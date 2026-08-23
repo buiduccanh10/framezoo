@@ -810,6 +810,7 @@
         "dualSubHint": "Seleccione un idioma para el subtítulo secundario (que se muestra arriba del principal)",
         "embedded": "Incorporado",
         "empty": "No hay subtítulos provistos para esto.",
+        "fetchFailed": "No se pudieron cargar los subtítulos, inténtelo de nuevo en unos segundos.",
         "loadingExternal": "Cargando subtítulos externos...",
         "loadingExternalProgress": "Cargando subtítulos externos... ({{progress}}%)",
         "matchScoreLabel": "Coincidencia ~{{score}}%",

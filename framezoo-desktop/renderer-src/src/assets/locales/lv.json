@@ -810,6 +810,7 @@
         "dualSubHint": "Atlasiet valodu sekundārajiem subtitriem (redzams virs primārā)",
         "embedded": "Iegults",
         "empty": "Šim nolūkam nav nodrošināti subtitri.",
+        "fetchFailed": "Neizdevās ielādēt subtitrus, mēģiniet vēlreiz pēc dažām sekundēm.",
         "loadingExternal": "Notiek ārējo subtitru ielāde...",
         "loadingExternalProgress": "Notiek ārējo subtitru ielāde... ({{progress}}%)",
         "matchScoreLabel": "Atbilst ~{{score}}%",

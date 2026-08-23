@@ -810,6 +810,7 @@
         "dualSubHint": "Välj ett språk för den sekundära undertexten (visas ovan primär)",
         "embedded": "Inbäddad",
         "empty": "Det finns inga tillhandahållna undertexter för detta.",
+        "fetchFailed": "Misslyckades med att ladda undertexter, försök igen om några sekunder.",
         "loadingExternal": "Laddar externa undertexter...",
         "loadingExternalProgress": "Laddar externa undertexter... ({{progress}}%)",
         "matchScoreLabel": "Matcha ~{{score}}%",

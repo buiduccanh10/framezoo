@@ -810,6 +810,7 @@
         "dualSubHint": "Sélectionnez une langue pour le sous-titre secondaire (indiqué au-dessus du sous-titre principal)",
         "embedded": "Intégré",
         "empty": "Aucun sous-titre n’est disponible pour ce contenu.",
+        "fetchFailed": "Impossible de charger les sous-titres, veuillez réessayer dans quelques secondes.",
         "loadingExternal": "Chargement des sous-titres externes...",
         "loadingExternalProgress": "Chargement des sous-titres externes... ({{progress}}%)",
         "matchScoreLabel": "Correspond à ~{{score}}%",

@@ -810,6 +810,7 @@
         "dualSubHint": "Válasszon nyelvet a másodlagos felirathoz (az elsődleges felirat felett)",
         "embedded": "Beágyazott",
         "empty": "Nincsenek szolgáltatott feliratok ennek.",
+        "fetchFailed": "Nem sikerült betölteni a feliratot, próbáld újra néhány másodperc múlva.",
         "loadingExternal": "Külső feliratok betöltése...",
         "loadingExternalProgress": "Külső feliratok betöltése... ({{progress}}%)",
         "matchScoreLabel": "Egyezés ~{{score}}%",

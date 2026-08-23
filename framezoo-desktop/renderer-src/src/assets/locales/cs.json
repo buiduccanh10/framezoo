@@ -810,6 +810,7 @@
         "dualSubHint": "Vyberte jazyk pro sekundární titulky (zobrazeno nad primárními)",
         "embedded": "Vložené",
         "empty": "Nejsou k tomu poskytovány žádné titulky.",
+        "fetchFailed": "Nepodařilo se načíst titulky, zkuste to znovu za několik sekund.",
         "loadingExternal": "Načítání externích titulků...",
         "loadingExternalProgress": "Načítání externích titulků... ({{progress}}%)",
         "matchScoreLabel": "Shoda ~{{score}}%",

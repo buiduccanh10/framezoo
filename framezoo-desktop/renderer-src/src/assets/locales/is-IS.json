@@ -810,6 +810,7 @@
         "dualSubHint": "Veldu tungumál fyrir aukatextann (sýnt fyrir ofan aðal)",
         "embedded": "Innfelld",
         "empty": "Enginn texti er til staðar fyrir þetta.",
+        "fetchFailed": "Mistókst að hlaða inn texta, reyndu aftur eftir nokkrar sekúndur.",
         "loadingExternal": "Hleður ytri skjátexta...",
         "loadingExternalProgress": "Hleður ytri skjátexta... ({{progress}}%)",
         "matchScoreLabel": "Samsvörun ~{{score}}%",

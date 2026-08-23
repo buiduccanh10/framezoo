@@ -810,6 +810,7 @@
         "dualSubHint": "Valitse toissijaisen tekstityksen kieli (näkyy ensisijaisen tekstityksen yläpuolella)",
         "embedded": "Upotettu",
         "empty": "Tälle ei ole saatavilla tekstityksiä.",
+        "fetchFailed": "Tekstitysten lataaminen epäonnistui, yritä uudelleen muutaman sekunnin kuluttua.",
         "loadingExternal": "Ladataan ulkoisia tekstityksiä...",
         "loadingExternalProgress": "Ladataan ulkoisia tekstityksiä... ({{progress}}%)",
         "matchScoreLabel": "Vastaa ~{{score}}%",

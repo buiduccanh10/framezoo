@@ -810,6 +810,7 @@
         "dualSubHint": "Chọn ngôn ngữ cho phụ đề phụ (hiển thị phía trên phụ đề chính)",
         "embedded": "Nhúng",
         "empty": "Không có phụ đề nào được cung cấp cho video này.",
+        "fetchFailed": "Không thể tải phụ đề, vui lòng thử lại sau vài giây.",
         "loadingExternal": "Đang tải phụ đề bên ngoài...",
         "loadingExternalProgress": "Đang tải phụ đề bên ngoài... ({{progress}}%)",
         "matchScoreLabel": "Khớp ~{{score}}%",

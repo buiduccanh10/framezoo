@@ -810,6 +810,7 @@
         "dualSubHint": "副字幕の言語を選択します (主字幕の上に表示)",
         "embedded": "埋め込み",
         "empty": "これには字幕は提供されていません。",
+        "fetchFailed": "字幕の読み込みに失敗しました。数秒後にもう一度お試しください。",
         "loadingExternal": "外部字幕を読み込んでいます...",
         "loadingExternalProgress": "外部字幕を読み込んでいます... ({{progress}}%)",
         "matchScoreLabel": "~{{score}}% に一致",

@@ -810,6 +810,7 @@
         "dualSubHint": "Selecteer een taal voor de secundaire ondertitel (weergegeven boven de primaire ondertitel)",
         "embedded": "Ingebed",
         "empty": "Er zijn geen ondertitels beschikbaar voor dit.",
+        "fetchFailed": "Ondertitels konden niet worden geladen, probeer het over een paar seconden opnieuw.",
         "loadingExternal": "Externe ondertiteling laden...",
         "loadingExternalProgress": "Externe ondertitels laden... ({{progress}}%)",
         "matchScoreLabel": "Komt overeen met ~{{score}}%",
