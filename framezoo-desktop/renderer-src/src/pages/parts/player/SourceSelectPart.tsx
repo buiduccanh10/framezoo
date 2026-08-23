@@ -487,6 +487,7 @@ export function SourceSelectPart(props: {
               name: stream.name || "",
               title: stream.title || "",
               bingeGroup: stream.bingeGroup,
+              savedAt: Date.now(),
             });
             saveLastStreamPreference(meta, stream, quality);
           }
@@ -518,6 +519,7 @@ export function SourceSelectPart(props: {
               name: stream.name || "",
               title: stream.title || "",
               bingeGroup: stream.bingeGroup,
+              savedAt: Date.now(),
             });
             saveLastStreamPreference(meta, stream, quality);
           }
@@ -566,7 +568,13 @@ export function SourceSelectPart(props: {
       return;
     }
 
-    if (savedTorrentSelection) {
+    const isTorrentSelectionStale = Boolean(
+      savedTorrentSelection &&
+      streamPreference?.savedAt &&
+      streamPreference.savedAt > savedTorrentSelection.savedAt,
+    );
+
+    if (savedTorrentSelection && !isTorrentSelectionStale) {
       const savedAddonIndex = eligibleAddons.findIndex(
         (addon) => addon.manifest.id === savedTorrentSelection.addonId,
       );

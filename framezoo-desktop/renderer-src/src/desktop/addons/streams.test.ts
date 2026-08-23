@@ -185,6 +185,106 @@ describe("addon stream normalization", () => {
       }),
     ).toBe(nextEpisodeStream);
   });
+
+  it("matches multi-season torrent pack title across episodes when seeds and size change", () => {
+    const [selectedStream] = normalizeAddonStreams(addon, [
+      {
+        name: "Torrentio\n1080p",
+        title:
+          "Dexter (2006) Season 1-8 S01-S08 (1080p BluRay x265 HEVC 10bit AAC 5.1 ImE) [QxR]\n" +
+          "Season 2/Dexter (2006) - S02E07 - That Night, A Forest Grew (1080p BluRay x265 ImE).mkv\n" +
+          "👤 326 💾 1.9 GB ⚙️ 1337x",
+        url: "magnet:?xt=urn:btih:hash-qxr",
+        fileIdx: 18,
+      },
+    ]);
+
+    const [hazMattStream, deejayStream, qxrStream] = normalizeAddonStreams(
+      addon,
+      [
+        {
+          name: "Torrentio\n1080p",
+          title:
+            "Dexter.Complete.1080p.BluRay.10bit.x265-HazMatt\n" +
+            "Dexter.Season.2.S02.1080p.BluRay.10bit.x265-HazMatt/Dexter.S02E08.1080p.BluRay.10bit.x265-HazMatt.mkv\n" +
+            "👤 18 💾 937.08 MB ⚙️ 1337x",
+          url: "magnet:?xt=urn:btih:hash-hazmatt",
+          fileIdx: 19,
+        },
+        {
+          name: "Torrentio\n1080p",
+          title:
+            "Dexter S02 Season 2 1080p 5.1Ch BluRay ReEnc-DeeJayAhmed\n" +
+            "Dexter.S02E08.1080p.5.1Ch.BluRay.ReEnc-DeeJayAhmed.mkv\n" +
+            "👤 17 💾 640.27 MB ⚙️ ThePirateBay",
+          url: "magnet:?xt=urn:btih:hash-deejay",
+          fileIdx: 0,
+        },
+        {
+          name: "Torrentio\n1080p",
+          title:
+            "Dexter (2006) Season 1-8 S01-S08 (1080p BluRay x265 HEVC 10bit AAC 5.1 ImE) [QxR]\n" +
+            "Season 2/Dexter (2006) - S02E08 - Morning Comes (1080p BluRay x265 ImE).mkv\n" +
+            "👤 312 💾 1.8 GB ⚙️ 1337x",
+          url: "magnet:?xt=urn:btih:hash-qxr",
+          fileIdx: 19,
+        },
+      ],
+    );
+
+    const match = findAddonStreamPreference(
+      [hazMattStream, deejayStream, qxrStream],
+      {
+        addonId: addon.manifest.id,
+        sourceKind: "torrent",
+        quality: "1080p",
+        name: selectedStream.name,
+        title: selectedStream.title,
+      },
+    );
+
+    expect(match).toBe(qxrStream);
+  });
+
+  it("matches release group for single-episode torrent releases", () => {
+    const [selectedStream] = normalizeAddonStreams(addon, [
+      {
+        name: "Torrentio\n1080p",
+        title:
+          "Dexter.S02E07.That.Night.A.Forest.Grew.1080p.10bit.BluRay.PSA.mkv\n" +
+          "👤 129 💾 700.51 MB ⚙️ 1337x",
+        url: "magnet:?xt=urn:btih:psa-ep7",
+      },
+    ]);
+
+    const [deejayStream, psaStream] = normalizeAddonStreams(addon, [
+      {
+        name: "Torrentio\n1080p",
+        title:
+          "Dexter S02 Season 2 1080p 5.1Ch BluRay ReEnc-DeeJayAhmed\n" +
+          "Dexter.S02E08.1080p.5.1Ch.BluRay.ReEnc-DeeJayAhmed.mkv\n" +
+          "👤 17 💾 640.27 MB ⚙️ ThePirateBay",
+        url: "magnet:?xt=urn:btih:deejay-ep8",
+      },
+      {
+        name: "Torrentio\n1080p",
+        title:
+          "Dexter.S02E08.Morning.Comes.1080p.10bit.BluRay.PSA.mkv\n" +
+          "👤 115 💾 680.12 MB ⚙️ 1337x",
+        url: "magnet:?xt=urn:btih:psa-ep8",
+      },
+    ]);
+
+    const match = findAddonStreamPreference([deejayStream, psaStream], {
+      addonId: addon.manifest.id,
+      sourceKind: "torrent",
+      quality: "1080p",
+      name: selectedStream.name,
+      title: selectedStream.title,
+    });
+
+    expect(match).toBe(psaStream);
+  });
 });
 
 describe("addon stream loading", () => {

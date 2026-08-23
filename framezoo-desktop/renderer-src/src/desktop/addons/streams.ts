@@ -65,7 +65,28 @@ function streamLines(value: string) {
 }
 
 function extractPreferenceWords(value: string): string[] {
-  return value.toLowerCase().match(/[a-z]{4,}/g) || [];
+  return value.toLowerCase().match(/[a-z0-9]{3,}/g) || [];
+}
+
+function extractReleaseGroup(title: string): string | null {
+  const bracketMatch = title.match(/\[([a-z0-9_-]+)\]/i);
+  if (bracketMatch?.[1]) return bracketMatch[1].toLowerCase();
+
+  const hyphenMatch = title.match(/[-.]([a-z0-9]+)(?:\.mkv|\.mp4)?$/i);
+  if (hyphenMatch?.[1]) return hyphenMatch[1].toLowerCase();
+
+  return null;
+}
+
+function normalizeReleaseTitle(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/\bs\d+e\d+\b/gi, "")
+    .replace(/\b(?:season|s)\s*\d+/gi, "")
+    .replace(/\b(?:episode|ep|e)\s*\d+/gi, "")
+    .replace(/\b\d+x\d+\b/gi, "")
+    .replace(/[^a-z0-9]+/gi, " ")
+    .trim();
 }
 
 export function matchesAddonStreamPreference(
@@ -80,9 +101,8 @@ export function matchesAddonStreamPreference(
     return false;
   }
 
-  // Stremio's stable cross-episode identity is bingeGroup. Do not fall back
-  // to title heuristics when the selected stream supplied one.
-  if (preference.bingeGroup) {
+  // Stremio's stable cross-episode identity is bingeGroup.
+  if (preference.bingeGroup && stream.bingeGroup) {
     return stream.bingeGroup === preference.bingeGroup;
   }
 
@@ -95,16 +115,17 @@ export function matchesAddonStreamPreference(
     return stream.title === preference.title;
   }
 
-  const streamLastLine = streamTitleLines[streamTitleLines.length - 1];
-  const preferenceLastLine =
-    preferenceTitleLines[preferenceTitleLines.length - 1];
-  const streamWords = extractPreferenceWords(streamLastLine);
-  const preferenceWords = extractPreferenceWords(preferenceLastLine);
+  // Compare the first line (the torrent / pack / release title)
+  const streamFirstLine = streamTitleLines[0];
+  const preferenceFirstLine = preferenceTitleLines[0];
 
-  return (
-    streamWords.some((word) => preferenceWords.includes(word)) ||
-    streamLastLine === preferenceLastLine
-  );
+  if (streamFirstLine === preferenceFirstLine) return true;
+
+  const normStream = normalizeReleaseTitle(streamFirstLine);
+  const normPref = normalizeReleaseTitle(preferenceFirstLine);
+  if (normStream && normPref && normStream === normPref) return true;
+
+  return false;
 }
 
 export function findAddonStreamPreference(
@@ -117,17 +138,69 @@ export function findAddonStreamPreference(
       (!preference.sourceKind || stream.kind === preference.sourceKind),
   );
 
+  if (compatibleStreams.length === 0) return null;
+
+  // 1. Exact match by bingeGroup or title heuristics
   const exactMatch = compatibleStreams.find((stream) =>
     matchesAddonStreamPreference(stream, preference),
   );
   if (exactMatch) return exactMatch;
 
-  // Addons can rotate bingeGroup/title metadata between episodes. Keep the
-  // selected provider and quality instead of falling back to the addon list.
+  // 2. Score candidate streams based on title similarity, release group, and matching quality
+  const preferenceTitleLines = streamLines(preference.title || "");
+  const preferenceFirstLine = preferenceTitleLines[0] || preference.title || "";
+  const normPref = normalizeReleaseTitle(preferenceFirstLine);
+  const preferenceWords = extractPreferenceWords(preferenceFirstLine);
+  const prefGroup = extractReleaseGroup(preferenceFirstLine);
+
+  let bestStream: AddonStream | null = null;
+  let highestScore = -1;
+
+  for (const stream of compatibleStreams) {
+    let score = 0;
+    const quality = getAddonStreamQuality(stream);
+    if (quality === preference.quality) {
+      score += 100;
+    }
+
+    const streamTitleLines = streamLines(stream.title || "");
+    const streamFirstLine = streamTitleLines[0] || stream.title || "";
+    const normStream = normalizeReleaseTitle(streamFirstLine);
+
+    if (streamFirstLine && streamFirstLine === preferenceFirstLine) {
+      score += 1000;
+    } else if (normStream && normPref && normStream === normPref) {
+      score += 800;
+    }
+
+    const streamGroup = extractReleaseGroup(streamFirstLine);
+    if (prefGroup && streamGroup && prefGroup === streamGroup) {
+      score += 500;
+    }
+
+    const streamWords = extractPreferenceWords(streamFirstLine);
+    if (streamWords.length > 0 && preferenceWords.length > 0) {
+      const commonCount = streamWords.filter((w) =>
+        preferenceWords.includes(w),
+      ).length;
+      const totalWords = new Set([...streamWords, ...preferenceWords]).size;
+      const jaccard = totalWords > 0 ? commonCount / totalWords : 0;
+      score += Math.round(jaccard * 300);
+    }
+
+    if (score > highestScore) {
+      highestScore = score;
+      bestStream = stream;
+    }
+  }
+
   return (
+    bestStream ??
     compatibleStreams.find(
       (stream) => getAddonStreamQuality(stream) === preference.quality,
-    ) ?? null
+    ) ??
+    compatibleStreams[0] ??
+    null
   );
 }
 

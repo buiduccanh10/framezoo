@@ -153,6 +153,7 @@ export interface PreferredStream {
   name: string;
   title: string;
   bingeGroup?: string;
+  savedAt?: number;
 }
 
 export interface SourceSlice {
