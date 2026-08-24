@@ -3,10 +3,80 @@ import { useTranslation } from "react-i18next";
 
 import { LazyImage } from "@/components/utils/Image";
 import { useActiveTorrentStatus } from "@/desktop/torrentPlaybackStore";
-import { playerStatus } from "@/stores/player/slices/source";
+import { PlayerStatus, playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 
 const MESSAGE_INITIAL_DELAY_MS = 6000;
+export const STREAM_READY_THRESHOLD_BYTES = 4 * 1024 * 1024;
+
+export interface PlayerLoadingTorrentStatus {
+  state: string;
+  streamType?: "pending" | "hls" | "file" | null;
+  streamUrl?: string | null;
+  downloadedBytes: number;
+  totalBytes: number | null;
+}
+
+export interface PlayerLoadingOverlayInput {
+  status: PlayerStatus;
+  sourceLoading?: boolean;
+  isLoading: boolean;
+  hasRenderedFrame: boolean;
+  duration: number;
+  buffered: number;
+  torrentStatus?: PlayerLoadingTorrentStatus | null;
+  isDesktopPipPlayback?: boolean;
+}
+
+export function getPlayerLoadingOverlayState(input: PlayerLoadingOverlayInput) {
+  const isDesktopPipPlayback = input.isDesktopPipPlayback === true;
+  const isBufferingCurrentPlaybackSegment =
+    input.status === playerStatus.PLAYING &&
+    input.isLoading &&
+    !isDesktopPipPlayback;
+  const isPreparingSource =
+    input.sourceLoading && input.status === playerStatus.SOURCE_SELECTION;
+  const torrentStatus = input.torrentStatus;
+  const isTorrentPreparing =
+    Boolean(torrentStatus) &&
+    input.status === playerStatus.PLAYING &&
+    torrentStatus?.state !== "error" &&
+    (!input.hasRenderedFrame ||
+      torrentStatus?.streamType === "pending" ||
+      !torrentStatus?.streamUrl ||
+      (input.duration === 0 && input.buffered === 0) ||
+      !Number.isFinite(input.duration));
+
+  const bufferedProgress =
+    input.duration > 0
+      ? Math.min(100, (input.buffered / input.duration) * 100)
+      : 0;
+  const torrentStreamTargetBytes = torrentStatus?.totalBytes
+    ? Math.min(STREAM_READY_THRESHOLD_BYTES, torrentStatus.totalBytes)
+    : STREAM_READY_THRESHOLD_BYTES;
+  const torrentStreamProgress = torrentStatus
+    ? Math.round(
+        (torrentStatus.downloadedBytes / torrentStreamTargetBytes) * 100,
+      )
+    : 0;
+  const rawLoadingProgress = torrentStatus
+    ? Math.max(bufferedProgress, torrentStreamProgress)
+    : bufferedProgress;
+
+  return {
+    isBufferingCurrentPlaybackSegment,
+    isPreparingSource,
+    isTorrentPreparing,
+    showOverlay:
+      !isDesktopPipPlayback &&
+      (input.status === playerStatus.IDLE ||
+        isPreparingSource ||
+        isBufferingCurrentPlaybackSegment ||
+        isTorrentPreparing ||
+        (input.status === playerStatus.PLAYING && !input.hasRenderedFrame)),
+    loadingProgress: Math.min(95, rawLoadingProgress),
+  };
+}
 
 function getRandomMessage(messages: string[], prev?: string) {
   if (messages.length <= 1) return messages[0] ?? "";
@@ -109,8 +179,185 @@ function LoadingBackdrop(props: { src?: string; alt: string }) {
   );
 }
 
-export function PlayerLoadingOverlay(props: { sourceLoading?: boolean }) {
+export interface PlayerLoadingOverlayViewProps {
+  show: boolean;
+  progress: number;
+  title?: string;
+  logo?: string;
+  backdrop?: string;
+  showBackdrop?: boolean;
+  message?: string;
+  className?: string;
+}
+
+export function PlayerLoadingOverlayView(props: PlayerLoadingOverlayViewProps) {
   const { t } = useTranslation();
+  const loadingMessages = useMemo(
+    () =>
+      Array.from({ length: 22 }, (_, i) =>
+        t(`player.loadingOverlayMessages.${i + 1}`),
+      ).filter(Boolean),
+    [t],
+  );
+  const backgroundImage = props.backdrop;
+  const showBackdropImage = props.show && props.showBackdrop === true;
+  const [shouldRender, setShouldRender] = useState(props.show);
+  const [isVisible, setIsVisible] = useState(props.show);
+  const [hideLogo, setHideLogo] = useState(false);
+  const [assetsReady, setAssetsReady] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState(() =>
+    getRandomMessage(loadingMessages),
+  );
+  const [messageEnabled, setMessageEnabled] = useState(false);
+  const [messageVisible, setMessageVisible] = useState(true);
+  const hasMessageOverride = Boolean(props.message);
+
+  useEffect(() => {
+    setHideLogo(false);
+  }, [props.logo]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    if (!props.show) {
+      setAssetsReady(false);
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    const sources = [
+      showBackdropImage ? backgroundImage : null,
+      props.logo,
+    ].filter(Boolean) as string[];
+    if (sources.length === 0) {
+      setAssetsReady(true);
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    Promise.all(sources.map(preloadImage)).then(() => {
+      if (!cancelled) setAssetsReady(true);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [props.show, showBackdropImage, backgroundImage, props.logo]);
+
+  const showOverlayWhenReady = props.show && assetsReady;
+
+  useEffect(() => {
+    setLoadingMessage((prev) => getRandomMessage(loadingMessages, prev));
+  }, [loadingMessages]);
+
+  useEffect(() => {
+    if (showOverlayWhenReady) {
+      setLoadingMessage((prev) => getRandomMessage(loadingMessages, prev));
+      setShouldRender(true);
+      const frame = window.requestAnimationFrame(() => setIsVisible(true));
+      return () => window.cancelAnimationFrame(frame);
+    }
+
+    setIsVisible(false);
+    const timeout = window.setTimeout(() => {
+      setShouldRender(false);
+    }, 250);
+
+    return () => window.clearTimeout(timeout);
+  }, [showOverlayWhenReady, loadingMessages]);
+
+  useEffect(() => {
+    if (!showOverlayWhenReady || hasMessageOverride) {
+      setMessageEnabled(false);
+      setMessageVisible(false);
+      return;
+    }
+
+    const timeout = window.setTimeout(() => {
+      setMessageEnabled(true);
+      setMessageVisible(true);
+    }, MESSAGE_INITIAL_DELAY_MS);
+
+    return () => window.clearTimeout(timeout);
+  }, [showOverlayWhenReady, hasMessageOverride]);
+
+  useEffect(() => {
+    if (!showOverlayWhenReady || hasMessageOverride || !messageEnabled) {
+      return;
+    }
+
+    const interval = window.setInterval(() => {
+      setMessageVisible(false);
+      window.setTimeout(() => {
+        setLoadingMessage((prev) => getRandomMessage(loadingMessages, prev));
+        setMessageVisible(true);
+      }, 260);
+    }, MESSAGE_INITIAL_DELAY_MS);
+
+    return () => window.clearInterval(interval);
+  }, [
+    showOverlayWhenReady,
+    loadingMessages,
+    messageEnabled,
+    hasMessageOverride,
+  ]);
+
+  if (!shouldRender && !props.show) return null;
+
+  const displayTitle = props.title;
+  const showLogo = Boolean(props.logo && !hideLogo);
+  const message = props.message ?? loadingMessage;
+  const messageVisibleNow =
+    hasMessageOverride || (messageEnabled && messageVisible);
+
+  return (
+    <div
+      className={`absolute inset-0 z-0 pointer-events-none overflow-hidden transition-opacity duration-300 ${
+        isVisible || !showOverlayWhenReady ? "opacity-100" : "opacity-0"
+      } ${props.className ?? ""}`}
+    >
+      {showBackdropImage ? (
+        <LoadingBackdrop src={backgroundImage} alt={displayTitle ?? ""} />
+      ) : null}
+
+      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/5 to-black/45" />
+
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 px-6 text-center">
+        {displayTitle ? (
+          showLogo ? (
+            <LoadingTitle
+              logo={props.logo}
+              title={displayTitle}
+              progress={props.progress}
+              onError={() => setHideLogo(true)}
+            />
+          ) : (
+            <LoadingTitle
+              title={displayTitle}
+              progress={props.progress}
+              onError={() => setHideLogo(true)}
+            />
+          )
+        ) : (
+          <LoadingTitleSkeleton />
+        )}
+        <p
+          className={`text-[16px] text-white/60 font-medium transition-all duration-300 ${
+            messageVisibleNow
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 -translate-y-2"
+          }`}
+        >
+          {message}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+export function PlayerLoadingOverlay(props: { sourceLoading?: boolean }) {
   const status = usePlayerStore((s) => s.status);
   const meta = usePlayerStore((s) => s.meta);
   const sourceId = usePlayerStore((s) => s.sourceId);
@@ -128,41 +375,16 @@ export function PlayerLoadingOverlay(props: { sourceLoading?: boolean }) {
   const torrentStatus = useActiveTorrentStatus();
 
   const isDesktopPipPlayback = pictureInPictureMode === "desktop";
-  const isBufferingCurrentPlaybackSegment =
-    status === playerStatus.PLAYING && isLoading && !isDesktopPipPlayback;
-
-  const isPreparingSource =
-    props.sourceLoading && status === playerStatus.SOURCE_SELECTION;
-
-  const isTorrentPreparing = useMemo(() => {
-    if (!torrentStatus || status !== playerStatus.PLAYING) return false;
-    if (torrentStatus.state === "error") return false;
-    return (
-      !hasRenderedFrame ||
-      torrentStatus.streamType === "pending" ||
-      !torrentStatus.streamUrl ||
-      (duration === 0 && buffered === 0) ||
-      !Number.isFinite(duration)
-    );
-  }, [torrentStatus, status, duration, buffered, hasRenderedFrame]);
-
-  const bufferedProgress =
-    duration > 0 ? Math.min(100, (buffered / duration) * 100) : 0;
-  const STREAM_READY_THRESHOLD_BYTES = 4 * 1024 * 1024; // ~4MB of initial pieces required to stream first frame
-  const torrentStreamTargetBytes = torrentStatus?.totalBytes
-    ? Math.min(STREAM_READY_THRESHOLD_BYTES, torrentStatus.totalBytes)
-    : STREAM_READY_THRESHOLD_BYTES;
-  const torrentStreamProgress = torrentStatus
-    ? Math.min(
-        95,
-        Math.round(
-          (torrentStatus.downloadedBytes / torrentStreamTargetBytes) * 100,
-        ),
-      )
-    : 0;
-  const rawLoadingProgress = torrentStatus
-    ? Math.max(bufferedProgress, torrentStreamProgress)
-    : bufferedProgress;
+  const loadingState = getPlayerLoadingOverlayState({
+    status,
+    sourceLoading: props.sourceLoading,
+    isLoading,
+    hasRenderedFrame,
+    duration,
+    buffered,
+    torrentStatus,
+    isDesktopPipPlayback,
+  });
 
   const metaType = meta?.type;
   const metaTmdbId = meta?.tmdbId;
@@ -211,15 +433,13 @@ export function PlayerLoadingOverlay(props: { sourceLoading?: boolean }) {
   }, [isPlaybackReady, playbackKey]);
 
   const showOverlay =
-    !isDesktopPipPlayback &&
-    (status === playerStatus.IDLE ||
-      isPreparingSource ||
-      isBufferingCurrentPlaybackSegment ||
-      isTorrentPreparing ||
-      (status === playerStatus.PLAYING && !canHidePlaybackOverlay));
+    loadingState.showOverlay ||
+    (!isDesktopPipPlayback &&
+      status === playerStatus.PLAYING &&
+      !canHidePlaybackOverlay);
   const loadingProgress = canHidePlaybackOverlay
     ? 100
-    : Math.min(95, rawLoadingProgress);
+    : loadingState.loadingProgress;
 
   const lastPlaybackKeyRef = useRef<string | null>(null);
   const [initialLoadPlaybackKey, setInitialLoadPlaybackKey] = useState<
@@ -261,166 +481,17 @@ export function PlayerLoadingOverlay(props: { sourceLoading?: boolean }) {
   const showBackdropImage =
     showOverlay &&
     (status === playerStatus.IDLE ||
-      isPreparingSource ||
+      loadingState.isPreparingSource ||
       (status === playerStatus.PLAYING && !hasRenderedFrame) ||
       (playbackKey !== null && initialLoadPlaybackKey === playbackKey));
-
-  const loadingMessages = useMemo(
-    () =>
-      Array.from({ length: 22 }, (_, i) =>
-        t(`player.loadingOverlayMessages.${i + 1}`),
-      ).filter(Boolean),
-    [t],
-  );
-  const backgroundImage = meta?.backdrop ?? meta?.poster;
-
-  const [shouldRender, setShouldRender] = useState(showOverlay);
-  const [isVisible, setIsVisible] = useState(showOverlay);
-  const [hideLogo, setHideLogo] = useState(false);
-  const [assetsReady, setAssetsReady] = useState(false);
-  const [loadingMessage, setLoadingMessage] = useState(() =>
-    getRandomMessage(loadingMessages),
-  );
-  const [messageEnabled, setMessageEnabled] = useState(false);
-  const [messageVisible, setMessageVisible] = useState(true);
-
-  useEffect(() => {
-    setHideLogo(false);
-  }, [meta?.logo]);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    if (!showOverlay) {
-      setAssetsReady(false);
-      return () => {
-        cancelled = true;
-      };
-    }
-
-    const sources = [
-      showBackdropImage ? backgroundImage : null,
-      meta?.logo,
-    ].filter(Boolean) as string[];
-    if (sources.length === 0) {
-      setAssetsReady(true);
-      return () => {
-        cancelled = true;
-      };
-    }
-
-    Promise.all(sources.map(preloadImage)).then(() => {
-      if (!cancelled) setAssetsReady(true);
-    });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [showOverlay, showBackdropImage, backgroundImage, meta?.logo]);
-
-  const showOverlayWhenReady = showOverlay && assetsReady;
-
-  useEffect(() => {
-    setLoadingMessage((prev) => getRandomMessage(loadingMessages, prev));
-  }, [loadingMessages]);
-
-  useEffect(() => {
-    if (showOverlayWhenReady) {
-      setLoadingMessage((prev) => getRandomMessage(loadingMessages, prev));
-      setShouldRender(true);
-      const frame = window.requestAnimationFrame(() => setIsVisible(true));
-      return () => window.cancelAnimationFrame(frame);
-    }
-
-    setIsVisible(false);
-    const timeout = window.setTimeout(() => {
-      setShouldRender(false);
-    }, 250);
-
-    return () => window.clearTimeout(timeout);
-  }, [showOverlayWhenReady, loadingMessages]);
-
-  useEffect(() => {
-    if (!showOverlayWhenReady) {
-      setMessageEnabled(false);
-      setMessageVisible(false);
-      return;
-    }
-
-    const timeout = window.setTimeout(() => {
-      setMessageEnabled(true);
-      setMessageVisible(true);
-    }, MESSAGE_INITIAL_DELAY_MS);
-
-    return () => window.clearTimeout(timeout);
-  }, [showOverlayWhenReady]);
-
-  useEffect(() => {
-    if (!showOverlayWhenReady || !messageEnabled) return;
-
-    const interval = window.setInterval(() => {
-      setMessageVisible(false);
-      window.setTimeout(() => {
-        setLoadingMessage((prev) => getRandomMessage(loadingMessages, prev));
-        setMessageVisible(true);
-      }, 260);
-    }, MESSAGE_INITIAL_DELAY_MS);
-
-    return () => window.clearInterval(interval);
-  }, [showOverlayWhenReady, loadingMessages, messageEnabled]);
-
-  // The desktop window is transparent for the native libmpv surface. Render
-  // the loading layer immediately to avoid exposing a black frame while
-  // backdrop assets are still loading.
-  if (!shouldRender && !showOverlay) return null;
-
-  const showLoadingTitle = true;
-  const displayTitle = meta?.title;
-  const showLogo = Boolean(showLoadingTitle && meta?.logo && !hideLogo);
-
   return (
-    <div
-      className={`absolute inset-0 z-0 pointer-events-none overflow-hidden transition-opacity duration-300 ${
-        isVisible || !showOverlayWhenReady ? "opacity-100" : "opacity-0"
-      }`}
-    >
-      {showBackdropImage ? (
-        <LoadingBackdrop src={backgroundImage} alt={displayTitle ?? ""} />
-      ) : null}
-
-      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/5 to-black/45" />
-
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 px-6 text-center">
-        {showLoadingTitle ? (
-          displayTitle ? (
-            showLogo ? (
-              <LoadingTitle
-                logo={meta?.logo}
-                title={displayTitle}
-                progress={loadingProgress}
-                onError={() => setHideLogo(true)}
-              />
-            ) : (
-              <LoadingTitle
-                title={displayTitle}
-                progress={loadingProgress}
-                onError={() => setHideLogo(true)}
-              />
-            )
-          ) : (
-            <LoadingTitleSkeleton />
-          )
-        ) : null}
-        <p
-          className={`text-[16px] text-white/60 font-medium transition-all duration-300 ${
-            messageEnabled && messageVisible
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 -translate-y-2"
-          }`}
-        >
-          {loadingMessage}
-        </p>
-      </div>
-    </div>
+    <PlayerLoadingOverlayView
+      show={showOverlay}
+      progress={loadingProgress}
+      title={meta?.title}
+      logo={meta?.logo}
+      backdrop={meta?.backdrop ?? meta?.poster}
+      showBackdrop={showBackdropImage}
+    />
   );
 }
