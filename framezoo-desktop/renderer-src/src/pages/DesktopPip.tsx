@@ -213,6 +213,7 @@ export default function DesktopPipPage() {
     typeof setTimeout
   > | null>(null);
   const readySignalled = useRef(false);
+  const transitionInProgress = useRef(false);
 
   const revealControls = useCallback(() => {
     setControlsVisible(true);
@@ -243,16 +244,27 @@ export default function DesktopPipPage() {
   );
 
   const close = useCallback(() => {
-    void getDesktopElectronApi()?.closeDesktopPipWindow();
+    const api = getDesktopElectronApi();
+    if (!api || transitionInProgress.current) return;
+    transitionInProgress.current = true;
+    void api
+      .closeDesktopPipWindow()
+      .then(() => api.focusMainWindow())
+      .finally(() => {
+        transitionInProgress.current = false;
+      });
   }, []);
 
   const returnToPlayer = useCallback(() => {
     const api = getDesktopElectronApi();
-    if (!api) return;
-    void Promise.allSettled([
-      api.focusMainWindow(),
-      api.closeDesktopPipWindow(),
-    ]);
+    if (!api || transitionInProgress.current) return;
+    transitionInProgress.current = true;
+    void api
+      .closeDesktopPipWindow()
+      .then(() => api.focusMainWindow())
+      .finally(() => {
+        transitionInProgress.current = false;
+      });
   }, []);
 
   useEffect(() => {

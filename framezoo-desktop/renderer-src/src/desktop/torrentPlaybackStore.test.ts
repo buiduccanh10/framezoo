@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   clearTorrentSession,
   registerTorrentSession,
+  stopTorrentSession,
   waitForTorrentPlayable,
 } from "./torrentPlaybackStore";
 import type { TorrentStatus } from "./torrentTypes";
@@ -91,5 +92,18 @@ describe("torrent playback wait lifecycle", () => {
     await clearTorrentSession();
 
     await expect(waiting).rejects.toThrow("Torrent session was replaced");
+  });
+
+  it("stops the active torrent immediately and cancels its grace timer", async () => {
+    torrentClientMocks.getTorrentStatus.mockResolvedValue(null);
+    registerTorrentSession("session-1");
+    await clearTorrentSession();
+    await stopTorrentSession();
+
+    expect(torrentClientMocks.stopTorrent).toHaveBeenCalledTimes(1);
+    expect(torrentClientMocks.stopTorrent).toHaveBeenCalledWith("session-1");
+
+    vi.advanceTimersByTime(10_000);
+    expect(torrentClientMocks.stopTorrent).toHaveBeenCalledTimes(1);
   });
 });

@@ -47,6 +47,7 @@ export function createDesktopPipController(
   let readyPromise: Promise<boolean> | null = null;
   let resolveReady: ((ready: boolean) => void) | null = null;
   let readyTimeout: ReturnType<typeof setTimeout> | null = null;
+  let closePromise: Promise<boolean> | null = null;
 
   function getPipUrl() {
     if (options.rendererDevUrl) {
@@ -210,11 +211,25 @@ export function createDesktopPipController(
       settleReady(false);
 
       if (!pipWindow || pipWindow.isDestroyed()) {
-        return false;
+        return Promise.resolve(false);
       }
 
-      pipWindow.close();
-      return true;
+      if (closePromise) return closePromise;
+
+      const window = pipWindow;
+      closePromise = new Promise<boolean>((resolve) => {
+        const finish = () => {
+          window.removeListener("closed", finish);
+          closePromise = null;
+          resolve(true);
+        };
+
+        window.once("closed", finish);
+        window.close();
+        if (window.isDestroyed()) finish();
+      });
+
+      return closePromise;
     },
     getState() {
       return pipState;

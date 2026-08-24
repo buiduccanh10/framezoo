@@ -69,6 +69,32 @@ export async function clearTorrentSession(sessionId?: string) {
   if (currentSessionId) scheduleTorrentStop(currentSessionId);
 }
 
+export async function stopTorrentSession(sessionId?: string) {
+  if (sessionId && sessionId !== activeSessionId) return;
+  const currentSessionId = activeSessionId;
+  const sessionIds = new Set<string>(Array.from(pendingStopTimers.keys()));
+  if (currentSessionId) sessionIds.add(currentSessionId);
+  activeSessionId = null;
+  activeStatus = null;
+  publish();
+
+  for (const id of sessionIds) {
+    const pendingStop = pendingStopTimers.get(id);
+    if (pendingStop) {
+      clearTimeout(pendingStop);
+      pendingStopTimers.delete(id);
+    }
+  }
+
+  await Promise.all(
+    Array.from(sessionIds, async (id) => {
+      await stopTorrent(id).catch((error) => {
+        console.warn("Failed to stop torrent session", id, error);
+      });
+    }),
+  );
+}
+
 export function getActiveTorrentStatus() {
   return activeStatus;
 }
