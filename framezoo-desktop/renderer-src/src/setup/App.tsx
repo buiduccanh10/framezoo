@@ -1,4 +1,4 @@
-import { ReactElement, Suspense, useEffect, useState } from "react";
+import { ReactElement, Suspense, useEffect, useRef, useState } from "react";
 import { lazyWithPreload } from "react-lazy-with-preload";
 import {
   Navigate,
@@ -20,6 +20,7 @@ import { KeyboardCommandsEditModal } from "@/components/overlays/KeyboardCommand
 import { KeyboardCommandsModal } from "@/components/overlays/KeyboardCommandsModal";
 import { ToastProvider } from "@/components/overlays/ToastProvider";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { stopTorrentSession } from "@/desktop/torrentPlaybackStore";
 import { useGlobalKeyboardEvents } from "@/hooks/useGlobalKeyboardEvents";
 import { useOnlineListener } from "@/hooks/usePing";
 import { AddonsPage } from "@/pages/addons/AddonsPage";
@@ -111,8 +112,23 @@ function App() {
   const location = useLocation();
   const navigate = useNavigate();
   const showModal = useOverlayStack((s) => s.showModal);
+  const previousPathRef = useRef(location.pathname);
 
   // Automatically restore previous window state if navigating away from video player routes
+  useEffect(() => {
+    const previousPath = previousPathRef.current;
+    const isPlayerRoute = location.pathname.startsWith("/media/");
+    const wasPlayerRoute = previousPath.startsWith("/media/");
+
+    if (wasPlayerRoute && !isPlayerRoute) {
+      void stopTorrentSession();
+      const electronApi = (window as any).electronAPI;
+      void electronApi?.closeDesktopPipWindow?.();
+    }
+
+    previousPathRef.current = location.pathname;
+  }, [location.pathname]);
+
   useEffect(() => {
     if (!location.pathname.startsWith("/media/")) {
       const electronApi = (window as any).electronAPI;

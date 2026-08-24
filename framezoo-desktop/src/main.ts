@@ -631,6 +631,7 @@ function registerHeaderInterceptors() {
 }
 
 function notifyMainWindowDesktopPipClosed() {
+  libmpvController.reparentPipPlayersToMain();
   if (!mainWindow || mainWindow.isDestroyed()) return;
   mainWindow.webContents.send("desktop:pip-closed");
 }

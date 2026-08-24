@@ -215,6 +215,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
   let desktopPipTogglePromise: Promise<void> | null = null;
   let desktopPipShouldResume = false;
   let desktopPipTarget: "main" | "pip" = "main";
+  let desktopPipTransitioning = false;
   let unbindFullscreen: (() => void) | null = null;
   // Tracks whether the current generation's file has fully loaded.
   // Used to drop stale `pause: true` events emitted during old-file teardown.
@@ -288,6 +289,13 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
 
     desktopPipActionUnsubscribe =
       pipApi.onDesktopPipAction?.((action) => {
+        if (
+          destroyed ||
+          desktopPipTransitioning ||
+          desktopPipTarget !== "pip"
+        ) {
+          return;
+        }
         if (action.type === "togglePlayback") {
           if (paused) {
             thisDisplay.play();
@@ -311,18 +319,45 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
 
         const shouldResume = desktopPipShouldResume;
         desktopPipShouldResume = false;
-        desktopPipTarget = "main";
-        if (playerId) {
-          void enqueueNativeOperation(async () => {
-            const reparented =
-              (await api.reparentLibMpvPlayer?.(playerId!, "main")) ?? false;
-            if (reparented && shouldResume) {
-              await sendNativeCommand(playerId!, { type: "play" });
+        desktopPipTransitioning = true;
+
+        const finishClose = async () => {
+          let reparented = true;
+          const currentPlayerId = playerId;
+          if (currentPlayerId) {
+            reparented =
+              (await enqueueNativeOperation(async () => {
+                const didReparent =
+                  (await api.reparentLibMpvPlayer?.(currentPlayerId, "main")) ??
+                  false;
+                if (didReparent && shouldResume && !destroyed) {
+                  // Do not enqueue another operation from inside the current
+                  // operation. That would wait on itself forever.
+                  await api.sendLibMpvCommand?.(currentPlayerId, {
+                    type: "play",
+                  });
+                }
+                return didReparent;
+              })) ?? false;
+          }
+
+          if (!destroyed) {
+            desktopPipTarget = "main";
+            emit("loading", false);
+            emitPictureInPictureState(null);
+            if (!reparented) {
+              console.warn(
+                "[libmpv] desktop PiP player reparent did not confirm",
+              );
             }
-          });
-        }
-        pictureInPictureMode = null;
-        emitPictureInPictureState(null);
+          }
+          desktopPipTransitioning = false;
+        };
+
+        void finishClose().catch((error) => {
+          desktopPipTransitioning = false;
+          console.warn("[libmpv] desktop PiP close transition failed", error);
+        });
       }) ?? null;
   }
 
@@ -888,6 +923,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
 
     const shouldResume = !desiredPaused;
     desktopPipShouldResume = shouldResume;
+    desktopPipTransitioning = true;
 
     // Stop native playback before the PiP renderer starts its startup/auth
     // gates. This prevents the hidden main window from advancing its clock
@@ -917,6 +953,8 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       if (!activated || desktopPipTarget !== "pip") return;
 
       enteredPip = true;
+      desktopPipTransitioning = false;
+      emit("loading", false);
       emitPictureInPictureState("desktop");
       bindDesktopPipActions();
       if (shouldResume) {
@@ -932,6 +970,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         }
         await api.closeDesktopPipWindow?.();
         desktopPipShouldResume = false;
+        desktopPipTransitioning = false;
         if (shouldResume) {
           thisDisplay.play();
         }
@@ -966,6 +1005,18 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     destroy(reason = "display:destroy") {
       destroyed = true;
       pendingLoad = null;
+      const pipApi = getElectronApi() as {
+        closeDesktopPipWindow?: () => Promise<boolean>;
+      } | null;
+      if (
+        pictureInPictureMode === "desktop" ||
+        desktopPipTarget === "pip" ||
+        desktopPipTransitioning
+      ) {
+        desktopPipShouldResume = false;
+        desktopPipTarget = "main";
+        void pipApi?.closeDesktopPipWindow?.();
+      }
       resizeObserver?.disconnect();
       resizeObserver = null;
       unbindEvents?.();
@@ -984,6 +1035,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         pictureInPictureMode = null;
         emitPictureInPictureState(null);
       }
+      desktopPipTransitioning = false;
       if (isFullscreen) {
         isFullscreen = false;
         emit("fullscreen", false);

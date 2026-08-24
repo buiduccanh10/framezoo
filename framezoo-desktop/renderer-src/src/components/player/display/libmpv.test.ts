@@ -1271,6 +1271,78 @@ describe("libmpv display", () => {
     });
   });
 
+  it("reparents to the main window before resuming when PiP closes", async () => {
+    const timeline: string[] = [];
+    let pipClosedListener: (() => void) | undefined;
+
+    usePlayerStore.setState({
+      source: {
+        type: "hls",
+        url: "https://example.test/video.m3u8",
+      },
+      currentQuality: null,
+      mediaPlaying: {
+        ...usePlayerStore.getState().mediaPlaying,
+        isPaused: false,
+      },
+    });
+
+    (window as any).electronAPI = {
+      createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
+      loadLibMpvSource: vi.fn().mockResolvedValue(true),
+      sendLibMpvCommand: vi.fn((_id: string, command: { type: string }) => {
+        timeline.push(`command:${command.type}`);
+        return Promise.resolve(true);
+      }),
+      onLibMpvEvent: vi.fn().mockReturnValue(() => undefined),
+      onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
+      openDesktopPipWindow: vi.fn().mockResolvedValue(true),
+      activateDesktopPipWindow: vi.fn().mockResolvedValue(true),
+      reparentLibMpvPlayer: vi
+        .fn()
+        .mockImplementation(async (_id: string, target: "main" | "pip") => {
+          timeline.push(`reparent:${target}`);
+          return true;
+        }),
+      onDesktopPipAction: vi.fn().mockReturnValue(() => undefined),
+      onDesktopPipClosed: vi.fn((listener: () => void) => {
+        pipClosedListener = listener;
+        return () => undefined;
+      }),
+      updateDesktopPipWindow: vi.fn(),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.processContainerElement(makeElement());
+    display.load({
+      source: {
+        type: "hls",
+        url: "https://example.test/video.m3u8",
+      } as Source,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    display.togglePictureInPicture();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    pipClosedListener?.();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(timeline.indexOf("reparent:main")).toBeGreaterThanOrEqual(0);
+    expect(timeline.indexOf("reparent:main")).toBeLessThan(
+      timeline.lastIndexOf("command:play"),
+    );
+
+    display.destroy();
+    usePlayerStore.setState({
+      source: null,
+      currentQuality: null,
+    });
+  });
+
   it("synchronizes initial fullscreen state from electronAPI", async () => {
     let fullscreenListener: ((isFull: boolean) => void) | undefined;
     const fullscreenEvents: boolean[] = [];

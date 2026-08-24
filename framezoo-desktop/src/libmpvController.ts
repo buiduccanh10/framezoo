@@ -730,6 +730,14 @@ export class LibMpvController {
     }
   }
 
+  public reparentPipPlayersToMain(): void {
+    for (const player of this.players.values()) {
+      if (player.target === "pip") {
+        this.reparent(player.id, "main");
+      }
+    }
+  }
+
   public destroy(playerId: string, reason = "ipc:destroy"): boolean {
     const player = this.players.get(playerId);
     if (!player) return false;

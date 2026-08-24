@@ -122,10 +122,14 @@ export function PlayerLoadingOverlay(props: { sourceLoading?: boolean }) {
   const time = usePlayerStore((s) => s.progress.time);
   const buffered = usePlayerStore((s) => s.progress.buffered);
   const duration = usePlayerStore((s) => s.progress.duration);
+  const pictureInPictureMode = usePlayerStore(
+    (s) => s.interface.pictureInPictureMode,
+  );
   const torrentStatus = useActiveTorrentStatus();
 
+  const isDesktopPipPlayback = pictureInPictureMode === "desktop";
   const isBufferingCurrentPlaybackSegment =
-    status === playerStatus.PLAYING && isLoading;
+    status === playerStatus.PLAYING && isLoading && !isDesktopPipPlayback;
 
   const isPreparingSource =
     props.sourceLoading && status === playerStatus.SOURCE_SELECTION;
@@ -207,11 +211,12 @@ export function PlayerLoadingOverlay(props: { sourceLoading?: boolean }) {
   }, [isPlaybackReady, playbackKey]);
 
   const showOverlay =
-    status === playerStatus.IDLE ||
-    isPreparingSource ||
-    isBufferingCurrentPlaybackSegment ||
-    isTorrentPreparing ||
-    (status === playerStatus.PLAYING && !canHidePlaybackOverlay);
+    !isDesktopPipPlayback &&
+    (status === playerStatus.IDLE ||
+      isPreparingSource ||
+      isBufferingCurrentPlaybackSegment ||
+      isTorrentPreparing ||
+      (status === playerStatus.PLAYING && !canHidePlaybackOverlay));
   const loadingProgress = canHidePlaybackOverlay
     ? 100
     : Math.min(95, rawLoadingProgress);
