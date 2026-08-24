@@ -15,9 +15,14 @@ import {
   getDesktopPipStateFromPlayerState,
   getPersistedDesktopPipWindowSize,
 } from "@/desktop/pip";
+import {
+  getActiveTorrentStatus,
+  subscribeActiveTorrentStatus,
+} from "@/desktop/torrentPlaybackStore";
 import { usePlayerStore } from "@/stores/player/store";
 import { LoadableSource } from "@/stores/player/utils/qualities";
 import { useSubtitleStore } from "@/stores/subtitles";
+import { useWatchPartyStore } from "@/stores/watchParty";
 import { makeEmitter } from "@/utils/events";
 
 type LibMpvBounds = {
@@ -215,7 +220,11 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
   let desktopPipTogglePromise: Promise<void> | null = null;
   let desktopPipShouldResume = false;
   let desktopPipTarget: "main" | "pip" = "main";
+  let desktopPipWindowOpen = false;
   let desktopPipTransitioning = false;
+  let unbindDesktopPipStore: (() => void) | null = null;
+  let unbindDesktopPipTorrent: (() => void) | null = null;
+  let unbindDesktopPipWatchParty: (() => void) | null = null;
   let unbindFullscreen: (() => void) | null = null;
   // Tracks whether the current generation's file has fully loaded.
   // Used to drop stale `pause: true` events emitted during old-file teardown.
@@ -275,6 +284,39 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     return bounds;
   }
 
+  async function handoffDesktopPipToMain(): Promise<boolean> {
+    if (desktopPipTarget !== "pip") return true;
+
+    const api = getElectronApi();
+    if (!api?.reparentLibMpvPlayer || !playerId) return false;
+
+    desktopPipTransitioning = true;
+    try {
+      const didReparent =
+        (await enqueueNativeOperation(() =>
+          api.reparentLibMpvPlayer?.(playerId!, "main"),
+        )) ?? false;
+      if (!didReparent) return false;
+
+      desktopPipTarget = "main";
+      desktopPipShouldResume = false;
+      emit("loading", false);
+      emitPictureInPictureState(null);
+      syncPipState(true);
+      return true;
+    } finally {
+      desktopPipTransitioning = false;
+    }
+  }
+
+  function dispatchDesktopPipAction(action: DesktopPipAction) {
+    window.dispatchEvent(
+      new CustomEvent("framezoo:desktop-pip-action", {
+        detail: action,
+      }),
+    );
+  }
+
   function bindDesktopPipActions() {
     if (desktopPipActionUnsubscribe) return;
     const api = getElectronApi();
@@ -288,15 +330,21 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     };
 
     desktopPipActionUnsubscribe =
-      pipApi.onDesktopPipAction?.((action) => {
-        if (
-          destroyed ||
-          desktopPipTransitioning ||
-          desktopPipTarget !== "pip"
-        ) {
+      pipApi.onDesktopPipAction?.(async (action) => {
+        if (destroyed || desktopPipTransitioning) {
           return;
         }
-        if (action.type === "togglePlayback") {
+        if (action.type === "nextEpisode") {
+          const didHandoff = await handoffDesktopPipToMain();
+          if (!didHandoff) return;
+          dispatchDesktopPipAction(action);
+          return;
+        }
+        if (desktopPipTarget !== "pip") return;
+
+        if (action.type === "skipSegment") {
+          thisDisplay.setTime(action.time);
+        } else if (action.type === "togglePlayback") {
           if (paused) {
             thisDisplay.play();
             desktopPipShouldResume = true;
@@ -313,9 +361,13 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
 
     desktopPipClosedUnsubscribe =
       pipApi.onDesktopPipClosed?.(() => {
+        desktopPipWindowOpen = false;
         const wasDesktopPip =
           pictureInPictureMode === "desktop" || desktopPipTarget === "pip";
-        if (!wasDesktopPip) return;
+        if (!wasDesktopPip) {
+          syncPipState(true);
+          return;
+        }
 
         const shouldResume = desktopPipShouldResume;
         desktopPipShouldResume = false;
@@ -855,7 +907,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
 
   let lastPipSync = 0;
   function syncPipState(force = false) {
-    if (pictureInPictureMode !== "desktop") return;
+    if (!desktopPipWindowOpen && pictureInPictureMode !== "desktop") return;
     const now = Date.now();
     if (!force && now - lastPipSync < 250) return;
     lastPipSync = now;
@@ -871,22 +923,39 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
   function buildPipState(): DesktopPipState | null {
     const playerState = usePlayerStore.getState();
     const subtitleState = useSubtitleStore.getState();
-    if (!source) return null;
     const pipBaseState = getDesktopPipStateFromPlayerState(
       playerState,
       subtitleState.primaryDelay,
       subtitleState.secondaryDelay,
     );
     if (!pipBaseState) return null;
+    const activeTorrentStatus = getActiveTorrentStatus();
+    const watchPartyState = useWatchPartyStore.getState();
 
     return {
       ...pipBaseState,
+      canControl: !watchPartyState.enabled || watchPartyState.isHost,
       source,
       time,
       duration,
       paused,
       playbackRate,
       title: playerState.meta?.title ?? "",
+      isLoading: playerState.mediaPlaying.isLoading,
+      hasRenderedFrame: playerState.mediaPlaying.hasRenderedFrame,
+      buffered: playerState.progress.buffered,
+      playbackTarget: desktopPipTarget,
+      torrent: activeTorrentStatus
+        ? {
+            state: activeTorrentStatus.state,
+            progress: activeTorrentStatus.progress,
+            speedBytesPerSecond: activeTorrentStatus.speedBytesPerSecond,
+            downloadedBytes: activeTorrentStatus.downloadedBytes,
+            totalBytes: activeTorrentStatus.totalBytes,
+            streamType: activeTorrentStatus.streamType ?? null,
+            streamUrl: activeTorrentStatus.streamUrl,
+          }
+        : null,
       caption: caption
         ? { vttData: caption.vttData, language: caption.language }
         : null,
@@ -899,6 +968,12 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       dualSubEnabled: playerState.caption.dualSubEnabled,
     };
   }
+
+  unbindDesktopPipStore = usePlayerStore.subscribe(() => syncPipState());
+  unbindDesktopPipTorrent = subscribeActiveTorrentStatus(() => syncPipState());
+  unbindDesktopPipWatchParty = useWatchPartyStore.subscribe(() =>
+    syncPipState(),
+  );
 
   async function performDesktopPipToggle() {
     const api = getElectronApi() as
@@ -920,6 +995,10 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
 
     const state = buildPipState();
     if (!state || !api.openDesktopPipWindow) return;
+    const initialPipState = {
+      ...state,
+      playbackTarget: "pip" as const,
+    };
 
     const shouldResume = !desiredPaused;
     desktopPipShouldResume = shouldResume;
@@ -935,10 +1014,11 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     let enteredPip = false;
     try {
       const opened = await api.openDesktopPipWindow(
-        state,
+        initialPipState,
         getPersistedDesktopPipWindowSize(),
       );
       if (!opened) return;
+      desktopPipWindowOpen = true;
 
       reparented =
         (await enqueueNativeOperation(() =>
@@ -1017,6 +1097,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         desktopPipTarget = "main";
         void pipApi?.closeDesktopPipWindow?.();
       }
+      desktopPipWindowOpen = false;
       resizeObserver?.disconnect();
       resizeObserver = null;
       unbindEvents?.();
@@ -1053,6 +1134,12 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         }
       }
       fscreen.removeEventListener("fullscreenchange", fullscreenChanged);
+      unbindDesktopPipStore?.();
+      unbindDesktopPipStore = null;
+      unbindDesktopPipTorrent?.();
+      unbindDesktopPipTorrent = null;
+      unbindDesktopPipWatchParty?.();
+      unbindDesktopPipWatchParty = null;
     },
     load(ops) {
       source = ops.source;
@@ -1066,6 +1153,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       desiredPaused = !(ops.autoplay ?? true);
       emit("loading", Boolean(ops.source));
       if (duration > 0) emit("duration", duration);
+      syncPipState(true);
 
       if (!ops.source) {
         // Native player generations restart at zero after destroy. Do not

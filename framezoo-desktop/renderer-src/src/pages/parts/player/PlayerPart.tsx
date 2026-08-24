@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useState } from "react";
+import { ReactNode, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { BrandPill } from "@/components/layout/BrandPill";
@@ -9,6 +9,7 @@ import { SkipSegmentButton } from "@/components/player/atoms/SkipSegmentButton";
 import { ThumbsFeedback } from "@/components/player/atoms/ThumbsFeedback";
 import { TorrentNetworkStatus } from "@/components/player/atoms/TorrentNetworkStatus";
 import { WatchPartyStatus } from "@/components/player/atoms/WatchPartyStatus";
+import { usePlayerMeta } from "@/components/player/hooks/usePlayerMeta";
 import { useShouldShowControls } from "@/components/player/hooks/useShouldShowControls";
 import {
   SegmentData,
@@ -16,9 +17,11 @@ import {
 } from "@/components/player/hooks/useSkipTime";
 import { DocumentPipOverlay } from "@/components/player/internals/DocumentPipOverlay";
 import { PauseOverlay } from "@/components/player/overlays/PauseOverlay";
+import type { DesktopPipAction } from "@/desktop/pip";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { PlayerMeta, playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
+import { useProgressStore } from "@/stores/progress";
 import { useWatchPartyStore } from "@/stores/watchParty";
 
 export interface PlayerPartProps {
@@ -30,6 +33,7 @@ export interface PlayerPartProps {
 }
 
 export function PlayerPart(props: PlayerPartProps) {
+  const { onMetaChange } = props;
   const { showTargets } = useShouldShowControls();
   const status = usePlayerStore((s) => s.status);
   const isLoading = usePlayerStore((s) => s.mediaPlaying.isLoading);
@@ -37,6 +41,11 @@ export function PlayerPart(props: PlayerPartProps) {
   const { isHost, enabled } = useWatchPartyStore();
   const { t } = useTranslation();
   const meta = usePlayerStore((s) => s.meta);
+  const { setDirectMeta } = usePlayerMeta();
+  const setShouldStartFromBeginning = usePlayerStore(
+    (s) => s.setShouldStartFromBeginning,
+  );
+  const updateProgress = useProgressStore((s) => s.updateItem);
 
   const inControl = !enabled || isHost;
   const shouldShowBottomControls = showTargets;
@@ -71,6 +80,47 @@ export function PlayerPart(props: PlayerPartProps) {
   const handleThumbsFeedback = useCallback(() => {
     setThumbsFeedbackData(null);
   }, []);
+
+  const handleDesktopPipAction = useCallback(
+    (event: Event) => {
+      const action = (event as CustomEvent<DesktopPipAction>).detail;
+      if (!action || action.type !== "nextEpisode") return;
+
+      const currentMeta = usePlayerStore.getState().meta;
+      if (currentMeta?.type !== "show" || !currentMeta.episode) return;
+
+      const nextEpisode = currentMeta.episodes?.find(
+        (episode) => episode.number === currentMeta.episode!.number + 1,
+      );
+      if (!nextEpisode) return;
+
+      const nextMeta = {
+        ...currentMeta,
+        episode: nextEpisode,
+      };
+      setShouldStartFromBeginning(true);
+      setDirectMeta(nextMeta);
+      onMetaChange?.(nextMeta);
+      updateProgress({
+        meta: nextMeta,
+        progress: { duration: 0, watched: 0 },
+      });
+    },
+    [onMetaChange, setDirectMeta, setShouldStartFromBeginning, updateProgress],
+  );
+
+  useEffect(() => {
+    window.addEventListener(
+      "framezoo:desktop-pip-action",
+      handleDesktopPipAction,
+    );
+    return () => {
+      window.removeEventListener(
+        "framezoo:desktop-pip-action",
+        handleDesktopPipAction,
+      );
+    };
+  }, [handleDesktopPipAction]);
 
   return (
     <Player.Container onLoad={props.onLoad} showingControls={showTargets}>

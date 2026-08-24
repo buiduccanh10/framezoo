@@ -8,6 +8,7 @@ import { MWMediaType, MWSeasonMeta } from "@/backend/metadata/types/mw";
 import { Button } from "@/components/buttons/Button";
 import { Icon, Icons } from "@/components/Icon";
 import { usePlayerMeta } from "@/components/player/hooks/usePlayerMeta";
+import { getNextEpisodeVisibility } from "@/components/player/utils/controlVisibility";
 import { isPlaybackInteractionLocked } from "@/components/player/utils/playbackLock";
 import { Transition } from "@/components/utils/Transition";
 import { PlayerMeta } from "@/stores/player/slices/source";
@@ -17,17 +18,6 @@ import { useProgressStore } from "@/stores/progress";
 import { isAutoplayAllowed } from "@/utils/autoplay";
 
 import { hasAired } from "../utils/aired";
-
-function shouldShowNextEpisodeButton(
-  time: number,
-  duration: number,
-): "always" | "hover" | "none" {
-  const percentage = time / duration;
-  const secondsFromEnd = duration - time;
-  if (secondsFromEnd <= 30) return "always";
-  if (percentage >= 0.93) return "hover";
-  return "none";
-}
 
 function ActionButton(props: {
   className: string;
@@ -118,7 +108,7 @@ export function NextEpisodeButton(props: {
   );
   const enableSkipCredits = usePreferencesStore((s) => s.enableSkipCredits);
   const autoplayEnabled = isAutoplayAllowed();
-  const timeBasedState = shouldShowNextEpisodeButton(time, duration);
+  const timeBasedState = getNextEpisodeVisibility(time, duration);
   const showingState = props.forceShow ? "always" : timeBasedState;
   const status = usePlayerStore((s) => s.status);
   const setShouldStartFromBeginning = usePlayerStore(

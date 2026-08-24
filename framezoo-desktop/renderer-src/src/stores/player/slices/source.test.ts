@@ -390,6 +390,9 @@ describe("external subtitle source transitions", () => {
       "series",
       "tmdb:85937:1:3",
       expect.anything(),
+      expect.objectContaining({
+        preferredLanguages: expect.arrayContaining(["en"]),
+      }),
     );
   });
 

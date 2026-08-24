@@ -632,7 +632,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     // This runs asynchronously so it doesn't block the stream loading
     if (!shouldReuseLoadedExternalSubtitles) {
       setTimeout(() => {
-        nextStore.addExternalSubtitles(requestId, { forceRefresh: true });
+        nextStore.addExternalSubtitles(requestId);
       }, 100);
     }
   },
@@ -740,6 +740,12 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     if (!mediaKey || !requestedMediaKey) return;
     const queryKey = getExternalSubtitleQueryKey(mediaKey);
     const forceRefresh = options?.forceRefresh === true;
+    const preferredLanguages = getExternalSubtitleLanguageKey(
+      useSubtitleStore.getState().lastSelectedLanguage,
+      useLanguageStore.getState().language,
+    )
+      .split(",")
+      .filter(Boolean);
 
     set((s) => {
       if (requestId == null) {
@@ -815,46 +821,51 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
         staleTime: EXTERNAL_SUBTITLE_CACHE_TTL_MS,
         gcTime: EXTERNAL_SUBTITLE_CACHE_GC_MS,
         queryFn: async () => {
-          const { captions: loadedCaptions, errors } = await loadAllAddonSubtitles(
-            getInstalledAddons(),
-            type,
-            id,
-            ({ captions: sourceCaptions, completed, total }) => {
-              const currentStore = get();
-              if (getMediaKey(currentStore.meta) !== requestedMediaKey) {
-                return;
-              }
-
-              set((s) => {
-                if (total > 1) {
-                  s.externalSubtitleLoadProgress = {
-                    completed,
-                    total,
-                  };
+          const { captions: loadedCaptions, errors } =
+            await loadAllAddonSubtitles(
+              getInstalledAddons(),
+              type,
+              id,
+              ({ captions: sourceCaptions, completed, total }) => {
+                const currentStore = get();
+                if (getMediaKey(currentStore.meta) !== requestedMediaKey) {
+                  return;
                 }
 
-                if (sourceCaptions.length > 0) {
-                  const existingCaptionKeys = new Set(
-                    s.captionList.map(getCaptionIdentityKey),
-                  );
-                  const newCaptions = sourceCaptions.filter(
-                    (caption) =>
-                      !existingCaptionKeys.has(getCaptionIdentityKey(caption)),
-                  );
-                  s.captionList = sortCaptionList([
-                    ...s.captionList,
-                    ...newCaptions,
-                  ]);
-                }
-              });
-            },
-            { forceRefresh }
-          );
-          
+                set((s) => {
+                  if (total > 1) {
+                    s.externalSubtitleLoadProgress = {
+                      completed,
+                      total,
+                    };
+                  }
+
+                  if (sourceCaptions.length > 0) {
+                    const existingCaptionKeys = new Set(
+                      s.captionList.map(getCaptionIdentityKey),
+                    );
+                    const newCaptions = sourceCaptions.filter(
+                      (caption) =>
+                        !existingCaptionKeys.has(
+                          getCaptionIdentityKey(caption),
+                        ),
+                    );
+                    s.captionList = sortCaptionList([
+                      ...s.captionList,
+                      ...newCaptions,
+                    ]);
+                  }
+                });
+              },
+              { forceRefresh, preferredLanguages },
+            );
+
           if (loadedCaptions.length === 0 && errors.length > 0) {
-            throw new Error(`Failed to fetch subtitles: ${errors.map(e => e.message).join(', ')}`);
+            throw new Error(
+              `Failed to fetch subtitles: ${errors.map((e) => e.message).join(", ")}`,
+            );
           }
-          
+
           return loadedCaptions;
         },
       });

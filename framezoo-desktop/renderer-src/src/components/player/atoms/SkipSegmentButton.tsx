@@ -9,12 +9,14 @@ import {
   getSegmentBoundsSeconds,
 } from "@/components/player/hooks/useSkipTime";
 import { useSkipTracking } from "@/components/player/hooks/useSkipTracking";
+import {
+  getSkipSegmentVisibility,
+  isSegmentEndingAtVideoEnd,
+} from "@/components/player/utils/controlVisibility";
 import { isPlaybackInteractionLocked } from "@/components/player/utils/playbackLock";
 import { Transition } from "@/components/utils/Transition";
 import { PlayerMeta } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
-
-const END_OF_VIDEO_TOLERANCE_SECONDS = 0.5;
 
 function getSegmentText(
   type: "intro" | "recap" | "credits" | "preview",
@@ -32,39 +34,6 @@ function getSegmentText(
     default:
       return t("player.skipTime.intro");
   }
-}
-
-function shouldShowSkipButton(
-  currentTime: number,
-  segment: SegmentData | null,
-  duration: number,
-): "always" | "hover" | "none" {
-  if (!segment) return "none";
-
-  const bounds = getSegmentBoundsSeconds(segment, duration);
-  if (!bounds) return "none";
-
-  const endSeconds =
-    bounds.end !== null ? bounds.end : duration > 0 ? duration : Infinity;
-
-  // Check if current time is within the segment
-  if (currentTime >= bounds.start && currentTime <= endSeconds) {
-    // Show "always" for the first 10 seconds of the segment, then "hover"
-    const timeInSegment = (currentTime - bounds.start) * 1000;
-    if (timeInSegment <= 10000) return "always"; // First 10 seconds
-    return "hover";
-  }
-
-  return "none";
-}
-
-function isEndingAtVideoEnd(segment: SegmentData, duration: number): boolean {
-  if (duration <= 0) return false;
-  const bounds = getSegmentBoundsSeconds(segment, duration);
-  if (!bounds) return false;
-
-  const endSeconds = bounds.end ?? duration;
-  return endSeconds >= duration - END_OF_VIDEO_TOLERANCE_SECONDS;
 }
 
 function Button(props: {
@@ -112,14 +81,16 @@ function SkipSegmentButton(props: {
 
   const endingSegment =
     meta?.type === "show"
-      ? props.segments.find((segment) => isEndingAtVideoEnd(segment, _duration))
+      ? props.segments.find((segment) =>
+          isSegmentEndingAtVideoEnd(segment, _duration),
+        )
       : undefined;
 
   // Find segments that should be shown at the current time.
   // Segments that run until video end are replaced with NextEpisodeButton.
   const activeSegments = props.segments.filter((segment) => {
     if (segment === endingSegment) return false;
-    const showingState = shouldShowSkipButton(time, segment, _duration);
+    const showingState = getSkipSegmentVisibility(time, segment, _duration);
     return showingState !== "none";
   });
 
@@ -181,7 +152,11 @@ function SkipSegmentButton(props: {
     <>
       <div className="absolute right-[calc(3rem+env(safe-area-inset-right))] bottom-0">
         {activeSegments.map((segment, index) => {
-          const showingState = shouldShowSkipButton(time, segment, _duration);
+          const showingState = getSkipSegmentVisibility(
+            time,
+            segment,
+            _duration,
+          );
           const animation = showingState === "hover" ? "slide-up" : "fade";
 
           let bottom = "bottom-[calc(6rem+env(safe-area-inset-bottom))]";

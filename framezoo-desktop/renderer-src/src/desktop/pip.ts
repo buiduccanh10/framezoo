@@ -1,4 +1,14 @@
-import { Caption } from "@/stores/player/slices/source";
+import { getSegmentBoundsSeconds } from "@/components/player/hooks/useSkipTime";
+import {
+  PlayerControlVisibility,
+  getSkipSegmentVisibility,
+  isSegmentEndingAtVideoEnd,
+} from "@/components/player/utils/controlVisibility";
+import {
+  Caption,
+  PlayerStatus,
+  playerStatus,
+} from "@/stores/player/slices/source";
 import { AllSlices } from "@/stores/player/slices/types";
 import {
   LoadableSource,
@@ -16,13 +26,51 @@ export interface PipWindowSize {
   height: number;
 }
 
+export interface DesktopPipTorrentState {
+  state: string;
+  progress: number;
+  speedBytesPerSecond: number;
+  downloadedBytes: number;
+  totalBytes: number | null;
+  streamType: "pending" | "hls" | "file" | null;
+  streamUrl: string | null;
+}
+
+export interface DesktopPipEpisodeState {
+  season: number | null;
+  episode: number;
+  title: string;
+}
+
+export interface DesktopPipSkipSegmentState {
+  type: "intro" | "recap" | "credits" | "preview";
+  startTime: number;
+  endTime: number;
+  visibility: PlayerControlVisibility;
+  isEndingAtVideoEnd: boolean;
+}
+
 export interface DesktopPipState {
   source: LoadableSource | null;
+  status: PlayerStatus;
+  sourceLoading: boolean;
   time: number;
   duration: number;
   paused: boolean;
   playbackRate: number;
   title: string;
+  logo: string | null;
+  backdrop: string | null;
+  isLoading: boolean;
+  hasRenderedFrame: boolean;
+  buffered: number;
+  playbackTarget: "main" | "pip";
+  torrent: DesktopPipTorrentState | null;
+  episode: DesktopPipEpisodeState | null;
+  nextEpisode: DesktopPipEpisodeState | null;
+  canControl: boolean;
+  hideNextEpisodeButton: boolean;
+  skipSegment: DesktopPipSkipSegmentState | null;
   primaryDelay: number;
   secondaryDelay: number;
   caption: DesktopPipCaption | null;
@@ -40,6 +88,13 @@ export type DesktopPipAction =
     }
   | {
       type: "seekTo";
+      time: number;
+    }
+  | {
+      type: "nextEpisode";
+    }
+  | {
+      type: "skipSegment";
       time: number;
     };
 
@@ -222,15 +277,90 @@ export function getDesktopPipStateFromPlayerState(
     state.source,
     state.currentQuality,
   );
-  if (!source) return null;
+  const currentTime = Math.max(0, state.progress.time);
+  const duration = Math.max(0, state.progress.duration);
+  const meta = state.meta;
+  const currentEpisode =
+    meta?.type === "show" && meta.episode
+      ? {
+          season: meta.season?.number ?? null,
+          episode: meta.episode.number,
+          title: meta.episode.title,
+        }
+      : null;
+  const nextEpisode =
+    meta?.type === "show" && meta.episode
+      ? (() => {
+          const next = meta.episodes?.find(
+            (episode) => episode.number === meta.episode!.number + 1,
+          );
+          return next
+            ? {
+                season: meta.season?.number ?? null,
+                episode: next.number,
+                title: next.title,
+              }
+            : null;
+        })()
+      : null;
+  const endingSegment =
+    meta?.type === "show"
+      ? state.skipSegments?.find((segment) =>
+          isSegmentEndingAtVideoEnd(segment, duration),
+        )
+      : undefined;
+  const activeSkipSegment =
+    state.skipSegments?.find((segment) => {
+      const bounds = getSegmentBoundsSeconds(segment, duration);
+      if (!bounds) return false;
+      const end = bounds.end ?? duration;
+      return (
+        currentTime >= bounds.start &&
+        currentTime <= end &&
+        getSkipSegmentVisibility(currentTime, segment, duration) !== "none"
+      );
+    }) ?? null;
+  const skipSegmentBounds = activeSkipSegment
+    ? getSegmentBoundsSeconds(activeSkipSegment, duration)
+    : null;
 
   return {
     source,
-    time: state.progress.time,
-    duration: state.progress.duration,
+    status: state.status,
+    sourceLoading: state.status === playerStatus.SOURCE_SELECTION,
+    time: currentTime,
+    duration,
     paused: state.mediaPlaying.isPaused,
     playbackRate: state.mediaPlaying.playbackRate,
     title: state.meta?.title ?? "Framezoo",
+    logo: state.meta?.logo ?? null,
+    backdrop: state.meta?.backdrop ?? state.meta?.poster ?? null,
+    isLoading: state.mediaPlaying.isLoading,
+    hasRenderedFrame: state.mediaPlaying.hasRenderedFrame,
+    buffered: Math.max(0, state.progress.buffered),
+    playbackTarget: "pip",
+    torrent: null,
+    episode: currentEpisode,
+    nextEpisode,
+    canControl: true,
+    hideNextEpisodeButton: state.interface?.hideNextEpisodeBtn ?? false,
+    skipSegment:
+      activeSkipSegment && skipSegmentBounds
+        ? {
+            type: activeSkipSegment.type,
+            startTime: skipSegmentBounds.start,
+            endTime: skipSegmentBounds.end ?? duration,
+            visibility: getSkipSegmentVisibility(
+              currentTime,
+              activeSkipSegment,
+              duration,
+            ),
+            isEndingAtVideoEnd:
+              meta?.type === "show" &&
+              (activeSkipSegment === endingSegment ||
+                isSegmentEndingAtVideoEnd(activeSkipSegment, duration)),
+          }
+        : null,
     primaryDelay: Number.isFinite(primaryDelay) ? primaryDelay : 0,
     secondaryDelay: Number.isFinite(secondaryDelay) ? secondaryDelay : 0,
     caption: toDesktopPipCaption(state.caption.selected),

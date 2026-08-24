@@ -70,7 +70,10 @@ export async function loadAddonSubtitles(
   addon: InstalledAddon,
   type: string,
   id: string,
-  options?: { forceRefresh?: boolean },
+  options?: {
+    forceRefresh?: boolean;
+    preferredLanguages?: string[];
+  },
 ): Promise<CaptionListItem[]> {
   let baseUrl = addon.baseUrl || "";
   if (!baseUrl.startsWith("http://") && !baseUrl.startsWith("https://")) {
@@ -93,6 +96,18 @@ export async function loadAddonSubtitles(
   );
   if (options?.forceRefresh) {
     url.searchParams.set("reload", Date.now().toString());
+  }
+  if (options?.preferredLanguages?.length) {
+    url.searchParams.set(
+      "language",
+      Array.from(
+        new Set(
+          options.preferredLanguages
+            .map((language) => language.trim().toLowerCase())
+            .filter(Boolean),
+        ),
+      ).join(","),
+    );
   }
 
   console.debug("[desktop-addon] subtitle request", {
@@ -133,7 +148,10 @@ export async function loadAllAddonSubtitles(
   type: string,
   id: string,
   onProgress?: (update: AddonSubtitleProgressUpdate) => void,
-  options?: { forceRefresh?: boolean },
+  options?: {
+    forceRefresh?: boolean;
+    preferredLanguages?: string[];
+  },
 ): Promise<AddonSubtitleLoadResult> {
   const eligibleAddons = addons
     .filter((addon) => addon.enabled)
@@ -168,7 +186,12 @@ export async function loadAllAddonSubtitles(
   await Promise.all(
     eligibleAddons.map(async (addon) => {
       try {
-        const addonCaptions = await loadAddonSubtitles(addon, type, id, options);
+        const addonCaptions = await loadAddonSubtitles(
+          addon,
+          type,
+          id,
+          options,
+        );
         const newCaptions: CaptionListItem[] = [];
         for (const caption of addonCaptions) {
           if (!seen.has(caption.url)) {
