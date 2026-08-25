@@ -1733,4 +1733,83 @@ describe("libmpv display", () => {
     expect(exitFullscreen).toHaveBeenCalledTimes(1);
     display.destroy();
   });
+
+  it("uses audio-pts as fallback when time-pos stalls for > 400ms and recovers when time-pos resumes", async () => {
+    let eventListener:
+      | ((event: {
+          playerId: string;
+          generation: number;
+          type: string;
+          name?: string;
+          data?: unknown;
+        }) => void)
+      | undefined;
+    const times: number[] = [];
+
+    (window as any).electronAPI = {
+      createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
+      loadLibMpvSource: vi.fn().mockResolvedValue(true),
+      sendLibMpvCommand: vi.fn().mockResolvedValue(true),
+      onLibMpvEvent: vi.fn((listener) => {
+        eventListener = listener;
+        return () => undefined;
+      }),
+      onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.processContainerElement(makeElement());
+    display.on("time", (time) => times.push(time));
+    display.load({
+      source: { type: "mp4", url: "https://example.test/video.mkv" } as Source,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const property = (name: string, data: unknown) =>
+      eventListener?.({
+        playerId: "player-1",
+        generation: 1,
+        type: "property",
+        name,
+        data,
+      });
+
+    property("pause", false);
+
+    // Initial time-pos
+    property("time-pos", 10.0);
+    expect(times).toEqual([10.0]);
+
+    // audio-pts arrives immediately (<400ms), should not take over
+    property("audio-pts", 10.1);
+    expect(times).toEqual([10.0]);
+
+    // Advance time past 400ms
+    let mockNow = performance.now();
+    vi.spyOn(performance, "now").mockImplementation(() => mockNow);
+
+    mockNow += 450;
+
+    // audio-pts arrives after 450ms stall of time-pos -> should takeover
+    property("audio-pts", 10.4);
+    expect(times).toEqual([10.0, 10.4]);
+
+    property("audio-pts", 10.8);
+    expect(times).toEqual([10.0, 10.4, 10.8]);
+
+    // time-pos recovers -> should take precedence again
+    property("time-pos", 11.0);
+    expect(times).toEqual([10.0, 10.4, 10.8, 11.0]);
+
+    // audio-pts immediately after time-pos (<400ms) should be ignored
+    property("audio-pts", 11.1);
+    expect(times).toEqual([10.0, 10.4, 10.8, 11.0]);
+
+    vi.restoreAllMocks();
+    display.destroy();
+  });
 });
