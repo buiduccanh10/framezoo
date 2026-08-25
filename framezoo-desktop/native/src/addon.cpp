@@ -229,6 +229,7 @@ struct MpvPlayer {
   void emit_playback_property_snapshots() {
     emit_property_snapshot("duration", MPV_FORMAT_DOUBLE);
     emit_property_snapshot("time-pos", MPV_FORMAT_DOUBLE);
+    emit_property_snapshot("audio-pts", MPV_FORMAT_DOUBLE);
     emit_property_snapshot(
         "demuxer-cache-duration",
         MPV_FORMAT_DOUBLE
@@ -1252,6 +1253,7 @@ napi_value create_player(napi_env env, napi_callback_info info) {
 
   const char* observed[] = {
       "time-pos",
+      "audio-pts",
       "duration",
       "pause",
       "volume",
@@ -1264,6 +1266,7 @@ napi_value create_player(napi_env env, napi_callback_info info) {
       "video-out-params",
     };
     const mpv_format formats[] = {
+      MPV_FORMAT_DOUBLE,
       MPV_FORMAT_DOUBLE,
       MPV_FORMAT_DOUBLE,
       MPV_FORMAT_FLAG,

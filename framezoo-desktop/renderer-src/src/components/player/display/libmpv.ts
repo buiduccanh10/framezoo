@@ -203,6 +203,9 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
   let heldSeekPosition: number | null = null;
   const PENDING_SEEK_TIMEOUT_MS = 8000;
   const TIME_BACKTRACK_TOLERANCE_SECONDS = 0.5;
+  const AUDIO_PTS_TAKEOVER_MS = 400;
+  let lastTimePosAt = 0;
+  let lastAudioPts = -1;
   let isFullscreen = false;
   let pictureInPictureMode: PictureInPictureMode = null;
   let caption: DisplayCaption | null = null;
@@ -749,6 +752,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     if (
       event.type === "property" &&
       event.name !== "time-pos" &&
+      event.name !== "audio-pts" &&
       event.name !== "demuxer-cache-duration"
     ) {
       console.debug("[libmpv] property", {
@@ -802,6 +806,8 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     if (event.type === "end-file") {
       paused = true;
       fileLoaded = false;
+      lastTimePosAt = 0;
+      lastAudioPts = -1;
       emit("loading", false);
       return;
     }
@@ -811,6 +817,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     switch (event.name) {
       case "time-pos":
         if (typeof event.data === "number" && Number.isFinite(event.data)) {
+          lastTimePosAt = performance.now();
           const rawPosition = Math.max(0, event.data);
           if (pendingSeekTarget !== null) {
             const isNearTarget =
@@ -837,6 +844,23 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
             break;
           }
           applyTimePosition(rawPosition);
+        }
+        break;
+      case "audio-pts":
+        if (typeof event.data === "number" && Number.isFinite(event.data)) {
+          lastAudioPts = Math.max(0, event.data);
+          if (
+            pendingSeekTarget === null &&
+            !paused &&
+            !cachePaused &&
+            !isSeeking &&
+            (lastTimePosAt === 0 ||
+              performance.now() - lastTimePosAt > AUDIO_PTS_TAKEOVER_MS)
+          ) {
+            if (lastAudioPts >= time - TIME_BACKTRACK_TOLERANCE_SECONDS) {
+              applyTimePosition(lastAudioPts);
+            }
+          }
         }
         break;
       case "duration":
@@ -1118,6 +1142,8 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     destroy(reason = "display:destroy") {
       destroyed = true;
       pendingLoad = null;
+      lastTimePosAt = 0;
+      lastAudioPts = -1;
       const pipApi = getElectronApi() as {
         closeDesktopPipWindow?: () => Promise<boolean>;
       } | null;
@@ -1222,6 +1248,8 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       generation = requestGeneration;
       fileLoaded = false; // reset for new load
       firstFrameLoggedGeneration = -1;
+      lastTimePosAt = 0;
+      lastAudioPts = -1;
       pendingSeekTarget = time > 0.5 ? time : null;
       pendingSeekSetAt = pendingSeekTarget === null ? 0 : performance.now();
       heldSeekPosition = null;
