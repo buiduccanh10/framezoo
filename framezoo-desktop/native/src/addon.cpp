@@ -1128,10 +1128,10 @@ napi_value create_player(napi_env env, napi_callback_info info) {
   // Keep torrent playback responsive without allowing libmpv to retain
   // hundreds of megabytes per player while the sidecar already buffers
   // requested pieces on disk.
-  set_mpv_option(player.get(), "cache-secs", "20");
-  set_mpv_option(player.get(), "demuxer-readahead-secs", "10");
-  set_mpv_option(player.get(), "demuxer-max-bytes", "128MiB");
-  set_mpv_option(player.get(), "stream-buffer-size", "1MiB");
+  set_mpv_option(player.get(), "cache-secs", "30");
+  set_mpv_option(player.get(), "demuxer-readahead-secs", "15");
+  set_mpv_option(player.get(), "demuxer-max-bytes", "256MiB");
+  set_mpv_option(player.get(), "stream-buffer-size", "2MiB");
   set_mpv_option(player.get(), "force-seekable", "yes");
   if (player->api.initialize(player->handle) < 0) {
     return throw_error(env, "mpv_initialize failed");
