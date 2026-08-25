@@ -33,7 +33,11 @@ type NativeAddonRequest =
       request: AddonProtocolRequest;
     };
 
-async function fetchWithTimeout(url: string, headers?: HeadersInit) {
+async function fetchWithTimeout(
+  url: string,
+  headers?: HeadersInit,
+  options?: RequestInit,
+) {
   const controller = new AbortController();
   const timeoutHandle = setTimeout(
     () => controller.abort(),
@@ -46,6 +50,7 @@ async function fetchWithTimeout(url: string, headers?: HeadersInit) {
     let response = await fetch(url, {
       signal: controller.signal,
       headers: authHeaders,
+      ...options,
     });
 
     if (
@@ -59,6 +64,7 @@ async function fetchWithTimeout(url: string, headers?: HeadersInit) {
         response = await fetch(url, {
           signal: controller.signal,
           headers: retryHeaders,
+          ...options,
         });
       }
     }
@@ -76,6 +82,14 @@ async function fetchJson<T>(
   url: string,
   nativeRequest?: NativeAddonRequest,
 ): Promise<T> {
+  const bypassHttpCache = (() => {
+    try {
+      return new URL(url).searchParams.has("reload");
+    } catch {
+      return false;
+    }
+  })();
+
   const fetchFromNativeAddon = async () => {
     const api = getDesktopAddonElectronApi();
     if (!api || !nativeRequest) {
@@ -103,7 +117,11 @@ async function fetchJson<T>(
 
   const fetchFromRenderer = async () => {
     const startedAt = Date.now();
-    const response = await fetchWithTimeout(url);
+    const response = await fetchWithTimeout(
+      url,
+      undefined,
+      bypassHttpCache ? { cache: "no-store" } : undefined,
+    );
     if (!response.ok) {
       throw new Error(`Request failed with HTTP ${response.status}`);
     }

@@ -1,7 +1,10 @@
 /* eslint-disable no-console */
 import { downloadCaptionAsVtt } from "@/backend/helpers/subs";
 import { SegmentQualityDebugInfo } from "@/components/player/display/displayInterface";
-import { getInstalledAddons } from "@/desktop/addons/storage";
+import {
+  NATIVE_SUBTITLE_ADDON_ID,
+  getInstalledAddons,
+} from "@/desktop/addons/storage";
 import { loadAllAddonSubtitles } from "@/desktop/addons/subtitles";
 import { useLanguageStore } from "@/stores/language";
 import { MakeSlice } from "@/stores/player/slices/types";
@@ -260,6 +263,25 @@ function getExternalSubtitleMediaKey(meta: PlayerMeta | null): string | null {
     useSubtitleStore.getState().lastSelectedLanguage,
     useLanguageStore.getState().language,
   )}`;
+}
+
+function hasVietnameseWyzieCaption(captions: CaptionListItem[]) {
+  return captions.some((caption) => {
+    const language = caption.language.trim().toLowerCase().split("-")[0];
+    const source = caption.source?.toLowerCase() ?? "";
+    return (
+      language === "vi" &&
+      (source.includes("wyzie") || caption.url.includes("sub.wyzie.io"))
+    );
+  });
+}
+
+function hasNativeSubtitleAddon(addons: ReturnType<typeof getInstalledAddons>) {
+  return addons.some(
+    (addon) =>
+      addon.enabled &&
+      (addon.isNative || addon.manifest.id === NATIVE_SUBTITLE_ADDON_ID),
+  );
 }
 
 function getCaptionIdentityKey(caption: CaptionListItem): string {
@@ -847,44 +869,66 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
         staleTime: EXTERNAL_SUBTITLE_CACHE_TTL_MS,
         gcTime: EXTERNAL_SUBTITLE_CACHE_GC_MS,
         queryFn: async () => {
-          const { captions: loadedCaptions, errors } =
-            await loadAllAddonSubtitles(
-              getInstalledAddons(),
-              type,
-              id,
-              ({ captions: sourceCaptions, completed, total }) => {
-                const currentStore = get();
-                if (getMediaKey(currentStore.meta) !== requestedMediaKey) {
-                  return;
-                }
+          const addons = getInstalledAddons();
+          const onProgress = ({
+            captions: sourceCaptions,
+            completed,
+            total,
+          }: {
+            captions: CaptionListItem[];
+            completed: number;
+            total: number;
+          }) => {
+            const currentStore = get();
+            if (getMediaKey(currentStore.meta) !== requestedMediaKey) {
+              return;
+            }
 
-                set((s) => {
-                  if (total > 1) {
-                    s.externalSubtitleLoadProgress = {
-                      completed,
-                      total,
-                    };
-                  }
+            set((s) => {
+              if (total > 1) {
+                s.externalSubtitleLoadProgress = {
+                  completed,
+                  total,
+                };
+              }
 
-                  if (sourceCaptions.length > 0) {
-                    const existingCaptionKeys = new Set(
-                      s.captionList.map(getCaptionIdentityKey),
-                    );
-                    const newCaptions = sourceCaptions.filter(
-                      (caption) =>
-                        !existingCaptionKeys.has(
-                          getCaptionIdentityKey(caption),
-                        ),
-                    );
-                    s.captionList = sortCaptionList([
-                      ...s.captionList,
-                      ...newCaptions,
-                    ]);
-                  }
-                });
-              },
-              { forceRefresh, preferredLanguages },
+              if (sourceCaptions.length > 0) {
+                const existingCaptionKeys = new Set(
+                  s.captionList.map(getCaptionIdentityKey),
+                );
+                const newCaptions = sourceCaptions.filter(
+                  (caption) =>
+                    !existingCaptionKeys.has(getCaptionIdentityKey(caption)),
+                );
+                s.captionList = sortCaptionList([
+                  ...s.captionList,
+                  ...newCaptions,
+                ]);
+              }
+            });
+          };
+
+          const loadSubtitles = () =>
+            loadAllAddonSubtitles(addons, type, id, onProgress, {
+              forceRefresh,
+              preferredLanguages,
+            });
+
+          let result = await loadSubtitles();
+          if (
+            forceRefresh &&
+            hasNativeSubtitleAddon(addons) &&
+            !hasVietnameseWyzieCaption(result.captions)
+          ) {
+            console.info(
+              "[player] retrying forced subtitle refresh without Wyzie Vietnamese subtitle",
+              { id },
             );
+            await new Promise((resolve) => setTimeout(resolve, 250));
+            result = await loadSubtitles();
+          }
+
+          const { captions: loadedCaptions, errors } = result;
 
           if (loadedCaptions.length === 0 && errors.length > 0) {
             throw new Error(

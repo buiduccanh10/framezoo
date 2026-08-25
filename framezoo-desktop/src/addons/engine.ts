@@ -79,7 +79,11 @@ export function getAddonResourceUrl(request: AddonProtocolRequest) {
       break;
   }
 
-  return new URL(resourcePath, baseUrl).toString();
+  const url = new URL(resourcePath, baseUrl);
+  if (request.cacheBust) {
+    url.searchParams.set("reload", request.cacheBust);
+  }
+  return url.toString();
 }
 
 async function readJsonResponse<T>(
@@ -152,6 +156,9 @@ export class AddonProtocolEngine {
           Accept: "application/json",
         },
         redirect: "follow",
+        ...(new URL(url).searchParams.has("reload")
+          ? { cache: "no-store" as const }
+          : {}),
         signal: AbortSignal.timeout(ADDON_PROTOCOL_TIMEOUT_MS),
       });
     } catch (error) {

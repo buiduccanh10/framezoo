@@ -1418,6 +1418,280 @@ describe("libmpv display", () => {
     });
   });
 
+  it("closes PiP before dispatching next episode to the main window", async () => {
+    const timeline: string[] = [];
+    let pipActionListener:
+      | ((action: DesktopPipAction) => Promise<void> | void)
+      | undefined;
+    const dispatchedActions: DesktopPipAction[] = [];
+    const onPipAction = (event: Event) => {
+      dispatchedActions.push((event as CustomEvent<DesktopPipAction>).detail);
+    };
+    window.addEventListener("framezoo:desktop-pip-action", onPipAction);
+
+    usePlayerStore.setState({
+      source: {
+        type: "hls",
+        url: "https://example.test/video.m3u8",
+      },
+      currentQuality: null,
+      mediaPlaying: {
+        ...usePlayerStore.getState().mediaPlaying,
+        isPaused: false,
+      },
+    });
+
+    (window as any).electronAPI = {
+      createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
+      loadLibMpvSource: vi.fn().mockResolvedValue(true),
+      sendLibMpvCommand: vi.fn().mockImplementation(async () => true),
+      onLibMpvEvent: vi.fn().mockReturnValue(() => undefined),
+      onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
+      openDesktopPipWindow: vi.fn().mockResolvedValue(true),
+      activateDesktopPipWindow: vi.fn().mockResolvedValue(true),
+      closeDesktopPipWindow: vi.fn().mockImplementation(async () => {
+        timeline.push("close-pip");
+        return true;
+      }),
+      focusMainWindow: vi.fn().mockImplementation(async () => {
+        timeline.push("focus-main");
+        return true;
+      }),
+      reparentLibMpvPlayer: vi
+        .fn()
+        .mockImplementation(async (_id: string, target: "main" | "pip") => {
+          timeline.push(`reparent:${target}`);
+          return true;
+        }),
+      onDesktopPipAction: vi.fn(
+        (listener: (action: DesktopPipAction) => Promise<void> | void) => {
+          pipActionListener = listener;
+          return () => undefined;
+        },
+      ),
+      onDesktopPipClosed: vi.fn().mockReturnValue(() => undefined),
+      updateDesktopPipWindow: vi.fn(),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.processContainerElement(makeElement());
+    display.load({
+      source: {
+        type: "hls",
+        url: "https://example.test/video.m3u8",
+      } as Source,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    display.togglePictureInPicture();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    await pipActionListener?.({ type: "nextEpisode" });
+
+    expect(timeline).toEqual([
+      "reparent:pip",
+      "reparent:main",
+      "close-pip",
+      "focus-main",
+    ]);
+    expect(dispatchedActions).toEqual([{ type: "nextEpisode" }]);
+
+    window.removeEventListener("framezoo:desktop-pip-action", onPipAction);
+    display.destroy();
+    usePlayerStore.setState({
+      source: null,
+      currentQuality: null,
+    });
+  });
+
+  it("closes PiP when the main player clears its source for a new episode", async () => {
+    const timeline: string[] = [];
+
+    usePlayerStore.setState({
+      source: {
+        type: "hls",
+        url: "https://example.test/video.m3u8",
+      },
+      currentQuality: null,
+      mediaPlaying: {
+        ...usePlayerStore.getState().mediaPlaying,
+        isPaused: false,
+      },
+    });
+
+    (window as any).electronAPI = {
+      createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
+      loadLibMpvSource: vi.fn().mockResolvedValue(true),
+      sendLibMpvCommand: vi.fn().mockImplementation(async () => true),
+      onLibMpvEvent: vi.fn().mockReturnValue(() => undefined),
+      onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
+      openDesktopPipWindow: vi.fn().mockResolvedValue(true),
+      activateDesktopPipWindow: vi.fn().mockResolvedValue(true),
+      closeDesktopPipWindow: vi.fn().mockImplementation(async () => {
+        timeline.push("close-pip");
+        return true;
+      }),
+      focusMainWindow: vi.fn().mockImplementation(async () => {
+        timeline.push("focus-main");
+        return true;
+      }),
+      reparentLibMpvPlayer: vi
+        .fn()
+        .mockImplementation(async (_id: string, target: "main" | "pip") => {
+          timeline.push(`reparent:${target}`);
+          return true;
+        }),
+      onDesktopPipAction: vi.fn().mockReturnValue(() => undefined),
+      onDesktopPipClosed: vi.fn().mockReturnValue(() => undefined),
+      updateDesktopPipWindow: vi.fn(),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.processContainerElement(makeElement());
+    display.load({
+      source: {
+        type: "hls",
+        url: "https://example.test/video.m3u8",
+      } as Source,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    display.togglePictureInPicture();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    display.load({
+      source: null,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(timeline).toEqual([
+      "reparent:pip",
+      "reparent:main",
+      "close-pip",
+      "focus-main",
+    ]);
+
+    display.destroy();
+    usePlayerStore.setState({
+      source: null,
+      currentQuality: null,
+    });
+  });
+
+  it("waits for the PiP handoff before loading a source selected from the main player", async () => {
+    const timeline: string[] = [];
+    const loadedUrls: string[] = [];
+    let releaseMainReparent: (() => void) | undefined;
+    const mainReparentStarted = new Promise<void>((resolve) => {
+      releaseMainReparent = resolve;
+    });
+
+    usePlayerStore.setState({
+      source: {
+        type: "hls",
+        url: "https://example.test/episode-1.m3u8",
+      },
+      currentQuality: null,
+      mediaPlaying: {
+        ...usePlayerStore.getState().mediaPlaying,
+        isPaused: false,
+      },
+    });
+
+    (window as any).electronAPI = {
+      createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
+      loadLibMpvSource: vi
+        .fn()
+        .mockImplementation(async (_id: string, request: { url: string }) => {
+          loadedUrls.push(request.url);
+          return true;
+        }),
+      sendLibMpvCommand: vi.fn().mockResolvedValue(true),
+      onLibMpvEvent: vi.fn().mockReturnValue(() => undefined),
+      onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
+      openDesktopPipWindow: vi.fn().mockResolvedValue(true),
+      activateDesktopPipWindow: vi.fn().mockResolvedValue(true),
+      closeDesktopPipWindow: vi.fn().mockImplementation(async () => {
+        timeline.push("close-pip");
+        return true;
+      }),
+      focusMainWindow: vi.fn().mockImplementation(async () => {
+        timeline.push("focus-main");
+        return true;
+      }),
+      reparentLibMpvPlayer: vi
+        .fn()
+        .mockImplementation(async (_id: string, target: "main" | "pip") => {
+          timeline.push(`reparent:${target}`);
+          if (target === "main") {
+            await mainReparentStarted;
+          }
+          return true;
+        }),
+      onDesktopPipAction: vi.fn().mockReturnValue(() => undefined),
+      onDesktopPipClosed: vi.fn().mockReturnValue(() => undefined),
+      updateDesktopPipWindow: vi.fn(),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.processContainerElement(makeElement());
+    display.load({
+      source: {
+        type: "hls",
+        url: "https://example.test/episode-1.m3u8",
+      } as Source,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    display.togglePictureInPicture();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    display.load({
+      source: {
+        type: "hls",
+        url: "https://example.test/episode-2.m3u8",
+      } as Source,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(loadedUrls).toEqual(["https://example.test/episode-1.m3u8"]);
+    expect(timeline).toContain("reparent:main");
+
+    releaseMainReparent?.();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(timeline).toEqual([
+      "reparent:pip",
+      "reparent:main",
+      "close-pip",
+      "focus-main",
+    ]);
+    expect(loadedUrls).toEqual([
+      "https://example.test/episode-1.m3u8",
+      "https://example.test/episode-2.m3u8",
+    ]);
+
+    display.destroy();
+    usePlayerStore.setState({
+      source: null,
+      currentQuality: null,
+    });
+  });
+
   it("synchronizes initial fullscreen state from electronAPI", async () => {
     let fullscreenListener: ((isFull: boolean) => void) | undefined;
     const fullscreenEvents: boolean[] = [];

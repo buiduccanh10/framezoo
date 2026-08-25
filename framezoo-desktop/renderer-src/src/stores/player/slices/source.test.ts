@@ -49,7 +49,10 @@ function createSource(id: string): SourceSliceSource {
   };
 }
 
-function createCaption(id: string): CaptionListItem {
+function createCaption(
+  id: string,
+  overrides: Partial<CaptionListItem> = {},
+): CaptionListItem {
   return {
     id,
     language: "vi",
@@ -58,6 +61,7 @@ function createCaption(id: string): CaptionListItem {
     needsProxy: false,
     opensubtitles: true,
     source: "wyzie",
+    ...overrides,
   };
 }
 
@@ -156,6 +160,35 @@ describe("external subtitle source transitions", () => {
       .findAll({ queryKey: ["externalSubtitles"] });
     expect(cachedQueries).toHaveLength(1);
     expect(cachedQueries[0]?.state.data).toEqual([newCaption]);
+  });
+
+  it("retries forced refresh when Wyzie Vietnamese subtitles are missing", async () => {
+    const englishCaption = createCaption("episode-5-english", {
+      language: "en",
+    });
+    const vietnameseCaption = createCaption("episode-5-vietnamese");
+    subtitleMocks.loadAll
+      .mockResolvedValueOnce({
+        captions: [englishCaption],
+        errors: [],
+      })
+      .mockResolvedValueOnce({
+        captions: [vietnameseCaption],
+        errors: [],
+      });
+
+    const store = usePlayerStore.getState();
+    store.setMeta(createMeta(5));
+    const refreshPromise = store.addExternalSubtitles(undefined, {
+      forceRefresh: true,
+    });
+    await vi.advanceTimersByTimeAsync(250);
+    await refreshPromise;
+
+    expect(subtitleMocks.loadAll).toHaveBeenCalledTimes(2);
+    expect(usePlayerStore.getState().captionList).toContainEqual(
+      vietnameseCaption,
+    );
   });
 
   it("rejects a late caption response from the previous episode", async () => {

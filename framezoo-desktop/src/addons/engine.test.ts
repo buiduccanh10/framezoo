@@ -70,12 +70,37 @@ describe("AddonProtocolEngine", () => {
     );
   });
 
+  it("bypasses HTTP cache for cache-busted addon requests", async () => {
+    const fetchMock = vi.fn(async () => {
+      return new Response("{}", {
+        status: 200,
+        headers: { "content-type": "application/json" },
+      });
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    await new AddonProtocolEngine().request({
+      manifestUrl: "https://example.com/addons/demo/manifest.json",
+      resource: "subtitles",
+      type: "series",
+      id: "tt1234567:1:2",
+      cacheBust: "123",
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      "https://example.com/addons/demo/subtitles/series/tt1234567%3A1%3A2.json?reload=123",
+      expect.objectContaining({
+        cache: "no-store",
+      }),
+    );
+  });
+
   it("rejects unsupported protocols, HTTP failures, and invalid JSON", async () => {
     const engine = new AddonProtocolEngine();
 
-    await expect(engine.loadManifest("file:///tmp/manifest.json")).rejects.toThrow(
-      "HTTP or HTTPS",
-    );
+    await expect(
+      engine.loadManifest("file:///tmp/manifest.json"),
+    ).rejects.toThrow("HTTP or HTTPS");
 
     vi.stubGlobal(
       "fetch",

@@ -80,6 +80,7 @@ type PendingLoad = {
   generation: number;
   source: LoadableSource;
   request: LibMpvSourceRequest;
+  desktopPipHandoff?: Promise<boolean>;
 };
 
 type LibMpvElectronApi = {
@@ -107,6 +108,8 @@ type LibMpvElectronApi = {
   exitPlayerFullscreen?: () => Promise<void>;
   setFullscreen?: (fullscreen: boolean) => Promise<void>;
   exitFullscreen?: () => Promise<void>;
+  closeDesktopPipWindow?: () => Promise<boolean>;
+  focusMainWindow?: () => Promise<boolean>;
   getFullscreenState?: () => Promise<boolean>;
   minimizeWindow?: () => Promise<void>;
   maximizeWindow?: () => Promise<void>;
@@ -222,6 +225,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
   let desktopPipTarget: "main" | "pip" = "main";
   let desktopPipWindowOpen = false;
   let desktopPipTransitioning = false;
+  let desktopPipHandoffPromise: Promise<boolean> | null = null;
   let unbindDesktopPipStore: (() => void) | null = null;
   let unbindDesktopPipTorrent: (() => void) | null = null;
   let unbindDesktopPipWatchParty: (() => void) | null = null;
@@ -284,17 +288,21 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     return bounds;
   }
 
-  async function handoffDesktopPipToMain(): Promise<boolean> {
-    if (desktopPipTarget !== "pip") return true;
+  function handoffDesktopPipToMain(): Promise<boolean> {
+    if (desktopPipHandoffPromise) return desktopPipHandoffPromise;
+    if (desktopPipTarget !== "pip") return Promise.resolve(true);
 
     const api = getElectronApi();
-    if (!api?.reparentLibMpvPlayer || !playerId) return false;
+    const currentPlayerId = playerId;
+    if (!api?.reparentLibMpvPlayer || !currentPlayerId) {
+      return Promise.resolve(false);
+    }
 
     desktopPipTransitioning = true;
-    try {
+    const transition = (async () => {
       const didReparent =
         (await enqueueNativeOperation(() =>
-          api.reparentLibMpvPlayer?.(playerId!, "main"),
+          api.reparentLibMpvPlayer?.(currentPlayerId, "main"),
         )) ?? false;
       if (!didReparent) return false;
 
@@ -303,10 +311,23 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       emit("loading", false);
       emitPictureInPictureState(null);
       syncPipState(true);
+
+      const didClose = api.closeDesktopPipWindow
+        ? await api.closeDesktopPipWindow()
+        : true;
+      if (!didClose && desktopPipWindowOpen) {
+        return false;
+      }
+      await api.focusMainWindow?.();
       return true;
-    } finally {
+    })();
+
+    const trackedTransition = transition.finally(() => {
+      desktopPipHandoffPromise = null;
       desktopPipTransitioning = false;
-    }
+    });
+    desktopPipHandoffPromise = trackedTransition;
+    return trackedTransition;
   }
 
   function dispatchDesktopPipAction(action: DesktopPipAction) {
@@ -539,45 +560,57 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     if (!pending) return;
     pendingLoad = null;
 
-    void enqueueNativeOperation(async () => {
-      if (
-        destroyed ||
-        pending.generation !== generation ||
-        source !== pending.source ||
-        playerId !== id
-      ) {
-        return;
+    void (async () => {
+      if (pending.desktopPipHandoff) {
+        const didHandoff = await pending.desktopPipHandoff;
+        if (!didHandoff || desktopPipTarget !== "main") {
+          return;
+        }
       }
-      const loaded = await electronApi?.loadLibMpvSource?.(id, pending.request);
-      if (loaded === false) {
-        emit("loading", false);
-        emit("error", {
-          type: "mpv",
-          errorName: "libmpv_load_failed",
-          message: "Native libmpv could not load the selected source",
+
+      await enqueueNativeOperation(async () => {
+        if (
+          destroyed ||
+          pending.generation !== generation ||
+          source !== pending.source ||
+          playerId !== id
+        ) {
+          return;
+        }
+        const loaded = await electronApi?.loadLibMpvSource?.(
+          id,
+          pending.request,
+        );
+        if (loaded === false) {
+          emit("loading", false);
+          emit("error", {
+            type: "mpv",
+            errorName: "libmpv_load_failed",
+            message: "Native libmpv could not load the selected source",
+          });
+          return;
+        }
+        await electronApi?.sendLibMpvCommand?.(id, {
+          type: "set-subtitle-track",
+          trackId: caption?.trackId ?? "no",
         });
-        return;
-      }
-      await electronApi?.sendLibMpvCommand?.(id, {
-        type: "set-subtitle-track",
-        trackId: caption?.trackId ?? "no",
+        await electronApi?.sendLibMpvCommand?.(id, {
+          type: "set-secondary-subtitle-track",
+          trackId: secondaryCaption?.trackId ?? "no",
+        });
+        await electronApi?.sendLibMpvCommand?.(id, {
+          type: "set-volume",
+          volume,
+        });
+        await electronApi?.sendLibMpvCommand?.(id, {
+          type: "set-playback-rate",
+          rate: playbackRate,
+        });
+        await electronApi?.sendLibMpvCommand?.(id, {
+          type: desiredPaused ? "pause" : "play",
+        });
       });
-      await electronApi?.sendLibMpvCommand?.(id, {
-        type: "set-secondary-subtitle-track",
-        trackId: secondaryCaption?.trackId ?? "no",
-      });
-      await electronApi?.sendLibMpvCommand?.(id, {
-        type: "set-volume",
-        volume,
-      });
-      await electronApi?.sendLibMpvCommand?.(id, {
-        type: "set-playback-rate",
-        rate: playbackRate,
-      });
-      await electronApi?.sendLibMpvCommand?.(id, {
-        type: desiredPaused ? "pause" : "play",
-      });
-    }).catch((error) => {
+    })().catch((error) => {
       emit("loading", false);
       emit("error", {
         type: "mpv",
@@ -1156,6 +1189,12 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       syncPipState(true);
 
       if (!ops.source) {
+        if (desktopPipTarget === "pip" && !desktopPipTransitioning) {
+          void handoffDesktopPipToMain().catch((error) => {
+            console.warn("[libmpv] source reset PiP handoff failed", error);
+          });
+        }
+
         // Native player generations restart at zero after destroy. Do not
         // consume a generation for the clear/reset lifecycle.
         generation = 0;
@@ -1206,6 +1245,10 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         generation: requestGeneration,
         source: requestedSource,
         request: loadRequest,
+        desktopPipHandoff:
+          desktopPipTarget === "pip"
+            ? handoffDesktopPipToMain()
+            : (desktopPipHandoffPromise ?? undefined),
       };
       void ensurePlayer().then((id) => {
         if (

@@ -125,6 +125,11 @@ export async function loadAddonSubtitles(
     resource: "subtitles",
     type,
     id,
+    ...(options?.forceRefresh
+      ? {
+          cacheBust: url.searchParams.get("reload") ?? Date.now().toString(),
+        }
+      : {}),
   });
 
   const rawSubs: StremioSubtitle[] = Array.isArray(response)

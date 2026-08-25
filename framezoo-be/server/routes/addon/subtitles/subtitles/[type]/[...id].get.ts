@@ -28,8 +28,11 @@ export default defineEventHandler(async event => {
     ((config.wyzieApiKey as string | undefined) || process.env.WYZIE_API_KEY || '').trim() ||
     undefined;
   const subsourceApiKey =
-    ((config.subsourceApiKey as string | undefined) || process.env.SUBSOURCE_API_KEY || '').trim() ||
-    undefined;
+    (
+      (config.subsourceApiKey as string | undefined) ||
+      process.env.SUBSOURCE_API_KEY ||
+      ''
+    ).trim() || undefined;
 
   const query = getQuery(event);
   const acceptLanguage = getRequestHeader(event, 'accept-language') || '';
@@ -59,7 +62,11 @@ export default defineEventHandler(async event => {
   });
 
   setHeader(event, 'Content-Type', 'application/json');
-  setHeader(event, 'Cache-Control', 'public, max-age=300, stale-while-revalidate=1800');
+  // Subtitle availability can change between episode transitions. React Query
+  // owns the client-side cache; do not let browser/CDN cache hide a refresh.
+  setHeader(event, 'Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  setHeader(event, 'Pragma', 'no-cache');
+  setHeader(event, 'Expires', '0');
 
   return {
     subtitles,

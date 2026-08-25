@@ -11,6 +11,7 @@ export interface AddonProtocolRequest {
   type?: string;
   id?: string;
   catalogId?: string;
+  cacheBust?: string;
 }
 
 export interface AddonProtocolResponse<T = unknown> {
