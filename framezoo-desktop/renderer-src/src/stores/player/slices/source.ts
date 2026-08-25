@@ -176,6 +176,7 @@ export interface SourceSlice {
     total: number;
   };
   externalSubtitleMediaKey: string | null;
+  externalSubtitleRefreshMediaKey: string | null;
   caption: {
     selected: Caption | null;
     secondary: Caption | null;
@@ -384,6 +385,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     total: 0,
   },
   externalSubtitleMediaKey: null,
+  externalSubtitleRefreshMediaKey: null,
   currentQuality: null,
   segmentQualityDebug: null,
   currentAudioTrack: null,
@@ -457,6 +459,11 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       if (newStatus) s.status = newStatus;
       if (isMediaChanged) {
         s.externalSubtitleMediaKey = null;
+        if (oldMediaKey && newMediaKey) {
+          s.externalSubtitleRefreshMediaKey = newMediaKey;
+        } else if (s.externalSubtitleRefreshMediaKey !== newMediaKey) {
+          s.externalSubtitleRefreshMediaKey = null;
+        }
         s.caption.selected = null;
         s.caption.secondary = null;
         s.caption.translateTask = null;
@@ -548,10 +555,15 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
   ) {
     const store = get();
     const currentMediaKey = getExternalSubtitleMediaKey(store.meta);
+    const currentMediaId = getMediaKey(store.meta);
     const hasLoadedForCurrentMedia =
       !!currentMediaKey && currentMediaKey === store.externalSubtitleMediaKey;
+    const shouldForceRefreshExternalSubtitles =
+      !!currentMediaId &&
+      currentMediaId === store.externalSubtitleRefreshMediaKey;
     const isExternalLoading = store.isLoadingExternalSubtitles;
     const shouldReuseLoadedExternalSubtitles =
+      !shouldForceRefreshExternalSubtitles &&
       hasLoadedForCurrentMedia &&
       (hasCompletedExternalSubtitleLoad(
         store.isLoadingExternalSubtitles,
@@ -611,6 +623,9 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       s.externalSubtitleMediaKey = shouldReuseLoadedExternalSubtitles
         ? currentMediaKey
         : null;
+      if (shouldForceRefreshExternalSubtitles) {
+        s.externalSubtitleRefreshMediaKey = null;
+      }
       s.interface.error = undefined;
       s.status = playerStatus.PLAYING;
       const autoplayNext = store.mediaPlaying.isPlaying || isAutoplayAllowed();
@@ -631,8 +646,19 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     // Trigger external subtitle scraping after stream is loaded
     // This runs asynchronously so it doesn't block the stream loading
     if (!shouldReuseLoadedExternalSubtitles) {
+      const sourceMediaKey = getMediaKey(nextStore.meta);
       setTimeout(() => {
-        nextStore.addExternalSubtitles(requestId);
+        const currentStore = get();
+        if (
+          currentStore.externalSubtitleRequestId !== requestId ||
+          getMediaKey(currentStore.meta) !== sourceMediaKey
+        ) {
+          return;
+        }
+
+        void currentStore.addExternalSubtitles(requestId, {
+          forceRefresh: shouldForceRefreshExternalSubtitles,
+        });
       }, 100);
     }
   },
