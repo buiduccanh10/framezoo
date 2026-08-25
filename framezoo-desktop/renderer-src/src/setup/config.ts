@@ -160,6 +160,6 @@ export function conf(): RuntimeConfig {
     SHOW_SUPPORT_BAR: getKey("SHOW_SUPPORT_BAR", "false") === "true",
     SUPPORT_BAR_VALUE: getKey("SUPPORT_BAR_VALUE") ?? "",
     TIDB_API_KEY: getKey("TIDB_API_KEY"),
-    APP_DOMAIN: getKey("APP_DOMAIN") ?? "https://framezoo.com",
+    APP_DOMAIN: getKey("APP_DOMAIN") ?? "https://framezoo.top",
   };
 }
