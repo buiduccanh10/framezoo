@@ -418,8 +418,40 @@ describe("external subtitle source transitions", () => {
     await vi.advanceTimersByTimeAsync(100);
 
     expect(subtitleMocks.loadAll).toHaveBeenCalledTimes(2);
+    expect(subtitleMocks.loadAll.mock.calls[1]?.[4]).toEqual(
+      expect.objectContaining({
+        forceRefresh: true,
+      }),
+    );
     expect(usePlayerStore.getState().captionList).not.toContainEqual(
       captionEp1,
+    );
+    expect(usePlayerStore.getState().captionList).toContainEqual(captionEp2);
+  });
+
+  it("keeps the episode refresh request pending across route reset", async () => {
+    const captionEp1 = createCaption("episode-1-sub");
+    const captionEp2 = createCaption("episode-2-sub");
+    subtitleMocks.loadAll
+      .mockResolvedValueOnce({ captions: [captionEp1], errors: [] })
+      .mockResolvedValueOnce({ captions: [captionEp2], errors: [] });
+
+    const store = usePlayerStore.getState();
+    store.setMeta(createMeta(1));
+    store.setSource(createSource("source-ep1"), [], 0);
+    await vi.advanceTimersByTimeAsync(100);
+
+    store.setMeta(createMeta(2), "sourceSelection");
+    store.reset();
+    store.setMeta(createMeta(2), "sourceSelection");
+    store.setSource(createSource("source-ep2"), [], 0);
+    await vi.advanceTimersByTimeAsync(100);
+
+    expect(subtitleMocks.loadAll).toHaveBeenCalledTimes(2);
+    expect(subtitleMocks.loadAll.mock.calls[1]?.[4]).toEqual(
+      expect.objectContaining({
+        forceRefresh: true,
+      }),
     );
     expect(usePlayerStore.getState().captionList).toContainEqual(captionEp2);
   });
