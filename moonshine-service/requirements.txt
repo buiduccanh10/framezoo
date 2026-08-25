@@ -1,4 +1,4 @@
 fastapi==0.116.1
-moonshine-voice==0.1.3
+moonshine-voice==0.1.5
 python-multipart==0.0.20
 uvicorn[standard]==0.35.0
