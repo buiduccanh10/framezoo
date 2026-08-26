@@ -1,3 +1,41 @@
+!macro _FixedIsNativeARM64 _a _b _t _f
+  !insertmacro _LOGICLIB_TEMP
+  # Dedicated single-architecture ARM64 build: ALWAYS evaluate to true
+  !ifdef APP_ARM64
+    !ifndef APP_64
+      !ifndef APP_32
+        Goto `${_t}`
+      !endif
+    !endif
+  !endif
+
+  # Query IsWow64Process2 for native ARM64 machine type (0xAA64 = 43620)
+  System::Call "kernel32::IsWow64Process2(p -1, *i, *i .s)"
+  Pop $_LOGICLIB_TEMP
+  ${if} $_LOGICLIB_TEMP == 0xAA64
+    Goto `${_t}`
+  ${endif}
+
+  # Check environment variables
+  ReadEnvStr $_LOGICLIB_TEMP "PROCESSOR_ARCHITECTURE"
+  ${if} $_LOGICLIB_TEMP == "ARM64"
+    Goto `${_t}`
+  ${endif}
+  ReadEnvStr $_LOGICLIB_TEMP "PROCESSOR_ARCHITEW6432"
+  ${if} $_LOGICLIB_TEMP == "ARM64"
+    Goto `${_t}`
+  ${endif}
+
+  Goto `${_f}`
+!macroend
+
+!macro customHeader
+  !ifdef IsNativeARM64
+    !undef IsNativeARM64
+  !endif
+  !define IsNativeARM64 `"" FixedIsNativeARM64 ""`
+!macroend
+
 !macro customInstall
   ${if} ${FileExists} "$appExe"
     # Write helper PowerShell script to create native shell links without emulation/plugin corruption
