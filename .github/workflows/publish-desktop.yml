@@ -346,6 +346,31 @@ jobs:
           ./framezoo-desktop/scripts/verify-windows-installer-shortcuts.ps1 `
             -InstallerPath $installer.FullName `
             -Architecture "${{ matrix.arch }}"
+      - name: Verify reinstall shortcut persistence (x64)
+        if: matrix.arch == 'x64'
+        shell: pwsh
+        run: |
+          $installer = Get-ChildItem `
+            -Path framezoo-desktop/release `
+            -Filter "Framezoo-*-x64.exe" `
+            -File |
+            Select-Object -First 1
+
+          if (-not $installer) {
+            throw "Windows x64 installer was not found for reinstall test."
+          }
+
+          Write-Host "Reinstall pass: Installing Framezoo a second time over existing installation..."
+          $reinstallProcess = Start-Process -FilePath $installer.FullName -ArgumentList "/S" -PassThru -Wait
+          if ($reinstallProcess.ExitCode -ne 0) {
+            throw "Reinstall failed with exit code $($reinstallProcess.ExitCode)"
+          }
+
+          Start-Sleep -Seconds 4
+
+          ./framezoo-desktop/scripts/verify-windows-installer-shortcuts.ps1 `
+            -InstallerPath $installer.FullName `
+            -Architecture "x64"
       # Strongest gate: load the addon exactly as the packaged app would, from
       # the packaged output, inside real Electron. A broken or missing native
       # binary fails the job and the release is never published.
