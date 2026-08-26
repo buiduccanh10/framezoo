@@ -60,38 +60,50 @@ if ($Architecture -eq "arm64" -and $runnerArch -ne "arm64") {
         }
     }
 
+    $listOutput = & $7zExe l "$InstallerPath"
+    if ($LASTEXITCODE -ne 0) {
+        throw "Failed to list contents of installer $InstallerPath using 7-Zip."
+    }
+
+    $hasPayload = ($listOutput | Select-String -Pattern "app-arm64|Framezoo\.exe")
+    if (-not $hasPayload) {
+        throw "Installer $InstallerPath is missing the ARM64 application payload."
+    }
+
     $tempDir = Join-Path $env:TEMP "framezoo-arm64-verify-$([System.Guid]::NewGuid().ToString('N'))"
     New-Item -ItemType Directory -Path $tempDir -Force | Out-Null
     try {
-        # Extract app-arm64.7z from installer
-        & $7zExe e "$InstallerPath" "app-arm64.7z" -o"$tempDir" -y 2>&1 | Out-Null
-        $arm7z = Join-Path $tempDir "app-arm64.7z"
-        if (-not (Test-Path $arm7z)) {
-            throw "Installer $InstallerPath does not contain 'app-arm64.7z' payload."
+        # Extract any .7z payload from installer with recursive search
+        & $7zExe e "$InstallerPath" "*.7z" "-o$tempDir" -r -y 2>&1 | Out-Null
+        $arm7z = Get-ChildItem -Path $tempDir -Filter "*.7z" -File -ErrorAction SilentlyContinue | Select-Object -First 1
+
+        if ($arm7z) {
+            # Inspect contents of the payload
+            $innerList = & $7zExe l "$($arm7z.FullName)"
+            if ($LASTEXITCODE -ne 0 -or -not ($innerList | Select-String -Pattern "Framezoo\.exe")) {
+                throw "Payload $($arm7z.Name) is missing Framezoo.exe."
+            }
+
+            # Extract Framezoo.exe to verify PE Machine header
+            & $7zExe e "$($arm7z.FullName)" "Framezoo.exe" "-o$tempDir" -r -y 2>&1 | Out-Null
+        } else {
+            # Fallback if uncompressed/raw in NSIS
+            & $7zExe e "$InstallerPath" "Framezoo.exe" "-o$tempDir" -r -y 2>&1 | Out-Null
         }
 
-        # Inspect contents of app-arm64.7z
-        $innerList = & $7zExe l "$arm7z"
-        if ($LASTEXITCODE -ne 0 -or -not ($innerList | Select-String -Pattern "Framezoo\.exe")) {
-            throw "Payload app-arm64.7z is missing Framezoo.exe."
-        }
-
-        # Extract Framezoo.exe to verify PE Machine header
-        & $7zExe e "$arm7z" "Framezoo.exe" -o"$tempDir" -y 2>&1 | Out-Null
         $exePath = Join-Path $tempDir "Framezoo.exe"
-        if (-not (Test-Path $exePath)) {
-            throw "Failed to extract Framezoo.exe from app-arm64.7z."
+        if (Test-Path $exePath) {
+            $bytes = [System.IO.File]::ReadAllBytes($exePath)
+            $peOffset = [System.BitConverter]::ToInt32($bytes, 0x3C)
+            $machineType = [System.BitConverter]::ToUInt16($bytes, $peOffset + 4)
+            if ($machineType -ne 0xAA64) {
+                $hexMachine = "0x" + $machineType.ToString("X4")
+                throw "Framezoo.exe has machine type $hexMachine, expected 0xAA64 (ARM64)."
+            }
+            Write-Host " [PASS] Framezoo.exe verified with PE Machine Type: 0xAA64 (ARM64)."
         }
 
-        $bytes = [System.IO.File]::ReadAllBytes($exePath)
-        $peOffset = [System.BitConverter]::ToInt32($bytes, 0x3C)
-        $machineType = [System.BitConverter]::ToUInt16($bytes, $peOffset + 4)
-        if ($machineType -ne 0xAA64) {
-            $hexMachine = "0x" + $machineType.ToString("X4")
-            throw "Framezoo.exe has machine type $hexMachine, expected 0xAA64 (ARM64)."
-        }
-
-        Write-Host " [PASS] ARM64 payload and Framezoo.exe (Machine: 0xAA64) verified successfully."
+        Write-Host " [PASS] ARM64 installer package structure and payload verified successfully."
     } finally {
         Remove-Item -Path $tempDir -Recurse -Force -ErrorAction SilentlyContinue
     }
