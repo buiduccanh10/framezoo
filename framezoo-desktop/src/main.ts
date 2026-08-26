@@ -14,6 +14,7 @@ import {
   type Rectangle,
 } from "electron";
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
 import { pathToFileURL } from "node:url";
@@ -40,6 +41,12 @@ import type {
 
 const APP_ID = "com.framezoo.desktop";
 const APP_NAME = "Framezoo";
+
+app.setName(APP_NAME);
+if (process.platform === "win32") {
+  app.setAppUserModelId(APP_ID);
+}
+
 const DEFAULT_BACKEND_URL = "http://127.0.0.1:3000";
 const RENDERER_DEV_URL = process.env.ELECTRON_RENDERER_URL;
 const RENDERER_PROTOCOL = "app";
@@ -121,6 +128,79 @@ function handleDeepLink(url: string) {
 
 const hasSingleInstanceLock = app.requestSingleInstanceLock();
 
+function copyDirectoryContentsRecursive(src: string, dest: string) {
+  try {
+    if (!fs.existsSync(src)) return;
+    fs.mkdirSync(dest, { recursive: true });
+    const entries = fs.readdirSync(src, { withFileTypes: true });
+    for (const entry of entries) {
+      const srcPath = path.join(src, entry.name);
+      const destPath = path.join(dest, entry.name);
+      if (entry.isDirectory()) {
+        copyDirectoryContentsRecursive(srcPath, destPath);
+      } else if (entry.isFile()) {
+        if (!fs.existsSync(destPath)) {
+          try {
+            fs.copyFileSync(srcPath, destPath);
+          } catch {
+            // ignore copy errors for individual files
+          }
+        }
+      }
+    }
+  } catch {
+    // ignore directory read errors
+  }
+}
+
+function migrateLegacyTorrentDirs(targetDir: string) {
+  try {
+    const normalizedTarget = path.resolve(targetDir);
+    const candidateDirs: (string | null | undefined)[] = [
+      path.join(app.getPath("appData"), "FrameZoo", "torrents"),
+      path.join(app.getPath("appData"), "AlphaFlix", "torrents"),
+      path.join(app.getPath("appData"), "BetaMovie", "torrents"),
+      path.join(os.tmpdir(), "framezoo-torrents"),
+      path.join(os.tmpdir(), "betamovie-torrents"),
+      typeof process.resourcesPath === "string"
+        ? path.join(process.resourcesPath, "torrents")
+        : null,
+      typeof process.resourcesPath === "string"
+        ? path.join(process.resourcesPath, "torrent-engine", "torrents")
+        : null,
+    ];
+
+    if (process.platform === "darwin") {
+      let appPath = process.execPath;
+      if (appPath.includes(".app/Contents/MacOS/")) {
+        appPath = appPath.substring(0, appPath.indexOf(".app") + 4);
+        candidateDirs.push(
+          path.join(appPath, "Contents", "Resources", "torrents"),
+          path.join(
+            appPath,
+            "Contents",
+            "Resources",
+            "torrent-engine",
+            "torrents",
+          ),
+          path.join(appPath, "torrents"),
+        );
+      }
+    }
+
+    for (const candidate of candidateDirs) {
+      if (!candidate) continue;
+      const normalizedCandidate = path.resolve(candidate);
+      if (normalizedCandidate === normalizedTarget) continue;
+      if (fs.existsSync(normalizedCandidate)) {
+        copyDirectoryContentsRecursive(normalizedCandidate, normalizedTarget);
+      }
+    }
+  } catch {
+    // ignore migration errors
+  }
+}
+
 function setupTorrentEnv() {
   if (!process.env.FRAMEZOO_TORRENT_DATA_DIR) {
     const torrentDir = path.join(app.getPath("userData"), "torrents");
@@ -131,6 +211,7 @@ function setupTorrentEnv() {
     }
     process.env.FRAMEZOO_TORRENT_DATA_DIR = torrentDir;
   }
+  migrateLegacyTorrentDirs(process.env.FRAMEZOO_TORRENT_DATA_DIR);
 }
 
 function getDirectorySize(dirPath: string): number {
@@ -284,10 +365,7 @@ function runTorrentWarmup(): Promise<boolean> {
       throw new Error("Torrent warmup timed out");
     });
     try {
-      await Promise.race([
-        torrentManager.warmup(),
-        timeoutPromise,
-      ]);
+      await Promise.race([torrentManager.warmup(), timeoutPromise]);
       setWarmupState({ status: "ready" });
       return true;
     } catch (err) {
@@ -719,6 +797,17 @@ const desktopAppUpdater = createDesktopAppUpdater({
         error,
       );
     }
+    try {
+      const torrentDir =
+        process.env.FRAMEZOO_TORRENT_DATA_DIR ||
+        path.join(app.getPath("userData"), "torrents");
+      migrateLegacyTorrentDirs(torrentDir);
+    } catch (error) {
+      console.error(
+        "[main] Failed to sync torrent cache before update install:",
+        error,
+      );
+    }
   },
   checkIntervalMs: DESKTOP_APP_UPDATE_CHECK_INTERVAL_MS,
   getBackendUrl: getConfiguredBackendUrl,
@@ -1022,7 +1111,10 @@ function isAppFullScreen(): boolean {
   return mainWindow.isFullScreen();
 }
 
-function setAppFullScreen(fullscreen: boolean, origin: "player" | "user" = "user") {
+function setAppFullScreen(
+  fullscreen: boolean,
+  origin: "player" | "user" = "user",
+) {
   if (!mainWindow || mainWindow.isDestroyed()) return;
 
   if (process.platform === "win32") {
@@ -1045,20 +1137,49 @@ function setAppFullScreen(fullscreen: boolean, origin: "player" | "user" = "user
         mainWindow.maximize();
       } else if (savedWindowBounds) {
         const currentDisplay = screen.getDisplayMatching(savedWindowBounds);
-        const workArea = currentDisplay?.workArea ?? { x: 0, y: 0, width: 1440, height: 900 };
-        const width = Math.min(workArea.width, Math.max(960, savedWindowBounds.width));
-        const height = Math.min(workArea.height, Math.max(600, savedWindowBounds.height));
+        const workArea = currentDisplay?.workArea ?? {
+          x: 0,
+          y: 0,
+          width: 1440,
+          height: 900,
+        };
+        const width = Math.min(
+          workArea.width,
+          Math.max(960, savedWindowBounds.width),
+        );
+        const height = Math.min(
+          workArea.height,
+          Math.max(600, savedWindowBounds.height),
+        );
         mainWindow.setBounds({
-          x: Math.max(workArea.x, Math.min(savedWindowBounds.x, workArea.x + workArea.width - width)),
-          y: Math.max(workArea.y, Math.min(savedWindowBounds.y, workArea.y + workArea.height - height)),
+          x: Math.max(
+            workArea.x,
+            Math.min(savedWindowBounds.x, workArea.x + workArea.width - width),
+          ),
+          y: Math.max(
+            workArea.y,
+            Math.min(
+              savedWindowBounds.y,
+              workArea.y + workArea.height - height,
+            ),
+          ),
           width,
           height,
         });
       } else {
         const primaryDisplay = screen.getPrimaryDisplay();
-        const workArea = primaryDisplay?.workArea ?? { width: 1440, height: 900 };
-        const initialWidth = Math.min(1440, Math.max(960, Math.round(workArea.width * 0.85)));
-        const initialHeight = Math.min(900, Math.max(600, Math.round(workArea.height * 0.85)));
+        const workArea = primaryDisplay?.workArea ?? {
+          width: 1440,
+          height: 900,
+        };
+        const initialWidth = Math.min(
+          1440,
+          Math.max(960, Math.round(workArea.width * 0.85)),
+        );
+        const initialHeight = Math.min(
+          900,
+          Math.max(600, Math.round(workArea.height * 0.85)),
+        );
         mainWindow.setSize(initialWidth, initialHeight);
         mainWindow.center();
       }
@@ -1111,8 +1232,14 @@ let lastNormalBounds: Rectangle | null = null;
 function createMainWindow() {
   const primaryDisplay = screen.getPrimaryDisplay();
   const workArea = primaryDisplay?.workArea ?? { width: 1440, height: 900 };
-  const initialWidth = Math.min(1440, Math.max(960, Math.round(workArea.width * 0.85)));
-  const initialHeight = Math.min(900, Math.max(600, Math.round(workArea.height * 0.85)));
+  const initialWidth = Math.min(
+    1440,
+    Math.max(960, Math.round(workArea.width * 0.85)),
+  );
+  const initialHeight = Math.min(
+    900,
+    Math.max(600, Math.round(workArea.height * 0.85)),
+  );
 
   mainWindow = new BrowserWindow({
     title: APP_NAME,
@@ -1606,20 +1733,49 @@ function registerIpcHandlers() {
         mainWindow.unmaximize();
         if (lastNormalBounds) {
           const currentDisplay = screen.getDisplayMatching(lastNormalBounds);
-          const workArea = currentDisplay?.workArea ?? { x: 0, y: 0, width: 1440, height: 900 };
-          const width = Math.min(workArea.width, Math.max(960, lastNormalBounds.width));
-          const height = Math.min(workArea.height, Math.max(600, lastNormalBounds.height));
+          const workArea = currentDisplay?.workArea ?? {
+            x: 0,
+            y: 0,
+            width: 1440,
+            height: 900,
+          };
+          const width = Math.min(
+            workArea.width,
+            Math.max(960, lastNormalBounds.width),
+          );
+          const height = Math.min(
+            workArea.height,
+            Math.max(600, lastNormalBounds.height),
+          );
           mainWindow.setBounds({
-            x: Math.max(workArea.x, Math.min(lastNormalBounds.x, workArea.x + workArea.width - width)),
-            y: Math.max(workArea.y, Math.min(lastNormalBounds.y, workArea.y + workArea.height - height)),
+            x: Math.max(
+              workArea.x,
+              Math.min(lastNormalBounds.x, workArea.x + workArea.width - width),
+            ),
+            y: Math.max(
+              workArea.y,
+              Math.min(
+                lastNormalBounds.y,
+                workArea.y + workArea.height - height,
+              ),
+            ),
             width,
             height,
           });
         } else {
           const primaryDisplay = screen.getPrimaryDisplay();
-          const workArea = primaryDisplay?.workArea ?? { width: 1440, height: 900 };
-          const initialWidth = Math.min(1440, Math.max(960, Math.round(workArea.width * 0.85)));
-          const initialHeight = Math.min(900, Math.max(600, Math.round(workArea.height * 0.85)));
+          const workArea = primaryDisplay?.workArea ?? {
+            width: 1440,
+            height: 900,
+          };
+          const initialWidth = Math.min(
+            1440,
+            Math.max(960, Math.round(workArea.width * 0.85)),
+          );
+          const initialHeight = Math.min(
+            900,
+            Math.max(600, Math.round(workArea.height * 0.85)),
+          );
           mainWindow.setSize(initialWidth, initialHeight);
           mainWindow.center();
         }
@@ -1782,11 +1938,6 @@ app.on("before-quit", () => {
 app.commandLine.appendSwitch("autoplay-policy", "no-user-gesture-required");
 app.commandLine.appendSwitch("enable-features", "DocumentPictureInPictureAPI");
 app.commandLine.appendSwitch("disable-features", "HardwareMediaKeyHandling");
-app.setName(APP_NAME);
-
-if (process.platform === "win32") {
-  app.setAppUserModelId(APP_ID);
-}
 
 if (!hasSingleInstanceLock) {
   app.quit();

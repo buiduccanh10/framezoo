@@ -207,8 +207,19 @@ export function createDesktopAppUpdater(
 
       const scriptContent = `#!/bin/bash
 sleep 2
+USER_TORRENTS_DIR="$HOME/Library/Application Support/${options.appName}/torrents"
+mkdir -p "$USER_TORRENTS_DIR"
+if [ -d "${appPath}/Contents/Resources/torrents" ]; then
+  cp -Rn "${appPath}/Contents/Resources/torrents/"* "$USER_TORRENTS_DIR/" 2>/dev/null || true
+fi
+if [ -d "${appPath}/Contents/Resources/torrent-engine/torrents" ]; then
+  cp -Rn "${appPath}/Contents/Resources/torrent-engine/torrents/"* "$USER_TORRENTS_DIR/" 2>/dev/null || true
+fi
+if [ -d "${appPath}/torrents" ]; then
+  cp -Rn "${appPath}/torrents/"* "$USER_TORRENTS_DIR/" 2>/dev/null || true
+fi
 rm -rf "${appPath}"
-unzip -q "${zipPath}" -d "${path.dirname(appPath)}"
+unzip -q -o "${zipPath}" -d "${path.dirname(appPath)}"
 xattr -cr "${appPath}"
 codesign --force --deep -s - "${appPath}"
 open "${appPath}"

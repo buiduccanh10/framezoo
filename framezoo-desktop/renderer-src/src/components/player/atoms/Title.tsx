@@ -1,21 +1,40 @@
+import { useTranslation } from "react-i18next";
+import { useParams } from "react-router-dom";
+import { useCopyToClipboard } from "react-use";
+
+import { TMDBIdToUrlId } from "@/backend/metadata/tmdb";
+import { MWMediaType } from "@/backend/metadata/types/mw";
+import { conf } from "@/setup/config";
+import { useToastStore } from "@/stores/interface/toast";
 import { usePlayerStore } from "@/stores/player/store";
 import { formatSeconds } from "@/utils/formatSeconds";
 
 export function Title() {
-  const title = usePlayerStore((s) => s.meta?.title);
+  const { t } = useTranslation();
+  const meta = usePlayerStore((s) => s.meta);
+  const title = meta?.title;
   const { time } = usePlayerStore((s) => s.progress);
+  const params = useParams<{ media?: string }>();
+  const [, copyToClipboard] = useCopyToClipboard();
+  const showToast = useToastStore((s) => s.showToast);
 
   const handleTitleClick = (e: React.MouseEvent) => {
-    const baseLink = window.location.href;
+    let urlId = params.media;
+    if (!urlId && meta?.tmdbId && meta?.title) {
+      urlId = TMDBIdToUrlId(
+        meta.type === "movie" ? MWMediaType.MOVIE : MWMediaType.SERIES,
+        meta.tmdbId,
+        meta.title,
+      );
+    }
+    if (!urlId) return;
+
+    const baseLink = `${conf().APP_DOMAIN}/discover?detail=${urlId}`;
     const timeStamp = formatSeconds(time, time >= 3600);
 
-    if (e.shiftKey) {
-      navigator.clipboard
-        .writeText(`${baseLink}?t=${timeStamp}`)
-        .then(() => {});
-    } else {
-      navigator.clipboard.writeText(baseLink).then(() => {});
-    }
+    const linkToCopy = e.shiftKey ? `${baseLink}&t=${timeStamp}` : baseLink;
+    copyToClipboard(linkToCopy);
+    showToast(t("toasts.linkCopied"), "success");
   };
 
   if (!title) {
