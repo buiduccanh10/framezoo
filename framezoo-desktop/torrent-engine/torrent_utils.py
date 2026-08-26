@@ -204,11 +204,20 @@ def get_torrent_data_dir() -> str:
     if env_dir:
         os.makedirs(env_dir, exist_ok=True)
         return os.path.abspath(env_dir)
-    fallback = (
-        os.path.expanduser("~/Library/Application Support/Framezoo/torrents")
-        if sys.platform == "darwin"
-        else os.path.join(tempfile.gettempdir(), "framezoo-torrents")
-    )
+    if sys.platform == "darwin":
+        fallback = os.path.expanduser("~/Library/Application Support/Framezoo/torrents")
+    elif sys.platform == "win32":
+        appdata = os.environ.get("APPDATA")
+        fallback = (
+            os.path.join(appdata, "Framezoo", "torrents")
+            if appdata
+            else os.path.join(tempfile.gettempdir(), "framezoo-torrents")
+        )
+    else:
+        config_dir = os.environ.get(
+            "XDG_CONFIG_HOME", os.path.expanduser("~/.config")
+        )
+        fallback = os.path.join(config_dir, "Framezoo", "torrents")
     os.makedirs(fallback, exist_ok=True)
     return os.path.abspath(fallback)
 
