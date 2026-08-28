@@ -12,19 +12,14 @@
   # Query IsWow64Process2 for native ARM64 machine type (0xAA64 = 43620)
   System::Call "kernel32::IsWow64Process2(p -1, *i, *i .s)"
   Pop $_LOGICLIB_TEMP
-  ${if} $_LOGICLIB_TEMP == 0xAA64
-    Goto `${_t}`
-  ${endif}
+  IntCmpU $_LOGICLIB_TEMP 0xAA64 `${_t}`
 
   # Check environment variables
   ReadEnvStr $_LOGICLIB_TEMP "PROCESSOR_ARCHITECTURE"
-  ${if} $_LOGICLIB_TEMP == "ARM64"
-    Goto `${_t}`
-  ${endif}
+  StrCmp $_LOGICLIB_TEMP "ARM64" `${_t}`
+  
   ReadEnvStr $_LOGICLIB_TEMP "PROCESSOR_ARCHITEW6432"
-  ${if} $_LOGICLIB_TEMP == "ARM64"
-    Goto `${_t}`
-  ${endif}
+  StrCmp $_LOGICLIB_TEMP "ARM64" `${_t}`
 
   Goto `${_f}`
 !macroend
