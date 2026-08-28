@@ -15,7 +15,7 @@ export interface PlaybackClockAnchor {
   timestamp: number;
 }
 
-export const MAX_EXTRAPOLATION_SECONDS = 1.5;
+export const MAX_EXTRAPOLATION_SECONDS = 10.0;
 export const SEEK_DISCONTINUITY_BACKWARD_THRESHOLD = 2.5;
 export const SEEK_DISCONTINUITY_FORWARD_THRESHOLD = 2.5;
 
