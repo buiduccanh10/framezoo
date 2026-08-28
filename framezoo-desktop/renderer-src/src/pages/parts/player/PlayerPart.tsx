@@ -17,6 +17,7 @@ import {
 } from "@/components/player/hooks/useSkipTime";
 import { DocumentPipOverlay } from "@/components/player/internals/DocumentPipOverlay";
 import { PauseOverlay } from "@/components/player/overlays/PauseOverlay";
+import { resolveNextEpisodeAction } from "@/components/player/utils/episodeNavigation";
 import type { DesktopPipAction } from "@/desktop/pip";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { PlayerMeta, playerStatus } from "@/stores/player/slices/source";
@@ -82,21 +83,22 @@ export function PlayerPart(props: PlayerPartProps) {
   }, []);
 
   const handleDesktopPipAction = useCallback(
-    (event: Event) => {
+    async (event: Event) => {
       const action = (event as CustomEvent<DesktopPipAction>).detail;
       if (!action || action.type !== "nextEpisode") return;
 
       const currentMeta = usePlayerStore.getState().meta;
       if (currentMeta?.type !== "show" || !currentMeta.episode) return;
 
-      const nextEpisode = currentMeta.episodes?.find(
-        (episode) => episode.number === currentMeta.episode!.number + 1,
-      );
-      if (!nextEpisode) return;
+      const nextAction = await resolveNextEpisodeAction(currentMeta);
+      if (!nextAction) return;
 
       const nextMeta = {
         ...currentMeta,
-        episode: nextEpisode,
+        episode: nextAction.episode,
+        season: nextAction.isSeasonChange
+          ? (nextAction.season ?? currentMeta.season)
+          : currentMeta.season,
       };
       setShouldStartFromBeginning(true);
       setDirectMeta(nextMeta);
