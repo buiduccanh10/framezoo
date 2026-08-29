@@ -67,23 +67,19 @@ if ($Architecture -eq "arm64" -and $runnerArch -ne "arm64") {
 
     $hasPayload = ($listOutput | Select-String -Pattern "app-arm64|Framezoo\.exe")
     if (-not $hasPayload) {
-        throw "Installer $InstallerPath is missing the ARM64 application payload."
+        throw "Installer $InstallerPath does not contain 'app-arm64' payload."
     }
 
     $tempDir = Join-Path $env:TEMP "framezoo-arm64-verify-$([System.Guid]::NewGuid().ToString('N'))"
     New-Item -ItemType Directory -Path $tempDir -Force | Out-Null
     try {
-        # Extract any .7z payload from installer with recursive search
+        # Extract any .7z or .zip payload from installer with recursive search
         & $7zExe e "$InstallerPath" "*.7z" "*.zip" "-o$tempDir" -r -y 2>&1 | Out-Null
         $arm7z = Get-ChildItem -Path "$tempDir\*" -Include "*.7z", "*.zip" -File -ErrorAction SilentlyContinue | Select-Object -First 1
 
         if ($arm7z) {
             # Inspect contents of the payload
             $innerList = & $7zExe l "$($arm7z.FullName)"
-            Write-Host "--- CONTENTS OF $($arm7z.Name) ---"
-            $innerList | Write-Host
-            Write-Host "----------------------------------"
-            
             if ($LASTEXITCODE -ne 0 -or -not ($innerList | Select-String -Pattern "Framezoo\.exe")) {
                 throw "Payload $($arm7z.Name) is missing Framezoo.exe."
             }
