@@ -74,8 +74,8 @@ if ($Architecture -eq "arm64" -and $runnerArch -ne "arm64") {
     New-Item -ItemType Directory -Path $tempDir -Force | Out-Null
     try {
         # Extract any .7z payload from installer with recursive search
-        & $7zExe e "$InstallerPath" "*.7z" "-o$tempDir" -r -y 2>&1 | Out-Null
-        $arm7z = Get-ChildItem -Path $tempDir -Filter "*.7z" -File -ErrorAction SilentlyContinue | Select-Object -First 1
+        & $7zExe e "$InstallerPath" "*.7z" "*.zip" "-o$tempDir" -r -y 2>&1 | Out-Null
+        $arm7z = Get-ChildItem -Path "$tempDir\*" -Include "*.7z", "*.zip" -File -ErrorAction SilentlyContinue | Select-Object -First 1
 
         if ($arm7z) {
             # Inspect contents of the payload
@@ -113,6 +113,14 @@ if ($Architecture -eq "arm64" -and $runnerArch -ne "arm64") {
 # Case 2: Native Architecture Verification (e.g. x64 installer on x64 Windows runner)
 Write-Host "Running silent installation test..."
 $installProcess = Start-Process -FilePath $InstallerPath -ArgumentList "/S" -PassThru -Wait
+
+$diagFile = Join-Path $env:LOCALAPPDATA "Programs\Framezoo\install_diagnostics.txt"
+if (Test-Path $diagFile) {
+    Write-Host "`n--- BEGIN install_diagnostics.txt ---"
+    Get-Content $diagFile | Write-Host
+    Write-Host "--- END install_diagnostics.txt ---`n"
+}
+
 if ($installProcess.ExitCode -ne 0) {
     throw "Installer exited with non-zero exit code: $($installProcess.ExitCode)"
 }

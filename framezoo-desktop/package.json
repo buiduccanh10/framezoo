@@ -277,7 +277,6 @@
       "icon": "build/icon.png"
     },
     "nsis": {
-      "useZip": true,
       "oneClick": true,
       "perMachine": false,
       "allowToChangeInstallationDirectory": false,
