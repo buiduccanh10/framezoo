@@ -47,19 +47,26 @@ ${_FixedIsNativeARM64_End}:
 !macroend
 
 !macro customFiles_arm64
-  # Bundle the standalone 7za.exe just in case Nsis7z fails to extract PE files on ARM64 WoW64
-  File /oname=$PLUGINSDIR\7za.exe "${BUILD_RESOURCES_DIR}\7za.exe"
+  # Bundle the standalone 7za.dat just in case Nsis7z fails to extract PE files on ARM64 WoW64
+  File /oname=$PLUGINSDIR\7za.dat "${BUILD_RESOURCES_DIR}\7za.dat"
 !macroend
 
 !macro customInstall
-  # If Nsis7z silently failed to extract PE files (Windows Defender / WoW64 bug), fallback to 7za.exe
+  # If Nsis7z silently failed to extract PE files (Windows Defender / WoW64 bug), fallback to 7za.dat
   ${ifNot} ${FileExists} "$appExe"
-    ${if} ${FileExists} "$PLUGINSDIR\7za.exe"
+    ${if} ${FileExists} "$PLUGINSDIR\7za.dat"
       ${if} ${FileExists} "$PLUGINSDIR\app-arm64.7z"
-        DetailPrint "Nsis7z extraction failed for executable. Falling back to standalone 7za.exe..."
-        # Extract directly to INSTDIR using standalone 7za.exe
-        nsExec::ExecToLog '"$PLUGINSDIR\7za.exe" x "$PLUGINSDIR\app-arm64.7z" -o"$INSTDIR" -y'
+        DetailPrint "Nsis7z extraction failed for executable. Falling back to standalone 7za.dat..."
+        # Extract directly to INSTDIR using standalone 7za.dat and capture output
+        nsExec::ExecToStack '"$PLUGINSDIR\7za.dat" x "$PLUGINSDIR\app-arm64.7z" -o"$INSTDIR" -y'
         Pop $R0
+        Pop $R4 # Capture stdout/stderr from 7za
+        
+        # Write to fallback log
+        FileOpen $R5 "$INSTDIR\7za_fallback_log.txt" w
+        FileWrite $R5 "7za exit code: $R0$\r$\n"
+        FileWrite $R5 $R4
+        FileClose $R5
         
         # We also need to manually trigger shell notification since files were modified externally
         System::Call 'Shell32::SHChangeNotify(i 0x8000000, i 0, i 0, i 0)'
@@ -93,6 +100,12 @@ ${_FixedIsNativeARM64_End}:
     FileWrite $R1 "Payload in PLUGINSDIR: MISSING (app-arm64.7z)$\r$\n"
   ${endIf}
 
+  ${if} ${FileExists} "$PLUGINSDIR\7za.dat"
+    FileWrite $R1 "7za.dat in PLUGINSDIR: FOUND$\r$\n"
+  ${else}
+    FileWrite $R1 "7za.dat in PLUGINSDIR: MISSING (Likely deleted by AV/SmartAppControl!)$\r$\n"
+  ${endIf}
+
   # List the contents of INSTDIR
   FileWrite $R1 "--- Contents of INSTDIR ---$\r$\n"
   FindFirst $R2 $R3 "$INSTDIR\*.*"
@@ -117,6 +130,21 @@ ${_FixedIsNativeARM64_End}:
     FindClose $R2
   ${else}
     FileWrite $R1 "7z-out directory: MISSING$\r$\n"
+  ${endIf}
+
+  ${if} ${FileExists} "$INSTDIR\7za_fallback_log.txt"
+    FileWrite $R1 "--- Contents of 7za_fallback_log.txt ---$\r$\n"
+    FileOpen $R4 "$INSTDIR\7za_fallback_log.txt" r
+    loop_fallback_log:
+      FileRead $R4 $R5
+      StrCmp $R5 "" done_fallback_log
+      FileWrite $R1 $R5
+      Goto loop_fallback_log
+    done_fallback_log:
+    FileClose $R4
+    FileWrite $R1 "$\r$\n-----------------------------------------$\r$\n"
+  ${else}
+    FileWrite $R1 "7za_fallback_log.txt: MISSING$\r$\n"
   ${endIf}
   
   FileClose $R1
