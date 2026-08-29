@@ -2,7 +2,7 @@ import fs from 'fs';
 import https from 'https';
 import path from 'path';
 
-const url = 'https://github.com/develar/7zip-bin/raw/master/win/ia32/7za.exe';
+const url = 'https://github.com/develar/7zip-bin/raw/master/win/x64/7za.exe';
 const dest = path.join(process.cwd(), 'build', '7za.exe');
 
 if (!fs.existsSync(dest)) {

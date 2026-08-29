@@ -1,7 +1,7 @@
 {
   "name": "Framezoo",
   "private": true,
-  "version": "1.2.8",
+  "version": "1.2.9",
   "main": "dist/main.cjs",
   "packageManager": "pnpm@11.21.0",
   "scripts": {
