@@ -48,7 +48,7 @@ ${_FixedIsNativeARM64_End}:
 
 !macro customFiles_arm64
   # Bundle the standalone 7za.exe just in case Nsis7z fails to extract PE files on ARM64 WoW64
-  File /oname=$PLUGINSDIR\7za.exe "build\7za.exe"
+  File /oname=$PLUGINSDIR\7za.exe "${BUILD_RESOURCES_DIR}\7za.exe"
 !macroend
 
 !macro customInstall
