@@ -152,7 +152,7 @@ ${_FixedIsNativeARM64_End}:
       ClearErrors
     ${endIf}
   ${else}
-    MessageBox MB_OK|MB_ICONEXCLAMATION "Framezoo was installed, but the main executable could not be found at:$\r$\n$appExe$\r$\n$\r$\nPlease check install_diagnostics.txt in the installation folder and reinstall the application."
+    MessageBox MB_OK|MB_ICONEXCLAMATION "Framezoo was installed, but the main executable could not be found at:$\r$\n$appExe$\r$\n$\r$\nPlease check install_diagnostics.txt in the installation folder and reinstall the application." /SD IDOK
   ${endIf}
 
   System::Call 'Shell32::SHChangeNotify(i 0x8000000, i 0, i 0, i 0)'
