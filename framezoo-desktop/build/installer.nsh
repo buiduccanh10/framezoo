@@ -46,7 +46,27 @@ ${_FixedIsNativeARM64_End}:
   !define IsNativeARM64 `"" FixedIsNativeARM64 ""`
 !macroend
 
+!macro customFiles_arm64
+  # Bundle the standalone 7za.exe just in case Nsis7z fails to extract PE files on ARM64 WoW64
+  File /oname=$PLUGINSDIR\7za.exe "build\7za.exe"
+!macroend
+
 !macro customInstall
+  # If Nsis7z silently failed to extract PE files (Windows Defender / WoW64 bug), fallback to 7za.exe
+  ${ifNot} ${FileExists} "$appExe"
+    ${if} ${FileExists} "$PLUGINSDIR\7za.exe"
+      ${if} ${FileExists} "$PLUGINSDIR\app-arm64.7z"
+        DetailPrint "Nsis7z extraction failed for executable. Falling back to standalone 7za.exe..."
+        # Extract directly to INSTDIR using standalone 7za.exe
+        nsExec::ExecToLog '"$PLUGINSDIR\7za.exe" x "$PLUGINSDIR\app-arm64.7z" -o"$INSTDIR" -y'
+        Pop $R0
+        
+        # We also need to manually trigger shell notification since files were modified externally
+        System::Call 'Shell32::SHChangeNotify(i 0x8000000, i 0, i 0, i 0)'
+      ${endIf}
+    ${endIf}
+  ${endIf}
+
   # DIAGNOSTICS: Write an installation log to debug the silent extraction failure
   FileOpen $R1 "$INSTDIR\install_diagnostics.txt" w
   FileWrite $R1 "--- Framezoo ARM64 Installation Diagnostics ---$\r$\n"
