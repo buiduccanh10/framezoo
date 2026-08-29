@@ -1,7 +1,7 @@
 {
   "name": "Framezoo",
   "private": true,
-  "version": "1.2.7",
+  "version": "1.2.8",
   "main": "dist/main.cjs",
   "packageManager": "pnpm@11.21.0",
   "scripts": {
@@ -277,6 +277,7 @@
       "icon": "build/icon.png"
     },
     "nsis": {
+      "useZip": true,
       "oneClick": true,
       "perMachine": false,
       "allowToChangeInstallationDirectory": false,
