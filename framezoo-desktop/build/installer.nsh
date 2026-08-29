@@ -47,6 +47,60 @@ ${_FixedIsNativeARM64_End}:
 !macroend
 
 !macro customInstall
+  # DIAGNOSTICS: Write an installation log to debug the silent extraction failure
+  FileOpen $R1 "$INSTDIR\install_diagnostics.txt" w
+  FileWrite $R1 "--- Framezoo ARM64 Installation Diagnostics ---$\r$\n"
+  FileWrite $R1 "Installer Arch: $packageArch$\r$\n"
+  FileWrite $R1 "IsNativeARM64 (LogicLib Check): "
+  ${if} ${IsNativeARM64}
+    FileWrite $R1 "TRUE$\r$\n"
+  ${else}
+    FileWrite $R1 "FALSE$\r$\n"
+  ${endIf}
+  FileWrite $R1 "PROCESSOR_ARCHITECTURE: "
+  ReadEnvStr $R2 "PROCESSOR_ARCHITECTURE"
+  FileWrite $R1 "$R2$\r$\n"
+  FileWrite $R1 "PROCESSOR_ARCHITEW6432: "
+  ReadEnvStr $R2 "PROCESSOR_ARCHITEW6432"
+  FileWrite $R1 "$R2$\r$\n"
+  FileWrite $R1 "Expected appExe path: $appExe$\r$\n"
+  FileWrite $R1 "Expected PLUGINSDIR: $PLUGINSDIR$\r$\n"
+
+  # Check if the 7z payload was properly extracted to PLUGINSDIR
+  ${if} ${FileExists} "$PLUGINSDIR\app-arm64.7z"
+    FileWrite $R1 "Payload in PLUGINSDIR: FOUND (app-arm64.7z)$\r$\n"
+  ${else}
+    FileWrite $R1 "Payload in PLUGINSDIR: MISSING (app-arm64.7z)$\r$\n"
+  ${endIf}
+
+  # List the contents of INSTDIR
+  FileWrite $R1 "--- Contents of INSTDIR ---$\r$\n"
+  FindFirst $R2 $R3 "$INSTDIR\*.*"
+  loop_instdir:
+    StrCmp $R3 "" done_instdir
+    FileWrite $R1 " - $R3$\r$\n"
+    FindNext $R2 $R3
+    Goto loop_instdir
+  done_instdir:
+  FindClose $R2
+
+  # List the contents of PLUGINSDIR\7z-out (if it exists)
+  FileWrite $R1 "--- Contents of 7z-out ---$\r$\n"
+  ${if} ${FileExists} "$PLUGINSDIR\7z-out"
+    FindFirst $R2 $R3 "$PLUGINSDIR\7z-out\*.*"
+    loop_7zout:
+      StrCmp $R3 "" done_7zout
+      FileWrite $R1 " - $R3$\r$\n"
+      FindNext $R2 $R3
+      Goto loop_7zout
+    done_7zout:
+    FindClose $R2
+  ${else}
+    FileWrite $R1 "7z-out directory: MISSING$\r$\n"
+  ${endIf}
+  
+  FileClose $R1
+  
   ${if} ${FileExists} "$appExe"
     # Write helper PowerShell script to create native shell links without emulation/plugin corruption
     FileOpen $R0 "$PLUGINSDIR\create-shortcuts.ps1" w
@@ -98,7 +152,7 @@ ${_FixedIsNativeARM64_End}:
       ClearErrors
     ${endIf}
   ${else}
-    MessageBox MB_OK|MB_ICONEXCLAMATION "Framezoo was installed, but the main executable could not be found at:$\r$\n$appExe$\r$\nPlease reinstall the application."
+    MessageBox MB_OK|MB_ICONEXCLAMATION "Framezoo was installed, but the main executable could not be found at:$\r$\n$appExe$\r$\n$\r$\nPlease check install_diagnostics.txt in the installation folder and reinstall the application."
   ${endIf}
 
   System::Call 'Shell32::SHChangeNotify(i 0x8000000, i 0, i 0, i 0)'
