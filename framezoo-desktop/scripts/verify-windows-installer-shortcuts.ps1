@@ -80,6 +80,10 @@ if ($Architecture -eq "arm64" -and $runnerArch -ne "arm64") {
         if ($arm7z) {
             # Inspect contents of the payload
             $innerList = & $7zExe l "$($arm7z.FullName)"
+            Write-Host "--- CONTENTS OF $($arm7z.Name) ---"
+            $innerList | Write-Host
+            Write-Host "----------------------------------"
+            
             if ($LASTEXITCODE -ne 0 -or -not ($innerList | Select-String -Pattern "Framezoo\.exe")) {
                 throw "Payload $($arm7z.Name) is missing Framezoo.exe."
             }
