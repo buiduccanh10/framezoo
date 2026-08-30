@@ -1940,6 +1940,9 @@ app.commandLine.appendSwitch("enable-features", "DocumentPictureInPictureAPI");
 app.commandLine.appendSwitch("disable-features", "HardwareMediaKeyHandling");
 
 if (!hasSingleInstanceLock) {
+  console.warn(
+    "[main] Another instance of Framezoo is already running. Quitting this instance...",
+  );
   app.quit();
 } else {
   app.on("second-instance", (event, commandLine) => {

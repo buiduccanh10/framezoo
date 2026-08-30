@@ -32,7 +32,7 @@ export function MigrationPage() {
             className="flex-1"
           >
             <CardContent
-              colorClass="!text-migration-good"
+              colorClass="!text-type-link"
               title={t("migration.start.options.download.title")}
               subtitle={t("migration.start.options.download.quality")}
               description={t("migration.start.options.download.description")}
@@ -43,7 +43,7 @@ export function MigrationPage() {
           </Card>
           <div className="hidden md:grid grid-rows-[1fr,auto,1fr] justify-center gap-4">
             <VerticalLine className="items-end" />
-            <span className="text-xs uppercase font-bold">
+            <span className="text-xs uppercase font-bold text-type-secondary">
               {t("migration.start.options.or")}
             </span>
             <VerticalLine />
@@ -53,7 +53,7 @@ export function MigrationPage() {
             className="flex-1"
           >
             <CardContent
-              colorClass="!text-migration-good"
+              colorClass="!text-type-link"
               title={t("migration.start.options.upload.title")}
               subtitle={t("migration.start.options.upload.quality")}
               description={t("migration.start.options.upload.description")}

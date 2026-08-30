@@ -145,26 +145,26 @@ export function MigrationDownloadPage() {
                   {t("migration.preview.downloadDescription")}
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <div className="p-4 bg-background rounded-lg">
-                    <div className="flex items-center gap-2">
+                  <div className="p-4 bg-settings-card-altBackground rounded-lg border border-settings-card-border/40">
+                    <div className="flex items-center gap-2 text-type-link">
                       <Icon icon={Icons.CLOCK} className="text-xl" />
-                      <span className="font-medium">
+                      <span className="font-medium text-white">
                         {t("migration.preview.items.progress")}
                       </span>
                     </div>
-                    <div className="text-xl font-bold mt-2">
+                    <div className="text-xl font-bold mt-2 text-white">
                       {Object.keys(persistedProgress.items || progress).length}
                     </div>
                   </div>
 
-                  <div className="p-4 bg-background rounded-lg">
-                    <div className="flex items-center gap-2">
+                  <div className="p-4 bg-settings-card-altBackground rounded-lg border border-settings-card-border/40">
+                    <div className="flex items-center gap-2 text-type-link">
                       <Icon icon={Icons.BOOKMARK} className="text-xl" />
-                      <span className="font-medium">
+                      <span className="font-medium text-white">
                         {t("migration.preview.items.bookmarks")}
                       </span>
                     </div>
-                    <div className="text-xl font-bold mt-2">
+                    <div className="text-xl font-bold mt-2 text-white">
                       {
                         Object.keys(persistedBookmarks.bookmarks || bookmarks)
                           .length
@@ -172,14 +172,14 @@ export function MigrationDownloadPage() {
                     </div>
                   </div>
 
-                  <div className="p-4 bg-background rounded-lg">
-                    <div className="flex items-center gap-2">
+                  <div className="p-4 bg-settings-card-altBackground rounded-lg border border-settings-card-border/40">
+                    <div className="flex items-center gap-2 text-type-link">
                       <Icon icon={Icons.CLOCK} className="text-xl" />
-                      <span className="font-medium">
+                      <span className="font-medium text-white">
                         {t("migration.preview.items.progress")}
                       </span>
                     </div>
-                    <div className="text-xl font-bold mt-2">
+                    <div className="text-xl font-bold mt-2 text-white">
                       {
                         Object.keys(persistedWatchHistory.items || watchHistory)
                           .length
@@ -187,14 +187,16 @@ export function MigrationDownloadPage() {
                     </div>
                   </div>
 
-                  <div className="p-4 bg-background rounded-lg">
-                    <div className="flex items-center gap-2">
+                  <div className="p-4 bg-settings-card-altBackground rounded-lg border border-settings-card-border/40">
+                    <div className="flex items-center gap-2 text-type-link">
                       <Icon icon={Icons.SETTINGS} className="text-xl" />
-                      <span className="font-medium">
+                      <span className="font-medium text-white">
                         {t("migration.preview.items.settings")}
                       </span>
                     </div>
-                    <div className="text-xl font-bold mt-2">✓</div>
+                    <div className="text-xl font-bold mt-2 text-type-success">
+                      ✓
+                    </div>
                   </div>
                 </div>
               </div>
@@ -221,12 +223,12 @@ export function MigrationDownloadPage() {
           </div>
           <div className="flex justify-center pt-4">
             {status === "success" && (
-              <p className="text-green-600 mt-4">
+              <p className="text-type-success mt-4">
                 {t("migration.download.status.success")}
               </p>
             )}
             {status === "error" && (
-              <p className="text-red-600 mt-4">
+              <p className="text-type-danger mt-4">
                 {t("migration.download.status.error")}
               </p>
             )}
