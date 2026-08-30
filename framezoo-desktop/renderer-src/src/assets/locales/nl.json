@@ -825,6 +825,7 @@
         "selectingSecondary": "Secundaire ondertiteling selecteren",
         "syncSubtitleConfirmTitle": "Ondertiteling synchroniseren met AI?",
         "syncSubtitleConfirmDescription": "Ondertitels worden door AI afgestemd op de video.",
+        "syncSubtitleSelectAnchor": "Om de nauwkeurigheid te verhogen, wat is de eerste dialoog in de video?",
         "syncSubtitleSupportedLanguages": "Ondersteunde audiotalen",
         "syncSubtitleSuccess": "Ondertiteling succesvol gesynchroniseerd",
         "syncSubtitleServerFallback": "Lokale synchronisatie ondersteunt deze audiotaal niet; gesynchroniseerd met behulp van de server.",

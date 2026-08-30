@@ -825,6 +825,7 @@
         "selectingSecondary": "Wybieranie drugiego napisu",
         "syncSubtitleConfirmTitle": "Zsynchronizować napisy z AI?",
         "syncSubtitleConfirmDescription": "Napisy zostaną dopasowane przez sztuczną inteligencję do filmu.",
+        "syncSubtitleSelectAnchor": "Żeby zwiększyć dokładność, który dialog pojawia się jako pierwszy w filmie?",
         "syncSubtitleSupportedLanguages": "Obsługiwane języki audio",
         "syncSubtitleSuccess": "Napisy zostały pomyślnie zsynchronizowane",
         "syncSubtitleServerFallback": "Lokalna synchronizacja nie obsługuje tego języka audio; synchronizowane przy użyciu serwera.",

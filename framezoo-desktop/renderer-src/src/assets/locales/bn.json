@@ -825,6 +825,7 @@
         "selectingSecondary": "সেকেন্ডারি সাবটাইটেল নির্বাচন করা হচ্ছে",
         "syncSubtitleConfirmTitle": "AI এর সাথে সাবটাইটেল সিঙ্ক করবেন?",
         "syncSubtitleConfirmDescription": "সাবটাইটেলগুলি ভিডিওর সাথে মেলে AI দ্বারা সারিবদ্ধ করা হবে৷",
+        "syncSubtitleSelectAnchor": "নির্ভুলতা বাড়ানোর জন্য, ভিডিওটির প্রথম সংলাপ কোনটি?",
         "syncSubtitleSupportedLanguages": "সমর্থিত অডিও ভাষা",
         "syncSubtitleSuccess": "সাবটাইটেল সফলভাবে সিঙ্ক হয়েছে৷",
         "syncSubtitleServerFallback": "স্থানীয় সিঙ্ক এই অডিও ভাষা সমর্থন করে না; সার্ভার ব্যবহার করে সিঙ্ক করা হয়েছে।",

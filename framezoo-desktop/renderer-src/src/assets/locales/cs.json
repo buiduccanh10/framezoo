@@ -825,6 +825,7 @@
         "selectingSecondary": "Výběr sekundárních titulků",
         "syncSubtitleConfirmTitle": "Synchronizovat titulky s AI?",
         "syncSubtitleConfirmDescription": "Titulky budou zarovnány AI tak, aby odpovídaly videu.",
+        "syncSubtitleSelectAnchor": "Pro zvýšení přesnosti, který je první dialog ve videu?",
         "syncSubtitleSupportedLanguages": "Podporované jazyky zvuku",
         "syncSubtitleSuccess": "Titulky byly úspěšně synchronizovány",
         "syncSubtitleServerFallback": "Místní synchronizace nepodporuje tento jazyk zvuku; synchronizováno pomocí serveru.",

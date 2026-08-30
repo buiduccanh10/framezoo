@@ -101,6 +101,14 @@ function QueryView() {
   return null;
 }
 
+function AuthRouteRedirect({ mode }: { mode: "login" | "register" }) {
+  const showModal = useOverlayStack((s) => s.showModal);
+  useEffect(() => {
+    showModal("auth", { mode });
+  }, [showModal, mode]);
+  return <Navigate to="/discover" replace />;
+}
+
 export const maintenanceTime = "March 31th 11:00 PM - 5:00 AM EST";
 
 function App() {
@@ -224,6 +232,11 @@ function App() {
 
             {/* Public pages */}
             <Route path="/" element={<Navigate to="/discover" replace />} />
+            <Route path="/login" element={<AuthRouteRedirect mode="login" />} />
+            <Route
+              path="/register"
+              element={<AuthRouteRedirect mode="register" />}
+            />
             <Route path="/browse/:query?" element={<HomePage />} />
             <Route path="/discover" element={<Discover />} />
             <Route

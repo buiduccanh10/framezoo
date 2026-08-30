@@ -825,6 +825,7 @@
         "selectingSecondary": "選擇輔助字幕",
         "syncSubtitleConfirmTitle": "與AI同步字幕？",
         "syncSubtitleConfirmDescription": "字幕將由人工智慧對齊以匹配影片。",
+        "syncSubtitleSelectAnchor": "為了提高準確性，影片中的第一段對話是什麼？",
         "syncSubtitleSupportedLanguages": "支援的音訊語言",
         "syncSubtitleSuccess": "字幕同步成功",
         "syncSubtitleServerFallback": "本機同步不支援該音訊語言；使用伺服器同步。",

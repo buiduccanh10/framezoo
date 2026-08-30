@@ -815,6 +815,7 @@
         "selectingSecondary": "Selecting secondary subtitle",
         "syncSubtitleConfirmTitle": "Sync subtitle with AI?",
         "syncSubtitleConfirmDescription": "Subtitles will be aligned by AI to match the video.",
+        "syncSubtitleSelectAnchor": "To increase accuracy, which is the first dialogue in the video?",
         "syncSubtitleSupportedLanguages": "Supported audio languages",
         "syncSubtitleSuccess": "Subtitle synced successfully",
         "syncSubtitleServerFallback": "Local sync does not support this audio language; synced using server.",

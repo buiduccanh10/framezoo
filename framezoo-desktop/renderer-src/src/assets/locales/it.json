@@ -825,6 +825,7 @@
         "selectingSecondary": "Selezione del sottotitolo secondario",
         "syncSubtitleConfirmTitle": "Sincronizzare i sottotitoli con l'intelligenza artificiale?",
         "syncSubtitleConfirmDescription": "I sottotitoli verranno allineati dall'intelligenza artificiale per corrispondere al video.",
+        "syncSubtitleSelectAnchor": "Per maggiore precisione, qual è il primo dialogo del video?",
         "syncSubtitleSupportedLanguages": "Lingue audio supportate",
         "syncSubtitleSuccess": "Sottotitoli sincronizzati correttamente",
         "syncSubtitleServerFallback": "La sincronizzazione locale non supporta questa lingua audio; sincronizzato utilizzando il server.",

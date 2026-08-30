@@ -825,6 +825,7 @@
         "selectingSecondary": "การเลือกคำบรรยายรอง",
         "syncSubtitleConfirmTitle": "ซิงค์คำบรรยายกับ AI หรือไม่",
         "syncSubtitleConfirmDescription": "คำบรรยายจะถูกจัดตำแหน่งโดย AI เพื่อให้ตรงกับวิดีโอ",
+        "syncSubtitleSelectAnchor": "เพื่อให้ถูกต้องแม่นยำยิ่งขึ้น บทสนทนาแรกในวิดีโอคือบทใด",
         "syncSubtitleSupportedLanguages": "ภาษาเสียงที่รองรับ",
         "syncSubtitleSuccess": "ซิงค์คำบรรยายสำเร็จแล้ว",
         "syncSubtitleServerFallback": "การซิงค์ในเครื่องไม่รองรับภาษาของเสียงนี้ ซิงค์โดยใช้เซิร์ฟเวอร์",

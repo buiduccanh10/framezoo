@@ -825,6 +825,7 @@
         "selectingSecondary": "ការជ្រើសរើសចំណងជើងរងបន្ទាប់បន្សំ",
         "syncSubtitleConfirmTitle": "ធ្វើសមកាលកម្មចំណងជើងរងជាមួយ AI?",
         "syncSubtitleConfirmDescription": "ចំណងជើងរងនឹងត្រូវបានតម្រឹមដោយ AI ដើម្បីផ្គូផ្គងវីដេអូ។",
+        "syncSubtitleSelectAnchor": "ដើម្បីបង្កើនភាពត្រឹមត្រូវ តើការសន្ទនាដំបូងនៅក្នុងវីដេអូគឺជាអ្វី?",
         "syncSubtitleSupportedLanguages": "ភាសាអូឌីយ៉ូដែលគាំទ្រ",
         "syncSubtitleSuccess": "ចំណងជើងរងត្រូវបានធ្វើសមកាលកម្មដោយជោគជ័យ",
         "syncSubtitleServerFallback": "ការធ្វើសមកាលកម្មក្នុងតំបន់មិនគាំទ្រភាសាអូឌីយ៉ូនេះទេ។ ធ្វើសមកាលកម្មដោយប្រើម៉ាស៊ីនមេ។",

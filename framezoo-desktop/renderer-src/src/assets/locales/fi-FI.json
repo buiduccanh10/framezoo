@@ -825,6 +825,7 @@
         "selectingSecondary": "Toissijaisen tekstityksen valinta",
         "syncSubtitleConfirmTitle": "Synkronoidaanko tekstitys tekoälyn kanssa?",
         "syncSubtitleConfirmDescription": "Tekoäly kohdistaa tekstitykset vastaamaan videota.",
+        "syncSubtitleSelectAnchor": "Tarkkuuden lisäämiseksi, mikä on videon ensimmäinen dialogi?",
         "syncSubtitleSupportedLanguages": "Tuetut äänikielet",
         "syncSubtitleSuccess": "Tekstityksen synkronointi onnistui",
         "syncSubtitleServerFallback": "Paikallinen synkronointi ei tue tätä äänen kieltä; synkronoitu palvelimen avulla.",

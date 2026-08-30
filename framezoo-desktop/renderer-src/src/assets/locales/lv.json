@@ -825,6 +825,7 @@
         "selectingSecondary": "Tiek atlasīti sekundārie subtitri",
         "syncSubtitleConfirmTitle": "Vai sinhronizēt subtitrus ar AI?",
         "syncSubtitleConfirmDescription": "Subtitri līdzinās AI, lai tie atbilstu videoklipam.",
+        "syncSubtitleSelectAnchor": "Lai palielinātu precizitāti, kurš ir pirmais dialogs video?",
         "syncSubtitleSupportedLanguages": "Atbalstītās audio valodas",
         "syncSubtitleSuccess": "Subtitri veiksmīgi sinhronizēti",
         "syncSubtitleServerFallback": "Vietējā sinhronizācija neatbalsta šo audio valodu; sinhronizēts, izmantojot serveri.",

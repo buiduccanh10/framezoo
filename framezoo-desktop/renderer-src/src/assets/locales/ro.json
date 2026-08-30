@@ -825,6 +825,7 @@
         "selectingSecondary": "Selectarea subtitrarii secundare",
         "syncSubtitleConfirmTitle": "Sincronizați subtitrarea cu AI?",
         "syncSubtitleConfirmDescription": "Subtitrările vor fi aliniate de AI pentru a se potrivi cu videoclipul.",
+        "syncSubtitleSelectAnchor": "Pentru a crește acuratețea, care este primul dialog din videoclip?",
         "syncSubtitleSupportedLanguages": "Limbi audio acceptate",
         "syncSubtitleSuccess": "Subtitrarea a fost sincronizată cu succes",
         "syncSubtitleServerFallback": "Sincronizarea locală nu acceptă această limbă audio; sincronizat folosind serverul.",

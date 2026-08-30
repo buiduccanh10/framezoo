@@ -14,8 +14,8 @@ export function Card(props: {
     <div
       className={classNames(
         {
-          "bg-onboarding-card duration-300 border border-onboarding-border rounded-lg p-7": true,
-          "hover:bg-onboarding-cardHover transition-colors cursor-pointer":
+          "bg-settings-card-background duration-300 border border-settings-card-border rounded-xl p-7 shadow-lg": true,
+          "hover:bg-settings-card-altBackground hover:border-type-link/40 transition-all cursor-pointer":
             !!props.onClick,
         },
         props.className,
@@ -31,21 +31,22 @@ export function CardContent(props: {
   title: ReactNode;
   description: ReactNode;
   subtitle: ReactNode;
-  colorClass: string;
+  colorClass?: string;
   children?: React.ReactNode;
   icon: Icons;
 }) {
+  const accentClass = props.colorClass ?? "text-type-link";
   return (
     <div className="grid grid-rows-[1fr,auto] h-full">
       <div>
         <Icon
           icon={props.icon}
-          className={classNames("text-4xl mb-8 block", props.colorClass)}
+          className={classNames("text-4xl mb-8 block", accentClass)}
         />
         <Heading3
           className={classNames(
-            "!mt-0 !mb-0 !text-xs uppercase",
-            props.colorClass,
+            "!mt-0 !mb-0 !text-xs uppercase tracking-wider font-bold",
+            accentClass,
           )}
         >
           {props.subtitle}
@@ -76,7 +77,7 @@ export function Link(props: {
       href={props.href}
       target={props.target}
       className={classNames(
-        "text-onboarding-link cursor-pointer inline-flex gap-2 items-center group hover:opacity-75 transition-opacity",
+        "text-type-link font-medium cursor-pointer inline-flex gap-2 items-center group hover:text-type-linkHover transition-colors",
         props.className,
       )}
       rel="noreferrer"

@@ -825,6 +825,7 @@
         "selectingSecondary": "माध्यमिक उपशीर्षक चयन गर्दै",
         "syncSubtitleConfirmTitle": "AI सँग उपशीर्षक सिंक गर्ने हो?",
         "syncSubtitleConfirmDescription": "भिडियोसँग मेल खाने उपशीर्षकहरू AI द्वारा पङ्क्तिबद्ध हुनेछन्।",
+        "syncSubtitleSelectAnchor": "शुद्धता बढाउन, भिडियोको पहिलो संवाद कुन हो?",
         "syncSubtitleSupportedLanguages": "समर्थित अडियो भाषाहरू",
         "syncSubtitleSuccess": "उपशीर्षक सफलतापूर्वक सिंक गरियो",
         "syncSubtitleServerFallback": "स्थानीय सिङ्कले यो अडियो भाषालाई समर्थन गर्दैन; सर्भर प्रयोग गरेर सिंक गरियो।",

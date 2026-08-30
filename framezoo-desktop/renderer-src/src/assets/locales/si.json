@@ -825,6 +825,7 @@
         "selectingSecondary": "ද්විතියික උපසිරැසි තේරීම",
         "syncSubtitleConfirmTitle": "උපසිරැසි AI සමඟ සමමුහුර්ත කරන්නද?",
         "syncSubtitleConfirmDescription": "වීඩියෝවට ගැළපීමට AI මගින් උපසිරැසි පෙළගස්වනු ඇත.",
+        "syncSubtitleSelectAnchor": "නිරවද්‍යතාවය වැඩි කිරීම සඳහා, වීඩියෝවේ පළමු සංවාදය කුමක්ද?",
         "syncSubtitleSupportedLanguages": "සහාය දක්වන ශ්‍රව්‍ය භාෂා",
         "syncSubtitleSuccess": "උපසිරැසි සාර්ථකව සමමුහුර්ත විය",
         "syncSubtitleServerFallback": "දේශීය සමමුහුර්තකරණය මෙම ශ්‍රව්‍ය භාෂාවට සහය නොදක්වයි; සේවාදායකය භාවිතයෙන් සමමුහුර්ත කර ඇත.",

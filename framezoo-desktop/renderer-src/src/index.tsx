@@ -51,7 +51,24 @@ import { initializeChromecast } from "./setup/chromecast";
 import { initializeImageFadeIn } from "./setup/imageFadeIn";
 import { initializeOldStores } from "./stores/__old/migrations";
 
+function normalizeHashRouterPath() {
+  if (typeof window === "undefined") return;
+  if (conf().NORMAL_ROUTER) return;
+
+  const { pathname, search, hash } = window.location;
+  if (
+    pathname &&
+    pathname !== "/" &&
+    pathname !== "/index.html" &&
+    (!hash || hash === "" || hash === "#" || hash === "#/")
+  ) {
+    const targetHash = `#${pathname}${search}`;
+    window.history.replaceState(null, "", `/${targetHash}`);
+  }
+}
+
 // initialize
+normalizeHashRouterPath();
 initializeChromecast();
 initializeImageFadeIn();
 
@@ -276,6 +293,7 @@ function TheRouter(props: { children: ReactNode }) {
   const normalRouter = conf().NORMAL_ROUTER;
 
   if (normalRouter) return <BrowserRouter>{props.children}</BrowserRouter>;
+  normalizeHashRouterPath();
   return <HashRouter>{props.children}</HashRouter>;
 }
 

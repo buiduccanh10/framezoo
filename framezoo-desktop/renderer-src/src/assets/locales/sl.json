@@ -825,6 +825,7 @@
         "selectingSecondary": "Izbira sekundarnega podnapisa",
         "syncSubtitleConfirmTitle": "Sinhronizirati podnapise z AI?",
         "syncSubtitleConfirmDescription": "Podnapise bo poravnal umetna inteligenca, da bodo ustrezali videoposnetku.",
+        "syncSubtitleSelectAnchor": "Za večjo natančnost, kateri je prvi dialog v videoposnetku?",
         "syncSubtitleSupportedLanguages": "Podprti avdio jeziki",
         "syncSubtitleSuccess": "Podnapisi so uspešno sinhronizirani",
         "syncSubtitleServerFallback": "Lokalna sinhronizacija ne podpira tega zvočnega jezika; sinhroniziran s strežnikom.",

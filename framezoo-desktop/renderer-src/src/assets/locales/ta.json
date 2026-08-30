@@ -825,6 +825,7 @@
         "selectingSecondary": "இரண்டாம் நிலை வசனத்தைத் தேர்ந்தெடுக்கிறது",
         "syncSubtitleConfirmTitle": "AI உடன் வசனங்களை ஒத்திசைக்கவா?",
         "syncSubtitleConfirmDescription": "வீடியோவுடன் பொருந்த, வசனங்கள் AI ஆல் சீரமைக்கப்படும்.",
+        "syncSubtitleSelectAnchor": "துல்லியத்தை அதிகரிக்க, காணொளியில் உள்ள முதல் உரையாடல் எது?",
         "syncSubtitleSupportedLanguages": "ஆதரிக்கப்படும் ஆடியோ மொழிகள்",
         "syncSubtitleSuccess": "வசனம் வெற்றிகரமாக ஒத்திசைக்கப்பட்டது",
         "syncSubtitleServerFallback": "உள்ளூர் ஒத்திசைவு இந்த ஆடியோ மொழியை ஆதரிக்காது; சேவையகத்தைப் பயன்படுத்தி ஒத்திசைக்கப்பட்டது.",

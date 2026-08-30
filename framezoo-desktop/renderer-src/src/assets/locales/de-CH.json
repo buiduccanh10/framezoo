@@ -825,6 +825,7 @@
         "selectingSecondary": "Auswahl des sekundären Untertitels",
         "syncSubtitleConfirmTitle": "Untertitel mit KI synchronisieren?",
         "syncSubtitleConfirmDescription": "Die Untertitel werden von der KI an das Video angepasst.",
+        "syncSubtitleSelectAnchor": "Um die Genauigkeit zu erhöhen: Welcher Dialog ist der erste im Video?",
         "syncSubtitleSupportedLanguages": "Unterstützte Audiosprachen",
         "syncSubtitleSuccess": "Untertitel erfolgreich synchronisiert",
         "syncSubtitleServerFallback": "Die lokale Synchronisierung unterstützt diese Audiosprache nicht. über den Server synchronisiert.",

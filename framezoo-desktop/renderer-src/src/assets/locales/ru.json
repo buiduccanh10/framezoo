@@ -825,6 +825,7 @@
         "selectingSecondary": "Выбор дополнительных субтитров",
         "syncSubtitleConfirmTitle": "Синхронизировать субтитры с AI?",
         "syncSubtitleConfirmDescription": "Субтитры будут выровнены искусственным интеллектом в соответствии с видео.",
+        "syncSubtitleSelectAnchor": "Для большей точности, какой диалог в видео первый?",
         "syncSubtitleSupportedLanguages": "Поддерживаемые языки аудио",
         "syncSubtitleSuccess": "Субтитры успешно синхронизированы",
         "syncSubtitleServerFallback": "Локальная синхронизация не поддерживает этот язык аудио; синхронизируется с помощью сервера.",

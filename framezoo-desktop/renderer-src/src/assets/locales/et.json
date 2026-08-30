@@ -825,6 +825,7 @@
         "selectingSecondary": "Teisese subtiitrite valimine",
         "syncSubtitleConfirmTitle": "Kas sünkroonida subtiitrid tehisintellektiga?",
         "syncSubtitleConfirmDescription": "Subtiitrid joondab AI, et need vastaksid videole.",
+        "syncSubtitleSelectAnchor": "Täpsuse suurendamiseks, milline on video esimene dialoog?",
         "syncSubtitleSupportedLanguages": "Toetatud helikeeled",
         "syncSubtitleSuccess": "Subtiitrite sünkroonimine õnnestus",
         "syncSubtitleServerFallback": "Kohalik sünkroonimine ei toeta seda helikeelt; sünkroonitud serveriga.",

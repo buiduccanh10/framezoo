@@ -25,7 +25,6 @@ import {
   setMoonshineModelPromptHandler,
 } from "@/moonshine/runtime";
 import type { MoonshineModelEntry } from "@/moonshine/types";
-import { useToastStore } from "@/stores/interface/toast";
 import { usePlayerStore } from "@/stores/player/store";
 import { useSubtitleStore } from "@/stores/subtitles";
 import { durationExceedsHour, formatSeconds } from "@/utils/formatSeconds";
@@ -33,17 +32,6 @@ import { getPrettyLanguageNameFromLocale } from "@/utils/language";
 
 import type { SubtitleSelectionMode } from "./CaptionsView";
 import { wordOverrides } from "../../Player";
-
-const MOONSHINE_AUDIO_LANGUAGES = [
-  { code: "en", label: "English" },
-  { code: "es", label: "Spanish" },
-  { code: "zh", label: "Mandarin" },
-  { code: "ja", label: "Japanese" },
-  { code: "ko", label: "Korean" },
-  { code: "vi", label: "Vietnamese" },
-  { code: "uk", label: "Ukrainian" },
-  { code: "ar", label: "Arabic" },
-] as const;
 
 export function TranscriptView({
   id,
@@ -72,12 +60,9 @@ export function TranscriptView({
   const setDelay =
     selectionMode === "secondary" ? setSecondaryDelay : setPrimaryDelay;
   const changeSelectionMode = onSelectionModeChange ?? setActiveCaptionTrack;
-  const { syncSelectedCaption, canSyncSelectedCaption } = useCaptions();
-  const syncModal = useModal("subtitle-sync-confirm");
+  const { canSyncSelectedCaption } = useCaptions();
   const modelModal = useModal("moonshine-model-download");
-  const showToast = useToastStore((s) => s.showToast);
 
-  const [isSyncCooldown, setIsSyncCooldown] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [delayInput, setDelayInput] = useState("");
   const [isDelayFocused, setIsDelayFocused] = useState(false);
@@ -133,67 +118,6 @@ export function TranscriptView({
   };
 
   const displayDelay = isDelayFocused ? delayInput : delay.toFixed(2);
-
-  const handleConfirmSync = async () => {
-    if (isSyncCooldown) return;
-    setIsSyncCooldown(true);
-    syncModal.hide();
-    router.close();
-
-    try {
-      const outcome = await syncSelectedCaption();
-      if (outcome.status === "success") {
-        if (outcome.warningMessage) {
-          showToast(
-            t("player.menus.subtitles.syncSubtitleServerFallback", {
-              defaultValue:
-                "Local sync does not support this audio language; synced using server.",
-            }),
-            "info",
-          );
-          return;
-        }
-        showToast(
-          t("player.menus.subtitles.syncSubtitleSuccess", {
-            defaultValue: "Subtitle synced successfully",
-          }),
-          "success",
-        );
-        return;
-      }
-      if (outcome.status === "cancelled") return;
-
-      const isRateLimit =
-        Boolean(outcome.errorMessage) &&
-        /rate limit|too many|429/i.test(outcome.errorMessage!);
-      const isServerBusy =
-        Boolean(outcome.errorMessage) &&
-        /capacity|busy|503/i.test(outcome.errorMessage!);
-
-      let detail = outcome.errorMessage;
-      if (isRateLimit) {
-        detail = t("player.menus.subtitles.syncRateLimit");
-      } else if (isServerBusy) {
-        detail = t("player.menus.subtitles.syncServerBusy");
-      }
-
-      showToast(
-        detail
-          ? t("player.menus.subtitles.syncSubtitleFailedWithDetail", {
-              defaultValue: "Could not sync subtitle: {{detail}}",
-              detail,
-            })
-          : t("player.menus.subtitles.syncSubtitleFailed", {
-              defaultValue: "Could not sync subtitle",
-            }),
-        "error",
-      );
-    } finally {
-      setTimeout(() => {
-        setIsSyncCooldown(false);
-      }, 3000);
-    }
-  };
 
   const parsedCaptions = useMemo(
     () => tryParseCanonicalVtt(activeCaption?.vttData),
@@ -386,7 +310,7 @@ export function TranscriptView({
           canSyncSelectedCaption ? (
             <button
               type="button"
-              onClick={() => syncModal.show()}
+              onClick={() => router.navigate("/captions/transcript/sync")}
               className="mr-[-0.5rem] flex h-8 w-8 items-center justify-center rounded-md text-video-context-type-accent transition-colors hover:bg-video-context-type-accent/15 disabled:cursor-not-allowed disabled:opacity-50"
               aria-label={t(
                 "player.menus.subtitles.syncSubtitleOpen",
@@ -436,64 +360,7 @@ export function TranscriptView({
             </div>
           </ModalCard>
         </Modal>
-        <Modal id={syncModal.id}>
-          <ModalCard className="!max-w-md">
-            <div className="space-y-5">
-              <div className="flex items-start gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-video-context-type-accent/15 text-video-context-type-accent">
-                  <Icon icon={Icons.WAND} className="text-xl" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-white">
-                    {t("player.menus.subtitles.syncSubtitleConfirmTitle", {
-                      defaultValue: "Sync subtitle with AI?",
-                    })}
-                  </h3>
-                  <p className="mt-1 text-sm text-video-context-type-secondary">
-                    {t(
-                      "player.menus.subtitles.syncSubtitleConfirmDescription",
-                      {
-                        defaultValue:
-                          "Moonshine will analyze the current stream audio and align this subtitle.",
-                      },
-                    )}
-                  </p>
-                </div>
-              </div>
 
-              <div className="rounded-xl border border-white/10 bg-white/[0.04] p-3">
-                <p className="text-xs uppercase tracking-wide text-video-context-type-secondary">
-                  {t("player.menus.subtitles.syncSubtitleSupportedLanguages", {
-                    defaultValue: "Supported audio languages",
-                  })}
-                </p>
-                <p className="mt-2 text-sm leading-6 text-white">
-                  {MOONSHINE_AUDIO_LANGUAGES.map((language, index) => (
-                    <span key={language.code}>
-                      {index > 0 ? ", " : ""}
-                      {language.label}
-                    </span>
-                  ))}
-                </p>
-              </div>
-
-              <div className="flex justify-end gap-2">
-                <Button theme="secondary" onClick={() => syncModal.hide()}>
-                  {t("actions.cancel")}
-                </Button>
-                <Button
-                  theme="purple"
-                  onClick={() => void handleConfirmSync()}
-                  disabled={!canSyncSelectedCaption}
-                >
-                  {t("player.menus.subtitles.syncSubtitleAction", {
-                    defaultValue: "Sync",
-                  })}
-                </Button>
-              </div>
-            </div>
-          </ModalCard>
-        </Modal>
         {isDualSubEnabled && (
           <div
             className="mb-3 grid grid-cols-2 gap-1 rounded-xl bg-white/[0.06] p-1"

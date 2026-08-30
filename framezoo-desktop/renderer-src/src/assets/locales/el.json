@@ -825,6 +825,7 @@
         "selectingSecondary": "Επιλογή δευτερεύοντος υπότιτλου",
         "syncSubtitleConfirmTitle": "Συγχρονισμός υποτίτλων με AI;",
         "syncSubtitleConfirmDescription": "Οι υπότιτλοι θα ευθυγραμμιστούν με AI ώστε να ταιριάζουν με το βίντεο.",
+        "syncSubtitleSelectAnchor": "Για να αυξηθεί η ακρίβεια, ποιος είναι ο πρώτος διάλογος στο βίντεο;",
         "syncSubtitleSupportedLanguages": "Υποστηριζόμενες γλώσσες ήχου",
         "syncSubtitleSuccess": "Οι υπότιτλοι συγχρονίστηκαν με επιτυχία",
         "syncSubtitleServerFallback": "Ο τοπικός συγχρονισμός δεν υποστηρίζει αυτήν τη γλώσσα ήχου. συγχρονισμός με χρήση διακομιστή.",

@@ -825,6 +825,7 @@
         "selectingSecondary": "Að velja aukatexta",
         "syncSubtitleConfirmTitle": "Samstilla texti við gervigreind?",
         "syncSubtitleConfirmDescription": "Textar verða samræmdir af gervigreind til að passa við myndbandið.",
+        "syncSubtitleSelectAnchor": "Til að auka nákvæmni, hver er fyrsta samræðan í myndbandinu?",
         "syncSubtitleSupportedLanguages": "Hljóðtungumál studd",
         "syncSubtitleSuccess": "Texti samstilltur tókst",
         "syncSubtitleServerFallback": "Staðbundin samstilling styður ekki þetta hljóðtungumál; samstillt með því að nota netþjón.",

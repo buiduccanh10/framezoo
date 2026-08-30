@@ -825,6 +825,7 @@
         "selectingSecondary": "Đang chọn phụ đề phụ",
         "syncSubtitleConfirmTitle": "Đồng bộ phụ đề bằng AI?",
         "syncSubtitleConfirmDescription": "Phụ đề sẽ được căn chỉnh bởi AI cho khớp với video.",
+        "syncSubtitleSelectAnchor": "Để tăng độ chính xác, đâu là câu thoại đầu tiên trong phim?",
         "syncSubtitleSupportedLanguages": "Ngôn ngữ audio được hỗ trợ",
         "syncSubtitleSuccess": "Đã đồng bộ phụ đề",
         "syncSubtitleServerFallback": "Đồng bộ local không hỗ trợ ngôn ngữ audio này; đã chuyển sang server.",
