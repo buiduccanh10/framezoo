@@ -314,6 +314,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       emit("loading", false);
       emitPictureInPictureState(null);
       syncPipState(true);
+      updateBounds();
 
       const didClose = api.closeDesktopPipWindow
         ? await api.closeDesktopPipWindow()
@@ -426,6 +427,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
                 "[libmpv] desktop PiP player reparent did not confirm",
               );
             }
+            updateBounds();
           }
           desktopPipTransitioning = false;
         };
@@ -1104,6 +1106,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
           await enqueueNativeOperation(() =>
             api.reparentLibMpvPlayer?.(playerId!, "main"),
           );
+          updateBounds();
         }
         await api.closeDesktopPipWindow?.();
         desktopPipShouldResume = false;
