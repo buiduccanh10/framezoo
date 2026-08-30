@@ -39,6 +39,14 @@ import type {
   TorrentStartRequest,
 } from "./types";
 
+process.on("uncaughtException", (error) => {
+  console.error("Uncaught Exception:", error);
+});
+
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("Unhandled Rejection at:", promise, "reason:", reason);
+});
+
 const APP_ID = "com.framezoo.desktop";
 const APP_NAME = "Framezoo";
 
