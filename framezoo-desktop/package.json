@@ -1,7 +1,7 @@
 {
   "name": "Framezoo",
   "private": true,
-  "version": "1.2.11",
+  "version": "1.2.12",
   "main": "dist/main.cjs",
   "packageManager": "pnpm@11.21.0",
   "scripts": {
@@ -39,7 +39,7 @@
     "package:release:mac:x64": "pnpm run torrent:setup && pnpm run torrent:build:darwin-x64 && pnpm run native:build:darwin-x64 && pnpm run resources:ensure:darwin-x64 && pnpm run build && electron-builder --mac dmg zip --x64",
     "package:release:mac:universal": "pnpm run torrent:setup && pnpm run torrent:build:darwin-arm64 && pnpm run torrent:build:darwin-x64 && pnpm run native:build:darwin-arm64 && pnpm run native:build:darwin-x64 && pnpm run resources:ensure:darwin-arm64 && pnpm run resources:ensure:darwin-x64 && pnpm run native:build:darwin-universal && pnpm run resources:ensure:darwin-universal && pnpm run build && electron-builder --mac dmg zip --universal",
     "package:release:win:x64": "pnpm run torrent:setup && pnpm run torrent:build:win32-x64 && pnpm run native:build:win32-x64 && pnpm run resources:ensure:win32-x64 && pnpm exec electron scripts/verify-libmpv-native.mjs --addon resources/native/win32-x64/libmpv.node --runtime-dir resources/libmpv/win32-x64 --expect-arch x64 && pnpm run build && electron-builder --win nsis --x64",
-    "package:release:win:arm64": "pnpm run torrent:setup && pnpm run torrent:build:win32-arm64 && pnpm run native:build:win32-arm64 && pnpm run resources:ensure:win32-arm64 && pnpm exec electron scripts/verify-libmpv-native.mjs --addon resources/native/win32-arm64/libmpv.node --runtime-dir resources/libmpv/win32-arm64 --expect-arch arm64 && pnpm run build && electron-builder --win nsis --arm64 --config.nsis.useZip=true",
+    "package:release:win:arm64": "pnpm run torrent:setup && pnpm run torrent:build:win32-arm64 && pnpm run native:build:win32-arm64 && pnpm run resources:ensure:win32-arm64 && pnpm exec electron scripts/verify-libmpv-native.mjs --addon resources/native/win32-arm64/libmpv.node --runtime-dir resources/libmpv/win32-arm64 --expect-arch arm64 && pnpm run build && electron-builder --win nsis --arm64 --config electron-builder-arm64.json",
     "dev:torrent": "pnpm run dev",
     "lint:renderer": "cd renderer-src && eslint src",
     "test:renderer": "vitest run --config renderer-src/vite.config.mts",
