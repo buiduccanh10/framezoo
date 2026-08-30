@@ -2,6 +2,7 @@ import { ReactNode, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { BrandPill } from "@/components/layout/BrandPill";
+import { WindowControls } from "@/components/layout/WindowControls";
 import { Player } from "@/components/player";
 import { PlayerLoadingOverlay } from "@/components/player/atoms/PlayerLoadingOverlay";
 import { SkipSegmentButton } from "@/components/player/atoms/SkipSegmentButton";
@@ -200,6 +201,7 @@ export function PlayerPart(props: PlayerPartProps) {
           {/* Right section: Brand pill & Window controls (desktop) or mobile actions */}
           <div className="hidden lg:flex items-center justify-end gap-3 shrink-0 z-10">
             <BrandPill />
+            <WindowControls />
           </div>
           <div className="flex lg:hidden items-center justify-end gap-2 shrink-0 z-10">
             {status === playerStatus.PLAYING ? (
@@ -211,6 +213,7 @@ export function PlayerPart(props: PlayerPartProps) {
                 <Player.Chromecast />
               </>
             ) : null}
+            <WindowControls />
           </div>
         </div>
       </Player.TopControls>
