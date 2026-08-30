@@ -1,7 +1,7 @@
 {
   "name": "Framezoo",
   "private": true,
-  "version": "1.2.13",
+  "version": "1.2.14",
   "main": "dist/main.cjs",
   "packageManager": "pnpm@11.21.0",
   "scripts": {
@@ -9,7 +9,7 @@
     "dev:renderer": "pnpm exec vite --config renderer-src/vite.config.mts --host 127.0.0.1 --port 5174",
     "dev:shell": "tsup --watch",
     "dev:electron": "wait-on dist/main.cjs tcp:127.0.0.1:5174 && cross-env ELECTRON_RENDERER_URL=http://127.0.0.1:5174 electronmon dist/main.cjs",
-    "build": "node scripts/download-7za.mjs && rimraf renderer dist && pnpm run build:renderer && pnpm run build:shell",
+    "build": "rimraf renderer dist && pnpm run build:renderer && pnpm run build:shell",
     "models:ensure": "node scripts/ensure-moonshine-models.mjs",
     "build:renderer": "pnpm run models:ensure && cross-env VITE_BASE_URL=./ pnpm exec vite build --config renderer-src/vite.config.mts && node scripts/prune-desktop-renderer.mjs",
     "build:shell": "tsup",
