@@ -324,28 +324,12 @@ export default function DesktopPipPage() {
   );
 
   const close = useCallback(() => {
-    const api = getDesktopElectronApi();
-    if (!api || transitionInProgress.current) return;
-    transitionInProgress.current = true;
-    void api
-      .closeDesktopPipWindow()
-      .then(() => api.focusMainWindow())
-      .finally(() => {
-        transitionInProgress.current = false;
-      });
-  }, []);
+    sendAction({ type: "close" });
+  }, [sendAction]);
 
   const returnToPlayer = useCallback(() => {
-    const api = getDesktopElectronApi();
-    if (!api || transitionInProgress.current) return;
-    transitionInProgress.current = true;
-    void api
-      .closeDesktopPipWindow()
-      .then(() => api.focusMainWindow())
-      .finally(() => {
-        transitionInProgress.current = false;
-      });
-  }, []);
+    sendAction({ type: "close" });
+  }, [sendAction]);
 
   useEffect(() => {
     document.documentElement.dataset.desktopPip = "true";

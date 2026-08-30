@@ -359,6 +359,10 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         if (destroyed || desktopPipTransitioning) {
           return;
         }
+        if (action.type === "close") {
+          await handoffDesktopPipToMain();
+          return;
+        }
         if (action.type === "nextEpisode") {
           const didHandoff = await handoffDesktopPipToMain();
           if (!didHandoff) return;
