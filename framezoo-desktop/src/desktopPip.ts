@@ -134,6 +134,8 @@ export function createDesktopPipController(
       transparent: true,
       alwaysOnTop: true,
       frame: false,
+      titleBarStyle: "hidden",
+      thickFrame: false,
       resizable: true,
       skipTaskbar: true,
       autoHideMenuBar: true,

@@ -13,7 +13,6 @@ import { useBannerSize } from "@/stores/banner";
 
 import { AddonManager } from "./AddonManager";
 import { BrandPill } from "./BrandPill";
-import { WindowControls } from "./WindowControls";
 // import { DownloadAppButton } from "./DownloadAppButton";
 
 export interface NavigationProps {
@@ -185,15 +184,8 @@ export function Navigation(props: NavigationProps) {
                     <LinksDropdown>
                       {loggedIn ? <UserAvatar withName /> : <NoUserAvatar />}
                     </LinksDropdown>
-                    <WindowControls className="ml-1" />
                   </div>
                 )}
-              {(location.pathname === "/login" ||
-                location.pathname === "/register") && (
-                <div className="relative pointer-events-auto ml-auto flex items-center">
-                  <WindowControls />
-                </div>
-              )}
             </div>
             {/* <a
                 onClick={() => openNotifications()}
