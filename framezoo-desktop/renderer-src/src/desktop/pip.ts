@@ -80,6 +80,9 @@ export interface DesktopPipState {
 
 export type DesktopPipAction =
   | {
+      type: "close";
+    }
+  | {
       type: "togglePlayback";
     }
   | {

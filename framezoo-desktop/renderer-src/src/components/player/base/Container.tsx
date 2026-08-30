@@ -118,6 +118,8 @@ function BaseContainer(props: { children?: ReactNode }) {
 export function Container(props: PlayerProps) {
   const propRef = useRef(props.onLoad);
   const status = usePlayerStore((s) => s.status);
+  const pipMode = usePlayerStore((s) => s.interface.pictureInPictureMode);
+
   useEffect(() => {
     propRef.current?.();
   }, []);
@@ -131,7 +133,7 @@ export function Container(props: PlayerProps) {
     if (typeof electronApi?.createLibMpvPlayer !== "function") return;
 
     const root = document.documentElement;
-    if (status === "playing") {
+    if (status === "playing" && pipMode !== "desktop") {
       root.dataset.libmpvPlayer = "true";
     } else {
       delete root.dataset.libmpvPlayer;
@@ -140,7 +142,7 @@ export function Container(props: PlayerProps) {
     return () => {
       delete root.dataset.libmpvPlayer;
     };
-  }, [status]);
+  }, [status, pipMode]);
 
   return (
     <div className="relative">
