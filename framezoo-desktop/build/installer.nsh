@@ -45,3 +45,29 @@ ${_FixedIsNativeARM64_End}:
   !endif
   !define IsNativeARM64 `"" FixedIsNativeARM64 ""`
 !macroend
+
+!macro customFiles_arm64
+  # Bundle the standalone 32-bit 7za.dat. Being 32-bit, WoW64 CAN execute it.
+  File /oname=$PLUGINSDIR\7za.dat "${BUILD_RESOURCES_DIR}\7za.dat"
+!macroend
+
+!macro customInstall
+  # If Nsis7z (the 32-bit plugin) silently dropped PE files due to Defender/SmartAppControl on WoW64...
+  ${ifNot} ${FileExists} "$appExe"
+    ${if} ${FileExists} "$PLUGINSDIR\7za.dat"
+      ${if} ${FileExists} "$PLUGINSDIR\app-arm64.7z"
+        DetailPrint "Executable missing. Falling back to standalone 32-bit 7za.dat extraction..."
+        nsExec::ExecToStack '"$PLUGINSDIR\7za.dat" x "$PLUGINSDIR\app-arm64.7z" -o"$INSTDIR" -y'
+        Pop $R0
+        Pop $R4 # Capture output for debugging just in case
+        
+        # Trigger shell notification since files were modified externally
+        System::Call 'Shell32::SHChangeNotify(i 0x8000000, i 0, i 0, i 0)'
+        
+        ${ifNot} ${FileExists} "$appExe"
+          MessageBox MB_OK|MB_ICONEXCLAMATION "Installation failed to extract files. Exit code: $R0$\nOutput: $R4" /SD IDOK
+        ${endIf}
+      ${endIf}
+    ${endIf}
+  ${endIf}
+!macroend
