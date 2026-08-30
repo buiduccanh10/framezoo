@@ -825,6 +825,7 @@
         "selectingSecondary": "Másodlagos felirat kiválasztása",
         "syncSubtitleConfirmTitle": "Szinkronizálja a feliratot az AI-val?",
         "syncSubtitleConfirmDescription": "A feliratokat mesterséges intelligencia igazítja a videóhoz.",
+        "syncSubtitleSelectAnchor": "A pontosság kedvéért, melyik a videó első párbeszéde?",
         "syncSubtitleSupportedLanguages": "Támogatott hangnyelvek",
         "syncSubtitleSuccess": "A felirat sikeresen szinkronizálva",
         "syncSubtitleServerFallback": "A helyi szinkronizálás nem támogatja ezt a hangnyelvet; szerverrel szinkronizálva.",

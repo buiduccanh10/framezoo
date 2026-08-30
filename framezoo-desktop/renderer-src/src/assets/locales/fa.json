@@ -825,6 +825,7 @@
         "selectingSecondary": "انتخاب زیرنویس ثانویه",
         "syncSubtitleConfirmTitle": "زیرنویس با هوش مصنوعی همگام شود؟",
         "syncSubtitleConfirmDescription": "زیرنویس ها با هوش مصنوعی تراز می شوند تا با ویدیو مطابقت داشته باشند.",
+        "syncSubtitleSelectAnchor": "برای افزایش دقت، اولین دیالوگ در ویدیو کدام است؟",
         "syncSubtitleSupportedLanguages": "پشتیبانی از زبان های صوتی",
         "syncSubtitleSuccess": "زیرنویس با موفقیت همگام سازی شد",
         "syncSubtitleServerFallback": "همگام سازی محلی از این زبان صوتی پشتیبانی نمی کند. همگام سازی با استفاده از سرور",

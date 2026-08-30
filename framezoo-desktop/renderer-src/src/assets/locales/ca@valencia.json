@@ -825,6 +825,7 @@
         "selectingSecondary": "Selecció de subtítols secundaris",
         "syncSubtitleConfirmTitle": "Vols sincronitzar els subtítols amb IA?",
         "syncSubtitleConfirmDescription": "L'IA alinearà els subtítols perquè coincideixin amb el vídeo.",
+        "syncSubtitleSelectAnchor": "Per augmentar la precisió, quin és el primer diàleg del vídeo?",
         "syncSubtitleSupportedLanguages": "Idiomes d'àudio compatibles",
         "syncSubtitleSuccess": "Els subtítols s'han sincronitzat correctament",
         "syncSubtitleServerFallback": "La sincronització local no admet aquest idioma d'àudio; sincronitzat mitjançant el servidor.",

@@ -825,6 +825,7 @@
         "selectingSecondary": "Memilih subtitle sekunder",
         "syncSubtitleConfirmTitle": "Sinkronkan subtitle dengan AI?",
         "syncSubtitleConfirmDescription": "Subtitle akan diselaraskan oleh AI agar sesuai dengan video.",
+        "syncSubtitleSelectAnchor": "Untuk meningkatkan akurasi, manakah dialog pertama dalam video tersebut?",
         "syncSubtitleSupportedLanguages": "Bahasa audio yang didukung",
         "syncSubtitleSuccess": "Subtitle berhasil disinkronkan",
         "syncSubtitleServerFallback": "Sinkronisasi lokal tidak mendukung bahasa audio ini; disinkronkan menggunakan server.",

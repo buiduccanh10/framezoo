@@ -825,6 +825,7 @@
         "selectingSecondary": "اختيار العنوان الفرعي الثانوي",
         "syncSubtitleConfirmTitle": "مزامنة الترجمة مع الذكاء الاصطناعي؟",
         "syncSubtitleConfirmDescription": "سيتم محاذاة الترجمات بواسطة الذكاء الاصطناعي لتتناسب مع الفيديو.",
+        "syncSubtitleSelectAnchor": "لزيادة الدقة، ما هو الحوار الأول في الفيديو؟",
         "syncSubtitleSupportedLanguages": "اللغات الصوتية المدعومة",
         "syncSubtitleSuccess": "تمت مزامنة الترجمة بنجاح",
         "syncSubtitleServerFallback": "المزامنة المحلية لا تدعم لغة الصوت هذه؛ تمت مزامنتها باستخدام الخادم.",

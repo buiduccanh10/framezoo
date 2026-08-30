@@ -825,6 +825,7 @@
         "selectingSecondary": "Valg af sekundær undertekst",
         "syncSubtitleConfirmTitle": "Synkronisere undertekster med AI?",
         "syncSubtitleConfirmDescription": "Undertekster vil blive justeret af AI, så de matcher videoen.",
+        "syncSubtitleSelectAnchor": "For at øge nøjagtigheden, hvilken er den første dialog i videoen?",
         "syncSubtitleSupportedLanguages": "Understøttede lydsprog",
         "syncSubtitleSuccess": "Undertekster synkroniseret",
         "syncSubtitleServerFallback": "Lokal synkronisering understøtter ikke dette lydsprog; synkroniseret ved hjælp af server.",

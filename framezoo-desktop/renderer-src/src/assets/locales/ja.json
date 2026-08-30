@@ -825,6 +825,7 @@
         "selectingSecondary": "副字幕の選択",
         "syncSubtitleConfirmTitle": "字幕をAIと同期させる？",
         "syncSubtitleConfirmDescription": "字幕はAIによって映像に合わせて調整されます。",
+        "syncSubtitleSelectAnchor": "正確性を高めるために、動画の最初のセリフはどれですか？",
         "syncSubtitleSupportedLanguages": "サポートされている音声言語",
         "syncSubtitleSuccess": "字幕は正常に同期されました",
         "syncSubtitleServerFallback": "ローカル同期はこの音声言語をサポートしていません。サーバーを使用して同期されます。",

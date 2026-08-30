@@ -825,6 +825,7 @@
         "selectingSecondary": "בחירת כתובית משנית",
         "syncSubtitleConfirmTitle": "לסנכרן כתוביות עם AI?",
         "syncSubtitleConfirmDescription": "כתוביות יתאימו על ידי AI כך שיתאימו לסרטון.",
+        "syncSubtitleSelectAnchor": "כדי להגביר את הדיוק, מהו הדיאלוג הראשון בסרטון?",
         "syncSubtitleSupportedLanguages": "שפות שמע נתמכות",
         "syncSubtitleSuccess": "כתוביות סנכרון בהצלחה",
         "syncSubtitleServerFallback": "סנכרון מקומי אינו תומך בשפת שמע זו; מסונכרן באמצעות שרת.",

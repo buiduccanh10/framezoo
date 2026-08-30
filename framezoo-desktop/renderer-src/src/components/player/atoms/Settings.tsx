@@ -25,6 +25,7 @@ import { PlaybackSettingsView } from "./settings/PlaybackSettingsView";
 import { QualityView } from "./settings/QualityView";
 import { SettingsMenu } from "./settings/SettingsMenu";
 import { SkipSegmentsView } from "./settings/SkipSegmentsView";
+import { SyncSubtitleView } from "./settings/SyncSubtitleView";
 import { TranscriptView } from "./settings/TranscriptView";
 import { TranslateSubtitleView } from "./settings/TranslateSubtitleView";
 import { WatchPartyView } from "./settings/WatchPartyView";
@@ -251,6 +252,16 @@ function SettingsOverlay({ id }: { id: string }) {
                 onSelectionModeChange={setSubtitleSelectionMode}
               />
             ) : null}
+          </Menu.CardWithScrollable>
+        </OverlayPage>
+        <OverlayPage
+          id={id}
+          path="/captions/transcript/sync"
+          width={wideWidth}
+          height={transcriptHeight}
+        >
+          <Menu.CardWithScrollable scrollLastChild>
+            <SyncSubtitleView id={id} selectionMode={subtitleSelectionMode} />
           </Menu.CardWithScrollable>
         </OverlayPage>
         <OverlayPage

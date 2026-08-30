@@ -7,7 +7,6 @@ import { Icon, Icons } from "@/components/Icon";
 import { useCaptions } from "@/components/player/hooks/useCaptions";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
-import { resolvePublicUrl } from "@/utils/publicUrl";
 import {
   CaptionListItem,
   isEmbeddedCaption,
@@ -15,6 +14,7 @@ import {
 import { usePlayerStore } from "@/stores/player/store";
 import { useSubtitleStore } from "@/stores/subtitles";
 import { getPrettyLanguageNameFromLocale } from "@/utils/language";
+import { resolvePublicUrl } from "@/utils/publicUrl";
 
 import { CaptionOption, type SubtitleSelectionMode } from "./CaptionsView";
 import { useCaptionMatchScore } from "../../hooks/useCaptionMatchScore";
@@ -333,14 +333,14 @@ export function LanguageSubtitlesView({
           languageCaptions.map(renderSubtitleOption)
         ) : externalSubtitleLoadError && !isLoadingExternalSubtitles ? (
           <div className="flex flex-col items-center justify-center py-6 px-4 text-center text-video-context-type-secondary">
-            <img 
-              src={resolvePublicUrl("/placeholder.png") ?? "/placeholder.png"} 
-              alt="Error" 
-              className="w-16 h-16 opacity-50 mb-3" 
+            <img
+              src={resolvePublicUrl("/placeholder.png") ?? "/placeholder.png"}
+              alt="Error"
+              className="w-16 h-16 opacity-50 mb-3"
             />
             <p className="text-sm">
-              {t("player.menus.subtitles.fetchFailed", { 
-                defaultValue: "Failed to load subtitles, try a few seconds." 
+              {t("player.menus.subtitles.fetchFailed", {
+                defaultValue: "Failed to load subtitles, try a few seconds.",
               })}
             </p>
           </div>

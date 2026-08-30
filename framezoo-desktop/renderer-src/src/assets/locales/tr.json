@@ -825,6 +825,7 @@
         "selectingSecondary": "İkincil altyazının seçilmesi",
         "syncSubtitleConfirmTitle": "Altyazı AI ile senkronize edilsin mi?",
         "syncSubtitleConfirmDescription": "Altyazılar yapay zeka tarafından videoyla eşleşecek şekilde hizalanacak.",
+        "syncSubtitleSelectAnchor": "Doğruluğu artırmak için, videodaki ilk diyalog hangisidir?",
         "syncSubtitleSupportedLanguages": "Desteklenen ses dilleri",
         "syncSubtitleSuccess": "Altyazı başarıyla senkronize edildi",
         "syncSubtitleServerFallback": "Yerel senkronizasyon bu ses dilini desteklemez; sunucu kullanılarak senkronize edildi.",

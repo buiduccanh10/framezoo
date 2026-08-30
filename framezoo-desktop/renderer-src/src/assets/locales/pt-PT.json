@@ -825,6 +825,7 @@
         "selectingSecondary": "Selecionando legenda secundária",
         "syncSubtitleConfirmTitle": "Sincronizar legenda com IA?",
         "syncSubtitleConfirmDescription": "As legendas serão alinhadas pela IA para corresponder ao vídeo.",
+        "syncSubtitleSelectAnchor": "Para aumentar a precisão, qual é o primeiro diálogo do vídeo?",
         "syncSubtitleSupportedLanguages": "Idiomas de áudio suportados",
         "syncSubtitleSuccess": "Legenda sincronizada com sucesso",
         "syncSubtitleServerFallback": "A sincronização local não oferece suporte a este idioma de áudio; sincronizado usando o servidor.",
