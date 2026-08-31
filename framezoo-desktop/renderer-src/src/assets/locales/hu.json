@@ -95,6 +95,7 @@
       "passwordIncorrect": "A jelszó helytelen",
       "passwordLabel": "Jelszó",
       "passwordPlaceholder": "Adja meg jelszavát",
+      "rememberMe": "Emlékezz a jelszavamra",
       "passwordRequired": "Jelszó megadása kötelező",
       "submit": "Bejelentkezés",
       "title": "Jelentkezz be a fiókodba",

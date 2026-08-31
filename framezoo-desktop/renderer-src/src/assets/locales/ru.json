@@ -95,6 +95,7 @@
       "passwordIncorrect": "Пароль неверен",
       "passwordLabel": "Пароль",
       "passwordPlaceholder": "Введите свой пароль",
+      "rememberMe": "Запомнить мой пароль",
       "passwordRequired": "Требуется пароль",
       "submit": "Войти",
       "title": "Войдите в аккаунт",

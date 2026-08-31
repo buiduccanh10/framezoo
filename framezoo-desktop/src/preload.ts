@@ -44,6 +44,15 @@ contextBridge.exposeInMainWorld("__CONFIG__", runtimeConfig);
 contextBridge.exposeInMainWorld("__FRAMEZOO_DESKTOP__", true);
 
 contextBridge.exposeInMainWorld("electronAPI", {
+  secureStoreSave(key: string, value: string) {
+    return ipcRenderer.invoke("desktop:secure-store-save", key, value);
+  },
+  secureStoreGet(key: string) {
+    return ipcRenderer.invoke("desktop:secure-store-get", key);
+  },
+  secureStoreRemove(key: string) {
+    return ipcRenderer.invoke("desktop:secure-store-remove", key);
+  },
   getAppUpdateState() {
     return ipcRenderer.invoke("desktop:app-update-get-state");
   },

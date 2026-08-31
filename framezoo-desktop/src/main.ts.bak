@@ -9,7 +9,6 @@ import {
   screen,
   session,
   shell,
-  safeStorage,
   type Input,
   type MenuItemConstructorOptions,
   type Rectangle,
@@ -1416,61 +1415,7 @@ function getOrCreateMainWindow() {
   return mainWindow;
 }
 
-function readSecureStore() {
-  try {
-    const p = path.join(app.getPath("userData"), "secure_store.json");
-    return JSON.parse(fs.readFileSync(p, "utf8"));
-  } catch {
-    return {};
-  }
-}
-
-function writeSecureStore(data: any) {
-  try {
-    const p = path.join(app.getPath("userData"), "secure_store.json");
-    fs.writeFileSync(p, JSON.stringify(data), "utf8");
-  } catch (err) {
-    console.error("Failed to write secure store", err);
-  }
-}
-
 function registerIpcHandlers() {
-  ipcMain.handle("desktop:secure-store-save", async (_event, key: string, value: string) => {
-    if (safeStorage.isEncryptionAvailable()) {
-      try {
-        const encrypted = safeStorage.encryptString(value);
-        const store = readSecureStore();
-        store[key] = encrypted.toString('base64');
-        writeSecureStore(store);
-        return true;
-      } catch (err) {
-        console.error("Encryption failed", err);
-      }
-    }
-    return false;
-  });
-
-  ipcMain.handle("desktop:secure-store-get", async (_event, key: string) => {
-    if (safeStorage.isEncryptionAvailable()) {
-      const store = readSecureStore();
-      const encryptedBase64 = store[key];
-      if (encryptedBase64) {
-        try {
-          return safeStorage.decryptString(Buffer.from(encryptedBase64, 'base64'));
-        } catch {
-          return null;
-        }
-      }
-    }
-    return null;
-  });
-
-  ipcMain.handle("desktop:secure-store-remove", async (_event, key: string) => {
-    const store = readSecureStore();
-    delete store[key];
-    writeSecureStore(store);
-  });
-
   ipcMain.handle("desktop:app-update-get-state", async () => {
     return desktopAppUpdater.getState();
   });

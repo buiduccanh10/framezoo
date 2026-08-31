@@ -95,6 +95,7 @@
       "passwordIncorrect": "La contraseña es incorrecta",
       "passwordLabel": "Contraseña",
       "passwordPlaceholder": "Introduce tu contraseña",
+      "rememberMe": "Recuerda mi contraseña",
       "passwordRequired": "Se requiere contraseña",
       "submit": "Iniciar sesión",
       "title": "Inicia sesión en tu cuenta",

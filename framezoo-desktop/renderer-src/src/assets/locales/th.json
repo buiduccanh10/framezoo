@@ -95,6 +95,7 @@
       "passwordIncorrect": "รหัสผ่านไม่ถูกต้อง",
       "passwordLabel": "รหัสผ่าน",
       "passwordPlaceholder": "ใส่รหัสผ่านของคุณ",
+      "rememberMe": "จดจำรหัสผ่านของฉัน",
       "passwordRequired": "ต้องใช้รหัสผ่าน",
       "submit": "เข้าสู่ระบบ",
       "title": "เข้าสู่ระบบบัญชีของคุณที่นี่",

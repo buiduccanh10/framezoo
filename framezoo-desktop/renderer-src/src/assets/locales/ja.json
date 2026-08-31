@@ -95,6 +95,7 @@
       "passwordIncorrect": "パスワードが間違っています",
       "passwordLabel": "パスワード",
       "passwordPlaceholder": "パスワードを入力してください",
+      "rememberMe": "パスワードを覚えておいてください",
       "passwordRequired": "パスワードが必要です",
       "submit": "ログイン",
       "title": "自分の口座にログインする",

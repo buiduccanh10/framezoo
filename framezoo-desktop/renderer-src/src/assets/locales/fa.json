@@ -95,6 +95,7 @@
       "passwordIncorrect": "رمز عبور نادرست است",
       "passwordLabel": "رمز عبور",
       "passwordPlaceholder": "رمز عبور خود را وارد کنید",
+      "rememberMe": "رمز عبور من را به خاطر بسپار",
       "passwordRequired": "رمز عبور لازم است",
       "submit": "ورود",
       "title": "ورود به حساب کاربری",

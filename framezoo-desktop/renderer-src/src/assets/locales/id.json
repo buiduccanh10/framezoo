@@ -95,6 +95,7 @@
       "passwordIncorrect": "Kata sandi salah",
       "passwordLabel": "Kata sandi",
       "passwordPlaceholder": "Masukkan kata sandi Anda",
+      "rememberMe": "Ingat kata sandi saya",
       "passwordRequired": "Kata sandi diperlukan",
       "submit": "Masuk",
       "title": "Masuk ke akun Anda",

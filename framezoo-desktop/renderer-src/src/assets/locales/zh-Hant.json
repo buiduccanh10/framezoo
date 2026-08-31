@@ -95,6 +95,7 @@
       "passwordIncorrect": "密碼不正確",
       "passwordLabel": "密碼",
       "passwordPlaceholder": "輸入您的密碼",
+      "rememberMe": "記住我的密碼",
       "passwordRequired": "需要密碼",
       "submit": "登入",
       "title": "登入您的帳戶",

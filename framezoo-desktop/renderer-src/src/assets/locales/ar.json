@@ -95,6 +95,7 @@
       "passwordIncorrect": "كلمة المرور غير صحيحة",
       "passwordLabel": "كلمة المرور",
       "passwordPlaceholder": "أدخل كلمة المرور الخاصة بك",
+      "rememberMe": "تذكر كلمة المرور الخاصة بي",
       "passwordRequired": "كلمة المرور مطلوبة",
       "submit": "تسجيل الدخول",
       "title": "تسجيل الدخول إلى حسابك",
