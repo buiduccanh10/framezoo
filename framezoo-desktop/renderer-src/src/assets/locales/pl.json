@@ -95,6 +95,7 @@
       "passwordIncorrect": "Hasło jest nieprawidłowe",
       "passwordLabel": "Hasło",
       "passwordPlaceholder": "Wpisz swoje hasło",
+      "rememberMe": "Zapamiętaj moje hasło",
       "passwordRequired": "Hasło jest wymagane",
       "submit": "Zaloguj się",
       "title": "Zaloguj się na swoje konto",

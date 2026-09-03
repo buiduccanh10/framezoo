@@ -1,4 +1,5 @@
 import { DisplayError } from "@/components/player/display/displayInterface";
+import type { NextEpisodeAction } from "@/components/player/utils/episodeNavigation";
 import { MakeSlice } from "@/stores/player/slices/types";
 
 export enum VideoPlayerTimeFormat {
@@ -25,6 +26,7 @@ export interface InterfaceSlice {
     documentPictureInPictureWindow: Window | null;
     isCasting: boolean;
     hideNextEpisodeBtn: boolean;
+    nextEpisodeAction: NextEpisodeAction | null;
     shouldStartFromBeginning: boolean;
     skipNextSavedProgressResume: boolean;
     error?: DisplayError;
@@ -46,6 +48,7 @@ export interface InterfaceSlice {
   setHasOpenOverlay(state: boolean): void;
   setLastVolume(state: number): void;
   hideNextEpisodeButton(): void;
+  setNextEpisodeAction(action: NextEpisodeAction | null): void;
   setShouldStartFromBeginning(val: boolean): void;
   setSkipNextSavedProgressResume(val: boolean): void;
   setSpeedBoosted(state: boolean): void;
@@ -70,6 +73,7 @@ export const createInterfaceSlice: MakeSlice<InterfaceSlice> = (set, get) => ({
     pictureInPictureMode: null,
     documentPictureInPictureWindow: null,
     hideNextEpisodeBtn: false,
+    nextEpisodeAction: null,
     shouldStartFromBeginning: false,
     skipNextSavedProgressResume: false,
     isSpeedBoosted: false,
@@ -129,6 +133,11 @@ export const createInterfaceSlice: MakeSlice<InterfaceSlice> = (set, get) => ({
   hideNextEpisodeButton() {
     set((s) => {
       s.interface.hideNextEpisodeBtn = true;
+    });
+  },
+  setNextEpisodeAction(action) {
+    set((s) => {
+      s.interface.nextEpisodeAction = action;
     });
   },
   setSpeedBoosted(state) {

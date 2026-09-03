@@ -95,6 +95,7 @@
       "passwordIncorrect": "비밀번호가 올바르지 않습니다.",
       "passwordLabel": "비밀번호",
       "passwordPlaceholder": "비밀번호를 입력하세요",
+      "rememberMe": "내 비밀번호를 기억하세요",
       "passwordRequired": "비밀번호가 필요합니다",
       "submit": "로그인",
       "title": "계정에 로그인하기",

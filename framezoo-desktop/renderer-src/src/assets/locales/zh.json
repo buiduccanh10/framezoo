@@ -95,6 +95,7 @@
       "passwordIncorrect": "密码不正确",
       "passwordLabel": "密码",
       "passwordPlaceholder": "输入您的密码",
+      "rememberMe": "记住我的密码",
       "passwordRequired": "需要密码",
       "submit": "登录",
       "title": "登录您的账户",

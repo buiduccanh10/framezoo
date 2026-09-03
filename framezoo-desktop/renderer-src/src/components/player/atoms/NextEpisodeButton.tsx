@@ -1,14 +1,16 @@
 import classNames from "classnames";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useAsync } from "react-use";
 
-import { getMetaFromId } from "@/backend/metadata/getmeta";
-import { MWMediaType, MWSeasonMeta } from "@/backend/metadata/types/mw";
 import { Button } from "@/components/buttons/Button";
 import { Icon, Icons } from "@/components/Icon";
 import { usePlayerMeta } from "@/components/player/hooks/usePlayerMeta";
 import { getNextEpisodeVisibility } from "@/components/player/utils/controlVisibility";
+import {
+  getNextEpisodeAction,
+  resolveNextEpisodeAction,
+} from "@/components/player/utils/episodeNavigation";
 import { isPlaybackInteractionLocked } from "@/components/player/utils/playbackLock";
 import { Transition } from "@/components/utils/Transition";
 import { PlayerMeta } from "@/stores/player/slices/source";
@@ -16,8 +18,6 @@ import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
 import { useProgressStore } from "@/stores/progress";
 import { isAutoplayAllowed } from "@/utils/autoplay";
-
-import { hasAired } from "../utils/aired";
 
 function ActionButton(props: {
   className: string;
@@ -39,50 +39,6 @@ function ActionButton(props: {
       {props.children}
     </button>
   );
-}
-
-function useSeasons(
-  mediaId: string | undefined,
-  isLastEpisode: boolean = false,
-) {
-  const state = useAsync(async () => {
-    if (isLastEpisode) {
-      if (!mediaId) return null;
-      const data = await getMetaFromId(MWMediaType.SERIES, mediaId);
-      if (data?.meta.type !== MWMediaType.SERIES) return null;
-      return data.meta.seasons;
-    }
-  }, [mediaId, isLastEpisode]);
-
-  return state;
-}
-
-function useNextSeasonEpisode(
-  nextSeason: MWSeasonMeta | undefined,
-  mediaId: string | undefined,
-) {
-  const state = useAsync(async () => {
-    if (nextSeason) {
-      if (!mediaId) return null;
-      const data = await getMetaFromId(
-        MWMediaType.SERIES,
-        mediaId,
-        nextSeason?.id,
-      );
-      if (data?.meta.type !== MWMediaType.SERIES) return null;
-
-      const nextSeasonEpisodes = data?.meta?.seasonData?.episodes
-        .filter((episode) => hasAired(episode.air_date))
-        .map((episode) => ({
-          number: episode.number,
-          title: episode.title,
-          tmdbId: episode.id,
-        }));
-
-      if (nextSeasonEpisodes.length > 0) return nextSeasonEpisodes[0];
-    }
-  }, [mediaId, nextSeason?.id]);
-  return state;
 }
 
 export function NextEpisodeButton(props: {
@@ -114,20 +70,38 @@ export function NextEpisodeButton(props: {
   const setShouldStartFromBeginning = usePlayerStore(
     (s) => s.setShouldStartFromBeginning,
   );
+  const setNextEpisodeAction = usePlayerStore((s) => s.setNextEpisodeAction);
   const updateItem = useProgressStore((s) => s.updateItem);
 
-  const isLastEpisode =
-    !meta?.episode?.number || !meta?.episodes?.at(-1)?.number
-      ? false
-      : meta.episode.number === meta.episodes.at(-1)!.number;
+  const directNextAction = useMemo(() => getNextEpisodeAction(meta), [meta]);
+  const resolvedNextAction = useAsync(async () => {
+    if (directNextAction || !meta) return null;
+    return resolveNextEpisodeAction(meta);
+  }, [
+    meta?.tmdbId,
+    meta?.season?.tmdbId,
+    meta?.episode?.tmdbId,
+    meta?.episode?.number,
+    directNextAction?.episode.tmdbId,
+  ]);
+  const nextAction =
+    directNextAction ||
+    (resolvedNextAction.loading ? null : resolvedNextAction.value) ||
+    null;
+  const nextEp = nextAction?.episode;
+  const isNextSeason = nextAction?.isSeasonChange ?? false;
 
-  const seasons = useSeasons(meta?.tmdbId, isLastEpisode);
-
-  const nextSeason = seasons.value?.find(
-    (season) => season.number === (meta?.season?.number ?? 0) + 1,
-  );
-
-  const nextSeasonEpisode = useNextSeasonEpisode(nextSeason, meta?.tmdbId);
+  useEffect(() => {
+    setNextEpisodeAction(nextAction);
+  }, [
+    nextAction?.episode.tmdbId,
+    nextAction?.episode.number,
+    nextAction?.episode.title,
+    nextAction?.season?.tmdbId,
+    nextAction?.isSeasonChange,
+    setNextEpisodeAction,
+    nextAction,
+  ]);
 
   let show = false;
   const hasAutoplayed = useRef(false);
@@ -142,22 +116,15 @@ export function NextEpisodeButton(props: {
       ? bottom
       : "bottom-[calc(3rem+env(safe-area-inset-bottom))]";
 
-  const nextEp = isLastEpisode
-    ? nextSeasonEpisode.value
-    : meta?.episodes?.find(
-        (v) => v.number === (meta?.episode?.number ?? 0) + 1,
-      );
-
   const loadNextEpisode = useCallback(() => {
     if (!meta || !nextEp || (!props.showAsButton && isPlaybackLocked)) return;
 
     const metaCopy = { ...meta };
     metaCopy.episode = nextEp;
     metaCopy.season =
-      isLastEpisode && nextSeason
+      isNextSeason && nextAction.season
         ? {
-            ...nextSeason,
-            tmdbId: nextSeason.id,
+            ...nextAction.season,
           }
         : metaCopy.season;
     setShouldStartFromBeginning(true);
@@ -175,8 +142,8 @@ export function NextEpisodeButton(props: {
     props,
     setShouldStartFromBeginning,
     updateItem,
-    isLastEpisode,
-    nextSeason,
+    isNextSeason,
+    nextAction,
     isPlaybackLocked,
   ]);
 
@@ -212,7 +179,7 @@ export function NextEpisodeButton(props: {
       : time >= duration && duration !== 0; // 100% completion
 
     if (duration === 0) hasAutoplayed.current = false;
-    if (isEnding && !hasAutoplayed.current) {
+    if (isEnding && !hasAutoplayed.current && nextAction) {
       hasAutoplayed.current = true;
       loadNextEpisode();
     }
@@ -224,6 +191,7 @@ export function NextEpisodeButton(props: {
     metaType,
     time,
     isPlaybackLocked,
+    nextAction,
   ]);
 
   if (!props.inControl) return null;
@@ -239,7 +207,7 @@ export function NextEpisodeButton(props: {
         className="w-full"
       >
         <Icon className="mr-2" icon={Icons.SKIP_EPISODE} />
-        {isLastEpisode && nextEp
+        {isNextSeason
           ? t("player.nextEpisode.nextSeason")
           : t("player.nextEpisode.next")}
       </Button>
@@ -271,7 +239,7 @@ export function NextEpisodeButton(props: {
           className="bg-buttons-primary hover:bg-buttons-primaryHover text-buttons-primaryText flex justify-center items-center"
         >
           <Icon className="text-xl mr-1" icon={Icons.SKIP_EPISODE} />
-          {isLastEpisode && nextEp
+          {isNextSeason
             ? t("player.nextEpisode.nextSeason")
             : t("player.nextEpisode.next")}
         </ActionButton>

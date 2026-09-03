@@ -9,7 +9,6 @@ import {
   screen,
   session,
   shell,
-  safeStorage,
   type Input,
   type MenuItemConstructorOptions,
   type Rectangle,
@@ -64,8 +63,8 @@ const ALLOWED_REMOTE_PROTOCOL_HOSTS = new Set(["www.gstatic.com"]);
 const PACKAGED_RENDERER_URL = `${RENDERER_PROTOCOL}://${RENDERER_PROTOCOL_HOST}/index.html`;
 const DESKTOP_BRIDGE_VERSION = "1.0.2";
 const DESKTOP_PIP_ROUTE = "/desktop-pip";
-const DESKTOP_RELEASE_OWNER = "buiduccanh10";
-const DESKTOP_RELEASE_REPO = "framezoo-desktop-releases";
+const DESKTOP_APP_UPDATE_CHANNEL =
+  process.env.FRAMEZOO_DESKTOP_UPDATE_CHANNEL ?? "stable";
 const DESKTOP_APP_UPDATE_CHECK_INTERVAL_MS = 60 * 60 * 1000;
 const DESKTOP_SETTINGS_ROUTE = "/settings";
 const EXTENSION_REQUEST_TIMEOUT_MS = 15_000;
@@ -819,12 +818,12 @@ const desktopAppUpdater = createDesktopAppUpdater({
     }
   },
   checkIntervalMs: DESKTOP_APP_UPDATE_CHECK_INTERVAL_MS,
+  getBackendUrl: getConfiguredBackendUrl,
   onStateChange: () => {
     sendDesktopAppUpdateState();
     installApplicationMenu();
   },
-  releaseOwner: DESKTOP_RELEASE_OWNER,
-  releaseRepo: DESKTOP_RELEASE_REPO,
+  updateChannel: DESKTOP_APP_UPDATE_CHANNEL,
 });
 
 const desktopPipController = createDesktopPipController({
@@ -1416,61 +1415,7 @@ function getOrCreateMainWindow() {
   return mainWindow;
 }
 
-function readSecureStore() {
-  try {
-    const p = path.join(app.getPath("userData"), "secure_store.json");
-    return JSON.parse(fs.readFileSync(p, "utf8"));
-  } catch {
-    return {};
-  }
-}
-
-function writeSecureStore(data: any) {
-  try {
-    const p = path.join(app.getPath("userData"), "secure_store.json");
-    fs.writeFileSync(p, JSON.stringify(data), "utf8");
-  } catch (err) {
-    console.error("Failed to write secure store", err);
-  }
-}
-
 function registerIpcHandlers() {
-  ipcMain.handle("desktop:secure-store-save", async (_event, key: string, value: string) => {
-    if (safeStorage.isEncryptionAvailable()) {
-      try {
-        const encrypted = safeStorage.encryptString(value);
-        const store = readSecureStore();
-        store[key] = encrypted.toString('base64');
-        writeSecureStore(store);
-        return true;
-      } catch (err) {
-        console.error("Encryption failed", err);
-      }
-    }
-    return false;
-  });
-
-  ipcMain.handle("desktop:secure-store-get", async (_event, key: string) => {
-    if (safeStorage.isEncryptionAvailable()) {
-      const store = readSecureStore();
-      const encryptedBase64 = store[key];
-      if (encryptedBase64) {
-        try {
-          return safeStorage.decryptString(Buffer.from(encryptedBase64, 'base64'));
-        } catch {
-          return null;
-        }
-      }
-    }
-    return null;
-  });
-
-  ipcMain.handle("desktop:secure-store-remove", async (_event, key: string) => {
-    const store = readSecureStore();
-    delete store[key];
-    writeSecureStore(store);
-  });
-
   ipcMain.handle("desktop:app-update-get-state", async () => {
     return desktopAppUpdater.getState();
   });

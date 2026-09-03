@@ -95,6 +95,7 @@
       "passwordIncorrect": "Adgangskoden er forkert",
       "passwordLabel": "Adgangskode",
       "passwordPlaceholder": "Indtast din adgangskode",
+      "rememberMe": "Husk min adgangskode",
       "passwordRequired": "Adgangskode er påkrævet",
       "submit": "Log ind",
       "title": "Log ind på din profil",

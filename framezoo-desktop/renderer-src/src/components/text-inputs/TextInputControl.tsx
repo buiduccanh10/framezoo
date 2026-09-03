@@ -55,9 +55,6 @@ export const TextInputControl = forwardRef<
           autoComplete={autoComplete}
           onBlur={() => onUnFocus && onUnFocus()}
           onFocus={() => onFocus?.()}
-          onKeyDown={(e) =>
-            e.key === "Enter" ? (e.target as HTMLInputElement).blur() : null
-          }
         />
         {passwordToggleable ? (
           <button

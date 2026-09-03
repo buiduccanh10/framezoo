@@ -49,6 +49,9 @@ import type {
 declare global {
   interface Window {
     electronAPI?: {
+      secureStoreSave?: (key: string, value: string) => Promise<boolean>;
+      secureStoreGet?: (key: string) => Promise<string | null>;
+      secureStoreRemove?: (key: string) => Promise<void>;
       getAppUpdateState?: () => Promise<DesktopAppUpdateState>;
       checkForAppUpdate?: () => Promise<boolean>;
       downloadAppUpdate?: () => Promise<boolean>;

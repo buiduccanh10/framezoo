@@ -1,7 +1,6 @@
 stages:
   - audit
   - deploy
-  - desktop
 
 variables:
   GIT_STRATEGY: none
@@ -17,8 +16,6 @@ variables:
 # - DEPLOY_BRANCH: git branch to deploy (default: main)
 # - DEPLOY_PATH: monorepo path on VPS (default: /home/framezoo)
 # - DEPLOY_PROJECT_NAME: docker compose project name (default: framezoo)
-# - FORCE_DESKTOP_PUBLISH: set to "true" to bypass desktop changes filter / manual desktop publish
-
 .default_ssh_setup: &default_ssh_setup
   before_script:
     - which apk && apk add --no-cache openssh-client git curl tar || (apt-get update && apt-get install -y openssh-client git curl tar && rm -rf /var/lib/apt/lists/*)
@@ -27,16 +24,6 @@ variables:
     - eval "$(ssh-agent -s)"
     - echo "$VPS_SSH_KEY" | tr -d '\r' | ssh-add -
     - ssh-keyscan -p "${VPS_PORT:-22}" "$VPS_HOST" >> ~/.ssh/known_hosts
-
-.desktop_publish_rules: &desktop_publish_rules
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "web" && $CI_COMMIT_BRANCH == "main" && $FORCE_DESKTOP_PUBLISH == "true"'
-    - if: '$CI_COMMIT_BRANCH == "main"'
-      changes:
-        - framezoo-desktop/**/*
-        - package.json
-        - pnpm-lock.yaml
-        - pnpm-workspace.yaml
 
 audit:framezoo:
   stage: audit
@@ -87,17 +74,3 @@ deploy:framezoo:
       echo "Building prod stack from ${DEPLOY_PATH}..."
       printf '%s' "$ENV_FILE" | ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" \
         "set -eu; ENV_TMP=\$(mktemp /tmp/${CI_PROJECT_NAME}_env.XXXXXX); trap 'rm -f \"\$ENV_TMP\"' EXIT; cat > \"\$ENV_TMP\"; chmod 600 \"\$ENV_TMP\"; cd '${DEPLOY_PATH}'; PROJECT_NAME='${DEPLOY_PROJECT_NAME}' COMPOSE_FILE='docker-compose.prod.yml' ENV_FILE_PATH=\"\$ENV_TMP\" ./scripts/deploy.sh all"
-
-trigger:desktop:publish:
-  stage: desktop
-  inherit:
-    variables: false
-  needs:
-    - job: deploy:framezoo
-  variables:
-    PARENT_COMMIT_SHA: $CI_COMMIT_SHA
-    PARENT_PIPELINE_CREATED_AT: $CI_PIPELINE_CREATED_AT
-  <<: *desktop_publish_rules
-  trigger:
-    include:
-      - local: .gitlab/desktop-publish.gitlab-ci.yml

@@ -95,6 +95,7 @@
       "passwordIncorrect": "A senha está incorreta",
       "passwordLabel": "Senha",
       "passwordPlaceholder": "Digite sua senha",
+      "rememberMe": "Lembrar minha senha",
       "passwordRequired": "A senha é obrigatória",
       "submit": "Entrar",
       "title": "Entrar na sua conta",

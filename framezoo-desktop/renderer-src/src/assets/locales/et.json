@@ -95,6 +95,7 @@
       "passwordIncorrect": "Parool on vale",
       "passwordLabel": "Parool",
       "passwordPlaceholder": "Sisestage oma parool",
+      "rememberMe": "Jäta minu parool meelde",
       "passwordRequired": "Parool on nõutav",
       "submit": "Logi sisse",
       "title": "Logi sisse oma kontosse",

@@ -85,6 +85,24 @@ or
 FRAMEZOO_BACKEND_URL=https://your-api.example.com pnpm run dist:desktop
 ```
 
+## Releases and Updates
+
+`.github/workflows/publish-desktop.yml` builds four release variants:
+`mac-arm64`, `mac-x64`, `win-x64`, and `win-arm64`. It publishes installers,
+update feeds, blockmaps, and manifests to the public
+`buiduccanh10/framezoo-desktop-releases` GitHub repository.
+
+The source repository needs an Actions secret named `DESKTOP_RELEASE_TOKEN`.
+Use a fine-grained GitHub token with `Contents: Read and write` access to
+`framezoo-desktop-releases`. The release repository must contain an initial
+commit before the first release.
+
+The website fetches `download-manifest.json` server-side through `/download`;
+installer requests redirect to GitHub Release assets. Desktop update checks use
+the GitHub Release feed directly. Windows uses `electron-updater`; unsigned
+macOS builds keep the existing manual ZIP, `xattr -cr`, and ad-hoc `codesign`
+installation path.
+
 ## Current limitations
 
 - `window.__FRAMEZOO_DESKTOP__` is enabled and backed by a minimal Electron IPC bridge.

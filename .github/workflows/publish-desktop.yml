@@ -13,7 +13,7 @@ on:
       ref:
         description: Git ref or SHA to publish
         required: false
-        default: main
+        default: ""
         type: string
 
 concurrency:
@@ -33,27 +33,38 @@ jobs:
       checkout_ref: ${{ steps.detect.outputs.checkout_ref }}
       published_at: ${{ steps.detect.outputs.published_at }}
       should_publish: ${{ steps.detect.outputs.should_publish }}
+      release_tag: ${{ steps.release.outputs.release_tag }}
     env:
-      TARGET_REF: ${{ github.event.workflow_run.head_sha || inputs.ref || github.sha }}
+      TARGET_REF: ${{ github.event.workflow_run.head_sha || inputs.ref || github.ref }}
     steps:
       - uses: actions/checkout@v5
         with:
           ref: ${{ env.TARGET_REF }}
           fetch-depth: 0
+      - name: Resolve checked out commit
+        id: resolve
+        shell: bash
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
       - name: Detect desktop-related changes
         id: detect
         uses: actions/github-script@v8
+        env:
+          CHECKED_OUT_SHA: ${{ steps.resolve.outputs.sha }}
         with:
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
-            const currentSha = process.env.TARGET_REF;
+            const currentSha = process.env.CHECKED_OUT_SHA;
             const publishedAt = new Date().toISOString();
             const desktopPatterns = [
               /^framezoo-desktop\//,
               /^package\.json$/,
               /^pnpm-lock\.yaml$/,
               /^pnpm-workspace\.yaml$/,
+              /^scripts\/desktop-release\.js$/,
+              /^scripts\/create-desktop-github-release-assets\.js$/,
+              /^scripts\/prepare-desktop-github-release-input\.js$/,
+              /^\.github\/workflows\/publish-desktop\.yml$/,
             ];
 
             core.setOutput("checkout_ref", currentSha);
@@ -136,6 +147,69 @@ jobs:
       - name: Skip marker
         if: steps.detect.outputs.should_publish != 'true'
         run: echo "No desktop-related changes. Skipping publish."
+      - name: Prepare draft GitHub Release
+        id: release
+        if: steps.detect.outputs.should_publish == 'true'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.DESKTOP_RELEASE_TOKEN }}
+          RELEASE_REPOSITORY: buiduccanh10/framezoo-desktop-releases
+        run: |
+          set -euo pipefail
+
+          if [ -z "${GH_TOKEN:-}" ]; then
+            echo "DESKTOP_RELEASE_TOKEN secret is empty."
+            exit 1
+          fi
+
+          if ! gh repo view "$RELEASE_REPOSITORY" >/dev/null 2>&1; then
+            echo "Release repository is not accessible: $RELEASE_REPOSITORY"
+            exit 1
+          fi
+
+          if [ "$(gh repo view "$RELEASE_REPOSITORY" --json isPrivate -q .isPrivate)" != "false" ]; then
+            echo "Release repository must be public: $RELEASE_REPOSITORY"
+            exit 1
+          fi
+
+          if ! gh api "repos/$RELEASE_REPOSITORY/commits?per_page=1" >/dev/null 2>&1; then
+            echo "Release repository must contain an initial commit before publishing: $RELEASE_REPOSITORY"
+            exit 1
+          fi
+
+          VERSION="$(node -p "require('./framezoo-desktop/package.json').version")"
+          TAG="v${VERSION}"
+          echo "release_tag=$TAG" >> "$GITHUB_OUTPUT"
+
+          if gh release view "$TAG" --repo "$RELEASE_REPOSITORY" >/dev/null 2>&1; then
+            if [ "$(gh release view "$TAG" --repo "$RELEASE_REPOSITORY" --json isDraft -q .isDraft)" != "true" ]; then
+              echo "Release $TAG is already published. Bump framezoo-desktop/package.json before publishing again."
+              exit 1
+            fi
+
+            existing_assets="$(
+              gh release view "$TAG" \
+                --repo "$RELEASE_REPOSITORY" \
+                --json assets \
+                -q '.assets[].name'
+            )"
+            while IFS= read -r asset_name; do
+              if [ -n "$asset_name" ]; then
+                gh release delete-asset "$TAG" \
+                  --repo "$RELEASE_REPOSITORY" \
+                  --yes \
+                  "$asset_name"
+              fi
+            done <<< "$existing_assets"
+          else
+            gh release create "$TAG" \
+              --repo "$RELEASE_REPOSITORY" \
+              --title "Framezoo ${VERSION}" \
+              --draft \
+              --generate-notes
+          fi
+
+          echo "Prepared draft release $TAG in $RELEASE_REPOSITORY."
 
   build-macos:
     name: Build macOS (${{ matrix.variant }})
@@ -166,7 +240,7 @@ jobs:
         run: |
           set -eu
           if [ -z "${CSC_LINK:-}" ]; then
-            echo "::warning::Thiếu macOS signing secrets (CSC_LINK). Ứng dụng sẽ KHÔNG được code sign và tính năng OTA Update trên macOS sẽ KHÔNG hoạt động."
+            echo "::warning::Thiếu macOS signing secrets (CSC_LINK). Ứng dụng sẽ không được Apple sign/notarize; OTA vẫn dùng manual unzip và ad-hoc codesign."
           else
             echo "macOS signing secrets có sẵn."
           fi
@@ -225,16 +299,52 @@ jobs:
           if [ -z "$APPLE_APP_SPECIFIC_PASSWORD" ]; then unset APPLE_APP_SPECIFIC_PASSWORD; fi
           if [ -z "$APPLE_TEAM_ID" ]; then unset APPLE_TEAM_ID; fi
           ${{ matrix.command }}
-      - name: Upload desktop artifacts
-        uses: actions/upload-artifact@v5
-        with:
-          name: ${{ matrix.variant }}
-          if-no-files-found: error
-          path: |
-            framezoo-desktop/release/latest-mac.yml
-            framezoo-desktop/release/Framezoo-*-${{ matrix.arch }}-mac.dmg
-            framezoo-desktop/release/Framezoo-*-${{ matrix.arch }}-mac.zip
-            framezoo-desktop/release/Framezoo-*-${{ matrix.arch }}-mac.zip.blockmap
+      - name: Stage desktop artifacts in draft GitHub Release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.DESKTOP_RELEASE_TOKEN }}
+          RELEASE_REPOSITORY: buiduccanh10/framezoo-desktop-releases
+          RELEASE_TAG: ${{ needs.prepare.outputs.release_tag }}
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+
+          if [ -z "${GH_TOKEN:-}" ]; then
+            echo "DESKTOP_RELEASE_TOKEN secret is empty."
+            exit 1
+          fi
+          if [ -z "${RELEASE_TAG:-}" ]; then
+            echo "Draft release tag is empty."
+            exit 1
+          fi
+
+          staging_dir="desktop-release-staging/${{ matrix.variant }}"
+          rm -rf "$staging_dir"
+          mkdir -p "$staging_dir"
+
+          feed_source="framezoo-desktop/release/latest-mac.yml"
+          feed_target="$staging_dir/latest-mac-${{ matrix.arch }}.yml"
+          test -s "$feed_source"
+          cp "$feed_source" "$feed_target"
+
+          for suffix in dmg zip zip.blockmap; do
+            matches=(framezoo-desktop/release/Framezoo-*-${{ matrix.arch }}-mac."$suffix")
+            if [ "${#matches[@]}" -ne 1 ]; then
+              echo "Expected exactly one macOS $suffix artifact for ${{ matrix.variant }}."
+              printf '%s\n' "${matches[@]:-<none>}"
+              exit 1
+            fi
+            if [ ! -s "${matches[0]}" ]; then
+              echo "macOS $suffix artifact is empty for ${{ matrix.variant }}."
+              exit 1
+            fi
+            cp "${matches[0]}" "$staging_dir/"
+          done
+
+          gh release upload "$RELEASE_TAG" \
+            --repo "$RELEASE_REPOSITORY" \
+            --clobber \
+            "$staging_dir"/*
 
   build-windows:
     name: Build Windows (${{ matrix.variant }})
@@ -410,15 +520,52 @@ jobs:
             --runtime-dir "$RUNTIME_DIR" \
             --expect-arch "$EXPECT_ARCH"
           echo "::endgroup::"
-      - name: Upload desktop artifacts
-        uses: actions/upload-artifact@v5
-        with:
-          name: ${{ matrix.variant }}
-          if-no-files-found: error
-          path: |
-            framezoo-desktop/release/latest.yml
-            framezoo-desktop/release/Framezoo-*-${{ matrix.arch }}.exe
-            framezoo-desktop/release/Framezoo-*-${{ matrix.arch }}.exe.blockmap
+      - name: Stage desktop artifacts in draft GitHub Release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.DESKTOP_RELEASE_TOKEN }}
+          RELEASE_REPOSITORY: buiduccanh10/framezoo-desktop-releases
+          RELEASE_TAG: ${{ needs.prepare.outputs.release_tag }}
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+
+          if [ -z "${GH_TOKEN:-}" ]; then
+            echo "DESKTOP_RELEASE_TOKEN secret is empty."
+            exit 1
+          fi
+          if [ -z "${RELEASE_TAG:-}" ]; then
+            echo "Draft release tag is empty."
+            exit 1
+          fi
+
+          staging_dir="desktop-release-staging/${{ matrix.variant }}"
+          rm -rf "$staging_dir"
+          mkdir -p "$staging_dir"
+
+          feed_source="framezoo-desktop/release/latest.yml"
+          feed_target="$staging_dir/latest-win-${{ matrix.arch }}.yml"
+          test -s "$feed_source"
+          cp "$feed_source" "$feed_target"
+
+          for suffix in exe exe.blockmap; do
+            matches=(framezoo-desktop/release/Framezoo-*-${{ matrix.arch }}."$suffix")
+            if [ "${#matches[@]}" -ne 1 ]; then
+              echo "Expected exactly one Windows $suffix artifact for ${{ matrix.variant }}."
+              printf '%s\n' "${matches[@]:-<none>}"
+              exit 1
+            fi
+            if [ ! -s "${matches[0]}" ]; then
+              echo "Windows $suffix artifact is empty for ${{ matrix.variant }}."
+              exit 1
+            fi
+            cp "${matches[0]}" "$staging_dir/"
+          done
+
+          gh release upload "$RELEASE_TAG" \
+            --repo "$RELEASE_REPOSITORY" \
+            --clobber \
+            "$staging_dir"/*
 
   publish:
     name: Publish
@@ -438,79 +585,158 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: 22
-      - name: Download packaged artifacts
-        uses: actions/download-artifact@v5
-        with:
-          path: desktop-artifacts
-      - name: Build release bundle
+      - name: Install release tooling
+        run: pnpm install --frozen-lockfile --ignore-scripts
+      - name: Download staged assets from draft GitHub Release
         shell: bash
-        run: |
-          set -eu
-          node scripts/create-desktop-release-bundle.js \
-            --input-root desktop-artifacts \
-            --output-dir desktop-release-bundle \
-            --channel stable \
-            --published-at "${{ needs.prepare.outputs.published_at }}"
-          node scripts/verify-desktop-release-bundle.js desktop-release-bundle
-          tar -czf desktop-release-bundle.tar.gz -C desktop-release-bundle .
-      - name: Install SSH tools
-        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.DESKTOP_RELEASE_TOKEN }}
+          RELEASE_REPOSITORY: buiduccanh10/framezoo-desktop-releases
+          RELEASE_TAG: ${{ needs.prepare.outputs.release_tag }}
         run: |
           set -euo pipefail
-          if [ -f /etc/apt/apt-mirrors.txt ]; then
-            sudo sed -i 's#azure\.archive\.ubuntu\.com#archive.ubuntu.com#g' \
-              /etc/apt/apt-mirrors.txt
-          fi
-          for attempt in 1 2 3; do
-            if sudo apt-get update -o Acquire::Retries=3; then
-              sudo apt-get install -y openssh-client
-              exit 0
-            fi
-            echo "apt-get update failed (attempt ${attempt}/3); retrying..."
-            sleep $((attempt * 5))
-          done
-          exit 1
-      - name: Start SSH agent
-        env:
-          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
-        run: |
-          eval "$(ssh-agent -s)"
-          echo "$VPS_SSH_KEY" | tr -d '\r' | ssh-add -
-          echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK" >> "$GITHUB_ENV"
-          echo "SSH_AGENT_PID=$SSH_AGENT_PID" >> "$GITHUB_ENV"
-      - name: Trust VPS host
-        env:
-          VPS_HOST: ${{ secrets.VPS_HOST }}
-          VPS_PORT: ${{ secrets.VPS_PORT }}
-        run: |
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-          ssh-keyscan -p "${VPS_PORT:-22}" "$VPS_HOST" >> ~/.ssh/known_hosts
-      - name: Upload bundle and publish on VPS
-        shell: bash
-        env:
-          ENV_FILE: ${{ secrets.ENV_FILE }}
-          VPS_HOST: ${{ secrets.VPS_HOST }}
-          VPS_PORT: ${{ secrets.VPS_PORT }}
-          VPS_USER: ${{ secrets.VPS_USER }}
-          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
-          DEPLOY_PROJECT_NAME: ${{ secrets.DEPLOY_PROJECT_NAME }}
-        run: |
-          set -eu
 
-          if [ -z "${ENV_FILE:-}" ]; then
-            echo "ENV_FILE secret is empty."
+          if [ -z "${GH_TOKEN:-}" ]; then
+            echo "DESKTOP_RELEASE_TOKEN secret is empty."
+            exit 1
+          fi
+          if [ -z "${RELEASE_TAG:-}" ]; then
+            echo "Draft release tag is empty."
             exit 1
           fi
 
-          DEPLOY_USER="${VPS_USER:-betakiot}"
-          DEPLOY_TARGET="${DEPLOY_USER}@${VPS_HOST}"
-          DEPLOY_PATH="${DEPLOY_PATH:-/home/framezoo}"
-          DEPLOY_PROJECT_NAME="${DEPLOY_PROJECT_NAME:-framezoo}"
-          STAGING_PATH="${DEPLOY_PATH}/desktop-publish-staging"
+          rm -rf desktop-raw desktop-artifacts
+          mkdir -p desktop-raw
+          gh release download "$RELEASE_TAG" \
+            --repo "$RELEASE_REPOSITORY" \
+            --dir desktop-raw
+          node scripts/prepare-desktop-github-release-input.js \
+            --input-dir desktop-raw \
+            --output-dir desktop-artifacts
+          find desktop-artifacts -maxdepth 2 -type f -print | sort
+      - name: Prepare GitHub Release assets
+        shell: bash
+        env:
+          RELEASE_OWNER: buiduccanh10
+          RELEASE_REPO: framezoo-desktop-releases
+        run: |
+          set -eu
+          node scripts/create-desktop-github-release-assets.js \
+            --input-root desktop-artifacts \
+            --output-dir desktop-release-assets \
+            --channel stable \
+            --published-at "${{ needs.prepare.outputs.published_at }}" \
+            --owner "$RELEASE_OWNER" \
+            --repo "$RELEASE_REPO"
+          test -s desktop-release-assets/latest.yml
+          test -s desktop-release-assets/latest-mac.yml
+          test -s desktop-release-assets/download-manifest.json
+          find desktop-release-assets -maxdepth 1 -type f -print | sort
+      - name: Publish GitHub Release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.DESKTOP_RELEASE_TOKEN }}
+          RELEASE_REPOSITORY: buiduccanh10/framezoo-desktop-releases
+          RELEASE_TAG: ${{ needs.prepare.outputs.release_tag }}
+        run: |
+          set -euo pipefail
 
-          ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" "mkdir -p '${STAGING_PATH}'"
-          scp -P "${VPS_PORT:-22}" desktop-release-bundle.tar.gz "${DEPLOY_TARGET}:${STAGING_PATH}/desktop-release-bundle.tar.gz"
+          if [ -z "${GH_TOKEN:-}" ]; then
+            echo "DESKTOP_RELEASE_TOKEN secret is empty."
+            exit 1
+          fi
 
-          printf '%s' "$ENV_FILE" | ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" \
-            "set -eu; ENV_TMP=\$(mktemp /tmp/framezoo_env.XXXXXX); trap 'rm -f \"\$ENV_TMP\"' EXIT; cat > \"\$ENV_TMP\"; chmod 600 \"\$ENV_TMP\"; cd '${DEPLOY_PATH}'; PROJECT_NAME='${DEPLOY_PROJECT_NAME}' COMPOSE_FILE='docker-compose.prod.yml' ENV_FILE_PATH=\"\$ENV_TMP\" ./scripts/deploy.sh publish-desktop"
+          if ! gh repo view "$RELEASE_REPOSITORY" >/dev/null 2>&1; then
+            echo "Release repository is not accessible: $RELEASE_REPOSITORY"
+            exit 1
+          fi
+
+          if [ "$(gh repo view "$RELEASE_REPOSITORY" --json isPrivate -q .isPrivate)" != "false" ]; then
+            echo "Release repository must be public: $RELEASE_REPOSITORY"
+            exit 1
+          fi
+
+          if ! gh api "repos/$RELEASE_REPOSITORY/commits?per_page=1" >/dev/null 2>&1; then
+            echo "Release repository must contain an initial commit before publishing: $RELEASE_REPOSITORY"
+            exit 1
+          fi
+
+          if [ -z "${RELEASE_TAG:-}" ]; then
+            echo "Draft release tag is empty."
+            exit 1
+          fi
+
+          VERSION="$(node -p "require('./framezoo-desktop/package.json').version")"
+          TAG="$RELEASE_TAG"
+          if [ "$TAG" != "v${VERSION}" ]; then
+            echo "Release tag $TAG does not match package version ${VERSION}."
+            exit 1
+          fi
+
+          if [ "$(gh release view "$TAG" --repo "$RELEASE_REPOSITORY" --json isDraft -q .isDraft)" != "true" ]; then
+            echo "Expected a draft release before final upload: $TAG"
+            exit 1
+          fi
+
+          existing_assets="$(
+            gh release view "$TAG" \
+              --repo "$RELEASE_REPOSITORY" \
+              --json assets \
+              -q '.assets[].name'
+          )"
+          while IFS= read -r asset_name; do
+            if [ -n "$asset_name" ]; then
+              gh release delete-asset "$TAG" \
+                --repo "$RELEASE_REPOSITORY" \
+                --yes \
+                "$asset_name"
+            fi
+          done <<< "$existing_assets"
+
+          gh release upload "$TAG" \
+            --repo "$RELEASE_REPOSITORY" \
+            --clobber \
+            desktop-release-assets/*
+
+          # REST "get release by tag" only resolves published releases.
+          # Resolve the draft through gh CLI, then PATCH it by database ID.
+          release_id="$(
+            gh release view "$TAG" \
+              --repo "$RELEASE_REPOSITORY" \
+              --json databaseId \
+              -q .databaseId
+          )"
+          if [ -z "$release_id" ]; then
+            echo "Could not resolve draft release ID: $TAG"
+            exit 1
+          fi
+          gh api --method PATCH \
+            "repos/$RELEASE_REPOSITORY/releases/$release_id" \
+            --input - >/dev/null <<EOF
+          {"name":"Framezoo ${VERSION}","draft":false}
+          EOF
+
+          release_json="$(
+            gh release view "$TAG" \
+              --repo "$RELEASE_REPOSITORY" \
+              --json isDraft,assets
+          )"
+          if [ "$(printf '%s' "$release_json" | jq -r '.isDraft')" != "false" ]; then
+            echo "GitHub Release was not published: $TAG"
+            exit 1
+          fi
+
+          expected_assets="$(
+            find desktop-release-assets -maxdepth 1 -type f -exec basename {} \; | sort
+          )"
+          actual_assets="$(
+            printf '%s' "$release_json" | jq -r '.assets[].name' | sort
+          )"
+          if ! diff -u \
+            <(printf '%s\n' "$expected_assets") \
+            <(printf '%s\n' "$actual_assets"); then
+            echo "Published GitHub Release asset set does not match generated assets."
+            exit 1
+          fi
+
+          echo "Published $RELEASE_REPOSITORY#$TAG with the expected desktop assets."

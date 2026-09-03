@@ -55,7 +55,9 @@ export function LoginFormPart(props: LoginFormPartProps) {
       status === 400 ||
       status === 401 ||
       status === 403 ||
+      status === 404 ||
       message.includes("user cannot be found") ||
+      message.includes("user not found") ||
       message.includes("invalid signature") ||
       message.includes("invalid challenge") ||
       message.includes("challenge code expired") ||
@@ -129,18 +131,19 @@ export function LoginFormPart(props: LoginFormPartProps) {
         const beMessage: string =
           anyErr?.response?._data?.message ?? anyErr?.message ?? "";
 
-        // Username or email not found
-        if (status === 401 && beMessage.includes("User cannot be found")) {
-          setNicknameError(
-            t("auth.login.identifierNotFound") ?? "Username or email not found",
-          );
-          return;
-        }
-
-        // Password / passphrase incorrect (invalid signature or generic 401)
-        if (beMessage.includes("Invalid signature") || status === 401) {
+        if (
+          status === 400 ||
+          status === 401 ||
+          status === 403 ||
+          status === 404 ||
+          beMessage.toLowerCase().includes("user") ||
+          beMessage.toLowerCase().includes("invalid") ||
+          beMessage.toLowerCase().includes("signature") ||
+          beMessage.toLowerCase().includes("credential")
+        ) {
           setPasswordError(
-            t("auth.login.passwordIncorrect") ?? "Password is incorrect",
+            t("auth.login.invalidCredentials") ??
+              "Username or password is incorrect",
           );
           return;
         }
@@ -154,6 +157,18 @@ export function LoginFormPart(props: LoginFormPartProps) {
       await importData(account, progressItems, bookmarkItems);
 
       await restore(account);
+
+      if (data.rememberMe) {
+        window.electronAPI?.secureStoreSave?.(
+          "saved_login",
+          JSON.stringify({
+            username: data.nickname,
+            password: data.password,
+          }),
+        );
+      } else {
+        window.electronAPI?.secureStoreRemove?.("saved_login");
+      }
 
       props.onLogin?.();
     },

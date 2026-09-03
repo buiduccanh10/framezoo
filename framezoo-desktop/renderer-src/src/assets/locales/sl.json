@@ -95,6 +95,7 @@
       "passwordIncorrect": "Geslo ni pravilno",
       "passwordLabel": "Geslo",
       "passwordPlaceholder": "Vnesite vaše geslo",
+      "rememberMe": "Zapomni si moje geslo",
       "passwordRequired": "Zahtevano je geslo",
       "submit": "Prijava",
       "title": "Prijava v račun",

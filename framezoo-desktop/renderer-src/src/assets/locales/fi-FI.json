@@ -95,6 +95,7 @@
       "passwordIncorrect": "Salasana on väärä",
       "passwordLabel": "Salasana",
       "passwordPlaceholder": "Kirjoita salasanasi",
+      "rememberMe": "Muista salasanani",
       "passwordRequired": "Salasana vaaditaan",
       "submit": "Kirjaudu sisään",
       "title": "Kirjaudu tilillesi",

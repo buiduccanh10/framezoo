@@ -95,6 +95,7 @@
       "passwordIncorrect": "Пароль неправильний",
       "passwordLabel": "Пароль",
       "passwordPlaceholder": "Введіть свій пароль",
+      "rememberMe": "Запам&#39;ятати мій пароль",
       "passwordRequired": "Необхідно ввести пароль",
       "submit": "Логін",
       "title": "Увійти до свого облікового запису",

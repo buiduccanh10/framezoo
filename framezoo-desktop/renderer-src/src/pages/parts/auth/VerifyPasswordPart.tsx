@@ -118,7 +118,18 @@ export function VerifyPasswordPart(props: VerifyPasswordProps) {
 
   return (
     <LargeCard>
-      <form>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (!result.loading) void execute(password);
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            if (!result.loading) void execute(password);
+          }
+        }}
+      >
         <LargeCardText
           icon={<Icon icon={Icons.CIRCLE_CHECK} />}
           title={t("auth.verify.title")}
@@ -127,8 +138,8 @@ export function VerifyPasswordPart(props: VerifyPasswordProps) {
         </LargeCardText>
         <AuthInputBox
           label={t("auth.verify.passwordLabel") ?? "Confirm Password"}
-          autoComplete="username"
-          name="username"
+          autoComplete="new-password"
+          name="password"
           value={password}
           onChange={setPassword}
           passwordToggleable
@@ -141,8 +152,12 @@ export function VerifyPasswordPart(props: VerifyPasswordProps) {
         <LargeCardButtons>
           <Button
             theme="purple"
+            type="submit"
             loading={result.loading}
-            onClick={() => execute(password)}
+            onClick={(e) => {
+              e.preventDefault();
+              if (!result.loading) void execute(password);
+            }}
           >
             {t("auth.verify.register")}
           </Button>

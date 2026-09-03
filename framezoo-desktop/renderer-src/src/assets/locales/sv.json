@@ -95,6 +95,7 @@
       "passwordIncorrect": "Lösenordet är felaktigt",
       "passwordLabel": "Lösenord",
       "passwordPlaceholder": "Ange ditt lösenord",
+      "rememberMe": "Kom ihåg mitt lösenord",
       "passwordRequired": "Lösenord krävs",
       "submit": "Logga in",
       "title": "Logga in på ditt konto",
