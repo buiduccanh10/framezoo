@@ -471,6 +471,13 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       store.display?.setCaption(null);
       store.display?.setSecondaryCaption?.(null);
       store.clearTranslateTask();
+
+      // Prevent ghost torrent status from previous episode showing during source selection
+      if (typeof window !== "undefined") {
+        import("@/desktop/torrentPlaybackStore")
+          .then(({ clearActiveTorrentSession }) => clearActiveTorrentSession())
+          .catch(() => {});
+      }
     }
 
     set((s) => {
