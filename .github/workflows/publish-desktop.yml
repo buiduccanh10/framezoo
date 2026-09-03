@@ -698,15 +698,30 @@ jobs:
             --clobber \
             desktop-release-assets/*
 
-          release_id="$(gh api "repos/$RELEASE_REPOSITORY/releases/tags/$TAG" -q .id)"
+          # REST "get release by tag" only resolves published releases.
+          # Resolve the draft through gh CLI, then PATCH it by database ID.
+          release_id="$(
+            gh release view "$TAG" \
+              --repo "$RELEASE_REPOSITORY" \
+              --json databaseId \
+              -q .databaseId
+          )"
+          if [ -z "$release_id" ]; then
+            echo "Could not resolve draft release ID: $TAG"
+            exit 1
+          fi
           gh api --method PATCH \
             "repos/$RELEASE_REPOSITORY/releases/$release_id" \
             --input - >/dev/null <<EOF
           {"name":"Framezoo ${VERSION}","draft":false}
           EOF
 
-          release_json="$(gh api "repos/$RELEASE_REPOSITORY/releases/tags/$TAG")"
-          if [ "$(printf '%s' "$release_json" | jq -r '.draft')" != "false" ]; then
+          release_json="$(
+            gh release view "$TAG" \
+              --repo "$RELEASE_REPOSITORY" \
+              --json isDraft,assets
+          )"
+          if [ "$(printf '%s' "$release_json" | jq -r '.isDraft')" != "false" ]; then
             echo "GitHub Release was not published: $TAG"
             exit 1
           fi
