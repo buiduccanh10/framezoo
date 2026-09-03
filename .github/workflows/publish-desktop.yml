@@ -13,7 +13,7 @@ on:
       ref:
         description: Git ref or SHA to publish
         required: false
-        default: main
+        default: ""
         type: string
 
 concurrency:
@@ -35,20 +35,26 @@ jobs:
       should_publish: ${{ steps.detect.outputs.should_publish }}
       release_tag: ${{ steps.release.outputs.release_tag }}
     env:
-      TARGET_REF: ${{ github.event.workflow_run.head_sha || inputs.ref || github.sha }}
+      TARGET_REF: ${{ github.event.workflow_run.head_sha || inputs.ref || github.ref }}
     steps:
       - uses: actions/checkout@v5
         with:
           ref: ${{ env.TARGET_REF }}
           fetch-depth: 0
+      - name: Resolve checked out commit
+        id: resolve
+        shell: bash
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
       - name: Detect desktop-related changes
         id: detect
         uses: actions/github-script@v8
+        env:
+          CHECKED_OUT_SHA: ${{ steps.resolve.outputs.sha }}
         with:
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
-            const currentSha = process.env.TARGET_REF;
+            const currentSha = process.env.CHECKED_OUT_SHA;
             const publishedAt = new Date().toISOString();
             const desktopPatterns = [
               /^framezoo-desktop\//,
