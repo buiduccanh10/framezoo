@@ -478,8 +478,11 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       s.embedId = null;
       s.sourceId = null;
       s.interface.hideNextEpisodeBtn = false;
+      s.interface.nextEpisodeAction = null;
       if (newStatus) s.status = newStatus;
       if (isMediaChanged) {
+        // Invalidate subtitle selection/load work before the next source is ready.
+        s.externalSubtitleRequestId += 1;
         s.externalSubtitleMediaKey = null;
         if (oldMediaKey && newMediaKey) {
           s.externalSubtitleRefreshMediaKey = newMediaKey;

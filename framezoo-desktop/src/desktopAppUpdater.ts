@@ -3,8 +3,10 @@ import { autoUpdater } from "electron-updater";
 import { spawn } from "node:child_process";
 import fs from "node:fs";
 import https from "node:https";
+import type { IncomingMessage } from "node:http";
 import os from "node:os";
 import path from "node:path";
+import { pipeline } from "node:stream/promises";
 import type {
   CreateDesktopAppUpdaterOptions,
   DesktopAppUpdateState,
@@ -18,6 +20,71 @@ const INITIAL_DESKTOP_APP_UPDATE_STATE: DesktopAppUpdateState = {
   errorMessage: null,
 };
 
+async function downloadHttpsFile(
+  url: string,
+  destinationPath: string,
+  onProgress: (percent: number | null) => void,
+  redirectCount = 0,
+): Promise<void> {
+  if (redirectCount > 5) {
+    throw new Error("Too many redirects while downloading desktop update");
+  }
+
+  const response = await new Promise<IncomingMessage>((resolve, reject) => {
+    const request = https.get(url, resolve);
+    request.setTimeout(30_000, () => {
+      request.destroy(new Error("Desktop update download timed out"));
+    });
+    request.on("error", reject);
+  });
+
+  const location = response.headers.location;
+  if (
+    response.statusCode &&
+    response.statusCode >= 300 &&
+    response.statusCode < 400 &&
+    location
+  ) {
+    response.resume();
+    const redirectUrl = new URL(location, url);
+    if (redirectUrl.protocol !== "https:") {
+      throw new Error("Desktop update redirect is not HTTPS");
+    }
+
+    await downloadHttpsFile(
+      redirectUrl.toString(),
+      destinationPath,
+      onProgress,
+      redirectCount + 1,
+    );
+    return;
+  }
+
+  if (response.statusCode !== 200) {
+    response.resume();
+    throw new Error(`Failed to download update: ${response.statusCode}`);
+  }
+
+  const totalBytes = parseInt(
+    String(response.headers["content-length"] ?? "0"),
+    10,
+  );
+  let downloadedBytes = 0;
+  response.on("data", (chunk: Buffer) => {
+    downloadedBytes += chunk.length;
+    onProgress(
+      totalBytes > 0 ? Math.round((downloadedBytes / totalBytes) * 100) : null,
+    );
+  });
+
+  try {
+    await pipeline(response, fs.createWriteStream(destinationPath));
+  } catch (error) {
+    await fs.promises.rm(destinationPath, { force: true }).catch(() => {});
+    throw error;
+  }
+}
+
 export function createDesktopAppUpdater(
   options: CreateDesktopAppUpdaterOptions,
 ) {
@@ -26,17 +93,8 @@ export function createDesktopAppUpdater(
   let updateInterval: NodeJS.Timeout | null = null;
   let state: DesktopAppUpdateState = { ...INITIAL_DESKTOP_APP_UPDATE_STATE };
 
-  function getFeedSlug() {
-    const arch = process.arch === "arm64" ? "arm64" : "x64";
-    return `${process.platform === "darwin" ? "mac" : "win"}-${arch}`;
-  }
-
   function getFeedUrl() {
-    const backendUrl = new URL(options.getBackendUrl());
-    return new URL(
-      `/desktop-updates/${options.updateChannel}/${getFeedSlug()}/`,
-      backendUrl,
-    ).toString();
+    return `https://github.com/${options.releaseOwner}/${options.releaseRepo}/releases/latest/download/`;
   }
 
   function isSupported() {
@@ -94,71 +152,22 @@ export function createDesktopAppUpdater(
 
         const arch = process.arch === "arm64" ? "arm64" : "x64";
         const zipFileName = `${options.appName}-${version}-${arch}-mac.zip`;
-        const downloadUrl = `${getFeedUrl()}${zipFileName}`;
-        const tempZipPath = path.join(os.tmpdir(), `${tempFilePrefix}-update.zip`);
+        const downloadUrl = new URL(
+          encodeURIComponent(zipFileName),
+          getFeedUrl(),
+        ).toString();
+        const tempZipPath = path.join(
+          os.tmpdir(),
+          `${tempFilePrefix}-update.zip`,
+        );
 
-        await new Promise<void>((resolve, reject) => {
-          const file = fs.createWriteStream(tempZipPath);
-
-          https
-            .get(downloadUrl, (response) => {
-              if (response.statusCode !== 200 && response.statusCode !== 302) {
-                reject(
-                  new Error(
-                    `Failed to download update: ${response.statusCode}`,
-                  ),
-                );
-                return;
-              }
-
-              if (response.statusCode === 302 && response.headers.location) {
-                https
-                  .get(response.headers.location, handleDownload)
-                  .on("error", handleError);
-              } else {
-                handleDownload(response);
-              }
-
-              function handleDownload(res: NodeJS.ReadableStream & {
-                headers: Record<string, string | string[] | undefined>;
-              }) {
-                const totalBytes = parseInt(
-                  String(res.headers["content-length"] ?? "0"),
-                  10,
-                );
-                let downloadedBytes = 0;
-
-                res.on("data", (chunk: Buffer) => {
-                  downloadedBytes += chunk.length;
-                  if (totalBytes > 0) {
-                    const percent = Math.round(
-                      (downloadedBytes / totalBytes) * 100,
-                    );
-                    setState({
-                      status: "downloading",
-                      progressPercent: percent,
-                      errorMessage: null,
-                    });
-                  }
-                });
-
-                res.pipe(file);
-
-                file.on("finish", () => {
-                  file.close();
-                  resolve();
-                });
-              }
-
-              function handleError(error: Error) {
-                fs.unlink(tempZipPath, () => {});
-                reject(error);
-              }
-            })
-            .on("error", (error) => {
-              fs.unlink(tempZipPath, () => {});
-              reject(error);
-            });
+        await fs.promises.rm(tempZipPath, { force: true });
+        await downloadHttpsFile(downloadUrl, tempZipPath, (progressPercent) => {
+          setState({
+            status: "downloading",
+            progressPercent,
+            errorMessage: null,
+          });
         });
 
         setState({
@@ -174,6 +183,13 @@ export function createDesktopAppUpdater(
       await autoUpdater.downloadUpdate();
       return true;
     } catch (error) {
+      if (process.platform === "darwin") {
+        await fs.promises
+          .rm(path.join(os.tmpdir(), `${tempFilePrefix}-update.zip`), {
+            force: true,
+          })
+          .catch(() => {});
+      }
       setState({
         status: "available",
         progressPercent: null,

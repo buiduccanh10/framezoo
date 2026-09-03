@@ -3,6 +3,7 @@ import { useCallback } from "react";
 import { Icons } from "@/components/Icon";
 import { usePlayerMeta } from "@/components/player/hooks/usePlayerMeta";
 import { VideoPlayerButton } from "@/components/player/internals/Button";
+import { getNextEpisodeAction } from "@/components/player/utils/episodeNavigation";
 import { PlayerMeta } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { useProgressStore } from "@/stores/progress";
@@ -21,9 +22,7 @@ export function SkipEpisodeButton(props: SkipEpisodeButtonProps) {
     (s) => s.setShouldStartFromBeginning,
   );
   const updateItem = useProgressStore((s) => s.updateItem);
-  const nextEp = meta?.episodes?.find(
-    (v) => v.number === (meta?.episode?.number ?? 0) + 1,
-  );
+  const nextEp = getNextEpisodeAction(meta)?.episode;
 
   const loadNextEpisode = useCallback(() => {
     if (!meta || !nextEp) return;

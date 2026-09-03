@@ -15,6 +15,7 @@ import { useLanguageStore } from "@/stores/language";
 import {
   Caption,
   CaptionListItem,
+  getMediaKey,
   isEmbeddedCaption,
 } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
@@ -39,6 +40,10 @@ type SubtitleSyncTarget = {
   track: SubtitleAlignmentTrack;
   caption: Caption;
   listItem: CaptionListItem;
+};
+
+type CaptionSelectionOptions = {
+  isCurrent?: () => boolean;
 };
 
 function waitForStablePlaybackPosition(): Promise<number | null> {
@@ -648,9 +653,13 @@ export function useCaptions() {
   );
 
   const selectCaptionById = useCallback(
-    async (captionId: string): Promise<boolean> => {
+    async (
+      captionId: string,
+      options?: CaptionSelectionOptions,
+    ): Promise<boolean> => {
       const caption = captions.find((v) => v.id === captionId);
       if (!caption) return false;
+      if (options?.isCurrent && !options.isCurrent()) return false;
 
       try {
         const captionToSet: Caption = {
@@ -665,6 +674,7 @@ export function useCaptions() {
           captionToSet.vttData = await downloadCaptionAsVtt(caption);
         }
 
+        if (options?.isCurrent && !options.isCurrent()) return false;
         setDirectCaption(captionToSet, caption);
         return true;
       } catch (error) {
@@ -758,16 +768,26 @@ export function useCaptions() {
       const fallbackToEnglish = options?.fallbackToEnglish ?? true;
       const waitForExternal = options?.waitForExternal ?? false;
       const requestId = ++autoSelectionRequestId;
+      const selectionMediaKey = getMediaKey(usePlayerStore.getState().meta);
+      const isCurrentRequest = () =>
+        requestId === autoSelectionRequestId &&
+        getMediaKey(usePlayerStore.getState().meta) === selectionMediaKey;
 
       const selectBestAvailableCaption = async (targetLanguage: string) => {
         const scoredCaptions = await scoreCaptionsForLanguage(targetLanguage, {
           mode: "auto",
         });
-        if (requestId !== autoSelectionRequestId) return false;
+        if (!isCurrentRequest()) return false;
         for (const candidate of scoredCaptions.filter(
           (item) => item.score >= 0,
         )) {
-          if (await selectCaptionById(candidate.caption.id)) return true;
+          if (
+            await selectCaptionById(candidate.caption.id, {
+              isCurrent: isCurrentRequest,
+            })
+          ) {
+            return true;
+          }
         }
         return false;
       };
@@ -799,6 +819,7 @@ export function useCaptions() {
       if (await selectBestAvailableCaption(language)) {
         return true;
       }
+      if (!isCurrentRequest()) return false;
 
       let caption = findCaptionByPreferredLanguage(language);
       if (!caption && fallbackToEnglish && language !== "en") {
@@ -813,7 +834,9 @@ export function useCaptions() {
         caption = findCaptionByPreferredLanguage("en");
       }
       if (!caption) return false;
-      return selectCaptionById(caption.id);
+      return selectCaptionById(caption.id, {
+        isCurrent: isCurrentRequest,
+      });
     },
     [
       captions,
@@ -830,33 +853,37 @@ export function useCaptions() {
     setLanguage(null);
   }, [setCaption, setLanguage, setIsOpenSubtitles]);
 
-  const selectLastUsedLanguage = useCallback(async () => {
-    const hasExternalSubtitles = captions.some((c) => c.opensubtitles);
-    if (
-      source?.type === "file" &&
-      !embeddedSubtitleTracksLoaded &&
-      !hasExternalSubtitles &&
-      isLoadingExternalSubtitles
-    ) {
-      return false;
-    }
+  const selectLastUsedLanguage = useCallback(
+    async (options?: { waitForExternal?: boolean }) => {
+      const hasExternalSubtitles = captions.some((c) => c.opensubtitles);
+      if (
+        source?.type === "file" &&
+        !embeddedSubtitleTracksLoaded &&
+        !hasExternalSubtitles &&
+        isLoadingExternalSubtitles
+      ) {
+        return false;
+      }
 
-    const language = resolvePreferredAutoSubtitleLanguage(
+      const language = resolvePreferredAutoSubtitleLanguage(
+        lastSelectedLanguage,
+        userLanguage,
+      );
+      return selectLanguage(language, {
+        fallbackToEnglish: false,
+        waitForExternal: options?.waitForExternal ?? false,
+      });
+    },
+    [
+      captions,
+      embeddedSubtitleTracksLoaded,
+      isLoadingExternalSubtitles,
       lastSelectedLanguage,
+      selectLanguage,
+      source,
       userLanguage,
-    );
-    return selectLanguage(language, {
-      fallbackToEnglish: false,
-    });
-  }, [
-    captions,
-    embeddedSubtitleTracksLoaded,
-    isLoadingExternalSubtitles,
-    lastSelectedLanguage,
-    selectLanguage,
-    source,
-    userLanguage,
-  ]);
+    ],
+  );
 
   const selectLastUsedLanguageIfEnabled = useCallback(async () => {
     if (enabled || !lastSelectedLanguage) await selectLastUsedLanguage();
@@ -910,15 +937,16 @@ export function useCaptions() {
         isNewSourceRequest || enabled || !lastSelectedLanguage;
 
       if (shouldAutoSelect) {
-        void selectLastUsedLanguage().then((didSelect) => {
-          if (didSelect || !isLoadingExternalSubtitles) {
-            latestAutoSelectRequestIdRef.current = externalSubtitleRequestId;
-          }
-        });
+        void selectLastUsedLanguage({ waitForExternal: true }).then(
+          (didSelect) => {
+            if (didSelect || !isLoadingExternalSubtitles) {
+              latestAutoSelectRequestIdRef.current = externalSubtitleRequestId;
+            }
+          },
+        );
       }
       return;
     }
-    latestAutoSelectRequestIdRef.current = externalSubtitleRequestId;
 
     // Skip validation for custom/pasted captions that aren't in the caption list
     const isCustomCaption =
@@ -926,7 +954,10 @@ export function useCaptions() {
       selectedCaption.id === "pasted-caption";
     const isPersistedCaption = selectedCaption.persisted;
 
-    if (isCustomCaption || isPersistedCaption) return;
+    if (isCustomCaption || isPersistedCaption) {
+      latestAutoSelectRequestIdRef.current = externalSubtitleRequestId;
+      return;
+    }
 
     const isSelectedCaptionStillAvailable = captions.some(
       (caption) =>
@@ -954,7 +985,10 @@ export function useCaptions() {
         // No caption with the same language found, clear the selection
         setCaption(null);
       }
+      return;
     }
+
+    latestAutoSelectRequestIdRef.current = externalSubtitleRequestId;
   }, [
     captions,
     selectedCaption,

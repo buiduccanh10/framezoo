@@ -437,7 +437,9 @@ export default function DesktopPipPage() {
         preview: t("player.skipTime.preview", "Skip preview"),
       }[pipState.skipSegment.type]
     : null;
-  const nextEpisodeLabel = t("player.nextEpisode.next", "Next episode");
+  const nextEpisodeLabel = pipState?.nextEpisodeIsSeasonChange
+    ? t("player.nextEpisode.nextSeason", "Next season")
+    : t("player.nextEpisode.next", "Next episode");
   const skipVisibility =
     pipState?.canControl &&
     pipState.skipSegment &&

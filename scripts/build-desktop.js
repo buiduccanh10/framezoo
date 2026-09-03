@@ -176,32 +176,4 @@ if (copiedCount === 0) {
   process.exit(1);
 }
 
-// 6. Sync to Docker volume if Docker is available
-try {
-  console.log("\nChecking for Docker volumes to sync...");
-  // Check which volume exists
-  let volumeName = null;
-  const volumesList = execSync("docker volume ls -q", { encoding: "utf8" });
-  if (volumesList.includes("framezoo_backend_downloads-data")) {
-    volumeName = "framezoo_backend_downloads-data";
-  } else if (volumesList.includes("framezoo_downloads-data")) {
-    volumeName = "framezoo_downloads-data";
-  }
-
-  if (volumeName) {
-    console.log(`Syncing files to Docker volume "${volumeName}"...`);
-    // Resolve absolute path to downloads folder for Docker mount
-    const absDownloadsDir = path.resolve(downloadsDir);
-    execSync(
-      `docker run --rm -v "${volumeName}":/data -v "${absDownloadsDir}":/src alpine sh -c "rm -f /data/Framezoo-* /data/README.txt && cp -r /src/. /data/"`,
-      { stdio: "inherit" },
-    );
-    console.log("Successfully synced files to Docker volume.");
-  } else {
-    console.log(
-      "No matching Docker downloads volume found to sync. Local files are preserved.",
-    );
-  }
-} catch (dockerError) {
-  console.log("Docker is not running or volume sync failed. Continuing...");
-}
+console.log("Desktop builds remain in the local downloads directory.");

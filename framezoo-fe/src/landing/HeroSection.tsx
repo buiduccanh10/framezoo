@@ -1,6 +1,5 @@
 import { type MouseEvent } from "react";
 
-import { FRAMEZOO_DESKTOP_VERSION } from "./appVersion";
 import type { LandingCopy } from "./i18n";
 import { MovieShowcaseSection } from "./MovieShowcaseSection";
 
@@ -8,12 +7,14 @@ interface HeroSectionProps {
   copy: LandingCopy["hero"];
   movieCopy: LandingCopy["movies"];
   onHashLinkClick: (event: MouseEvent<HTMLAnchorElement>) => void;
+  version: string | null;
 }
 
 export function HeroSection({
   copy,
   movieCopy,
   onHashLinkClick,
+  version,
 }: HeroSectionProps) {
   return (
     <section className="landing-hero" aria-labelledby="hero-title">
@@ -39,7 +40,9 @@ export function HeroSection({
             {copy.secondaryCta}
           </a>
         </div>
-        <span className="landing-app-version">v{FRAMEZOO_DESKTOP_VERSION}</span>
+        {version ? (
+          <span className="landing-app-version">v{version}</span>
+        ) : null}
       </div>
 
       <div className="landing-hero-visual landing-reveal landing-reveal-two">

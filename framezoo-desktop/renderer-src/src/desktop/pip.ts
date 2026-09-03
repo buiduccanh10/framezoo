@@ -4,6 +4,7 @@ import {
   getSkipSegmentVisibility,
   isSegmentEndingAtVideoEnd,
 } from "@/components/player/utils/controlVisibility";
+import { getNextEpisodeAction } from "@/components/player/utils/episodeNavigation";
 import {
   Caption,
   PlayerStatus,
@@ -68,6 +69,7 @@ export interface DesktopPipState {
   torrent: DesktopPipTorrentState | null;
   episode: DesktopPipEpisodeState | null;
   nextEpisode: DesktopPipEpisodeState | null;
+  nextEpisodeIsSeasonChange: boolean;
   canControl: boolean;
   hideNextEpisodeButton: boolean;
   skipSegment: DesktopPipSkipSegmentState | null;
@@ -291,21 +293,15 @@ export function getDesktopPipStateFromPlayerState(
           title: meta.episode.title,
         }
       : null;
-  const nextEpisode =
-    meta?.type === "show" && meta.episode
-      ? (() => {
-          const next = meta.episodes?.find(
-            (episode) => episode.number === meta.episode!.number + 1,
-          );
-          return next
-            ? {
-                season: meta.season?.number ?? null,
-                episode: next.number,
-                title: next.title,
-              }
-            : null;
-        })()
-      : null;
+  const nextEpisodeAction =
+    getNextEpisodeAction(meta) ?? state.interface?.nextEpisodeAction;
+  const nextEpisode = nextEpisodeAction
+    ? {
+        season: nextEpisodeAction.season?.number ?? null,
+        episode: nextEpisodeAction.episode.number,
+        title: nextEpisodeAction.episode.title,
+      }
+    : null;
   const endingSegment =
     meta?.type === "show"
       ? state.skipSegments?.find((segment) =>
@@ -345,6 +341,7 @@ export function getDesktopPipStateFromPlayerState(
     torrent: null,
     episode: currentEpisode,
     nextEpisode,
+    nextEpisodeIsSeasonChange: Boolean(nextEpisodeAction?.isSeasonChange),
     canControl: true,
     hideNextEpisodeButton: state.interface?.hideNextEpisodeBtn ?? false,
     skipSegment:
@@ -366,8 +363,8 @@ export function getDesktopPipStateFromPlayerState(
         : null,
     primaryDelay: Number.isFinite(primaryDelay) ? primaryDelay : 0,
     secondaryDelay: Number.isFinite(secondaryDelay) ? secondaryDelay : 0,
-    caption: toDesktopPipCaption(state.caption.selected),
-    secondaryCaption: toDesktopPipCaption(state.caption.secondary),
-    dualSubEnabled: state.caption.dualSubEnabled,
+    caption: toDesktopPipCaption(state.caption?.selected ?? null),
+    secondaryCaption: toDesktopPipCaption(state.caption?.secondary ?? null),
+    dualSubEnabled: state.caption?.dualSubEnabled ?? false,
   };
 }
