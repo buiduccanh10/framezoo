@@ -41,7 +41,7 @@ export default defineEventHandler(async event => {
     return sendRedirect(event, downloadOption.url, 302);
   }
 
-  setHeader(event, 'Cache-Control', 'public, max-age=300');
+  setHeader(event, 'Cache-Control', 'no-store');
 
   return {
     version: manifest?.version ?? null,

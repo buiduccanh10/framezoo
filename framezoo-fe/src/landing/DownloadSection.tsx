@@ -1,57 +1,19 @@
-import { useCallback, useEffect, useState } from "react";
-
-import {
-  type AppDownloadManifest,
-  getAppDownloadManifest,
-} from "@/backend/download";
-
 import type { LandingCopy } from "./i18n";
 import { detectPlatformForManifest } from "./platform";
 import { PlatformSelector } from "./PlatformSelector";
+import type { DownloadState } from "./useDownloadManifest";
 
 interface DownloadSectionProps {
-  backendUrl: string | null;
   copy: LandingCopy["download"];
+  onRetry: () => void;
+  state: DownloadState;
 }
 
-type DownloadState =
-  | { status: "loading" }
-  | { status: "error"; message: string }
-  | { status: "empty" }
-  | { status: "ready"; manifest: AppDownloadManifest };
-
-export function DownloadSection({ backendUrl, copy }: DownloadSectionProps) {
-  const [state, setState] = useState<DownloadState>({ status: "loading" });
-
-  const loadManifest = useCallback(() => {
-    if (!backendUrl) {
-      setState({ status: "error", message: copy.noBackend });
-      return;
-    }
-
-    setState({ status: "loading" });
-    void getAppDownloadManifest(backendUrl)
-      .then((manifest) => {
-        if (manifest.options.length === 0) {
-          setState({ status: "empty" });
-          return;
-        }
-
-        setState({ status: "ready", manifest });
-      })
-      .catch((error: unknown) => {
-        console.error("Failed to load desktop download manifest:", error);
-        setState({
-          status: "error",
-          message: copy.error,
-        });
-      });
-  }, [backendUrl, copy.error, copy.noBackend]);
-
-  useEffect(() => {
-    loadManifest();
-  }, [loadManifest]);
-
+export function DownloadSection({
+  copy,
+  onRetry,
+  state,
+}: DownloadSectionProps) {
   const detection =
     state.status === "ready" ? detectPlatformForManifest(state.manifest) : null;
 
@@ -80,7 +42,7 @@ export function DownloadSection({ backendUrl, copy }: DownloadSectionProps) {
             <button
               className="landing-text-button"
               type="button"
-              onClick={loadManifest}
+              onClick={onRetry}
             >
               {copy.retry} <span aria-hidden="true">↗</span>
             </button>
@@ -91,7 +53,7 @@ export function DownloadSection({ backendUrl, copy }: DownloadSectionProps) {
             <button
               className="landing-text-button"
               type="button"
-              onClick={loadManifest}
+              onClick={onRetry}
             >
               {copy.retry} <span aria-hidden="true">↗</span>
             </button>

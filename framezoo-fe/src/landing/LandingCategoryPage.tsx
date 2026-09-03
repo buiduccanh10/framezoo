@@ -19,6 +19,7 @@ import {
   applyLandingSeo,
   getLandingSeoMetadata,
 } from "./seo";
+import { useDownloadManifest } from "./useDownloadManifest";
 import { useLandingMotion } from "./useLandingMotion";
 import "./landing.css";
 
@@ -31,6 +32,15 @@ export function LandingCategoryPage({ category }: LandingCategoryPageProps) {
   const shellRef = useRef<HTMLDivElement>(null);
   const activeCopy = getLandingCopy(locale);
   const metadata = getLandingSeoMetadata(locale, category);
+  const backendUrl = category === "download" ? getConfiguredBackendUrl() : null;
+  const { state: downloadState, loadManifest } = useDownloadManifest(
+    backendUrl,
+    {
+      error: activeCopy.download.error,
+      noBackend: activeCopy.download.noBackend,
+    },
+    category === "download",
+  );
   useLandingMotion(shellRef);
 
   useEffect(() => {
@@ -93,8 +103,9 @@ export function LandingCategoryPage({ category }: LandingCategoryPageProps) {
         )}
         {category === "download" && (
           <DownloadSection
-            backendUrl={getConfiguredBackendUrl()}
             copy={activeCopy.download}
+            onRetry={loadManifest}
+            state={downloadState}
           />
         )}
       </main>

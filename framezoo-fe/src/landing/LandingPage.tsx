@@ -21,6 +21,7 @@ import {
 import { LandingLanguageSelector } from "./LandingLanguageSelector";
 import { LandingParticles } from "./LandingParticles";
 import { applyLandingSeo } from "./seo";
+import { useDownloadManifest } from "./useDownloadManifest";
 import { useLandingMotion } from "./useLandingMotion";
 import "./landing.css";
 
@@ -30,6 +31,14 @@ export function LandingPage() {
   const shellRef = useRef<HTMLDivElement>(null);
   const topSentinelRef = useRef<HTMLDivElement>(null);
   const activeCopy = getLandingCopy(locale);
+  const backendUrl = getConfiguredBackendUrl();
+  const { state: downloadState, loadManifest } = useDownloadManifest(
+    backendUrl,
+    {
+      error: activeCopy.download.error,
+      noBackend: activeCopy.download.noBackend,
+    },
+  );
   useLandingMotion(shellRef);
 
   useEffect(() => {
@@ -174,13 +183,19 @@ export function LandingPage() {
             copy={activeCopy.hero}
             movieCopy={activeCopy.movies}
             onHashLinkClick={handleLandingHashClick}
+            version={
+              downloadState.status === "ready"
+                ? downloadState.manifest.version
+                : null
+            }
           />
         </div>
         <FeatureSection copy={activeCopy.features} />
         <AddonGuideSection copy={activeCopy.addonGuide} />
         <DownloadSection
-          backendUrl={getConfiguredBackendUrl()}
           copy={activeCopy.download}
+          onRetry={loadManifest}
+          state={downloadState}
         />
       </main>
 
