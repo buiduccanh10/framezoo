@@ -28,14 +28,6 @@ if [ "$EXTERNAL_LEGACY_VOLUMES" = "false" ] \
   EXTERNAL_LEGACY_VOLUMES=true
 fi
 
-if [ "$EXTERNAL_LEGACY_VOLUMES" = "true" ]; then
-  if ! docker volume inspect framezoo_backend_downloads-data >/dev/null 2>&1; then
-    echo "Creating missing production downloads volume: framezoo_backend_downloads-data"
-    docker volume create framezoo_backend_downloads-data >/dev/null
-  fi
-fi
-
-
 compose() {
   ENV_FILE_PATH="$ENV_FILE_PATH" EXTERNAL_LEGACY_VOLUMES="$EXTERNAL_LEGACY_VOLUMES" docker compose --project-name "$PROJECT_NAME" --env-file "$ENV_FILE_PATH" -f "$COMPOSE_FILE" "$@"
 }
@@ -95,11 +87,8 @@ case "$ACTION" in
   ps)
     compose ps
     ;;
-  publish-desktop)
-    compose --profile desktop-publisher run --rm desktop-publisher
-    ;;
   *)
-    echo "Usage: ./deploy.sh {all|up|down|restart|logs|ps|publish-desktop}"
+    echo "Usage: ./deploy.sh {all|up|down|restart|logs|ps}"
     exit 1
     ;;
 esac

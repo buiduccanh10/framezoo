@@ -290,8 +290,10 @@
     },
     "publish": [
       {
-        "provider": "generic",
-        "url": "https://updates.invalid/desktop-updates/stable"
+        "provider": "github",
+        "owner": "buiduccanh10",
+        "repo": "framezoo-desktop-releases",
+        "releaseType": "release"
       }
     ],
     "electronUpdaterCompatibility": ">=2.16"

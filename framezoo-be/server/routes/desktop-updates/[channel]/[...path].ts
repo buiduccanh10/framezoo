@@ -1,67 +1,58 @@
-import fs from "node:fs";
-import { createReadStream } from "node:fs";
-import path from "node:path";
-import { getRouterParam, sendStream, setHeader } from "h3";
+import { getRouterParam, sendRedirect, setHeader } from 'h3';
 
 import {
   DEFAULT_DESKTOP_UPDATE_CHANNEL,
+  getDesktopGitHubReleaseAssetUrl,
   isSafeDesktopUpdateChannel,
-  resolveDesktopUpdateRequest,
-} from "../../../utils/desktopRelease";
-
-function getContentType(fileName: string) {
-  if (fileName.endsWith(".yml")) return "application/x-yaml; charset=utf-8";
-  if (fileName.endsWith(".json")) return "application/json; charset=utf-8";
-  if (fileName.endsWith(".blockmap")) return "application/octet-stream";
-  if (fileName.endsWith(".dmg")) return "application/x-apple-diskimage";
-  if (fileName.endsWith(".zip")) return "application/zip";
-  if (fileName.endsWith(".exe")) return "application/vnd.microsoft.portable-executable";
-  return "application/octet-stream";
-}
+} from '../../../utils/desktopRelease';
 
 function getCacheControl(fileName: string) {
-  if (fileName.endsWith(".yml") || fileName.endsWith(".json")) {
-    return "public, max-age=60, stale-while-revalidate=300";
+  if (fileName.endsWith('.yml') || fileName.endsWith('.json')) {
+    return 'public, max-age=60, stale-while-revalidate=300';
   }
 
-  return "public, max-age=31536000, immutable";
+  return 'public, max-age=31536000, immutable';
 }
 
 export default defineEventHandler(async event => {
-  const channel =
-    getRouterParam(event, "channel")?.trim() || DEFAULT_DESKTOP_UPDATE_CHANNEL;
-  const requestedPath = getRouterParam(event, "path")?.trim();
+  const channel = getRouterParam(event, 'channel')?.trim() || DEFAULT_DESKTOP_UPDATE_CHANNEL;
+  const requestedPath = getRouterParam(event, 'path')?.trim();
 
   if (!isSafeDesktopUpdateChannel(channel)) {
     throw createError({
       statusCode: 404,
-      message: "Update file not found",
+      message: 'Update file not found',
     });
   }
 
   if (!requestedPath) {
     throw createError({
       statusCode: 404,
-      message: "Update file not found",
+      message: 'Update file not found',
     });
   }
 
-  const resolved = resolveDesktopUpdateRequest(channel, requestedPath);
-  if (!resolved) {
+  const normalizedPath = requestedPath.replace(/^\/+/, '');
+  const pathParts = normalizedPath.split('/');
+  if (
+    pathParts.length > 2 ||
+    pathParts.some(part => part.length === 0 || part === '.' || part === '..')
+  ) {
     throw createError({
       statusCode: 404,
-      message: "Update file not found",
+      message: 'Update file not found',
     });
   }
 
-  setHeader(event, "Cache-Control", getCacheControl(resolved.fileName));
-  setHeader(event, "Content-Type", getContentType(resolved.fileName));
-  setHeader(event, "Content-Length", fs.statSync(resolved.filePath).size);
-  setHeader(
-    event,
-    "Content-Disposition",
-    `inline; filename="${path.basename(resolved.fileName)}"`,
-  );
+  const fileName = pathParts[pathParts.length - 1];
+  const releaseUrl = getDesktopGitHubReleaseAssetUrl(fileName);
+  if (!releaseUrl) {
+    throw createError({
+      statusCode: 404,
+      message: 'Update file not found',
+    });
+  }
 
-  return sendStream(event, createReadStream(resolved.filePath));
+  setHeader(event, 'Cache-Control', getCacheControl(fileName));
+  return sendRedirect(event, releaseUrl, 302);
 });

@@ -64,8 +64,8 @@ const ALLOWED_REMOTE_PROTOCOL_HOSTS = new Set(["www.gstatic.com"]);
 const PACKAGED_RENDERER_URL = `${RENDERER_PROTOCOL}://${RENDERER_PROTOCOL_HOST}/index.html`;
 const DESKTOP_BRIDGE_VERSION = "1.0.2";
 const DESKTOP_PIP_ROUTE = "/desktop-pip";
-const DESKTOP_APP_UPDATE_CHANNEL =
-  process.env.FRAMEZOO_DESKTOP_UPDATE_CHANNEL ?? "stable";
+const DESKTOP_RELEASE_OWNER = "buiduccanh10";
+const DESKTOP_RELEASE_REPO = "framezoo-desktop-releases";
 const DESKTOP_APP_UPDATE_CHECK_INTERVAL_MS = 60 * 60 * 1000;
 const DESKTOP_SETTINGS_ROUTE = "/settings";
 const EXTENSION_REQUEST_TIMEOUT_MS = 15_000;
@@ -819,12 +819,12 @@ const desktopAppUpdater = createDesktopAppUpdater({
     }
   },
   checkIntervalMs: DESKTOP_APP_UPDATE_CHECK_INTERVAL_MS,
-  getBackendUrl: getConfiguredBackendUrl,
   onStateChange: () => {
     sendDesktopAppUpdateState();
     installApplicationMenu();
   },
-  updateChannel: DESKTOP_APP_UPDATE_CHANNEL,
+  releaseOwner: DESKTOP_RELEASE_OWNER,
+  releaseRepo: DESKTOP_RELEASE_REPO,
 });
 
 const desktopPipController = createDesktopPipController({

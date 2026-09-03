@@ -96,7 +96,11 @@ function computeSha256(filePath) {
 }
 
 function findMatchingFile(inputDir, pattern) {
-  const entries = fs.readdirSync(inputDir).sort((a, b) => b.localeCompare(a, undefined, { numeric: true, sensitivity: 'base' }));
+  const entries = fs
+    .readdirSync(inputDir)
+    .sort((a, b) =>
+      b.localeCompare(a, undefined, { numeric: true, sensitivity: "base" }),
+    );
   for (const entry of entries) {
     const match = entry.match(pattern);
     if (match) {
@@ -197,7 +201,13 @@ function collectVariantFiles(inputDir, variantId) {
   };
 }
 
-function buildManifestFileEntry(kind, descriptor, relativePath, absolutePath, extra) {
+function buildManifestFileEntry(
+  kind,
+  descriptor,
+  relativePath,
+  absolutePath,
+  extra,
+) {
   return {
     id: extra.id,
     kind,
@@ -282,7 +292,10 @@ function createDesktopReleaseBundle(options) {
       ),
     );
 
-    if (variant.files.artifact) {
+    if (
+      variant.files.artifact &&
+      variant.files.artifact.fileName !== variant.files.download.fileName
+    ) {
       const artifactRelativePath = path.join(
         variantId,
         variant.files.artifact.fileName,
@@ -334,9 +347,7 @@ function createDesktopReleaseBundle(options) {
 }
 
 function verifyDesktopReleaseBundle(bundleDir, options = {}) {
-  const {
-    requiredVariants = REQUIRED_RELEASE_VARIANTS,
-  } = options;
+  const { requiredVariants = REQUIRED_RELEASE_VARIANTS } = options;
   const manifestPath = path.join(bundleDir, "manifest.json");
   assert(fs.existsSync(manifestPath), `Missing manifest.json in ${bundleDir}`);
 
@@ -349,7 +360,10 @@ function verifyDesktopReleaseBundle(bundleDir, options = {}) {
   );
 
   for (const file of manifest.files) {
-    assert(typeof file.path === "string", "Desktop release file path is missing");
+    assert(
+      typeof file.path === "string",
+      "Desktop release file path is missing",
+    );
     const absolutePath = path.join(bundleDir, file.path);
     assert(fs.existsSync(absolutePath), `Missing release file: ${file.path}`);
   }
@@ -370,8 +384,14 @@ function verifyDesktopReleaseBundle(bundleDir, options = {}) {
       .filter((file) => file.kind === "download")
       .map((file) => file.platform),
   );
-  assert(platforms.has("mac"), "Desktop release bundle is missing macOS artifacts");
-  assert(platforms.has("win"), "Desktop release bundle is missing Windows artifacts");
+  assert(
+    platforms.has("mac"),
+    "Desktop release bundle is missing macOS artifacts",
+  );
+  assert(
+    platforms.has("win"),
+    "Desktop release bundle is missing Windows artifacts",
+  );
 
   return manifest;
 }
@@ -380,6 +400,7 @@ module.exports = {
   PRODUCT_NAME,
   RELEASE_VARIANTS,
   REQUIRED_RELEASE_VARIANTS,
+  computeSha256,
   createDesktopReleaseBundle,
   ensureDir,
   removeDir,

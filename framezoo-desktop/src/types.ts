@@ -104,9 +104,9 @@ export type CreateDesktopAppUpdaterOptions = {
   appName: string;
   beforeInstall?: () => Promise<void> | void;
   checkIntervalMs: number;
-  getBackendUrl: () => string;
   onStateChange?: (state: DesktopAppUpdateState) => void;
-  updateChannel: string;
+  releaseOwner: string;
+  releaseRepo: string;
 };
 
 export type DesktopPipState = Record<string, unknown> | null;

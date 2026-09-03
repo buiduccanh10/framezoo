@@ -54,6 +54,9 @@ jobs:
               /^package\.json$/,
               /^pnpm-lock\.yaml$/,
               /^pnpm-workspace\.yaml$/,
+              /^scripts\/desktop-release\.js$/,
+              /^scripts\/create-desktop-github-release-assets\.js$/,
+              /^\.github\/workflows\/publish-desktop\.yml$/,
             ];
 
             core.setOutput("checkout_ref", currentSha);
@@ -166,7 +169,7 @@ jobs:
         run: |
           set -eu
           if [ -z "${CSC_LINK:-}" ]; then
-            echo "::warning::Thiếu macOS signing secrets (CSC_LINK). Ứng dụng sẽ KHÔNG được code sign và tính năng OTA Update trên macOS sẽ KHÔNG hoạt động."
+            echo "::warning::Thiếu macOS signing secrets (CSC_LINK). Ứng dụng sẽ không được Apple sign/notarize; OTA vẫn dùng manual unzip và ad-hoc codesign."
           else
             echo "macOS signing secrets có sẵn."
           fi
@@ -438,79 +441,91 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: 22
+      - name: Install release tooling
+        run: pnpm install --frozen-lockfile --ignore-scripts
       - name: Download packaged artifacts
         uses: actions/download-artifact@v5
         with:
           path: desktop-artifacts
-      - name: Build release bundle
+      - name: Prepare GitHub Release assets
         shell: bash
+        env:
+          RELEASE_OWNER: buiduccanh10
+          RELEASE_REPO: framezoo-desktop-releases
         run: |
           set -eu
-          node scripts/create-desktop-release-bundle.js \
+          node scripts/create-desktop-github-release-assets.js \
             --input-root desktop-artifacts \
-            --output-dir desktop-release-bundle \
+            --output-dir desktop-release-assets \
             --channel stable \
-            --published-at "${{ needs.prepare.outputs.published_at }}"
-          node scripts/verify-desktop-release-bundle.js desktop-release-bundle
-          tar -czf desktop-release-bundle.tar.gz -C desktop-release-bundle .
-      - name: Install SSH tools
-        shell: bash
-        run: |
-          set -euo pipefail
-          if [ -f /etc/apt/apt-mirrors.txt ]; then
-            sudo sed -i 's#azure\.archive\.ubuntu\.com#archive.ubuntu.com#g' \
-              /etc/apt/apt-mirrors.txt
-          fi
-          for attempt in 1 2 3; do
-            if sudo apt-get update -o Acquire::Retries=3; then
-              sudo apt-get install -y openssh-client
-              exit 0
-            fi
-            echo "apt-get update failed (attempt ${attempt}/3); retrying..."
-            sleep $((attempt * 5))
-          done
-          exit 1
-      - name: Start SSH agent
-        env:
-          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
-        run: |
-          eval "$(ssh-agent -s)"
-          echo "$VPS_SSH_KEY" | tr -d '\r' | ssh-add -
-          echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK" >> "$GITHUB_ENV"
-          echo "SSH_AGENT_PID=$SSH_AGENT_PID" >> "$GITHUB_ENV"
-      - name: Trust VPS host
-        env:
-          VPS_HOST: ${{ secrets.VPS_HOST }}
-          VPS_PORT: ${{ secrets.VPS_PORT }}
-        run: |
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-          ssh-keyscan -p "${VPS_PORT:-22}" "$VPS_HOST" >> ~/.ssh/known_hosts
-      - name: Upload bundle and publish on VPS
+            --published-at "${{ needs.prepare.outputs.published_at }}" \
+            --owner "$RELEASE_OWNER" \
+            --repo "$RELEASE_REPO"
+          test -s desktop-release-assets/latest.yml
+          test -s desktop-release-assets/latest-mac.yml
+          test -s desktop-release-assets/download-manifest.json
+          find desktop-release-assets -maxdepth 1 -type f -print | sort
+      - name: Publish GitHub Release
         shell: bash
         env:
-          ENV_FILE: ${{ secrets.ENV_FILE }}
-          VPS_HOST: ${{ secrets.VPS_HOST }}
-          VPS_PORT: ${{ secrets.VPS_PORT }}
-          VPS_USER: ${{ secrets.VPS_USER }}
-          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
-          DEPLOY_PROJECT_NAME: ${{ secrets.DEPLOY_PROJECT_NAME }}
+          GH_TOKEN: ${{ secrets.DESKTOP_RELEASE_TOKEN }}
+          RELEASE_REPOSITORY: buiduccanh10/framezoo-desktop-releases
         run: |
           set -eu
 
-          if [ -z "${ENV_FILE:-}" ]; then
-            echo "ENV_FILE secret is empty."
+          if [ -z "${GH_TOKEN:-}" ]; then
+            echo "DESKTOP_RELEASE_TOKEN secret is empty."
             exit 1
           fi
 
-          DEPLOY_USER="${VPS_USER:-betakiot}"
-          DEPLOY_TARGET="${DEPLOY_USER}@${VPS_HOST}"
-          DEPLOY_PATH="${DEPLOY_PATH:-/home/framezoo}"
-          DEPLOY_PROJECT_NAME="${DEPLOY_PROJECT_NAME:-framezoo}"
-          STAGING_PATH="${DEPLOY_PATH}/desktop-publish-staging"
+          if ! gh repo view "$RELEASE_REPOSITORY" >/dev/null 2>&1; then
+            echo "Release repository is not accessible: $RELEASE_REPOSITORY"
+            exit 1
+          fi
 
-          ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" "mkdir -p '${STAGING_PATH}'"
-          scp -P "${VPS_PORT:-22}" desktop-release-bundle.tar.gz "${DEPLOY_TARGET}:${STAGING_PATH}/desktop-release-bundle.tar.gz"
+          if [ "$(gh repo view "$RELEASE_REPOSITORY" --json isPrivate -q .isPrivate)" != "false" ]; then
+            echo "Release repository must be public: $RELEASE_REPOSITORY"
+            exit 1
+          fi
 
-          printf '%s' "$ENV_FILE" | ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" \
-            "set -eu; ENV_TMP=\$(mktemp /tmp/framezoo_env.XXXXXX); trap 'rm -f \"\$ENV_TMP\"' EXIT; cat > \"\$ENV_TMP\"; chmod 600 \"\$ENV_TMP\"; cd '${DEPLOY_PATH}'; PROJECT_NAME='${DEPLOY_PROJECT_NAME}' COMPOSE_FILE='docker-compose.prod.yml' ENV_FILE_PATH=\"\$ENV_TMP\" ./scripts/deploy.sh publish-desktop"
+          if ! gh api "repos/$RELEASE_REPOSITORY/commits?per_page=1" >/dev/null 2>&1; then
+            echo "Release repository must contain an initial commit before publishing: $RELEASE_REPOSITORY"
+            exit 1
+          fi
+
+          VERSION="$(node -p "require('./framezoo-desktop/package.json').version")"
+          TAG="v${VERSION}"
+
+          if gh release view "$TAG" --repo "$RELEASE_REPOSITORY" >/dev/null 2>&1; then
+            expected_assets="$(
+              find desktop-release-assets -maxdepth 1 -type f -exec basename {} \; | sort
+            )"
+            existing_assets="$(
+              gh release view "$TAG" \
+                --repo "$RELEASE_REPOSITORY" \
+                --json assets \
+                -q '.assets[].name'
+            )"
+            while IFS= read -r asset_name; do
+              if [ -n "$asset_name" ] && ! printf '%s\n' "$expected_assets" | grep -Fqx -- "$asset_name"; then
+                gh release delete-asset "$TAG" \
+                  --repo "$RELEASE_REPOSITORY" \
+                  --yes \
+                  "$asset_name"
+              fi
+            done <<< "$existing_assets"
+
+            gh release upload "$TAG" \
+              --repo "$RELEASE_REPOSITORY" \
+              --clobber \
+              desktop-release-assets/*
+            gh release edit "$TAG" \
+              --repo "$RELEASE_REPOSITORY" \
+              --title "Framezoo ${VERSION}"
+          else
+            gh release create "$TAG" \
+              --repo "$RELEASE_REPOSITORY" \
+              --title "Framezoo ${VERSION}" \
+              --generate-notes \
+              desktop-release-assets/*
+          fi
