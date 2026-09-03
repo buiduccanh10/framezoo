@@ -69,6 +69,14 @@ export async function clearTorrentSession(sessionId?: string) {
   if (currentSessionId) scheduleTorrentStop(currentSessionId);
 }
 
+export function clearActiveTorrentSession() {
+  const currentSessionId = activeSessionId;
+  activeSessionId = null;
+  activeStatus = null;
+  publish();
+  if (currentSessionId) scheduleTorrentStop(currentSessionId);
+}
+
 export async function stopTorrentSession(sessionId?: string) {
   if (sessionId && sessionId !== activeSessionId) return;
   const currentSessionId = activeSessionId;
