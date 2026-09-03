@@ -2068,7 +2068,7 @@ app.on("window-all-closed", () => {
 
 let isQuitting = false;
 app.on("before-quit", (event) => {
-  if (isQuitting) return;
+  if (isQuitting || (global as any).isUpdating) return;
   event.preventDefault();
   isQuitting = true;
   desktopAppUpdater.dispose();

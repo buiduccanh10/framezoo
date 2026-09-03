@@ -247,11 +247,12 @@ open "${appPath}"
         detached: true,
         stdio: "ignore",
       }).unref();
-
+      (global as any).isUpdating = true;
       app.quit();
       return true;
     }
 
+    (global as any).isUpdating = true;
     autoUpdater.quitAndInstall(true, true);
     return true;
   }
