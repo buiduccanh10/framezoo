@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { t } from "i18next";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/buttons/Button";
 import { Dropdown } from "@/components/form/Dropdown";
@@ -53,6 +53,7 @@ export function EpisodeCarousel({
   totalEpisodes,
   boundaryRef,
 }: EpisodeCarouselProps) {
+  const navigate = useNavigate();
   const [showEpisodeMenu, setShowEpisodeMenu] = useState(false);
   const [customSeason, setCustomSeason] = useState("");
   const [customEpisode, setCustomEpisode] = useState("");
@@ -158,7 +159,7 @@ export function EpisodeCarousel({
 
     // Navigate to the episode using the same URL format as getEpisodeUrl
     const url = `/media/tmdb-tv-${mediaId}-${mediaTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-")}/${seasonData.id}/${episodeData.id}`;
-    window.location.href = url;
+    navigate(url);
     setShowEpisodeMenu(false);
   };
 
