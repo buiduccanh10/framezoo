@@ -94,6 +94,7 @@
       "noBackendUrl": "Ni zalednega URL-ja",
       "or": "or",
       "passwordIncorrect": "Geslo ni pravilno",
+      "invalidCredentials": "Uporabniško ime ali geslo je napačno",
       "passwordLabel": "Geslo",
       "passwordPlaceholder": "Vnesite vaše geslo",
       "rememberMe": "Zapomni si moje geslo",
@@ -286,6 +287,7 @@
       "shortcuts": {
         "barrelRoll": "Naredite barrel roll! 🌀",
         "closeOverlay": "Zapri prekrivanje/modal",
+        "holdShift": "Držite tipko in nato kliknite gumb Celoten zaslon, da se prilega sliki, ali kliknite naslov filma, da kopirate povezavo s časom. Držite tipko in kliknite gumb Celoten zaslon, da se prilega sliki, ali kliknite naslov videoposnetka, da kopirate povezavo s časovnim žigom.",
         "decreaseVolume": "Zmanjšajte glasnost",
         "increaseVolume": "Povečaj glasnost",
         "jumpTo0": "Skok na 0 % (začetek)",

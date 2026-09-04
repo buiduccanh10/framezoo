@@ -94,6 +94,7 @@
       "noBackendUrl": "Nessun URL di back-end",
       "or": "or",
       "passwordIncorrect": "La password non è corretta",
+      "invalidCredentials": "Nome utente o password errati",
       "passwordLabel": "Password",
       "passwordPlaceholder": "Inserisci la tua password",
       "rememberMe": "Ricorda la mia password",
@@ -286,6 +287,7 @@
       "shortcuts": {
         "barrelRoll": "Fare un tonneau con l'aereo! 🌀",
         "closeOverlay": "Chiudi overlay/modale",
+        "holdShift": "Tieni premuto il tasto e fai clic sul pulsante Schermo intero per adattare l&#39;immagine oppure fai clic sul titolo del filmato per copiare il collegamento con l&#39;indicazione oraria. Tieni premuto il tasto e fai clic sul pulsante Schermo intero per adattare l&#39;immagine alla cornice oppure fai clic sul titolo del video per copiare il collegamento con l&#39;indicazione oraria.",
         "decreaseVolume": "Diminuire il volume",
         "increaseVolume": "Aumenta il volume",
         "jumpTo0": "Vai allo 0% (inizio)",

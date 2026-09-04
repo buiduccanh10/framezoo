@@ -94,6 +94,7 @@
       "noBackendUrl": "No hi ha URL de backend",
       "or": "o",
       "passwordIncorrect": "La contrasenya és incorrecta",
+      "invalidCredentials": "El nom d&#39;usuari o la contrasenya són incorrectes",
       "passwordLabel": "Contrasenya",
       "passwordPlaceholder": "Introduïu la vostra contrasenya",
       "rememberMe": "Recorda la meva contrasenya",
@@ -286,6 +287,7 @@
       "shortcuts": {
         "barrelRoll": "Fes un rodet! 🌀",
         "closeOverlay": "Tanca la superposició/modal",
+        "holdShift": "Mantingueu premuda la tecla i feu clic al botó Pantalla completa per ajustar-la o feu clic per titular la pel·lícula per copiar l&#39;enllaç amb la marca de temps. Mantingueu premuda la tecla i feu clic al botó Pantalla completa per ajustar-la al fotograma o feu clic al títol del vídeo per copiar l&#39;enllaç amb la marca de temps.",
         "decreaseVolume": "Disminuir el volum",
         "increaseVolume": "Augmenta el volum",
         "jumpTo0": "Salta al 0% (inici)",

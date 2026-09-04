@@ -94,6 +94,7 @@
       "noBackendUrl": "无后端网址",
       "or": "or",
       "passwordIncorrect": "密码不正确",
+      "invalidCredentials": "用户名或密码错误",
       "passwordLabel": "密码",
       "passwordPlaceholder": "输入您的密码",
       "rememberMe": "记住我的密码",
@@ -286,6 +287,7 @@
       "shortcuts": {
         "barrelRoll": "做飞行特技表演！ 🌀",
         "closeOverlay": "关闭叠加/模态",
+        "holdShift": "按住按键并单击全屏按钮以适应画面，或单击电影标题以复制带有时间戳的链接。",
         "decreaseVolume": "减小音量",
         "increaseVolume": "增加音量",
         "jumpTo0": "跳至0%（开始）",

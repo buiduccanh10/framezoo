@@ -94,6 +94,7 @@
       "noBackendUrl": "Ingen backend-URL",
       "or": "or",
       "passwordIncorrect": "Lösenordet är felaktigt",
+      "invalidCredentials": "Användarnamn eller lösenord är felaktigt",
       "passwordLabel": "Lösenord",
       "passwordPlaceholder": "Ange ditt lösenord",
       "rememberMe": "Kom ihåg mitt lösenord",
@@ -286,6 +287,7 @@
       "shortcuts": {
         "barrelRoll": "Gör en fatrulle! 🌀",
         "closeOverlay": "Stäng överlägg/modal",
+        "holdShift": "Håll ner knappen och klicka sedan på helskärmsknappen för att anpassa bilden eller klicka på filmens titel för att kopiera länken med tidsstämpeln. Håll ner knappen och klicka på helskärmsknappen för att anpassa bilden till bilden, eller klicka på videotiteln för att kopiera länken med tidsstämpeln.",
         "decreaseVolume": "Minska volymen",
         "increaseVolume": "Öka volymen",
         "jumpTo0": "Hoppa till 0 % (början)",

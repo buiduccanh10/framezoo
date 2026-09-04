@@ -94,6 +94,7 @@
       "noBackendUrl": "Nav aizmugursistēmas URL",
       "or": "or",
       "passwordIncorrect": "Parole nav pareiza",
+      "invalidCredentials": "Lietotājvārds vai parole nav pareiza",
       "passwordLabel": "Parole",
       "passwordPlaceholder": "Ievadiet savu paroli",
       "rememberMe": "Atcerēties manu paroli",
@@ -286,6 +287,7 @@
       "shortcuts": {
         "barrelRoll": "Uztaisi mucas ritināšanu! 🌀",
         "closeOverlay": "Aizvērt pārklājumu/modālu",
+        "holdShift": "Turiet nospiestu taustiņu un pēc tam noklikšķiniet uz pilnekrāna režīma pogas, lai ietilpinātu kadrā, vai noklikšķiniet uz filmas nosaukuma, lai kopētu saiti ar laika zīmogu. Turiet nospiestu taustiņu un noklikšķiniet uz pilnekrāna režīma pogas, lai ietilpinātu kadrā, vai noklikšķiniet uz video nosaukuma, lai kopētu saiti ar laika zīmogu.",
         "decreaseVolume": "Samaziniet skaļumu",
         "increaseVolume": "Palieliniet skaļumu",
         "jumpTo0": "Pāriet uz 0% (sākums)",

@@ -94,6 +94,7 @@
       "noBackendUrl": "Keine Backend-URL",
       "or": "or",
       "passwordIncorrect": "Das Passwort ist falsch",
+      "invalidCredentials": "Benutzername oder Passwort ist falsch.",
       "passwordLabel": "Passwort",
       "passwordPlaceholder": "Geben Sie Ihr Passwort ein",
       "rememberMe": "Passwort merken",
@@ -286,6 +287,7 @@
       "shortcuts": {
         "barrelRoll": "Eine Drehung um die Längsachse machen! 🌀",
         "closeOverlay": "Overlay/Modal schließen",
+        "holdShift": "Halten Sie die Taste gedrückt und klicken Sie dann auf die Vollbild-Schaltfläche, um das Bild anzupassen, oder klicken Sie auf den Filmtitel, um den Link mit Zeitstempel zu kopieren.",
         "decreaseVolume": "Lautstärke verringern",
         "increaseVolume": "Lautstärke erhöhen",
         "jumpTo0": "Auf 0 % springen (Anfang)",

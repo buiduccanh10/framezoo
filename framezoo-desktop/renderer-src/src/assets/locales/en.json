@@ -287,6 +287,7 @@
       "shortcuts": {
         "barrelRoll": "Do a barrel roll! 🌀",
         "closeOverlay": "Close overlay/modal",
+        "holdShift": "Hold key then click Fullscreen button to fit or click to title movie to copy link with timeHold down the key and click the full-screen button to fit the frame, or click the video title to copy the link with the timestamp.",
         "decreaseVolume": "Decrease volume",
         "increaseVolume": "Increase volume",
         "jumpTo0": "Jump to 0% (beginning)",

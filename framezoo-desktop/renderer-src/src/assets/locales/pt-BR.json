@@ -94,6 +94,7 @@
       "noBackendUrl": "Sem URL de back-end",
       "or": "or",
       "passwordIncorrect": "A senha está incorreta",
+      "invalidCredentials": "O nome de usuário ou a senha estão incorretos.",
       "passwordLabel": "Senha",
       "passwordPlaceholder": "Digite sua senha",
       "rememberMe": "Lembrar minha senha",
@@ -286,6 +287,7 @@
       "shortcuts": {
         "barrelRoll": "Faça um ioiô! 🌀",
         "closeOverlay": "Fechar sobreposição/modal",
+        "holdShift": "Mantenha a tecla pressionada e clique no botão Tela cheia para ajustar a imagem ou clique no título do filme para copiar o link com o tempo.",
         "decreaseVolume": "Diminuir volume",
         "increaseVolume": "Aumentar o volume",
         "jumpTo0": "Ir para 0% (início)",

@@ -94,6 +94,7 @@
       "noBackendUrl": "Ingen backend-URL",
       "or": "or",
       "passwordIncorrect": "Adgangskoden er forkert",
+      "invalidCredentials": "Brugernavn eller adgangskode er forkert",
       "passwordLabel": "Adgangskode",
       "passwordPlaceholder": "Indtast din adgangskode",
       "rememberMe": "Husk min adgangskode",
@@ -286,6 +287,7 @@
       "shortcuts": {
         "barrelRoll": "Lav en tønderulle! 🌀",
         "closeOverlay": "Luk overlejring/modal",
+        "holdShift": "Hold tasten nede, og klik derefter på knappen Fuldskærm for at tilpasse den til billedet, eller klik på filmens titel for at kopiere linket med tidsstemplet. Hold tasten nede, og klik på knappen Fuldskærm for at tilpasse billedet, eller klik på videotitlen for at kopiere linket med tidsstemplet.",
         "decreaseVolume": "Sænk volumen",
         "increaseVolume": "Øg volumen",
         "jumpTo0": "Hop til 0 % (begyndelse)",

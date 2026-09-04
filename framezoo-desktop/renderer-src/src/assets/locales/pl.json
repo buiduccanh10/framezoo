@@ -94,6 +94,7 @@
       "noBackendUrl": "Brak adresu URL zaplecza",
       "or": "or",
       "passwordIncorrect": "Hasło jest nieprawidłowe",
+      "invalidCredentials": "Nazwa użytkownika lub hasło są nieprawidłowe",
       "passwordLabel": "Hasło",
       "passwordPlaceholder": "Wpisz swoje hasło",
       "rememberMe": "Zapamiętaj moje hasło",
@@ -286,6 +287,7 @@
       "shortcuts": {
         "barrelRoll": "Zrób beczkę! 🌀",
         "closeOverlay": "Zamknij nakładkę/modal",
+        "holdShift": "Przytrzymaj klawisz, a następnie kliknij przycisk pełnego ekranu, aby dopasować go do ramki, lub kliknij, aby dodać tytuł filmu, aby skopiować link wraz z czasem. Przytrzymaj klawisz i kliknij przycisk pełnego ekranu, aby dopasować go do ramki, lub kliknij tytuł filmu, aby skopiować link wraz z czasem.",
         "decreaseVolume": "Zmniejsz głośność",
         "increaseVolume": "Zwiększ głośność",
         "jumpTo0": "Skok do 0% (początek)",

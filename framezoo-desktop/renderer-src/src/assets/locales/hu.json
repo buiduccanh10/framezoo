@@ -94,6 +94,7 @@
       "noBackendUrl": "Nincs háttér-URL",
       "or": "or",
       "passwordIncorrect": "A jelszó helytelen",
+      "invalidCredentials": "A felhasználónév vagy jelszó helytelen",
       "passwordLabel": "Jelszó",
       "passwordPlaceholder": "Adja meg jelszavát",
       "rememberMe": "Emlékezz a jelszavamra",
@@ -286,6 +287,7 @@
       "shortcuts": {
         "barrelRoll": "Csinálj egy hordótekerést! 🌀",
         "closeOverlay": "Fedvény/modális bezárása",
+        "holdShift": "Tartsa lenyomva a billentyűt, majd kattintson a Teljes képernyő gombra a képkockához igazításhoz, vagy kattintson a címre a link időbélyeggel együtt történő másolásához. Tartsa lenyomva a billentyűt, és kattintson a teljes képernyő gombra a képkockához igazításhoz, vagy kattintson a videó címére a link időbélyeggel együtt történő másolásához.",
         "decreaseVolume": "Hangerő csökkentése",
         "increaseVolume": "Hangerő növelése",
         "jumpTo0": "Ugrás 0%-ra (eleje)",

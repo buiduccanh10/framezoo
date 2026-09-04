@@ -94,6 +94,7 @@
       "noBackendUrl": "Engin bakenda slóð",
       "or": "or",
       "passwordIncorrect": "Lykilorð er rangt",
+      "invalidCredentials": "Notandanafn eða lykilorð er rangt",
       "passwordLabel": "Lykilorð",
       "passwordPlaceholder": "Sláðu inn lykilorðið þitt",
       "rememberMe": "Mundu lykilorðið mitt",
@@ -286,6 +287,7 @@
       "shortcuts": {
         "barrelRoll": "Gerðu tunnurúllu! 🌀",
         "closeOverlay": "Lokaðu yfirlagi/modal",
+        "holdShift": "Haltu inni takkanum og smelltu síðan á hnappinn fyrir allan skjáinn til að passa við myndina eða smelltu á titil myndarinnar til að afrita tengilinn með tíma. Haltu inni takkanum og smelltu á hnappinn fyrir allan skjáinn til að passa við rammann eða smelltu á titil myndbandsins til að afrita tengilinn með tímastimplinum.",
         "decreaseVolume": "Minnka hljóðstyrk",
         "increaseVolume": "Auka hljóðstyrk",
         "jumpTo0": "Hoppa í 0% (byrjun)",

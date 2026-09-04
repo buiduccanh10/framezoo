@@ -94,6 +94,7 @@
       "noBackendUrl": "백엔드 URL 없음",
       "or": "or",
       "passwordIncorrect": "비밀번호가 올바르지 않습니다.",
+      "invalidCredentials": "사용자 이름 또는 비밀번호가 잘못되었습니다.",
       "passwordLabel": "비밀번호",
       "passwordPlaceholder": "비밀번호를 입력하세요",
       "rememberMe": "내 비밀번호를 기억하세요",
@@ -286,6 +287,7 @@
       "shortcuts": {
         "barrelRoll": "배럴롤을 해보세요! 🌀",
         "closeOverlay": "오버레이/모달 닫기",
+        "holdShift": "키를 누른 상태에서 전체 화면 버튼을 클릭하여 화면을 프레임에 맞추거나, 동영상 제목을 클릭하여 타임스탬프가 포함된 링크를 복사하세요.",
         "decreaseVolume": "볼륨 줄이기",
         "increaseVolume": "볼륨 높이기",
         "jumpTo0": "0%로 점프(시작)",
