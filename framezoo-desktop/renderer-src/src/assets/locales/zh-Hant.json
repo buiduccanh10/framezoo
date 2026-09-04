@@ -41,6 +41,7 @@
       "loadingStreams": "正在加載流...",
       "manageAddonsButton": "管理外掛程式列表",
       "noAddonStreams": "此插件沒有返回任何串流。",
+      "noStreams": "沒有直播串流",
       "noTorrentStreams": "此插件沒有傳回種子流。",
       "qualities": {
         "1080p": "1080p",
@@ -1112,7 +1113,15 @@
         "loggedInAt": "登入於：{{date}}",
         "removeDevice": "刪除",
         "title": "設備",
-        "unknownDevice": "未知設備，解密名稱時發生錯誤"
+        "thisDevice": "這個設備",
+        "types": {
+          "desktop": "桌面",
+          "mobile": "移動的",
+          "tablet": "藥片"
+        },
+        "unknownBrowser": "未知瀏覽器",
+        "unknownDevice": "未知設備，解密名稱時發生錯誤",
+        "unknownOperatingSystem": "未知作業系統"
       },
       "profile": {
         "finish": "完成編輯",

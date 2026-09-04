@@ -41,6 +41,7 @@
       "loadingStreams": "جارٍ تحميل التدفقات...",
       "manageAddonsButton": "إدارة قائمة الإضافات",
       "noAddonStreams": "لم يتم إرجاع أي تدفقات بواسطة هذا الملحق.",
+      "noStreams": "لا توجد بثوث مباشرة",
       "noTorrentStreams": "لم يتم إرجاع أي تدفقات تورنت لهذا الملحق.",
       "qualities": {
         "1080p": "1080p",
@@ -1112,7 +1113,15 @@
         "loggedInAt": "تم تسجيل الدخول في: {{date}}",
         "removeDevice": "إزالة",
         "title": "الأجهزة",
-        "unknownDevice": "جهاز غير معروف، خطأ في فك تشفير الاسم"
+        "thisDevice": "هذا الجهاز",
+        "types": {
+          "desktop": "سطح المكتب",
+          "mobile": "متحرك",
+          "tablet": "جهاز لوحي"
+        },
+        "unknownBrowser": "متصفح غير معروف",
+        "unknownDevice": "جهاز غير معروف، خطأ في فك تشفير الاسم",
+        "unknownOperatingSystem": "نظام تشغيل غير معروف"
       },
       "profile": {
         "finish": "إنهاء التعديل",

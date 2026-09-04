@@ -41,6 +41,7 @@
       "loadingStreams": "正在加载流...",
       "manageAddonsButton": "管理插件列表",
       "noAddonStreams": "此插件没有返回任何流。",
+      "noStreams": "没有直播流",
       "noTorrentStreams": "此插件没有返回种子流。",
       "qualities": {
         "1080p": "1080p",
@@ -1112,7 +1113,15 @@
         "loggedInAt": "登录于：{{date}}",
         "removeDevice": "移除",
         "title": "设备",
-        "unknownDevice": "未知设备，解密名称时出错"
+        "thisDevice": "这个设备",
+        "types": {
+          "desktop": "桌面",
+          "mobile": "移动的",
+          "tablet": "药片"
+        },
+        "unknownBrowser": "未知浏览器",
+        "unknownDevice": "未知设备，解密名称时出错",
+        "unknownOperatingSystem": "未知操作系统"
       },
       "profile": {
         "finish": "完成编辑",

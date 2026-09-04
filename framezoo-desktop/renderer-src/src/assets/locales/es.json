@@ -41,6 +41,7 @@
       "loadingStreams": "Cargando secuencias...",
       "manageAddonsButton": "Administrar lista de complementos",
       "noAddonStreams": "Este complemento no devolvió transmisiones.",
+      "noStreams": "No hay transmisiones",
       "noTorrentStreams": "No se devolvieron transmisiones de torrents para este complemento.",
       "qualities": {
         "1080p": "1080p",
@@ -1112,7 +1113,15 @@
         "loggedInAt": "Inicia sesión en: {{date}}",
         "removeDevice": "Eliminar",
         "title": "Dispositivos",
-        "unknownDevice": "Dispositivo desconocido, error al descifrar el nombre"
+        "thisDevice": "Este dispositivo",
+        "types": {
+          "desktop": "De oficina",
+          "mobile": "Móvil",
+          "tablet": "Tableta"
+        },
+        "unknownBrowser": "Navegador desconocido",
+        "unknownDevice": "Dispositivo desconocido, error al descifrar el nombre",
+        "unknownOperatingSystem": "Sistema operativo desconocido"
       },
       "profile": {
         "finish": "Finalizar edición",

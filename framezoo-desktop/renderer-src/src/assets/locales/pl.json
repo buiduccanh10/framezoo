@@ -41,6 +41,7 @@
       "loadingStreams": "Ładowanie strumieni...",
       "manageAddonsButton": "Zarządzaj listą dodatków",
       "noAddonStreams": "Ten dodatek nie zwrócił żadnych strumieni.",
+      "noStreams": "Brak strumieni",
       "noTorrentStreams": "Dla tego dodatku nie zwrócono żadnych strumieni torrentowych.",
       "qualities": {
         "1080p": "1080p",
@@ -1112,7 +1113,15 @@
         "loggedInAt": "Zalogowano się pod adresem: {{date}}",
         "removeDevice": "Usuń",
         "title": "Urządzenia",
-        "unknownDevice": "Nieznane urządzenie, błąd podczas odszyfrowywania nazwy"
+        "thisDevice": "To urządzenie",
+        "types": {
+          "desktop": "Pulpit",
+          "mobile": "Przenośny",
+          "tablet": "Tabletka"
+        },
+        "unknownBrowser": "Nieznana przeglądarka",
+        "unknownDevice": "Nieznane urządzenie, błąd podczas odszyfrowywania nazwy",
+        "unknownOperatingSystem": "Nieznany system operacyjny"
       },
       "profile": {
         "finish": "Zakończ edycję",

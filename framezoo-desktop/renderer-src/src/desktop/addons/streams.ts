@@ -194,14 +194,11 @@ export function findAddonStreamPreference(
     }
   }
 
-  return (
-    bestStream ??
-    compatibleStreams.find(
-      (stream) => getAddonStreamQuality(stream) === preference.quality,
-    ) ??
-    compatibleStreams[0] ??
-    null
-  );
+  if (highestScore > 0) {
+    return bestStream;
+  }
+
+  return null;
 }
 
 function getStreamKind(stream: StremioStream): AddonStream["kind"] | null {

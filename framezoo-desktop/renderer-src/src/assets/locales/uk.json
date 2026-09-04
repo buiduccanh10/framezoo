@@ -41,6 +41,7 @@
       "loadingStreams": "Завантаження потоків...",
       "manageAddonsButton": "Керувати списком додатків",
       "noAddonStreams": "Цей аддон не повернув жодного потоку.",
+      "noStreams": "Немає потоків",
       "noTorrentStreams": "Немає торрент-потоків для цього аддона.",
       "qualities": {
         "1080p": "1080p",
@@ -1112,7 +1113,15 @@
         "loggedInAt": "Увійшли в систему: {{date}}",
         "removeDevice": "Видалити",
         "title": "Пристрої",
-        "unknownDevice": "Невідомий пристрій, помилка розшифровки імені"
+        "thisDevice": "Цей пристрій",
+        "types": {
+          "desktop": "Робочий стіл",
+          "mobile": "Мобільний",
+          "tablet": "Планшет"
+        },
+        "unknownBrowser": "Невідомий браузер",
+        "unknownDevice": "Невідомий пристрій, помилка розшифровки імені",
+        "unknownOperatingSystem": "Невідома операційна система"
       },
       "profile": {
         "finish": "Завершити редагування",

@@ -41,6 +41,7 @@
       "loadingStreams": "ஸ்ட்ரீம்களை ஏற்றுகிறது...",
       "manageAddonsButton": "Addon பட்டியலை நிர்வகிக்கவும்",
       "noAddonStreams": "இந்த addon மூலம் ஸ்ட்ரீம்கள் எதுவும் திருப்பி அனுப்பப்படவில்லை.",
+      "noStreams": "ஸ்ட்ரீம்கள் இல்லை",
       "noTorrentStreams": "இந்த addonக்கு டோரண்ட் ஸ்ட்ரீம்கள் எதுவும் திரும்பவில்லை.",
       "qualities": {
         "1080p": "1080p",
@@ -1112,7 +1113,15 @@
         "loggedInAt": "உள்நுழைந்தது: {{date}}",
         "removeDevice": "நீக்கு",
         "title": "சாதனங்கள்",
-        "unknownDevice": "தெரியாத சாதனம், பெயரை மறைகுறியாக்குவதில் பிழை"
+        "thisDevice": "இந்த சாதனம்",
+        "types": {
+          "desktop": "டெஸ்க்டாப்",
+          "mobile": "மொபைல்",
+          "tablet": "டேப்லெட்"
+        },
+        "unknownBrowser": "அறியப்படாத உலாவி",
+        "unknownDevice": "தெரியாத சாதனம், பெயரை மறைகுறியாக்குவதில் பிழை",
+        "unknownOperatingSystem": "அறியப்படாத இயக்க முறைமை"
       },
       "profile": {
         "finish": "எடிட்டிங் முடிக்கவும்",

@@ -41,6 +41,7 @@
       "loadingStreams": "ප්‍රවාහ පූරණය වෙමින්...",
       "manageAddonsButton": "ඇඩෝන ලැයිස්තුව කළමනාකරණය කරන්න",
       "noAddonStreams": "මෙම ඇඩෝනය මඟින් ප්‍රවාහ කිසිවක් ආපසු ලබා දී නැත.",
+      "noStreams": "ප්‍රවාහ නැත",
       "noTorrentStreams": "මෙම ඇඩෝනය සඳහා ටොරන්ට් ප්‍රවාහයන් ආපසු නොපැමිණි.",
       "qualities": {
         "1080p": "1080p",
@@ -1112,7 +1113,15 @@
         "loggedInAt": "පුරනය වී ඇත්තේ: {{date}}",
         "removeDevice": "ඉවත් කරන්න",
         "title": "උපාංග",
-        "unknownDevice": "නොදන්නා උපාංගය, නම විකේතනය කිරීමේ දෝෂයකි"
+        "thisDevice": "මෙම උපාංගය",
+        "types": {
+          "desktop": "ඩෙස්ක්ටොප්",
+          "mobile": "ජංගම",
+          "tablet": "ටැබ්ලටය"
+        },
+        "unknownBrowser": "නොදන්නා බ්‍රව්සරයකි",
+        "unknownDevice": "නොදන්නා උපාංගය, නම විකේතනය කිරීමේ දෝෂයකි",
+        "unknownOperatingSystem": "නොදන්නා මෙහෙයුම් පද්ධතිය"
       },
       "profile": {
         "finish": "සංස්කරණය අවසන් කරන්න",

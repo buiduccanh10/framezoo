@@ -41,6 +41,7 @@
       "loadingStreams": "Hleður straumum...",
       "manageAddonsButton": "Stjórna viðbótarlista",
       "noAddonStreams": "Engum straumum var skilað af þessari viðbót.",
+      "noStreams": "Engir straumar",
       "noTorrentStreams": "Engir straumstraumar skiluðu sér fyrir þessa viðbót.",
       "qualities": {
         "1080p": "1080p",
@@ -1112,7 +1113,15 @@
         "loggedInAt": "Innskráður á: {{date}}",
         "removeDevice": "Eyða",
         "title": "Tæki",
-        "unknownDevice": "Óþekkt tæki, villa við að afkóða nafn"
+        "thisDevice": "Þetta tæki",
+        "types": {
+          "desktop": "Skjáborð",
+          "mobile": "Farsími",
+          "tablet": "Spjaldtölva"
+        },
+        "unknownBrowser": "Óþekktur vafri",
+        "unknownDevice": "Óþekkt tæki, villa við að afkóða nafn",
+        "unknownOperatingSystem": "Óþekkt stýrikerfi"
       },
       "profile": {
         "finish": "Klára breytingar",

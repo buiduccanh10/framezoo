@@ -41,6 +41,7 @@
       "loadingStreams": "Ladataan streameja...",
       "manageAddonsButton": "Hallinnoi lisäosien luetteloa",
       "noAddonStreams": "Tämä lisäosa ei palauttanut yhtään striimiä.",
+      "noStreams": "Ei striimejä",
       "noTorrentStreams": "Tälle lisäosalle ei palautettu torrent-streameja.",
       "qualities": {
         "1080p": "1080p",
@@ -1112,7 +1113,15 @@
         "loggedInAt": "Kirjautunut sisään osoitteessa: {{date}}",
         "removeDevice": "Poistaa",
         "title": "Laitteet",
-        "unknownDevice": "Tuntematon laite, virhe nimen salauksen purkamisessa"
+        "thisDevice": "Tämä laite",
+        "types": {
+          "desktop": "Työpöytä",
+          "mobile": "Mobiili",
+          "tablet": "Tabletti"
+        },
+        "unknownBrowser": "Tuntematon selain",
+        "unknownDevice": "Tuntematon laite, virhe nimen salauksen purkamisessa",
+        "unknownOperatingSystem": "Tuntematon käyttöjärjestelmä"
       },
       "profile": {
         "finish": "Viimeistele muokkaus",

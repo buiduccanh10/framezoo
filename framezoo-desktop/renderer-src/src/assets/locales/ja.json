@@ -41,6 +41,7 @@
       "loadingStreams": "ストリームを読み込み中...",
       "manageAddonsButton": "アドオンリストの管理",
       "noAddonStreams": "このアドオンによってストリームは返されませんでした。",
+      "noStreams": "ストリームなし",
       "noTorrentStreams": "このアドオンに対して返された torrent ストリームはありません。",
       "qualities": {
         "1080p": "1080p",
@@ -1112,7 +1113,15 @@
         "loggedInAt": "ログイン場所: {{date}}",
         "removeDevice": "取り除く",
         "title": "デバイス",
-        "unknownDevice": "不明なデバイス、名前の復号化エラー"
+        "thisDevice": "このデバイス",
+        "types": {
+          "desktop": "デスクトップ",
+          "mobile": "携帯",
+          "tablet": "錠剤"
+        },
+        "unknownBrowser": "不明なブラウザ",
+        "unknownDevice": "不明なデバイス、名前の復号化エラー",
+        "unknownOperatingSystem": "不明なオペレーティングシステム"
       },
       "profile": {
         "finish": "編集を終了する",

@@ -41,6 +41,7 @@
       "loadingStreams": "טוען זרמים...",
       "manageAddonsButton": "נהל רשימת תוספות",
       "noAddonStreams": "שום זרמים לא הוחזרו על ידי התוסף הזה.",
+      "noStreams": "אין זרמים",
       "noTorrentStreams": "לא הוחזרו זרמי טורנט עבור התוסף הזה.",
       "qualities": {
         "1080p": "1080p",
@@ -1112,7 +1113,15 @@
         "loggedInAt": "מחובר ב: {{date}}",
         "removeDevice": "הסר",
         "title": "מכשירים",
-        "unknownDevice": "מכשיר לא ידוע, שגיאה בפענוח השם"
+        "thisDevice": "המכשיר הזה",
+        "types": {
+          "desktop": "שולחן עבודה",
+          "mobile": "נייד",
+          "tablet": "לוּחַ"
+        },
+        "unknownBrowser": "דפדפן לא ידוע",
+        "unknownDevice": "מכשיר לא ידוע, שגיאה בפענוח השם",
+        "unknownOperatingSystem": "מערכת הפעלה לא ידועה"
       },
       "profile": {
         "finish": "סייםעריכה",

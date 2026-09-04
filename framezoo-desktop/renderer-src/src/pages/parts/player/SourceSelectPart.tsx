@@ -1,11 +1,5 @@
 import { useQueries } from "@tanstack/react-query";
-import React, {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-} from "react";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
@@ -261,16 +255,17 @@ export function SourceSelectPart(props: {
   const [selectedAddonId, setSelectedAddonId] = React.useState<string | null>(
     null,
   );
+  const [autoSelectionResolved, setAutoSelectionResolved] =
+    React.useState(false);
   const isInitialSelection = mode === "initial";
 
   const hasAttemptedAutoSelect = useRef(false);
-  const hasAutoSelectedSingleAddon = useRef(false);
   const keepAddonListOpen = useRef(false);
   const selectionOperation = useRef(0);
   useEffect(() => {
     hasAttemptedAutoSelect.current = false;
-    hasAutoSelectedSingleAddon.current = false;
     keepAddonListOpen.current = false;
+    setAutoSelectionResolved(false);
   }, [meta.tmdbId, meta.season?.tmdbId, meta.episode?.tmdbId]);
 
   const qualityOptions: OptionItem[] = useMemo(
@@ -356,11 +351,6 @@ export function SourceSelectPart(props: {
     [addonStreamQueries, eligibleAddons],
   );
 
-  const selectedAddon = useMemo(
-    () => addons.find((addon) => addon.manifest.id === selectedAddonId) ?? null,
-    [addons, selectedAddonId],
-  );
-
   const currentStream = useMemo(() => {
     const activeSourceId = pendingTorrentSourceId ?? currentSourceId;
     if (activeSourceId) {
@@ -384,6 +374,15 @@ export function SourceSelectPart(props: {
     savedTorrentSelection,
   ]);
   const currentAddonId = currentStream?.addonId ?? null;
+  const displayedSelectedAddonId =
+    selectedAddonId ??
+    (mode === "full" && !keepAddonListOpen.current ? currentAddonId : null);
+  const selectedAddon = useMemo(
+    () =>
+      addons.find((addon) => addon.manifest.id === displayedSelectedAddonId) ??
+      null,
+    [addons, displayedSelectedAddonId],
+  );
 
   useEffect(() => {
     setSelectedAddonId(null);
@@ -391,35 +390,9 @@ export function SourceSelectPart(props: {
     setSelectedQuality(qualityOptions[0]);
   }, [addonMedia, qualityOptions]);
 
-  useLayoutEffect(() => {
-    if (
-      hasAutoSelectedSingleAddon.current ||
-      selectedAddonId ||
-      eligibleAddons.length !== 1
-    ) {
-      return;
-    }
-
-    hasAutoSelectedSingleAddon.current = true;
-    setSelectedAddonId(eligibleAddons[0].manifest.id);
-  }, [eligibleAddons, selectedAddonId]);
-
   useEffect(() => {
-    if (
-      mode !== "full" ||
-      selectedAddonId ||
-      !currentAddonId ||
-      keepAddonListOpen.current ||
-      pendingTorrentSourceId
-    ) {
-      return;
-    }
-    setSelectedAddonId(currentAddonId);
-  }, [currentAddonId, mode, pendingTorrentSourceId, selectedAddonId]);
-
-  useEffect(() => {
-    onStateChange?.(selectedAddonId ? "streams" : "addons");
-  }, [selectedAddonId, onStateChange]);
+    onStateChange?.(displayedSelectedAddonId ? "streams" : "addons");
+  }, [displayedSelectedAddonId, onStateChange]);
 
   const selectAddonStream = useCallback(
     async (stream: AddonStream) => {
@@ -586,6 +559,7 @@ export function SourceSelectPart(props: {
 
       if (matchingStream && !startingAddonId) {
         hasAttemptedAutoSelect.current = true;
+        setAutoSelectionResolved(true);
         void selectAddonStream(matchingStream).catch(() => {
           // Auto-play failed (e.g. torrent engine unavailable).
           // Clear the saved selection so we don't retry on every mount.
@@ -605,22 +579,8 @@ export function SourceSelectPart(props: {
 
     if (!streamPreference || streamPreference.seriesId !== meta.tmdbId) {
       hasAttemptedAutoSelect.current = true;
+      setAutoSelectionResolved(true);
       return;
-    }
-
-    if (!selectedAddonId && streamPreference.addonId) {
-      const isAddonEnabled = enabledAddons.some(
-        (a) => a.manifest.id === streamPreference.addonId,
-      );
-      if (isAddonEnabled) {
-        setSelectedAddonId(streamPreference.addonId);
-        const matchingQuality = qualityOptions.find(
-          (q) => q.id === streamPreference.quality,
-        );
-        if (matchingQuality) {
-          setSelectedQuality(matchingQuality);
-        }
-      }
     }
 
     const matchingStream = findAddonStreamPreference(
@@ -630,6 +590,7 @@ export function SourceSelectPart(props: {
 
     if (matchingStream && !startingAddonId) {
       hasAttemptedAutoSelect.current = true;
+      setAutoSelectionResolved(true);
       void selectAddonStream(matchingStream);
       return;
     }
@@ -641,6 +602,22 @@ export function SourceSelectPart(props: {
       preferredAddonIndex >= 0 ? addonStreamQueries[preferredAddonIndex] : null;
     if (preferredQuery && !preferredQuery.isLoading) {
       hasAttemptedAutoSelect.current = true;
+      setAutoSelectionResolved(true);
+      // Fallback: pre-select the preferred addon to show in the UI.
+      if (!selectedAddonId && streamPreference.addonId) {
+        const isAddonEnabled = enabledAddons.some(
+          (a) => a.manifest.id === streamPreference.addonId,
+        );
+        if (isAddonEnabled) {
+          setSelectedAddonId(streamPreference.addonId);
+          const matchingQuality = qualityOptions.find(
+            (q) => q.id === streamPreference.quality,
+          );
+          if (matchingQuality) {
+            setSelectedQuality(matchingQuality);
+          }
+        }
+      }
     }
   }, [
     addonStreams,
@@ -680,22 +657,8 @@ export function SourceSelectPart(props: {
     () => new Set(addonStreams.map((stream) => stream.addonId)),
     [addonStreams],
   );
-  const singleAddonWithStreamsId =
-    addonIdsWithStreams.size === 1 ? [...addonIdsWithStreams][0] : null;
+
   const hasMultipleAddonsWithStreams = addonIdsWithStreams.size > 1;
-
-  useLayoutEffect(() => {
-    if (
-      hasAutoSelectedSingleAddon.current ||
-      selectedAddonId ||
-      !singleAddonWithStreamsId
-    ) {
-      return;
-    }
-
-    hasAutoSelectedSingleAddon.current = true;
-    setSelectedAddonId(singleAddonWithStreamsId);
-  }, [selectedAddonId, singleAddonWithStreamsId]);
 
   const selectedAddonError = useMemo(
     () =>
@@ -735,7 +698,6 @@ export function SourceSelectPart(props: {
         <SelectedAddonHeader
           addon={selectedAddon}
           onBack={() => {
-            hasAutoSelectedSingleAddon.current = true;
             keepAddonListOpen.current = true;
             setSelectedAddonId(null);
             setAddonError(null);
@@ -793,6 +755,8 @@ export function SourceSelectPart(props: {
                 const loadError = addonLoadErrors.find(
                   (error) => error.addonId === addon.manifest.id,
                 );
+                const hasNoStreams =
+                  !loading && !loadError && streamCount === 0;
 
                 const isSelected = currentAddonId === addon.manifest.id;
 
@@ -800,6 +764,7 @@ export function SourceSelectPart(props: {
                   <SelectableLink
                     key={addon.manifest.id}
                     active={isSelected}
+                    disabled={hasNoStreams}
                     rightSide={
                       <div className="flex items-center gap-2">
                         {isSelected ? (
@@ -808,16 +773,22 @@ export function SourceSelectPart(props: {
                             className="text-xl text-video-context-type-accent"
                           />
                         ) : null}
-                        <Icon
-                          className="ml-2 text-xl"
-                          icon={Icons.CHEVRON_RIGHT}
-                        />
+                        {!hasNoStreams ? (
+                          <Icon
+                            className="ml-2 text-xl"
+                            icon={Icons.CHEVRON_RIGHT}
+                          />
+                        ) : null}
                       </div>
                     }
-                    onClick={() => {
-                      keepAddonListOpen.current = false;
-                      setSelectedAddonId(addon.manifest.id);
-                    }}
+                    onClick={
+                      hasNoStreams
+                        ? undefined
+                        : () => {
+                            keepAddonListOpen.current = false;
+                            setSelectedAddonId(addon.manifest.id);
+                          }
+                    }
                   >
                     <span className="inline-flex h-full min-w-0 items-center gap-3 align-middle">
                       <AddonIcon
@@ -847,10 +818,7 @@ export function SourceSelectPart(props: {
                                     "{{count}} streams",
                                     { count: streamCount },
                                   )
-                                : t(
-                                    "addons.player.viewStreams",
-                                    "View streams",
-                                  )}
+                                : t("addons.player.noStreams", "No streams")}
                         </span>
                       </span>
                     </span>
@@ -993,7 +961,7 @@ export function SourceSelectPart(props: {
   // While a torrent stream is being started we show a loading overlay instead
   // of returning null (which left the user staring at a black screen with no
   // feedback). The backdrop and spinner give a clear "please wait" signal.
-  if (startingAddonId) {
+  if (startingAddonId || (!autoSelectionResolved && mode === "initial")) {
     return (
       <div className="pointer-events-none relative h-full w-full overflow-hidden bg-black">
         {showBackdrop ? (

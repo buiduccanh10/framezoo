@@ -13,6 +13,83 @@ import { Heading2 } from "@/components/utils/Text";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { useAuthStore } from "@/stores/auth";
 
+type DeviceType = "desktop" | "mobile" | "tablet";
+
+type DeviceMetadata = {
+  browser: string;
+  operatingSystem: string;
+  type: DeviceType;
+};
+
+function getVersion(userAgent: string, pattern: RegExp) {
+  return userAgent.match(pattern)?.[1]?.replace(/_/g, ".") ?? null;
+}
+
+function getDeviceMetadata(userAgent: string): DeviceMetadata {
+  const ua = userAgent ?? "";
+  const isTablet = /iPad|Tablet/i.test(ua);
+  const isMobile =
+    !isTablet && /Android|iPhone|iPod|Mobile|Windows Phone/i.test(ua);
+  const type: DeviceType = isTablet
+    ? "tablet"
+    : isMobile
+      ? "mobile"
+      : "desktop";
+
+  let operatingSystem = "";
+  if (/Windows NT 10\.0/i.test(ua)) operatingSystem = "Windows 10/11";
+  else if (/Windows NT 6\.3/i.test(ua)) operatingSystem = "Windows 8.1";
+  else if (/Windows NT 6\.2/i.test(ua)) operatingSystem = "Windows 8";
+  else if (/Windows NT 6\.1/i.test(ua)) operatingSystem = "Windows 7";
+  else if (/Windows NT/i.test(ua)) operatingSystem = "Windows";
+  else if (/CrOS/i.test(ua)) operatingSystem = "ChromeOS";
+  else if (/Android/i.test(ua)) {
+    const version = getVersion(ua, /Android[ /]([\d._]+)/i);
+    operatingSystem = version ? `Android ${version}` : "Android";
+  } else if (/iPad|iPhone|iPod/i.test(ua)) {
+    const version = getVersion(ua, /OS ([\d_]+)/i);
+    operatingSystem = version ? `iOS ${version}` : "iOS";
+  } else if (/Macintosh|Mac OS X|macOS/i.test(ua)) {
+    operatingSystem = "macOS";
+  } else if (/Linux/i.test(ua)) {
+    operatingSystem = "Linux";
+  }
+
+  let browser = "";
+  let browserVersion: string | null = null;
+  if (/Electron\//i.test(ua)) {
+    browser = "Framezoo Desktop";
+    browserVersion = getVersion(ua, /Electron\/([\d.]+)/i);
+  } else if (/Edg\//i.test(ua)) {
+    browser = "Edge";
+    browserVersion = getVersion(ua, /Edg\/([\d.]+)/i);
+  } else if (/OPR\//i.test(ua) || /Opera/i.test(ua)) {
+    browser = "Opera";
+    browserVersion = getVersion(ua, /(?:OPR|Opera)[ /]([\d.]+)/i);
+  } else if (/CriOS\//i.test(ua)) {
+    browser = "Chrome";
+    browserVersion = getVersion(ua, /CriOS\/([\d.]+)/i);
+  } else if (/Chrome\//i.test(ua)) {
+    browser = "Chrome";
+    browserVersion = getVersion(ua, /Chrome\/([\d.]+)/i);
+  } else if (/FxiOS\//i.test(ua)) {
+    browser = "Firefox";
+    browserVersion = getVersion(ua, /FxiOS\/([\d.]+)/i);
+  } else if (/Firefox\//i.test(ua)) {
+    browser = "Firefox";
+    browserVersion = getVersion(ua, /Firefox\/([\d.]+)/i);
+  } else if (/Safari\//i.test(ua)) {
+    browser = "Safari";
+    browserVersion = getVersion(ua, /Version\/([\d.]+)/i);
+  }
+
+  return {
+    browser: browserVersion ? `${browser} ${browserVersion}` : browser,
+    operatingSystem,
+    type,
+  };
+}
+
 export const signOutAllDevices = () => {
   const buttons = document.querySelectorAll(".logout-button");
 
@@ -27,6 +104,9 @@ export function Device(props: {
   isCurrent?: boolean;
   createdAt?: string;
   accessedAt?: string;
+  browser: string;
+  operatingSystem: string;
+  type: DeviceType;
   onRemove?: () => void;
 }) {
   const { t } = useTranslation();
@@ -41,24 +121,42 @@ export function Device(props: {
 
   return (
     <SettingsCard
-      className="flex justify-between items-center"
-      paddingClass="px-6 py-4"
+      className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+      paddingClass="px-6 py-5"
     >
-      <div className="font-medium">
-        <SecondaryLabel>
-          {t("settings.account.devices.deviceNameLabel")}
-        </SecondaryLabel>
-        <p className="text-white">{props.name}</p>
+      <div className="min-w-0 font-medium">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+          <SecondaryLabel>
+            {t("settings.account.devices.deviceNameLabel")}
+          </SecondaryLabel>
+          {props.isCurrent ? (
+            <span className="inline-flex items-center rounded-full bg-type-link/20 px-2.5 py-1 text-xs font-semibold text-type-link">
+              {t("settings.account.devices.thisDevice")}
+            </span>
+          ) : null}
+        </div>
+        <p className="mt-1 truncate text-white">{props.name}</p>
+        <p className="mt-2 text-sm text-gray-300">
+          {props.browser} · {props.operatingSystem} ·{" "}
+          {t(`settings.account.devices.types.${props.type}`)}
+        </p>
         {(props.createdAt || props.accessedAt) && (
-          <p className="text-xs text-gray-400 mt-1">
-            {props.accessedAt
-              ? t("settings.account.devices.lastActive", {
+          <div className="mt-2 space-y-1 text-xs text-gray-400">
+            {props.accessedAt ? (
+              <p>
+                {t("settings.account.devices.lastActive", {
                   date: new Date(props.accessedAt).toLocaleString(),
-                })
-              : t("settings.account.devices.loggedInAt", {
-                  date: new Date(props.createdAt as string).toLocaleString(),
                 })}
-          </p>
+              </p>
+            ) : null}
+            {props.createdAt ? (
+              <p>
+                {t("settings.account.devices.loggedInAt", {
+                  date: new Date(props.createdAt).toLocaleString(),
+                })}
+              </p>
+            ) : null}
+          </div>
         )}
       </div>
       {!props.isCurrent ? (
@@ -86,8 +184,8 @@ export function DeviceListPart(props: {
   const sessions = props.sessions;
   const currentSessionId = useAuthStore((s) => s.account?.sessionId);
 
-  const getDeviceLabel = useCallback(
-    (session: SessionResponse, deviceSeed: string): string => {
+  const getDeviceInfo = useCallback(
+    (session: SessionResponse, deviceSeed: string) => {
       let decryptedName: string | null = null;
       try {
         decryptedName = decryptData(session.device, base64ToBuffer(deviceSeed));
@@ -98,38 +196,20 @@ export function DeviceListPart(props: {
         );
       }
 
-      const ua = session.userAgent ?? "";
-      const isMobile = /Mobile|Android|iPhone|iPad/i.test(ua);
+      const metadata = getDeviceMetadata(session.userAgent);
+      const browser =
+        metadata.browser || t("settings.account.devices.unknownBrowser");
+      const operatingSystem =
+        metadata.operatingSystem ||
+        t("settings.account.devices.unknownOperatingSystem");
+      const name =
+        decryptedName && decryptedName !== "Browser"
+          ? decryptedName
+          : session.userAgent
+            ? `${browser} · ${operatingSystem}`
+            : t("settings.account.devices.unknownDevice");
 
-      let os = "Unknown OS";
-      if (/Windows NT 10\.0/.test(ua)) os = "Windows 10";
-      else if (/Windows NT 11\.0/.test(ua)) os = "Windows 11";
-      else if (/Mac OS X 10[._]\d+/.test(ua) || /Macintosh/.test(ua))
-        os = "macOS";
-      else if (/Android/.test(ua)) os = "Android";
-      else if (/iPhone|iPad|iPod/.test(ua)) os = "iOS";
-      else if (/Linux/.test(ua)) os = "Linux";
-
-      let browser = "Browser";
-      if (/Edg\//.test(ua)) browser = "Edge";
-      else if (/OPR\//.test(ua) || /Opera/.test(ua)) browser = "Opera";
-      else if (/Chrome\//.test(ua) && !/Edg\//.test(ua)) browser = "Chrome";
-      else if (/Safari\//.test(ua) && !/Chrome\//.test(ua)) browser = "Safari";
-      else if (/Firefox\//.test(ua)) browser = "Firefox";
-
-      const baseLabel = isMobile
-        ? `${browser} · ${os} (mobile)`
-        : `${browser} · ${os}`;
-
-      if (decryptedName && decryptedName !== "Browser") {
-        return `${decryptedName} · ${baseLabel}`;
-      }
-
-      if (!ua && !decryptedName) {
-        return t("settings.account.devices.unknownDevice");
-      }
-
-      return baseLabel;
+      return { name, ...metadata, browser, operatingSystem };
     },
     [t],
   );
@@ -142,14 +222,17 @@ export function DeviceListPart(props: {
         current: boolean;
         ids: string[];
         name: string;
+        browser: string;
+        operatingSystem: string;
+        type: DeviceType;
         createdAt?: string;
         accessedAt?: string;
       }
     >();
 
     sessions.forEach((session) => {
-      const label = getDeviceLabel(session, seed);
-      const key = `${label}__${session.userAgent}`;
+      const deviceInfo = getDeviceInfo(session, seed);
+      const key = `${deviceInfo.name}__${session.userAgent}`;
       const existing = groups.get(key);
 
       if (existing) {
@@ -167,7 +250,10 @@ export function DeviceListPart(props: {
         groups.set(key, {
           current: session.id === currentSessionId,
           ids: [session.id],
-          name: label,
+          name: deviceInfo.name,
+          browser: deviceInfo.browser,
+          operatingSystem: deviceInfo.operatingSystem,
+          type: deviceInfo.type,
           createdAt: session.createdAt,
           accessedAt: session.accessedAt,
         });
@@ -180,7 +266,7 @@ export function DeviceListPart(props: {
       return a.name.localeCompare(b.name);
     });
     return list;
-  }, [seed, sessions, currentSessionId, getDeviceLabel]);
+  }, [seed, sessions, currentSessionId, getDeviceInfo]);
   if (!seed) return null;
 
   return (
@@ -200,6 +286,9 @@ export function DeviceListPart(props: {
               ids={session.ids}
               createdAt={session.createdAt}
               accessedAt={session.accessedAt}
+              browser={session.browser}
+              operatingSystem={session.operatingSystem}
+              type={session.type}
               key={session.ids.join(",")}
               isCurrent={session.current}
               onRemove={props.onChange}

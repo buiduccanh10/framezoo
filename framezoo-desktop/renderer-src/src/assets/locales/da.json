@@ -41,6 +41,7 @@
       "loadingStreams": "Indlæser streams...",
       "manageAddonsButton": "Administrer tilføjelsesliste",
       "noAddonStreams": "Ingen streams blev returneret af denne tilføjelse.",
+      "noStreams": "Ingen strømme",
       "noTorrentStreams": "Ingen torrent-streams returnerede for denne tilføjelse.",
       "qualities": {
         "1080p": "1080p",
@@ -1112,7 +1113,15 @@
         "loggedInAt": "Logget ind på: {{date}}",
         "removeDevice": "Fjern",
         "title": "Enheder",
-        "unknownDevice": "Ukendt enhed, fejl ved dekryptering af navn"
+        "thisDevice": "Denne enhed",
+        "types": {
+          "desktop": "Skrivebord",
+          "mobile": "Mobil",
+          "tablet": "Tablet"
+        },
+        "unknownBrowser": "Ukendt browser",
+        "unknownDevice": "Ukendt enhed, fejl ved dekryptering af navn",
+        "unknownOperatingSystem": "Ukendt operativsystem"
       },
       "profile": {
         "finish": "Afslut redigering",

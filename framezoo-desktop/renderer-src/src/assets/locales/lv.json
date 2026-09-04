@@ -41,6 +41,7 @@
       "loadingStreams": "Notiek straumju ielāde...",
       "manageAddonsButton": "Pārvaldīt papildinājumu sarakstu",
       "noAddonStreams": "Šis papildinājums neatgrieza nevienu straumi.",
+      "noStreams": "Nav straumju",
       "noTorrentStreams": "Šim papildinājumam netika atgriezta neviena torrent straume.",
       "qualities": {
         "1080p": "1080p",
@@ -1112,7 +1113,15 @@
         "loggedInAt": "Pieteicies: {{date}}",
         "removeDevice": "Nonēmt",
         "title": "Ierīces",
-        "unknownDevice": "Nezināma ierīce, kļūda, atšifrējot nosaukumu"
+        "thisDevice": "Šī ierīce",
+        "types": {
+          "desktop": "Darbvirsma",
+          "mobile": "Mobilais",
+          "tablet": "Planšetdators"
+        },
+        "unknownBrowser": "Nezināma pārlūkprogramma",
+        "unknownDevice": "Nezināma ierīce, kļūda, atšifrējot nosaukumu",
+        "unknownOperatingSystem": "Nezināma operētājsistēma"
       },
       "profile": {
         "finish": "Pabeidziet rediģēšanu",

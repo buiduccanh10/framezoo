@@ -41,6 +41,7 @@
       "loadingStreams": "Akışlar yükleniyor...",
       "manageAddonsButton": "Eklenti Listesini Yönet",
       "noAddonStreams": "Bu eklenti tarafından hiçbir akış döndürülmedi.",
+      "noStreams": "Hiçbir yayın yok",
       "noTorrentStreams": "Bu eklenti için torrent akışı döndürülmedi.",
       "qualities": {
         "1080p": "1080p",
@@ -1112,7 +1113,15 @@
         "loggedInAt": "Şu saatte giriş yapıldı: {{date}}",
         "removeDevice": "Sil",
         "title": "Cihazlar",
-        "unknownDevice": "Bilinmeyen cihaz, adın şifresi çözülürken hata oluştu"
+        "thisDevice": "Bu cihaz",
+        "types": {
+          "desktop": "Masaüstü",
+          "mobile": "Mobil",
+          "tablet": "Tablet"
+        },
+        "unknownBrowser": "Bilinmeyen tarayıcı",
+        "unknownDevice": "Bilinmeyen cihaz, adın şifresi çözülürken hata oluştu",
+        "unknownOperatingSystem": "Bilinmeyen işletim sistemi"
       },
       "profile": {
         "finish": "Düzenlemeyi bitir",

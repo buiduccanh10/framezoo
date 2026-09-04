@@ -41,6 +41,7 @@
       "loadingStreams": "Chargement des flux...",
       "manageAddonsButton": "Gérer la liste des modules complémentaires",
       "noAddonStreams": "Aucun flux n'a été renvoyé par cet addon.",
+      "noStreams": "Aucun flux",
       "noTorrentStreams": "Aucun flux torrent renvoyé pour cet addon.",
       "qualities": {
         "1080p": "1080p",
@@ -1112,7 +1113,15 @@
         "loggedInAt": "Connecté à : {{date}}",
         "removeDevice": "Supprimer",
         "title": "Appareils",
-        "unknownDevice": "Appareil inconnu, erreur de déchiffrement du nom"
+        "thisDevice": "Cet appareil",
+        "types": {
+          "desktop": "Ordinateur de bureau",
+          "mobile": "Mobile",
+          "tablet": "Comprimé"
+        },
+        "unknownBrowser": "Navigateur inconnu",
+        "unknownDevice": "Appareil inconnu, erreur de déchiffrement du nom",
+        "unknownOperatingSystem": "Système d&#39;exploitation inconnu"
       },
       "profile": {
         "finish": "Terminer l'édition",

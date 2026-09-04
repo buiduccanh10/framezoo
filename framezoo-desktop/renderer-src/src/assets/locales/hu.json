@@ -41,6 +41,7 @@
       "loadingStreams": "Adatfolyamok betöltése...",
       "manageAddonsButton": "Addon List kezelése",
       "noAddonStreams": "Ez a kiegészítő nem adott vissza adatfolyamot.",
+      "noStreams": "Nincsenek streamek",
       "noTorrentStreams": "Ehhez a kiegészítőhöz nem érkezett vissza torrentfolyam.",
       "qualities": {
         "1080p": "1080p",
@@ -1112,7 +1113,15 @@
         "loggedInAt": "Bejelentkezés: {{date}}",
         "removeDevice": "Eltávolítás",
         "title": "Eszközök",
-        "unknownDevice": "Ismeretlen eszköz, hiba a név visszafejtésekor"
+        "thisDevice": "Ez az eszköz",
+        "types": {
+          "desktop": "Asztali",
+          "mobile": "Mozgó",
+          "tablet": "Tabletta"
+        },
+        "unknownBrowser": "Ismeretlen böngésző",
+        "unknownDevice": "Ismeretlen eszköz, hiba a név visszafejtésekor",
+        "unknownOperatingSystem": "Ismeretlen operációs rendszer"
       },
       "profile": {
         "finish": "Szerkesztés befejezése",

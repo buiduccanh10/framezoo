@@ -41,6 +41,7 @@
       "loadingStreams": "កំពុង​ផ្ទុក​ការ​ផ្សាយ...",
       "manageAddonsButton": "គ្រប់គ្រងបញ្ជី Addon",
       "noAddonStreams": "គ្មានការផ្សាយត្រូវបានបញ្ជូនមកវិញដោយ addon នេះទេ។",
+      "noStreams": "គ្មានស្ទ្រីមទេ",
       "noTorrentStreams": "គ្មានការផ្សាយ torrent ត្រឡប់មកវិញសម្រាប់ addon នេះទេ។",
       "qualities": {
         "1080p": "1080p",
@@ -1112,7 +1113,15 @@
         "loggedInAt": "បានចូលនៅ៖ {{date}}",
         "removeDevice": "ដកចេញ",
         "title": "ឧបករណ៍",
-        "unknownDevice": "ឧបករណ៍មិនស្គាល់ កំហុសក្នុងការឌិគ្រីបឈ្មោះ"
+        "thisDevice": "ឧបករណ៍នេះ",
+        "types": {
+          "desktop": "កុំព្យូទ័រលើតុ",
+          "mobile": "ទូរស័ព្ទចល័ត",
+          "tablet": "ថេប្លេត"
+        },
+        "unknownBrowser": "កម្មវិធីរុករកដែលមិនស្គាល់",
+        "unknownDevice": "ឧបករណ៍មិនស្គាល់ កំហុសក្នុងការឌិគ្រីបឈ្មោះ",
+        "unknownOperatingSystem": "ប្រព័ន្ធប្រតិបត្តិការដែលមិនស្គាល់"
       },
       "profile": {
         "finish": "បញ្ចប់ការកែសម្រួល",

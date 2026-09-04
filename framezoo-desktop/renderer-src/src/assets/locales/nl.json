@@ -41,6 +41,7 @@
       "loadingStreams": "Streams laden...",
       "manageAddonsButton": "Beheer Add-onlijst",
       "noAddonStreams": "Er zijn geen streams geretourneerd door deze add-on.",
+      "noStreams": "Geen streams",
       "noTorrentStreams": "Er zijn geen torrent-streams geretourneerd voor deze add-on.",
       "qualities": {
         "1080p": "1080p",
@@ -1112,7 +1113,15 @@
         "loggedInAt": "Ingelogd op: {{date}}",
         "removeDevice": "Verwijder",
         "title": "Apparaten",
-        "unknownDevice": "Onbekend apparaat, fout bij het decoderen van naam"
+        "thisDevice": "Dit apparaat",
+        "types": {
+          "desktop": "bureaublad",
+          "mobile": "Mobiel",
+          "tablet": "Tablet"
+        },
+        "unknownBrowser": "Onbekende browser",
+        "unknownDevice": "Onbekend apparaat, fout bij het decoderen van naam",
+        "unknownOperatingSystem": "Onbekend besturingssysteem"
       },
       "profile": {
         "finish": "Bewerken voltooien",

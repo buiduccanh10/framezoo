@@ -41,6 +41,7 @@
       "loadingStreams": "در حال بارگیری جریان‌ها...",
       "manageAddonsButton": "لیست افزونه ها را مدیریت کنید",
       "noAddonStreams": "هیچ جریانی توسط این افزونه برگردانده نشد.",
+      "noStreams": "بدون جریان",
       "noTorrentStreams": "هیچ جریان تورنتی برای این افزونه برنگشت.",
       "qualities": {
         "1080p": "1080p",
@@ -1112,7 +1113,15 @@
         "loggedInAt": "وارد شده در: {{date}}",
         "removeDevice": "حذف",
         "title": "دستگاه ها",
-        "unknownDevice": "دستگاه ناشناس، خطا در رمزگشایی نام"
+        "thisDevice": "این دستگاه",
+        "types": {
+          "desktop": "دسکتاپ",
+          "mobile": "موبایل",
+          "tablet": "قرص"
+        },
+        "unknownBrowser": "مرورگر ناشناخته",
+        "unknownDevice": "دستگاه ناشناس، خطا در رمزگشایی نام",
+        "unknownOperatingSystem": "سیستم عامل ناشناخته"
       },
       "profile": {
         "finish": "تمام کردن ویرایش",
