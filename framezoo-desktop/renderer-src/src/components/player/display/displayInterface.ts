@@ -70,6 +70,7 @@ export type DisplayInterfaceEvents = {
   playbackrate: number;
   error: DisplayError;
   segmentqualitydebug: SegmentQualityDebugInfo | null;
+  videodimensions: { width: number; height: number } | null;
 };
 
 export interface qualityChangeOptions {

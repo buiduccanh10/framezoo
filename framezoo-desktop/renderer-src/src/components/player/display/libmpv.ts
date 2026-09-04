@@ -114,10 +114,10 @@ type LibMpvElectronApi = {
   minimizeWindow?: () => Promise<void>;
   maximizeWindow?: () => Promise<void>;
   closeWindow?: () => Promise<void>;
-  isMaximized?: () => Promise<boolean>;
-  onMaximizeState?: (listener: (isMaximized: boolean) => void) => () => void;
+  resizeToVideo?: (videoWidth: number, videoHeight: number) => Promise<boolean>;
   isWindows?: boolean;
   platform?: string;
+  onMaximizeState?: (listener: (isMaximized: boolean) => void) => () => void;
   onFullscreenState?: (listener: (isFullscreen: boolean) => void) => () => void;
   getStartupNativeWarmupState?: () => Promise<{
     status?: string;
@@ -953,6 +953,29 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
           emit("buffered", bufferedTime);
         }
         break;
+      case "video-params":
+      case "video-out-params": {
+        // Parse display width/height from the video-params node (JSON object)
+        try {
+          const params =
+            typeof event.data === "string"
+              ? JSON.parse(event.data)
+              : event.data;
+          const dw = params?.dw ?? params?.w;
+          const dh = params?.dh ?? params?.h;
+          if (
+            typeof dw === "number" &&
+            typeof dh === "number" &&
+            dw > 0 &&
+            dh > 0
+          ) {
+            emit("videodimensions", { width: dw, height: dh });
+          }
+        } catch {
+          // ignore malformed data
+        }
+        break;
+      }
       case "track-list":
         handleTrackList(event.data);
         break;

@@ -55,7 +55,7 @@ function KeyBadge({
   return (
     <kbd
       className={`
-        relative inline-flex items-center justify-center min-w-[2rem] h-8 px-2 text-sm font-mono bg-gray-800 text-gray-200 rounded border shadow-sm
+        relative inline-flex items-center justify-center min-w-[2rem] h-8 px-2.5 text-sm font-mono bg-gray-800 text-gray-200 rounded border shadow-sm whitespace-nowrap
         ${onClick ? "cursor-pointer hover:bg-gray-700" : ""}
         ${editing ? "ring-2 ring-blue-500" : ""}
         ${hasConflict ? "border-red-500 bg-red-900/20" : "border-gray-600"}
@@ -515,6 +515,15 @@ export function KeyboardCommandsEditModal({
                 </div>
               </div>
             ))}
+            {/* Non-editable Shift key info */}
+            <div className="flex items-center gap-3 py-2 border-t border-gray-700 mt-1">
+              <kbd className="relative inline-flex items-center justify-center min-w-[2rem] h-8 px-2.5 text-sm font-mono bg-gray-800 text-gray-200 rounded border border-gray-600 shadow-sm whitespace-nowrap">
+                Shift
+              </kbd>
+              <span className="text-type-secondary text-sm">
+                {t("global.keyboardShortcuts.shortcuts.holdShift")}
+              </span>
+            </div>
             <div className="flex items-center justify-between py-3 border-t border-gray-700">
               <div className="flex-1">
                 <p className="text-white font-medium">

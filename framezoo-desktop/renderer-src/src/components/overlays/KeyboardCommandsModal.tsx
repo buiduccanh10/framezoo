@@ -35,7 +35,7 @@ function KeyBadge({
   const modifier = config?.modifier;
 
   return (
-    <kbd className="relative inline-flex items-center justify-center min-w-[2rem] h-8 px-2 text-sm font-mono bg-gray-800 text-gray-200 rounded border border-gray-600 shadow-sm">
+    <kbd className="relative inline-flex items-center justify-center min-w-[2rem] h-8 px-2.5 text-sm font-mono bg-gray-800 text-gray-200 rounded border border-gray-600 shadow-sm whitespace-nowrap">
       {children}
       {modifier && (
         <span className="absolute -top-1 -right-1 text-xs bg-blue-600 text-white rounded-full w-4 h-4 flex items-center justify-center">

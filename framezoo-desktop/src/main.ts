@@ -1864,6 +1864,50 @@ function registerIpcHandlers() {
     return true;
   });
 
+  ipcMain.handle(
+    "desktop:resize-to-video",
+    async (
+      _event,
+      videoWidth: number,
+      videoHeight: number,
+    ) => {
+      if (!mainWindow || mainWindow.isDestroyed()) return false;
+      if (
+        !Number.isFinite(videoWidth) ||
+        !Number.isFinite(videoHeight) ||
+        videoWidth <= 0 ||
+        videoHeight <= 0
+      ) return false;
+      // Don't resize when fullscreen or maximized - let the user control that
+      if (mainWindow.isFullScreen() || mainWindow.isMaximized()) return false;
+
+      const currentDisplay = screen.getDisplayMatching(mainWindow.getBounds());
+      const workArea = currentDisplay?.workArea ?? { x: 0, y: 0, width: 1440, height: 900 };
+      const titleBarHeight = mainWindow.getBounds().height - mainWindow.getContentSize()[1];
+      const maxContentWidth = Math.min(videoWidth, workArea.width - 40);
+      const maxContentHeight = Math.min(videoHeight, workArea.height - titleBarHeight - 40);
+
+      const aspectRatio = videoWidth / videoHeight;
+      let contentWidth = maxContentWidth;
+      let contentHeight = Math.round(contentWidth / aspectRatio);
+      if (contentHeight > maxContentHeight) {
+        contentHeight = maxContentHeight;
+        contentWidth = Math.round(contentHeight * aspectRatio);
+      }
+
+      const windowWidth = contentWidth;
+      const windowHeight = contentHeight + titleBarHeight;
+
+      // Center on current display
+      const x = Math.round(workArea.x + (workArea.width - windowWidth) / 2);
+      const y = Math.round(workArea.y + (workArea.height - windowHeight) / 2);
+
+      mainWindow.setContentSize(contentWidth, contentHeight, true);
+      mainWindow.setPosition(x, y, true);
+      return true;
+    },
+  );
+
   ipcMain.handle("desktop:is-maximized", async () => {
     if (!mainWindow || mainWindow.isDestroyed()) return false;
     return mainWindow.isMaximized();
@@ -1962,6 +2006,10 @@ function registerIpcHandlers() {
   );
 
   ipcMain.handle("desktop:torrent-clear-storage", async () => {
+    // Restart the torrent engine first so it drops all in-memory libtorrent
+    // handles. Otherwise, it will retain piece states for deleted files.
+    await torrentManager.restartEngine();
+
     const torrentDir =
       process.env.FRAMEZOO_TORRENT_DATA_DIR ||
       path.join(app.getPath("userData"), "torrents");
@@ -1974,6 +2022,7 @@ function registerIpcHandlers() {
         }
       }
       return true;
+
     } catch (err) {
       console.error("Failed to clear torrent storage:", err);
       return false;

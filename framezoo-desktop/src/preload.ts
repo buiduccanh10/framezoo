@@ -184,6 +184,9 @@ contextBridge.exposeInMainWorld("electronAPI", {
   closeWindow(): Promise<void> {
     return ipcRenderer.invoke("desktop:close-window");
   },
+  resizeToVideo(videoWidth: number, videoHeight: number): Promise<boolean> {
+    return ipcRenderer.invoke("desktop:resize-to-video", videoWidth, videoHeight);
+  },
   isMaximized(): Promise<boolean> {
     return ipcRenderer.invoke("desktop:is-maximized");
   },

@@ -72,6 +72,12 @@ export class TorrentManager {
     }
   }
 
+  async restartEngine() {
+    await this.engine.dispose();
+    this.statuses.clear();
+    // We intentionally don't clear listeners so IPC bindings in main.ts survive.
+  }
+
   async dispose() {
     await this.engine.dispose();
     this.statuses.clear();

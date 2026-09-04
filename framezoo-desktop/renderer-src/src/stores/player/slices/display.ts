@@ -150,6 +150,15 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
         s.mediaPlaying.playbackRate = rate;
       });
     });
+    newDisplay.on("videodimensions", (dimensions) => {
+      set((s) => {
+        if (dimensions) {
+          s.interface.videoDimensions = dimensions;
+        } else {
+          s.interface.videoDimensions = undefined;
+        }
+      });
+    });
     newDisplay.on("error", (err) => {
       if (get().display !== newDisplay) return;
 
