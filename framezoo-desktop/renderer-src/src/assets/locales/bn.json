@@ -41,6 +41,7 @@
       "loadingStreams": "স্ট্রীম লোড হচ্ছে...",
       "manageAddonsButton": "অ্যাডন তালিকা পরিচালনা করুন",
       "noAddonStreams": "এই অ্যাডঅন দ্বারা কোন স্ট্রীম ফেরত দেওয়া হয়নি।",
+      "noStreams": "কোন স্ট্রিম নেই",
       "noTorrentStreams": "এই অ্যাডঅনের জন্য কোন টরেন্ট স্ট্রীম ফেরত আসেনি।",
       "qualities": {
         "1080p": "1080p",
@@ -1112,7 +1113,15 @@
         "loggedInAt": "লগ ইন করেছেন: {{date}}",
         "removeDevice": "সরান",
         "title": "ডিভাইস",
-        "unknownDevice": "অজানা ডিভাইস, নাম ডিক্রিপ্ট করার সময় ত্রুটি"
+        "thisDevice": "এই ডিভাইসটি",
+        "types": {
+          "desktop": "ডেস্কটপ",
+          "mobile": "মোবাইল",
+          "tablet": "ট্যাবলেট"
+        },
+        "unknownBrowser": "অজানা ব্রাউজার",
+        "unknownDevice": "অজানা ডিভাইস, নাম ডিক্রিপ্ট করার সময় ত্রুটি",
+        "unknownOperatingSystem": "অজানা অপারেটিং সিস্টেম"
       },
       "profile": {
         "finish": "সম্পাদনা শেষ করুন",

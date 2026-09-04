@@ -41,6 +41,7 @@
       "loadingStreams": "Loading streams...",
       "manageAddonsButton": "Manage Addon List",
       "noAddonStreams": "No streams were returned by this addon.",
+      "noStreams": "No streams",
       "noTorrentStreams": "No torrent streams returned for this addon.",
       "qualities": {
         "1080p": "1080p",
@@ -1103,7 +1104,15 @@
         "loggedInAt": "Logged in at: {{date}}",
         "removeDevice": "Remove",
         "title": "Devices",
-        "unknownDevice": "Unknown device, error decrypting name"
+        "thisDevice": "This device",
+        "types": {
+          "desktop": "Desktop",
+          "mobile": "Mobile",
+          "tablet": "Tablet"
+        },
+        "unknownBrowser": "Unknown browser",
+        "unknownDevice": "Unknown device, error decrypting name",
+        "unknownOperatingSystem": "Unknown operating system"
       },
       "profile": {
         "finish": "Finish editing",

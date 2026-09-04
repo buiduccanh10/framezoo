@@ -41,6 +41,7 @@
       "loadingStreams": "S'estan carregant els fluxos...",
       "manageAddonsButton": "Gestioneu la llista de complements",
       "noAddonStreams": "Aquest complement no ha retornat cap reproducció.",
+      "noStreams": "Sense fluxos",
       "noTorrentStreams": "No s'ha retornat cap flux de torrent per a aquest complement.",
       "qualities": {
         "1080p": "1080p",
@@ -1112,7 +1113,15 @@
         "loggedInAt": "Inicieu sessió a: {{date}}",
         "removeDevice": "Eliminar",
         "title": "Dispositius",
-        "unknownDevice": "Dispositiu desconegut, error en desxifrar el nom"
+        "thisDevice": "Aquest dispositiu",
+        "types": {
+          "desktop": "Escriptori",
+          "mobile": "Mòbil",
+          "tablet": "Tauleta"
+        },
+        "unknownBrowser": "Navegador desconegut",
+        "unknownDevice": "Dispositiu desconegut, error en desxifrar el nom",
+        "unknownOperatingSystem": "Sistema operatiu desconegut"
       },
       "profile": {
         "finish": "Acabar l'edició",

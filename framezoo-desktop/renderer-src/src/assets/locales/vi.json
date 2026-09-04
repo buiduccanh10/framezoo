@@ -41,6 +41,7 @@
       "loadingStreams": "Đang tìm luồng...",
       "manageAddonsButton": "Quản lý danh sách Addons",
       "noAddonStreams": "Không có luồng nào được trả lại bởi addon này.",
+      "noStreams": "Không có luồng",
       "noTorrentStreams": "Không tìm thấy luồng torrent nào từ addon này.",
       "qualities": {
         "1080p": "1080p",
@@ -1112,7 +1113,15 @@
         "loggedInAt": "Đăng nhập lúc: {{date}}",
         "removeDevice": "Xóa",
         "title": "Thiết bị",
-        "unknownDevice": "Thiết bị không xác định, lỗi giải mã tên"
+        "thisDevice": "Thiết bị này",
+        "types": {
+          "desktop": "Máy tính",
+          "mobile": "Điện thoại",
+          "tablet": "Máy tính bảng"
+        },
+        "unknownBrowser": "Trình duyệt không xác định",
+        "unknownDevice": "Thiết bị không xác định, lỗi giải mã tên",
+        "unknownOperatingSystem": "Hệ điều hành không xác định"
       },
       "profile": {
         "finish": "Hoàn tất chỉnh sửa",

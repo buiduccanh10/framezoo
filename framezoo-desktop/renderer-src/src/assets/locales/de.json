@@ -41,6 +41,7 @@
       "loadingStreams": "Streams werden geladen...",
       "manageAddonsButton": "Add-on-Liste verwalten",
       "noAddonStreams": "Von diesem Add-on wurden keine Streams zurückgegeben.",
+      "noStreams": "Keine Streams",
       "noTorrentStreams": "Für dieses Add-on wurden keine Torrent-Streams zurückgegeben.",
       "qualities": {
         "1080p": "1080p",
@@ -1112,7 +1113,15 @@
         "loggedInAt": "Angemeldet unter: {{date}}",
         "removeDevice": "Entfernen",
         "title": "Geräte",
-        "unknownDevice": "Unbekanntes Gerät, Fehler beim Entschlüsseln des Namens"
+        "thisDevice": "Dieses Gerät",
+        "types": {
+          "desktop": "Desktop",
+          "mobile": "Mobile",
+          "tablet": "Tablette"
+        },
+        "unknownBrowser": "Unbekannter Browser",
+        "unknownDevice": "Unbekanntes Gerät, Fehler beim Entschlüsseln des Namens",
+        "unknownOperatingSystem": "Unbekanntes Betriebssystem"
       },
       "profile": {
         "finish": "Bearbeiten beenden",

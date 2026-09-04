@@ -41,6 +41,7 @@
       "loadingStreams": "Caricamento stream...",
       "manageAddonsButton": "Gestisci elenco componenti aggiuntivi",
       "noAddonStreams": "Nessun flusso è stato restituito da questo componente aggiuntivo.",
+      "noStreams": "Nessuno streaming",
       "noTorrentStreams": "Nessun flusso torrent restituito per questo componente aggiuntivo.",
       "qualities": {
         "1080p": "1080p",
@@ -1112,7 +1113,15 @@
         "loggedInAt": "Accesso effettuato a: {{date}}",
         "removeDevice": "Rimuovi",
         "title": "Dispositivi",
-        "unknownDevice": "Dispositivo sconosciuto, errore durante la decrittografia del nome"
+        "thisDevice": "Questo dispositivo",
+        "types": {
+          "desktop": "Desktop",
+          "mobile": "Mobile",
+          "tablet": "Tablet"
+        },
+        "unknownBrowser": "Browser sconosciuto",
+        "unknownDevice": "Dispositivo sconosciuto, errore durante la decrittografia del nome",
+        "unknownOperatingSystem": "Sistema operativo sconosciuto"
       },
       "profile": {
         "finish": "Termina la modifica",

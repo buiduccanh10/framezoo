@@ -41,6 +41,7 @@
       "loadingStreams": "स्ट्रीम लोड हो रही हैं...",
       "manageAddonsButton": "ऐडऑन सूची प्रबंधित करें",
       "noAddonStreams": "इस ऐडऑन द्वारा कोई स्ट्रीम वापस नहीं की गई।",
+      "noStreams": "कोई स्ट्रीम नहीं",
       "noTorrentStreams": "इस ऐडऑन के लिए कोई टोरेंट स्ट्रीम वापस नहीं आई।",
       "qualities": {
         "1080p": "1080p",
@@ -1112,7 +1113,15 @@
         "loggedInAt": "यहां लॉग इन किया गया: {{date}}",
         "removeDevice": "निकालना",
         "title": "उपकरण",
-        "unknownDevice": "अज्ञात डिवाइस, नाम डिक्रिप्ट करने में त्रुटि"
+        "thisDevice": "यह डिवाइस",
+        "types": {
+          "desktop": "डेस्कटॉप",
+          "mobile": "गतिमान",
+          "tablet": "टैबलेट"
+        },
+        "unknownBrowser": "अज्ञात ब्राउज़र",
+        "unknownDevice": "अज्ञात डिवाइस, नाम डिक्रिप्ट करने में त्रुटि",
+        "unknownOperatingSystem": "अज्ञात ऑपरेटिंग सिस्टम"
       },
       "profile": {
         "finish": "संपादन समाप्त करें",

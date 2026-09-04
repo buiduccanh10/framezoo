@@ -41,6 +41,7 @@
       "loadingStreams": "Nalaganje tokov ...",
       "manageAddonsButton": "Upravljanje seznama dodatkov",
       "noAddonStreams": "Ta dodatek ni vrnil nobenega toka.",
+      "noStreams": "Ni pretočnih predvajanj",
       "noTorrentStreams": "Za ta dodatek ni bil vrnjen noben torrent tok.",
       "qualities": {
         "1080p": "1080p",
@@ -1112,7 +1113,15 @@
         "loggedInAt": "Prijavljen na: {{date}}",
         "removeDevice": "Odstrani",
         "title": "Naprave",
-        "unknownDevice": "Neznana naprava, napaka pri dešifriranju imena"
+        "thisDevice": "Ta naprava",
+        "types": {
+          "desktop": "Namizni računalnik",
+          "mobile": "Mobilni telefon",
+          "tablet": "Tablični računalnik"
+        },
+        "unknownBrowser": "Neznan brskalnik",
+        "unknownDevice": "Neznana naprava, napaka pri dešifriranju imena",
+        "unknownOperatingSystem": "Neznan operacijski sistem"
       },
       "profile": {
         "finish": "Zaključi urejanje",

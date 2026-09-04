@@ -41,6 +41,7 @@
       "loadingStreams": "સ્ટ્રીમ્સ લોડ કરી રહ્યાં છીએ...",
       "manageAddonsButton": "એડન સૂચિનું સંચાલન કરો",
       "noAddonStreams": "આ એડન દ્વારા કોઈ સ્ટ્રીમ્સ પરત કરવામાં આવી નથી.",
+      "noStreams": "કોઈ સ્ટ્રીમ નથી",
       "noTorrentStreams": "આ એડઓન માટે કોઈ ટૉરેંટ સ્ટ્રીમ્સ પાછા નથી આવ્યા.",
       "qualities": {
         "1080p": "1080p",
@@ -1112,7 +1113,15 @@
         "loggedInAt": "અહીં લૉગ ઇન કર્યું: {{date}}",
         "removeDevice": "દૂર કરો",
         "title": "ઉપકરણો",
-        "unknownDevice": "અજ્ઞાત ઉપકરણ, નામ ડિક્રિપ્ટ કરવામાં ભૂલ"
+        "thisDevice": "આ ઉપકરણ",
+        "types": {
+          "desktop": "ડેસ્કટોપ",
+          "mobile": "મોબાઇલ",
+          "tablet": "ટેબ્લેટ"
+        },
+        "unknownBrowser": "અજાણ્યું બ્રાઉઝર",
+        "unknownDevice": "અજ્ઞાત ઉપકરણ, નામ ડિક્રિપ્ટ કરવામાં ભૂલ",
+        "unknownOperatingSystem": "અજાણી ઓપરેટિંગ સિસ્ટમ"
       },
       "profile": {
         "finish": "સંપાદન સમાપ્ત કરો",

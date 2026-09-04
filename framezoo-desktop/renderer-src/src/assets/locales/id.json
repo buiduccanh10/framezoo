@@ -41,6 +41,7 @@
       "loadingStreams": "Memuat streaming...",
       "manageAddonsButton": "Kelola Daftar Addon",
       "noAddonStreams": "Tidak ada aliran yang dikembalikan oleh addon ini.",
+      "noStreams": "Tidak ada siaran langsung",
       "noTorrentStreams": "Tidak ada aliran torrent yang dikembalikan untuk addon ini.",
       "qualities": {
         "1080p": "1080p",
@@ -1112,7 +1113,15 @@
         "loggedInAt": "Masuk di: {{date}}",
         "removeDevice": "Hapus",
         "title": "Perangkat",
-        "unknownDevice": "Perangkat tidak dikenal, kesalahan mendekripsi nama"
+        "thisDevice": "Perangkat ini",
+        "types": {
+          "desktop": "Desktop",
+          "mobile": "Ponsel",
+          "tablet": "Tablet"
+        },
+        "unknownBrowser": "Browser tidak dikenal",
+        "unknownDevice": "Perangkat tidak dikenal, kesalahan mendekripsi nama",
+        "unknownOperatingSystem": "Sistem operasi tidak dikenal"
       },
       "profile": {
         "finish": "Selesai mengubah",

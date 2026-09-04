@@ -41,6 +41,7 @@
       "loadingStreams": "Načítání streamů...",
       "manageAddonsButton": "Správa seznamu doplňků",
       "noAddonStreams": "Tento doplněk nevrátil žádné streamy.",
+      "noStreams": "Žádné streamy",
       "noTorrentStreams": "Pro tento doplněk se nevrátily žádné torrentové proudy.",
       "qualities": {
         "1080p": "1080p",
@@ -1112,7 +1113,15 @@
         "loggedInAt": "Přihlášen na: {{date}}",
         "removeDevice": "Odstranit",
         "title": "Zařízení",
-        "unknownDevice": "Neznámé zařízení, při dešifrování názvu došlo k chybě"
+        "thisDevice": "Toto zařízení",
+        "types": {
+          "desktop": "Počítač",
+          "mobile": "Mobilní",
+          "tablet": "Tableta"
+        },
+        "unknownBrowser": "Neznámý prohlížeč",
+        "unknownDevice": "Neznámé zařízení, při dešifrování názvu došlo k chybě",
+        "unknownOperatingSystem": "Neznámý operační systém"
       },
       "profile": {
         "finish": "Dokončit",

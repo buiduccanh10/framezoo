@@ -41,6 +41,7 @@
       "loadingStreams": "Se încarcă fluxurile...",
       "manageAddonsButton": "Gestionați lista de suplimente",
       "noAddonStreams": "Acest supliment nu a returnat niciun flux.",
+      "noStreams": "Niciun flux",
       "noTorrentStreams": "Nu au fost returnate fluxuri de torrent pentru acest supliment.",
       "qualities": {
         "1080p": "1080p",
@@ -1112,7 +1113,15 @@
         "loggedInAt": "Conectat la: {{date}}",
         "removeDevice": "Șterge",
         "title": "Dispozitive",
-        "unknownDevice": "Dispozitiv necunoscut, eroare la decriptarea numelui"
+        "thisDevice": "Acest dispozitiv",
+        "types": {
+          "desktop": "Desktop",
+          "mobile": "Mobil",
+          "tablet": "Comprimat"
+        },
+        "unknownBrowser": "Browser necunoscut",
+        "unknownDevice": "Dispozitiv necunoscut, eroare la decriptarea numelui",
+        "unknownOperatingSystem": "Sistem de operare necunoscut"
       },
       "profile": {
         "finish": "Termină editarea",

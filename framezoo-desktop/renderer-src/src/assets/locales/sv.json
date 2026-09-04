@@ -41,6 +41,7 @@
       "loadingStreams": "Laddar strömmar...",
       "manageAddonsButton": "Hantera tilläggslista",
       "noAddonStreams": "Inga strömmar returnerades av detta tillägg.",
+      "noStreams": "Inga strömmar",
       "noTorrentStreams": "Inga torrentströmmar returnerade för detta tillägg.",
       "qualities": {
         "1080p": "1080p",
@@ -1112,7 +1113,15 @@
         "loggedInAt": "Inloggad på: {{date}}",
         "removeDevice": "Ta bort",
         "title": "Enheter",
-        "unknownDevice": "Okänd enhet, fel vid dekryptering av namn"
+        "thisDevice": "Den här enheten",
+        "types": {
+          "desktop": "Skrivbord",
+          "mobile": "Mobil",
+          "tablet": "Tablett"
+        },
+        "unknownBrowser": "Okänd webbläsare",
+        "unknownDevice": "Okänd enhet, fel vid dekryptering av namn",
+        "unknownOperatingSystem": "Okänt operativsystem"
       },
       "profile": {
         "finish": "Slutför redigering",
