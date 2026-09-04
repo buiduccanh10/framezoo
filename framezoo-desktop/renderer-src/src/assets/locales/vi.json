@@ -94,6 +94,7 @@
       "noBackendUrl": "Không có URL backend",
       "or": "hoặc",
       "passwordIncorrect": "Mật khẩu không chính xác",
+      "invalidCredentials": "Tên người dùng hoặc mật khẩu không chính xác",
       "passwordLabel": "Mật khẩu",
       "passwordPlaceholder": "Nhập mật khẩu của bạn",
       "rememberMe": "Ghi nhớ mật khẩu của tôi",
@@ -286,6 +287,7 @@
       "shortcuts": {
         "barrelRoll": "Lộn vòng! 🌀",
         "closeOverlay": "Đóng lớp phủ/cửa sổ",
+        "holdShift": "Giữ phím rồi nhấp vào nút Toàn màn hình để điều chỉnh cho vừa khung hình hoặc nhấp vào tiêu đề phim để sao chép liên kết kèm dấu thời gian.",
         "decreaseVolume": "Giảm âm lượng",
         "increaseVolume": "Tăng âm lượng",
         "jumpTo0": "Nhảy tới 0% (bắt đầu)",

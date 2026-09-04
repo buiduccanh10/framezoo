@@ -23,3 +23,4 @@ export * from "./SpeedChangedPopout";
 export * from "./TIDBSubmissionSuccessPopout";
 export * from "./UnreleasedEpisodeOverlay";
 export * from "./KeyboardCommandsButton";
+export * from "./Widescreen";

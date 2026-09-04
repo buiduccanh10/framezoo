@@ -94,6 +94,7 @@
       "noBackendUrl": "Ei tausta-URL-osoitetta",
       "or": "or",
       "passwordIncorrect": "Salasana on väärä",
+      "invalidCredentials": "Käyttäjätunnus tai salasana on virheellinen",
       "passwordLabel": "Salasana",
       "passwordPlaceholder": "Kirjoita salasanasi",
       "rememberMe": "Muista salasanani",
@@ -286,6 +287,7 @@
       "shortcuts": {
         "barrelRoll": "Tee tynnyrirulla! 🌀",
         "closeOverlay": "Sulje peittokuva/modaali",
+        "holdShift": "Pidä näppäintä painettuna ja napsauta koko näytön painiketta sovittaaksesi elokuvan ruutuun tai napsauta otsikkoa kopioidaksesi linkin aikaleiman kanssa. Pidä näppäintä painettuna ja napsauta koko näytön painiketta sovittaaksesi sen ruutuun tai napsauta videon otsikkoa kopioidaksesi linkin aikaleiman kanssa.",
         "decreaseVolume": "Vähennä äänenvoimakkuutta",
         "increaseVolume": "Lisää äänenvoimakkuutta",
         "jumpTo0": "Hyppää 0 %:iin (alkuun)",

@@ -94,6 +94,7 @@
       "noBackendUrl": "バックエンド URL がありません",
       "or": "or",
       "passwordIncorrect": "パスワードが間違っています",
+      "invalidCredentials": "ユーザー名またはパスワードが間違っています。",
       "passwordLabel": "パスワード",
       "passwordPlaceholder": "パスワードを入力してください",
       "rememberMe": "パスワードを覚えておいてください",
@@ -286,6 +287,7 @@
       "shortcuts": {
         "barrelRoll": "バレルロールをする！ 🌀",
         "closeOverlay": "オーバーレイ/モーダルを閉じる",
+        "holdShift": "キーを押しながらフルスクリーンボタンをクリックしてフレームに合わせるか、タイトルムービーをクリックしてタイムスタンプ付きのリンクをコピーします。",
         "decreaseVolume": "音量を下げる",
         "increaseVolume": "音量を上げる",
         "jumpTo0": "0% (先頭) にジャンプします",

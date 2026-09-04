@@ -94,6 +94,7 @@
       "noBackendUrl": "Tidak ada URL ujung belakang",
       "or": "or",
       "passwordIncorrect": "Kata sandi salah",
+      "invalidCredentials": "Nama pengguna atau kata sandi salah.",
       "passwordLabel": "Kata sandi",
       "passwordPlaceholder": "Masukkan kata sandi Anda",
       "rememberMe": "Ingat kata sandi saya",
@@ -286,6 +287,7 @@
       "shortcuts": {
         "barrelRoll": "Lakukan gerakan barel! 🌀",
         "closeOverlay": "Tutup hamparan/modal",
+        "holdShift": "Tahan tombol lalu klik tombol Layar Penuh untuk menyesuaikan ukuran atau klik judul film untuk menyalin tautan dengan stempel waktu.",
         "decreaseVolume": "Kurangi volumenya",
         "increaseVolume": "Tingkatkan volume",
         "jumpTo0": "Lompat ke 0% (awal)",

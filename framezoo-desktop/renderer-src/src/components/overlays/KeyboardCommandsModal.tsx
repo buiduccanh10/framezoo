@@ -200,6 +200,10 @@ const getShortcutGroups = (
           config: getConfig(ShortcutId.BARREL_ROLL),
         },
         {
+          key: "Shift",
+          description: t("global.keyboardShortcuts.shortcuts.holdShift"),
+        },
+        {
           key: "Escape",
           description: t("global.keyboardShortcuts.shortcuts.closeOverlay"),
         },

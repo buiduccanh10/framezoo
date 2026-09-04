@@ -94,6 +94,7 @@
       "noBackendUrl": "Taustaprogrammi URL puudub",
       "or": "or",
       "passwordIncorrect": "Parool on vale",
+      "invalidCredentials": "Kasutajanimi või parool on vale",
       "passwordLabel": "Parool",
       "passwordPlaceholder": "Sisestage oma parool",
       "rememberMe": "Jäta minu parool meelde",
@@ -286,6 +287,7 @@
       "shortcuts": {
         "barrelRoll": "Tee tünnirull! 🌀",
         "closeOverlay": "Sule ülekate/modaal",
+        "holdShift": "Hoidke klahvi all ja klõpsake täisekraani nuppu, et see kaadrisse mahutada, või klõpsake filmi pealkirja, et kopeerida link koos ajatempliga. Hoidke klahvi all ja klõpsake täisekraani nuppu, et see kaadrisse mahutada, või klõpsake video pealkirja, et kopeerida link koos ajatempliga.",
         "decreaseVolume": "Vähenda helitugevust",
         "increaseVolume": "Suurenda helitugevust",
         "jumpTo0": "Hüppa 0% (algus)",

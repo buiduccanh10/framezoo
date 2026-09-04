@@ -94,6 +94,7 @@
       "noBackendUrl": "Arka uç URL'si yok",
       "or": "or",
       "passwordIncorrect": "Şifre yanlış",
+      "invalidCredentials": "Kullanıcı adı veya şifre yanlış.",
       "passwordLabel": "Şifre",
       "passwordPlaceholder": "Şifrenizi girin",
       "rememberMe": "Şifremi hatırla",
@@ -286,6 +287,7 @@
       "shortcuts": {
         "barrelRoll": "Uçağın ekseni üzerinde tam bir devir yapması! 🌀",
         "closeOverlay": "Yer paylaşımını/modalı kapat",
+        "holdShift": "Ekranı tam ekrana sığdırmak için tuşu basılı tutun ve ardından Tam Ekran düğmesine tıklayın veya zaman damgasıyla birlikte bağlantıyı kopyalamak için video başlığına tıklayın.",
         "decreaseVolume": "Sesi azalt",
         "increaseVolume": "Sesi artır",
         "jumpTo0": "%0'a atla (başlangıç)",

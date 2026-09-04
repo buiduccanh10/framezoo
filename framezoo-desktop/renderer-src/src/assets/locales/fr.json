@@ -94,6 +94,7 @@
       "noBackendUrl": "Aucune URL back-end",
       "or": "or",
       "passwordIncorrect": "Le mot de passe est incorrect",
+      "invalidCredentials": "Nom d&#39;utilisateur ou mot de passe incorrect",
       "passwordLabel": "Mot de passe",
       "passwordPlaceholder": "Entrez votre mot de passe",
       "rememberMe": "Se souvenir de mon mot de passe",
@@ -286,6 +287,7 @@
       "shortcuts": {
         "barrelRoll": "Faire un tonneau! 🌀",
         "closeOverlay": "Fermer la superposition/modal",
+        "holdShift": "Maintenez la touche enfoncée puis cliquez sur le bouton Plein écran pour ajuster la vidéo ou cliquez sur le titre du film pour copier le lien avec l&#39;horodatage.",
         "decreaseVolume": "Diminuer le volume",
         "increaseVolume": "Augmenter le volume",
         "jumpTo0": "Passer à 0 % (début)",

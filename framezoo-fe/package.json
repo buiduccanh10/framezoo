@@ -1,5 +1,5 @@
 {
-  "packageManager": "pnpm@11.21.0",
+  "packageManager": "pnpm@11.25.0",
   "name": "framezoo-fe",
   "version": "1.0.0",
   "private": true,

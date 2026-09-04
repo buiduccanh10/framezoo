@@ -94,6 +94,7 @@
       "noBackendUrl": "Geen backend-URL",
       "or": "or",
       "passwordIncorrect": "Wachtwoord is onjuist",
+      "invalidCredentials": "De gebruikersnaam of het wachtwoord is onjuist.",
       "passwordLabel": "Wachtwoord",
       "passwordPlaceholder": "Voer uw wachtwoord in",
       "rememberMe": "Mijn wachtwoord onthouden",
@@ -286,6 +287,7 @@
       "shortcuts": {
         "barrelRoll": "Doe een vatrol! 🌀",
         "closeOverlay": "Overlay/modaal sluiten",
+        "holdShift": "Houd de toets ingedrukt en klik vervolgens op de knop Volledig scherm om het beeld aan te passen aan het frame, of klik op de titel van de film om de link met de tijdstempel te kopiëren.",
         "decreaseVolume": "Verlaag het volume",
         "increaseVolume": "Verhoog het volume",
         "jumpTo0": "Spring naar 0% (begin)",

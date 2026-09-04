@@ -94,6 +94,7 @@
       "noBackendUrl": "無後端網址",
       "or": "or",
       "passwordIncorrect": "密碼不正確",
+      "invalidCredentials": "使用者名稱或密碼錯誤",
       "passwordLabel": "密碼",
       "passwordPlaceholder": "輸入您的密碼",
       "rememberMe": "記住我的密碼",
@@ -286,6 +287,7 @@
       "shortcuts": {
         "barrelRoll": "做飛行特技表演！ 🌀",
         "closeOverlay": "關閉疊加/模態",
+        "holdShift": "按住按鍵並按一下全螢幕按鈕以適應畫面，或按一下影片標題以複製帶有時間戳記的連結。",
         "decreaseVolume": "減小音量",
         "increaseVolume": "增加音量",
         "jumpTo0": "跳至0%（開始）",

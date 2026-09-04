@@ -94,6 +94,7 @@
       "noBackendUrl": "Sen URL de backend",
       "or": "or",
       "passwordIncorrect": "O contrasinal é incorrecto",
+      "invalidCredentials": "O nome de usuario ou o contrasinal son incorrectos",
       "passwordLabel": "Contrasinal",
       "passwordPlaceholder": "Introduce o teu contrasinal",
       "rememberMe": "Lembrar o meu contrasinal",
@@ -286,6 +287,7 @@
       "shortcuts": {
         "barrelRoll": "Fai un rollo de barril! 🌀",
         "closeOverlay": "Pechar superposición/modal",
+        "holdShift": "Mantén premida a tecla e fai clic no botón Pantalla completa para axustar o fotograma ou fai clic para titular a película para copiar a ligazón coa marca de tempo. Mantén premida a tecla e fai clic no botón Pantalla completa para axustar o fotograma ou fai clic no título do vídeo para copiar a ligazón coa marca de tempo.",
         "decreaseVolume": "Diminuír o volume",
         "increaseVolume": "Aumentar o volume",
         "jumpTo0": "Ir ao 0 % (inicio)",
