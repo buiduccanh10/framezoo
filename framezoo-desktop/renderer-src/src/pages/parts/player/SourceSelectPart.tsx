@@ -268,6 +268,15 @@ export function SourceSelectPart(props: {
     setAutoSelectionResolved(false);
   }, [meta.tmdbId, meta.season?.tmdbId, meta.episode?.tmdbId]);
 
+  // When MPV emits a playback error while we were starting a torrent stream,
+  // `startingAddonId` remains set and hides the error behind a spinner. Clear
+  // it so the ErrorCard is rendered instead.
+  useEffect(() => {
+    if (isPlaybackError && startingAddonId) {
+      setStartingAddonId(null);
+    }
+  }, [isPlaybackError, startingAddonId]);
+
   const qualityOptions: OptionItem[] = useMemo(
     () => [
       { id: "all", name: t("addons.player.qualities.all", "All Qualities") },
@@ -375,8 +384,7 @@ export function SourceSelectPart(props: {
   ]);
   const currentAddonId = currentStream?.addonId ?? null;
   const displayedSelectedAddonId =
-    selectedAddonId ??
-    (mode === "full" && !keepAddonListOpen.current ? currentAddonId : null);
+    selectedAddonId ?? (!keepAddonListOpen.current ? currentAddonId : null);
   const selectedAddon = useMemo(
     () =>
       addons.find((addon) => addon.manifest.id === displayedSelectedAddonId) ??
@@ -641,11 +649,11 @@ export function SourceSelectPart(props: {
     );
   }, [addonStreams, selectedQuality]);
   const selectedAddonStreams = useMemo(() => {
-    if (!selectedAddonId) return [];
+    if (!displayedSelectedAddonId) return [];
     return filteredAddonStreams.filter(
-      (stream) => stream.addonId === selectedAddonId,
+      (stream) => stream.addonId === displayedSelectedAddonId,
     );
-  }, [filteredAddonStreams, selectedAddonId]);
+  }, [filteredAddonStreams, displayedSelectedAddonId]);
   const streamCountByAddon = useMemo(() => {
     const counts = new Map<string, number>();
     for (const stream of filteredAddonStreams) {
@@ -662,14 +670,15 @@ export function SourceSelectPart(props: {
 
   const selectedAddonError = useMemo(
     () =>
-      addonLoadErrors.find((error) => error.addonId === selectedAddonId) ??
-      null,
-    [addonLoadErrors, selectedAddonId],
+      addonLoadErrors.find(
+        (error) => error.addonId === displayedSelectedAddonId,
+      ) ?? null,
+    [addonLoadErrors, displayedSelectedAddonId],
   );
-  const selectedAddonLoading = selectedAddonId
-    ? loadingAddonIds.has(selectedAddonId)
+  const selectedAddonLoading = displayedSelectedAddonId
+    ? loadingAddonIds.has(displayedSelectedAddonId)
     : false;
-  const showAddonList = !selectedAddonId || !selectedAddon;
+  const showAddonList = !displayedSelectedAddonId || !selectedAddon;
   const showBackdrop = isInitialSelection;
   const backgroundImage = meta.backdrop ?? meta.poster;
 
@@ -852,7 +861,7 @@ export function SourceSelectPart(props: {
           </Menu.Section>
         ) : (
           <Menu.ScrollToActiveSection
-            loaded={`${selectedAddonId}:${selectedQuality.id}:${currentStream?.id ?? ""}:${selectedAddonStreams.length}`}
+            loaded={`${displayedSelectedAddonId}:${selectedQuality.id}:${currentStream?.id ?? ""}:${selectedAddonStreams.length}`}
           >
             {selectedAddonStreams.map((stream) => {
               const startingStreamId =

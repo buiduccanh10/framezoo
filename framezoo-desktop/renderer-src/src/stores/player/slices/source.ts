@@ -6,6 +6,7 @@ import {
   getInstalledAddons,
 } from "@/desktop/addons/storage";
 import { loadAllAddonSubtitles } from "@/desktop/addons/subtitles";
+import { clearActiveTorrentSession } from "@/desktop/torrentPlaybackStore";
 import { useLanguageStore } from "@/stores/language";
 import { MakeSlice } from "@/stores/player/slices/types";
 import {
@@ -474,9 +475,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
 
       // Prevent ghost torrent status from previous episode showing during source selection
       if (typeof window !== "undefined") {
-        import("@/desktop/torrentPlaybackStore")
-          .then(({ clearActiveTorrentSession }) => clearActiveTorrentSession())
-          .catch(() => {});
+        clearActiveTorrentSession();
       }
     }
 

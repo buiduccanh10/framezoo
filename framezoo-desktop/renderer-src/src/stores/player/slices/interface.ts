@@ -30,6 +30,7 @@ export interface InterfaceSlice {
     shouldStartFromBeginning: boolean;
     skipNextSavedProgressResume: boolean;
     error?: DisplayError;
+    videoDimensions?: { width: number; height: number };
 
     volumeChangedWithKeybind: boolean; // has the volume recently been adjusted with the up/down arrows recently?
     volumeChangedWithKeybindDebounce: NodeJS.Timeout | null; // debounce for the duration of the "volume changed thingamajig"

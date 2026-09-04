@@ -1,7 +1,6 @@
-import { useState } from "react";
-
 import { Icons } from "@/components/Icon";
 import { VideoPlayerButton } from "@/components/player/internals/Button";
+import { usePlayerStore } from "@/stores/player/store";
 
 interface WidescreenProps {
   iconSizeClass?: string;
@@ -9,8 +8,7 @@ interface WidescreenProps {
 }
 
 export function Widescreen(props: WidescreenProps) {
-  // Add widescreen status
-  const [isWideScreen, setIsWideScreen] = useState(false);
+  const dimensions = usePlayerStore((s) => s.interface.videoDimensions);
 
   return (
     <VideoPlayerButton
@@ -18,14 +16,15 @@ export function Widescreen(props: WidescreenProps) {
         props.className ? `${props.className} text-white` : "text-white"
       }
       iconSizeClass={props.iconSizeClass}
-      icon={isWideScreen ? Icons.SHRINK : Icons.STRETCH}
+      icon={Icons.STRETCH}
       onClick={() => {
-        const surface = document.getElementById("libmpv-video-surface");
-        if (surface) {
-          surface.classList.toggle("object-cover");
-          setIsWideScreen(!isWideScreen);
+        if (!dimensions) return;
+        const api = (window as any).electronAPI;
+        if (api?.resizeToVideo) {
+          api.resizeToVideo(dimensions.width, dimensions.height);
         }
       }}
     />
   );
 }
+
