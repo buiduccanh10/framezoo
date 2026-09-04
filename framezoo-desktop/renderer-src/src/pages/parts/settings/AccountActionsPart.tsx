@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import { useAsyncFn } from "react-use";
 
 import { deleteUser } from "@/backend/accounts/user";
@@ -13,6 +14,7 @@ import { useAuthStore } from "@/stores/auth";
 import { signOutAllDevices } from "./DeviceListPart";
 
 export function AccountActionsPart() {
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const url = useBackendUrl();
   const account = useAuthStore((s) => s.account);
@@ -48,7 +50,7 @@ export function AccountActionsPart() {
             <Button
               theme="purple"
               onClick={() => {
-                window.location.href = "/migration";
+                navigate("/migration");
               }}
             >
               {t("settings.account.actions.migration.button")}
