@@ -120,16 +120,6 @@ export function SyncSubtitleView({
     try {
       const outcome = await syncSelectedCaption();
       if (outcome.status === "success") {
-        if (outcome.warningMessage) {
-          showToast(
-            t("player.menus.subtitles.syncSubtitleServerFallback", {
-              defaultValue:
-                "Local sync does not support this audio language; synced using server.",
-            }),
-            "info",
-          );
-          return;
-        }
         showToast(
           t("player.menus.subtitles.syncSubtitleSuccess", {
             defaultValue: "Subtitle synced successfully",

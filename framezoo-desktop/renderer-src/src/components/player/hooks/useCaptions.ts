@@ -11,6 +11,7 @@ import {
   getSubtitleAlignmentInputVtt,
   isSubtitleAlignmentResultApplicable,
 } from "@/components/player/utils/subtitleAlignment";
+import { normalizeMoonshineLanguage } from "@/moonshine/runtime";
 import { useLanguageStore } from "@/stores/language";
 import {
   Caption,
@@ -35,6 +36,32 @@ const AUTO_SCORE_CONCURRENCY = 3;
 const AUTO_SCORE_PER_ITEM_TIMEOUT_MS = 1500;
 const SUBTITLE_SYNC_PAUSE_TIMEOUT_MS = 1500;
 const SUBTITLE_SYNC_STABLE_SAMPLES = 2;
+
+// Matches valid ISO-639-1 (2-letter) or ISO-639-2/3 (3-letter) codes, with optional region suffix
+const VALID_LANGUAGE_TAG_RE = /^[a-z]{2,3}(?:[-_][a-z]{2,4})?$/i;
+
+/**
+ * Resolves the best language code to use for subtitle alignment.
+ * Priority: audio track language tag (if valid ISO-639 format) → TMDB originalLanguage → "en"
+ */
+function resolveAudioLanguage(
+  audioTrackLanguage: string | null | undefined,
+  metaOriginalLanguage: string | null | undefined,
+): string {
+  if (
+    audioTrackLanguage &&
+    VALID_LANGUAGE_TAG_RE.test(audioTrackLanguage.trim())
+  ) {
+    return normalizeMoonshineLanguage(audioTrackLanguage.trim());
+  }
+  if (
+    metaOriginalLanguage &&
+    VALID_LANGUAGE_TAG_RE.test(metaOriginalLanguage.trim())
+  ) {
+    return normalizeMoonshineLanguage(metaOriginalLanguage.trim());
+  }
+  return "en";
+}
 
 type SubtitleSyncTarget = {
   track: SubtitleAlignmentTrack;
@@ -83,7 +110,7 @@ function waitForStablePlaybackPosition(): Promise<number | null> {
 }
 
 export type SubtitleSyncOutcome =
-  | { status: "success"; warningMessage?: string }
+  | { status: "success" }
   | { status: "cancelled" }
   | { status: "failed"; errorMessage?: string };
 
@@ -243,7 +270,10 @@ export function useCaptions() {
         const batchResult = await alignSubtitlesWithCurrentStream({
           sourceUrl: quality.url,
           startAt: Math.max(0, pausedTime - 30),
-          language: pausedState.currentAudioTrack?.language ?? "en",
+          language: resolveAudioLanguage(
+            pausedState.currentAudioTrack?.language,
+            pausedState.meta?.originalLanguage,
+          ),
           subtitles: targets.map(({ track, caption }) => ({
             track,
             vttData: getSubtitleAlignmentInputVtt(caption),
@@ -379,7 +409,6 @@ export function useCaptions() {
         });
         return {
           status: "success",
-          warningMessage: batchResult.warningMessage,
         };
       } catch (error) {
         if (

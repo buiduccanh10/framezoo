@@ -28,6 +28,7 @@ export type TMDBMediaResult = {
   object_type: TMDBContentTypes;
   seasons?: TMDBSeasonShort[];
   overview?: string;
+  originalLanguage?: string;
 };
 
 export type TMDBSeasonMetaResult = {

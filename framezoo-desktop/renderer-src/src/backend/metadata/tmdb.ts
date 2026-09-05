@@ -108,6 +108,7 @@ export function formatTMDBMeta(
     logo: media.logo,
     type,
     overview: media.overview,
+    originalLanguage: media.originalLanguage,
     seasons: seasons as any,
     seasonData: season
       ? {

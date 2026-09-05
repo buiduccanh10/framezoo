@@ -59,6 +59,7 @@ export interface PlayerMeta {
   backdrop?: string;
   logo?: string;
   overview?: string;
+  originalLanguage?: string;
   episodes?: PlayerMetaEpisode[];
   episode?: PlayerMetaEpisode;
   season?: {
