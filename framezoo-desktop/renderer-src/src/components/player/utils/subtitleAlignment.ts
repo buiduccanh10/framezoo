@@ -332,7 +332,6 @@ export async function alignSubtitlesWithCurrentStream(options: {
   let localSpeechIntervals: Array<
     Array<{ startMs: number; endMs: number }>
   > | null = null;
-  let localFallbackWarning: string | undefined;
   try {
     const localEntry = await ensureMoonshineModel(options.language || "en");
     if (localEntry) {
@@ -360,13 +359,8 @@ export async function alignSubtitlesWithCurrentStream(options: {
   } catch (error) {
     if (isAbortError(error, options.signal)) throw error;
     localSpeechIntervals = null;
-    if (error instanceof MoonshineLanguageUnavailableError) {
-      localFallbackWarning =
-        "Local Moonshine không hỗ trợ ngôn ngữ này; đã dùng server fallback.";
-    } else {
+    if (!(error instanceof MoonshineLanguageUnavailableError)) {
       disableMoonshineForSession();
-      localFallbackWarning =
-        "Local Moonshine không khả dụng; đã dùng server fallback.";
     }
     console.warn("[subtitle-align] local Moonshine failed; using server", {
       language: options.language,
@@ -408,9 +402,8 @@ export async function alignSubtitlesWithCurrentStream(options: {
     },
   );
   options.onProgress?.(1, "analyzing");
-  return localFallbackWarning
-    ? { ...response, warningMessage: localFallbackWarning }
-    : response;
+  // Discard any server-side warningMessage — we don't surface fallback details to users
+  return { ...response, warningMessage: undefined };
 }
 
 export async function alignSubtitleWithCurrentStream(options: {

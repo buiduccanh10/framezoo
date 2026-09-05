@@ -58,6 +58,7 @@ export function formatTMDBMetaResult(
       logo,
       original_release_date: new Date(movie.release_date),
       overview: movie.overview || undefined,
+      originalLanguage: movie.original_language || undefined,
     };
   }
   if (type === MWMediaType.SERIES) {
@@ -76,6 +77,7 @@ export function formatTMDBMetaResult(
       logo,
       original_release_date: new Date(show.first_air_date),
       overview: show.overview,
+      originalLanguage: show.original_language || undefined,
     };
   }
 

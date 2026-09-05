@@ -32,6 +32,7 @@ type MWMediaMetaBase = {
   backdrop?: string;
   logo?: string;
   overview?: string;
+  originalLanguage?: string;
 };
 
 type MWMediaMetaSpecific =
