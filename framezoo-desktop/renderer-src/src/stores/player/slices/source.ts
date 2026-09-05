@@ -94,7 +94,7 @@ export interface Caption {
   alignment?: SubtitleAlignmentState;
   sourceCaption?: CaptionListItem;
   trackId?: string;
-  persisted?: boolean;
+  isPendingSyncConfirmation?: boolean;
 }
 
 export interface CaptionListItem {

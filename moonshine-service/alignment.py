@@ -995,6 +995,20 @@ def alignment_result_from_speech(
             "reason": "insufficient_speech_anchors",
         }
 
+    if evidence.matched_anchors == 1 and confidence < 80:
+        return {
+            "aligned": False,
+            "offsetMs": 0,
+            "confidence": confidence,
+            "speechIntervals": [
+                {"startMs": start_ms, "endMs": end_ms}
+                for start_ms, end_ms in speech_intervals
+            ],
+            "speechAnchorCount": evidence.matched_anchors,
+            "speechAnchorCoverage": evidence.anchor_coverage,
+            "reason": "low_confidence_for_single_anchor",
+        }
+
     minimum_anchor_coverage = (
         MIN_SPEECH_ANCHOR_COVERAGE
         if evidence.matched_anchors >= 3
@@ -1366,6 +1380,13 @@ def select_alignment_consensus(
         and best_cluster["averageConfidence"] >= MIN_ALIGNMENT_CONFIDENCE
         and score_margin >= 10
     )
+
+    # Fallback: if we only have 1 window agreeing, but its confidence is very high
+    # and it clearly beats any dissenting windows (or there are no dissenting windows)
+    if not has_consensus and len(best_cluster["candidates"]) == 1:
+        if best_cluster["averageConfidence"] >= 85 and score_margin >= 20:
+            has_consensus = True
+
     if not has_consensus:
         return _build_unaligned_consensus_result(
             candidates,

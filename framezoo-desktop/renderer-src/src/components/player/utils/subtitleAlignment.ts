@@ -81,9 +81,7 @@ export function isSubtitleAlignmentResultApplicable(item: {
 }): boolean {
   return (
     item.result?.aligned === true &&
-    item.currentCaptionId === item.expectedCaptionId &&
-    (item.expectedBaseVttData === undefined ||
-      item.expectedBaseVttData === item.currentBaseVttData)
+    item.currentCaptionId === item.expectedCaptionId
   );
 }
 
@@ -237,52 +235,48 @@ export function buildAlignmentWindowPlan(
     );
   }
 
-  if (plans.length < 2) {
-    if (currentStart >= windowDuration) {
+  // Expand outwards from currentStart
+  let step = 1;
+  const MAX_PLANS = 20; // Generate up to 20 plans to try
+  while (plans.length < MAX_PLANS) {
+    addUniqueAlignmentWindow(
+      plans,
+      currentStart + step * windowDuration,
+      "nearby",
+      videoDuration,
+      windowDuration,
+    );
+    addUniqueAlignmentWindow(
+      plans,
+      currentStart - step * windowDuration,
+      "nearby",
+      videoDuration,
+      windowDuration,
+    );
+
+    // Also include some distant fallbacks
+    const maxStart =
+      typeof videoDuration === "number" &&
+      Number.isFinite(videoDuration) &&
+      videoDuration > 0
+        ? Math.max(0, videoDuration - windowDuration)
+        : null;
+
+    if (maxStart !== null) {
       addUniqueAlignmentWindow(
         plans,
-        currentStart - windowDuration,
-        "nearby",
-        videoDuration,
-        windowDuration,
-      );
-    } else {
-      addUniqueAlignmentWindow(
-        plans,
-        currentStart + windowDuration,
-        "nearby",
+        Math.round(maxStart * (step / (MAX_PLANS / 2))),
+        "fallback",
         videoDuration,
         windowDuration,
       );
     }
+
+    step++;
+    if (step > MAX_PLANS) break;
   }
 
-  const maxStart =
-    typeof videoDuration === "number" &&
-    Number.isFinite(videoDuration) &&
-    videoDuration > 0
-      ? Math.max(0, videoDuration - windowDuration)
-      : null;
-  const fallbackStarts =
-    maxStart !== null
-      ? SUBTITLE_ALIGNMENT_TIMELINE_ANCHOR_FRACTIONS.map((fraction) =>
-          Math.round(maxStart * fraction),
-        )
-      : SUBTITLE_ALIGNMENT_WINDOW_FALLBACK_OFFSETS_SECONDS.map((offset) =>
-          Math.round(currentStart + offset),
-        );
-
-  for (const fallbackStart of fallbackStarts) {
-    addUniqueAlignmentWindow(
-      plans,
-      fallbackStart,
-      "fallback",
-      videoDuration,
-      windowDuration,
-    );
-  }
-
-  return plans.slice(0, SUBTITLE_ALIGNMENT_MAX_WINDOWS);
+  return plans;
 }
 
 export async function alignSubtitlesWithCurrentStream(options: {
@@ -314,51 +308,17 @@ export async function alignSubtitlesWithCurrentStream(options: {
   const windowStartsMs: number[] = [];
   const windowDurationsMs: number[] = [];
 
-  for (const [index, plan] of windowPlan.entries()) {
-    const audio = await captureCurrentStreamAudio({
-      ...options,
-      startAt: plan.startAt,
-      duration: windowDuration,
-    });
-    capturedWindows.push({
-      audio,
-      startMs: Math.round(plan.startAt * 1000),
-    });
-    windowStartsMs.push(Math.round(plan.startAt * 1000));
-    windowDurationsMs.push(Math.round(windowDuration * 1000));
-    options.onProgress?.(((index + 1) / windowPlan.length) * 0.35, "capturing");
-  }
-
   let localSpeechIntervals: Array<
     Array<{ startMs: number; endMs: number }>
   > | null = null;
+  let localEntry: any = null;
   try {
-    const localEntry = await ensureMoonshineModel(options.language || "en");
+    localEntry = await ensureMoonshineModel(options.language || "en");
     if (localEntry) {
       localSpeechIntervals = [];
-      for (const [index, window] of capturedWindows.entries()) {
-        const decoded = decodeMoonshineWav(window.audio);
-        const localIntervals = await transcribeMoonshine(
-          localEntry,
-          window.audio,
-          options.signal,
-        );
-        localSpeechIntervals.push(
-          localIntervals.map(({ startMs, endMs }) => ({
-            startMs: window.startMs + startMs,
-            endMs: window.startMs + endMs,
-          })),
-        );
-        windowDurationsMs[index] = decoded.durationMs;
-        options.onProgress?.(
-          0.35 + ((index + 1) / capturedWindows.length) * 0.35,
-          "analyzing",
-        );
-      }
     }
   } catch (error) {
     if (isAbortError(error, options.signal)) throw error;
-    localSpeechIntervals = null;
     if (!(error instanceof MoonshineLanguageUnavailableError)) {
       disableMoonshineForSession();
     }
@@ -366,6 +326,50 @@ export async function alignSubtitlesWithCurrentStream(options: {
       language: options.language,
       error,
     });
+  }
+
+  for (const [index, plan] of windowPlan.entries()) {
+    if (capturedWindows.length >= SUBTITLE_ALIGNMENT_MAX_WINDOWS) break;
+
+    const audio = await captureCurrentStreamAudio({
+      ...options,
+      startAt: plan.startAt,
+      duration: windowDuration,
+    });
+
+    if (localEntry && localSpeechIntervals) {
+      const decoded = decodeMoonshineWav(audio);
+      const localIntervals = await transcribeMoonshine(
+        localEntry,
+        audio,
+        options.signal,
+      );
+
+      if (localIntervals.length > 0) {
+        const startMs = Math.round(plan.startAt * 1000);
+        capturedWindows.push({ audio, startMs });
+        windowStartsMs.push(startMs);
+        windowDurationsMs.push(Math.round(decoded.durationMs));
+        localSpeechIntervals.push(
+          localIntervals.map(({ startMs: s, endMs: e }) => ({
+            startMs: startMs + s,
+            endMs: startMs + e,
+          })),
+        );
+      }
+    } else {
+      capturedWindows.push({
+        audio,
+        startMs: Math.round(plan.startAt * 1000),
+      });
+      windowStartsMs.push(Math.round(plan.startAt * 1000));
+      windowDurationsMs.push(Math.round(windowDuration * 1000));
+    }
+
+    options.onProgress?.(
+      (capturedWindows.length / SUBTITLE_ALIGNMENT_MAX_WINDOWS) * 0.75,
+      localEntry ? "analyzing" : "capturing",
+    );
   }
 
   const body = new FormData();

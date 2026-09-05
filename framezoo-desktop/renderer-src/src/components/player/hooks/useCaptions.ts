@@ -298,22 +298,7 @@ export function useCaptions() {
 
         const currentPlayerState = usePlayerStore.getState();
         const currentSource = currentPlayerState.source;
-        const currentQualityUrl =
-          currentSource?.type === "file"
-            ? (
-                (currentPlayerState.currentQuality &&
-                  currentSource.qualities[currentPlayerState.currentQuality]) ||
-                Object.values(currentSource.qualities).find((item) =>
-                  Boolean(item),
-                )
-              )?.url
-            : undefined;
-        if (
-          currentSource !== contextSource ||
-          currentQualityUrl !== contextQualityUrl ||
-          (currentPlayerState.currentAudioTrack?.id ?? null) !==
-            contextAudioTrackId
-        ) {
+        if (currentSource !== contextSource) {
           return { status: "failed" };
         }
 
@@ -367,32 +352,28 @@ export function useCaptions() {
           baseVttData,
         } of applicableTargets) {
           if (!result || !currentCaption) continue;
-          const alignedVtt = applySubtitleAlignment(baseVttData, result);
           const alignment = {
             offsetMs: result.offsetMs,
             ...(result.segments ? { segments: result.segments } : {}),
           };
-          if (
-            alignedVtt !== currentCaption.vttData ||
-            currentCaption.alignmentBaseVttData !== baseVttData ||
-            currentCaption.alignment?.offsetMs !== alignment.offsetMs ||
-            JSON.stringify(currentCaption.alignment?.segments) !==
-              JSON.stringify(alignment.segments)
-          ) {
-            const nextCaption = {
+
+          if (target.track === "primary") {
+            setCaption({
               ...currentCaption,
-              vttData: alignedVtt,
-              alignmentBaseVttData: baseVttData,
-              alignmentSourceVttData: inputVttData,
               alignment,
-            };
-            if (target.track === "primary") {
-              setCaption(nextCaption);
-            } else {
-              setSecondaryCaption(nextCaption);
-            }
+              isPendingSyncConfirmation: true,
+            });
+            useSubtitleStore.getState().setPrimaryDelay(result.offsetMs / 1000);
+          } else {
+            setSecondaryCaption({
+              ...currentCaption,
+              alignment,
+              isPendingSyncConfirmation: true,
+            });
+            useSubtitleStore
+              .getState()
+              .setSecondaryDelay(result.offsetMs / 1000);
           }
-          resetSubtitleSpecificSettings(target.track);
         }
 
         console.info("[subtitle-align]", {
@@ -703,8 +684,28 @@ export function useCaptions() {
           captionToSet.vttData = await downloadCaptionAsVtt(caption);
         }
 
+        const state = usePlayerStore.getState();
+        const storageKey = `subtitle-sync:${state.meta?.tmdbId || "unknown"}:${state.source?.id || "unknown"}:${caption.id}`;
+        const savedSync = localStorage.getItem(storageKey);
+        if (savedSync) {
+          try {
+            const alignment = JSON.parse(savedSync);
+            captionToSet.alignment = alignment;
+            // Delay will be restored after setDirectCaption
+          } catch (e) {
+            console.warn("Failed to parse saved subtitle sync", e);
+          }
+        }
+
         if (options?.isCurrent && !options.isCurrent()) return false;
         setDirectCaption(captionToSet, caption);
+
+        if (captionToSet.alignment?.offsetMs) {
+          useSubtitleStore
+            .getState()
+            .setPrimaryDelay(captionToSet.alignment.offsetMs / 1000);
+        }
+
         return true;
       } catch (error) {
         console.warn("Skipping unavailable caption source", {
@@ -757,10 +758,28 @@ export function useCaptions() {
             captionToSet.vttData = await downloadCaptionAsVtt(candidate);
           }
 
+          const state = usePlayerStore.getState();
+          const storageKey = `subtitle-sync:${state.meta?.tmdbId || "unknown"}:${state.source?.id || "unknown"}:${candidate.id}`;
+          const savedSync = localStorage.getItem(storageKey);
+          if (savedSync) {
+            try {
+              const alignment = JSON.parse(savedSync);
+              captionToSet.alignment = alignment;
+            } catch (e) {
+              console.warn("Failed to parse saved subtitle sync", e);
+            }
+          }
+
           if (secondaryCaption?.id !== candidate.id) {
             resetSubtitleSpecificSettings("secondary");
           }
           setSecondaryCaption(captionToSet);
+
+          if (captionToSet.alignment?.offsetMs) {
+            useSubtitleStore
+              .getState()
+              .setSecondaryDelay(captionToSet.alignment.offsetMs / 1000);
+          }
           return;
         } catch (error) {
           lastError = error;
@@ -981,7 +1000,7 @@ export function useCaptions() {
     const isCustomCaption =
       selectedCaption.id === "custom-caption" ||
       selectedCaption.id === "pasted-caption";
-    const isPersistedCaption = selectedCaption.persisted;
+    const isPersistedCaption = !!selectedCaption.alignment;
 
     if (isCustomCaption || isPersistedCaption) {
       latestAutoSelectRequestIdRef.current = externalSubtitleRequestId;
@@ -1042,7 +1061,7 @@ export function useCaptions() {
     const isCustomCaption =
       secondaryCaption.id === "custom-caption" ||
       secondaryCaption.id === "pasted-caption";
-    const isPersistedCaption = secondaryCaption.persisted;
+    const isPersistedCaption = !!secondaryCaption.alignment;
     if (isCustomCaption || isPersistedCaption) return;
 
     const isSecondaryCaptionStillAvailable = captions.some(
