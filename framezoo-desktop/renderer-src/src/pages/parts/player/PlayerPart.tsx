@@ -461,6 +461,8 @@ export function PlayerPart(props: PlayerPartProps) {
         feedbackData={thumbsFeedbackData}
         onAction={handleThumbsFeedback}
       />
+
+      <Player.SubtitleSyncBadge controlsShowing={showTargets} />
     </Player.Container>
   );
 }
