@@ -5,6 +5,7 @@ import {
   ipcMain,
   Menu,
   net,
+  powerMonitor,
   protocol,
   screen,
   session,
@@ -1435,20 +1436,23 @@ function writeSecureStore(data: any) {
 }
 
 function registerIpcHandlers() {
-  ipcMain.handle("desktop:secure-store-save", async (_event, key: string, value: string) => {
-    if (safeStorage.isEncryptionAvailable()) {
-      try {
-        const encrypted = safeStorage.encryptString(value);
-        const store = readSecureStore();
-        store[key] = encrypted.toString('base64');
-        writeSecureStore(store);
-        return true;
-      } catch (err) {
-        console.error("Encryption failed", err);
+  ipcMain.handle(
+    "desktop:secure-store-save",
+    async (_event, key: string, value: string) => {
+      if (safeStorage.isEncryptionAvailable()) {
+        try {
+          const encrypted = safeStorage.encryptString(value);
+          const store = readSecureStore();
+          store[key] = encrypted.toString("base64");
+          writeSecureStore(store);
+          return true;
+        } catch (err) {
+          console.error("Encryption failed", err);
+        }
       }
-    }
-    return false;
-  });
+      return false;
+    },
+  );
 
   ipcMain.handle("desktop:secure-store-get", async (_event, key: string) => {
     if (safeStorage.isEncryptionAvailable()) {
@@ -1456,7 +1460,9 @@ function registerIpcHandlers() {
       const encryptedBase64 = store[key];
       if (encryptedBase64) {
         try {
-          return safeStorage.decryptString(Buffer.from(encryptedBase64, 'base64'));
+          return safeStorage.decryptString(
+            Buffer.from(encryptedBase64, "base64"),
+          );
         } catch {
           return null;
         }
@@ -1866,26 +1872,32 @@ function registerIpcHandlers() {
 
   ipcMain.handle(
     "desktop:resize-to-video",
-    async (
-      _event,
-      videoWidth: number,
-      videoHeight: number,
-    ) => {
+    async (_event, videoWidth: number, videoHeight: number) => {
       if (!mainWindow || mainWindow.isDestroyed()) return false;
       if (
         !Number.isFinite(videoWidth) ||
         !Number.isFinite(videoHeight) ||
         videoWidth <= 0 ||
         videoHeight <= 0
-      ) return false;
+      )
+        return false;
       // Don't resize when fullscreen or maximized - let the user control that
       if (mainWindow.isFullScreen() || mainWindow.isMaximized()) return false;
 
       const currentDisplay = screen.getDisplayMatching(mainWindow.getBounds());
-      const workArea = currentDisplay?.workArea ?? { x: 0, y: 0, width: 1440, height: 900 };
-      const titleBarHeight = mainWindow.getBounds().height - mainWindow.getContentSize()[1];
+      const workArea = currentDisplay?.workArea ?? {
+        x: 0,
+        y: 0,
+        width: 1440,
+        height: 900,
+      };
+      const titleBarHeight =
+        mainWindow.getBounds().height - mainWindow.getContentSize()[1];
       const maxContentWidth = Math.min(videoWidth, workArea.width - 40);
-      const maxContentHeight = Math.min(videoHeight, workArea.height - titleBarHeight - 40);
+      const maxContentHeight = Math.min(
+        videoHeight,
+        workArea.height - titleBarHeight - 40,
+      );
 
       const aspectRatio = videoWidth / videoHeight;
       let contentWidth = maxContentWidth;
@@ -2022,7 +2034,6 @@ function registerIpcHandlers() {
         }
       }
       return true;
-
     } catch (err) {
       console.error("Failed to clear torrent storage:", err);
       return false;
@@ -2080,6 +2091,10 @@ if (!hasSingleInstanceLock) {
     registerHeaderInterceptors();
     installApplicationMenu();
     createMainWindow();
+
+    powerMonitor.on("resume", () => {
+      mainWindow?.webContents.send("desktop:os-resume");
+    });
     void runStartupNativeWarmup();
     desktopAppUpdater.initialize();
 

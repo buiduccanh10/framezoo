@@ -151,6 +151,15 @@ contextBridge.exposeInMainWorld("electronAPI", {
       ipcRenderer.removeListener("desktop:deep-link", handler);
     };
   },
+  onOsResume(listener: () => void) {
+    const handler = () => {
+      listener();
+    };
+    ipcRenderer.on("desktop:os-resume", handler);
+    return () => {
+      ipcRenderer.removeListener("desktop:os-resume", handler);
+    };
+  },
   onAppUpdateState(listener: (state: unknown) => void) {
     const handler = (_event: Electron.IpcRendererEvent, state: unknown) => {
       listener(state);
@@ -185,7 +194,11 @@ contextBridge.exposeInMainWorld("electronAPI", {
     return ipcRenderer.invoke("desktop:close-window");
   },
   resizeToVideo(videoWidth: number, videoHeight: number): Promise<boolean> {
-    return ipcRenderer.invoke("desktop:resize-to-video", videoWidth, videoHeight);
+    return ipcRenderer.invoke(
+      "desktop:resize-to-video",
+      videoWidth,
+      videoHeight,
+    );
   },
   isMaximized(): Promise<boolean> {
     return ipcRenderer.invoke("desktop:is-maximized");
