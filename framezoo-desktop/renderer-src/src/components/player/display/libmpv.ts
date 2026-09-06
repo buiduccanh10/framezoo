@@ -206,6 +206,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
   const TIME_BACKTRACK_TOLERANCE_SECONDS = 0.5;
   const AUDIO_PTS_TAKEOVER_MS = 400;
   let lastTimePosAt = 0;
+  let lastTimePosValue = -1;
   let lastAudioPts = -1;
   let isFullscreen = false;
   let pictureInPictureMode: PictureInPictureMode = null;
@@ -815,6 +816,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       paused = true;
       fileLoaded = false;
       lastTimePosAt = 0;
+      lastTimePosValue = -1;
       lastAudioPts = -1;
       emit("loading", false);
       return;
@@ -825,8 +827,11 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     switch (event.name) {
       case "time-pos":
         if (typeof event.data === "number" && Number.isFinite(event.data)) {
-          lastTimePosAt = performance.now();
           const rawPosition = Math.max(0, event.data);
+          if (Math.abs(rawPosition - lastTimePosValue) > 0.001) {
+            lastTimePosAt = performance.now();
+            lastTimePosValue = rawPosition;
+          }
           if (pendingSeekTarget !== null) {
             const isNearTarget =
               Math.abs(rawPosition - pendingSeekTarget) <= 3.5;
@@ -1175,6 +1180,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       destroyed = true;
       pendingLoad = null;
       lastTimePosAt = 0;
+      lastTimePosValue = -1;
       lastAudioPts = -1;
       const pipApi = getElectronApi() as {
         closeDesktopPipWindow?: () => Promise<boolean>;
@@ -1283,6 +1289,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       fileLoaded = false; // reset for new load
       firstFrameLoggedGeneration = -1;
       lastTimePosAt = 0;
+      lastTimePosValue = -1;
       lastAudioPts = -1;
       pendingSeekTarget = time > 0.5 ? time : null;
       pendingSeekSetAt = pendingSeekTarget === null ? 0 : performance.now();
