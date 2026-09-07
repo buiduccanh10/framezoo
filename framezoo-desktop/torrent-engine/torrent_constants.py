@@ -116,4 +116,4 @@ DHT_BOOTSTRAP_NODES = (
     ("router.utorrent.com", 6881),
     ("dht.transmissionbt.com", 6881),
 )
-TORRENT_HANDLE_GRACE_SECONDS = 3.0
+TORRENT_HANDLE_GRACE_SECONDS = 300.0

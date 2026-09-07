@@ -236,9 +236,21 @@ export function TorrentPart() {
                     )}
                   </p>
                   <p className="font-medium text-type-secondary">
-                    {storageInfo
-                      ? `${formatBytes(storageInfo.usedBytes)} / ${formatBytes(currentMaxSizeBytes)}`
-                      : t("settings.torrent.currentSizeLoading", "Loading...")}
+                    {storageInfo ? (
+                      <>
+                        {`${formatBytes(storageInfo.usedBytes)} / ${formatBytes(currentMaxSizeBytes)}`}
+                        {storageInfo.freeBytes !== undefined && (
+                          <span className="ml-2">
+                            {t("settings.torrent.spaceLeftOnDevice", {
+                              space: formatBytes(storageInfo.freeBytes),
+                              defaultValue: `(${formatBytes(storageInfo.freeBytes)} space left on your device)`
+                            })}
+                          </span>
+                        )}
+                      </>
+                    ) : (
+                      t("settings.torrent.currentSizeLoading", "Loading...")
+                    )}
                   </p>
                 </div>
                 <Button

@@ -1998,10 +1998,20 @@ function registerIpcHandlers() {
       if (!isNaN(parsed)) maxBytes = parsed;
     }
 
+    let freeBytes = 0;
+    try {
+      const targetDir = fs.existsSync(torrentDir) ? torrentDir : app.getPath("userData");
+      const stats = fs.statfsSync(targetDir);
+      freeBytes = stats.bfree * stats.bsize;
+    } catch {
+      // Fallback or ignore if statfs is not available or errors out
+    }
+
     return {
       path: torrentDir,
       usedBytes: totalBytes,
       maxBytes,
+      freeBytes,
     };
   });
 

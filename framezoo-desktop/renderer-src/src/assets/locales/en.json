@@ -1291,7 +1291,8 @@
       "clearCacheSuccess": "Cache cleared",
       "clearCacheError": "Failed to clear cache. Please try again.",
       "unlimited": "Unlimited",
-      "custom": "Custom..."
+      "custom": "Custom...",
+      "spaceLeftOnDevice": "({{space}} space left on your device)"
     },
     "unsaved": "You have unsaved changes... "
   },

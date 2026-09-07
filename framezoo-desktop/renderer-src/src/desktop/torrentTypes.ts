@@ -59,4 +59,5 @@ export interface TorrentStorageInfo {
   path: string;
   usedBytes: number;
   maxBytes: number;
+  freeBytes?: number;
 }
