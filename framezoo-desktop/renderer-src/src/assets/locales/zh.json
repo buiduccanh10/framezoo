@@ -666,7 +666,8 @@
         "restart": "重启即可更新",
         "updating": "更新中..."
       },
-      "offline": "无法连接到服务器。请稍后再试。"
+      "offline": "无法连接到服务器。请稍后再试。",
+      "lowSpace": "您的设备存储空间不足。这可能会影响流媒体播放和下载。"
     },
     "download": {
       "empty": "尚未配置下载。",
@@ -1301,7 +1302,8 @@
       "clearCacheSuccess": "缓存已清除",
       "clearCacheError": "清除缓存失败。请再试一次。",
       "unlimited": "无限",
-      "custom": "风俗..."
+      "custom": "风俗...",
+      "spaceLeftOnDevice": "（设备上剩余的{{space}}空间）"
     },
     "unsaved": "您有未保存的更改…"
   },

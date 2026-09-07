@@ -666,7 +666,8 @@
         "restart": "Mulai ulang untuk memperbarui",
         "updating": "Memperbarui..."
       },
-      "offline": "Tidak dapat terhubung ke server. Silakan coba lagi dalam beberapa detik."
+      "offline": "Tidak dapat terhubung ke server. Silakan coba lagi dalam beberapa detik.",
+      "lowSpace": "Ruang penyimpanan perangkat Anda hampir habis. Hal ini dapat memengaruhi proses streaming dan pengunduhan."
     },
     "download": {
       "empty": "Belum ada unduhan yang dikonfigurasi.",
@@ -1301,7 +1302,8 @@
       "clearCacheSuccess": "Tembolok dibersihkan",
       "clearCacheError": "Gagal menghapus cache. Silakan coba lagi.",
       "unlimited": "Tak terbatas",
-      "custom": "Kebiasaan..."
+      "custom": "Kebiasaan...",
+      "spaceLeftOnDevice": "(Ruang penyimpanan __PH__0__ tersisa di perangkat Anda)"
     },
     "unsaved": "Anda memiliki perubahan yang belum disimpan"
   },

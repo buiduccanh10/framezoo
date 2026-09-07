@@ -162,11 +162,12 @@ class TorrentRuntime:
                         self.file_path,
                         self.file_size,
                     ) = select_file(self.info, self.request)
-                    priorities = [0] * self.info.files().num_files()
-                    priorities[
-                        self.file_index
-                    ] = constants.STREAM_IDLE_FILE_PRIORITY
-                    self.handle.prioritize_files(priorities)
+                    if getattr(self, "record", None) is not None:
+                        self.record.update_file_priorities()
+                    else:
+                        priorities = [0] * self.info.files().num_files()
+                        priorities[self.file_index] = constants.STREAM_IDLE_FILE_PRIORITY
+                        self.handle.prioritize_files(priorities)
                     # Piece priorities and deadlines drive playback; global
                     # sequential mode would start from piece 0 instead of
                     # the selected file's playhead.
@@ -535,10 +536,17 @@ class TorrentRuntime:
                     ),
                 ),
             )
-            if startup_pieces:
+            
+            # Stremio-like fast start: Always fetch the last piece for MP4/MKV tail headers
+            tail_start = max(0, self.file_size - piece_length)
+            tail_pieces = self.map_pieces(tail_start, piece_length)
+            
+            combined_pieces = sorted(set(startup_pieces) | tail_pieces)
+            
+            if combined_pieces:
                 self._schedule_pieces(
-                    startup_pieces,
-                    {startup_pieces[0]},
+                    combined_pieces,
+                    {startup_pieces[0]} if startup_pieces else set(),
                     reason="startup-prefetch",
                 )
 
@@ -598,9 +606,12 @@ class TorrentRuntime:
             if getattr(self, "_focused_file_index", None) == self.file_index:
                 return
         try:
-            priorities = [0] * self.info.files().num_files()
-            priorities[self.file_index] = constants.STREAM_IDLE_FILE_PRIORITY
-            self.handle.prioritize_files(priorities)
+            if getattr(self, "record", None) is not None:
+                self.record.update_file_priorities()
+            else:
+                priorities = [0] * self.info.files().num_files()
+                priorities[self.file_index] = constants.STREAM_IDLE_FILE_PRIORITY
+                self.handle.prioritize_files(priorities)
             self.handle.set_sequential_download(False)
             with self._piece_priority_lock:
                 self._focused_file_index = self.file_index

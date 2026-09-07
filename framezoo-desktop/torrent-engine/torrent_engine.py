@@ -82,6 +82,24 @@ class TorrentRecord:
         if self.discovery is not None:
             self.discovery.add_trackers(trackers)
 
+    def update_file_priorities(self) -> None:
+        try:
+            status = self.handle.status()
+            if not status.has_metadata:
+                return
+            info = self.handle.torrent_file()
+            if info is None:
+                return
+            priorities = [0] * info.files().num_files()
+            with self.lock:
+                for session_id in self.session_ids:
+                    runtime = self.engine.sessions.get(session_id)
+                    if runtime is not None and runtime.file_index is not None:
+                        priorities[runtime.file_index] = constants.STREAM_IDLE_FILE_PRIORITY
+            self.handle.prioritize_files(priorities)
+        except Exception:
+            pass
+
     def snapshot(self) -> dict[str, Any]:
         if self.discovery is None:
             return {
@@ -159,6 +177,7 @@ class LibtorrentEngine:
                 "send_buffer_watermark": 4 * 1024 * 1024,
                 "suggest_mode": 1,
                 "mixed_mode_algorithm": 0,
+                "piece_extent_affinity": True,
                 "active_downloads": -1,
                 "active_limit": -1,
                 "announce_to_all_trackers": True,

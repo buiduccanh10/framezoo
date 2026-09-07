@@ -225,7 +225,7 @@ function MoreContentInner({ onShowDetails }: MoreContentProps) {
   const handleLoadMore = async () => {
     setCurrentPage((prev) => prev + 1);
   };
-  const loadMoreRef = useRef<HTMLDivElement | null>(null);
+  const loadMoreRef = useRef<HTMLDivElement>(null!);
 
   // Infinite Scroll Trigger
   useEffect(() => {

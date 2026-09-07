@@ -666,7 +666,8 @@
         "restart": "Reiniciar para actualizar",
         "updating": "Actualizando..."
       },
-      "offline": "No se pudo conectar con el servidor. Inténtelo de nuevo en unos segundos."
+      "offline": "No se pudo conectar con el servidor. Inténtelo de nuevo en unos segundos.",
+      "lowSpace": "Tu dispositivo se está quedando sin espacio de almacenamiento. Esto puede afectar la reproducción en streaming y las descargas."
     },
     "download": {
       "empty": "Aún no se han configurado descargas.",
@@ -1301,7 +1302,8 @@
       "clearCacheSuccess": "Caché borrado",
       "clearCacheError": "No se pudo borrar el caché. Por favor inténtalo de nuevo.",
       "unlimited": "Ilimitado",
-      "custom": "Costumbre..."
+      "custom": "Costumbre...",
+      "spaceLeftOnDevice": "({{space}} espacio restante en su dispositivo)"
     },
     "unsaved": "Tienes cambios sin guardar"
   },

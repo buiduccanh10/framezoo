@@ -46,7 +46,7 @@ export function DiscoverNavigation({
       })),
     [genres],
   );
-  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null!);
   const [isNavScrolled, setIsNavScrolled] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
 

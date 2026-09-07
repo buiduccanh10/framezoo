@@ -7,7 +7,7 @@ import path from "path";
 export const handlebars = (
   options: { vars?: Record<string, any> } = {},
 ): PluginOption[] => {
-  const files = globSync(path.resolve(__dirname, "../src/assets/**/**.hbs"));
+  const files = globSync(path.resolve(import.meta.dirname, "../src/assets/**/**.hbs"));
 
   function render(content: string): string {
     const template = Handlebars.compile(content);

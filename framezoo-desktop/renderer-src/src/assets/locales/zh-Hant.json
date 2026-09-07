@@ -666,7 +666,8 @@
         "restart": "重啟即可更新",
         "updating": "更新中..."
       },
-      "offline": "無法連接到伺服器。請稍後再試。"
+      "offline": "無法連接到伺服器。請稍後再試。",
+      "lowSpace": "您的設備儲存空間不足。這可能會影響串流媒體播放和下載。"
     },
     "download": {
       "empty": "尚未配置下載。",
@@ -1301,7 +1302,8 @@
       "clearCacheSuccess": "快取已清除",
       "clearCacheError": "清除快取失敗。請再試一次。",
       "unlimited": "無限",
-      "custom": "風俗..."
+      "custom": "風俗...",
+      "spaceLeftOnDevice": "（裝置上剩餘的{{space}}空間）"
     },
     "unsaved": "您有未儲存的變更"
   },

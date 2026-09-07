@@ -40,7 +40,7 @@ export const DetailsBackdrop = forwardRef<
   ref,
 ) {
   const [logoHeight, setLogoHeight] = useState<number>(0);
-  const logoRef = useRef<HTMLDivElement>(null);
+  const logoRef = useRef<HTMLDivElement>(null!);
   const [trailerReady, setTrailerReady] = useState(false);
   const trailerPlayerRef = useRef<TrailerPlayerHandle>(null);
 

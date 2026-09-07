@@ -24,7 +24,7 @@ export function Chromecast({ className }: ChromecastProps) {
   const [castHidden, setCastHidden] = useState(false);
   const isCasting = usePlayerStore((s) => s.interface.isCasting);
   const source = usePlayerStore((s) => s.source);
-  const launcherRef = useRef<HTMLDivElement>(null);
+  const launcherRef = useRef<HTMLDivElement>(null!);
 
   // Check if source is supported for casting
   // HLS is always supported (proxied if needed)

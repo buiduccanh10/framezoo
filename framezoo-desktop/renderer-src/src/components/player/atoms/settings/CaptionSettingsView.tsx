@@ -54,7 +54,7 @@ export function CaptionSetting(props: {
   controlButtons?: boolean;
 }) {
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null!);
 
   const currentPercentage = (props.value - props.min) / (props.max - props.min);
   const commit = useCallback(

@@ -42,7 +42,7 @@ export function ScrollToActiveSection(props: {
   behavior?: ScrollBehavior;
   autoScroll?: boolean;
 }) {
-  const scrollingContainer = useRef<HTMLDivElement>(null);
+  const scrollingContainer = useRef<HTMLDivElement>(null!);
 
   useEffect(() => {
     if (props.autoScroll === false) return;

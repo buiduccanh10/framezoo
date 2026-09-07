@@ -666,7 +666,8 @@
         "restart": "Riavvia per aggiornare",
         "updating": "Aggiornamento..."
       },
-      "offline": "Impossibile connettersi al server. Riprovare tra qualche secondo."
+      "offline": "Impossibile connettersi al server. Riprovare tra qualche secondo.",
+      "lowSpace": "Lo spazio di archiviazione sul tuo dispositivo si sta esaurendo. Ciò potrebbe influire sullo streaming e sul download."
     },
     "download": {
       "empty": "Nessun download è stato ancora configurato.",
@@ -1301,7 +1302,8 @@
       "clearCacheSuccess": "Cache cancellata",
       "clearCacheError": "Impossibile svuotare la cache. Per favore riprova.",
       "unlimited": "Illimitato",
-      "custom": "Costume..."
+      "custom": "Costume...",
+      "spaceLeftOnDevice": "({{space}} spazio lasciato sul tuo dispositivo)"
     },
     "unsaved": "Hai modifiche non salvate... "
   },

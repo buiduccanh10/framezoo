@@ -666,7 +666,8 @@
         "restart": "Endurræstu til að uppfæra",
         "updating": "Uppfærir..."
       },
-      "offline": "Ekki tókst að tengjast netþjóninum. Reyndu aftur eftir nokkrar sekúndur."
+      "offline": "Ekki tókst að tengjast netþjóninum. Reyndu aftur eftir nokkrar sekúndur.",
+      "lowSpace": "Geymslurými tækisins er að klárast. Þetta gæti haft áhrif á streymi og niðurhal."
     },
     "download": {
       "empty": "Engin niðurhal er stillt ennþá.",
@@ -1301,7 +1302,8 @@
       "clearCacheSuccess": "Skyndiminni hreinsaður",
       "clearCacheError": "Mistókst að hreinsa skyndiminni. Vinsamlegast reyndu aftur.",
       "unlimited": "Ótakmarkað",
-      "custom": "Sérsniðin..."
+      "custom": "Sérsniðin...",
+      "spaceLeftOnDevice": "({{space}} pláss eftir á tækinu þínu)"
     },
     "unsaved": "Þú hefur óvistaðar breytingar"
   },

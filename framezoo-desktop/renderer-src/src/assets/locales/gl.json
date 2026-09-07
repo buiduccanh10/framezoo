@@ -666,7 +666,8 @@
         "restart": "Reinicia para actualizar",
         "updating": "Actualizando..."
       },
-      "offline": "Non se pode conectar co servidor. Téntao de novo nuns segundos."
+      "offline": "Non se pode conectar co servidor. Téntao de novo nuns segundos.",
+      "lowSpace": "O teu dispositivo está a quedar sen espazo de almacenamento. Isto pode afectar á transmisión e ás descargas."
     },
     "download": {
       "empty": "Aínda non hai descargas configuradas.",
@@ -1301,7 +1302,8 @@
       "clearCacheSuccess": "Limpar a caché",
       "clearCacheError": "Produciuse un erro ao borrar a caché. Téntao de novo.",
       "unlimited": "Ilimitado",
-      "custom": "Personalizado..."
+      "custom": "Personalizado...",
+      "spaceLeftOnDevice": "({{space}} espazo libre no teu dispositivo)"
     },
     "unsaved": "Tes cambios sen gardar"
   },

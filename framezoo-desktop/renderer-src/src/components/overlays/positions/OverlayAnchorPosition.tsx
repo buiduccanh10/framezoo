@@ -10,7 +10,7 @@ interface AnchorPositionProps {
 
 function useCalculatePositions() {
   const anchorPoint = useOverlayStore((s) => s.anchorPoint);
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null!);
   const [left, setLeft] = useState<number>(0);
   const [top, setTop] = useState<number>(0);
   const [cardRect, setCardRect] = useState<DOMRect | null>(null);

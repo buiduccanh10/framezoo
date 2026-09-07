@@ -93,7 +93,7 @@ function DropdownMenu({
   boundaryRef,
   initialLeft,
 }: DropdownMenuProps) {
-  const menuRef = useRef<HTMLDivElement | null>(null);
+  const menuRef = useRef<HTMLDivElement>(null!);
   const [menuLeft, setMenuLeft] = useState(initialLeft);
 
   const resolveMenuPosition = useCallback(
@@ -204,7 +204,7 @@ function DropdownMenu({
 
 export function Dropdown(props: DropdownProps) {
   const { direction = "down", customButton, customMenu } = props;
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null!);
   const [initialMenuLeft, setInitialMenuLeft] = useState(0);
   const estimatedMenuWidth = useMemo(() => {
     const longestOption = props.options.reduce(

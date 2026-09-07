@@ -38,7 +38,7 @@ function Child(props: { className?: string; children?: ReactNode }) {
 }
 
 function Light(props: FlareProps) {
-  const outerRef = useRef<HTMLDivElement>(null);
+  const outerRef = useRef<HTMLDivElement>(null!);
   const size = props.flareSize ?? SIZE_DEFAULT;
   const cssVar = props.cssColorVar ?? CSS_VAR_DEFAULT;
   const opacity = props.gradientOpacity ?? 1;

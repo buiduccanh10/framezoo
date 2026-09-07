@@ -666,7 +666,8 @@
         "restart": "Käynnistä uudelleen päivittääksesi",
         "updating": "Päivitetään..."
       },
-      "offline": "Palvelimeen ei saada yhteyttä. Yritä uudelleen muutaman sekunnin kuluttua."
+      "offline": "Palvelimeen ei saada yhteyttä. Yritä uudelleen muutaman sekunnin kuluttua.",
+      "lowSpace": "Laitteesi tallennustila on loppumassa. Tämä voi vaikuttaa suoratoistoon ja lataukseen."
     },
     "download": {
       "empty": "Latauksia ei ole vielä määritetty.",
@@ -1301,7 +1302,8 @@
       "clearCacheSuccess": "Välimuisti tyhjennetty",
       "clearCacheError": "Välimuistin tyhjennys epäonnistui. Yritä uudelleen.",
       "unlimited": "Rajoittamaton",
-      "custom": "Mukautettu..."
+      "custom": "Mukautettu...",
+      "spaceLeftOnDevice": "({{space}} tilaa jäljellä laitteellasi)"
     },
     "unsaved": "Sinulla on tallentamattomia muutoksia..."
   },

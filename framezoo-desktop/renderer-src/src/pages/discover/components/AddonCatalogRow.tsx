@@ -62,7 +62,7 @@ export function AddonCatalogRow({
 }: AddonCatalogRowProps) {
   const { t } = useTranslation();
   const addons = useInstalledAddons();
-  // const scrollRef = useRef<HTMLDivElement>(null);
+  // const scrollRef = useRef<HTMLDivElement>(null!);
   const { ref: intersectionRef, hasIntersected } =
     useIntersectionObserver<HTMLDivElement>({
       threshold: 0.1,

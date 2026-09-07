@@ -23,7 +23,7 @@ export function useModal(id: string) {
 
 export function ModalCard(props: {
   children?: ReactNode;
-  className?: ReactNode;
+  className?: string;
 }) {
   return (
     <div

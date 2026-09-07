@@ -22,7 +22,7 @@ export const SearchBarInput = forwardRef<HTMLInputElement, SearchBarProps>(
     const [lightTheme, setLightTheme] = useState(
       Boolean(props.isInFeatured) && window.scrollY < 600,
     );
-    const containerRef = useRef<HTMLDivElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null!);
     const [showTooltip, setShowTooltip] = useState(false);
 
     function setSearch(value: string) {

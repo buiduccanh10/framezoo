@@ -666,7 +666,8 @@
         "restart": "Genstart for at opdatere",
         "updating": "Opdaterer..."
       },
-      "offline": "Kan ikke oprette forbindelse til serveren. Prøv igen om et par sekunder."
+      "offline": "Kan ikke oprette forbindelse til serveren. Prøv igen om et par sekunder.",
+      "lowSpace": "Din enhed er ved at løbe tør for lagerplads. Dette kan påvirke streaming og download."
     },
     "download": {
       "empty": "Ingen downloads er konfigureret endnu.",
@@ -1301,7 +1302,8 @@
       "clearCacheSuccess": "Cache ryddet",
       "clearCacheError": "Kunne ikke rydde cachen. Prøv venligst igen.",
       "unlimited": "Ubegrænset",
-      "custom": "Skik..."
+      "custom": "Skik...",
+      "spaceLeftOnDevice": "({{space}} plads tilbage på din enhed)"
     },
     "unsaved": "Du har ændringer, der ikke er gemt... "
   },

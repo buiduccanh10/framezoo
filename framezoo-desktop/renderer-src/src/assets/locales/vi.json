@@ -666,7 +666,8 @@
         "restart": "Khởi động lại để cập nhật",
         "updating": "Đang cập nhật..."
       },
-      "offline": "Không thể kết nối với máy chủ. Vui lòng thử lại sau vài giây."
+      "offline": "Không thể kết nối với máy chủ. Vui lòng thử lại sau vài giây.",
+      "lowSpace": "Thiết bị của bạn sắp hết dung lượng lưu trữ. Điều này có thể ảnh hưởng đến việc phát trực tuyến và tải xuống."
     },
     "download": {
       "empty": "Chưa có nội dung tải xuống nào được định cấu hình.",
@@ -1301,7 +1302,8 @@
       "clearCacheSuccess": "Đã xóa bộ nhớ đệm",
       "clearCacheError": "Không xóa được bộ nhớ đệm. Vui lòng thử lại.",
       "unlimited": "Không giới hạn",
-      "custom": "Tùy chỉnh..."
+      "custom": "Tùy chỉnh...",
+      "spaceLeftOnDevice": "({{space}} dung lượng trống trên thiết bị của bạn)"
     },
     "unsaved": "Bạn có thay đổi chưa lưu... "
   },

@@ -38,7 +38,7 @@ export function GroupDropdown({
   const [newGroup, setNewGroup] = useState("");
   const [showInput, setShowInput] = useState(false);
   const [selectedIcon, setSelectedIcon] = useState<UserIcons>(userIconList[0]);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null!);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

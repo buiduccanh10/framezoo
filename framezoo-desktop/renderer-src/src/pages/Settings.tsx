@@ -60,7 +60,7 @@ function SettingsLayout(props: {
   const { className } = props;
   const { t } = useTranslation();
   const { isMobile } = useIsMobile();
-  const searchRef = useRef<HTMLInputElement>(null);
+  const searchRef = useRef<HTMLInputElement>(null!);
   const bannerSize = useBannerSize();
 
   const isPWA = useIsPWA();

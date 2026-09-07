@@ -49,7 +49,7 @@ export function LazyCarouselWrapper({
   isLoading?: boolean;
   keepChildrenMounted?: boolean;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null!);
   const intersection = useIntersection(ref, {
     root: null,
     rootMargin: "500px",
@@ -282,7 +282,7 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
   );
   const [trailerUrl, setTrailerUrl] = useState<string | undefined>();
   const [showCollection, setShowCollection] = useState(false);
-  const contentRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null!);
   const trailerPlayerRef = useRef<TrailerPlayerHandle>(null);
   const [selectedSeason, setSelectedSeason] = useState<number>(1);
   const [fetchedSeasons, setFetchedSeasons] = useState<
