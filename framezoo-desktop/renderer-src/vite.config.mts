@@ -4,7 +4,7 @@ import loadVersion from "vite-plugin-package-version";
 import checker from "vite-plugin-checker";
 import { readFileSync } from "fs";
 import path from "path";
-import { handlebars } from "./plugins/handlebars";
+import { handlebars } from "./plugins/handlebars.mts";
 import { PluginOption, loadEnv } from "vite";
 import { visualizer } from "rollup-plugin-visualizer";
 
@@ -41,10 +41,13 @@ function emitVersionManifest(version: string, buildId: string): PluginOption {
 }
 
 export default defineConfig(({ mode }) => {
-  const workspaceRoot = path.resolve(__dirname, "../..");
+  const workspaceRoot = path.resolve(import.meta.dirname, "../..");
   const env = loadEnv(mode, workspaceRoot);
   const packageJson = JSON.parse(
-    readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8"),
+    readFileSync(
+      path.resolve(import.meta.dirname, "..", "package.json"),
+      "utf8",
+    ),
   ) as { version?: string };
   const appVersion = packageJson.version ?? "0.0.0";
   const appBuildId =
@@ -53,7 +56,7 @@ export default defineConfig(({ mode }) => {
     process.env.SOURCE_VERSION ||
     new Date().toISOString();
   return {
-    root: __dirname,
+    root: import.meta.dirname,
     envDir: workspaceRoot,
     base: env.VITE_BASE_URL || "/",
     define: {
@@ -80,7 +83,7 @@ export default defineConfig(({ mode }) => {
                 position: "tr",
               },
               typescript: {
-                root: __dirname,
+                root: import.meta.dirname,
                 tsconfigPath: "tsconfig.json",
               },
             }),
@@ -90,7 +93,7 @@ export default defineConfig(({ mode }) => {
     ],
 
     build: {
-      outDir: path.resolve(__dirname, "..", "renderer"),
+      outDir: path.resolve(import.meta.dirname, "..", "renderer"),
       emptyOutDir: true,
       sourcemap: mode !== "production",
       rolldownOptions: {
@@ -128,7 +131,7 @@ export default defineConfig(({ mode }) => {
       postcss: {
         plugins: [
           tailwind({
-            config: path.resolve(__dirname, "tailwind.config.ts"),
+            config: path.resolve(import.meta.dirname, "tailwind.config.ts"),
           }),
           rtl(),
         ],
@@ -138,10 +141,10 @@ export default defineConfig(({ mode }) => {
     resolve: {
       dedupe: ["react", "react-dom"],
       alias: {
-        "@": path.resolve(__dirname, "./src"),
-        "@themes": path.resolve(__dirname, "./themes"),
+        "@": path.resolve(import.meta.dirname, "./src"),
+        "@themes": path.resolve(import.meta.dirname, "./themes"),
         "@sozialhelden/ietf-language-tags": path.resolve(
-          __dirname,
+          import.meta.dirname,
           "../node_modules/@sozialhelden/ietf-language-tags/dist/cjs",
         ),
       },
