@@ -666,7 +666,8 @@
         "restart": "Redémarrer pour mettre à jour",
         "updating": "Mise à jour..."
       },
-      "offline": "Impossible de se connecter au serveur. Veuillez réessayer dans quelques secondes."
+      "offline": "Impossible de se connecter au serveur. Veuillez réessayer dans quelques secondes.",
+      "lowSpace": "Votre appareil manque d&#39;espace de stockage. Cela peut affecter la lecture en continu et le téléchargement."
     },
     "download": {
       "empty": "Aucun téléchargement n'est encore configuré.",
@@ -1301,7 +1302,8 @@
       "clearCacheSuccess": "Cache vidé",
       "clearCacheError": "Échec de la suppression du cache. Veuillez réessayer.",
       "unlimited": "Illimité",
-      "custom": "Coutume..."
+      "custom": "Coutume...",
+      "spaceLeftOnDevice": "({{space}} espace restant sur votre appareil)"
     },
     "unsaved": "Vous avez des changements non sauvegardés"
   },

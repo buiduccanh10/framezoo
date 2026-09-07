@@ -666,7 +666,8 @@
         "restart": "Starta om för att uppdatera",
         "updating": "Uppdaterar..."
       },
-      "offline": "Det gick inte att ansluta till servern. Försök igen om några sekunder."
+      "offline": "Det gick inte att ansluta till servern. Försök igen om några sekunder.",
+      "lowSpace": "Din enhets lagringsutrymme börjar ta slut. Detta kan påverka streaming och nedladdning."
     },
     "download": {
       "empty": "Inga nedladdningar är konfigurerade än.",
@@ -1301,7 +1302,8 @@
       "clearCacheSuccess": "Cache rensad",
       "clearCacheError": "Det gick inte att rensa cacheminnet. Försök igen.",
       "unlimited": "Obegränsat",
-      "custom": "Beställnings..."
+      "custom": "Beställnings...",
+      "spaceLeftOnDevice": "({{space}} utrymme kvar på din enhet)"
     },
     "unsaved": "Du har osparade ändringar"
   },

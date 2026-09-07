@@ -666,7 +666,8 @@
         "restart": "Reporniți pentru a actualiza",
         "updating": "Se actualizează..."
       },
-      "offline": "Nu se poate conecta la server. Vă rugăm să încercați din nou în câteva secunde."
+      "offline": "Nu se poate conecta la server. Vă rugăm să încercați din nou în câteva secunde.",
+      "lowSpace": "Dispozitivul tău rămâne fără spațiu de stocare. Acest lucru poate afecta redarea în flux și descărcarea."
     },
     "download": {
       "empty": "Nu sunt încă configurate descărcări.",
@@ -1301,7 +1302,8 @@
       "clearCacheSuccess": "Cache-ul a fost golit",
       "clearCacheError": "Nu s-a șters memoria cache. Vă rugăm să încercați din nou.",
       "unlimited": "Nelimitat",
-      "custom": "Personalizat..."
+      "custom": "Personalizat...",
+      "spaceLeftOnDevice": "({{space}} spațiu rămas pe dispozitiv)"
     },
     "unsaved": "Aveți modificări nesalvate"
   },

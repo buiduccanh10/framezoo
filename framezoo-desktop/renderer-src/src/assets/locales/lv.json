@@ -666,7 +666,8 @@
         "restart": "Restartējiet, lai atjauninātu",
         "updating": "Notiek atjaunināšana..."
       },
-      "offline": "Nevar izveidot savienojumu ar serveri. Lūdzu, mēģiniet vēlreiz pēc dažām sekundēm."
+      "offline": "Nevar izveidot savienojumu ar serveri. Lūdzu, mēģiniet vēlreiz pēc dažām sekundēm.",
+      "lowSpace": "Jūsu ierīcē trūkst vietas krātuvē. Tas var ietekmēt straumēšanu un lejupielādi."
     },
     "download": {
       "empty": "Vēl nav konfigurēta neviena lejupielāde.",
@@ -1301,7 +1302,8 @@
       "clearCacheSuccess": "Kešatmiņa notīrīta",
       "clearCacheError": "Neizdevās notīrīt kešatmiņu. Lūdzu, mēģiniet vēlreiz.",
       "unlimited": "Neierobežots",
-      "custom": "Pielāgots..."
+      "custom": "Pielāgots...",
+      "spaceLeftOnDevice": "(ierīcē atlikušā vieta {{space}})"
     },
     "unsaved": "Jums ir nesaglabātas izmaiņas"
   },

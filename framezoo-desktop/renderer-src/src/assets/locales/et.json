@@ -666,7 +666,8 @@
         "restart": "Värskendamiseks taaskäivitage",
         "updating": "Värskendamine..."
       },
-      "offline": "Serveriga ei õnnestu ühendust luua. Palun proovige uuesti mõne sekundi pärast."
+      "offline": "Serveriga ei õnnestu ühendust luua. Palun proovige uuesti mõne sekundi pärast.",
+      "lowSpace": "Teie seadme salvestusruum hakkab otsa saama. See võib mõjutada voogedastust ja allalaadimist."
     },
     "download": {
       "empty": "Ühtegi allalaadimist pole veel konfigureeritud.",
@@ -1301,7 +1302,8 @@
       "clearCacheSuccess": "Vahemälu tühjendatud",
       "clearCacheError": "Vahemälu tühjendamine ebaõnnestus. Palun proovi uuesti.",
       "unlimited": "Piiramatu",
-      "custom": "Kohandatud..."
+      "custom": "Kohandatud...",
+      "spaceLeftOnDevice": "(Teie seadmes on jäänud {{space}} vaba ruumi)"
     },
     "unsaved": "Teil on salvestamata muudatusi"
   },

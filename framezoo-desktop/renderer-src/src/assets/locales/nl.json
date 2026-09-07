@@ -666,7 +666,8 @@
         "restart": "Start opnieuw op om te updaten",
         "updating": "Updaten..."
       },
-      "offline": "Kan geen verbinding maken met de server. Probeer het over een paar seconden opnieuw."
+      "offline": "Kan geen verbinding maken met de server. Probeer het over een paar seconden opnieuw.",
+      "lowSpace": "Uw apparaat heeft bijna geen opslagruimte meer. Dit kan gevolgen hebben voor het streamen en downloaden."
     },
     "download": {
       "empty": "Er zijn nog geen downloads geconfigureerd.",
@@ -1301,7 +1302,8 @@
       "clearCacheSuccess": "Cache gewist",
       "clearCacheError": "Kan de cache niet wissen. Probeer het opnieuw.",
       "unlimited": "Onbeperkt",
-      "custom": "Aangepast..."
+      "custom": "Aangepast...",
+      "spaceLeftOnDevice": "({{space}} vrije ruimte op uw apparaat)"
     },
     "unsaved": "U heeft niet-opgeslagen wijzigingen"
   },

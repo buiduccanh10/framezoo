@@ -666,7 +666,8 @@
         "restart": "Güncellemek için yeniden başlatın",
         "updating": "Güncelleniyor..."
       },
-      "offline": "Sunucuya bağlanılamadı. Lütfen birkaç saniye sonra tekrar deneyin."
+      "offline": "Sunucuya bağlanılamadı. Lütfen birkaç saniye sonra tekrar deneyin.",
+      "lowSpace": "Cihazınızın depolama alanı azalıyor. Bu durum yayın akışını ve indirme işlemlerini etkileyebilir."
     },
     "download": {
       "empty": "Henüz hiçbir indirme işlemi yapılandırılmadı.",
@@ -1301,7 +1302,8 @@
       "clearCacheSuccess": "Önbellek temizlendi",
       "clearCacheError": "Önbellek temizlenemedi. Lütfen tekrar deneyin.",
       "unlimited": "Sınırsız",
-      "custom": "Gelenek..."
+      "custom": "Gelenek...",
+      "spaceLeftOnDevice": "(Cihazınızda {{space}} boş alan kaldı)"
     },
     "unsaved": "Kaydedilmemiş değişiklikleriniz mevcut"
   },

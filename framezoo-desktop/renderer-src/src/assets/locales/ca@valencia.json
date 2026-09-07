@@ -666,7 +666,8 @@
         "restart": "Reinicieu per actualitzar",
         "updating": "S'està actualitzant..."
       },
-      "offline": "No es pot connectar al servidor. Torna-ho a intentar d&#39;aquí a uns segons."
+      "offline": "No es pot connectar al servidor. Torna-ho a intentar d&#39;aquí a uns segons.",
+      "lowSpace": "El dispositiu s&#39;està quedant sense espai d&#39;emmagatzematge. Això pot afectar la reproducció en temps real i les descàrregues."
     },
     "download": {
       "empty": "Encara no s'ha configurat cap baixada.",
@@ -1301,7 +1302,8 @@
       "clearCacheSuccess": "S'ha esborrat la memòria cau",
       "clearCacheError": "No s'ha pogut esborrar la memòria cau. Si us plau, torna-ho a provar.",
       "unlimited": "Il·limitat",
-      "custom": "Personalitzat..."
+      "custom": "Personalitzat...",
+      "spaceLeftOnDevice": "({{space}} espai restant al dispositiu)"
     },
     "unsaved": "Tens canvis no desats..."
   },

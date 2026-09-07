@@ -666,7 +666,8 @@
         "restart": "Znova zaženite za posodobitev",
         "updating": "Posodabljanje ..."
       },
-      "offline": "Ni mogoče vzpostaviti povezave s strežnikom. Poskusite znova čez nekaj sekund."
+      "offline": "Ni mogoče vzpostaviti povezave s strežnikom. Poskusite znova čez nekaj sekund.",
+      "lowSpace": "V vaši napravi zmanjkuje prostora za shranjevanje. To lahko vpliva na pretakanje in prenos."
     },
     "download": {
       "empty": "Noben prenos še ni konfiguriran.",
@@ -1301,7 +1302,8 @@
       "clearCacheSuccess": "Predpomnilnik počiščen",
       "clearCacheError": "Čiščenje predpomnilnika ni uspelo. prosim poskusite znova",
       "unlimited": "Neomejeno",
-      "custom": "Po meri ..."
+      "custom": "Po meri ...",
+      "spaceLeftOnDevice": "({{space}} prostora na vaši napravi)"
     },
     "unsaved": "Imate neshranjene spremembe"
   },

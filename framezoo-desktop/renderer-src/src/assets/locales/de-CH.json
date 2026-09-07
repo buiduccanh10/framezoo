@@ -666,7 +666,8 @@
         "restart": "Starten Sie neu, um zu aktualisieren",
         "updating": "Aktualisierung..."
       },
-      "offline": "Verbindung zum Server konnte nicht hergestellt werden. Bitte versuchen Sie es in wenigen Sekunden erneut."
+      "offline": "Verbindung zum Server konnte nicht hergestellt werden. Bitte versuchen Sie es in wenigen Sekunden erneut.",
+      "lowSpace": "Auf Ihrem Gerät ist der Speicherplatz knapp. Dies kann das Streaming und Herunterladen beeinträchtigen."
     },
     "download": {
       "empty": "Es sind noch keine Downloads konfiguriert.",
@@ -1301,7 +1302,8 @@
       "clearCacheSuccess": "Cache geleert",
       "clearCacheError": "Cache konnte nicht geleert werden. Bitte versuchen Sie es erneut.",
       "unlimited": "Unbegrenzt",
-      "custom": "Brauch..."
+      "custom": "Brauch...",
+      "spaceLeftOnDevice": "({{space}} Speicherplatz auf Ihrem Gerät verbleibend)"
     },
     "unsaved": "Du hesch onspreichereti änderige…"
   },

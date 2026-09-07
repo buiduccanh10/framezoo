@@ -666,7 +666,8 @@
         "restart": "Pro aktualizaci restartujte",
         "updating": "Aktualizace..."
       },
-      "offline": "Nelze se připojit k serveru. Zkuste to prosím znovu za několik sekund."
+      "offline": "Nelze se připojit k serveru. Zkuste to prosím znovu za několik sekund.",
+      "lowSpace": "Vašemu zařízení dochází úložný prostor. To může ovlivnit streamování a stahování."
     },
     "download": {
       "empty": "Zatím nejsou nakonfigurována žádná stahování.",
@@ -1301,7 +1302,8 @@
       "clearCacheSuccess": "Cache vymazána",
       "clearCacheError": "Vymazání mezipaměti se nezdařilo. Zkuste to prosím znovu.",
       "unlimited": "Neomezený",
-      "custom": "Zvyk..."
+      "custom": "Zvyk...",
+      "spaceLeftOnDevice": "({{space}} zbývá místo na vašem zařízení)"
     },
     "unsaved": "Máte neuložené změny"
   },

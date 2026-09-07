@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Icon, Icons } from "@/components/Icon";
@@ -94,6 +94,38 @@ export function BannerLocation(props: { location?: string }) {
   const snoozeUpdate = useAppUpdateStore((s) => s.snoozeUpdate);
   const loc = props.location ?? null;
 
+  const [isLowSpace, setIsLowSpace] = useState(false);
+
+  useEffect(() => {
+    if (
+      !isDesktopApp ||
+      typeof window.electronAPI?.getTorrentStorageInfo !== "function"
+    ) {
+      return;
+    }
+
+    let cancelled = false;
+    const checkSpace = async () => {
+      try {
+        const info = await window.electronAPI!.getTorrentStorageInfo!();
+        if (!cancelled && info && info.freeBytes !== undefined) {
+          const LOW_SPACE_THRESHOLD = 2 * 1024 * 1024 * 1024; // 2GB
+          setIsLowSpace(info.freeBytes < LOW_SPACE_THRESHOLD);
+        }
+      } catch {
+        // ignore
+      }
+    };
+
+    void checkSpace();
+    const interval = window.setInterval(checkSpace, 15000); // Check every 15s
+
+    return () => {
+      cancelled = true;
+      window.clearInterval(interval);
+    };
+  }, [isDesktopApp]);
+
   useEffect(() => {
     if (!loc) return;
     setLocation(loc);
@@ -131,6 +163,14 @@ export function BannerLocation(props: { location?: string }) {
       {!isOnline && !ignoredBannerIds.includes("offline") ? (
         <Banner id="offline" type="error">
           {t("navigation.banner.offline")}
+        </Banner>
+      ) : null}
+      {isLowSpace && !ignoredBannerIds.includes("low-space") ? (
+        <Banner id="low-space" type="error">
+          {t(
+            "navigation.banner.lowSpace",
+            "Your device is running out of storage space. This may affect streaming and downloading.",
+          )}
         </Banner>
       ) : null}
       {hasCustomBanner && customMessage ? (

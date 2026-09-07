@@ -666,7 +666,8 @@
         "restart": "Indítsa újra a frissítéshez",
         "updating": "Frissítés..."
       },
-      "offline": "Nem sikerült csatlakozni a szerverhez. Próbáld újra néhány másodperc múlva."
+      "offline": "Nem sikerült csatlakozni a szerverhez. Próbáld újra néhány másodperc múlva.",
+      "lowSpace": "Fogyóban van a tárhelyed az eszközödön. Ez befolyásolhatja a streamelést és a letöltést."
     },
     "download": {
       "empty": "Még nincsenek letöltések konfigurálva.",
@@ -1301,7 +1302,8 @@
       "clearCacheSuccess": "A gyorsítótár törölve",
       "clearCacheError": "Nem sikerült törölni a gyorsítótárat. Kérjük, próbálja újra.",
       "unlimited": "Korlátlan",
-      "custom": "Szokás..."
+      "custom": "Szokás...",
+      "spaceLeftOnDevice": "({{space}} szabad hely az eszközödön)"
     },
     "unsaved": "Mentetlen változtatásaid vannak..."
   },

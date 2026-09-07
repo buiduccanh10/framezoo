@@ -666,7 +666,8 @@
         "restart": "Uruchom ponownie, aby zaktualizować",
         "updating": "Aktualizowanie..."
       },
-      "offline": "Nie można połączyć się z serwerem. Spróbuj ponownie za kilka sekund."
+      "offline": "Nie można połączyć się z serwerem. Spróbuj ponownie za kilka sekund.",
+      "lowSpace": "Na Twoim urządzeniu kończy się miejsce. Może to mieć wpływ na strumieniowanie i pobieranie."
     },
     "download": {
       "empty": "Żadne pobieranie nie zostało jeszcze skonfigurowane.",
@@ -1301,7 +1302,8 @@
       "clearCacheSuccess": "Pamięć podręczna wyczyszczona",
       "clearCacheError": "Nie udało się wyczyścić pamięci podręcznej. Spróbuj ponownie.",
       "unlimited": "Nieograniczony",
-      "custom": "Zwyczaj..."
+      "custom": "Zwyczaj...",
+      "spaceLeftOnDevice": "({{space}} miejsca pozostało na Twoim urządzeniu)"
     },
     "unsaved": "Masz niezapisane zmiany"
   },
