@@ -101,3 +101,4 @@ audit:
 
 patchedDependencies:
   image-size@1.2.1: patches/image-size@1.2.1.patch
+allowUnusedPatches: true
