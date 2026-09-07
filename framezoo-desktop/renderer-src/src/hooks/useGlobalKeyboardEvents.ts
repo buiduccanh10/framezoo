@@ -8,7 +8,7 @@ import { useOverlayStack } from "@/stores/interface/overlayStack";
  */
 export function useGlobalKeyboardEvents() {
   const { getTopModal, hideModal, showModal } = useOverlayStack();
-  const holdTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>();
+  const holdTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const isKeyHeldRef = useRef<boolean>(false);
 
   const showKeyboardCommands = useCallback(() => {

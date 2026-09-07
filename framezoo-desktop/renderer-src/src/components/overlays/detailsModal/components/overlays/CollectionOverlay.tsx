@@ -27,7 +27,7 @@ function SimpleCarousel({
   categorySlug = "collection",
 }: SimpleCarouselProps) {
   const { isMobile } = useIsMobile();
-  const carouselRef = useRef<HTMLDivElement>(null);
+  const carouselRef = useRef<HTMLDivElement>(null!);
   const carouselRefs = useRef<{ [key: string]: HTMLDivElement | null }>({
     [categorySlug]: null,
   });

@@ -21,7 +21,7 @@ export function PassphraseDisplay(props: {
   const [validationError, setValidationError] = useState("");
   const isMounted = useMountedState();
 
-  const timeout = useRef<ReturnType<typeof setTimeout>>();
+  const timeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const validPassphraseRegex =
     /^[a-zA-Z0-9\s\-_.,!?@#$%^&*()+=:;"'<>[\]{}|\\/`~]+$/;

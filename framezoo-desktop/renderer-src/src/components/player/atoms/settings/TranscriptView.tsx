@@ -72,7 +72,7 @@ export function TranscriptView({
     entry: MoonshineModelEntry;
     downloading: boolean;
   } | null>(null);
-  const carouselRef = useRef<HTMLDivElement>(null);
+  const carouselRef = useRef<HTMLDivElement>(null!);
   const modelResolverRef = useRef<((accepted: boolean) => void) | null>(null);
   const modelAbortRef = useRef<AbortController | null>(null);
 

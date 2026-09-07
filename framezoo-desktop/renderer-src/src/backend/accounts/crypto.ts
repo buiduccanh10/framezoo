@@ -1,7 +1,7 @@
-import { pbkdf2Async } from "@noble/hashes/pbkdf2";
-import { sha256 } from "@noble/hashes/sha256";
+import { pbkdf2Async } from "@noble/hashes/pbkdf2.js";
+import { sha256 } from "@noble/hashes/sha2.js";
 import { generateMnemonic, validateMnemonic } from "@scure/bip39";
-import { wordlist } from "@scure/bip39/wordlists/english";
+import { wordlist } from "@scure/bip39/wordlists/english.js";
 import forge from "node-forge";
 
 type Keys = {

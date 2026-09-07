@@ -70,8 +70,8 @@ export function EpisodeCarousel({
   const [showFavorites, setShowFavorites] = useState(false);
   const [favoriteEpisodes, setFavoriteEpisodes] = useState<any[]>([]);
   const [selectedEpisodeGroupIndex, setSelectedEpisodeGroupIndex] = useState(0);
-  const episodeMenuRef = useRef<HTMLDivElement>(null);
-  const carouselRef = useRef<HTMLDivElement>(null);
+  const episodeMenuRef = useRef<HTMLDivElement>(null!);
+  const carouselRef = useRef<HTMLDivElement>(null!);
   const activeEpisodeRef = useRef<HTMLAnchorElement>(null);
   const descriptionRefs = useRef<{
     [key: number]: HTMLElement | null;

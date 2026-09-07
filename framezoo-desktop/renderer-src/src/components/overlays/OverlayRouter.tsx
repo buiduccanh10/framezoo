@@ -14,7 +14,7 @@ interface OverlayRouterProps {
 }
 
 function RouterBase(props: { id: string; children: ReactNode }) {
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null!);
   const { isMobile } = useIsMobile();
 
   const routes = useOverlayStore((s) => s.routes);

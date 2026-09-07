@@ -688,8 +688,8 @@ export function EpisodesView({
       loadAllSeasons();
     }
   }, [selectedSeason, meta?.tmdbId, seasons]);
-  const carouselRef = useRef<HTMLDivElement>(null);
-  const activeEpisodeRef = useRef<HTMLDivElement>(null);
+  const carouselRef = useRef<HTMLDivElement>(null!);
+  const activeEpisodeRef = useRef<HTMLDivElement>(null!);
   const [expandedEpisodes, setExpandedEpisodes] = useState<{
     [key: string]: boolean;
   }>({});

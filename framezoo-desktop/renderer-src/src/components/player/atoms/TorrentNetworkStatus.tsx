@@ -20,7 +20,7 @@ export function TorrentNetworkStatus(props: {
   const { t } = useTranslation();
   const status = useActiveTorrentStatus();
   const [open, setOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null!);
   const stateLabel = status
     ? t(`player.torrent.states.${status.state}`, {
         defaultValue: status.state,

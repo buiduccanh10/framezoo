@@ -28,7 +28,7 @@ export function DownloadAppButton() {
   const [manifest, setManifest] = useState<AppDownloadManifest | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null!);
 
   useEffect(() => {
     if (!open) return;

@@ -32,7 +32,7 @@ function PlaybackSpeedControl(props: {
   onChange: (v: number) => void;
   disabled?: boolean;
 }) {
-  const sliderRef = useRef<HTMLDivElement>(null);
+  const sliderRef = useRef<HTMLDivElement>(null!);
   const speedRange = MAX_PLAYBACK_SPEED - MIN_PLAYBACK_SPEED;
   const normalizedSelected =
     (clampPlaybackSpeed(props.selected) - MIN_PLAYBACK_SPEED) / speedRange;

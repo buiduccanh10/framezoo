@@ -18,7 +18,7 @@ interface Props {
 }
 
 export function Volume(props: Props) {
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null!);
   const setHovering = usePlayerStore((s) => s.setHoveringLeftControls);
   const hovering = usePlayerStore((s) => s.interface.leftControlHovering);
   const volume = usePlayerStore((s) => s.mediaPlaying.volume);

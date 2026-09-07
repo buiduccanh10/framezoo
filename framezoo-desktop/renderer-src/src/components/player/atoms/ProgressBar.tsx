@@ -85,7 +85,7 @@ export function ProgressBar() {
     [duration, display],
   );
 
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null!);
 
   const { dragging, dragPercentage, dragMouseDown } = useProgressBar(
     ref,

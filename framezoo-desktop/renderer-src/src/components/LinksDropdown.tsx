@@ -295,7 +295,7 @@ export function WatchPartyInputLink({
 export function LinksDropdown(props: { children: React.ReactNode }) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null!);
   const nickname = useAuthStore((s) => s.account?.nickname);
   const deviceName = useAuthStore((s) => s.account?.deviceName);
   const seed = useAuthStore((s) => s.account?.seed);

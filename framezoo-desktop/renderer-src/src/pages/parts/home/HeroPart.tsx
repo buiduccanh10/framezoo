@@ -70,7 +70,7 @@ export function HeroPart({
   const time = getTimeOfDay(new Date());
   const title = randomT(`home.titles.${time}`);
   const placeholder = randomT(`home.search.placeholder`);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null!);
   const location = useLocation();
   useSlashFocus(inputRef);
 
@@ -80,7 +80,7 @@ export function HeroPart({
     }
   }, [location.pathname]);
 
-  const observerRef = useRef<HTMLDivElement>(null);
+  const observerRef = useRef<HTMLDivElement>(null!);
   const intersection = useIntersection(observerRef, {
     root: null,
     rootMargin: `-${Math.max(0, topOffset - 1)}px 0px 0px 0px`,

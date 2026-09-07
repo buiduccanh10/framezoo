@@ -179,7 +179,7 @@ function YouTubeTrailer({
   onError,
   onAudioControllerChange,
 }: YouTubeTrailerProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null!);
   const playerRef = useRef<YouTubePlayer | undefined>(undefined);
   const playerReadyRef = useRef(false);
   const playerStartedRef = useRef(false);

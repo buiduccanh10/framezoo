@@ -40,7 +40,7 @@ export function OverlayPortal(props: {
 }) {
   const [portalElement, setPortalElement] = useState<Element | null>(null);
   const [isReady, setIsReady] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null!);
   const close = props.close;
   const zIndex = props.zIndex ?? 999;
 

@@ -95,7 +95,7 @@ function useHovering(containerEl: RefObject<HTMLDivElement>) {
 }
 
 function BaseContainer(props: { children?: ReactNode }) {
-  const containerEl = useRef<HTMLDivElement | null>(null);
+  const containerEl = useRef<HTMLDivElement>(null!);
   const display = usePlayerStore((s) => s.display);
   useHovering(containerEl);
 

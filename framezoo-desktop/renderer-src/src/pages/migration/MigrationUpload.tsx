@@ -56,7 +56,7 @@ export function MigrationUploadPage() {
   const navigate = useNavigate();
   const user = useAuthStore();
   const backendUrl = useBackendUrl();
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null!);
   const replaceBookmarks = useBookmarkStore((s) => s.replaceBookmarks);
   const replaceProgress = useProgressStore((s) => s.replaceItems);
   const replaceWatchHistory = useWatchHistoryStore((s) => s.replaceItems);

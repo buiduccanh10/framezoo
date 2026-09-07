@@ -286,8 +286,8 @@ export function AppearancePart(props: {
   const customTheme = props.customTheme;
   const setCustomTheme = props.setCustomTheme;
 
-  const carouselRef = useRef<HTMLDivElement>(null);
-  const activeThemeRef = useRef<HTMLDivElement>(null);
+  const carouselRef = useRef<HTMLDivElement>(null!);
+  const activeThemeRef = useRef<HTMLDivElement>(null!);
   const [isAtTop, setIsAtTop] = useState(true);
   const [isAtBottom, setIsAtBottom] = useState(false);
 

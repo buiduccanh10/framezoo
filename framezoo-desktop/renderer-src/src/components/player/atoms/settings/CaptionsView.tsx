@@ -358,7 +358,7 @@ export function CustomCaptionOption({
   const setCaption = usePlayerStore((s) => s.setCaption);
   const setSecondaryCaption = usePlayerStore((s) => s.setSecondaryCaption);
   const setCustomSubs = useSubtitleStore((s) => s.setCustomSubs);
-  const fileInput = useRef<HTMLInputElement>(null);
+  const fileInput = useRef<HTMLInputElement>(null!);
   const [error, setError] = useState<string | null>(null);
   const isSecondary = selectionMode === "secondary";
 
@@ -559,7 +559,7 @@ export function CaptionsView({
   const { disable, selectBestCaptionFromLastUsedLanguage, disableSecondary } =
     useCaptions();
   const [isRandomSelecting, setIsRandomSelecting] = useState(false);
-  const scrollableContainerRef = useRef<HTMLDivElement>(null);
+  const scrollableContainerRef = useRef<HTMLDivElement>(null!);
 
   const handleRandomSelect = async () => {
     if (isRandomSelecting) return; // Prevent multiple simultaneous calls

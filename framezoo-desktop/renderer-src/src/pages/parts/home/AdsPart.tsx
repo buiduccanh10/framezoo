@@ -21,7 +21,7 @@ function setCookie(name: string, value: string, expiryDays: number): void {
   document.cookie = `${name}=${value};${expires};path=/`;
 }
 
-export function AdsPart(): JSX.Element | null {
+export function AdsPart(): React.ReactNode | null {
   const [isAdDismissed, setIsAdDismissed] = useState(() => {
     return getCookie("adDismissed") === "true";
   });

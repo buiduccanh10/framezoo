@@ -47,7 +47,7 @@ export function useShouldShowVideoElement() {
 }
 
 function LibMpvSurface() {
-  const surfaceRef = useRef<HTMLDivElement | null>(null);
+  const surfaceRef = useRef<HTMLDivElement>(null!);
   const display = usePlayerStore((state) => state.display);
 
   useEffect(() => {
