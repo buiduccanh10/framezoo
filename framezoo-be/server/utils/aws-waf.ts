@@ -5,6 +5,8 @@ const FETCH_TIMEOUT_MS = 15000;
 const TOKEN_TTL_MS = 10 * 60 * 1000;
 const CHALLENGE_POLL_INTERVAL_MS = 100;
 const CHALLENGE_TIMEOUT_MS = 15000;
+const CHALLENGE_RETRY_DELAY_MS = 250;
+const MAX_EMPTY_CHALLENGE_RETRIES = 2;
 
 const tokenCache = new Map<string, { token: string; cachedAt: number }>();
 
@@ -159,7 +161,10 @@ function withTokenHeaders(headers: HeaderMap, token: string): HeaderMap {
   };
 }
 
-async function fetchText(url: string, headers: HeaderMap): Promise<{ response: Response; body: string }> {
+async function fetchText(
+  url: string,
+  headers: HeaderMap
+): Promise<{ response: Response; body: string }> {
   const response = await fetch(url, {
     headers,
     signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
@@ -169,6 +174,47 @@ async function fetchText(url: string, headers: HeaderMap): Promise<{ response: R
     response,
     body: await response.text(),
   };
+}
+
+async function fetchChallengeScript(
+  scriptUrl: string,
+  pageUrl: string,
+  headers: HeaderMap
+): Promise<string> {
+  const response = await fetch(scriptUrl, {
+    headers: {
+      ...headers,
+      Accept: 'text/javascript, application/javascript, */*;q=0.1',
+      Referer: pageUrl,
+    },
+    signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+  });
+
+  if (!response.ok) {
+    throw new Error(`AWS WAF challenge script fetch failed with status ${response.status}`);
+  }
+
+  return await response.text();
+}
+
+async function inlineChallengeScript(
+  challengeHtml: string,
+  url: string,
+  headers: HeaderMap
+): Promise<string> {
+  const scriptTagPattern = /<script\b([^>]*?)\bsrc=(["'])([^"']+)\2([^>]*)>\s*<\/script>/i;
+  const scriptMatch = challengeHtml.match(scriptTagPattern);
+
+  if (!scriptMatch) {
+    return challengeHtml;
+  }
+
+  const scriptUrl = new URL(scriptMatch[3], url).toString();
+  const script = await fetchChallengeScript(scriptUrl, url, headers);
+  const safeScript = script.replace(/<\/script/gi, '<\\/script');
+  const replacement = `<script${scriptMatch[1]}>\n${safeScript}\n</script>`;
+
+  return challengeHtml.replace(scriptMatch[0], replacement);
 }
 
 async function waitForAwsWafIntegration(dom: JSDOM): Promise<void> {
@@ -200,16 +246,20 @@ async function waitForAwsWafTokenCookie(dom: JSDOM): Promise<string> {
   throw new Error('AWS WAF token cookie was not written in time');
 }
 
-async function solveChallengeToken(challengeHtml: string, url: string): Promise<string> {
-  const sanitizedHtml = challengeHtml.replace(
-    /<script>\s*AwsWafIntegration\.saveReferrer\(\);[\s\S]*?<\/script>/,
+async function solveChallengeToken(
+  challengeHtml: string,
+  url: string,
+  headers: HeaderMap
+): Promise<string> {
+  const challengeWithInlineScript = await inlineChallengeScript(challengeHtml, url, headers);
+  const sanitizedHtml = challengeWithInlineScript.replace(
+    /<script\b[^>]*>\s*AwsWafIntegration\.saveReferrer\(\);[\s\S]*?<\/script>/i,
     ''
   );
   const virtualConsole = new VirtualConsole();
   const dom = new JSDOM(sanitizedHtml, {
     url,
     runScripts: 'dangerously',
-    resources: 'usable',
     pretendToBeVisual: true,
     virtualConsole,
     beforeParse(window) {
@@ -253,19 +303,18 @@ async function solveChallengeToken(challengeHtml: string, url: string): Promise<
             if (prop === 'toString') return () => url;
             return undefined;
           }
-        }
+        },
       });
       try {
         Object.defineProperty(window, 'location', {
           get() {
             return safeLocation;
           },
-          configurable: true
+          configurable: true,
         });
       } catch {
         // JSDOM exposes window.location as non-configurable. Ignore and continue.
       }
-
 
       // Native Node Web Crypto integration (standard and robust WebCrypto support)
       // Bound to preserve context across JSDOM / Node VM context boundary
@@ -308,24 +357,32 @@ async function solveChallengeToken(challengeHtml: string, url: string): Promise<
       });
 
       // matchMedia mock
-      window.matchMedia = window.matchMedia || function() {
-        return {
-          matches: false,
-          addListener() {},
-          removeListener() {},
-          addEventListener() {},
-          removeEventListener() {},
-          dispatchEvent() { return false; },
+      window.matchMedia =
+        window.matchMedia ||
+        function () {
+          return {
+            matches: false,
+            addListener() {},
+            removeListener() {},
+            addEventListener() {},
+            removeEventListener() {},
+            dispatchEvent() {
+              return false;
+            },
+          };
         };
-      };
 
       // requestAnimationFrame mock
-      window.requestAnimationFrame = window.requestAnimationFrame || function(callback) {
-        return setTimeout(() => callback(Date.now()), 16);
-      };
-      window.cancelAnimationFrame = window.cancelAnimationFrame || function(id) {
-        clearTimeout(id);
-      };
+      window.requestAnimationFrame =
+        window.requestAnimationFrame ||
+        function (callback) {
+          return setTimeout(() => callback(Date.now()), 16);
+        };
+      window.cancelAnimationFrame =
+        window.cancelAnimationFrame ||
+        function (id) {
+          clearTimeout(id);
+        };
 
       // AudioContext / webkitAudioContext mocks
       class AudioContextMock {
@@ -349,8 +406,16 @@ async function solveChallengeToken(challengeHtml: string, url: string): Promise<
         }
         destination = {};
       }
-      Object.defineProperty(window, 'AudioContext', { value: AudioContextMock, writable: true, configurable: true });
-      Object.defineProperty(window, 'webkitAudioContext', { value: AudioContextMock, writable: true, configurable: true });
+      Object.defineProperty(window, 'AudioContext', {
+        value: AudioContextMock,
+        writable: true,
+        configurable: true,
+      });
+      Object.defineProperty(window, 'webkitAudioContext', {
+        value: AudioContextMock,
+        writable: true,
+        configurable: true,
+      });
 
       // Fonts API mock
       Object.defineProperty(window.document, 'fonts', {
@@ -371,14 +436,19 @@ async function solveChallengeToken(challengeHtml: string, url: string): Promise<
     dom.window.AwsWafIntegration.saveReferrer?.();
 
     const shouldForceRefresh = await dom.window.AwsWafIntegration.checkForceRefresh?.();
+    let token: unknown;
     if (shouldForceRefresh) {
-      await dom.window.AwsWafIntegration.forceRefreshToken?.({
+      token = await dom.window.AwsWafIntegration.forceRefreshToken?.({
         timeoutMs: CHALLENGE_TIMEOUT_MS,
       });
     } else {
-      await dom.window.AwsWafIntegration.getToken({
+      token = await dom.window.AwsWafIntegration.getToken({
         timeoutMs: CHALLENGE_TIMEOUT_MS,
       });
+    }
+
+    if (typeof token === 'string' && token.length > 0) {
+      return token;
     }
 
     return await waitForAwsWafTokenCookie(dom);
@@ -404,7 +474,7 @@ export async function fetchTextWithAwsWaf(url: string, headers: HeaderMap): Prom
     clearCachedToken(cacheKey);
   }
 
-  const initialAttempt = await fetchText(url, headers);
+  let initialAttempt = await fetchText(url, headers);
   if (!isChallengeResponse(initialAttempt.response)) {
     if (!initialAttempt.response.ok) {
       throw new Error(`Fetch failed with status ${initialAttempt.response.status}`);
@@ -412,7 +482,29 @@ export async function fetchTextWithAwsWaf(url: string, headers: HeaderMap): Prom
     return initialAttempt.body;
   }
 
-  const token = await solveChallengeToken(initialAttempt.body, url);
+  let emptyChallengeRetries = 0;
+  while (!initialAttempt.body.trim() && emptyChallengeRetries < MAX_EMPTY_CHALLENGE_RETRIES) {
+    emptyChallengeRetries += 1;
+    await new Promise(resolve => setTimeout(resolve, CHALLENGE_RETRY_DELAY_MS));
+    initialAttempt = await fetchText(url, {
+      ...headers,
+      'Cache-Control': 'no-cache',
+      Pragma: 'no-cache',
+    });
+
+    if (!isChallengeResponse(initialAttempt.response)) {
+      if (!initialAttempt.response.ok) {
+        throw new Error(`Fetch failed with status ${initialAttempt.response.status}`);
+      }
+      return initialAttempt.body;
+    }
+  }
+
+  if (!initialAttempt.body.trim()) {
+    throw new Error('AWS WAF returned an empty challenge response');
+  }
+
+  const token = await solveChallengeToken(initialAttempt.body, url, headers);
   setCachedToken(cacheKey, token);
 
   const finalAttempt = await fetchText(url, withTokenHeaders(headers, token));

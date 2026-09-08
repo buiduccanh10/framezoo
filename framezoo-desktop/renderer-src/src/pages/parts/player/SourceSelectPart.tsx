@@ -911,23 +911,29 @@ export function SourceSelectPart(props: {
                   className="items-center gap-4 px-3 py-3"
                   onClick={() => void selectAddonStream(stream)}
                 >
-                  <div className="grid min-w-0 flex-1 grid-cols-[minmax(8rem,12rem),minmax(0,1fr)] items-center gap-6">
+                  <div className="grid min-w-0 flex-1 grid-cols-[minmax(8rem,12rem)_minmax(0,1fr)] items-center gap-6">
                     <div className="flex min-w-0 flex-col">
-                      <div className="flex items-center gap-2">
+                      <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                         {isStartingThisStream ? (
                           <Spinner className="text-[14px] shrink-0 text-white/90" />
                         ) : null}
-                        <span className="min-w-0 whitespace-pre-line text-[15px] font-medium leading-5 text-white/90">
-                          {nameLines.join("\n")}
-                        </span>
+                        {nameLines.map((line, index) => (
+                          <span
+                            key={`${line}-${index}`}
+                            className="min-w-0 text-[15px] font-medium leading-5 text-white/90"
+                          >
+                            {line}
+                          </span>
+                        ))}
                       </div>
                     </div>
-                    <span className="min-w-0 whitespace-pre-line text-[14px] leading-5 text-white/70 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:5] overflow-hidden">
+                    <span className="min-w-0 text-[14px] leading-5 text-white/70 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:5] overflow-hidden">
                       {detailsLines.map((line, i) => (
                         <span
                           key={i}
-                          className={`block ${i === 0 ? "text-white/90 font-medium text-[15px]" : ""}`}
+                          className={`inline ${i === 0 ? "text-white/90 font-medium text-[15px]" : ""}`}
                         >
+                          {i > 0 ? " " : null}
                           {line}
                         </span>
                       ))}
@@ -945,10 +951,10 @@ export function SourceSelectPart(props: {
               onClose={() => {
                 setAddonError(null);
                 if (isPlaybackError) {
-                  usePlayerStore.setState((s) => {
-                    s.interface.error = undefined;
-                    s.status = playerStatus.SOURCE_SELECTION;
-                  });
+                  usePlayerStore.setState((s) => ({
+                    interface: { ...s.interface, error: undefined },
+                    status: playerStatus.SOURCE_SELECTION,
+                  }));
                 }
               }}
             />

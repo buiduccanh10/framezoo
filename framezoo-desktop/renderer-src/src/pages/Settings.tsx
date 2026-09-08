@@ -1,4 +1,3 @@
-import classNames from "classnames";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
@@ -98,10 +97,7 @@ function SettingsLayout(props: {
       </div>
 
       <div
-        className={classNames(
-          "grid gap-12",
-          isMobile ? "grid-cols-1" : "lg:grid-cols-[280px,1fr]",
-        )}
+        className="grid gap-12 md:grid-cols-[280px_1fr]"
         data-settings-content
       >
         <SidebarPart
@@ -112,7 +108,7 @@ function SettingsLayout(props: {
           showConnections={props.showConnections}
         />
         <div className={className}>{props.children}</div>
-        <div className="block lg:hidden">
+        <div className="block md:hidden">
           <Divider />
         </div>
       </div>
