@@ -114,7 +114,7 @@ describe("subtitle alignment client", () => {
 
     expect(entries.filter(([name]) => name === "audio")).toHaveLength(2);
     expect(entries.some(([name]) => name === "speechIntervals")).toBe(false);
-    expect(result.warningMessage).toContain("server fallback");
+    expect(result.warningMessage).toBeUndefined();
     expect(alignmentMocks.transcribeMoonshine).not.toHaveBeenCalled();
   });
 

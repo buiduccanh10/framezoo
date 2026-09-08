@@ -17,7 +17,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@babel/runtime": "^8.0.0",
+    "@babel/runtime": "^7.29.7",
     "@noble/hashes": "^2.4.0",
     "@react-native-async-storage/async-storage": "^3.1.1",
     "@react-native-picker/picker": "^2.11.4",
@@ -40,14 +40,12 @@
     "zustand": "^5.0.15"
   },
   "devDependencies": {
-    "@babel/core": "^8.0.1",
-    "@babel/preset-env": "^8.0.2",
+    "@babel/core": "^7.29.7",
     "@react-native-community/cli": "20.2.0",
     "@react-native-community/cli-platform-android": "20.2.0",
     "@react-native-community/cli-platform-ios": "20.2.0",
     "@react-native/babel-preset": "0.87.1",
     "@react-native/codegen": "0.87.1",
-    "@react-native/eslint-config": "0.87.1",
     "@react-native/gradle-plugin": "0.87.1",
     "@react-native/jest-preset": "0.87.1",
     "@react-native/metro-config": "0.87.1",
@@ -55,14 +53,15 @@
     "@types/jest": "^30.0.0",
     "@types/react": "^19.2.18",
     "@types/react-test-renderer": "^19.1.0",
-    "@typescript-eslint/eslint-plugin": "^8.69.0",
-    "@typescript-eslint/parser": "^8.69.0",
+    "@typescript-eslint/eslint-plugin": "^8.70.0",
+    "@typescript-eslint/parser": "^8.70.0",
     "babel-plugin-module-resolver": "^5.0.3",
-    "eslint": "^10.10.0",
+    "@eslint/js": "^9.39.1",
+    "eslint": "^9.39.1",
     "jest": "^30.5.1",
     "prettier": "3.9.6",
     "react-test-renderer": "19.2.8",
-    "typescript": "^7.0.2"
+    "typescript": "6.0.3"
   },
   "engines": {
     "node": ">= 22.11.0"

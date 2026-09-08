@@ -21,7 +21,7 @@ export function Screen(props: {
   safeAreaTop?: boolean;
 }) {
   const insets = useSafeAreaInsets();
-  const scrollRef = useRef<ScrollView>(null);
+  const scrollRef = useRef<React.ElementRef<typeof ScrollView>>(null);
   const topInset = props.safeAreaTop === false ? 0 : insets.top + spacing.sm;
   const useNativeScrollInset =
     Platform.OS === 'ios' && props.scroll && props.safeAreaTop !== false;

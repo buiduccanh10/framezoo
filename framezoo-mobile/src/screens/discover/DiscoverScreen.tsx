@@ -10,7 +10,6 @@ import {
   EmptyState,
   ErrorState,
   Screen,
-  Section,
 } from '@/components/primitives';
 import { getDiscoverSection, getDiscoverGenres } from '@/services/api/metadata';
 import { addonRepository } from '@/services/addons';

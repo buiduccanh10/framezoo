@@ -10,7 +10,7 @@ import { QueryProvider } from './QueryProvider';
 export function AppProviders(props: { children: React.ReactNode }) {
   return (
     <SafeAreaProvider>
-      <StatusBar barStyle="light-content" backgroundColor="#030303" />
+      <StatusBar barStyle="light-content" />
       <DeviceModeProvider>
         <QueryProvider>{props.children}</QueryProvider>
       </DeviceModeProvider>

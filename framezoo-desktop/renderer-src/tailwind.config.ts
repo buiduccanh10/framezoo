@@ -1,9 +1,9 @@
-import { allThemes, defaultTheme, safeThemeList } from "./themes";
+import { safeThemeList } from "./themes";
 import type { Config } from "tailwindcss";
 import plugin from "tailwindcss/plugin";
 import path from "node:path";
 
-const themer = require("tailwindcss-themer");
+import { framezooThemePlugin } from "./tailwind-theme-plugin";
 
 const config: Config = {
   content: [
@@ -92,17 +92,7 @@ const config: Config = {
   },
   plugins: [
     require("tailwind-scrollbar"),
-    themer({
-      defaultTheme: defaultTheme,
-      themes: [
-        {
-          name: "default",
-          selectors: [".theme-default"],
-          ...defaultTheme,
-        },
-        ...allThemes,
-      ],
-    }),
+    framezooThemePlugin,
     plugin(({ addVariant }) => {
       addVariant("dir-neutral", "[dir] &");
     }),

@@ -245,7 +245,7 @@ jobs:
             echo "macOS signing secrets có sẵn."
           fi
       - run: corepack enable
-      - run: corepack prepare pnpm@11.9.0 --activate
+      - run: corepack prepare pnpm@12.3.4 --activate
       - uses: actions/setup-node@v5
         with:
           node-version: 22
@@ -367,7 +367,7 @@ jobs:
         with:
           ref: ${{ needs.prepare.outputs.checkout_ref }}
       - run: corepack enable
-      - run: corepack prepare pnpm@11.9.0 --activate
+      - run: corepack prepare pnpm@12.3.4 --activate
       - uses: actions/setup-node@v5
         with:
           node-version: 22
@@ -581,7 +581,7 @@ jobs:
         with:
           ref: ${{ needs.prepare.outputs.checkout_ref }}
       - run: corepack enable
-      - run: corepack prepare pnpm@11.9.0 --activate
+      - run: corepack prepare pnpm@12.3.4 --activate
       - uses: actions/setup-node@v5
         with:
           node-version: 22

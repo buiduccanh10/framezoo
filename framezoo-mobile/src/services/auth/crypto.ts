@@ -1,5 +1,5 @@
-import { pbkdf2 } from '@noble/hashes/pbkdf2';
-import { sha256 } from '@noble/hashes/sha256';
+import { pbkdf2 } from '@noble/hashes/pbkdf2.js';
+import { sha256 } from '@noble/hashes/sha2.js';
 import { fromByteArray } from 'base64-js';
 import nacl from 'tweetnacl';
 

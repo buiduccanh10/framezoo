@@ -1,12 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap");
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@config "../../../tailwind.config.ts";
 
 html,
 body {
   font-family: "Lato", sans-serif !important;
-  @apply bg-background-main !important;
+  background-color: rgb(var(--colors-background-main) / 1) !important;
   @apply font-main text-type-text;
   min-height: 100vh;
   min-height: 100dvh;
@@ -250,7 +249,7 @@ input[type="range"].styled-slider.slider-progress::-ms-fill-lower {
 /* Modern thin rounded scrollbar */
 * {
   scrollbar-width: thin;
-  scrollbar-color: theme("colors.video.context.border") transparent;
+  scrollbar-color: rgb(var(--colors-video-context-border) / 1) transparent;
 }
 
 ::-webkit-scrollbar {
@@ -264,7 +263,7 @@ input[type="range"].styled-slider.slider-progress::-ms-fill-lower {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: theme("colors.video.context.border");
+  background-color: rgb(var(--colors-video-context-border) / 1);
   border-radius: 10px;
   transition: background-color 0.2s ease;
 }
@@ -286,8 +285,8 @@ input[type="range"].styled-slider.slider-progress::-ms-fill-lower {
 }
 
 .tabbable:focus-visible {
-  outline: 2px solid theme("colors.themePreview.primary");
-  box-shadow: 0 0 10px theme("colors.themePreview.secondary");
+  outline: 2px solid rgb(var(--colors-themePreview-primary) / 1);
+  box-shadow: 0 0 10px rgb(var(--colors-themePreview-secondary) / 1);
 }
 
 [dir="rtl"] .transform {
