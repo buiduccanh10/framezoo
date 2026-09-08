@@ -8,7 +8,7 @@ import { handlebars } from "./plugins/handlebars.mts";
 import { PluginOption, loadEnv } from "vite";
 import { visualizer } from "rollup-plugin-visualizer";
 
-import tailwind from "tailwindcss";
+import tailwind from "@tailwindcss/postcss";
 import rtl from "postcss-rtlcss";
 
 const captioningPackages = [
@@ -131,7 +131,7 @@ export default defineConfig(({ mode }) => {
       postcss: {
         plugins: [
           tailwind({
-            config: path.resolve(import.meta.dirname, "tailwind.config.ts"),
+            base: path.resolve(import.meta.dirname),
           }),
           rtl(),
         ],

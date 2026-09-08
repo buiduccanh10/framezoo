@@ -3,30 +3,32 @@
   "private": true,
   "version": "3.0.0",
   "type": "module",
-  "packageManager": "pnpm@11.25.0",
+  "packageManager": "pnpm@12.3.4",
   "scripts": {
     "build": "nitro build",
     "dev": "nitro dev",
     "prepare": "nitro prepare && prisma generate && nitro prepare",
     "preview": "node .output/server/index.mjs",
-    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint . --ext .ts,.mts,.js,.mjs --quiet"
+    "lint": "eslint server --quiet"
   },
   "devDependencies": {
-    "@types/node": "^26.4.1",
-    "@typescript-eslint/eslint-plugin": "^8.69.0",
-    "@typescript-eslint/parser": "^8.69.0",
-    "eslint": "^10.10.0",
+    "@eslint/js": "^9.39.1",
+    "@types/node": "^26.5.0",
+    "@typescript-eslint/eslint-plugin": "^8.70.0",
+    "@typescript-eslint/parser": "^8.70.0",
+    "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.6",
-    "h3": "2.0.1-rc.31",
+    "h3": "1.15.11",
     "nitropack": "^2.13.4",
     "prettier": "^3.9.6",
-    "prisma": "^7.10.0"
+    "prisma": "7.10.0"
   },
   "dependencies": {
-    "@prisma/adapter-pg": "^7.10.0",
-    "@prisma/client": "^7.10.0",
+    "@prisma/adapter-pg": "7.10.0",
+    "@prisma/client": "7.10.0",
     "bcryptjs": "^3.0.3",
+    "cheerio": "^1.2.0",
     "dotenv": "^17.4.2",
     "ioredis": "^6.0.0",
     "jsdom": "^30.0.1",

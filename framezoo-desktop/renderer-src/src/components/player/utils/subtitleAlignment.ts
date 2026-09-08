@@ -235,48 +235,44 @@ export function buildAlignmentWindowPlan(
     );
   }
 
-  // Expand outwards from currentStart
-  let step = 1;
-  const MAX_PLANS = 20; // Generate up to 20 plans to try
-  while (plans.length < MAX_PLANS) {
+  if (plans.length < 2) {
     addUniqueAlignmentWindow(
       plans,
-      currentStart + step * windowDuration,
+      currentStart >= windowDuration
+        ? currentStart - windowDuration
+        : currentStart + windowDuration,
       "nearby",
       videoDuration,
       windowDuration,
     );
-    addUniqueAlignmentWindow(
-      plans,
-      currentStart - step * windowDuration,
-      "nearby",
-      videoDuration,
-      windowDuration,
-    );
-
-    // Also include some distant fallbacks
-    const maxStart =
-      typeof videoDuration === "number" &&
-      Number.isFinite(videoDuration) &&
-      videoDuration > 0
-        ? Math.max(0, videoDuration - windowDuration)
-        : null;
-
-    if (maxStart !== null) {
-      addUniqueAlignmentWindow(
-        plans,
-        Math.round(maxStart * (step / (MAX_PLANS / 2))),
-        "fallback",
-        videoDuration,
-        windowDuration,
-      );
-    }
-
-    step++;
-    if (step > MAX_PLANS) break;
   }
 
-  return plans;
+  const maxStart =
+    typeof videoDuration === "number" &&
+    Number.isFinite(videoDuration) &&
+    videoDuration > 0
+      ? Math.max(0, videoDuration - windowDuration)
+      : null;
+  const fallbackStarts =
+    maxStart !== null
+      ? SUBTITLE_ALIGNMENT_TIMELINE_ANCHOR_FRACTIONS.map(fraction =>
+          Math.round(maxStart * fraction),
+        )
+      : SUBTITLE_ALIGNMENT_WINDOW_FALLBACK_OFFSETS_SECONDS.map(offset =>
+          Math.round(currentStart + offset),
+        );
+
+  for (const fallbackStart of fallbackStarts) {
+    addUniqueAlignmentWindow(
+      plans,
+      fallbackStart,
+      "fallback",
+      videoDuration,
+      windowDuration,
+    );
+  }
+
+  return plans.slice(0, SUBTITLE_ALIGNMENT_MAX_WINDOWS);
 }
 
 export async function alignSubtitlesWithCurrentStream(options: {
@@ -328,7 +324,7 @@ export async function alignSubtitlesWithCurrentStream(options: {
     });
   }
 
-  for (const [index, plan] of windowPlan.entries()) {
+  for (const plan of windowPlan) {
     if (capturedWindows.length >= SUBTITLE_ALIGNMENT_MAX_WINDOWS) break;
 
     const audio = await captureCurrentStreamAudio({

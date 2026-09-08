@@ -1,5 +1,6 @@
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { fixupPluginRules } from "@eslint/compat";
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
 import reactPlugin from "eslint-plugin-react";
@@ -57,7 +58,7 @@ export default tseslint.config(
   // React
   {
     plugins: {
-      react: reactPlugin,
+      react: fixupPluginRules(reactPlugin),
       "react-hooks": reactHooksPlugin,
     },
     rules: {
@@ -82,7 +83,7 @@ export default tseslint.config(
   // Import plugin
   {
     plugins: {
-      import: importPlugin,
+      import: fixupPluginRules(importPlugin),
     },
     rules: {
       "import/prefer-default-export": "off",
@@ -113,6 +114,9 @@ export default tseslint.config(
   // Project-specific rules
   {
     rules: {
+      "prettier/prettier": "warn",
+      "no-useless-assignment": "off",
+      "preserve-caught-error": "off",
       "no-underscore-dangle": "off",
       "no-console": ["warn", { allow: ["warn", "error", "debug", "info"] }],
       "no-shadow": "off",

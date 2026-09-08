@@ -11,7 +11,10 @@ import { Transition } from "@/components/utils/Transition";
 import { usePlayerStore } from "@/stores/player/store";
 import { useSubtitleStore } from "@/stores/subtitles";
 
-export function SubtitleSyncBadge(props: { controlsShowing?: boolean }) {
+export function SubtitleSyncBadge(props: {
+  controlsShowing?: boolean;
+  skipFeedbackActive?: boolean;
+}) {
   const caption = usePlayerStore((s) => s.caption.selected);
   const meta = usePlayerStore((s) => s.meta);
   const source = usePlayerStore((s) => s.source);
@@ -67,7 +70,10 @@ export function SubtitleSyncBadge(props: { controlsShowing?: boolean }) {
   // Each skip button adds roughly 60px (3.75rem), so we use 4rem for clean stacking
   const baseOffsetRem = props.controlsShowing ? 6 : 3;
   const skipOffsetRem = activeSkipSegmentsCount * 4;
-  const finalOffsetRem = baseOffsetRem + skipOffsetRem;
+  // Keep the subtitle-sync confirmation above the skip feedback prompt.
+  // The feedback prompt is roughly 68px tall, so 5rem leaves a visible gap.
+  const skipFeedbackOffsetRem = props.skipFeedbackActive ? 5 : 0;
+  const finalOffsetRem = baseOffsetRem + skipOffsetRem + skipFeedbackOffsetRem;
 
   return (
     <div className="absolute right-[calc(3rem+env(safe-area-inset-right))] bottom-0 pointer-events-none">

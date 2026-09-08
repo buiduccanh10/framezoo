@@ -462,7 +462,10 @@ export function PlayerPart(props: PlayerPartProps) {
         onAction={handleThumbsFeedback}
       />
 
-      <Player.SubtitleSyncBadge controlsShowing={showTargets} />
+      <Player.SubtitleSyncBadge
+        controlsShowing={showTargets}
+        skipFeedbackActive={thumbsFeedbackData !== null}
+      />
     </Player.Container>
   );
 }

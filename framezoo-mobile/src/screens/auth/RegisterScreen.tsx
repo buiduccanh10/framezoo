@@ -3,7 +3,6 @@ import { StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import { AppText, Button, Screen, TextInput } from '@/components/primitives';
-import type { AuthStackParamList } from '@/navigation/AuthNavigator';
 import { register } from '@/services/api/auth';
 import { persistAuth } from '@/app/bootstrap';
 import { useAuthStore } from '@/state/auth/store';

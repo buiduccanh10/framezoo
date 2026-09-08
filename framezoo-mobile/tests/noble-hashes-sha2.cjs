@@ -1,0 +1,3 @@
+module.exports = {
+  sha256: {},
+};
