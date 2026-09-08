@@ -179,33 +179,33 @@ function ThemePreview(props: {
             {/* Navbar */}
             <div className="p-2 flex justify-between items-center">
               <div className="flex space-x-1">
-                <div className="bg-themePreview-ghost bg-opacity-10 w-4 h-2 rounded-full" />
-                <div className="bg-themePreview-ghost bg-opacity-10 w-2 h-2 rounded-full" />
-                <div className="bg-themePreview-ghost bg-opacity-10 w-2 h-2 rounded-full" />
+                <div className="bg-themePreview-ghost/10 w-4 h-2 rounded-full" />
+                <div className="bg-themePreview-ghost/10 w-2 h-2 rounded-full" />
+                <div className="bg-themePreview-ghost/10 w-2 h-2 rounded-full" />
               </div>
-              <div className="bg-themePreview-ghost bg-opacity-10 w-2 h-2 rounded-full" />
+              <div className="bg-themePreview-ghost/10 w-2 h-2 rounded-full" />
             </div>
             {/* Hero */}
             <div className="mt-1 flex items-center flex-col gap-1">
               {/* Title and subtitle */}
-              <div className="bg-themePreview-ghost bg-opacity-20 w-8 h-0.5 rounded-full" />
-              <div className="bg-themePreview-ghost bg-opacity-20 w-6 h-0.5 rounded-full" />
+              <div className="bg-themePreview-ghost/20 w-8 h-0.5 rounded-full" />
+              <div className="bg-themePreview-ghost/20 w-6 h-0.5 rounded-full" />
               {/* Search bar */}
-              <div className="bg-themePreview-ghost bg-opacity-10 w-16 h-2 mt-1 rounded-full" />
+              <div className="bg-themePreview-ghost/10 w-16 h-2 mt-1 rounded-full" />
             </div>
             {/* Media grid */}
             <div className="mt-5 px-3">
               {/* Title */}
               <div className="flex gap-1 items-center">
-                <div className="bg-themePreview-ghost bg-opacity-20 w-2 h-2 rounded-full" />
-                <div className="bg-themePreview-ghost bg-opacity-20 w-8 h-0.5 rounded-full" />
+                <div className="bg-themePreview-ghost/20 w-2 h-2 rounded-full" />
+                <div className="bg-themePreview-ghost/20 w-8 h-0.5 rounded-full" />
               </div>
               {/* Blocks */}
               <div className="flex w-full gap-1 mt-1">
-                <div className="bg-themePreview-ghost bg-opacity-10 w-full h-20 rounded" />
-                <div className="bg-themePreview-ghost bg-opacity-10 w-full h-20 rounded" />
-                <div className="bg-themePreview-ghost bg-opacity-10 w-full h-20 rounded" />
-                <div className="bg-themePreview-ghost bg-opacity-10 w-full h-20 rounded" />
+                <div className="bg-themePreview-ghost/10 w-full h-20 rounded" />
+                <div className="bg-themePreview-ghost/10 w-full h-20 rounded" />
+                <div className="bg-themePreview-ghost/10 w-full h-20 rounded" />
+                <div className="bg-themePreview-ghost/10 w-full h-20 rounded" />
               </div>
             </div>
           </div>

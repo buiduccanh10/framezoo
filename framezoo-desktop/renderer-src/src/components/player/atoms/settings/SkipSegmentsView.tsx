@@ -70,7 +70,7 @@ export function SkipSegmentsView({ id }: { id: string }) {
               {t("player.skipTime.submitSegment")}
             </Button>
           ) : (
-            <div className="flex-1 text-center text-sm text-type-secondary p-3 bg-video-context-light bg-opacity-10 rounded-lg">
+            <div className="flex-1 text-center text-sm text-type-secondary p-3 bg-video-context-light/10 rounded-lg">
               {t("player.skipTime.submissionUnavailableMessage")}
             </div>
           )}
@@ -96,7 +96,7 @@ export function SkipSegmentsView({ id }: { id: string }) {
                   key={`${segment.type}-${segment.submission_count}-${segment.start_ms || "null"}`}
                   type="button"
                   onClick={() => handleSeek(startTime)}
-                  className="w-full text-left p-3 rounded-xl bg-video-context-light bg-opacity-10 hover:bg-opacity-20 transition-colors cursor-pointer"
+                  className="w-full text-left p-3 rounded-xl bg-video-context-light/10 hover:bg-video-context-light/20 transition-colors cursor-pointer"
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-video-context-type-main font-medium">

@@ -14,7 +14,7 @@ export function LargeCard(props: {
       ) : null}
       <div
         className={classNames(
-          "w-full rounded-xl bg-largeCard-background bg-opacity-50 max-w-[600px] mx-auto",
+          "w-full rounded-xl bg-largeCard-background/50 max-w-[600px] mx-auto",
           props.compact ? "p-4 sm:p-6 md:p-8" : "p-[3rem]",
         )}
       >

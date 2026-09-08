@@ -107,7 +107,7 @@ export function ErrorCardInPlainModal(props: {
 }) {
   if (!props.show || !props.error) return null;
   return (
-    <div className="fixed inset-0 flex h-full w-full items-center justify-center bg-black bg-opacity-30 p-12">
+    <div className="fixed inset-0 flex h-full w-full items-center justify-center bg-black/30 p-12">
       <div className="w-full max-w-2xl">
         <ErrorCard error={props.error} onClose={props.onClose} />
       </div>

@@ -786,7 +786,7 @@ export function EpisodeCarousel({
                           className="w-full h-full object-cover"
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-black bg-opacity-50">
+                        <div className="w-full h-full flex items-center justify-center bg-black/50">
                           <Icon
                             icon={Icons.FILM}
                             className="text-video-context-type-main opacity-50 text-3xl"
@@ -796,7 +796,7 @@ export function EpisodeCarousel({
 
                       {/* Episode Number Badge */}
                       <div className="absolute top-2 left-2 flex items-center space-x-2">
-                        <span className="p-0.5 px-2 rounded inline bg-video-context-hoverColor bg-opacity-80 text-video-context-type-main text-sm">
+                        <span className="p-0.5 px-2 rounded inline bg-video-context-hoverColor/80 text-video-context-type-main text-sm">
                           {episodeBadgeLabel}
                         </span>
                         {!isAired && (

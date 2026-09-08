@@ -85,7 +85,7 @@ export function RandomMovieButton() {
         className={`
           relative flex items-center overflow-hidden
           rounded-full text-white h-10
-          bg-pill-background bg-opacity-50 hover:bg-pill-backgroundHover
+          bg-pill-background/50 hover:bg-pill-backgroundHover
           transition-all duration-300 ease-in-out
           ${countdown !== null && countdown > 0 ? "min-w-[10px] pl-3" : "w-10"}
         `}

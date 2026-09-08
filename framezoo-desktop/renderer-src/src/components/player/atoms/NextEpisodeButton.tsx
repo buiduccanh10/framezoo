@@ -227,7 +227,7 @@ export function NextEpisodeButton(props: {
         ])}
       >
         <ActionButton
-          className="py-px box-content bg-buttons-secondary hover:bg-buttons-secondaryHover bg-opacity-90 text-buttons-secondaryText justify-center items-center"
+          className="py-px box-content bg-buttons-secondary/90 hover:bg-buttons-secondaryHover text-buttons-secondaryText justify-center items-center"
           onClick={() => startCurrentEpisodeFromBeginning()}
           disabled={isPlaybackLocked}
         >

@@ -182,7 +182,7 @@ export function ProgressBar() {
         >
           <div
             className={[
-              "relative w-full h-[4px] bg-progress-background bg-opacity-25 rounded-sm transition-[height] duration-100 group-hover:h-[6px]",
+              "relative w-full h-[4px] bg-progress-background/25 rounded-sm transition-[height] duration-100 group-hover:h-[6px]",
               dragging ? "!h-[6px]" : "",
             ].join(" ")}
           >
@@ -200,7 +200,7 @@ export function ProgressBar() {
             ))}
             {/* Pre-loaded content bar */}
             <div
-              className="absolute top-0 left-0 h-full rounded-sm bg-progress-preloaded bg-opacity-50 flex justify-end items-center"
+              className="absolute top-0 left-0 h-full rounded-sm bg-progress-preloaded/50 flex justify-end items-center"
               style={{
                 width: `${torrentPreloadedProgress * 100}%`,
               }}

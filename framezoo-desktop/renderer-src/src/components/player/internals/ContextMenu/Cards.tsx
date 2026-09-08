@@ -17,10 +17,10 @@ export function CardWithScrollable(props: {
   return (
     <div
       className={classNames(
-        "[&>*]:px-6 h-full grid",
+        "*:px-6 h-full grid",
         props.scrollLastChild
-          ? "min-h-0 grid-rows-[auto,auto,minmax(0,1fr)] [&>*:nth-child(3)]:min-h-0 [&>*:nth-child(3)]:overflow-y-auto [&>*:nth-child(3)]:overflow-x-hidden"
-          : "grid-rows-[auto,1fr] [&>*:nth-child(2)]:overflow-y-auto [&>*:nth-child(2)]:overflow-x-hidden",
+          ? "min-h-0 grid-rows-[auto_auto_minmax(0,1fr)] [&>*:nth-child(3)]:min-h-0 [&>*:nth-child(3)]:overflow-y-auto [&>*:nth-child(3)]:overflow-x-hidden"
+          : "grid-rows-[auto_1fr] [&>*:nth-child(2)]:overflow-y-auto [&>*:nth-child(2)]:overflow-x-hidden",
       )}
     >
       {props.children}

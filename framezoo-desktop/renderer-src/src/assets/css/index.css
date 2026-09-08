@@ -280,6 +280,19 @@ input[type="range"].styled-slider.slider-progress::-ms-fill-lower {
   background: transparent;
 }
 
+.scrollbar-none,
+.scrollbar-hide {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+.scrollbar-none::-webkit-scrollbar,
+.scrollbar-hide::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
 .grecaptcha-badge {
   display: none !important;
 }

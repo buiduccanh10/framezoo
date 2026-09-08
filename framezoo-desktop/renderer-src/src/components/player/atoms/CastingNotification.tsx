@@ -19,7 +19,7 @@ export function CastingNotification() {
 
   return (
     <div className="flex flex-col items-center justify-center gap-4">
-      <div className="rounded-full bg-opacity-10 bg-video-buttonBackground p-3 brightness-100 grayscale">
+      <div className="rounded-full bg-video-buttonBackground/10 p-3 brightness-100 grayscale">
         <Icon icon={Icons.CASTING} />
       </div>
       <p className="text-center">

@@ -75,13 +75,13 @@ function CaptionOptionRightSide(props: CaptionOptionProps) {
       props.translatable && (
         <span
           className={classNames(
-            "text-buttons-secondaryText px-2 py-1 rounded bg-opacity-0",
+            "text-buttons-secondaryText px-2 py-1 rounded bg-transparent",
             {
               "mr-1": margin,
-              "bg-opacity-100 bg-buttons-purpleHover": props.isTranslatedTarget,
+              "bg-buttons-purpleHover/100": props.isTranslatedTarget,
             },
             "transition duration-300 ease-in-out",
-            "hover:bg-opacity-100 hover:bg-buttons-primaryHover",
+            "hover:bg-buttons-primaryHover/100",
             "hover:text-buttons-primaryText",
           )}
           onClick={(e) => {
@@ -257,7 +257,7 @@ export function CaptionOption(props: CaptionOptionProps) {
           </div>
           <div className="flex items-center">
             {subtitleTypeLabel && (
-              <span className="px-2 py-0.5 mt-2 rounded bg-video-context-hoverColor bg-opacity-80 text-video-context-type-main text-xs font-semibold">
+              <span className="px-2 py-0.5 mt-2 rounded bg-video-context-hoverColor/80 text-video-context-type-main text-xs font-semibold">
                 {subtitleTypeLabel}
               </span>
             )}
@@ -633,7 +633,7 @@ export function CaptionsView({
         onClick={handleRefreshExternalSubtitles}
         disabled={isLoadingExternalSubtitles}
         className={classNames(
-          "-my-1 p-[0.4em] rounded tabbable hover:bg-video-context-light hover:bg-opacity-10",
+          "-my-1 p-[0.4em] rounded tabbable hover:bg-video-context-light/10",
           isLoadingExternalSubtitles ? "opacity-60 cursor-not-allowed" : "",
         )}
         aria-label={refreshButtonLabel}
@@ -650,7 +650,7 @@ export function CaptionsView({
       <button
         type="button"
         onClick={() => router.navigate(settingsPath)}
-        className="-mr-2 -my-1 px-2 p-[0.4em] rounded tabbable hover:bg-video-context-light hover:bg-opacity-10"
+        className="-mr-2 -my-1 px-2 p-[0.4em] rounded tabbable hover:bg-video-context-light/10"
       >
         {t("player.menus.subtitles.customizeLabel")}
       </button>
@@ -846,7 +846,7 @@ export function CaptionsView({
 
         {/* Current subtitle preview */}
         {isMobile && activeCaption && (
-          <div className="mt-3 p-2 rounded-xl bg-video-context-light bg-opacity-10 text-center">
+          <div className="mt-3 p-2 rounded-xl bg-video-context-light/10 text-center">
             <div className="text-sm text-video-context-type-secondary mb-1">
               {t("player.menus.subtitles.previewLabel")} ·{" "}
               {t(`player.menus.subtitles.${selectionMode}`)}
@@ -1086,7 +1086,7 @@ export function CaptionsView({
           {!isLoadingExternalSubtitles &&
             sourceCaptions.length === 0 &&
             externalCaptions.length === 0 && (
-              <div className="p-4 pb-4 rounded-xl bg-video-context-light bg-opacity-10 text-center">
+              <div className="p-4 pb-4 rounded-xl bg-video-context-light/10 text-center">
                 <div className="text-video-context-type-secondary">
                   {t("player.menus.subtitles.empty")}
                 </div>
@@ -1095,7 +1095,7 @@ export function CaptionsView({
 
           {/* Loading external subtitles */}
           {isLoadingExternalSubtitles && (
-            <div className="p-4 rounded-xl bg-video-context-light bg-opacity-10 text-center">
+            <div className="p-4 rounded-xl bg-video-context-light/10 text-center">
               <div className="text-video-context-type-secondary">
                 {externalSubtitleProgressLabel}
               </div>

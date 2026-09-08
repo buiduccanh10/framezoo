@@ -26,8 +26,10 @@ export function ColorOption(props: {
     <button
       type="button"
       className={classNames(
-        "tabbable p-1.5 bg-video-context-buttonFocus rounded transition-colors duration-100",
-        props.active ? "bg-opacity-100" : "bg-opacity-0 cursor-pointer",
+        "tabbable p-1.5 rounded transition-colors duration-100",
+        props.active
+          ? "bg-video-context-buttonFocus/100"
+          : "bg-video-context-buttonFocus/0 cursor-pointer",
       )}
       onClick={props.onClick}
     >
@@ -107,7 +109,7 @@ export function CaptionSetting(props: {
             <div
               dir="ltr"
               className={[
-                "relative w-full h-1 bg-video-context-slider bg-opacity-25 rounded-full transition-[height] duration-100 group-hover/progress:h-1.5",
+                "relative w-full h-1 bg-video-context-slider/25 rounded-full transition-[height] duration-100 group-hover/progress:h-1.5",
                 dragging ? "!h-1.5" : "",
               ].join(" ")}
             >
@@ -482,7 +484,7 @@ export function CaptionSettingsView({
                   "px-3 py-1 rounded transition-colors duration-100",
                   styling.verticalPosition === 1
                     ? "bg-video-context-buttonFocus"
-                    : "bg-video-context-buttonFocus bg-opacity-0 hover:bg-opacity-50",
+                    : "bg-video-context-buttonFocus/0 hover:bg-video-context-buttonFocus/50",
                 )}
                 onClick={() =>
                   handleStylingChange({
@@ -499,7 +501,7 @@ export function CaptionSettingsView({
                   "px-3 py-1 rounded transition-colors duration-100",
                   styling.verticalPosition === 3
                     ? "bg-video-context-buttonFocus"
-                    : "bg-video-context-buttonFocus bg-opacity-0 hover:bg-opacity-50",
+                    : "bg-video-context-buttonFocus/0 hover:bg-video-context-buttonFocus/50",
                 )}
                 onClick={() =>
                   handleStylingChange({

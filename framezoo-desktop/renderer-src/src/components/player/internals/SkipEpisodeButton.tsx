@@ -55,7 +55,7 @@ export function SkipEpisodeButton(props: SkipEpisodeButtonProps) {
       onClick={() => loadNextEpisode()}
       icon={Icons.SKIP_EPISODE}
       iconSizeClass={props.iconSizeClass}
-      className={`hover:bg-video-buttonBackground hover:bg-opacity-50 ${props.className ?? ""}`}
+      className={`hover:bg-video-buttonBackground/50 ${props.className ?? ""}`}
     />
   );
 }

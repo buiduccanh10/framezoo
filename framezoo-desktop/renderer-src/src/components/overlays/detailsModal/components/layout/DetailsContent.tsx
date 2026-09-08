@@ -648,7 +648,7 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
         <button
           type="button"
           onClick={() => setEnableTrailer(!isTrailerEnabled)}
-          className="pointer-events-auto absolute bottom-6 right-6 z-50 flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-pill-background bg-opacity-50 text-white transition-all duration-300 ease-in-out hover:bg-pill-backgroundHover"
+          className="pointer-events-auto absolute bottom-6 right-6 z-50 flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-pill-background/50 text-white transition-all duration-300 ease-in-out hover:bg-pill-backgroundHover"
           aria-label={isTrailerEnabled ? "Show image" : "Show trailer"}
           aria-pressed={!isTrailerEnabled}
           title={isTrailerEnabled ? "Show image" : "Show trailer"}
@@ -665,7 +665,7 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
             trailerPlayerRef.current?.setMuted(nextMuted);
             setEnableTrailerAudio(!nextMuted);
           }}
-          className="pointer-events-auto absolute bottom-6 right-20 z-50 flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-pill-background bg-opacity-50 text-white transition-all duration-300 ease-in-out hover:bg-pill-backgroundHover"
+          className="pointer-events-auto absolute bottom-6 right-20 z-50 flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-pill-background/50 text-white transition-all duration-300 ease-in-out hover:bg-pill-backgroundHover"
           aria-label={isTrailerMuted ? "Unmute trailer" : "Mute trailer"}
           aria-pressed={!isTrailerMuted}
           title={isTrailerMuted ? "Unmute trailer" : "Mute trailer"}

@@ -173,7 +173,7 @@ function SelectedAddonHeader(props: {
           {showBack ? (
             <button
               type="button"
-              className="-ml-2 shrink-0 rounded p-2 tabbable hover:bg-video-context-light hover:bg-opacity-10"
+              className="-ml-2 shrink-0 rounded p-2 tabbable hover:bg-video-context-light/10"
               onClick={props.onBack}
               aria-label="Back to addons"
             >
@@ -727,7 +727,7 @@ export function SourceSelectPart(props: {
                 )}
               >
                 <div className="flex flex-col items-center gap-4 pt-2 pb-4">
-                  <p className="max-w-md text-sm leading-relaxed text-video-context-type-main text-opacity-80">
+                  <p className="max-w-md text-sm leading-relaxed text-video-context-type-main/80">
                     {t(
                       "addons.player.emptyExplanation",
                       "No stream addon is installed or enabled. Add a manifest URL you choose in the Addons Manager.",
@@ -808,7 +808,7 @@ export function SourceSelectPart(props: {
                         <span className="truncate text-white">
                           {addon.manifest.name}
                         </span>
-                        <span className="truncate text-sm text-video-context-type-main text-opacity-60">
+                        <span className="truncate text-sm text-video-context-type-main/60">
                           {loadError
                             ? t(
                                 "addons.player.unableToLoad",
@@ -911,23 +911,29 @@ export function SourceSelectPart(props: {
                   className="items-center gap-4 px-3 py-3"
                   onClick={() => void selectAddonStream(stream)}
                 >
-                  <div className="grid min-w-0 flex-1 grid-cols-[minmax(8rem,12rem),minmax(0,1fr)] items-center gap-6">
+                  <div className="grid min-w-0 flex-1 grid-cols-[minmax(8rem,12rem)_minmax(0,1fr)] items-center gap-6">
                     <div className="flex min-w-0 flex-col">
-                      <div className="flex items-center gap-2">
+                      <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                         {isStartingThisStream ? (
                           <Spinner className="text-[14px] shrink-0 text-white/90" />
                         ) : null}
-                        <span className="min-w-0 whitespace-pre-line text-[15px] font-medium leading-5 text-white/90">
-                          {nameLines.join("\n")}
-                        </span>
+                        {nameLines.map((line, index) => (
+                          <span
+                            key={`${line}-${index}`}
+                            className="min-w-0 text-[15px] font-medium leading-5 text-white/90"
+                          >
+                            {line}
+                          </span>
+                        ))}
                       </div>
                     </div>
-                    <span className="min-w-0 whitespace-pre-line text-[14px] leading-5 text-white/70 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:5] overflow-hidden">
+                    <span className="min-w-0 text-[14px] leading-5 text-white/70 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:5] overflow-hidden">
                       {detailsLines.map((line, i) => (
                         <span
                           key={i}
-                          className={`block ${i === 0 ? "text-white/90 font-medium text-[15px]" : ""}`}
+                          className={`inline ${i === 0 ? "text-white/90 font-medium text-[15px]" : ""}`}
                         >
+                          {i > 0 ? " " : null}
                           {line}
                         </span>
                       ))}
@@ -945,10 +951,10 @@ export function SourceSelectPart(props: {
               onClose={() => {
                 setAddonError(null);
                 if (isPlaybackError) {
-                  usePlayerStore.setState((s) => {
-                    s.interface.error = undefined;
-                    s.status = playerStatus.SOURCE_SELECTION;
-                  });
+                  usePlayerStore.setState((s) => ({
+                    interface: { ...s.interface, error: undefined },
+                    status: playerStatus.SOURCE_SELECTION,
+                  }));
                 }
               }}
             />

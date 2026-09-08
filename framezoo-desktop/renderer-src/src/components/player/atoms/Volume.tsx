@@ -106,7 +106,7 @@ export function Volume(props: Props) {
             onMouseDown={dragMouseDown}
             onTouchStart={dragMouseDown}
           >
-            <div className="relative h-1 flex-1 rounded-full bg-gray-500 bg-opacity-50">
+            <div className="relative h-1 flex-1 rounded-full bg-gray-500/50">
               <div
                 className="absolute inset-y-0 left-0 flex items-center justify-end rounded-full bg-video-audio-set"
                 style={{

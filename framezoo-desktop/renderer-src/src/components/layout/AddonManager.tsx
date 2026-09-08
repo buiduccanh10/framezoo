@@ -97,7 +97,7 @@ export function AddonManager({
           aria-label={t("addons.manager.ariaManage", "Manage addons")}
           title={t("addons.manager.ariaManage", "Manage addons")}
         >
-          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-pill-background bg-opacity-50 transition-colors hover:bg-pill-backgroundHover">
+          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-pill-background/50 transition-colors hover:bg-pill-backgroundHover">
             <Icon icon={Icons.EXTENSION} />
           </span>
         </button>

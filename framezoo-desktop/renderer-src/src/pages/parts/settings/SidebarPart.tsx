@@ -170,7 +170,7 @@ export function SidebarPart(props: {
             </SidebarLink>
           ))}
         </SidebarSection>
-        <div className="mt-6 rounded-lg border border-settings-card-border bg-settings-card-background bg-opacity-[0.15] px-4 py-3">
+        <div className="mt-6 rounded-lg border border-settings-card-border bg-settings-card-background/[0.15] px-4 py-3">
           <p className="text-xs font-medium uppercase tracking-wide text-settings-sidebar-type-secondary">
             {t("settings.sidebar.info.appVersion")}
           </p>

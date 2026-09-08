@@ -231,7 +231,7 @@ export function CollectionOverlay({
       <Flare.Base
         className={classNames(
           "group -m-[0.705em] rounded-3xl bg-background-main transition-colors duration-300 focus:relative focus:z-10",
-          "w-full mx-4 p-6 bg-mediaCard-hoverBackground bg-opacity-60 backdrop-filter backdrop-blur-lg shadow-lg",
+          "w-full mx-4 p-6 bg-mediaCard-hoverBackground/60 backdrop-filter backdrop-blur-lg shadow-lg",
           "max-w-7xl max-h-[90vh]",
         )}
       >
