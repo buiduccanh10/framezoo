@@ -61,7 +61,7 @@ export function AdsPart(): React.ReactNode | null {
             <div className="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 justify-center w-full items-center md:items-start">
               {showAd1 ? (
                 <div className="rounded-xl bg-background-main hover:scale-[1.02] max-w-[16rem] md:max-w-[22rem] transition-all duration-300 md:flex-1 relative group">
-                  <div className="bg-opacity-10 bg-buttons-purple rounded-xl border-2 border-buttons-purple border-opacity-30 hover:border-opacity-70 hover:shadow-lg hover:shadow-buttons-purple/20">
+                  <div className="bg-buttons-purple/10 rounded-xl border-2 border-buttons-purple/30 hover:border-buttons-purple/70 hover:shadow-lg hover:shadow-buttons-purple/20">
                     {" "}
                     <button
                       onClick={dismissAd}
@@ -91,7 +91,7 @@ export function AdsPart(): React.ReactNode | null {
               ) : null}
               {showAd2 ? (
                 <div className="rounded-xl bg-background-main hover:scale-[1.02] max-w-[16rem] md:max-w-[20rem] transition-all duration-300 md:flex-1 relative group">
-                  <div className="bg-opacity-10 bg-buttons-purple rounded-xl border-2 border-buttons-purple border-opacity-30 hover:border-opacity-70 hover:shadow-lg hover:shadow-buttons-purple/20">
+                  <div className="bg-buttons-purple/10 rounded-xl border-2 border-buttons-purple/30 hover:border-buttons-purple/70 hover:shadow-lg hover:shadow-buttons-purple/20">
                     <button
                       onClick={dismissAd}
                       type="button"

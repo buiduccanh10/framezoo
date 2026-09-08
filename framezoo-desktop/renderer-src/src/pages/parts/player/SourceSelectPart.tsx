@@ -173,7 +173,7 @@ function SelectedAddonHeader(props: {
           {showBack ? (
             <button
               type="button"
-              className="-ml-2 shrink-0 rounded p-2 tabbable hover:bg-video-context-light hover:bg-opacity-10"
+              className="-ml-2 shrink-0 rounded p-2 tabbable hover:bg-video-context-light/10"
               onClick={props.onBack}
               aria-label="Back to addons"
             >
@@ -727,7 +727,7 @@ export function SourceSelectPart(props: {
                 )}
               >
                 <div className="flex flex-col items-center gap-4 pt-2 pb-4">
-                  <p className="max-w-md text-sm leading-relaxed text-video-context-type-main text-opacity-80">
+                  <p className="max-w-md text-sm leading-relaxed text-video-context-type-main/80">
                     {t(
                       "addons.player.emptyExplanation",
                       "No stream addon is installed or enabled. Add a manifest URL you choose in the Addons Manager.",
@@ -808,7 +808,7 @@ export function SourceSelectPart(props: {
                         <span className="truncate text-white">
                           {addon.manifest.name}
                         </span>
-                        <span className="truncate text-sm text-video-context-type-main text-opacity-60">
+                        <span className="truncate text-sm text-video-context-type-main/60">
                           {loadError
                             ? t(
                                 "addons.player.unableToLoad",

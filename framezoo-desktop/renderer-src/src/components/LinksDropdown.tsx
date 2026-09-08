@@ -341,8 +341,8 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
       <button
         type="button"
         className={classNames(
-          "cursor-pointer tabbable rounded-full flex gap-2 text-white items-center py-2 px-3 bg-pill-background hover:bg-pill-backgroundHover backdrop-blur-lg transition-all duration-100 hover:scale-105",
-          open ? "bg-opacity-100" : "bg-opacity-50",
+          "cursor-pointer tabbable rounded-full flex gap-2 text-white items-center py-2 px-3 hover:bg-pill-backgroundHover backdrop-blur-lg transition-all duration-100 hover:scale-105",
+          open ? "bg-pill-background/100" : "bg-pill-background/50",
         )}
         onClick={toggleOpen}
         aria-haspopup="menu"

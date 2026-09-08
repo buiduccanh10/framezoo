@@ -74,7 +74,7 @@ export function Navigation(props: NavigationProps) {
       >
         <div
           className={classNames(
-            "fixed left-0 right-0 top-0 flex items-center", // border-b border-utils-divider border-opacity-50
+            "fixed left-0 right-0 top-0 flex items-center", // border-b border-utils-divider/50
             "transition-[background-color,backdrop-filter] duration-300 ease-in-out",
             props.doBackground
               ? props.clearBackground

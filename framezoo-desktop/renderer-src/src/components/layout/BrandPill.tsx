@@ -16,7 +16,7 @@ export function BrandPill(props: {
     <div
       className={classNames(
         "flex items-center space-x-2 rounded-full px-2 py-0 text-type-logo backdrop-blur-lg",
-        props.backgroundClass ?? "bg-pill-background bg-opacity-50",
+        props.backgroundClass ?? "bg-pill-background/50",
         props.clickable
           ? "transition-[transform,background-color] hover:scale-105 hover:bg-pill-backgroundHover hover:text-type-logo active:scale-95"
           : "",

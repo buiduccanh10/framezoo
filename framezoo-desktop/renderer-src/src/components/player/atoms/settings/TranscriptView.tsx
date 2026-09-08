@@ -424,7 +424,7 @@ export function TranscriptView({
               <button
                 type="button"
                 onClick={() => setDelay(Number((delay - 0.1).toFixed(2)))}
-                className="w-7 h-7 flex items-center justify-center rounded-md bg-video-context-light bg-opacity-15 hover:bg-opacity-25 text-white font-bold transition-colors select-none text-sm"
+                className="w-7 h-7 flex items-center justify-center rounded-md bg-video-context-light/15 hover:bg-video-context-light/25 text-white font-bold transition-colors select-none text-sm"
                 title="-0.1s"
               >
                 -
@@ -456,7 +456,7 @@ export function TranscriptView({
               <button
                 type="button"
                 onClick={() => setDelay(Number((delay + 0.1).toFixed(2)))}
-                className="w-7 h-7 flex items-center justify-center rounded-md bg-video-context-light bg-opacity-15 hover:bg-opacity-25 text-white font-bold transition-colors select-none text-sm"
+                className="w-7 h-7 flex items-center justify-center rounded-md bg-video-context-light/15 hover:bg-video-context-light/25 text-white font-bold transition-colors select-none text-sm"
                 title="+0.1s"
               >
                 +
@@ -465,7 +465,7 @@ export function TranscriptView({
                 type="button"
                 onClick={() => setDelay(0)}
                 disabled={delay === 0}
-                className="h-7 px-2 ml-0.5 text-xs rounded-md bg-video-context-light bg-opacity-15 hover:bg-opacity-25 text-video-context-type-main hover:text-white transition-colors flex items-center justify-center disabled:opacity-40 disabled:hover:bg-opacity-15 disabled:hover:text-video-context-type-main disabled:cursor-not-allowed"
+                className="h-7 px-2 ml-0.5 text-xs rounded-md bg-video-context-light/15 hover:bg-video-context-light/25 text-video-context-type-main hover:text-white transition-colors flex items-center justify-center disabled:opacity-40 disabled:hover:bg-video-context-light/15 disabled:hover:text-video-context-type-main disabled:cursor-not-allowed"
                 title={t("player.menus.subtitles.resetDelay", "Reset")}
               >
                 <Icon icon={Icons.RELOAD} className="text-xs" />

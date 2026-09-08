@@ -1149,7 +1149,7 @@ export function FeaturedCarousel({
             <button
               type="button"
               onClick={toggleTrailer}
-              className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-pill-background bg-opacity-50 text-white transition-all duration-300 ease-in-out hover:bg-pill-backgroundHover"
+              className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-pill-background/50 text-white transition-all duration-300 ease-in-out hover:bg-pill-backgroundHover"
               aria-label={isTrailerEnabled ? "Show image" : "Show trailer"}
               aria-pressed={!isTrailerEnabled}
               title={isTrailerEnabled ? "Show image" : "Show trailer"}
@@ -1166,7 +1166,7 @@ export function FeaturedCarousel({
                 trailerPlayerRef.current?.setMuted(nextMuted);
                 setEnableTrailerAudio(!nextMuted);
               }}
-              className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-pill-background bg-opacity-50 text-white transition-all duration-300 ease-in-out hover:bg-pill-backgroundHover"
+              className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-pill-background/50 text-white transition-all duration-300 ease-in-out hover:bg-pill-backgroundHover"
               aria-label={isTrailerMuted ? "Unmute trailer" : "Mute trailer"}
               aria-pressed={!isTrailerMuted}
               title={isTrailerMuted ? "Unmute trailer" : "Mute trailer"}

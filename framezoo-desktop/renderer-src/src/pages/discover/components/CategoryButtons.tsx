@@ -53,7 +53,7 @@ export function CategoryButtons({
             <button
               key={category.id || category.name}
               type="button"
-              className="whitespace-nowrap flex items-center space-x-2 rounded-full px-4 text-white py-2 bg-pill-background bg-opacity-50 hover:bg-pill-backgroundHover transition-[background,transform] duration-100 hover:scale-105"
+              className="whitespace-nowrap flex items-center space-x-2 rounded-full px-4 text-white py-2 bg-pill-background/50 hover:bg-pill-backgroundHover transition-[background,transform] duration-100 hover:scale-105"
               onClick={() => onCategoryClick(category.id, category.name)}
             >
               {category.name}

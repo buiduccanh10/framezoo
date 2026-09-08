@@ -93,7 +93,7 @@ function PlaybackSpeedControl(props: {
             <div
               dir="ltr"
               className={[
-                "relative w-full h-1 bg-video-context-slider bg-opacity-25 rounded-full transition-[height] duration-100 group-hover/progress:h-1.5",
+                "relative w-full h-1 bg-video-context-slider/25 rounded-full transition-[height] duration-100 group-hover/progress:h-1.5",
                 dragging ? "!h-1.5" : "",
               ].join(" ")}
             >

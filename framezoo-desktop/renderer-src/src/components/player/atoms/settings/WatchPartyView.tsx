@@ -250,7 +250,7 @@ export function WatchPartyView({ id }: { id: string }) {
                         </Trans>
                       </div>
                       <div
-                        className="relative flex items-center justify-center p-3 bg-mediaCard-hoverBackground rounded-lg border border-mediaCard-hoverAccent border-opacity-20 cursor-pointer transition-all duration-300 hover:bg-mediaCard-hoverShadow group"
+                        className="relative flex items-center justify-center p-3 bg-mediaCard-hoverBackground rounded-lg border border-mediaCard-hoverAccent/20 cursor-pointer transition-all duration-300 hover:bg-mediaCard-hoverShadow group"
                         onClick={editingCode ? undefined : handleCopyCode}
                         title={
                           editingCode ? undefined : t("watchParty.copyCode")
@@ -320,7 +320,7 @@ export function WatchPartyView({ id }: { id: string }) {
                     </div>
 
                     {roomUsers.length > 1 && (
-                      <div className="bg-mediaCard-hoverBackground rounded-lg p-3 border border-mediaCard-hoverAccent border-opacity-20">
+                      <div className="bg-mediaCard-hoverBackground rounded-lg p-3 border border-mediaCard-hoverAccent/20">
                         <div className="flex justify-between items-center mb-2">
                           <span className="text-sm font-medium text-white">
                             {t("watchParty.viewers", {
@@ -366,7 +366,7 @@ export function WatchPartyView({ id }: { id: string }) {
                     )}
 
                     <div className="flex flex-col space-y-4">
-                      <div className="flex items-center justify-between bg-mediaCard-hoverBackground rounded-lg p-3 border border-mediaCard-hoverAccent border-opacity-20">
+                      <div className="flex items-center justify-between bg-mediaCard-hoverBackground rounded-lg p-3 border border-mediaCard-hoverAccent/20">
                         <span className="text-white">
                           {t("watchParty.showStatusOverlay")}
                         </span>
@@ -399,7 +399,7 @@ export function WatchPartyView({ id }: { id: string }) {
                     <input
                       type="text"
                       maxLength={10}
-                      className="w-full p-2 text-center text-2xl tracking-widest bg-mediaCard-hoverBackground border border-mediaCard-hoverAccent border-opacity-20 rounded-lg text-type-logo"
+                      className="w-full p-2 text-center text-2xl tracking-widest bg-mediaCard-hoverBackground border border-mediaCard-hoverAccent/20 rounded-lg text-type-logo"
                       placeholder="ABCD123456"
                       value={joinCode}
                       onChange={(e) => {

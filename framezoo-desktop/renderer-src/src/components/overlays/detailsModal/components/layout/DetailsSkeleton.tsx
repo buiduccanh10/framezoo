@@ -84,7 +84,7 @@ export function DetailsSkeleton() {
 
           {/* Right Column - Details Info (1/3) */}
           <div className="md:col-span-1">
-            <div className="bg-video-context-border p-4 rounded-lg border-buttons-primary bg-opacity-80">
+            <div className="bg-video-context-border/80 p-4 rounded-lg border-buttons-primary">
               <div className="space-y-3">
                 <div className="h-4 w-32 bg-white/10 rounded" /> {/* Runtime */}
                 <div className="h-4 w-24 bg-white/10 rounded" />{" "}

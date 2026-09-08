@@ -303,7 +303,7 @@ export function LanguageSubtitlesView({
               <button
                 type="button"
                 onClick={handleRandomSelect}
-                className="-mr-2 -my-1 px-2 p-[0.4em] rounded tabbable hover:bg-video-context-light hover:bg-opacity-10"
+                className="-mr-2 -my-1 px-2 p-[0.4em] rounded tabbable hover:bg-video-context-light/10"
                 title="Pick random subtitle"
               >
                 <Icon icon={Icons.REPEAT} className="text-lg" />

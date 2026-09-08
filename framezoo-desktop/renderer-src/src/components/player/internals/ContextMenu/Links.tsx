@@ -46,7 +46,7 @@ export function BackLink(props: {
         rightSide={
           <button
             type="button"
-            className="p-2 rounded tabbable hover:bg-video-context-light hover:bg-opacity-10"
+            className="p-2 rounded tabbable hover:bg-video-context-light/10"
             onClick={props.onClick}
           >
             <Icon className="text-xl" icon={Icons.ARROW_RIGHT} />
@@ -67,7 +67,7 @@ export function BackLink(props: {
     <Title rightSide={props.rightSide}>
       <button
         type="button"
-        className="-ml-2 p-2 rounded tabbable hover:bg-video-context-light hover:bg-opacity-10"
+        className="-ml-2 p-2 rounded tabbable hover:bg-video-context-light/10"
         onClick={props.onClick}
       >
         <Icon className="text-xl" icon={Icons.ARROW_LEFT} />
@@ -93,9 +93,9 @@ export function Link(props: {
     props.box ? "bg-video-context-light/10 h-20" : "",
     {
       "cursor-default": !props.clickable,
-      "hover:bg-video-context-light hover:bg-opacity-20 cursor-pointer tabbable":
+      "hover:bg-video-context-light/20 cursor-pointer tabbable":
         props.clickable,
-      "bg-video-context-light bg-opacity-20": props.active,
+      "bg-video-context-light/20": props.active,
       "-ml-3 px-3 w-full": !props.box,
       "opacity-50 pointer-events-none": props.disabled,
     },
@@ -228,7 +228,7 @@ export function SelectableLink(props: {
       <LinkTitle
         textClass={classNames({
           "text-white": props.selected,
-          "text-video-context-type-main text-opacity-40": props.disabled,
+          "text-video-context-type-main/40": props.disabled,
         })}
       >
         {props.children}

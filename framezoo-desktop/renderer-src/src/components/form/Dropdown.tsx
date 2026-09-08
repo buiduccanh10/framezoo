@@ -169,7 +169,7 @@ function DropdownMenu({
       <Transition
         animation="slide-down"
         show={open}
-        className={`min-w-[20px] w-fit max-w-[calc(100vw-2rem)] max-h-60 overflow-auto rounded-xl bg-dropdown-background py-1 text-white shadow-lg ring-1 ring-black ring-opacity-5 scrollbar-thin scrollbar-track-background-secondary scrollbar-thumb-type-secondary focus:outline-none ${
+        className={`min-w-[20px] w-fit max-w-[calc(100vw-2rem)] max-h-60 overflow-auto rounded-xl bg-dropdown-background py-1 text-white shadow-lg ring-1 ring-black/5 scrollbar-thin scrollbar-track-background-secondary scrollbar-thumb-type-secondary focus:outline-none ${
           menuClassName ?? ""
         }`}
       >

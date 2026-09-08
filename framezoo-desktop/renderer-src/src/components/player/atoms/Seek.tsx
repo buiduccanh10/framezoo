@@ -5,7 +5,7 @@ export type SeekDirection = "backward" | "forward";
 export function Seek(props: { direction: SeekDirection }) {
   return (
     <div
-      className={`pointer-events-none flex h-20 w-20 items-center justify-center rounded-full bg-black bg-opacity-50 text-white ${
+      className={`pointer-events-none flex h-20 w-20 items-center justify-center rounded-full bg-black/50 text-white ${
         props.direction === "backward"
           ? "animate-seek-left"
           : "animate-seek-right"

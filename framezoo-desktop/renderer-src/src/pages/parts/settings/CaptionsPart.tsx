@@ -72,7 +72,7 @@ export function CaptionPreview(props: {
         >
           <button
             type="button"
-            className="tabbable bg-black absolute right-3 top-3 text-white bg-opacity-25 duration-100 transition-[background-color,transform] active:scale-110 hover:bg-opacity-50 p-2 rounded-md cursor-pointer"
+            className="tabbable bg-black/25 absolute right-3 top-3 text-white duration-100 transition-[background-color,transform] active:scale-110 hover:bg-black/50 p-2 rounded-md cursor-pointer"
             onClick={props.onToggle}
           >
             <Icon icon={props.fullscreen ? Icons.X : Icons.EXPAND} />
@@ -342,7 +342,7 @@ export function CaptionsPart(props: {
                     "px-3 py-1 rounded transition-colors duration-100",
                     styling.verticalPosition === 1
                       ? "bg-video-context-buttonFocus"
-                      : "bg-video-context-buttonFocus bg-opacity-0 hover:bg-opacity-50",
+                      : "bg-video-context-buttonFocus/0 hover:bg-video-context-buttonFocus/50",
                   )}
                   onClick={() =>
                     handleStylingChange({
@@ -359,7 +359,7 @@ export function CaptionsPart(props: {
                     "px-3 py-1 rounded transition-colors duration-100",
                     styling.verticalPosition === 3
                       ? "bg-video-context-buttonFocus"
-                      : "bg-video-context-buttonFocus bg-opacity-0 hover:bg-opacity-50",
+                      : "bg-video-context-buttonFocus/0 hover:bg-video-context-buttonFocus/50",
                   )}
                   onClick={() =>
                     handleStylingChange({

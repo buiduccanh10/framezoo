@@ -4,7 +4,7 @@ interface TextProps {
   border?: boolean;
 }
 
-const borderClass = "pb-4 border-b border-utils-divider border-opacity-50";
+const borderClass = "pb-4 border-b border-utils-divider/50";
 
 export function Heading1(props: TextProps) {
   return (

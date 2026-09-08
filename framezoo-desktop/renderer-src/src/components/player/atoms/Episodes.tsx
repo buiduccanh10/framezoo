@@ -187,10 +187,10 @@ function EpisodeItem({
             <div
               className={classNames(
                 "text-left flex items-center space-x-1 text-video-context-type-main",
-                isAired || isActive ? "" : "text-opacity-25",
+                isAired || isActive ? "" : "text-video-context-type-main/25",
               )}
             >
-              <span className="p-0.5 px-2 rounded inline bg-video-context-hoverColor bg-opacity-50">
+              <span className="p-0.5 px-2 rounded inline bg-video-context-hoverColor/50">
                 {episodeBadgeLabel}
               </span>
               <span className="line-clamp-1 break-all">{episodeTitle}</span>
@@ -220,7 +220,7 @@ function EpisodeItem({
               className="w-full h-full object-cover"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-black bg-opacity-50">
+            <div className="w-full h-full flex items-center justify-center bg-black/50">
               <Icon
                 icon={Icons.FILM}
                 className="text-video-context-type-main opacity-50 text-3xl"
@@ -230,7 +230,7 @@ function EpisodeItem({
 
           {/* Episode Number Badge */}
           <div className="absolute top-2 left-2 flex items-center space-x-2">
-            <span className="p-0.5 px-2 rounded inline bg-video-context-hoverColor bg-opacity-80 text-video-context-type-main text-sm">
+            <span className="p-0.5 px-2 rounded inline bg-video-context-hoverColor/80 text-video-context-type-main text-sm">
               {episodeBadgeLabel}
             </span>
             {!isAired && (
@@ -375,7 +375,7 @@ function EpisodeItem({
                 className="w-full h-full object-cover"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center bg-black bg-opacity-50">
+              <div className="w-full h-full flex items-center justify-center bg-black/50">
                 <Icon
                   icon={Icons.FILM}
                   className="text-video-context-type-main opacity-50 text-3xl"
@@ -385,7 +385,7 @@ function EpisodeItem({
 
             {/* Episode Number Badge */}
             <div className="absolute top-2 left-2 flex items-center space-x-2">
-              <span className="p-0.5 px-2 rounded inline bg-video-context-hoverColor bg-opacity-80 text-video-context-type-main text-sm">
+              <span className="p-0.5 px-2 rounded inline bg-video-context-hoverColor/80 text-video-context-type-main text-sm">
                 {episodeBadgeLabel}
               </span>
               {!isAired && (

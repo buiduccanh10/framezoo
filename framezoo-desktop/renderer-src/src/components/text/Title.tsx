@@ -7,7 +7,7 @@ export function Title(props: {
   return (
     <h2
       className={classNames(
-        "text-white text-3xl font-bold text-opacity-100 mt-6",
+        "text-white/100 text-3xl font-bold mt-6",
         props.className,
       )}
     >

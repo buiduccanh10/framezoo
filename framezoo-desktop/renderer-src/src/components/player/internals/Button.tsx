@@ -36,10 +36,10 @@ export const VideoPlayerButton = forwardRef<
         "tabbable p-3 rounded-full transition-transform duration-100 flex items-center justify-center",
         props.disabled
           ? "opacity-50 cursor-not-allowed"
-          : "hover:bg-video-buttonBackground hover:bg-opacity-50",
+          : "hover:bg-video-buttonBackground/50",
         !props.disabled &&
           (props.activeClass ??
-            "active:scale-110 active:bg-opacity-75 active:text-white"),
+            "active:scale-110 active:bg-video-buttonBackground/75 active:text-white"),
         props.className ?? "",
       ])}
     >

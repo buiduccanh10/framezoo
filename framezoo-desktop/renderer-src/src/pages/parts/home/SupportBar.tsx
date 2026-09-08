@@ -98,7 +98,7 @@ export function SupportBar() {
             </span>
           </div>
           <div className="w-full max-w-md">
-            <div className="relative w-full h-2 bg-progress-background bg-opacity-25 rounded-full">
+            <div className="relative w-full h-2 bg-progress-background/25 rounded-full">
               {/* Progress bar */}
               <div
                 className="absolute top-0 left-0 h-full rounded-full bg-progress-filled transition-all duration-300"

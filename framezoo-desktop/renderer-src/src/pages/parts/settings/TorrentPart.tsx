@@ -226,7 +226,7 @@ export function TorrentPart() {
                 </div>
               )}
             </div>
-            <div className="mt-8 border-t border-utils-divider border-opacity-50 pt-6">
+            <div className="mt-8 border-t border-utils-divider/50 pt-6">
               <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div>
                   <p className="text-white font-bold mb-2">
@@ -243,7 +243,7 @@ export function TorrentPart() {
                           <span className="ml-2">
                             {t("settings.torrent.spaceLeftOnDevice", {
                               space: formatBytes(storageInfo.freeBytes),
-                              defaultValue: `(${formatBytes(storageInfo.freeBytes)} space left on your device)`
+                              defaultValue: `(${formatBytes(storageInfo.freeBytes)} space left on your device)`,
                             })}
                           </span>
                         )}
