@@ -828,10 +828,6 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       case "time-pos":
         if (typeof event.data === "number" && Number.isFinite(event.data)) {
           const rawPosition = Math.max(0, event.data);
-          if (Math.abs(rawPosition - lastTimePosValue) > 0.001) {
-            lastTimePosAt = performance.now();
-            lastTimePosValue = rawPosition;
-          }
           if (pendingSeekTarget !== null) {
             const isNearTarget =
               Math.abs(rawPosition - pendingSeekTarget) <= 3.5;
@@ -848,6 +844,10 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
             }
             pendingSeekTarget = null;
             heldSeekPosition = null;
+            if (Math.abs(rawPosition - lastTimePosValue) > 0.001) {
+              lastTimePosAt = performance.now();
+              lastTimePosValue = rawPosition;
+            }
             applyTimePosition(rawPosition, true);
             break;
           }
@@ -855,6 +855,10 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
             // A backward jump without a pending seek is stale decoder state,
             // not user navigation.
             break;
+          }
+          if (Math.abs(rawPosition - lastTimePosValue) > 0.001) {
+            lastTimePosAt = performance.now();
+            lastTimePosValue = rawPosition;
           }
           applyTimePosition(rawPosition);
         }
