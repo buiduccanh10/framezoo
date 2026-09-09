@@ -128,6 +128,10 @@ export function useSmoothPlaybackClock({
         time: anchorRef.current.time,
         timestamp: 0,
       };
+      if (clockTimeRef.current !== anchorRef.current.time) {
+        clockTimeRef.current = anchorRef.current.time;
+        setClockTime(anchorRef.current.time);
+      }
     } else if (anchorRef.current.timestamp <= 0) {
       // Clock just reactivated (isActive: false → true) but time hasn't
       // advanced yet to trigger the forward branch. Refresh the anchor to
