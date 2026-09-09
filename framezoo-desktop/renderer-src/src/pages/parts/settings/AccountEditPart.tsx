@@ -38,7 +38,7 @@ export function AccountEditPart(props: {
         userIcon={props.userIcon}
         setUserIcon={props.setUserIcon}
       />
-      <div className="grid lg:grid-cols-[auto,1fr] gap-8">
+      <div className="grid lg:grid-cols-[auto_1fr] gap-8">
         <div>
           <Avatar
             profile={{

@@ -37,7 +37,7 @@ export function CardContent(props: {
 }) {
   const accentClass = props.colorClass ?? "text-type-link";
   return (
-    <div className="grid grid-rows-[1fr,auto] h-full">
+    <div className="grid grid-rows-[1fr_auto] h-full">
       <div>
         <Icon
           icon={props.icon}
