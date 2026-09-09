@@ -954,6 +954,7 @@ export function SourceSelectPart(props: {
                   usePlayerStore.setState((s) => ({
                     interface: { ...s.interface, error: undefined },
                     status: playerStatus.SOURCE_SELECTION,
+                    sourceId: null,
                   }));
                 }
               }}
