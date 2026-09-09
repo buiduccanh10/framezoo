@@ -129,6 +129,8 @@ class LibtorrentEngine:
         self.records: Dict[str, TorrentRecord] = {}
         self.session_records: Dict[str, str] = {}
         self.lock = threading.RLock()
+        self._alert_lock = threading.Lock()
+        self._finished_blocks: dict[str, Set[tuple[int, int]]] = {}
         self.peer_id = b"-FZ0001-" + os.urandom(12)
         self.listen_address: Optional[str] = None
         self.listen_port = 6881
@@ -170,20 +172,34 @@ class LibtorrentEngine:
                 "request_queue_time": 1,
                 "max_out_request_queue": 1500,
                 "max_allowed_in_request_queue": 2000,
-                "whole_pieces_threshold": 5,
+                "whole_pieces_threshold": 0,
                 "peer_connect_timeout": 2,
                 "piece_timeout": 3,
                 "aio_threads": 8,
                 "send_buffer_watermark": 4 * 1024 * 1024,
                 "suggest_mode": 1,
                 "mixed_mode_algorithm": 0,
-                "piece_extent_affinity": True,
+                # Playback requests byte ranges inside shared pieces. Avoid
+                # disk-locality heuristics that delay those partial ranges.
+                "piece_extent_affinity": False,
                 "active_downloads": -1,
                 "active_limit": -1,
                 "announce_to_all_trackers": True,
                 "announce_to_all_tiers": True,
                 "allow_multiple_connections_per_ip": True,
             }
+            alert_category = getattr(
+                getattr(lt, "alert", None),
+                "category_t",
+                None,
+            )
+            block_progress = getattr(
+                alert_category,
+                "block_progress_notification",
+                None,
+            )
+            if block_progress is not None:
+                settings["alert_mask"] = int(block_progress)
             session = lt.session(settings)
             try:
                 session.start_dht()
@@ -235,12 +251,17 @@ class LibtorrentEngine:
                     resume_data = b""
 
         magnet = get_magnet(request)
-        params = lt.parse_magnet_uri(magnet)
-        magnet_trackers = list(getattr(params, "trackers", []))
+        magnet_params = lt.parse_magnet_uri(magnet)
+        magnet_trackers = list(getattr(magnet_params, "trackers", []))
         cached_trackers = get_torrent_info_trackers(torrent_info)
-        params.save_path = save_path
+        params = magnet_params
         if torrent_info is not None:
+            # A cached torrent_info is authoritative. Do not combine it with
+            # magnet params; libtorrent rejects that combination as a hash
+            # mismatch even when both hashes are equal.
+            params = lt.add_torrent_params()
             params.ti = torrent_info
+        params.save_path = save_path
 
         if resume_data:
             try:
@@ -468,6 +489,46 @@ class LibtorrentEngine:
         if self.listen_address:
             snapshot["listenAddress"] = self.listen_address
         return snapshot
+
+    def finished_blocks_for(self, handle: Any) -> Set[tuple[int, int]]:
+        """Return blocks libtorrent has written, including partial pieces."""
+        try:
+            info_hash = str(handle.info_hash())
+        except Exception:
+            return set()
+
+        with self._alert_lock:
+            try:
+                alerts = self.session.pop_alerts()
+            except Exception:
+                alerts = []
+            for alert in alerts:
+                if not isinstance(alert, lt.block_finished_alert):
+                    continue
+                try:
+                    alert_handle = alert.handle
+                    alert_hash = str(alert_handle.info_hash())
+                    block = (
+                        int(alert.piece_index),
+                        int(alert.block_index),
+                    )
+                except Exception:
+                    continue
+                self._finished_blocks.setdefault(alert_hash, set()).add(block)
+
+            finished = set(self._finished_blocks.get(info_hash, set()))
+            try:
+                pieces = handle.status().pieces
+                if pieces:
+                    finished = {
+                        block
+                        for block in finished
+                        if block[0] >= len(pieces) or not pieces[block[0]]
+                    }
+                    self._finished_blocks[info_hash] = finished
+            except Exception:
+                pass
+            return finished
 
     def close(self) -> None:
         for session_id in list(self.sessions.keys()):

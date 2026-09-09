@@ -162,6 +162,15 @@ class TorrentRuntime:
                         self.file_path,
                         self.file_size,
                     ) = select_file(self.info, self.request)
+                    try:
+                        self.materialize_selected_file()
+                    except OSError as error:
+                        log_event(
+                            "selected file precreate failed",
+                            sessionId=self.session_id,
+                            fileName=self.file_path,
+                            error=str(error),
+                        )
                     if getattr(self, "record", None) is not None:
                         self.record.update_file_priorities()
                     else:
@@ -268,6 +277,27 @@ class TorrentRuntime:
                 self.request.get("infoHash"),
             ),
         }
+
+    def selected_file_path(self) -> str:
+        relative_path = self.file_path.replace("\\", "/")
+        absolute_path = os.path.abspath(
+            os.path.join(self.save_path, relative_path),
+        )
+        root = os.path.abspath(self.save_path)
+        if not absolute_path.startswith(root + os.sep):
+            raise ValueError("invalid torrent file path")
+        return absolute_path
+
+    def materialize_selected_file(self) -> None:
+        """Create the selected sparse file before shared pieces are requested."""
+        absolute_path = self.selected_file_path()
+        os.makedirs(os.path.dirname(absolute_path), exist_ok=True)
+        try:
+            stream = open(absolute_path, "r+b")
+        except FileNotFoundError:
+            stream = open(absolute_path, "w+b")
+        with stream:
+            stream.truncate(self.file_size)
 
     def persist_metadata(self) -> None:
         if not self.cache_key or self.info is None:
@@ -570,12 +600,7 @@ class TorrentRuntime:
         if self.file_size <= 0 or not self.file_path:
             raise ValueError("selected torrent file is empty")
 
-        absolute_path = os.path.abspath(
-            os.path.join(self.save_path, self.file_path.replace("\\", "/")),
-        )
-        root = os.path.abspath(self.save_path)
-        if not absolute_path.startswith(root + os.sep):
-            raise ValueError("invalid torrent file path")
+        absolute_path = self.selected_file_path()
 
         end = min(self.file_size - 1, constants.STREAM_CHUNK_SIZE - 1)
         stream, chunk = self.open_first_chunk(
@@ -672,9 +697,71 @@ class TorrentRuntime:
         if not pieces:
             return False
         try:
-            return all(self.handle.have_piece(piece) for piece in pieces)
+            if all(self.handle.have_piece(piece) for piece in pieces):
+                return True
         except RuntimeError:
+            pass
+        return self._range_blocks_are_finished(start, end)
+
+    def _required_range_blocks(
+        self,
+        start: int,
+        end: int,
+    ) -> Set[tuple[int, int]]:
+        """Map a file range to libtorrent's finished block coordinates."""
+        if (
+            start < 0
+            or end < start
+            or self.file_size <= 0
+            or self.info is None
+            or start >= self.file_size
+        ):
+            return set()
+        end = min(end, self.file_size - 1)
+        try:
+            piece_length = int(self.info.piece_length())
+            file_offset = int(
+                self.info.files().file_offset(self.file_index),
+            )
+            status = self.handle.status()
+            block_size = int(getattr(status, "block_size", 0))
+        except (AttributeError, IndexError, TypeError, ValueError):
+            return set()
+        if piece_length <= 0 or block_size <= 0:
+            return set()
+
+        first_global = file_offset + start
+        last_global = file_offset + end
+        first_piece = first_global // piece_length
+        last_piece = last_global // piece_length
+        required: Set[tuple[int, int]] = set()
+        for piece in range(first_piece, last_piece + 1):
+            piece_start = piece * piece_length
+            block_start = max(
+                0,
+                (first_global - piece_start) // block_size,
+            )
+            block_end = max(
+                0,
+                (last_global - piece_start) // block_size,
+            )
+            required.update(
+                (piece, block)
+                for block in range(block_start, block_end + 1)
+            )
+        return required
+
+    def _range_blocks_are_finished(self, start: int, end: int) -> bool:
+        required = self._required_range_blocks(start, end)
+        if not required:
             return False
+        engine = getattr(self, "engine", None)
+        get_finished = getattr(engine, "finished_blocks_for", None)
+        if callable(get_finished):
+            finished = get_finished(self.handle)
+        else:
+            finished = set(getattr(self, "_finished_blocks", set()))
+        return required.issubset(finished)
 
     def _schedule_pieces(
         self,
@@ -1014,6 +1101,25 @@ class TorrentRuntime:
                     pass
             return
 
+    def _range_target_piece_has_prefix(
+        self,
+        start: int,
+        end: int,
+        target_piece: Optional[int],
+    ) -> bool:
+        """Return whether the requested range starts inside a piece."""
+        if target_piece is None:
+            return False
+        required = self._required_range_blocks(start, end)
+        target_blocks = {
+            block
+            for piece, block in required
+            if piece == target_piece
+        }
+        if not target_blocks:
+            return False
+        return min(target_blocks) > 0
+
     def _kick_target_piece(self, target_piece: Optional[int]) -> None:
         """Cancel a stalled target piece so its blocks are re-requested.
 
@@ -1350,6 +1456,25 @@ class TorrentRuntime:
                     end=end,
                     requiredPieces=len(required_pieces),
                     trackPosition=track_position,
+                    partialPiece=False,
+                    timingPhase="range_ready",
+                    elapsedMs=self.elapsed_ms(),
+                )
+                return True
+            if self._range_blocks_are_finished(start, end):
+                if stalled_target_piece is not None:
+                    self._release_target_focus(stalled_target_piece)
+                self._restore_pending_kicks(
+                    time.monotonic() + constants.TARGET_KICK_RESTORE_DELAY
+                )
+                log_event(
+                    "range ready",
+                    sessionId=self.session_id,
+                    start=start,
+                    end=end,
+                    requiredPieces=len(required_pieces),
+                    trackPosition=track_position,
+                    partialPiece=True,
                     timingPhase="range_ready",
                     elapsedMs=self.elapsed_ms(),
                 )
@@ -1431,6 +1556,11 @@ class TorrentRuntime:
                         and stall_seconds >= constants.TARGET_KICK_DELAY
                         and now - last_kick
                         >= constants.TARGET_KICK_INTERVAL
+                        and not self._range_target_piece_has_prefix(
+                            start,
+                            end,
+                            target_piece,
+                        )
                     ):
                         self._kick_target_piece(target_piece)
                         last_kick = now
@@ -1615,12 +1745,9 @@ class TorrentRuntime:
 
         self.focus_file()
 
-        relative_path = self.file_path.replace("\\", "/")
-        absolute_path = os.path.abspath(
-            os.path.join(self.save_path, relative_path),
-        )
-        root = os.path.abspath(self.save_path)
-        if not absolute_path.startswith(root + os.sep):
+        try:
+            absolute_path = self.selected_file_path()
+        except ValueError:
             handler.send_error(500, "Invalid torrent file path")
             return
 
