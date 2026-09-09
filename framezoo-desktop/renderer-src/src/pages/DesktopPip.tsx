@@ -1,3 +1,4 @@
+import type { PointerEvent as ReactPointerEvent } from "react";
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -14,6 +15,7 @@ import {
   tryParseCanonicalVtt,
 } from "@/components/player/utils/captions";
 import { getNextEpisodeVisibility } from "@/components/player/utils/controlVisibility";
+import { isPlaybackInteractionLocked } from "@/components/player/utils/playbackLock";
 import {
   DesktopPipAction,
   DesktopPipState,
@@ -26,17 +28,26 @@ type DesktopElectronApi = {
   closeDesktopPipWindow(): Promise<boolean>;
   focusMainWindow(): Promise<boolean>;
   getDesktopPipWindowState(): Promise<DesktopPipState | null>;
+  moveDesktopPipWindow(x: number, y: number): void;
   onDesktopPipActivate(listener: () => void): () => void;
   sendDesktopPipAction(action: DesktopPipAction): Promise<boolean>;
+  snapDesktopPipWindow(): Promise<boolean>;
   signalDesktopPipReady(): Promise<boolean>;
   onDesktopPipState(
     listener: (state: DesktopPipState | null) => void,
   ): () => void;
 };
 
-const dragRegionStyle = { ["WebkitAppRegion" as any]: "drag" };
 const noDragRegionStyle = { ["WebkitAppRegion" as any]: "no-drag" };
 const CONTROL_AUTOHIDE_MS = 2200;
+
+type PipDragState = {
+  pointerId: number;
+  pointerX: number;
+  pointerY: number;
+  windowX: number;
+  windowY: number;
+};
 
 function formatSpeed(bytesPerSecond: number) {
   if (bytesPerSecond < 1024) return `${Math.round(bytesPerSecond)} B/s`;
@@ -53,7 +64,9 @@ function getDesktopElectronApi(): DesktopElectronApi | null {
     typeof api.getDesktopPipWindowState !== "function" ||
     typeof api.onDesktopPipState !== "function" ||
     typeof api.signalDesktopPipReady !== "function" ||
-    typeof api.onDesktopPipActivate !== "function"
+    typeof api.onDesktopPipActivate !== "function" ||
+    typeof api.moveDesktopPipWindow !== "function" ||
+    typeof api.snapDesktopPipWindow !== "function"
   ) {
     return null;
   }
@@ -64,6 +77,7 @@ function DesktopPipButton(props: {
   icon: Icons;
   label: string;
   onClick(): void;
+  disabled?: boolean;
   large?: boolean;
   className?: string;
 }) {
@@ -73,9 +87,12 @@ function DesktopPipButton(props: {
       aria-label={props.label}
       title={props.label}
       onClick={props.onClick}
-      className={`flex items-center justify-center rounded-full border border-white/20 bg-black/35 text-white transition duration-200 hover:bg-black/60 active:scale-95 ${
-        props.large ? "h-16 w-16" : "h-10 w-10"
-      } ${props.className ?? ""}`}
+      disabled={props.disabled}
+      className={`flex items-center justify-center rounded-full border border-white/20 bg-black/35 text-white transition duration-200 ${
+        props.disabled
+          ? "cursor-not-allowed opacity-50"
+          : "hover:bg-black/60 active:scale-95"
+      } ${props.large ? "h-16 w-16" : "h-10 w-10"} ${props.className ?? ""}`}
       style={noDragRegionStyle}
     >
       <Icon
@@ -172,6 +189,7 @@ function useFallbackSubtitleStyling() {
 function PipProgress(props: {
   state: DesktopPipState;
   visible: boolean;
+  disabled: boolean;
   onSeek(time: number): void;
   onHoverChange(hovering: boolean): void;
   onScrubChange(scrubbing: boolean): void;
@@ -192,9 +210,12 @@ function PipProgress(props: {
         props.visible ? "opacity-100" : "pointer-events-none opacity-0"
       }`}
       style={noDragRegionStyle}
+      data-pip-no-drag
       onPointerEnter={() => props.onHoverChange(true)}
       onPointerLeave={() => props.onHoverChange(false)}
-      onPointerDown={() => props.onScrubChange(true)}
+      onPointerDown={() => {
+        if (!props.disabled) props.onScrubChange(true);
+      }}
       onPointerUp={() => props.onScrubChange(false)}
       onPointerCancel={() => props.onScrubChange(false)}
     >
@@ -209,10 +230,15 @@ function PipProgress(props: {
             max={Math.max(props.state.duration, 0)}
             step={0.1}
             value={props.state.duration > 0 ? current : 0}
+            disabled={props.disabled}
             onChange={(event) =>
               props.onSeek(Number(event.currentTarget.value))
             }
-            className="h-1 w-full cursor-pointer appearance-none rounded-full bg-white/18 accent-white"
+            className={`h-1 w-full appearance-none rounded-full bg-white/18 accent-white ${
+              props.disabled
+                ? "cursor-not-allowed opacity-50"
+                : "cursor-pointer"
+            }`}
           />
           <span className="min-w-[48px] text-left text-[11px] font-medium tabular-nums text-white/76">
             {props.state.duration > 0
@@ -229,6 +255,7 @@ function PipTextActionButton(props: {
   icon: Icons;
   label: string;
   onClick(): void;
+  disabled?: boolean;
 }) {
   return (
     <button
@@ -236,7 +263,12 @@ function PipTextActionButton(props: {
       aria-label={props.label}
       title={props.label}
       onClick={props.onClick}
-      className="flex h-9 items-center gap-1.5 rounded-md border border-white/20 bg-black/55 px-3 text-xs font-semibold text-white shadow-lg backdrop-blur-md transition hover:bg-black/75 active:scale-95"
+      disabled={props.disabled}
+      className={`flex h-9 items-center gap-1.5 rounded-md border border-white/20 bg-black/55 px-3 text-xs font-semibold text-white shadow-lg backdrop-blur-md transition ${
+        props.disabled
+          ? "cursor-not-allowed opacity-50"
+          : "hover:bg-black/75 active:scale-95"
+      }`}
       style={noDragRegionStyle}
     >
       <Icon icon={props.icon} className="text-base" />
@@ -256,6 +288,69 @@ export default function DesktopPipPage() {
   const scrubbingRef = useRef(false);
   const readySignalled = useRef(false);
   const transitionInProgress = useRef(false);
+  const pipDragRef = useRef<PipDragState | null>(null);
+
+  const beginPipDrag = useCallback(
+    (event: ReactPointerEvent<HTMLDivElement>) => {
+      if (event.button !== 0 || event.target !== event.currentTarget) {
+        return;
+      }
+
+      const api = getDesktopElectronApi();
+      if (!api) return;
+
+      pipDragRef.current = {
+        pointerId: event.pointerId,
+        pointerX: event.screenX,
+        pointerY: event.screenY,
+        windowX: window.screenX,
+        windowY: window.screenY,
+      };
+      try {
+        event.currentTarget.setPointerCapture(event.pointerId);
+      } catch {
+        pipDragRef.current = null;
+        return;
+      }
+      event.preventDefault();
+    },
+    [],
+  );
+
+  const movePipDrag = useCallback(
+    (event: ReactPointerEvent<HTMLDivElement>) => {
+      const drag = pipDragRef.current;
+      if (!drag || drag.pointerId !== event.pointerId) return;
+
+      const api = getDesktopElectronApi();
+      if (!api) return;
+
+      api.moveDesktopPipWindow(
+        Math.round(drag.windowX + event.screenX - drag.pointerX),
+        Math.round(drag.windowY + event.screenY - drag.pointerY),
+      );
+      event.preventDefault();
+    },
+    [],
+  );
+
+  const endPipDrag = useCallback((event: ReactPointerEvent<HTMLDivElement>) => {
+    const drag = pipDragRef.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+
+    pipDragRef.current = null;
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+    const api = getDesktopElectronApi();
+    if (!api) return;
+
+    api.moveDesktopPipWindow(
+      Math.round(drag.windowX + event.screenX - drag.pointerX),
+      Math.round(drag.windowY + event.screenY - drag.pointerY),
+    );
+    void api.snapDesktopPipWindow();
+  }, []);
 
   const clearHideTimer = useCallback(() => {
     if (!hideTimerRef.current) return;
@@ -306,13 +401,31 @@ export default function DesktopPipPage() {
     [clearHideTimer, scheduleHideControls],
   );
 
-  const sendAction = useCallback((action: DesktopPipAction) => {
-    void getDesktopElectronApi()?.sendDesktopPipAction(action);
-  }, []);
+  const sendAction = useCallback(
+    (action: DesktopPipAction) => {
+      const state = pipState;
+      const playbackLocked =
+        !state ||
+        state.playbackTarget !== "pip" ||
+        !state.canControl ||
+        isPlaybackInteractionLocked(state, false);
+      if (action.type !== "close" && playbackLocked) return;
+
+      void getDesktopElectronApi()?.sendDesktopPipAction(action);
+    },
+    [pipState],
+  );
 
   const seekTo = useCallback(
     (time: number) => {
-      if (!pipState) return;
+      if (
+        !pipState ||
+        pipState.playbackTarget !== "pip" ||
+        !pipState.canControl ||
+        isPlaybackInteractionLocked(pipState, false)
+      ) {
+        return;
+      }
       const nextTime = Math.max(
         0,
         Math.min(time, pipState.duration || Number.POSITIVE_INFINITY),
@@ -322,6 +435,12 @@ export default function DesktopPipPage() {
     },
     [pipState, sendAction],
   );
+
+  const playbackControlsDisabled =
+    !pipState ||
+    pipState.playbackTarget !== "pip" ||
+    !pipState.canControl ||
+    isPlaybackInteractionLocked(pipState, false);
 
   const close = useCallback(() => {
     sendAction({ type: "close" });
@@ -426,6 +545,7 @@ export default function DesktopPipPage() {
         duration: pipState.duration,
         buffered: pipState.buffered,
         torrentStatus: pipState.torrent,
+        isDesktopPipPlayback: true,
       })
     : null;
 
@@ -482,14 +602,25 @@ export default function DesktopPipPage() {
   return (
     <div
       className="fixed inset-0 select-none overflow-hidden bg-transparent text-white"
-      onPointerMove={revealControls}
-      onPointerDown={revealControls}
+      style={noDragRegionStyle}
+      onPointerMoveCapture={revealControls}
+      onPointerDownCapture={revealControls}
       onPointerLeave={scheduleHideControls}
     >
       <div
         id="libmpv-pip-surface"
         className="pointer-events-none absolute inset-0 h-full w-full bg-transparent"
         aria-hidden="true"
+      />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 z-[1] cursor-grab bg-transparent"
+        style={{ ...noDragRegionStyle, touchAction: "none" }}
+        onPointerDown={beginPipDrag}
+        onPointerMove={movePipDrag}
+        onPointerUp={endPipDrag}
+        onPointerCancel={endPipDrag}
+        onLostPointerCapture={endPipDrag}
       />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/45 via-transparent to-black/70" />
       <PlayerLoadingOverlayView
@@ -525,7 +656,7 @@ export default function DesktopPipPage() {
       >
         <div
           className="flex items-start justify-between px-3 py-3"
-          style={dragRegionStyle}
+          style={noDragRegionStyle}
         >
           <div
             className="flex min-w-0 items-start gap-3"
@@ -574,6 +705,7 @@ export default function DesktopPipPage() {
           controlsVisible ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
         style={noDragRegionStyle}
+        data-pip-no-drag
         onPointerEnter={() => setControlsHovering(true)}
         onPointerLeave={() => setControlsHovering(false)}
       >
@@ -582,12 +714,14 @@ export default function DesktopPipPage() {
             icon={Icons.SKIP_BACKWARD}
             label="Seek backward 10 seconds"
             onClick={() => sendAction({ type: "seekBy", delta: -10 })}
+            disabled={playbackControlsDisabled}
             className="h-14 w-14 bg-black/20 backdrop-blur-md"
           />
           <DesktopPipButton
             icon={pipState.paused ? Icons.PLAY : Icons.PAUSE}
             label={pipState.paused ? "Play" : "Pause"}
             onClick={() => sendAction({ type: "togglePlayback" })}
+            disabled={playbackControlsDisabled}
             large
             className="bg-white/18 backdrop-blur-md"
           />
@@ -595,6 +729,7 @@ export default function DesktopPipPage() {
             icon={Icons.SKIP_FORWARD}
             label="Seek forward 10 seconds"
             onClick={() => sendAction({ type: "seekBy", delta: 10 })}
+            disabled={playbackControlsDisabled}
             className="h-14 w-14 bg-black/20 backdrop-blur-md"
           />
         </div>
@@ -604,6 +739,7 @@ export default function DesktopPipPage() {
         <div
           className="absolute inset-x-0 bottom-16 z-20 flex justify-end gap-2 px-3"
           style={noDragRegionStyle}
+          data-pip-no-drag
           onPointerEnter={() => setControlsHovering(true)}
           onPointerLeave={() => setControlsHovering(false)}
         >
@@ -617,6 +753,7 @@ export default function DesktopPipPage() {
                   time: pipState.skipSegment!.endTime,
                 })
               }
+              disabled={playbackControlsDisabled}
             />
           ) : null}
           {showNextAction && pipState.nextEpisode ? (
@@ -624,6 +761,7 @@ export default function DesktopPipPage() {
               icon={Icons.SKIP_EPISODE}
               label={nextEpisodeLabel}
               onClick={() => sendAction({ type: "nextEpisode" })}
+              disabled={playbackControlsDisabled}
             />
           ) : null}
         </div>
@@ -631,6 +769,7 @@ export default function DesktopPipPage() {
       <PipProgress
         state={pipState}
         visible={controlsVisible}
+        disabled={playbackControlsDisabled}
         onHoverChange={setControlsHovering}
         onScrubChange={setPipScrubbing}
         onSeek={seekTo}

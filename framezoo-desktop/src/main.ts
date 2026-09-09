@@ -1716,6 +1716,14 @@ function registerIpcHandlers() {
     return desktopPipController.update(nextState ?? null);
   });
 
+  ipcMain.on("desktop:pip-move", (event, x, y) => {
+    desktopPipController.move(event.sender, x, y);
+  });
+
+  ipcMain.handle("desktop:pip-snap", (event) => {
+    return desktopPipController.snap(event.sender);
+  });
+
   ipcMain.handle("desktop:pip-close", async () => {
     const didClose = desktopPipController.close();
     if (!didClose) {
@@ -2000,7 +2008,9 @@ function registerIpcHandlers() {
 
     let freeBytes = 0;
     try {
-      const targetDir = fs.existsSync(torrentDir) ? torrentDir : app.getPath("userData");
+      const targetDir = fs.existsSync(torrentDir)
+        ? torrentDir
+        : app.getPath("userData");
       const stats = fs.statfsSync(targetDir);
       freeBytes = stats.bfree * stats.bsize;
     } catch {
