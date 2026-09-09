@@ -572,7 +572,7 @@ export function CaptionsView({
   };
   const setCaption = usePlayerStore((s) => s.setCaption);
   const setSecondaryCaption = usePlayerStore((s) => s.setSecondaryCaption);
-  const videoTime = usePlaybackClock();
+  const videoTime = usePlayerStore((s) => s.progress.time);
   const selectedLanguage = usePlayerStore((s) => s.caption.selected?.language);
   const captionList = usePlayerStore((s) => s.captionList);
   const getHlsCaptionList = usePlayerStore((s) => s.display?.getCaptionList);
