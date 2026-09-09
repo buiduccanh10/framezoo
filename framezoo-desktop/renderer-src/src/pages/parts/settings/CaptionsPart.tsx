@@ -159,7 +159,7 @@ export function CaptionsPart(props: {
           />
         </div>
       )}
-      <div className="grid md:grid-cols-[1fr,356px] gap-8">
+      <div className="grid md:grid-cols-[1fr_356px] gap-8">
         <div className="space-y-6">
           <>
             <CaptionSetting

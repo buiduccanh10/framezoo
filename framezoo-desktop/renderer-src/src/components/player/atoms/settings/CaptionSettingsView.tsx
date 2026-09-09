@@ -99,7 +99,7 @@ export function CaptionSetting(props: {
   return (
     <div>
       <Menu.FieldTitle>{props.label}</Menu.FieldTitle>
-      <div className="grid items-center grid-cols-[1fr,auto] gap-4">
+      <div className="grid items-center grid-cols-[1fr_auto] gap-4">
         <div ref={ref}>
           <div
             className="group/progress w-full h-8 flex items-center cursor-pointer"

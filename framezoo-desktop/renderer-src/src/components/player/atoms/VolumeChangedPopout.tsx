@@ -24,7 +24,7 @@ export function VolumeChangedPopout() {
           backgroundClass="bg-video-context-background duration-100"
           className="rounded-lg"
         />
-        <Flare.Child className="grid grid-cols-[auto,1fr] gap-3 pointer-events-auto relative transition-transform">
+        <Flare.Child className="grid grid-cols-[auto_1fr] gap-3 pointer-events-auto relative transition-transform">
           <Icon
             className="text-2xl"
             icon={volume > 0 ? Icons.VOLUME : Icons.VOLUME_X}

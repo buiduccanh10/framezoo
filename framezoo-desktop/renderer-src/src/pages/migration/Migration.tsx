@@ -41,7 +41,7 @@ export function MigrationPage() {
               <Link>{t("migration.start.options.download.action")}</Link>
             </CardContent>
           </Card>
-          <div className="hidden md:grid grid-rows-[1fr,auto,1fr] justify-center gap-4">
+          <div className="hidden md:grid grid-rows-[1fr_auto_1fr] justify-center gap-4">
             <VerticalLine className="items-end" />
             <span className="text-xs uppercase font-bold text-type-secondary">
               {t("migration.start.options.or")}

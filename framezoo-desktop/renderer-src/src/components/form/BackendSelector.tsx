@@ -229,7 +229,7 @@ export function BackendSelector({
               ) : null}
             </div>
             <div className="space-y-3">
-              <div className="grid grid-cols-[1fr,auto] items-center gap-2">
+              <div className="grid grid-cols-[1fr_auto] items-center gap-2">
                 <TextInputControl
                   value={customUrl}
                   onChange={setCustomUrl}

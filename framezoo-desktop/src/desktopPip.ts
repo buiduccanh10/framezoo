@@ -1,4 +1,4 @@
-import { BrowserWindow, shell } from "electron";
+import { BrowserWindow, screen, shell, type Rectangle } from "electron";
 import { pathToFileURL } from "node:url";
 import type {
   CreateDesktopPipControllerOptions,
@@ -13,6 +13,43 @@ const DESKTOP_PIP_MIN_HEIGHT = 180;
 const DESKTOP_PIP_MAX_WIDTH = 1280;
 const DESKTOP_PIP_MAX_HEIGHT = 720;
 const DESKTOP_PIP_READY_TIMEOUT_MS = 30_000;
+const DESKTOP_PIP_CORNER_MARGIN = 16;
+
+function getNearestCornerPosition(
+  bounds: Rectangle,
+  workArea: Rectangle,
+): Pick<Rectangle, "x" | "y"> {
+  const left = workArea.x + DESKTOP_PIP_CORNER_MARGIN;
+  const top = workArea.y + DESKTOP_PIP_CORNER_MARGIN;
+  const right = Math.max(
+    left,
+    workArea.x + workArea.width - bounds.width - DESKTOP_PIP_CORNER_MARGIN,
+  );
+  const bottom = Math.max(
+    top,
+    workArea.y + workArea.height - bounds.height - DESKTOP_PIP_CORNER_MARGIN,
+  );
+  const positions = [
+    { x: left, y: top },
+    { x: right, y: top },
+    { x: left, y: bottom },
+    { x: right, y: bottom },
+  ];
+  const centerX = bounds.x + bounds.width / 2;
+  const centerY = bounds.y + bounds.height / 2;
+
+  return positions.reduce((nearest, position) => {
+    const nearestDistance = Math.hypot(
+      centerX - (nearest.x + bounds.width / 2),
+      centerY - (nearest.y + bounds.height / 2),
+    );
+    const positionDistance = Math.hypot(
+      centerX - (position.x + bounds.width / 2),
+      centerY - (position.y + bounds.height / 2),
+    );
+    return positionDistance < nearestDistance ? position : nearest;
+  });
+}
 
 function normalizeWindowSize(
   value: DesktopPipWindowSize | null | undefined,
@@ -48,6 +85,20 @@ export function createDesktopPipController(
   let resolveReady: ((ready: boolean) => void) | null = null;
   let readyTimeout: ReturnType<typeof setTimeout> | null = null;
   let closePromise: Promise<boolean> | null = null;
+
+  function snapPipWindowToCorner(animate = true) {
+    if (!pipWindow || pipWindow.isDestroyed()) return;
+
+    const bounds = pipWindow.getBounds();
+    const workArea = screen.getDisplayNearestPoint({
+      x: bounds.x + bounds.width / 2,
+      y: bounds.y + bounds.height / 2,
+    }).workArea;
+    const position = getNearestCornerPosition(bounds, workArea);
+    if (position.x === bounds.x && position.y === bounds.y) return;
+
+    pipWindow.setPosition(position.x, position.y, animate);
+  }
 
   function getPipUrl() {
     if (options.rendererDevUrl) {
@@ -190,6 +241,10 @@ export function createDesktopPipController(
       pipWindow?.show();
     });
 
+    pipWindow.on("resized", () => {
+      snapPipWindowToCorner();
+    });
+
     pipWindow.on("closed", () => {
       settleReady(false);
       pipWindow = null;
@@ -199,6 +254,7 @@ export function createDesktopPipController(
     });
 
     void pipWindow.loadURL(getPipUrl());
+    snapPipWindowToCorner(false);
 
     return pipWindow;
   }
@@ -236,6 +292,34 @@ export function createDesktopPipController(
     getState() {
       return pipState;
     },
+    move(sender: { id: number }, xValue: unknown, yValue: unknown) {
+      if (
+        !pipWindow ||
+        pipWindow.isDestroyed() ||
+        pipWindow.webContents.id !== sender.id
+      ) {
+        return false;
+      }
+
+      const x = Number(xValue);
+      const y = Number(yValue);
+      if (!Number.isFinite(x) || !Number.isFinite(y)) return false;
+
+      pipWindow.setPosition(Math.round(x), Math.round(y), false);
+      return true;
+    },
+    snap(sender: { id: number }) {
+      if (
+        !pipWindow ||
+        pipWindow.isDestroyed() ||
+        pipWindow.webContents.id !== sender.id
+      ) {
+        return false;
+      }
+
+      snapPipWindowToCorner();
+      return true;
+    },
     async open(
       nextState: DesktopPipState,
       nextWindowSize?: DesktopPipWindowSize | null,
@@ -244,6 +328,7 @@ export function createDesktopPipController(
       if (!pipState) return false;
 
       const window = createWindow(nextWindowSize);
+      snapPipWindowToCorner();
       sendState();
 
       if (window.isMinimized()) {

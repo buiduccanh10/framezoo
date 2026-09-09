@@ -94,6 +94,12 @@ contextBridge.exposeInMainWorld("electronAPI", {
   updateDesktopPipWindow(state: unknown) {
     return ipcRenderer.invoke("desktop:pip-update", state);
   },
+  moveDesktopPipWindow(x: number, y: number) {
+    ipcRenderer.send("desktop:pip-move", x, y);
+  },
+  snapDesktopPipWindow() {
+    return ipcRenderer.invoke("desktop:pip-snap");
+  },
   closeDesktopPipWindow() {
     return ipcRenderer.invoke("desktop:pip-close");
   },

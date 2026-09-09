@@ -65,7 +65,7 @@ function PlaybackSpeedControl(props: {
         {formatPlaybackSpeed(currentRate).toUpperCase()}
       </div>
 
-      <div className="grid grid-cols-[auto,1fr,auto] items-center gap-3">
+      <div className="grid grid-cols-[auto_1fr_auto] items-center gap-3">
         <button
           type="button"
           disabled={props.disabled}
