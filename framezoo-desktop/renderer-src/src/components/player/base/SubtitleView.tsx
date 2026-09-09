@@ -242,7 +242,7 @@ function SubtitleTrackSlot({
 export function SubtitleRenderer(props?: {
   useNativePictureInPictureStyle?: boolean;
 }) {
-  const videoTime = usePlayerStore((s) => s.progress.time);
+  const videoTime = usePlaybackClock();
   const vttData = usePlayerStore((s) => s.caption.selected?.vttData);
   const dualSubEnabled = usePlayerStore((s) => s.caption.dualSubEnabled);
   const isSeeking = usePlayerStore((s) => s.interface.isSeeking);
@@ -286,7 +286,7 @@ export function SubtitleRenderer(props?: {
 export function SecondarySubtitleRenderer(props?: {
   useNativePictureInPictureStyle?: boolean;
 }) {
-  const videoTime = usePlayerStore((s) => s.progress.time);
+  const videoTime = usePlaybackClock();
   const vttData = usePlayerStore((s) => s.caption.secondary?.vttData);
   const dualSubEnabled = usePlayerStore((s) => s.caption.dualSubEnabled);
   const isSeeking = usePlayerStore((s) => s.interface.isSeeking);

@@ -53,7 +53,7 @@ export function TranscriptView({
   const setPrimaryDelay = useSubtitleStore((s) => s.setPrimaryDelay);
   const setSecondaryDelay = useSubtitleStore((s) => s.setSecondaryDelay);
   const timeDuration = usePlayerStore((s) => s.progress.duration);
-  const time = usePlayerStore((s) => s.progress.time);
+  const time = usePlaybackClock();
   const activeCaption =
     selectionMode === "secondary" ? secondaryCaption : primaryCaption;
   const delay = selectionMode === "secondary" ? secondaryDelay : primaryDelay;
