@@ -43,6 +43,118 @@ class SidecarStreamTest(unittest.TestCase):
 
         self.assertEqual(runtime.stream_type, "file")
 
+    def test_materializes_selected_file_at_declared_size(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.save_path = tempfile.mkdtemp()
+        runtime.file_path = "pack/S07E02.mkv"
+        runtime.file_size = 12345
+
+        try:
+            runtime.materialize_selected_file()
+            selected_path = Path(runtime.save_path, runtime.file_path)
+            self.assertTrue(selected_path.exists())
+            self.assertEqual(selected_path.stat().st_size, 12345)
+        finally:
+            shutil.rmtree(runtime.save_path, ignore_errors=True)
+
+    def test_materialization_preserves_existing_prefix(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.save_path = tempfile.mkdtemp()
+        runtime.file_path = "S07E02.mkv"
+        runtime.file_size = 12345
+        selected_path = Path(runtime.save_path, runtime.file_path)
+        selected_path.write_bytes(b"downloaded-prefix")
+
+        try:
+            runtime.materialize_selected_file()
+            self.assertEqual(selected_path.stat().st_size, 12345)
+            self.assertEqual(
+                selected_path.read_bytes()[:17],
+                b"downloaded-prefix",
+            )
+        finally:
+            shutil.rmtree(runtime.save_path, ignore_errors=True)
+
+    def test_range_readiness_uses_finished_blocks_not_sparse_size(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.file_size = 8 * 1024 * 1024
+        runtime.file_index = 1
+        runtime.info = type(
+            "Info",
+            (),
+            {
+                "piece_length": lambda _self: 16 * 1024 * 1024,
+                "files": lambda _self: type(
+                    "Files",
+                    (),
+                    {"file_offset": lambda _self, _index: 12 * 1024 * 1024},
+                )(),
+            },
+        )()
+        runtime.handle = type(
+            "Handle",
+            (),
+            {
+                "status": lambda _self: type(
+                    "Status",
+                    (),
+                    {"block_size": 16 * 1024},
+                )(),
+            },
+        )()
+        runtime._finished_blocks = {
+            (0, 768),
+            (0, 769),
+            (0, 770),
+            (0, 771),
+        }
+
+        self.assertTrue(runtime._range_blocks_are_finished(0, 64 * 1024 - 1))
+        self.assertFalse(runtime._range_blocks_are_finished(0, 80 * 1024 - 1))
+
+    def test_shared_piece_prefix_suppresses_stall_kick(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.file_size = 8 * 1024 * 1024
+        runtime.file_index = 1
+        runtime.info = type(
+            "Info",
+            (),
+            {
+                "piece_length": lambda _self: 16 * 1024 * 1024,
+                "files": lambda _self: type(
+                    "Files",
+                    (),
+                    {"file_offset": lambda _self, _index: 12 * 1024 * 1024},
+                )(),
+            },
+        )()
+        runtime.handle = type(
+            "Handle",
+            (),
+            {
+                "status": lambda _self: type(
+                    "Status",
+                    (),
+                    {"block_size": 16 * 1024},
+                )(),
+            },
+        )()
+
+        self.assertTrue(
+            runtime._range_target_piece_has_prefix(
+                0,
+                64 * 1024 - 1,
+                0,
+            ),
+        )
+        self.assertFalse(
+            runtime._range_target_piece_has_prefix(
+                0,
+                64 * 1024 - 1,
+                None,
+            ),
+        )
+
     def test_initial_chunk_wait_can_survive_the_default_range_timeout(self):
         runtime = object.__new__(TorrentRuntime)
         runtime.stop_event = threading.Event()
@@ -586,7 +698,7 @@ class SidecarStreamTest(unittest.TestCase):
             scheduled,
             [
                 (
-                    [10, 11, 12, 13, 14],
+                    [10, 11, 12, 13, 14, 90, 91],
                     {10},
                     "startup-prefetch",
                 ),
@@ -594,7 +706,13 @@ class SidecarStreamTest(unittest.TestCase):
         )
         self.assertEqual(
             requested_lengths,
-            [(0, constants.STARTUP_PREFETCH_BYTES)],
+            [
+                (0, constants.STARTUP_PREFETCH_BYTES),
+                (
+                    runtime.file_size - runtime.info.piece_length(),
+                    runtime.info.piece_length(),
+                ),
+            ],
         )
 
     def test_reannounces_when_target_piece_is_unavailable_with_active_rate(self):

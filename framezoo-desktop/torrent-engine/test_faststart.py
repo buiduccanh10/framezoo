@@ -17,6 +17,7 @@ from torrent_engine import LibtorrentEngine
 from torrent_utils import get_torrent_cache_key
 
 SEED_DIR = None
+SEED_PORT = None
 FILESIZE = 8 * 1024 * 1024
 
 
@@ -37,11 +38,22 @@ def make_torrent(tmp: Path) -> str:
     return str(torrent_file)
 
 
-def seed_forever(torrent_path: str, listen_port: int = 6889):
-    ses = lt.session({"listen_interfaces": f"0.0.0.0:{listen_port}", "enable_dht": False})
+def seed_forever(torrent_path: str, ready: threading.Event):
+    global SEED_PORT
+    ses = lt.session(
+        {
+            "listen_interfaces": "127.0.0.1:0",
+            "enable_dht": False,
+            "enable_lsd": False,
+            "enable_upnp": False,
+            "enable_natpmp": False,
+        },
+    )
+    SEED_PORT = int(ses.listen_port())
     h = ses.add_torrent(
         {"save_path": str(SEED_DIR), "ti": lt.torrent_info(torrent_path)}
     )
+    ready.set()
     while True:
         ses.pop_alerts()
         time.sleep(0.3)
@@ -63,7 +75,15 @@ def main():
         "sourceId": "test",
     }
 
-    threading.Thread(target=seed_forever, args=(torrent_path,), daemon=True).start()
+    seed_ready = threading.Event()
+    threading.Thread(
+        target=seed_forever,
+        args=(torrent_path, seed_ready),
+        daemon=True,
+    ).start()
+    assert seed_ready.wait(5), "seeder did not start"
+    peer_port = SEED_PORT
+    assert peer_port is not None
 
     engine = LibtorrentEngine()
     cache_key = get_torrent_cache_key(request)
@@ -77,7 +97,7 @@ def main():
     engine.start("s1", request)
     print(f"[1] first start returned in {time.monotonic()-t0:.2f}s (magnet; no metadata yet)")
     runtime = engine.sessions["s1"]
-    runtime.handle.connect_peer(("127.0.0.1", 6889), 0)
+    runtime.handle.connect_peer(("127.0.0.1", peer_port), 0)
     runtime.wait_for_metadata(30)
     print("[1] metadata_ready in", runtime.elapsed_ms(), "ms")
 
@@ -149,7 +169,7 @@ def main():
     # invalidate the new route.
     engine.start("s3", request)
     runtime3 = engine.sessions["s3"]
-    runtime3.handle.connect_peer(("127.0.0.1", 6889), 0)
+    runtime3.handle.connect_peer(("127.0.0.1", peer_port), 0)
     runtime3.wait_for_metadata(30)
     print("[3] session s3 active; metadata_ready:", runtime3.metadata_ready.is_set())
     assert runtime3.metadata_ready.is_set()
@@ -158,7 +178,7 @@ def main():
     runtime4 = engine.sessions["s4"]
     assert "s3" in engine.sessions, "shared session was removed unexpectedly"
     assert runtime4.handle is runtime3.handle, "torrent handle was not reused"
-    runtime4.handle.connect_peer(("127.0.0.1", 6889), 0)
+    runtime4.handle.connect_peer(("127.0.0.1", peer_port), 0)
     runtime4.wait_for_metadata(15)
     print("[3] session s4 replaced s3; metadata_ready:", runtime4.metadata_ready.is_set())
     assert runtime4.metadata_ready.is_set()

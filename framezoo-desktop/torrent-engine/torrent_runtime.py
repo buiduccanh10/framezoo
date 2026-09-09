@@ -20,6 +20,11 @@ from torrent_utils import (
     select_file,
     torrent_hash,
 )
+from torrent_fast_blocks import (
+    Endpoint,
+    fetch_blocks_from_peers,
+    normalize_endpoint,
+)
 
 
 class TorrentRuntime:
@@ -80,6 +85,11 @@ class TorrentRuntime:
         self._last_reannounce = 0.0
         self._focus_piece: Optional[int] = None
         self._playback_focus_piece: Optional[int] = None
+        self._fast_block_lock = threading.Lock()
+        self._fast_blocks: Set[tuple[int, int]] = set()
+        self._fast_blocks_inflight: Set[tuple[int, int]] = set()
+        self._fast_block_retry_at: dict[tuple[int, int], float] = {}
+        self._fast_peer_id = b"-FZFB01-" + os.urandom(12)
         self.status_thread = threading.Thread(
             target=self.publish_status,
             name="torrent-status-" + session_id,
@@ -761,7 +771,168 @@ class TorrentRuntime:
             finished = get_finished(self.handle)
         else:
             finished = set(getattr(self, "_finished_blocks", set()))
+        fast_lock = getattr(self, "_fast_block_lock", None)
+        if fast_lock is None:
+            finished.update(getattr(self, "_fast_blocks", set()))
+        else:
+            with fast_lock:
+                finished.update(getattr(self, "_fast_blocks", set()))
         return required.issubset(finished)
+
+    def _fast_peer_endpoints(self, pieces: Set[int]) -> list[Endpoint]:
+        try:
+            peers = self.handle.get_peer_info()
+        except Exception:
+            return []
+
+        endpoints: list[Endpoint] = []
+        seen: Set[Endpoint] = set()
+        for peer in peers:
+            endpoint = normalize_endpoint(getattr(peer, "ip", None))
+            if endpoint is None or endpoint in seen:
+                continue
+            availability = getattr(peer, "pieces", None)
+            if availability:
+                if not any(
+                    piece < len(availability) and bool(availability[piece])
+                    for piece in pieces
+                ):
+                    continue
+            seen.add(endpoint)
+            endpoints.append(endpoint)
+            if len(endpoints) >= 8:
+                break
+        return endpoints
+
+    def _start_fast_block_fetch(self, start: int, end: int) -> None:
+        required = self._required_range_blocks(start, end)
+        if not required or self.stop_event.is_set():
+            return
+
+        try:
+            piece_length = int(self.info.piece_length())
+            file_offset = int(
+                self.info.files().file_offset(self.file_index),
+            )
+            block_size = int(self.handle.status().block_size)
+            total_size = int(self.info.files().total_size())
+            info_hash = bytes.fromhex(str(self.handle.info_hash()))
+        except (AttributeError, IndexError, TypeError, ValueError):
+            return
+        if piece_length <= 0 or block_size <= 0 or total_size <= 0:
+            return
+
+        engine = getattr(self, "engine", None)
+        get_finished = getattr(engine, "finished_blocks_for", None)
+        if callable(get_finished):
+            finished = get_finished(self.handle)
+        else:
+            finished = set(getattr(self, "_finished_blocks", set()))
+        with self._fast_block_lock:
+            finished.update(self._fast_blocks)
+            now = time.monotonic()
+            pending = {
+                block
+                for block in required - finished - self._fast_blocks_inflight
+                if now >= self._fast_block_retry_at.get(block, 0.0)
+            }
+            if not pending:
+                return
+            self._fast_blocks_inflight.update(pending)
+
+        endpoints = self._fast_peer_endpoints(
+            {piece for piece, _ in pending},
+        )
+        if not endpoints:
+            with self._fast_block_lock:
+                self._fast_blocks_inflight.difference_update(pending)
+            return
+
+        thread = threading.Thread(
+            target=self._fetch_fast_blocks,
+            args=(
+                pending,
+                endpoints,
+                info_hash,
+                piece_length,
+                file_offset,
+                block_size,
+                total_size,
+            ),
+            name="torrent-fast-blocks-" + self.session_id,
+            daemon=True,
+        )
+        thread.start()
+        log_event(
+            "fast block fetch started",
+            sessionId=self.session_id,
+            blocks=len(pending),
+            peers=len(endpoints),
+            timingPhase="fast_block_fetch",
+            elapsedMs=self.elapsed_ms(),
+        )
+
+    def _fetch_fast_blocks(
+        self,
+        blocks: Set[tuple[int, int]],
+        endpoints: list[Endpoint],
+        info_hash: bytes,
+        piece_length: int,
+        file_offset: int,
+        block_size: int,
+        total_size: int,
+    ) -> None:
+        fetched = fetch_blocks_from_peers(
+            endpoints,
+            info_hash,
+            self._fast_peer_id,
+            blocks,
+            piece_length,
+            block_size,
+            total_size,
+        )
+        if fetched and not self.stop_event.is_set():
+            try:
+                absolute_path = self.selected_file_path()
+                with open(absolute_path, "r+b") as stream:
+                    for (piece, block), data in fetched.items():
+                        local_offset = (
+                            piece * piece_length
+                            + block * block_size
+                            - file_offset
+                        )
+                        if (
+                            local_offset < 0
+                            or local_offset + len(data) > self.file_size
+                        ):
+                            continue
+                        stream.seek(local_offset)
+                        stream.write(data)
+                    stream.flush()
+            except (OSError, ValueError) as error:
+                log_event(
+                    "fast block write failed",
+                    sessionId=self.session_id,
+                    error=str(error),
+                )
+                fetched = {}
+
+        with self._fast_block_lock:
+            self._fast_blocks_inflight.difference_update(blocks)
+            self._fast_blocks.update(fetched)
+            retry_at = time.monotonic() + 1.0
+            for block in blocks - set(fetched):
+                self._fast_block_retry_at[block] = retry_at
+            for block in fetched:
+                self._fast_block_retry_at.pop(block, None)
+        if fetched:
+            log_event(
+                "fast blocks ready",
+                sessionId=self.session_id,
+                blocks=len(fetched),
+                timingPhase="fast_block_ready",
+                elapsedMs=self.elapsed_ms(),
+            )
 
     def _schedule_pieces(
         self,
@@ -1400,6 +1571,7 @@ class TorrentRuntime:
             self.maybe_refocus(start)
         required_set = set(required_pieces)
         self._schedule_pieces(all_pieces, required_set, reason="range")
+        self._start_fast_block_fetch(start, end)
 
         blocked_waits = 0
         blocked_replan_count = 0
@@ -1595,6 +1767,7 @@ class TorrentRuntime:
                         required_set,
                         reason="blocked-replan",
                     )
+                    self._start_fast_block_fetch(start, end)
                 self._force_reannounce_if_stalled(
                     target_piece,
                     blocked_waits,
