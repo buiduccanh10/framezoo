@@ -866,18 +866,6 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       case "audio-pts":
         if (typeof event.data === "number" && Number.isFinite(event.data)) {
           lastAudioPts = Math.max(0, event.data);
-          if (
-            pendingSeekTarget === null &&
-            !paused &&
-            !cachePaused &&
-            !isSeeking &&
-            (lastTimePosAt === 0 ||
-              performance.now() - lastTimePosAt > AUDIO_PTS_TAKEOVER_MS)
-          ) {
-            if (lastAudioPts >= time - TIME_BACKTRACK_TOLERANCE_SECONDS) {
-              applyTimePosition(lastAudioPts);
-            }
-          }
         }
         break;
       case "duration":
