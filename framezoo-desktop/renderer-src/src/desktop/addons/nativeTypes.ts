@@ -1,9 +1,5 @@
 export type AddonProtocolResource =
-  | "catalog"
-  | "meta"
-  | "stream"
-  | "subtitles"
-  | "addon_catalog";
+  "catalog" | "meta" | "stream" | "subtitles" | "addon_catalog";
 
 export interface AddonProtocolRequest {
   manifestUrl: string;

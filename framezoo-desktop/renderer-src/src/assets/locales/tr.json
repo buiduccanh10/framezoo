@@ -1044,11 +1044,16 @@
     "torrent": {
       "file": "Dosya: {{fileName}}",
       "infohash": "Infohash: {{infoHash}}",
+      "infohashLabel": "Bilgi özeti",
       "network": "Torrent ağı",
       "networkStatus": "Torrent ağ durumu",
       "peers": "Benzerleri: {{count}}",
+      "peersLabel": "Akranlar",
       "progress": "İlerleme: %{{progress}}",
+      "completedLabel": "Tamamlanmış",
       "speed": "Hız: {{speed}}",
+      "speedLabel": "Hız",
+      "statistics": "İstatistikler",
       "states": {
         "buffering": "Tamponlama",
         "downloading": "İndiriliyor",

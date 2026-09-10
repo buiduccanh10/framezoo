@@ -1,4 +1,6 @@
 import { useSyncExternalStore } from "react";
+import { Subject, asyncScheduler } from "rxjs";
+import { throttleTime } from "rxjs/operators";
 
 import {
   getTorrentStatus,
@@ -14,6 +16,16 @@ const pendingStopTimers = new Map<string, ReturnType<typeof setTimeout>>();
 let unsubscribe: (() => void) | null = null;
 const TORRENT_STOP_GRACE_MS = 3_000;
 
+const statusSubject = new Subject<TorrentStatus>();
+
+// Throttle updates to UI at most once every 500ms, but always deliver the first and last
+statusSubject
+  .pipe(throttleTime(500, asyncScheduler, { leading: true, trailing: true }))
+  .subscribe((status) => {
+    activeStatus = status;
+    publish();
+  });
+
 function publish() {
   for (const listener of listeners) listener();
 }
@@ -22,8 +34,7 @@ function ensureSubscription() {
   if (unsubscribe) return;
   unsubscribe = subscribeTorrentStatus((status) => {
     if (status.sessionId !== activeSessionId) return;
-    activeStatus = status;
-    publish();
+    statusSubject.next(status);
   });
 }
 

@@ -5,8 +5,7 @@ import {
 } from "./types/tmdb";
 
 export type TMDBSearchMediaResult =
-  | TMDBMovieSearchResult
-  | TMDBShowSearchResult;
+  TMDBMovieSearchResult | TMDBShowSearchResult;
 
 function getSearchResultKey(result: TMDBSearchMediaResult): string {
   return `${result.media_type}:${result.id}`;

@@ -1044,11 +1044,16 @@
     "torrent": {
       "file": "Fișier: {{fileName}}",
       "infohash": "Infohash: {{infoHash}}",
+      "infohashLabel": "Informații hash",
       "network": "Rețea torrent",
       "networkStatus": "Starea rețelei torrent",
       "peers": "Semeni: {{count}}",
+      "peersLabel": "Colegi",
       "progress": "Progres: {{progress}}%",
+      "completedLabel": "Finalizat",
       "speed": "Viteză: {{speed}}",
+      "speedLabel": "Viteză",
+      "statistics": "Statistici",
       "states": {
         "buffering": "Buffering",
         "downloading": "Descărcarea",

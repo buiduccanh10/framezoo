@@ -12,7 +12,9 @@ export function useShouldShowControls() {
 
   const isHovering = hovering !== PlayerHoverState.NOT_HOVERING;
   const isLoading = usePlayerStore((s) => s.mediaPlaying.isLoading);
-  const hasRenderedFrame = usePlayerStore((s) => s.mediaPlaying.hasRenderedFrame);
+  const hasRenderedFrame = usePlayerStore(
+    (s) => s.mediaPlaying.hasRenderedFrame,
+  );
   const status = usePlayerStore((s) => s.status);
 
   // On player interface, controls must always show when:
@@ -26,7 +28,12 @@ export function useShouldShowControls() {
   const isPendingStart = status === playerStatus.PLAYING && !hasRenderedFrame;
 
   const showTargets =
-    isHovering || isHoveringControls || hasOpenOverlay || isPaused || isLoading || isPendingStart;
+    isHovering ||
+    isHoveringControls ||
+    hasOpenOverlay ||
+    isPaused ||
+    isLoading ||
+    isPendingStart;
 
   return {
     showTouchTargets: showTargets,

@@ -48,12 +48,7 @@ export type JWSeasonMetaResult = {
 };
 
 export type JWExternalIdType =
-  | "eidr"
-  | "imdb_latest"
-  | "imdb"
-  | "tmdb_latest"
-  | "tmdb"
-  | "tms";
+  "eidr" | "imdb_latest" | "imdb" | "tmdb_latest" | "tmdb" | "tms";
 
 export interface JWExternalId {
   provider: JWExternalIdType;

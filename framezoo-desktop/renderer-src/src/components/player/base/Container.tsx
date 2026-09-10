@@ -1,4 +1,6 @@
 import { ReactNode, RefObject, useEffect, useRef } from "react";
+import { Subscription, fromEvent, merge, timer } from "rxjs";
+import { switchMap, tap } from "rxjs/operators";
 
 import { OverlayDisplay } from "@/components/overlays/OverlayDisplay";
 import { AutoSkipSegments } from "@/components/player/internals/AutoSkipSegments";
@@ -24,72 +26,68 @@ export interface PlayerProps {
 }
 
 function useHovering(containerEl: RefObject<HTMLDivElement>) {
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const updateInterfaceHovering = usePlayerStore(
     (s) => s.updateInterfaceHovering,
   );
 
   useEffect(() => {
-    function resetHover() {
-      if (
-        usePlayerStore.getState().interface.hovering !==
-        PlayerHoverState.MOUSE_HOVER
-      ) {
-        updateInterfaceHovering(PlayerHoverState.MOUSE_HOVER);
-      }
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-      timeoutRef.current = setTimeout(() => {
-        if (usePlayerStore.getState().interface.isHoveringControls) {
-          resetHover();
-          return;
-        }
-        updateInterfaceHovering(PlayerHoverState.NOT_HOVERING);
-        timeoutRef.current = null;
-      }, 3000);
-    }
-
-    function pointerMove() {
-      resetHover();
-    }
-
-    function pointerLeave(e: MouseEvent) {
-      if (!e.relatedTarget && !document.hasFocus()) {
-        updateInterfaceHovering(PlayerHoverState.NOT_HOVERING);
-        if (timeoutRef.current) {
-          clearTimeout(timeoutRef.current);
-          timeoutRef.current = null;
-        }
-      }
-    }
-
     const el = containerEl.current;
-    if (el) {
-      el.addEventListener("pointermove", pointerMove, { passive: true });
-      el.addEventListener("mousemove", pointerMove, { passive: true });
-      el.addEventListener("pointerenter", pointerMove, { passive: true });
-      el.addEventListener("mouseenter", pointerMove, { passive: true });
-    }
+    if (!el) return;
 
-    window.addEventListener("pointermove", pointerMove, { passive: true });
-    window.addEventListener("mousemove", pointerMove, { passive: true });
-    document.addEventListener("mouseleave", pointerLeave, { passive: true });
-    window.addEventListener("focus", resetHover);
+    // Stream of events that should trigger a hover state
+    const moveEvents$ = merge(
+      fromEvent(el, "pointermove", { passive: true }),
+      fromEvent(el, "mousemove", { passive: true }),
+      fromEvent(el, "pointerenter", { passive: true }),
+      fromEvent(el, "mouseenter", { passive: true }),
+      fromEvent(window, "pointermove", { passive: true }),
+      fromEvent(window, "mousemove", { passive: true }),
+      fromEvent(window, "focus"),
+    );
+
+    // Stream of events that should immediately hide controls
+    const leaveEvents$ = fromEvent<MouseEvent>(document, "mouseleave", {
+      passive: true,
+    });
+
+    const subscription = new Subscription();
+
+    // Handle hovering logic using switchMap to automatically clear previous timers
+    subscription.add(
+      moveEvents$
+        .pipe(
+          tap(() => {
+            if (
+              usePlayerStore.getState().interface.hovering !==
+              PlayerHoverState.MOUSE_HOVER
+            ) {
+              updateInterfaceHovering(PlayerHoverState.MOUSE_HOVER);
+            }
+          }),
+          switchMap(() => timer(3000)),
+        )
+        .subscribe(() => {
+          if (usePlayerStore.getState().interface.isHoveringControls) {
+            // If hovering over controls, pretend we just moved the mouse to restart the timer
+            // by dispatching a fake event
+            window.dispatchEvent(new Event("pointermove"));
+            return;
+          }
+          updateInterfaceHovering(PlayerHoverState.NOT_HOVERING);
+        }),
+    );
+
+    // Handle immediate leave
+    subscription.add(
+      leaveEvents$.subscribe((e) => {
+        if (!e.relatedTarget && !document.hasFocus()) {
+          updateInterfaceHovering(PlayerHoverState.NOT_HOVERING);
+        }
+      }),
+    );
 
     return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-        timeoutRef.current = null;
-      }
-      if (el) {
-        el.removeEventListener("pointermove", pointerMove);
-        el.removeEventListener("mousemove", pointerMove);
-        el.removeEventListener("pointerenter", pointerMove);
-        el.removeEventListener("mouseenter", pointerMove);
-      }
-      window.removeEventListener("pointermove", pointerMove);
-      window.removeEventListener("mousemove", pointerMove);
-      document.removeEventListener("mouseleave", pointerLeave);
-      window.removeEventListener("focus", resetHover);
+      subscription.unsubscribe();
     };
   }, [containerEl, updateInterfaceHovering]);
 }

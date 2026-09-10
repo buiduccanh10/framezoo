@@ -1044,11 +1044,16 @@
     "torrent": {
       "file": "فایل: {{fileName}}",
       "infohash": "Infohash: {{infoHash}}",
+      "infohashLabel": "هش اطلاعات",
       "network": "شبکه تورنت",
       "networkStatus": "وضعیت شبکه تورنت",
       "peers": "همتایان: {{count}}",
+      "peersLabel": "همسالان",
       "progress": "پیشرفت: {{progress}}%",
+      "completedLabel": "تکمیل شده",
       "speed": "سرعت: {{speed}}",
+      "speedLabel": "سرعت",
+      "statistics": "آمار",
       "states": {
         "buffering": "بافر کردن",
         "downloading": "در حال دانلود",

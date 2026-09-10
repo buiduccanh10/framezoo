@@ -1044,11 +1044,16 @@
     "torrent": {
       "file": "Fájl: {{fileName}}",
       "infohash": "Infohash: {{infoHash}}",
+      "infohashLabel": "Információs hash",
       "network": "Torrent hálózat",
       "networkStatus": "Torrent hálózat állapota",
       "peers": "Társ: {{count}}",
+      "peersLabel": "Társak",
       "progress": "Haladás: {{progress}}%",
+      "completedLabel": "Befejezve",
       "speed": "Sebesség: {{speed}}",
+      "speedLabel": "Sebesség",
+      "statistics": "Statisztika",
       "states": {
         "buffering": "Pufferelés",
         "downloading": "Letöltés",

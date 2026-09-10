@@ -1044,11 +1044,16 @@
     "torrent": {
       "file": "Plik: {{fileName}}",
       "infohash": "Infohash: {{infoHash}}",
+      "infohashLabel": "Hasz informacyjny",
       "network": "Sieć torrentowa",
       "networkStatus": "Stan sieci torrent",
       "peers": "Rówieśnicy: {{count}}",
+      "peersLabel": "Rówieśnicy",
       "progress": "Postęp: {{progress}}%",
+      "completedLabel": "Zakończony",
       "speed": "Prędkość: {{speed}}",
+      "speedLabel": "Prędkość",
+      "statistics": "Statystyka",
       "states": {
         "buffering": "Buforowanie",
         "downloading": "Ściąganie",

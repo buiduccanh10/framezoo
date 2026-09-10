@@ -27,13 +27,11 @@ export function formatJWMeta(
   if (type === MWMediaType.SERIES) {
     seasons = media.seasons
       ?.sort((a, b) => a.season_number - b.season_number)
-      .map(
-        (v): MWSeasonMeta => ({
-          id: v.id.toString(),
-          number: v.season_number,
-          title: v.title,
-        }),
-      );
+      .map((v): MWSeasonMeta => ({
+        id: v.id.toString(),
+        number: v.season_number,
+        title: v.title,
+      }));
   }
 
   return {

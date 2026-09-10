@@ -1044,11 +1044,16 @@
     "torrent": {
       "file": "ไฟล์: {{fileName}}",
       "infohash": "ข้อมูลแฮช: {{infoHash}}",
+      "infohashLabel": "ข้อมูลแฮช",
       "network": "เครือข่ายทอร์เรนต์",
       "networkStatus": "สถานะเครือข่ายทอร์เรนต์",
       "peers": "เพื่อนร่วมงาน: {{count}}",
+      "peersLabel": "เพื่อนร่วมงาน",
       "progress": "ความคืบหน้า: {{progress}}%",
+      "completedLabel": "สมบูรณ์",
       "speed": "ความเร็ว: {{speed}}",
+      "speedLabel": "ความเร็ว",
+      "statistics": "สถิติ",
       "states": {
         "buffering": "การบัฟเฟอร์",
         "downloading": "กำลังดาวน์โหลด",

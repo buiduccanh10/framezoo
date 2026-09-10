@@ -1,4 +1,6 @@
 /* eslint-disable no-console */
+import { Observable } from "rxjs";
+
 import { downloadCaptionAsVtt } from "@/backend/helpers/subs";
 import { SegmentQualityDebugInfo } from "@/components/player/display/displayInterface";
 import {
@@ -121,11 +123,7 @@ export interface AddExternalSubtitlesOptions {
 }
 
 export type SubtitleSyncPhase =
-  | "idle"
-  | "pausing"
-  | "capturing"
-  | "analyzing"
-  | "applying";
+  "idle" | "pausing" | "capturing" | "analyzing" | "applying";
 
 export interface SubtitleSyncState {
   active: boolean;
@@ -1008,7 +1006,6 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       return;
     }
 
-    const abortController = new AbortController();
     const activeCaption =
       sourceCaptionSnapshot ??
       [store.caption.selected, store.caption.secondary].find(
@@ -1032,6 +1029,91 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
           vttData: "",
         };
 
+    const subscription = new Observable<void>((subscriber) => {
+      const abortController = new AbortController();
+      let isCancelled = false;
+
+      const run = async () => {
+        try {
+          const vttData = await downloadCaptionAsVtt(targetCaption);
+          if (isCancelled || abortController.signal.aborted) return;
+          if (!vttData) throw new Error("Fetching failed");
+
+          let fetchedTargetCaption: Caption | undefined;
+          set((s) => {
+            if (!s.caption.translateTask) return;
+            const fetchedVttData = sourceCaption.vttData || vttData;
+            fetchedTargetCaption = {
+              ...sourceCaption,
+              vttData: fetchedVttData,
+              alignmentSourceVttData:
+                sourceCaption.alignmentSourceVttData ?? fetchedVttData,
+              sourceCaption: targetCaption,
+            };
+            s.caption.translateTask.fetchedTargetCaption = fetchedTargetCaption;
+          });
+          store = get();
+
+          const result = await translate(
+            store.caption.translateTask!.fetchedTargetCaption!,
+            targetLanguage,
+            googletranslate,
+            abortController.signal,
+          );
+          if (isCancelled || abortController.signal.aborted) return;
+          if (!result) throw new Error("Translation failed");
+
+          set((s) => {
+            if (!s.caption.translateTask) return;
+            const translatedBaseVttData = result;
+            const translatedSourceCaption =
+              s.caption.translateTask.fetchedTargetCaption ?? sourceCaption;
+            const alignment = translatedSourceCaption.alignment;
+            const translatedCaption: Caption = {
+              id: `${targetCaption.id}-translated-${targetLanguage}`,
+              language: targetLanguage,
+              url: targetCaption.url,
+              vttData: applyStoredCaptionAlignment(
+                translatedBaseVttData,
+                alignment,
+              ),
+              alignmentSourceVttData:
+                translatedSourceCaption.alignmentSourceVttData,
+              ...(alignment
+                ? {
+                    alignmentBaseVttData: translatedBaseVttData,
+                    alignment,
+                  }
+                : {}),
+              sourceCaption: targetCaption,
+            };
+            s.caption.translateTask.done = true;
+            s.caption.translateTask.translatedCaption = translatedCaption;
+          });
+          subscriber.complete();
+        } catch (err) {
+          if (!isCancelled && !abortController.signal.aborted) {
+            subscriber.error(err);
+          }
+        }
+      };
+
+      run();
+
+      return () => {
+        isCancelled = true;
+        abortController.abort();
+      };
+    }).subscribe({
+      error: (err) => {
+        console.error("Translation task ran into an error", err);
+        set((s) => {
+          if (!s.caption.translateTask) return;
+          s.caption.translateTask.error = true;
+        });
+      },
+    });
+
     set((s) => {
       s.caption.translateTask = {
         targetCaption,
@@ -1040,91 +1122,11 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
         error: false,
         cancel() {
           if (!this.done && !this.error) {
-            console.log("Translation task was cancelled");
+            console.log("Translation task was cancelled via RxJS");
           }
-          abortController.abort();
+          subscription.unsubscribe();
         },
       };
     });
-
-    function handleError(err: any) {
-      if (abortController.signal.aborted) {
-        return;
-      }
-      console.error("Translation task ran into an error", err);
-      set((s) => {
-        if (!s.caption.translateTask) return;
-        s.caption.translateTask.error = true;
-      });
-    }
-
-    try {
-      const vttData = await downloadCaptionAsVtt(targetCaption);
-      if (abortController.signal.aborted) {
-        return;
-      }
-      if (!vttData) {
-        throw new Error("Fetching failed");
-      }
-      set((s) => {
-        if (!s.caption.translateTask) return;
-        const fetchedVttData = sourceCaption.vttData || vttData;
-        s.caption.translateTask.fetchedTargetCaption = {
-          ...sourceCaption,
-          vttData: fetchedVttData,
-          alignmentSourceVttData:
-            sourceCaption.alignmentSourceVttData ?? fetchedVttData,
-          sourceCaption: targetCaption,
-        };
-      });
-      store = get();
-    } catch (err) {
-      handleError(err);
-      return;
-    }
-
-    try {
-      const result = await translate(
-        store.caption.translateTask!.fetchedTargetCaption!,
-        targetLanguage,
-        googletranslate,
-        abortController.signal,
-      );
-      if (abortController.signal.aborted) {
-        return;
-      }
-      if (!result) {
-        throw new Error("Translation failed");
-      }
-      set((s) => {
-        if (!s.caption.translateTask) return;
-        const translatedBaseVttData = result;
-        const translatedSourceCaption =
-          s.caption.translateTask.fetchedTargetCaption ?? sourceCaption;
-        const alignment = translatedSourceCaption.alignment;
-        const translatedCaption: Caption = {
-          id: `${targetCaption.id}-translated-${targetLanguage}`,
-          language: targetLanguage,
-          url: targetCaption.url,
-          vttData: applyStoredCaptionAlignment(
-            translatedBaseVttData,
-            alignment,
-          ),
-          alignmentSourceVttData:
-            translatedSourceCaption.alignmentSourceVttData,
-          ...(alignment
-            ? {
-                alignmentBaseVttData: translatedBaseVttData,
-                alignment,
-              }
-            : {}),
-          sourceCaption: targetCaption,
-        };
-        s.caption.translateTask.done = true;
-        s.caption.translateTask.translatedCaption = translatedCaption;
-      });
-    } catch (err) {
-      handleError(err);
-    }
   },
 });

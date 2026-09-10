@@ -1044,11 +1044,16 @@
     "torrent": {
       "file": "Αρχείο: {{fileName}}",
       "infohash": "Infohash: {{infoHash}}",
+      "infohashLabel": "Κατακερματισμός πληροφοριών",
       "network": "Δίκτυο torrent",
       "networkStatus": "Κατάσταση δικτύου torrent",
       "peers": "Συνομήλικοι: {{count}}",
+      "peersLabel": "Ομότιμοι",
       "progress": "Πρόοδος: {{progress}}%",
+      "completedLabel": "Ολοκληρώθηκε το",
       "speed": "Ταχύτητα: {{speed}}",
+      "speedLabel": "Ταχύτητα",
+      "statistics": "Στατιστική",
       "states": {
         "buffering": "Προσωρινή αποθήκευση",
         "downloading": "Λήψη",

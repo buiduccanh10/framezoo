@@ -255,10 +255,10 @@ export function buildAlignmentWindowPlan(
       : null;
   const fallbackStarts =
     maxStart !== null
-      ? SUBTITLE_ALIGNMENT_TIMELINE_ANCHOR_FRACTIONS.map(fraction =>
+      ? SUBTITLE_ALIGNMENT_TIMELINE_ANCHOR_FRACTIONS.map((fraction) =>
           Math.round(maxStart * fraction),
         )
-      : SUBTITLE_ALIGNMENT_WINDOW_FALLBACK_OFFSETS_SECONDS.map(offset =>
+      : SUBTITLE_ALIGNMENT_WINDOW_FALLBACK_OFFSETS_SECONDS.map((offset) =>
           Math.round(currentStart + offset),
         );
 

@@ -1044,11 +1044,16 @@
     "torrent": {
       "file": "Файл: {{fileName}}",
       "infohash": "Infohash: {{infoHash}}",
+      "infohashLabel": "Хеш на информацията",
       "network": "Торент мрежа",
       "networkStatus": "Състояние на торент мрежа",
       "peers": "Връстници: {{count}}",
+      "peersLabel": "Връстници",
       "progress": "Напредък: {{progress}}%",
+      "completedLabel": "Завършено",
       "speed": "Скорост: {{speed}}",
+      "speedLabel": "Скорост",
+      "statistics": "Статистика",
       "states": {
         "buffering": "Буфериране",
         "downloading": "Изтегля се",

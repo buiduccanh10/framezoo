@@ -1044,11 +1044,16 @@
     "torrent": {
       "file": "Bestand: {{fileName}}",
       "infohash": "Infohash: {{infoHash}}",
+      "infohashLabel": "Info hash",
       "network": "Torrent-netwerk",
       "networkStatus": "Torrent-netwerkstatus",
       "peers": "Collega's: {{count}}",
+      "peersLabel": "Leeftijdsgenoten",
       "progress": "Voortgang: {{progress}}%",
+      "completedLabel": "Voltooid",
       "speed": "Snelheid: {{speed}}",
+      "speedLabel": "Snelheid",
+      "statistics": "Statistieken",
       "states": {
         "buffering": "Bufferen",
         "downloading": "Downloaden",

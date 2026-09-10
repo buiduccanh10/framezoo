@@ -1044,11 +1044,16 @@
     "torrent": {
       "file": "Datoteka: {{fileName}}",
       "infohash": "Infohash: {{infoHash}}",
+      "infohashLabel": "Zgoščena vrednost informacij",
       "network": "Torrent omrežje",
       "networkStatus": "Stanje omrežja Torrent",
       "peers": "Vrstniki: {{count}}",
+      "peersLabel": "Vrstniki",
       "progress": "Napredek: {{progress}}%",
+      "completedLabel": "Dokončano",
       "speed": "Hitrost: {{speed}}",
+      "speedLabel": "Hitrost",
+      "statistics": "Statistika",
       "states": {
         "buffering": "Medpomnjenje",
         "downloading": "Prenašanje",

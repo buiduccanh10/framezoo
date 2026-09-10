@@ -1044,11 +1044,16 @@
     "torrent": {
       "file": "Файл: {{fileName}}",
       "infohash": "Инфохэш: {{infoHash}}",
+      "infohashLabel": "Информационный хеш",
       "network": "Торрент-сеть",
       "networkStatus": "Статус торрент-сети",
       "peers": "Коллеги: {{count}}",
+      "peersLabel": "Коллеги",
       "progress": "Прогресс: {{progress}}%",
+      "completedLabel": "Завершенный",
       "speed": "Скорость: {{speed}}",
+      "speedLabel": "Скорость",
+      "statistics": "Статистика",
       "states": {
         "buffering": "Буферизация",
         "downloading": "Загрузка",

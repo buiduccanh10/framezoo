@@ -1044,11 +1044,16 @@
     "torrent": {
       "file": "Fitxer: {{fileName}}",
       "infohash": "Infohash: {{infoHash}}",
+      "infohashLabel": "Hash d&#39;informació",
       "network": "Xarxa Torrent",
       "networkStatus": "Estat de la xarxa de torrent",
       "peers": "Iguals: {{count}}",
+      "peersLabel": "Compañers",
       "progress": "Progrés: {{progress}}%",
+      "completedLabel": "Completat",
       "speed": "Velocitat: {{speed}}",
+      "speedLabel": "Velocitat",
+      "statistics": "Estadístiques",
       "states": {
         "buffering": "Buffering",
         "downloading": "Descàrrega",

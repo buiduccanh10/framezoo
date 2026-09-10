@@ -142,8 +142,7 @@ export async function loadAllAddonCatalogs(
       const targetCatalogId =
         catalogId ??
         (addon.manifest.catalogs?.find((c) => c.type === type)?.id as
-          | string
-          | undefined) ??
+          string | undefined) ??
         "top";
 
       const metas = await loadAddonCatalog(addon, type, targetCatalogId);
