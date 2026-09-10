@@ -324,7 +324,10 @@ export async function alignSubtitlesWithCurrentStream(options: {
     });
   }
 
-  for (const plan of windowPlan) {
+  let lastResponse: SubtitleAlignmentBatchResponse | null = null;
+
+  for (let i = 0; i < windowPlan.length; i++) {
+    const plan = windowPlan[i];
     if (capturedWindows.length >= SUBTITLE_ALIGNMENT_MAX_WINDOWS) break;
 
     const audio = await captureCurrentStreamAudio({
@@ -352,6 +355,9 @@ export async function alignSubtitlesWithCurrentStream(options: {
             endMs: startMs + e,
           })),
         );
+      } else {
+        // No speech detected, skip to next window plan
+        continue;
       }
     } else {
       capturedWindows.push({
@@ -366,44 +372,76 @@ export async function alignSubtitlesWithCurrentStream(options: {
       (capturedWindows.length / SUBTITLE_ALIGNMENT_MAX_WINDOWS) * 0.75,
       localEntry ? "analyzing" : "capturing",
     );
-  }
 
-  const body = new FormData();
-  body.append(
-    "subtitles",
-    JSON.stringify(
-      options.subtitles.map((subtitle) => ({
-        track: subtitle.track,
-        vttData: subtitle.vttData,
-      })),
-    ),
-  );
-  body.append("language", options.language || "en");
-  body.append("windowStartsMs", JSON.stringify(windowStartsMs));
-  body.append("windowDurationsMs", JSON.stringify(windowDurationsMs));
+    // Try aligning incrementally with the windows we have so far
+    if (capturedWindows.length > 0) {
+      const body = new FormData();
+      body.append(
+        "subtitles",
+        JSON.stringify(
+          options.subtitles.map((subtitle) => ({
+            track: subtitle.track,
+            vttData: subtitle.vttData,
+          })),
+        ),
+      );
+      body.append("language", options.language || "en");
+      body.append("windowStartsMs", JSON.stringify(windowStartsMs));
+      body.append("windowDurationsMs", JSON.stringify(windowDurationsMs));
 
-  if (localSpeechIntervals) {
-    body.append("speechIntervals", JSON.stringify(localSpeechIntervals));
-  } else {
-    for (const [index, window] of capturedWindows.entries()) {
-      appendAudio(body, window.audio, index);
+      if (localSpeechIntervals) {
+        body.append("speechIntervals", JSON.stringify(localSpeechIntervals));
+      } else {
+        for (const [index, window] of capturedWindows.entries()) {
+          appendAudio(body, window.audio, index);
+        }
+      }
+
+      try {
+        const response = await mwFetch<SubtitleAlignmentBatchResponse>(
+          "/api/subtitle-align",
+          {
+            method: "POST",
+            body,
+            baseURL: conf().BACKEND_URL ?? undefined,
+            signal: options.signal,
+            timeout: 300_000,
+          },
+        );
+        lastResponse = response;
+
+        const allAligned = options.subtitles.every(
+          (sub) => response.results[sub.track]?.aligned === true,
+        );
+
+        if (allAligned) {
+          break; // Stop early, we got a confident alignment!
+        }
+      } catch (error) {
+        if (isAbortError(error, options.signal)) throw error;
+        // Only throw if this is the last iteration and we haven't succeeded
+        if (
+          i === windowPlan.length - 1 ||
+          capturedWindows.length >= SUBTITLE_ALIGNMENT_MAX_WINDOWS
+        ) {
+          throw error;
+        }
+        console.warn(
+          "[subtitle-align] incremental alignment failed, trying next window",
+          error,
+        );
+      }
     }
   }
-  options.onProgress?.(0.75, "analyzing");
 
-  const response = await mwFetch<SubtitleAlignmentBatchResponse>(
-    "/api/subtitle-align",
-    {
-      method: "POST",
-      body,
-      baseURL: conf().BACKEND_URL ?? undefined,
-      signal: options.signal,
-      timeout: 300_000,
-    },
-  );
   options.onProgress?.(1, "analyzing");
+
+  if (!lastResponse) {
+    throw new Error("Failed to capture any valid audio windows for alignment");
+  }
+
   // Discard any server-side warningMessage — we don't surface fallback details to users
-  return { ...response, warningMessage: undefined };
+  return { ...lastResponse, warningMessage: undefined };
 }
 
 export async function alignSubtitleWithCurrentStream(options: {
