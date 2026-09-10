@@ -1044,11 +1044,16 @@
     "torrent": {
       "file": "파일: {{fileName}}",
       "infohash": "정보해시: {{infoHash}}",
+      "infohashLabel": "정보 해시",
       "network": "토렌트 네트워크",
       "networkStatus": "토렌트 네트워크 상태",
       "peers": "동료: {{count}}",
+      "peersLabel": "동료",
       "progress": "진행률: {{progress}}%",
+      "completedLabel": "완전한",
       "speed": "속도: {{speed}}",
+      "speedLabel": "속도",
+      "statistics": "통계",
       "states": {
         "buffering": "버퍼링",
         "downloading": "다운로드 중",

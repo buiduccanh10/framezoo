@@ -1,10 +1,16 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { useAsyncFn } from "react-use";
+import { Subject, from, of } from "rxjs";
+import {
+  catchError,
+  debounceTime,
+  startWith,
+  switchMap,
+  tap,
+} from "rxjs/operators";
 
 import { enrichSearchResults, searchForMedia } from "@/backend/metadata/search";
-import { MWQuery } from "@/backend/metadata/types/mw";
 import { ActionPillButton } from "@/components/buttons/ActionPillButton";
 import { IconPatch } from "@/components/buttons/IconPatch";
 import { Dropdown, OptionItem } from "@/components/form/Dropdown";
@@ -97,9 +103,6 @@ export function SearchListPart({
     useState<string>(ALL_GENRES_FILTER_ID);
   const { genres: movieGenres } = useDiscoverOptions("movie");
   const { genres: showGenres } = useDiscoverOptions("tv");
-  const [state, exec] = useAsyncFn((query: MWQuery) => searchForMedia(query));
-  const searchRequestId = useRef(0);
-
   const genreNameById = useMemo(() => {
     const map = new Map<number, string>();
     [...movieGenres, ...showGenres].forEach((genre) => {
@@ -152,38 +155,52 @@ export function SearchListPart({
     });
   }, [results, selectedGenreId, filterYear, filterCountry]);
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  // Create a persistent Subject for the search query stream
+  const [searchSubject] = useState(() => new Subject<string>());
+
   useEffect(() => {
-    const requestId = ++searchRequestId.current;
-    let cancelled = false;
-
-    async function runSearch(query: MWQuery) {
-      const searchResults = await exec(query);
-      if (
-        !searchResults ||
-        cancelled ||
-        requestId !== searchRequestId.current
-      ) {
-        return;
-      }
-
-      setResults(searchResults);
-
-      void enrichSearchResults(query, searchResults)
-        .then((enrichedResults) => {
-          if (cancelled || requestId !== searchRequestId.current) return;
-          setResults(enrichedResults);
-        })
-        .catch(() => {
-          // Raw search results remain visible when background metadata fails.
-        });
-    }
-
-    if (searchQuery !== "") runSearch({ searchQuery });
+    const sub = searchSubject
+      .pipe(
+        tap(() => {
+          setLoading(true);
+          setError(null);
+        }),
+        debounceTime(300),
+        switchMap((query) => {
+          if (!query) {
+            setLoading(false);
+            return of([]);
+          }
+          return from(searchForMedia({ searchQuery: query })).pipe(
+            switchMap((rawResults) => {
+              if (!rawResults || rawResults.length === 0) return of([]);
+              return from(
+                enrichSearchResults({ searchQuery: query }, rawResults),
+              ).pipe(startWith(rawResults));
+            }),
+            catchError((err) => {
+              setError(err instanceof Error ? err : new Error("Search failed"));
+              return of([]);
+            }),
+          );
+        }),
+      )
+      .subscribe((finalResults) => {
+        setResults(finalResults);
+        setLoading(false);
+      });
 
     return () => {
-      cancelled = true;
+      sub.unsubscribe();
     };
-  }, [searchQuery, exec]);
+  }, [searchSubject]);
+
+  useEffect(() => {
+    searchSubject.next(searchQuery);
+  }, [searchQuery, searchSubject]);
 
   useEffect(() => {
     setSelectedGenreId(ALL_GENRES_FILTER_ID);
@@ -198,8 +215,8 @@ export function SearchListPart({
     }
   }, [genreFilterOptions, selectedGenreId]);
 
-  if (state.loading) return <SearchLoadingPart />;
-  if (state.error) return <SearchSuffix failed />;
+  if (loading) return <SearchLoadingPart />;
+  if (error) return <SearchSuffix failed />;
   if (!results) return null;
 
   return (

@@ -90,13 +90,11 @@ export function formatTMDBMeta(
   if (type === MWMediaType.SERIES) {
     seasons = media.seasons
       ?.sort((a, b) => a.season_number - b.season_number)
-      .map(
-        (v): MWSeasonMeta => ({
-          title: v.title,
-          id: v.id.toString(),
-          number: v.season_number,
-        }),
-      );
+      .map((v): MWSeasonMeta => ({
+        title: v.title,
+        id: v.id.toString(),
+        number: v.season_number,
+      }));
   }
 
   return {
@@ -193,8 +191,7 @@ interface TMDBCacheKey {
 }
 
 export type TMDBSearchMediaResult =
-  | TMDBMovieSearchResult
-  | TMDBShowSearchResult;
+  TMDBMovieSearchResult | TMDBShowSearchResult;
 
 const ENGLISH_TMDB_LANGUAGE = "en-US";
 

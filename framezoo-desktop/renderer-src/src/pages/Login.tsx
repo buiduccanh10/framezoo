@@ -20,8 +20,7 @@ export function LoginPanel() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const state = location.state as
-    | { from?: { pathname: string; search?: string; hash?: string } }
-    | undefined;
+    { from?: { pathname: string; search?: string; hash?: string } } | undefined;
   const setPreviewTheme = usePreviewThemeStore((s) => s.setPreviewTheme);
   const setBackendUrl = useAuthStore((s) => s.setBackendUrl);
   const config = conf();

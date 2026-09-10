@@ -1044,11 +1044,16 @@
     "torrent": {
       "file": "ឯកសារ៖ {{fileName}}",
       "infohash": "ព័ត៌មាន៖ {{infoHash}}",
+      "infohashLabel": "ហាសព័ត៌មាន",
       "network": "បណ្តាញ Torrent",
       "networkStatus": "ស្ថានភាពបណ្តាញ Torrent",
       "peers": "មិត្តភ័ក្តិ៖ {{count}}",
+      "peersLabel": "មិត្តភក្ដិ",
       "progress": "វឌ្ឍនភាព៖ {{progress}}%",
+      "completedLabel": "បានបញ្ចប់",
       "speed": "ល្បឿន៖ {{speed}}",
+      "speedLabel": "ល្បឿន",
+      "statistics": "ស្ថិតិ",
       "states": {
         "buffering": "សតិបណ្ដោះអាសន្ន",
         "downloading": "កំពុងទាញយក",

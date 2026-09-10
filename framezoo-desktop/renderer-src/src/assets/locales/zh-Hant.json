@@ -1044,11 +1044,16 @@
     "torrent": {
       "file": "文件：{{fileName}}",
       "infohash": "資訊哈希：{{infoHash}}",
+      "infohashLabel": "資訊哈希",
       "network": "激流網路",
       "networkStatus": "洪流網路狀態",
       "peers": "同行：{{count}}",
+      "peersLabel": "同齡人",
       "progress": "進度：{{progress}}%",
+      "completedLabel": "完全的",
       "speed": "速度：{{speed}}",
+      "speedLabel": "速度",
+      "statistics": "統計數據",
       "states": {
         "buffering": "緩衝",
         "downloading": "正在下載",

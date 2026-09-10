@@ -1044,11 +1044,16 @@
     "torrent": {
       "file": "Tiedosto: {{fileName}}",
       "infohash": "Infohash: {{infoHash}}",
+      "infohashLabel": "Tietojen hajautus",
       "network": "Torrent verkko",
       "networkStatus": "Torrent-verkon tila",
       "peers": "Vertailijat: {{count}}",
+      "peersLabel": "Vertaiset",
       "progress": "Edistyminen: {{progress}}%",
+      "completedLabel": "Valmis",
       "speed": "Nopeus: {{speed}}",
+      "speedLabel": "Nopeus",
+      "statistics": "Tilastot",
       "states": {
         "buffering": "Puskurointi",
         "downloading": "Ladataan",

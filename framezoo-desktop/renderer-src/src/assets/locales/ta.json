@@ -1044,11 +1044,16 @@
     "torrent": {
       "file": "கோப்பு: {{fileName}}",
       "infohash": "இன்ஃபோஹாஷ்: {{infoHash}}",
+      "infohashLabel": "தகவல் ஹாஷ்",
       "network": "டோரண்ட் நெட்வொர்க்",
       "networkStatus": "டோரண்ட் நெட்வொர்க் நிலை",
       "peers": "சகாக்கள்: {{count}}",
+      "peersLabel": "சகாக்கள்",
       "progress": "முன்னேற்றம்: {{progress}}%",
+      "completedLabel": "நிறைவுற்றது",
       "speed": "வேகம்: {{speed}}",
+      "speedLabel": "வேகம்",
+      "statistics": "புள்ளிவிவரங்கள்",
       "states": {
         "buffering": "தாங்கல்",
         "downloading": "பதிவிறக்குகிறது",

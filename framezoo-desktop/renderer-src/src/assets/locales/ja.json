@@ -1044,11 +1044,16 @@
     "torrent": {
       "file": "ファイル: {{fileName}}",
       "infohash": "インフォハッシュ: {{infoHash}}",
+      "infohashLabel": "情報ハッシュ",
       "network": "トレントネットワーク",
       "networkStatus": "トレントネットワークのステータス",
       "peers": "ピア: {{count}}",
+      "peersLabel": "仲間",
       "progress": "進捗状況: {{progress}}%",
+      "completedLabel": "完了",
       "speed": "速度: {{speed}}",
+      "speedLabel": "スピード",
+      "statistics": "統計",
       "states": {
         "buffering": "バッファリング",
         "downloading": "ダウンロード中",

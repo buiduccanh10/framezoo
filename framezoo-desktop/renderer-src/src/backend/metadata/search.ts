@@ -165,8 +165,7 @@ export async function enrichSearchResults(
 
       try {
         const details = (await getMediaBaseDetails(result.id, tmdbType)) as
-          | TMDBMovieData
-          | TMDBShowData;
+          TMDBMovieData | TMDBShowData;
         return {
           ...result,
           originCountryCodes: getCountryCodesFromDetails(details, tmdbType),

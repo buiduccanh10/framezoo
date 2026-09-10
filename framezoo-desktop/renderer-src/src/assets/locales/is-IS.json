@@ -1044,11 +1044,16 @@
     "torrent": {
       "file": "Skrá: {{fileName}}",
       "infohash": "Infohash: {{infoHash}}",
+      "infohashLabel": "Upplýsinga-kjöl",
       "network": "Torrent net",
       "networkStatus": "Staða netstraums",
       "peers": "Jafnaldrar: {{count}}",
+      "peersLabel": "Jafningjar",
       "progress": "Framfarir: {{progress}}%",
+      "completedLabel": "Lokið",
       "speed": "Hraði: {{speed}}",
+      "speedLabel": "Hraði",
+      "statistics": "Tölfræði",
       "states": {
         "buffering": "Biðmögnun",
         "downloading": "Niðurhal",

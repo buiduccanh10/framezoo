@@ -1348,8 +1348,7 @@ describe("libmpv display", () => {
     const commands: string[] = [];
     const reparents: string[] = [];
     let pipActionListener:
-      | ((action: DesktopPipAction) => Promise<void> | void)
-      | undefined;
+      ((action: DesktopPipAction) => Promise<void> | void) | undefined;
 
     usePlayerStore.setState({
       source: {
@@ -1421,8 +1420,7 @@ describe("libmpv display", () => {
   it("closes PiP before dispatching next episode to the main window", async () => {
     const timeline: string[] = [];
     let pipActionListener:
-      | ((action: DesktopPipAction) => Promise<void> | void)
-      | undefined;
+      ((action: DesktopPipAction) => Promise<void> | void) | undefined;
     const dispatchedActions: DesktopPipAction[] = [];
     const onPipAction = (event: Event) => {
       dispatchedActions.push((event as CustomEvent<DesktopPipAction>).detail);

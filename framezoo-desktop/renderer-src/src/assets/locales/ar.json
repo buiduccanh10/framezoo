@@ -1044,11 +1044,16 @@
     "torrent": {
       "file": "الملف: {{fileName}}",
       "infohash": "المعلومات: {{infoHash}}",
+      "infohashLabel": "تجزئة المعلومات",
       "network": "شبكة تورنت",
       "networkStatus": "حالة شبكة تورنت",
       "peers": "الأقران: {{count}}",
+      "peersLabel": "الأقران",
       "progress": "التقدم: {{progress}}%",
+      "completedLabel": "مكتمل",
       "speed": "السرعة: {{speed}}",
+      "speedLabel": "سرعة",
+      "statistics": "إحصائيات",
       "states": {
         "buffering": "التخزين المؤقت",
         "downloading": "جارٍ التنزيل",

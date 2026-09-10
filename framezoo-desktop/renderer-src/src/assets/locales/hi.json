@@ -1044,11 +1044,16 @@
     "torrent": {
       "file": "फ़ाइल: {{fileName}}",
       "infohash": "इन्फोहैश: {{infoHash}}",
+      "infohashLabel": "घपले की जानकारी",
       "network": "टोरेंट नेटवर्क",
       "networkStatus": "टोरेंट नेटवर्क स्थिति",
       "peers": "सहकर्मी: {{count}}",
+      "peersLabel": "समकक्ष लोग",
       "progress": "प्रगति: {{progress}}%",
+      "completedLabel": "पुरा होना।",
       "speed": "गति: {{speed}}",
+      "speedLabel": "रफ़्तार",
+      "statistics": "आंकड़े",
       "states": {
         "buffering": "बफ़र हो",
         "downloading": "डाउनलोड",

@@ -1044,11 +1044,16 @@
     "torrent": {
       "file": "קובץ: {{fileName}}",
       "infohash": "Infohash: {{infoHash}}",
+      "infohashLabel": "גיבוב מידע",
       "network": "רשת טורנט",
       "networkStatus": "סטטוס רשת טורנט",
       "peers": "עמיתים: {{count}}",
+      "peersLabel": "עמיתים",
       "progress": "התקדמות: {{progress}}%",
+      "completedLabel": "הושלם",
       "speed": "מהירות: {{speed}}",
+      "speedLabel": "מְהִירוּת",
+      "statistics": "סטָטִיסטִיקָה",
       "states": {
         "buffering": "חציצה",
         "downloading": "מוריד",

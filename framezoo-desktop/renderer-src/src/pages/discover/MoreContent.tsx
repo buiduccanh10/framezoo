@@ -265,33 +265,53 @@ function MoreContentInner({ onShowDetails }: MoreContentProps) {
     if (contentType === "provider" && id) {
       const provider = providers.find((p) => p.id === id);
       if (provider) {
-        setSelectedProvider({ id: provider.id, name: provider.name });
+        setSelectedProvider((prev) =>
+          prev?.id === provider.id
+            ? prev
+            : { id: provider.id, name: provider.name },
+        );
       }
     } else if (contentType === "genre" && id) {
       const genre = genres.find((g) => g.id.toString() === id);
       if (genre) {
-        setSelectedGenre({ id: genre.id.toString(), name: genre.name });
+        setSelectedGenre((prev) =>
+          prev?.id === genre.id.toString()
+            ? prev
+            : { id: genre.id.toString(), name: genre.name },
+        );
       }
     } else if (contentType === "recommendations" && id) {
-      setSelectedRecommendationId(id);
+      setSelectedRecommendationId((prev) => (prev === id ? prev : id));
     }
   }, [contentType, id, providers, genres]);
 
   // Handle selection changes
   useEffect(() => {
-    if (contentType === "provider" && selectedProvider) {
+    if (
+      contentType === "provider" &&
+      selectedProvider &&
+      selectedProvider.id !== id
+    ) {
       navigate(
         buildMoreRoute(
           `/discover/more/provider/${selectedProvider.id}/${actualMediaType}`,
         ),
       );
-    } else if (contentType === "genre" && selectedGenre) {
+    } else if (
+      contentType === "genre" &&
+      selectedGenre &&
+      selectedGenre.id !== id
+    ) {
       navigate(
         buildMoreRoute(
           `/discover/more/genre/${selectedGenre.id}/${actualMediaType}`,
         ),
       );
-    } else if (contentType === "recommendations" && selectedRecommendationId) {
+    } else if (
+      contentType === "recommendations" &&
+      selectedRecommendationId &&
+      selectedRecommendationId !== id
+    ) {
       navigate(
         buildMoreRoute(
           `/discover/more/recommendations/${selectedRecommendationId}/${actualMediaType}`,
@@ -303,6 +323,7 @@ function MoreContentInner({ onShowDetails }: MoreContentProps) {
     selectedGenre,
     selectedRecommendationId,
     contentType,
+    id,
     actualMediaType,
     buildMoreRoute,
     navigate,

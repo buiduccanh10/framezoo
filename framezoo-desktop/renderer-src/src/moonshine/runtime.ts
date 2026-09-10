@@ -68,8 +68,7 @@ let startupState: MoonshineStartupState = {
   models: {},
 };
 let modelPromptHandler:
-  | ((entry: MoonshineModelEntry) => Promise<boolean>)
-  | null = null;
+  ((entry: MoonshineModelEntry) => Promise<boolean>) | null = null;
 const ISO_639_3_TO_1: Record<string, string> = {
   ara: "ar",
   ces: "cs",

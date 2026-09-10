@@ -4,11 +4,7 @@ import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
 type OverlayType =
-  | "volume"
-  | "subtitle"
-  | "speed"
-  | "tidb-submission-success"
-  | null;
+  "volume" | "subtitle" | "speed" | "tidb-submission-success" | null;
 
 interface ModalData {
   id?: number;

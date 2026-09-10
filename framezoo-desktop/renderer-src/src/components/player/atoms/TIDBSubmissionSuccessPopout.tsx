@@ -10,7 +10,9 @@ export function TIDBSubmissionSuccessPopout() {
   const { t } = useTranslation();
   const currentOverlay = useOverlayStack((s) => s.currentOverlay);
   const setCurrentOverlay = useOverlayStack((s) => s.setCurrentOverlay);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined,
+  );
 
   useEffect(() => {
     if (currentOverlay === "tidb-submission-success") {

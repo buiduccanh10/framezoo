@@ -18,9 +18,7 @@ interface IArrowLinkPropsInternal extends IArrowLinkPropsBase {
 }
 
 export type ArrowLinkProps =
-  | IArrowLinkPropsExternal
-  | IArrowLinkPropsInternal
-  | IArrowLinkPropsBase;
+  IArrowLinkPropsExternal | IArrowLinkPropsInternal | IArrowLinkPropsBase;
 
 export function ArrowLink(props: ArrowLinkProps) {
   const direction = props.direction || "right";

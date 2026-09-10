@@ -1,10 +1,5 @@
 export type DesktopAppUpdateStatus =
-  | "idle"
-  | "checking"
-  | "available"
-  | "downloading"
-  | "downloaded"
-  | "error";
+  "idle" | "checking" | "available" | "downloading" | "downloaded" | "error";
 
 export interface DesktopAppUpdateState {
   status: DesktopAppUpdateStatus;

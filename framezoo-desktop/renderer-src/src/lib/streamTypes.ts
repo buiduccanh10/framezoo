@@ -1,11 +1,5 @@
 export type Qualities =
-  | "360"
-  | "480"
-  | "720"
-  | "1080"
-  | "1440"
-  | "4k"
-  | "unknown";
+  "360" | "480" | "720" | "1080" | "1440" | "4k" | "unknown";
 
 export type Caption = {
   id: string;

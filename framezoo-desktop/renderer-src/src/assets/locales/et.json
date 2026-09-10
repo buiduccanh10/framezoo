@@ -1044,11 +1044,16 @@
     "torrent": {
       "file": "Fail: {{fileName}}",
       "infohash": "Inforäsi: {{infoHash}}",
+      "infohashLabel": "Info räsi",
       "network": "Torrent võrk",
       "networkStatus": "Torrenti võrgu olek",
       "peers": "Sarnased partnerid: {{count}}",
+      "peersLabel": "Eakaaslased",
       "progress": "Edenemine: {{progress}}%",
+      "completedLabel": "Lõpetatud",
       "speed": "Kiirus: {{speed}}",
+      "speedLabel": "Kiirus",
+      "statistics": "Statistika",
       "states": {
         "buffering": "Puhverdamine",
         "downloading": "Allalaadimine",

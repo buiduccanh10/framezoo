@@ -1044,11 +1044,16 @@
     "torrent": {
       "file": "Berkas: {{fileName}}",
       "infohash": "Infohash: {{infoHash}}",
+      "infohashLabel": "Hash informasi",
       "network": "Jaringan torrent",
       "networkStatus": "Status jaringan torrent",
       "peers": "Rekan: {{count}}",
+      "peersLabel": "Rekan sejawat",
       "progress": "Kemajuan: {{progress}}%",
+      "completedLabel": "Selesai",
       "speed": "Kecepatan: {{speed}}",
+      "speedLabel": "Kecepatan",
+      "statistics": "Statistik",
       "states": {
         "buffering": "Penyangga",
         "downloading": "Mengunduh",

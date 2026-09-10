@@ -1034,11 +1034,16 @@
     "torrent": {
       "file": "File: {{fileName}}",
       "infohash": "Infohash: {{infoHash}}",
+      "infohashLabel": "Info hash",
       "network": "Torrent network",
       "networkStatus": "Torrent network status",
       "peers": "Peers: {{count}}",
+      "peersLabel": "Peers",
       "progress": "Progress: {{progress}}%",
+      "completedLabel": "Completed",
       "speed": "Speed: {{speed}}",
+      "speedLabel": "Speed",
+      "statistics": "Statistics",
       "states": {
         "buffering": "Buffering",
         "downloading": "Downloading",

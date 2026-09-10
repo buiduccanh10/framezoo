@@ -1,10 +1,5 @@
 export type TorrentLifecycle =
-  | "starting"
-  | "buffering"
-  | "ready"
-  | "downloading"
-  | "stopped"
-  | "error";
+  "starting" | "buffering" | "ready" | "downloading" | "stopped" | "error";
 
 export interface TorrentStartRequest {
   sourceId: string;

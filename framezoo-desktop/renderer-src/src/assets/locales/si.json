@@ -1044,11 +1044,16 @@
     "torrent": {
       "file": "ගොනුව: {{fileName}}",
       "infohash": "Infohash: {{infoHash}}",
+      "infohashLabel": "තොරතුරු හැෂ්",
       "network": "ටොරන්ට් ජාලය",
       "networkStatus": "ටොරන්ට් ජාල තත්ත්වය",
       "peers": "සම වයසේ මිතුරන්: {{count}}",
+      "peersLabel": "සම වයසේ මිතුරන්",
       "progress": "ප්‍රගතිය: {{progress}}%",
+      "completedLabel": "සම්පූර්ණ කරන ලදී",
       "speed": "වේගය: {{speed}}",
+      "speedLabel": "වේගය",
+      "statistics": "සංඛ්‍යාලේඛන",
       "states": {
         "buffering": "බෆරින්",
         "downloading": "බාගත කිරීම",

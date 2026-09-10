@@ -1044,11 +1044,16 @@
     "torrent": {
       "file": "Fails: {{fileName}}",
       "infohash": "Info hash: {{infoHash}}",
+      "infohashLabel": "Informācijas jaucējkoda",
       "network": "Torrent tīkls",
       "networkStatus": "Torrent tīkla statuss",
       "peers": "Līdzinieki: {{count}}",
+      "peersLabel": "Vienaudži",
       "progress": "Progress: {{progress}}%",
+      "completedLabel": "Pabeigts",
       "speed": "Ātrums: {{speed}}",
+      "speedLabel": "Ātrums",
+      "statistics": "Statistika",
       "states": {
         "buffering": "Buferizācija",
         "downloading": "Notiek lejupielāde",

@@ -1044,11 +1044,16 @@
     "torrent": {
       "file": "Fil: {{fileName}}",
       "infohash": "Infohash: {{infoHash}}",
+      "infohashLabel": "Informationshash",
       "network": "Torrent nätverk",
       "networkStatus": "Torrent nätverksstatus",
       "peers": "Kamrater: {{count}}",
+      "peersLabel": "Kamrater",
       "progress": "Framsteg: {{progress}}%",
+      "completedLabel": "Avslutad",
       "speed": "Hastighet: {{speed}}",
+      "speedLabel": "Hastighet",
+      "statistics": "Statistik",
       "states": {
         "buffering": "Buffring",
         "downloading": "Laddar ner",

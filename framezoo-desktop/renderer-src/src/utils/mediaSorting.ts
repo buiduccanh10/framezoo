@@ -3,11 +3,7 @@ import { ProgressMediaItem } from "@/stores/progress";
 import { MediaItem } from "@/utils/mediaTypes";
 
 export type SortOption =
-  | "date"
-  | "title-asc"
-  | "title-desc"
-  | "year-asc"
-  | "year-desc";
+  "date" | "title-asc" | "title-desc" | "year-asc" | "year-desc";
 
 export function sortMediaItems(
   items: MediaItem[],

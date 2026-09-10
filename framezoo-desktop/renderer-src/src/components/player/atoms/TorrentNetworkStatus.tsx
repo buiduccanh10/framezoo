@@ -21,11 +21,6 @@ export function TorrentNetworkStatus(props: {
   const status = useActiveTorrentStatus();
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null!);
-  const stateLabel = status
-    ? t(`player.torrent.states.${status.state}`, {
-        defaultValue: status.state,
-      })
-    : "";
 
   useEffect(() => {
     if (!open) return;
@@ -67,33 +62,43 @@ export function TorrentNetworkStatus(props: {
         icon={Icons.WEB}
       />
       {open ? (
-        <div className="absolute bottom-full right-0 z-[100] mb-2 w-max min-w-[16rem] max-w-[90vw] sm:max-w-md rounded-xl border border-dropdown-border bg-dropdown-altBackground p-3 text-xs text-dropdown-text shadow-xl">
-          <div className="mb-2 flex items-center justify-between gap-4 text-white">
-            <span>{t("player.torrent.network")}</span>
-            <span className="uppercase text-type-link">{stateLabel}</span>
+        <div className="absolute bottom-full right-0 z-[100] mb-2 w-max min-w-[24rem] max-w-[90vw] sm:max-w-xl rounded-xl border border-dropdown-border bg-dropdown-altBackground p-5 text-sm shadow-xl">
+          <div className="mb-6 text-lg font-bold text-white">
+            {t("player.torrent.statistics", { defaultValue: "Statistics" })}
           </div>
-          <div className="space-y-1">
-            <p>
-              {t("player.torrent.progress", {
-                progress: status.progress.toFixed(1),
-              })}
-            </p>
-            <p>{t("player.torrent.peers", { count: status.peers })}</p>
-            <p>
-              {t("player.torrent.speed", {
-                speed: formatSpeed(status.speedBytesPerSecond),
-              })}
-            </p>
-            <p className="break-all">
-              {t("player.torrent.infohash", {
-                infoHash: status.infoHash ?? t("player.torrent.unknown"),
-              })}
-            </p>
-            <p>
-              {status.fileName
-                ? t("player.torrent.file", { fileName: status.fileName })
-                : null}
-            </p>
+
+          <div className="mb-6 flex items-center justify-between gap-6">
+            <div className="flex items-center gap-2">
+              <span className="text-type-secondary text-base">Peers</span>
+              <span className="text-white text-base">{status.peers}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-type-secondary text-base">
+                {t("player.torrent.speedLabel", { defaultValue: "Speed" })}
+              </span>
+              <span className="text-white text-base">
+                {formatSpeed(status.speedBytesPerSecond)}
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-type-secondary text-base">
+                {t("player.torrent.completedLabel", {
+                  defaultValue: "Completed",
+                })}
+              </span>
+              <span className="text-white text-base">
+                {status.progress.toFixed(0)} %
+              </span>
+            </div>
+          </div>
+
+          <div>
+            <div className="mb-2 text-type-secondary text-base">
+              {t("player.torrent.infohashLabel", { defaultValue: "Info hash" })}
+            </div>
+            <div className="break-all text-white text-base">
+              {status.infoHash ?? t("player.torrent.unknown")}
+            </div>
           </div>
         </div>
       ) : null}

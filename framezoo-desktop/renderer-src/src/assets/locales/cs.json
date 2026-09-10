@@ -1044,11 +1044,16 @@
     "torrent": {
       "file": "Soubor: {{fileName}}",
       "infohash": "Infohash: {{infoHash}}",
+      "infohashLabel": "Informační hash",
       "network": "Torrentová síť",
       "networkStatus": "Stav sítě torrent",
       "peers": "Ostatní: {{count}}",
+      "peersLabel": "Vrstevníci",
       "progress": "Průběh: {{progress}}%",
+      "completedLabel": "Dokončeno",
       "speed": "Rychlost: {{speed}}",
+      "speedLabel": "Rychlost",
+      "statistics": "Statistika",
       "states": {
         "buffering": "Ukládání do vyrovnávací paměti",
         "downloading": "Stahování",
