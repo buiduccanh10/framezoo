@@ -162,8 +162,8 @@ export function useDiscoverOptions(
   const userLanguage = useLanguageStore((s) => s.language);
   const formattedLanguage = getTmdbLanguageCode(userLanguage);
 
-  const providers =
-    mediaType === "all"
+  const providers = useMemo(() => {
+    return mediaType === "all"
       ? Array.from(
           new Map(
             [...MOVIE_PROVIDERS, ...TV_PROVIDERS].map((provider) => [
@@ -175,6 +175,7 @@ export function useDiscoverOptions(
       : mediaType === "movie"
         ? MOVIE_PROVIDERS
         : TV_PROVIDERS;
+  }, [mediaType]);
 
   useEffect(() => {
     const fetchOptions = async () => {

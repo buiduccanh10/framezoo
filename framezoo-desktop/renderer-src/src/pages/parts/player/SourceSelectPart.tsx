@@ -974,10 +974,8 @@ export function SourceSelectPart(props: {
     return content;
   }
 
-  // While a torrent stream is being started we show a loading overlay instead
-  // of returning null (which left the user staring at a black screen with no
-  // feedback). The backdrop and spinner give a clear "please wait" signal.
-  if (startingAddonId || (!autoSelectionResolved && mode === "initial")) {
+  // Prevent flashing the streams menu during initial auto-selection
+  if (!autoSelectionResolved && mode === "initial") {
     return (
       <div className="pointer-events-none relative h-full w-full overflow-hidden bg-black">
         {showBackdrop ? (
@@ -996,9 +994,6 @@ export function SourceSelectPart(props: {
             <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/55 to-black/80" />
           </>
         ) : null}
-        <div className="pointer-events-auto relative flex h-full w-full flex-col items-center justify-center gap-4 px-6 py-8">
-          <Spinner className="text-3xl text-white/80" />
-        </div>
       </div>
     );
   }
