@@ -118,6 +118,53 @@ describe("subtitle alignment client", () => {
     expect(alignmentMocks.transcribeMoonshine).not.toHaveBeenCalled();
   });
 
+  it("keeps full timeline evidence when a later playback position is synced", async () => {
+    await alignSubtitlesWithCurrentStream({
+      sourceUrl: "https://example.test/video.m3u8",
+      startAt: 600,
+      language: "en",
+      subtitles: [{ track: "primary", vttData: "WEBVTT" }],
+      videoDuration: 3600,
+      buffered: 3600,
+    });
+
+    expect(alignmentMocks.mwFetch).toHaveBeenCalledTimes(1);
+    const request = alignmentMocks.mwFetch.mock.calls[0][1];
+    const entries = [...(request.body as FormData).entries()];
+    const fields = new Map(
+      entries.filter(([, value]) => typeof value === "string") as Array<
+        [string, string]
+      >,
+    );
+
+    expect(JSON.parse(fields.get("windowStartsMs")!)).toHaveLength(6);
+    expect(JSON.parse(fields.get("speechIntervals")!)).toHaveLength(6);
+  });
+
+  it("limits concurrent audio extraction while preserving all windows", async () => {
+    let activeCaptures = 0;
+    let maxActiveCaptures = 0;
+    alignmentMocks.extractAudioWindow.mockImplementation(async () => {
+      activeCaptures += 1;
+      maxActiveCaptures = Math.max(maxActiveCaptures, activeCaptures);
+      await new Promise((resolve) => setTimeout(resolve, 5));
+      activeCaptures -= 1;
+      return new Uint8Array([1, 2, 3]);
+    });
+
+    await alignSubtitlesWithCurrentStream({
+      sourceUrl: "https://example.test/video.m3u8",
+      startAt: 600,
+      language: "en",
+      subtitles: [{ track: "primary", vttData: "WEBVTT" }],
+      videoDuration: 3600,
+      buffered: 3600,
+    });
+
+    expect(maxActiveCaptures).toBe(3);
+    expect(alignmentMocks.extractAudioWindow).toHaveBeenCalledTimes(6);
+  });
+
   it("plans independent current, buffered, and fallback windows", () => {
     const plan = buildAlignmentWindowPlan(600, 3600, 900);
 

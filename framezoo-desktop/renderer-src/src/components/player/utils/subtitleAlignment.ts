@@ -26,6 +26,7 @@ const SUBTITLE_ALIGNMENT_WINDOW_FALLBACK_OFFSETS_SECONDS = [
   -120, 120, -240, 240,
 ];
 const SUBTITLE_ALIGNMENT_MIN_AUDIO_WINDOW_SECONDS = 1;
+const SUBTITLE_ALIGNMENT_CAPTURE_CONCURRENCY = 3;
 
 export interface SubtitleAlignmentResponse {
   aligned: boolean;
@@ -324,17 +325,57 @@ export async function alignSubtitlesWithCurrentStream(options: {
     });
   }
 
-  let lastResponse: SubtitleAlignmentBatchResponse | null = null;
+  const capturedAudio = new Array<Uint8Array>(windowPlan.length);
+  const captureAbortController = new AbortController();
+  const abortCaptures = () => {
+    captureAbortController.abort();
+  };
+  options.signal?.addEventListener("abort", abortCaptures, { once: true });
+  if (options.signal?.aborted) {
+    captureAbortController.abort();
+  }
+  let completedCaptures = 0;
+  let nextCaptureIndex = 0;
+  const captureWorker = async () => {
+    try {
+      while (nextCaptureIndex < windowPlan.length) {
+        const index = nextCaptureIndex++;
+        const plan = windowPlan[index];
+        capturedAudio[index] = await captureCurrentStreamAudio({
+          ...options,
+          startAt: plan.startAt,
+          duration: windowDuration,
+          signal: captureAbortController.signal,
+        });
+        completedCaptures += 1;
+        options.onProgress?.(
+          (completedCaptures / windowPlan.length) * 0.4,
+          "capturing",
+        );
+      }
+    } catch (error) {
+      captureAbortController.abort();
+      throw error;
+    }
+  };
+  try {
+    await Promise.all(
+      Array.from(
+        {
+          length: Math.min(
+            SUBTITLE_ALIGNMENT_CAPTURE_CONCURRENCY,
+            windowPlan.length,
+          ),
+        },
+        () => captureWorker(),
+      ),
+    );
+  } finally {
+    options.signal?.removeEventListener("abort", abortCaptures);
+  }
 
-  for (let i = 0; i < windowPlan.length; i++) {
-    const plan = windowPlan[i];
-    if (capturedWindows.length >= SUBTITLE_ALIGNMENT_MAX_WINDOWS) break;
-
-    const audio = await captureCurrentStreamAudio({
-      ...options,
-      startAt: plan.startAt,
-      duration: windowDuration,
-    });
+  for (const [index, plan] of windowPlan.entries()) {
+    const audio = capturedAudio[index];
 
     if (localEntry && localSpeechIntervals) {
       const decoded = decodeMoonshineWav(audio);
@@ -355,9 +396,6 @@ export async function alignSubtitlesWithCurrentStream(options: {
             endMs: startMs + e,
           })),
         );
-      } else {
-        // No speech detected, skip to next window plan
-        continue;
       }
     } else {
       capturedWindows.push({
@@ -369,79 +407,51 @@ export async function alignSubtitlesWithCurrentStream(options: {
     }
 
     options.onProgress?.(
-      (capturedWindows.length / SUBTITLE_ALIGNMENT_MAX_WINDOWS) * 0.75,
+      0.4 + (capturedWindows.length / SUBTITLE_ALIGNMENT_MAX_WINDOWS) * 0.35,
       localEntry ? "analyzing" : "capturing",
     );
-
-    // Try aligning incrementally with the windows we have so far
-    if (capturedWindows.length > 0) {
-      const body = new FormData();
-      body.append(
-        "subtitles",
-        JSON.stringify(
-          options.subtitles.map((subtitle) => ({
-            track: subtitle.track,
-            vttData: subtitle.vttData,
-          })),
-        ),
-      );
-      body.append("language", options.language || "en");
-      body.append("windowStartsMs", JSON.stringify(windowStartsMs));
-      body.append("windowDurationsMs", JSON.stringify(windowDurationsMs));
-
-      if (localSpeechIntervals) {
-        body.append("speechIntervals", JSON.stringify(localSpeechIntervals));
-      } else {
-        for (const [index, window] of capturedWindows.entries()) {
-          appendAudio(body, window.audio, index);
-        }
-      }
-
-      try {
-        const response = await mwFetch<SubtitleAlignmentBatchResponse>(
-          "/api/subtitle-align",
-          {
-            method: "POST",
-            body,
-            baseURL: conf().BACKEND_URL ?? undefined,
-            signal: options.signal,
-            timeout: 300_000,
-          },
-        );
-        lastResponse = response;
-
-        const allAligned = options.subtitles.every(
-          (sub) => response.results[sub.track]?.aligned === true,
-        );
-
-        if (allAligned) {
-          break; // Stop early, we got a confident alignment!
-        }
-      } catch (error) {
-        if (isAbortError(error, options.signal)) throw error;
-        // Only throw if this is the last iteration and we haven't succeeded
-        if (
-          i === windowPlan.length - 1 ||
-          capturedWindows.length >= SUBTITLE_ALIGNMENT_MAX_WINDOWS
-        ) {
-          throw error;
-        }
-        console.warn(
-          "[subtitle-align] incremental alignment failed, trying next window",
-          error,
-        );
-      }
-    }
   }
 
-  options.onProgress?.(1, "analyzing");
-
-  if (!lastResponse) {
+  if (capturedWindows.length === 0) {
     throw new Error("Failed to capture any valid audio windows for alignment");
   }
 
+  // Keep every captured window: one local match cannot detect intro cuts or drift.
+  const body = new FormData();
+  body.append(
+    "subtitles",
+    JSON.stringify(
+      options.subtitles.map((subtitle) => ({
+        track: subtitle.track,
+        vttData: subtitle.vttData,
+      })),
+    ),
+  );
+  body.append("language", options.language || "en");
+  body.append("windowStartsMs", JSON.stringify(windowStartsMs));
+  body.append("windowDurationsMs", JSON.stringify(windowDurationsMs));
+
+  if (localSpeechIntervals) {
+    body.append("speechIntervals", JSON.stringify(localSpeechIntervals));
+  } else {
+    for (const [index, window] of capturedWindows.entries()) {
+      appendAudio(body, window.audio, index);
+    }
+  }
+
+  const response = await mwFetch<SubtitleAlignmentBatchResponse>(
+    "/api/subtitle-align",
+    {
+      method: "POST",
+      body,
+      baseURL: conf().BACKEND_URL ?? undefined,
+      signal: options.signal,
+      timeout: 300_000,
+    },
+  );
+  options.onProgress?.(1, "analyzing");
   // Discard any server-side warningMessage — we don't surface fallback details to users
-  return { ...lastResponse, warningMessage: undefined };
+  return { ...response, warningMessage: undefined };
 }
 
 export async function alignSubtitleWithCurrentStream(options: {
