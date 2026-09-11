@@ -20,6 +20,7 @@ export interface TorrentStartRequest {
   fileIdx?: number;
   fileName?: string;
   startAt?: number;
+  maxBytes?: number;
 }
 
 export interface TorrentStatus {

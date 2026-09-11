@@ -198,6 +198,14 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
         return;
       }
 
+      if ((currentState.source as any)?.isTorrent) {
+        import("@/desktop/torrentPlaybackStore")
+          .then(({ stopTorrentSession }) => {
+            void stopTorrentSession();
+          })
+          .catch(() => {});
+      }
+
       set((s) => {
         s.status = playerStatus.PLAYBACK_ERROR;
         s.interface.error = err;
