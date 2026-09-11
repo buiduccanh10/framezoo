@@ -40,6 +40,8 @@ export function SubtitleSyncBadge(props: {
   const handleReject = () => {
     setCaption({
       ...caption,
+      vttData: caption.alignmentBaseVttData ?? caption.vttData,
+      alignmentBaseVttData: undefined,
       alignment: undefined,
       isPendingSyncConfirmation: false,
     });
