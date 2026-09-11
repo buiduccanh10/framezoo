@@ -376,10 +376,61 @@ export function shiftVttPiecewiseTimestamps(
       if (!Number.isFinite(start) || !Number.isFinite(end)) return block;
 
       let appliedOffsetMs = fallbackOffsetMs;
+      
+      let insideSegment = false;
       for (const seg of sortedSegments) {
         if (start >= seg.startMs && start < seg.endMs) {
           appliedOffsetMs = seg.offsetMs;
+          insideSegment = true;
           break;
+        }
+      }
+
+      if (!insideSegment && sortedSegments.length > 0) {
+        if (sortedSegments.length === 1) {
+          appliedOffsetMs = sortedSegments[0].offsetMs;
+        } else if (start < sortedSegments[0].startMs) {
+          const s0 = sortedSegments[0];
+          const s1 = sortedSegments[1];
+          const c0 = (s0.startMs + s0.endMs) / 2;
+          const c1 = (s1.startMs + s1.endMs) / 2;
+          if (c1 !== c0) {
+            let slope = (s1.offsetMs - s0.offsetMs) / (c1 - c0);
+            slope = Math.max(-0.1, Math.min(0.1, slope));
+            appliedOffsetMs = s0.offsetMs + slope * (start - s0.startMs);
+          } else {
+            appliedOffsetMs = s0.offsetMs;
+          }
+        } else if (start >= sortedSegments[sortedSegments.length - 1].endMs) {
+          const sLast = sortedSegments[sortedSegments.length - 1];
+          const sPrev = sortedSegments[sortedSegments.length - 2];
+          const cLast = (sLast.startMs + sLast.endMs) / 2;
+          const cPrev = (sPrev.startMs + sPrev.endMs) / 2;
+          if (cLast !== cPrev) {
+            let slope = (sLast.offsetMs - sPrev.offsetMs) / (cLast - cPrev);
+            slope = Math.max(-0.1, Math.min(0.1, slope));
+            appliedOffsetMs = sLast.offsetMs + slope * (start - sLast.endMs);
+          } else {
+            appliedOffsetMs = sLast.offsetMs;
+          }
+        } else {
+          for (let i = 0; i < sortedSegments.length - 1; i++) {
+            const s1 = sortedSegments[i];
+            let s2 = sortedSegments[i + 1];
+            // Find the next non-overlapping segment to interpolate the gap
+            for (let j = i + 1; j < sortedSegments.length; j++) {
+              if (sortedSegments[j].startMs >= s1.endMs) {
+                s2 = sortedSegments[j];
+                break;
+              }
+            }
+            if (start >= s1.endMs && start < s2.startMs) {
+              const gap = s2.startMs - s1.endMs;
+              const slope = (s2.offsetMs - s1.offsetMs) / gap;
+              appliedOffsetMs = s1.offsetMs + slope * (start - s1.endMs);
+              break;
+            }
+          }
         }
       }
 

@@ -40,10 +40,19 @@ export class TorrentManager {
   }
 
   async start(request: TorrentStartRequest) {
-    const session = await this.engine.start(request, (status) => {
-      this.statuses.set(status.sessionId, status);
-      for (const listener of this.listeners) listener(status);
-    });
+    let maxBytes: number | undefined;
+    if (process.env.FRAMEZOO_TORRENT_MAX_SIZE_BYTES) {
+      const parsed = parseInt(process.env.FRAMEZOO_TORRENT_MAX_SIZE_BYTES, 10);
+      if (!isNaN(parsed)) maxBytes = parsed;
+    }
+
+    const session = await this.engine.start(
+      { ...request, maxBytes },
+      (status) => {
+        this.statuses.set(status.sessionId, status);
+        for (const listener of this.listeners) listener(status);
+      },
+    );
     return session;
   }
 

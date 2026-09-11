@@ -61,6 +61,9 @@ export function TranscriptView({
     selectionMode === "secondary" ? setSecondaryDelay : setPrimaryDelay;
   const changeSelectionMode = onSelectionModeChange ?? setActiveCaptionTrack;
   const { canSyncSelectedCaption } = useCaptions();
+  const hasRenderedFrame = usePlayerStore(
+    (s) => s.mediaPlaying.hasRenderedFrame,
+  );
   const modelModal = useModal("moonshine-model-download");
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -311,6 +314,7 @@ export function TranscriptView({
             <button
               type="button"
               onClick={() => router.navigate("/captions/transcript/sync")}
+              disabled={!hasRenderedFrame}
               className="mr-[-0.5rem] flex h-8 w-8 items-center justify-center rounded-md text-video-context-type-accent transition-colors hover:bg-video-context-type-accent/15 disabled:cursor-not-allowed disabled:opacity-50"
               aria-label={t(
                 "player.menus.subtitles.syncSubtitleOpen",

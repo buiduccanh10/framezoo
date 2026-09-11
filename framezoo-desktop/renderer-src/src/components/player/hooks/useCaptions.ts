@@ -357,22 +357,26 @@ export function useCaptions() {
             ...(result.segments ? { segments: result.segments } : {}),
           };
 
+          const newVttData = applySubtitleAlignment(baseVttData, result);
+
           if (target.track === "primary") {
             setCaption({
               ...currentCaption,
+              vttData: newVttData,
+              alignmentBaseVttData: currentCaption.alignmentBaseVttData ?? currentCaption.vttData,
               alignment,
               isPendingSyncConfirmation: true,
             });
-            useSubtitleStore.getState().setPrimaryDelay(result.offsetMs / 1000);
+            useSubtitleStore.getState().setPrimaryDelay(0);
           } else {
             setSecondaryCaption({
               ...currentCaption,
+              vttData: newVttData,
+              alignmentBaseVttData: currentCaption.alignmentBaseVttData ?? currentCaption.vttData,
               alignment,
               isPendingSyncConfirmation: true,
             });
-            useSubtitleStore
-              .getState()
-              .setSecondaryDelay(result.offsetMs / 1000);
+            useSubtitleStore.getState().setSecondaryDelay(0);
           }
         }
 
@@ -691,6 +695,8 @@ export function useCaptions() {
           try {
             const alignment = JSON.parse(savedSync);
             captionToSet.alignment = alignment;
+            captionToSet.alignmentBaseVttData = captionToSet.vttData;
+            captionToSet.vttData = applySubtitleAlignment(captionToSet.alignmentBaseVttData, alignment as any);
             // Delay will be restored after setDirectCaption
           } catch (e) {
             console.warn("Failed to parse saved subtitle sync", e);
@@ -700,10 +706,8 @@ export function useCaptions() {
         if (options?.isCurrent && !options.isCurrent()) return false;
         setDirectCaption(captionToSet, caption);
 
-        if (captionToSet.alignment?.offsetMs) {
-          useSubtitleStore
-            .getState()
-            .setPrimaryDelay(captionToSet.alignment.offsetMs / 1000);
+        if (captionToSet.alignment) {
+          useSubtitleStore.getState().setPrimaryDelay(0);
         }
 
         return true;
@@ -765,6 +769,8 @@ export function useCaptions() {
             try {
               const alignment = JSON.parse(savedSync);
               captionToSet.alignment = alignment;
+              captionToSet.alignmentBaseVttData = captionToSet.vttData;
+              captionToSet.vttData = applySubtitleAlignment(captionToSet.alignmentBaseVttData, alignment as any);
             } catch (e) {
               console.warn("Failed to parse saved subtitle sync", e);
             }
@@ -775,10 +781,8 @@ export function useCaptions() {
           }
           setSecondaryCaption(captionToSet);
 
-          if (captionToSet.alignment?.offsetMs) {
-            useSubtitleStore
-              .getState()
-              .setSecondaryDelay(captionToSet.alignment.offsetMs / 1000);
+          if (captionToSet.alignment) {
+            useSubtitleStore.getState().setSecondaryDelay(0);
           }
           return;
         } catch (error) {

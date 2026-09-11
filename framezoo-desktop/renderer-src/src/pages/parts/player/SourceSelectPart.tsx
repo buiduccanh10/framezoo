@@ -541,6 +541,11 @@ export function SourceSelectPart(props: {
   );
 
   useEffect(() => {
+    if (status === playerStatus.PLAYBACK_ERROR) {
+      setAutoSelectionResolved(true);
+      return;
+    }
+
     if (
       hasAttemptedAutoSelect.current ||
       mode !== "initial" ||
@@ -567,12 +572,16 @@ export function SourceSelectPart(props: {
 
       if (matchingStream && !startingAddonId) {
         hasAttemptedAutoSelect.current = true;
-        setAutoSelectionResolved(true);
-        void selectAddonStream(matchingStream).catch(() => {
-          // Auto-play failed (e.g. torrent engine unavailable).
-          // Clear the saved selection so we don't retry on every mount.
-          clearLastTorrentSelection(meta);
-        });
+        void selectAddonStream(matchingStream)
+          .then(() => {
+            setAutoSelectionResolved(true);
+          })
+          .catch(() => {
+            setAutoSelectionResolved(true);
+            // Auto-play failed (e.g. torrent engine unavailable).
+            // Clear the saved selection so we don't retry on every mount.
+            clearLastTorrentSelection(meta);
+          });
         return;
       }
 
@@ -598,8 +607,9 @@ export function SourceSelectPart(props: {
 
     if (matchingStream && !startingAddonId) {
       hasAttemptedAutoSelect.current = true;
-      setAutoSelectionResolved(true);
-      void selectAddonStream(matchingStream);
+      void selectAddonStream(matchingStream).finally(() => {
+        setAutoSelectionResolved(true);
+      });
       return;
     }
 
@@ -1017,7 +1027,9 @@ export function SourceSelectPart(props: {
         </>
       ) : null}
       <div className="pointer-events-auto relative flex h-full w-full items-center justify-center px-6 py-8">
-        <div className="h-[min(58vh,42rem)] w-full max-w-2xl">{content}</div>
+        <div className="h-[min(58vh,42rem)] w-full max-w-2xl overflow-hidden rounded-2xl bg-video-context-background text-video-context-type-main">
+          {content}
+        </div>
       </div>
     </div>
   );

@@ -392,7 +392,16 @@ class LibtorrentEngine:
                         runtime.save_path for runtime in self.sessions.values()
                     }
                 active_paths.add(save_path)
-                enforce_storage_limit(root, active_paths=active_paths)
+                
+                max_bytes_override = request.get("maxBytes")
+                if max_bytes_override is not None:
+                    enforce_storage_limit(
+                        root,
+                        max_bytes=max_bytes_override,
+                        active_paths=active_paths,
+                    )
+                else:
+                    enforce_storage_limit(root, active_paths=active_paths)
             except Exception as error:
                 sys.stderr.write(
                     f"[sidecar] Storage limit enforcement error: {error}\n",
