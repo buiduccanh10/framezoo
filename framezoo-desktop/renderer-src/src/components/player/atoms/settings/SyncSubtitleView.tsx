@@ -142,6 +142,18 @@ export function SyncSubtitleView({
         detail = t("player.menus.subtitles.syncRateLimit");
       } else if (isServerBusy) {
         detail = t("player.menus.subtitles.syncServerBusy");
+      } else if (
+        detail &&
+        (detail.includes("Failed to fetch") ||
+          detail.includes("NetworkError") ||
+          detail.includes("Network request failed") ||
+          detail.includes("<no response>"))
+      ) {
+        detail = t("player.menus.subtitles.syncNetworkError", {
+          defaultValue: "Network connection failed",
+        });
+      } else if (detail && detail.length > 100) {
+        detail = undefined; // Hide overly verbose errors
       }
 
       showToast(
