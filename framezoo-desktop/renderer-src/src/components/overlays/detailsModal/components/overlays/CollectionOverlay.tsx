@@ -225,7 +225,7 @@ export function CollectionOverlay({
 
   return (
     <div
-      className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4 sm:p-6 lg:p-8 transition-opacity duration-300"
+      className="fixed inset-0 bg-black/90 backdrop-blur-sm z-[100] flex items-center justify-center p-4 sm:p-6 lg:p-8 transition-opacity duration-300"
       onClick={onClose}
     >
       <Flare.Base
