@@ -274,6 +274,7 @@ function YouTubeTrailer({
             playlist: videoId,
             rel: 0,
             vq: "hd2160",
+            origin: window.location.origin,
           },
           events: {
             onReady: ({ target }) => {
