@@ -618,22 +618,26 @@ export function SourceSelectPart(props: {
     );
     const preferredQuery =
       preferredAddonIndex >= 0 ? addonStreamQueries[preferredAddonIndex] : null;
-    if (preferredQuery && !preferredQuery.isLoading) {
-      hasAttemptedAutoSelect.current = true;
-      setAutoSelectionResolved(true);
-      // Fallback: pre-select the preferred addon to show in the UI.
-      if (!selectedAddonId && streamPreference.addonId) {
-        const isAddonEnabled = enabledAddons.some(
-          (a) => a.manifest.id === streamPreference.addonId,
+
+    if (preferredQuery?.isLoading) {
+      return;
+    }
+
+    hasAttemptedAutoSelect.current = true;
+    setAutoSelectionResolved(true);
+
+    // Fallback: pre-select the preferred addon to show in the UI.
+    if (preferredQuery && !selectedAddonId && streamPreference.addonId) {
+      const isAddonEnabled = enabledAddons.some(
+        (a) => a.manifest.id === streamPreference.addonId,
+      );
+      if (isAddonEnabled) {
+        setSelectedAddonId(streamPreference.addonId);
+        const matchingQuality = qualityOptions.find(
+          (q) => q.id === streamPreference.quality,
         );
-        if (isAddonEnabled) {
-          setSelectedAddonId(streamPreference.addonId);
-          const matchingQuality = qualityOptions.find(
-            (q) => q.id === streamPreference.quality,
-          );
-          if (matchingQuality) {
-            setSelectedQuality(matchingQuality);
-          }
+        if (matchingQuality) {
+          setSelectedQuality(matchingQuality);
         }
       }
     }
