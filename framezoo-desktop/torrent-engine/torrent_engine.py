@@ -91,12 +91,27 @@ class TorrentRecord:
             if info is None:
                 return
             priorities = [0] * info.files().num_files()
+            has_wanted_files = False
             with self.lock:
                 for session_id in self.session_ids:
                     runtime = self.engine.sessions.get(session_id)
                     if runtime is not None and runtime.file_index is not None:
                         priorities[runtime.file_index] = constants.STREAM_IDLE_FILE_PRIORITY
+                        has_wanted_files = True
             self.handle.prioritize_files(priorities)
+            
+            is_finished = False
+            try:
+                is_finished = status.state.name == "finished"
+            except Exception:
+                is_finished = str(status.state) == "finished"
+                
+            if has_wanted_files and (is_finished or getattr(status, "num_peers", 0) == 0):
+                try:
+                    self.handle.pause()
+                    self.handle.resume()
+                except Exception:
+                    pass
         except Exception:
             pass
 
