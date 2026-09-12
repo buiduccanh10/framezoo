@@ -4,7 +4,7 @@ WORKDIR /app
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 
-RUN corepack enable && apk add --no-cache curl \
+RUN corepack enable && apk add --no-cache curl postgresql-client \
     && corepack prepare pnpm@12.3.4 --activate
 
 COPY framezoo-be/package.json ./framezoo-be/package.json

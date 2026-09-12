@@ -34,6 +34,8 @@ export default defineNitroConfig({
     '0 0 * * 0': ['jobs:clear-metrics:weekly'],
     // Monthly cron jobs (1st of month at midnight)
     '0 0 1 * *': ['jobs:clear-metrics:monthly'],
+    // Daily backup at 3 AM
+    '0 3 * * *': ['backup:daily'],
   },
   storage: {
     cache: createRedisStorage('redis'),
@@ -43,6 +45,8 @@ export default defineNitroConfig({
   },
 
   runtimeConfig: {
+    supabaseUrl: process.env.SUPABASE_URL,
+    supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY,
     public: {
       meta: {
         name: process.env.META_NAME || '',
