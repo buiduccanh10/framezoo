@@ -13,14 +13,17 @@ const isPublicApiRequest = (path: string, method: string) => {
 const isGuestAuthRequest = (path: string, method: string) => {
   return (
     method === 'POST' &&
-    (path === '/api/auth/guest' ||
-      path === '/api/auth/session/guest' ||
-      path === '/auth/guest')
+    (path === '/api/auth/guest' || path === '/api/auth/session/guest' || path === '/auth/guest')
   );
 };
 
 export default defineEventHandler(async event => {
   const path = event.path.split('?')[0] || '';
+
+  // Bypass admin backup routes (they handle their own auth)
+  if (path.startsWith('/api/backup')) {
+    return;
+  }
 
   // Manifest is public
   if (path === '/addon/subtitles/manifest.json') {
@@ -48,9 +51,7 @@ export default defineEventHandler(async event => {
 
   const auth = useAuth();
   const authHeader = getRequestHeader(event, 'authorization');
-  const bearerToken = authHeader?.startsWith('Bearer ')
-    ? authHeader.slice(7).trim()
-    : null;
+  const bearerToken = authHeader?.startsWith('Bearer ') ? authHeader.slice(7).trim() : null;
 
   // 1. Check if it's a valid guest token
   if (bearerToken) {
@@ -86,4 +87,3 @@ export default defineEventHandler(async event => {
     throw err;
   }
 });
-

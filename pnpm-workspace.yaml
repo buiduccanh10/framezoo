@@ -3,6 +3,7 @@ packages:
   - framezoo-be
   - framezoo-desktop
   - framezoo-mobile
+  - framezoo-admin
 
 shamefullyHoist: true
 strictPeerDependencies: false
