@@ -672,7 +672,19 @@ function registerHeaderInterceptors() {
     let nextHeaders = { ...details.requestHeaders };
 
     try {
-      const hostname = new URL(details.url).hostname.toLowerCase();
+      const url = new URL(details.url);
+      const hostname = url.hostname.toLowerCase();
+
+      // Inject Referer and Origin for YouTube iframe API to fix Error 153
+      if (
+        hostname === "www.youtube.com" ||
+        hostname === "youtube.com" ||
+        hostname === "youtube-nocookie.com"
+      ) {
+        nextHeaders["Referer"] = "https://www.youtube.com/";
+        nextHeaders["Origin"] = "https://www.youtube.com";
+      }
+
       for (const rule of streamRules.values()) {
         if (!matchesRule(hostname, rule.targetDomains)) continue;
         nextHeaders = {
