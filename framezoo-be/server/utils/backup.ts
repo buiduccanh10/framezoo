@@ -276,15 +276,19 @@ export const useBackup = () => {
       }
       fs.mkdirSync(tempDir, { recursive: true });
 
-      const uploadedFilePath = path.join(tempDir, filename);
+      // Use a safe internal filename to prevent command injection
+      const ext = filename.endsWith('.tar.gz') ? '.tar.gz' : '.sql';
+      const safeFilename = `upload${ext}`;
+      const uploadedFilePath = path.join(tempDir, safeFilename);
+
       fs.writeFileSync(uploadedFilePath, buffer);
       console.log(`Saved uploaded file to: ${uploadedFilePath}`);
 
       let backupFilePath = uploadedFilePath;
 
       // If it's a tar.gz, extract it
-      if (filename.endsWith('.tar.gz')) {
-        const extractCmd = `cd ${tempDir} && tar -xzf ${filename}`;
+      if (ext === '.tar.gz') {
+        const extractCmd = `cd ${tempDir} && tar -xzf ${safeFilename}`;
         console.log(`Extracting backup: ${extractCmd}`);
         await execAsync(extractCmd);
 
@@ -294,7 +298,10 @@ export const useBackup = () => {
         if (!extractedFile) {
           return { success: false, error: 'No .sql file found in archive' };
         }
-        backupFilePath = path.join(tempDir, extractedFile);
+
+        const originalExtractedPath = path.join(tempDir, extractedFile);
+        backupFilePath = path.join(tempDir, 'safe_restore.sql');
+        fs.renameSync(originalExtractedPath, backupFilePath);
       }
 
       console.log(`Restoring database from: ${backupFilePath}`);

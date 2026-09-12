@@ -149,6 +149,25 @@ services:
       - betakiot_proxy_network
     restart: always
 
+  framezoo-admin:
+    build:
+      context: .
+      dockerfile: framezoo-admin/Dockerfile
+    hostname: framezoo-admin
+    environment:
+      - VIRTUAL_HOST=admin.framezoo.top
+      - VIRTUAL_PORT=80
+      - VIRTUAL_PROTO=http
+      - ACME_HOST=admin.framezoo.top
+      - ACME_EMAIL=buiduccanh10@gmail.com
+    depends_on:
+      framezoo-be:
+        condition: service_started
+    networks:
+      - framezoo-prod-network
+      - betakiot_proxy_network
+    restart: always
+
 networks:
   framezoo-prod-network:
     driver: bridge

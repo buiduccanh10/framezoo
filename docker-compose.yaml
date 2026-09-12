@@ -131,6 +131,19 @@ services:
     networks:
       - framezoo-network
 
+  framezoo-admin:
+    build:
+      context: .
+      dockerfile: framezoo-admin/Dockerfile
+    ports:
+      - "5175:80"
+    depends_on:
+      framezoo-be:
+        condition: service_started
+    restart: unless-stopped
+    networks:
+      - framezoo-network
+
 networks:
   framezoo-network:
     driver: bridge

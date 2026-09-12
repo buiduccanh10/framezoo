@@ -15,6 +15,9 @@ export default defineEventHandler(async event => {
     });
   }
 
+  // Basic brute-force protection: constant delay of 1s
+  await new Promise(resolve => setTimeout(resolve, 1000));
+
   if (username !== envUser || password !== envPass) {
     throw createError({
       statusCode: 401,
