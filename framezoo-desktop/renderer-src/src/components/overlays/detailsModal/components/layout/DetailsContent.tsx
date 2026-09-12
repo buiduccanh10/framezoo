@@ -849,7 +849,9 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
                   playbackUrl = videoKey;
                 } else {
                   // TMDB trailer needs to be converted to YouTube embed URL
-                  playbackUrl = `https://www.youtube.com/embed/${videoKey}?autoplay=1&rel=0`;
+                  playbackUrl = `https://www.youtube.com/embed/${videoKey}?autoplay=1&rel=0&origin=${encodeURIComponent(
+                    window.location.origin,
+                  )}`;
                 }
                 setTrailerUrl(playbackUrl);
                 setShowTrailer(true);

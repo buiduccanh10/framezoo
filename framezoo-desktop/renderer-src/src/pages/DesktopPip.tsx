@@ -21,6 +21,7 @@ import {
   DesktopPipState,
   setPersistedDesktopPipWindowSize,
 } from "@/desktop/pip";
+import { useBannerStore } from "@/stores/banner";
 import { playerStatus } from "@/stores/player/slices/source";
 import { durationExceedsHour, formatSeconds } from "@/utils/formatSeconds";
 
@@ -279,6 +280,14 @@ function PipTextActionButton(props: {
 
 export default function DesktopPipPage() {
   const { t } = useTranslation();
+  const setBannerLocation = useBannerStore((s) => s.setLocation);
+
+  // Set banner location to 'pip' to prevent the global Layout banners (which use location=null) from showing in the PiP window.
+  useEffect(() => {
+    setBannerLocation("pip");
+    return () => setBannerLocation(null);
+  }, [setBannerLocation]);
+
   const [pipState, setPipState] = useState<DesktopPipState | null>(null);
   const [pipReady, setPipReady] = useState(false);
   const [error, setError] = useState<string | null>(null);

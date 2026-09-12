@@ -3,11 +3,11 @@ import { describe, expect, it } from "vitest";
 import { getTorrentPreloadedProgress } from "./torrentProgress";
 
 describe("torrent preload progress", () => {
-  it("uses torrent download progress when it is ahead of playback buffering", () => {
-    expect(getTorrentPreloadedProgress(20, 100, 70)).toBe(0.7);
+  it("ignores overall torrent progress to avoid confusing users with non-sequential buffer representations", () => {
+    expect(getTorrentPreloadedProgress(20, 100, 70)).toBe(0.2);
   });
 
-  it("keeps the browser buffered progress when it is ahead of torrent progress", () => {
+  it("always uses the browser buffered progress", () => {
     expect(getTorrentPreloadedProgress(30, 100, 10)).toBe(0.3);
   });
 

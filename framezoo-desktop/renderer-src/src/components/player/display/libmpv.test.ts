@@ -1731,5 +1731,4 @@ describe("libmpv display", () => {
     expect(exitFullscreen).toHaveBeenCalledTimes(1);
     display.destroy();
   });
-
-  });
+});

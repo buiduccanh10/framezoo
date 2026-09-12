@@ -1,7 +1,7 @@
 export function getTorrentPreloadedProgress(
   bufferedSeconds: number,
   durationSeconds: number,
-  torrentProgressPercent: number,
+  _torrentProgressPercent: number,
 ) {
   if (!Number.isFinite(durationSeconds) || durationSeconds <= 0) return 0;
 
@@ -9,10 +9,10 @@ export function getTorrentPreloadedProgress(
     Number.isFinite(bufferedSeconds) && bufferedSeconds > 0
       ? bufferedSeconds / durationSeconds
       : 0;
-  const torrentProgress =
-    Number.isFinite(torrentProgressPercent) && torrentProgressPercent > 0
-      ? torrentProgressPercent / 100
-      : 0;
 
-  return Math.min(1, Math.max(0, bufferedProgress, torrentProgress));
+  // We intentionally ignore torrentProgressPercent here because showing overall
+  // torrent download percentage on the media progress bar implies to the user
+  // that the video is sequentially buffered and seekable instantly, which is false
+  // for out-of-order torrent downloads.
+  return Math.min(1, Math.max(0, bufferedProgress));
 }
