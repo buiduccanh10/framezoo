@@ -339,7 +339,7 @@ function App() {
                 Restore Database
                 <input
                   type="file"
-                  accept=".tar.gz,.sql"
+                  accept=".tar.gz,.gz,application/gzip,application/x-gzip,.sql,text/plain,application/sql"
                   className="hidden"
                   onChange={handleFileUpload}
                   disabled={actionLoading}
