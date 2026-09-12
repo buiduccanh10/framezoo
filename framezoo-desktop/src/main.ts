@@ -675,16 +675,6 @@ function registerHeaderInterceptors() {
       const url = new URL(details.url);
       const hostname = url.hostname.toLowerCase();
 
-      // Inject Referer and Origin for YouTube iframe API to fix Error 153
-      if (
-        hostname === "www.youtube.com" ||
-        hostname === "youtube.com" ||
-        hostname === "youtube-nocookie.com"
-      ) {
-        nextHeaders["Referer"] = "https://www.youtube.com/";
-        nextHeaders["Origin"] = "https://www.youtube.com";
-      }
-
       for (const rule of streamRules.values()) {
         if (!matchesRule(hostname, rule.targetDomains)) continue;
         nextHeaders = {
@@ -2118,6 +2108,13 @@ if (!hasSingleInstanceLock) {
   });
 
   app.whenReady().then(() => {
+    // Strip Electron and App name from User-Agent to prevent YouTube Error 152
+    const currentUserAgent = session.defaultSession.getUserAgent();
+    app.userAgentFallback = currentUserAgent
+      .replace(/Electron\/\S+\s*/gi, "")
+      .replace(/Framezoo\/\S+\s*/gi, "")
+      .trim();
+    session.defaultSession.setUserAgent(app.userAgentFallback);
     registerRendererProtocol();
     registerIpcHandlers();
     registerHeaderInterceptors();

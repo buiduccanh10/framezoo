@@ -5,7 +5,7 @@ import { TrailerOverlayProps } from "../../types";
 export function TrailerOverlay({ trailerUrl, onClose }: TrailerOverlayProps) {
   return (
     <div
-      className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center transition-opacity duration-300"
+      className="fixed inset-0 bg-black/90 backdrop-blur-sm z-100 flex items-center justify-center transition-opacity duration-300"
       onClick={onClose}
     >
       <div
@@ -29,16 +29,16 @@ export function TrailerOverlay({ trailerUrl, onClose }: TrailerOverlayProps) {
             <source src={trailerUrl} type="video/mp4" />
           </video>
         )}
-
-        {/* Close Button */}
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute top-4 right-4 p-2 bg-black/50 hover:bg-black/70 rounded-full transition-colors"
-        >
-          <Icon icon={Icons.X} className="text-white" />
-        </button>
       </div>
+
+      {/* Close Button */}
+      <button
+        type="button"
+        onClick={onClose}
+        className="absolute top-6 right-6 p-3 bg-black/50 hover:bg-black/70 rounded-full transition-colors z-50"
+      >
+        <Icon icon={Icons.X} className="text-white text-xl" />
+      </button>
     </div>
   );
 }
