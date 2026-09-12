@@ -274,7 +274,8 @@ function YouTubeTrailer({
             playlist: videoId,
             rel: 0,
             vq: "hd2160",
-            origin: window.location.origin,
+            origin: "https://framezoo.com",
+            widget_referrer: "https://framezoo.com",
           },
           events: {
             onReady: ({ target }) => {
