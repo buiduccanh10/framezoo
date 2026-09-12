@@ -45,8 +45,6 @@ export default defineNitroConfig({
   },
 
   runtimeConfig: {
-    supabaseUrl: process.env.SUPABASE_URL,
-    supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY,
     public: {
       meta: {
         name: process.env.META_NAME || '',

@@ -7,9 +7,8 @@ export const useSupabase = () => {
     return supabaseClient;
   }
 
-  const config = useRuntimeConfig();
-  const url = config.supabaseUrl;
-  const key = config.supabaseServiceRoleKey;
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!url || !key) {
     return null;

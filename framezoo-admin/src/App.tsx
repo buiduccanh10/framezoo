@@ -200,7 +200,7 @@ function App() {
 
   if (!token) {
     return (
-      <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-[#0b0b0f]">
+      <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-[background]">
         <div className="absolute inset-0 z-0 opacity-20">
           <div className="absolute -top-40 -left-40 w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
           <div className="absolute top-0 -right-40 w-96 h-96 bg-blue-600 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
@@ -209,7 +209,7 @@ function App() {
 
         <div className="z-10 bg-white/5 backdrop-blur-xl p-8 rounded-2xl shadow-2xl border border-white/10 w-full max-w-md">
           <div className="text-center mb-8">
-            <Database className="w-12 h-12 text-blue-400 mx-auto mb-4" />
+            <img src="/framezoo-logo.svg" alt="Framezoo Logo" className="w-16 h-16 mx-auto mb-4" />
             <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
               Framezoo Admin
             </h1>
@@ -260,12 +260,12 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0b0b0f] text-gray-100 p-4 md:p-8">
+    <div className="min-h-screen bg-[background] text-gray-100 p-4 md:p-8">
       {/* Header */}
       <header className="max-w-6xl mx-auto flex items-center justify-between mb-12">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg">
-            <Database className="w-5 h-5 text-white" />
+          <div className="w-10 h-10 flex items-center justify-center">
+            <img src="/framezoo-logo.svg" alt="Framezoo Logo" className="w-8 h-8" />
           </div>
           <div>
             <h1 className="text-2xl font-bold tracking-tight">

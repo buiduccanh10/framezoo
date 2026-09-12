@@ -5,7 +5,14 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['"Avenir Next"', '"Helvetica Neue"', '"Segoe UI"', 'sans-serif'],
+      },
+      colors: {
+        background: '#090b0d',
+      }
+    },
   },
   plugins: [],
 }
