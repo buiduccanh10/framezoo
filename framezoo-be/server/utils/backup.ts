@@ -34,7 +34,17 @@ export const useBackup = () => {
   const setIsRunning = (val: boolean) => ((global as any).__backupRunning = val);
 
   const getDatabaseUrl = () => {
-    return process.env.DATABASE_URL_DOCKER || process.env.DATABASE_URL;
+    let url = process.env.DATABASE_URL_DOCKER || process.env.DATABASE_URL;
+    if (url) {
+      try {
+        const parsed = new URL(url);
+        parsed.searchParams.delete('schema');
+        url = parsed.toString();
+      } catch (e) {
+        url = url.split('?')[0];
+      }
+    }
+    return url;
   };
 
   const getStorage = () => {

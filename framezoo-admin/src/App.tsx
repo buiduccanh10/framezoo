@@ -200,7 +200,7 @@ function App() {
 
   if (!token) {
     return (
-      <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-[background]">
+      <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-background">
         <div className="absolute inset-0 z-0 opacity-20">
           <div className="absolute -top-40 -left-40 w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
           <div className="absolute top-0 -right-40 w-96 h-96 bg-blue-600 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
@@ -260,7 +260,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[background] text-gray-100 p-4 md:p-8">
+    <div className="min-h-screen bg-background text-gray-100 p-4 md:p-8">
       {/* Header */}
       <header className="max-w-6xl mx-auto flex items-center justify-between mb-12">
         <div className="flex items-center gap-3">
