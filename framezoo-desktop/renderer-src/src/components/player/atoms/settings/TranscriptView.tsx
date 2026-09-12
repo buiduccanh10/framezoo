@@ -9,7 +9,6 @@ import { FlagIcon } from "@/components/FlagIcon";
 import { Icon, Icons } from "@/components/Icon";
 import { Modal, ModalCard, useModal } from "@/components/overlays/Modal";
 import { useCaptions } from "@/components/player/hooks/useCaptions";
-import { usePlaybackClock } from "@/components/player/hooks/usePlaybackClock";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { Input } from "@/components/player/internals/ContextMenu/Input";
 import {
@@ -53,7 +52,7 @@ export function TranscriptView({
   const setPrimaryDelay = useSubtitleStore((s) => s.setPrimaryDelay);
   const setSecondaryDelay = useSubtitleStore((s) => s.setSecondaryDelay);
   const timeDuration = usePlayerStore((s) => s.progress.duration);
-  const time = usePlaybackClock();
+  const time = usePlayerStore((s) => s.progress.time);
   const activeCaption =
     selectionMode === "secondary" ? secondaryCaption : primaryCaption;
   const delay = selectionMode === "secondary" ? secondaryDelay : primaryDelay;

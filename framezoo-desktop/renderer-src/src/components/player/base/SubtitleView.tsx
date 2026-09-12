@@ -257,15 +257,21 @@ export function SubtitleRenderer(props?: {
     [vttData],
   );
 
-  const visibleCaptions = useMemo(
-    () =>
-      parsedCaptions.flatMap((cue, sourceIndex) =>
-        captionIsVisible(cue.start, cue.end, delay, videoTime)
-          ? [{ cue, sourceIndex }]
-          : [],
-      ),
-    [parsedCaptions, videoTime, delay],
-  );
+  const visibleCaptions = useMemo(() => {
+    const results: VisibleCaptionCue[] = [];
+    if (parsedCaptions.length === 0) return results;
+
+    const targetTimeMs = (videoTime - delay) * 1000;
+    for (let i = 0; i < parsedCaptions.length; i++) {
+      const cue = parsedCaptions[i];
+      if (cue.start > targetTimeMs) break;
+
+      if (captionIsVisible(cue.start, cue.end, delay, videoTime)) {
+        results.push({ cue, sourceIndex: i });
+      }
+    }
+    return results;
+  }, [parsedCaptions, videoTime, delay]);
 
   const captionsToRender = useSeekFrozenCaptions<VisibleCaptionCue>(
     visibleCaptions,
@@ -306,15 +312,21 @@ export function SecondarySubtitleRenderer(props?: {
     [vttData],
   );
 
-  const visibleCaptions = useMemo(
-    () =>
-      parsedCaptions.flatMap((cue, sourceIndex) =>
-        captionIsVisible(cue.start, cue.end, delay, videoTime)
-          ? [{ cue, sourceIndex }]
-          : [],
-      ),
-    [parsedCaptions, videoTime, delay],
-  );
+  const visibleCaptions = useMemo(() => {
+    const results: VisibleCaptionCue[] = [];
+    if (parsedCaptions.length === 0) return results;
+
+    const targetTimeMs = (videoTime - delay) * 1000;
+    for (let i = 0; i < parsedCaptions.length; i++) {
+      const cue = parsedCaptions[i];
+      if (cue.start > targetTimeMs) break;
+
+      if (captionIsVisible(cue.start, cue.end, delay, videoTime)) {
+        results.push({ cue, sourceIndex: i });
+      }
+    }
+    return results;
+  }, [parsedCaptions, videoTime, delay]);
 
   const captionsToRender = useSeekFrozenCaptions<VisibleCaptionCue>(
     visibleCaptions,

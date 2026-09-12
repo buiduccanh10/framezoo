@@ -987,7 +987,7 @@ export function SourceSelectPart(props: {
   // Prevent flashing the streams menu during initial auto-selection
   if (!autoSelectionResolved && mode === "initial") {
     return (
-      <div className="pointer-events-none relative h-full w-full overflow-hidden bg-black">
+      <div className="pointer-events-none relative z-0 h-full w-full overflow-hidden bg-black">
         {showBackdrop ? (
           <>
             {backgroundImage ? (
@@ -1009,7 +1009,7 @@ export function SourceSelectPart(props: {
   }
 
   return (
-    <div className="pointer-events-none relative h-full w-full overflow-hidden bg-black">
+    <div className="pointer-events-none relative z-0 h-full w-full overflow-hidden bg-black">
       {showBackdrop ? (
         <>
           {backgroundImage ? (
@@ -1027,7 +1027,7 @@ export function SourceSelectPart(props: {
         </>
       ) : null}
       <div className="pointer-events-auto relative flex h-full w-full items-center justify-center px-6 py-8">
-        <div className="h-[min(58vh,42rem)] w-full max-w-2xl overflow-hidden rounded-2xl bg-video-context-background text-video-context-type-main">
+        <div className="h-[min(58vh,42rem)] w-full max-w-2xl overflow-hidden rounded-2xl text-video-context-type-main">
           {content}
         </div>
       </div>
