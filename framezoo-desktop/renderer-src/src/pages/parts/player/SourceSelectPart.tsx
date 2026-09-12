@@ -618,22 +618,26 @@ export function SourceSelectPart(props: {
     );
     const preferredQuery =
       preferredAddonIndex >= 0 ? addonStreamQueries[preferredAddonIndex] : null;
-    if (preferredQuery && !preferredQuery.isLoading) {
-      hasAttemptedAutoSelect.current = true;
-      setAutoSelectionResolved(true);
-      // Fallback: pre-select the preferred addon to show in the UI.
-      if (!selectedAddonId && streamPreference.addonId) {
-        const isAddonEnabled = enabledAddons.some(
-          (a) => a.manifest.id === streamPreference.addonId,
+
+    if (preferredQuery?.isLoading) {
+      return;
+    }
+
+    hasAttemptedAutoSelect.current = true;
+    setAutoSelectionResolved(true);
+
+    // Fallback: pre-select the preferred addon to show in the UI.
+    if (preferredQuery && !selectedAddonId && streamPreference.addonId) {
+      const isAddonEnabled = enabledAddons.some(
+        (a) => a.manifest.id === streamPreference.addonId,
+      );
+      if (isAddonEnabled) {
+        setSelectedAddonId(streamPreference.addonId);
+        const matchingQuality = qualityOptions.find(
+          (q) => q.id === streamPreference.quality,
         );
-        if (isAddonEnabled) {
-          setSelectedAddonId(streamPreference.addonId);
-          const matchingQuality = qualityOptions.find(
-            (q) => q.id === streamPreference.quality,
-          );
-          if (matchingQuality) {
-            setSelectedQuality(matchingQuality);
-          }
+        if (matchingQuality) {
+          setSelectedQuality(matchingQuality);
         }
       }
     }
@@ -987,7 +991,7 @@ export function SourceSelectPart(props: {
   // Prevent flashing the streams menu during initial auto-selection
   if (!autoSelectionResolved && mode === "initial") {
     return (
-      <div className="pointer-events-none relative h-full w-full overflow-hidden bg-black">
+      <div className="pointer-events-none relative z-0 h-full w-full overflow-hidden bg-black">
         {showBackdrop ? (
           <>
             {backgroundImage ? (
@@ -1009,7 +1013,7 @@ export function SourceSelectPart(props: {
   }
 
   return (
-    <div className="pointer-events-none relative h-full w-full overflow-hidden bg-black">
+    <div className="pointer-events-none relative z-0 h-full w-full overflow-hidden bg-black">
       {showBackdrop ? (
         <>
           {backgroundImage ? (
@@ -1027,7 +1031,7 @@ export function SourceSelectPart(props: {
         </>
       ) : null}
       <div className="pointer-events-auto relative flex h-full w-full items-center justify-center px-6 py-8">
-        <div className="h-[min(58vh,42rem)] w-full max-w-2xl overflow-hidden rounded-2xl bg-video-context-background text-video-context-type-main">
+        <div className="h-[min(58vh,42rem)] w-full max-w-2xl overflow-hidden rounded-2xl text-video-context-type-main">
           {content}
         </div>
       </div>

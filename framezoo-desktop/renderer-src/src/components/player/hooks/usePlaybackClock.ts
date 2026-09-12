@@ -89,7 +89,10 @@ export function useSmoothPlaybackClock({
       Math.min(duration > 0 ? duration : Number.POSITIVE_INFINITY, time),
     );
     const previousTime = clockTimeRef.current;
-    const delta = clampedTime - previousTime;
+    
+    // Calculate delta against the last known authoritative time (anchor),
+    // NOT the extrapolated previousTime, to avoid spurious backward jumps.
+    const delta = clampedTime - anchorRef.current.time;
 
     const isDiscontinuity =
       isSeeking ||
@@ -111,11 +114,9 @@ export function useSmoothPlaybackClock({
         timestamp: isActive ? now : 0,
       };
       // Only force a visual clock update if the real time is AHEAD of the extrapolated clock.
-      // If the real time is slightly behind (because we extrapolated a bit too fast),
-      // Math.max in the tick loop will gracefully pause the visual clock for a few ms
-      // until the real time catches up, avoiding micro-stutters backward.
-      // However, if it's behind by more than 100ms, we must snap back to avoid noticeable desync.
-      if (clampedTime > previousTime || previousTime - clampedTime > 0.1) {
+      // If the real time is behind, the tick loop will gracefully pause the visual clock
+      // until the real time catches up, completely avoiding backward micro-stutters.
+      if (clampedTime > previousTime) {
         clockTimeRef.current = clampedTime;
         setClockTime(clampedTime);
       }
@@ -157,7 +158,8 @@ export function useSmoothPlaybackClock({
       );
       const next = Math.max(clockTimeRef.current, projected);
 
-      if (next !== clockTimeRef.current) {
+      // Throttle React state updates to ~30fps to save CPU (0.033s delta)
+      if (Math.abs(next - clockTimeRef.current) >= 0.033) {
         clockTimeRef.current = next;
         setClockTime(next);
       }

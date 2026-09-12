@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 
-import { usePlaybackClock } from "@/components/player/hooks/usePlaybackClock";
+
 import { VideoPlayerButton } from "@/components/player/internals/Button";
 import { VideoPlayerTimeFormat } from "@/stores/player/slices/interface";
 import { usePlayerStore } from "@/stores/player/store";
@@ -15,7 +15,7 @@ export function Time(props: { short?: boolean }) {
   const timeDuration = usePlayerStore((s) => s.progress.duration);
   const draggingTime = usePlayerStore((s) => s.progress.draggingTime);
   const isSeeking = usePlayerStore((s) => s.interface.isSeeking);
-  const clockTime = usePlaybackClock();
+  const clockTime = usePlayerStore((s) => s.progress.time);
   const { t } = useTranslation();
   const hasHours = durationExceedsHour(timeDuration);
 
