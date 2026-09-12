@@ -1,6 +1,5 @@
 import { useTranslation } from "react-i18next";
 
-
 import { VideoPlayerButton } from "@/components/player/internals/Button";
 import { VideoPlayerTimeFormat } from "@/stores/player/slices/interface";
 import { usePlayerStore } from "@/stores/player/store";

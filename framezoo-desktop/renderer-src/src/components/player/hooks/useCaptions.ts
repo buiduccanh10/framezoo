@@ -363,7 +363,8 @@ export function useCaptions() {
             setCaption({
               ...currentCaption,
               vttData: newVttData,
-              alignmentBaseVttData: currentCaption.alignmentBaseVttData ?? currentCaption.vttData,
+              alignmentBaseVttData:
+                currentCaption.alignmentBaseVttData ?? currentCaption.vttData,
               alignment,
               isPendingSyncConfirmation: true,
             });
@@ -372,7 +373,8 @@ export function useCaptions() {
             setSecondaryCaption({
               ...currentCaption,
               vttData: newVttData,
-              alignmentBaseVttData: currentCaption.alignmentBaseVttData ?? currentCaption.vttData,
+              alignmentBaseVttData:
+                currentCaption.alignmentBaseVttData ?? currentCaption.vttData,
               alignment,
               isPendingSyncConfirmation: true,
             });
@@ -696,7 +698,10 @@ export function useCaptions() {
             const alignment = JSON.parse(savedSync);
             captionToSet.alignment = alignment;
             captionToSet.alignmentBaseVttData = captionToSet.vttData;
-            captionToSet.vttData = applySubtitleAlignment(captionToSet.alignmentBaseVttData, alignment as any);
+            captionToSet.vttData = applySubtitleAlignment(
+              captionToSet.alignmentBaseVttData,
+              alignment as any,
+            );
             // Delay will be restored after setDirectCaption
           } catch (e) {
             console.warn("Failed to parse saved subtitle sync", e);
@@ -770,7 +775,10 @@ export function useCaptions() {
               const alignment = JSON.parse(savedSync);
               captionToSet.alignment = alignment;
               captionToSet.alignmentBaseVttData = captionToSet.vttData;
-              captionToSet.vttData = applySubtitleAlignment(captionToSet.alignmentBaseVttData, alignment as any);
+              captionToSet.vttData = applySubtitleAlignment(
+                captionToSet.alignmentBaseVttData,
+                alignment as any,
+              );
             } catch (e) {
               console.warn("Failed to parse saved subtitle sync", e);
             }

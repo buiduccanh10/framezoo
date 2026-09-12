@@ -89,7 +89,7 @@ export function useSmoothPlaybackClock({
       Math.min(duration > 0 ? duration : Number.POSITIVE_INFINITY, time),
     );
     const previousTime = clockTimeRef.current;
-    
+
     // Calculate delta against the last known authoritative time (anchor),
     // NOT the extrapolated previousTime, to avoid spurious backward jumps.
     const delta = clampedTime - anchorRef.current.time;

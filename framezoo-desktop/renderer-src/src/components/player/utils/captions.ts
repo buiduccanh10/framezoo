@@ -376,7 +376,7 @@ export function shiftVttPiecewiseTimestamps(
       if (!Number.isFinite(start) || !Number.isFinite(end)) return block;
 
       let appliedOffsetMs = fallbackOffsetMs;
-      
+
       let insideSegment = false;
       for (const seg of sortedSegments) {
         if (start >= seg.startMs && start < seg.endMs) {
