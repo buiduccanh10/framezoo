@@ -16,8 +16,8 @@ export interface PlaybackClockAnchor {
 }
 
 export const MAX_EXTRAPOLATION_SECONDS = 10.0;
-export const SEEK_DISCONTINUITY_BACKWARD_THRESHOLD = 2.5;
-export const SEEK_DISCONTINUITY_FORWARD_THRESHOLD = 2.5;
+export const SEEK_DISCONTINUITY_BACKWARD_THRESHOLD = 0.5;
+export const SEEK_DISCONTINUITY_FORWARD_THRESHOLD = 0.5;
 
 export function getProjectedPlaybackTime(
   anchor: PlaybackClockAnchor,
@@ -114,7 +114,8 @@ export function useSmoothPlaybackClock({
       // If the real time is slightly behind (because we extrapolated a bit too fast),
       // Math.max in the tick loop will gracefully pause the visual clock for a few ms
       // until the real time catches up, avoiding micro-stutters backward.
-      if (clampedTime > previousTime) {
+      // However, if it's behind by more than 100ms, we must snap back to avoid noticeable desync.
+      if (clampedTime > previousTime || previousTime - clampedTime > 0.1) {
         clockTimeRef.current = clampedTime;
         setClockTime(clampedTime);
       }
