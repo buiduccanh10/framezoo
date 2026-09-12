@@ -675,15 +675,15 @@ function registerHeaderInterceptors() {
       const url = new URL(details.url);
       const hostname = url.hostname.toLowerCase();
 
-      // Inject Referer and Origin for YouTube iframe API to fix Error 153 in app:// protocol
+      // Inject Referer for YouTube iframe API to fix Error 153 in app:// protocol
       // Do NOT use youtube.com as it triggers Error 152. Use a standard domain like framezoo.com
+      // Do NOT spoof Origin, as forcing Origin on GET requests causes YouTube to return a blank black screen!
       if (
         hostname === "www.youtube.com" ||
         hostname === "youtube.com" ||
         hostname === "youtube-nocookie.com"
       ) {
         nextHeaders["Referer"] = "https://framezoo.com/";
-        nextHeaders["Origin"] = "https://framezoo.com";
       }
 
       for (const rule of streamRules.values()) {
