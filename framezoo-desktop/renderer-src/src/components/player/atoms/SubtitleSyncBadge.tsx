@@ -33,8 +33,13 @@ export function SubtitleSyncBadge(props: {
   const storageKey = `subtitle-sync:${meta.tmdbId || "unknown"}:${source.id || "unknown"}:${caption.id}`;
 
   const handleConfirm = () => {
-    localStorage.setItem(storageKey, JSON.stringify(alignment));
-    setCaption({ ...caption, isPendingSyncConfirmation: false });
+    const finalAlignment = { ...alignment, aligned: true };
+    localStorage.setItem(storageKey, JSON.stringify(finalAlignment));
+    setCaption({
+      ...caption,
+      alignment: finalAlignment,
+      isPendingSyncConfirmation: false,
+    });
   };
 
   const handleReject = () => {
