@@ -505,8 +505,11 @@ class LibtorrentEngine:
         if runtime is None:
             return
         runtime.stop(remove_torrent=False)
-        if record is not None and record.remove_session(session_id):
-            self._schedule_record_removal(record.key)
+        if record is not None:
+            is_empty = record.remove_session(session_id)
+            record.update_file_priorities()
+            if is_empty:
+                self._schedule_record_removal(record.key)
 
     def get_discovery_status(self, record: Any) -> dict[str, Any]:
         snapshot = record.snapshot() if record is not None else {}

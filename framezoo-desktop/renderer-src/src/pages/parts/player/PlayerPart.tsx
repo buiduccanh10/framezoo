@@ -162,6 +162,9 @@ export function PlayerPart(props: PlayerPartProps) {
           ? (nextAction.season ?? currentMeta.season)
           : currentMeta.season,
       };
+      if (nextAction.episodes) {
+        nextMeta.episodes = nextAction.episodes;
+      }
       setShouldStartFromBeginning(true);
       setDirectMeta(nextMeta);
       onMetaChange?.(nextMeta);
