@@ -321,7 +321,7 @@ export function normalizeAddonStreams(
 
     return [
       {
-        id: `${addon.manifest.id}:${index}:${stream.infoHash ?? url}`,
+        id: `${addon.manifest.id}:${stream.infoHash ?? url}:${stream.fileIdx ?? 0}`,
         addonId: addon.manifest.id,
         addonName: addon.manifest.name,
         kind,
