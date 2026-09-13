@@ -353,6 +353,7 @@ export function useCaptions() {
         } of applicableTargets) {
           if (!result || !currentCaption) continue;
           const alignment = {
+            aligned: true,
             offsetMs: result.offsetMs,
             ...(result.segments ? { segments: result.segments } : {}),
           };
@@ -695,7 +696,7 @@ export function useCaptions() {
         const savedSync = localStorage.getItem(storageKey);
         if (savedSync) {
           try {
-            const alignment = JSON.parse(savedSync);
+            const alignment = { ...JSON.parse(savedSync), aligned: true };
             captionToSet.alignment = alignment;
             captionToSet.alignmentBaseVttData = captionToSet.vttData;
             captionToSet.vttData = applySubtitleAlignment(
