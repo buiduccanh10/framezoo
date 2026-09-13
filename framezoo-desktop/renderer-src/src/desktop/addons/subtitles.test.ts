@@ -73,7 +73,7 @@ describe("addon subtitles", () => {
 
     const normalized = normalizeAddonSubtitle(addon, raw, 0);
     expect(normalized).toEqual({
-      id: "addon:com.example.subs:0:https://example.com/sub.vtt",
+      id: "addon:com.example.subs:vi:https://example.com/sub.vtt",
       language: "vi",
       url: "https://example.com/sub.vtt",
       type: "vtt",

@@ -44,7 +44,7 @@ export function normalizeAddonSubtitle(
 
   const language = (sub.lang ?? sub.language ?? "unknown").trim();
   const display = sub.label?.trim() || undefined;
-  const id = `addon:${addon.manifest.id}:${index}:${url}`;
+  const id = `addon:${addon.manifest.id}:${language}:${url}`;
 
   return {
     id,
