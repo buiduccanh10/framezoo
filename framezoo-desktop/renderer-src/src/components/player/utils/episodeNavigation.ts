@@ -14,6 +14,7 @@ export interface NextEpisodeAction {
   episode: PlayerMetaEpisode;
   season: NextEpisodeSeason | null;
   isSeasonChange: boolean;
+  episodes?: PlayerMetaEpisode[];
 }
 
 export function findNextEpisodeInSeason(
@@ -91,6 +92,7 @@ export async function resolveNextEpisodeAction(
         episode: nextEpisode,
         season: meta.season,
         isSeasonChange: false,
+        episodes: currentSeasonEpisodes,
       };
     }
   }
@@ -123,5 +125,6 @@ export async function resolveNextEpisodeAction(
       tmdbId: nextSeason.id,
     },
     isSeasonChange: true,
+    episodes: nextSeasonData.meta.seasonData.episodes.map(toPlayerMetaEpisode),
   };
 }

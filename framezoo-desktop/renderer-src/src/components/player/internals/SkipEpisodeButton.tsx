@@ -22,12 +22,19 @@ export function SkipEpisodeButton(props: SkipEpisodeButtonProps) {
     (s) => s.setShouldStartFromBeginning,
   );
   const updateItem = useProgressStore((s) => s.updateItem);
-  const nextEp = getNextEpisodeAction(meta)?.episode;
+  const nextEpAction = usePlayerStore((s) => s.interface.nextEpisodeAction);
+  const nextEp = nextEpAction?.episode;
 
   const loadNextEpisode = useCallback(() => {
-    if (!meta || !nextEp) return;
+    if (!meta || !nextEpAction || !nextEpAction.episode) return;
     const metaCopy = { ...meta };
-    metaCopy.episode = nextEp;
+    metaCopy.episode = nextEpAction.episode;
+    if (nextEpAction.isSeasonChange && nextEpAction.season) {
+      metaCopy.season = nextEpAction.season;
+    }
+    if (nextEpAction.episodes) {
+      metaCopy.episodes = nextEpAction.episodes;
+    }
     setShouldStartFromBeginning(true);
     setDirectMeta(metaCopy);
     props.onChange?.(metaCopy);
@@ -38,7 +45,7 @@ export function SkipEpisodeButton(props: SkipEpisodeButtonProps) {
     });
   }, [
     setDirectMeta,
-    nextEp,
+    nextEpAction,
     meta,
     props,
     setShouldStartFromBeginning,
