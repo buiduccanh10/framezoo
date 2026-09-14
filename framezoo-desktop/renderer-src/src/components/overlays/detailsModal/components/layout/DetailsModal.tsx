@@ -224,7 +224,7 @@ export function DetailsModal({
               backgroundClass="bg-modal-background duration-100"
               className="rounded-3xl bg-background-main group-hover:opacity-100 transition-opacity duration-300"
             />
-            <div className="absolute right-4 top-4 z-50 pointer-events-auto">
+            <div className="absolute right-4 top-4 z-[60] pointer-events-auto">
               <button
                 type="button"
                 className="text-s font-semibold text-type-secondary hover:text-white transition-transform hover:scale-95 select-none"
