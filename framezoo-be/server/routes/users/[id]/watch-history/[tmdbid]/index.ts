@@ -56,10 +56,7 @@ export default defineEventHandler(async event => {
       const body = await readBody(event);
 
       // Accept single object (normal playback) or array (e.g. user import)
-      const bodySchema = z.union([
-        watchHistoryItemSchema,
-        z.array(watchHistoryItemSchema),
-      ]);
+      const bodySchema = z.union([watchHistoryItemSchema, z.array(watchHistoryItemSchema)]);
       const parsed = bodySchema.parse(body);
       const items = Array.isArray(parsed) ? parsed : [parsed];
 
@@ -71,8 +68,10 @@ export default defineEventHandler(async event => {
         const now = new Date();
 
         // Normalize IDs for movies (use '\n' instead of null to satisfy unique constraint)
-        const normSeasonId = validatedBody.meta.type === 'movie' ? '\n' : validatedBody.seasonId ?? null;
-        const normEpisodeId = validatedBody.meta.type === 'movie' ? '\n' : validatedBody.episodeId ?? null;
+        const normSeasonId =
+          validatedBody.meta.type === 'movie' ? '\n' : (validatedBody.seasonId ?? null);
+        const normEpisodeId =
+          validatedBody.meta.type === 'movie' ? '\n' : (validatedBody.episodeId ?? null);
 
         const existingItem = await prisma.watch_history.findUnique({
           where: {
@@ -92,6 +91,12 @@ export default defineEventHandler(async event => {
           completed: validatedBody.completed,
           meta: validatedBody.meta,
           updated_at: now,
+          ...(validatedBody.seasonNumber !== undefined
+            ? { season_number: validatedBody.seasonNumber ?? null }
+            : {}),
+          ...(validatedBody.episodeNumber !== undefined
+            ? { episode_number: validatedBody.episodeNumber ?? null }
+            : {}),
         };
 
         let watchHistoryItem;
@@ -109,8 +114,6 @@ export default defineEventHandler(async event => {
               user_id: userId,
               season_id: normSeasonId,
               episode_id: normEpisodeId,
-              season_number: validatedBody.seasonNumber ?? null,
-              episode_number: validatedBody.episodeNumber ?? null,
               ...data,
             },
           });
@@ -134,7 +137,9 @@ export default defineEventHandler(async event => {
         });
       }
 
-      return results.length === 1 ? results[0] : { success: true, count: results.length, items: results };
+      return results.length === 1
+        ? results[0]
+        : { success: true, count: results.length, items: results };
     } catch (dbError) {
       console.error('Database error:', dbError);
       throw createError({

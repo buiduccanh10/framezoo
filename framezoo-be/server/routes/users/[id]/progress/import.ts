@@ -150,6 +150,8 @@ export default defineEventHandler(async event => {
             watched: item.watched,
             meta: item.meta,
             updated_at: item.updated_at,
+            ...(item.season_number !== undefined ? { season_number: item.season_number } : {}),
+            ...(item.episode_number !== undefined ? { episode_number: item.episode_number } : {}),
           },
         });
 
