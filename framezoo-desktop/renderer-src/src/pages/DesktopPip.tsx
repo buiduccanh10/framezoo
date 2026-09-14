@@ -1,14 +1,5 @@
 import type { PointerEvent as ReactPointerEvent } from "react";
-import {
-  createContext,
-  memo,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Icon, Icons } from "@/components/Icon";
@@ -87,37 +78,6 @@ function getDesktopElectronApi(): DesktopElectronApi | null {
   }
   return api as DesktopElectronApi;
 }
-const PipPlaybackClockContext = createContext<number>(0);
-
-function PipPlaybackClockProvider(props: {
-  state: DesktopPipState;
-  children: React.ReactNode;
-}) {
-  const time = useSmoothPlaybackClock({
-    time: props.state.time,
-    duration: props.state.duration,
-    playbackRate: props.state.playbackRate,
-    isActive:
-      props.state.isPlaying &&
-      !props.state.paused &&
-      !props.state.isSeeking &&
-      !props.state.isLoading &&
-      props.state.hasRenderedFrame &&
-      props.state.status === playerStatus.PLAYING &&
-      props.state.playbackRate > 0,
-    isSeeking: props.state.isSeeking,
-  });
-
-  return (
-    <PipPlaybackClockContext.Provider value={time}>
-      {props.children}
-    </PipPlaybackClockContext.Provider>
-  );
-}
-
-function usePipSharedPlaybackClock() {
-  return useContext(PipPlaybackClockContext);
-}
 
 function DesktopPipButton(props: {
   icon: Icons;
@@ -153,7 +113,20 @@ const PipCaptions = memo(function PipCaptionsView(props: {
   state: DesktopPipState;
   controlsVisible: boolean;
 }) {
-  const time = usePipSharedPlaybackClock();
+  const time = useSmoothPlaybackClock({
+    time: props.state.time,
+    duration: props.state.duration,
+    playbackRate: props.state.playbackRate,
+    isActive:
+      props.state.isPlaying &&
+      !props.state.paused &&
+      !props.state.isSeeking &&
+      !props.state.isLoading &&
+      props.state.hasRenderedFrame &&
+      props.state.status === playerStatus.PLAYING &&
+      props.state.playbackRate > 0,
+    isSeeking: props.state.isSeeking,
+  });
   const rawPrimaryStyling = useSubtitleStore((s) => s.styling);
   const rawSecondaryStyling = useSubtitleStore((s) => s.secondaryStyling);
   const overrideCasing = useSubtitleStore((s) => s.overrideCasing);
@@ -247,7 +220,20 @@ function PipProgress(props: {
   onHoverChange(hovering: boolean): void;
   onScrubChange(scrubbing: boolean): void;
 }) {
-  const time = usePipSharedPlaybackClock();
+  const time = useSmoothPlaybackClock({
+    time: props.state.time,
+    duration: props.state.duration,
+    playbackRate: props.state.playbackRate,
+    isActive:
+      props.state.isPlaying &&
+      !props.state.paused &&
+      !props.state.isSeeking &&
+      !props.state.isLoading &&
+      props.state.hasRenderedFrame &&
+      props.state.status === playerStatus.PLAYING &&
+      props.state.playbackRate > 0,
+    isSeeking: props.state.isSeeking,
+  });
 
   const hours = durationExceedsHour(props.state.duration);
   const current = Math.max(
@@ -660,187 +646,185 @@ export default function DesktopPipPage() {
   }
 
   return (
-    <PipPlaybackClockProvider state={pipState}>
+    <div
+      className="fixed inset-0 select-none overflow-hidden bg-transparent text-white"
+      style={noDragRegionStyle}
+      onPointerMoveCapture={revealControls}
+      onPointerDownCapture={revealControls}
+      onPointerLeave={scheduleHideControls}
+    >
       <div
-        className="fixed inset-0 select-none overflow-hidden bg-transparent text-white"
-        style={noDragRegionStyle}
-        onPointerMoveCapture={revealControls}
-        onPointerDownCapture={revealControls}
-        onPointerLeave={scheduleHideControls}
+        id="libmpv-pip-surface"
+        className="pointer-events-none absolute inset-0 h-full w-full bg-transparent"
+        aria-hidden="true"
+      />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 z-[1] cursor-grab bg-transparent"
+        style={{ ...noDragRegionStyle, touchAction: "none" }}
+        onPointerDown={beginPipDrag}
+        onPointerMove={movePipDrag}
+        onPointerUp={endPipDrag}
+        onPointerCancel={endPipDrag}
+        onLostPointerCapture={endPipDrag}
+      />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/45 via-transparent to-black/70" />
+      <PlayerLoadingOverlayView
+        show={
+          pipState.playbackTarget === "main" ||
+          Boolean(loadingState?.showOverlay)
+        }
+        progress={
+          pipState.playbackTarget === "main"
+            ? 100
+            : (loadingState?.loadingProgress ?? 0)
+        }
+        title={pipState.title || "Framezoo"}
+        logo={pipState.logo ?? undefined}
+        backdrop={pipState.backdrop ?? undefined}
+        showBackdrop={pipState.playbackTarget !== "main"}
+        message={
+          pipState.playbackTarget === "main"
+            ? t(
+                "player.pictureInPicture.playingInMainWindow",
+                "Playing in main window",
+              )
+            : undefined
+        }
+        className="z-10"
+      />
+      <div
+        className={`absolute inset-x-0 top-0 z-20 transition-opacity ${
+          controlsVisible ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
+        onPointerEnter={() => setControlsHovering(true)}
+        onPointerLeave={() => setControlsHovering(false)}
       >
         <div
-          id="libmpv-pip-surface"
-          className="pointer-events-none absolute inset-0 h-full w-full bg-transparent"
-          aria-hidden="true"
-        />
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 z-[1] cursor-grab bg-transparent"
-          style={{ ...noDragRegionStyle, touchAction: "none" }}
-          onPointerDown={beginPipDrag}
-          onPointerMove={movePipDrag}
-          onPointerUp={endPipDrag}
-          onPointerCancel={endPipDrag}
-          onLostPointerCapture={endPipDrag}
-        />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/45 via-transparent to-black/70" />
-        <PlayerLoadingOverlayView
-          show={
-            pipState.playbackTarget === "main" ||
-            Boolean(loadingState?.showOverlay)
-          }
-          progress={
-            pipState.playbackTarget === "main"
-              ? 100
-              : (loadingState?.loadingProgress ?? 0)
-          }
-          title={pipState.title || "Framezoo"}
-          logo={pipState.logo ?? undefined}
-          backdrop={pipState.backdrop ?? undefined}
-          showBackdrop={pipState.playbackTarget !== "main"}
-          message={
-            pipState.playbackTarget === "main"
-              ? t(
-                  "player.pictureInPicture.playingInMainWindow",
-                  "Playing in main window",
-                )
-              : undefined
-          }
-          className="z-10"
-        />
-        <div
-          className={`absolute inset-x-0 top-0 z-20 transition-opacity ${
-            controlsVisible ? "opacity-100" : "pointer-events-none opacity-0"
-          }`}
-          onPointerEnter={() => setControlsHovering(true)}
-          onPointerLeave={() => setControlsHovering(false)}
+          className="flex items-start justify-between px-3 py-3"
+          style={noDragRegionStyle}
         >
           <div
-            className="flex items-start justify-between px-3 py-3"
+            className="flex min-w-0 items-start gap-3"
             style={noDragRegionStyle}
           >
-            <div
-              className="flex min-w-0 items-start gap-3"
-              style={noDragRegionStyle}
-            >
-              <DesktopPipButton
-                icon={Icons.X}
-                label="Close picture in picture"
-                onClick={close}
-              />
-              <div className="flex min-w-0 max-w-[30vw] flex-col">
-                <div className="truncate text-sm font-medium text-white/80">
-                  {pipState.title || ""}
-                </div>
-                {pipState.episode ? (
-                  <div className="truncate text-[11px] text-white/55">
-                    S{pipState.episode.season ?? 0}E{pipState.episode.episode}{" "}
-                    {pipState.episode.title}
-                  </div>
-                ) : null}
+            <DesktopPipButton
+              icon={Icons.X}
+              label="Close picture in picture"
+              onClick={close}
+            />
+            <div className="flex min-w-0 max-w-[30vw] flex-col">
+              <div className="truncate text-sm font-medium text-white/80">
+                {pipState.title || ""}
               </div>
-            </div>
-            <div className="flex items-center gap-3" style={noDragRegionStyle}>
-              {pipState.torrent ? (
-                <div className="flex items-center gap-2 text-[10px] text-white/65">
-                  <span>
-                    {Math.round(Math.max(0, pipState.torrent.progress))}%
-                  </span>
-                  <span aria-hidden="true">•</span>
-                  <span className="tabular-nums">
-                    {formatSpeed(pipState.torrent.speedBytesPerSecond)}
-                  </span>
+              {pipState.episode ? (
+                <div className="truncate text-[11px] text-white/55">
+                  S{pipState.episode.season ?? 0}E{pipState.episode.episode}{" "}
+                  {pipState.episode.title}
                 </div>
               ) : null}
-              <DesktopPipButton
-                icon={Icons.COMPRESS}
-                label="Return to player app"
-                onClick={returnToPlayer}
-              />
             </div>
           </div>
+          <div className="flex items-center gap-3" style={noDragRegionStyle}>
+            {pipState.torrent ? (
+              <div className="flex items-center gap-2 text-[10px] text-white/65">
+                <span>
+                  {Math.round(Math.max(0, pipState.torrent.progress))}%
+                </span>
+                <span aria-hidden="true">•</span>
+                <span className="tabular-nums">
+                  {formatSpeed(pipState.torrent.speedBytesPerSecond)}
+                </span>
+              </div>
+            ) : null}
+            <DesktopPipButton
+              icon={Icons.COMPRESS}
+              label="Return to player app"
+              onClick={returnToPlayer}
+            />
+          </div>
         </div>
-        <PipCaptions state={pipState} controlsVisible={controlsVisible} />
+      </div>
+      <PipCaptions state={pipState} controlsVisible={controlsVisible} />
+      <div
+        className={`absolute inset-x-0 top-1/2 z-20 flex -translate-y-1/2 justify-center transition-opacity ${
+          controlsVisible ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
+        style={noDragRegionStyle}
+        data-pip-no-drag
+        onPointerEnter={() => setControlsHovering(true)}
+        onPointerLeave={() => setControlsHovering(false)}
+      >
+        <div className="flex items-center justify-center gap-5">
+          <DesktopPipButton
+            icon={Icons.SKIP_BACKWARD}
+            label="Seek backward 10 seconds"
+            onClick={() => sendAction({ type: "seekBy", delta: -10 })}
+            disabled={playbackControlsDisabled}
+            className="h-14 w-14 bg-black/20 backdrop-blur-md"
+          />
+          <DesktopPipButton
+            icon={pipState.paused ? Icons.PLAY : Icons.PAUSE}
+            label={pipState.paused ? "Play" : "Pause"}
+            onClick={() => sendAction({ type: "togglePlayback" })}
+            disabled={playbackControlsDisabled}
+            large
+            className="bg-white/18 backdrop-blur-md"
+          />
+          <DesktopPipButton
+            icon={Icons.SKIP_FORWARD}
+            label="Seek forward 10 seconds"
+            onClick={() => sendAction({ type: "seekBy", delta: 10 })}
+            disabled={playbackControlsDisabled}
+            className="h-14 w-14 bg-black/20 backdrop-blur-md"
+          />
+        </div>
+      </div>
+      {pipState.playbackTarget === "pip" &&
+      (showSkipAction || showNextAction) ? (
         <div
-          className={`absolute inset-x-0 top-1/2 z-20 flex -translate-y-1/2 justify-center transition-opacity ${
-            controlsVisible ? "opacity-100" : "pointer-events-none opacity-0"
-          }`}
+          className="absolute inset-x-0 bottom-16 z-20 flex justify-end gap-2 px-3"
           style={noDragRegionStyle}
           data-pip-no-drag
           onPointerEnter={() => setControlsHovering(true)}
           onPointerLeave={() => setControlsHovering(false)}
         >
-          <div className="flex items-center justify-center gap-5">
-            <DesktopPipButton
-              icon={Icons.SKIP_BACKWARD}
-              label="Seek backward 10 seconds"
-              onClick={() => sendAction({ type: "seekBy", delta: -10 })}
+          {showSkipAction && skipSegmentLabel && pipState.skipSegment ? (
+            <PipTextActionButton
+              icon={Icons.SKIP_EPISODE}
+              label={skipSegmentLabel}
+              onClick={() =>
+                sendAction({
+                  type: "skipSegment",
+                  time: pipState.skipSegment!.endTime,
+                })
+              }
               disabled={playbackControlsDisabled}
-              className="h-14 w-14 bg-black/20 backdrop-blur-md"
             />
-            <DesktopPipButton
-              icon={pipState.paused ? Icons.PLAY : Icons.PAUSE}
-              label={pipState.paused ? "Play" : "Pause"}
-              onClick={() => sendAction({ type: "togglePlayback" })}
+          ) : null}
+          {showNextAction && pipState.nextEpisode ? (
+            <PipTextActionButton
+              icon={Icons.SKIP_EPISODE}
+              label={nextEpisodeLabel}
+              onClick={() => sendAction({ type: "nextEpisode" })}
               disabled={playbackControlsDisabled}
-              large
-              className="bg-white/18 backdrop-blur-md"
             />
-            <DesktopPipButton
-              icon={Icons.SKIP_FORWARD}
-              label="Seek forward 10 seconds"
-              onClick={() => sendAction({ type: "seekBy", delta: 10 })}
-              disabled={playbackControlsDisabled}
-              className="h-14 w-14 bg-black/20 backdrop-blur-md"
-            />
-          </div>
+          ) : null}
         </div>
-        {pipState.playbackTarget === "pip" &&
-        (showSkipAction || showNextAction) ? (
-          <div
-            className="absolute inset-x-0 bottom-16 z-20 flex justify-end gap-2 px-3"
-            style={noDragRegionStyle}
-            data-pip-no-drag
-            onPointerEnter={() => setControlsHovering(true)}
-            onPointerLeave={() => setControlsHovering(false)}
-          >
-            {showSkipAction && skipSegmentLabel && pipState.skipSegment ? (
-              <PipTextActionButton
-                icon={Icons.SKIP_EPISODE}
-                label={skipSegmentLabel}
-                onClick={() =>
-                  sendAction({
-                    type: "skipSegment",
-                    time: pipState.skipSegment!.endTime,
-                  })
-                }
-                disabled={playbackControlsDisabled}
-              />
-            ) : null}
-            {showNextAction && pipState.nextEpisode ? (
-              <PipTextActionButton
-                icon={Icons.SKIP_EPISODE}
-                label={nextEpisodeLabel}
-                onClick={() => sendAction({ type: "nextEpisode" })}
-                disabled={playbackControlsDisabled}
-              />
-            ) : null}
-          </div>
-        ) : null}
-        <PipProgress
-          state={pipState}
-          visible={controlsVisible}
-          disabled={playbackControlsDisabled}
-          onHoverChange={setControlsHovering}
-          onScrubChange={setPipScrubbing}
-          onSeek={seekTo}
-        />
-        {error ? (
-          <div className="pointer-events-none absolute inset-x-0 bottom-24 px-4 text-center text-xs text-white/70">
-            {error}
-          </div>
-        ) : null}
-      </div>
-    </PipPlaybackClockProvider>
+      ) : null}
+      <PipProgress
+        state={pipState}
+        visible={controlsVisible}
+        disabled={playbackControlsDisabled}
+        onHoverChange={setControlsHovering}
+        onScrubChange={setPipScrubbing}
+        onSeek={seekTo}
+      />
+      {error ? (
+        <div className="pointer-events-none absolute inset-x-0 bottom-24 px-4 text-center text-xs text-white/70">
+          {error}
+        </div>
+      ) : null}
+    </div>
   );
 }
