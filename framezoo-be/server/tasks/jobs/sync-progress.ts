@@ -26,17 +26,43 @@ export default defineTask({
       let syncedCount = 0;
 
       for (const { key, data } of itemsToProcess) {
-        const { tmdbId, userId, seasonId, episodeId, seasonNumber, episodeNumber, duration, watched, meta, updatedAt } = data as any;
+        const {
+          tmdbId,
+          userId,
+          seasonId,
+          episodeId,
+          seasonNumber,
+          episodeNumber,
+          duration,
+          watched,
+          meta,
+          updatedAt,
+        } = data as any;
         const normSeasonId = seasonId === 'none' ? null : seasonId;
         const normEpisodeId = episodeId === 'none' ? null : episodeId;
 
         const now = new Date(updatedAt);
 
         const existing = await prisma.progress_items.findUnique({
-          where: { tmdb_id_user_id_season_id_episode_id: { tmdb_id: tmdbId, user_id: userId, season_id: normSeasonId, episode_id: normEpisodeId } },
+          where: {
+            tmdb_id_user_id_season_id_episode_id: {
+              tmdb_id: tmdbId,
+              user_id: userId,
+              season_id: normSeasonId,
+              episode_id: normEpisodeId,
+            },
+          },
         });
 
-        const shouldSave = await shouldSaveProgress(userId, tmdbId, meta.type || 'show', duration, watched, normSeasonId, normEpisodeId);
+        const shouldSave = await shouldSaveProgress(
+          userId,
+          tmdbId,
+          meta.type || 'show',
+          duration,
+          watched,
+          normSeasonId,
+          normEpisodeId
+        );
 
         if (shouldSave) {
           const dbData = {
@@ -44,11 +70,13 @@ export default defineTask({
             watched: BigInt(watched),
             meta,
             updated_at: now,
+            ...(seasonNumber !== undefined ? { season_number: seasonNumber ?? null } : {}),
+            ...(episodeNumber !== undefined ? { episode_number: episodeNumber ?? null } : {}),
           };
 
           if (existing) {
             if (now.getTime() >= new Date(existing.updated_at).getTime()) {
-               await prisma.progress_items.update({ where: { id: existing.id }, data: dbData });
+              await prisma.progress_items.update({ where: { id: existing.id }, data: dbData });
             }
           } else {
             await prisma.progress_items.create({
@@ -71,11 +99,16 @@ export default defineTask({
         await storage.removeItem(key);
       }
 
-      console.log(`[sync-progress] Successfully processed ${keys.length} items, synced ${syncedCount} to DB.`);
+      console.log(
+        `[sync-progress] Successfully processed ${keys.length} items, synced ${syncedCount} to DB.`
+      );
       return { result: 'success', processed: keys.length, synced: syncedCount };
     } catch (err: any) {
-      console.warn('[sync-progress] Skipping sync: Redis cache is unavailable or stream is not writeable.', err?.message || err);
+      console.warn(
+        '[sync-progress] Skipping sync: Redis cache is unavailable or stream is not writeable.',
+        err?.message || err
+      );
       return { result: 'skipped', reason: 'Redis unavailable' };
     }
-  }
+  },
 });
