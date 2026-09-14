@@ -58,6 +58,8 @@ export interface DesktopPipState {
   time: number;
   duration: number;
   paused: boolean;
+  isPlaying: boolean;
+  isSeeking: boolean;
   playbackRate: number;
   title: string;
   logo: string | null;
@@ -330,6 +332,8 @@ export function getDesktopPipStateFromPlayerState(
     time: currentTime,
     duration,
     paused: state.mediaPlaying.isPaused,
+    isPlaying: state.mediaPlaying.isPlaying,
+    isSeeking: state.interface?.isSeeking ?? false,
     playbackRate: state.mediaPlaying.playbackRate,
     title: state.meta?.title ?? "Framezoo",
     logo: state.meta?.logo ?? null,

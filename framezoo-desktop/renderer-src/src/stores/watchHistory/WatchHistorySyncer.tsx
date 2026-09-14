@@ -20,39 +20,41 @@ async function syncWatchHistory(
   url: string,
   account: AccountWithToken | null,
 ) {
-  for (const item of items) {
-    // complete it beforehand so it doesn't get handled while in progress
-    finish(item.id);
+  await Promise.allSettled(
+    items.map(async (item) => {
+      // complete it beforehand so it doesn't get handled while in progress
+      finish(item.id);
 
-    if (!account) continue; // not logged in, dont sync to server
+      if (!account) return; // not logged in, dont sync to server
 
-    try {
-      if (item.action === "delete") {
-        await removeWatchHistory(
-          url,
-          account,
-          item.tmdbId,
-          item.episodeId,
-          item.seasonId,
+      try {
+        if (item.action === "delete") {
+          await removeWatchHistory(
+            url,
+            account,
+            item.tmdbId,
+            item.episodeId,
+            item.seasonId,
+          );
+          return;
+        }
+
+        if (item.action === "add" || item.action === "update") {
+          await setWatchHistory(
+            url,
+            account,
+            watchHistoryUpdateItemToInput(item),
+          );
+          return;
+        }
+      } catch (err) {
+        console.error(
+          `Failed to sync watch history: ${item.tmdbId} - ${item.action}`,
+          err,
         );
-        continue;
       }
-
-      if (item.action === "add" || item.action === "update") {
-        await setWatchHistory(
-          url,
-          account,
-          watchHistoryUpdateItemToInput(item),
-        );
-        continue;
-      }
-    } catch (err) {
-      console.error(
-        `Failed to sync watch history: ${item.tmdbId} - ${item.action}`,
-        err,
-      );
-    }
-  }
+    }),
+  );
 }
 
 export function WatchHistorySyncer() {

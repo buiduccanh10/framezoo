@@ -24,7 +24,7 @@ export const SECONDARY_SUBTITLE_SIZE_SCALE = 0.88;
 // lags the timeline. Rendering cues for the in-flight time makes subtitles
 // flash ahead of the picture, so keep the last stable set of cues until the
 // seek or buffer settles.
-function useSeekFrozenCaptions<T>(
+export function useSeekFrozenCaptions<T>(
   visibleCaptions: T[],
   isFrozen: boolean,
 ): T[] {
@@ -48,7 +48,7 @@ function getCaptionCueKey(caption: VisibleCaptionCue): string {
   return makeQueId(caption.sourceIndex, caption.cue.start, caption.cue.end);
 }
 
-function getRenderedSubtitleStyling(
+export function getRenderedSubtitleStyling(
   styling: SubtitleStyling,
   dualSubEnabled: boolean,
   primaryStyling?: SubtitleStyling,

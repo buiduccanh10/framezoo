@@ -59,36 +59,38 @@ async function syncProgress(
     return;
   }
 
-  for (const entry of entries) {
-    const { item, consumedIds } = entry;
+  await Promise.allSettled(
+    entries.map(async (entry) => {
+      const { item, consumedIds } = entry;
 
-    try {
-      if (item.action === "delete") {
-        await removeProgress(
-          url,
-          account,
-          item.tmdbId,
-          item.episodeId,
-          item.seasonId,
-          { keepalive },
+      try {
+        if (item.action === "delete") {
+          await removeProgress(
+            url,
+            account,
+            item.tmdbId,
+            item.episodeId,
+            item.seasonId,
+            { keepalive },
+          );
+          finish(consumedIds);
+          return;
+        }
+
+        if (item.action === "upsert") {
+          await setProgress(url, account, progressUpdateItemToInput(item), {
+            keepalive,
+          });
+          finish(consumedIds);
+        }
+      } catch (err) {
+        console.error(
+          `Failed to sync progress: ${item.tmdbId} - ${item.action}`,
+          err,
         );
-        finish(consumedIds);
-        continue;
       }
-
-      if (item.action === "upsert") {
-        await setProgress(url, account, progressUpdateItemToInput(item), {
-          keepalive,
-        });
-        finish(consumedIds);
-      }
-    } catch (err) {
-      console.error(
-        `Failed to sync progress: ${item.tmdbId} - ${item.action}`,
-        err,
-      );
-    }
-  }
+    }),
+  );
 }
 
 export function ProgressSyncer() {

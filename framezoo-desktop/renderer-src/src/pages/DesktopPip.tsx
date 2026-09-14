@@ -8,7 +8,11 @@ import {
   PlayerLoadingOverlayView,
   getPlayerLoadingOverlayState,
 } from "@/components/player/atoms/PlayerLoadingOverlay";
-import { CaptionCue } from "@/components/player/base/SubtitleView";
+import {
+  CaptionCue,
+  getRenderedSubtitleStyling,
+  useSeekFrozenCaptions,
+} from "@/components/player/base/SubtitleView";
 import { useSmoothPlaybackClock } from "@/components/player/hooks/usePlaybackClock";
 import {
   captionIsVisible,
@@ -23,6 +27,7 @@ import {
 } from "@/desktop/pip";
 import { useBannerStore } from "@/stores/banner";
 import { playerStatus } from "@/stores/player/slices/source";
+import { useSubtitleStore } from "@/stores/subtitles";
 import { durationExceedsHour, formatSeconds } from "@/utils/formatSeconds";
 
 type DesktopElectronApi = {
@@ -112,11 +117,29 @@ const PipCaptions = memo(function PipCaptionsView(props: {
     time: props.state.time,
     duration: props.state.duration,
     playbackRate: props.state.playbackRate,
-    isActive: !props.state.paused && props.state.playbackRate > 0,
+    isActive:
+      props.state.isPlaying &&
+      !props.state.paused &&
+      !props.state.isSeeking &&
+      !props.state.isLoading &&
+      props.state.hasRenderedFrame &&
+      props.state.status === playerStatus.PLAYING &&
+      props.state.playbackRate > 0,
+    isSeeking: props.state.isSeeking,
   });
-  const styling = {
-    ...useFallbackSubtitleStyling(),
-  };
+  const rawPrimaryStyling = useSubtitleStore((s) => s.styling);
+  const rawSecondaryStyling = useSubtitleStore((s) => s.secondaryStyling);
+  const overrideCasing = useSubtitleStore((s) => s.overrideCasing);
+
+  const styling = getRenderedSubtitleStyling(
+    rawPrimaryStyling,
+    props.state.dualSubEnabled,
+  );
+  const secondaryRenderedStyling = getRenderedSubtitleStyling(
+    rawSecondaryStyling,
+    props.state.dualSubEnabled,
+    rawPrimaryStyling,
+  );
   const primaryVttData = props.state.caption?.vttData;
   const secondaryVttData = props.state.secondaryCaption?.vttData;
   const primary = useMemo(
@@ -144,6 +167,16 @@ const PipCaptions = memo(function PipCaptionsView(props: {
     time,
   ]);
 
+  const frozenPrimary = useSeekFrozenCaptions(
+    captions.primary,
+    props.state.isSeeking || props.state.isLoading,
+  );
+
+  const frozenSecondary = useSeekFrozenCaptions(
+    captions.secondary,
+    props.state.isSeeking || props.state.isLoading,
+  );
+
   const showSecondary =
     props.state.dualSubEnabled &&
     props.state.secondaryCaption &&
@@ -156,36 +189,28 @@ const PipCaptions = memo(function PipCaptionsView(props: {
       }`}
     >
       {showSecondary
-        ? captions.secondary.map((cue, index) => (
+        ? frozenSecondary.map((cue, index) => (
             <CaptionCue
               key={`secondary-${cue.start}-${cue.end}-${index}`}
               text={cue.content}
-              styling={styling}
-              overrideCasing={false}
+              styling={secondaryRenderedStyling}
+              overrideCasing={overrideCasing}
               useNativePictureInPictureStyle
             />
           ))
         : null}
-      {captions.primary.map((cue, index) => (
+      {frozenPrimary.map((cue, index) => (
         <CaptionCue
           key={`primary-${cue.start}-${cue.end}-${index}`}
           text={cue.content}
           styling={styling}
-          overrideCasing={false}
+          overrideCasing={overrideCasing}
           useNativePictureInPictureStyle
         />
       ))}
     </div>
   );
 });
-
-function useFallbackSubtitleStyling() {
-  return {
-    fontSize: 1,
-    color: "#ffffff",
-    backgroundColor: "rgba(0,0,0,0.45)",
-  } as any;
-}
 
 function PipProgress(props: {
   state: DesktopPipState;
@@ -195,13 +220,25 @@ function PipProgress(props: {
   onHoverChange(hovering: boolean): void;
   onScrubChange(scrubbing: boolean): void;
 }) {
+  const time = useSmoothPlaybackClock({
+    time: props.state.time,
+    duration: props.state.duration,
+    playbackRate: props.state.playbackRate,
+    isActive:
+      props.state.isPlaying &&
+      !props.state.paused &&
+      !props.state.isSeeking &&
+      !props.state.isLoading &&
+      props.state.hasRenderedFrame &&
+      props.state.status === playerStatus.PLAYING &&
+      props.state.playbackRate > 0,
+    isSeeking: props.state.isSeeking,
+  });
+
   const hours = durationExceedsHour(props.state.duration);
   const current = Math.max(
     0,
-    Math.min(
-      props.state.time,
-      props.state.duration || Number.POSITIVE_INFINITY,
-    ),
+    Math.min(time, props.state.duration || Number.POSITIVE_INFINITY),
   );
   const remaining = Math.max(props.state.duration - current, 0);
 
