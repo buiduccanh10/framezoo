@@ -85,7 +85,17 @@ export function shouldShowProgress(
   // shows only hide an item if its too early in episode, it still shows if its near the end.
   // Otherwise you would lose episode progress
   const ep = Object.values(item.episodes)
-    .sort((a, b) => b.updatedAt - a.updatedAt)
+    .sort((a, b) => {
+      if (b.updatedAt !== a.updatedAt) {
+        return b.updatedAt - a.updatedAt;
+      }
+      const seasonA = item.seasons[a.seasonId]?.number ?? 0;
+      const seasonB = item.seasons[b.seasonId]?.number ?? 0;
+      if (seasonB !== seasonA) {
+        return seasonB - seasonA;
+      }
+      return b.number - a.number;
+    })
     .filter(
       (epi) =>
         !progressIsNotStarted(epi.progress.duration, epi.progress.watched) ||

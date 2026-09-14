@@ -94,8 +94,16 @@ export function WatchHistory({ onShowDetails }: WatchHistoryProps) {
     const output: Array<{ media: MediaItem; historyItem: WatchHistoryItem }> =
       [];
     Object.entries(groupedItems).forEach(([groupKey, groupItems]) => {
-      // Sort group by most recent watchedAt
-      const sortedGroup = groupItems.sort((a, b) => b.watchedAt - a.watchedAt);
+      // Sort group by most recent watchedAt, then fallback to season and episode numbers
+      const sortedGroup = groupItems.sort((a, b) => {
+        if (b.watchedAt !== a.watchedAt) {
+          return b.watchedAt - a.watchedAt;
+        }
+        if (b.seasonNumber !== a.seasonNumber) {
+          return (b.seasonNumber || 0) - (a.seasonNumber || 0);
+        }
+        return (b.episodeNumber || 0) - (a.episodeNumber || 0);
+      });
       const mostRecentItem = sortedGroup[0];
 
       output.push({
