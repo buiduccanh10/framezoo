@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
 
-import { usePlaybackClock } from "@/components/player/hooks/usePlaybackClock";
+import { useSharedPlaybackClock } from "@/components/player/context/PlaybackClockContext";
 import {
   type CaptionCueType,
   captionIsVisible,
@@ -30,11 +30,9 @@ export function useSeekFrozenCaptions<T>(
 ): T[] {
   const lastStableCaptions = useRef<T[]>([]);
 
-  useEffect(() => {
-    if (!isFrozen) {
-      lastStableCaptions.current = visibleCaptions;
-    }
-  });
+  if (!isFrozen) {
+    lastStableCaptions.current = visibleCaptions;
+  }
 
   return isFrozen ? lastStableCaptions.current : visibleCaptions;
 }
@@ -242,7 +240,7 @@ function SubtitleTrackSlot({
 export function SubtitleRenderer(props?: {
   useNativePictureInPictureStyle?: boolean;
 }) {
-  const videoTime = usePlaybackClock();
+  const videoTime = useSharedPlaybackClock();
   const vttData = usePlayerStore((s) => s.caption.selected?.vttData);
   const dualSubEnabled = usePlayerStore((s) => s.caption.dualSubEnabled);
   const isSeeking = usePlayerStore((s) => s.interface.isSeeking);
@@ -292,7 +290,7 @@ export function SubtitleRenderer(props?: {
 export function SecondarySubtitleRenderer(props?: {
   useNativePictureInPictureStyle?: boolean;
 }) {
-  const videoTime = usePlaybackClock();
+  const videoTime = useSharedPlaybackClock();
   const vttData = usePlayerStore((s) => s.caption.secondary?.vttData);
   const dualSubEnabled = usePlayerStore((s) => s.caption.dualSubEnabled);
   const isSeeking = usePlayerStore((s) => s.interface.isSeeking);

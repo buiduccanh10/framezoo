@@ -43,19 +43,25 @@ export function usePlayerStatusPolling(
   const mediaPlaying = usePlayerStore((s) => s.mediaPlaying);
   const progress = usePlayerStore((s) => s.progress);
 
+  // Use refs to avoid recreating the callback/interval on every store update
+  const dataRef = useRef({ mediaPlaying, progress });
+  dataRef.current = { mediaPlaying, progress };
+
   // Create a function to update the history
   const updateHistory = useCallback(() => {
+    const { mediaPlaying: currentMediaPlaying, progress: currentProgress } =
+      dataRef.current;
     const now = Date.now();
     const currentStatus: PlayerStatusData = {
-      isPlaying: mediaPlaying.isPlaying,
-      isPaused: mediaPlaying.isPaused,
-      isLoading: mediaPlaying.isLoading,
-      hasPlayedOnce: mediaPlaying.hasPlayedOnce,
-      volume: mediaPlaying.volume,
-      playbackRate: mediaPlaying.playbackRate,
-      time: progress.time,
-      duration: progress.duration,
-      buffered: progress.buffered,
+      isPlaying: currentMediaPlaying.isPlaying,
+      isPaused: currentMediaPlaying.isPaused,
+      isLoading: currentMediaPlaying.isLoading,
+      hasPlayedOnce: currentMediaPlaying.hasPlayedOnce,
+      volume: currentMediaPlaying.volume,
+      playbackRate: currentMediaPlaying.playbackRate,
+      time: currentProgress.time,
+      duration: currentProgress.duration,
+      buffered: currentProgress.buffered,
       timestamp: now,
     };
 
@@ -113,7 +119,7 @@ export function usePlayerStatusPolling(
     }
 
     return currentStatus;
-  }, [mediaPlaying, progress, maxHistory]);
+  }, [maxHistory]);
 
   const clearHistory = useCallback(() => {
     setStatusHistory([]);
@@ -127,14 +133,14 @@ export function usePlayerStatusPolling(
 
     // Set up polling interval at 2 seconds
     const interval = setInterval(() => {
-      if (mediaPlaying.hasPlayedOnce) {
+      if (dataRef.current.mediaPlaying.hasPlayedOnce) {
         updateHistory();
       }
     }, 2000);
 
     // Clean up on unmount
     return () => clearInterval(interval);
-  }, [updateHistory, mediaPlaying.hasPlayedOnce]);
+  }, [updateHistory]);
 
   return {
     statusHistory,

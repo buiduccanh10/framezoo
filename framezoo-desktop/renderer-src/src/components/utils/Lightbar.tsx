@@ -399,9 +399,32 @@ function ParticlesCanvas() {
       particles.push(particle);
     }
 
+    let isVisible = true;
     let shouldTick = true;
     let handle: ReturnType<typeof requestAnimationFrame> | null = null;
+    let interval: ReturnType<typeof setInterval> | null = null;
+
+    function startLoops() {
+      if (handle || interval) return;
+      interval = setInterval(() => {
+        shouldTick = true;
+      }, 1e3 / 120); // tick 120 times a sec
+      particlesLoop();
+    }
+
+    function stopLoops() {
+      if (handle) {
+        cancelAnimationFrame(handle);
+        handle = null;
+      }
+      if (interval) {
+        clearInterval(interval);
+        interval = null;
+      }
+    }
+
     function particlesLoop() {
+      if (!isVisible) return;
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
 
@@ -420,15 +443,25 @@ function ParticlesCanvas() {
 
       handle = requestAnimationFrame(particlesLoop);
     }
-    const interval = setInterval(() => {
-      shouldTick = true;
-    }, 1e3 / 120); // tick 120 times a sec
 
-    particlesLoop();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        isVisible = entry.isIntersecting;
+        if (isVisible) {
+          startLoops();
+        } else {
+          stopLoops();
+        }
+      },
+      { threshold: 0 },
+    );
+
+    observer.observe(canvas);
 
     return () => {
-      if (handle) cancelAnimationFrame(handle);
-      clearInterval(interval);
+      observer.disconnect();
+      stopLoops();
     };
   }, []);
 
