@@ -6,11 +6,34 @@ import { usePlayerStore } from "@/stores/player/store";
 
 import { usePlayerMeta } from "../hooks/usePlayerMeta";
 
-// Native libmpv audio is outside Chromium's media-element graph. This tiny
-// silent element gives Chromium audio focus so its Media Session can reach the
-// Windows/macOS system media controls without adding a second audible player.
-const SILENT_AUDIO_DATA_URL =
-  "data:audio/wav;base64,UklGRiUAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQEAAACA";
+function createSilentAudioURI(durationSeconds = 10): string {
+  const sampleRate = 8000;
+  const numSamples = durationSeconds * sampleRate;
+  const wavHeader = new Uint8Array(44);
+  const view = new DataView(wavHeader.buffer);
+
+  view.setUint32(0, 1380533830, false); // 'RIFF'
+  view.setUint32(4, 36 + numSamples * 2, true);
+  view.setUint32(8, 1463899717, false); // 'WAVE'
+
+  view.setUint32(12, 1718449184, false); // 'fmt '
+  view.setUint32(16, 16, true);
+  view.setUint16(20, 1, true); // PCM
+  view.setUint16(22, 1, true); // Mono
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, sampleRate * 2, true);
+  view.setUint16(32, 2, true);
+  view.setUint16(34, 16, true);
+
+  view.setUint32(36, 1684108385, false); // 'data'
+  view.setUint32(40, numSamples * 2, true);
+
+  const wavBytes = new Uint8Array(44 + numSamples * 2);
+  wavBytes.set(wavHeader);
+
+  const blob = new Blob([wavBytes], { type: "audio/wav" });
+  return URL.createObjectURL(blob);
+}
 
 const MEDIA_SESSION_ACTIONS: MediaSessionAction[] = [
   "play",
@@ -159,7 +182,8 @@ export function MediaSession() {
   useEffect(() => {
     if (!isDesktopShell()) return;
 
-    const audio = new Audio(SILENT_AUDIO_DATA_URL);
+    const uri = createSilentAudioURI(10);
+    const audio = new Audio(uri);
     audio.preload = "auto";
     audio.loop = true;
     audio.volume = 1;
@@ -171,6 +195,7 @@ export function MediaSession() {
       audio.removeAttribute("src");
       audio.load();
       audioFocusRef.current = null;
+      URL.revokeObjectURL(uri);
     };
   }, []);
 
@@ -178,15 +203,13 @@ export function MediaSession() {
     const audio = audioFocusRef.current;
     if (!audio) return;
 
-    if (hasActiveMedia && mediaPlaying.isPlaying) {
-      void audio.play().catch(() => {
-        // The Electron shell normally allows autoplay; retry on the next state update.
-      });
+    if (hasActiveMedia) {
+      void audio.play().catch(() => {});
       return;
     }
 
     audio.pause();
-  }, [hasActiveMedia, mediaPlaying.isPlaying]);
+  }, [hasActiveMedia]);
 
   useEffect(() => {
     const mediaSession = getMediaSession();
@@ -243,6 +266,7 @@ export function MediaSession() {
       ) {
         return;
       }
+      mediaSession.playbackState = "playing";
       state.display?.play();
       updatePositionState(state.progress.time);
     });
@@ -257,6 +281,7 @@ export function MediaSession() {
       ) {
         return;
       }
+      mediaSession.playbackState = "paused";
       state.display?.pause();
       updatePositionState(state.progress.time);
     });
