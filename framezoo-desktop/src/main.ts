@@ -2093,7 +2093,6 @@ app.on("before-quit", () => {
 
 app.commandLine.appendSwitch("autoplay-policy", "no-user-gesture-required");
 app.commandLine.appendSwitch("enable-features", "DocumentPictureInPictureAPI");
-app.commandLine.appendSwitch("disable-features", "HardwareMediaKeyHandling");
 
 if (!hasSingleInstanceLock) {
   console.warn(
