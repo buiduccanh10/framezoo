@@ -4,6 +4,7 @@ import {
   MAX_EXTRAPOLATION_SECONDS,
   getMonotonicPlaybackTime,
   getProjectedPlaybackTime,
+  shouldSnapPlaybackClock,
 } from "./usePlaybackClock";
 
 describe("playback clock", () => {
@@ -72,6 +73,28 @@ describe("playback clock", () => {
     it("clamps authoritative time within duration bounds", () => {
       expect(getMonotonicPlaybackTime(130.0, 10.0, false, 120)).toBe(120);
       expect(getMonotonicPlaybackTime(-5.0, 10.0, false, 120)).toBe(0);
+    });
+  });
+
+  describe("shouldSnapPlaybackClock", () => {
+    it("ignores a large stale backward sample during continuous playback", () => {
+      expect(shouldSnapPlaybackClock(5, 12, false, false, false)).toBe(false);
+    });
+
+    it("does not snap when seeking starts before the target sample arrives", () => {
+      expect(shouldSnapPlaybackClock(12, 12, true, true, false)).toBe(false);
+    });
+
+    it("snaps to a small backward seek once the target sample changes", () => {
+      expect(shouldSnapPlaybackClock(11.7, 12, false, true, false)).toBe(true);
+    });
+
+    it("snaps when the media/source identity changes", () => {
+      expect(shouldSnapPlaybackClock(0, 12, false, false, true)).toBe(true);
+    });
+
+    it("snaps a forward discontinuity without waiting for a seek flag", () => {
+      expect(shouldSnapPlaybackClock(45, 12, false, false, false)).toBe(true);
     });
   });
 });

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { Icon, Icons } from "@/components/Icon";
+import { useSharedPlaybackClock } from "@/components/player/context/PlaybackClockContext";
 import { getDocumentPictureInPictureRoots } from "@/components/player/utils/documentPictureInPicture";
 import { isPlaybackInteractionLocked } from "@/components/player/utils/playbackLock";
 import { playerStatus } from "@/stores/player/slices/source";
@@ -51,7 +52,7 @@ export function DocumentPipOverlay() {
   const status = usePlayerStore((s) => s.status);
   const display = usePlayerStore((s) => s.display);
   const meta = usePlayerStore((s) => s.meta);
-  const time = usePlayerStore((s) => s.progress.time);
+  const time = useSharedPlaybackClock();
   const duration = usePlayerStore((s) => s.progress.duration);
   const isPaused = usePlayerStore((s) => s.mediaPlaying.isPaused);
   const isSubtitleSyncActive = usePlayerStore((s) => s.subtitleSync.active);

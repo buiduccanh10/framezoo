@@ -2,8 +2,8 @@ import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Icon, Icons } from "@/components/Icon";
+import { useSharedPlaybackClock } from "@/components/player/context/PlaybackClockContext";
 import { cancelActiveSubtitleSync } from "@/components/player/hooks/useCaptions";
-import { usePlaybackClock } from "@/components/player/hooks/usePlaybackClock";
 import {
   getSegmentBoundsSeconds,
   useSkipTime,
@@ -28,7 +28,7 @@ const SEGMENT_COLORS: Record<
 export function ProgressBar() {
   const { t } = useTranslation();
   const { duration, buffered } = usePlayerStore((s) => s.progress);
-  const time = usePlaybackClock();
+  const time = useSharedPlaybackClock();
   const torrentStatus = useActiveTorrentStatus();
   const display = usePlayerStore((s) => s.display);
   const mediaPlaying = usePlayerStore((s) => s.mediaPlaying);
