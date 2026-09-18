@@ -4,6 +4,7 @@ type LibMpvAudioRequest = {
   duration: number;
   headers?: Record<string, string>;
   requestId?: string;
+  client?: "sync" | "player";
 };
 
 function getElectronApi() {
@@ -43,6 +44,7 @@ export async function extractAudioWindow(options: {
       duration: Math.min(60, Math.max(1, options.duration)),
       headers: options.headers,
       requestId,
+      client: "sync",
     });
   } finally {
     options.signal?.removeEventListener("abort", onAbort);
