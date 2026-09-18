@@ -157,6 +157,15 @@ contextBridge.exposeInMainWorld("electronAPI", {
       ipcRenderer.removeListener("desktop:deep-link", handler);
     };
   },
+  onOsSuspend(listener: () => void) {
+    const handler = () => {
+      listener();
+    };
+    ipcRenderer.on("desktop:os-suspend", handler);
+    return () => {
+      ipcRenderer.removeListener("desktop:os-suspend", handler);
+    };
+  },
   onOsResume(listener: () => void) {
     const handler = () => {
       listener();
