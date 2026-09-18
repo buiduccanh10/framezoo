@@ -236,9 +236,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
   let unbindDesktopPipTorrent: (() => void) | null = null;
   let unbindDesktopPipWatchParty: (() => void) | null = null;
   let unbindFullscreen: (() => void) | null = null;
-  let unbindOsSuspend: (() => void) | null = null;
-  let unbindOsResume: (() => void) | null = null;
-  let wasPlayingBeforeSuspend = false;
+
   // Tracks whether the current generation's file has fully loaded.
   // Used to drop stale `pause: true` events emitted during old-file teardown.
   let fileLoaded = false;
@@ -1198,10 +1196,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       unbindLogs = null;
       unbindFullscreen?.();
       unbindFullscreen = null;
-      unbindOsSuspend?.();
-      unbindOsSuspend = null;
-      unbindOsResume?.();
-      unbindOsResume = null;
+
       cleanupPipSubscriptions();
       const playerToDestroy = playerId;
       playerId = null;
@@ -1519,26 +1514,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       emit("fullscreen", isFull);
     }) ?? null;
 
-  unbindOsSuspend =
-    electronApi?.onOsSuspend?.(() => {
-      if (destroyed || !playerId) return;
-      wasPlayingBeforeSuspend = !paused;
-      if (!paused) {
-        void sendNativeCommand(playerId, { type: "pause" }).catch(() => {});
-      }
-    }) ?? null;
 
-  unbindOsResume =
-    electronApi?.onOsResume?.(() => {
-      if (destroyed || !playerId) return;
-      if (wasPlayingBeforeSuspend) {
-        void sendNativeCommand(playerId, { type: "pause" })
-          .then(() => new Promise((resolve) => setTimeout(resolve, 50)))
-          .then(() => sendNativeCommand(playerId!, { type: "play" }))
-          .catch(() => {});
-        wasPlayingBeforeSuspend = false;
-      }
-    }) ?? null;
 
   if (electronApi?.getFullscreenState) {
     electronApi
