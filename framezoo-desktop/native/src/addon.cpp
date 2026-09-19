@@ -126,6 +126,7 @@ struct MpvPlayer {
   std::atomic<double> pending_start_at{0};
   bool software_render = false;
   std::vector<uint8_t> sw_buffer;
+  std::atomic<bool> is_suspended{false};
 
   int command(const char* const* commands) {
     std::lock_guard<std::mutex> lock(command_mutex);
@@ -247,6 +248,7 @@ struct MpvPlayer {
     std::lock_guard<std::mutex> lock(render_mutex);
     if (
         !running.load(std::memory_order_acquire) ||
+        is_suspended.load(std::memory_order_acquire) ||
         !render_context ||
         !surface
     ) {
@@ -1435,6 +1437,28 @@ napi_value command_player(napi_env env, napi_callback_info info) {
   return result;
 }
 
+napi_value set_player_suspended(napi_env env, napi_callback_info info) {
+  size_t argc = 2;
+  napi_value argv[2];
+  napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
+  std::string id;
+  if (!get_value_string(env, argv[0], &id)) {
+    return throw_error(env, "player id must be a string");
+  }
+  auto player = find_player(id);
+  if (!player) return throw_error(env, "player not found");
+
+  bool suspended = false;
+  if (napi_get_value_bool(env, argv[1], &suspended) != napi_ok) {
+    return throw_error(env, "suspended must be a boolean");
+  }
+  player->is_suspended.store(suspended, std::memory_order_release);
+
+  napi_value result;
+  napi_get_boolean(env, true, &result);
+  return result;
+}
+
 napi_value load_player(napi_env env, napi_callback_info info) {
   size_t argc = 2;
   napi_value argv[2];
@@ -1561,6 +1585,8 @@ napi_value init(napi_env env, napi_value exports) {
       {"reparentPlayer", nullptr, reparent_player, nullptr, nullptr, nullptr,
        napi_default, nullptr},
       {"commandPlayer", nullptr, command_player, nullptr, nullptr, nullptr,
+       napi_default, nullptr},
+      {"setPlayerSuspended", nullptr, set_player_suspended, nullptr, nullptr, nullptr,
        napi_default, nullptr},
       {"extractAudio", nullptr, extract_audio, nullptr, nullptr, nullptr,
        napi_default, nullptr},
