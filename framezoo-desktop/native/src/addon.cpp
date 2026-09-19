@@ -246,23 +246,24 @@ struct MpvPlayer {
 
   void render() {
     std::lock_guard<std::mutex> lock(render_mutex);
-    if (
-        !running.load(std::memory_order_acquire) ||
-        is_suspended.load(std::memory_order_acquire) ||
-        !render_context ||
-        !surface
-    ) {
+    if (!running.load(std::memory_order_acquire) || !render_context) {
       return;
     }
+
+    const uint64_t update_flags = api.render_context_update(render_context);
+
+    if (is_suspended.load(std::memory_order_acquire) || !surface) {
+      return;
+    }
+
     const uint64_t render_number = render_count.fetch_add(1) + 1;
 #if defined(_WIN32)
     if (software_render) {
-      render_software(render_number);
+      render_software(render_number, update_flags);
       return;
     }
 #endif
     surface_make_current(surface);
-    const uint64_t update_flags = api.render_context_update(render_context);
     const bool has_frame_update =
         (update_flags & MPV_RENDER_UPDATE_FRAME) != 0;
     if (!running.load(std::memory_order_acquire)) return;
@@ -319,7 +320,7 @@ struct MpvPlayer {
   }
 
 #if defined(_WIN32)
-  void render_software(uint64_t render_number) {
+  void render_software(uint64_t render_number, uint64_t update_flags) {
     const int width = surface_width(surface);
     const int height = surface_height(surface);
     if (width <= 0 || height <= 0) return;
@@ -329,8 +330,6 @@ struct MpvPlayer {
     if (sw_buffer.size() < needed) {
       sw_buffer.assign(needed, 0);
     }
-
-    const uint64_t update_flags = api.render_context_update(render_context);
     const bool has_frame_update =
         (update_flags & MPV_RENDER_UPDATE_FRAME) != 0;
     if (!running.load(std::memory_order_acquire)) return;

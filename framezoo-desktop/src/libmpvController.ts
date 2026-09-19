@@ -630,29 +630,32 @@ export class LibMpvController {
 
   public resumeAllForSuspend(): void {
     if (!this.addon) return;
-    for (const playerId of this.players.keys()) {
-      try {
-        this.addon.setPlayerSuspended(playerId, false);
-      } catch (e) {}
-    }
 
-    for (const playerId of this.playersWasPlayingBeforeSuspend) {
-      if (this.players.has(playerId)) {
+    // Delay restoring native render and playback by 1s to allow macOS
+    // WindowServer to fully restore the OpenGL/Metal views on wake.
+    setTimeout(() => {
+      for (const playerId of this.players.keys()) {
         try {
-          this.addon.commandPlayer(playerId, { type: "pause" });
-          setTimeout(() => {
-            try {
-              this.addon?.commandPlayer(playerId, { type: "play" });
-            } catch (e) {
-              // ignore
-            }
-          }, 50);
-        } catch (error) {
-          console.error(`[libmpv] Failed to resume player ${playerId} on wake`, error);
+          this.addon?.setPlayerSuspended(playerId, false);
+        } catch (e) {}
+      }
+
+      for (const playerId of this.playersWasPlayingBeforeSuspend) {
+        if (this.players.has(playerId)) {
+          try {
+            this.addon?.commandPlayer(playerId, { type: "pause" });
+            setTimeout(() => {
+              try {
+                this.addon?.commandPlayer(playerId, { type: "play" });
+              } catch (e) {}
+            }, 50);
+          } catch (error) {
+            console.error(`[libmpv] Failed to resume player ${playerId} on wake`, error);
+          }
         }
       }
-    }
-    this.playersWasPlayingBeforeSuspend.clear();
+      this.playersWasPlayingBeforeSuspend.clear();
+    }, 1000);
   }
 
   public command(playerId: string, command: LibMpvCommand): boolean {
