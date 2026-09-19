@@ -28,6 +28,7 @@ interface NativeLibMpvAddon {
     request: LibMpvSourceRequest & { generation: number },
   ): void;
   commandPlayer(playerId: string, command: LibMpvCommand): void;
+  setPlayerSuspended(playerId: string, suspended: boolean): void;
   extractAudio(
     request: LibMpvAudioRequest & { outputPath: string },
   ): Promise<string>;
@@ -612,6 +613,10 @@ export class LibMpvController {
   public pauseAllForSuspend(): void {
     if (!this.addon) return;
     for (const [playerId, player] of this.players.entries()) {
+      try {
+        this.addon.setPlayerSuspended(playerId, true);
+      } catch (e) {}
+
       if (!player.isPaused) {
         this.playersWasPlayingBeforeSuspend.add(playerId);
         try {
@@ -625,6 +630,12 @@ export class LibMpvController {
 
   public resumeAllForSuspend(): void {
     if (!this.addon) return;
+    for (const playerId of this.players.keys()) {
+      try {
+        this.addon.setPlayerSuspended(playerId, false);
+      } catch (e) {}
+    }
+
     for (const playerId of this.playersWasPlayingBeforeSuspend) {
       if (this.players.has(playerId)) {
         try {
