@@ -2132,9 +2132,6 @@ if (!hasSingleInstanceLock) {
     installApplicationMenu();
     createMainWindow();
 
-    powerMonitor.on("suspend", () => {
-      mainWindow?.webContents.send("desktop:os-suspend");
-    });
     powerMonitor.on("resume", () => {
       mainWindow?.webContents.send("desktop:os-resume");
     });
