@@ -45,7 +45,6 @@ type PlayerRecord = {
   isTorrent?: boolean;
   pipResizeListener?: () => void;
   pipWindow?: BrowserWindow;
-  isPaused?: boolean;
 };
 
 const DEFAULT_NATIVE_EVENT_TIMEOUT_MS = 120_000;
@@ -235,7 +234,6 @@ export class LibMpvController {
   private pipWindowProvider: (() => BrowserWindow | null) | null = null;
   private addon: NativeLibMpvAddon | null = null;
   private players = new Map<string, PlayerRecord>();
-  private playersWasPlayingBeforeSuspend = new Set<string>();
   private eventTimers = new Map<string, ReturnType<typeof setTimeout>>();
   private ipcRegistered = false;
   private startupPreflight: (() => Promise<void>) | null = null;
@@ -609,41 +607,6 @@ export class LibMpvController {
     }
   }
 
-  public pauseAllForSuspend(): void {
-    if (!this.addon) return;
-    for (const [playerId, player] of this.players.entries()) {
-      if (!player.isPaused) {
-        this.playersWasPlayingBeforeSuspend.add(playerId);
-        try {
-          this.addon.commandPlayer(playerId, { type: "pause" });
-        } catch (error) {
-          console.error(`[libmpv] Failed to pause player ${playerId} on suspend`, error);
-        }
-      }
-    }
-  }
-
-  public resumeAllForSuspend(): void {
-    if (!this.addon) return;
-    for (const playerId of this.playersWasPlayingBeforeSuspend) {
-      if (this.players.has(playerId)) {
-        try {
-          this.addon.commandPlayer(playerId, { type: "pause" });
-          setTimeout(() => {
-            try {
-              this.addon?.commandPlayer(playerId, { type: "play" });
-            } catch (e) {
-              // ignore
-            }
-          }, 50);
-        } catch (error) {
-          console.error(`[libmpv] Failed to resume player ${playerId} on wake`, error);
-        }
-      }
-    }
-    this.playersWasPlayingBeforeSuspend.clear();
-  }
-
   public command(playerId: string, command: LibMpvCommand): boolean {
     const player = this.players.get(playerId);
     if (!player || !this.addon) return false;
@@ -679,12 +642,6 @@ export class LibMpvController {
     ) {
       throw new Error("Invalid libmpv audio extraction request");
     }
-    
-    let url = request.url;
-    if (request.client) {
-      const sep = url.includes("?") ? "&" : "?";
-      url = `${url}${sep}client=${encodeURIComponent(request.client)}`;
-    }
 
     const outputPath = path.join(
       app.getPath("temp"),
@@ -693,7 +650,6 @@ export class LibMpvController {
     try {
       await this.addon.extractAudio({
         ...request,
-        url,
         requestId: request.requestId ?? `audio-${Date.now()}`,
         startAt: Math.max(0, request.startAt),
         duration: Math.min(60, Math.max(1, request.duration)),
@@ -866,7 +822,6 @@ export class LibMpvController {
       this.broadcastLog("error", "error", eventData);
     } else if (event.type === "property") {
       if (event.name === "pause" && typeof event.data === "boolean") {
-        player.isPaused = event.data;
         this.broadcastLog(
           event.data ? "info" : "info",
           event.data ? "pause" : "play",

@@ -939,7 +939,6 @@ class TorrentRuntime:
         prefetch_pieces: list[int],
         required_pieces: Set[int],
         reason: str,
-        is_sync: bool = False,
     ) -> None:
         """Keep stream demand and read-ahead priorities additive.
 
@@ -964,28 +963,19 @@ class TorrentRuntime:
 
                 if piece in required_set:
                     focus_piece = getattr(self, "_focus_piece", None)
-                    if is_sync:
-                        priority = constants.STREAM_PIECE_PRIORITY
-                        deadline_ms = 0
-                    elif (
+                    if (
                         focus_piece is not None
                         and piece != focus_piece
                     ):
                         priority = constants.STREAM_HOT_PIECE_PRIORITY
-                        distance = (
-                            0
-                            if first_required_piece is None
-                            else max(0, piece - first_required_piece)
-                        )
-                        deadline_ms = distance * 25
                     else:
                         priority = constants.STREAM_PIECE_PRIORITY
-                        distance = (
-                            0
-                            if first_required_piece is None
-                            else max(0, piece - first_required_piece)
-                        )
-                        deadline_ms = distance * 25
+                    distance = (
+                        0
+                        if first_required_piece is None
+                        else max(0, piece - first_required_piece)
+                    )
+                    deadline_ms = distance * 25
                 elif (
                     not getattr(self, "_has_streamed_bytes", False)
                     and index < constants.STARTUP_WINDOW_PIECES
@@ -1506,7 +1496,6 @@ class TorrentRuntime:
         handler: Optional[BaseHTTPRequestHandler] = None,
         connect_start: float = 0.0,
         track_position: bool = True,
-        is_sync: bool = False,
     ) -> bool:
         prefetch_length = max(
             end - start + 1,
@@ -1581,9 +1570,7 @@ class TorrentRuntime:
         if track_position:
             self.maybe_refocus(start)
         required_set = set(required_pieces)
-        self._schedule_pieces(
-            all_pieces, required_set, reason="range", is_sync=is_sync
-        )
+        self._schedule_pieces(all_pieces, required_set, reason="range")
         self._start_fast_block_fetch(start, end)
 
         blocked_waits = 0
@@ -1802,7 +1789,6 @@ class TorrentRuntime:
         handler: Optional[BaseHTTPRequestHandler] = None,
         connect_start: float = 0.0,
         track_position: bool = True,
-        is_sync: bool = False,
     ) -> Optional[bytes]:
         end = min(end, self.file_piece_end(start))
         expected_length = end - start + 1
@@ -1831,7 +1817,6 @@ class TorrentRuntime:
                 handler=handler,
                 connect_start=connect_start,
                 track_position=track_position,
-                is_sync=is_sync,
             ):
                 return None
 
@@ -1846,12 +1831,7 @@ class TorrentRuntime:
 
         return None
 
-    def serve(
-        self,
-        handler: BaseHTTPRequestHandler,
-        head_only: bool,
-        is_sync: bool = False,
-    ) -> None:
+    def serve(self, handler: BaseHTTPRequestHandler, head_only: bool) -> None:
         # mpv cancels the current range connection while seeking. Keep each
         # response single-use so FFmpeg does not reuse a half-read HTTP body.
         handler.close_connection = True
@@ -1921,13 +1901,10 @@ class TorrentRuntime:
             start, end, status_code = byte_range[0], byte_range[1], 206
             start, end = cap_open_ended_range(range_header, (start, end))
 
-        track_position = (
-            not is_sync
-            and not self.is_initial_tail_probe(
-                start,
-                total,
-                request_number,
-            )
+        track_position = not self.is_initial_tail_probe(
+            start,
+            total,
+            request_number,
         )
         if not track_position:
             log_event(
@@ -2039,7 +2016,6 @@ class TorrentRuntime:
                         handler=handler,
                         connect_start=connect_start,
                         track_position=track_position,
-                        is_sync=is_sync,
                     )
                     if chunk is None:
                         handler.close_connection = True
@@ -2096,7 +2072,6 @@ class TorrentRuntime:
         connect_start: float = 0.0,
         track_position: bool = True,
         timeout: Optional[float] = constants.FIRST_RANGE_WAIT_TIMEOUT,
-        is_sync: bool = False,
     ) -> Tuple[Optional[Any], Optional[bytes]]:
         """Wait for libtorrent to create and fill the first requested bytes."""
         chunk_end = min(
@@ -2163,7 +2138,6 @@ class TorrentRuntime:
                 handler=handler,
                 connect_start=connect_start,
                 track_position=track_position,
-                is_sync=is_sync,
             )
             if chunk is not None:
                 return stream, chunk

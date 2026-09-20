@@ -144,7 +144,6 @@ export interface LibMpvAudioRequest {
   duration: number;
   headers?: Record<string, string>;
   requestId?: string;
-  client?: "sync" | "player";
 }
 
 export interface LibMpvPlayerEvent {
