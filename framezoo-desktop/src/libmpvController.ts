@@ -643,6 +643,12 @@ export class LibMpvController {
       throw new Error("Invalid libmpv audio extraction request");
     }
 
+    let url = request.url;
+    if (request.client) {
+      const sep = url.includes("?") ? "&" : "?";
+      url = `${url}${sep}client=${encodeURIComponent(request.client)}`;
+    }
+
     const outputPath = path.join(
       app.getPath("temp"),
       `framezoo-audio-${Date.now()}-${Math.random().toString(16).slice(2)}.wav`,
@@ -650,6 +656,7 @@ export class LibMpvController {
     try {
       await this.addon.extractAudio({
         ...request,
+        url,
         requestId: request.requestId ?? `audio-${Date.now()}`,
         startAt: Math.max(0, request.startAt),
         duration: Math.min(60, Math.max(1, request.duration)),

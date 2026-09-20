@@ -153,7 +153,9 @@ class TorrentHttpHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
     def handle_torrent_request(self, head_only: bool) -> None:
-        parts = urlparse(self.path).path.strip("/").split("/")
+        parsed_url = urlparse(self.path)
+        parts = parsed_url.path.strip("/").split("/")
+        is_sync = "client=sync" in parsed_url.query
 
         # Route: /torrent/<sessionId>
         runtime = (
@@ -164,7 +166,7 @@ class TorrentHttpHandler(BaseHTTPRequestHandler):
         if runtime is None:
             self.send_error(404)
             return
-        runtime.serve(self, head_only)
+        runtime.serve(self, head_only, is_sync=is_sync)
 
     def log_message(self, _format: str, *_args: Any) -> None:
         return
