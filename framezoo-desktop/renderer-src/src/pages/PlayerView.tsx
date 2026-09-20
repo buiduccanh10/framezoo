@@ -72,15 +72,37 @@ export function RealPlayerView() {
     season: params.season,
     episode: params.episode,
   });
+
   useEffect(() => {
+    const currentMeta = usePlayerStore.getState().meta;
+    let isAlreadyMatching = false;
+
+    if (currentMeta) {
+      if (currentMeta.type === "show") {
+        isAlreadyMatching =
+          currentMeta.season?.tmdbId === params.season &&
+          currentMeta.episode?.tmdbId === params.episode;
+      } else if (currentMeta.type === "movie") {
+        isAlreadyMatching = !params.season && !params.episode;
+      }
+    }
+
+    if (isAlreadyMatching) {
+      return;
+    }
+
     reset();
     setSourceLoading(false);
     openedWatchPartyRef.current = false;
     initializedMetaRef.current = null;
+  }, [paramsData, reset, params.season, params.episode]);
+
+  // Clean up on unmount
+  useEffect(() => {
     return () => {
       reset();
     };
-  }, [paramsData, reset]);
+  }, [reset]);
 
   useEffect(() => {
     return () => {

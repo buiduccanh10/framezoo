@@ -119,8 +119,6 @@ type LibMpvElectronApi = {
   platform?: string;
   onMaximizeState?: (listener: (isMaximized: boolean) => void) => () => void;
   onFullscreenState?: (listener: (isFullscreen: boolean) => void) => () => void;
-  onOsSuspend?: (listener: () => void) => () => void;
-  onOsResume?: (listener: () => void) => () => void;
   getStartupNativeWarmupState?: () => Promise<{
     status?: string;
     libmpv?: { status?: string; message?: string };
