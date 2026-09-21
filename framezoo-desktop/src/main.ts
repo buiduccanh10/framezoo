@@ -2132,7 +2132,12 @@ if (!hasSingleInstanceLock) {
     installApplicationMenu();
     createMainWindow();
 
+    powerMonitor.on("suspend", () => {
+      libmpvController.pauseAllForSuspend();
+      mainWindow?.webContents.send("desktop:os-suspend");
+    });
     powerMonitor.on("resume", () => {
+      libmpvController.resumeAllForSuspend();
       mainWindow?.webContents.send("desktop:os-resume");
     });
     void runStartupNativeWarmup();
