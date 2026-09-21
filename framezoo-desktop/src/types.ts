@@ -1,16 +1,8 @@
 export type ExtensionMessageName =
-  | "hello"
-  | "makeRequest"
-  | "prepareStream"
-  | "openPage";
+  "hello" | "makeRequest" | "prepareStream" | "openPage";
 
 export type TorrentLifecycle =
-  | "starting"
-  | "buffering"
-  | "ready"
-  | "downloading"
-  | "stopped"
-  | "error";
+  "starting" | "buffering" | "ready" | "downloading" | "stopped" | "error";
 
 export interface TorrentStartRequest {
   sourceId: string;
@@ -86,12 +78,7 @@ export type StreamRule = {
 };
 
 export type DesktopAppUpdateStatus =
-  | "idle"
-  | "checking"
-  | "available"
-  | "downloading"
-  | "downloaded"
-  | "error";
+  "idle" | "checking" | "available" | "downloading" | "downloaded" | "error";
 
 export type DesktopAppUpdateState = {
   status: DesktopAppUpdateStatus;
@@ -145,6 +132,9 @@ export interface LibMpvAudioRequest {
   headers?: Record<string, string>;
   requestId?: string;
   client?: "sync" | "player";
+  syncWindowIndex?: number;
+  syncStartAt?: number;
+  syncDuration?: number;
 }
 
 export interface LibMpvPlayerEvent {

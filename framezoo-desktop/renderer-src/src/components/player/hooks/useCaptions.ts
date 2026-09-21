@@ -230,6 +230,12 @@ export function useCaptions() {
         return { status: "failed" };
       }
 
+      console.info("[subtitle-sync]", "sync_click", {
+        isTorrent: initialSource.isTorrent === true,
+        sourceType: initialSource.type,
+        startAt: initialState.progress.time,
+      });
+
       setSubtitleSyncState({
         active: true,
         phase: wasPlaying ? "pausing" : "capturing",
@@ -254,8 +260,6 @@ export function useCaptions() {
           Object.values(contextSource.qualities).find((item) => Boolean(item));
         if (!quality?.url) return { status: "failed" };
 
-        const contextQualityUrl = quality.url;
-        const contextAudioTrackId = pausedState.currentAudioTrack?.id ?? null;
         const alignmentVideoDuration =
           pausedState.progress.duration > 0
             ? pausedState.progress.duration
@@ -269,6 +273,7 @@ export function useCaptions() {
 
         const batchResult = await alignSubtitlesWithCurrentStream({
           sourceUrl: quality.url,
+          isTorrent: contextSource.isTorrent === true,
           startAt: Math.max(0, pausedTime - 30),
           language: resolveAudioLanguage(
             pausedState.currentAudioTrack?.language,

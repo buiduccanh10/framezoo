@@ -43,6 +43,48 @@ class SidecarStreamTest(unittest.TestCase):
 
         self.assertEqual(runtime.stream_type, "file")
 
+    def test_sync_flag_reaches_first_chunk_priority(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.stop_event = threading.Event()
+        runtime.info = object()
+        runtime.file_index = 0
+        runtime.file_size = 16
+        runtime.session_id = "torrent-sync-first-chunk-test"
+        runtime._piece_priority_lock = threading.RLock()
+        runtime._boosted_pieces = set()
+        runtime.map_pieces = lambda _start, _length: {0}
+        runtime.file_piece_end = lambda _start: 15
+        runtime._focus_playback_piece = lambda _piece: None
+        calls = []
+
+        def prioritize_range(self, *args, **kwargs):
+            calls.append(kwargs)
+
+        def read_range_chunk(self, stream, start, end, **_kwargs):
+            stream.seek(start)
+            return stream.read(end - start + 1)
+
+        runtime.prioritize_range = MethodType(prioritize_range, runtime)
+        runtime.read_range_chunk = MethodType(read_range_chunk, runtime)
+
+        with tempfile.NamedTemporaryFile() as media:
+            media.write(b"0123456789abcdef")
+            media.flush()
+            stream, chunk = runtime.open_first_chunk(
+                media.name,
+                0,
+                3,
+                track_position=True,
+                is_sync=True,
+                sync_metadata={"windowIndex": 0},
+            )
+
+        self.assertEqual(chunk, b"0123")
+        self.assertTrue(calls)
+        self.assertTrue(calls[0]["is_sync"])
+        self.assertEqual(calls[0]["sync_metadata"], {"windowIndex": 0})
+        stream.close()
+
     def test_materializes_selected_file_at_declared_size(self):
         runtime = object.__new__(TorrentRuntime)
         runtime.save_path = tempfile.mkdtemp()
@@ -1419,6 +1461,73 @@ class SidecarStreamTest(unittest.TestCase):
         self.assertIn(constants.RANGE_PREFETCH_BYTES, map_lengths)
         self.assertIn(constants.RANGE_PREFETCH_BYTES * 2, map_lengths)
         self.assertIn(constants.MAX_REPLAN_PREFETCH_BYTES, map_lengths)
+
+    def test_sync_range_keeps_read_ahead_at_eight_megabytes(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.stop_event = threading.Event()
+        runtime.info = None
+        runtime.file_index = None
+        runtime.file_size = constants.SYNC_RANGE_PREFETCH_BYTES * 2
+        runtime.session_id = "torrent-sync-prefetch-test"
+        runtime.last_range_key = None
+        runtime._piece_priority_lock = threading.RLock()
+        runtime._boosted_pieces = set()
+        map_lengths = []
+        schedule_calls = []
+
+        def map_pieces(self, _start, length):
+            map_lengths.append(length)
+            return {0}
+
+        runtime.map_pieces = MethodType(map_pieces, runtime)
+
+        def schedule_pieces(
+            self,
+            _prefetch_pieces,
+            _required_pieces,
+            reason=None,
+            is_sync=False,
+            sync_metadata=None,
+        ):
+            schedule_calls.append((is_sync, sync_metadata))
+
+        runtime._schedule_pieces = MethodType(schedule_pieces, runtime)
+
+        class FakeStatus:
+            has_metadata = True
+            total_done = 0
+            download_rate = 0
+            pieces = [False]
+
+        class FakeHandle:
+            def status(self):
+                return FakeStatus()
+
+            def piece_availability(self):
+                return [0]
+
+            def have_piece(self, _piece):
+                return False
+
+            def piece_priority(self, _piece, _priority):
+                return None
+
+            def set_piece_deadline(self, _piece, _deadline, _flags):
+                return None
+
+        runtime.handle = FakeHandle()
+        runtime.wait_for_range(
+            0,
+            0,
+            timeout=0.15,
+            track_position=False,
+            is_sync=True,
+        )
+
+        self.assertIn(constants.SYNC_RANGE_PREFETCH_BYTES, map_lengths)
+        self.assertNotIn(constants.SYNC_RANGE_PREFETCH_BYTES * 2, map_lengths)
+        self.assertTrue(schedule_calls)
+        self.assertTrue(all(is_sync for is_sync, _metadata in schedule_calls))
 
     def test_focus_file_does_not_reset_priorities_for_each_range(self):
         runtime = object.__new__(TorrentRuntime)

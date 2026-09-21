@@ -151,12 +151,17 @@ function isAbortError(error: unknown, signal?: AbortSignal) {
   );
 }
 
+function logSyncTelemetry(event: string, fields: Record<string, unknown> = {}) {
+  console.info("[subtitle-sync]", event, fields);
+}
+
 async function captureCurrentStreamAudio(options: {
   sourceUrl: string;
   startAt: number;
   duration: number;
   headers?: unknown;
   signal?: AbortSignal;
+  windowIndex?: number;
 }) {
   return await extractAudioWindow({
     url: options.sourceUrl,
@@ -164,6 +169,7 @@ async function captureCurrentStreamAudio(options: {
     duration: options.duration,
     headers: normalizeHeaders(options.headers),
     signal: options.signal,
+    windowIndex: options.windowIndex,
   });
 }
 
@@ -288,6 +294,7 @@ export async function alignSubtitlesWithCurrentStream(options: {
   signal?: AbortSignal;
   videoDuration?: number;
   buffered?: number;
+  isTorrent?: boolean;
   onProgress?: (progress: number, phase?: "capturing" | "analyzing") => void;
 }): Promise<SubtitleAlignmentBatchResponse> {
   const windowPlan = buildAlignmentWindowPlan(
@@ -326,6 +333,11 @@ export async function alignSubtitlesWithCurrentStream(options: {
   }
 
   const capturedAudio = new Array<Uint8Array>(windowPlan.length);
+  const localResults = new Array<{
+    audio: Uint8Array;
+    durationMs: number;
+    intervals: Array<{ startMs: number; endMs: number }>;
+  } | null>(windowPlan.length).fill(null);
   const captureAbortController = new AbortController();
   const abortCaptures = () => {
     captureAbortController.abort();
@@ -335,23 +347,60 @@ export async function alignSubtitlesWithCurrentStream(options: {
     captureAbortController.abort();
   }
   let completedCaptures = 0;
-  let nextCaptureIndex = 0;
+  let nextCaptureIndex = options.isTorrent ? 1 : 0;
+  const analysisPromises: Promise<void>[] = [];
+  const processWindow = async (index: number) => {
+    const plan = windowPlan[index];
+    const audio = await captureCurrentStreamAudio({
+      ...options,
+      startAt: plan.startAt,
+      duration: windowDuration,
+      windowIndex: index,
+      signal: captureAbortController.signal,
+    });
+    capturedAudio[index] = audio;
+    completedCaptures += 1;
+    if (index === 0) {
+      logSyncTelemetry("first_audio_window_ready", {
+        windowIndex: index,
+        startAt: plan.startAt,
+        duration: windowDuration,
+      });
+    }
+    options.onProgress?.(
+      (completedCaptures / windowPlan.length) * 0.4,
+      "capturing",
+    );
+    if (localEntry && localSpeechIntervals) {
+      analysisPromises.push(
+        (async () => {
+          const decoded = decodeMoonshineWav(audio);
+          const intervals = await transcribeMoonshine(
+            localEntry,
+            audio,
+            captureAbortController.signal,
+          );
+          localResults[index] = {
+            audio,
+            durationMs: Math.round(decoded.durationMs),
+            intervals,
+          };
+          options.onProgress?.(
+            0.4 + ((index + 1) / SUBTITLE_ALIGNMENT_MAX_WINDOWS) * 0.35,
+            "analyzing",
+          );
+        })().catch((error) => {
+          captureAbortController.abort();
+          throw error;
+        }),
+      );
+    }
+  };
   const captureWorker = async () => {
     try {
       while (nextCaptureIndex < windowPlan.length) {
         const index = nextCaptureIndex++;
-        const plan = windowPlan[index];
-        capturedAudio[index] = await captureCurrentStreamAudio({
-          ...options,
-          startAt: plan.startAt,
-          duration: windowDuration,
-          signal: captureAbortController.signal,
-        });
-        completedCaptures += 1;
-        options.onProgress?.(
-          (completedCaptures / windowPlan.length) * 0.4,
-          "capturing",
-        );
+        await processWindow(index);
       }
     } catch (error) {
       captureAbortController.abort();
@@ -359,39 +408,46 @@ export async function alignSubtitlesWithCurrentStream(options: {
     }
   };
   try {
+    if (options.isTorrent) {
+      await processWindow(0);
+    }
     await Promise.all(
       Array.from(
         {
           length: Math.min(
             SUBTITLE_ALIGNMENT_CAPTURE_CONCURRENCY,
-            windowPlan.length,
+            Math.max(0, windowPlan.length - 1),
           ),
         },
         () => captureWorker(),
       ),
     );
+    logSyncTelemetry("all_audio_windows_ready", {
+      windowCount: windowPlan.length,
+      windowDuration,
+    });
+    await Promise.all(analysisPromises);
   } finally {
     options.signal?.removeEventListener("abort", abortCaptures);
   }
 
-  for (const [index, plan] of windowPlan.entries()) {
+  const timelineWindows = windowPlan
+    .map((plan, index) => ({ index, plan }))
+    .sort((left, right) => left.plan.startAt - right.plan.startAt);
+  for (const { index, plan } of timelineWindows) {
     const audio = capturedAudio[index];
 
     if (localEntry && localSpeechIntervals) {
-      const decoded = decodeMoonshineWav(audio);
-      const localIntervals = await transcribeMoonshine(
-        localEntry,
-        audio,
-        options.signal,
-      );
+      const result = localResults[index];
+      if (!result) continue;
 
-      if (localIntervals.length > 0) {
+      if (result.intervals.length > 0) {
         const startMs = Math.round(plan.startAt * 1000);
-        capturedWindows.push({ audio, startMs });
+        capturedWindows.push({ audio: result.audio, startMs });
         windowStartsMs.push(startMs);
-        windowDurationsMs.push(Math.round(decoded.durationMs));
+        windowDurationsMs.push(result.durationMs);
         localSpeechIntervals.push(
-          localIntervals.map(({ startMs: s, endMs: e }) => ({
+          result.intervals.map(({ startMs: s, endMs: e }) => ({
             startMs: startMs + s,
             endMs: startMs + e,
           })),
@@ -449,6 +505,10 @@ export async function alignSubtitlesWithCurrentStream(options: {
       timeout: 300_000,
     },
   );
+  logSyncTelemetry("alignment_complete", {
+    windowCount: capturedWindows.length,
+    windowDuration,
+  });
   options.onProgress?.(1, "analyzing");
   // Discard any server-side warningMessage — we don't surface fallback details to users
   return { ...response, warningMessage: undefined };
@@ -463,6 +523,7 @@ export async function alignSubtitleWithCurrentStream(options: {
   signal?: AbortSignal;
   videoDuration?: number;
   buffered?: number;
+  isTorrent?: boolean;
 }): Promise<SubtitleAlignmentResponse> {
   const batchResult = await alignSubtitlesWithCurrentStream({
     sourceUrl: options.sourceUrl,
@@ -473,6 +534,7 @@ export async function alignSubtitleWithCurrentStream(options: {
     signal: options.signal,
     videoDuration: options.videoDuration,
     buffered: options.buffered,
+    isTorrent: options.isTorrent,
   });
   return (
     batchResult.results.primary ?? {

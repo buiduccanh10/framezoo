@@ -8,7 +8,7 @@ import threading
 import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any, Dict, Optional
-from urllib.parse import urlparse
+from urllib.parse import parse_qs, urlparse
 
 import torrent_constants as constants
 
@@ -155,7 +155,20 @@ class TorrentHttpHandler(BaseHTTPRequestHandler):
     def handle_torrent_request(self, head_only: bool) -> None:
         parsed_url = urlparse(self.path)
         parts = parsed_url.path.strip("/").split("/")
-        is_sync = "client=sync" in parsed_url.query
+        query = parse_qs(parsed_url.query)
+        is_sync = query.get("client", [None])[0] == "sync"
+        sync_metadata = None
+        if is_sync:
+            sync_metadata = {
+                "windowIndex": _query_number(query, "syncWindowIndex", int),
+                "startAt": _query_number(query, "syncStartAt", float),
+                "duration": _query_number(query, "syncDuration", float),
+            }
+            sync_metadata = {
+                key: value
+                for key, value in sync_metadata.items()
+                if value is not None
+            }
 
         # Route: /torrent/<sessionId>
         runtime = (
@@ -166,7 +179,22 @@ class TorrentHttpHandler(BaseHTTPRequestHandler):
         if runtime is None:
             self.send_error(404)
             return
-        runtime.serve(self, head_only, is_sync=is_sync)
+        runtime.serve(
+            self,
+            head_only,
+            is_sync=is_sync,
+            sync_metadata=sync_metadata,
+        )
 
     def log_message(self, _format: str, *_args: Any) -> None:
         return
+
+
+def _query_number(query: Dict[str, list[str]], key: str, parser: Any) -> Any:
+    value = query.get(key, [None])[0]
+    if value is None:
+        return None
+    try:
+        return parser(value)
+    except (TypeError, ValueError):
+        return None

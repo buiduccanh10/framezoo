@@ -137,7 +137,9 @@ describe("subtitle alignment client", () => {
       >,
     );
 
-    expect(JSON.parse(fields.get("windowStartsMs")!)).toHaveLength(6);
+    const windowStarts = JSON.parse(fields.get("windowStartsMs")!);
+    expect(windowStarts).toHaveLength(6);
+    expect(windowStarts).toEqual([...windowStarts].sort((a, b) => a - b));
     expect(JSON.parse(fields.get("speechIntervals")!)).toHaveLength(6);
   });
 
@@ -163,6 +165,40 @@ describe("subtitle alignment client", () => {
 
     expect(maxActiveCaptures).toBe(3);
     expect(alignmentMocks.extractAudioWindow).toHaveBeenCalledTimes(6);
+  });
+
+  it("finishes the first torrent window before starting the remaining pool", async () => {
+    let resolveFirst: (() => void) | null = null;
+    let firstFinished = false;
+    const starts: number[] = [];
+    alignmentMocks.extractAudioWindow.mockImplementation(async (request) => {
+      starts.push(request.windowIndex);
+      if (request.windowIndex === 0) {
+        await new Promise<void>((resolve) => {
+          resolveFirst = resolve;
+        });
+        firstFinished = true;
+      } else {
+        expect(firstFinished).toBe(true);
+      }
+      return new Uint8Array([1, 2, 3]);
+    });
+
+    const pending = alignSubtitlesWithCurrentStream({
+      sourceUrl: "http://127.0.0.1/torrent/file.mp4",
+      startAt: 600,
+      language: "en",
+      subtitles: [{ track: "primary", vttData: "WEBVTT" }],
+      videoDuration: 3600,
+      buffered: 3600,
+      isTorrent: true,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(starts).toEqual([0]);
+    resolveFirst?.();
+    await pending;
+    expect(starts).toHaveLength(6);
   });
 
   it("plans independent current, buffered, and fallback windows", () => {

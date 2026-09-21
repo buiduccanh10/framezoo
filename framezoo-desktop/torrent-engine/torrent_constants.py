@@ -3,6 +3,8 @@ from __future__ import annotations
 VIDEO_EXTENSIONS = (".avi", ".m4v", ".mkv", ".mov", ".mp4", ".webm")
 STREAM_CHUNK_SIZE = 1024 * 1024
 RANGE_PREFETCH_BYTES = 32 * 1024 * 1024
+# Subtitle sync reads sparse audio windows; bound read-ahead competition.
+SYNC_RANGE_PREFETCH_BYTES = 8 * 1024 * 1024
 MAX_REPLAN_PREFETCH_BYTES = 128 * 1024 * 1024
 # Keep the selected file materialized on disk while the playback scheduler
 # boosts the contiguous range that libmpv currently needs.

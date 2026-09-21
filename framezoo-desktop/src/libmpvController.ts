@@ -517,10 +517,7 @@ export class LibMpvController {
       return true;
     }
 
-    if (
-      process.platform === "win32" &&
-      !this.mainWindow.isDestroyed()
-    ) {
+    if (process.platform === "win32" && !this.mainWindow.isDestroyed()) {
       const [contentWidth, contentHeight] = this.mainWindow.getContentSize();
       const scale = getNativeScaleFactor(this.mainWindow);
       player.bounds = {
@@ -717,9 +714,24 @@ export class LibMpvController {
     }
 
     let url = request.url;
+    const query = new URLSearchParams();
     if (request.client) {
+      query.set("client", request.client);
+    }
+    if (request.client === "sync") {
+      if (Number.isInteger(request.syncWindowIndex)) {
+        query.set("syncWindowIndex", String(request.syncWindowIndex));
+      }
+      if (Number.isFinite(request.syncStartAt)) {
+        query.set("syncStartAt", String(request.syncStartAt));
+      }
+      if (Number.isFinite(request.syncDuration)) {
+        query.set("syncDuration", String(request.syncDuration));
+      }
+    }
+    if (query.size > 0) {
       const sep = url.includes("?") ? "&" : "?";
-      url = `${url}${sep}client=${encodeURIComponent(request.client)}`;
+      url = `${url}${sep}${query.toString()}`;
     }
 
     const outputPath = path.join(
