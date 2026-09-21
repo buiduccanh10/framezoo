@@ -543,9 +543,17 @@ class TorrentRuntime:
         start: int,
         length: int,
         reason: str,
+        is_sync: bool = False,
+        sync_metadata: Optional[dict[str, Any]] = None,
     ) -> None:
         pieces = sorted(self.map_pieces(start, length))
-        self._schedule_pieces(pieces, set(pieces), reason)
+        self._schedule_pieces(
+            pieces,
+            set(pieces),
+            reason,
+            is_sync=is_sync,
+            sync_metadata=sync_metadata,
+        )
 
     def prime_startup_ranges(self) -> None:
         """Keep enough contiguous playback data active before libmpv's first frame.
@@ -940,6 +948,7 @@ class TorrentRuntime:
         required_pieces: Set[int],
         reason: str,
         is_sync: bool = False,
+        sync_metadata: Optional[dict[str, Any]] = None,
     ) -> None:
         """Keep stream demand and read-ahead priorities additive.
 
@@ -1045,6 +1054,7 @@ class TorrentRuntime:
                     if reason == "first-chunk"
                     else None
                 ),
+                **(sync_metadata or {}),
             )
         if (
             required_set
@@ -1061,6 +1071,23 @@ class TorrentRuntime:
                 deadlineMs=0,
                 timingPhase="first_piece_prioritized",
                 elapsedMs=self.elapsed_ms(),
+                **(sync_metadata or {}),
+            )
+        if (
+            is_sync
+            and not getattr(self, "_first_sync_range_prioritized_logged", False)
+        ):
+            self._first_sync_range_prioritized_logged = True
+            log_event(
+                "first sync range prioritized",
+                sessionId=self.session_id,
+                requiredPieces=len(required_set),
+                pieces=len(prefetch_pieces),
+                priority=constants.STREAM_PIECE_PRIORITY,
+                deadlineMs=0,
+                timingPhase="first_sync_range_prioritized",
+                elapsedMs=self.elapsed_ms(),
+                **(sync_metadata or {}),
             )
 
     def _reset_piece_deadline(self, piece: int) -> None:
@@ -1507,10 +1534,15 @@ class TorrentRuntime:
         connect_start: float = 0.0,
         track_position: bool = True,
         is_sync: bool = False,
+        sync_metadata: Optional[dict[str, Any]] = None,
     ) -> bool:
         prefetch_length = max(
             end - start + 1,
-            constants.RANGE_PREFETCH_BYTES,
+            (
+                constants.SYNC_RANGE_PREFETCH_BYTES
+                if is_sync
+                else constants.RANGE_PREFETCH_BYTES
+            ),
         )
         required_pieces = sorted(self.map_pieces(start, end - start + 1))
         all_pieces = sorted(self.map_pieces(start, prefetch_length))
@@ -1570,6 +1602,7 @@ class TorrentRuntime:
                 downloadRate=download_rate,
                 trackPosition=track_position,
                 elapsedMs=self.elapsed_ms(),
+                **(sync_metadata or {}),
             )
 
         deadline = (
@@ -1582,7 +1615,11 @@ class TorrentRuntime:
             self.maybe_refocus(start)
         required_set = set(required_pieces)
         self._schedule_pieces(
-            all_pieces, required_set, reason="range", is_sync=is_sync
+            all_pieces,
+            required_set,
+            reason="range",
+            is_sync=is_sync,
+            sync_metadata=sync_metadata,
         )
         self._start_fast_block_fetch(start, end)
 
@@ -1644,7 +1681,26 @@ class TorrentRuntime:
                     partialPiece=False,
                     timingPhase="range_ready",
                     elapsedMs=self.elapsed_ms(),
+                    **(sync_metadata or {}),
                 )
+                if is_sync and not getattr(
+                    self, "_first_sync_bytes_ready_logged", False
+                ):
+                    self._first_sync_bytes_ready_logged = True
+                    try:
+                        status = self.handle.status()
+                        downloaded_bytes = int(getattr(status, "total_done", 0))
+                    except Exception:
+                        downloaded_bytes = None
+                    log_event(
+                        "first sync bytes ready",
+                        sessionId=self.session_id,
+                        downloadedBytes=downloaded_bytes,
+                        requiredPieces=len(required_pieces),
+                        timingPhase="first_sync_bytes_ready",
+                        elapsedMs=self.elapsed_ms(),
+                        **(sync_metadata or {}),
+                    )
                 return True
             if self._range_blocks_are_finished(start, end):
                 if stalled_target_piece is not None:
@@ -1662,7 +1718,21 @@ class TorrentRuntime:
                     partialPiece=True,
                     timingPhase="range_ready",
                     elapsedMs=self.elapsed_ms(),
+                    **(sync_metadata or {}),
                 )
+                if is_sync and not getattr(
+                    self, "_first_sync_bytes_ready_logged", False
+                ):
+                    self._first_sync_bytes_ready_logged = True
+                    log_event(
+                        "first sync bytes ready",
+                        sessionId=self.session_id,
+                        downloadedBytes=None,
+                        requiredPieces=len(required_pieces),
+                        timingPhase="first_sync_bytes_ready",
+                        elapsedMs=self.elapsed_ms(),
+                        **(sync_metadata or {}),
+                    )
                 return True
 
             blocked_waits += 1
@@ -1749,13 +1819,17 @@ class TorrentRuntime:
                     ):
                         self._kick_target_piece(target_piece)
                         last_kick = now
+                replan_cap = (
+                    max(prefetch_length, constants.SYNC_RANGE_PREFETCH_BYTES)
+                    if is_sync
+                    else constants.MAX_REPLAN_PREFETCH_BYTES
+                )
                 expansion = min(
                     2 ** min(2, blocked_replan_count),
-                    constants.MAX_REPLAN_PREFETCH_BYTES
-                    // max(1, prefetch_length),
+                    max(1, replan_cap // max(1, prefetch_length)),
                 )
                 replan_length = min(
-                    constants.MAX_REPLAN_PREFETCH_BYTES,
+                    replan_cap,
                     prefetch_length * expansion,
                 )
                 # Expand the read-ahead window as it grows, and re-assert the
@@ -1779,6 +1853,8 @@ class TorrentRuntime:
                         replanned_pieces,
                         required_set,
                         reason="blocked-replan",
+                        is_sync=is_sync,
+                        sync_metadata=sync_metadata,
                     )
                     self._start_fast_block_fetch(start, end)
                 self._force_reannounce_if_stalled(
@@ -1803,6 +1879,7 @@ class TorrentRuntime:
         connect_start: float = 0.0,
         track_position: bool = True,
         is_sync: bool = False,
+        sync_metadata: Optional[dict[str, Any]] = None,
     ) -> Optional[bytes]:
         end = min(end, self.file_piece_end(start))
         expected_length = end - start + 1
@@ -1832,6 +1909,7 @@ class TorrentRuntime:
                 connect_start=connect_start,
                 track_position=track_position,
                 is_sync=is_sync,
+                sync_metadata=sync_metadata,
             ):
                 return None
 
@@ -1851,6 +1929,7 @@ class TorrentRuntime:
         handler: BaseHTTPRequestHandler,
         head_only: bool,
         is_sync: bool = False,
+        sync_metadata: Optional[dict[str, Any]] = None,
     ) -> None:
         # mpv cancels the current range connection while seeking. Keep each
         # response single-use so FFmpeg does not reuse a half-read HTTP body.
@@ -1867,6 +1946,7 @@ class TorrentRuntime:
                 range=handler.headers.get("Range"),
                 timingPhase="first_http_request",
                 elapsedMs=self.elapsed_ms(),
+                **(sync_metadata or {}),
             )
         else:
             log_event(
@@ -1877,6 +1957,7 @@ class TorrentRuntime:
                 range=handler.headers.get("Range"),
                 timingPhase="http_request",
                 elapsedMs=self.elapsed_ms(),
+                **(sync_metadata or {}),
             )
         while (
             not self.metadata_ready.is_set()
@@ -1967,6 +2048,8 @@ class TorrentRuntime:
                 connect_start=connect_start,
                 track_position=track_position,
                 timeout=constants.INITIAL_RANGE_HEADER_WAIT_TIMEOUT,
+                is_sync=is_sync,
+                sync_metadata=sync_metadata,
             )
             defer_first_chunk = stream is None or first_chunk is None
 
@@ -2010,6 +2093,8 @@ class TorrentRuntime:
                 connect_start=connect_start,
                 track_position=track_position,
                 timeout=constants.FIRST_RANGE_WAIT_TIMEOUT,
+                is_sync=is_sync,
+                sync_metadata=sync_metadata,
             )
             if stream is None or first_chunk is None:
                 log_event(
@@ -2040,6 +2125,7 @@ class TorrentRuntime:
                         connect_start=connect_start,
                         track_position=track_position,
                         is_sync=is_sync,
+                        sync_metadata=sync_metadata,
                     )
                     if chunk is None:
                         handler.close_connection = True
@@ -2097,6 +2183,7 @@ class TorrentRuntime:
         track_position: bool = True,
         timeout: Optional[float] = constants.FIRST_RANGE_WAIT_TIMEOUT,
         is_sync: bool = False,
+        sync_metadata: Optional[dict[str, Any]] = None,
     ) -> Tuple[Optional[Any], Optional[bytes]]:
         """Wait for libtorrent to create and fill the first requested bytes."""
         chunk_end = min(
@@ -2118,6 +2205,8 @@ class TorrentRuntime:
                 start,
                 max(1, chunk_end - start + 1),
                 reason="first-chunk",
+                is_sync=is_sync,
+                sync_metadata=sync_metadata,
             )
         deadline = (
             time.monotonic() + timeout
@@ -2164,6 +2253,7 @@ class TorrentRuntime:
                 connect_start=connect_start,
                 track_position=track_position,
                 is_sync=is_sync,
+                sync_metadata=sync_metadata,
             )
             if chunk is not None:
                 return stream, chunk

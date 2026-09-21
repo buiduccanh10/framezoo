@@ -135,7 +135,10 @@ struct MpvPlayer {
 
   void stop() {
     const bool wasRunning = running.exchange(false, std::memory_order_acq_rel);
-    surface_disable_paint(surface);
+
+    if (render_context) {
+      api.render_context_set_update_callback(render_context, nullptr, nullptr);
+    }
 
     if (wasRunning && handle) {
       const char* command[] = {"quit", nullptr};
@@ -148,10 +151,14 @@ struct MpvPlayer {
     ) {
       event_thread.join();
     }
+
+    std::lock_guard<std::mutex> lock(render_mutex);
+    surface_disable_paint(surface);
   }
 
   ~MpvPlayer() {
     stop();
+    std::lock_guard<std::mutex> lock(render_mutex);
     if (render_context) {
       api.render_context_free(render_context);
       render_context = nullptr;
@@ -246,16 +253,21 @@ struct MpvPlayer {
 
   void render() {
     std::lock_guard<std::mutex> lock(render_mutex);
-    if (!running.load(std::memory_order_acquire) || !render_context) {
+    if (
+        !running.load(std::memory_order_acquire) ||
+        is_suspended.load(std::memory_order_acquire) ||
+        !render_context ||
+        !surface
+    ) {
       return;
     }
-
     const uint64_t update_flags = api.render_context_update(render_context);
-
-    if (is_suspended.load(std::memory_order_acquire) || !surface) {
+    if (
+        !running.load(std::memory_order_acquire) ||
+        is_suspended.load(std::memory_order_acquire)
+    ) {
       return;
     }
-
     const uint64_t render_number = render_count.fetch_add(1) + 1;
 #if defined(_WIN32)
     if (software_render) {
@@ -330,6 +342,7 @@ struct MpvPlayer {
     if (sw_buffer.size() < needed) {
       sw_buffer.assign(needed, 0);
     }
+
     const bool has_frame_update =
         (update_flags & MPV_RENDER_UPDATE_FRAME) != 0;
     if (!running.load(std::memory_order_acquire)) return;
@@ -554,7 +567,13 @@ std::unordered_map<std::string, std::shared_ptr<std::atomic<bool>>>
 
 void render_update_callback(void* user) {
   auto* player = static_cast<MpvPlayer*>(user);
-  if (!player || !player->running.load(std::memory_order_acquire)) return;
+  if (!player) return;
+  std::unique_lock<std::mutex> lock(player->render_mutex, std::try_to_lock);
+  if (!lock.owns_lock()) return;
+  if (
+      !player->running.load(std::memory_order_acquire) ||
+      player->is_suspended.load(std::memory_order_acquire)
+  ) return;
   const uint64_t update_number = player->render_update_count.fetch_add(1) + 1;
   if (update_number <= 5 || update_number % 60 == 0) {
     std::fprintf(
@@ -1451,7 +1470,10 @@ napi_value set_player_suspended(napi_env env, napi_callback_info info) {
   if (napi_get_value_bool(env, argv[1], &suspended) != napi_ok) {
     return throw_error(env, "suspended must be a boolean");
   }
-  player->is_suspended.store(suspended, std::memory_order_release);
+  {
+    std::lock_guard<std::mutex> lock(player->render_mutex);
+    player->is_suspended.store(suspended, std::memory_order_release);
+  }
 
   napi_value result;
   napi_get_boolean(env, true, &result);
@@ -1585,8 +1607,8 @@ napi_value init(napi_env env, napi_value exports) {
        napi_default, nullptr},
       {"commandPlayer", nullptr, command_player, nullptr, nullptr, nullptr,
        napi_default, nullptr},
-      {"setPlayerSuspended", nullptr, set_player_suspended, nullptr, nullptr, nullptr,
-       napi_default, nullptr},
+      {"setPlayerSuspended", nullptr, set_player_suspended, nullptr, nullptr,
+       nullptr, napi_default, nullptr},
       {"extractAudio", nullptr, extract_audio, nullptr, nullptr, nullptr,
        napi_default, nullptr},
       {"cancelAudioExtraction", nullptr, cancel_audio_extraction, nullptr,

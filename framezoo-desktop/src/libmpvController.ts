@@ -28,7 +28,7 @@ interface NativeLibMpvAddon {
     request: LibMpvSourceRequest & { generation: number },
   ): void;
   commandPlayer(playerId: string, command: LibMpvCommand): void;
-  setPlayerSuspended(playerId: string, suspended: boolean): void;
+  setPlayerSuspended?(playerId: string, suspended: boolean): void;
   extractAudio(
     request: LibMpvAudioRequest & { outputPath: string },
   ): Promise<string>;
@@ -46,7 +46,7 @@ type PlayerRecord = {
   isTorrent?: boolean;
   pipResizeListener?: () => void;
   pipWindow?: BrowserWindow;
-  isPaused?: boolean;
+  isPaused: boolean;
 };
 
 const DEFAULT_NATIVE_EVENT_TIMEOUT_MS = 120_000;
@@ -237,6 +237,9 @@ export class LibMpvController {
   private addon: NativeLibMpvAddon | null = null;
   private players = new Map<string, PlayerRecord>();
   private playersWasPlayingBeforeSuspend = new Set<string>();
+  private suspendGeneration = 0;
+  private suspendResumeTimer: ReturnType<typeof setTimeout> | null = null;
+  private isSuspended = false;
   private eventTimers = new Map<string, ReturnType<typeof setTimeout>>();
   private ipcRegistered = false;
   private startupPreflight: (() => Promise<void>) | null = null;
@@ -476,7 +479,18 @@ export class LibMpvController {
         generation: 0,
         bounds: normalizedBounds,
         target: "main",
+        isPaused: true,
       });
+      if (this.isSuspended) {
+        try {
+          this.addon.setPlayerSuspended?.(id, true);
+        } catch (error) {
+          console.warn(
+            "[libmpv] failed to suspend newly created player",
+            error,
+          );
+        }
+      }
       lastPlayerCreateError = null;
       this.broadcastLog("info", "create", {
         playerId: id,
@@ -503,10 +517,7 @@ export class LibMpvController {
       return true;
     }
 
-    if (
-      process.platform === "win32" &&
-      !this.mainWindow.isDestroyed()
-    ) {
+    if (process.platform === "win32" && !this.mainWindow.isDestroyed()) {
       const [contentWidth, contentHeight] = this.mainWindow.getContentSize();
       const scale = getNativeScaleFactor(this.mainWindow);
       player.bounds = {
@@ -580,6 +591,7 @@ export class LibMpvController {
         startAt: Math.max(0, Number(request.startAt) || 0),
         autoplay: request.autoplay !== false,
       });
+      player.isPaused = request.autoplay === false;
 
       const timeoutMs = request.isTorrent
         ? TORRENT_NATIVE_EVENT_TIMEOUT_MS
@@ -610,60 +622,14 @@ export class LibMpvController {
     }
   }
 
-  public pauseAllForSuspend(): void {
-    if (!this.addon) return;
-    for (const [playerId, player] of this.players.entries()) {
-      try {
-        this.addon.setPlayerSuspended(playerId, true);
-      } catch (e) {}
-
-      if (!player.isPaused) {
-        this.playersWasPlayingBeforeSuspend.add(playerId);
-        try {
-          this.addon.commandPlayer(playerId, { type: "pause" });
-        } catch (error) {
-          console.error(`[libmpv] Failed to pause player ${playerId} on suspend`, error);
-        }
-      }
-    }
-  }
-
-  public resumeAllForSuspend(): void {
-    if (!this.addon) return;
-
-    // Delay restoring native render and playback by 1s to allow macOS
-    // WindowServer to fully restore the OpenGL/Metal views on wake.
-    setTimeout(() => {
-      for (const playerId of this.players.keys()) {
-        try {
-          this.addon?.setPlayerSuspended(playerId, false);
-        } catch (e) {}
-      }
-
-      for (const playerId of this.playersWasPlayingBeforeSuspend) {
-        if (this.players.has(playerId)) {
-          try {
-            this.addon?.commandPlayer(playerId, { type: "pause" });
-            setTimeout(() => {
-              try {
-                this.addon?.commandPlayer(playerId, { type: "play" });
-              } catch (e) {}
-            }, 50);
-          } catch (error) {
-            console.error(`[libmpv] Failed to resume player ${playerId} on wake`, error);
-          }
-        }
-      }
-      this.playersWasPlayingBeforeSuspend.clear();
-    }, 1000);
-  }
-
   public command(playerId: string, command: LibMpvCommand): boolean {
     const player = this.players.get(playerId);
     if (!player || !this.addon) return false;
 
     try {
       this.addon.commandPlayer(playerId, command);
+      if (command.type === "play") player.isPaused = false;
+      if (command.type === "pause") player.isPaused = true;
       this.broadcastLog("debug", command.type, {
         playerId,
         generation: player.generation,
@@ -677,6 +643,59 @@ export class LibMpvController {
       );
       return false;
     }
+  }
+
+  public pauseAllForSuspend(): void {
+    this.suspendGeneration += 1;
+    this.isSuspended = true;
+    if (this.suspendResumeTimer) {
+      clearTimeout(this.suspendResumeTimer);
+      this.suspendResumeTimer = null;
+    }
+
+    for (const [playerId, player] of this.players.entries()) {
+      try {
+        this.addon?.setPlayerSuspended?.(playerId, true);
+      } catch (error) {
+        console.warn(`[libmpv] failed to suspend player ${playerId}`, error);
+      }
+      if (!player.isPaused) {
+        this.playersWasPlayingBeforeSuspend.add(playerId);
+        this.command(playerId, { type: "pause" });
+      }
+    }
+  }
+
+  public resumeAllForSuspend(): void {
+    const generation = ++this.suspendGeneration;
+    if (this.suspendResumeTimer) clearTimeout(this.suspendResumeTimer);
+
+    this.suspendResumeTimer = setTimeout(() => {
+      this.suspendResumeTimer = null;
+      if (!this.isSuspended || generation !== this.suspendGeneration) return;
+      this.isSuspended = false;
+
+      for (const playerId of this.players.keys()) {
+        try {
+          this.addon?.setPlayerSuspended?.(playerId, false);
+        } catch (error) {
+          console.warn(
+            `[libmpv] failed to resume render for ${playerId}`,
+            error,
+          );
+        }
+      }
+
+      for (const playerId of this.playersWasPlayingBeforeSuspend) {
+        if (!this.players.has(playerId)) continue;
+        this.command(playerId, { type: "pause" });
+        setTimeout(() => {
+          if (!this.players.has(playerId) || this.isSuspended) return;
+          this.command(playerId, { type: "play" });
+        }, 50);
+      }
+      this.playersWasPlayingBeforeSuspend.clear();
+    }, 1000);
   }
 
   public async extractAudio(request: LibMpvAudioRequest): Promise<Uint8Array> {
@@ -693,11 +712,26 @@ export class LibMpvController {
     ) {
       throw new Error("Invalid libmpv audio extraction request");
     }
-    
+
     let url = request.url;
+    const query = new URLSearchParams();
     if (request.client) {
+      query.set("client", request.client);
+    }
+    if (request.client === "sync") {
+      if (Number.isInteger(request.syncWindowIndex)) {
+        query.set("syncWindowIndex", String(request.syncWindowIndex));
+      }
+      if (Number.isFinite(request.syncStartAt)) {
+        query.set("syncStartAt", String(request.syncStartAt));
+      }
+      if (Number.isFinite(request.syncDuration)) {
+        query.set("syncDuration", String(request.syncDuration));
+      }
+    }
+    if (query.size > 0) {
       const sep = url.includes("?") ? "&" : "?";
-      url = `${url}${sep}client=${encodeURIComponent(request.client)}`;
+      url = `${url}${sep}${query.toString()}`;
     }
 
     const outputPath = path.join(
