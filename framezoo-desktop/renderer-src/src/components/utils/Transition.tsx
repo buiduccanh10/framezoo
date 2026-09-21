@@ -1,8 +1,18 @@
+import classNames from "classnames";
 import {
-  Transition as HeadlessTransition,
-  TransitionClasses,
-} from "@headlessui/react";
-import { CSSProperties, Fragment, ReactNode } from "react";
+  CSSProperties,
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+
+const useIsomorphicLayoutEffect =
+  typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 export type TransitionAnimations =
   | "slide-down"
@@ -12,7 +22,7 @@ export type TransitionAnimations =
   | "fade"
   | "none";
 
-interface Props {
+export interface Props {
   show?: boolean;
   durationClass?: string;
   animation: TransitionAnimations;
@@ -20,6 +30,15 @@ interface Props {
   children?: ReactNode;
   isChild?: boolean;
   style?: CSSProperties;
+}
+
+export interface TransitionClasses {
+  enter?: string;
+  enterFrom?: string;
+  enterTo?: string;
+  leave?: string;
+  leaveFrom?: string;
+  leaveTo?: string;
 }
 
 function getClasses(
@@ -84,25 +103,131 @@ function getClasses(
   return {};
 }
 
-export function Transition(props: Props) {
-  const duration = props.durationClass ?? "duration-200";
-  const classes = getClasses(props.animation, duration);
+function parseDuration(durationClass?: string): number {
+  if (!durationClass) return 200;
+  const match = durationClass.match(/\d+/);
+  return match ? parseInt(match[0], 10) : 200;
+}
 
-  if (props.isChild) {
-    return (
-      <HeadlessTransition.Child as={Fragment} {...classes}>
-        <div className={props.className} style={props.style}>
-          {props.children}
-        </div>
-      </HeadlessTransition.Child>
-    );
+interface TransitionContextValue {
+  show: boolean;
+}
+
+const TransitionContext = createContext<TransitionContextValue | null>(null);
+
+type Stage =
+  "unmounted" | "enter-start" | "enter-active" | "entered" | "leave-active";
+
+export function Transition(props: Props) {
+  const context = useContext(TransitionContext);
+  const effectiveShow =
+    props.show !== undefined
+      ? Boolean(props.show)
+      : props.isChild && context !== null
+        ? context.show
+        : Boolean(props.show ?? true);
+
+  const durationClass = props.durationClass ?? "duration-200";
+  const durationMs = parseDuration(durationClass);
+  const classes = useMemo(
+    () => getClasses(props.animation, durationClass),
+    [props.animation, durationClass],
+  );
+
+  const [mounted, setMounted] = useState(effectiveShow);
+  const [stage, setStage] = useState<Stage>(
+    effectiveShow ? "entered" : "unmounted",
+  );
+  const isFirstRender = useRef(true);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const elRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
+    if (props.animation === "none") {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
+      }
+      setMounted(effectiveShow);
+      setStage(effectiveShow ? "entered" : "unmounted");
+      return;
+    }
+
+    if (effectiveShow) {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
+      }
+      setMounted(true);
+      setStage("enter-start");
+    } else {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
+      }
+      setStage("leave-active");
+      timerRef.current = setTimeout(() => {
+        setMounted(false);
+        setStage("unmounted");
+        timerRef.current = null;
+      }, durationMs);
+    }
+
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
+      }
+    };
+  }, [effectiveShow, props.animation, durationMs]);
+
+  useIsomorphicLayoutEffect(() => {
+    if (stage === "enter-start") {
+      if (elRef.current) {
+        void elRef.current.offsetHeight;
+      }
+      setStage("enter-active");
+      timerRef.current = setTimeout(() => {
+        setStage("entered");
+        timerRef.current = null;
+      }, durationMs);
+    }
+  }, [stage, durationMs]);
+
+  const contextValue = useMemo(
+    () => ({ show: effectiveShow }),
+    [effectiveShow],
+  );
+
+  if (!mounted && stage === "unmounted") {
+    return null;
+  }
+
+  let activeClass = "";
+  if (stage === "enter-start") {
+    activeClass = `${classes.enter ?? ""} ${classes.enterFrom ?? ""}`;
+  } else if (stage === "enter-active") {
+    activeClass = `${classes.enter ?? ""} ${classes.enterTo ?? ""}`;
+  } else if (stage === "entered") {
+    activeClass = classes.enterTo ?? "";
+  } else if (stage === "leave-active") {
+    activeClass = `${classes.leave ?? ""} ${classes.leaveTo ?? ""}`;
   }
 
   return (
-    <HeadlessTransition show={props.show} as={Fragment} {...classes}>
-      <div className={props.className} style={props.style}>
+    <TransitionContext.Provider value={contextValue}>
+      <div
+        ref={elRef}
+        className={classNames(props.className, activeClass)}
+        style={props.style}
+      >
         {props.children}
       </div>
-    </HeadlessTransition>
+    </TransitionContext.Provider>
   );
 }
