@@ -201,6 +201,111 @@ describe("subtitle alignment client", () => {
     expect(starts).toHaveLength(6);
   });
 
+  it("reports monotonic progress and completes audio preparation before moving to subtitle sync", async () => {
+    const progressEvents: Array<{
+      progress: number;
+      phase?: "capturing" | "analyzing";
+    }> = [];
+
+    await alignSubtitlesWithCurrentStream({
+      sourceUrl: "https://example.test/video.m3u8",
+      startAt: 600,
+      language: "en",
+      subtitles: [{ track: "primary", vttData: "WEBVTT" }],
+      videoDuration: 3600,
+      buffered: 3600,
+      onProgress: (progress, phase) => {
+        progressEvents.push({ progress, phase });
+      },
+    });
+
+    expect(progressEvents.length).toBeGreaterThan(0);
+
+    // Verify progress never decreases
+    for (let i = 1; i < progressEvents.length; i++) {
+      expect(progressEvents[i].progress).toBeGreaterThanOrEqual(
+        progressEvents[i - 1].progress,
+      );
+    }
+
+    // Verify all capturing phase events happen first and stay <= 0.4
+    const firstAnalyzingIndex = progressEvents.findIndex(
+      (e) => e.phase === "analyzing",
+    );
+    expect(firstAnalyzingIndex).toBeGreaterThan(0);
+
+    const capturingEvents = progressEvents.slice(0, firstAnalyzingIndex);
+    const analyzingEvents = progressEvents.slice(firstAnalyzingIndex);
+
+    for (const e of capturingEvents) {
+      expect(e.phase).toBe("capturing");
+      expect(e.progress).toBeLessThanOrEqual(0.4);
+    }
+
+    // The last capturing event should reach 0.4 (100% of capturing phase)
+    expect(capturingEvents[capturingEvents.length - 1].progress).toBeCloseTo(
+      0.4,
+      5,
+    );
+
+    // After transitioning to analyzing, phase must never go back to capturing
+    for (const e of analyzingEvents) {
+      expect(e.phase).toBe("analyzing");
+      expect(e.progress).toBeGreaterThan(0.4);
+    }
+
+    // Final event should be 1.0 analyzing
+    expect(progressEvents[progressEvents.length - 1]).toEqual({
+      progress: 1,
+      phase: "analyzing",
+    });
+  });
+
+  it("reports monotonic progress for torrent sources without jumping phases backwards", async () => {
+    const progressEvents: Array<{
+      progress: number;
+      phase?: "capturing" | "analyzing";
+    }> = [];
+
+    await alignSubtitlesWithCurrentStream({
+      sourceUrl: "http://127.0.0.1/torrent/file.mp4",
+      startAt: 600,
+      language: "en",
+      subtitles: [{ track: "primary", vttData: "WEBVTT" }],
+      videoDuration: 3600,
+      buffered: 3600,
+      isTorrent: true,
+      onProgress: (progress, phase) => {
+        progressEvents.push({ progress, phase });
+      },
+    });
+
+    // Verify progress never decreases
+    for (let i = 1; i < progressEvents.length; i++) {
+      expect(progressEvents[i].progress).toBeGreaterThanOrEqual(
+        progressEvents[i - 1].progress,
+      );
+    }
+
+    // Phase transition must only occur once: capturing -> analyzing
+    let seenAnalyzing = false;
+    for (const e of progressEvents) {
+      if (e.phase === "analyzing") {
+        seenAnalyzing = true;
+      }
+      if (seenAnalyzing) {
+        expect(e.phase).toBe("analyzing");
+      } else {
+        expect(e.phase).toBe("capturing");
+      }
+    }
+
+    expect(progressEvents[progressEvents.length - 1]).toEqual({
+      progress: 1,
+      phase: "analyzing",
+    });
+  });
+
   it("plans independent current, buffered, and fallback windows", () => {
     const plan = buildAlignmentWindowPlan(600, 3600, 900);
 

@@ -333,11 +333,6 @@ export async function alignSubtitlesWithCurrentStream(options: {
   }
 
   const capturedAudio = new Array<Uint8Array>(windowPlan.length);
-  const localResults = new Array<{
-    audio: Uint8Array;
-    durationMs: number;
-    intervals: Array<{ startMs: number; endMs: number }>;
-  } | null>(windowPlan.length).fill(null);
   const captureAbortController = new AbortController();
   const abortCaptures = () => {
     captureAbortController.abort();
@@ -348,7 +343,6 @@ export async function alignSubtitlesWithCurrentStream(options: {
   }
   let completedCaptures = 0;
   let nextCaptureIndex = options.isTorrent ? 1 : 0;
-  const analysisPromises: Promise<void>[] = [];
   const processWindow = async (index: number) => {
     const plan = windowPlan[index];
     const audio = await captureCurrentStreamAudio({
@@ -371,30 +365,6 @@ export async function alignSubtitlesWithCurrentStream(options: {
       (completedCaptures / windowPlan.length) * 0.4,
       "capturing",
     );
-    if (localEntry && localSpeechIntervals) {
-      analysisPromises.push(
-        (async () => {
-          const decoded = decodeMoonshineWav(audio);
-          const intervals = await transcribeMoonshine(
-            localEntry,
-            audio,
-            captureAbortController.signal,
-          );
-          localResults[index] = {
-            audio,
-            durationMs: Math.round(decoded.durationMs),
-            intervals,
-          };
-          options.onProgress?.(
-            0.4 + ((index + 1) / SUBTITLE_ALIGNMENT_MAX_WINDOWS) * 0.35,
-            "analyzing",
-          );
-        })().catch((error) => {
-          captureAbortController.abort();
-          throw error;
-        }),
-      );
-    }
   };
   const captureWorker = async () => {
     try {
@@ -426,7 +396,6 @@ export async function alignSubtitlesWithCurrentStream(options: {
       windowCount: windowPlan.length,
       windowDuration,
     });
-    await Promise.all(analysisPromises);
   } finally {
     options.signal?.removeEventListener("abort", abortCaptures);
   }
@@ -434,20 +403,24 @@ export async function alignSubtitlesWithCurrentStream(options: {
   const timelineWindows = windowPlan
     .map((plan, index) => ({ index, plan }))
     .sort((left, right) => left.plan.startAt - right.plan.startAt);
-  for (const { index, plan } of timelineWindows) {
+  for (const [processedIndex, { index, plan }] of timelineWindows.entries()) {
     const audio = capturedAudio[index];
 
     if (localEntry && localSpeechIntervals) {
-      const result = localResults[index];
-      if (!result) continue;
+      const decoded = decodeMoonshineWav(audio);
+      const localIntervals = await transcribeMoonshine(
+        localEntry,
+        audio,
+        options.signal,
+      );
 
-      if (result.intervals.length > 0) {
+      if (localIntervals.length > 0) {
         const startMs = Math.round(plan.startAt * 1000);
-        capturedWindows.push({ audio: result.audio, startMs });
+        capturedWindows.push({ audio, startMs });
         windowStartsMs.push(startMs);
-        windowDurationsMs.push(result.durationMs);
+        windowDurationsMs.push(Math.round(decoded.durationMs));
         localSpeechIntervals.push(
-          result.intervals.map(({ startMs: s, endMs: e }) => ({
+          localIntervals.map(({ startMs: s, endMs: e }) => ({
             startMs: startMs + s,
             endMs: startMs + e,
           })),
@@ -463,8 +436,8 @@ export async function alignSubtitlesWithCurrentStream(options: {
     }
 
     options.onProgress?.(
-      0.4 + (capturedWindows.length / SUBTITLE_ALIGNMENT_MAX_WINDOWS) * 0.35,
-      localEntry ? "analyzing" : "capturing",
+      0.4 + ((processedIndex + 1) / timelineWindows.length) * 0.35,
+      "analyzing",
     );
   }
 
