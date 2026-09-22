@@ -29,6 +29,7 @@ import {
   TorrentManager,
 } from "./torrent/manager";
 import { libmpvController } from "./libmpvController";
+import { bindPowerLifecycle } from "./powerLifecycle";
 import {
   MoonshineNodeRuntime,
   type MoonshineNodeModel,
@@ -116,6 +117,21 @@ protocol.registerSchemesAsPrivileged([
 let mainWindow: BrowserWindow | null = null;
 const PROTOCOL_PREFIX = "framezoo";
 
+function sendToMainWindow(channel: string, ...args: unknown[]): void {
+  if (
+    !mainWindow ||
+    mainWindow.isDestroyed() ||
+    mainWindow.webContents.isDestroyed()
+  ) {
+    return;
+  }
+  try {
+    mainWindow.webContents.send(channel, ...args);
+  } catch (error) {
+    console.warn(`[main] failed to send ${channel}`, error);
+  }
+}
+
 if (process.defaultApp) {
   if (process.argv.length >= 2) {
     app.setAsDefaultProtocolClient(PROTOCOL_PREFIX, process.execPath, [
@@ -132,7 +148,7 @@ function handleDeepLink(url: string) {
   if (mainWindow) {
     if (mainWindow.isMinimized()) mainWindow.restore();
     mainWindow.focus();
-    mainWindow.webContents.send("desktop:deep-link", deepLinkPath);
+    sendToMainWindow("desktop:deep-link", deepLinkPath);
   }
 }
 
@@ -347,17 +363,14 @@ function getStartupWarmupState(): NativeStartupWarmupState {
 
 function publishStartupWarmupState() {
   if (mainWindow && !mainWindow.isDestroyed()) {
-    mainWindow.webContents.send(
-      "desktop:native-warmup-state",
-      getStartupWarmupState(),
-    );
+    sendToMainWindow("desktop:native-warmup-state", getStartupWarmupState());
   }
 }
 
 function setWarmupState(next: TorrentWarmupState) {
   torrentWarmupState = next;
   if (mainWindow && !mainWindow.isDestroyed()) {
-    mainWindow.webContents.send("desktop:torrent-warmup-state", next);
+    sendToMainWindow("desktop:torrent-warmup-state", next);
   }
   publishStartupWarmupState();
 }
@@ -734,7 +747,7 @@ function registerHeaderInterceptors() {
 function notifyMainWindowDesktopPipClosed() {
   libmpvController.reparentPipPlayersToMain();
   if (!mainWindow || mainWindow.isDestroyed()) return;
-  mainWindow.webContents.send("desktop:pip-closed");
+  sendToMainWindow("desktop:pip-closed");
 }
 
 function focusMainWindow(window: BrowserWindow) {
@@ -853,15 +866,12 @@ const desktopPipController = createDesktopPipController({
 
 function sendDesktopAppUpdateState() {
   if (!mainWindow || mainWindow.isDestroyed()) return;
-  mainWindow.webContents.send(
-    "desktop:app-update-state",
-    desktopAppUpdater.getState(),
-  );
+  sendToMainWindow("desktop:app-update-state", desktopAppUpdater.getState());
 }
 
 function sendTorrentStatus(status: unknown) {
   if (!mainWindow || mainWindow.isDestroyed()) return;
-  mainWindow.webContents.send("desktop:torrent-status", status);
+  sendToMainWindow("desktop:torrent-status", status);
 }
 
 async function handleDesktopAppUpdateMenuAction() {
@@ -1151,7 +1161,7 @@ function setAppFullScreen(
       mainWindow.setAutoHideMenuBar(true);
       mainWindow.setMenuBarVisibility(false);
       mainWindow.setBounds(currentDisplay.bounds);
-      mainWindow.webContents.send("desktop:fullscreen-state", true);
+      sendToMainWindow("desktop:fullscreen-state", true);
     } else {
       isWindowsFullScreen = false;
       mainWindow.setAutoHideMenuBar(true);
@@ -1208,7 +1218,7 @@ function setAppFullScreen(
       }
       fullscreenOrigin = null;
       wasMaximizedBeforePlayerFullscreen = false;
-      mainWindow.webContents.send("desktop:fullscreen-state", false);
+      sendToMainWindow("desktop:fullscreen-state", false);
     }
   } else {
     const currentFull = mainWindow.isFullScreen();
@@ -1228,13 +1238,13 @@ function setAppFullScreen(
     } else {
       mainWindow.setFullScreen(false);
     }
-    mainWindow.webContents.send("desktop:fullscreen-state", fullscreen);
+    sendToMainWindow("desktop:fullscreen-state", fullscreen);
 
     fullscreenTransitionTimeout = setTimeout(() => {
       clearFullscreenTransition();
       if (mainWindow && !mainWindow.isDestroyed()) {
         const actualFull = mainWindow.isFullScreen();
-        mainWindow.webContents.send("desktop:fullscreen-state", actualFull);
+        sendToMainWindow("desktop:fullscreen-state", actualFull);
       }
     }, 1500);
   }
@@ -1322,13 +1332,13 @@ function createMainWindow() {
 
   mainWindow.on("maximize", () => {
     if (mainWindow && !mainWindow.isDestroyed()) {
-      mainWindow.webContents.send("desktop:maximize-state", true);
+      sendToMainWindow("desktop:maximize-state", true);
     }
   });
 
   mainWindow.on("unmaximize", () => {
     if (mainWindow && !mainWindow.isDestroyed()) {
-      mainWindow.webContents.send("desktop:maximize-state", false);
+      sendToMainWindow("desktop:maximize-state", false);
     }
   });
 
@@ -1343,7 +1353,7 @@ function createMainWindow() {
       if (!fullscreenOrigin) {
         fullscreenOrigin = "user";
       }
-      mainWindow.webContents.send("desktop:fullscreen-state", true);
+      sendToMainWindow("desktop:fullscreen-state", true);
     }
   });
 
@@ -1357,7 +1367,7 @@ function createMainWindow() {
       }
       fullscreenOrigin = null;
       wasMaximizedBeforePlayerFullscreen = false;
-      mainWindow.webContents.send("desktop:fullscreen-state", false);
+      sendToMainWindow("desktop:fullscreen-state", false);
     }
   });
 
@@ -1675,7 +1685,7 @@ function registerIpcHandlers() {
             chunks.push(bytes);
             loaded += bytes.byteLength;
             if (mainWindow && !mainWindow.isDestroyed()) {
-              mainWindow.webContents.send("desktop:moonshine-model-progress", {
+              sendToMainWindow("desktop:moonshine-model-progress", {
                 requestId,
                 language: request.language,
                 architecture: request.architecture,
@@ -1751,7 +1761,7 @@ function registerIpcHandlers() {
 
   ipcMain.handle("desktop:pip-action", async (_event, action: any) => {
     if (!mainWindow || mainWindow.isDestroyed()) return false;
-    mainWindow.webContents.send("desktop:pip-action", action);
+    sendToMainWindow("desktop:pip-action", action);
     return true;
   });
 
@@ -2132,14 +2142,7 @@ if (!hasSingleInstanceLock) {
     installApplicationMenu();
     createMainWindow();
 
-    powerMonitor.on("suspend", () => {
-      libmpvController.pauseAllForSuspend();
-      mainWindow?.webContents.send("desktop:os-suspend");
-    });
-    powerMonitor.on("resume", () => {
-      libmpvController.resumeAllForSuspend();
-      mainWindow?.webContents.send("desktop:os-resume");
-    });
+    bindPowerLifecycle(powerMonitor, libmpvController, sendToMainWindow);
     void runStartupNativeWarmup();
     desktopAppUpdater.initialize();
 

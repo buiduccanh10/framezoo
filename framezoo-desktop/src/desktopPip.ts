@@ -129,11 +129,20 @@ export function createDesktopPipController(
   }
 
   function sendState() {
-    if (!pipWindow || pipWindow.isDestroyed() || !pipState) {
+    if (
+      !pipWindow ||
+      pipWindow.isDestroyed() ||
+      pipWindow.webContents.isDestroyed() ||
+      !pipState
+    ) {
       return;
     }
 
-    pipWindow.webContents.send("desktop:pip-state", pipState);
+    try {
+      pipWindow.webContents.send("desktop:pip-state", pipState);
+    } catch (error) {
+      console.warn("[desktop-pip] failed to send state", error);
+    }
   }
 
   function settleReady(ready: boolean) {
@@ -359,12 +368,22 @@ export function createDesktopPipController(
       return true;
     },
     activate() {
-      if (!pipReady || !pipWindow || pipWindow.isDestroyed()) {
+      if (
+        !pipReady ||
+        !pipWindow ||
+        pipWindow.isDestroyed() ||
+        pipWindow.webContents.isDestroyed()
+      ) {
         return false;
       }
 
-      pipWindow.webContents.send("desktop:pip-activate");
-      return true;
+      try {
+        pipWindow.webContents.send("desktop:pip-activate");
+        return true;
+      } catch (error) {
+        console.warn("[desktop-pip] failed to activate", error);
+        return false;
+      }
     },
     update(nextState: DesktopPipState) {
       pipState = nextState ?? null;
