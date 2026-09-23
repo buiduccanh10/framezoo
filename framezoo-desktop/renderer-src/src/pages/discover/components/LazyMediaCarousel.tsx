@@ -53,8 +53,8 @@ export function LazyMediaCarousel({
   sectionTitleOverride,
 }: LazyMediaCarouselProps) {
   const { ref, hasIntersected } = useIntersectionObserver<HTMLDivElement>({
-    threshold: 0.1,
-    rootMargin: "50px", // Start loading when carousel is 50px from viewport
+    threshold: 0,
+    rootMargin: "800px 0px", // Start loading when carousel is 800px from viewport
   });
 
   // Always render if priority is true (for top carousels)

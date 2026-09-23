@@ -955,8 +955,20 @@ export class LibMpvController {
   }
 
   private sendToRenderer(event: LibMpvPlayerEvent): void {
-    if (!this.mainWindow || this.mainWindow.isDestroyed()) return;
-    this.mainWindow.webContents.send("desktop:libmpv-event", event);
+    if (!this.canSendToRenderer()) return;
+    try {
+      this.mainWindow!.webContents.send("desktop:libmpv-event", event);
+    } catch (error) {
+      console.warn("[libmpv] failed to send native event", error);
+    }
+  }
+
+  private canSendToRenderer(): boolean {
+    return Boolean(
+      this.mainWindow &&
+      !this.mainWindow.isDestroyed() &&
+      !this.mainWindow.webContents.isDestroyed(),
+    );
   }
 
   private broadcastLog(
@@ -968,12 +980,16 @@ export class LibMpvController {
       ? { ...data, playbackId: data.playbackId ?? data.playerId }
       : data;
     console.log(`[libmpv] ${name}`, { level, ...enrichedData });
-    if (!this.mainWindow || this.mainWindow.isDestroyed()) return;
-    this.mainWindow.webContents.send("desktop:libmpv-log", {
-      level,
-      name,
-      data: enrichedData,
-    });
+    if (!this.canSendToRenderer()) return;
+    try {
+      this.mainWindow!.webContents.send("desktop:libmpv-log", {
+        level,
+        name,
+        data: enrichedData,
+      });
+    } catch (error) {
+      console.warn("[libmpv] failed to send native log", error);
+    }
   }
 
   private broadcastError(

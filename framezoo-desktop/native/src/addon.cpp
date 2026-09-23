@@ -3,6 +3,7 @@
 #include <atomic>
 #include <algorithm>
 #include <chrono>
+#include <condition_variable>
 #include <cstdlib>
 #include <cstdio>
 #include <cmath>
@@ -21,6 +22,26 @@
 namespace {
 
 constexpr uint64_t MPV_RENDER_UPDATE_FRAME = 1ULL << 0;
+
+struct MpvPlayer;
+
+struct RenderCallbackState {
+  std::mutex mutex;
+  std::condition_variable cv;
+  MpvPlayer* player = nullptr;
+  size_t active_callbacks = 0;
+  bool disabled = false;
+};
+
+struct RenderCallbackGuard {
+  RenderCallbackState* state;
+
+  ~RenderCallbackGuard() {
+    std::lock_guard<std::mutex> lock(state->mutex);
+    state->active_callbacks -= 1;
+    if (state->active_callbacks == 0) state->cv.notify_all();
+  }
+};
 
 struct NativeEvent {
   std::string player_id;
@@ -127,6 +148,7 @@ struct MpvPlayer {
   bool software_render = false;
   std::vector<uint8_t> sw_buffer;
   std::atomic<bool> is_suspended{false};
+  RenderCallbackState render_callback_state;
 
   int command(const char* const* commands) {
     std::lock_guard<std::mutex> lock(command_mutex);
@@ -139,6 +161,19 @@ struct MpvPlayer {
     if (render_context) {
       api.render_context_set_update_callback(render_context, nullptr, nullptr);
     }
+
+    {
+      std::unique_lock<std::mutex> callback_lock(render_callback_state.mutex);
+      render_callback_state.disabled = true;
+      render_callback_state.player = nullptr;
+      render_callback_state.cv.wait(callback_lock, [this] {
+        return render_callback_state.active_callbacks == 0;
+      });
+    }
+
+    // Disable AppKit paints before releasing the surface/user. Wake can deliver
+    // a stale drawRect after the player has stopped.
+    surface_disable_paint(surface);
 
     if (wasRunning && handle) {
       const char* command[] = {"quit", nullptr};
@@ -153,7 +188,6 @@ struct MpvPlayer {
     }
 
     std::lock_guard<std::mutex> lock(render_mutex);
-    surface_disable_paint(surface);
   }
 
   ~MpvPlayer() {
@@ -566,8 +600,18 @@ std::unordered_map<std::string, std::shared_ptr<std::atomic<bool>>>
     audio_request_cancellations;
 
 void render_update_callback(void* user) {
-  auto* player = static_cast<MpvPlayer*>(user);
-  if (!player) return;
+  auto* state = static_cast<RenderCallbackState*>(user);
+  if (!state) return;
+
+  MpvPlayer* player = nullptr;
+  {
+    std::lock_guard<std::mutex> lock(state->mutex);
+    if (state->disabled || !state->player) return;
+    state->active_callbacks += 1;
+    player = state->player;
+  }
+  RenderCallbackGuard callback_guard{state};
+
   std::unique_lock<std::mutex> lock(player->render_mutex, std::try_to_lock);
   if (!lock.owns_lock()) return;
   if (
@@ -1263,10 +1307,11 @@ napi_value create_player(napi_env env, napi_callback_info info) {
       ) < 0) {
     return throw_error(env, "mpv_render_context_create failed");
   }
+  player->render_callback_state.player = player.get();
   player->api.render_context_set_update_callback(
       player->render_context,
       render_update_callback,
-      player.get()
+      &player->render_callback_state
   );
 #endif
 
@@ -1474,6 +1519,8 @@ napi_value set_player_suspended(napi_env env, napi_callback_info info) {
     std::lock_guard<std::mutex> lock(player->render_mutex);
     player->is_suspended.store(suspended, std::memory_order_release);
   }
+  // Avoid touching the sleeping OpenGL context from queued AppKit draws.
+  surface_set_paint_enabled(player->surface, !suspended);
 
   napi_value result;
   napi_get_boolean(env, true, &result);
