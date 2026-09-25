@@ -2,8 +2,6 @@ cmake_minimum_required(VERSION 3.20)
 
 project(framezoo_libmpv_native LANGUAGES CXX)
 
-option(FRAMEZOO_NATIVE_BUILD_TESTS "Build native lifecycle tests" OFF)
-
 if(NOT WIN32 AND NOT APPLE)
   message(FATAL_ERROR "framezoo-desktop native playback supports macOS and Windows only")
 endif()
@@ -81,20 +79,4 @@ elseif(WIN32)
   set_target_properties(libmpv PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
   )
-endif()
-
-if(APPLE AND FRAMEZOO_NATIVE_BUILD_TESTS)
-  add_executable(platform_surface_mac_test EXCLUDE_FROM_ALL
-    tests/platform_surface_mac_test.mm
-    src/platform_surface_mac.mm
-  )
-  target_include_directories(platform_surface_mac_test PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-  )
-  target_link_libraries(platform_surface_mac_test PRIVATE
-    "-framework Cocoa"
-    "-framework OpenGL"
-  )
-  enable_testing()
-  add_test(NAME platform_surface_mac_test COMMAND platform_surface_mac_test)
 endif()

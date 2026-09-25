@@ -1,7 +1,6 @@
 import {
   app,
   BrowserWindow,
-  crashReporter,
   dialog,
   ipcMain,
   Menu,
@@ -55,8 +54,6 @@ const APP_ID = "com.framezoo.desktop";
 const APP_NAME = "Framezoo";
 
 app.setName(APP_NAME);
-// Keep native/renderer crash dumps local for sleep-wake diagnosis.
-crashReporter.start({ productName: APP_NAME, uploadToServer: false });
 if (process.platform === "win32") {
   app.setAppUserModelId(APP_ID);
 }
