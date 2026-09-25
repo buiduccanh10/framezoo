@@ -41,6 +41,9 @@ export interface StremioSubtitle {
   source?: string;
   type?: string;
   isHearingImpaired?: boolean;
+  hearing_impaired?: boolean | string | number;
+  hearingImpaired?: boolean | string | number;
+  hi?: boolean | string | number;
   encoding?: string;
 }
 

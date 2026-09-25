@@ -1,3 +1,4 @@
+import { isHearingImpairedCaption } from "@/components/player/utils/captions";
 import { conf } from "@/setup/config";
 import type { CaptionListItem } from "@/stores/player/slices/source";
 
@@ -37,7 +38,7 @@ export interface AddonSubtitleProgressUpdate {
 export function normalizeAddonSubtitle(
   addon: InstalledAddon,
   sub: StremioSubtitle,
-  index: number,
+  _index: number,
 ): CaptionListItem | null {
   const url = sub.url?.trim();
   if (!url) return null;
@@ -45,6 +46,10 @@ export function normalizeAddonSubtitle(
   const language = (sub.lang ?? sub.language ?? "unknown").trim();
   const display = sub.label?.trim() || undefined;
   const id = `addon:${addon.manifest.id}:${language}:${url}`;
+  const isHearingImpaired = isHearingImpairedCaption({
+    ...sub,
+    display,
+  });
 
   return {
     id,
@@ -55,7 +60,7 @@ export function normalizeAddonSubtitle(
     opensubtitles: true,
     display: display ?? language,
     source: sub.source || addon.manifest.name,
-    isHearingImpaired: sub.isHearingImpaired,
+    isHearingImpaired,
     encoding: sub.encoding,
   };
 }

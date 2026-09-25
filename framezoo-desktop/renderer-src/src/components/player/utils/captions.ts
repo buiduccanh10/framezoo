@@ -648,3 +648,43 @@ export function decodeSubtitleBytes(
     return new TextDecoder("utf-8").decode(bytes);
   }
 }
+
+export function isHearingImpairedCaption(sub?: {
+  isHearingImpaired?: boolean;
+  hearing_impaired?: boolean | string | number;
+  hearingImpaired?: boolean | string | number;
+  hi?: boolean | string | number;
+  label?: string;
+  display?: string;
+  media?: string;
+  url?: string;
+}): boolean {
+  if (!sub) return false;
+
+  if (
+    sub.isHearingImpaired === true ||
+    sub.hearing_impaired === true ||
+    sub.hearing_impaired === "true" ||
+    sub.hearing_impaired === 1 ||
+    sub.hearing_impaired === "1" ||
+    sub.hearingImpaired === true ||
+    sub.hearingImpaired === "true" ||
+    sub.hearingImpaired === 1 ||
+    sub.hearingImpaired === "1" ||
+    sub.hi === true ||
+    sub.hi === "true" ||
+    sub.hi === 1 ||
+    sub.hi === "1"
+  ) {
+    return true;
+  }
+
+  const textToScan = [sub.label, sub.display, sub.media, sub.url]
+    .filter(Boolean)
+    .join(" ");
+  if (!textToScan) return false;
+
+  const hiRegex =
+    /(?:^|[._\s\-[\]()])(hi|sdh)(?:$|[._\s\-[\]()])|\bhearing[._\s-]?impaired\b/i;
+  return hiRegex.test(textToScan);
+}

@@ -6,6 +6,7 @@ import { FlagIcon } from "@/components/FlagIcon";
 import { Icon, Icons } from "@/components/Icon";
 import { useCaptions } from "@/components/player/hooks/useCaptions";
 import { Menu } from "@/components/player/internals/ContextMenu";
+import { isHearingImpairedCaption } from "@/components/player/utils/captions";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import {
   CaptionListItem,
@@ -198,6 +199,15 @@ export function LanguageSubtitlesView({
       mediaCandidate ||
       displayCandidate ||
       prettyLanguage;
+    const isHearingImpaired =
+      v.isHearingImpaired ||
+      isHearingImpairedCaption({
+        isHearingImpaired: v.isHearingImpaired,
+        label: v.display,
+        display: displayTitle,
+        media: v.media,
+        url: v.url,
+      });
 
     const handleDoubleClick = async () => {
       const copyData = {
@@ -209,7 +219,7 @@ export function LanguageSubtitlesView({
         opensubtitles: v.opensubtitles,
         display: v.display,
         media: v.media,
-        isHearingImpaired: v.isHearingImpaired,
+        isHearingImpaired,
         source: v.source,
         encoding: v.encoding,
         delay: selectionMode === "secondary" ? secondaryDelay : primaryDelay,
@@ -278,7 +288,7 @@ export function LanguageSubtitlesView({
         subtitleType={v.type}
         subtitleSource={inferredSource}
         subtitleEncoding={v.encoding}
-        isHearingImpaired={v.isHearingImpaired}
+        isHearingImpaired={isHearingImpaired}
         matchScore={v.id === selectedCaptionId ? matchScore : undefined}
       >
         {displayTitle}
