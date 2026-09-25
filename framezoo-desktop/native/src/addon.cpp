@@ -566,10 +566,8 @@ std::unordered_map<std::string, std::shared_ptr<std::atomic<bool>>>
 void render_update_callback(void* user) {
   auto* player = static_cast<MpvPlayer*>(user);
   if (!player) return;
-
-  std::unique_lock<std::mutex> lock(player->render_mutex, std::try_to_lock);
-  if (!lock.owns_lock()) return;
   if (!player->running.load(std::memory_order_acquire)) return;
+
   const uint64_t update_number = player->render_update_count.fetch_add(1) + 1;
   if (update_number <= 5 || update_number % 60 == 0) {
     std::fprintf(
@@ -580,7 +578,9 @@ void render_update_callback(void* user) {
         player->generation.load()
     );
   }
-  if (player->surface) surface_request_paint(player->surface);
+  if (player->surface) {
+    surface_request_paint(player->surface);
+  }
 }
 
 void paint_callback(void* user, NativeSurface*) {
@@ -1144,15 +1144,18 @@ napi_value create_player(napi_env env, napi_callback_info info) {
   set_mpv_option(player.get(), "network-timeout", "120");
   set_mpv_option(player.get(), "cache", "yes");
   set_mpv_option(player.get(), "cache-pause", "yes");
-  set_mpv_option(player.get(), "cache-pause-initial", "no");
-  set_mpv_option(player.get(), "cache-pause-wait", "0.5");
-  // Keep torrent playback responsive without allowing libmpv to retain
-  // hundreds of megabytes per player while the sidecar already buffers
-  // requested pieces on disk.
-  set_mpv_option(player.get(), "cache-secs", "30");
-  set_mpv_option(player.get(), "demuxer-readahead-secs", "15");
-  set_mpv_option(player.get(), "demuxer-max-bytes", "256MiB");
-  set_mpv_option(player.get(), "stream-buffer-size", "2MiB");
+  set_mpv_option(player.get(), "cache-pause-initial", "yes");
+  set_mpv_option(player.get(), "cache-pause-wait", "2.0");
+  set_mpv_option(player.get(), "cache-secs", "60");
+  set_mpv_option(player.get(), "demuxer-readahead-secs", "30");
+  set_mpv_option(player.get(), "demuxer-max-bytes", "512MiB");
+  set_mpv_option(player.get(), "demuxer-seekable-cache", "yes");
+  set_mpv_option(player.get(), "stream-buffer-size", "4MiB");
+  set_mpv_option(player.get(), "framedrop", "vo");
+  set_mpv_option(player.get(), "hr-seek", "yes");
+  set_mpv_option(player.get(), "hr-seek-framedrop", "yes");
+  set_mpv_option(player.get(), "vd-lavc-show-all", "no");
+  set_mpv_option(player.get(), "vd-lavc-fast", "yes");
   set_mpv_option(player.get(), "force-seekable", "yes");
   if (player->api.initialize(player->handle) < 0) {
     return throw_error(env, "mpv_initialize failed");
@@ -1511,7 +1514,7 @@ napi_value load_player(napi_env env, napi_callback_info info) {
       set_mpv_property(
           player.get(),
           "force-seekable",
-          is_torrent ? "no" : "yes"
+          "yes"
       ) < 0
   ) {
     return throw_error(env, "libmpv seekability configuration failed");

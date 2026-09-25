@@ -20,6 +20,19 @@ function parseArgs(argv) {
     else if (value === "--runtime-dir") args.runtimeDir = argv[++index] ?? null;
     else if (value === "--expect-arch") args.expectArch = argv[++index] ?? null;
   }
+  const hostTarget = `${process.platform}-${process.arch}`;
+  if (!args.addon) {
+    const defaultAddon = path.join("resources", "native", hostTarget, "libmpv.node");
+    if (fs.existsSync(defaultAddon)) {
+      args.addon = defaultAddon;
+    }
+  }
+  if (!args.runtimeDir) {
+    const defaultRuntime = path.join("resources", "libmpv", hostTarget);
+    if (fs.existsSync(defaultRuntime)) {
+      args.runtimeDir = defaultRuntime;
+    }
+  }
   return args;
 }
 
