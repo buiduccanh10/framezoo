@@ -1,11 +1,11 @@
 import {
   app,
   BrowserWindow,
+  crashReporter,
   dialog,
   ipcMain,
   Menu,
   net,
-  powerMonitor,
   protocol,
   screen,
   session,
@@ -29,7 +29,6 @@ import {
   TorrentManager,
 } from "./torrent/manager";
 import { libmpvController } from "./libmpvController";
-import { bindPowerLifecycle } from "./powerLifecycle";
 import {
   MoonshineNodeRuntime,
   type MoonshineNodeModel,
@@ -54,6 +53,8 @@ const APP_ID = "com.framezoo.desktop";
 const APP_NAME = "Framezoo";
 
 app.setName(APP_NAME);
+// Keep native/renderer crash dumps local for diagnosis.
+crashReporter.start({ productName: APP_NAME, uploadToServer: false });
 if (process.platform === "win32") {
   app.setAppUserModelId(APP_ID);
 }
@@ -2142,7 +2143,6 @@ if (!hasSingleInstanceLock) {
     installApplicationMenu();
     createMainWindow();
 
-    bindPowerLifecycle(powerMonitor, libmpvController, sendToMainWindow);
     void runStartupNativeWarmup();
     desktopAppUpdater.initialize();
 

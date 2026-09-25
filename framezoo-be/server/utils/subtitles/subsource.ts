@@ -93,11 +93,7 @@ function buildDisplayLabel(subtitle: SubsourceSubtitleRecord): string {
 }
 
 function buildEpisodeSearchText(subtitle: SubsourceSubtitleRecord): string {
-  const pieces = [
-    buildDisplayLabel(subtitle),
-    subtitle.release_info ?? '',
-    subtitle.caption ?? '',
-  ];
+  const pieces = [buildDisplayLabel(subtitle), subtitle.release_info ?? '', subtitle.caption ?? ''];
 
   return pieces.join(' ').toLowerCase();
 }
@@ -421,7 +417,13 @@ export async function fetchSubsourceSubtitlesList(
         label,
         source: 'subsource',
         type: 'srt',
-        isHearingImpaired: Boolean(sub.hearingImpaired ?? sub.hearing_impaired ?? sub.hi),
+        isHearingImpaired: Boolean(
+          (sub.hearingImpaired ?? sub.hearing_impaired ?? sub.hi) ||
+          (label &&
+            /(?:^|[._\s\-[\]()])(hi|sdh)(?:$|[._\s\-[\]()])|\bhearing[._\s-]?impaired\b/i.test(
+              label
+            ))
+        ),
       });
     }
 

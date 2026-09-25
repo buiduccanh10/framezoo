@@ -4,6 +4,7 @@ import {
   captionIsVisible,
   getCaptionLookahead,
   getCaptionTimelineIndex,
+  isHearingImpairedCaption,
   normalizeSubtitleToVtt,
   parseCanonicalVtt,
   shiftVttPiecewiseTimestamps,
@@ -231,5 +232,61 @@ Hello this is actual movie dialogue`;
     const cues = parseCanonicalVtt(rawVtt);
     expect(cues).toHaveLength(1);
     expect(cues[0].content).toBe("Hello this is actual movie dialogue");
+  });
+
+  describe("isHearingImpairedCaption", () => {
+    it("detects boolean flags", () => {
+      expect(isHearingImpairedCaption({ isHearingImpaired: true })).toBe(true);
+      expect(isHearingImpairedCaption({ hearing_impaired: true })).toBe(true);
+      expect(isHearingImpairedCaption({ hearing_impaired: "1" })).toBe(true);
+      expect(isHearingImpairedCaption({ hearingImpaired: true })).toBe(true);
+      expect(isHearingImpairedCaption({ hi: true })).toBe(true);
+      expect(
+        isHearingImpairedCaption({
+          isHearingImpaired: false,
+        }),
+      ).toBe(false);
+    });
+
+    it("detects HI and SDH tokens in label or filename", () => {
+      expect(
+        isHearingImpairedCaption({
+          label: "Doctor.Who.720p.HDTV.x264-ORGANiC.HI.srt",
+        }),
+      ).toBe(true);
+      expect(
+        isHearingImpairedCaption({
+          label: "Doctor.Who.1080p.[HI].srt",
+        }),
+      ).toBe(true);
+      expect(
+        isHearingImpairedCaption({
+          label: "Inception.2010.SDH.srt",
+        }),
+      ).toBe(true);
+      expect(
+        isHearingImpairedCaption({
+          display: "Avatar (Hearing Impaired)",
+        }),
+      ).toBe(true);
+    });
+
+    it("does not false positive on normal words", () => {
+      expect(
+        isHearingImpairedCaption({
+          label: "This.Is.It.1080p.srt",
+        }),
+      ).toBe(false);
+      expect(
+        isHearingImpairedCaption({
+          label: "White.House.Down.srt",
+        }),
+      ).toBe(false);
+      expect(
+        isHearingImpairedCaption({
+          label: "High.School.Musical.srt",
+        }),
+      ).toBe(false);
+    });
   });
 });

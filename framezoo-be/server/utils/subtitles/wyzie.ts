@@ -9,7 +9,12 @@ interface WyzieRawSubtitle {
   format?: string;
   display?: string;
   media?: string;
+  fileName?: string;
+  release?: string;
   isHearingImpaired?: boolean;
+  hearing_impaired?: boolean | string | number;
+  hearingImpaired?: boolean | string | number;
+  hi?: boolean | string | number;
   encoding?: string;
 }
 
@@ -155,7 +160,16 @@ export async function fetchWyzieSubtitles(
           label,
           source: `wyzie ${sourceName === 'opensubtitles' ? 'opensubs' : sourceName}`,
           type: sub.format || 'srt',
-          isHearingImpaired: Boolean(sub.isHearingImpaired),
+          isHearingImpaired: Boolean(
+            sub.isHearingImpaired ||
+            sub.hearing_impaired ||
+            sub.hearingImpaired ||
+            sub.hi ||
+            (label &&
+              /(?:^|[._\s\-[\]()])(hi|sdh)(?:$|[._\s\-[\]()])|\bhearing[._\s-]?impaired\b/i.test(
+                label
+              ))
+          ),
           encoding: sub.encoding,
         });
       }

@@ -81,47 +81,69 @@ export function KeyboardEvents() {
     undefined,
   );
 
-  // Speed boost
-  const setSpeedBoosted = usePlayerStore((s) => s.setSpeedBoosted);
-  const setShowSpeedIndicator = usePlayerStore((s) => s.setShowSpeedIndicator);
-  const speedIndicatorTimeoutRef = useRef<
-    ReturnType<typeof setTimeout> | undefined
-  >(undefined);
-  const boostTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
+  const seekResetTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined,
   );
-  const isPendingBoostRef = useRef<boolean>(false);
-  const previousRateRef = useRef<number>(1);
-  const isSpaceHeldRef = useRef<boolean>(false);
+  const lastSeekTargetRef = useRef<number | null>(null);
+  const lastSeekKeyTimeRef = useRef<number>(0);
 
   const setCurrentOverlay = useOverlayStack((s) => s.setCurrentOverlay);
 
   useEffect(() => {
     if (!isPlaybackLocked) return;
-
-    isPendingBoostRef.current = false;
-    isSpaceHeldRef.current = false;
-    if (boostTimeoutRef.current) {
-      clearTimeout(boostTimeoutRef.current);
-      boostTimeoutRef.current = undefined;
-    }
-    if (speedIndicatorTimeoutRef.current) {
-      clearTimeout(speedIndicatorTimeoutRef.current);
-      speedIndicatorTimeoutRef.current = undefined;
-    }
-    setSpeedBoosted(false);
-    setShowSpeedIndicator(false);
     setCurrentOverlay(null);
-  }, [
-    isPlaybackLocked,
-    setCurrentOverlay,
-    setShowSpeedIndicator,
-    setSpeedBoosted,
-  ]);
+  }, [isPlaybackLocked, setCurrentOverlay]);
+
+  const performSeek = useCallback((delta: number) => {
+    const maxDuration = dataRef.current.duration;
+    const baseTime =
+      lastSeekTargetRef.current !== null
+        ? lastSeekTargetRef.current
+        : dataRef.current.time;
+
+    const targetTime = Math.max(
+      0,
+      Math.min(
+        maxDuration > 0 ? maxDuration : Number.POSITIVE_INFINITY,
+        baseTime + delta,
+      ),
+    );
+
+    lastSeekTargetRef.current = targetTime;
+    if (seekResetTimeoutRef.current) {
+      clearTimeout(seekResetTimeoutRef.current);
+    }
+    seekResetTimeoutRef.current = setTimeout(() => {
+      lastSeekTargetRef.current = null;
+    }, 800);
+
+    dataRef.current.display?.setTime(targetTime);
+  }, []);
+
+  const performAbsoluteSeek = useCallback((targetTime: number) => {
+    const maxDuration = dataRef.current.duration;
+    const clamped = Math.max(
+      0,
+      Math.min(
+        maxDuration > 0 ? maxDuration : Number.POSITIVE_INFINITY,
+        targetTime,
+      ),
+    );
+    lastSeekTargetRef.current = clamped;
+    if (seekResetTimeoutRef.current) {
+      clearTimeout(seekResetTimeoutRef.current);
+    }
+    seekResetTimeoutRef.current = setTimeout(() => {
+      lastSeekTargetRef.current = null;
+    }, 800);
+
+    dataRef.current.display?.setTime(clamped);
+  }, []);
 
   // Episode navigation functions
   const navigateToNextEpisode = useCallback(async () => {
     if (!meta || meta.type !== "show" || !meta.episode) return;
+    usePlayerStore.getState().display?.pause();
 
     // Check if we're at the last episode of the current season
     const isLastEpisode =
@@ -206,6 +228,7 @@ export function KeyboardEvents() {
 
   const navigateToPreviousEpisode = useCallback(async () => {
     if (!meta || meta.type !== "show" || !meta.episode) return;
+    usePlayerStore.getState().display?.pause();
 
     // Check if we're at the first episode of the current season
     const isFirstEpisode = meta.episode.number === meta.episodes?.[0]?.number;
@@ -308,13 +331,8 @@ export function KeyboardEvents() {
     setShowDelayIndicator,
     setCurrentOverlay,
     isInWatchParty,
-    previousRateRef,
-    isSpaceHeldRef,
-    setSpeedBoosted,
-    setShowSpeedIndicator,
-    speedIndicatorTimeoutRef,
-    boostTimeoutRef,
-    isPendingBoostRef,
+    performSeek,
+    performAbsoluteSeek,
     navigateToNextEpisode,
     navigateToPreviousEpisode,
     keyboardShortcuts,
@@ -343,13 +361,8 @@ export function KeyboardEvents() {
       setShowDelayIndicator,
       setCurrentOverlay,
       isInWatchParty,
-      previousRateRef,
-      isSpaceHeldRef,
-      setSpeedBoosted,
-      setShowSpeedIndicator,
-      speedIndicatorTimeoutRef,
-      boostTimeoutRef,
-      isPendingBoostRef,
+      performSeek,
+      performAbsoluteSeek,
       navigateToNextEpisode,
       navigateToPreviousEpisode,
       keyboardShortcuts,
@@ -376,8 +389,8 @@ export function KeyboardEvents() {
     setShowDelayIndicator,
     setCurrentOverlay,
     isInWatchParty,
-    setSpeedBoosted,
-    setShowSpeedIndicator,
+    performSeek,
+    performAbsoluteSeek,
     navigateToNextEpisode,
     navigateToPreviousEpisode,
     keyboardShortcuts,
@@ -439,22 +452,16 @@ export function KeyboardEvents() {
         if (next) dataRef.current.display?.setPlaybackRate(next);
       }
 
-      // Handle spacebar press for play/pause and hold for 2x speed - disabled in watch party
+      // Handle spacebar press & MediaPlayPause for immediate play/pause
       // Space is locked, always check it
-      if (
-        k === LOCKED_SHORTCUTS.PLAY_PAUSE_SPACE &&
-        !dataRef.current.isInWatchParty
-      ) {
+      if (k === LOCKED_SHORTCUTS.PLAY_PAUSE_SPACE || k === "MediaPlayPause") {
         // Skip if it's a repeated event
         if (evt.repeat) {
           return;
         }
 
         // Skip if a button is targeted
-        if (
-          evt.target &&
-          (evt.target as HTMLInputElement).nodeName === "BUTTON"
-        ) {
+        if (evt.target && (evt.target as HTMLElement).nodeName === "BUTTON") {
           return;
         }
 
@@ -470,83 +477,15 @@ export function KeyboardEvents() {
           return;
         }
 
-        // If already paused, play the video and return
-        if (dataRef.current.mediaPlaying.isPaused) {
-          dataRef.current.display?.play();
-          return;
-        }
-
-        // If we're already holding space, don't trigger boost again
-        if (dataRef.current.isSpaceHeldRef.current) {
-          return;
-        }
-
-        // Save current rate
-        dataRef.current.previousRateRef.current =
-          dataRef.current.mediaPlaying.playbackRate;
-
-        // Set pending boost flag
-        dataRef.current.isPendingBoostRef.current = true;
-
-        // Add delay before boosting speed
-        if (dataRef.current.boostTimeoutRef.current) {
-          clearTimeout(dataRef.current.boostTimeoutRef.current);
-        }
-
-        dataRef.current.boostTimeoutRef.current = setTimeout(() => {
-          // Only apply boost if the key is still held down
-          if (dataRef.current.isPendingBoostRef.current) {
-            dataRef.current.isSpaceHeldRef.current = true;
-            dataRef.current.isPendingBoostRef.current = false;
-
-            // Show speed indicator
-            dataRef.current.setSpeedBoosted(true);
-            dataRef.current.setShowSpeedIndicator(true);
-            dataRef.current.setCurrentOverlay("speed");
-
-            // Clear any existing timeout
-            if (dataRef.current.speedIndicatorTimeoutRef.current) {
-              clearTimeout(dataRef.current.speedIndicatorTimeoutRef.current);
-            }
-
-            dataRef.current.display?.setPlaybackRate(2);
-          }
-        }, 300); // 300ms delay before boost takes effect
-      }
-
-      // Handle spacebar press for simple play/pause in watch party mode
-      // Space is locked, always check it
-      if (
-        k === LOCKED_SHORTCUTS.PLAY_PAUSE_SPACE &&
-        dataRef.current.isInWatchParty
-      ) {
-        // Skip if it's a repeated event
-        if (evt.repeat) {
-          return;
-        }
-
-        // Skip if a button is targeted
-        if (
-          evt.target &&
-          (evt.target as HTMLInputElement).nodeName === "BUTTON"
-        ) {
-          return;
-        }
-
-        // Prevent the default spacebar behavior
-        evt.preventDefault();
-
-        if (
-          !dataRef.current.mediaPlaying.isPaused &&
-          (dataRef.current.mediaPlaying.isLoading ||
-            !dataRef.current.mediaPlaying.hasRenderedFrame)
-        ) {
-          return;
-        }
-
-        // Simple play/pause toggle
         const action = dataRef.current.mediaPlaying.isPaused ? "play" : "pause";
         dataRef.current.display?.[action]();
+        return;
+      }
+
+      if (k === "MediaStop") {
+        evt.preventDefault();
+        dataRef.current.display?.pause();
+        return;
       }
 
       // Subtitle delay - customizable; handle before repeat guard so holding works.
@@ -595,19 +534,31 @@ export function KeyboardEvents() {
         return;
       }
 
-      // Video progress - handle skip shortcuts
-      // Skip repeated key events to prevent multiple skips
-      if (evt.repeat) return;
+      // Video progress - handle skip shortcuts with accumulated seek & throttled repeat
+      const canHandleSeek = () => {
+        const now = performance.now();
+        if (evt.repeat) {
+          if (now - lastSeekKeyTimeRef.current < 150) {
+            return false;
+          }
+        }
+        lastSeekKeyTimeRef.current = now;
+        return true;
+      };
 
-      // Arrow keys are locked (always 5 seconds) - handle first and return
+      // Arrow keys are locked (always 5 seconds)
       if (k === LOCKED_SHORTCUTS.ARROW_RIGHT) {
         evt.preventDefault();
-        dataRef.current.display?.setTime(dataRef.current.time + 5);
+        if (canHandleSeek()) {
+          dataRef.current.performSeek(5);
+        }
         return;
       }
       if (k === LOCKED_SHORTCUTS.ARROW_LEFT) {
         evt.preventDefault();
-        dataRef.current.display?.setTime(dataRef.current.time - 5);
+        if (canHandleSeek()) {
+          dataRef.current.performSeek(-5);
+        }
         return;
       }
 
@@ -620,7 +571,9 @@ export function KeyboardEvents() {
         matchesShortcut(evt, skipForward5)
       ) {
         evt.preventDefault();
-        dataRef.current.display?.setTime(dataRef.current.time + 5);
+        if (canHandleSeek()) {
+          dataRef.current.performSeek(5);
+        }
         return;
       }
       const skipBackward5 =
@@ -631,7 +584,9 @@ export function KeyboardEvents() {
         matchesShortcut(evt, skipBackward5)
       ) {
         evt.preventDefault();
-        dataRef.current.display?.setTime(dataRef.current.time - 5);
+        if (canHandleSeek()) {
+          dataRef.current.performSeek(-5);
+        }
         return;
       }
 
@@ -643,7 +598,9 @@ export function KeyboardEvents() {
         )
       ) {
         evt.preventDefault();
-        dataRef.current.display?.setTime(dataRef.current.time + 10);
+        if (canHandleSeek()) {
+          dataRef.current.performSeek(10);
+        }
         return;
       }
       if (
@@ -653,7 +610,9 @@ export function KeyboardEvents() {
         )
       ) {
         evt.preventDefault();
-        dataRef.current.display?.setTime(dataRef.current.time - 10);
+        if (canHandleSeek()) {
+          dataRef.current.performSeek(-10);
+        }
         return;
       }
 
@@ -665,7 +624,9 @@ export function KeyboardEvents() {
         )
       ) {
         evt.preventDefault();
-        dataRef.current.display?.setTime(dataRef.current.time + 1);
+        if (canHandleSeek()) {
+          dataRef.current.performSeek(1);
+        }
         return;
       }
       if (
@@ -675,12 +636,13 @@ export function KeyboardEvents() {
         )
       ) {
         evt.preventDefault();
-        dataRef.current.display?.setTime(dataRef.current.time - 1);
+        if (canHandleSeek()) {
+          dataRef.current.performSeek(-1);
+        }
         return;
       }
 
       // Skip to percentage with number keys (0-9) - locked, always use number keys
-      // Number keys are reserved for progress skipping, so handle them before customizable shortcuts
       if (
         dataRef.current.enableNumberKeySeeking &&
         /^[0-9]$/.test(k) &&
@@ -690,17 +652,18 @@ export function KeyboardEvents() {
         !evt.shiftKey &&
         !evt.altKey
       ) {
+        if (evt.repeat) return;
         evt.preventDefault();
         if (k === "0") {
-          dataRef.current.display?.setTime(0);
+          dataRef.current.performAbsoluteSeek(0);
         } else if (k === "9") {
           const targetTime = (dataRef.current.duration * 90) / 100;
-          dataRef.current.display?.setTime(targetTime);
+          dataRef.current.performAbsoluteSeek(targetTime);
         } else {
           // 1-8 for 10%-80%
           const percentage = parseInt(k, 10) * 10;
           const targetTime = (dataRef.current.duration * percentage) / 100;
-          dataRef.current.display?.setTime(targetTime);
+          dataRef.current.performAbsoluteSeek(targetTime);
         }
         return;
       }
@@ -712,18 +675,14 @@ export function KeyboardEvents() {
           dataRef.current.keyboardShortcuts[ShortcutId.TOGGLE_FULLSCREEN],
         )
       ) {
+        if (evt.repeat) return;
         dataRef.current.display?.toggleFullscreen();
       }
 
       // K key for play/pause - locked shortcut
-      if (
-        keyL === LOCKED_SHORTCUTS.PLAY_PAUSE_K.toLowerCase() &&
-        !dataRef.current.isSpaceHeldRef.current
-      ) {
-        if (
-          evt.target &&
-          (evt.target as HTMLInputElement).nodeName === "BUTTON"
-        ) {
+      if (keyL === LOCKED_SHORTCUTS.PLAY_PAUSE_K.toLowerCase()) {
+        if (evt.repeat) return;
+        if (evt.target && (evt.target as HTMLElement).nodeName === "BUTTON") {
           return;
         }
 
@@ -737,7 +696,23 @@ export function KeyboardEvents() {
 
         const action = dataRef.current.mediaPlaying.isPaused ? "play" : "pause";
         dataRef.current.display?.[action]();
+        return;
       }
+
+      // Media keys: Next / Previous Track
+      if (k === "MediaTrackNext") {
+        if (evt.repeat) return;
+        evt.preventDefault();
+        dataRef.current.navigateToNextEpisode();
+        return;
+      }
+      if (k === "MediaTrackPrevious") {
+        if (evt.repeat) return;
+        evt.preventDefault();
+        dataRef.current.navigateToPreviousEpisode();
+        return;
+      }
+
       // Escape is locked
       if (k === LOCKED_SHORTCUTS.ESCAPE) {
         if (dataRef.current.router.isRouterActive) {
@@ -758,6 +733,7 @@ export function KeyboardEvents() {
           dataRef.current.keyboardShortcuts[ShortcutId.NEXT_EPISODE],
         )
       ) {
+        if (evt.repeat) return;
         dataRef.current.navigateToNextEpisode();
       }
       if (
@@ -766,6 +742,7 @@ export function KeyboardEvents() {
           dataRef.current.keyboardShortcuts[ShortcutId.PREVIOUS_EPISODE],
         )
       ) {
+        if (evt.repeat) return;
         dataRef.current.navigateToPreviousEpisode();
       }
 
@@ -809,63 +786,18 @@ export function KeyboardEvents() {
       }
     };
 
-    const keyupEventHandler = (evt: KeyboardEvent) => {
-      const k = evt.key;
-
-      const state = usePlayerStore.getState();
-      if (
-        isPlaybackInteractionLocked(
-          state.mediaPlaying,
-          state.subtitleSync.active,
-        )
-      )
-        return;
-
-      // Handle spacebar release - only handle speed boost logic when not in watch party
-      if (k === " " && !dataRef.current.isInWatchParty) {
-        // If we haven't applied the boost yet but were about to, cancel it
-        if (dataRef.current.isPendingBoostRef.current) {
-          dataRef.current.isPendingBoostRef.current = false;
-          if (dataRef.current.boostTimeoutRef.current) {
-            clearTimeout(dataRef.current.boostTimeoutRef.current);
-          }
-
-          // The space key was released quickly, so trigger play/pause
-          const action = dataRef.current.mediaPlaying.isPaused
-            ? "play"
-            : "pause";
-          dataRef.current.display?.[action]();
-        } else if (dataRef.current.isSpaceHeldRef.current) {
-          // We were in boost mode, restore previous rate
-          dataRef.current.display?.setPlaybackRate(
-            dataRef.current.previousRateRef.current,
-          );
-          dataRef.current.isSpaceHeldRef.current = false;
-
-          // Update UI state
-          dataRef.current.setSpeedBoosted(false);
-
-          // Set a timeout to hide the speed indicator
-          if (dataRef.current.speedIndicatorTimeoutRef.current) {
-            clearTimeout(dataRef.current.speedIndicatorTimeoutRef.current);
-          }
-
-          dataRef.current.speedIndicatorTimeoutRef.current = setTimeout(() => {
-            dataRef.current.setShowSpeedIndicator(false);
-            dataRef.current.setCurrentOverlay(null);
-          }, 1500);
-        }
-      }
-    };
-
     window.addEventListener("keydown", keydownEventHandler);
-    window.addEventListener("keyup", keyupEventHandler);
 
     return () => {
       window.removeEventListener("keydown", keydownEventHandler);
-      window.removeEventListener("keyup", keyupEventHandler);
       if (subtitleDebounce.current) {
         clearTimeout(subtitleDebounce.current);
+      }
+      if (volumeDebounce.current) {
+        clearTimeout(volumeDebounce.current);
+      }
+      if (seekResetTimeoutRef.current) {
+        clearTimeout(seekResetTimeoutRef.current);
       }
     };
   }, []);

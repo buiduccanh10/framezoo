@@ -168,7 +168,7 @@ describe("subtitle alignment client", () => {
   });
 
   it("finishes the first torrent window before starting the remaining pool", async () => {
-    let resolveFirst: (() => void) | null = null;
+    let resolveFirst: (() => void) | undefined;
     let firstFinished = false;
     const starts: number[] = [];
     alignmentMocks.extractAudioWindow.mockImplementation(async (request) => {

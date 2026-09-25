@@ -179,8 +179,6 @@ void surface_reparent(NativeSurface* surface, void* parent_handle) {
 
 void surface_request_paint(NativeSurface*) {}
 
-void surface_set_paint_enabled(NativeSurface*, bool) {}
-
 void surface_disable_paint(NativeSurface* surface) {
   if (!surface) return;
   surface->paint_callback = nullptr;

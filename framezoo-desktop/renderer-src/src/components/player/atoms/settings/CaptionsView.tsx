@@ -21,6 +21,7 @@ import { SelectableLink } from "@/components/player/internals/ContextMenu/Links"
 import {
   captionIsVisible,
   decodeSubtitleBytes,
+  isHearingImpairedCaption,
   normalizeSubtitleToVtt,
   tryParseCanonicalVtt,
 } from "@/components/player/utils/captions";
@@ -155,6 +156,13 @@ export function CaptionOption(props: CaptionOptionProps) {
   const subtitleTypeLabel = getSubtitleBadgeLabel(props.subtitleType);
   const subtitleSourceLabel = getSubtitleBadgeLabel(props.subtitleSource);
   const subtitleSource = props.subtitleSource?.toLowerCase();
+  const isHearingImpaired =
+    props.isHearingImpaired ||
+    isHearingImpairedCaption({
+      isHearingImpaired: props.isHearingImpaired,
+      label: typeof props.children === "string" ? props.children : undefined,
+      url: props.subtitleUrl,
+    });
 
   const tooltipContent = useMemo(() => {
     if (!props.subtitleUrl && !props.subtitleSource) return null;
@@ -169,7 +177,7 @@ export function CaptionOption(props: CaptionOptionProps) {
       parts.push(`Encoding: ${props.subtitleEncoding}`);
     }
 
-    if (props.isHearingImpaired) {
+    if (isHearingImpaired) {
       parts.push(`Hearing Impaired: Yes`);
     }
 
@@ -190,7 +198,7 @@ export function CaptionOption(props: CaptionOptionProps) {
     props.subtitleUrl,
     props.subtitleSource,
     props.subtitleEncoding,
-    props.isHearingImpaired,
+    isHearingImpaired,
     props.matchScore,
   ]);
 
@@ -253,52 +261,66 @@ export function CaptionOption(props: CaptionOptionProps) {
             >
               {props.children}
             </span>
-          </div>
-          <div className="flex items-center">
-            {subtitleTypeLabel && (
-              <span className="px-2 py-0.5 mt-2 rounded bg-video-context-hoverColor/80 text-video-context-type-main text-xs font-semibold">
-                {subtitleTypeLabel}
-              </span>
-            )}
-            {subtitleSourceLabel && (
+            {isHearingImpaired && (
               <span
-                className={classNames(
-                  "ml-2 px-2 py-0.5 mt-2 rounded text-white text-xs font-semibold overflow-hidden text-ellipsis whitespace-nowrap",
-                  {
-                    "bg-blue-500": subtitleSource?.includes("wyzie"),
-                    "bg-orange-500": subtitleSource === "opensubs",
-                    "bg-cyan-500": subtitleSource === "subsource",
-                    "bg-green-500": subtitleSource === "granite",
-                  },
-                )}
+                className="ml-2 inline-flex flex-shrink-0 items-center text-video-context-type-accent"
+                title={t("player.menus.subtitles.hearingImpaired", {
+                  defaultValue: "Hearing Impaired (SDH)",
+                })}
               >
-                {subtitleSourceLabel}
+                <Icon icon={Icons.EAR} className="text-base" />
               </span>
             )}
-            {props.isHearingImpaired && (
-              <Icon icon={Icons.EAR} className="ml-2 mt-2" />
-            )}
-            {SHOW_MATCH_SCORE &&
+          </div>
+          {(subtitleTypeLabel ||
+            subtitleSourceLabel ||
+            (SHOW_MATCH_SCORE &&
               props.matchScore !== undefined &&
-              props.matchScore !== null && (
+              props.matchScore !== null)) && (
+            <div className="flex items-center min-w-0 w-full">
+              {subtitleTypeLabel && (
+                <span className="px-2 py-0.5 mt-2 rounded bg-video-context-hoverColor/80 text-video-context-type-main text-xs font-semibold flex-shrink-0">
+                  {subtitleTypeLabel}
+                </span>
+              )}
+              {subtitleSourceLabel && (
                 <span
                   className={classNames(
-                    "text-xs font-bold ml-2 mt-2 whitespace-nowrap",
+                    "ml-2 px-2 py-0.5 mt-2 rounded text-white text-xs font-semibold overflow-hidden text-ellipsis whitespace-nowrap flex-shrink min-w-0",
                     {
-                      "text-video-context-type-accent": props.matchScore >= 80,
-                      "text-yellow-500":
-                        props.matchScore >= 50 && props.matchScore < 80,
-                      "text-video-context-error": props.matchScore < 50,
+                      "bg-blue-500": subtitleSource?.includes("wyzie"),
+                      "bg-orange-500": subtitleSource === "opensubs",
+                      "bg-cyan-500": subtitleSource === "subsource",
+                      "bg-green-500": subtitleSource === "granite",
                     },
                   )}
                 >
-                  {t("player.menus.subtitles.matchScoreLabel", {
-                    score: props.matchScore,
-                    defaultValue: "Match ~{{score}}%",
-                  })}
+                  {subtitleSourceLabel}
                 </span>
               )}
-          </div>
+              {SHOW_MATCH_SCORE &&
+                props.matchScore !== undefined &&
+                props.matchScore !== null && (
+                  <span
+                    className={classNames(
+                      "text-xs font-bold ml-2 mt-2 whitespace-nowrap flex-shrink-0",
+                      {
+                        "text-video-context-type-accent":
+                          props.matchScore >= 80,
+                        "text-yellow-500":
+                          props.matchScore >= 50 && props.matchScore < 80,
+                        "text-video-context-error": props.matchScore < 50,
+                      },
+                    )}
+                  >
+                    {t("player.menus.subtitles.matchScoreLabel", {
+                      score: props.matchScore,
+                      defaultValue: "Match ~{{score}}%",
+                    })}
+                  </span>
+                )}
+            </div>
+          )}
         </span>
       </SelectableLink>
       {tooltipContent && showTooltip && (
