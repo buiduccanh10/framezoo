@@ -715,11 +715,9 @@ class TorrentRuntime:
         if not pieces:
             return False
         try:
-            if all(self.handle.have_piece(piece) for piece in pieces):
-                return True
+            return all(self.handle.have_piece(piece) for piece in pieces)
         except RuntimeError:
-            pass
-        return self._range_blocks_are_finished(start, end)
+            return False
 
     def _required_range_blocks(
         self,
@@ -813,22 +811,10 @@ class TorrentRuntime:
         return endpoints
 
     def _start_fast_block_fetch(self, start: int, end: int) -> None:
-        required = self._required_range_blocks(start, end)
-        if not required or self.stop_event.is_set():
-            return
-
-        try:
-            piece_length = int(self.info.piece_length())
-            file_offset = int(
-                self.info.files().file_offset(self.file_index),
-            )
-            block_size = int(self.handle.status().block_size)
-            total_size = int(self.info.files().total_size())
-            info_hash = bytes.fromhex(str(self.handle.info_hash()))
-        except (AttributeError, IndexError, TypeError, ValueError):
-            return
-        if piece_length <= 0 or block_size <= 0 or total_size <= 0:
-            return
+        # Fast block fetching bypasses libtorrent piece hash validation and writes unverified
+        # data concurrently to disk, which can cause video stream corruption ("vỡ frame").
+        # Keep libtorrent as the single authoritative downloader and writer.
+        return
 
         engine = getattr(self, "engine", None)
         get_finished = getattr(engine, "finished_blocks_for", None)
@@ -1696,38 +1682,6 @@ class TorrentRuntime:
                         "first sync bytes ready",
                         sessionId=self.session_id,
                         downloadedBytes=downloaded_bytes,
-                        requiredPieces=len(required_pieces),
-                        timingPhase="first_sync_bytes_ready",
-                        elapsedMs=self.elapsed_ms(),
-                        **(sync_metadata or {}),
-                    )
-                return True
-            if self._range_blocks_are_finished(start, end):
-                if stalled_target_piece is not None:
-                    self._release_target_focus(stalled_target_piece)
-                self._restore_pending_kicks(
-                    time.monotonic() + constants.TARGET_KICK_RESTORE_DELAY
-                )
-                log_event(
-                    "range ready",
-                    sessionId=self.session_id,
-                    start=start,
-                    end=end,
-                    requiredPieces=len(required_pieces),
-                    trackPosition=track_position,
-                    partialPiece=True,
-                    timingPhase="range_ready",
-                    elapsedMs=self.elapsed_ms(),
-                    **(sync_metadata or {}),
-                )
-                if is_sync and not getattr(
-                    self, "_first_sync_bytes_ready_logged", False
-                ):
-                    self._first_sync_bytes_ready_logged = True
-                    log_event(
-                        "first sync bytes ready",
-                        sessionId=self.session_id,
-                        downloadedBytes=None,
                         requiredPieces=len(required_pieces),
                         timingPhase="first_sync_bytes_ready",
                         elapsedMs=self.elapsed_ms(),
