@@ -28,7 +28,6 @@ interface NativeLibMpvAddon {
     request: LibMpvSourceRequest & { generation: number },
   ): void;
   commandPlayer(playerId: string, command: LibMpvCommand): void;
-  setPlayerSuspended?(playerId: string, suspended: boolean): void;
   extractAudio(
     request: LibMpvAudioRequest & { outputPath: string },
   ): Promise<string>;
@@ -236,10 +235,6 @@ export class LibMpvController {
   private pipWindowProvider: (() => BrowserWindow | null) | null = null;
   private addon: NativeLibMpvAddon | null = null;
   private players = new Map<string, PlayerRecord>();
-  private playersWasPlayingBeforeSuspend = new Set<string>();
-  private suspendGeneration = 0;
-  private suspendResumeTimer: ReturnType<typeof setTimeout> | null = null;
-  private isSuspended = false;
   private eventTimers = new Map<string, ReturnType<typeof setTimeout>>();
   private ipcRegistered = false;
   private startupPreflight: (() => Promise<void>) | null = null;
@@ -481,16 +476,6 @@ export class LibMpvController {
         target: "main",
         isPaused: true,
       });
-      if (this.isSuspended) {
-        try {
-          this.addon.setPlayerSuspended?.(id, true);
-        } catch (error) {
-          console.warn(
-            "[libmpv] failed to suspend newly created player",
-            error,
-          );
-        }
-      }
       lastPlayerCreateError = null;
       this.broadcastLog("info", "create", {
         playerId: id,
@@ -643,59 +628,6 @@ export class LibMpvController {
       );
       return false;
     }
-  }
-
-  public pauseAllForSuspend(): void {
-    this.suspendGeneration += 1;
-    this.isSuspended = true;
-    if (this.suspendResumeTimer) {
-      clearTimeout(this.suspendResumeTimer);
-      this.suspendResumeTimer = null;
-    }
-
-    for (const [playerId, player] of this.players.entries()) {
-      try {
-        this.addon?.setPlayerSuspended?.(playerId, true);
-      } catch (error) {
-        console.warn(`[libmpv] failed to suspend player ${playerId}`, error);
-      }
-      if (!player.isPaused) {
-        this.playersWasPlayingBeforeSuspend.add(playerId);
-        this.command(playerId, { type: "pause" });
-      }
-    }
-  }
-
-  public resumeAllForSuspend(): void {
-    const generation = ++this.suspendGeneration;
-    if (this.suspendResumeTimer) clearTimeout(this.suspendResumeTimer);
-
-    this.suspendResumeTimer = setTimeout(() => {
-      this.suspendResumeTimer = null;
-      if (!this.isSuspended || generation !== this.suspendGeneration) return;
-      this.isSuspended = false;
-
-      for (const playerId of this.players.keys()) {
-        try {
-          this.addon?.setPlayerSuspended?.(playerId, false);
-        } catch (error) {
-          console.warn(
-            `[libmpv] failed to resume render for ${playerId}`,
-            error,
-          );
-        }
-      }
-
-      for (const playerId of this.playersWasPlayingBeforeSuspend) {
-        if (!this.players.has(playerId)) continue;
-        this.command(playerId, { type: "pause" });
-        setTimeout(() => {
-          if (!this.players.has(playerId) || this.isSuspended) return;
-          this.command(playerId, { type: "play" });
-        }, 50);
-      }
-      this.playersWasPlayingBeforeSuspend.clear();
-    }, 1000);
   }
 
   public async extractAudio(request: LibMpvAudioRequest): Promise<Uint8Array> {

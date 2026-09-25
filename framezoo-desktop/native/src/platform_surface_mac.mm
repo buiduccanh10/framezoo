@@ -8,10 +8,8 @@
 #include <algorithm>
 #include <atomic>
 #include <cmath>
-#include <condition_variable>
 #include <cstdio>
 #include <dlfcn.h>
-#include <mutex>
 
 struct NativeSurface;
 
@@ -28,20 +26,6 @@ struct NativeSurface {
   std::atomic<uint64_t> paint_count{0};
   SurfacePaintCallback paint_callback = nullptr;
   void* user = nullptr;
-  std::mutex paint_mutex;
-  std::condition_variable paint_cv;
-  size_t active_paints = 0;
-  bool paint_enabled = true;
-};
-
-struct ActivePaintGuard {
-  NativeSurface* surface;
-
-  ~ActivePaintGuard() {
-    std::lock_guard<std::mutex> lock(surface->paint_mutex);
-    surface->active_paints -= 1;
-    if (surface->active_paints == 0) surface->paint_cv.notify_all();
-  }
 };
 
 void update_backing_scale_factor(NativeSurface* surface) {
@@ -130,22 +114,9 @@ void attach_surface(NativeSurface* surface, NSView* anchor) {
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
-  NativeSurface* surface = self.surface;
-  if (!surface) return;
-
-  SurfacePaintCallback paint_callback = nullptr;
-  void* user = nullptr;
-  {
-    std::lock_guard<std::mutex> lock(surface->paint_mutex);
-    if (!surface->paint_enabled || !surface->paint_callback || !surface->user) {
-      return;
-    }
-    paint_callback = surface->paint_callback;
-    user = surface->user;
-    surface->active_paints += 1;
-  }
-  ActivePaintGuard paint_guard{surface};
   [super drawRect:dirtyRect];
+  NativeSurface* surface = self.surface;
+  if (!surface || !surface->paint_callback || !surface->user) return;
 
   const uint64_t paint_number = surface->paint_count.fetch_add(1) + 1;
   if (paint_number <= 5 || paint_number % 60 == 0) {
@@ -164,7 +135,7 @@ void attach_surface(NativeSurface* surface, NSView* anchor) {
   }
   [[self openGLContext] makeCurrentContext];
   glViewport(0, 0, surface_width(surface), surface_height(surface));
-  paint_callback(user, surface);
+  surface->paint_callback(surface->user, surface);
 }
 
 @end
@@ -234,13 +205,7 @@ void surface_reparent(NativeSurface* surface, void* parent_handle) {
 }
 
 void surface_request_paint(NativeSurface* surface) {
-  if (!surface || !surface->view) return;
-  {
-    std::lock_guard<std::mutex> lock(surface->paint_mutex);
-    if (!surface->paint_enabled || !surface->paint_callback || !surface->user) {
-      return;
-    }
-  }
+  if (!surface || !surface->view || !surface->paint_callback || !surface->user) return;
   FrameZooMpvView* view = surface->view;
   [view retain];
   dispatch_async(dispatch_get_main_queue(), ^{
@@ -249,26 +214,10 @@ void surface_request_paint(NativeSurface* surface) {
   });
 }
 
-void surface_set_paint_enabled(NativeSurface* surface, bool enabled) {
-  if (!surface) return;
-  std::unique_lock<std::mutex> lock(surface->paint_mutex);
-  surface->paint_enabled = enabled;
-  if (!enabled) {
-    surface->paint_cv.wait(lock, [surface] {
-      return surface->active_paints == 0;
-    });
-  }
-}
-
 void surface_disable_paint(NativeSurface* surface) {
   if (!surface) return;
-  std::unique_lock<std::mutex> lock(surface->paint_mutex);
-  surface->paint_enabled = false;
   surface->paint_callback = nullptr;
   surface->user = nullptr;
-  surface->paint_cv.wait(lock, [surface] {
-    return surface->active_paints == 0;
-  });
 }
 
 void surface_destroy(NativeSurface* surface) {
