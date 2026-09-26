@@ -140,6 +140,33 @@ export function KeyboardEvents() {
     dataRef.current.display?.setTime(clamped);
   }, []);
 
+  const lastVolumeTargetRef = useRef<number | null>(null);
+  const volumeResetTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined,
+  );
+
+  const performVolumeChange = useCallback((delta: number) => {
+    const currentVol =
+      lastVolumeTargetRef.current !== null
+        ? lastVolumeTargetRef.current
+        : (dataRef.current.mediaPlaying?.volume ?? 1);
+
+    const targetVolume = Math.max(
+      0,
+      Math.min(1, Math.round((currentVol + delta) * 100) / 100),
+    );
+    lastVolumeTargetRef.current = targetVolume;
+
+    if (volumeResetTimeoutRef.current) {
+      clearTimeout(volumeResetTimeoutRef.current);
+    }
+    volumeResetTimeoutRef.current = setTimeout(() => {
+      lastVolumeTargetRef.current = null;
+    }, 800);
+
+    dataRef.current.setVolume(targetVolume);
+  }, []);
+
   // Episode navigation functions
   const navigateToNextEpisode = useCallback(async () => {
     if (!meta || meta.type !== "show" || !meta.episode) return;
@@ -333,6 +360,7 @@ export function KeyboardEvents() {
     isInWatchParty,
     performSeek,
     performAbsoluteSeek,
+    performVolumeChange,
     navigateToNextEpisode,
     navigateToPreviousEpisode,
     keyboardShortcuts,
@@ -363,6 +391,7 @@ export function KeyboardEvents() {
       isInWatchParty,
       performSeek,
       performAbsoluteSeek,
+      performVolumeChange,
       navigateToNextEpisode,
       navigateToPreviousEpisode,
       keyboardShortcuts,
@@ -391,6 +420,7 @@ export function KeyboardEvents() {
     isInWatchParty,
     performSeek,
     performAbsoluteSeek,
+    performVolumeChange,
     navigateToNextEpisode,
     navigateToPreviousEpisode,
     keyboardShortcuts,
@@ -416,8 +446,26 @@ export function KeyboardEvents() {
       const k = evt.key;
       const keyL = evt.key.toLowerCase();
 
-      // Volume (locked shortcuts - ArrowUp/ArrowDown always work)
-      if (["ArrowUp", "ArrowDown", "m", "M"].includes(k)) {
+      const isVolumeUp =
+        k === LOCKED_SHORTCUTS.ARROW_UP ||
+        matchesShortcut(
+          evt,
+          dataRef.current.keyboardShortcuts[ShortcutId.INCREASE_VOLUME],
+        );
+      const isVolumeDown =
+        k === LOCKED_SHORTCUTS.ARROW_DOWN ||
+        matchesShortcut(
+          evt,
+          dataRef.current.keyboardShortcuts[ShortcutId.DECREASE_VOLUME],
+        );
+      const isMute =
+        matchesShortcut(
+          evt,
+          dataRef.current.keyboardShortcuts[ShortcutId.MUTE],
+        ) || ["m", "M"].includes(k);
+
+      // Volume (locked shortcuts & customizable shortcuts)
+      if (isVolumeUp || isVolumeDown || isMute) {
         dataRef.current.setShowVolume(true);
         dataRef.current.setCurrentOverlay("volume");
 
@@ -427,19 +475,21 @@ export function KeyboardEvents() {
           dataRef.current.setCurrentOverlay(null);
         }, 3e3);
       }
-      if (k === LOCKED_SHORTCUTS.ARROW_UP)
-        dataRef.current.setVolume(
-          (dataRef.current.mediaPlaying?.volume || 0) + 0.15,
-        );
-      if (k === LOCKED_SHORTCUTS.ARROW_DOWN)
-        dataRef.current.setVolume(
-          (dataRef.current.mediaPlaying?.volume || 0) - 0.15,
-        );
-      // Mute - check customizable shortcut
-      if (
-        matchesShortcut(evt, dataRef.current.keyboardShortcuts[ShortcutId.MUTE])
-      ) {
+      if (isVolumeUp) {
+        evt.preventDefault();
+        dataRef.current.performVolumeChange(0.15);
+        return;
+      }
+      if (isVolumeDown) {
+        evt.preventDefault();
+        dataRef.current.performVolumeChange(-0.15);
+        return;
+      }
+      // Mute - check customizable shortcut or m/M
+      if (isMute) {
+        lastVolumeTargetRef.current = null;
         dataRef.current.toggleMute();
+        return;
       }
 
       // Video playback speed - disabled in watch party (hardcoded, not customizable)
@@ -795,6 +845,9 @@ export function KeyboardEvents() {
       }
       if (volumeDebounce.current) {
         clearTimeout(volumeDebounce.current);
+      }
+      if (volumeResetTimeoutRef.current) {
+        clearTimeout(volumeResetTimeoutRef.current);
       }
       if (seekResetTimeoutRef.current) {
         clearTimeout(seekResetTimeoutRef.current);

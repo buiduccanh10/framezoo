@@ -1731,4 +1731,114 @@ describe("libmpv display", () => {
     expect(exitFullscreen).toHaveBeenCalledTimes(1);
     display.destroy();
   });
+
+  it("emits volumechange optimistically and dispatches set-volume immediately", async () => {
+    const commands: Array<{ type: string; volume?: number }> = [];
+    const volumes: number[] = [];
+
+    (window as any).electronAPI = {
+      createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
+      loadLibMpvSource: vi.fn().mockResolvedValue(true),
+      sendLibMpvCommand: vi.fn((_id: string, command: { type: string; volume?: number }) => {
+        commands.push(command);
+        return Promise.resolve(true);
+      }),
+      onLibMpvEvent: vi.fn().mockReturnValue(() => undefined),
+      onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.on("volumechange", (vol) => volumes.push(vol));
+    display.processContainerElement(makeElement());
+    display.load({
+      source: { type: "mp4", url: "http://127.0.0.1/video.mp4" } as Source,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    display.setVolume(0.85);
+
+    expect(volumes).toContain(0.85);
+    expect(commands).toContainEqual({ type: "set-volume", volume: 0.85 });
+
+    display.destroy();
+  });
+
+  it("emits play and pause optimistically and dispatches commands", async () => {
+    const commands: Array<{ type: string }> = [];
+    const plays: number[] = [];
+    const pauses: number[] = [];
+
+    (window as any).electronAPI = {
+      createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
+      loadLibMpvSource: vi.fn().mockResolvedValue(true),
+      sendLibMpvCommand: vi.fn((_id: string, command: { type: string }) => {
+        commands.push(command);
+        return Promise.resolve(true);
+      }),
+      onLibMpvEvent: vi.fn().mockReturnValue(() => undefined),
+      onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.on("play", () => plays.push(1));
+    display.on("pause", () => pauses.push(1));
+    display.processContainerElement(makeElement());
+    display.load({
+      source: { type: "mp4", url: "http://127.0.0.1/video.mp4" } as Source,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+      autoplay: false,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    display.play();
+    expect(plays.length).toBe(1);
+    expect(commands).toContainEqual({ type: "play" });
+
+    display.pause();
+    expect(pauses.length).toBe(1);
+    expect(commands).toContainEqual({ type: "pause" });
+
+    display.destroy();
+  });
+
+  it("emits playbackrate optimistically", async () => {
+    const rates: number[] = [];
+    const commands: Array<{ type: string; rate?: number }> = [];
+
+    (window as any).electronAPI = {
+      createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
+      loadLibMpvSource: vi.fn().mockResolvedValue(true),
+      sendLibMpvCommand: vi.fn((_id: string, command: { type: string; rate?: number }) => {
+        commands.push(command);
+        return Promise.resolve(true);
+      }),
+      onLibMpvEvent: vi.fn().mockReturnValue(() => undefined),
+      onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.on("playbackrate", (rate) => rates.push(rate));
+    display.processContainerElement(makeElement());
+    display.load({
+      source: { type: "mp4", url: "http://127.0.0.1/video.mp4" } as Source,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    display.setPlaybackRate(1.5);
+    expect(rates).toContain(1.5);
+    expect(commands).toContainEqual({ type: "set-playback-rate", rate: 1.5 });
+
+    display.destroy();
+  });
 });

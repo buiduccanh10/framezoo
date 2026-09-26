@@ -1410,6 +1410,9 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         void ensurePlayer();
         return;
       }
+      paused = false;
+      emit("play", undefined);
+      syncPipState(true);
       void sendNativeCommand(playerId, { type: "play" });
     },
     pause() {
@@ -1418,6 +1421,9 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         desktopPipShouldResume = false;
       }
       if (!playerId) return;
+      paused = true;
+      emit("pause", undefined);
+      syncPipState(true);
       void sendNativeCommand(playerId, { type: "pause" });
     },
     setTime(nextTime) {
@@ -1444,8 +1450,8 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     },
     setVolume(nextVolume) {
       volume = normalizeVolume(nextVolume);
+      emit("volumechange", volume);
       if (!playerId) {
-        emit("volumechange", volume);
         return;
       }
       void sendNativeCommand(playerId, {
@@ -1456,6 +1462,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     setPlaybackRate(rate) {
       if (!Number.isFinite(rate) || rate <= 0 || !playerId) return;
       playbackRate = rate;
+      emit("playbackrate", playbackRate);
       void sendNativeCommand(playerId, {
         type: "set-playback-rate",
         rate,
