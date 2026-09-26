@@ -93,6 +93,7 @@ bool MpvApi::load(std::string* error) {
     LOAD_MPV_SYMBOL(initialize, "mpv_initialize")
     LOAD_MPV_SYMBOL(set_option_string, "mpv_set_option_string")
     LOAD_MPV_SYMBOL(command, "mpv_command")
+    LOAD_MPV_SYMBOL(command_async, "mpv_command_async")
     LOAD_MPV_SYMBOL(wait_event, "mpv_wait_event")
     LOAD_MPV_SYMBOL(observe_property, "mpv_observe_property")
     LOAD_MPV_SYMBOL(get_property, "mpv_get_property")
@@ -131,6 +132,7 @@ void MpvApi::unload() {
   initialize = nullptr;
   set_option_string = nullptr;
   command = nullptr;
+  command_async = nullptr;
   wait_event = nullptr;
   observe_property = nullptr;
   get_property = nullptr;

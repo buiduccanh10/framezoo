@@ -135,6 +135,14 @@ struct MpvPlayer {
     return api.command(handle, commands);
   }
 
+  int command_async(const char* const* commands) {
+    if (api.command_async) {
+      return api.command_async(handle, 0, commands);
+    }
+    std::lock_guard<std::mutex> lock(command_mutex);
+    return api.command(handle, commands);
+  }
+
   void stop() {
     const bool wasRunning = running.exchange(false, std::memory_order_acq_rel);
 
@@ -1450,7 +1458,7 @@ napi_value command_player(napi_env env, napi_callback_info info) {
   std::vector<const char*> command;
   for (const auto& item : values) command.push_back(item.c_str());
   command.push_back(nullptr);
-  if (player->command(command.data()) < 0) {
+  if (player->command_async(command.data()) < 0) {
     return throw_error(env, "libmpv command failed");
   }
 

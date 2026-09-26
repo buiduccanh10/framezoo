@@ -11,6 +11,7 @@ struct MpvApi {
   int (*initialize)(mpv_handle*) = nullptr;
   int (*set_option_string)(mpv_handle*, const char*, const char*) = nullptr;
   int (*command)(mpv_handle*, const char* const*) = nullptr;
+  int (*command_async)(mpv_handle*, uint64_t, const char* const*) = nullptr;
   mpv_event* (*wait_event)(mpv_handle*, double) = nullptr;
   int (*observe_property)(mpv_handle*, uint64_t, const char*, mpv_format) =
       nullptr;
