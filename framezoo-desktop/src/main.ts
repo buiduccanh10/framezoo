@@ -1049,7 +1049,13 @@ function buildApplicationMenu() {
           {
             label: "Window",
             submenu: [
-              { role: "minimize" },
+              {
+                label: "Minimize",
+                accelerator: "CmdOrCtrl+M",
+                click: () => {
+                  void safeMinimizeWindow();
+                },
+              },
               { role: "zoom" },
               { role: "front" },
             ],
@@ -1261,6 +1267,70 @@ function exitPlayerFullScreen() {
   setAppFullScreen(false, "player");
 }
 
+let pendingMinimize = false;
+let leaveFullScreenSettleTimer: NodeJS.Timeout | null = null;
+
+function clearLeaveFullScreenSettleTimer() {
+  if (leaveFullScreenSettleTimer) {
+    clearTimeout(leaveFullScreenSettleTimer);
+    leaveFullScreenSettleTimer = null;
+  }
+}
+
+function resyncCompositorAndInput(win: BrowserWindow | null) {
+  if (!win || win.isDestroyed()) return;
+  try {
+    win.setIgnoreMouseEvents(false);
+    win.focus();
+    win.webContents.focus();
+
+    // Trigger Chromium compositor re-sync of VisualProperties and hit-testing:
+    // A micro 1px resize nudge forces WindowServer and Chromium RenderWidgetHost to recalculate geometry
+    const bounds = win.getBounds();
+    win.setBounds({ ...bounds, width: bounds.width + 1 });
+    win.setBounds(bounds);
+    win.webContents.invalidate();
+  } catch (err) {
+    console.warn("[desktop] failed to resync compositor and input", err);
+  }
+}
+
+async function safeMinimizeWindow(): Promise<boolean> {
+  if (!mainWindow || mainWindow.isDestroyed()) return false;
+
+  if (process.platform === "win32") {
+    if (isWindowsFullScreen) {
+      setAppFullScreen(false, "user");
+      // Allow 100ms for Windows DWM WM_SIZE before minimizing transparent window
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      mainWindow.minimize();
+    }
+    return true;
+  }
+
+  // macOS / Linux:
+  // If in fullscreen or transitioning, requesting miniaturize directly can corrupt AppKit window state.
+  // We must exit fullscreen first and await the Space transition to settle.
+  if (mainWindow.isFullScreen() || isFullScreenTransitioning) {
+    pendingMinimize = true;
+    setAppFullScreen(false, "user");
+
+    // Failsafe timeout in case leave-full-screen never fires or takes too long
+    setTimeout(() => {
+      if (pendingMinimize && mainWindow && !mainWindow.isDestroyed()) {
+        pendingMinimize = false;
+        mainWindow.minimize();
+      }
+    }, 2500);
+    return true;
+  }
+
+  mainWindow.minimize();
+  return true;
+}
+
 let lastNormalBounds: Rectangle | null = null;
 
 function createMainWindow() {
@@ -1345,15 +1415,18 @@ function createMainWindow() {
   });
 
   mainWindow.on("restore", () => {
-    if (mainWindow && !mainWindow.isDestroyed()) {
-      mainWindow.focus();
-      mainWindow.webContents.focus();
-      sendToMainWindow("desktop:fullscreen-state", isAppFullScreen());
-    }
+    if (!mainWindow || mainWindow.isDestroyed()) return;
+    clearFullscreenTransition();
+    clearLeaveFullScreenSettleTimer();
+    pendingMinimize = false;
+    resyncCompositorAndInput(mainWindow);
+    sendToMainWindow("desktop:fullscreen-state", isAppFullScreen());
   });
 
   mainWindow.on("enter-full-screen", () => {
     clearFullscreenTransition();
+    clearLeaveFullScreenSettleTimer();
+    pendingMinimize = false;
     if (mainWindow && !mainWindow.isDestroyed()) {
       if (process.platform === "win32") {
         isWindowsFullScreen = true;
@@ -1369,6 +1442,7 @@ function createMainWindow() {
 
   mainWindow.on("leave-full-screen", () => {
     clearFullscreenTransition();
+    clearLeaveFullScreenSettleTimer();
     if (mainWindow && !mainWindow.isDestroyed()) {
       if (process.platform === "win32") {
         isWindowsFullScreen = false;
@@ -1378,12 +1452,22 @@ function createMainWindow() {
       fullscreenOrigin = null;
       wasMaximizedBeforePlayerFullscreen = false;
       sendToMainWindow("desktop:fullscreen-state", false);
-      setTimeout(() => {
-        if (mainWindow && !mainWindow.isDestroyed()) {
-          mainWindow.focus();
-          mainWindow.webContents.focus();
+
+      // On macOS, Space transition animation takes 400ms–800ms.
+      // Calling focus at 100ms breaks the WindowServer Event Tap mid-transition.
+      // We wait 450ms for the Space transition to settle, then either execute pending minimize
+      // or resynchronize the compositor and hit-testing tree.
+      leaveFullScreenSettleTimer = setTimeout(() => {
+        leaveFullScreenSettleTimer = null;
+        if (!mainWindow || mainWindow.isDestroyed()) return;
+
+        if (pendingMinimize) {
+          pendingMinimize = false;
+          mainWindow.minimize();
+        } else {
+          resyncCompositorAndInput(mainWindow);
         }
-      }, 100);
+      }, 450);
     }
   });
 
@@ -1435,6 +1519,8 @@ function createMainWindow() {
 
   mainWindow.on("closed", () => {
     clearFullscreenTransition();
+    clearLeaveFullScreenSettleTimer();
+    pendingMinimize = false;
     desktopPipController.close();
     mainWindow = null;
     savedWindowBounds = null;
@@ -1819,42 +1905,7 @@ function registerIpcHandlers() {
   });
 
   ipcMain.handle("desktop:minimize-window", async () => {
-    if (!mainWindow || mainWindow.isDestroyed()) return false;
-
-    if (process.platform === "win32") {
-      if (isWindowsFullScreen) {
-        setAppFullScreen(false, "user");
-      }
-      mainWindow.minimize();
-      return true;
-    }
-
-    if (mainWindow.isFullScreen()) {
-      return new Promise<boolean>((resolve) => {
-        let timeoutId: NodeJS.Timeout | null = null;
-        const onLeave = () => {
-          if (timeoutId) clearTimeout(timeoutId);
-          setTimeout(() => {
-            if (mainWindow && !mainWindow.isDestroyed()) {
-              mainWindow.minimize();
-            }
-            resolve(true);
-          }, 120);
-        };
-        mainWindow?.once("leave-full-screen", onLeave);
-        timeoutId = setTimeout(() => {
-          mainWindow?.removeListener("leave-full-screen", onLeave);
-          if (mainWindow && !mainWindow.isDestroyed()) {
-            mainWindow.minimize();
-          }
-          resolve(true);
-        }, 3000);
-        setAppFullScreen(false, "user");
-      });
-    }
-
-    mainWindow.minimize();
-    return true;
+    return safeMinimizeWindow();
   });
 
   ipcMain.handle("desktop:maximize-window", async () => {
