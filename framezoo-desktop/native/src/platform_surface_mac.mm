@@ -291,7 +291,6 @@ void surface_configure_window(void* parent_handle) {
 
   window.styleMask |= NSWindowStyleMaskTitled | NSWindowStyleMaskClosable |
                       NSWindowStyleMaskMiniaturizable | NSWindowStyleMaskResizable;
-  window.collectionBehavior |= NSWindowCollectionBehaviorFullScreenPrimary;
   window.titlebarAppearsTransparent = NO;
   window.titleVisibility = NSWindowTitleVisible;
   [window setOpaque:YES];

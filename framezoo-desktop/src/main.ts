@@ -1247,7 +1247,7 @@ function setAppFullScreen(
         const actualFull = mainWindow.isFullScreen();
         sendToMainWindow("desktop:fullscreen-state", actualFull);
       }
-    }, 1500);
+    }, 2500);
   }
 }
 
@@ -1293,6 +1293,7 @@ function createMainWindow() {
       nodeIntegration: false,
       sandbox: true,
       webSecurity: true,
+      backgroundThrottling: false,
       devTools: ENABLE_DEVTOOLS,
     },
   });
@@ -1343,6 +1344,14 @@ function createMainWindow() {
     }
   });
 
+  mainWindow.on("restore", () => {
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      mainWindow.focus();
+      mainWindow.webContents.focus();
+      sendToMainWindow("desktop:fullscreen-state", isAppFullScreen());
+    }
+  });
+
   mainWindow.on("enter-full-screen", () => {
     clearFullscreenTransition();
     if (mainWindow && !mainWindow.isDestroyed()) {
@@ -1369,6 +1378,12 @@ function createMainWindow() {
       fullscreenOrigin = null;
       wasMaximizedBeforePlayerFullscreen = false;
       sendToMainWindow("desktop:fullscreen-state", false);
+      setTimeout(() => {
+        if (mainWindow && !mainWindow.isDestroyed()) {
+          mainWindow.focus();
+          mainWindow.webContents.focus();
+        }
+      }, 100);
     }
   });
 
@@ -1805,24 +1820,39 @@ function registerIpcHandlers() {
 
   ipcMain.handle("desktop:minimize-window", async () => {
     if (!mainWindow || mainWindow.isDestroyed()) return false;
-    if (process.platform !== "win32" && mainWindow.isFullScreen()) {
-      let timeoutId: NodeJS.Timeout | null = null;
-      const onLeave = () => {
-        if (timeoutId) clearTimeout(timeoutId);
-        if (mainWindow && !mainWindow.isDestroyed()) {
-          mainWindow.minimize();
-        }
-      };
-      mainWindow.once("leave-full-screen", onLeave);
-      timeoutId = setTimeout(() => {
-        mainWindow?.removeListener("leave-full-screen", onLeave);
-        if (mainWindow && !mainWindow.isDestroyed()) {
-          mainWindow.minimize();
-        }
-      }, 600);
-      setAppFullScreen(false, "user");
+
+    if (process.platform === "win32") {
+      if (isWindowsFullScreen) {
+        setAppFullScreen(false, "user");
+      }
+      mainWindow.minimize();
       return true;
     }
+
+    if (mainWindow.isFullScreen()) {
+      return new Promise<boolean>((resolve) => {
+        let timeoutId: NodeJS.Timeout | null = null;
+        const onLeave = () => {
+          if (timeoutId) clearTimeout(timeoutId);
+          setTimeout(() => {
+            if (mainWindow && !mainWindow.isDestroyed()) {
+              mainWindow.minimize();
+            }
+            resolve(true);
+          }, 120);
+        };
+        mainWindow?.once("leave-full-screen", onLeave);
+        timeoutId = setTimeout(() => {
+          mainWindow?.removeListener("leave-full-screen", onLeave);
+          if (mainWindow && !mainWindow.isDestroyed()) {
+            mainWindow.minimize();
+          }
+          resolve(true);
+        }, 3000);
+        setAppFullScreen(false, "user");
+      });
+    }
+
     mainWindow.minimize();
     return true;
   });
@@ -2104,7 +2134,11 @@ app.on("before-quit", () => {
 
 app.commandLine.appendSwitch("autoplay-policy", "no-user-gesture-required");
 app.commandLine.appendSwitch("enable-features", "DocumentPictureInPictureAPI");
-app.commandLine.appendSwitch("disable-features", "HardwareMediaKeyHandling");
+app.commandLine.appendSwitch(
+  "disable-features",
+  "HardwareMediaKeyHandling,CalculateNativeWinOcclusion",
+);
+app.commandLine.appendSwitch("disable-background-timer-throttling");
 
 if (!hasSingleInstanceLock) {
   console.warn(

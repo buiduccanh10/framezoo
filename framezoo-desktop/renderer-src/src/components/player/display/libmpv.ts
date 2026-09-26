@@ -280,10 +280,10 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     if (!element) return null;
     const rect = element.getBoundingClientRect();
     const bounds = {
-      x: rect.left,
-      y: rect.top,
-      width: rect.width || window.innerWidth,
-      height: rect.height || window.innerHeight,
+      x: Math.max(0, rect.left),
+      y: Math.max(0, rect.top),
+      width: Math.max(1, Math.round(rect.width || window.innerWidth || 1)),
+      height: Math.max(1, Math.round(rect.height || window.innerHeight || 1)),
     };
     const boundsKey = Object.values(bounds).join(":");
     if (boundsKey !== lastBoundsKey) {

@@ -290,6 +290,22 @@ export class LibMpvController {
         this.addon?.resizePlayer(player.id, player.bounds);
       }
     });
+    mainWindow.on("restore", () => {
+      if (!mainWindow || mainWindow.isDestroyed()) return;
+      const [contentWidth, contentHeight] = mainWindow.getContentSize();
+      const scale = getNativeScaleFactor(mainWindow);
+      for (const player of this.players.values()) {
+        if (player.target === "main") {
+          player.bounds = {
+            x: 0,
+            y: 0,
+            width: Math.max(1, Math.round(contentWidth * scale)),
+            height: Math.max(1, Math.round(contentHeight * scale)),
+          };
+          this.addon?.resizePlayer(player.id, player.bounds);
+        }
+      }
+    });
     mainWindow.on("closed", () => {
       this.destroyAll();
     });
