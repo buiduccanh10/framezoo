@@ -631,9 +631,12 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     });
   }
 
-  function sendNativeCommand(id: string, command: LibMpvCommand) {
-    return enqueueNativeOperation(() =>
-      electronApi?.sendLibMpvCommand?.(id, command),
+  function sendNativeCommand(
+    id: string,
+    command: LibMpvCommand,
+  ): Promise<boolean> {
+    return (
+      electronApi?.sendLibMpvCommand?.(id, command) ?? Promise.resolve(false)
     );
   }
 
