@@ -289,6 +289,10 @@ void surface_configure_window(void* parent_handle) {
   NSWindow* window = anchor.window;
   if (!window) return;
 
+  [window setBackgroundColor:[NSColor colorWithSRGBRed:9.0 / 255.0
+                                                 green:9.0 / 255.0
+                                                  blue:11.0 / 255.0
+                                                 alpha:1.0]];
   [window setHasShadow:YES];
 }
 

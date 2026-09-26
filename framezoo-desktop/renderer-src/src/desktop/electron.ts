@@ -140,6 +140,20 @@ declare global {
         ) => Promise<AddonProtocolResponse>;
       };
       onDeepLink?: (listener: (url: string) => void) => () => void;
+      platform?: string;
+      isWindows?: boolean;
+      isMac?: boolean;
+      getFullscreenState?: () => Promise<boolean>;
+      onFullscreenState?: (
+        listener: (isFullscreen: boolean) => void,
+      ) => () => void;
+      minimizeWindow?: () => Promise<void>;
+      maximizeWindow?: () => Promise<void>;
+      closeWindow?: () => Promise<void>;
+      isMaximized?: () => Promise<boolean>;
+      onMaximizeState?: (
+        listener: (isMaximized: boolean) => void,
+      ) => () => void;
     };
     __CONFIG__?: Record<string, string>;
   }

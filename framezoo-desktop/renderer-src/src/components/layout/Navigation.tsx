@@ -8,6 +8,7 @@ import { Icons } from "@/components/Icon";
 import { LinksDropdown, WatchPartyInputLink } from "@/components/LinksDropdown";
 import { Lightbar } from "@/components/utils/Lightbar";
 import { useAuth } from "@/hooks/auth/useAuth";
+import { useIsMacWindowed } from "@/hooks/useIsDesktopApp";
 import { BlurEllipsis } from "@/pages/layouts/SubPageLayout";
 import { useBannerSize } from "@/stores/banner";
 
@@ -24,6 +25,7 @@ export interface NavigationProps {
 }
 
 export function Navigation(props: NavigationProps) {
+  const isMacWindowed = useIsMacWindowed();
   const bannerHeight = useBannerSize();
   const location = useLocation();
   const { loggedIn } = useAuth();
@@ -124,16 +126,28 @@ export function Navigation(props: NavigationProps) {
         }}
       >
         <div
-          className={classNames("absolute left-0 right-0 flex items-center")}
+          className={classNames(
+            "absolute left-0 right-0 flex items-center pointer-events-auto",
+          )}
+          style={{ WebkitAppRegion: "drag" } as React.CSSProperties}
         >
           <div className="px-1 py-5 sm:px-4 md:px-6 lg:px-7 relative z-[60] flex flex-1 items-center">
             <div className="pointer-events-auto flex flex-1 items-center justify-center gap-1 sm:gap-2 md:gap-3 md:justify-start">
+              {isMacWindowed && (
+                <div
+                  className="w-[72px] shrink-0 pointer-events-none"
+                  aria-hidden="true"
+                />
+              )}
               {location.pathname !== "/login" &&
                 location.pathname !== "/register" && (
                   <Link
                     className="block shrink-0 tabbable rounded-full text-xs ssm:text-base"
                     to="/discover"
                     onClick={() => window.scrollTo(0, 0)}
+                    style={
+                      { WebkitAppRegion: "no-drag" } as React.CSSProperties
+                    }
                   >
                     <BrandPill clickable header />
                   </Link>
@@ -146,6 +160,9 @@ export function Navigation(props: NavigationProps) {
                     to="/browse"
                     onClick={() => window.scrollTo(0, 0)}
                     className="shrink-0 text-lg text-white tabbable rounded-full backdrop-blur-lg"
+                    style={
+                      { WebkitAppRegion: "no-drag" } as React.CSSProperties
+                    }
                   >
                     <IconPatch
                       icon={Icons.SEARCH}
@@ -159,6 +176,9 @@ export function Navigation(props: NavigationProps) {
                     to="/discover"
                     onClick={() => window.scrollTo(0, 0)}
                     className="shrink-0 text-xl text-white tabbable rounded-full backdrop-blur-lg"
+                    style={
+                      { WebkitAppRegion: "no-drag" } as React.CSSProperties
+                    }
                   >
                     <IconPatch
                       icon={Icons.RISING_STAR}
@@ -171,17 +191,36 @@ export function Navigation(props: NavigationProps) {
               {location.pathname !== "/login" &&
                 location.pathname !== "/settings" &&
                 location.pathname !== "/register" && (
-                  <WatchPartyInputLink triggerVariant="icon" />
+                  <div
+                    style={
+                      { WebkitAppRegion: "no-drag" } as React.CSSProperties
+                    }
+                  >
+                    <WatchPartyInputLink triggerVariant="icon" />
+                  </div>
                 )}
               {/* {location.pathname !== "/login" &&
                 location.pathname !== "/settings" &&
                 location.pathname !== "/register" && <DownloadAppButton />} */}
               {location.pathname !== "/login" &&
                 location.pathname !== "/settings" &&
-                location.pathname !== "/register" && <AddonManager />}
+                location.pathname !== "/register" && (
+                  <div
+                    style={
+                      { WebkitAppRegion: "no-drag" } as React.CSSProperties
+                    }
+                  >
+                    <AddonManager />
+                  </div>
+                )}
               {location.pathname !== "/login" &&
                 location.pathname !== "/register" && (
-                  <div className="relative pointer-events-auto ml-0 md:ml-auto flex items-center gap-2">
+                  <div
+                    className="relative pointer-events-auto ml-0 md:ml-auto flex items-center gap-2"
+                    style={
+                      { WebkitAppRegion: "no-drag" } as React.CSSProperties
+                    }
+                  >
                     <LinksDropdown>
                       {loggedIn ? <UserAvatar withName /> : <NoUserAvatar />}
                     </LinksDropdown>
@@ -190,7 +229,10 @@ export function Navigation(props: NavigationProps) {
                 )}
               {(location.pathname === "/login" ||
                 location.pathname === "/register") && (
-                <div className="relative pointer-events-auto ml-auto flex items-center">
+                <div
+                  className="relative pointer-events-auto ml-auto flex items-center"
+                  style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
+                >
                   <WindowControls />
                 </div>
               )}
