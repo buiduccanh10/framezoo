@@ -1351,10 +1351,18 @@ function createMainWindow() {
     height: initialHeight,
     minWidth: 960,
     minHeight: 600,
+    show: false,
     backgroundColor: "#00000000",
     transparent: true,
     fullscreenable: true,
-    titleBarStyle: "default" as const,
+    ...(process.platform === "darwin"
+      ? {
+          titleBarStyle: "hiddenInset" as const,
+          trafficLightPosition: { x: 20, y: 34 },
+        }
+      : {
+          titleBarStyle: "default" as const,
+        }),
     autoHideMenuBar: true,
     icon: getWindowIconPath(),
     webPreferences: {
@@ -1366,6 +1374,22 @@ function createMainWindow() {
       backgroundThrottling: false,
       devTools: ENABLE_DEVTOOLS,
     },
+  });
+
+  mainWindow.once("ready-to-show", () => {
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      mainWindow.show();
+    }
+  });
+
+  const showFallbackTimer = setTimeout(() => {
+    if (mainWindow && !mainWindow.isDestroyed() && !mainWindow.isVisible()) {
+      mainWindow.show();
+    }
+  }, 2500);
+
+  mainWindow.once("show", () => {
+    clearTimeout(showFallbackTimer);
   });
 
   if (process.platform === "darwin") {
@@ -1518,6 +1542,7 @@ function createMainWindow() {
   }
 
   mainWindow.on("closed", () => {
+    clearTimeout(showFallbackTimer);
     clearFullscreenTransition();
     clearLeaveFullScreenSettleTimer();
     pendingMinimize = false;

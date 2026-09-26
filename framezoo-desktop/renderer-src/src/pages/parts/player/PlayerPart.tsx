@@ -19,6 +19,7 @@ import { DocumentPipOverlay } from "@/components/player/internals/DocumentPipOve
 import { PauseOverlay } from "@/components/player/overlays/PauseOverlay";
 import { resolveNextEpisodeAction } from "@/components/player/utils/episodeNavigation";
 import type { DesktopPipAction } from "@/desktop/pip";
+import { useIsMacWindowed } from "@/hooks/useIsDesktopApp";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { PlayerMeta, playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
@@ -34,6 +35,7 @@ export interface PlayerPartProps {
 }
 
 export function PlayerPart(props: PlayerPartProps) {
+  const isMacWindowed = useIsMacWindowed();
   const { onMetaChange } = props;
   const { showTargets } = useShouldShowControls();
   const status = usePlayerStore((s) => s.status);
@@ -227,9 +229,21 @@ export function PlayerPart(props: PlayerPartProps) {
       </div>
 
       <Player.TopControls show={showTargets}>
-        <div className="relative flex w-full items-center justify-between gap-4">
+        <div
+          className="relative flex w-full items-center justify-between gap-4 pointer-events-auto"
+          style={{ WebkitAppRegion: "drag" } as React.CSSProperties}
+        >
           {/* Left section: Back link, slash, responsive title, and 3 action buttons */}
-          <div className="flex min-w-0 max-w-[calc(50%-80px)] md:max-w-[calc(50%-140px)] items-center gap-1 ssm:gap-2 z-10">
+          <div
+            className="flex min-w-0 max-w-[calc(50%-80px)] md:max-w-[calc(50%-140px)] items-center gap-1 ssm:gap-2 z-10"
+            style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
+          >
+            {isMacWindowed && (
+              <div
+                className="w-[72px] shrink-0 pointer-events-none"
+                aria-hidden="true"
+              />
+            )}
             <div className="shrink-0">
               <Player.BackLink url={props.backUrl} />
             </div>
@@ -258,7 +272,10 @@ export function PlayerPart(props: PlayerPartProps) {
 
           {/* Center section: Episode title (centered between left controls and right brand/window controls) */}
           {meta?.type === "show" ? (
-            <div className="pointer-events-none absolute inset-x-0 hidden md:flex justify-center items-center px-4">
+            <div
+              className="pointer-events-none absolute inset-x-0 hidden md:flex justify-center items-center px-4"
+              style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
+            >
               <div className="pointer-events-auto max-w-[40%] truncate text-center">
                 <Player.EpisodeTitle />
               </div>
@@ -266,11 +283,17 @@ export function PlayerPart(props: PlayerPartProps) {
           ) : null}
 
           {/* Right section: Brand pill & Window controls (desktop) or mobile actions */}
-          <div className="hidden lg:flex items-center justify-end gap-3 shrink-0 z-10">
+          <div
+            className="hidden lg:flex items-center justify-end gap-3 shrink-0 z-10"
+            style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
+          >
             <BrandPill />
             <WindowControls />
           </div>
-          <div className="flex lg:hidden items-center justify-end gap-2 shrink-0 z-10">
+          <div
+            className="flex lg:hidden items-center justify-end gap-2 shrink-0 z-10"
+            style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
+          >
             {status === playerStatus.PLAYING ? (
               <>
                 <Player.Airplay
