@@ -229,54 +229,53 @@ export function PlayerPart(props: PlayerPartProps) {
       </div>
 
       <Player.TopControls show={showTargets}>
-        <div
-          className="relative flex w-full items-center justify-between gap-4 pointer-events-auto"
-          style={{ WebkitAppRegion: "drag" } as React.CSSProperties}
-        >
+        <div className="relative flex w-full items-center justify-between gap-4 pointer-events-auto">
           {/* Left section: Back link, slash, responsive title, and 3 action buttons */}
-          <div
-            className="flex min-w-0 max-w-[calc(50%-80px)] md:max-w-[calc(50%-140px)] items-center gap-1 ssm:gap-2 z-10"
-            style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
-          >
+          <div className="flex min-w-0 max-w-[calc(50%-80px)] md:max-w-[calc(50%-140px)] items-center gap-1 ssm:gap-2 z-10">
             {isMacWindowed && (
               <div
                 className="w-[72px] shrink-0 pointer-events-none"
                 aria-hidden="true"
               />
             )}
-            <div className="shrink-0">
-              <Player.BackLink url={props.backUrl} />
-            </div>
-            <span className="text mx-1.5 md:mx-3 text-type-secondary shrink-0 select-none">
-              /
-            </span>
-            <div className="min-w-0 truncate">
-              <Player.Title />
-            </div>
-
-            {isMobile && meta?.type === "show" && (
-              <span className="text-type-secondary text-sm whitespace-nowrap shrink-0">
-                {t("media.episodeDisplay", {
-                  season: meta?.season?.number,
-                  episode: meta?.episode?.number,
-                })}
+            <div
+              className="flex items-center gap-1 ssm:gap-2 min-w-0"
+              style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
+            >
+              <div className="shrink-0">
+                <Player.BackLink url={props.backUrl} />
+              </div>
+              <span className="text mx-1.5 md:mx-3 text-type-secondary shrink-0 select-none">
+                /
               </span>
-            )}
+              <div className="min-w-0 truncate">
+                <Player.Title />
+              </div>
 
-            <div className="flex items-center shrink-0 ml-1">
-              <Player.InfoButton />
-              <Player.BookmarkButton />
-              <Player.KeyboardCommandsButton />
+              {isMobile && meta?.type === "show" && (
+                <span className="text-type-secondary text-sm whitespace-nowrap shrink-0">
+                  {t("media.episodeDisplay", {
+                    season: meta?.season?.number,
+                    episode: meta?.episode?.number,
+                  })}
+                </span>
+              )}
+
+              <div className="flex items-center shrink-0 ml-1">
+                <Player.InfoButton />
+                <Player.BookmarkButton />
+                <Player.KeyboardCommandsButton />
+              </div>
             </div>
           </div>
 
           {/* Center section: Episode title (centered between left controls and right brand/window controls) */}
           {meta?.type === "show" ? (
-            <div
-              className="pointer-events-none absolute inset-x-0 hidden md:flex justify-center items-center px-4"
-              style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
-            >
-              <div className="pointer-events-auto max-w-[40%] truncate text-center">
+            <div className="pointer-events-none absolute inset-x-0 hidden md:flex justify-center items-center px-4">
+              <div
+                className="pointer-events-auto max-w-[40%] truncate text-center"
+                style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
+              >
                 <Player.EpisodeTitle />
               </div>
             </div>
@@ -295,13 +294,16 @@ export function PlayerPart(props: PlayerPartProps) {
             style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
           >
             {status === playerStatus.PLAYING ? (
-              <>
+              <div
+                className="flex items-center gap-2"
+                style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
+              >
                 <Player.Airplay
                   iconSizeClass={mobileActionIconClass}
                   className={mobileActionButtonClass}
                 />
                 <Player.Chromecast />
-              </>
+              </div>
             ) : null}
             <WindowControls />
           </div>

@@ -42,17 +42,25 @@ export function TopControls(props: {
       <div
         onMouseOver={() => setHoveringAnyControls(true)}
         onMouseOut={() => setHoveringAnyControls(false)}
-        className="pointer-events-auto pl-[calc(2rem+env(safe-area-inset-left))] pr-[calc(2rem+env(safe-area-inset-right))] pt-6 absolute top-0 w-full"
+        className="pointer-events-none absolute top-0 left-0 right-0 z-[500]"
         style={{
           top: `${bannerSize}px`,
         }}
       >
-        <Transition
-          animation="slide-down"
-          show={props.show}
-          className="top-content text-white"
-        >
-          {props.children}
+        {/* Top window drag strip in the empty space above controls (y: 0 -> 20px) */}
+        <div
+          className="absolute top-0 left-0 right-0 h-5 pointer-events-auto"
+          style={{ WebkitAppRegion: "drag" } as React.CSSProperties}
+        />
+        <Transition animation="fade" show={props.show} className="text-white">
+          <div
+            className="absolute top-5 left-0 right-0 flex items-center pointer-events-auto"
+            style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
+          >
+            <div className="px-1 pb-5 sm:px-4 md:px-6 lg:px-7 relative z-[60] flex flex-1 items-center">
+              {props.children}
+            </div>
+          </div>
         </Transition>
       </div>
     </div>
