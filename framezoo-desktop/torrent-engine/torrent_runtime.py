@@ -585,16 +585,29 @@ class TorrentRuntime:
                 ),
             )
             
-            # Stremio-like fast start: Always fetch the last piece for MP4/MKV tail headers
-            tail_start = max(0, self.file_size - piece_length)
-            tail_pieces = self.map_pieces(tail_start, piece_length)
+            # Stremio-like fast start: Fetch head pieces and container tail index (MKV Cues / MP4 moov)
+            tail_length = min(
+                self.file_size,
+                max(
+                    piece_length * 2,
+                    getattr(constants, "STARTUP_TAIL_PREFETCH_BYTES", 8 * 1024 * 1024),
+                ),
+            )
+            if self.file_size > piece_length:
+                tail_length = min(tail_length, max(piece_length, self.file_size // 2))
+            tail_start = max(0, self.file_size - tail_length)
+            tail_pieces = sorted(self.map_pieces(tail_start, tail_length))
             
-            combined_pieces = sorted(set(startup_pieces) | tail_pieces)
+            combined_pieces = sorted(set(startup_pieces) | set(tail_pieces))
+            required_pieces = (
+                (set(startup_pieces[:2]) if startup_pieces else set())
+                | set(tail_pieces)
+            )
             
             if combined_pieces:
                 self._schedule_pieces(
                     combined_pieces,
-                    {startup_pieces[0]} if startup_pieces else set(),
+                    required_pieces,
                     reason="startup-prefetch",
                 )
 
@@ -946,6 +959,8 @@ class TorrentRuntime:
         missing_pieces = 0
         required_set = set(required_pieces)
         first_required_piece = min(required_set) if required_set else None
+        required_list = sorted(required_set)
+        required_ranks = {p: i for i, p in enumerate(required_list)}
         first_piece_was_prioritized = False
         with self._piece_priority_lock:
             for index, piece in enumerate(prefetch_pieces):
@@ -959,6 +974,8 @@ class TorrentRuntime:
 
                 if piece in required_set:
                     focus_piece = getattr(self, "_focus_piece", None)
+                    rank = required_ranks.get(piece, 0)
+                    deadline_ms = min(250, rank * 25)
                     if is_sync:
                         priority = constants.STREAM_PIECE_PRIORITY
                         deadline_ms = 0
@@ -967,20 +984,8 @@ class TorrentRuntime:
                         and piece != focus_piece
                     ):
                         priority = constants.STREAM_HOT_PIECE_PRIORITY
-                        distance = (
-                            0
-                            if first_required_piece is None
-                            else max(0, piece - first_required_piece)
-                        )
-                        deadline_ms = distance * 25
                     else:
                         priority = constants.STREAM_PIECE_PRIORITY
-                        distance = (
-                            0
-                            if first_required_piece is None
-                            else max(0, piece - first_required_piece)
-                        )
-                        deadline_ms = distance * 25
                 elif (
                     not getattr(self, "_has_streamed_bytes", False)
                     and index < constants.STARTUP_WINDOW_PIECES
@@ -2204,7 +2209,18 @@ class TorrentRuntime:
             try:
                 stream = open(absolute_path, "rb")
             except FileNotFoundError:
-                time.sleep(constants.FILE_OPEN_RETRY_INTERVAL)
+                remaining = (
+                    None
+                    if deadline is None
+                    else max(0.0, deadline - time.monotonic())
+                )
+                if remaining is not None and remaining <= 0:
+                    return None, None
+                time.sleep(
+                    min(constants.FILE_OPEN_RETRY_INTERVAL, remaining)
+                    if remaining is not None
+                    else constants.FILE_OPEN_RETRY_INTERVAL
+                )
                 continue
             except OSError:
                 return None, None
@@ -2234,6 +2250,17 @@ class TorrentRuntime:
             stream.close()
             if self.stop_event.is_set():
                 break
-            time.sleep(constants.FILE_OPEN_RETRY_INTERVAL)
+            remaining = (
+                None
+                if deadline is None
+                else max(0.0, deadline - time.monotonic())
+            )
+            if remaining is not None and remaining <= 0:
+                break
+            time.sleep(
+                min(constants.FILE_OPEN_RETRY_INTERVAL, remaining)
+                if remaining is not None
+                else constants.FILE_OPEN_RETRY_INTERVAL
+            )
 
         return None, None

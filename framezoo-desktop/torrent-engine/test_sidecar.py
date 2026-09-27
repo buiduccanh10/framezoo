@@ -741,18 +741,27 @@ class SidecarStreamTest(unittest.TestCase):
             [
                 (
                     [10, 11, 12, 13, 14, 90, 91],
-                    {10},
+                    {10, 11, 90, 91},
                     "startup-prefetch",
                 ),
             ],
         )
+        tail_length = min(
+            runtime.file_size,
+            max(
+                runtime.info.piece_length() * 2,
+                constants.STARTUP_TAIL_PREFETCH_BYTES,
+            ),
+        )
+        if runtime.file_size > runtime.info.piece_length():
+            tail_length = min(tail_length, max(runtime.info.piece_length(), runtime.file_size // 2))
         self.assertEqual(
             requested_lengths,
             [
                 (0, constants.STARTUP_PREFETCH_BYTES),
                 (
-                    runtime.file_size - runtime.info.piece_length(),
-                    runtime.info.piece_length(),
+                    runtime.file_size - tail_length,
+                    tail_length,
                 ),
             ],
         )
