@@ -24,6 +24,7 @@ struct NativeSurface {
   SurfaceBounds bounds{};
   std::atomic<double> backing_scale_factor{1.0};
   std::atomic<uint64_t> paint_count{0};
+  std::atomic<bool> paint_requested{false};
   SurfacePaintCallback paint_callback = nullptr;
   void* user = nullptr;
 };
@@ -117,6 +118,7 @@ void attach_surface(NativeSurface* surface, NSView* anchor) {
   [super drawRect:dirtyRect];
   NativeSurface* surface = self.surface;
   if (!surface || !surface->paint_callback || !surface->user) return;
+  surface->paint_requested.store(false, std::memory_order_relaxed);
 
   const uint64_t paint_number = surface->paint_count.fetch_add(1) + 1;
   if (paint_number <= 5 || paint_number % 60 == 0) {
@@ -183,6 +185,9 @@ NativeSurface* surface_create(
   surface->view.layer.backgroundColor = NSColor.clearColor.CGColor;
   surface->view.autoresizingMask =
       NSViewWidthSizable | NSViewHeightSizable;
+  GLint swap_interval = 1;
+  [[surface->view openGLContext] setValues:&swap_interval
+                              forParameter:NSOpenGLCPSwapInterval];
   attach_surface(surface, parent);
   [surface->view setNeedsDisplay:YES];
   return surface;
@@ -206,9 +211,13 @@ void surface_reparent(NativeSurface* surface, void* parent_handle) {
 
 void surface_request_paint(NativeSurface* surface) {
   if (!surface || !surface->view || !surface->paint_callback || !surface->user) return;
+  if (surface->paint_requested.exchange(true, std::memory_order_relaxed)) {
+    return;
+  }
   FrameZooMpvView* view = surface->view;
   [view retain];
   dispatch_async(dispatch_get_main_queue(), ^{
+    surface->paint_requested.store(false, std::memory_order_relaxed);
     [view setNeedsDisplay:YES];
     [view release];
   });

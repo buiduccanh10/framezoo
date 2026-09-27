@@ -1511,6 +1511,28 @@ class TorrentRuntime:
             elapsedMs=self.elapsed_ms(),
         )
 
+    def _get_range_prefetch_bytes(self, is_sync: bool) -> int:
+        if is_sync:
+            return constants.SYNC_RANGE_PREFETCH_BYTES
+        file_size = getattr(self, "file_size", None)
+        if (
+            file_size is not None
+            and file_size >= constants.HIGH_BITRATE_FILE_THRESHOLD_BYTES
+        ):
+            return constants.HIGH_BITRATE_RANGE_PREFETCH_BYTES
+        return constants.RANGE_PREFETCH_BYTES
+
+    def _get_max_replan_prefetch_bytes(self, is_sync: bool) -> int:
+        if is_sync:
+            return constants.SYNC_RANGE_PREFETCH_BYTES
+        file_size = getattr(self, "file_size", None)
+        if (
+            file_size is not None
+            and file_size >= constants.HIGH_BITRATE_FILE_THRESHOLD_BYTES
+        ):
+            return constants.HIGH_BITRATE_MAX_REPLAN_PREFETCH_BYTES
+        return constants.MAX_REPLAN_PREFETCH_BYTES
+
     def wait_for_range(
         self,
         start: int,
@@ -1524,11 +1546,7 @@ class TorrentRuntime:
     ) -> bool:
         prefetch_length = max(
             end - start + 1,
-            (
-                constants.SYNC_RANGE_PREFETCH_BYTES
-                if is_sync
-                else constants.RANGE_PREFETCH_BYTES
-            ),
+            self._get_range_prefetch_bytes(is_sync),
         )
         required_pieces = sorted(self.map_pieces(start, end - start + 1))
         all_pieces = sorted(self.map_pieces(start, prefetch_length))
@@ -1774,9 +1792,10 @@ class TorrentRuntime:
                         self._kick_target_piece(target_piece)
                         last_kick = now
                 replan_cap = (
-                    max(prefetch_length, constants.SYNC_RANGE_PREFETCH_BYTES)
-                    if is_sync
-                    else constants.MAX_REPLAN_PREFETCH_BYTES
+                    max(
+                        prefetch_length,
+                        self._get_max_replan_prefetch_bytes(is_sync),
+                    )
                 )
                 expansion = min(
                     2 ** min(2, blocked_replan_count),

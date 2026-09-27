@@ -6,6 +6,10 @@ RANGE_PREFETCH_BYTES = 32 * 1024 * 1024
 # Subtitle sync reads sparse audio windows; bound read-ahead competition.
 SYNC_RANGE_PREFETCH_BYTES = 8 * 1024 * 1024
 MAX_REPLAN_PREFETCH_BYTES = 128 * 1024 * 1024
+# High-bitrate / 4K stream optimizations: scale up prefetch to prevent buffer underrun
+HIGH_BITRATE_FILE_THRESHOLD_BYTES = 4 * 1024 * 1024 * 1024
+HIGH_BITRATE_RANGE_PREFETCH_BYTES = 96 * 1024 * 1024
+HIGH_BITRATE_MAX_REPLAN_PREFETCH_BYTES = 256 * 1024 * 1024
 # Keep the selected file materialized on disk while the playback scheduler
 # boosts the contiguous range that libmpv currently needs.
 STREAM_IDLE_FILE_PRIORITY = 1
