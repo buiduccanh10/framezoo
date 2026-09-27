@@ -1148,6 +1148,7 @@ napi_value create_player(napi_env env, napi_callback_info info) {
   set_mpv_option(player.get(), "vo", "gpu,direct3d,null");
   set_mpv_option(player.get(), "gpu-api", "d3d11,auto");
   set_mpv_option(player.get(), "gpu-context", "d3d11,auto");
+  set_mpv_option(player.get(), "d3d11-flip", "yes");
 #else
   set_mpv_option(player.get(), "vo", "libmpv");
 #if defined(__APPLE__)
@@ -1161,24 +1162,47 @@ napi_value create_player(napi_env env, napi_callback_info info) {
   set_mpv_option(player.get(), "osd-bar", "no");
   set_mpv_option(player.get(), "input-default-bindings", "no");
   set_mpv_option(player.get(), "input-vo-keyboard", "no");
+
+  // Hardware decoding & multi-threading
   set_mpv_option(player.get(), "hwdec", "auto-safe");
+  set_mpv_option(player.get(), "hwdec-extra-frames", "16");
+  set_mpv_option(player.get(), "vd-lavc-threads", "0");
+  set_mpv_option(player.get(), "vd-lavc-check-hw-profile", "yes");
+
   set_mpv_option(player.get(), "keep-open", "yes");
   set_mpv_option(player.get(), "idle", "yes");
   set_mpv_option(player.get(), "network-timeout", "120");
+
+  // Network and streaming resilience
+  set_mpv_option(
+      player.get(),
+      "stream-lavf-o",
+      "reconnect=1,reconnect_streamed=1,reconnect_delay_max=5"
+  );
+  set_mpv_option(player.get(), "demuxer-lavf-buffersize", "131072");
+
+  // Cache & demuxer tuning for 4K streams
   set_mpv_option(player.get(), "cache", "yes");
   set_mpv_option(player.get(), "cache-pause", "yes");
-  set_mpv_option(player.get(), "cache-pause-initial", "yes");
-  set_mpv_option(player.get(), "cache-pause-wait", "2.0");
-  set_mpv_option(player.get(), "cache-secs", "60");
-  set_mpv_option(player.get(), "demuxer-readahead-secs", "30");
-  set_mpv_option(player.get(), "demuxer-max-bytes", "512MiB");
+  set_mpv_option(player.get(), "cache-pause-initial", "no");
+  set_mpv_option(player.get(), "cache-pause-wait", "0.5");
+  set_mpv_option(player.get(), "cache-secs", "120");
+  set_mpv_option(player.get(), "demuxer-readahead-secs", "90");
+  set_mpv_option(player.get(), "demuxer-max-bytes", "768MiB");
+  set_mpv_option(player.get(), "demuxer-max-back-bytes", "128MiB");
+  set_mpv_option(player.get(), "demuxer-hysteresis-secs", "10");
   set_mpv_option(player.get(), "demuxer-seekable-cache", "yes");
-  set_mpv_option(player.get(), "stream-buffer-size", "4MiB");
+  set_mpv_option(player.get(), "stream-buffer-size", "32MiB");
+  set_mpv_option(player.get(), "demuxer-lavf-analyzeduration", "0.5");
+  set_mpv_option(player.get(), "demuxer-lavf-probesize", "1048576");
+
+  // Frame pacing & decoding fidelity (no frame corruption or judder)
+  set_mpv_option(player.get(), "video-sync", "display-resample");
   set_mpv_option(player.get(), "framedrop", "vo");
   set_mpv_option(player.get(), "hr-seek", "yes");
   set_mpv_option(player.get(), "hr-seek-framedrop", "yes");
   set_mpv_option(player.get(), "vd-lavc-show-all", "no");
-  set_mpv_option(player.get(), "vd-lavc-fast", "yes");
+  set_mpv_option(player.get(), "vd-lavc-fast", "no");
   set_mpv_option(player.get(), "force-seekable", "yes");
   if (player->api.initialize(player->handle) < 0) {
     return throw_error(env, "mpv_initialize failed");

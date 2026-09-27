@@ -670,6 +670,81 @@ class SidecarStreamTest(unittest.TestCase):
             constants.STREAM_WARM_PIECE_PRIORITY,
         )
 
+    def test_focus_playback_piece_protects_startup_tail_pieces(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime._piece_priority_lock = threading.RLock()
+        runtime._boosted_pieces = {10, 11, 90, 91}
+        runtime._startup_tail_pieces = {90, 91}
+        runtime._startup_required_tail_pieces = {90, 91}
+        runtime._piece_deadlines = {10: 0, 90: 50, 91: 50}
+        runtime._piece_priorities = {
+            10: constants.STREAM_PIECE_PRIORITY,
+            11: constants.STREAM_HOT_PIECE_PRIORITY,
+            90: constants.STREAM_PIECE_PRIORITY,
+            91: constants.STREAM_PIECE_PRIORITY,
+        }
+        runtime.session_id = "torrent-protect-tail-test"
+        runtime.elapsed_ms = lambda: 0
+
+        class FakeHandle:
+            def __init__(self):
+                self.cleared_deadlines = 0
+                self.priorities = {}
+                self.deadlines = {}
+
+            def clear_piece_deadlines(self):
+                self.cleared_deadlines += 1
+
+            def have_piece(self, _piece):
+                return False
+
+            def piece_priority(self, piece, priority):
+                self.priorities[piece] = priority
+
+            def set_piece_deadline(self, piece, deadline, flags=0):
+                self.deadlines[piece] = deadline
+
+        runtime.handle = FakeHandle()
+        runtime._set_piece_deadline = MethodType(TorrentRuntime._set_piece_deadline, runtime)
+
+        # Focus playback piece 10
+        runtime._focus_playback_piece(10)
+
+        # Piece 11 (not target, not tail) should be demoted to idle
+        self.assertEqual(runtime._piece_priorities[11], constants.STREAM_IDLE_FILE_PRIORITY)
+        # Tail pieces (90, 91) must NOT be demoted to idle; they must be re-asserted with priority 7 and deadline 50
+        self.assertEqual(runtime.handle.priorities[90], constants.STREAM_PIECE_PRIORITY)
+        self.assertEqual(runtime.handle.priorities[91], constants.STREAM_PIECE_PRIORITY)
+        self.assertEqual(runtime._piece_deadlines[90], 50)
+        self.assertEqual(runtime._piece_deadlines[91], 50)
+
+    def test_open_first_chunk_prioritizes_tail_chunk(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.session_id = "torrent-tail-prioritize-test"
+        runtime.stop_event = threading.Event()
+        runtime.info = object()
+        runtime.file_index = 0
+        runtime.file_size = 100 * 1024 * 1024
+        runtime.file_piece_end = lambda offset: offset + 1024 * 1024 - 1
+        runtime.map_pieces = lambda _start, _len: [90]
+
+        prioritized = []
+        def fake_prioritize_range(self, start, length, reason, **_kwargs):
+            prioritized.append((start, length, reason))
+
+        runtime.prioritize_range = MethodType(fake_prioritize_range, runtime)
+
+        runtime.open_first_chunk(
+            "/nonexistent/path",
+            start=95 * 1024 * 1024,
+            end=95 * 1024 * 1024 + 1024,
+            track_position=False,
+            timeout=0.001,
+        )
+
+        self.assertEqual(len(prioritized), 1)
+        self.assertEqual(prioritized[0][2], "tail-chunk")
+
     def test_piece_scheduling_uses_hot_startup_window_and_warm_readahead(self):
         runtime = object.__new__(TorrentRuntime)
         runtime._piece_priority_lock = threading.RLock()
@@ -741,18 +816,27 @@ class SidecarStreamTest(unittest.TestCase):
             [
                 (
                     [10, 11, 12, 13, 14, 90, 91],
-                    {10},
+                    {10, 11, 90, 91},
                     "startup-prefetch",
                 ),
             ],
         )
+        tail_length = min(
+            runtime.file_size,
+            max(
+                runtime.info.piece_length() * 2,
+                constants.STARTUP_TAIL_PREFETCH_BYTES,
+            ),
+        )
+        if runtime.file_size > runtime.info.piece_length():
+            tail_length = min(tail_length, max(runtime.info.piece_length(), runtime.file_size // 2))
         self.assertEqual(
             requested_lengths,
             [
                 (0, constants.STARTUP_PREFETCH_BYTES),
                 (
-                    runtime.file_size - runtime.info.piece_length(),
-                    runtime.info.piece_length(),
+                    runtime.file_size - tail_length,
+                    tail_length,
                 ),
             ],
         )
@@ -1566,7 +1650,7 @@ class SidecarStreamTest(unittest.TestCase):
             [[0, constants.STREAM_IDLE_FILE_PRIORITY, 0]],
         )
         self.assertEqual(runtime.handle.sequential_calls, 1)
-        self.assertFalse(runtime.handle.sequential_enabled)
+        self.assertTrue(runtime.handle.sequential_enabled)
 
     def test_ignores_initial_tail_probe_for_playback_cursor(self):
         runtime = object.__new__(TorrentRuntime)

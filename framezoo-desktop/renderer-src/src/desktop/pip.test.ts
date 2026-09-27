@@ -181,3 +181,60 @@ describe("Desktop PiP subtitle state", () => {
     expect(state?.nextEpisodeIsSeasonChange).toBe(true);
   });
 });
+
+describe("Desktop PiP drag surface interaction checks", () => {
+  it("correctly identifies interactive elements that should NOT initiate window drag", async () => {
+    const { isInteractiveElement } = await import("@/pages/DesktopPip");
+
+    // Standard button
+    const button = document.createElement("button");
+    expect(isInteractiveElement(button)).toBe(true);
+
+    // Child icon inside button
+    const iconInsideButton = document.createElement("span");
+    button.appendChild(iconInsideButton);
+    expect(isInteractiveElement(iconInsideButton)).toBe(true);
+
+    // Range input slider
+    const input = document.createElement("input");
+    input.type = "range";
+    expect(isInteractiveElement(input)).toBe(true);
+
+    // Element with data-pip-no-drag attribute
+    const noDragDiv = document.createElement("div");
+    noDragDiv.setAttribute("data-pip-no-drag", "");
+    const childInsideNoDrag = document.createElement("span");
+    noDragDiv.appendChild(childInsideNoDrag);
+    expect(isInteractiveElement(noDragDiv)).toBe(true);
+    expect(isInteractiveElement(childInsideNoDrag)).toBe(true);
+
+    // ARIA role button
+    const roleButton = document.createElement("div");
+    roleButton.setAttribute("role", "button");
+    expect(isInteractiveElement(roleButton)).toBe(true);
+  });
+
+  it("correctly identifies non-interactive elements that SHOULD initiate window drag", async () => {
+    const { isInteractiveElement } = await import("@/pages/DesktopPip");
+
+    // Root / backdrop / header divs
+    const container = document.createElement("div");
+    expect(isInteractiveElement(container)).toBe(false);
+
+    // Header title text
+    const title = document.createElement("div");
+    title.className = "truncate text-sm font-medium";
+    title.textContent = "Movie Title";
+    container.appendChild(title);
+    expect(isInteractiveElement(title)).toBe(false);
+
+    // Subtitle cue text
+    const captionCue = document.createElement("span");
+    captionCue.textContent = "Hello world";
+    container.appendChild(captionCue);
+    expect(isInteractiveElement(captionCue)).toBe(false);
+
+    // Null or undefined target
+    expect(isInteractiveElement(null)).toBe(false);
+  });
+});

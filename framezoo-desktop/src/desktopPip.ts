@@ -314,7 +314,14 @@ export function createDesktopPipController(
       const y = Number(yValue);
       if (!Number.isFinite(x) || !Number.isFinite(y)) return false;
 
-      pipWindow.setPosition(Math.round(x), Math.round(y), false);
+      const targetX = Math.round(x);
+      const targetY = Math.round(y);
+      const [curX, curY] = pipWindow.getPosition();
+      if (curX === targetX && curY === targetY) {
+        return true;
+      }
+
+      pipWindow.setPosition(targetX, targetY, false);
       return true;
     },
     snap(sender: { id: number }) {
@@ -359,6 +366,11 @@ export function createDesktopPipController(
         pipWindow.webContents.id !== sender.id ||
         !pipState
       ) {
+        console.warn("[desktop-pip] ready check failed", {
+          hasWindow: Boolean(pipWindow && !pipWindow.isDestroyed()),
+          senderMatch: pipWindow?.webContents?.id === sender.id,
+          hasState: Boolean(pipState),
+        });
         return false;
       }
 
@@ -369,11 +381,11 @@ export function createDesktopPipController(
     },
     activate() {
       if (
-        !pipReady ||
         !pipWindow ||
         pipWindow.isDestroyed() ||
         pipWindow.webContents.isDestroyed()
       ) {
+        console.warn("[desktop-pip] cannot activate: pipWindow unavailable or destroyed");
         return false;
       }
 

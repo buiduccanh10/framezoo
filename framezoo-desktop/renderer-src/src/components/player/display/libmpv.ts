@@ -1088,7 +1088,16 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     }
 
     const state = buildPipState();
-    if (!state || !api.openDesktopPipWindow) return;
+    if (!state || !api.openDesktopPipWindow) {
+      console.warn(
+        "[libmpv] cannot open desktop PiP: state or API unavailable",
+        {
+          hasState: Boolean(state),
+          hasOpenPip: Boolean(api?.openDesktopPipWindow),
+        },
+      );
+      return;
+    }
     const initialPipState = {
       ...state,
       playbackTarget: "pip" as const,
@@ -1111,20 +1120,32 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         initialPipState,
         getPersistedDesktopPipWindowSize(),
       );
-      if (!opened) return;
+      if (!opened) {
+        console.warn("[libmpv] openDesktopPipWindow returned false");
+        return;
+      }
       desktopPipWindowOpen = true;
 
       reparented =
         (await enqueueNativeOperation(() =>
           api.reparentLibMpvPlayer?.(playerId!, "pip"),
         )) ?? false;
-      if (!reparented) return;
+      if (!reparented) {
+        console.warn("[libmpv] reparentLibMpvPlayer to pip returned false");
+        return;
+      }
 
       desktopPipTarget = "pip";
       const activated = api.activateDesktopPipWindow
         ? await api.activateDesktopPipWindow()
         : true;
-      if (!activated || desktopPipTarget !== "pip") return;
+      if (!activated || desktopPipTarget !== "pip") {
+        console.warn("[libmpv] activateDesktopPipWindow failed", {
+          activated,
+          desktopPipTarget,
+        });
+        return;
+      }
 
       enteredPip = true;
       desktopPipTransitioning = false;
