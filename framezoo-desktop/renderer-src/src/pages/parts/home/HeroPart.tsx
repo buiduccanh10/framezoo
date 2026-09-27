@@ -11,7 +11,6 @@ import { useIsIOS, useIsMobile, useIsPWA } from "@/hooks/useIsMobile";
 import { useIsTV } from "@/hooks/useIsTv";
 import { useRandomTranslation } from "@/hooks/useRandomTranslation";
 import { useSearchQuery } from "@/hooks/useSearchQuery";
-import { useBannerSize } from "@/stores/banner";
 
 export interface HeroPartProps {
   setIsSticky: (val: boolean) => void;
@@ -44,7 +43,6 @@ export function HeroPart({
   const { t: randomT } = useRandomTranslation();
   const [search, setSearch, setSearchUnFocus] = searchParams;
   const [showBg, setShowBg] = useState(false);
-  const bannerSize = useBannerSize();
   const { isMobile } = useIsMobile();
   const { isTV } = useIsTV();
 
@@ -64,8 +62,8 @@ export function HeroPart({
   const navbarHeight = 80;
   // Keep the sticky search below the nav on desktop so it doesn't cover nav items.
   const topOffset = isMobile
-    ? navbarHeight + bannerSize + (isIOSPWA ? 34 : 0)
-    : navbarHeight + bannerSize + 14;
+    ? navbarHeight + (isIOSPWA ? 34 : 0)
+    : navbarHeight + 14;
 
   const time = getTimeOfDay(new Date());
   const title = randomT(`home.titles.${time}`);

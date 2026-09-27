@@ -1,8 +1,6 @@
 import { useEffect } from "react";
 
 import { Transition } from "@/components/utils/Transition";
-import { useBannerSize } from "@/stores/banner";
-import { BannerLocation } from "@/stores/banner/BannerLocation";
 import { usePlayerStore } from "@/stores/player/store";
 import { useSubtitleStore } from "@/stores/subtitles";
 
@@ -10,7 +8,6 @@ export function TopControls(props: {
   show?: boolean;
   children: React.ReactNode;
 }) {
-  const bannerSize = useBannerSize("player");
   const setHoveringAnyControls = usePlayerStore(
     (s) => s.setHoveringAnyControls,
   );
@@ -30,22 +27,13 @@ export function TopControls(props: {
         <Transition
           animation="fade"
           show={props.show}
-          style={{
-            top: `${bannerSize}px`,
-          }}
           className="pointer-events-none flex justify-end pb-32 bg-gradient-to-b from-black to-transparent [margin-bottom:env(safe-area-inset-bottom)] transition-opacity duration-200 absolute top-0 w-full"
         />
       )}
-      <div className="relative z-10">
-        <BannerLocation location="player" />
-      </div>
       <div
         onMouseOver={() => setHoveringAnyControls(true)}
         onMouseOut={() => setHoveringAnyControls(false)}
         className="pointer-events-none absolute top-0 left-0 right-0 z-[500]"
-        style={{
-          top: `${bannerSize}px`,
-        }}
       >
         {/* Top window drag strip in the empty space above controls (y: 0 -> 20px) */}
         <div
