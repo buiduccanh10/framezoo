@@ -119,6 +119,7 @@ struct MpvPlayer {
   mpv_render_context* render_context = nullptr;
   NativeSurface* surface = nullptr;
   std::atomic<bool> running{true};
+  std::atomic<bool> is_paused{true};
   std::atomic<int> generation{0};
   std::mutex command_mutex;
   std::mutex render_mutex;
@@ -141,6 +142,14 @@ struct MpvPlayer {
     }
     std::lock_guard<std::mutex> lock(command_mutex);
     return api.command(handle, commands);
+  }
+
+  int set_property_string(const char* name, const char* data) {
+    if (api.set_property_string && handle) {
+      return api.set_property_string(handle, name, data);
+    }
+    const char* command[] = {"set", name, data, nullptr};
+    return command_async(command);
   }
 
   void stop() {
@@ -497,6 +506,9 @@ struct MpvPlayer {
                 native_event->has_bool = true;
                 native_event->bool_value =
                     *static_cast<int*>(property->data) != 0;
+                if (property->name && std::string(property->name) == "pause") {
+                  is_paused.store(native_event->bool_value, std::memory_order_release);
+                }
                 break;
               case MPV_FORMAT_INT64:
                 native_event->has_number = true;
@@ -669,8 +681,11 @@ int set_mpv_property(
     const char* property,
     const char* value
 ) {
+  if (player && player->handle && player->api.set_property_string) {
+    return player->api.set_property_string(player->handle, property, value);
+  }
   const char* command[] = {"set", property, value, nullptr};
-  return player->command(command);
+  return player ? player->command(command) : -1;
 }
 
 void set_mpv_option(MpvPlayer* player, const char* option, const char* value) {
@@ -1420,46 +1435,72 @@ napi_value command_player(napi_env env, napi_callback_info info) {
   std::string value;
   double number = 0;
   bool boolean = false;
-  std::vector<std::string> values;
+
   if (type == "play") {
-    values = {"set", "pause", "no"};
+    player->is_paused.store(false, std::memory_order_release);
+    if (player->set_property_string("pause", "no") < 0) {
+      return throw_error(env, "libmpv command failed");
+    }
   } else if (type == "pause") {
-    values = {"set", "pause", "yes"};
+    const bool was_paused =
+        player->is_paused.exchange(true, std::memory_order_acq_rel);
+    if (player->set_property_string("pause", "yes") < 0) {
+      return throw_error(env, "libmpv command failed");
+    }
+#if defined(__APPLE__)
+    if (!was_paused) {
+      // With ao=avfoundation, AVSampleBufferAudioRenderer buffers 2-4 seconds ahead in hardware.
+      // mpv's pause handler only stops the synchronizer rate without flushing the audio renderer,
+      // which causes audio to keep draining for 3-5 seconds. Issuing an exact seek at offset 0
+      // triggers ao_reset() in mpv, which calls [renderer flush] and halts playback within ~30ms.
+      const char* flush_cmd[] = {"seek", "0", "relative", "exact", nullptr};
+      player->command_async(flush_cmd);
+    }
+#endif
   } else if (type == "seek" && get_number(env, argv[1], "time", &number)) {
-    values = {"seek", std::to_string(number), "absolute"};
+    const std::string time_str = std::to_string(number);
+    const char* seek_cmd[] = {"seek", time_str.c_str(), "absolute", nullptr};
+    if (player->command_async(seek_cmd) < 0) {
+      return throw_error(env, "libmpv command failed");
+    }
   } else if (
       type == "set-volume" && get_number(env, argv[1], "volume", &number)
   ) {
-    values = {"set", "volume", std::to_string(number * 100)};
+    const std::string volume_str = std::to_string(number * 100);
+    if (player->set_property_string("volume", volume_str.c_str()) < 0) {
+      return throw_error(env, "libmpv command failed");
+    }
   } else if (type == "set-mute" && get_bool(env, argv[1], "muted", &boolean)) {
-    values = {"set", "mute", boolean ? "yes" : "no"};
+    const char* mute_str = boolean ? "yes" : "no";
+    if (player->set_property_string("mute", mute_str) < 0) {
+      return throw_error(env, "libmpv command failed");
+    }
+#if defined(__APPLE__)
+    player->set_property_string("ao-mute", mute_str);
+#endif
   } else if (
       type == "set-playback-rate" &&
       get_number(env, argv[1], "rate", &number)
   ) {
-    values = {"set", "speed", std::to_string(number)};
+    const std::string rate_str = std::to_string(number);
+    if (player->set_property_string("speed", rate_str.c_str()) < 0) {
+      return throw_error(env, "libmpv command failed");
+    }
   } else if (
       (type == "set-audio-track" || type == "set-subtitle-track" ||
        type == "set-secondary-subtitle-track") &&
       get_string(env, argv[1], "trackId", &value)
   ) {
-    values = {
-        "set",
+    const char* prop_name =
         type == "set-audio-track"
             ? "aid"
             : type == "set-secondary-subtitle-track" ? "secondary-sid"
-                                                       : "sid",
-        value,
-    };
+                                                       : "sid";
+    if (player->set_property_string(prop_name, value.c_str()) < 0) {
+      return throw_error(env, "libmpv command failed");
+    }
   } else {
     return throw_error(env, "unsupported libmpv command");
-  }
-
-  std::vector<const char*> command;
-  for (const auto& item : values) command.push_back(item.c_str());
-  command.push_back(nullptr);
-  if (player->command_async(command.data()) < 0) {
-    return throw_error(env, "libmpv command failed");
   }
 
   napi_value result;
@@ -1518,6 +1559,7 @@ napi_value load_player(napi_env env, napi_callback_info info) {
   ) {
     return throw_error(env, "libmpv pause configuration failed");
   }
+  player->is_paused.store(!autoplay, std::memory_order_release);
   if (
       set_mpv_property(
           player.get(),

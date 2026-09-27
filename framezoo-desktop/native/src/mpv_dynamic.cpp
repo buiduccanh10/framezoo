@@ -98,6 +98,7 @@ bool MpvApi::load(std::string* error) {
     LOAD_MPV_SYMBOL(observe_property, "mpv_observe_property")
     LOAD_MPV_SYMBOL(get_property, "mpv_get_property")
     LOAD_MPV_SYMBOL(get_property_string, "mpv_get_property_string")
+    LOAD_MPV_SYMBOL(set_property_string, "mpv_set_property_string")
     LOAD_MPV_SYMBOL(free_node_contents, "mpv_free_node_contents")
     LOAD_MPV_SYMBOL(free_memory, "mpv_free")
     LOAD_MPV_SYMBOL(terminate_destroy, "mpv_terminate_destroy")

@@ -926,12 +926,19 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         break;
       case "seeking":
         if (event.data === true) {
+          // If we are paused and not waiting for a user seek (pendingSeekTarget === null),
+          // this is an internal audio/video flush (e.g. pause queue flush), don't show loading spinner.
+          if (paused && pendingSeekTarget === null) {
+            break;
+          }
           isSeeking = true;
           emit("loading", true);
           break;
         }
         isSeeking = false;
-        emit("loading", false);
+        if (!paused || pendingSeekTarget !== null) {
+          emit("loading", false);
+        }
         if (pendingSeekTarget !== null) {
           const settled =
             heldSeekPosition !== null ? heldSeekPosition : pendingSeekTarget;
@@ -1521,8 +1528,6 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       isFullscreen = isFull;
       emit("fullscreen", isFull);
     }) ?? null;
-
-
 
   if (electronApi?.getFullscreenState) {
     electronApi

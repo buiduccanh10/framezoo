@@ -17,6 +17,7 @@ struct MpvApi {
       nullptr;
   int (*get_property)(mpv_handle*, const char*, mpv_format, void*) = nullptr;
   char* (*get_property_string)(mpv_handle*, const char*) = nullptr;
+  int (*set_property_string)(mpv_handle*, const char*, const char*) = nullptr;
   void (*free_node_contents)(mpv_node*) = nullptr;
   void (*free_memory)(void*) = nullptr;
   void (*terminate_destroy)(mpv_handle*) = nullptr;
