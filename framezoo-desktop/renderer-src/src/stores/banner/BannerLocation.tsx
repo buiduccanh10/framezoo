@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
 
 import { Icon, Icons } from "@/components/Icon";
 import { useIsDesktopApp } from "@/hooks/useIsDesktopApp";
@@ -79,6 +80,8 @@ export function Banner(props: {
 }
 
 export function BannerLocation(props: { location?: string }) {
+  const routerLocation = useLocation();
+  const isPlayerRoute = routerLocation.pathname.startsWith("/media/");
   const { t } = useTranslation();
   const isOnline = useBannerStore((s) => s.isOnline);
   const isDesktopApp = useIsDesktopApp();
@@ -145,6 +148,7 @@ export function BannerLocation(props: { location?: string }) {
     }
   }, [loc, showBanner]);
 
+  if (isPlayerRoute || props.location === "player") return null;
   if (currentLocation !== loc) return null;
 
   const config = conf();

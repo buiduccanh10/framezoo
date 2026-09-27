@@ -10,7 +10,6 @@ import { Lightbar } from "@/components/utils/Lightbar";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { useIsMacWindowed } from "@/hooks/useIsDesktopApp";
 import { BlurEllipsis } from "@/pages/layouts/SubPageLayout";
-import { useBannerSize } from "@/stores/banner";
 
 import { AddonManager } from "./AddonManager";
 import { BrandPill } from "./BrandPill";
@@ -26,7 +25,6 @@ export interface NavigationProps {
 
 export function Navigation(props: NavigationProps) {
   const isMacWindowed = useIsMacWindowed();
-  const bannerHeight = useBannerSize();
   const location = useLocation();
   const { loggedIn } = useAuth();
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -55,12 +53,7 @@ export function Navigation(props: NavigationProps) {
     <>
       {/* lightbar */}
       {!props.noLightbar ? (
-        <div
-          className="absolute inset-x-0 top-0 flex h-[88px] items-center justify-center"
-          style={{
-            top: `${bannerHeight}px`,
-          }}
-        >
+        <div className="absolute inset-x-0 top-0 flex h-[88px] items-center justify-center">
           <div className="absolute inset-x-0 -mt-[22%] flex items-center sm:mt-0">
             <Lightbar />
           </div>
@@ -68,12 +61,7 @@ export function Navigation(props: NavigationProps) {
       ) : null}
 
       {/* backgrounds - these are seperate because of z-index issues */}
-      <div
-        className="top-content fixed z-[20] pointer-events-none left-0 right-0 top-0 min-h-[150px]"
-        style={{
-          top: `${bannerHeight}px`,
-        }}
-      >
+      <div className="top-content fixed z-[20] pointer-events-none left-0 right-0 top-0 min-h-[150px]">
         <div
           className={classNames(
             "fixed left-0 right-0 top-0 flex items-center", // border-b border-utils-divider/50
@@ -119,12 +107,7 @@ export function Navigation(props: NavigationProps) {
       </div>
 
       {/* content */}
-      <div
-        className="top-content fixed pointer-events-none left-0 right-0 z-[500] top-0 min-h-[150px]"
-        style={{
-          top: `${bannerHeight}px`,
-        }}
-      >
+      <div className="top-content fixed pointer-events-none left-0 right-0 z-[500] top-0 min-h-[150px]">
         <div
           className={classNames(
             "absolute left-0 right-0 flex items-center pointer-events-auto",
