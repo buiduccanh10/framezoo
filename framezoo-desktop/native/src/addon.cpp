@@ -1193,8 +1193,8 @@ napi_value create_player(napi_env env, napi_callback_info info) {
   set_mpv_option(player.get(), "demuxer-hysteresis-secs", "10");
   set_mpv_option(player.get(), "demuxer-seekable-cache", "yes");
   set_mpv_option(player.get(), "stream-buffer-size", "32MiB");
-  set_mpv_option(player.get(), "demuxer-lavf-analyzeduration", "1.5");
-  set_mpv_option(player.get(), "demuxer-lavf-probesize", "10485760");
+  set_mpv_option(player.get(), "demuxer-lavf-analyzeduration", "0.5");
+  set_mpv_option(player.get(), "demuxer-lavf-probesize", "1048576");
 
   // Frame pacing & decoding fidelity (no frame corruption or judder)
   set_mpv_option(player.get(), "video-sync", "display-resample");
