@@ -19,6 +19,7 @@ import { Loading } from "@/components/layout/Loading";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { useAuthRestore } from "@/hooks/auth/useAuthRestore";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
+import DesktopPipPage from "@/pages/DesktopPip";
 import { ErrorBoundary } from "@/pages/errors/ErrorBoundary";
 import { MigrationPart } from "@/pages/parts/migrations/MigrationPart";
 import { LargeTextPart } from "@/pages/parts/util/LargeTextPart";
@@ -27,7 +28,11 @@ import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
 import { BookmarkSyncer } from "@/stores/bookmarks/BookmarkSyncer";
 import { GroupSyncer } from "@/stores/groupOrder/GroupSyncer";
-import { changeAppLanguage, useLanguageStore } from "@/stores/language";
+import {
+  LanguageProvider,
+  changeAppLanguage,
+  useLanguageStore,
+} from "@/stores/language";
 import { ProgressSyncer } from "@/stores/progress/ProgressSyncer";
 import { SettingsSyncer } from "@/stores/subtitles/SettingsSyncer";
 import { ThemeProvider } from "@/stores/theme";
@@ -67,10 +72,17 @@ function normalizeHashRouterPath() {
   }
 }
 
+const isDesktopPipRoute =
+  typeof window !== "undefined" &&
+  (window.location.hash.startsWith("#/desktop-pip") ||
+    window.location.pathname === "/desktop-pip");
+
 // initialize
 normalizeHashRouterPath();
-initializeChromecast();
-initializeImageFadeIn();
+if (!isDesktopPipRoute) {
+  initializeChromecast();
+  initializeImageFadeIn();
+}
 
 function LoadingScreen(props: { type: "user" | "lazy" | "native" }) {
   const mapping = {
@@ -327,42 +339,59 @@ if (!container) {
 // Keep the root across Vite HMR re-evaluation of this entry module.
 const root = (container.__framezooReactRoot ??= createRoot(container));
 
-root.render(
-  <StrictMode>
-    <ErrorBoundary>
-      <HelmetProvider>
-        <PersistQueryClientProvider
-          client={queryClient}
-          persistOptions={{
-            buster: TMDB_METADATA_CACHE_BUSTER,
-            maxAge: TMDB_METADATA_CACHE_TTL_MS,
-            persister: queryPersister,
-            dehydrateOptions: {
-              shouldDehydrateQuery: (query) =>
-                (query.queryKey[0] === "tmdb" ||
-                  query.queryKey[0] === "externalSubtitles") &&
-                query.state.status === "success",
-            },
-          }}
-        >
-          <ReactQueryDevtools initialIsOpen={false} />
-          <Suspense fallback={<LoadingScreen type="lazy" />}>
-            <ExtensionStatus />
-            <NativeStartupGate>
-              <TheRouter>
-                <ThemeProvider applyGlobal>
-                  <ProgressSyncer />
-                  <BookmarkSyncer />
-                  <WatchHistorySyncer />
-                  <GroupSyncer />
-                  <SettingsSyncer />
-                  <MigrationRunner />
-                </ThemeProvider>
-              </TheRouter>
-            </NativeStartupGate>
-          </Suspense>
-        </PersistQueryClientProvider>
-      </HelmetProvider>
-    </ErrorBoundary>
-  </StrictMode>,
-);
+if (isDesktopPipRoute) {
+  root.render(
+    <StrictMode>
+      <ErrorBoundary>
+        <HelmetProvider>
+          <TheRouter>
+            <ThemeProvider applyGlobal>
+              <LanguageProvider />
+              <DesktopPipPage />
+            </ThemeProvider>
+          </TheRouter>
+        </HelmetProvider>
+      </ErrorBoundary>
+    </StrictMode>,
+  );
+} else {
+  root.render(
+    <StrictMode>
+      <ErrorBoundary>
+        <HelmetProvider>
+          <PersistQueryClientProvider
+            client={queryClient}
+            persistOptions={{
+              buster: TMDB_METADATA_CACHE_BUSTER,
+              maxAge: TMDB_METADATA_CACHE_TTL_MS,
+              persister: queryPersister,
+              dehydrateOptions: {
+                shouldDehydrateQuery: (query) =>
+                  (query.queryKey[0] === "tmdb" ||
+                    query.queryKey[0] === "externalSubtitles") &&
+                  query.state.status === "success",
+              },
+            }}
+          >
+            <ReactQueryDevtools initialIsOpen={false} />
+            <Suspense fallback={<LoadingScreen type="lazy" />}>
+              <ExtensionStatus />
+              <NativeStartupGate>
+                <TheRouter>
+                  <ThemeProvider applyGlobal>
+                    <ProgressSyncer />
+                    <BookmarkSyncer />
+                    <WatchHistorySyncer />
+                    <GroupSyncer />
+                    <SettingsSyncer />
+                    <MigrationRunner />
+                  </ThemeProvider>
+                </TheRouter>
+              </NativeStartupGate>
+            </Suspense>
+          </PersistQueryClientProvider>
+        </HelmetProvider>
+      </ErrorBoundary>
+    </StrictMode>,
+  );
+}
