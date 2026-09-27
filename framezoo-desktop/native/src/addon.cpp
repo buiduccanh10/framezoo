@@ -1149,6 +1149,10 @@ napi_value create_player(napi_env env, napi_callback_info info) {
   set_mpv_option(player.get(), "gpu-api", "d3d11,auto");
   set_mpv_option(player.get(), "gpu-context", "d3d11,auto");
   set_mpv_option(player.get(), "d3d11-flip", "yes");
+  // Vsync cho D3D11 swap chain — tương đương opengl-swapinterval=1 trên macOS.
+  // Đợi vblank trước khi present, tránh GPU present frame trong khi
+  // DXVA2/D3D11VA decoder vẫn còn giữ reference (gây corruption 4K HEVC).
+  set_mpv_option(player.get(), "d3d11-sync-interval", "1");
 #else
   set_mpv_option(player.get(), "vo", "libmpv");
 #if defined(__APPLE__)
@@ -1164,10 +1168,19 @@ napi_value create_player(napi_env env, napi_callback_info info) {
   set_mpv_option(player.get(), "input-vo-keyboard", "no");
 
   // Hardware decoding & multi-threading
-  set_mpv_option(player.get(), "hwdec", "auto-safe");
-  set_mpv_option(player.get(), "hwdec-extra-frames", "16");
+  // "auto" (không có -safe) để VideoToolbox decode toàn bộ HEVC pipeline
+  // mà không fallback giữa chừng — partial hw/sw mixing gây frame corruption.
+  set_mpv_option(player.get(), "hwdec", "auto");
+  // 4K HEVC frame ~4x lớn hơn 1080p → tăng pool để VideoToolbox không
+  // reference vào frame đang được display (gây corruption với torrent stream).
+  set_mpv_option(player.get(), "hwdec-extra-frames", "32");
   set_mpv_option(player.get(), "vd-lavc-threads", "0");
-  set_mpv_option(player.get(), "vd-lavc-check-hw-profile", "yes");
+  // Direct rendering: hw decoder ghi thẳng vào surface buffer,
+  // tránh copy overhead và buffer mismatch khi decode 4K HEVC.
+  set_mpv_option(player.get(), "vd-lavc-dr", "yes");
+  // Bỏ vd-lavc-check-hw-profile: với HEVC Main10/HDR profiles,
+  // check này có thể trigger partial hw decode rồi fallback sang sw
+  // giữa chừng → frame hỗn hợp → corruption trên 4K.
 
   set_mpv_option(player.get(), "keep-open", "yes");
   set_mpv_option(player.get(), "idle", "yes");
@@ -1196,14 +1209,26 @@ napi_value create_player(napi_env env, napi_callback_info info) {
   set_mpv_option(player.get(), "demuxer-lavf-analyzeduration", "0.5");
   set_mpv_option(player.get(), "demuxer-lavf-probesize", "1048576");
 
-  // Frame pacing & decoding fidelity (no frame corruption or judder)
-  set_mpv_option(player.get(), "video-sync", "display-resample");
-  set_mpv_option(player.get(), "framedrop", "vo");
+  // Frame pacing & decoding fidelity
+  // "audio" sync thay vì "display-resample":
+  //   - display-resample với 4K HEVC torrent gây resampler làm mất frame timing,
+  //     dẫn đến VideoToolbox drop frame đang còn được reference bởi display → corruption.
+  //   - "audio" ổn định hơn cho stream có bitrate bursty (torrent).
+  set_mpv_option(player.get(), "video-sync", "audio");
+  // framedrop=no: không drop frame, đợi VideoToolbox decode xong mới display.
+  // Stremio dùng framedrop=no cho tất cả streams — đây là khác biệt chính.
+  set_mpv_option(player.get(), "framedrop", "no");
   set_mpv_option(player.get(), "hr-seek", "yes");
-  set_mpv_option(player.get(), "hr-seek-framedrop", "yes");
+  // hr-seek-framedrop=no: sau seek không drop frame, tránh corrupt frame đầu tiên.
+  set_mpv_option(player.get(), "hr-seek-framedrop", "no");
   set_mpv_option(player.get(), "vd-lavc-show-all", "no");
   set_mpv_option(player.get(), "vd-lavc-fast", "no");
   set_mpv_option(player.get(), "force-seekable", "yes");
+#if defined(__APPLE__)
+  // OpenGL swap interval = 1 (vsync) để tránh buffer tearing
+  // khi VideoToolbox render 4K frame lên NSOpenGLView.
+  set_mpv_option(player.get(), "opengl-swapinterval", "1");
+#endif
   if (player->api.initialize(player->handle) < 0) {
     return throw_error(env, "mpv_initialize failed");
   }
