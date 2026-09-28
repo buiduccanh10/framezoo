@@ -1175,9 +1175,6 @@ napi_value create_player(napi_env env, napi_callback_info info) {
   // reference vào frame đang được display (gây corruption với torrent stream).
   set_mpv_option(player.get(), "hwdec-extra-frames", "32");
   set_mpv_option(player.get(), "vd-lavc-threads", "0");
-  // Direct rendering: hw decoder ghi thẳng vào surface buffer,
-  // tránh copy overhead và buffer mismatch khi decode 4K HEVC.
-  set_mpv_option(player.get(), "vd-lavc-dr", "yes");
   // Bỏ vd-lavc-check-hw-profile: với HEVC Main10/HDR profiles,
   // check này có thể trigger partial hw decode rồi fallback sang sw
   // giữa chừng → frame hỗn hợp → corruption trên 4K.
