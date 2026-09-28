@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
+import { type CSSProperties, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Icon, Icons } from "@/components/Icon";
+import { useBannerSize } from "@/stores/banner";
 
 export function ScrollToTopButton() {
   const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(false);
+  const bannerSize = useBannerSize();
 
   const toggleVisibility = () => {
     const scrolled = window.scrollY > 300;
@@ -27,7 +29,10 @@ export function ScrollToTopButton() {
   };
 
   return (
-    <div className="fixed bottom-9 md:bottom-4 transform -translate-x-1/2 z-50 left-12 md:left-1/2">
+    <div
+      className="fixed bottom-[calc(2.25rem+var(--banner-height))] left-12 z-50 -translate-x-1/2 transform md:bottom-[calc(1rem+var(--banner-height))] md:left-1/2"
+      style={{ "--banner-height": `${bannerSize}px` } as CSSProperties}
+    >
       <div
         className={`absolute inset-0 mx-auto h-[50px] w-[200px] rounded-full blur-[50px] opacity-50 pointer-events-none z-0 ${
           isVisible ? "opacity-100 visible" : "opacity-0 invisible"
