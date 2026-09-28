@@ -8,6 +8,9 @@ export interface SmoothPlaybackClockOptions {
   duration: number;
   playbackRate: number;
   isActive: boolean;
+  isSeeking?: boolean;
+  tickIntervalMs?: number;
+  resetKey?: string;
 }
 
 export interface PlaybackClockAnchor {
@@ -18,6 +21,8 @@ export interface PlaybackClockAnchor {
 export const MAX_EXTRAPOLATION_SECONDS = 10.0;
 export const SEEK_DISCONTINUITY_BACKWARD_THRESHOLD = 0.5;
 export const SEEK_DISCONTINUITY_FORWARD_THRESHOLD = 0.5;
+export const VISUAL_PLAYBACK_CLOCK_TICK_MS = 33;
+export const SUBTITLE_PLAYBACK_CLOCK_TICK_MS = 50;
 
 export function getProjectedPlaybackTime(
   anchor: PlaybackClockAnchor,
@@ -74,9 +79,12 @@ export function useSmoothPlaybackClock({
   playbackRate,
   isActive,
   isSeeking = false,
-}: SmoothPlaybackClockOptions & { isSeeking?: boolean }): number {
+  tickIntervalMs = VISUAL_PLAYBACK_CLOCK_TICK_MS,
+  resetKey,
+}: SmoothPlaybackClockOptions): number {
   const [clockTime, setClockTime] = useState(time);
   const clockTimeRef = useRef(time);
+  const resetKeyRef = useRef(resetKey);
   const anchorRef = useRef<PlaybackClockAnchor>({
     time,
     timestamp: isActive ? performance.now() : 0,
@@ -89,12 +97,15 @@ export function useSmoothPlaybackClock({
       Math.min(duration > 0 ? duration : Number.POSITIVE_INFINITY, time),
     );
     const previousTime = clockTimeRef.current;
+    const didReset = resetKeyRef.current !== resetKey;
+    resetKeyRef.current = resetKey;
 
     // Calculate delta against the last known authoritative time (anchor),
     // NOT the extrapolated previousTime, to avoid spurious backward jumps.
     const delta = clampedTime - anchorRef.current.time;
 
     const isDiscontinuity =
+      didReset ||
       isSeeking ||
       previousTime <= 0 ||
       delta < -SEEK_DISCONTINUITY_BACKWARD_THRESHOLD ||
@@ -158,8 +169,10 @@ export function useSmoothPlaybackClock({
       );
       const next = Math.max(clockTimeRef.current, projected);
 
-      // Throttle React state updates to ~30fps to save CPU (0.033s delta)
-      if (Math.abs(next - clockTimeRef.current) >= 0.033) {
+      if (
+        Math.abs(next - clockTimeRef.current) >=
+        Math.max(0, tickIntervalMs) / 1000
+      ) {
         clockTimeRef.current = next;
         setClockTime(next);
       }
@@ -171,7 +184,15 @@ export function useSmoothPlaybackClock({
 
     animationFrame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(animationFrame);
-  }, [duration, isActive, isSeeking, playbackRate, time]);
+  }, [
+    duration,
+    isActive,
+    isSeeking,
+    playbackRate,
+    resetKey,
+    tickIntervalMs,
+    time,
+  ]);
 
   return clockTime;
 }
