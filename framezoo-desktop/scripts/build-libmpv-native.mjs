@@ -234,7 +234,15 @@ if (!addonPath) {
 
 const stageDir = path.join(stagedRoot, target);
 fs.mkdirSync(stageDir, { recursive: true });
-fs.copyFileSync(addonPath, path.join(stageDir, "libmpv.node"));
+const stagedAddonPath = path.join(stageDir, "libmpv.node");
+fs.copyFileSync(addonPath, stagedAddonPath);
+
+if (target.startsWith("darwin-")) {
+  // Ensure dyld accepts the copied native module in the Electron process.
+  execFileSync("codesign", ["--force", "--sign", "-", "--timestamp=none", stagedAddonPath], {
+    stdio: "inherit",
+  });
+}
 
 if (target === `${process.platform}-${process.arch}` || process.env.VERIFY_NATIVE) {
   verifyStagedAddon(target);
