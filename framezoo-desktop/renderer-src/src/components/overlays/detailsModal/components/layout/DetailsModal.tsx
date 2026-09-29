@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { useCallback, useEffect, useState } from "react";
+import { CSSProperties, useCallback, useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 
 import {
@@ -229,6 +229,7 @@ export function DetailsModal({
                 type="button"
                 className="text-s font-semibold text-type-secondary hover:text-white transition-transform hover:scale-95 select-none"
                 onClick={hide}
+                style={{ WebkitAppRegion: "no-drag" } as CSSProperties}
               >
                 <IconPatch icon={Icons.X} />
               </button>
