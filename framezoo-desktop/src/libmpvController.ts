@@ -877,6 +877,9 @@ export class LibMpvController {
         event.name === "track-list" ||
         event.name === "video-params" ||
         event.name === "video-out-params" ||
+        event.name === "hwdec-current" ||
+        event.name === "decoder-frame-drop-count" ||
+        event.name === "frame-drop-count" ||
         event.name === "pause" ||
         event.name === "seeking" ||
         event.name === "paused-for-cache"

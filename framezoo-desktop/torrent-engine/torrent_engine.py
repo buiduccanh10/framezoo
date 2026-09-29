@@ -34,6 +34,7 @@ class TorrentRecord:
         handle: Any,
         save_path: str,
         persistent_cache: bool,
+        cache_ready: bool,
         trackers: list[str],
     ) -> None:
         self.engine = engine
@@ -41,6 +42,8 @@ class TorrentRecord:
         self.handle = handle
         self.save_path = save_path
         self.persistent_cache = persistent_cache
+        # Metadata alone must not make a failed startup reusable.
+        self.cache_ready = cache_ready
         self.session_ids: Set[str] = set()
         self.lock = threading.RLock()
         self.removal_timer: Optional[threading.Timer] = None
@@ -91,27 +94,12 @@ class TorrentRecord:
             if info is None:
                 return
             priorities = [0] * info.files().num_files()
-            has_wanted_files = False
             with self.lock:
                 for session_id in self.session_ids:
                     runtime = self.engine.sessions.get(session_id)
                     if runtime is not None and runtime.file_index is not None:
                         priorities[runtime.file_index] = constants.STREAM_IDLE_FILE_PRIORITY
-                        has_wanted_files = True
             self.handle.prioritize_files(priorities)
-            
-            is_finished = False
-            try:
-                is_finished = status.state.name == "finished"
-            except Exception:
-                is_finished = str(status.state) == "finished"
-                
-            if has_wanted_files and (is_finished or getattr(status, "num_peers", 0) == 0):
-                try:
-                    self.handle.pause()
-                    self.handle.resume()
-                except Exception:
-                    pass
         except Exception:
             pass
 
@@ -247,18 +235,35 @@ class LibtorrentEngine:
         session = self._ensure_session()
         resume_data = b""
         torrent_info = None
+        cache_ready = False
 
         if cache_key:
+            cache_ready = os.path.isfile(
+                os.path.join(save_path, ".framezoo-stream-ready"),
+            )
             torrent_path = os.path.join(save_path, cache_key + ".torrent")
-            if os.path.exists(torrent_path):
+            resume_path = os.path.join(save_path, "resume.dat")
+            if not cache_ready:
+                # Older versions saved this control state after metadata, even
+                # when no media bytes ever reached the player. Never restore it.
+                for stale_path in (torrent_path, resume_path):
+                    try:
+                        os.remove(stale_path)
+                    except FileNotFoundError:
+                        pass
+                    except OSError as error:
+                        sys.stderr.write(
+                            "[sidecar] Failed to discard unplayable cache state: "
+                            f"{error}\n",
+                        )
+            if cache_ready and os.path.exists(torrent_path):
                 try:
                     torrent_info = lt.torrent_info(torrent_path)
                 except Exception as error:
                     sys.stderr.write(
                         f"[sidecar] Failed to load cached torrent file: {error}\n",
                     )
-            resume_path = os.path.join(save_path, "resume.dat")
-            if os.path.exists(resume_path):
+            if cache_ready and os.path.exists(resume_path):
                 try:
                     with open(resume_path, "rb") as file:
                         resume_data = file.read()
@@ -341,6 +346,7 @@ class LibtorrentEngine:
             handle,
             save_path,
             persistent_cache=bool(cache_key),
+            cache_ready=cache_ready,
             trackers=merge_tracker_sources(
                 cached_trackers,
                 magnet_trackers,
@@ -455,7 +461,7 @@ class LibtorrentEngine:
                     return
                 self.records.pop(record_key, None)
         record.stop_discovery()
-        if record.persistent_cache:
+        if record.persistent_cache and record.cache_ready:
             self._save_record_resume_data(record)
             try:
                 os.utime(record.save_path, None)
@@ -465,25 +471,31 @@ class LibtorrentEngine:
             self.session.remove_torrent(record.handle)
         except Exception:
             pass
-        if not record.persistent_cache:
+        if not record.persistent_cache or not record.cache_ready:
             shutil.rmtree(record.save_path, ignore_errors=True)
 
     def _schedule_record_removal(self, record_key: str) -> None:
+        remove_now = False
         with self.lock:
             record = self.records.get(record_key)
             if record is None or record.session_ids:
                 return
-            timer = threading.Timer(
-                constants.TORRENT_HANDLE_GRACE_SECONDS,
-                self._remove_record,
-                args=(record_key,),
-            )
-            timer.daemon = True
-            record.removal_timer = timer
-            timer.start()
+            if not record.cache_ready:
+                remove_now = True
+            else:
+                timer = threading.Timer(
+                    constants.TORRENT_HANDLE_GRACE_SECONDS,
+                    self._remove_record,
+                    args=(record_key,),
+                )
+                timer.daemon = True
+                record.removal_timer = timer
+                timer.start()
+        if remove_now:
+            self._remove_record(record_key)
 
     def _save_record_resume_data(self, record: TorrentRecord) -> bool:
-        if not record.persistent_cache:
+        if not record.persistent_cache or not record.cache_ready:
             return False
         try:
             data = lt.bencode(record.handle.write_resume_data())
@@ -568,8 +580,10 @@ class LibtorrentEngine:
                 record.removal_timer.cancel()
             record.session_ids.clear()
             record.stop_discovery()
-            if record.persistent_cache:
+            if record.persistent_cache and record.cache_ready:
                 self._save_record_resume_data(record)
+            else:
+                shutil.rmtree(record.save_path, ignore_errors=True)
             try:
                 self.session.remove_torrent(record.handle)
             except Exception:
