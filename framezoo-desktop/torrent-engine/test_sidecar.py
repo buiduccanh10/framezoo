@@ -117,6 +117,41 @@ class SidecarStreamTest(unittest.TestCase):
         finally:
             shutil.rmtree(runtime.save_path, ignore_errors=True)
 
+    def test_cache_metadata_waits_for_playback_bytes(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.persistent_cache = True
+        runtime.save_path = tempfile.mkdtemp()
+        runtime._metadata_lock = threading.RLock()
+        persisted = []
+        runtime.record = type(
+            "Record",
+            (),
+            {"lock": threading.RLock(), "cache_ready": False},
+        )()
+
+        def persist_metadata(self, overwrite=False):
+            persisted.append(overwrite)
+            return True
+
+        runtime.persist_metadata = MethodType(persist_metadata, runtime)
+
+        try:
+            self.assertFalse(runtime.record.cache_ready)
+            self.assertFalse(
+                Path(runtime.save_path, ".framezoo-stream-ready").exists(),
+            )
+
+            runtime.mark_stream_playable()
+            runtime.mark_stream_playable()
+
+            self.assertEqual(persisted, [True])
+            self.assertTrue(runtime.record.cache_ready)
+            self.assertTrue(
+                Path(runtime.save_path, ".framezoo-stream-ready").exists(),
+            )
+        finally:
+            shutil.rmtree(runtime.save_path, ignore_errors=True)
+
     def test_range_readiness_uses_finished_blocks_not_sparse_size(self):
         runtime = object.__new__(TorrentRuntime)
         runtime.file_size = 8 * 1024 * 1024

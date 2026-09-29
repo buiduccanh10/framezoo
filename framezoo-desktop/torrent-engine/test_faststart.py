@@ -91,6 +91,7 @@ def main():
     cache_dir = data_root / ("torrent-" + cache_key)
     torrent_path_cached = cache_dir / (cache_key + ".torrent")
     resume_path = cache_dir / "resume.dat"
+    cache_ready_path = cache_dir / ".framezoo-stream-ready"
 
     # ---- PHASE 1: first download ----
     t0 = time.monotonic()
@@ -100,6 +101,20 @@ def main():
     runtime.handle.connect_peer(("127.0.0.1", peer_port), 0)
     runtime.wait_for_metadata(30)
     print("[1] metadata_ready in", runtime.elapsed_ms(), "ms")
+
+    # Metadata alone is intentionally not persistent. The first playable byte
+    # commits cache metadata so a failed startup cannot poison a later replay.
+    range_request = Request(
+        runtime.stream_url,
+        headers={"Range": "bytes=0-1023"},
+    )
+    with urlopen(range_request, timeout=15) as response:
+        assert response.read() and response.status == 206
+    cache_deadline = time.monotonic() + 5
+    while not cache_ready_path.exists() and time.monotonic() < cache_deadline:
+        time.sleep(0.05)
+    assert cache_ready_path.exists(), "playable cache marker was not written"
+    assert torrent_path_cached.exists(), "torrent metadata was not persisted"
 
     deadline = time.time() + 90
     while time.time() < deadline and runtime.current_status()["state"] != "ready":
@@ -111,7 +126,7 @@ def main():
     print(
         "[1] .torrent persisted:",
         torrent_path_cached.exists(),
-        "| resume.dat pending period.",
+        "| after first playable byte.",
     )
 
     engine.stop("s1")

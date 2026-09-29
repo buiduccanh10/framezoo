@@ -204,8 +204,6 @@ class TorrentRuntime:
                             resume()
                         except Exception:
                             pass
-                    if self.persistent_cache:
-                        self.persist_metadata()
                     self.metadata_ready.set()
                     # Publish the loopback URL as soon as file metadata is
                     # known. The player must be allowed to connect while the
@@ -316,26 +314,67 @@ class TorrentRuntime:
         with stream:
             stream.truncate(self.file_size)
 
-    def persist_metadata(self) -> None:
+    def persist_metadata(self, overwrite: bool = False) -> bool:
         if not self.cache_key or self.info is None:
-            return
+            return False
         torrent_path = os.path.join(self.save_path, self.cache_key + ".torrent")
-        if os.path.exists(torrent_path):
-            return
+        if os.path.exists(torrent_path) and not overwrite:
+            return True
         try:
             entry = lt.create_torrent(self.info).generate()
-            with open(torrent_path, "wb") as f:
+            temporary_path = torrent_path + ".tmp"
+            with open(temporary_path, "wb") as f:
                 f.write(lt.bencode(entry))
+            os.replace(temporary_path, torrent_path)
             log_event(
                 "metadata persisted",
                 sessionId=self.session_id,
                 torrentPath=torrent_path,
             )
+            return True
         except Exception as error:
             sys.stderr.write(f"[sidecar] Failed to persist torrent metadata: {error}\n")
+            return False
+
+    def _cache_is_ready(self) -> bool:
+        record = getattr(self, "record", None)
+        if record is not None:
+            with record.lock:
+                return bool(record.cache_ready)
+        return bool(getattr(self, "_cache_ready", False))
+
+    def mark_stream_playable(self) -> None:
+        """Persist only after playback receives a real media byte."""
+        if not getattr(self, "persistent_cache", False):
+            return
+
+        record = getattr(self, "record", None)
+        lock = record.lock if record is not None else self._metadata_lock
+        with lock:
+            if self._cache_is_ready():
+                return
+            if not self.persist_metadata(overwrite=True):
+                return
+            marker_path = os.path.join(
+                self.save_path,
+                ".framezoo-stream-ready",
+            )
+            try:
+                with open(marker_path + ".tmp", "wb") as marker:
+                    marker.write(b"1\n")
+                os.replace(marker_path + ".tmp", marker_path)
+            except OSError as error:
+                sys.stderr.write(
+                    f"[sidecar] Failed to mark torrent cache ready: {error}\n",
+                )
+                return
+            if record is not None:
+                record.cache_ready = True
+            else:
+                self._cache_ready = True
 
     def save_resume_data_sync(self) -> bool:
-        if not self.persistent_cache:
+        if not self.persistent_cache or not self._cache_is_ready():
             return False
         with self._resume_lock:
             try:
@@ -472,6 +511,7 @@ class TorrentRuntime:
             if (
                 resume_saves >= 60
                 and self.persistent_cache
+                and self._cache_is_ready()
                 and self.metadata_ready.is_set()
             ):
                 resume_saves = 0
@@ -2162,6 +2202,7 @@ class TorrentRuntime:
                         elapsedMs=self.elapsed_ms(),
                     )
                 if track_position:
+                    self.mark_stream_playable()
                     with self._piece_priority_lock:
                         self._has_streamed_bytes = True
                         self._last_stream_start = offset
