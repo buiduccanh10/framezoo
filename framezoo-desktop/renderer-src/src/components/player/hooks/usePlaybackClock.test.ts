@@ -6,8 +6,10 @@ import {
   MAX_EXTRAPOLATION_SECONDS,
   SUBTITLE_PLAYBACK_CLOCK_TICK_MS,
   VISUAL_PLAYBACK_CLOCK_TICK_MS,
-  getMonotonicPlaybackTime,
+  advancePlaybackClockState,
+  createPlaybackClockState,
   getProjectedPlaybackTime,
+  reconcilePlaybackClockState,
   useSmoothPlaybackClock,
 } from "./usePlaybackClock";
 
@@ -144,42 +146,6 @@ describe("playback clock", () => {
     ).toBe(25.5);
   });
 
-  describe("getMonotonicPlaybackTime", () => {
-    it("keeps current clock time when an authoritative sample is slightly behind (IPC latency)", () => {
-      // Current extrapolated clock reached 12.02, but delayed IPC sample arrives with 11.98
-      expect(getMonotonicPlaybackTime(11.98, 12.02, false, 120)).toBe(12.02);
-    });
-
-    it("advances clock when an authoritative sample is ahead", () => {
-      // Authoritative sample 12.10 is ahead of extrapolated 12.02
-      expect(getMonotonicPlaybackTime(12.1, 12.02, false, 120)).toBe(12.1);
-    });
-
-    it("immediately snaps on an intentional backward seek (>3.0s jump backward)", () => {
-      // User jumped back to 5.0 from 12.02
-      expect(getMonotonicPlaybackTime(5.0, 12.02, false, 120)).toBe(5.0);
-    });
-
-    it("immediately snaps on seek even for small backward adjustments", () => {
-      // User scrubbed back to 11.7 from 12.02 with isSeeking=true
-      expect(getMonotonicPlaybackTime(11.7, 12.02, true, 120)).toBe(11.7);
-    });
-
-    it("immediately snaps on an intentional forward jump (>3.0s jump forward)", () => {
-      // User jumped forward to 45.0 from 12.02
-      expect(getMonotonicPlaybackTime(45.0, 12.02, false, 120)).toBe(45.0);
-    });
-
-    it("maintains current time if sample is within jitter tolerance during continuous playback", () => {
-      expect(getMonotonicPlaybackTime(11.98, 12.02, false, 120)).toBe(12.02);
-    });
-
-    it("clamps authoritative time within duration bounds", () => {
-      expect(getMonotonicPlaybackTime(130.0, 10.0, false, 120)).toBe(120);
-      expect(getMonotonicPlaybackTime(-5.0, 10.0, false, 120)).toBe(0);
-    });
-  });
-
   it("keeps visual and subtitle clocks on separate cadences", async () => {
     const visualTimes: number[] = [];
     const subtitleTimes: number[] = [];
@@ -214,7 +180,7 @@ describe("playback clock", () => {
     expect(subtitleTimes.at(-1)).toBe(10.051);
   });
 
-  it("does not move backward for a delayed authoritative sample", async () => {
+  it("continues past a delayed authoritative sample without re-anchoring", async () => {
     const times: number[] = [];
     const onTime = (time: number) => times.push(time);
     const props = {
@@ -233,7 +199,7 @@ describe("playback clock", () => {
 
     await renderClock({ ...props, time: 10.1 });
     await runAnimationFrame(1_650);
-    expect(times.at(-1)).toBe(10.4);
+    expect(times.at(-1)).toBe(10.65);
   });
 
   it("freezes during buffering and resumes from the latest sample", async () => {
@@ -252,14 +218,94 @@ describe("playback clock", () => {
     await renderClock(props);
     await runAnimationFrame(1_034);
     await renderClock({ ...props, isActive: false });
-    expect(times.at(-1)).toBe(10);
+    expect(times.at(-1)).toBe(10.034);
 
     await runAnimationFrame(6_000);
-    expect(times.at(-1)).toBe(10);
+    expect(times.at(-1)).toBe(10.034);
 
     await renderClock({ ...props, isActive: true });
     await runAnimationFrame(6_034);
-    expect(times.at(-1)).toBe(10.034);
+    expect(times.at(-1)).toBeCloseTo(10.068, 6);
+  });
+
+  it("drops a stale backward sample while continuing from the existing anchor", () => {
+    const input = {
+      time: 10,
+      duration: 120,
+      playbackRate: 1,
+      isActive: true,
+      resetKey: "source-a",
+    };
+    let state = createPlaybackClockState(input, 1_000);
+    state = advancePlaybackClockState(state, input.duration, 1_400);
+    state = reconcilePlaybackClockState(state, { ...input, time: 10.1 }, 1_400);
+
+    expect(state.time).toBe(10.4);
+    expect(advancePlaybackClockState(state, input.duration, 1_650).time).toBe(
+      10.65,
+    );
+  });
+
+  it("freezes while buffering then resumes from its stable clock", () => {
+    const input = {
+      time: 10,
+      duration: 120,
+      playbackRate: 1,
+      isActive: true,
+      resetKey: "source-a",
+    };
+    let state = createPlaybackClockState(input, 1_000);
+    state = advancePlaybackClockState(state, input.duration, 1_034);
+    state = reconcilePlaybackClockState(
+      state,
+      { ...input, time: 10.05, isLoading: true },
+      1_034,
+    );
+
+    expect(advancePlaybackClockState(state, input.duration, 6_000).time).toBe(
+      10.05,
+    );
+
+    state = reconcilePlaybackClockState(
+      state,
+      { ...input, time: 10.05 },
+      6_000,
+    );
+    expect(
+      advancePlaybackClockState(state, input.duration, 6_034).time,
+    ).toBeCloseTo(10.084, 6);
+  });
+
+  it("snaps for backward and forward seeks, plus a source reset", () => {
+    const input = {
+      time: 20,
+      duration: 120,
+      playbackRate: 1,
+      isActive: true,
+      resetKey: "source-a",
+    };
+    let state = createPlaybackClockState(input, 1_000);
+
+    state = reconcilePlaybackClockState(
+      state,
+      { ...input, time: 5, isSeeking: true },
+      2_000,
+    );
+    expect(state.time).toBe(5);
+
+    state = reconcilePlaybackClockState(
+      state,
+      { ...input, time: 45, isSeeking: false },
+      2_100,
+    );
+    expect(state.time).toBe(45);
+
+    state = reconcilePlaybackClockState(
+      state,
+      { ...input, time: 2, resetKey: "source-b" },
+      2_200,
+    );
+    expect(state.time).toBe(2);
   });
 
   it("snaps immediately when the source identity changes", async () => {

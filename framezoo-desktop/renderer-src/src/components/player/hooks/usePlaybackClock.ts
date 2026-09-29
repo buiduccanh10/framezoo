@@ -1,16 +1,19 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
-import { playerStatus } from "@/stores/player/slices/source";
+import { getMediaKey, playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
+
+export type PlaybackClockResetKey = string | number | null | undefined;
 
 export interface SmoothPlaybackClockOptions {
   time: number;
   duration: number;
   playbackRate: number;
   isActive: boolean;
+  isLoading?: boolean;
   isSeeking?: boolean;
   tickIntervalMs?: number;
-  resetKey?: string;
+  resetKey?: PlaybackClockResetKey;
 }
 
 export interface PlaybackClockAnchor {
@@ -18,11 +21,29 @@ export interface PlaybackClockAnchor {
   timestamp: number;
 }
 
+export interface PlaybackClockState {
+  anchor: PlaybackClockAnchor;
+  time: number;
+  playbackRate: number;
+  isRunning: boolean;
+  resetKey: PlaybackClockResetKey;
+}
+
 export const MAX_EXTRAPOLATION_SECONDS = 10.0;
-export const SEEK_DISCONTINUITY_BACKWARD_THRESHOLD = 0.5;
 export const SEEK_DISCONTINUITY_FORWARD_THRESHOLD = 0.5;
 export const VISUAL_PLAYBACK_CLOCK_TICK_MS = 33;
 export const SUBTITLE_PLAYBACK_CLOCK_TICK_MS = 50;
+
+function clampPlaybackTime(time: number, duration: number): number {
+  return Math.max(
+    0,
+    Math.min(duration > 0 ? duration : Number.POSITIVE_INFINITY, time),
+  );
+}
+
+function isClockRunning(input: SmoothPlaybackClockOptions): boolean {
+  return input.isActive && !input.isLoading && input.playbackRate > 0;
+}
 
 export function getProjectedPlaybackTime(
   anchor: PlaybackClockAnchor,
@@ -36,165 +57,230 @@ export function getProjectedPlaybackTime(
     MAX_EXTRAPOLATION_SECONDS,
     Math.max(0, now - anchor.timestamp) / 1000,
   );
+  return clampPlaybackTime(anchor.time + elapsed * playbackRate, duration);
+}
+
+function getClockTime(
+  state: PlaybackClockState,
+  duration: number,
+  now: number,
+): number {
+  if (!state.isRunning) return clampPlaybackTime(state.time, duration);
+
   return Math.max(
-    0,
-    Math.min(
-      duration > 0 ? duration : Number.POSITIVE_INFINITY,
-      anchor.time + elapsed * playbackRate,
-    ),
+    clampPlaybackTime(state.time, duration),
+    getProjectedPlaybackTime(state.anchor, now, state.playbackRate, duration),
   );
 }
 
-export function getMonotonicPlaybackTime(
-  authoritativeTime: number,
-  currentClockTime: number,
-  isSeeking: boolean,
-  duration: number,
-): number {
-  const clampedAuth = Math.max(
-    0,
-    Math.min(
-      duration > 0 ? duration : Number.POSITIVE_INFINITY,
-      authoritativeTime,
-    ),
+export function createPlaybackClockState(
+  input: SmoothPlaybackClockOptions,
+  now: number,
+): PlaybackClockState {
+  const time = clampPlaybackTime(input.time, input.duration);
+  const isRunning = isClockRunning(input);
+
+  return {
+    anchor: { time, timestamp: isRunning ? now : 0 },
+    time,
+    playbackRate: input.playbackRate,
+    isRunning,
+    resetKey: input.resetKey,
+  };
+}
+
+export function shouldSnapPlaybackClock(
+  state: PlaybackClockState,
+  input: SmoothPlaybackClockOptions,
+  now: number,
+): boolean {
+  const authoritativeTime = clampPlaybackTime(input.time, input.duration);
+  const currentTime = getClockTime(state, input.duration, now);
+
+  return (
+    state.resetKey !== input.resetKey ||
+    Boolean(input.isSeeking) ||
+    (!input.isLoading &&
+      authoritativeTime - currentTime > SEEK_DISCONTINUITY_FORWARD_THRESHOLD)
   );
+}
 
-  const delta = clampedAuth - currentClockTime;
-  const isDiscontinuity =
-    isSeeking ||
-    currentClockTime <= 0 ||
-    delta < -SEEK_DISCONTINUITY_BACKWARD_THRESHOLD ||
-    delta > SEEK_DISCONTINUITY_FORWARD_THRESHOLD;
+/**
+ * Reconcile sparse native/IPC samples without resetting the anchor to a late
+ * sample. That keeps both player UIs moving until the next valid seek/reset.
+ */
+export function reconcilePlaybackClockState(
+  state: PlaybackClockState,
+  input: SmoothPlaybackClockOptions,
+  now: number,
+): PlaybackClockState {
+  const authoritativeTime = clampPlaybackTime(input.time, input.duration);
+  const currentTime = getClockTime(state, input.duration, now);
+  const isRunning = isClockRunning(input);
 
-  if (isDiscontinuity) {
-    return clampedAuth;
+  if (shouldSnapPlaybackClock(state, input, now)) {
+    return {
+      anchor: {
+        time: authoritativeTime,
+        timestamp: isRunning ? now : 0,
+      },
+      time: authoritativeTime,
+      playbackRate: input.playbackRate,
+      isRunning,
+      resetKey: input.resetKey,
+    };
   }
 
-  return Math.max(currentClockTime, clampedAuth);
+  if (!isRunning) {
+    // A native sample may still arrive as buffering begins; accept progress,
+    // but never let a delayed sample pull the frozen clock backward.
+    const frozenTime = Math.max(currentTime, authoritativeTime);
+
+    return {
+      anchor: { time: frozenTime, timestamp: 0 },
+      time: frozenTime,
+      playbackRate: input.playbackRate,
+      isRunning: false,
+      resetKey: input.resetKey,
+    };
+  }
+
+  if (!state.isRunning || state.playbackRate !== input.playbackRate) {
+    return {
+      anchor: { time: currentTime, timestamp: now },
+      time: currentTime,
+      playbackRate: input.playbackRate,
+      isRunning: true,
+      resetKey: input.resetKey,
+    };
+  }
+
+  if (authoritativeTime > currentTime) {
+    return {
+      anchor: { time: authoritativeTime, timestamp: now },
+      time: authoritativeTime,
+      playbackRate: input.playbackRate,
+      isRunning: true,
+      resetKey: input.resetKey,
+    };
+  }
+
+  return {
+    ...state,
+    anchor: {
+      time: clampPlaybackTime(state.anchor.time, input.duration),
+      timestamp: state.anchor.timestamp,
+    },
+    time: currentTime,
+    playbackRate: input.playbackRate,
+    isRunning: true,
+    resetKey: input.resetKey,
+  };
 }
 
-export function useSmoothPlaybackClock({
-  time,
-  duration,
-  playbackRate,
-  isActive,
-  isSeeking = false,
-  tickIntervalMs = VISUAL_PLAYBACK_CLOCK_TICK_MS,
-  resetKey,
-}: SmoothPlaybackClockOptions): number {
-  const [clockTime, setClockTime] = useState(time);
-  const clockTimeRef = useRef(time);
-  const resetKeyRef = useRef(resetKey);
-  const anchorRef = useRef<PlaybackClockAnchor>({
+export function advancePlaybackClockState(
+  state: PlaybackClockState,
+  duration: number,
+  now: number,
+): PlaybackClockState {
+  if (!state.isRunning) return state;
+
+  return { ...state, time: getClockTime(state, duration, now) };
+}
+
+export function useSmoothPlaybackClock(
+  options: SmoothPlaybackClockOptions,
+): number {
+  const {
+    duration,
+    isActive,
+    isLoading,
+    isSeeking,
+    playbackRate,
+    resetKey,
+    tickIntervalMs,
     time,
-    timestamp: isActive ? performance.now() : 0,
-  });
+  } = options;
+  const input = useMemo(
+    () => ({
+      time,
+      duration,
+      playbackRate,
+      isActive,
+      isLoading,
+      isSeeking,
+      tickIntervalMs,
+      resetKey,
+    }),
+    [
+      duration,
+      isActive,
+      isLoading,
+      isSeeking,
+      playbackRate,
+      resetKey,
+      tickIntervalMs,
+      time,
+    ],
+  );
+  const stateRef = useRef<PlaybackClockState | null>(null);
+  const [clockTime, setClockTime] = useState(() =>
+    clampPlaybackTime(time, duration),
+  );
+
+  if (!stateRef.current) {
+    stateRef.current = createPlaybackClockState(input, performance.now());
+  }
 
   useEffect(() => {
     const now = performance.now();
-    const clampedTime = Math.max(
-      0,
-      Math.min(duration > 0 ? duration : Number.POSITIVE_INFINITY, time),
-    );
-    const previousTime = clockTimeRef.current;
-    const didReset = resetKeyRef.current !== resetKey;
-    resetKeyRef.current = resetKey;
+    const previousState = stateRef.current!;
+    const shouldSnap = shouldSnapPlaybackClock(previousState, input, now);
+    const nextState = reconcilePlaybackClockState(previousState, input, now);
+    stateRef.current = nextState;
 
-    // Calculate delta against the last known authoritative time (anchor),
-    // NOT the extrapolated previousTime, to avoid spurious backward jumps.
-    const delta = clampedTime - anchorRef.current.time;
-
-    const isDiscontinuity =
-      didReset ||
-      isSeeking ||
-      previousTime <= 0 ||
-      delta < -SEEK_DISCONTINUITY_BACKWARD_THRESHOLD ||
-      delta > SEEK_DISCONTINUITY_FORWARD_THRESHOLD;
-
-    if (isDiscontinuity) {
-      anchorRef.current = {
-        time: clampedTime,
-        timestamp: isActive ? now : 0,
-      };
-      clockTimeRef.current = clampedTime;
-      setClockTime(clampedTime);
-    } else if (clampedTime !== anchorRef.current.time) {
-      // The authoritative time has updated. Always update the anchor so we don't drift.
-      anchorRef.current = {
-        time: clampedTime,
-        timestamp: isActive ? now : 0,
-      };
-      // Only force a visual clock update if the real time is AHEAD of the extrapolated clock.
-      // If the real time is behind, the tick loop will gracefully pause the visual clock
-      // until the real time catches up, completely avoiding backward micro-stutters.
-      if (clampedTime > previousTime) {
-        clockTimeRef.current = clampedTime;
-        setClockTime(clampedTime);
-      }
-    } else if (!isActive) {
-      // Clock is paused (e.g. buffering / isLoading). Explicitly zero out the
-      // anchor timestamp so that when the clock reactivates the rAF does NOT
-      // extrapolate from a stale past timestamp (which would cause a spurious
-      // forward jump followed by a backward discontinuity snap).
-      // We must preserve the original anchor.time to avoid committing extrapolated time.
-      anchorRef.current = {
-        time: anchorRef.current.time,
-        timestamp: 0,
-      };
-      if (clockTimeRef.current !== anchorRef.current.time) {
-        clockTimeRef.current = anchorRef.current.time;
-        setClockTime(anchorRef.current.time);
-      }
-    } else if (anchorRef.current.timestamp <= 0) {
-      // Clock just reactivated (isActive: false → true) but time hasn't
-      // advanced yet to trigger the forward branch. Refresh the anchor to
-      // now so the rAF extrapolates from the present, not a stale moment.
-      anchorRef.current = {
-        time: anchorRef.current.time,
-        timestamp: now,
-      };
+    if (
+      nextState.time !== clockTime &&
+      (shouldSnap || clampPlaybackTime(time, duration) > clockTime)
+    ) {
+      setClockTime(nextState.time);
     }
-
-    if (!isActive || playbackRate <= 0) {
-      return;
-    }
+    if (!nextState.isRunning) return;
 
     let animationFrame = 0;
     const tick = (frameNow: number) => {
-      const projected = getProjectedPlaybackTime(
-        anchorRef.current,
-        frameNow,
-        playbackRate,
+      const next = advancePlaybackClockState(
+        stateRef.current!,
         duration,
+        frameNow,
       );
-      const next = Math.max(clockTimeRef.current, projected);
+      stateRef.current = next;
 
       if (
-        Math.abs(next - clockTimeRef.current) >=
-        Math.max(0, tickIntervalMs) / 1000
+        Math.abs(next.time - clockTime) >=
+        Math.max(0, tickIntervalMs ?? VISUAL_PLAYBACK_CLOCK_TICK_MS) / 1000
       ) {
-        clockTimeRef.current = next;
-        setClockTime(next);
+        setClockTime(next.time);
       }
 
-      if (duration <= 0 || next < duration) {
+      if (duration <= 0 || next.time < duration) {
         animationFrame = requestAnimationFrame(tick);
       }
     };
 
     animationFrame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(animationFrame);
-  }, [
-    duration,
-    isActive,
-    isSeeking,
-    playbackRate,
-    resetKey,
-    tickIntervalMs,
-    time,
-  ]);
+  }, [clockTime, duration, input, tickIntervalMs, time]);
 
   return clockTime;
+}
+
+function getPlaybackClockResetKey(state: {
+  source: { id?: string; url?: string } | null;
+  sourceId: string | null;
+  meta: Parameters<typeof getMediaKey>[0];
+}): string {
+  return `${state.sourceId ?? state.source?.id ?? state.source?.url ?? ""}:${getMediaKey(state.meta) ?? ""}`;
 }
 
 /**
@@ -214,12 +300,12 @@ export function usePlaybackClock(): number {
     (s) => s.mediaPlaying.hasRenderedFrame,
   );
   const status = usePlayerStore((s) => s.status);
+  const resetKey = usePlayerStore((s) => getPlaybackClockResetKey(s));
 
   const isActive =
     isPlaying &&
     !isPaused &&
     !isSeeking &&
-    !isLoading &&
     hasRenderedFrame &&
     status === playerStatus.PLAYING &&
     playbackRate > 0;
@@ -229,6 +315,8 @@ export function usePlaybackClock(): number {
     duration,
     playbackRate,
     isActive,
+    isLoading,
     isSeeking,
+    resetKey,
   });
 }

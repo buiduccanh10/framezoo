@@ -102,7 +102,7 @@ function getPipPlaybackResetKey(state: DesktopPipState): string {
   ].join(":");
 }
 
-function PipPlaybackClockProvider(props: {
+export function PipPlaybackClockProvider(props: {
   state: DesktopPipState;
   isDragging: boolean;
   children: ReactNode;
@@ -112,7 +112,6 @@ function PipPlaybackClockProvider(props: {
     props.state.isPlaying &&
     !props.state.paused &&
     !props.state.isSeeking &&
-    !props.state.isLoading &&
     props.state.hasRenderedFrame &&
     props.state.status === playerStatus.PLAYING &&
     props.state.playbackRate > 0;
@@ -121,6 +120,7 @@ function PipPlaybackClockProvider(props: {
     duration: props.state.duration,
     playbackRate: props.state.playbackRate,
     isActive,
+    isLoading: props.state.isLoading,
     isSeeking: props.state.isSeeking,
     resetKey: getPipPlaybackResetKey(props.state),
   };
@@ -142,11 +142,11 @@ function PipPlaybackClockProvider(props: {
   );
 }
 
-function usePipVisualClock(): number {
+export function usePipVisualClock(): number {
   return useContext(PipVisualClockContext);
 }
 
-function usePipSubtitleClock(): number {
+export function usePipSubtitleClock(): number {
   return useContext(PipSubtitleClockContext);
 }
 
@@ -181,7 +181,7 @@ function DesktopPipButton(props: {
   );
 }
 
-const PipCaptions = memo(function PipCaptionsView(props: {
+export const PipCaptions = memo(function PipCaptionsView(props: {
   state: DesktopPipState;
   controlsVisible: boolean;
 }) {
