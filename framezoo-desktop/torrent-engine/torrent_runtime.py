@@ -1973,6 +1973,13 @@ class TorrentRuntime:
         )
         return not required_pieces
 
+    def flush_piece_cache(self) -> None:
+        try:
+            if hasattr(self, "handle") and callable(getattr(self.handle, "flush_cache", None)):
+                self.handle.flush_cache()
+        except Exception:
+            pass
+
     def read_range_chunk(
         self,
         stream: Any,
@@ -1992,6 +1999,9 @@ class TorrentRuntime:
             if timeout is not None
             else None
         )
+        retries_with_zeros = 0
+        max_zero_retries = 10
+        sparse_zero_block = b"\x00" * 16384
 
         while (
             (deadline is None or time.monotonic() < deadline)
@@ -2017,9 +2027,22 @@ class TorrentRuntime:
             ):
                 return None
 
+            self.flush_piece_cache()
+
             stream.seek(start)
             chunk = stream.read(expected_length)
             if len(chunk) == expected_length:
+                has_sparse_zeros = (
+                    (sparse_zero_block in chunk)
+                    if len(chunk) >= 16384
+                    else (chunk == b"\x00" * len(chunk))
+                )
+                if has_sparse_zeros and retries_with_zeros < max_zero_retries:
+                    retries_with_zeros += 1
+                    self.flush_piece_cache()
+                    time.sleep(constants.RANGE_RETRY_INTERVAL)
+                    continue
+
                 return chunk
 
             # libtorrent can finish a piece before the file descriptor sees
@@ -2333,7 +2356,7 @@ class TorrentRuntime:
                 )
                 return None, None
             try:
-                stream = open(absolute_path, "rb")
+                stream = open(absolute_path, "rb", buffering=0)
             except FileNotFoundError:
                 remaining = (
                     None
