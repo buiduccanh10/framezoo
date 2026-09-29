@@ -281,9 +281,6 @@ struct MpvPlayer {
     emit_property_snapshot("speed", MPV_FORMAT_DOUBLE);
     emit_property_snapshot("seeking", MPV_FORMAT_FLAG);
     emit_property_snapshot("paused-for-cache", MPV_FORMAT_FLAG);
-    emit_property_snapshot("hwdec-current", MPV_FORMAT_STRING);
-    emit_property_snapshot("decoder-frame-drop-count", MPV_FORMAT_INT64);
-    emit_property_snapshot("frame-drop-count", MPV_FORMAT_INT64);
     emit_property_snapshot("track-list", MPV_FORMAT_NODE);
     emit_property_snapshot("video-params", MPV_FORMAT_NODE);
     emit_property_snapshot("video-out-params", MPV_FORMAT_NODE);
@@ -1184,9 +1181,11 @@ napi_value create_player(napi_env env, napi_callback_info info) {
   set_mpv_option(player.get(), "input-default-bindings", "no");
   set_mpv_option(player.get(), "input-vo-keyboard", "no");
 
-  // Non-torrent sources retain the supported automatic hardware-decoder path.
-  set_mpv_option(player.get(), "hwdec", "auto");
+  // Hardware decoding & multi-threading
+  set_mpv_option(player.get(), "hwdec", "auto-safe");
   set_mpv_option(player.get(), "vd-lavc-threads", "0");
+  set_mpv_option(player.get(), "vd-lavc-dr", "yes");
+  set_mpv_option(player.get(), "vd-lavc-check-hw-profile", "yes");
 
   set_mpv_option(player.get(), "keep-open", "yes");
   set_mpv_option(player.get(), "idle", "yes");
@@ -1215,11 +1214,11 @@ napi_value create_player(napi_env env, napi_callback_info info) {
   set_mpv_option(player.get(), "demuxer-lavf-analyzeduration", "0.5");
   set_mpv_option(player.get(), "demuxer-lavf-probesize", "1048576");
 
-  // Prefer audio-clock pacing and complete frames.
-  set_mpv_option(player.get(), "video-sync", "audio");
-  set_mpv_option(player.get(), "framedrop", "no");
+  // Frame pacing & decoding fidelity
+  set_mpv_option(player.get(), "video-sync", "display-resample");
+  set_mpv_option(player.get(), "framedrop", "vo");
   set_mpv_option(player.get(), "hr-seek", "yes");
-  set_mpv_option(player.get(), "hr-seek-framedrop", "no");
+  set_mpv_option(player.get(), "hr-seek-framedrop", "yes");
   set_mpv_option(player.get(), "vd-lavc-show-all", "no");
   set_mpv_option(player.get(), "vd-lavc-fast", "no");
   set_mpv_option(player.get(), "force-seekable", "yes");
@@ -1353,9 +1352,6 @@ napi_value create_player(napi_env env, napi_callback_info info) {
       "seeking",
       "paused-for-cache",
       "demuxer-cache-duration",
-      "hwdec-current",
-      "decoder-frame-drop-count",
-      "frame-drop-count",
       "track-list",
       "video-params",
       "video-out-params",
@@ -1369,9 +1365,6 @@ napi_value create_player(napi_env env, napi_callback_info info) {
       MPV_FORMAT_FLAG,
       MPV_FORMAT_FLAG,
       MPV_FORMAT_DOUBLE,
-      MPV_FORMAT_STRING,
-      MPV_FORMAT_INT64,
-      MPV_FORMAT_INT64,
       MPV_FORMAT_NODE,
       MPV_FORMAT_NODE,
       MPV_FORMAT_NODE,
@@ -1593,17 +1586,7 @@ napi_value load_player(napi_env env, napi_callback_info info) {
       std::max(0.0, start_at),
       std::memory_order_release
   );
-  // Torrent pieces are hash-validated before HTTP serving. Copy decoded frames
-  // back to RAM so the renderer never consumes a decoder-owned GPU surface.
-  if (
-      set_mpv_property(
-          player.get(),
-          "hwdec",
-          is_torrent ? "auto-copy" : "auto"
-      ) < 0
-  ) {
-    return throw_error(env, "libmpv hardware decoder configuration failed");
-  }
+
   const std::string headers = get_headers(env, argv[1]);
   if (
       set_mpv_property(
