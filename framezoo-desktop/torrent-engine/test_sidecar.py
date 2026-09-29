@@ -1879,6 +1879,47 @@ class SidecarStreamTest(unittest.TestCase):
             self.assertEqual(first_chunk, b"video")
             stream.close()
 
+    def test_idle_runtime_releases_only_stale_piece_schedule(self):
+        class FakeHandle:
+            def __init__(self):
+                self.deadlines_cleared = 0
+                self.priorities = []
+
+            def clear_piece_deadlines(self):
+                self.deadlines_cleared += 1
+
+            def have_piece(self, piece):
+                return piece == 3
+
+            def piece_priority(self, piece, priority):
+                self.priorities.append((piece, priority))
+
+        runtime = object.__new__(TorrentRuntime)
+        runtime.session_id = "idle-schedule"
+        runtime.handle = FakeHandle()
+        runtime._piece_priority_lock = threading.RLock()
+        runtime._boosted_pieces = {2, 3}
+        runtime._piece_priorities = {2: 7, 5: 4}
+        runtime._piece_deadlines = {2: 0}
+        runtime._pending_kick_restore = {4: time.monotonic() + 1}
+
+        runtime.release_playback_schedule()
+
+        self.assertEqual(runtime.handle.deadlines_cleared, 1)
+        self.assertCountEqual(
+            runtime.handle.priorities,
+            [
+                (2, constants.STREAM_IDLE_FILE_PRIORITY),
+                (4, constants.STREAM_IDLE_FILE_PRIORITY),
+                (5, constants.STREAM_IDLE_FILE_PRIORITY),
+            ],
+        )
+        self.assertFalse(runtime._boosted_pieces)
+        self.assertFalse(runtime._piece_priorities)
+        self.assertFalse(runtime._piece_deadlines)
+        self.assertFalse(runtime._pending_kick_restore)
+
+
 class SidecarStorageTest(unittest.TestCase):
     def test_enforce_storage_limit_prunes_oldest(self):
         with tempfile.TemporaryDirectory() as root_dir:

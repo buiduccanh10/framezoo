@@ -194,6 +194,84 @@ class TorrentDiscoveryTest(unittest.TestCase):
         self.assertFalse(runtime.thread.is_alive())
         self.assertEqual(runtime.snapshot()["discoveryPhase"], "stopped")
 
+    def test_reactivate_wakes_backoff_and_retries_known_peers(self):
+        peer = discovery.PeerAddress("127.0.0.1", 6881)
+
+        class FakeHandle:
+            def __init__(self):
+                self.connected = []
+                self.resumes = 0
+                self.reannounces = 0
+                self.dht_announces = 0
+
+            def status(self):
+                return SimpleNamespace(
+                    total_done=0,
+                    total_wanted=100,
+                    num_peers=0,
+                    download_rate=0,
+                )
+
+            def connect_peer(self, address, _source):
+                self.connected.append(address)
+
+            def resume(self):
+                self.resumes += 1
+
+            def force_reannounce(self):
+                self.reannounces += 1
+
+            def force_dht_announce(self):
+                self.dht_announces += 1
+
+        class FakeSession:
+            def __init__(self):
+                self.dht_queries = 0
+
+            def dht_get_peers(self, _info_hash):
+                self.dht_queries += 1
+
+        handle = FakeHandle()
+        session = FakeSession()
+        runtime = discovery.TorrentDiscovery(
+            session,
+            handle,
+            lt.sha1_hash(bytes.fromhex("06" * 20)),
+            [],
+            b"-FZ0001-" + b"0" * 12,
+            6881,
+        )
+        runtime.discovered_peers.add((peer.host, peer.port))
+        runtime.peer_last_attempt_at[(peer.host, peer.port)] = time.monotonic()
+
+        with patch.object(
+            discovery.constants,
+            "DISCOVERY_BACKOFF_SECONDS",
+            (60.0,),
+        ):
+            worker = runtime.thread
+            runtime.start()
+            activated_at = time.monotonic()
+            details = runtime.reactivate()
+            deadline = activated_at + 1
+            while (
+                runtime.snapshot()["lastDiscoveryAt"] is None
+                and time.monotonic() < deadline
+            ):
+                time.sleep(0.01)
+            runtime.stop()
+
+        self.assertLess(time.monotonic() - activated_at, 1.2)
+        self.assertIs(runtime.thread, worker)
+        self.assertEqual(handle.resumes, 1)
+        self.assertEqual(handle.reannounces, 1)
+        self.assertGreaterEqual(handle.dht_announces, 1)
+        self.assertGreaterEqual(session.dht_queries, 2)
+        self.assertIn((peer.host, peer.port), handle.connected)
+        self.assertEqual(details["knownPeers"], 1)
+        self.assertIsNotNone(runtime.snapshot()["lastDiscoveryAt"])
+        self.assertFalse(runtime.thread.is_alive())
+
     def test_cycle_queries_http_trackers_and_injects_unique_peers(self):
         peer = discovery.PeerAddress("127.0.0.1", 6881)
         second_peer = discovery.PeerAddress("127.0.0.2", 6882)

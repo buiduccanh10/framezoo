@@ -275,6 +275,7 @@ class TorrentDiscovery:
         self.listen_port = listen_port
         self.status_callback = status_callback
         self.stop_event = threading.Event()
+        self.wake_event = threading.Event()
         self.lock = threading.RLock()
         self.trackers = normalize_trackers(trackers)
         self.injected_peers: Set[Tuple[str, int]] = set()
@@ -298,6 +299,7 @@ class TorrentDiscovery:
 
     def stop(self) -> None:
         self.stop_event.set()
+        self.wake_event.set()
         with self.lock:
             self.phase = "stopped"
         if self.thread.is_alive() and threading.current_thread() is not self.thread:
@@ -307,6 +309,68 @@ class TorrentDiscovery:
     def add_trackers(self, trackers: Iterable[str]) -> None:
         with self.lock:
             self.trackers = normalize_trackers((*self.trackers, *trackers))
+
+    def reactivate(self) -> dict[str, int | bool]:
+        """Prompt an idle retained handle to find and reconnect to its swarm."""
+        try:
+            status = self.handle.status()
+        except Exception:
+            status = None
+        peers_before = max(0, int(getattr(status, "num_peers", 0)))
+        rate_before = max(0, int(getattr(status, "download_rate", 0)))
+
+        with self.lock:
+            known_peers = [
+                PeerAddress(host, port)
+                for host, port in self.discovered_peers
+            ]
+            # Re-selecting playback is intentional: do not wait for the
+            # normal stale-peer cooldown before retrying these endpoints.
+            self.peer_last_attempt_at.clear()
+            self.phase = "reactivating"
+            self.wake_event.set()
+
+        resumed = False
+        reannounced = False
+        dht_announced = False
+        resume = getattr(self.handle, "resume", None)
+        if callable(resume):
+            try:
+                resume()
+                resumed = True
+            except Exception:
+                pass
+        force_reannounce = getattr(self.handle, "force_reannounce", None)
+        if callable(force_reannounce):
+            try:
+                force_reannounce()
+                reannounced = True
+            except Exception:
+                pass
+        force_dht = getattr(self.handle, "force_dht_announce", None)
+        if callable(force_dht):
+            try:
+                force_dht()
+                dht_announced = True
+            except Exception:
+                pass
+        dht_get_peers = getattr(self.session, "dht_get_peers", None)
+        if callable(dht_get_peers):
+            try:
+                dht_get_peers(self.info_hash)
+                dht_announced = True
+            except Exception:
+                pass
+        self._inject_peers(known_peers)
+        self._emit_status()
+        return {
+            "peersBefore": peers_before,
+            "downloadRateBefore": rate_before,
+            "knownPeers": len(known_peers),
+            "resumed": resumed,
+            "reannounced": reannounced,
+            "dhtAnnounced": dht_announced,
+        }
 
     def snapshot(self) -> dict[str, Any]:
         with self.lock:
@@ -451,7 +515,11 @@ class TorrentDiscovery:
         while not self.stop_event.is_set():
             if self._connected_peers() < constants.DISCOVERY_MIN_PEERS:
                 return True
-            if self.stop_event.wait(constants.DISCOVERY_COOL_OFF_SECONDS):
+            if self.wake_event.wait(constants.DISCOVERY_COOL_OFF_SECONDS):
+                self.wake_event.clear()
+                if not self.stop_event.is_set():
+                    return True
+            if self.stop_event.is_set():
                 return False
         return False
 
@@ -549,7 +617,9 @@ class TorrentDiscovery:
             backoff = constants.DISCOVERY_BACKOFF_SECONDS[
                 min(retry_index, len(constants.DISCOVERY_BACKOFF_SECONDS) - 1)
             ]
-            if self.stop_event.wait(backoff):
+            if self.wake_event.wait(backoff):
+                self.wake_event.clear()
+            if self.stop_event.is_set():
                 break
             self._run_cycle()
             retry_index += 1

@@ -409,6 +409,53 @@ class TorrentRuntime:
                         pass
             self._torrent_cleaned = True
 
+    def release_playback_schedule(self) -> None:
+        """Drop this idle runtime's deadlines without discarding downloaded pieces."""
+        with self._piece_priority_lock:
+            stale_pieces = set(getattr(self, "_boosted_pieces", set()))
+            stale_pieces.update(
+                getattr(self, "_pending_kick_restore", {}).keys(),
+            )
+            stale_pieces.update(getattr(self, "_piece_priorities", {}).keys())
+            self._boosted_pieces.clear()
+            self._piece_priorities.clear()
+            self._piece_deadlines.clear()
+            self._pending_kick_restore.clear()
+
+        clear_deadlines = getattr(self.handle, "clear_piece_deadlines", None)
+        if callable(clear_deadlines):
+            try:
+                clear_deadlines()
+            except Exception:
+                pass
+        else:
+            reset_deadline = getattr(self.handle, "reset_piece_deadline", None)
+            if callable(reset_deadline):
+                for piece in stale_pieces:
+                    try:
+                        reset_deadline(piece)
+                    except Exception:
+                        continue
+
+        demoted = 0
+        for piece in stale_pieces:
+            try:
+                if self.handle.have_piece(piece):
+                    continue
+                self.handle.piece_priority(
+                    piece,
+                    constants.STREAM_IDLE_FILE_PRIORITY,
+                )
+                demoted += 1
+            except Exception:
+                continue
+        log_event(
+            "playback schedule released",
+            sessionId=self.session_id,
+            stalePieces=len(stale_pieces),
+            demotedPieces=demoted,
+        )
+
     def current_status(self) -> dict[str, Any]:
         status = self.handle.status()
         self._observe_status_milestones(status)
