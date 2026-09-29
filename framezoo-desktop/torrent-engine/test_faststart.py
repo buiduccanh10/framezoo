@@ -220,8 +220,28 @@ def main():
         assert len(body) == 1024
         print("[3] HTTP range after s3 stop:", response.status, "bytes:", len(body))
 
+    # Once s4 stops, A becomes idle but its cache-ready handle remains alive
+    # for the five-minute grace. Returning to A must reuse that handle and
+    # explicitly reactivate its swarm rather than waiting for discovery backoff.
+    record = engine.records[cache_key]
+    reactivated = []
+    reactivate = record.reactivate
+
+    def track_reactivation(session_id):
+        reactivated.append(session_id)
+        return reactivate(session_id)
+
+    record.reactivate = track_reactivation
     engine.stop("s4")
-    print("PASS (phase 3): replacement session survived the superseded session stop")
+    engine.start("s5", request)
+    runtime5 = engine.sessions["s5"]
+    assert runtime5.handle is runtime4.handle, "idle torrent handle was not reused"
+    assert reactivated == ["s5"], "idle torrent swarm was not reactivated"
+    runtime5.wait_for_metadata(5)
+    assert runtime5.metadata_ready.is_set()
+
+    engine.stop("s5")
+    print("PASS (phase 3): idle handle reactivated without discarding pieces")
 
     engine.close()
     shutil.rmtree(root)

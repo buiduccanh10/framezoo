@@ -69,12 +69,14 @@ class TorrentRecord:
         if self.discovery is not None:
             self.discovery.start()
 
-    def add_session(self, session_id: str) -> None:
+    def add_session(self, session_id: str) -> bool:
         with self.lock:
+            was_idle = not self.session_ids
             if self.removal_timer is not None:
                 self.removal_timer.cancel()
                 self.removal_timer = None
             self.session_ids.add(session_id)
+            return was_idle
 
     def remove_session(self, session_id: str) -> bool:
         with self.lock:
@@ -84,6 +86,23 @@ class TorrentRecord:
     def add_trackers(self, trackers: list[str]) -> None:
         if self.discovery is not None:
             self.discovery.add_trackers(trackers)
+
+    def reactivate(self, session_id: str) -> None:
+        if self.discovery is None:
+            return
+        details = self.discovery.reactivate()
+        try:
+            info_hash = str(self.handle.info_hash())
+        except Exception:
+            info_hash = self.key
+        log_event(
+            "torrent handle reactivated",
+            sessionId=session_id,
+            infoHash=info_hash,
+            cacheKey=self.key,
+            discoveryPhase=self.snapshot().get("discoveryPhase"),
+            **details,
+        )
 
     def update_file_priorities(self) -> None:
         try:
@@ -371,11 +390,12 @@ class LibtorrentEngine:
         record_key = cache_key or session_id
 
         with self._start_lock:
+            record_was_idle = False
             with self.lock:
                 record = self.records.get(record_key)
                 if record is not None:
                     record.add_trackers(trackers)
-                    record.add_session(session_id)
+                    record_was_idle = record.add_session(session_id)
             if record is not None:
                 runtime = TorrentRuntime(
                     self,
@@ -389,12 +409,15 @@ class LibtorrentEngine:
                 with self.lock:
                     self.sessions[session_id] = runtime
                     self.session_records[session_id] = record_key
+                if record_was_idle:
+                    record.reactivate(session_id)
                 runtime.start()
                 log_event(
                     "torrent handle reused",
                     sessionId=session_id,
                     cacheKey=record_key,
                     activeSessions=len(record.session_ids),
+                    reactivated=record_was_idle,
                 )
                 return runtime.session_payload()
 
@@ -510,18 +533,22 @@ class LibtorrentEngine:
             return False
 
     def stop(self, session_id: str) -> None:
-        with self.lock:
-            runtime = self.sessions.pop(session_id, None)
-            record_key = self.session_records.pop(session_id, None)
-            record = self.records.get(record_key) if record_key else None
-        if runtime is None:
-            return
-        runtime.stop(remove_torrent=False)
-        if record is not None:
-            is_empty = record.remove_session(session_id)
-            record.update_file_priorities()
-            if is_empty:
-                self._schedule_record_removal(record.key)
+        with self._start_lock:
+            with self.lock:
+                runtime = self.sessions.pop(session_id, None)
+                record_key = self.session_records.pop(session_id, None)
+                record = self.records.get(record_key) if record_key else None
+            if runtime is None:
+                return
+            runtime.stop(remove_torrent=False)
+            if record is not None:
+                is_empty = record.remove_session(session_id)
+                if is_empty:
+                    runtime.release_playback_schedule()
+                record.update_file_priorities()
+                if is_empty:
+                    self._save_record_resume_data(record)
+                    self._schedule_record_removal(record.key)
 
     def get_discovery_status(self, record: Any) -> dict[str, Any]:
         snapshot = record.snapshot() if record is not None else {}

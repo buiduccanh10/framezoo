@@ -409,6 +409,53 @@ class TorrentRuntime:
                         pass
             self._torrent_cleaned = True
 
+    def release_playback_schedule(self) -> None:
+        """Drop this idle runtime's deadlines without discarding downloaded pieces."""
+        with self._piece_priority_lock:
+            stale_pieces = set(getattr(self, "_boosted_pieces", set()))
+            stale_pieces.update(
+                getattr(self, "_pending_kick_restore", {}).keys(),
+            )
+            stale_pieces.update(getattr(self, "_piece_priorities", {}).keys())
+            self._boosted_pieces.clear()
+            self._piece_priorities.clear()
+            self._piece_deadlines.clear()
+            self._pending_kick_restore.clear()
+
+        clear_deadlines = getattr(self.handle, "clear_piece_deadlines", None)
+        if callable(clear_deadlines):
+            try:
+                clear_deadlines()
+            except Exception:
+                pass
+        else:
+            reset_deadline = getattr(self.handle, "reset_piece_deadline", None)
+            if callable(reset_deadline):
+                for piece in stale_pieces:
+                    try:
+                        reset_deadline(piece)
+                    except Exception:
+                        continue
+
+        demoted = 0
+        for piece in stale_pieces:
+            try:
+                if self.handle.have_piece(piece):
+                    continue
+                self.handle.piece_priority(
+                    piece,
+                    constants.STREAM_IDLE_FILE_PRIORITY,
+                )
+                demoted += 1
+            except Exception:
+                continue
+        log_event(
+            "playback schedule released",
+            sessionId=self.session_id,
+            stalePieces=len(stale_pieces),
+            demotedPieces=demoted,
+        )
+
     def current_status(self) -> dict[str, Any]:
         status = self.handle.status()
         self._observe_status_milestones(status)
@@ -1926,6 +1973,13 @@ class TorrentRuntime:
         )
         return not required_pieces
 
+    def flush_piece_cache(self) -> None:
+        try:
+            if hasattr(self, "handle") and callable(getattr(self.handle, "flush_cache", None)):
+                self.handle.flush_cache()
+        except Exception:
+            pass
+
     def read_range_chunk(
         self,
         stream: Any,
@@ -1945,6 +1999,9 @@ class TorrentRuntime:
             if timeout is not None
             else None
         )
+        retries_with_zeros = 0
+        max_zero_retries = 10
+        sparse_zero_block = b"\x00" * 16384
 
         while (
             (deadline is None or time.monotonic() < deadline)
@@ -1970,9 +2027,22 @@ class TorrentRuntime:
             ):
                 return None
 
+            self.flush_piece_cache()
+
             stream.seek(start)
             chunk = stream.read(expected_length)
             if len(chunk) == expected_length:
+                has_sparse_zeros = (
+                    (sparse_zero_block in chunk)
+                    if len(chunk) >= 16384
+                    else (chunk == b"\x00" * len(chunk))
+                )
+                if has_sparse_zeros and retries_with_zeros < max_zero_retries:
+                    retries_with_zeros += 1
+                    self.flush_piece_cache()
+                    time.sleep(constants.RANGE_RETRY_INTERVAL)
+                    continue
+
                 return chunk
 
             # libtorrent can finish a piece before the file descriptor sees
@@ -2286,7 +2356,7 @@ class TorrentRuntime:
                 )
                 return None, None
             try:
-                stream = open(absolute_path, "rb")
+                stream = open(absolute_path, "rb", buffering=0)
             except FileNotFoundError:
                 remaining = (
                     None
