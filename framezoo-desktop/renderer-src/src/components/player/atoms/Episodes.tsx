@@ -31,6 +31,7 @@ import { concurrentMap } from "@/utils/async";
 import { measureInlineExpandableText } from "@/utils/inlineExpandText";
 import { scrollToElement } from "@/utils/scroll";
 import { formatEpisodeTitle, formatSeasonTitle } from "@/utils/season";
+import { formatDateDDMMYY } from "@/utils/timestamp";
 
 import { hasAired } from "../utils/aired";
 
@@ -236,7 +237,7 @@ function EpisodeItem({
             {!isAired && (
               <span className="bg-video-context-hoverColor/50 text-video-context-type-main/80 text-sm px-1 py-0.5 rounded-md">
                 {episode.air_date
-                  ? `(${t("details.airs")} - ${new Date(episode.air_date).toLocaleDateString()})`
+                  ? `(${t("details.airs")} - ${formatDateDDMMYY(episode.air_date)})`
                   : `(${t("media.unreleased")})`}
               </span>
             )}
@@ -391,7 +392,7 @@ function EpisodeItem({
               {!isAired && (
                 <span className="bg-video-context-hoverColor/50 text-video-context-type-main/80 text-sm px-1 py-0.5 rounded-md">
                   {episode.air_date
-                    ? `(${t("details.airs")} - ${new Date(episode.air_date).toLocaleDateString()})`
+                    ? `(${t("details.airs")} - ${formatDateDDMMYY(episode.air_date)})`
                     : `(${t("media.unreleased")})`}
                 </span>
               )}
