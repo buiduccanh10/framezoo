@@ -4,6 +4,7 @@ import {
   ProgressMediaItem,
   ProgressSeasonItem,
 } from "@/stores/progress";
+import type { WatchHistoryItem } from "@/stores/watchHistory";
 
 export interface ShowProgressResult {
   episode?: ProgressEpisodeItem;
@@ -16,6 +17,57 @@ const defaultProgress = {
   duration: 0,
   watched: 0,
 };
+
+export function mergeCompletedHistoryIntoProgress(
+  progress: ProgressMediaItem | undefined,
+  history: WatchHistoryItem[],
+): ProgressMediaItem | undefined {
+  const completedEpisodes = history.filter(
+    (item) =>
+      item.completed &&
+      item.episodeId &&
+      item.seasonId &&
+      item.episodeNumber !== undefined &&
+      item.seasonNumber !== undefined,
+  );
+  if (completedEpisodes.length === 0) return progress;
+
+  const firstEpisode = completedEpisodes[0];
+  const merged: ProgressMediaItem = {
+    ...(progress ?? {
+      type: "show",
+      title: firstEpisode.title,
+      year: firstEpisode.year,
+      poster: firstEpisode.poster,
+      updatedAt: 0,
+      episodes: {},
+      seasons: {},
+    }),
+    episodes: { ...(progress?.episodes ?? {}) },
+    seasons: { ...(progress?.seasons ?? {}) },
+  };
+
+  completedEpisodes.forEach((item) => {
+    if (merged.episodes[item.episodeId!]) return;
+
+    merged.seasons[item.seasonId!] ??= {
+      id: item.seasonId!,
+      number: item.seasonNumber!,
+      title: "",
+    };
+    merged.episodes[item.episodeId!] = {
+      id: item.episodeId!,
+      number: item.episodeNumber!,
+      title: "",
+      seasonId: item.seasonId!,
+      updatedAt: item.watchedAt,
+      progress: item.progress,
+    };
+    merged.updatedAt = Math.max(merged.updatedAt, item.watchedAt);
+  });
+
+  return merged;
+}
 
 function progressIsCompleted(duration: number, watched: number): boolean {
   const timeFromEnd = duration - watched;

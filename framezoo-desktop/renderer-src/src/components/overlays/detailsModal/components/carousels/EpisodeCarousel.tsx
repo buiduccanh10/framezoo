@@ -284,24 +284,22 @@ export function EpisodeCarousel({
     if (!mediaId || !totalEpisodes) return { watched: 0, percentage: 0 };
 
     let watchedCount = 0;
-    episodes.forEach((episode) => {
-      const episodeProgress =
-        progress[mediaId.toString()]?.episodes?.[episode.id];
-      const percentage = episodeProgress
-        ? getProgressPercentage(
-            episodeProgress.progress.watched,
-            episodeProgress.progress.duration,
-          )
-        : 0;
-      if (percentage > 90) {
-        watchedCount += 1;
-      }
-    });
+    Object.values(progress[mediaId.toString()]?.episodes ?? {}).forEach(
+      (episode: any) => {
+        const percentage = getProgressPercentage(
+          episode.progress.watched,
+          episode.progress.duration,
+        );
+        if (percentage > 90) {
+          watchedCount += 1;
+        }
+      },
+    );
 
     const percentage = Math.round((watchedCount / totalEpisodes) * 100);
 
     return { watched: watchedCount, percentage };
-  }, [episodes, progress, mediaId, totalEpisodes]);
+  }, [progress, mediaId, totalEpisodes]);
 
   // Load favorite episodes when favorites is selected
   useEffect(() => {

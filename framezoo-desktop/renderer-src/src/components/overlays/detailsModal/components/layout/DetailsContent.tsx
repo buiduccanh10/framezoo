@@ -20,7 +20,11 @@ import {
 } from "@/stores/player/slices/source";
 import { usePreferencesStore } from "@/stores/preferences";
 import { getProgressPercentage, useProgressStore } from "@/stores/progress";
-import { shouldShowProgress } from "@/stores/progress/utils";
+import {
+  mergeCompletedHistoryIntoProgress,
+  shouldShowProgress,
+} from "@/stores/progress/utils";
+import { useWatchHistoryStore } from "@/stores/watchHistory";
 import { getTmdbLanguageCode } from "@/utils/language";
 
 import {
@@ -298,12 +302,24 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
   const progressItem = useProgressStore((s) =>
     data.id ? s.items[data.id.toString()] : undefined,
   );
+  const watchHistory = useWatchHistoryStore((s) => s.items);
   const updateItem = useProgressStore((s) => s.updateItem);
-  const progress = useMemo(
-    () =>
-      data.id && progressItem ? { [data.id.toString()]: progressItem } : {},
-    [data.id, progressItem],
-  );
+  const progress = useMemo(() => {
+    if (!data.id) return {};
+
+    const mediaId = data.id.toString();
+    const completedHistory = Object.entries(watchHistory)
+      .filter(
+        ([key, item]) => key.startsWith(`${mediaId}-`) && item.type === "show",
+      )
+      .map(([, item]) => item);
+    const item = mergeCompletedHistoryIntoProgress(
+      progressItem,
+      completedHistory,
+    );
+
+    return item ? { [mediaId]: item } : {};
+  }, [data.id, progressItem, watchHistory]);
 
   // Check if movie is watched (>90% progress)
   const isMovieWatched = useMemo(() => {
