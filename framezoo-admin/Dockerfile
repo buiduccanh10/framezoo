@@ -4,12 +4,14 @@ WORKDIR /app
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 
-RUN corepack enable && corepack prepare pnpm@12.3.4 --activate
+RUN corepack enable && corepack install --global pnpm@12.8.1
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 COPY framezoo-admin/package.json ./framezoo-admin/package.json
-COPY patches ./patches
-
+COPY framezoo-be/package.json ./framezoo-be/package.json
+COPY framezoo-desktop/package.json ./framezoo-desktop/package.json
+COPY framezoo-fe/package.json ./framezoo-fe/package.json
+COPY framezoo-mobile/package.json ./framezoo-mobile/package.json
 # Install dependencies for framezoo-admin
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm install --frozen-lockfile --ignore-scripts --filter framezoo-admin...

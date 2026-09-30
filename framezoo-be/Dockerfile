@@ -5,12 +5,14 @@ ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 
 RUN corepack enable && apk add --no-cache curl postgresql-client \
-    && corepack prepare pnpm@12.3.4 --activate
+    && corepack install --global pnpm@12.8.1
 
 COPY framezoo-be/package.json ./framezoo-be/package.json
 COPY pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
-COPY patches ./patches
-
+COPY framezoo-admin/package.json ./framezoo-admin/package.json
+COPY framezoo-desktop/package.json ./framezoo-desktop/package.json
+COPY framezoo-fe/package.json ./framezoo-fe/package.json
+COPY framezoo-mobile/package.json ./framezoo-mobile/package.json
 # framezoo-be prepare runs prisma generate; install without lifecycle until sources exist.
 # Keep the workspace shape stable after this layer. Adding another workspace
 # package.json later makes pnpm reconcile the workspace again during `pnpm run`,
