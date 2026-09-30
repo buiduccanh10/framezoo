@@ -195,9 +195,6 @@ export function PlayerPart(props: PlayerPartProps) {
     <Player.Container onLoad={props.onLoad} showingControls={showTargets}>
       {props.children}
       <PauseOverlay />
-      <Player.BlackOverlay
-        show={showTargets && status === playerStatus.PLAYING}
-      />
       <Player.EpisodesRouter onChange={props.onMetaChange} />
       <Player.SettingsRouter />
       <Player.SubtitleView controlsShown={showTargets} />
