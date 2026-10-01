@@ -88,6 +88,10 @@ class TorrentRecord:
             self.discovery.add_trackers(trackers)
 
     def reactivate(self, session_id: str) -> None:
+        try:
+            self.handle.resume()
+        except Exception:
+            pass
         if self.discovery is None:
             return
         details = self.discovery.reactivate()
@@ -545,6 +549,11 @@ class LibtorrentEngine:
                 is_empty = record.remove_session(session_id)
                 if is_empty:
                     runtime.release_playback_schedule()
+                    record.stop_discovery()
+                    try:
+                        record.handle.pause()
+                    except Exception:
+                        pass
                 record.update_file_priorities()
                 if is_empty:
                     self._save_record_resume_data(record)

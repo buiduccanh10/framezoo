@@ -1,4 +1,4 @@
-import { getTag } from "@sozialhelden/ietf-language-tags";
+import { getSubTag, parseLanguageTag } from "@sozialhelden/ietf-language-tags";
 import { iso6393To1 } from "iso-639-3";
 
 const languageAliases: Record<string, string> = {
@@ -246,6 +246,35 @@ function normalizeLanguageLookupLabel(label: string): string {
     .trim();
 }
 
+const VALID_LANGTAG_SYNTAX_RE = /^[a-zA-Z]{2,3}(?:-[a-zA-Z0-9]{1,8})*$/;
+const SUBTITLE_FILE_EXTENSIONS_RE = /\.(?:srt|vtt|sub|ass|ssa|idx|smi|txt)$/i;
+
+function safeGetTag(code: string) {
+  if (!VALID_LANGTAG_SYNTAX_RE.test(code) || code.length > 35) {
+    return undefined;
+  }
+  try {
+    const parsed = parseLanguageTag(code, true, () => {});
+    if (!parsed?.language) return undefined;
+    const langSubTag = getSubTag("language", parsed.language);
+    if (!langSubTag) return undefined;
+    const regionSubTag = parsed.region
+      ? getSubTag("region", parsed.region)
+      : undefined;
+    const scriptSubTag = parsed.script
+      ? getSubTag("script", parsed.script)
+      : undefined;
+    return {
+      parts: parsed,
+      language: langSubTag,
+      region: regionSubTag,
+      script: scriptSubTag,
+    };
+  } catch {
+    return undefined;
+  }
+}
+
 function normalizeLanguageCodeCandidate(label: string): string {
   return label
     .trim()
@@ -260,6 +289,9 @@ function normalizeLanguageCodeCandidate(label: string): string {
 
 export function labelToLanguageCode(label?: string | null): string | null {
   if (!label) return null;
+  const trimmed = label.trim();
+  if (trimmed.length === 0 || trimmed.length > 50) return null;
+  if (SUBTITLE_FILE_EXTENSIONS_RE.test(trimmed)) return null;
 
   const normalizedLabel = normalizeLanguageLookupLabel(label);
   if (!normalizedLabel) return null;
@@ -274,7 +306,7 @@ export function labelToLanguageCode(label?: string | null): string | null {
   const fromIso6393 = iso6393To1[normalizedCode];
   if (fromIso6393) return fromIso6393;
 
-  const tag = getTag(normalizedCode, true);
+  const tag = safeGetTag(normalizedCode);
   if (tag?.language?.Description?.[0]) {
     return tag.parts.langtag ?? normalizedCode;
   }

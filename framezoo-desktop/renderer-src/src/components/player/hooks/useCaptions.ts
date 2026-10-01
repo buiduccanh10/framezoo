@@ -11,7 +11,6 @@ import {
   getSubtitleAlignmentInputVtt,
   isSubtitleAlignmentResultApplicable,
 } from "@/components/player/utils/subtitleAlignment";
-import { normalizeMoonshineLanguage } from "@/moonshine/runtime";
 import { useLanguageStore } from "@/stores/language";
 import {
   Caption,
@@ -31,6 +30,8 @@ import {
 let autoSelectionRequestId = 0;
 let subtitleAlignmentRequestId = 0;
 let activeSubtitleSyncCancel: (() => void) | null = null;
+let activeAutoSelectionPromise: Promise<boolean> | null = null;
+let activeAutoSelectionRequestId = -1;
 const AUTO_SCORE_MAX_CANDIDATES = 8;
 const AUTO_SCORE_CONCURRENCY = 3;
 const AUTO_SCORE_PER_ITEM_TIMEOUT_MS = 1500;
@@ -44,6 +45,26 @@ const VALID_LANGUAGE_TAG_RE = /^[a-z]{2,3}(?:[-_][a-z]{2,4})?$/i;
  * Resolves the best language code to use for subtitle alignment.
  * Priority: audio track language tag (if valid ISO-639 format) → TMDB originalLanguage → "en"
  */
+function normalizeLanguageCode(tag: string): string {
+  const value = tag.trim().toLowerCase();
+  const base = value.split(/[-_]/)[0] ?? value;
+  const map: Record<string, string> = {
+    eng: "en",
+    vie: "vi",
+    spa: "es",
+    fra: "fr",
+    deu: "de",
+    ita: "it",
+    por: "pt",
+    rus: "ru",
+    zho: "zh",
+    jpn: "ja",
+    kor: "ko",
+    ara: "ar",
+  };
+  return map[base] ?? base;
+}
+
 function resolveAudioLanguage(
   audioTrackLanguage: string | null | undefined,
   metaOriginalLanguage: string | null | undefined,
@@ -52,13 +73,13 @@ function resolveAudioLanguage(
     audioTrackLanguage &&
     VALID_LANGUAGE_TAG_RE.test(audioTrackLanguage.trim())
   ) {
-    return normalizeMoonshineLanguage(audioTrackLanguage.trim());
+    return normalizeLanguageCode(audioTrackLanguage.trim());
   }
   if (
     metaOriginalLanguage &&
     VALID_LANGUAGE_TAG_RE.test(metaOriginalLanguage.trim())
   ) {
-    return normalizeMoonshineLanguage(metaOriginalLanguage.trim());
+    return normalizeLanguageCode(metaOriginalLanguage.trim());
   }
   return "en";
 }
@@ -203,6 +224,7 @@ export function useCaptions() {
   const setCaptionAsTrack = usePlayerStore((s) => s.setCaptionAsTrack);
   const captionAsTrack = usePlayerStore((s) => s.caption.asTrack);
   const latestAutoSelectRequestIdRef = useRef<number | null>(null);
+  const lastFinishedExternalRef = useRef<number | null>(null);
   const syncAbortControllerRef = useRef<AbortController | null>(null);
   const subtitleSync = usePlayerStore((s) => s.subtitleSync);
   const setSubtitleSyncState = usePlayerStore((s) => s.setSubtitleSyncState);
@@ -999,17 +1021,39 @@ export function useCaptions() {
     if (!selectedCaption) {
       const isNewSourceRequest =
         latestAutoSelectRequestIdRef.current !== externalSubtitleRequestId;
+      const isExternalJustFinished =
+        !isLoadingExternalSubtitles &&
+        lastFinishedExternalRef.current !== externalSubtitleRequestId;
       const shouldAutoSelect =
-        isNewSourceRequest || enabled || !lastSelectedLanguage;
+        isNewSourceRequest ||
+        isExternalJustFinished ||
+        enabled ||
+        !lastSelectedLanguage;
 
       if (shouldAutoSelect) {
-        void selectLastUsedLanguage({ waitForExternal: true }).then(
-          (didSelect) => {
-            if (didSelect || !isLoadingExternalSubtitles) {
-              latestAutoSelectRequestIdRef.current = externalSubtitleRequestId;
-            }
-          },
-        );
+        if (!isLoadingExternalSubtitles) {
+          lastFinishedExternalRef.current = externalSubtitleRequestId;
+        }
+
+        if (
+          activeAutoSelectionRequestId === externalSubtitleRequestId &&
+          activeAutoSelectionPromise
+        ) {
+          latestAutoSelectRequestIdRef.current = externalSubtitleRequestId;
+          return;
+        }
+
+        latestAutoSelectRequestIdRef.current = externalSubtitleRequestId;
+        activeAutoSelectionRequestId = externalSubtitleRequestId;
+
+        const promise = selectLastUsedLanguage({ waitForExternal: true });
+        activeAutoSelectionPromise = promise;
+
+        void promise.finally(() => {
+          if (activeAutoSelectionPromise === promise) {
+            activeAutoSelectionPromise = null;
+          }
+        });
       }
       return;
     }

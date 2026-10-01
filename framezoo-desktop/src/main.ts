@@ -29,10 +29,6 @@ import {
   TorrentManager,
 } from "./torrent/manager";
 import { libmpvController } from "./libmpvController";
-import {
-  MoonshineNodeRuntime,
-  type MoonshineNodeModel,
-} from "./moonshineNodeRuntime";
 import type {
   ExtensionMessageName,
   NativeStartupWarmupState,
@@ -72,24 +68,13 @@ const DESKTOP_RELEASE_REPO = "framezoo-desktop-releases";
 const DESKTOP_APP_UPDATE_CHECK_INTERVAL_MS = 60 * 60 * 1000;
 const DESKTOP_SETTINGS_ROUTE = "/settings";
 const EXTENSION_REQUEST_TIMEOUT_MS = 15_000;
-const moonshineDownloadControllers = new Map<string, AbortController>();
-const CRC32C_TABLE = (() => {
-  const table = new Uint32Array(256);
-  for (let index = 0; index < table.length; index += 1) {
-    let value = index;
-    for (let bit = 0; bit < 8; bit += 1) {
-      value = (value & 1) === 1 ? (value >>> 1) ^ 0x82f63b78 : value >>> 1;
-    }
-    table[index] = value >>> 0;
-  }
-  return table;
-})();
 
 const ENABLE_DEVTOOLS =
   Boolean(RENDERER_DEV_URL) ||
   process.env.VITE_ENABLE_DEVTOOLS_PROTECTION === "false";
 
-const BLOCKED_EXTENSION_HOSTS = /^(localhost|0\.0\.0\.0|127\.|10\.|169\.254\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.|\[?::1\]?|\[?fc|\[?fd)/i;
+const BLOCKED_EXTENSION_HOSTS =
+  /^(localhost|0\.0\.0\.0|127\.|10\.|169\.254\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.|\[?::1\]?|\[?fc|\[?fd)/i;
 
 function validateExtensionRequestUrl(rawUrl: unknown): string {
   if (typeof rawUrl !== "string") {
@@ -273,75 +258,11 @@ function getDirectorySize(dirPath: string): number {
   return size;
 }
 
-function crc32c(bytes: Uint8Array): number {
-  let value = 0xffffffff;
-  for (const byte of bytes) {
-    value = CRC32C_TABLE[(value ^ byte) & 0xff]! ^ (value >>> 8);
-  }
-  return (value ^ 0xffffffff) >>> 0;
-}
-
-function crc32cBase64(bytes: Uint8Array): string {
-  const value = crc32c(bytes);
-  return Buffer.from([
-    value >>> 24,
-    (value >>> 16) & 0xff,
-    (value >>> 8) & 0xff,
-    value & 0xff,
-  ]).toString("base64");
-}
-
-function verifyMoonshineFileChecksum(
-  bytes: Uint8Array,
-  file: {
-    name: string;
-    checksum: string | null;
-    checksumType: string | null;
-  },
-) {
-  if (!file.checksum) return;
-  if (file.checksumType !== "crc32c") {
-    throw new Error(
-      `Unsupported Moonshine checksum type for ${file.name}: ${file.checksumType ?? "unknown"}`,
-    );
-  }
-  if (crc32cBase64(bytes) !== file.checksum) {
-    throw new Error(`Moonshine model checksum mismatch for ${file.name}`);
-  }
-}
-
 setupTorrentEnv();
 
 const streamRules = new Map<number, StreamRule>();
 const torrentManager: TorrentManager = createTorrentManagerFromEnvironment();
 const addonProtocolEngine = new AddonProtocolEngine();
-const moonshineNodeRuntime = new MoonshineNodeRuntime(
-  () => [
-    path.join(path.dirname(getRendererEntryPath()), "moonshine", "models"),
-    path.join(__dirname, "..", "renderer-src", "public", "moonshine", "models"),
-  ],
-  () => path.join(app.getPath("userData"), "moonshine-models"),
-  () => {
-    const runtimeRoots = [
-      path.join(path.dirname(getRendererEntryPath()), "moonshine", "runtime"),
-      path.join(
-        __dirname,
-        "..",
-        "renderer-src",
-        "public",
-        "moonshine",
-        "runtime",
-      ),
-    ];
-    const runtimeRoot = runtimeRoots.find((root) =>
-      fs.existsSync(path.join(root, "module.js")),
-    );
-    if (!runtimeRoot) {
-      throw new Error("Moonshine runtime is unavailable");
-    }
-    return runtimeRoot;
-  },
-);
 
 // Warmup state – tracks whether the torrent engine has been initialised.
 type TorrentWarmupState =
@@ -477,31 +398,6 @@ function registerRendererProtocol() {
 
       if (url.hostname !== RENDERER_PROTOCOL_HOST) {
         return new Response("Not found", { status: 404 });
-      }
-
-      if (url.pathname.startsWith("/moonshine-cache/")) {
-        const cacheParts = decodeURIComponent(url.pathname)
-          .replace(/^\/moonshine-cache\//, "")
-          .split("/");
-        if (
-          cacheParts.length !== 3 ||
-          !["tiny", "base"].includes(cacheParts[0] ?? "") ||
-          !/^[a-z0-9_-]+$/i.test(cacheParts[1] ?? "") ||
-          !/^[a-z0-9._-]+$/i.test(cacheParts[2] ?? "")
-        ) {
-          return new Response("Not found", { status: 404 });
-        }
-        const cachePath = path.join(
-          app.getPath("userData"),
-          "moonshine-models",
-          cacheParts[0]!,
-          cacheParts[1]!,
-          cacheParts[2]!,
-        );
-        if (!fs.existsSync(cachePath)) {
-          return new Response("Not found", { status: 404 });
-        }
-        return net.fetch(pathToFileURL(cachePath).toString());
       }
 
       const rendererRoot = path.resolve(path.dirname(getRendererEntryPath()));
@@ -1566,6 +1462,7 @@ function createMainWindow() {
     wasMaximizedBeforePlayerFullscreen = false;
     fullscreenOrigin = null;
     isWindowsFullScreen = false;
+    libmpvController.destroyAll("main-window:closed");
     void torrentManager.stopAll();
   });
 
@@ -1696,175 +1593,6 @@ function registerIpcHandlers() {
     await showDesktopSettings();
     return true;
   });
-
-  ipcMain.handle(
-    "desktop:moonshine-model-has",
-    async (_event, architecture: "tiny" | "base", language: string) => {
-      const modelRoot = path.join(
-        app.getPath("userData"),
-        "moonshine-models",
-        architecture,
-        language,
-      );
-      return (
-        fs.existsSync(modelRoot) &&
-        fs.readdirSync(modelRoot).some((entry) => entry.endsWith(".ort")) &&
-        fs.existsSync(path.join(modelRoot, "tokenizer.bin"))
-      );
-    },
-  );
-
-  ipcMain.handle(
-    "desktop:moonshine-local-load",
-    async (_event, model: MoonshineNodeModel) => {
-      await moonshineNodeRuntime.loadModel(model);
-      return true;
-    },
-  );
-
-  ipcMain.handle(
-    "desktop:moonshine-local-transcribe",
-    async (
-      _event,
-      requestId: string,
-      model: MoonshineNodeModel,
-      audio: ArrayBuffer,
-      sampleRate: number,
-    ) => {
-      if (
-        typeof requestId !== "string" ||
-        !(audio instanceof ArrayBuffer) ||
-        !Number.isFinite(sampleRate) ||
-        sampleRate <= 0
-      ) {
-        throw new Error("Invalid Moonshine local inference request");
-      }
-      try {
-        return await moonshineNodeRuntime.transcribe(
-          requestId,
-          model,
-          audio,
-          sampleRate,
-        );
-      } catch (error) {
-        if (error instanceof DOMException && error.name === "AbortError") {
-          return { cancelled: true as const };
-        }
-        throw error;
-      }
-    },
-  );
-
-  ipcMain.handle(
-    "desktop:moonshine-local-cancel",
-    async (_event, requestId: string) => {
-      return moonshineNodeRuntime.cancel(requestId);
-    },
-  );
-
-  ipcMain.handle(
-    "desktop:moonshine-model-cancel",
-    async (_event, requestId: string) => {
-      const controller = moonshineDownloadControllers.get(requestId);
-      if (!controller) return false;
-      controller.abort();
-      return true;
-    },
-  );
-
-  ipcMain.handle(
-    "desktop:moonshine-model-download",
-    async (
-      _event,
-      requestId: string,
-      request: {
-        architecture: "tiny" | "base";
-        language: string;
-        files: Array<{
-          name: string;
-          url: string;
-          size: number;
-          checksum: string | null;
-          checksumType: string | null;
-        }>;
-      },
-    ) => {
-      if (
-        !/^[a-z0-9_-]+$/i.test(request.language) ||
-        !["tiny", "base"].includes(request.architecture) ||
-        !Array.isArray(request.files) ||
-        request.files.length === 0
-      ) {
-        throw new Error("Invalid Moonshine model download request");
-      }
-      const controller = new AbortController();
-      moonshineDownloadControllers.set(requestId, controller);
-      const modelRoot = path.join(
-        app.getPath("userData"),
-        "moonshine-models",
-        request.architecture,
-        request.language,
-      );
-      const tempRoot = `${modelRoot}.partial-${requestId}`;
-      try {
-        await fs.promises.rm(tempRoot, { recursive: true, force: true });
-        await fs.promises.mkdir(tempRoot, { recursive: true });
-        for (const file of request.files) {
-          if (
-            !/^[a-z0-9._-]+$/i.test(file.name) ||
-            !/^https:\/\//i.test(file.url) ||
-            !Number.isFinite(file.size) ||
-            file.size <= 0
-          ) {
-            throw new Error("Invalid Moonshine model file");
-          }
-          const response = await fetch(file.url, { signal: controller.signal });
-          if (!response.ok || !response.body) {
-            throw new Error(
-              `Moonshine model download failed: ${response.status} ${file.url}`,
-            );
-          }
-          const chunks: Buffer[] = [];
-          let loaded = 0;
-          for await (const chunk of response.body as AsyncIterable<Uint8Array>) {
-            if (controller.signal.aborted) {
-              throw new DOMException("Aborted", "AbortError");
-            }
-            const bytes = Buffer.from(chunk);
-            chunks.push(bytes);
-            loaded += bytes.byteLength;
-            if (mainWindow && !mainWindow.isDestroyed()) {
-              sendToMainWindow("desktop:moonshine-model-progress", {
-                requestId,
-                language: request.language,
-                architecture: request.architecture,
-                file: file.name,
-                loaded,
-                total: file.size,
-              });
-            }
-          }
-          const bytes = Buffer.concat(chunks);
-          if (bytes.byteLength !== file.size) {
-            throw new Error(
-              `Moonshine model size mismatch for ${file.name}: expected ${file.size}, got ${bytes.byteLength}`,
-            );
-          }
-          verifyMoonshineFileChecksum(bytes, file);
-          await fs.promises.writeFile(path.join(tempRoot, file.name), bytes);
-        }
-        await fs.promises.rm(modelRoot, { recursive: true, force: true });
-        await fs.promises.mkdir(path.dirname(modelRoot), { recursive: true });
-        await fs.promises.rename(tempRoot, modelRoot);
-        return true;
-      } finally {
-        moonshineDownloadControllers.delete(requestId);
-        await fs.promises
-          .rm(tempRoot, { recursive: true, force: true })
-          .catch(() => {});
-      }
-    },
-  );
 
   ipcMain.handle(
     "desktop:pip-open",
@@ -2226,10 +1954,6 @@ function registerIpcHandlers() {
   });
 }
 
-app.on("before-quit", () => {
-  moonshineNodeRuntime.close();
-});
-
 app.commandLine.appendSwitch("autoplay-policy", "no-user-gesture-required");
 app.commandLine.appendSwitch("enable-features", "DocumentPictureInPictureAPI");
 app.commandLine.appendSwitch(
@@ -2315,13 +2039,41 @@ app.on("before-quit", (event) => {
   if (isQuitting || (global as any).isUpdating) return;
   event.preventDefault();
   isQuitting = true;
+
+  // Watchdog timer: If graceful cleanup hangs, force terminate the process after 3 seconds
+  const forceQuitTimer = setTimeout(() => {
+    console.warn("[main] quit cleanup timed out after 3s, forcing exit");
+    app.exit(0);
+  }, 3000);
+  forceQuitTimer.unref();
+
   desktopAppUpdater.dispose();
-  torrentManager
-    .stopAll()
-    .catch(console.error)
+  try {
+    libmpvController.destroyAll("app:before-quit");
+    desktopPipController.close();
+  } catch (error) {
+    console.warn(
+      "[main] failed to destroy media controllers before quit:",
+      error,
+    );
+  }
+
+  // Gracefully stop torrents within 1500ms, then dispose the sidecar engine
+  Promise.race([torrentManager.stopAll(), delay(1500)])
+    .catch((error) =>
+      console.warn("[main] failed to stop torrents before quit:", error),
+    )
     .finally(() => {
-      void torrentManager.dispose().finally(() => {
-        app.quit();
-      });
+      Promise.race([torrentManager.dispose(), delay(1000)])
+        .catch((error) =>
+          console.warn(
+            "[main] failed to dispose torrent manager before quit:",
+            error,
+          ),
+        )
+        .finally(() => {
+          clearTimeout(forceQuitTimer);
+          app.exit(0);
+        });
     });
 });

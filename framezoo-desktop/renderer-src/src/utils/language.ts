@@ -1,6 +1,30 @@
 import countryLanguages, { LanguageObj } from "@ladjs/country-language";
-import { getTag } from "@sozialhelden/ietf-language-tags";
+import { getSubTag, parseLanguageTag } from "@sozialhelden/ietf-language-tags";
 import { iso6393To1 } from "iso-639-3";
+
+function safeGetTag(tag: string) {
+  if (!tag || tag.length > 35) return undefined;
+  try {
+    const parsed = parseLanguageTag(tag, true, () => {});
+    if (!parsed?.language) return undefined;
+    const langSubTag = getSubTag("language", parsed.language);
+    if (!langSubTag) return undefined;
+    const regionSubTag = parsed.region
+      ? getSubTag("region", parsed.region)
+      : undefined;
+    const scriptSubTag = parsed.script
+      ? getSubTag("script", parsed.script)
+      : undefined;
+    return {
+      parts: parsed,
+      language: langSubTag,
+      region: regionSubTag,
+      script: scriptSubTag,
+    };
+  } catch {
+    return undefined;
+  }
+}
 
 const languageOrder = ["en", "hi", "fr", "de", "nl", "pt"];
 
@@ -108,8 +132,8 @@ function populateLanguageCode(language: string): string {
 export function getPrettyLanguageNameFromLocale(locale: string): string | null {
   const tag =
     locale.length === 3
-      ? getTag(iso6393To1[locale] ?? locale, true)
-      : getTag(locale, true);
+      ? safeGetTag(iso6393To1[locale] ?? locale)
+      : safeGetTag(locale);
   const lang = tag?.language?.Description?.[0] ?? null;
   if (!lang) return null;
 
@@ -150,7 +174,7 @@ export function sortLangCodes(langCodes: string[]) {
  */
 export function getCountryCodeForLocale(locale: string): string | null {
   let output: LanguageObj | null = null as any as LanguageObj;
-  const tag = getTag(populateLanguageCode(locale), true);
+  const tag = safeGetTag(populateLanguageCode(locale));
 
   if (!tag?.language?.Subtag) return null;
   // this function isn't async, so its guaranteed to work like this
@@ -203,7 +227,7 @@ export function getLocaleInfo(locale: string): LocaleInfo | null {
     return extraLang;
   }
 
-  const tag = getTag(realLocale, true);
+  const tag = safeGetTag(realLocale);
   if (!tag?.language?.Subtag) return null;
 
   let output: LanguageObj | null = null as any as LanguageObj;

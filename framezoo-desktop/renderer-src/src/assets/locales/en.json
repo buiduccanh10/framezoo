@@ -439,15 +439,21 @@
     "titles": {
       "69": {
         "default": "Up for something spicy?",
-        "extra": ["Happy 69 day 😘!"]
+        "extra": [
+          "Happy 69 day 😘!"
+        ]
       },
       "420": {
         "default": "What would you like to watch this 4/20?",
-        "extra": ["Happy 4/20 🥳!"]
+        "extra": [
+          "Happy 4/20 🥳!"
+        ]
       },
       "day": {
         "default": "What would you like to watch this afternoon?",
-        "extra": ["Viva la Framezoo!"]
+        "extra": [
+          "Viva la Framezoo!"
+        ]
       },
       "halloween": {
         "default": "What spooky movie would you like to watch this Halloween?",
@@ -460,11 +466,15 @@
       },
       "morning": {
         "default": "What would you like to watch this morning?",
-        "extra": ["Viva la Framezoo!"]
+        "extra": [
+          "Viva la Framezoo!"
+        ]
       },
       "night": {
         "default": "What would you like to watch tonight?",
-        "extra": ["Viva la Framezoo!"]
+        "extra": [
+          "Viva la Framezoo!"
+        ]
       }
     },
     "watchHistory": {
@@ -820,7 +830,8 @@
         "selectingSecondary": "Selecting secondary subtitle",
         "syncSubtitleConfirmTitle": "Sync subtitle with AI?",
         "syncSubtitleConfirmDescription": "Subtitles will be aligned by AI to match the video.",
-        "syncSubtitleSelectAnchor": "To increase accuracy, which is the first dialogue in the video?",
+        "syncSubtitleNoticeTitle": "Note",
+        "syncSubtitleNoticeDescription": "Subtitle sync may take some time depending on your download speed to retrieve enough audio samples for alignment.",
         "syncSubtitleSupportedLanguages": "Supported audio languages",
         "syncSubtitleSuccess": "Subtitle synced successfully",
         "syncSubtitleServerFallback": "Local sync does not support this audio language; synced using server.",

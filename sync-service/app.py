@@ -40,8 +40,8 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="Framezoo Moonshine alignment service",
-    version="1",
+    title="Framezoo subtitle sync service",
+    version="2",
     lifespan=lifespan,
 )
 
@@ -260,7 +260,9 @@ def parse_window_durations(
 
 
 def validate_internal_token(token: str | None) -> None:
-    expected_token = os.getenv("MOONSHINE_INTERNAL_TOKEN", "").strip()
+    expected_token = (
+        os.getenv("SYNC_INTERNAL_TOKEN", "") or os.getenv("MOONSHINE_INTERNAL_TOKEN", "")
+    ).strip()
     if expected_token and token != expected_token:
         raise HTTPException(status_code=401, detail="invalid internal token")
 
@@ -269,8 +271,9 @@ def validate_internal_token(token: str | None) -> None:
 async def health() -> dict[str, Any]:
     return {
         "status": "ok",
-        "model": os.getenv("MOONSHINE_MODEL_ARCH", "default"),
-        "language": normalize_language(os.getenv("MOONSHINE_LANGUAGE", "en")),
+        "engine": "vad_fft_split",
+        "model": "silero_vad_v5",
+        "language": normalize_language(os.getenv("SYNC_LANGUAGE", "en")),
     }
 
 

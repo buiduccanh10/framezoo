@@ -19,11 +19,8 @@ function copyToArrayBuffer(data: Uint8Array): ArrayBuffer {
   return copy.buffer;
 }
 
-function getMoonshineServiceUrl() {
-  return (process.env.MOONSHINE_SERVICE_URL?.trim() || 'http://moonshine-service:8000').replace(
-    /\/+$/,
-    ''
-  );
+function getSyncServiceUrl() {
+  return (process.env.SYNC_SERVICE_URL?.trim() || 'http://sync-service:8000').replace(/\/+$/, '');
 }
 
 export default defineEventHandler(async event => {
@@ -242,16 +239,18 @@ export default defineEventHandler(async event => {
     : subtitlesPart?.data
       ? '/v1/align-batch'
       : '/v1/align';
-  const response = await fetch(`${getMoonshineServiceUrl()}${endpoint}`, {
+  const response = await fetch(`${getSyncServiceUrl()}${endpoint}`, {
     method: 'POST',
     headers,
     body,
-    signal: AbortSignal.timeout(Number(process.env.MOONSHINE_TIMEOUT_MS) || 300_000),
+    signal: AbortSignal.timeout(
+      Number(process.env.SYNC_TIMEOUT_MS || process.env.MOONSHINE_TIMEOUT_MS) || 300_000
+    ),
   });
 
   if (!response.ok) {
     const detail = await response.text().catch(() => '');
-    let statusMessage = 'Moonshine alignment failed';
+    let statusMessage = 'Subtitle alignment failed';
     try {
       const json = JSON.parse(detail);
       if (json.detail) statusMessage = json.detail;

@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { ReactNode, useEffect, useMemo } from "react";
+import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 
 import {
   Transition,
@@ -17,6 +17,7 @@ interface Props {
   height: number;
   width: number;
   fullWidth?: boolean;
+  autoHeight?: boolean;
 }
 
 export function OverlayPage(props: Props) {
@@ -26,14 +27,43 @@ export function OverlayPage(props: Props) {
   const registerRoute = useOverlayStore((s) => s.registerRoute);
   const path = useMemo(() => router.makePath(props.path), [props.path, router]);
   const { isMobile } = useIsMobile();
+  const [measuredHeight, setMeasuredHeight] = useState<number | null>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!props.autoHeight || !show) return;
+    const el = contentRef.current;
+    if (!el) return;
+
+    const updateHeight = () => {
+      const height = Math.ceil(el.offsetHeight);
+      if (height > 0) {
+        setMeasuredHeight(height);
+      }
+    };
+
+    updateHeight();
+
+    if (typeof ResizeObserver !== "undefined") {
+      const observer = new ResizeObserver(() => {
+        updateHeight();
+      });
+      observer.observe(el);
+      return () => observer.disconnect();
+    }
+  }, [props.autoHeight, show]);
+
+  const effectiveHeight = props.autoHeight
+    ? (measuredHeight ?? props.height)
+    : props.height;
 
   useEffect(() => {
     registerRoute({
       id: path,
       width: props.fullWidth ? window.innerWidth - 60 : props.width,
-      height: props.height,
+      height: effectiveHeight,
     });
-  }, [props.height, props.width, props.fullWidth, path, registerRoute]);
+  }, [effectiveHeight, props.width, props.fullWidth, path, registerRoute]);
 
   const width = !isMobile
     ? props.fullWidth
@@ -52,13 +82,18 @@ export function OverlayPage(props: Props) {
       show={show}
     >
       <div
+        ref={contentRef}
         className={classNames([
-          "grid grid-rows-1 max-h-full",
+          props.autoHeight ? "h-fit" : "grid grid-rows-1 max-h-full",
           props.className,
           props.fullWidth ? "max-w-none" : "",
         ])}
         style={{
-          height: props.height ? `${props.height}px` : undefined,
+          height: props.autoHeight
+            ? undefined
+            : props.height
+              ? `${props.height}px`
+              : undefined,
           width: props.width ? width : undefined,
         }}
       >

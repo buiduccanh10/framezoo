@@ -68,7 +68,6 @@ export interface NativeStartupWarmupState {
   status: "idle" | "warming" | "ready" | "degraded";
   torrent: NativeWarmupComponentState;
   libmpv: NativeWarmupComponentState;
-  moonshine?: NativeWarmupComponentState;
 }
 
 export type StreamRule = {

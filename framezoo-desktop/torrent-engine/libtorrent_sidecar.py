@@ -34,7 +34,29 @@ def main() -> None:
                         },
                     )
                 elif message_type == "stop":
-                    engine.stop(session_id)
+                    if session_id:
+                        engine.stop(session_id)
+                    else:
+                        for s_id in list(engine.sessions.keys()):
+                            engine.stop(s_id)
+                    emit(
+                        {
+                            "type": "response",
+                            "requestId": request_id,
+                            "ok": True,
+                        },
+                    )
+                elif message_type == "stop_all":
+                    for s_id in list(engine.sessions.keys()):
+                        engine.stop(s_id)
+                    with engine.lock:
+                        for record in list(engine.records.values()):
+                            if not record.session_ids:
+                                record.stop_discovery()
+                                try:
+                                    record.handle.pause()
+                                except Exception:
+                                    pass
                     emit(
                         {
                             "type": "response",

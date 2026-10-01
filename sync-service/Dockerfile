@@ -1,17 +1,21 @@
-FROM python:3.11-slim@sha256:e41613d42d4891e4930f79523f93f81bbc7632584ec65e36ab055f41a800b41e
+FROM python:3.12-slim
 
 WORKDIR /app
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-COPY moonshine-service/requirements.txt ./requirements.txt
+COPY sync-service/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY moonshine-service/app.py ./app.py
-COPY moonshine-service/limiter.py ./limiter.py
-COPY moonshine-service/alignment.py ./alignment.py
-COPY moonshine-service/model_runtime.py ./model_runtime.py
+COPY sync-service/silero_vad.onnx ./silero_vad.onnx
+COPY sync-service/vad.py ./vad.py
+COPY sync-service/fft_align.py ./fft_align.py
+COPY sync-service/split_align.py ./split_align.py
+COPY sync-service/app.py ./app.py
+COPY sync-service/limiter.py ./limiter.py
+COPY sync-service/alignment.py ./alignment.py
+COPY sync-service/model_runtime.py ./model_runtime.py
 
 EXPOSE 8000
 

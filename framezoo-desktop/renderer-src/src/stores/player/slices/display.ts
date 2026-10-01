@@ -227,6 +227,14 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
       preferredQuality: null,
       reason: "store:reset",
     });
+    const currentSource = get().source as any;
+    if (currentSource?.isTorrent) {
+      import("@/desktop/torrentPlaybackStore")
+        .then(({ stopTorrentSession }) => {
+          void stopTorrentSession();
+        })
+        .catch(() => {});
+    }
     set((s) => {
       s.status = playerStatus.IDLE;
       s.meta = null;

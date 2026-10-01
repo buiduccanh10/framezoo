@@ -6,7 +6,9 @@ import threading
 from dataclasses import dataclass
 from typing import Any, Callable
 
-from model_runtime import get_transcriber
+from vad import detect_speech_intervals
+from fft_align import find_best_offset_fft
+from split_align import compute_piecewise_segments
 
 
 TIMING_RE = re.compile(
@@ -356,22 +358,11 @@ def transcribe_speech_intervals(
     language: str,
     audio_start_ms: int,
 ) -> list[tuple[int, int]]:
-    transcriber = get_transcriber(language)
-    with _TRANSCRIPTION_LOCK:
-        transcript = transcriber.transcribe_without_streaming(
-            audio,
-            sample_rate=sample_rate,
-            flags=0,
-        )
-
-    intervals: list[tuple[int, int]] = []
-    for line in transcript.lines:
-        start_ms = audio_start_ms + int(round(float(line.start_time) * 1_000))
-        duration_ms = int(round(float(line.duration) * 1_000))
-        end_ms = start_ms + duration_ms
-        if duration_ms >= MIN_SPEECH_INTERVAL_MS:
-            intervals.append((start_ms, end_ms))
-    return merge_intervals(intervals)
+    return detect_speech_intervals(
+        audio,
+        sample_rate=sample_rate,
+        audio_start_ms=audio_start_ms,
+    )
 
 
 def overlap_ms(
@@ -789,7 +780,21 @@ def find_best_offset(
     audio_end_ms: int,
     search_centers: list[int] | None = None,
 ) -> tuple[int, float]:
-    centers = search_centers or [0]
+    centers_set = set(search_centers or [0])
+    cue_intervals = [(c.start_ms, c.end_ms) for c in cues if c.end_ms > c.start_ms]
+    try:
+        fft_offset, fft_conf, _ = find_best_offset_fft(
+            speech_intervals,
+            cue_intervals,
+            audio_start_ms,
+            audio_end_ms,
+            search_centers=search_centers,
+        )
+        if fft_conf >= 15.0 and abs(fft_offset) <= MAX_PLAUSIBLE_ALIGNMENT_OFFSET_MS:
+            centers_set.add(fft_offset)
+    except Exception:
+        pass
+    centers = sorted(centers_set)
 
     def rank_offset(value: int) -> tuple[float, int, int]:
         dist_to_center = min(abs(value - c) for c in centers)
@@ -1399,13 +1404,20 @@ def select_alignment_consensus(
         best_cluster["candidates"],
         key=lambda item: int(item["result"].get("confidence", 0)),
     )["result"]
-    return {
+    avg_offset = round(best_cluster["averageOffsetMs"])
+    avg_conf = round(best_cluster["averageConfidence"])
+    piecewise_segments = compute_piecewise_segments(valid_entries, avg_offset)
+
+    consensus_res = {
         **representative,
         "aligned": True,
-        "offsetMs": round(best_cluster["averageOffsetMs"]),
-        "confidence": round(best_cluster["averageConfidence"]),
+        "offsetMs": avg_offset,
+        "confidence": avg_conf,
         "reason": None,
     }
+    if piecewise_segments:
+        consensus_res["segments"] = piecewise_segments
+    return consensus_res
 
 
 def align_speech_windows(

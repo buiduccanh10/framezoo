@@ -4,10 +4,8 @@ import Fuse from "fuse.js";
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Button } from "@/components/buttons/Button";
 import { FlagIcon } from "@/components/FlagIcon";
 import { Icon, Icons } from "@/components/Icon";
-import { Modal, ModalCard, useModal } from "@/components/overlays/Modal";
 import { useCaptions } from "@/components/player/hooks/useCaptions";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { Input } from "@/components/player/internals/ContextMenu/Input";
@@ -19,11 +17,6 @@ import {
   tryParseCanonicalVtt,
 } from "@/components/player/utils/captions";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
-import {
-  downloadMoonshineModel,
-  setMoonshineModelPromptHandler,
-} from "@/moonshine/runtime";
-import type { MoonshineModelEntry } from "@/moonshine/types";
 import { usePlayerStore } from "@/stores/player/store";
 import { useSubtitleStore } from "@/stores/subtitles";
 import { durationExceedsHour, formatSeconds } from "@/utils/formatSeconds";
@@ -63,61 +56,12 @@ export function TranscriptView({
   const hasRenderedFrame = usePlayerStore(
     (s) => s.mediaPlaying.hasRenderedFrame,
   );
-  const modelModal = useModal("moonshine-model-download");
-
   const [searchQuery, setSearchQuery] = useState("");
   const [delayInput, setDelayInput] = useState("");
   const [isDelayFocused, setIsDelayFocused] = useState(false);
   const [isAtTop, setIsAtTop] = useState(true);
   const [isAtBottom, setIsAtBottom] = useState(false);
-  const [modelRequest, setModelRequest] = useState<{
-    entry: MoonshineModelEntry;
-    downloading: boolean;
-  } | null>(null);
   const carouselRef = useRef<HTMLDivElement>(null!);
-  const modelResolverRef = useRef<((accepted: boolean) => void) | null>(null);
-  const modelAbortRef = useRef<AbortController | null>(null);
-
-  useEffect(() => {
-    setMoonshineModelPromptHandler(
-      (entry) =>
-        new Promise<boolean>((resolve) => {
-          modelResolverRef.current = resolve;
-          setModelRequest({ entry, downloading: false });
-          modelModal.show();
-        }),
-    );
-    return () => {
-      setMoonshineModelPromptHandler(null);
-      modelAbortRef.current?.abort();
-      modelResolverRef.current?.(false);
-      modelResolverRef.current = null;
-    };
-  }, [modelModal]);
-
-  const resolveModelRequest = (accepted: boolean) => {
-    modelAbortRef.current?.abort();
-    modelAbortRef.current = null;
-    modelResolverRef.current?.(accepted);
-    modelResolverRef.current = null;
-    setModelRequest(null);
-    modelModal.hide();
-  };
-
-  const handleModelDownload = async () => {
-    if (!modelRequest || modelRequest.downloading) return;
-    const controller = new AbortController();
-    modelAbortRef.current = controller;
-    setModelRequest((current) =>
-      current ? { ...current, downloading: true } : current,
-    );
-    try {
-      await downloadMoonshineModel(modelRequest.entry, controller.signal);
-      resolveModelRequest(true);
-    } catch {
-      resolveModelRequest(false);
-    }
-  };
 
   const displayDelay = isDelayFocused ? delayInput : delay.toFixed(2);
 
@@ -334,36 +278,6 @@ export function TranscriptView({
         </span>
       </Menu.BackLink>
       <Menu.Section>
-        <Modal id={modelModal.id}>
-          <ModalCard className="!max-w-md">
-            <div className="space-y-5">
-              <div>
-                <h3 className="text-lg font-semibold text-white">
-                  Tải model {modelRequest?.entry.language.toUpperCase()}?
-                </h3>
-                <p className="mt-1 text-sm text-video-context-type-secondary">
-                  Model được lưu trong thiết bị để đồng bộ phụ đề local.
-                </p>
-              </div>
-              <div className="flex justify-end gap-2">
-                <Button
-                  theme="secondary"
-                  onClick={() => resolveModelRequest(false)}
-                >
-                  {t("actions.cancel", "Hủy")}
-                </Button>
-                <Button
-                  theme="purple"
-                  disabled={modelRequest?.downloading === true}
-                  onClick={() => void handleModelDownload()}
-                >
-                  {modelRequest?.downloading ? "Đang tải..." : "Tải model"}
-                </Button>
-              </div>
-            </div>
-          </ModalCard>
-        </Modal>
-
         {isDualSubEnabled && (
           <div
             className="mb-3 grid grid-cols-2 gap-1 rounded-xl bg-white/[0.06] p-1"
