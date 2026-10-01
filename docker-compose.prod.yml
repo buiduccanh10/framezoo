@@ -26,34 +26,22 @@ services:
     volumes:
       - redis-data:/data
 
-  moonshine-service:
+  sync-service:
     build:
       context: .
-      dockerfile: moonshine-service/Dockerfile
+      dockerfile: sync-service/Dockerfile
     restart: always
     expose:
       - "8000"
-    volumes:
-      - moonshine-cache:/root/.cache
     environment:
-      MOONSHINE_LANGUAGE: ${MOONSHINE_LANGUAGE:-en}
-      MOONSHINE_MODEL_ARCH: ${MOONSHINE_MODEL_ARCH:-tiny}
-      MOONSHINE_INTERNAL_TOKEN: ${INTERNAL_API_TOKEN:-}
-      MAX_CONCURRENT_INFERENCES: ${MAX_CONCURRENT_INFERENCES:-2}
-      INFERENCE_TIMEOUT_SEC: ${INFERENCE_TIMEOUT_SEC:-60.0}
-      CONCURRENCY_TIMEOUT_SEC: ${CONCURRENCY_TIMEOUT_SEC:-15.0}
-      RATE_LIMIT_BURST: ${RATE_LIMIT_BURST:-6}
+      SYNC_INTERNAL_TOKEN: ${INTERNAL_API_TOKEN:-}
+      MAX_CONCURRENT_INFERENCES: ${MAX_CONCURRENT_INFERENCES:-4}
+      INFERENCE_TIMEOUT_SEC: ${INFERENCE_TIMEOUT_SEC:-30.0}
+      CONCURRENCY_TIMEOUT_SEC: ${CONCURRENCY_TIMEOUT_SEC:-10.0}
+      RATE_LIMIT_BURST: ${RATE_LIMIT_BURST:-10}
       RATE_LIMIT_BURST_PERIOD: ${RATE_LIMIT_BURST_PERIOD:-10}
-      RATE_LIMIT_SUSTAINED: ${RATE_LIMIT_SUSTAINED:-20}
+      RATE_LIMIT_SUSTAINED: ${RATE_LIMIT_SUSTAINED:-60}
       RATE_LIMIT_SUSTAINED_PERIOD: ${RATE_LIMIT_SUSTAINED_PERIOD:-60}
-    deploy:
-      resources:
-        limits:
-          cpus: '2.0'
-          memory: 2048M
-        reservations:
-          cpus: '0.5'
-          memory: 512M
     healthcheck:
       test:
         [
@@ -65,7 +53,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 12
-      start_period: 30s
+      start_period: 10s
     networks:
       - framezoo-prod-network
 
@@ -86,8 +74,8 @@ services:
       CAPTCHA_CLIENT_KEY: ${CAPTCHA_CLIENT_KEY}
       NODE_ENV: ${NODE_ENV:-production}
       REDIS_URL: ${REDIS_URL:-redis://redis:6379}
-      MOONSHINE_SERVICE_URL: http://moonshine-service:8000
-      MOONSHINE_TIMEOUT_MS: ${MOONSHINE_TIMEOUT_MS:-300000}
+      SYNC_SERVICE_URL: http://sync-service:8000
+      SYNC_TIMEOUT_MS: ${SYNC_TIMEOUT_MS:-300000}
       WYZIE_API_KEY: ${WYZIE_API_KEY:-}
       SUBSOURCE_API_KEY: ${SUBSOURCE_API_KEY:-}
       PROXY_REQUIRE_UPSTREAM_ALLOWLIST: "true"
@@ -108,7 +96,7 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
-      moonshine-service:
+      sync-service:
         condition: service_healthy
     networks:
       - framezoo-prod-network
@@ -181,6 +169,3 @@ volumes:
   redis-data:
     external: ${EXTERNAL_LEGACY_VOLUMES:-false}
     name: framezoo_backend_redis-data
-  moonshine-cache:
-    external: ${EXTERNAL_LEGACY_VOLUMES:-false}
-    name: framezoo_backend_moonshine-cache

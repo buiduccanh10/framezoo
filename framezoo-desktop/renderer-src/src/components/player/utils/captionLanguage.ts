@@ -18,8 +18,64 @@ function sanitizeLanguageLabel(value: string): string {
     .trim();
 }
 
+const SUBTITLE_EXT_RE = /\.(?:srt|vtt|sub|ass|ssa|idx|smi|txt)$/i;
+const MEDIA_FILENAME_HINT_RE =
+  /\b(?:1080p|720p|480p|2160p|4k|bluray|web-?dl|telesync|cam|x264|x265|hevc|aac\d?|dts)\b/i;
+
+function isLikelyFilename(value: string): boolean {
+  return SUBTITLE_EXT_RE.test(value) || MEDIA_FILENAME_HINT_RE.test(value);
+}
+
+const SUBTITLE_EXTS = new Set([
+  "srt",
+  "vtt",
+  "sub",
+  "ass",
+  "ssa",
+  "idx",
+  "smi",
+  "txt",
+]);
+
+function extractLanguageFromFilename(filename: string): string | null {
+  // Extract trailing language code before extension, e.g. .es1.srt, .zh-tw.srt, .en.srt, -eh.a.es1.srt
+  const match = filename.match(
+    /[._-]([a-z]{2,3}(?:-[a-z]{2,4})?)(?:\d+)?\.(?:srt|vtt|sub|ass|ssa|idx|smi|txt)$/i,
+  );
+  if (match) {
+    const candidate = match[1].toLowerCase();
+    if (!SUBTITLE_EXTS.has(candidate)) return candidate;
+  }
+  // Trailing language code without extension, e.g. .zh-tw, .en, .es (only if filename does not have subtitle extension)
+  if (!SUBTITLE_EXT_RE.test(filename)) {
+    const endMatch = filename.match(
+      /[._-]([a-z]{2,3}(?:-[a-z]{2,4})?)(?:\d+)?$/i,
+    );
+    if (endMatch) {
+      const candidate = endMatch[1].toLowerCase();
+      if (!SUBTITLE_EXTS.has(candidate)) return candidate;
+    }
+  }
+  // Bracketed/parenthesized language tag, e.g. [es], (spa)
+  const bracketMatch = filename.match(
+    /[\[(]([a-z]{2,3}(?:-[a-z]{2,4})?)[\])]/i,
+  );
+  if (bracketMatch) {
+    const candidate = bracketMatch[1].toLowerCase();
+    if (!SUBTITLE_EXTS.has(candidate)) return candidate;
+  }
+  return null;
+}
+
 export function canonicalizeLanguageCode(value: string): string {
-  const resolved = labelToLanguageCode(value);
+  let target = value;
+  if (isLikelyFilename(value)) {
+    const extracted = extractLanguageFromFilename(value);
+    if (!extracted) return "unknown";
+    target = extracted;
+  }
+
+  const resolved = labelToLanguageCode(target);
   if (!resolved) return "unknown";
 
   const normalized = sanitizeLanguageLabel(resolved);

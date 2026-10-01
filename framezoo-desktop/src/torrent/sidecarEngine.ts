@@ -89,15 +89,44 @@ export class SidecarTorrentEngine implements TorrentEngine {
   async stop(sessionId: string) {
     try {
       if (this.process) {
-        await this.send({
-          type: "stop",
-          requestId: randomUUID(),
-          sessionId,
-        });
+        await this.send(
+          {
+            type: "stop",
+            requestId: randomUUID(),
+            sessionId,
+          },
+          5_000,
+        );
       }
+    } catch (error) {
+      console.warn("[torrent] sidecar stop failed:", error);
     } finally {
       this.listeners.delete(sessionId);
       this.statuses.delete(sessionId);
+    }
+  }
+
+  async stopAll(): Promise<void> {
+    const sessions = Array.from(this.statuses.keys());
+    try {
+      if (this.process?.stdin.writable) {
+        await this.send(
+          {
+            type: "stop_all",
+            requestId: randomUUID(),
+          },
+          5_000,
+        );
+      }
+    } catch (error) {
+      console.warn(
+        "[torrent] sidecar stop_all failed, falling back to per-session stop:",
+        error,
+      );
+      await Promise.allSettled(sessions.map((id) => this.stop(id)));
+    } finally {
+      this.listeners.clear();
+      this.statuses.clear();
     }
   }
 
@@ -123,7 +152,12 @@ export class SidecarTorrentEngine implements TorrentEngine {
           proc.kill();
         }
       } else {
-        proc.kill();
+        proc.kill("SIGTERM");
+        setTimeout(() => {
+          try {
+            if (proc.pid) proc.kill("SIGKILL");
+          } catch {}
+        }, 1500).unref();
       }
     }
   }
@@ -230,7 +264,7 @@ export class SidecarTorrentEngine implements TorrentEngine {
     });
   }
 
-  private send(message: Record<string, unknown>) {
+  private send(message: Record<string, unknown>, timeoutMs = 180_000) {
     if (!this.process?.stdin.writable) {
       return Promise.reject(new Error("torrent sidecar is not running"));
     }
@@ -239,8 +273,12 @@ export class SidecarTorrentEngine implements TorrentEngine {
     return new Promise<SidecarResponse>((resolve, reject) => {
       const timer = setTimeout(() => {
         this.pending.delete(requestId);
-        reject(new Error("torrent sidecar request timed out"));
-      }, 180_000);
+        reject(
+          new Error(
+            `torrent sidecar request (${String(message.type)}) timed out after ${timeoutMs}ms`,
+          ),
+        );
+      }, timeoutMs);
       this.pending.set(requestId, { resolve, reject, timer });
       this.process?.stdin.write(`${JSON.stringify(message)}\n`);
     });

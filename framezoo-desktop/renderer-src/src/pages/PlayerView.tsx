@@ -6,6 +6,7 @@ import { usePlayer } from "@/components/player/hooks/usePlayer";
 import { usePlayerMeta } from "@/components/player/hooks/usePlayerMeta";
 import {
   clearTorrentSession,
+  stopTorrentSession,
   useActiveTorrentStatus,
 } from "@/desktop/torrentPlaybackStore";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
@@ -101,6 +102,7 @@ export function RealPlayerView() {
   useEffect(() => {
     return () => {
       reset();
+      void stopTorrentSession();
     };
   }, [reset]);
 

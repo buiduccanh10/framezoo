@@ -62,8 +62,19 @@ export class TorrentManager {
   }
 
   async stopAll() {
+    if (typeof this.engine.stopAll === "function") {
+      try {
+        await this.engine.stopAll();
+      } catch (error) {
+        console.warn("[torrent] engine.stopAll failed:", error);
+      } finally {
+        this.statuses.clear();
+      }
+      return;
+    }
     const sessions = Array.from(this.statuses.keys());
     await Promise.allSettled(sessions.map((id) => this.stop(id)));
+    this.statuses.clear();
   }
 
   getStatus(sessionId: string) {

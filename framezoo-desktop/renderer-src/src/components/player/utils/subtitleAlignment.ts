@@ -1,20 +1,12 @@
-import { mwFetch } from "@/backend/helpers/fetch";
-import {
-  MoonshineLanguageUnavailableError,
-  MoonshineModelCancelledError,
-  decodeMoonshineWav,
-  disableMoonshineForSession,
-  ensureMoonshineModel,
-  transcribeMoonshine,
-} from "@/moonshine/runtime";
-import { conf } from "@/setup/config";
-
 import { extractAudioWindow } from "./audioCapture";
 import {
   SubtitleTimingSegment,
   shiftVttPiecewiseTimestamps,
   shiftVttTimestamps,
 } from "./captions";
+import { mwFetch } from "../../../backend/helpers/fetch";
+import { conf } from "../../../setup/config";
+import { alignWindowsLocal } from "../../../sync/aligner";
 
 export const SUBTITLE_ALIGNMENT_AUDIO_WINDOW_SECONDS = 60;
 export const SUBTITLE_ALIGNMENT_MAX_WINDOWS = 6;
@@ -146,8 +138,7 @@ function appendAudio(body: FormData, audio: Uint8Array, index: number) {
 function isAbortError(error: unknown, signal?: AbortSignal) {
   return (
     signal?.aborted === true ||
-    (error instanceof DOMException && error.name === "AbortError") ||
-    error instanceof MoonshineModelCancelledError
+    (error instanceof DOMException && error.name === "AbortError")
   );
 }
 
@@ -312,26 +303,6 @@ export async function alignSubtitlesWithCurrentStream(options: {
   const windowStartsMs: number[] = [];
   const windowDurationsMs: number[] = [];
 
-  let localSpeechIntervals: Array<
-    Array<{ startMs: number; endMs: number }>
-  > | null = null;
-  let localEntry: any = null;
-  try {
-    localEntry = await ensureMoonshineModel(options.language || "en");
-    if (localEntry) {
-      localSpeechIntervals = [];
-    }
-  } catch (error) {
-    if (isAbortError(error, options.signal)) throw error;
-    if (!(error instanceof MoonshineLanguageUnavailableError)) {
-      disableMoonshineForSession();
-    }
-    console.warn("[subtitle-align] local Moonshine failed; using server", {
-      language: options.language,
-      error,
-    });
-  }
-
   const capturedAudio = new Array<Uint8Array>(windowPlan.length);
   const captureAbortController = new AbortController();
   const abortCaptures = () => {
@@ -344,7 +315,7 @@ export async function alignSubtitlesWithCurrentStream(options: {
   let completedCaptures = 0;
   let nextCaptureIndex = options.isTorrent ? 1 : 0;
   const processWindow = async (index: number) => {
-    const plan = windowPlan[index];
+    const plan = windowPlan[index]!;
     const audio = await captureCurrentStreamAudio({
       ...options,
       startAt: plan.startAt,
@@ -405,28 +376,7 @@ export async function alignSubtitlesWithCurrentStream(options: {
     .sort((left, right) => left.plan.startAt - right.plan.startAt);
   for (const [processedIndex, { index, plan }] of timelineWindows.entries()) {
     const audio = capturedAudio[index];
-
-    if (localEntry && localSpeechIntervals) {
-      const decoded = decodeMoonshineWav(audio);
-      const localIntervals = await transcribeMoonshine(
-        localEntry,
-        audio,
-        options.signal,
-      );
-
-      if (localIntervals.length > 0) {
-        const startMs = Math.round(plan.startAt * 1000);
-        capturedWindows.push({ audio, startMs });
-        windowStartsMs.push(startMs);
-        windowDurationsMs.push(Math.round(decoded.durationMs));
-        localSpeechIntervals.push(
-          localIntervals.map(({ startMs: s, endMs: e }) => ({
-            startMs: startMs + s,
-            endMs: startMs + e,
-          })),
-        );
-      }
-    } else {
+    if (audio) {
       capturedWindows.push({
         audio,
         startMs: Math.round(plan.startAt * 1000),
@@ -445,7 +395,54 @@ export async function alignSubtitlesWithCurrentStream(options: {
     throw new Error("Failed to capture any valid audio windows for alignment");
   }
 
-  // Keep every captured window: one local match cannot detect intro cuts or drift.
+  // 1. Try 100% on-device local VAD + FFT + Split alignment first!
+  try {
+    const localBatchResults: Partial<
+      Record<SubtitleAlignmentTrack, SubtitleAlignmentResponse>
+    > = {};
+    for (const subtitle of options.subtitles) {
+      const localRes = await alignWindowsLocal({
+        windows: capturedWindows.map((w) => ({
+          audioWav: w.audio,
+          startMs: w.startMs,
+        })),
+        vttData: subtitle.vttData,
+      });
+      if (localRes.aligned) {
+        localBatchResults[subtitle.track] = {
+          aligned: true,
+          offsetMs: localRes.offsetMs,
+          confidence: localRes.confidence,
+          speechIntervals: localRes.speechIntervals,
+          segments: localRes.segments,
+          reason: null,
+        };
+      }
+    }
+
+    if (
+      options.subtitles.length > 0 &&
+      options.subtitles.every((s) => localBatchResults[s.track]?.aligned)
+    ) {
+      logSyncTelemetry("alignment_complete_local_on_device", {
+        windowCount: capturedWindows.length,
+        confidence: Object.values(localBatchResults).map((r) => r?.confidence),
+      });
+      options.onProgress?.(1, "analyzing");
+      return { results: localBatchResults };
+    }
+    console.warn(
+      "[subtitle-align] local on-device VAD+FFT produced low confidence / no speech; falling back to server",
+      localBatchResults,
+    );
+  } catch (localError) {
+    console.warn(
+      "[subtitle-align] local on-device VAD+FFT sync skipped/failed; falling back to server",
+      localError,
+    );
+  }
+
+  // 2. Fallback to server sync-service
   const body = new FormData();
   body.append(
     "subtitles",
@@ -460,12 +457,8 @@ export async function alignSubtitlesWithCurrentStream(options: {
   body.append("windowStartsMs", JSON.stringify(windowStartsMs));
   body.append("windowDurationsMs", JSON.stringify(windowDurationsMs));
 
-  if (localSpeechIntervals) {
-    body.append("speechIntervals", JSON.stringify(localSpeechIntervals));
-  } else {
-    for (const [index, window] of capturedWindows.entries()) {
-      appendAudio(body, window.audio, index);
-    }
+  for (const [index, window] of capturedWindows.entries()) {
+    appendAudio(body, window.audio, index);
   }
 
   const response = await mwFetch<SubtitleAlignmentBatchResponse>(

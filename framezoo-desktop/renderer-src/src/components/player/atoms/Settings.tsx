@@ -69,6 +69,7 @@ function SettingsOverlay({ id }: { id: string }) {
   );
   const playbackHeight = Math.min(330, maxOverlayHeight);
   const skipSegmentsHeight = Math.min(446, maxOverlayHeight);
+  const syncSubtitleHeight = Math.min(270, maxOverlayHeight);
 
   // reset source id and language when going to home or closing overlay
   useEffect(() => {
@@ -258,11 +259,12 @@ function SettingsOverlay({ id }: { id: string }) {
           id={id}
           path="/captions/transcript/sync"
           width={wideWidth}
-          height={transcriptHeight}
+          height={syncSubtitleHeight}
+          autoHeight
         >
-          <Menu.CardWithScrollable scrollLastChild>
+          <div className="px-6 pb-5 flex flex-col">
             <SyncSubtitleView id={id} selectionMode={subtitleSelectionMode} />
-          </Menu.CardWithScrollable>
+          </div>
         </OverlayPage>
         <OverlayPage
           id={id}

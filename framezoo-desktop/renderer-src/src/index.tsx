@@ -51,7 +51,6 @@ import {
   isExtensionActiveCached,
 } from "./backend/extension/messaging";
 import type { NativeStartupWarmupState } from "./desktop/electron";
-import { preloadMoonshineModels } from "./moonshine/runtime";
 import { initializeChromecast } from "./setup/chromecast";
 import { initializeImageFadeIn } from "./setup/imageFadeIn";
 import { initializeOldStores } from "./stores/__old/migrations";
@@ -116,41 +115,23 @@ function NativeStartupGate(props: { children: ReactNode }) {
             torrent: { status: "ready" as const },
             libmpv: { status: "ready" as const },
           });
-    const moonshinePromise = preloadMoonshineModels();
     const timeoutPromise = new Promise<never>((_, reject) =>
       setTimeout(() => reject(new Error("Startup warmup timed out")), 60_000),
     );
 
-    void Promise.race([
-      Promise.all([nativePromise, moonshinePromise]),
-      timeoutPromise,
-    ])
-      .then(([native, moonshine]) => {
+    void Promise.race([nativePromise, timeoutPromise])
+      .then((native) => {
         publish({
-          status:
-            native.status === "degraded" || moonshine.status === "degraded"
-              ? "degraded"
-              : "ready",
+          status: native.status === "degraded" ? "degraded" : "ready",
           torrent: native.torrent,
           libmpv: native.libmpv,
-          moonshine:
-            moonshine.status === "degraded"
-              ? {
-                  status: "error",
-                  message: moonshine.message ?? "Moonshine startup degraded",
-                }
-              : { status: "ready" },
         });
       })
-      .catch((error) => {
+      .catch((_error) => {
         publish({
           status: "degraded",
           torrent: { status: "error", message: "Native warmup failed" },
           libmpv: { status: "error", message: "Native warmup failed" },
-          moonshine: {
-            status: "error",
-            message: error instanceof Error ? error.message : String(error),
-          },
         });
       });
 

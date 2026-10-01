@@ -69,6 +69,9 @@ function isHtmlResponse(data: string, contentType?: string): boolean {
   );
 }
 
+const inFlightDownloads = new Map<string, Promise<string>>();
+const FETCH_TIMEOUT_MS = 10_000;
+
 /**
  * Always returns canonical WebVTT.
  */
@@ -78,64 +81,91 @@ export async function downloadCaptionAsVtt(
   const cached = downloadCache.get(caption.url);
   if (cached) return cached;
 
-  let data: string | undefined;
-  if (caption.needsProxy) {
-    if (isExtensionActiveCached()) {
-      const extensionResponse = await sendExtensionRequest({
-        url: caption.url,
-        method: "GET",
-      });
-      if (
-        !extensionResponse?.success ||
-        typeof extensionResponse.response.body !== "string"
-      ) {
-        throw new Error("failed to get caption data from extension");
+  const inFlight = inFlightDownloads.get(caption.url);
+  if (inFlight) return inFlight;
+
+  const promise = (async () => {
+    let data: string | undefined;
+    if (caption.needsProxy) {
+      if (isExtensionActiveCached()) {
+        const extensionResponse = await sendExtensionRequest({
+          url: caption.url,
+          method: "GET",
+        });
+        if (
+          !extensionResponse?.success ||
+          typeof extensionResponse.response.body !== "string"
+        ) {
+          throw new Error("failed to get caption data from extension");
+        }
+
+        data = extensionResponse.response.body;
+      } else {
+        data = await proxiedFetch<string>(caption.url, {
+          responseType: "text",
+          headers: {
+            "Accept-Charset": "utf-8",
+          },
+        });
+      }
+    } else {
+      const authHeaders = await getBackendAuthHeadersAsync(caption.url);
+      const abortController = new AbortController();
+      const timeoutId = setTimeout(
+        () => abortController.abort(),
+        FETCH_TIMEOUT_MS,
+      );
+      let response: Response;
+      try {
+        response = await fetch(caption.url, {
+          headers: authHeaders,
+          signal: abortController.signal,
+        });
+      } finally {
+        clearTimeout(timeoutId);
       }
 
-      data = extensionResponse.response.body;
-    } else {
-      data = await proxiedFetch<string>(caption.url, {
-        responseType: "text",
-        headers: {
-          "Accept-Charset": "utf-8",
-        },
-      });
-    }
-  } else {
-    const authHeaders = await getBackendAuthHeadersAsync(caption.url);
-    const response = await fetch(caption.url, {
-      headers: authHeaders,
-    });
-    if (!response.ok) {
-      throw new Error(
-        `Caption request failed: ${response.status} ${response.statusText}`,
-      );
-    }
-    const contentType = response.headers.get("content-type") || "";
+      if (!response.ok) {
+        throw new Error(
+          `Caption request failed: ${response.status} ${response.statusText}`,
+        );
+      }
+      const contentType = response.headers.get("content-type") || "";
 
-    // Get the raw bytes
-    const buffer = await response.arrayBuffer();
-    if (contentType.includes("application/zip") || isZipArchive(buffer)) {
-      data = extractSubtitleTextFromZip(buffer, caption.language) ?? undefined;
-    }
+      // Get the raw bytes
+      const buffer = await response.arrayBuffer();
+      if (contentType.includes("application/zip") || isZipArchive(buffer)) {
+        data =
+          extractSubtitleTextFromZip(buffer, caption.language) ?? undefined;
+      }
 
-    if (!data) {
-      data = decodeSubtitleBytes(buffer, caption.language);
-    }
+      if (!data) {
+        data = decodeSubtitleBytes(buffer, caption.language);
+      }
 
-    if (data && isHtmlResponse(data, contentType)) {
+      if (data && isHtmlResponse(data, contentType)) {
+        throw new Error(
+          "Subtitle source returned HTML instead of subtitle data",
+        );
+      }
+    }
+    if (!data) throw new Error("failed to get caption data");
+
+    if (isHtmlResponse(data)) {
       throw new Error("Subtitle source returned HTML instead of subtitle data");
     }
-  }
-  if (!data) throw new Error("failed to get caption data");
 
-  if (isHtmlResponse(data)) {
-    throw new Error("Subtitle source returned HTML instead of subtitle data");
-  }
+    const output = normalizeSubtitleToVtt(data, caption.type);
+    downloadCache.set(caption.url, output, expirySeconds);
+    return output;
+  })();
 
-  const output = normalizeSubtitleToVtt(data, caption.type);
-  downloadCache.set(caption.url, output, expirySeconds);
-  return output;
+  inFlightDownloads.set(caption.url, promise);
+  try {
+    return await promise;
+  } finally {
+    inFlightDownloads.delete(caption.url);
+  }
 }
 
 /**
@@ -146,6 +176,32 @@ export async function downloadWebVTT(url: string): Promise<string> {
   const cached = downloadCache.get(url);
   if (cached) return cached;
 
-  const buffer = await fetch(url).then((v) => v.arrayBuffer());
-  return decodeSubtitleBytes(buffer);
+  const inFlight = inFlightDownloads.get(url);
+  if (inFlight) return inFlight;
+
+  const promise = (async () => {
+    const abortController = new AbortController();
+    const timeoutId = setTimeout(
+      () => abortController.abort(),
+      FETCH_TIMEOUT_MS,
+    );
+    let buffer: ArrayBuffer;
+    try {
+      buffer = await fetch(url, {
+        signal: abortController.signal,
+      }).then((v) => v.arrayBuffer());
+    } finally {
+      clearTimeout(timeoutId);
+    }
+    const decoded = decodeSubtitleBytes(buffer);
+    downloadCache.set(url, decoded, expirySeconds);
+    return decoded;
+  })();
+
+  inFlightDownloads.set(url, promise);
+  try {
+    return await promise;
+  } finally {
+    inFlightDownloads.delete(url);
+  }
 }

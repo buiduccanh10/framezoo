@@ -59,4 +59,27 @@ describe("caption language normalization", () => {
       ]),
     ).toBeNull();
   });
+
+  it("safely handles release filenames without logging errors or crashing", () => {
+    expect(
+      getCaptionLanguageGroupKey({
+        language: "",
+        display: "the.odyssey.2026.1080p.cam.x264-onlyflix-eh.a.es1.srt",
+      }),
+    ).toBe("es");
+
+    expect(
+      getCaptionLanguageGroupKey({
+        language: "",
+        display: "the.odyssey.2026.1080p.cam.x264-onlyflix.zh-tw",
+      }),
+    ).toBe("zh");
+
+    expect(
+      getCaptionLanguageGroupKey({
+        language: "",
+        display: "the.odyssey.2026.1080p.telesync.hevc.aac2.0-splice.srt",
+      }),
+    ).toBe("unknown");
+  });
 });
