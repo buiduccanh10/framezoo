@@ -41,6 +41,8 @@ const LANGUAGE_CHUNKS = [
   'sr,hr',
   'bg,et',
 ];
+const MAX_PROVIDER_REQUESTS = 32;
+const MAX_CONCURRENT_REQUESTS = 6;
 
 export async function fetchWyzieSubtitles(
   context: SubtitleSearchContext,
@@ -96,11 +98,14 @@ export async function fetchWyzieSubtitles(
     }
   }
 
-  const uniqueUrls = Array.from(new Set(searchUrls));
+  const uniqueUrls = Array.from(new Set(searchUrls)).slice(0, MAX_PROVIDER_REQUESTS);
 
   try {
-    const responses = await Promise.allSettled(
-      uniqueUrls.map(async url => {
+    const responses: PromiseSettledResult<WyzieRawSubtitle[]>[] = [];
+    for (let index = 0; index < uniqueUrls.length; index += MAX_CONCURRENT_REQUESTS) {
+      responses.push(
+        ...(await Promise.allSettled(
+          uniqueUrls.slice(index, index + MAX_CONCURRENT_REQUESTS).map(async url => {
         const response = await fetch(url, {
           signal: AbortSignal.timeout(8_000),
           headers: {
@@ -128,8 +133,10 @@ export async function fetchWyzieSubtitles(
         }
 
         return items;
-      })
-    );
+          })
+        ))
+      );
+    }
 
     const subtitles: StremioSubtitle[] = [];
     const seen = new Set<string>();

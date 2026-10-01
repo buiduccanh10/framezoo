@@ -1,7 +1,12 @@
 import { defineEventHandler, getQuery, readBody, createError } from 'h3';
 import { runTask } from '#imports';
+import { isValidInternalApiRequest } from '~/utils/internalApi';
 
 export default defineEventHandler(async (event) => {
+  if (!isValidInternalApiRequest(event)) {
+    throw createError({ statusCode: 403, statusMessage: 'Forbidden' });
+  }
+
   // Get job name from query parameters
   const query = getQuery(event);
   const jobName = query.job as string;
@@ -30,4 +35,4 @@ export default defineEventHandler(async (event) => {
       statusMessage: `Failed to run job: ${error.message || 'Unknown error'}`
     });
   }
-}); 
+});

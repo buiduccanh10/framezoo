@@ -1,34 +1,56 @@
 name: shared-nginx-proxy
 
 services:
+  docker-socket-proxy:
+    image: tecnativa/docker-socket-proxy:0.3.0@sha256:9e4b9e7517a6b660f2cc903a19b257b1852d5b3344794e3ea334ff00ae677ac2
+    container_name: nginx-proxy-docker-socket
+    environment:
+      CONTAINERS: 1
+      EVENTS: 1
+      INFO: 1
+      NETWORKS: 1
+      SERVICES: 1
+      VOLUMES: 1
+      POST: 0
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - proxy_network
+    read_only: true
+    tmpfs:
+      - /run
+    restart: unless-stopped
+
   nginx-proxy:
-    image: nginxproxy/nginx-proxy:1.11
+    image: nginxproxy/nginx-proxy:1.11@sha256:dd78565eca9742624655bb743723e0aeeab552153c4eea01095e4266c59150d5
     container_name: nginx-proxy
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro
       - nginx_certs:/etc/nginx/certs:ro
       - nginx_vhost:/etc/nginx/vhost.d:ro
       - nginx_html:/usr/share/nginx/html:ro
     networks:
       - proxy_network
+    environment:
+      DOCKER_HOST: tcp://docker-socket-proxy:2375
     dns:
       - 1.1.1.1
       - 8.8.8.8
     restart: unless-stopped
 
   nginx-proxy-acme:
-    image: nginxproxy/acme-companion:2.8.2
+    image: nginxproxy/acme-companion:2.8.2@sha256:e3c5fb08bf623ae93dbc945d78fe50040c1fa107ddf59f7ee04ba6a61f34cbc1
     container_name: nginx-proxy-acme
     depends_on:
       - nginx-proxy
+      - docker-socket-proxy
     environment:
       DEFAULT_EMAIL: ${ACME_DEFAULT_EMAIL:?ACME_DEFAULT_EMAIL is required}
       NGINX_PROXY_CONTAINER: nginx-proxy
+      DOCKER_HOST: tcp://docker-socket-proxy:2375
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
       - nginx_certs:/etc/nginx/certs
       - nginx_vhost:/etc/nginx/vhost.d
       - nginx_html:/usr/share/nginx/html

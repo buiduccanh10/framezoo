@@ -9,6 +9,7 @@ variables:
 # Required CI/CD variables (GitLab > Settings > CI/CD > Variables):
 # - VPS_HOST: SSH host of your VPS
 # - VPS_SSH_KEY: private SSH key for deployment user
+# - VPS_KNOWN_HOSTS: verified SSH known_hosts entry for the deployment host
 # - ENV_FILE: full monorepo .env file content (frontend + backend, multiline)
 # Optional:
 # - VPS_PORT: SSH port (default: 22)
@@ -23,7 +24,9 @@ variables:
     - chmod 700 ~/.ssh
     - eval "$(ssh-agent -s)"
     - echo "$VPS_SSH_KEY" | tr -d '\r' | ssh-add -
-    - ssh-keyscan -p "${VPS_PORT:-22}" "$VPS_HOST" >> ~/.ssh/known_hosts
+    - test -n "${VPS_KNOWN_HOSTS:-}" || (echo "VPS_KNOWN_HOSTS is required" && exit 1)
+    - printf '%s\n' "$VPS_KNOWN_HOSTS" > ~/.ssh/known_hosts
+    - ssh-keygen -F "$VPS_HOST" -f ~/.ssh/known_hosts >/dev/null || ssh-keygen -F "[$VPS_HOST]:${VPS_PORT:-22}" -f ~/.ssh/known_hosts >/dev/null
 
 audit:framezoo:
   stage: audit
@@ -68,9 +71,9 @@ deploy:framezoo:
       DEPLOY_PROJECT_NAME="${DEPLOY_PROJECT_NAME:-framezoo}"
 
       echo "Syncing monorepo on VPS (${DEPLOY_PATH})..."
-      ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" \
+      ssh -o StrictHostKeyChecking=yes -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" \
         "set -eu; cd '${DEPLOY_PATH}'; [ -d .git ] || { echo 'Git repository not found at ${DEPLOY_PATH}'; exit 1; }; if [ ! -w .git ]; then echo 'No write permission on .git, trying sudo chown...'; sudo -n chown -R \$(id -un):\$(id -gn) . || { echo 'Cannot write .git and sudo is unavailable. Run once on VPS: sudo chown -R ${DEPLOY_USER}:${DEPLOY_USER} ${DEPLOY_PATH}'; exit 1; }; fi; CURRENT_URL=\$(git remote get-url origin 2>/dev/null || echo ''); case \"\$CURRENT_URL\" in https://gitlab.com/*) echo 'Converting GitLab HTTPS origin to SSH...'; NEW_URL=\$(echo \"\$CURRENT_URL\" | sed 's|^https://gitlab.com/|git@gitlab.com:|'); git remote set-url origin \"\$NEW_URL\"; ;; https://github.com/*) echo 'Converting GitHub HTTPS origin to SSH...'; NEW_URL=\$(echo \"\$CURRENT_URL\" | sed 's|^https://github.com/|git@github.com:|'); git remote set-url origin \"\$NEW_URL\"; ;; esac; git fetch origin '${DEPLOY_BRANCH}'; (git checkout '${DEPLOY_BRANCH}' || git checkout -b '${DEPLOY_BRANCH}' 'origin/${DEPLOY_BRANCH}'); git pull --ff-only origin '${DEPLOY_BRANCH}'; git clean -fd; [ -f scripts/deploy.sh ] || { echo 'scripts/deploy.sh not found at ${DEPLOY_PATH}'; exit 1; }; [ -f docker-compose.prod.yml ] || { echo 'docker-compose.prod.yml not found at ${DEPLOY_PATH}'; exit 1; }; chmod +x scripts/deploy.sh"
 
       echo "Building prod stack from ${DEPLOY_PATH}..."
-      printf '%s' "$ENV_FILE" | ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" \
+      printf '%s' "$ENV_FILE" | ssh -o StrictHostKeyChecking=yes -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" \
         "set -eu; ENV_TMP=\$(mktemp /tmp/${CI_PROJECT_NAME}_env.XXXXXX); trap 'rm -f \"\$ENV_TMP\"' EXIT; cat > \"\$ENV_TMP\"; chmod 600 \"\$ENV_TMP\"; cd '${DEPLOY_PATH}'; PROJECT_NAME='${DEPLOY_PROJECT_NAME}' COMPOSE_FILE='docker-compose.prod.yml' ENV_FILE_PATH=\"\$ENV_TMP\" ./scripts/deploy.sh all"

@@ -19,6 +19,14 @@ export default defineEventHandler(async event => {
   const userId = event.context.params?.id;
 
   if (event.method === 'GET') {
+    const session = await useAuth().getCurrentSession();
+    if (session.user !== userId) {
+      throw createError({
+        statusCode: 403,
+        message: 'Cannot read other users',
+      });
+    }
+
     const user = await prisma.users.findUnique({
       where: { id: userId },
     });

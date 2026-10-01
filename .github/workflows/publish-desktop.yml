@@ -37,7 +37,7 @@ jobs:
     env:
       TARGET_REF: ${{ github.event.workflow_run.head_sha || inputs.ref || github.ref }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
           ref: ${{ env.TARGET_REF }}
           fetch-depth: 0
@@ -47,7 +47,7 @@ jobs:
         run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
       - name: Detect desktop-related changes
         id: detect
-        uses: actions/github-script@v8
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd
         env:
           CHECKED_OUT_SHA: ${{ steps.resolve.outputs.sha }}
         with:
@@ -230,7 +230,7 @@ jobs:
             arch: arm64
             command: pnpm --filter Framezoo package:release:mac:arm64
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
           ref: ${{ needs.prepare.outputs.checkout_ref }}
       - name: Check macOS signing secrets
@@ -240,18 +240,18 @@ jobs:
         run: |
           set -eu
           if [ -z "${CSC_LINK:-}" ]; then
-            echo "::warning::Thiếu macOS signing secrets (CSC_LINK). Ứng dụng sẽ không được Apple sign/notarize; OTA vẫn dùng manual unzip và ad-hoc codesign."
-          else
-            echo "macOS signing secrets có sẵn."
+            echo "::error::macOS signing secrets (CSC_LINK) are required for release artifacts."
+            exit 1
           fi
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v5
+          echo "macOS signing secrets có sẵn."
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444
         with:
           node-version: 22
           cache: pnpm
           cache-dependency-path: pnpm-lock.yaml
       - name: Set up Python 3.12 for the torrent engine sidecar
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: "3.12"
       - name: Write env file
@@ -362,17 +362,17 @@ jobs:
             command: pnpm --filter Framezoo package:release:win:arm64
             arch: arm64
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
           ref: ${{ needs.prepare.outputs.checkout_ref }}
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v5
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444
         with:
           node-version: 22
           cache: pnpm
           cache-dependency-path: pnpm-lock.yaml
       - name: Set up Python 3.12 for the torrent engine sidecar
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: "3.12"
       - name: Install Node headers for native addon
@@ -423,7 +423,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Cache Windows libmpv SDK
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830
         with:
           path: ./win-mpv-dev-${{ matrix.variant }}
           # Keyed on the fetch script so SDK upgrades invalidate the cache,
@@ -432,8 +432,6 @@ jobs:
           restore-keys: |
             mpv-sdk-${{ matrix.variant }}-
       - name: Setup Windows libmpv SDK
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: node framezoo-desktop/scripts/fetch-windows-libmpv.mjs --target ${{ matrix.variant == 'win-x64' && 'win32-x64' || 'win32-arm64' }} --out ./win-mpv-dev-${{ matrix.variant }}
       - name: Build desktop artifacts
         shell: bash
@@ -575,11 +573,11 @@ jobs:
       - build-windows
     if: needs.prepare.outputs.should_publish == 'true'
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
           ref: ${{ needs.prepare.outputs.checkout_ref }}
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v5
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444
         with:
           node-version: 22
       - name: Install release tooling

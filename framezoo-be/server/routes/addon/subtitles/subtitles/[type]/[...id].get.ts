@@ -37,19 +37,23 @@ export default defineEventHandler(async event => {
   const query = getQuery(event);
   const acceptLanguage = getRequestHeader(event, 'accept-language') || '';
   const preferredLanguages: string[] = [];
+  const addPreferredLanguages = (raw: string) => {
+    for (const value of raw.split(',')) {
+      const language = value.trim().toLowerCase().split(';')[0].split('-')[0];
+      if (!/^[a-z]{2,3}$/.test(language) || preferredLanguages.includes(language)) continue;
+      preferredLanguages.push(language);
+      if (preferredLanguages.length >= 8) break;
+    }
+  };
 
   if (typeof query.language === 'string') {
-    preferredLanguages.push(...query.language.split(',').map(s => s.trim().toLowerCase()));
+    addPreferredLanguages(query.language);
   }
   if (typeof query.languages === 'string') {
-    preferredLanguages.push(...query.languages.split(',').map(s => s.trim().toLowerCase()));
+    addPreferredLanguages(query.languages);
   }
   if (acceptLanguage) {
-    const headerLangs = acceptLanguage
-      .split(',')
-      .map(part => part.split(';')[0].trim().toLowerCase().split('-')[0])
-      .filter(Boolean);
-    preferredLanguages.push(...headerLangs);
+    addPreferredLanguages(acceptLanguage);
   }
 
   const context = await resolveSubtitleContext(type, idStr);

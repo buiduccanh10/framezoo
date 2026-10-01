@@ -25,7 +25,13 @@ export default defineEventHandler(async event => {
     });
   }
 
-  const secret = process.env.CRYPTO_SECRET || 'fallback-secret';
+  const secret = process.env.CRYPTO_SECRET;
+  if (!secret) {
+    throw createError({
+      statusCode: 500,
+      message: 'CRYPTO_SECRET environment variable is not set',
+    });
+  }
 
   // Create token valid for 8 hours
   const token = jwt.sign({ username, role: 'env-admin' }, secret, { expiresIn: '8h' });

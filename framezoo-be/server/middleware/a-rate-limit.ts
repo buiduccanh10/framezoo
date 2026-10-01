@@ -1,4 +1,3 @@
-import jwt from 'jsonwebtoken';
 import Redis from 'ioredis';
 import { isValidInternalApiRequest } from '~/utils/internalApi';
 
@@ -113,25 +112,7 @@ export default defineEventHandler(async event => {
   const ip = getRequestIP(event, { xForwardedFor: trustProxy }) || '127.0.0.1';
   const { scope, windowMs, maxRequests } = getRateLimitConfig(path);
 
-  let identifier = ip;
-  if (scope !== 'auth-guest') {
-    const authHeader = getRequestHeader(event, 'authorization');
-    const bearerToken = authHeader?.startsWith('Bearer ')
-      ? authHeader.slice(7).trim()
-      : null;
-    if (bearerToken) {
-      try {
-        const decoded = jwt.decode(bearerToken) as { gid?: string; sid?: string } | null;
-        if (decoded?.gid) {
-          identifier = `gid:${decoded.gid}`;
-        } else if (decoded?.sid) {
-          identifier = `sid:${decoded.sid}`;
-        }
-      } catch {
-        // Fallback to IP on decode failure
-      }
-    }
-  }
+  const identifier = ip;
 
   const currentBucket = Math.floor(Date.now() / windowMs);
   const cacheKey = `rate-limit:${scope}:${identifier}:${currentBucket}`;
