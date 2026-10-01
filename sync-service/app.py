@@ -261,7 +261,7 @@ def parse_window_durations(
 
 def validate_internal_token(token: str | None) -> None:
     expected_token = (
-        os.getenv("SYNC_INTERNAL_TOKEN", "") or os.getenv("MOONSHINE_INTERNAL_TOKEN", "")
+        os.getenv("SYNC_INTERNAL_TOKEN", "")
     ).strip()
     if expected_token and token != expected_token:
         raise HTTPException(status_code=401, detail="invalid internal token")

@@ -243,9 +243,7 @@ export default defineEventHandler(async event => {
     method: 'POST',
     headers,
     body,
-    signal: AbortSignal.timeout(
-      Number(process.env.SYNC_TIMEOUT_MS || process.env.MOONSHINE_TIMEOUT_MS) || 300_000
-    ),
+    signal: AbortSignal.timeout(Number(process.env.SYNC_TIMEOUT_MS) || 300_000),
   });
 
   if (!response.ok) {
