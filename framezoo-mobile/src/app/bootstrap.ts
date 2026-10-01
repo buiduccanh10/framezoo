@@ -27,12 +27,21 @@ interface PersistedPreferences {
 
 export async function bootstrap() {
   const [auth, backendUrl, preferences] = await Promise.all([
-    mobileStorage.getJson<ReturnType<typeof useAuthStore.getState>>(AUTH_KEY),
+    mobileStorage.getSecureJson<ReturnType<typeof useAuthStore.getState>>(AUTH_KEY),
     mobileStorage.get(BACKEND_KEY),
     mobileStorage.getJson<PersistedPreferences>(PREFERENCES_KEY),
   ]);
 
-  if (auth?.account) useAuthStore.getState().setAccount(auth.account);
+  if (!auth) {
+    const legacyAuth = await mobileStorage.getJson<ReturnType<typeof useAuthStore.getState>>(AUTH_KEY);
+    if (legacyAuth) {
+      await mobileStorage.setSecureJson(AUTH_KEY, legacyAuth);
+      await mobileStorage.remove(AUTH_KEY);
+    }
+  }
+
+  const secureAuth = auth ?? (await mobileStorage.getSecureJson<ReturnType<typeof useAuthStore.getState>>(AUTH_KEY));
+  if (secureAuth?.account) useAuthStore.getState().setAccount(secureAuth.account);
   useAuthStore.getState().setBackendUrl(backendUrl ?? DEFAULT_CONFIG.backendUrl);
   if (preferences) {
     const current = usePreferencesStore.getState();
@@ -65,10 +74,13 @@ export async function bootstrap() {
   useAuthStore.getState().setHydrated(true);
 }
 
-export function persistAuth() {
-  return mobileStorage.setJson(AUTH_KEY, {
-    account: useAuthStore.getState().account,
-  });
+export async function persistAuth(): Promise<void> {
+  const account = useAuthStore.getState().account;
+  if (account) {
+    await mobileStorage.setSecureJson(AUTH_KEY, { account });
+  } else {
+    await mobileStorage.removeSecure(AUTH_KEY);
+  }
 }
 
 export function persistBackendUrl() {

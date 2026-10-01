@@ -5,6 +5,8 @@ import * as path from 'path';
 import { useSupabase } from './supabase';
 
 const execAsync = promisify(exec);
+const MAX_BACKUP_ARCHIVE_BYTES = 512 * 1024 * 1024;
+const MAX_BACKUP_UNCOMPRESSED_BYTES = 2 * 1024 * 1024 * 1024;
 
 export interface BackupFileInfo {
   name: string;
@@ -276,6 +278,9 @@ export const useBackup = () => {
 
     const dbUrl = getDatabaseUrl();
     if (!dbUrl) return { success: false, error: 'DATABASE_URL is not configured' };
+    if (buffer.byteLength > MAX_BACKUP_ARCHIVE_BYTES) {
+      return { success: false, error: 'Backup archive exceeds the maximum allowed size' };
+    }
 
     setIsRunning(true);
     const tempDir = path.join(tempFolder, 'temp_restore');
@@ -298,6 +303,40 @@ export const useBackup = () => {
 
       // If it's a tar.gz, extract it
       if (ext === '.tar.gz') {
+        const archiveListing = await execAsync(`tar -tzf ${safeFilename}`, { cwd: tempDir });
+        const members = archiveListing.stdout.split('\n').filter(Boolean);
+        if (members.length === 0 || members.length > 10_000) {
+          return { success: false, error: 'Backup archive has an invalid member count' };
+        }
+
+        for (const member of members) {
+          const normalized = path.posix.normalize(member.replace(/\\/g, '/'));
+          if (
+            member.length > 4096 ||
+            path.posix.isAbsolute(normalized) ||
+            normalized === '..' ||
+            normalized.startsWith('../')
+          ) {
+            return { success: false, error: 'Backup archive contains an unsafe path' };
+          }
+        }
+
+        const archiveDetails = await execAsync(`tar -tvzf ${safeFilename}`, { cwd: tempDir });
+        let uncompressedBytes = 0;
+        for (const line of archiveDetails.stdout.split('\n').filter(Boolean)) {
+          if (/^[lhbcp]/.test(line)) {
+            return { success: false, error: 'Backup archive contains unsupported links or special files' };
+          }
+          const size = line.match(/\s(\d+)\s+(?:\d{4}-\d{2}-\d{2}|[A-Z][a-z]{2}\s+\d{1,2}\s)/);
+          if (!size) {
+            return { success: false, error: 'Backup archive has an invalid member listing' };
+          }
+          uncompressedBytes += Number(size[1]);
+          if (!Number.isSafeInteger(uncompressedBytes) || uncompressedBytes > MAX_BACKUP_UNCOMPRESSED_BYTES) {
+            return { success: false, error: 'Backup archive expands beyond the maximum allowed size' };
+          }
+        }
+
         const extractCmd = `cd ${tempDir} && tar -xzf ${safeFilename}`;
         console.log(`Extracting backup: ${extractCmd}`);
         await execAsync(extractCmd);

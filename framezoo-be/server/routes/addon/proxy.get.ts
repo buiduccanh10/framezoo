@@ -1,3 +1,7 @@
+import { promises as dns } from 'node:dns';
+import { isIP } from 'node:net';
+import https from 'node:https';
+import type { IncomingMessage } from 'node:http';
 import { getQuery, setHeader } from 'h3';
 
 /**
@@ -35,7 +39,56 @@ function isBlockedHost(hostname: string): boolean {
   return BLOCKED_HOST_PATTERNS.some(pattern => pattern.test(hostname));
 }
 
-function validateProxyUrl(rawUrl: string): URL {
+function isBlockedIPv4Address(address: string): boolean {
+  const parts = address.split('.').map(Number);
+  if (
+    parts.length !== 4 ||
+    parts.some(value => !Number.isInteger(value) || value < 0 || value > 255)
+  ) {
+    return true;
+  }
+  const [a, b] = parts;
+
+  return (
+    a === 0 ||
+    a === 10 ||
+    a === 127 ||
+    (a === 100 && b >= 64 && b <= 127) ||
+    (a === 169 && b === 254) ||
+    (a === 172 && b >= 16 && b <= 31) ||
+    (a === 192 && (b === 0 || b === 168)) ||
+    (a === 198 && b >= 18 && b <= 19) ||
+    (a === 203 && b === 0) ||
+    a >= 224
+  );
+}
+
+function isBlockedAddress(address: string): boolean {
+  if (isIP(address) === 4) {
+    return isBlockedIPv4Address(address);
+  }
+
+  const normalized = address.toLowerCase();
+  const mappedIPv4 = normalized.match(/^::ffff:(\d{1,3}(?:\.\d{1,3}){3})$/);
+  if (mappedIPv4) return isBlockedIPv4Address(mappedIPv4[1]);
+
+  return (
+    normalized === '::' ||
+    normalized === '::1' ||
+    normalized.startsWith('fc') ||
+    normalized.startsWith('fd') ||
+    normalized.startsWith('fe8') ||
+    normalized.startsWith('fe9') ||
+    normalized.startsWith('fea') ||
+    normalized.startsWith('feb') ||
+    normalized.startsWith('ff') ||
+    normalized.includes('::ffff:127.') ||
+    normalized.includes('::ffff:10.') ||
+    normalized.includes('::ffff:192.168.')
+  );
+}
+
+async function validateProxyUrl(rawUrl: string): Promise<{ url: URL; address: string }> {
   let parsed: URL;
   try {
     parsed = new URL(rawUrl);
@@ -63,7 +116,51 @@ function validateProxyUrl(rawUrl: string): URL {
     });
   }
 
-  return parsed;
+  let addresses: { address: string }[];
+  try {
+    addresses = await dns.lookup(parsed.hostname, { all: true, verbatim: true });
+  } catch {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Bad Request',
+      message: 'Unable to resolve addon host.',
+    });
+  }
+
+  const address = addresses.find(({ address }) => !isBlockedAddress(address))?.address;
+  if (!address || addresses.some(({ address: candidate }) => isBlockedAddress(candidate))) {
+    throw createError({
+      statusCode: 403,
+      statusMessage: 'Forbidden',
+      message: 'Requests to internal or private addresses are not allowed.',
+    });
+  }
+
+  return { url: parsed, address };
+}
+
+function requestPinned(url: URL, address: string): Promise<IncomingMessage> {
+  return new Promise((resolve, reject) => {
+    const request = https.get(
+      {
+        hostname: url.hostname,
+        port: url.port || 443,
+        path: `${url.pathname}${url.search}`,
+        servername: url.hostname,
+        rejectUnauthorized: true,
+        lookup: (_hostname, _options, callback) => {
+          callback(null, address, isIP(address) as 4 | 6);
+        },
+        headers: {
+          'User-Agent': 'Framezoo/1.0 (compatible; addon-proxy)',
+          Accept: 'application/json',
+        },
+      },
+      resolve,
+    );
+    request.setTimeout(15_000, () => request.destroy(new Error('Addon server timed out')));
+    request.on('error', reject);
+  });
 }
 
 export default defineEventHandler(async event => {
@@ -77,18 +174,11 @@ export default defineEventHandler(async event => {
     });
   }
 
-  const targetUrl = validateProxyUrl(url);
+  const target = await validateProxyUrl(url);
 
-  let response: Response;
+  let response: IncomingMessage;
   try {
-    response = await fetch(targetUrl.toString(), {
-      method: 'GET',
-      headers: {
-        'User-Agent': 'Framezoo/1.0 (compatible; addon-proxy)',
-        Accept: 'application/json',
-      },
-      signal: AbortSignal.timeout(15_000), // 15s timeout
-    });
+    response = await requestPinned(target.url, target.address);
   } catch (err: unknown) {
     const message =
       err instanceof Error && err.name === 'TimeoutError'
@@ -101,16 +191,18 @@ export default defineEventHandler(async event => {
     });
   }
 
-  if (!response.ok) {
+  if (!response.statusCode || response.statusCode < 200 || response.statusCode >= 300) {
+    response.resume();
     throw createError({
-      statusCode: response.status,
-      statusMessage: response.statusText,
-      message: `Addon server responded with status ${response.status}.`,
+      statusCode: 502,
+      statusMessage: 'Bad Gateway',
+      message: `Addon server responded with status ${response.statusCode ?? 'unknown'}.`,
     });
   }
 
-  const contentLength = response.headers.get('content-length');
+  const contentLength = response.headers['content-length'];
   if (contentLength && Number(contentLength) > MAX_RESPONSE_SIZE_BYTES) {
+    response.resume();
     throw createError({
       statusCode: 502,
       statusMessage: 'Bad Gateway',
@@ -118,22 +210,29 @@ export default defineEventHandler(async event => {
     });
   }
 
-  const buffer = await response.arrayBuffer();
-
-  if (buffer.byteLength > MAX_RESPONSE_SIZE_BYTES) {
-    throw createError({
-      statusCode: 502,
-      statusMessage: 'Bad Gateway',
-      message: 'Addon response exceeds the maximum allowed size.',
-    });
+  const chunks: Uint8Array[] = [];
+  let totalBytes = 0;
+  for await (const chunk of response) {
+    const value = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
+    totalBytes += value.byteLength;
+    if (totalBytes > MAX_RESPONSE_SIZE_BYTES) {
+      response.destroy();
+      throw createError({
+        statusCode: 502,
+        statusMessage: 'Bad Gateway',
+        message: 'Addon response exceeds the maximum allowed size.',
+      });
+    }
+    chunks.push(value);
   }
+  const buffer = Buffer.concat(chunks, totalBytes);
 
   // Forward content-type from the origin addon server
-  const contentType = response.headers.get('content-type') || 'application/json';
+  const contentType = response.headers['content-type'] || 'application/json';
 
   setHeader(event, 'Content-Type', contentType);
   setHeader(event, 'Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
-  setHeader(event, 'X-Proxied-From', targetUrl.hostname);
+  setHeader(event, 'X-Proxied-From', target.url.hostname);
 
   return new Response(buffer, { status: 200 });
 });

@@ -86,11 +86,18 @@ android {
         versionName "1.0"
     }
     signingConfigs {
-        debug {
-            storeFile file('debug.keystore')
-            storePassword 'android'
-            keyAlias 'androiddebugkey'
-            keyPassword 'android'
+        release {
+            def storeFilePath = System.getenv('ANDROID_RELEASE_STORE_FILE')
+            def storePassword = System.getenv('ANDROID_RELEASE_STORE_PASSWORD')
+            def keyAlias = System.getenv('ANDROID_RELEASE_KEY_ALIAS')
+            def keyPassword = System.getenv('ANDROID_RELEASE_KEY_PASSWORD')
+            if (!storeFilePath || !storePassword || !keyAlias || !keyPassword) {
+                throw new GradleException('Android release signing credentials are required')
+            }
+            storeFile file(storeFilePath)
+            this.storePassword storePassword
+            this.keyAlias keyAlias
+            this.keyPassword keyPassword
         }
     }
     buildTypes {
@@ -98,9 +105,7 @@ android {
             signingConfig signingConfigs.debug
         }
         release {
-            // Caution! In production, you need to generate your own keystore file.
-            // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }

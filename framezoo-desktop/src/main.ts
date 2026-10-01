@@ -89,6 +89,19 @@ const ENABLE_DEVTOOLS =
   Boolean(RENDERER_DEV_URL) ||
   process.env.VITE_ENABLE_DEVTOOLS_PROTECTION === "false";
 
+const BLOCKED_EXTENSION_HOSTS = /^(localhost|0\.0\.0\.0|127\.|10\.|169\.254\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.|\[?::1\]?|\[?fc|\[?fd)/i;
+
+function validateExtensionRequestUrl(rawUrl: unknown): string {
+  if (typeof rawUrl !== "string") {
+    throw new Error("Extension request URL is required");
+  }
+  const url = new URL(rawUrl);
+  if (url.protocol !== "https:" || BLOCKED_EXTENSION_HOSTS.test(url.hostname)) {
+    throw new Error("Extension requests must target public HTTPS hosts");
+  }
+  return url.toString();
+}
+
 function isAllowedRendererUrl(url: string) {
   const allowedUrl = RENDERER_DEV_URL ?? PACKAGED_RENDERER_URL;
   try {
@@ -626,6 +639,7 @@ async function handleExtensionMessage(
 
   if (message === "makeRequest") {
     try {
+      const requestUrl = validateExtensionRequestUrl(payload?.url);
       const headers = new Headers(payload?.headers ?? {});
       const body = buildRequestBody(payload?.body, payload?.bodyType);
 
@@ -637,11 +651,11 @@ async function handleExtensionMessage(
         headers.set("content-type", "application/json");
       }
 
-      const response = await fetch(payload.url, {
+      const response = await fetch(requestUrl, {
         method: payload?.method ?? "GET",
         headers,
         body,
-        redirect: "follow",
+        redirect: "error",
         signal: AbortSignal.timeout(EXTENSION_REQUEST_TIMEOUT_MS),
       });
 
@@ -663,7 +677,7 @@ async function handleExtensionMessage(
         response: {
           statusCode: response.status,
           headers: serializeHeaders(response.headers),
-          finalUrl: response.url || payload.url,
+          finalUrl: response.url || requestUrl,
           body: parsedBody,
         },
       };
@@ -1645,7 +1659,15 @@ function registerIpcHandlers() {
 
   ipcMain.handle(
     "desktop:extension-message",
-    async (_event, message: ExtensionMessageName, payload?: any) => {
+    async (event, message: ExtensionMessageName, payload?: any) => {
+      if (
+        !mainWindow ||
+        event.sender !== mainWindow.webContents ||
+        !event.senderFrame ||
+        !isAllowedRendererUrl(event.senderFrame.url)
+      ) {
+        return { success: false, error: "Unauthorized extension IPC sender" };
+      }
       return handleExtensionMessage(message, payload);
     },
   );

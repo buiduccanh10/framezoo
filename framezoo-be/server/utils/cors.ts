@@ -11,9 +11,7 @@ const DEFAULT_DEV_ORIGINS = new Set([
 ]);
 
 const isLocalDevelopmentOrigin = (value: string) => {
-  if (value === 'null') {
-    return true;
-  }
+  if (value === 'null') return false;
 
   try {
     const { hostname } = new URL(value);
@@ -74,14 +72,19 @@ export const resolveCorsOrigin = (event: H3EventCompat) => {
   const normalizedRequestOrigin = normalizeOrigin(requestOrigin);
   const allowedOrigins = parseAllowedOrigins();
 
-  if (allowedOrigins.has('*') || allowedOrigins.has(normalizedRequestOrigin)) {
+  if (
+    normalizedRequestOrigin !== 'null' &&
+    !allowedOrigins.has('*') &&
+    allowedOrigins.has(normalizedRequestOrigin)
+  ) {
     return normalizedRequestOrigin;
   }
 
   // Allow local dev origins even when a frontend allowlist is present.
   if (
-    DEFAULT_DEV_ORIGINS.has(normalizedRequestOrigin) ||
-    isLocalDevelopmentOrigin(normalizedRequestOrigin)
+    process.env.NODE_ENV !== 'production' &&
+    (DEFAULT_DEV_ORIGINS.has(normalizedRequestOrigin) ||
+      isLocalDevelopmentOrigin(normalizedRequestOrigin))
   ) {
     return normalizedRequestOrigin;
   }

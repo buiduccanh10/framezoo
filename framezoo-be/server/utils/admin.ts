@@ -13,7 +13,13 @@ export const requireAdmin = async (event: H3Event) => {
   }
 
   try {
-    const secret = process.env.CRYPTO_SECRET || 'fallback-secret';
+    const secret = process.env.CRYPTO_SECRET;
+    if (!secret) {
+      throw createError({
+        statusCode: 500,
+        message: 'CRYPTO_SECRET environment variable is not set',
+      });
+    }
     const decoded = jwt.verify(token, secret) as any;
 
     if (decoded.role !== 'env-admin') {

@@ -9,13 +9,10 @@ Khi tải về và mở ra bạn sẽ thấy thông báo chặn từ Gatekeeper:
 "Framezoo is damaged and can't be opened" hoặc "Apple cannot verify this app".
 
 CÁCH KHẮC PHỤC (HOW TO FIX):
-Cách 1 (Dùng Terminal - Nhanh & triệt để nhất):
-1. Kéo ứng dụng Framezoo vào thư mục Applications (Ứng dụng).
-2. Mở ứng dụng Terminal trên Mac và chạy lệnh sau:
-   xattr -cr /Applications/Framezoo.app
-3. Mở lại app bình thường.
+Chỉ mở bản phát hành đã được ký từ nguồn chính thức. Không dùng `xattr -cr`
+hoặc ký lại ứng dụng để bỏ qua kiểm tra toàn vẹn.
 
-Cách 2 (Mở thủ công qua Finder):
+Mở thủ công qua Finder:
 1. Kéo ứng dụng Framezoo vào thư mục Applications.
 2. Click chuột phải (hoặc nhấn giữ nút Control + click) vào Framezoo.app.
 3. Chọn "Open" (Mở) trong menu chuột phải.

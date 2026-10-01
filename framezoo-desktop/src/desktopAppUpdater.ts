@@ -1,5 +1,6 @@
 import { app } from "electron";
 import { autoUpdater } from "electron-updater";
+import { createHash } from "node:crypto";
 import { spawn } from "node:child_process";
 import fs from "node:fs";
 import https from "node:https";
@@ -85,6 +86,30 @@ async function downloadHttpsFile(
   }
 }
 
+async function verifyReleaseAsset(
+  manifestUrl: string,
+  assetName: string,
+  assetPath: string,
+  manifestPath: string,
+): Promise<void> {
+  await downloadHttpsFile(manifestUrl, manifestPath, () => {});
+  const manifest = JSON.parse(await fs.promises.readFile(manifestPath, "utf8"));
+  const expected = manifest.files?.find(
+    (file: { fileName?: string; sha256?: string }) =>
+      file.fileName === assetName && typeof file.sha256 === "string",
+  )?.sha256;
+  if (!expected) {
+    throw new Error(`No trusted checksum found for desktop update asset ${assetName}`);
+  }
+
+  const actual = createHash("sha256")
+    .update(await fs.promises.readFile(assetPath))
+    .digest("hex");
+  if (actual.toLowerCase() !== expected.toLowerCase()) {
+    throw new Error(`Desktop update checksum mismatch for ${assetName}`);
+  }
+}
+
 export function createDesktopAppUpdater(
   options: CreateDesktopAppUpdaterOptions,
 ) {
@@ -160,8 +185,13 @@ export function createDesktopAppUpdater(
           os.tmpdir(),
           `${tempFilePrefix}-update.zip`,
         );
+        const tempManifestPath = path.join(
+          os.tmpdir(),
+          `${tempFilePrefix}-update-manifest.json`,
+        );
 
         await fs.promises.rm(tempZipPath, { force: true });
+        await fs.promises.rm(tempManifestPath, { force: true });
         await downloadHttpsFile(downloadUrl, tempZipPath, (progressPercent) => {
           setState({
             status: "downloading",
@@ -169,6 +199,13 @@ export function createDesktopAppUpdater(
             errorMessage: null,
           });
         });
+        await verifyReleaseAsset(
+          new URL("manifest.json", getFeedUrl()).toString(),
+          zipFileName,
+          tempZipPath,
+          tempManifestPath,
+        );
+        await fs.promises.rm(tempManifestPath, { force: true });
 
         setState({
           status: "downloaded",
@@ -186,6 +223,11 @@ export function createDesktopAppUpdater(
       if (process.platform === "darwin") {
         await fs.promises
           .rm(path.join(os.tmpdir(), `${tempFilePrefix}-update.zip`), {
+            force: true,
+          })
+          .catch(() => {});
+        await fs.promises
+          .rm(path.join(os.tmpdir(), `${tempFilePrefix}-update-manifest.json`), {
             force: true,
           })
           .catch(() => {});
@@ -222,6 +264,7 @@ export function createDesktopAppUpdater(
       }
 
       const scriptContent = `#!/bin/bash
+set -euo pipefail
 sleep 2
 USER_TORRENTS_DIR="$HOME/Library/Application Support/${options.appName}/torrents"
 mkdir -p "$USER_TORRENTS_DIR"
@@ -234,10 +277,26 @@ fi
 if [ -d "${appPath}/torrents" ]; then
   cp -Rn "${appPath}/torrents/"* "$USER_TORRENTS_DIR/" 2>/dev/null || true
 fi
+CURRENT_TEAM_ID=$(/usr/bin/codesign -dv --verbose=4 "${appPath}" 2>&1 | sed -n 's/^TeamIdentifier=//p')
+[ -n "$CURRENT_TEAM_ID" ] || exit 1
+STAGING_DIR=$(mktemp -d "${path.dirname(appPath)}/.${tempFilePrefix}-update.XXXXXX")
+trap 'rm -rf "$STAGING_DIR"' EXIT
+unzip -Z1 "${zipPath}" | while IFS= read -r entry; do
+  case "$entry" in
+    /*|../*|*/../*|*/..)
+      echo "Unsafe path in desktop update archive" >&2
+      exit 1
+      ;;
+  esac
+done
+unzip -q -o "${zipPath}" -d "$STAGING_DIR"
+STAGED_APP="$STAGING_DIR/$(basename "${appPath}")"
+[ -d "$STAGED_APP" ] || exit 1
+/usr/bin/codesign --verify --deep --strict --verbose=2 "$STAGED_APP"
+STAGED_TEAM_ID=$(/usr/bin/codesign -dv --verbose=4 "$STAGED_APP" 2>&1 | sed -n 's/^TeamIdentifier=//p')
+[ "$STAGED_TEAM_ID" = "$CURRENT_TEAM_ID" ] || exit 1
 rm -rf "${appPath}"
-unzip -q -o "${zipPath}" -d "${path.dirname(appPath)}"
-xattr -cr "${appPath}"
-codesign --force --deep -s - "${appPath}"
+mv "$STAGED_APP" "${appPath}"
 open "${appPath}"
 `;
 

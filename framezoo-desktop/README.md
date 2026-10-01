@@ -99,14 +99,14 @@ commit before the first release.
 
 The website fetches `download-manifest.json` server-side through `/download`;
 installer requests redirect to GitHub Release assets. Desktop update checks use
-the GitHub Release feed directly. Windows uses `electron-updater`; unsigned
-macOS builds keep the existing manual ZIP, `xattr -cr`, and ad-hoc `codesign`
-installation path.
+the GitHub Release feed directly. Windows uses `electron-updater`; macOS ZIP
+updates verify the release manifest SHA-256 before staged installation. Release
+workflows fail closed unless macOS signing credentials are configured.
 
 ## Current limitations
 
 - `window.__FRAMEZOO_DESKTOP__` is enabled and backed by a minimal Electron IPC bridge.
 - The bridge currently covers the extension-style calls the frontend already expects: `hello`, `makeRequest`, `prepareStream`, and `openPage`.
 - `BrowserWindow.webPreferences.webSecurity` is enabled. Packaged windows use the `app://renderer` origin, so `framezoo-be` must allow that origin in production CORS.
-- Mac signing/notarization and Windows signing are not configured yet.
+- Release workflows require macOS signing credentials before publishing.
 - Local desktop-origin CORS support for `framezoo-be` allows `localhost` and `127.0.0.1` origins in development.

@@ -101,7 +101,10 @@ export default defineEventHandler(async event => {
   if (event.method === 'PUT') {
     try {
       const body = await readBody(event);
-      log.info('Updating user settings', { userId, body });
+      log.info('Updating user settings', {
+        userId,
+        fields: body && typeof body === 'object' ? Object.keys(body) : [],
+      });
 
       const validatedBody = userSettingsSchema.parse(body);
 
@@ -170,8 +173,7 @@ export default defineEventHandler(async event => {
 
       log.info('Preparing to upsert settings', {
         userId,
-        updateData,
-        createData: { id: userId, ...createData },
+        updatedFields: Object.keys(updateData),
       });
 
       const settings = await prisma.user_settings.upsert({

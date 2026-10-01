@@ -384,8 +384,12 @@ export function useAuth() {
     const expiryDate = new Date(now.getTime() + SESSION_EXPIRY_MS);
     const newRefreshJti = shouldRotate ? randomUUID() : session.refresh_jti;
 
-    const updatedSession = await prisma.sessions.update({
-      where: { id: session.id },
+    const updated = await prisma.sessions.updateMany({
+      where: {
+        id: session.id,
+        refresh_jti: payload.jti,
+        refresh_expires_at: { gte: now },
+      },
       data: {
         accessed_at: now,
         expires_at: expiryDate,
@@ -393,6 +397,15 @@ export function useAuth() {
         refresh_expires_at: expiryDate,
       },
     });
+
+    if (updated.count !== 1) {
+      return { success: false, reason: 'refresh_token_reused' };
+    }
+
+    const updatedSession = await getSession(session.id);
+    if (!updatedSession) {
+      return { success: false, reason: 'session_not_found_or_expired' };
+    }
 
     const tokens: SessionTokenBundle = {
       accessToken: makeAccessToken(updatedSession),
