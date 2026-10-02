@@ -246,6 +246,8 @@ export function createDesktopAppUpdater(
     if (!app.isPackaged || !isSupported()) return false;
     if (state.status !== "downloaded") return false;
 
+    // Let the updater own shutdown while cleanup is still asynchronous.
+    (global as any).isUpdating = true;
     try {
       await options.beforeInstall?.();
     } catch (error) {
@@ -277,8 +279,8 @@ fi
 if [ -d "${appPath}/torrents" ]; then
   cp -Rn "${appPath}/torrents/"* "$USER_TORRENTS_DIR/" 2>/dev/null || true
 fi
-CURRENT_TEAM_ID=$(/usr/bin/codesign -dv --verbose=4 "${appPath}" 2>&1 | sed -n 's/^TeamIdentifier=//p')
-[ -n "$CURRENT_TEAM_ID" ] || exit 1
+CURRENT_TEAM_ID=$(/usr/bin/codesign -dv --verbose=4 "${appPath}" 2>&1 | sed -n 's/^TeamIdentifier=//p') || true
+[ "$CURRENT_TEAM_ID" = "not set" ] && CURRENT_TEAM_ID=""
 STAGING_DIR=$(mktemp -d "${path.dirname(appPath)}/.${tempFilePrefix}-update.XXXXXX")
 trap 'rm -rf "$STAGING_DIR"' EXIT
 unzip -Z1 "${zipPath}" | while IFS= read -r entry; do
@@ -293,8 +295,11 @@ unzip -q -o "${zipPath}" -d "$STAGING_DIR"
 STAGED_APP="$STAGING_DIR/$(basename "${appPath}")"
 [ -d "$STAGED_APP" ] || exit 1
 /usr/bin/codesign --verify --deep --strict --verbose=2 "$STAGED_APP"
-STAGED_TEAM_ID=$(/usr/bin/codesign -dv --verbose=4 "$STAGED_APP" 2>&1 | sed -n 's/^TeamIdentifier=//p')
-[ "$STAGED_TEAM_ID" = "$CURRENT_TEAM_ID" ] || exit 1
+if [ -n "$CURRENT_TEAM_ID" ]; then
+  STAGED_TEAM_ID=$(/usr/bin/codesign -dv --verbose=4 "$STAGED_APP" 2>&1 | sed -n 's/^TeamIdentifier=//p') || true
+  [ "$STAGED_TEAM_ID" = "not set" ] && STAGED_TEAM_ID=""
+  [ "$STAGED_TEAM_ID" = "$CURRENT_TEAM_ID" ] || exit 1
+fi
 rm -rf "${appPath}"
 mv "$STAGED_APP" "${appPath}"
 open "${appPath}"
@@ -306,12 +311,10 @@ open "${appPath}"
         detached: true,
         stdio: "ignore",
       }).unref();
-      (global as any).isUpdating = true;
       app.quit();
       return true;
     }
 
-    (global as any).isUpdating = true;
     autoUpdater.quitAndInstall(true, true);
     return true;
   }
