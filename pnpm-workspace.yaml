@@ -8,6 +8,11 @@ packages:
 shamefullyHoist: true
 strictPeerDependencies: false
 
+# Nitro's build-only listhen chain has no published node-forge fix yet.
+auditConfig:
+  ignoreGhsas:
+    - GHSA-86w9-cpqp-85rv
+
 allowBuilds:
   "@parcel/watcher": true
   "@prisma/client": true

@@ -1,22 +1,15 @@
+import { gcm } from "@noble/ciphers/aes.js";
+import { ed25519 } from "@noble/curves/ed25519.js";
 import { pbkdf2Async } from "@noble/hashes/pbkdf2.js";
 import { sha256 } from "@noble/hashes/sha2.js";
 import { generateMnemonic, validateMnemonic } from "@scure/bip39";
 import { wordlist } from "@scure/bip39/wordlists/english.js";
-import forge from "node-forge";
 
 type Keys = {
   privateKey: Uint8Array;
   publicKey: Uint8Array;
   seed: Uint8Array;
 };
-
-function uint8ArrayToBuffer(array: Uint8Array): forge.util.ByteStringBuffer {
-  return forge.util.createBuffer(
-    Array.from(array)
-      .map((byte) => String.fromCharCode(byte))
-      .join(""),
-  );
-}
 
 async function seedFromMnemonic(mnemonic: string) {
   return pbkdf2Async(sha256, mnemonic, "mnemonic", {
@@ -45,9 +38,11 @@ export function verifyValidMnemonic(mnemonic: string) {
 }
 
 export async function keysFromSeed(seed: Uint8Array): Promise<Keys> {
-  const { privateKey, publicKey } = forge.pki.ed25519.generateKeyPair({
-    seed,
-  });
+  if (seed.byteLength !== 32) throw new Error("Seed must be 256-bit");
+  const publicKey = ed25519.getPublicKey(seed);
+  const privateKey = new Uint8Array(64);
+  privateKey.set(seed);
+  privateKey.set(publicKey, 32);
 
   return {
     privateKey: new Uint8Array(privateKey),
@@ -82,16 +77,16 @@ export async function signCode(
   code: string,
   privateKey: Uint8Array,
 ): Promise<Uint8Array> {
-  const signature = forge.pki.ed25519.sign({
-    encoding: "utf8",
-    message: code,
-    privateKey: uint8ArrayToBuffer(privateKey),
-  });
-  return new Uint8Array(signature);
+  if (privateKey.byteLength < 32) throw new Error("Private key is invalid");
+  return ed25519.sign(new TextEncoder().encode(code), privateKey.slice(0, 32));
 }
 
 export function bytesToBase64(bytes: Uint8Array) {
-  return forge.util.encode64(String.fromCodePoint(...bytes));
+  let binary = "";
+  for (let index = 0; index < bytes.length; index += 0x8000) {
+    binary += String.fromCharCode(...bytes.subarray(index, index + 0x8000));
+  }
+  return btoa(binary);
 }
 
 export function bytesToBase64Url(bytes: Uint8Array): string {
@@ -107,69 +102,45 @@ export async function signChallenge(keys: Keys, challengeCode: string) {
 }
 
 export function base64ToBuffer(data: string) {
-  return forge.util.binary.base64.decode(data);
-}
-
-export function base64ToStringBuffer(data: string) {
-  const decoded = base64ToBuffer(data);
-
-  return uint8ArrayToBuffer(decoded);
-}
-
-export function stringBufferToBase64(buffer: forge.util.ByteStringBuffer) {
-  return forge.util.encode64(buffer.getBytes());
+  const binary = atob(data);
+  const bytes = new Uint8Array(binary.length);
+  for (let index = 0; index < binary.length; index += 1) {
+    bytes[index] = binary.charCodeAt(index);
+  }
+  return bytes;
 }
 
 export async function encryptData(data: string, secret: Uint8Array) {
   if (secret.byteLength !== 32)
     throw new Error("Secret must be at least 256-bit");
 
-  const iv = await new Promise<string>((resolve, reject) => {
-    forge.random.getBytes(16, (err, bytes) => {
-      if (err) reject(err);
-      resolve(bytes);
-    });
-  });
+  const iv = crypto.getRandomValues(new Uint8Array(16));
+  const encrypted = gcm(secret, iv).encrypt(new TextEncoder().encode(data));
+  const encryptedData = encrypted.slice(0, -16);
+  const tag = encrypted.slice(-16);
 
-  const cipher = forge.cipher.createCipher(
-    "AES-GCM",
-    uint8ArrayToBuffer(secret),
-  );
-  cipher.start({
-    iv,
-    tagLength: 128,
-  });
-  cipher.update(forge.util.createBuffer(data, "utf8"));
-  cipher.finish();
-
-  const encryptedData = cipher.output;
-  const tag = cipher.mode.tag;
-
-  return `${forge.util.encode64(iv)}.${stringBufferToBase64(
-    encryptedData,
-  )}.${stringBufferToBase64(tag)}` as const;
+  return `${bytesToBase64(iv)}.${bytesToBase64(encryptedData)}.${bytesToBase64(
+    tag,
+  )}` as const;
 }
 
 export function decryptData(data: string, secret: Uint8Array) {
   if (secret.byteLength !== 32) throw new Error("Secret must be 256-bit");
 
   const [iv, encryptedData, tag] = data.split(".");
+  if (!iv || !encryptedData || !tag) throw new Error("Invalid encrypted data");
 
-  const decipher = forge.cipher.createDecipher(
-    "AES-GCM",
-    uint8ArrayToBuffer(secret),
-  );
-  decipher.start({
-    iv: base64ToStringBuffer(iv),
-    tag: base64ToStringBuffer(tag),
-    tagLength: 128,
-  });
-  decipher.update(base64ToStringBuffer(encryptedData));
-  const pass = decipher.finish();
-
-  if (!pass) throw new Error("Error decrypting data");
-
-  return decipher.output.toString();
+  const ciphertext = new Uint8Array([
+    ...base64ToBuffer(encryptedData),
+    ...base64ToBuffer(tag),
+  ]);
+  try {
+    return new TextDecoder().decode(
+      gcm(secret, base64ToBuffer(iv)).decrypt(ciphertext),
+    );
+  } catch {
+    throw new Error("Error decrypting data");
+  }
 }
 
 // Passkey/WebAuthn utilities
