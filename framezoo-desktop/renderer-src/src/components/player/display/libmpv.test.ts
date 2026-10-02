@@ -140,7 +140,7 @@ describe("libmpv display", () => {
       generation: 1,
       type: "error",
       name: "end-file",
-      message: "libmpv end-file error -13",
+      message: "libmpv end-file error -17",
     });
 
     expect(errors).toEqual([]);
