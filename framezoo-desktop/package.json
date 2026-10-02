@@ -1,7 +1,7 @@
 {
   "name": "Framezoo",
   "private": true,
-  "version": "1.8.5",
+  "version": "1.8.6",
   "main": "dist/main.cjs",
   "packageManager": "pnpm@12.8.1+sha512.f64ba907507f5ceafe06c8d38e6052d0179444580ec1279ddd5bfc11cb48aa8a2644b66598e07e761da84872a9fc57d5f902b87fa49d024198d558612aabbe45",
   "scripts": {
@@ -54,7 +54,6 @@
   },
   "dependencies": {
     "electron-updater": "^6.8.9",
-    "onnxruntime-web": "^1.30.0",
     "rxjs": "^7.8.2"
   },
   "devDependencies": {
@@ -132,6 +131,7 @@
     "nanoid": "^6.0.1",
     "node-forge": "^1.4.0",
     "ofetch": "^1.5.1",
+    "onnxruntime-web": "^1.30.0",
     "postcss": "^8.5.28",
     "postcss-rtl": "^2.0.0",
     "postcss-rtlcss": "^6.0.0",

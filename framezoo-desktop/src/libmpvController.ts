@@ -50,10 +50,6 @@ type PlayerRecord = {
 
 const DEFAULT_NATIVE_EVENT_TIMEOUT_MS = 120_000;
 const FILE_NATIVE_EVENT_TIMEOUT_MS = 45_000;
-// Torrent streams must buffer pieces before the first bytes arrive.
-// Give them much more time before treating the load as failed.
-const TORRENT_NATIVE_EVENT_TIMEOUT_MS = 600_000; // 10 minutes
-
 let lastAddonLoadError: string | null = null;
 let lastPlayerCreateError: string | null = null;
 
@@ -594,24 +590,28 @@ export class LibMpvController {
       });
       player.isPaused = request.autoplay === false;
 
-      const timeoutMs = request.isTorrent
-        ? TORRENT_NATIVE_EVENT_TIMEOUT_MS
-        : request.type === "file"
-          ? FILE_NATIVE_EVENT_TIMEOUT_MS
-          : DEFAULT_NATIVE_EVENT_TIMEOUT_MS;
-      const timeout = setTimeout(() => {
-        if (this.players.get(playerId)?.generation !== generation) return;
-        this.eventTimers.delete(playerId);
-        this.broadcastError(
-          "load_timeout",
-          `libmpv load timed out after ${timeoutMs}ms`,
-          {
-            playerId,
-            generation,
-          },
-        );
-      }, timeoutMs);
-      this.eventTimers.set(playerId, timeout);
+      // A torrent HTTP route can legitimately wait for peers indefinitely.
+      // Keep the player alive; the renderer retries transient libmpv end-file
+      // events until the first bytes become available.
+      if (!request.isTorrent) {
+        const timeoutMs =
+          request.type === "file"
+            ? FILE_NATIVE_EVENT_TIMEOUT_MS
+            : DEFAULT_NATIVE_EVENT_TIMEOUT_MS;
+        const timeout = setTimeout(() => {
+          if (this.players.get(playerId)?.generation !== generation) return;
+          this.eventTimers.delete(playerId);
+          this.broadcastError(
+            "load_timeout",
+            `libmpv load timed out after ${timeoutMs}ms`,
+            {
+              playerId,
+              generation,
+            },
+          );
+        }, timeoutMs);
+        this.eventTimers.set(playerId, timeout);
+      }
       return true;
     } catch (error) {
       this.broadcastError(

@@ -181,12 +181,14 @@ function toDisplayError(event: LibMpvPlayerEvent): DisplayError {
 function isWaitingForTorrentBytes(
   currentSource: LoadableSource | null,
   event: LibMpvPlayerEvent,
+  hasRenderedFrame: boolean,
 ) {
   return (
     currentSource?.isTorrent === true &&
+    !hasRenderedFrame &&
     event.type === "error" &&
     event.name === "end-file" &&
-    /end-file error -13$/.test(event.message ?? "")
+    /^libmpv end-file error -\d+$/.test(event.message ?? "")
   );
 }
 
@@ -818,7 +820,13 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     }
 
     if (event.type === "error") {
-      if (isWaitingForTorrentBytes(source, event)) {
+      if (
+        isWaitingForTorrentBytes(
+          source,
+          event,
+          firstFrameLoggedGeneration === generation,
+        )
+      ) {
         // mpv can end the provisional torrent URL before its first bytes are
         // available. Keep the session alive; the local route can keep waiting
         // until the torrent supplies them.
