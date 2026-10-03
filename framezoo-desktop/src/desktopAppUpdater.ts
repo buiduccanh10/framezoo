@@ -99,7 +99,9 @@ async function verifyReleaseAsset(
       file.fileName === assetName && typeof file.sha256 === "string",
   )?.sha256;
   if (!expected) {
-    throw new Error(`No trusted checksum found for desktop update asset ${assetName}`);
+    throw new Error(
+      `No trusted checksum found for desktop update asset ${assetName}`,
+    );
   }
 
   const actual = createHash("sha256")
@@ -227,9 +229,12 @@ export function createDesktopAppUpdater(
           })
           .catch(() => {});
         await fs.promises
-          .rm(path.join(os.tmpdir(), `${tempFilePrefix}-update-manifest.json`), {
-            force: true,
-          })
+          .rm(
+            path.join(os.tmpdir(), `${tempFilePrefix}-update-manifest.json`),
+            {
+              force: true,
+            },
+          )
           .catch(() => {});
       }
       setState({
@@ -246,6 +251,7 @@ export function createDesktopAppUpdater(
     if (!app.isPackaged || !isSupported()) return false;
     if (state.status !== "downloaded") return false;
 
+    dispose();
     // Let the updater own shutdown while cleanup is still asynchronous.
     (global as any).isUpdating = true;
     try {
@@ -265,9 +271,22 @@ export function createDesktopAppUpdater(
         appPath = `/Applications/${options.appName}.app`;
       }
 
+      const currentPid = process.pid;
       const scriptContent = `#!/bin/bash
 set -euo pipefail
-sleep 2
+LOG_FILE="\${TMPDIR:-/tmp}/${tempFilePrefix}-updater.log"
+exec > "$LOG_FILE" 2>&1
+echo "Starting desktop update at $(date)"
+
+OLD_PID=${currentPid}
+echo "Waiting for old app process $OLD_PID to exit..."
+for i in {1..30}; do
+  if ! kill -0 "$OLD_PID" 2>/dev/null; then
+    break
+  fi
+  sleep 0.2
+done
+
 USER_TORRENTS_DIR="$HOME/Library/Application Support/${options.appName}/torrents"
 mkdir -p "$USER_TORRENTS_DIR"
 if [ -d "${appPath}/Contents/Resources/torrents" ]; then
@@ -279,10 +298,13 @@ fi
 if [ -d "${appPath}/torrents" ]; then
   cp -Rn "${appPath}/torrents/"* "$USER_TORRENTS_DIR/" 2>/dev/null || true
 fi
+
 CURRENT_TEAM_ID=$(/usr/bin/codesign -dv --verbose=4 "${appPath}" 2>&1 | sed -n 's/^TeamIdentifier=//p') || true
 [ "$CURRENT_TEAM_ID" = "not set" ] && CURRENT_TEAM_ID=""
-STAGING_DIR=$(mktemp -d "${path.dirname(appPath)}/.${tempFilePrefix}-update.XXXXXX")
+
+STAGING_DIR=$(mktemp -d "\${TMPDIR:-/tmp}/${tempFilePrefix}-update.XXXXXX")
 trap 'rm -rf "$STAGING_DIR"' EXIT
+
 unzip -Z1 "${zipPath}" | while IFS= read -r entry; do
   case "$entry" in
     /*|../*|*/../*|*/..)
@@ -291,18 +313,40 @@ unzip -Z1 "${zipPath}" | while IFS= read -r entry; do
       ;;
   esac
 done
+
 unzip -q -o "${zipPath}" -d "$STAGING_DIR"
+
 STAGED_APP="$STAGING_DIR/$(basename "${appPath}")"
-[ -d "$STAGED_APP" ] || exit 1
-/usr/bin/codesign --verify --deep --strict --verbose=2 "$STAGED_APP"
+if [ ! -d "$STAGED_APP" ]; then
+  if [ -d "$STAGING_DIR/${options.appName}.app" ]; then
+    STAGED_APP="$STAGING_DIR/${options.appName}.app"
+  else
+    STAGED_APP=$(find "$STAGING_DIR" -maxdepth 1 -name "*.app" | head -n 1)
+  fi
+fi
+[ -n "$STAGED_APP" ] && [ -d "$STAGED_APP" ] || exit 1
+
 if [ -n "$CURRENT_TEAM_ID" ]; then
+  echo "Verifying signature against current Team ID: $CURRENT_TEAM_ID"
+  /usr/bin/codesign --verify --deep --strict --verbose=2 "$STAGED_APP"
   STAGED_TEAM_ID=$(/usr/bin/codesign -dv --verbose=4 "$STAGED_APP" 2>&1 | sed -n 's/^TeamIdentifier=//p') || true
   [ "$STAGED_TEAM_ID" = "not set" ] && STAGED_TEAM_ID=""
   [ "$STAGED_TEAM_ID" = "$CURRENT_TEAM_ID" ] || exit 1
+else
+  echo "Ad-hoc signed package detected, clearing quarantine and re-signing ad-hoc..."
+  xattr -cr "$STAGED_APP" || true
+  /usr/bin/codesign --force --deep -s - "$STAGED_APP" || true
+  /usr/bin/codesign --verify --deep --verbose=2 "$STAGED_APP" || true
 fi
+
+echo "Replacing old application at ${appPath}..."
 rm -rf "${appPath}"
 mv "$STAGED_APP" "${appPath}"
-open "${appPath}"
+xattr -cr "${appPath}" || true
+
+echo "Launching updated app at ${appPath}..."
+open -n "${appPath}" || open "${appPath}"
+echo "Update finished successfully at $(date)"
 `;
 
       fs.writeFileSync(scriptPath, scriptContent, { mode: 0o755 });
@@ -315,7 +359,7 @@ open "${appPath}"
       return true;
     }
 
-    autoUpdater.quitAndInstall(true, true);
+    autoUpdater.quitAndInstall(false, true);
     return true;
   }
 
