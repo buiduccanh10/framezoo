@@ -196,6 +196,309 @@ function isEmptyVttDocument(text: string): boolean {
   );
 }
 
+function getTimestampParts(ms: number) {
+  const total = Math.max(0, Math.round(ms));
+  const hours = Math.floor(total / 3_600_000);
+  const minutes = Math.floor((total % 3_600_000) / 60_000);
+  const seconds = Math.floor((total % 60_000) / 1000);
+  const remMs = total % 1000;
+  return { hours, minutes, seconds, ms: remMs };
+}
+
+function buildTimestampMs(
+  hours: number,
+  minutes: number,
+  seconds: number,
+  ms: number,
+): number {
+  return hours * 3_600_000 + minutes * 60_000 + seconds * 1000 + ms;
+}
+
+export function repairBrokenSrtTimeline(vttText: string): string {
+  const normalizedText = vttText.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+  const rawBlocks = normalizedText.split(/\n\s*\n/);
+
+  type BlockInfo = {
+    index: number;
+    raw: string;
+    hasTiming: boolean;
+    startMs: number;
+    endMs: number;
+    match?: RegExpExecArray;
+  };
+
+  const parsedBlocks: BlockInfo[] = rawBlocks.map((block, index) => {
+    const match = VTT_CUE_TIMING_RE.exec(block);
+    if (!match) {
+      return { index, raw: block, hasTiming: false, startMs: 0, endMs: 0 };
+    }
+    const startMs = parseVttTimestamp(match[1]);
+    const endMs = parseVttTimestamp(match[2]);
+    const hasTiming = Number.isFinite(startMs) && Number.isFinite(endMs);
+    return {
+      index,
+      raw: block,
+      hasTiming,
+      startMs: hasTiming ? startMs : 0,
+      endMs: hasTiming ? endMs : 0,
+      match,
+    };
+  });
+
+  const timedIndices = parsedBlocks
+    .map((b, i) => (b.hasTiming ? i : -1))
+    .filter((i) => i !== -1);
+
+  let repairedCount = 0;
+  let droppedCount = 0;
+
+  for (let pass = 0; pass < 2; pass++) {
+    for (let t = 0; t < timedIndices.length; t++) {
+      const currIdx = timedIndices[t];
+      const curr = parsedBlocks[currIdx];
+
+      const prev = t > 0 ? parsedBlocks[timedIndices[t - 1]] : null;
+      const next =
+        t < timedIndices.length - 1 ? parsedBlocks[timedIndices[t + 1]] : null;
+
+      const isStartGtEnd = curr.startMs > curr.endMs;
+
+      // Lookahead window to detect forward spikes (jumping forward into future while later cues are in past)
+      const futureIndices = timedIndices.slice(t + 1, t + 6);
+      const earlierFutures = futureIndices.filter(
+        (fIdx) => parsedBlocks[fIdx].startMs < curr.startMs - 2000,
+      );
+      const isForwardSpike =
+        earlierFutures.length >= 2 ||
+        (futureIndices.length > 0 &&
+          earlierFutures.length === futureIndices.length);
+
+      const isDurationUnreasonable = curr.endMs - curr.startMs > 60_000;
+
+      if (isStartGtEnd || isForwardSpike || isDurationUnreasonable) {
+        // Collect neighbor minutes to find consensus baseline minute
+        const neighborMinutes: number[] = [];
+        for (
+          let k = Math.max(0, t - 4);
+          k <= Math.min(timedIndices.length - 1, t + 5);
+          k++
+        ) {
+          if (k !== t) {
+            const neighborCue = parsedBlocks[timedIndices[k]];
+            neighborMinutes.push(
+              Math.floor((neighborCue.startMs % 3_600_000) / 60_000),
+            );
+          }
+        }
+
+        // Count frequency of minutes in neighborhood
+        const minuteCounts = new Map<number, number>();
+        let baselineMinute = 0;
+        let maxCount = 0;
+        for (const m of neighborMinutes) {
+          const count = (minuteCounts.get(m) ?? 0) + 1;
+          minuteCounts.set(m, count);
+          if (count > maxCount) {
+            maxCount = count;
+            baselineMinute = m;
+          }
+        }
+
+        const sp = getTimestampParts(curr.startMs);
+        const ep = getTimestampParts(curr.endMs);
+        const pp = prev ? getTimestampParts(prev.endMs) : null;
+        const np = next ? getTimestampParts(next.startMs) : null;
+
+        type Candidate = {
+          name: string;
+          startMs: number;
+          endMs: number;
+        };
+        const candidates: Candidate[] = [];
+
+        // 1. Candidate: Align both start and end to the neighborhood consensus baseline minute
+        const cBaselineStart = buildTimestampMs(
+          sp.hours,
+          baselineMinute,
+          sp.seconds,
+          sp.ms,
+        );
+        const cBaselineEnd = buildTimestampMs(
+          ep.hours,
+          baselineMinute,
+          ep.seconds,
+          ep.ms,
+        );
+        if (
+          cBaselineStart <= cBaselineEnd &&
+          cBaselineEnd - cBaselineStart < 60_000
+        ) {
+          candidates.push({
+            name: "baseline_both",
+            startMs: cBaselineStart,
+            endMs: cBaselineEnd,
+          });
+        }
+
+        // 2. Candidate: Fix start minute to match end minute (e.g. 00:02:32 -> 00:00:32 when end is 00:00:34)
+        const c1 = buildTimestampMs(sp.hours, ep.minutes, sp.seconds, sp.ms);
+        if (c1 <= curr.endMs && curr.endMs - c1 < 60_000) {
+          candidates.push({
+            name: "fix_start_minute_to_end",
+            startMs: c1,
+            endMs: curr.endMs,
+          });
+        }
+
+        // 3. Candidate: Fix start minute to match prev minute (e.g. 00:33:58 -> 00:32:58 when prev ends at 00:32:57)
+        if (pp) {
+          const c2 = buildTimestampMs(sp.hours, pp.minutes, sp.seconds, sp.ms);
+          if (c2 <= curr.endMs && curr.endMs - c2 < 60_000) {
+            candidates.push({
+              name: "fix_start_minute_to_prev",
+              startMs: c2,
+              endMs: curr.endMs,
+            });
+          }
+        }
+
+        // 4. Candidate: Fix end minute to match start minute (e.g. 00:33:04 -> 00:03:07 => end becomes 00:33:07)
+        const c3 = buildTimestampMs(ep.hours, sp.minutes, ep.seconds, ep.ms);
+        if (curr.startMs <= c3 && c3 - curr.startMs < 60_000) {
+          candidates.push({
+            name: "fix_end_minute_to_start",
+            startMs: curr.startMs,
+            endMs: c3,
+          });
+        }
+
+        // 5. Candidate: Fix end minute to match next minute (e.g. 00:15:35 -> 00:03:59 => end becomes 00:15:39)
+        if (np) {
+          const c4 = buildTimestampMs(ep.hours, np.minutes, ep.seconds, ep.ms);
+          if (curr.startMs <= c4 && c4 - curr.startMs < 60_000) {
+            candidates.push({
+              name: "fix_end_minute_to_next",
+              startMs: curr.startMs,
+              endMs: c4,
+            });
+          }
+        }
+
+        // 6. Candidate: Zero out start minute (if surrounding context is minute 0)
+        const c5 = buildTimestampMs(sp.hours, 0, sp.seconds, sp.ms);
+        if (c5 <= curr.endMs && curr.endMs - c5 < 60_000) {
+          candidates.push({
+            name: "fix_start_minute_zero",
+            startMs: c5,
+            endMs: curr.endMs,
+          });
+        }
+
+        // 7. Derive start from end if end is consistent with neighboring context
+        if (
+          candidates.length === 0 &&
+          (prev !== null || next !== null) &&
+          (!prev || curr.endMs >= prev.startMs) &&
+          (!next || curr.endMs <= next.endMs + 30_000)
+        ) {
+          const fStart = Math.max(prev ? prev.endMs : 0, curr.endMs - 2500);
+          if (fStart < curr.endMs) {
+            candidates.push({
+              name: "derive_start_from_end",
+              startMs: fStart,
+              endMs: curr.endMs,
+            });
+          }
+        }
+
+        // 8. Derive end from start if start is consistent with neighboring context
+        if (
+          candidates.length === 0 &&
+          (prev !== null || next !== null) &&
+          (!prev || curr.startMs >= prev.startMs - 30_000) &&
+          (!next || curr.startMs <= next.startMs)
+        ) {
+          const fEnd = Math.min(
+            next ? next.startMs : curr.startMs + 3000,
+            curr.startMs + 2500,
+          );
+          if (curr.startMs < fEnd) {
+            candidates.push({
+              name: "derive_end_from_start",
+              startMs: curr.startMs,
+              endMs: fEnd,
+            });
+          }
+        }
+
+        let bestCandidate: Candidate | null = null;
+        let bestScore = Number.POSITIVE_INFINITY;
+
+        for (const cand of candidates) {
+          let score = 0;
+          if (prev && cand.startMs < prev.endMs) {
+            score += (prev.endMs - cand.startMs) * 3;
+          }
+          if (next && cand.endMs > next.startMs) {
+            score += (cand.endMs - next.startMs) * 3;
+          }
+          // Penalize deviation from neighborhood consensus minute
+          const candMinute = Math.floor((cand.startMs % 3_600_000) / 60_000);
+          score += Math.abs(candMinute - baselineMinute) * 5000;
+
+          const duration = cand.endMs - cand.startMs;
+          if (duration < 500 || duration > 10_000) {
+            score += 2000;
+          }
+          if (score < bestScore) {
+            bestScore = score;
+            bestCandidate = cand;
+          }
+        }
+
+        if (
+          bestCandidate &&
+          curr.match &&
+          (bestCandidate.startMs !== curr.startMs ||
+            bestCandidate.endMs !== curr.endMs)
+        ) {
+          repairedCount++;
+          curr.startMs = bestCandidate.startMs;
+          curr.endMs = bestCandidate.endMs;
+          const newTimingLine = `${formatVttTimestamp(bestCandidate.startMs)} --> ${formatVttTimestamp(bestCandidate.endMs)}${curr.match[3] || ""}`;
+          curr.raw = curr.raw.replace(curr.match[0], newTimingLine);
+        } else if (isStartGtEnd && candidates.length === 0) {
+          droppedCount++;
+          curr.raw = "";
+        }
+      }
+    }
+  }
+
+  if (timedIndices.length === 0) {
+    return vttText;
+  }
+
+  // If nothing was repaired or dropped, return the original text untouched
+  if (repairedCount === 0 && droppedCount === 0) {
+    return vttText;
+  }
+
+  let repairedVtt = parsedBlocks
+    .map((b) => b.raw)
+    .filter((raw) => raw.trim().length > 0)
+    .join("\n\n");
+
+  if (!hasVttHeader(repairedVtt)) {
+    repairedVtt = `WEBVTT\n\n${repairedVtt}`;
+  } else if (!repairedVtt.endsWith("\n\n")) {
+    repairedVtt = `${repairedVtt}\n\n`;
+  }
+
+  console.info(`[subtitle-repair] Fixed ${repairedCount} broken timestamps`);
+  return repairedVtt;
+}
+
 export function normalizeSubtitleToVtt(text: string, format?: string): string {
   const textTrimmed = text.replace(/^\uFEFF/, "").trim();
   if (textTrimmed === "") {
@@ -213,10 +516,16 @@ export function normalizeSubtitleToVtt(text: string, format?: string): string {
     try {
       const input =
         candidateFormat === "vtt" ? prepareVttInput(textTrimmed) : textTrimmed;
-      const vtt = convert(input, { from: candidateFormat, to: "vtt" });
+      let vtt = convert(input, { from: candidateFormat, to: "vtt" });
+      const originalCuesLength = parseVttSubtitles(vtt).length;
+      vtt = repairBrokenSrtTimeline(vtt);
       const cues = parseVttSubtitles(vtt);
 
-      if (cues.length > 0 || isEmptyVttDocument(textTrimmed)) {
+      if (
+        cues.length > 0 ||
+        isEmptyVttDocument(textTrimmed) ||
+        originalCuesLength > 0
+      ) {
         return vtt;
       }
     } catch {
@@ -284,7 +593,9 @@ export function removeVttAds(vttText: string): string {
 
 export function parseCanonicalVtt(vttText: string): CaptionCueType[] {
   const vtt = removeVttAds(vttText);
-  return filterDuplicateCaptionCues(parseVttSubtitles(vtt));
+  return filterDuplicateCaptionCues(parseVttSubtitles(vtt)).sort(
+    (a, b) => a.start - b.start,
+  );
 }
 
 export function tryParseCanonicalVtt(vttText: unknown): CaptionCueType[] {

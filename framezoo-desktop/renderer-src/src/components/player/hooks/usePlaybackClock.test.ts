@@ -308,6 +308,45 @@ describe("playback clock", () => {
     expect(state.time).toBe(2);
   });
 
+  it("snaps for backward seek without isSeeking flag (e.g. skip backward, hotkeys, progress bar click)", () => {
+    const input = {
+      time: 44,
+      duration: 120,
+      playbackRate: 1,
+      isActive: true,
+      resetKey: "source-a",
+    };
+    let state = createPlaybackClockState(input, 1_000);
+
+    // Skip backward 10s: from 44 to 34 without isSeeking
+    state = reconcilePlaybackClockState(
+      state,
+      { ...input, time: 34, isSeeking: false },
+      2_000,
+    );
+    expect(state.time).toBe(34);
+    expect(state.anchor.time).toBe(34);
+  });
+
+  it("snaps for backward seek while paused", () => {
+    const input = {
+      time: 44,
+      duration: 120,
+      playbackRate: 1,
+      isActive: false, // paused
+      resetKey: "source-a",
+    };
+    let state = createPlaybackClockState(input, 1_000);
+
+    // Seek back to 33 while paused
+    state = reconcilePlaybackClockState(
+      state,
+      { ...input, time: 33, isSeeking: false },
+      2_000,
+    );
+    expect(state.time).toBe(33);
+  });
+
   it("snaps immediately when the source identity changes", async () => {
     const times: number[] = [];
     const onTime = (time: number) => times.push(time);

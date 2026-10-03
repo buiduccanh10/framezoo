@@ -27,10 +27,12 @@ export interface PlaybackClockState {
   playbackRate: number;
   isRunning: boolean;
   resetKey: PlaybackClockResetKey;
+  authoritativeTime?: number;
 }
 
 export const MAX_EXTRAPOLATION_SECONDS = 10.0;
 export const SEEK_DISCONTINUITY_FORWARD_THRESHOLD = 0.5;
+export const SEEK_DISCONTINUITY_BACKWARD_THRESHOLD = 0.5;
 export const VISUAL_PLAYBACK_CLOCK_TICK_MS = 33;
 export const SUBTITLE_PLAYBACK_CLOCK_TICK_MS = 50;
 
@@ -86,6 +88,7 @@ export function createPlaybackClockState(
     playbackRate: input.playbackRate,
     isRunning,
     resetKey: input.resetKey,
+    authoritativeTime: time,
   };
 }
 
@@ -96,12 +99,17 @@ export function shouldSnapPlaybackClock(
 ): boolean {
   const authoritativeTime = clampPlaybackTime(input.time, input.duration);
   const currentTime = getClockTime(state, input.duration, now);
+  const forwardDiscontinuity =
+    authoritativeTime - currentTime > SEEK_DISCONTINUITY_FORWARD_THRESHOLD;
+  const backwardDiscontinuity =
+    state.authoritativeTime !== undefined &&
+    state.authoritativeTime - authoritativeTime >
+      SEEK_DISCONTINUITY_BACKWARD_THRESHOLD;
 
   return (
     state.resetKey !== input.resetKey ||
     Boolean(input.isSeeking) ||
-    (!input.isLoading &&
-      authoritativeTime - currentTime > SEEK_DISCONTINUITY_FORWARD_THRESHOLD)
+    (!input.isLoading && (forwardDiscontinuity || backwardDiscontinuity))
   );
 }
 
@@ -128,6 +136,7 @@ export function reconcilePlaybackClockState(
       playbackRate: input.playbackRate,
       isRunning,
       resetKey: input.resetKey,
+      authoritativeTime,
     };
   }
 
@@ -142,6 +151,7 @@ export function reconcilePlaybackClockState(
       playbackRate: input.playbackRate,
       isRunning: false,
       resetKey: input.resetKey,
+      authoritativeTime,
     };
   }
 
@@ -152,6 +162,7 @@ export function reconcilePlaybackClockState(
       playbackRate: input.playbackRate,
       isRunning: true,
       resetKey: input.resetKey,
+      authoritativeTime,
     };
   }
 
@@ -162,6 +173,7 @@ export function reconcilePlaybackClockState(
       playbackRate: input.playbackRate,
       isRunning: true,
       resetKey: input.resetKey,
+      authoritativeTime,
     };
   }
 
@@ -175,6 +187,7 @@ export function reconcilePlaybackClockState(
     playbackRate: input.playbackRate,
     isRunning: true,
     resetKey: input.resetKey,
+    authoritativeTime,
   };
 }
 
