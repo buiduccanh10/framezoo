@@ -261,11 +261,8 @@ export function SubtitleRenderer(props?: {
     const results: VisibleCaptionCue[] = [];
     if (parsedCaptions.length === 0) return results;
 
-    const targetTimeMs = (videoTime - delay) * 1000;
     for (let i = 0; i < parsedCaptions.length; i++) {
       const cue = parsedCaptions[i];
-      if (cue.start > targetTimeMs) break;
-
       if (captionIsVisible(cue.start, cue.end, delay, videoTime)) {
         results.push({ cue, sourceIndex: i });
       }
@@ -316,11 +313,8 @@ export function SecondarySubtitleRenderer(props?: {
     const results: VisibleCaptionCue[] = [];
     if (parsedCaptions.length === 0) return results;
 
-    const targetTimeMs = (videoTime - delay) * 1000;
     for (let i = 0; i < parsedCaptions.length; i++) {
       const cue = parsedCaptions[i];
-      if (cue.start > targetTimeMs) break;
-
       if (captionIsVisible(cue.start, cue.end, delay, videoTime)) {
         results.push({ cue, sourceIndex: i });
       }

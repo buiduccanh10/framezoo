@@ -290,3 +290,92 @@ Hello this is actual movie dialogue`;
     });
   });
 });
+
+describe("repairBrokenSrtTimeline", () => {
+  it("fixes blocks where start > end via zero-minute strategy", () => {
+    const srt = `1
+00:02:32,450 --> 00:00:34,535
+Hello world`;
+    
+    const vtt = normalizeSubtitleToVtt(srt);
+    const cues = parseCanonicalVtt(vtt);
+    expect(cues).toHaveLength(1);
+    expect(cues[0].start).toBe(32450);
+    expect(cues[0].end).toBe(34535);
+  });
+
+  it("drops blocks that cannot be fixed", () => {
+    const srt = `1
+00:02:36,450 --> 00:00:34,535
+Hello world`;
+    
+    const vtt = normalizeSubtitleToVtt(srt);
+    const cues = parseCanonicalVtt(vtt);
+    expect(cues).toHaveLength(0);
+  });
+
+  it("preserves valid blocks unchanged", () => {
+    const srt = `1
+00:00:32,450 --> 00:00:34,535
+Hello world`;
+    
+    const vtt = normalizeSubtitleToVtt(srt);
+    const cues = parseCanonicalVtt(vtt);
+    expect(cues).toHaveLength(1);
+    expect(cues[0].start).toBe(32450);
+    expect(cues[0].end).toBe(34535);
+  });
+
+  it("repairs real-world inverted and spiked subtitles preserving 100% of cues", () => {
+    const srt = `13
+00:00:29,572 --> 00:00:32,366
+Họ từng qua lại với nhau.
+
+14
+00:02:32,450 --> 00:00:34,535
+Tôi cần ghép tủy,
+
+15
+00:00:34,618 --> 00:00:36,078
+nhưng rất khó tìm người tương thích.
+
+16
+00:03:36,162 --> 00:00:38,289
+Anh đã ở đó khi nguồn tin của tôi được thụ thai sao.
+
+17
+00:03:38,372 --> 00:03:39,498
+Ông nghĩ tôi từng ngoại tình à?
+
+18
+00:03:39,582 --> 00:00:42,710
+Nếu anh chỉ cần ADN của tôi
+
+19
+00:00:43,919 --> 00:00:44,754
+Của anh đây.`;
+
+    const vtt = normalizeSubtitleToVtt(srt);
+    const cues = parseCanonicalVtt(vtt);
+    expect(cues).toHaveLength(7);
+    // Block 14 was fixed from 00:02:32,450 to 00:00:32,450
+    expect(cues[1].start).toBe(32450);
+    expect(cues[1].end).toBe(34535);
+    // Block 16 was fixed from 00:03:36,162 to 00:00:36,162
+    expect(cues[3].start).toBe(36162);
+    expect(cues[3].end).toBe(38289);
+    // Block 17 was fixed from 00:03:38,372 to 00:00:38,372
+    expect(cues[4].start).toBe(38372);
+    expect(cues[4].end).toBe(39498);
+    // Block 18 was fixed from 00:03:39,582 to 00:00:39,582
+    expect(cues[5].start).toBe(39582);
+    expect(cues[5].end).toBe(42710);
+    // Block 19
+    expect(cues[6].start).toBe(43919);
+    expect(cues[6].end).toBe(44754);
+    // All cues are strictly monotonic: start < end
+    for (const cue of cues) {
+      expect(cue.start).toBeLessThan(cue.end);
+    }
+  });
+});
