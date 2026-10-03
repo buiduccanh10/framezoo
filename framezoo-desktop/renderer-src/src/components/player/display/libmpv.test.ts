@@ -235,6 +235,251 @@ describe("libmpv display", () => {
     display.destroy();
   });
 
+  it("selects English audio track by default instead of first index", async () => {
+    let eventListener:
+      | ((event: {
+          playerId: string;
+          generation: number;
+          type: "property";
+          name: string;
+          data: unknown;
+        }) => void)
+      | undefined;
+    const commands: Array<{ type: string; trackId?: string }> = [];
+    const changedAudioTracks: unknown[] = [];
+
+    (window as any).electronAPI = {
+      createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
+      loadLibMpvSource: vi.fn().mockResolvedValue(true),
+      sendLibMpvCommand: vi.fn(
+        (_id: string, command: { type: string; trackId?: string }) => {
+          commands.push(command);
+          return Promise.resolve(true);
+        },
+      ),
+      onLibMpvEvent: vi.fn((listener) => {
+        eventListener = listener;
+        return () => undefined;
+      }),
+      onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.processContainerElement(makeElement());
+    display.on("changedaudiotrack", (track) => changedAudioTracks.push(track));
+
+    const source = {
+      type: "mp4",
+      url: "https://example.test/video.mkv",
+    } as Source;
+    display.load({
+      source,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    // First track is Russian (selected by mpv by default), English is track 3
+    eventListener?.({
+      playerId: "player-1",
+      generation: 1,
+      type: "property",
+      name: "track-list",
+      data: JSON.stringify([
+        { id: 1, type: "audio", lang: "ru", title: "Russian", selected: true },
+        {
+          id: 2,
+          type: "audio",
+          lang: "uk",
+          title: "Ukrainian",
+          selected: false,
+        },
+        { id: 3, type: "audio", lang: "en", title: "English", selected: false },
+      ]),
+    });
+
+    // It should automatically switch to English (id: 3) instead of first index (id: 1)
+    expect(commands).toContainEqual({
+      type: "set-audio-track",
+      trackId: "3",
+    });
+    expect(changedAudioTracks.at(-1)).toEqual({
+      id: "3",
+      label: "English",
+      language: "en",
+    });
+
+    // If user manually changes to Russian (track 1)
+    display.changeAudioTrack({ id: "1", label: "Russian", language: "ru" });
+    expect(commands).toContainEqual({
+      type: "set-audio-track",
+      trackId: "1",
+    });
+    expect(changedAudioTracks.at(-1)).toEqual({
+      id: "1",
+      label: "Russian",
+      language: "ru",
+    });
+
+    // Subsequent track-list from mpv reflecting Russian selected should not override back to English
+    eventListener?.({
+      playerId: "player-1",
+      generation: 1,
+      type: "property",
+      name: "track-list",
+      data: JSON.stringify([
+        { id: 1, type: "audio", lang: "ru", title: "Russian", selected: true },
+        {
+          id: 2,
+          type: "audio",
+          lang: "uk",
+          title: "Ukrainian",
+          selected: false,
+        },
+        { id: 3, type: "audio", lang: "en", title: "English", selected: false },
+      ]),
+    });
+    expect(changedAudioTracks.at(-1)).toEqual({
+      id: "1",
+      label: "Russian",
+      language: "ru",
+    });
+
+    display.destroy();
+  });
+
+  it("keeps native track without sending extra command when no English track exists", async () => {
+    let eventListener:
+      | ((event: {
+          playerId: string;
+          generation: number;
+          type: "property";
+          name: string;
+          data: unknown;
+        }) => void)
+      | undefined;
+    const commands: Array<{ type: string; trackId?: string }> = [];
+    const changedAudioTracks: unknown[] = [];
+
+    (window as any).electronAPI = {
+      createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
+      loadLibMpvSource: vi.fn().mockResolvedValue(true),
+      sendLibMpvCommand: vi.fn(
+        (_id: string, command: { type: string; trackId?: string }) => {
+          commands.push(command);
+          return Promise.resolve(true);
+        },
+      ),
+      onLibMpvEvent: vi.fn((listener) => {
+        eventListener = listener;
+        return () => undefined;
+      }),
+      onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.processContainerElement(makeElement());
+    display.on("changedaudiotrack", (track) => changedAudioTracks.push(track));
+
+    display.load({
+      source: { type: "mp4", url: "https://example.test/video.mkv" } as Source,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    eventListener?.({
+      playerId: "player-1",
+      generation: 1,
+      type: "property",
+      name: "track-list",
+      data: JSON.stringify([
+        { id: 1, type: "audio", lang: "ja", title: "Japanese", selected: true },
+        { id: 2, type: "audio", lang: "fr", title: "French", selected: false },
+      ]),
+    });
+
+    // Should NOT send any set-audio-track commands since Japanese is already selected
+    expect(commands.filter((c) => c.type === "set-audio-track")).toHaveLength(
+      0,
+    );
+    expect(changedAudioTracks.at(-1)).toEqual({
+      id: "1",
+      label: "Japanese",
+      language: "ja",
+    });
+
+    display.destroy();
+  });
+
+  it("handles single audio track without extra command", async () => {
+    let eventListener:
+      | ((event: {
+          playerId: string;
+          generation: number;
+          type: "property";
+          name: string;
+          data: unknown;
+        }) => void)
+      | undefined;
+    const commands: Array<{ type: string; trackId?: string }> = [];
+    const changedAudioTracks: unknown[] = [];
+
+    (window as any).electronAPI = {
+      createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
+      loadLibMpvSource: vi.fn().mockResolvedValue(true),
+      sendLibMpvCommand: vi.fn(
+        (_id: string, command: { type: string; trackId?: string }) => {
+          commands.push(command);
+          return Promise.resolve(true);
+        },
+      ),
+      onLibMpvEvent: vi.fn((listener) => {
+        eventListener = listener;
+        return () => undefined;
+      }),
+      onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.processContainerElement(makeElement());
+    display.on("changedaudiotrack", (track) => changedAudioTracks.push(track));
+
+    display.load({
+      source: { type: "mp4", url: "https://example.test/video.mkv" } as Source,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    eventListener?.({
+      playerId: "player-1",
+      generation: 1,
+      type: "property",
+      name: "track-list",
+      data: JSON.stringify([
+        { id: 1, type: "audio", lang: "ja", title: "Japanese", selected: true },
+      ]),
+    });
+
+    expect(commands.filter((c) => c.type === "set-audio-track")).toHaveLength(
+      0,
+    );
+    expect(changedAudioTracks.at(-1)).toEqual({
+      id: "1",
+      label: "Japanese",
+      language: "ja",
+    });
+
+    display.destroy();
+  });
+
   it("selects embedded subtitles natively and disables them for external captions", async () => {
     const commands: Array<{ type: string; trackId?: string }> = [];
 
@@ -1793,10 +2038,12 @@ describe("libmpv display", () => {
     (window as any).electronAPI = {
       createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
       loadLibMpvSource: vi.fn().mockResolvedValue(true),
-      sendLibMpvCommand: vi.fn((_id: string, command: { type: string; volume?: number }) => {
-        commands.push(command);
-        return Promise.resolve(true);
-      }),
+      sendLibMpvCommand: vi.fn(
+        (_id: string, command: { type: string; volume?: number }) => {
+          commands.push(command);
+          return Promise.resolve(true);
+        },
+      ),
       onLibMpvEvent: vi.fn().mockReturnValue(() => undefined),
       onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
     };
@@ -1869,10 +2116,12 @@ describe("libmpv display", () => {
     (window as any).electronAPI = {
       createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
       loadLibMpvSource: vi.fn().mockResolvedValue(true),
-      sendLibMpvCommand: vi.fn((_id: string, command: { type: string; rate?: number }) => {
-        commands.push(command);
-        return Promise.resolve(true);
-      }),
+      sendLibMpvCommand: vi.fn(
+        (_id: string, command: { type: string; rate?: number }) => {
+          commands.push(command);
+          return Promise.resolve(true);
+        },
+      ),
       onLibMpvEvent: vi.fn().mockReturnValue(() => undefined),
       onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
     };
