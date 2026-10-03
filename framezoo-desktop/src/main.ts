@@ -729,6 +729,15 @@ const desktopAppUpdater = createDesktopAppUpdater({
   appName: APP_NAME,
   beforeInstall: async () => {
     try {
+      libmpvController.destroyAll("updater:before-install");
+      desktopPipController.close();
+    } catch (error) {
+      console.error(
+        "[main] Failed to destroy controllers before update install:",
+        error,
+      );
+    }
+    try {
       await torrentManager.stopAll();
     } catch (error) {
       console.error(
@@ -752,6 +761,26 @@ const desktopAppUpdater = createDesktopAppUpdater({
     } catch (error) {
       console.error(
         "[main] Failed to sync torrent cache before update install:",
+        error,
+      );
+    }
+    try {
+      app.releaseSingleInstanceLock();
+    } catch (error) {
+      console.error(
+        "[main] Failed to release single instance lock before update install:",
+        error,
+      );
+    }
+    try {
+      for (const window of BrowserWindow.getAllWindows()) {
+        if (!window.isDestroyed()) {
+          window.destroy();
+        }
+      }
+    } catch (error) {
+      console.error(
+        "[main] Failed to destroy windows before update install:",
         error,
       );
     }
@@ -2029,6 +2058,7 @@ app.on("open-url", (event, url) => {
 });
 
 app.on("window-all-closed", () => {
+  if ((global as any).isUpdating) return;
   if (process.platform !== "darwin") {
     app.quit();
   }
