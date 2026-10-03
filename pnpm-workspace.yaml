@@ -8,10 +8,15 @@ packages:
 shamefullyHoist: true
 strictPeerDependencies: false
 
-# Nitro's build-only listhen chain has no published node-forge fix yet.
+# Known vulnerabilities with no upstream published fixes yet:
+# - GHSA-86w9-cpqp-85rv: Nitro's build-only listhen chain (node-forge <=1.3.3)
+# - GHSA-ch52-4w7c-c8xp: electron-builder dev dependency (http-cache-semantics <=4.2.0)
+# - GHSA-vfj7-8cjw-p6xm: micromatch dependency (braces <=3.0.3)
 auditConfig:
   ignoreGhsas:
     - GHSA-86w9-cpqp-85rv
+    - GHSA-ch52-4w7c-c8xp
+    - GHSA-vfj7-8cjw-p6xm
 
 allowBuilds:
   "@parcel/watcher": true
