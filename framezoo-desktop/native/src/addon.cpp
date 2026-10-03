@@ -1175,6 +1175,8 @@ napi_value create_player(napi_env env, napi_callback_info info) {
   set_mpv_option(player.get(), "ao", "avfoundation");
 #endif
 #endif
+  // Default audio language: prefer English over first index
+  set_mpv_option(player.get(), "alang", "en,eng,enUS,en-US,enGB,en-GB,English");
   set_mpv_option(player.get(), "osc", "no");
   set_mpv_option(player.get(), "osd-level", "0");
   set_mpv_option(player.get(), "osd-bar", "no");

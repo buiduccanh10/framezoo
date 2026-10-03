@@ -9,6 +9,7 @@ import {
   MpvTrack,
   PictureInPictureMode,
 } from "@/components/player/display/displayInterface";
+import { resolveDefaultAudioTrack } from "@/components/player/utils/audioTrack";
 import {
   DesktopPipAction,
   DesktopPipState,
@@ -228,6 +229,8 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
   let caption: DisplayCaption | null = null;
   let secondaryCaption: DisplayCaption | null = null;
   let tracks: MpvTrack[] = [];
+  let userSelectedAudioTrack = false;
+  let hasAppliedDefaultAudioTrack = false;
   let destroyed = false;
   let desiredPaused = true;
   let unbindEvents: (() => void) | null = null;
@@ -734,8 +737,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     const subtitleTracks = tracks.filter((track) => track.kind === "sub");
     emit("audiotracks", audioTracks);
     emit("subtitletracks", subtitleTracks);
-    emit(
-      "changedaudiotrack",
+    const currentNativeSelectedTrack =
       audioTracks.find((track) =>
         tracks.some(
           (nativeTrack) =>
@@ -743,8 +745,33 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
             nativeTrack.id === track.id &&
             nativeTrack.selected,
         ),
-      ) ?? null,
-    );
+      ) ?? null;
+
+    let targetAudioTrack = currentNativeSelectedTrack;
+
+    if (
+      !userSelectedAudioTrack &&
+      !hasAppliedDefaultAudioTrack &&
+      audioTracks.length > 0
+    ) {
+      hasAppliedDefaultAudioTrack = true;
+      targetAudioTrack = resolveDefaultAudioTrack(
+        audioTracks,
+        currentNativeSelectedTrack,
+      );
+      if (
+        playerId &&
+        targetAudioTrack &&
+        targetAudioTrack.id !== currentNativeSelectedTrack?.id
+      ) {
+        void sendNativeCommand(playerId, {
+          type: "set-audio-track",
+          trackId: targetAudioTrack.id,
+        });
+      }
+    }
+
+    emit("changedaudiotrack", targetAudioTrack);
   }
 
   function publishTimePosition(position: number) {
@@ -1298,6 +1325,8 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         emitPictureInPictureState(null);
       }
       desktopPipTransitioning = false;
+      userSelectedAudioTrack = false;
+      hasAppliedDefaultAudioTrack = false;
       if (isFullscreen) {
         isFullscreen = false;
         emit("fullscreen", false);
@@ -1326,6 +1355,8 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       clearTorrentRetry();
       source = ops.source;
       tracks = [];
+      userSelectedAudioTrack = false;
+      hasAppliedDefaultAudioTrack = false;
       emit("audiotracks", []);
       emit("changedaudiotrack", null);
       time = Math.max(0, ops.startAt);
@@ -1351,6 +1382,8 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         pendingLoad = null;
         pendingSeekTarget = null;
         pendingInitialResumeTime = null;
+        userSelectedAudioTrack = false;
+        hasAppliedDefaultAudioTrack = false;
         const playerToDestroy = playerId;
         playerId = null;
         tracks = [];
@@ -1419,11 +1452,13 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       // continue to reload through the player store.
     },
     changeAudioTrack(track) {
+      userSelectedAudioTrack = true;
       if (!playerId) return;
       void sendNativeCommand(playerId, {
         type: "set-audio-track",
         trackId: track.id,
       });
+      emit("changedaudiotrack", track);
     },
     processContainerElement(container) {
       containerElement = container;
