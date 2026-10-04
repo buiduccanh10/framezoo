@@ -31,7 +31,8 @@ function RouterBase(props: { id: string; children: ReactNode }) {
         width: isMobile ? "100%" : `${routeMeta?.width ?? 0}px`,
       },
       config: {
-        easing: easings.linear,
+        duration: 250,
+        easing: easings.easeOutCubic,
       },
     }),
     [],
