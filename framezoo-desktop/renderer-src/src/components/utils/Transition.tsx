@@ -3,16 +3,13 @@ import {
   CSSProperties,
   ReactNode,
   createContext,
+  useCallback,
   useContext,
   useEffect,
-  useLayoutEffect,
   useMemo,
   useRef,
   useState,
 } from "react";
-
-const useIsomorphicLayoutEffect =
-  typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 export type TransitionAnimations =
   | "slide-down"
@@ -47,10 +44,10 @@ function getClasses(
 ): TransitionClasses {
   if (animation === "slide-down") {
     return {
-      leave: `transition-[transform,opacity] ${duration}`,
+      leave: `transition-all ease-out ${duration}`,
       leaveFrom: "opacity-100 translate-y-0",
       leaveTo: "-translate-y-4 opacity-0",
-      enter: `transition-[transform,opacity] ${duration}`,
+      enter: `transition-all ease-out ${duration}`,
       enterFrom: "opacity-0 -translate-y-4",
       enterTo: "translate-y-0 opacity-100",
     };
@@ -58,10 +55,10 @@ function getClasses(
 
   if (animation === "slide-up") {
     return {
-      leave: `transition-[transform,opacity] ${duration}`,
+      leave: `transition-all ease-out ${duration}`,
       leaveFrom: "opacity-100 translate-y-0",
       leaveTo: "translate-y-4 opacity-0",
-      enter: `transition-[transform,opacity] ${duration}`,
+      enter: `transition-all ease-out ${duration}`,
       enterFrom: "opacity-0 translate-y-4",
       enterTo: "translate-y-0 opacity-100",
     };
@@ -69,10 +66,10 @@ function getClasses(
 
   if (animation === "slide-full-left") {
     return {
-      leave: `transition-[transform] ${duration}`,
+      leave: `transition-transform ease-out ${duration}`,
       leaveFrom: "translate-x-0",
       leaveTo: "-translate-x-full",
-      enter: `transition-[transform] ${duration}`,
+      enter: `transition-transform ease-out ${duration}`,
       enterFrom: "-translate-x-full",
       enterTo: "translate-x-0",
     };
@@ -80,10 +77,10 @@ function getClasses(
 
   if (animation === "slide-full-right") {
     return {
-      leave: `transition-[transform] ${duration}`,
+      leave: `transition-transform ease-out ${duration}`,
       leaveFrom: "translate-x-0",
       leaveTo: "translate-x-full",
-      enter: `transition-[transform] ${duration}`,
+      enter: `transition-transform ease-out ${duration}`,
       enterFrom: "translate-x-full",
       enterTo: "translate-x-0",
     };
@@ -91,10 +88,10 @@ function getClasses(
 
   if (animation === "fade") {
     return {
-      leave: `transition-[transform,opacity] ${duration}`,
+      leave: `transition-opacity ease-out ${duration}`,
       leaveFrom: "opacity-100",
       leaveTo: "opacity-0",
-      enter: `transition-[transform,opacity] ${duration}`,
+      enter: `transition-opacity ease-out ${duration}`,
       enterFrom: "opacity-0",
       enterTo: "opacity-100",
     };
@@ -111,12 +108,19 @@ function parseDuration(durationClass?: string): number {
 
 interface TransitionContextValue {
   show: boolean;
+  onChildLeaveStart?: () => void;
+  onChildLeaveEnd?: () => void;
 }
 
 const TransitionContext = createContext<TransitionContextValue | null>(null);
 
 type Stage =
-  "unmounted" | "enter-start" | "enter-active" | "entered" | "leave-active";
+  | "unmounted"
+  | "enter-from"
+  | "enter-to"
+  | "entered"
+  | "leave-from"
+  | "leave-to";
 
 export function Transition(props: Props) {
   const context = useContext(TransitionContext);
@@ -135,73 +139,180 @@ export function Transition(props: Props) {
   );
 
   const [mounted, setMounted] = useState(effectiveShow);
-  const [stage, setStage] = useState<Stage>(
-    effectiveShow ? "entered" : "unmounted",
-  );
-  const isFirstRender = useRef(true);
+  const [stage, setStage] = useState<Stage>(() => {
+    if (!effectiveShow) return "unmounted";
+    return props.animation === "none" ? "entered" : "enter-from";
+  });
+
+  const mountedRef = useRef(mounted);
+  mountedRef.current = mounted;
+  const stageRef = useRef(stage);
+  stageRef.current = stage;
+
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const rafRef1 = useRef<number | null>(null);
+  const rafRef2 = useRef<number | null>(null);
   const elRef = useRef<HTMLDivElement>(null);
+  const isLeavingParent = useRef(false);
+
+  // Active child leave tracking for parent coordination
+  const leavingChildrenCountRef = useRef(0);
+  const [childrenLeaving, setChildrenLeaving] = useState(false);
+
+  const onChildLeaveStart = useCallback(() => {
+    leavingChildrenCountRef.current += 1;
+    setChildrenLeaving(true);
+  }, []);
+
+  const onChildLeaveEnd = useCallback(() => {
+    leavingChildrenCountRef.current = Math.max(
+      0,
+      leavingChildrenCountRef.current - 1,
+    );
+    if (leavingChildrenCountRef.current === 0) {
+      setChildrenLeaving(false);
+    }
+  }, []);
+
+  const clearPending = useCallback(() => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+    if (rafRef1.current !== null) {
+      cancelAnimationFrame(rafRef1.current);
+      rafRef1.current = null;
+    }
+    if (rafRef2.current !== null) {
+      cancelAnimationFrame(rafRef2.current);
+      rafRef2.current = null;
+    }
+  }, []);
 
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
-
-    if (props.animation === "none") {
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-        timerRef.current = null;
+    return () => {
+      clearPending();
+      if (isLeavingParent.current && context?.onChildLeaveEnd) {
+        context.onChildLeaveEnd();
       }
-      setMounted(effectiveShow);
-      setStage(effectiveShow ? "entered" : "unmounted");
-      return;
-    }
+    };
+  }, [clearPending, context]);
+
+  const isInitialMount = useRef(true);
+
+  useEffect(() => {
+    clearPending();
 
     if (effectiveShow) {
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-        timerRef.current = null;
+      if (isLeavingParent.current && context?.onChildLeaveEnd) {
+        context.onChildLeaveEnd();
+        isLeavingParent.current = false;
       }
+
       setMounted(true);
-      setStage("enter-start");
-    } else {
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-        timerRef.current = null;
+
+      if (props.animation === "none") {
+        setStage("entered");
+        return;
       }
-      setStage("leave-active");
-      timerRef.current = setTimeout(() => {
-        setMounted(false);
-        setStage("unmounted");
-        timerRef.current = null;
-      }, durationMs);
+
+      if (!isInitialMount.current && stageRef.current === "entered") {
+        return;
+      }
+      isInitialMount.current = false;
+
+      setStage("enter-from");
+
+      rafRef1.current = requestAnimationFrame(() => {
+        if (elRef.current) {
+          void elRef.current.offsetHeight;
+        }
+        rafRef2.current = requestAnimationFrame(() => {
+          setStage("enter-to");
+          timerRef.current = setTimeout(() => {
+            setStage("entered");
+            timerRef.current = null;
+          }, durationMs);
+        });
+      });
+    } else {
+      isInitialMount.current = false;
+
+      if (!mountedRef.current && stageRef.current === "unmounted") {
+        return;
+      }
+
+      if (props.animation === "none") {
+        return;
+      }
+
+      if (!isLeavingParent.current && context?.onChildLeaveStart) {
+        isLeavingParent.current = true;
+        context.onChildLeaveStart();
+      }
+
+      setStage("leave-from");
+
+      rafRef1.current = requestAnimationFrame(() => {
+        if (elRef.current) {
+          void elRef.current.offsetHeight;
+        }
+        rafRef2.current = requestAnimationFrame(() => {
+          setStage("leave-to");
+          timerRef.current = setTimeout(() => {
+            setMounted(false);
+            setStage("unmounted");
+            timerRef.current = null;
+            if (isLeavingParent.current && context?.onChildLeaveEnd) {
+              context.onChildLeaveEnd();
+              isLeavingParent.current = false;
+            }
+          }, durationMs);
+        });
+      });
     }
 
     return () => {
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-        timerRef.current = null;
-      }
+      clearPending();
     };
-  }, [effectiveShow, props.animation, durationMs]);
+  }, [effectiveShow, props.animation, durationMs, clearPending, context]);
 
-  useIsomorphicLayoutEffect(() => {
-    if (stage === "enter-start") {
-      if (elRef.current) {
-        void elRef.current.offsetHeight;
+  // Root coordination: when effectiveShow is false and animation is "none", wait for child transitions
+  useEffect(() => {
+    if (!effectiveShow && props.animation === "none") {
+      if (childrenLeaving) {
+        return;
       }
-      setStage("enter-active");
-      timerRef.current = setTimeout(() => {
-        setStage("entered");
-        timerRef.current = null;
-      }, durationMs);
+
+      const checkTimer = setTimeout(() => {
+        if (leavingChildrenCountRef.current === 0) {
+          setMounted(false);
+          setStage("unmounted");
+        }
+      }, 50);
+
+      const safetyTimer = setTimeout(
+        () => {
+          setMounted(false);
+          setStage("unmounted");
+        },
+        Math.max(durationMs, 1000),
+      );
+
+      return () => {
+        clearTimeout(checkTimer);
+        clearTimeout(safetyTimer);
+      };
     }
-  }, [stage, durationMs]);
+  }, [effectiveShow, props.animation, childrenLeaving, durationMs]);
 
   const contextValue = useMemo(
-    () => ({ show: effectiveShow }),
-    [effectiveShow],
+    () => ({
+      show: effectiveShow,
+      onChildLeaveStart,
+      onChildLeaveEnd,
+    }),
+    [effectiveShow, onChildLeaveStart, onChildLeaveEnd],
   );
 
   if (!mounted && stage === "unmounted") {
@@ -209,22 +320,32 @@ export function Transition(props: Props) {
   }
 
   let activeClass = "";
-  if (stage === "enter-start") {
+  if (stage === "enter-from") {
     activeClass = `${classes.enter ?? ""} ${classes.enterFrom ?? ""}`;
-  } else if (stage === "enter-active") {
+  } else if (stage === "enter-to") {
     activeClass = `${classes.enter ?? ""} ${classes.enterTo ?? ""}`;
   } else if (stage === "entered") {
     activeClass = classes.enterTo ?? "";
-  } else if (stage === "leave-active") {
+  } else if (stage === "leave-from") {
+    activeClass = `${classes.leave ?? ""} ${classes.leaveFrom ?? ""}`;
+  } else if (stage === "leave-to") {
     activeClass = `${classes.leave ?? ""} ${classes.leaveTo ?? ""}`;
   }
+
+  const animStyle =
+    props.animation === "none" || stage === "entered" || stage === "unmounted"
+      ? props.style
+      : {
+          ...props.style,
+          transitionDuration: `${durationMs}ms`,
+        };
 
   return (
     <TransitionContext.Provider value={contextValue}>
       <div
         ref={elRef}
         className={classNames(props.className, activeClass)}
-        style={props.style}
+        style={animStyle}
       >
         {props.children}
       </div>
