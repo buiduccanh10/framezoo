@@ -281,7 +281,6 @@ export function SourceSelectPart(props: {
     () => [
       { id: "all", name: t("addons.player.qualities.all", "All Qualities") },
       { id: "4K", name: t("addons.player.qualities.4k", "4K") },
-      { id: "1440p", name: t("addons.player.qualities.1440p", "1440p") },
       { id: "1080p", name: t("addons.player.qualities.1080p", "1080p") },
       { id: "720p", name: t("addons.player.qualities.720p", "720p") },
       { id: "480p", name: t("addons.player.qualities.480p", "480p / SD") },
@@ -658,10 +657,20 @@ export function SourceSelectPart(props: {
   ]);
   const filteredAddonStreams = useMemo(() => {
     if (selectedQuality.id === "all") return addonStreams;
+    if (selectedQuality.id === "other") {
+      const knownQualities = new Set(
+        qualityOptions
+          .filter((opt) => opt.id !== "all" && opt.id !== "other")
+          .map((opt) => opt.id),
+      );
+      return addonStreams.filter(
+        (stream) => !knownQualities.has(getAddonStreamQuality(stream)),
+      );
+    }
     return addonStreams.filter(
       (stream) => getAddonStreamQuality(stream) === selectedQuality.id,
     );
-  }, [addonStreams, selectedQuality]);
+  }, [addonStreams, qualityOptions, selectedQuality]);
   const selectedAddonStreams = useMemo(() => {
     if (!displayedSelectedAddonId) return [];
     return filteredAddonStreams.filter(
