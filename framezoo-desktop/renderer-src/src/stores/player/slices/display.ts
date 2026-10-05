@@ -18,6 +18,7 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
       set((s) => {
         s.display = null;
         s.mediaPlaying.hasRenderedFrame = false;
+        s.mediaPlaying.isPlaybackStalled = false;
         s.interface.pictureInPictureMode = null;
         s.interface.documentPictureInPictureWindow = null;
       });
@@ -40,6 +41,11 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
         if (newDisplay.getType() === "casting") {
           s.mediaPlaying.hasRenderedFrame = true;
         }
+      }),
+    );
+    newDisplay.on("playbackstalled", (stalled) =>
+      set((s) => {
+        s.mediaPlaying.isPlaybackStalled = stalled;
       }),
     );
     newDisplay.on("fullscreen", (isFullscreen) =>
@@ -194,6 +200,7 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
       ) {
         set((s) => {
           s.mediaPlaying.isLoading = false;
+          s.mediaPlaying.isPlaybackStalled = false;
         });
         return;
       }
@@ -216,6 +223,7 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
       s.display = newDisplay;
       s.mediaPlaying.hasRenderedFrame = false;
       s.mediaPlaying.isLoading = false;
+      s.mediaPlaying.isPlaybackStalled = false;
     });
   },
   reset() {
@@ -249,6 +257,7 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
       s.mediaPlaying.isPlaying = false;
       s.mediaPlaying.isPaused = true;
       s.mediaPlaying.isLoading = false;
+      s.mediaPlaying.isPlaybackStalled = false;
       s.mediaPlaying.hasPlayedOnce = false;
       s.mediaPlaying.hasRenderedFrame = false;
     });

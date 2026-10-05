@@ -94,20 +94,43 @@ type CaptionSelectionOptions = {
   isCurrent?: () => boolean;
 };
 
-function waitForStablePlaybackPosition(): Promise<number | null> {
+export function pauseAndWaitForStablePlaybackPosition(
+  display: NonNullable<ReturnType<typeof usePlayerStore.getState>["display"]>,
+  alreadyPaused: boolean,
+  signal: AbortSignal,
+): Promise<number | null> {
   return new Promise((resolve) => {
     const deadline = performance.now() + SUBTITLE_SYNC_PAUSE_TIMEOUT_MS;
     let previousTime: number | null = null;
     let stableSamples = 0;
+    let pauseConfirmed = alreadyPaused;
+    let settled = false;
+
+    const cleanup = () => {
+      display.off("pauseconfirmed", onPauseConfirmed);
+      signal.removeEventListener("abort", onAbort);
+      window.clearTimeout(timer);
+    };
+    const finish = (time: number | null) => {
+      if (settled) return;
+      settled = true;
+      cleanup();
+      resolve(time);
+    };
+    const onPauseConfirmed = () => {
+      pauseConfirmed = true;
+    };
+    const onAbort = () => finish(null);
 
     const sample = () => {
       const state = usePlayerStore.getState();
       const currentTime = state.progress.time;
 
       if (
-        (state.mediaPlaying.isPaused || !state.mediaPlaying.isPlaying) &&
+        pauseConfirmed &&
         Number.isFinite(currentTime) &&
-        (previousTime === null || Math.abs(currentTime - previousTime) <= 0.1)
+        previousTime !== null &&
+        Math.abs(currentTime - previousTime) <= 0.05
       ) {
         stableSamples += 1;
       } else {
@@ -115,17 +138,26 @@ function waitForStablePlaybackPosition(): Promise<number | null> {
       }
       previousTime = currentTime;
 
-      if (
-        stableSamples >= SUBTITLE_SYNC_STABLE_SAMPLES ||
-        performance.now() >= deadline
-      ) {
-        resolve(Number.isFinite(currentTime) ? currentTime : null);
+      if (stableSamples >= SUBTITLE_SYNC_STABLE_SAMPLES) {
+        finish(currentTime);
+        return;
+      }
+      if (performance.now() >= deadline) {
+        finish(null);
         return;
       }
 
-      window.setTimeout(sample, 50);
+      timer = window.setTimeout(sample, 50);
     };
 
+    let timer = 0;
+    display.on("pauseconfirmed", onPauseConfirmed);
+    signal.addEventListener("abort", onAbort, { once: true });
+    if (signal.aborted) {
+      finish(null);
+      return;
+    }
+    if (!alreadyPaused) display.pause();
     sample();
   });
 }
@@ -244,8 +276,8 @@ export function useCaptions() {
       const initialState = usePlayerStore.getState();
       const initialSource = initialState.source;
       const wasPlaying =
-        !initialState.mediaPlaying.isPaused ||
-        initialState.mediaPlaying.isPlaying;
+        initialState.mediaPlaying.isPlaying &&
+        !initialState.mediaPlaying.isPaused;
       let contextSource = initialSource;
 
       if (targets.length === 0 || initialSource?.type !== "file") {
@@ -265,12 +297,20 @@ export function useCaptions() {
       });
 
       try {
-        if (wasPlaying) {
-          initialState.display?.pause();
+        const display = initialState.display;
+        if (!display) return { status: "failed" };
+        const pausedTime = await pauseAndWaitForStablePlaybackPosition(
+          display,
+          !wasPlaying,
+          abortController.signal,
+        );
+        if (pausedTime === null) {
+          if (abortController.signal.aborted) return { status: "cancelled" };
+          return {
+            status: "failed",
+            errorMessage: "Player did not confirm pause before audio capture",
+          };
         }
-
-        const pausedTime = await waitForStablePlaybackPosition();
-        if (pausedTime === null) return { status: "failed" };
 
         const pausedState = usePlayerStore.getState();
         if (pausedState.source !== initialSource) return { status: "failed" };

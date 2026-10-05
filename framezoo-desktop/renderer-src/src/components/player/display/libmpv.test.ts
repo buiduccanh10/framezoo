@@ -680,6 +680,8 @@ describe("libmpv display", () => {
     const plays: number[] = [];
     const pauses: number[] = [];
     const loading: boolean[] = [];
+    const stalled: boolean[] = [];
+    const pauseConfirmed: number[] = [];
 
     (window as any).electronAPI = {
       createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
@@ -697,6 +699,8 @@ describe("libmpv display", () => {
     display.on("loading", (isLoading) => loading.push(isLoading));
     display.on("play", () => plays.push(1));
     display.on("pause", () => pauses.push(1));
+    display.on("playbackstalled", (value) => stalled.push(value));
+    display.on("pauseconfirmed", () => pauseConfirmed.push(1));
     display.load({
       source: {
         type: "mp4",
@@ -742,6 +746,7 @@ describe("libmpv display", () => {
     });
     expect(pauses).toEqual([]);
     expect(loading.at(-1)).toBe(true);
+    expect(stalled.at(-1)).toBe(true);
 
     // Cache recovers: playback resumes automatically.
     eventListener?.({
@@ -760,6 +765,8 @@ describe("libmpv display", () => {
     });
     expect(plays.length).toBeGreaterThanOrEqual(2);
     expect(pauses).toEqual([]);
+    expect(stalled.at(-1)).toBe(false);
+    expect(pauseConfirmed).toHaveLength(1);
     display.destroy();
   });
 

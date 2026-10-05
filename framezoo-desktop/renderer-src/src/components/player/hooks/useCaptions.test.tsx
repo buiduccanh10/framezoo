@@ -2,6 +2,10 @@ import { act } from "react";
 import { type Root, createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+import type {
+  DisplayInterface,
+  DisplayInterfaceEvents,
+} from "@/components/player/display/displayInterface";
 import { useLanguageStore } from "@/stores/language";
 import type {
   CaptionListItem,
@@ -10,9 +14,13 @@ import type {
 import { usePlayerStore } from "@/stores/player/store";
 import type { SourceSliceSource } from "@/stores/player/utils/qualities";
 import { useSubtitleStore } from "@/stores/subtitles";
+import { makeEmitter } from "@/utils/events";
 import { queryClient } from "@/utils/queryClient";
 
-import { useCaptions } from "./useCaptions";
+import {
+  pauseAndWaitForStablePlaybackPosition,
+  useCaptions,
+} from "./useCaptions";
 
 const mocks = vi.hoisted(() => ({
   downloadCaptionAsVtt: vi.fn(),
@@ -186,5 +194,56 @@ describe("caption auto-selection across episode transitions", () => {
     expect(usePlayerStore.getState().caption.selected?.id).toBe(
       episodeTwoCaption.id,
     );
+  });
+});
+
+describe("subtitle sync pause barrier", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    usePlayerStore.getState().reset();
+    usePlayerStore.setState((state) => ({
+      progress: { ...state.progress, time: 12.5 },
+    }));
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+    usePlayerStore.getState().reset();
+  });
+
+  function makeDisplay() {
+    const emitter = makeEmitter<DisplayInterfaceEvents>();
+    const display = {
+      on: emitter.on,
+      off: emitter.off,
+      pause: vi.fn(),
+    } as unknown as DisplayInterface;
+    return { display, emit: emitter.emit };
+  }
+
+  it("waits for native pause confirmation and stable progress before capture", async () => {
+    const { display, emit } = makeDisplay();
+    const result = pauseAndWaitForStablePlaybackPosition(
+      display,
+      false,
+      new AbortController().signal,
+    );
+
+    expect(display.pause).toHaveBeenCalledOnce();
+    emit("pauseconfirmed", undefined);
+    await vi.advanceTimersByTimeAsync(100);
+    await expect(result).resolves.toBe(12.5);
+  });
+
+  it("does not return a capture position when native pause is not confirmed", async () => {
+    const { display } = makeDisplay();
+    const result = pauseAndWaitForStablePlaybackPosition(
+      display,
+      false,
+      new AbortController().signal,
+    );
+
+    await vi.advanceTimersByTimeAsync(1500);
+    await expect(result).resolves.toBeNull();
   });
 });

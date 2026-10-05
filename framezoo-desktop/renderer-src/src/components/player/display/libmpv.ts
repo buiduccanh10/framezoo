@@ -970,6 +970,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
           }
           const wasPaused = paused;
           paused = event.data;
+          if (paused) emit("pauseconfirmed", undefined);
           if (!paused) {
             syncPipState(true);
             if (cachePaused || !wasPaused) {
@@ -1019,10 +1020,12 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
             break;
           }
           isSeeking = true;
+          emit("playbackstalled", true);
           emit("loading", true);
           break;
         }
         isSeeking = false;
+        emit("playbackstalled", cachePaused);
         if (!paused || pendingSeekTarget !== null) {
           emit("loading", false);
         }
@@ -1036,6 +1039,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         break;
       case "paused-for-cache":
         cachePaused = event.data === true;
+        emit("playbackstalled", cachePaused || isSeeking);
         emit("loading", cachePaused);
         break;
       case "demuxer-cache-duration":
