@@ -52,6 +52,8 @@ export type PictureInPictureState = {
 export type DisplayInterfaceEvents = {
   play: void;
   pause: void;
+  pauseconfirmed: void;
+  playbackstalled: boolean;
   fullscreen: boolean;
   volumechange: number;
   time: number;

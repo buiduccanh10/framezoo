@@ -63,8 +63,12 @@ export function makeChromecastDisplayInterface(
           break;
         case "playerState":
           emit("loading", e.value === "BUFFERING");
+          emit("playbackstalled", e.value === "BUFFERING");
           if (e.value === "PLAYING") emit("play", undefined);
-          else if (e.value === "PAUSED") emit("pause", undefined);
+          else if (e.value === "PAUSED") {
+            emit("pause", undefined);
+            emit("pauseconfirmed", undefined);
+          }
           isPaused = e.value === "PAUSED";
           break;
         case "isMuted":

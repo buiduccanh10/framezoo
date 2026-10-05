@@ -246,7 +246,9 @@ export function SubtitleRenderer(props?: {
   const vttData = usePlayerStore((s) => s.caption.selected?.vttData);
   const dualSubEnabled = usePlayerStore((s) => s.caption.dualSubEnabled);
   const isSeeking = usePlayerStore((s) => s.interface.isSeeking);
-  const isLoading = usePlayerStore((s) => s.mediaPlaying.isLoading);
+  const isPlaybackStalled = usePlayerStore(
+    (s) => s.mediaPlaying.isPlaybackStalled,
+  );
   const styling = useSubtitleStore((s) => s.styling);
   const overrideCasing = useSubtitleStore((s) => s.overrideCasing);
   const delay = useSubtitleStore((s) => s.primaryDelay);
@@ -272,7 +274,7 @@ export function SubtitleRenderer(props?: {
 
   const captionsToRender = useSeekFrozenCaptions<VisibleCaptionCue>(
     visibleCaptions,
-    isSeeking || isLoading,
+    isSeeking || isPlaybackStalled,
   );
 
   return (
@@ -293,7 +295,9 @@ export function SecondarySubtitleRenderer(props?: {
   const vttData = usePlayerStore((s) => s.caption.secondary?.vttData);
   const dualSubEnabled = usePlayerStore((s) => s.caption.dualSubEnabled);
   const isSeeking = usePlayerStore((s) => s.interface.isSeeking);
-  const isLoading = usePlayerStore((s) => s.mediaPlaying.isLoading);
+  const isPlaybackStalled = usePlayerStore(
+    (s) => s.mediaPlaying.isPlaybackStalled,
+  );
   const primaryStyling = useSubtitleStore((s) => s.styling);
   const styling = useSubtitleStore((s) => s.secondaryStyling);
   const overrideCasing = useSubtitleStore((s) => s.overrideCasing);
@@ -324,7 +328,7 @@ export function SecondarySubtitleRenderer(props?: {
 
   const captionsToRender = useSeekFrozenCaptions<VisibleCaptionCue>(
     visibleCaptions,
-    isSeeking || isLoading,
+    isSeeking || isPlaybackStalled,
   );
 
   if (!vttData) return null;

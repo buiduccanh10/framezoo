@@ -2,6 +2,9 @@ import { act, createElement, useEffect } from "react";
 import { type Root, createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+import { playerStatus } from "@/stores/player/slices/source";
+import { usePlayerStore } from "@/stores/player/store";
+
 import {
   MAX_EXTRAPOLATION_SECONDS,
   SUBTITLE_PLAYBACK_CLOCK_TICK_MS,
@@ -10,6 +13,7 @@ import {
   createPlaybackClockState,
   getProjectedPlaybackTime,
   reconcilePlaybackClockState,
+  usePlaybackClock,
   useSmoothPlaybackClock,
 } from "./usePlaybackClock";
 
@@ -19,6 +23,7 @@ type ClockHarnessProps = {
   playbackRate: number;
   isActive: boolean;
   isSeeking?: boolean;
+  isLoading?: boolean;
   tickIntervalMs: number;
   resetKey: string;
   onTime(time: number): void;
@@ -30,6 +35,16 @@ function ClockHarness(props: ClockHarnessProps) {
   useEffect(() => {
     props.onTime(clockTime);
   }, [clockTime, props]);
+
+  return null;
+}
+
+function StoreClockHarness({ onTime }: { onTime(time: number): void }) {
+  const clockTime = usePlaybackClock();
+
+  useEffect(() => {
+    onTime(clockTime);
+  }, [clockTime, onTime]);
 
   return null;
 }
@@ -72,6 +87,7 @@ describe("playback clock", () => {
     document.body.appendChild(container);
     root = createRoot(container);
     now = 1_000;
+    usePlayerStore.getState().reset();
     nextAnimationFrame = 1;
     animationFrames = new Map();
     vi.spyOn(performance, "now").mockImplementation(() => now);
@@ -92,6 +108,7 @@ describe("playback clock", () => {
     container.remove();
     vi.restoreAllMocks();
     vi.unstubAllGlobals();
+    usePlayerStore.getState().reset();
     delete (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean })
       .IS_REACT_ACT_ENVIRONMENT;
   });
@@ -226,6 +243,66 @@ describe("playback clock", () => {
     await renderClock({ ...props, isActive: true });
     await runAnimationFrame(6_034);
     expect(times.at(-1)).toBeCloseTo(10.068, 6);
+  });
+
+  it("freezes on an explicit stall and resumes from the latest authoritative sample", async () => {
+    const times: number[] = [];
+    const onTime = (time: number) => times.push(time);
+    const base = {
+      time: 10,
+      duration: 120,
+      playbackRate: 1,
+      isActive: true,
+      tickIntervalMs: VISUAL_PLAYBACK_CLOCK_TICK_MS,
+      resetKey: "source-a",
+      onTime,
+    };
+
+    await renderClock(base);
+    await runAnimationFrame(1_100);
+    expect(times.at(-1)).toBe(10.1);
+
+    await renderClock({ ...base, isLoading: true });
+    await runAnimationFrame(2_000);
+    expect(times.at(-1)).toBe(10.1);
+
+    await renderClock({ ...base, time: 10.1, isLoading: false });
+    await runAnimationFrame(2_100);
+    expect(times.at(-1)).toBeCloseTo(10.2, 6);
+  });
+
+  it("does not freeze subtitles for generic loading, only for a real playback stall", async () => {
+    const times: number[] = [];
+    const onTime = (time: number) => times.push(time);
+    const state = usePlayerStore.getState();
+    usePlayerStore.setState({
+      status: playerStatus.PLAYING,
+      progress: { ...state.progress, time: 10, duration: 120 },
+      mediaPlaying: {
+        ...state.mediaPlaying,
+        isPlaying: true,
+        isPaused: false,
+        isLoading: true,
+        isPlaybackStalled: false,
+        hasRenderedFrame: true,
+        playbackRate: 1,
+      },
+    });
+
+    await act(async () => {
+      root.render(createElement(StoreClockHarness, { onTime }));
+    });
+    await runAnimationFrame(1_100);
+    expect(times.at(-1)).toBeCloseTo(10.1, 6);
+
+    usePlayerStore.setState((current) => ({
+      mediaPlaying: { ...current.mediaPlaying, isPlaybackStalled: true },
+    }));
+    await act(async () => {
+      await Promise.resolve();
+    });
+    await runAnimationFrame(2_000);
+    expect(times.at(-1)).toBeCloseTo(10.1, 6);
   });
 
   it("drops a stale backward sample while continuing from the existing anchor", () => {

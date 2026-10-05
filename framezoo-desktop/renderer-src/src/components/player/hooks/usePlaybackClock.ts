@@ -237,6 +237,9 @@ export function useSmoothPlaybackClock(
     ],
   );
   const stateRef = useRef<PlaybackClockState | null>(null);
+  const lastFrameAtRef = useRef<number | null>(null);
+  const lastTimeSampleRef = useRef<{ time: number; at: number } | null>(null);
+  const lastClockDiagnosticAtRef = useRef(0);
   const [clockTime, setClockTime] = useState(() =>
     clampPlaybackTime(time, duration),
   );
@@ -247,6 +250,22 @@ export function useSmoothPlaybackClock(
 
   useEffect(() => {
     const now = performance.now();
+    const previousSample = lastTimeSampleRef.current;
+    if (previousSample && previousSample.time !== input.time) {
+      const sampleGap = now - previousSample.at;
+      if (sampleGap > 500 && now - lastClockDiagnosticAtRef.current > 5_000) {
+        console.debug("[playback-clock] sparse-authoritative-sample", {
+          gapMs: Math.round(sampleGap),
+          isLoading: Boolean(input.isLoading),
+          isSeeking: Boolean(input.isSeeking),
+          isActive: input.isActive,
+        });
+        lastClockDiagnosticAtRef.current = now;
+      }
+      lastTimeSampleRef.current = { time: input.time, at: now };
+    } else if (!previousSample) {
+      lastTimeSampleRef.current = { time: input.time, at: now };
+    }
     const previousState = stateRef.current!;
     const shouldSnap = shouldSnapPlaybackClock(previousState, input, now);
     const nextState = reconcilePlaybackClockState(previousState, input, now);
@@ -258,10 +277,28 @@ export function useSmoothPlaybackClock(
     ) {
       setClockTime(nextState.time);
     }
-    if (!nextState.isRunning) return;
+    if (!nextState.isRunning) {
+      lastFrameAtRef.current = null;
+      return;
+    }
 
     let animationFrame = 0;
     const tick = (frameNow: number) => {
+      const previousFrameAt = lastFrameAtRef.current;
+      if (
+        previousFrameAt !== null &&
+        frameNow - previousFrameAt > 150 &&
+        frameNow - lastClockDiagnosticAtRef.current > 5_000
+      ) {
+        console.debug("[playback-clock] animation-frame-gap", {
+          gapMs: Math.round(frameNow - previousFrameAt),
+          isLoading: Boolean(input.isLoading),
+          isSeeking: Boolean(input.isSeeking),
+          isActive: input.isActive,
+        });
+        lastClockDiagnosticAtRef.current = frameNow;
+      }
+      lastFrameAtRef.current = frameNow;
       const next = advancePlaybackClockState(
         stateRef.current!,
         duration,
@@ -308,7 +345,9 @@ export function usePlaybackClock(): number {
   const isPlaying = usePlayerStore((s) => s.mediaPlaying.isPlaying);
   const isPaused = usePlayerStore((s) => s.mediaPlaying.isPaused);
   const isSeeking = usePlayerStore((s) => s.interface.isSeeking);
-  const isLoading = usePlayerStore((s) => s.mediaPlaying.isLoading);
+  const isPlaybackStalled = usePlayerStore(
+    (s) => s.mediaPlaying.isPlaybackStalled,
+  );
   const hasRenderedFrame = usePlayerStore(
     (s) => s.mediaPlaying.hasRenderedFrame,
   );
@@ -328,7 +367,7 @@ export function usePlaybackClock(): number {
     duration,
     playbackRate,
     isActive,
-    isLoading,
+    isLoading: isPlaybackStalled,
     isSeeking,
     resetKey,
   });
