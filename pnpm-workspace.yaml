@@ -9,14 +9,14 @@ shamefullyHoist: true
 strictPeerDependencies: false
 
 # Known vulnerabilities with no upstream published fixes yet:
-# - GHSA-86w9-cpqp-85rv: Nitro's build-only listhen chain (node-forge <=1.3.3)
-# - GHSA-ch52-4w7c-c8xp: electron-builder dev dependency (http-cache-semantics <=4.2.0)
+# - GHSA-86w9-cpqp-85rv: Nitro's build-only listhen chain (node-forge <=1.4.0)
 # - GHSA-vfj7-8cjw-p6xm: micromatch dependency (braces <=3.0.3)
+# - GHSA-hp3w-g68c-fv3c: mobile Jest/electron-builder tooling (sprintf-js; no fixed release)
 auditConfig:
   ignoreGhsas:
     - GHSA-86w9-cpqp-85rv
-    - GHSA-ch52-4w7c-c8xp
     - GHSA-vfj7-8cjw-p6xm
+    - GHSA-hp3w-g68c-fv3c
 
 allowBuilds:
   "@parcel/watcher": true
@@ -88,6 +88,9 @@ overrides:
   "jsdom>undici": "^7.29.0"
   "@electron/get>undici": "^7.29.0"
   "ajv>fast-uri": "^4.1.3"
+  "seroval@<1.6.3": "1.6.8"
+  "source-map-js@<1.2.2": "1.2.2"
+  "http-cache-semantics@<=4.2.0": "4.3.0"
   "tar@>=7.0.0 <7.5.21": ">=7.5.21"
   "js-yaml@>=4.0.0 <4.3.0": "^4.3.0"
   "hono@>=4.0.0 <4.12.34": ">=4.12.34"
