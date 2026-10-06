@@ -226,9 +226,15 @@ export function PlayerPart(props: PlayerPartProps) {
       </div>
 
       <Player.TopControls show={showTargets}>
-        <div className="relative flex w-full items-center justify-between gap-4 pointer-events-auto">
+        <div
+          className={`relative flex w-full items-center gap-2 pointer-events-auto ${
+            meta?.type === "show"
+              ? "xl:grid xl:grid-cols-[minmax(0,1fr)_minmax(0,30%)_minmax(0,1fr)]"
+              : "justify-between"
+          }`}
+        >
           {/* Left section: Back link, slash, responsive title, and 3 action buttons */}
-          <div className="flex min-w-0 max-w-[calc(50%-80px)] md:max-w-[calc(50%-140px)] items-center gap-1 ssm:gap-2 z-10">
+          <div className="flex flex-1 min-w-0 items-center gap-1 ssm:gap-2 z-10">
             {isMacWindowed && (
               <div
                 className="w-[72px] shrink-0 pointer-events-none"
@@ -266,11 +272,11 @@ export function PlayerPart(props: PlayerPartProps) {
             </div>
           </div>
 
-          {/* Center section: Episode title (centered between left controls and right brand/window controls) */}
+          {/* Center section: reserve its own column on wide screens to prevent overlap */}
           {meta?.type === "show" ? (
-            <div className="pointer-events-none absolute inset-x-0 hidden md:flex justify-center items-center px-4">
+            <div className="hidden min-w-0 justify-center items-center xl:flex">
               <div
-                className="pointer-events-auto max-w-[40%] truncate text-center"
+                className="max-w-full truncate text-center"
                 style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
               >
                 <Player.EpisodeTitle />
@@ -280,14 +286,14 @@ export function PlayerPart(props: PlayerPartProps) {
 
           {/* Right section: Brand pill & Window controls (desktop) or mobile actions */}
           <div
-            className="hidden lg:flex items-center justify-end gap-3 shrink-0 z-10"
+            className="hidden flex-1 lg:flex items-center justify-end gap-3 z-10"
             style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
           >
             <BrandPill />
             <WindowControls />
           </div>
           <div
-            className="flex lg:hidden items-center justify-end gap-2 shrink-0 z-10"
+            className="flex flex-1 lg:hidden items-center justify-end gap-2 z-10"
             style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
           >
             {status === playerStatus.PLAYING ? (

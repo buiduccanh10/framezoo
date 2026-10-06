@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
+import type { TorrentProfile } from "@/desktop/torrentTypes";
 import {
   DEFAULT_KEYBOARD_SHORTCUTS,
   KeyboardShortcuts,
@@ -24,6 +25,8 @@ export interface PreferencesStore {
   enableNumberKeySeeking: boolean;
   keyboardShortcuts: KeyboardShortcuts;
   torrentMaxSize: string | null;
+  torrentCacheRoot: string | null;
+  torrentProfile: TorrentProfile;
 
   setEnableAutoplay(v: boolean): void;
   setEnableTrailer(v: boolean): void;
@@ -41,6 +44,8 @@ export interface PreferencesStore {
   setEnableNumberKeySeeking(v: boolean): void;
   setKeyboardShortcuts(v: KeyboardShortcuts): void;
   setTorrentMaxSize(v: string | null): void;
+  setTorrentCacheRoot(v: string | null): void;
+  setTorrentProfile(v: TorrentProfile): void;
 }
 
 export const usePreferencesStore = create(
@@ -62,6 +67,8 @@ export const usePreferencesStore = create(
       enableNumberKeySeeking: true,
       keyboardShortcuts: DEFAULT_KEYBOARD_SHORTCUTS,
       torrentMaxSize: null,
+      torrentCacheRoot: null,
+      torrentProfile: "default",
 
       setEnableAutoplay(v) {
         set((s) => {
@@ -141,6 +148,16 @@ export const usePreferencesStore = create(
       setTorrentMaxSize(v) {
         set((s) => {
           s.torrentMaxSize = v;
+        });
+      },
+      setTorrentCacheRoot(v) {
+        set((s) => {
+          s.torrentCacheRoot = v;
+        });
+      },
+      setTorrentProfile(v) {
+        set((s) => {
+          s.torrentProfile = v;
         });
       },
     })),

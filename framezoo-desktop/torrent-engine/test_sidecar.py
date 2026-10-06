@@ -85,6 +85,7 @@ class SidecarStreamTest(unittest.TestCase):
         self.assertEqual(calls[0]["sync_metadata"], {"windowIndex": 0})
         stream.close()
 
+
     def test_materializes_selected_file_at_declared_size(self):
         runtime = object.__new__(TorrentRuntime)
         runtime.save_path = tempfile.mkdtemp()
@@ -1920,7 +1921,71 @@ class SidecarStreamTest(unittest.TestCase):
         self.assertFalse(runtime._pending_kick_restore)
 
 
+class TorrentProfileTest(unittest.TestCase):
+    def test_profiles_scale_read_ahead_but_keep_sync_window(self):
+        expected = {
+            "soft": constants.RANGE_PREFETCH_BYTES // 2,
+            "default": constants.RANGE_PREFETCH_BYTES,
+            "fast": constants.RANGE_PREFETCH_BYTES * 3 // 2,
+            "ultra-fast": constants.RANGE_PREFETCH_BYTES * 2,
+        }
+        for profile, byte_count in expected.items():
+            with self.subTest(profile=profile):
+                runtime = object.__new__(TorrentRuntime)
+                runtime.file_size = 0
+                runtime.torrent_profile = profile
+                self.assertEqual(
+                    runtime._get_range_prefetch_bytes(False), byte_count
+                )
+                self.assertEqual(
+                    runtime._get_range_prefetch_bytes(True),
+                    constants.SYNC_RANGE_PREFETCH_BYTES,
+                )
+
+
 class SidecarStorageTest(unittest.TestCase):
+    def test_cache_root_override_creates_selected_directory(self):
+        with tempfile.TemporaryDirectory() as parent:
+            selected = Path(parent) / "external-drive" / "torrent-cache"
+            self.assertEqual(
+                utils.get_torrent_data_dir(str(selected)),
+                str(selected / "Framezoo" / "torrents"),
+            )
+            self.assertTrue((selected / "Framezoo" / "torrents").is_dir())
+
+    def test_unlimited_cache_does_not_prune(self):
+        with tempfile.TemporaryDirectory() as root_dir:
+            cache_dir = Path(root_dir) / "torrent-kept"
+            cache_dir.mkdir()
+            media = cache_dir / "data.bin"
+            media.write_bytes(b"cached")
+
+            utils.enforce_storage_limit(root_dir, max_bytes=None)
+
+            self.assertEqual(media.read_bytes(), b"cached")
+
+    def test_zero_cache_prunes_inactive_but_preserves_retained_handle(self):
+        with tempfile.TemporaryDirectory() as root_dir:
+            active = Path(root_dir) / "torrent-active"
+            inactive = Path(root_dir) / "torrent-inactive"
+            unrelated = Path(root_dir) / "my-downloads"
+            active.mkdir()
+            inactive.mkdir()
+            unrelated.mkdir()
+            (active / "data.bin").write_bytes(b"active")
+            (inactive / "data.bin").write_bytes(b"inactive")
+            (unrelated / "data.bin").write_bytes(b"user data")
+
+            utils.enforce_storage_limit(
+                root_dir,
+                max_bytes=0,
+                active_paths={str(active)},
+            )
+
+            self.assertTrue(active.exists())
+            self.assertFalse(inactive.exists())
+            self.assertTrue(unrelated.exists())
+
     def test_enforce_storage_limit_prunes_oldest(self):
         with tempfile.TemporaryDirectory() as root_dir:
             dir1 = Path(root_dir) / "torrent-1"
@@ -1941,8 +2006,9 @@ class SidecarStorageTest(unittest.TestCase):
             os.utime(dir2, (now - 200, now - 200))
             os.utime(dir3, (now - 100, now - 100))
 
-            # Limit to 100 bytes (total is 180 bytes)
-            utils.enforce_storage_limit(root_dir, max_bytes=100)
+            # Allow two allocated files, evicting only the oldest.
+            limit = utils.get_dir_size(str(dir1)) + utils.get_dir_size(str(dir2))
+            utils.enforce_storage_limit(root_dir, max_bytes=limit)
 
             self.assertFalse(dir1.exists())  # Oldest pruned
             self.assertTrue(dir2.exists() or dir3.exists())

@@ -198,11 +198,27 @@ function App() {
   }, [navigate]);
 
   const torrentMaxSize = usePreferencesStore((s) => s.torrentMaxSize);
+  const torrentCacheRoot = usePreferencesStore((s) => s.torrentCacheRoot);
+  const torrentProfile = usePreferencesStore((s) => s.torrentProfile);
   useEffect(() => {
-    if (window.electronAPI?.setTorrentMaxSize) {
-      window.electronAPI.setTorrentMaxSize(torrentMaxSize).catch(() => {});
+    if (window.electronAPI?.setTorrentSettings) {
+      const maxBytes =
+        torrentMaxSize === "unlimited"
+          ? null
+          : torrentMaxSize === null
+            ? 5 * 1024 * 1024 * 1024
+            : Number(torrentMaxSize);
+      if (maxBytes === null || Number.isSafeInteger(maxBytes)) {
+        window.electronAPI
+          .setTorrentSettings({
+            maxBytes,
+            cacheRoot: torrentCacheRoot,
+            profile: torrentProfile,
+          })
+          .catch(() => {});
+      }
     }
-  }, [torrentMaxSize]);
+  }, [torrentCacheRoot, torrentMaxSize, torrentProfile]);
 
   return (
     <Layout>

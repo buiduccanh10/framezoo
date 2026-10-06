@@ -10,6 +10,7 @@ import type {
   LibMpvPlayerEvent,
   LibMpvSourceRequest,
   TorrentSession,
+  TorrentSettings,
   TorrentStartRequest,
   TorrentStatus,
   TorrentStorageInfo,
@@ -245,8 +246,11 @@ contextBridge.exposeInMainWorld("electronAPI", {
   getTorrentStatus(sessionId: string): Promise<TorrentStatus | null> {
     return ipcRenderer.invoke("desktop:torrent-get-status", sessionId);
   },
-  setTorrentMaxSize(size: string | null): Promise<boolean> {
-    return ipcRenderer.invoke("desktop:set-torrent-max-size", size);
+  setTorrentSettings(settings: TorrentSettings): Promise<boolean> {
+    return ipcRenderer.invoke("desktop:set-torrent-settings", settings);
+  },
+  selectTorrentCacheRoot(): Promise<string | null> {
+    return ipcRenderer.invoke("desktop:torrent-select-cache-root");
   },
   getTorrentStorageInfo(): Promise<TorrentStorageInfo> {
     return ipcRenderer.invoke("desktop:torrent-get-storage-info");
