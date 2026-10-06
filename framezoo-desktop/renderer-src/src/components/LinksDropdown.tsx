@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
@@ -97,14 +98,15 @@ function parseWatchPartyCode(input: string): string | null {
   }
 }
 
-export function WatchPartyInputLink({
-  triggerVariant = "dropdown",
+export function WatchPartyJoinDialog({
+  open,
+  onClose,
 }: {
-  triggerVariant?: "dropdown" | "icon";
+  open: boolean;
+  onClose: () => void;
 }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
   const [code, setCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -125,12 +127,12 @@ export function WatchPartyInputLink({
 
     const onEsc = (evt: KeyboardEvent) => {
       if (evt.key === "Escape") {
-        setOpen(false);
+        onClose();
       }
     };
     window.addEventListener("keydown", onEsc);
     return () => window.removeEventListener("keydown", onEsc);
-  }, [open]);
+  }, [open, onClose]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -182,7 +184,7 @@ export function WatchPartyInputLink({
 
       navigate(url.pathname + url.search);
       setCode("");
-      setOpen(false);
+      onClose();
     } catch (err) {
       console.error("Failed to fetch room data:", err);
       setError(t("watchParty.invalidRoom"));
@@ -191,103 +193,108 @@ export function WatchPartyInputLink({
     }
   };
 
+  if (!open) return null;
+
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/70 px-4"
+      onClick={onClose}
+    >
+      <div
+        className="w-full max-w-md rounded-xl border border-dropdown-border bg-dropdown-altBackground p-4 shadow-xl"
+        onClick={(evt) => evt.stopPropagation()}
+      >
+        <div className="mb-3 flex items-center justify-between">
+          <div className="flex items-center gap-2 text-white">
+            <Icon icon={Icons.WATCH_PARTY} className="text-xl" />
+            <h3 className="text-base font-semibold">
+              {t("player.menus.watchparty.watchpartyItem")}
+            </h3>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded p-1 text-dropdown-text transition-colors hover:bg-dropdown-contentBackground hover:text-white"
+            aria-label={t("watchParty.cancel")}
+          >
+            <Icon icon={Icons.X} className="text-lg" />
+          </button>
+        </div>
+
+        <p className="mb-3 text-sm text-dropdown-text">
+          {t("watchParty.enterCodeOrLink")}
+        </p>
+
+        <form onSubmit={handleSubmit} className="space-y-3">
+          <input
+            type="text"
+            value={code}
+            onChange={(e) => {
+              setCode(e.target.value);
+              setError(null);
+            }}
+            placeholder={`https://framezoo/...?...watchparty=ABCD123456`}
+            className="w-full rounded-lg border border-dropdown-border bg-dropdown-contentBackground px-3 py-2 text-white outline-none transition-colors focus:border-type-link"
+            disabled={isLoading}
+          />
+
+          {error && <p className="text-xs text-red-500">{error}</p>}
+
+          <div className="flex justify-end gap-2">
+            <button
+              type="button"
+              className="rounded-lg px-3 py-2 text-sm text-dropdown-text transition-colors hover:bg-dropdown-contentBackground hover:text-white"
+              onClick={onClose}
+            >
+              {t("watchParty.cancel")}
+            </button>
+            <button
+              type="submit"
+              className={classNames(
+                "rounded-lg bg-buttons-purple px-3 py-2 text-sm text-white transition-colors hover:bg-buttons-purpleHover",
+                (!code.trim() || isLoading) &&
+                  "cursor-not-allowed opacity-70 hover:bg-buttons-purple",
+              )}
+              disabled={!code.trim() || isLoading}
+            >
+              {isLoading ? (
+                <span className="flex items-center gap-1">
+                  <Spinner className="h-4 w-4" />
+                  {t("watchParty.validating")}
+                </span>
+              ) : (
+                t("watchParty.join")
+              )}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>,
+    document.body,
+  );
+}
+
+export function WatchPartyInputLink() {
+  const { t } = useTranslation();
+  const [open, setOpen] = useState(false);
+  const account = useAuthStore((s) => s.account);
+
+  const requestLogin = () => {
+    useOverlayStack.getState().showModal("auth", { mode: "login" });
+  };
+  const openDialog = () => (account ? setOpen(true) : requestLogin());
+
   return (
     <>
-      {triggerVariant === "dropdown" ? (
-        <DropdownLink
-          icon={Icons.WATCH_PARTY}
-          onClick={() => (account ? setOpen(true) : requestLogin())}
-          className="text-dropdown-text hover:text-white"
-        >
-          {t("player.menus.watchparty.watchpartyItem")}
-        </DropdownLink>
-      ) : (
-        <button
-          type="button"
-          onClick={() => (account ? setOpen(true) : requestLogin())}
-          className="text-lg text-white tabbable rounded-full backdrop-blur-lg pointer-events-auto"
-          aria-label={t("player.menus.watchparty.watchpartyItem")}
-        >
-          <IconPatch icon={Icons.WATCH_PARTY} clickable downsized navigation />
-        </button>
-      )}
-
-      {open && (
-        <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 px-4"
-          onClick={() => setOpen(false)}
-        >
-          <div
-            className="w-full max-w-md rounded-xl border border-dropdown-border bg-dropdown-altBackground p-4 shadow-xl"
-            onClick={(evt) => evt.stopPropagation()}
-          >
-            <div className="mb-3 flex items-center justify-between">
-              <div className="flex items-center gap-2 text-white">
-                <Icon icon={Icons.WATCH_PARTY} className="text-xl" />
-                <h3 className="text-base font-semibold">
-                  {t("player.menus.watchparty.watchpartyItem")}
-                </h3>
-              </div>
-              <button
-                type="button"
-                onClick={() => setOpen(false)}
-                className="rounded p-1 text-dropdown-text transition-colors hover:bg-dropdown-contentBackground hover:text-white"
-                aria-label={t("watchParty.cancel")}
-              >
-                <Icon icon={Icons.X} className="text-lg" />
-              </button>
-            </div>
-
-            <p className="mb-3 text-sm text-dropdown-text">
-              {t("watchParty.enterCodeOrLink")}
-            </p>
-
-            <form onSubmit={handleSubmit} className="space-y-3">
-              <input
-                type="text"
-                value={code}
-                onChange={(e) => {
-                  setCode(e.target.value);
-                  setError(null);
-                }}
-                placeholder={`https://framezoo/...?...watchparty=ABCD123456`}
-                className="w-full rounded-lg border border-dropdown-border bg-dropdown-contentBackground px-3 py-2 text-white outline-none transition-colors focus:border-type-link"
-                disabled={isLoading}
-              />
-
-              {error && <p className="text-xs text-red-500">{error}</p>}
-
-              <div className="flex justify-end gap-2">
-                <button
-                  type="button"
-                  className="rounded-lg px-3 py-2 text-sm text-dropdown-text transition-colors hover:bg-dropdown-contentBackground hover:text-white"
-                  onClick={() => setOpen(false)}
-                >
-                  {t("watchParty.cancel")}
-                </button>
-                <button
-                  type="submit"
-                  className={classNames(
-                    "rounded-lg bg-buttons-purple px-3 py-2 text-sm text-white transition-colors hover:bg-buttons-purpleHover",
-                    (!code.trim() || isLoading) &&
-                      "cursor-not-allowed opacity-70 hover:bg-buttons-purple",
-                  )}
-                  disabled={!code.trim() || isLoading}
-                >
-                  {isLoading ? (
-                    <span className="flex items-center gap-1">
-                      <Spinner className="h-4 w-4" />
-                      {t("watchParty.validating")}
-                    </span>
-                  ) : (
-                    t("watchParty.join")
-                  )}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      <button
+        type="button"
+        onClick={openDialog}
+        className="text-lg text-white tabbable rounded-full backdrop-blur-lg pointer-events-auto"
+        aria-label={t("player.menus.watchparty.watchpartyItem")}
+      >
+        <IconPatch icon={Icons.WATCH_PARTY} clickable downsized navigation />
+      </button>
+      <WatchPartyJoinDialog open={open} onClose={() => setOpen(false)} />
     </>
   );
 }
@@ -295,6 +302,7 @@ export function WatchPartyInputLink({
 export function LinksDropdown(props: { children: React.ReactNode }) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
+  const [watchPartyDialogOpen, setWatchPartyDialogOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null!);
   const nickname = useAuthStore((s) => s.account?.nickname);
   const deviceName = useAuthStore((s) => s.account?.deviceName);
@@ -403,7 +411,19 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
           <DropdownLink href="/addons" icon={Icons.EXTENSION}>
             {t("navigation.menu.addons", "Addons")}
           </DropdownLink>
-          <WatchPartyInputLink />
+          <DropdownLink
+            icon={Icons.WATCH_PARTY}
+            onClick={() => {
+              if (account) {
+                setOpen(false);
+                setWatchPartyDialogOpen(true);
+              } else {
+                useOverlayStack.getState().showModal("auth", { mode: "login" });
+              }
+            }}
+          >
+            {t("player.menus.watchparty.watchpartyItem")}
+          </DropdownLink>
           <DropdownLink href="/settings" icon={Icons.SETTINGS}>
             {t("navigation.menu.settings")}
           </DropdownLink>
@@ -419,6 +439,10 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
           <Divider />
         </div>
       </Transition>
+      <WatchPartyJoinDialog
+        open={watchPartyDialogOpen}
+        onClose={() => setWatchPartyDialogOpen(false)}
+      />
     </div>
   );
 }

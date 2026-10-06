@@ -233,7 +233,7 @@ export function PlayerPart(props: PlayerPartProps) {
               : "justify-between"
           }`}
         >
-          {/* Left section: Back link, slash, responsive title, and 3 action buttons */}
+          {/* Left section: Back link, slash, and responsive title */}
           <div className="flex flex-1 min-w-0 items-center gap-1 ssm:gap-2 z-10">
             {isMacWindowed && (
               <div
@@ -263,12 +263,6 @@ export function PlayerPart(props: PlayerPartProps) {
                   })}
                 </span>
               )}
-
-              <div className="flex items-center shrink-0 ml-1">
-                <Player.InfoButton />
-                <Player.BookmarkButton />
-                <Player.KeyboardCommandsButton />
-              </div>
             </div>
           </div>
 
@@ -289,6 +283,9 @@ export function PlayerPart(props: PlayerPartProps) {
             className="hidden flex-1 lg:flex items-center justify-end gap-3 z-10"
             style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
           >
+            <Player.InfoButton />
+            <Player.BookmarkButton />
+            <Player.KeyboardCommandsButton />
             <BrandPill />
             <WindowControls />
           </div>
@@ -296,6 +293,9 @@ export function PlayerPart(props: PlayerPartProps) {
             className="flex flex-1 lg:hidden items-center justify-end gap-2 z-10"
             style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
           >
+            <Player.InfoButton />
+            <Player.BookmarkButton />
+            <Player.KeyboardCommandsButton />
             {status === playerStatus.PLAYING ? (
               <div
                 className="flex items-center gap-2"
