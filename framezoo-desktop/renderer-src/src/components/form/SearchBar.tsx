@@ -14,6 +14,8 @@ export interface SearchBarProps {
   isSticky?: boolean;
   isInFeatured?: boolean;
   hideTooltip?: boolean;
+  className?: string;
+  style?: React.CSSProperties;
 }
 
 export const SearchBarInput = forwardRef<HTMLInputElement, SearchBarProps>(
@@ -38,7 +40,26 @@ export const SearchBarInput = forwardRef<HTMLInputElement, SearchBarProps>(
     }, [props.isInFeatured]);
 
     return (
-      <div ref={containerRef}>
+      <div
+        ref={containerRef}
+        className={props.className}
+        style={
+          {
+            WebkitAppRegion: "no-drag",
+            ...props.style,
+          } as React.CSSProperties
+        }
+        onClick={(e) => {
+          if (
+            ref &&
+            typeof ref !== "function" &&
+            ref.current &&
+            e.target !== ref.current
+          ) {
+            ref.current.focus();
+          }
+        }}
+      >
         <Flare.Base
           className={c({
             "hover:flare-enabled group flex flex-col rounded-[28px] transition-colors sm:flex-row sm:items-center relative backdrop-blur-sm": true,
@@ -71,6 +92,7 @@ export const SearchBarInput = forwardRef<HTMLInputElement, SearchBarProps>(
               )}
               onClick={(e) => {
                 e.preventDefault();
+                e.stopPropagation();
                 setShowTooltip(!showTooltip);
                 if (ref && typeof ref !== "function" && ref.current) {
                   ref.current.focus();
@@ -122,7 +144,8 @@ export const SearchBarInput = forwardRef<HTMLInputElement, SearchBarProps>(
 
             {props.value.length > 0 && (
               <div
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   props.onUnFocus("");
                   if (ref && typeof ref !== "function") {
                     ref.current?.focus();

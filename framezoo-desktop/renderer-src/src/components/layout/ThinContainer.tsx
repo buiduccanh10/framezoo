@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 
 interface ThinContainerProps {
   classNames?: string;
+  style?: React.CSSProperties;
   children?: ReactNode;
 }
 
@@ -12,6 +13,7 @@ export function ThinContainer(props: ThinContainerProps) {
       className={`mx-auto w-[600px] max-w-full px-8 sm:px-0 ${
         props.classNames || ""
       }`}
+      style={props.style}
     >
       {props.children}
     </div>
