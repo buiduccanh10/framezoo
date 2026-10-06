@@ -1253,13 +1253,24 @@ function resyncCompositorAndInput(win: BrowserWindow | null) {
     win.setIgnoreMouseEvents(false);
     win.focus();
     win.webContents.focus();
+    win.webContents.invalidate();
 
     // Trigger Chromium compositor re-sync of VisualProperties and hit-testing:
-    // A micro 1px resize nudge forces WindowServer and Chromium RenderWidgetHost to recalculate geometry
-    const bounds = win.getBounds();
-    win.setBounds({ ...bounds, width: bounds.width + 1 });
-    win.setBounds(bounds);
-    win.webContents.invalidate();
+    // Only on Windows/Linux in windowed mode: a micro 1px resize nudge forces WindowServer/DWM and Chromium RenderWidgetHost to recalculate geometry.
+    // NEVER run this on macOS (which causes WindowServer hit-test detachment during/after transitions),
+    // and NEVER run when fullscreen, transitioning, or maximized!
+    if (
+      process.platform !== "darwin" &&
+      !win.isFullScreen() &&
+      !isWindowsFullScreen &&
+      !isFullScreenTransitioning &&
+      !win.isMaximized() &&
+      !win.isMinimized()
+    ) {
+      const bounds = win.getBounds();
+      win.setBounds({ ...bounds, width: bounds.width + 1 });
+      win.setBounds(bounds);
+    }
   } catch (err) {
     console.warn("[desktop] failed to resync compositor and input", err);
   }
@@ -1431,6 +1442,7 @@ function createMainWindow() {
         fullscreenOrigin = "user";
       }
       sendToMainWindow("desktop:fullscreen-state", true);
+      resyncCompositorAndInput(mainWindow);
     }
   });
 
@@ -1448,8 +1460,8 @@ function createMainWindow() {
       sendToMainWindow("desktop:fullscreen-state", false);
 
       // On macOS, Space transition animation takes 400ms–800ms.
-      // Calling focus at 100ms breaks the WindowServer Event Tap mid-transition.
-      // We wait 450ms for the Space transition to settle, then either execute pending minimize
+      // Calling focus or bounds modifications mid-transition breaks the WindowServer Event Tap.
+      // We wait for the Space transition to settle (800ms), then either execute pending minimize
       // or resynchronize the compositor and hit-testing tree.
       leaveFullScreenSettleTimer = setTimeout(() => {
         leaveFullScreenSettleTimer = null;
@@ -1461,7 +1473,7 @@ function createMainWindow() {
         } else {
           resyncCompositorAndInput(mainWindow);
         }
-      }, 450);
+      }, 800);
     }
   });
 
@@ -1498,16 +1510,27 @@ function createMainWindow() {
     mainWindow?.setTitle(normalizeWindowTitle(title));
   });
 
+  const handleDidFinishLoad = () => {
+    if (!mainWindow || mainWindow.isDestroyed()) return;
+    resyncCompositorAndInput(mainWindow);
+    sendToMainWindow("desktop:fullscreen-state", isAppFullScreen());
+    sendDesktopAppUpdateState();
+  };
+
   if (RENDERER_DEV_URL) {
     void mainWindow.loadURL(RENDERER_DEV_URL);
-    mainWindow.webContents.once("did-finish-load", () => {
-      sendDesktopAppUpdateState();
-      mainWindow?.webContents.openDevTools({ mode: "detach" });
+    let devToolsOpened = false;
+    mainWindow.webContents.on("did-finish-load", () => {
+      handleDidFinishLoad();
+      if (!devToolsOpened) {
+        devToolsOpened = true;
+        mainWindow?.webContents.openDevTools({ mode: "detach" });
+      }
     });
   } else {
     void mainWindow.loadURL(PACKAGED_RENDERER_URL);
     mainWindow.webContents.on("did-finish-load", () => {
-      sendDesktopAppUpdateState();
+      handleDidFinishLoad();
     });
   }
 

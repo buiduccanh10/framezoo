@@ -148,6 +148,114 @@ describe("libmpv display", () => {
     display.destroy();
   });
 
+  it("keeps waiting when a torrent URL emits end-file event (error 0) before its first bytes", async () => {
+    let eventListener:
+      | ((event: {
+          playerId: string;
+          generation: number;
+          type: "end-file" | "video-frame";
+        }) => void)
+      | undefined;
+    const errors: unknown[] = [];
+    const loading: boolean[] = [];
+
+    (window as any).electronAPI = {
+      createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
+      loadLibMpvSource: vi.fn().mockResolvedValue(true),
+      sendLibMpvCommand: vi.fn().mockResolvedValue(true),
+      onLibMpvEvent: vi.fn((listener) => {
+        eventListener = listener;
+        return () => undefined;
+      }),
+      onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.processContainerElement(makeElement());
+    display.on("error", (error) => errors.push(error));
+    display.on("loading", (isLoading) => loading.push(isLoading));
+    display.load({
+      source: {
+        type: "mp4",
+        url: "http://127.0.0.1/torrent/session-1",
+        isTorrent: true,
+      } as Source,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    eventListener?.({
+      playerId: "player-1",
+      generation: 1,
+      type: "end-file",
+    });
+
+    expect(errors).toEqual([]);
+    expect(loading.at(-1)).toBe(true);
+    display.destroy();
+  });
+
+  it("does not treat end-file as waiting for torrent bytes after first frame has rendered", async () => {
+    let eventListener:
+      | ((event: {
+          playerId: string;
+          generation: number;
+          type: "end-file" | "video-frame";
+        }) => void)
+      | undefined;
+    const errors: unknown[] = [];
+    const loading: boolean[] = [];
+
+    (window as any).electronAPI = {
+      createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
+      loadLibMpvSource: vi.fn().mockResolvedValue(true),
+      sendLibMpvCommand: vi.fn().mockResolvedValue(true),
+      onLibMpvEvent: vi.fn((listener) => {
+        eventListener = listener;
+        return () => undefined;
+      }),
+      onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.processContainerElement(makeElement());
+    display.on("error", (error) => errors.push(error));
+    display.on("loading", (isLoading) => loading.push(isLoading));
+    display.load({
+      source: {
+        type: "mp4",
+        url: "http://127.0.0.1/torrent/session-1",
+        isTorrent: true,
+      } as Source,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    // First frame rendered
+    eventListener?.({
+      playerId: "player-1",
+      generation: 1,
+      type: "video-frame",
+    });
+
+    // Legitimate end-of-file
+    eventListener?.({
+      playerId: "player-1",
+      generation: 1,
+      type: "end-file",
+    });
+
+    expect(errors).toEqual([]);
+    expect(loading.at(-1)).toBe(false);
+    display.destroy();
+  });
+
   it("maps authoritative properties and excludes video tracks", async () => {
     let eventListener:
       | ((event: {

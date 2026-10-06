@@ -184,12 +184,20 @@ function isWaitingForTorrentBytes(
   event: LibMpvPlayerEvent,
   hasRenderedFrame: boolean,
 ) {
+  if (currentSource?.isTorrent !== true || hasRenderedFrame) {
+    return false;
+  }
+  const torrentStatus = getActiveTorrentStatus();
+  if (torrentStatus?.state === "error") {
+    return false;
+  }
+  if (event.type === "end-file") {
+    return true;
+  }
   return (
-    currentSource?.isTorrent === true &&
-    !hasRenderedFrame &&
     event.type === "error" &&
-    event.name === "end-file" &&
-    /^libmpv end-file error -\d+$/.test(event.message ?? "")
+    (event.name === "end-file" ||
+      /^libmpv end-file error -\d+$/.test(event.message ?? ""))
   );
 }
 
@@ -220,10 +228,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
   let heldSeekPosition: number | null = null;
   const PENDING_SEEK_TIMEOUT_MS = 8000;
   const TIME_BACKTRACK_TOLERANCE_SECONDS = 0.5;
-  const AUDIO_PTS_TAKEOVER_MS = 400;
-  let lastTimePosAt = 0;
   let lastTimePosValue = -1;
-  let lastAudioPts = -1;
   let isFullscreen = false;
   let pictureInPictureMode: PictureInPictureMode = null;
   let caption: DisplayCaption | null = null;
@@ -254,6 +259,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
   let unbindDesktopPipWatchParty: (() => void) | null = null;
   let unbindFullscreen: (() => void) | null = null;
   let torrentRetryTimer: ReturnType<typeof setTimeout> | null = null;
+  let initialStartAt = 0;
 
   // Tracks whether the current generation's file has fully loaded.
   // Used to drop stale `pause: true` events emitted during old-file teardown.
@@ -276,6 +282,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     if (torrentRetryTimer || !source) return;
     const retrySource = source;
     const retryGeneration = generation;
+    const retryStartAt = initialStartAt;
     torrentRetryTimer = setTimeout(() => {
       torrentRetryTimer = null;
       if (
@@ -287,7 +294,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       }
       thisDisplay.load({
         source: retrySource,
-        startAt: time,
+        startAt: retryStartAt,
         automaticQuality: false,
         preferredQuality: null,
         autoplay: !desiredPaused,
@@ -902,11 +909,33 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     }
 
     if (event.type === "end-file") {
+      if (
+        isWaitingForTorrentBytes(
+          source,
+          event,
+          firstFrameLoggedGeneration === generation,
+        )
+      ) {
+        emit("loading", true);
+        scheduleTorrentRetry();
+        return;
+      }
+      if (
+        source?.isTorrent === true &&
+        firstFrameLoggedGeneration !== generation &&
+        getActiveTorrentStatus()?.state === "error"
+      ) {
+        emit("error", {
+          type: "mpv",
+          errorName: "torrent_error",
+          message: getActiveTorrentStatus()?.error || "Torrent playback failed",
+        });
+        emit("loading", false);
+        return;
+      }
       paused = true;
       fileLoaded = false;
-      lastTimePosAt = 0;
       lastTimePosValue = -1;
-      lastAudioPts = -1;
       emit("loading", false);
       return;
     }
@@ -934,7 +963,6 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
             pendingSeekTarget = null;
             heldSeekPosition = null;
             if (Math.abs(rawPosition - lastTimePosValue) > 0.001) {
-              lastTimePosAt = performance.now();
               lastTimePosValue = rawPosition;
             }
             applyTimePosition(rawPosition, true);
@@ -946,15 +974,9 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
             break;
           }
           if (Math.abs(rawPosition - lastTimePosValue) > 0.001) {
-            lastTimePosAt = performance.now();
             lastTimePosValue = rawPosition;
           }
           applyTimePosition(rawPosition);
-        }
-        break;
-      case "audio-pts":
-        if (typeof event.data === "number" && Number.isFinite(event.data)) {
-          lastAudioPts = Math.max(0, event.data);
         }
         break;
       case "duration":
@@ -1293,9 +1315,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       destroyed = true;
       clearTorrentRetry();
       pendingLoad = null;
-      lastTimePosAt = 0;
       lastTimePosValue = -1;
-      lastAudioPts = -1;
       const pipApi = getElectronApi() as {
         closeDesktopPipWindow?: () => Promise<boolean>;
       } | null;
@@ -1364,6 +1384,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       emit("audiotracks", []);
       emit("changedaudiotrack", null);
       time = Math.max(0, ops.startAt);
+      initialStartAt = time;
       pendingInitialResumeTime = time > 0.5 ? time : null;
       bufferedTime = time;
       duration = ops.source?.duration ?? 0;
@@ -1408,9 +1429,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       generation = requestGeneration;
       fileLoaded = false; // reset for new load
       firstFrameLoggedGeneration = -1;
-      lastTimePosAt = 0;
       lastTimePosValue = -1;
-      lastAudioPts = -1;
       pendingSeekTarget = time > 0.5 ? time : null;
       pendingSeekSetAt = pendingSeekTarget === null ? 0 : performance.now();
       heldSeekPosition = null;
