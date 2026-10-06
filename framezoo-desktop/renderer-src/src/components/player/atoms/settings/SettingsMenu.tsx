@@ -65,8 +65,10 @@ export function SettingsMenu({ id }: { id: string }) {
           onClick={() => router.navigate("/quality")}
           rightText={currentQuality ? qualityToString(currentQuality) : ""}
         >
-          {t("player.menus.settings.qualityItem")}
-          <span className="text-type-secondary text-sm">
+          <span className="w-full text-center truncate">
+            {t("player.menus.settings.qualityItem")}
+          </span>
+          <span className="text-type-secondary text-sm w-full text-center truncate leading-tight">
             {currentQuality
               ? qualityToString(currentQuality)
               : t("player.menus.quality.auto")}
@@ -77,20 +79,26 @@ export function SettingsMenu({ id }: { id: string }) {
           onClick={() => router.navigate("/source")}
           rightText={sourceName}
         >
-          {t("player.menus.settings.sourceItem")}
-          <span className="text-type-secondary text-sm">{sourceName}</span>
+          <span className="w-full text-center truncate">
+            {t("player.menus.settings.sourceItem")}
+          </span>
+          <span className="text-type-secondary text-sm w-full text-center truncate leading-tight">
+            {sourceName}
+          </span>
         </Menu.ChevronLink>
         <Menu.ChevronLink
           box
           onClick={() => router.navigate("/captions")}
           rightText={sourceName}
         >
-          {t("player.menus.settings.subtitleItem")}
-          <span className="text-type-secondary text-sm">
+          <span className="w-full text-center truncate">
+            {t("player.menus.settings.subtitleItem")}
+          </span>
+          <span className="text-type-secondary text-sm w-full text-center line-clamp-2 leading-tight">
             {selectedLanguagePretty ?? t("player.menus.subtitles.offChoice")}
           </span>
           {secondaryLanguagePretty && (
-            <span className="text-purple-400 text-xs">
+            <span className="text-purple-400 text-xs w-full text-center truncate leading-tight">
               + {secondaryLanguagePretty}
             </span>
           )}
@@ -101,8 +109,10 @@ export function SettingsMenu({ id }: { id: string }) {
             onClick={() => router.navigate("/audio")}
             rightText={selectedAudioLanguagePretty ?? undefined}
           >
-            {t("player.menus.settings.audioItem")}
-            <span className="text-type-secondary text-sm">
+            <span className="w-full text-center truncate">
+              {t("player.menus.settings.audioItem")}
+            </span>
+            <span className="text-type-secondary text-sm w-full text-center line-clamp-2 leading-tight">
               {selectedAudioLanguagePretty}
             </span>
           </Menu.ChevronLink>
@@ -112,8 +122,10 @@ export function SettingsMenu({ id }: { id: string }) {
             onClick={() => router.navigate("/audio")}
             disabled
           >
-            {t("player.menus.settings.audioItem")}
-            <span className="text-type-secondary text-sm">
+            <span className="w-full text-center truncate">
+              {t("player.menus.settings.audioItem")}
+            </span>
+            <span className="text-type-secondary text-sm w-full text-center line-clamp-2 leading-tight">
               {t("player.menus.audio.default")}
             </span>
           </Menu.ChevronLink>

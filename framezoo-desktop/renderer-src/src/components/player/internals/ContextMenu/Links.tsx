@@ -22,8 +22,10 @@ export function LinkTitle(props: {
   return (
     <span
       className={classNames([
-        "flex h-full items-center font-medium text-left min-w-0 flex-1 w-full",
-        props.box ? "flex-col justify-center gap-1 text-center" : "",
+        "flex h-full items-center font-medium min-w-0 flex-1 w-full",
+        props.box
+          ? "flex-col justify-center gap-1 text-center items-center"
+          : "text-left",
         props.textClass || "text-video-context-type-main",
       ])}
     >
@@ -90,7 +92,7 @@ export function Link(props: {
 }) {
   const classes = classNames(
     "flex py-2 transition-colors duration-100 rounded-lg",
-    props.box ? "bg-video-context-light/10 h-20" : "",
+    props.box ? "bg-video-context-light/10 h-20 px-2.5 text-center" : "",
     {
       "cursor-default": !props.clickable,
       "hover:bg-video-context-light/20 cursor-pointer tabbable":
@@ -110,7 +112,12 @@ export function Link(props: {
         props.className,
       )}
     >
-      <div className="flex-1 text-left flex h-full min-w-0">
+      <div
+        className={classNames(
+          "flex-1 flex h-full min-w-0",
+          props.box ? "text-center justify-center items-center" : "text-left",
+        )}
+      >
         {props.children}
       </div>
       {props.rightSide && (
@@ -175,7 +182,9 @@ export function ChevronLink(props: {
       active={props.active}
       clickable
       rightSide={props.box ? null : rightContent}
-      className={props.box ? "flex flex-col items-center justify-center" : ""}
+      className={
+        props.box ? "flex flex-col items-center justify-center text-center" : ""
+      }
       box={props.box}
       disabled={props.disabled}
     >
