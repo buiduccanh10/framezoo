@@ -199,7 +199,16 @@ def cap_open_ended_range(
     return start, min(end, int(raw_end) if raw_end else end)
 
 
-def get_torrent_data_dir() -> str:
+def get_torrent_data_dir(root_override: Optional[str] = None) -> str:
+    if root_override is not None:
+        if not isinstance(root_override, str) or not root_override.strip():
+            raise ValueError("torrent cache root must be a non-empty path")
+        if not os.path.isabs(root_override):
+            raise ValueError("torrent cache root must be absolute")
+        root = os.path.join(os.path.abspath(root_override), "Framezoo", "torrents")
+        os.makedirs(root, exist_ok=True)
+        return root
+
     env_dir = os.environ.get("FRAMEZOO_TORRENT_DATA_DIR")
     if env_dir:
         os.makedirs(env_dir, exist_ok=True)
@@ -229,26 +238,42 @@ def get_dir_size(path: str) -> int:
             for file_name in files:
                 file_path = os.path.join(root, file_name)
                 if not os.path.islink(file_path):
-                    total += os.path.getsize(file_path)
+                    stats = os.stat(file_path)
+                    total += (
+                        stats.st_blocks * 512
+                        if hasattr(stats, "st_blocks")
+                        else stats.st_size
+                    )
     except Exception:
         pass
     return total
 
 
+_USE_CONFIGURED_STORAGE_LIMIT = object()
+
+
 def enforce_storage_limit(
     root_dir: str,
-    max_bytes: int = constants.DEFAULT_MAX_TORRENT_BYTES,
+    max_bytes: Any = _USE_CONFIGURED_STORAGE_LIMIT,
     active_paths: Optional[Set[str]] = None,
 ) -> None:
     if active_paths is None:
         active_paths = set()
 
-    max_bytes_env = os.environ.get("FRAMEZOO_TORRENT_MAX_SIZE_BYTES")
-    if max_bytes_env:
+    if max_bytes is _USE_CONFIGURED_STORAGE_LIMIT:
+        max_bytes = constants.DEFAULT_MAX_TORRENT_BYTES
+        max_bytes_env = os.environ.get("FRAMEZOO_TORRENT_MAX_SIZE_BYTES")
         try:
-            max_bytes = int(max_bytes_env)
-        except ValueError:
-            pass
+            if max_bytes_env:
+                configured = int(max_bytes_env)
+                if configured >= 0:
+                    max_bytes = configured
+        except (TypeError, ValueError):
+            max_bytes = constants.DEFAULT_MAX_TORRENT_BYTES
+    elif max_bytes is None:
+        return
+    elif type(max_bytes) is not int or max_bytes < 0:
+        raise ValueError("torrent cache size must be a non-negative integer or null")
 
     if not os.path.exists(root_dir):
         return
@@ -259,7 +284,13 @@ def enforce_storage_limit(
     try:
         for entry in os.listdir(root_dir):
             full_path = os.path.join(root_dir, entry)
-            if os.path.isdir(full_path):
+            if (
+                os.path.isdir(full_path)
+                and (
+                    re.fullmatch(r"torrent-[a-z0-9]{1,128}", entry)
+                    or re.fullmatch(r"framezoo-torrent-[a-z0-9_-]{6,}", entry)
+                )
+            ):
                 candidate_dirs.append(full_path)
     except Exception:
         pass
@@ -269,7 +300,7 @@ def enforce_storage_limit(
     if os.path.abspath(temp_dir) != os.path.abspath(root_dir):
         try:
             for entry in os.listdir(temp_dir):
-                if entry.startswith("framezoo-torrent-"):
+                if re.fullmatch(r"framezoo-torrent-[a-z0-9_-]{6,}", entry):
                     full_path = os.path.join(temp_dir, entry)
                     if os.path.isdir(full_path):
                         candidate_dirs.append(full_path)

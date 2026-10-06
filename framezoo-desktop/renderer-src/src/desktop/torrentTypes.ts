@@ -1,6 +1,14 @@
 export type TorrentLifecycle =
   "starting" | "buffering" | "ready" | "downloading" | "stopped" | "error";
 
+export type TorrentProfile = "default" | "soft" | "fast" | "ultra-fast";
+
+export interface TorrentSettings {
+  maxBytes: number | null;
+  cacheRoot: string | null;
+  profile: TorrentProfile;
+}
+
 export interface TorrentStartRequest {
   sourceId: string;
   url: string;
@@ -53,6 +61,6 @@ export interface TorrentSession {
 export interface TorrentStorageInfo {
   path: string;
   usedBytes: number;
-  maxBytes: number;
+  maxBytes: number | null;
   freeBytes?: number;
 }

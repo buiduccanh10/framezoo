@@ -37,6 +37,7 @@ class TorrentRuntime:
         save_path: str,
         persistent_cache: bool = False,
         record: Any = None,
+        torrent_profile: str = "default",
     ) -> None:
         self.engine = engine
         self.session_id = session_id
@@ -45,6 +46,11 @@ class TorrentRuntime:
         self.save_path = save_path
         self.persistent_cache = persistent_cache
         self.record = record
+        self.torrent_profile = (
+            torrent_profile
+            if torrent_profile in {"default", "soft", "fast", "ultra-fast"}
+            else "default"
+        )
         self.cache_key = get_torrent_cache_key(request)
         self._resume_lock = threading.Lock()
         self.info: Any = None
@@ -1646,23 +1652,34 @@ class TorrentRuntime:
         if is_sync:
             return constants.SYNC_RANGE_PREFETCH_BYTES
         file_size = getattr(self, "file_size", None)
+        base = constants.RANGE_PREFETCH_BYTES
         if (
             file_size is not None
             and file_size >= constants.HIGH_BITRATE_FILE_THRESHOLD_BYTES
         ):
-            return constants.HIGH_BITRATE_RANGE_PREFETCH_BYTES
-        return constants.RANGE_PREFETCH_BYTES
+            base = constants.HIGH_BITRATE_RANGE_PREFETCH_BYTES
+        return self._apply_profile_prefetch(base)
 
     def _get_max_replan_prefetch_bytes(self, is_sync: bool) -> int:
         if is_sync:
             return constants.SYNC_RANGE_PREFETCH_BYTES
         file_size = getattr(self, "file_size", None)
+        base = constants.MAX_REPLAN_PREFETCH_BYTES
         if (
             file_size is not None
             and file_size >= constants.HIGH_BITRATE_FILE_THRESHOLD_BYTES
         ):
-            return constants.HIGH_BITRATE_MAX_REPLAN_PREFETCH_BYTES
-        return constants.MAX_REPLAN_PREFETCH_BYTES
+            base = constants.HIGH_BITRATE_MAX_REPLAN_PREFETCH_BYTES
+        return self._apply_profile_prefetch(base)
+
+    def _apply_profile_prefetch(self, byte_count: int) -> int:
+        numerator, denominator = {
+            "soft": (1, 2),
+            "default": (1, 1),
+            "fast": (3, 2),
+            "ultra-fast": (2, 1),
+        }.get(getattr(self, "torrent_profile", "default"), (1, 1))
+        return max(1, byte_count * numerator // denominator)
 
     def wait_for_range(
         self,

@@ -34,6 +34,8 @@ import type {
   NativeStartupWarmupState,
   NativeWarmupComponentState,
   StreamRule,
+  TorrentProfile,
+  TorrentSettings,
   TorrentStartRequest,
 } from "./types";
 
@@ -68,6 +70,13 @@ const DESKTOP_RELEASE_REPO = "framezoo-desktop-releases";
 const DESKTOP_APP_UPDATE_CHECK_INTERVAL_MS = 60 * 60 * 1000;
 const DESKTOP_SETTINGS_ROUTE = "/settings";
 const EXTENSION_REQUEST_TIMEOUT_MS = 15_000;
+const DEFAULT_TORRENT_MAX_BYTES = 5 * 1024 * 1024 * 1024;
+const TORRENT_PROFILES = new Set<TorrentProfile>([
+  "default",
+  "soft",
+  "fast",
+  "ultra-fast",
+]);
 
 const ENABLE_DEVTOOLS =
   Boolean(RENDERER_DEV_URL) ||
@@ -226,17 +235,31 @@ function migrateLegacyTorrentDirs(targetDir: string) {
   }
 }
 
+const DEFAULT_TORRENT_DATA_DIR =
+  process.env.FRAMEZOO_TORRENT_DATA_DIR ||
+  path.join(app.getPath("userData"), "torrents");
+
+let torrentSettings: TorrentSettings = {
+  maxBytes: DEFAULT_TORRENT_MAX_BYTES,
+  cacheRoot: null,
+  profile: "default",
+};
+
+function getTorrentDataDir(cacheRoot = torrentSettings.cacheRoot) {
+  return cacheRoot
+    ? path.join(cacheRoot, "Framezoo", "torrents")
+    : DEFAULT_TORRENT_DATA_DIR;
+}
+
 function setupTorrentEnv() {
-  if (!process.env.FRAMEZOO_TORRENT_DATA_DIR) {
-    const torrentDir = path.join(app.getPath("userData"), "torrents");
-    try {
-      fs.mkdirSync(torrentDir, { recursive: true });
-    } catch {
-      // ignore
-    }
-    process.env.FRAMEZOO_TORRENT_DATA_DIR = torrentDir;
+  const torrentDir = getTorrentDataDir();
+  try {
+    fs.mkdirSync(torrentDir, { recursive: true });
+  } catch {
+    // Keep the configured path; the torrent sidecar reports write failures.
   }
-  migrateLegacyTorrentDirs(process.env.FRAMEZOO_TORRENT_DATA_DIR);
+  process.env.FRAMEZOO_TORRENT_DATA_DIR = torrentDir;
+  migrateLegacyTorrentDirs(torrentDir);
 }
 
 function getDirectorySize(dirPath: string): number {
@@ -249,13 +272,21 @@ function getDirectorySize(dirPath: string): number {
         size += getDirectorySize(fullPath);
       } else if (entry.isFile()) {
         const stat = fs.statSync(fullPath);
-        size += stat.size;
+        size +=
+          process.platform !== "win32" && Number.isFinite(stat.blocks)
+            ? Math.min(stat.size, stat.blocks * 512)
+            : stat.size;
       }
     }
   } catch {
     // ignore
   }
   return size;
+}
+
+function isTorrentCacheEntry(name: string) {
+  return /^torrent-[a-z0-9]{1,128}$/i.test(name) ||
+    /^framezoo-torrent-[a-z0-9_-]{6,}$/i.test(name);
 }
 
 setupTorrentEnv();
@@ -1888,14 +1919,13 @@ function registerIpcHandlers() {
   );
 
   ipcMain.handle("desktop:torrent-get-storage-info", async () => {
-    const torrentDir =
-      process.env.FRAMEZOO_TORRENT_DATA_DIR ||
-      path.join(app.getPath("userData"), "torrents");
+    const torrentDir = getTorrentDataDir();
     let totalBytes = 0;
     try {
       if (fs.existsSync(torrentDir)) {
         const files = fs.readdirSync(torrentDir);
         for (const file of files) {
+          if (!isTorrentCacheEntry(file)) continue;
           const fullPath = path.join(torrentDir, file);
           const stat = fs.statSync(fullPath);
           if (stat.isDirectory()) {
@@ -1909,19 +1939,11 @@ function registerIpcHandlers() {
       // ignore
     }
 
-    let maxBytes = 5 * 1024 * 1024 * 1024; // Default 5GB
-    if (process.env.FRAMEZOO_TORRENT_MAX_SIZE_BYTES) {
-      const parsed = parseInt(process.env.FRAMEZOO_TORRENT_MAX_SIZE_BYTES, 10);
-      if (!isNaN(parsed)) maxBytes = parsed;
-    }
-
     let freeBytes = 0;
     try {
-      const targetDir = fs.existsSync(torrentDir)
-        ? torrentDir
-        : app.getPath("userData");
-      const stats = fs.statfsSync(targetDir);
-      freeBytes = stats.bfree * stats.bsize;
+      fs.mkdirSync(torrentDir, { recursive: true });
+      const stats = fs.statfsSync(torrentDir);
+      freeBytes = stats.bavail * stats.bsize;
     } catch {
       // Fallback or ignore if statfs is not available or errors out
     }
@@ -1929,35 +1951,84 @@ function registerIpcHandlers() {
     return {
       path: torrentDir,
       usedBytes: totalBytes,
-      maxBytes,
+      maxBytes: torrentSettings.maxBytes,
       freeBytes,
     };
   });
 
   ipcMain.handle(
-    "desktop:set-torrent-max-size",
-    async (_event, size: string | null) => {
-      if (size) {
-        process.env.FRAMEZOO_TORRENT_MAX_SIZE_BYTES = size;
-      } else {
-        delete process.env.FRAMEZOO_TORRENT_MAX_SIZE_BYTES;
+    "desktop:set-torrent-settings",
+    async (_event, input: unknown) => {
+      if (!input || typeof input !== "object") return false;
+      const next = input as Partial<TorrentSettings>;
+      if (
+        !(
+          next.maxBytes === null ||
+          (typeof next.maxBytes === "number" &&
+            Number.isSafeInteger(next.maxBytes) &&
+            next.maxBytes >= 0)
+        ) ||
+        !(next.cacheRoot === null || typeof next.cacheRoot === "string") ||
+        typeof next.profile !== "string" ||
+        !TORRENT_PROFILES.has(next.profile as TorrentProfile)
+      ) {
+        return false;
       }
+
+      if (
+        typeof next.cacheRoot === "string" &&
+        (!next.cacheRoot.trim() ||
+          next.cacheRoot.includes("\0") ||
+          next.cacheRoot.length > 4096 ||
+          !path.isAbsolute(next.cacheRoot))
+      ) {
+        return false;
+      }
+      const cacheRoot =
+        typeof next.cacheRoot === "string"
+          ? path.resolve(next.cacheRoot.trim())
+          : null;
+
+      const settings: TorrentSettings = {
+        maxBytes: next.maxBytes!,
+        cacheRoot,
+        profile: next.profile as TorrentProfile,
+      };
+      const torrentDir = getTorrentDataDir(settings.cacheRoot);
+      try {
+        fs.mkdirSync(torrentDir, { recursive: true });
+      } catch {
+        return false;
+      }
+
+      torrentSettings = settings;
+      torrentManager.configure(settings);
       return true;
     },
   );
+
+  ipcMain.handle("desktop:torrent-select-cache-root", async () => {
+    const result = mainWindow
+      ? await dialog.showOpenDialog(mainWindow, {
+          properties: ["openDirectory", "createDirectory"],
+        })
+      : await dialog.showOpenDialog({
+          properties: ["openDirectory", "createDirectory"],
+        });
+    return result.canceled ? null : (result.filePaths[0] ?? null);
+  });
 
   ipcMain.handle("desktop:torrent-clear-storage", async () => {
     // Restart the torrent engine first so it drops all in-memory libtorrent
     // handles. Otherwise, it will retain piece states for deleted files.
     await torrentManager.restartEngine();
 
-    const torrentDir =
-      process.env.FRAMEZOO_TORRENT_DATA_DIR ||
-      path.join(app.getPath("userData"), "torrents");
+    const torrentDir = getTorrentDataDir();
     try {
       if (fs.existsSync(torrentDir)) {
         const entries = fs.readdirSync(torrentDir);
         for (const entry of entries) {
+          if (!isTorrentCacheEntry(entry)) continue;
           const fullPath = path.join(torrentDir, entry);
           fs.rmSync(fullPath, { recursive: true, force: true });
         }

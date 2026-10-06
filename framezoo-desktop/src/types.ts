@@ -12,7 +12,20 @@ export interface TorrentStartRequest {
   fileIdx?: number;
   fileName?: string;
   startAt?: number;
-  maxBytes?: number;
+  /** Electron main-process settings, added before the request reaches the sidecar. */
+  maxBytes?: number | null;
+  cacheRoot?: string | null;
+  torrentProfile?: TorrentProfile;
+}
+
+export type TorrentProfile = "default" | "soft" | "fast" | "ultra-fast";
+
+export interface TorrentSettings {
+  /** null is unlimited; zero removes data at stop but still uses disk while streaming. */
+  maxBytes: number | null;
+  /** Selected parent stores data under Framezoo/torrents; null uses the app default. */
+  cacheRoot: string | null;
+  profile: TorrentProfile;
 }
 
 export interface TorrentStatus {
@@ -57,7 +70,8 @@ export interface TorrentSession {
 export interface TorrentStorageInfo {
   path: string;
   usedBytes: number;
-  maxBytes: number;
+  maxBytes: number | null;
+  freeBytes: number;
 }
 
 export type NativeWarmupComponentState =

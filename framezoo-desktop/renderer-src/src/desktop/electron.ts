@@ -35,6 +35,7 @@ import type {
 } from "./addons/nativeTypes";
 import type {
   TorrentSession,
+  TorrentSettings,
   TorrentStartRequest,
   TorrentStatus,
   TorrentStorageInfo,
@@ -56,7 +57,8 @@ declare global {
       startTorrent?: (request: TorrentStartRequest) => Promise<TorrentSession>;
       stopTorrent?: (sessionId: string) => Promise<boolean>;
       getTorrentStatus?: (sessionId: string) => Promise<TorrentStatus | null>;
-      setTorrentMaxSize?: (size: string | null) => Promise<boolean>;
+      setTorrentSettings?: (settings: TorrentSettings) => Promise<boolean>;
+      selectTorrentCacheRoot?: () => Promise<string | null>;
       getTorrentStorageInfo?: () => Promise<TorrentStorageInfo>;
       clearTorrentStorage?: () => Promise<boolean>;
       onTorrentStatus?: (

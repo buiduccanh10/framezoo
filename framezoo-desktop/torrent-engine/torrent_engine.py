@@ -35,6 +35,8 @@ class TorrentRecord:
         save_path: str,
         persistent_cache: bool,
         cache_ready: bool,
+        cache_root: str,
+        max_bytes: Optional[int],
         trackers: list[str],
     ) -> None:
         self.engine = engine
@@ -42,6 +44,8 @@ class TorrentRecord:
         self.handle = handle
         self.save_path = save_path
         self.persistent_cache = persistent_cache
+        self.cache_root = cache_root
+        self.max_bytes = max_bytes
         # Metadata alone must not make a failed startup reusable.
         self.cache_ready = cache_ready
         self.session_ids: Set[str] = set()
@@ -149,7 +153,7 @@ class LibtorrentEngine:
     def __init__(self) -> None:
         self._session: Any = None
         self._session_lock = threading.Lock()
-        self._start_lock = threading.Lock()
+        self._start_lock = threading.RLock()
         self.http_server = TorrentHttpServer()
         self.sessions: Dict[str, TorrentRuntime] = {}
         self.records: Dict[str, TorrentRecord] = {}
@@ -253,6 +257,9 @@ class LibtorrentEngine:
         request: Dict[str, Any],
         cache_key: Optional[str],
         save_path: str,
+        cache_root: str,
+        max_bytes: Optional[int],
+        persistent_cache: bool,
         trackers: list[str],
     ) -> TorrentRecord:
         session = self._ensure_session()
@@ -368,8 +375,10 @@ class LibtorrentEngine:
             key,
             handle,
             save_path,
-            persistent_cache=bool(cache_key),
+            persistent_cache=bool(cache_key) and persistent_cache,
             cache_ready=cache_ready,
+            cache_root=cache_root,
+            max_bytes=max_bytes,
             trackers=merge_tracker_sources(
                 cached_trackers,
                 magnet_trackers,
@@ -388,7 +397,13 @@ class LibtorrentEngine:
         request: Dict[str, Any],
     ) -> Dict[str, Any]:
         self._ensure_session()
-        root = get_torrent_data_dir()
+        root = get_torrent_data_dir(request.get("cacheRoot"))
+        max_bytes = request.get("maxBytes", constants.DEFAULT_MAX_TORRENT_BYTES)
+        if max_bytes is not None and (
+            type(max_bytes) is not int or max_bytes < 0
+        ):
+            raise ValueError("torrent cache size must be a non-negative integer or null")
+        persistent_cache = max_bytes != 0
         cache_key = get_torrent_cache_key(request)
         trackers = get_request_trackers(request)
         record_key = cache_key or session_id
@@ -400,6 +415,8 @@ class LibtorrentEngine:
                 if record is not None:
                     record.add_trackers(trackers)
                     record_was_idle = record.add_session(session_id)
+                    record.persistent_cache = persistent_cache
+                    record.max_bytes = max_bytes
             if record is not None:
                 runtime = TorrentRuntime(
                     self,
@@ -407,8 +424,9 @@ class LibtorrentEngine:
                     request,
                     record.handle,
                     record.save_path,
-                    persistent_cache=record.persistent_cache,
+                    persistent_cache=persistent_cache,
                     record=record,
+                    torrent_profile=request.get("torrentProfile", "default"),
                 )
                 with self.lock:
                     self.sessions[session_id] = runtime
@@ -436,20 +454,13 @@ class LibtorrentEngine:
 
             try:
                 with self.lock:
-                    active_paths = {
-                        runtime.save_path for runtime in self.sessions.values()
-                    }
+                    active_paths = {item.save_path for item in self.records.values()}
                 active_paths.add(save_path)
-                
-                max_bytes_override = request.get("maxBytes")
-                if max_bytes_override is not None:
-                    enforce_storage_limit(
-                        root,
-                        max_bytes=max_bytes_override,
-                        active_paths=active_paths,
-                    )
-                else:
-                    enforce_storage_limit(root, active_paths=active_paths)
+                enforce_storage_limit(
+                    root,
+                    max_bytes=max_bytes,
+                    active_paths=active_paths,
+                )
             except Exception as error:
                 sys.stderr.write(
                     f"[sidecar] Storage limit enforcement error: {error}\n",
@@ -460,6 +471,9 @@ class LibtorrentEngine:
                 request,
                 cache_key,
                 save_path,
+                root,
+                max_bytes,
+                persistent_cache,
                 trackers,
             )
             record.add_session(session_id)
@@ -471,6 +485,7 @@ class LibtorrentEngine:
                 record.save_path,
                 persistent_cache=record.persistent_cache,
                 record=record,
+                torrent_profile=request.get("torrentProfile", "default"),
             )
             with self.lock:
                 self.sessions[session_id] = runtime
@@ -479,27 +494,42 @@ class LibtorrentEngine:
             return runtime.session_payload()
 
     def _remove_record(self, record_key: str) -> None:
-        with self.lock:
-            record = self.records.get(record_key)
-            if record is None:
-                return
-            with record.lock:
-                if record.session_ids:
+        with self._start_lock:
+            with self.lock:
+                record = self.records.get(record_key)
+                if record is None:
                     return
+                with record.lock:
+                    if record.session_ids:
+                        return
                 self.records.pop(record_key, None)
-        record.stop_discovery()
-        if record.persistent_cache and record.cache_ready:
-            self._save_record_resume_data(record)
+            record.stop_discovery()
+            if record.persistent_cache and record.cache_ready:
+                self._save_record_resume_data(record)
+                try:
+                    os.utime(record.save_path, None)
+                except OSError:
+                    pass
             try:
-                os.utime(record.save_path, None)
-            except OSError:
+                self.session.remove_torrent(record.handle)
+            except Exception:
                 pass
-        try:
-            self.session.remove_torrent(record.handle)
-        except Exception:
-            pass
-        if not record.persistent_cache or not record.cache_ready:
-            shutil.rmtree(record.save_path, ignore_errors=True)
+            if not record.persistent_cache or not record.cache_ready:
+                shutil.rmtree(record.save_path, ignore_errors=True)
+            try:
+                with self.lock:
+                    active_paths = {
+                        item.save_path for item in self.records.values()
+                    }
+                enforce_storage_limit(
+                    record.cache_root,
+                    max_bytes=record.max_bytes,
+                    active_paths=active_paths,
+                )
+            except Exception as error:
+                sys.stderr.write(
+                    f"[sidecar] Storage limit enforcement error: {error}\n",
+                )
 
     def _schedule_record_removal(self, record_key: str) -> None:
         remove_now = False
@@ -507,7 +537,7 @@ class LibtorrentEngine:
             record = self.records.get(record_key)
             if record is None or record.session_ids:
                 return
-            if not record.cache_ready:
+            if not record.persistent_cache or not record.cache_ready:
                 remove_now = True
             else:
                 timer = threading.Timer(
