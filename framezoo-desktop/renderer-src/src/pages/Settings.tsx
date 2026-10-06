@@ -79,7 +79,10 @@ function SettingsLayout(props: {
           top: `${topOffset}px`,
         }}
       >
-        <ThinContainer classNames="pointer-events-auto">
+        <ThinContainer
+          classNames="pointer-events-auto"
+          style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
+        >
           <SearchBarInput
             ref={searchRef}
             onChange={props.onSearchChange}
@@ -110,6 +113,17 @@ function SettingsLayout(props: {
       </div>
     </WideContainer>
   );
+}
+
+function removeSearchHighlights() {
+  const existingHighlights = document.querySelectorAll(".search-highlight");
+  existingHighlights.forEach((el) => {
+    const parent = el.parentNode;
+    if (parent) {
+      parent.replaceChild(document.createTextNode(el.textContent || ""), el);
+      parent.normalize();
+    }
+  });
 }
 
 export function AccountSettings(props: {
@@ -284,35 +298,47 @@ export function SettingsPage() {
     if (value.trim()) {
       setSelectedCategory(null);
     }
+  }, []);
 
-    // Remove existing highlights
-    const existingHighlights = document.querySelectorAll(".search-highlight");
-    existingHighlights.forEach((el) => {
-      const parent = el.parentNode;
-      if (parent) {
-        parent.replaceChild(document.createTextNode(el.textContent || ""), el);
-        parent.normalize();
-      }
-    });
+  useEffect(() => {
+    removeSearchHighlights();
 
-    if (value.trim()) {
-      // Find and highlight matching text
+    const query = searchQuery.trim();
+    if (!query) return;
+
+    const timeoutId = setTimeout(() => {
+      const container =
+        document.querySelector("[data-settings-content]") || document.body;
       const walker = document.createTreeWalker(
-        document.querySelector("[data-settings-content]") || document.body,
+        container,
         NodeFilter.SHOW_TEXT,
         null,
       );
 
+      const nodesToReplace: { node: Text; highlightedText: string }[] = [];
       let node = walker.nextNode();
 
       while (node) {
+        const parent = node.parentElement;
+        if (
+          parent &&
+          (parent.tagName === "SCRIPT" ||
+            parent.tagName === "STYLE" ||
+            parent.closest(".search-highlight") ||
+            parent.closest("input") ||
+            parent.closest("textarea"))
+        ) {
+          node = walker.nextNode();
+          continue;
+        }
+
         const text = node.textContent || "";
         const lowerText = text.toLowerCase();
-        const lowerValue = value.toLowerCase();
+        const lowerValue = query.toLowerCase();
 
         if (lowerText.includes(lowerValue)) {
           const regex = new RegExp(
-            `(${value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`,
+            `(${query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`,
             "gi",
           );
           const highlightedText = text.replace(
@@ -321,27 +347,36 @@ export function SettingsPage() {
           );
 
           if (highlightedText !== text) {
-            const wrapper = document.createElement("div");
-            wrapper.innerHTML = highlightedText;
-            const parent = node.parentNode;
-            if (parent) {
-              while (wrapper.firstChild) {
-                parent.insertBefore(wrapper.firstChild, node);
-              }
-              parent.removeChild(node);
-            }
+            nodesToReplace.push({ node: node as Text, highlightedText });
           }
         }
         node = walker.nextNode();
       }
+
+      nodesToReplace.forEach(({ node: targetNode, highlightedText }) => {
+        const wrapper = document.createElement("span");
+        wrapper.innerHTML = highlightedText;
+        const parent = targetNode.parentNode;
+        if (parent) {
+          while (wrapper.firstChild) {
+            parent.insertBefore(wrapper.firstChild, targetNode);
+          }
+          parent.removeChild(targetNode);
+        }
+      });
 
       // Scroll to first highlighted element
       scrollToElement(".search-highlight", {
         behavior: "smooth",
         block: "center",
       });
-    }
-  }, []);
+    }, 150);
+
+    return () => {
+      clearTimeout(timeoutId);
+      removeSearchHighlights();
+    };
+  }, [searchQuery]);
 
   const handleSearchUnFocus = useCallback((newSearch?: string) => {
     if (newSearch !== undefined) {

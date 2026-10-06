@@ -12,6 +12,7 @@ export interface TextInputControlPropsNoLabel {
   autoComplete?: string;
   placeholder?: string;
   className?: string;
+  style?: React.CSSProperties;
   passwordToggleable?: boolean;
 }
 
@@ -32,6 +33,7 @@ export const TextInputControl = forwardRef<
       name,
       autoComplete,
       className,
+      style,
       placeholder,
       onFocus,
       passwordToggleable,
@@ -48,6 +50,12 @@ export const TextInputControl = forwardRef<
           type={inputType}
           ref={ref}
           className={classNames(className, passwordToggleable && "pr-12")}
+          style={
+            {
+              WebkitAppRegion: "no-drag",
+              ...style,
+            } as React.CSSProperties
+          }
           placeholder={placeholder}
           onChange={(e) => onChange && onChange(e.target.value)}
           value={value}
@@ -60,6 +68,7 @@ export const TextInputControl = forwardRef<
           <button
             type="button"
             className="absolute top-1/2 -translate-y-1/2 right-1 text-xl p-3"
+            style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
             onClick={() => setShowPassword(!showPassword)}
           >
             <Icon icon={showPassword ? Icons.EYE : Icons.EYE_SLASH} />
