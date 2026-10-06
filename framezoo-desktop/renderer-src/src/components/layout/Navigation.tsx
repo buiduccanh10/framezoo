@@ -179,7 +179,7 @@ export function Navigation(props: NavigationProps) {
                       { WebkitAppRegion: "no-drag" } as React.CSSProperties
                     }
                   >
-                    <WatchPartyInputLink triggerVariant="icon" />
+                    <WatchPartyInputLink />
                   </div>
                 )}
               {/* {location.pathname !== "/login" &&
