@@ -197,8 +197,6 @@ export function DocumentPipOverlay() {
       }}
       onDoubleClick={togglePlayback}
     >
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/45 via-transparent to-black/70" />
-
       <div
         className={`absolute inset-x-0 top-0 z-20 transition-opacity duration-200 ${
           controlsVisible ? "opacity-100" : "pointer-events-none opacity-0"
