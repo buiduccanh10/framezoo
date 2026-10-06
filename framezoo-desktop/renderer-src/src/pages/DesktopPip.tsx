@@ -809,7 +809,6 @@ export default function DesktopPipPage() {
           className="pointer-events-none absolute inset-0 h-full w-full bg-transparent"
           aria-hidden="true"
         />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/45 via-transparent to-black/70" />
         <PlayerLoadingOverlayView
           show={
             pipState.playbackTarget === "main" ||
