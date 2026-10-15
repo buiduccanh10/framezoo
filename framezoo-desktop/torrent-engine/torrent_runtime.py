@@ -210,21 +210,22 @@ class TorrentRuntime:
                             resume()
                         except Exception:
                             pass
+                    # Do not expose the stream to libmpv until the container
+                    # head is readable. Otherwise initial resume seeks can
+                    # race the first HTTP response and playback may present
+                    # offset zero while the UI already shows saved progress.
+                    self.prime_startup_ranges()
+                    self.wait_for_initial_chunk()
                     self.metadata_ready.set()
-                    # Publish the loopback URL as soon as file metadata is
-                    # known. The player must be allowed to connect while the
-                    # first piece is still pending; serve() keeps the HTTP
-                    # body open until the piece arrives or the client leaves.
                     self.stream_type = "file"
                     log_event(
-                        "stream available",
+                        "stream ready",
                         sessionId=self.session_id,
                         fileName=self.file_path.rsplit("/", 1)[-1],
                         fileSize=self.file_size,
-                        timingPhase="stream_available",
+                        timingPhase="stream_ready",
                         elapsedMs=self.elapsed_ms(),
                     )
-                    self.prime_startup_ranges()
                 return
             now = time.monotonic()
             if (
