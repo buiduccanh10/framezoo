@@ -44,6 +44,7 @@ import {
   registerTorrentSession,
   scheduleTorrentStop,
   useActiveTorrentStatus,
+  waitForTorrentPlayable,
 } from "@/desktop/torrentPlaybackStore";
 import { ErrorCard } from "@/pages/parts/errors/ErrorCard";
 import { type PlayerMeta, playerStatus } from "@/stores/player/slices/source";
@@ -429,12 +430,22 @@ export function SourceSelectPart(props: {
             startAt,
           });
 
+          if (operationId !== selectionOperation.current) {
+            scheduleTorrentStop(session.sessionId);
+            return;
+          }
           registerTorrentSession(session.sessionId);
+          const playable = await waitForTorrentPlayable(session.sessionId);
+          if (operationId !== selectionOperation.current) {
+            scheduleTorrentStop(session.sessionId);
+            return;
+          }
+
           // When user explicitly chose "watch from beginning", ignore session.startAt
           // (sidecar may return a cached previous position and override our intent).
           const playbackStartAt = wasStartFromBeginning
             ? 0
-            : (session.startAt ?? startAt);
+            : (playable.startAt ?? session.startAt ?? startAt);
           const mediaSource: SourceSliceSource = {
             id: stream.id,
             type: "file",
@@ -442,10 +453,10 @@ export function SourceSelectPart(props: {
             qualities: {
               unknown: {
                 type: "mp4",
-                url: session.streamUrl,
+                url: playable.streamUrl ?? session.streamUrl,
               },
             },
-            duration: session.duration ?? undefined,
+            duration: playable.duration ?? session.duration ?? undefined,
             isTorrent: true,
           };
 
