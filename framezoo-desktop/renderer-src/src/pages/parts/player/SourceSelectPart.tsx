@@ -433,6 +433,7 @@ export function SourceSelectPart(props: {
             trackers: stream.trackers,
             fileIdx: stream.fileIdx ?? undefined,
             fileName: stream.fileName ?? undefined,
+            quality: getTorrentQuality(stream),
             startAt,
           });
 

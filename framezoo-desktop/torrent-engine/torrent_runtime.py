@@ -1652,26 +1652,39 @@ class TorrentRuntime:
     def _get_range_prefetch_bytes(self, is_sync: bool) -> int:
         if is_sync:
             return constants.SYNC_RANGE_PREFETCH_BYTES
-        file_size = getattr(self, "file_size", None)
         base = constants.RANGE_PREFETCH_BYTES
-        if (
-            file_size is not None
-            and file_size >= constants.HIGH_BITRATE_FILE_THRESHOLD_BYTES
-        ):
+        if self._is_high_bitrate_stream():
             base = constants.HIGH_BITRATE_RANGE_PREFETCH_BYTES
         return self._apply_profile_prefetch(base)
 
     def _get_max_replan_prefetch_bytes(self, is_sync: bool) -> int:
         if is_sync:
             return constants.SYNC_RANGE_PREFETCH_BYTES
-        file_size = getattr(self, "file_size", None)
         base = constants.MAX_REPLAN_PREFETCH_BYTES
-        if (
-            file_size is not None
-            and file_size >= constants.HIGH_BITRATE_FILE_THRESHOLD_BYTES
-        ):
+        if self._is_high_bitrate_stream():
             base = constants.HIGH_BITRATE_MAX_REPLAN_PREFETCH_BYTES
         return self._apply_profile_prefetch(base)
+
+    def _is_high_bitrate_stream(self) -> bool:
+        """Use the addon quality hint before falling back to file size.
+
+        A 4K encode can be smaller than 4 GiB. Relying only on file size
+        leaves those streams on the 32 MiB default window and starves the
+        next HEVC reference range before libmpv can pause cleanly.
+        """
+        request = getattr(self, "request", {})
+        quality = (
+            str(request.get("quality", ""))
+            if isinstance(request, dict)
+            else ""
+        )
+        if quality.strip().lower() in {"4k", "2160p", "uhd"}:
+            return True
+        file_size = getattr(self, "file_size", None)
+        return bool(
+            file_size is not None
+            and file_size >= constants.HIGH_BITRATE_FILE_THRESHOLD_BYTES
+        )
 
     def _apply_profile_prefetch(self, byte_count: int) -> int:
         numerator, denominator = {

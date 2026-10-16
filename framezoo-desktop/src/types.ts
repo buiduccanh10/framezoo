@@ -11,6 +11,8 @@ export interface TorrentStartRequest {
   trackers?: string[];
   fileIdx?: number;
   fileName?: string;
+  /** Stream quality hint from the addon, used for adaptive read-ahead. */
+  quality?: string;
   startAt?: number;
   /** Electron main-process settings, added before the request reaches the sidecar. */
   maxBytes?: number | null;
@@ -178,6 +180,24 @@ export type LibMpvCommand =
   | { type: "set-audio-track"; trackId: string }
   | { type: "set-subtitle-track"; trackId: string }
   | { type: "set-secondary-subtitle-track"; trackId: string };
+
+export type NativeMediaCommand =
+  "toggle-play-pause" | "play" | "pause" | "next" | "previous";
+
+export interface NativeMediaCommandEvent {
+  command: NativeMediaCommand;
+}
+
+export interface NativeMediaMetadata {
+  title: string;
+  artist: string;
+  albumTitle: string;
+}
+
+export interface NativeMediaNavigationAvailability {
+  previousEnabled: boolean;
+  nextEnabled: boolean;
+}
 
 export interface LibMpvPlayerRequest {
   bounds: LibMpvBounds;

@@ -1942,6 +1942,21 @@ class TorrentProfileTest(unittest.TestCase):
                     constants.SYNC_RANGE_PREFETCH_BYTES,
                 )
 
+    def test_4k_quality_hint_uses_high_bitrate_window_below_size_threshold(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.file_size = constants.HIGH_BITRATE_FILE_THRESHOLD_BYTES - 1
+        runtime.request = {"quality": "4k"}
+        runtime.torrent_profile = "default"
+
+        self.assertEqual(
+            runtime._get_range_prefetch_bytes(False),
+            constants.HIGH_BITRATE_RANGE_PREFETCH_BYTES,
+        )
+        self.assertEqual(
+            runtime._get_max_replan_prefetch_bytes(False),
+            constants.HIGH_BITRATE_MAX_REPLAN_PREFETCH_BYTES,
+        )
+
 
 class SidecarStorageTest(unittest.TestCase):
     def test_cache_root_override_creates_selected_directory(self):

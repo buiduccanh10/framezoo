@@ -7,7 +7,9 @@ RANGE_PREFETCH_BYTES = 32 * 1024 * 1024
 SYNC_RANGE_PREFETCH_BYTES = 8 * 1024 * 1024
 MAX_REPLAN_PREFETCH_BYTES = 128 * 1024 * 1024
 # High-bitrate / 4K stream optimizations: scale up prefetch to prevent buffer underrun
-HIGH_BITRATE_FILE_THRESHOLD_BYTES = 4 * 1024 * 1024 * 1024
+# Fallback for addons that omit a resolution hint. Keep 4K files around
+# 3.7 GiB on the high-bitrate window even when their title is incomplete.
+HIGH_BITRATE_FILE_THRESHOLD_BYTES = 3 * 1024 * 1024 * 1024
 HIGH_BITRATE_RANGE_PREFETCH_BYTES = 96 * 1024 * 1024
 HIGH_BITRATE_MAX_REPLAN_PREFETCH_BYTES = 256 * 1024 * 1024
 # Keep the selected file materialized on disk while the playback scheduler

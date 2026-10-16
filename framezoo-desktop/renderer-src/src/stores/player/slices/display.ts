@@ -59,6 +59,7 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
           pendingTime = time;
           return;
         }
+        s.progress.mediaTime = time;
         s.progress.time = time;
       }),
     );
@@ -87,6 +88,7 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
       set((s) => {
         s.mediaPlaying.hasRenderedFrame = true;
         if (pendingTime !== null) {
+          s.progress.mediaTime = pendingTime;
           s.progress.time = pendingTime;
           pendingTime = null;
         }
@@ -252,6 +254,7 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
       s.interface.skipNextSavedProgressResume = false;
       s.interface.isFullscreen = false;
       s.progress.time = 0;
+      s.progress.mediaTime = 0;
       s.progress.duration = 0;
       s.progress.buffered = 0;
       s.mediaPlaying.isPlaying = false;

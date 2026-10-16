@@ -256,6 +256,62 @@ describe("libmpv display", () => {
     display.destroy();
   });
 
+  it("cancels a provisional torrent retry when the first frame renders", async () => {
+    let eventListener:
+      | ((event: {
+          playerId: string;
+          generation: number;
+          type: "end-file" | "video-frame";
+        }) => void)
+      | undefined;
+    const loadSource = vi.fn().mockResolvedValue(true);
+
+    (window as any).electronAPI = {
+      createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
+      loadLibMpvSource: loadSource,
+      sendLibMpvCommand: vi.fn().mockResolvedValue(true),
+      onLibMpvEvent: vi.fn((listener) => {
+        eventListener = listener;
+        return () => undefined;
+      }),
+      onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.processContainerElement(makeElement());
+    display.load({
+      source: {
+        type: "mp4",
+        url: "http://127.0.0.1/torrent/session-1",
+        isTorrent: true,
+      } as Source,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    vi.useFakeTimers();
+    try {
+      eventListener?.({
+        playerId: "player-1",
+        generation: 1,
+        type: "end-file",
+      });
+      eventListener?.({
+        playerId: "player-1",
+        generation: 1,
+        type: "video-frame",
+      });
+
+      await vi.advanceTimersByTimeAsync(1_001);
+      expect(loadSource).toHaveBeenCalledTimes(1);
+    } finally {
+      display.destroy();
+      vi.useRealTimers();
+    }
+  });
+
   it("maps authoritative properties and excludes video tracks", async () => {
     let eventListener:
       | ((event: {

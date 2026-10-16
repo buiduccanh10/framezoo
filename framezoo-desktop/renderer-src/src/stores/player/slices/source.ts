@@ -506,6 +506,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
         s.segmentQualityDebug = null;
         s.source = null;
         s.progress.time = 0;
+        s.progress.mediaTime = 0;
         s.progress.duration = 0;
         s.progress.buffered = 0;
         s.mediaPlaying.hasRenderedFrame = false;

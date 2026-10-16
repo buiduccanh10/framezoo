@@ -10,6 +10,9 @@ import type {
   LibMpvPlayerEvent,
   LibMpvPlayerRequest,
   LibMpvSourceRequest,
+  NativeMediaCommand,
+  NativeMediaMetadata,
+  NativeMediaNavigationAvailability,
 } from "./types";
 
 type NativePlayerEvent = LibMpvPlayerEvent;
@@ -34,6 +37,17 @@ interface NativeLibMpvAddon {
   cancelAudioExtraction?(requestId: string): boolean;
   destroyPlayer(playerId: string): void;
   configureWindow?(parentHandle: Buffer): void;
+  registerMediaControls?(
+    parentHandle: Buffer,
+    callback: (event: { command: NativeMediaCommand }) => void,
+  ): boolean;
+  unregisterMediaControls?(): boolean;
+  setMediaPlaybackState?(playing: boolean): boolean;
+  setMediaMetadata?(title: string, artist: string, albumTitle: string): boolean;
+  setMediaNavigationAvailability?(
+    previousEnabled: boolean,
+    nextEnabled: boolean,
+  ): boolean;
 }
 
 type PlayerRecord = {
@@ -236,6 +250,7 @@ export class LibMpvController {
   private startupPreflight: (() => Promise<void>) | null = null;
   private warmupPromise: Promise<{ ok: boolean; message?: string }> | null =
     null;
+  private mediaControlsRegistered = false;
 
   public init(
     mainWindow: BrowserWindow,
@@ -261,6 +276,8 @@ export class LibMpvController {
         console.warn("[libmpv] failed to configure window", err);
       }
     }
+
+    this.registerMediaControls();
 
     this.registerIpc();
 
@@ -303,8 +320,128 @@ export class LibMpvController {
       }
     });
     mainWindow.on("closed", () => {
-      this.destroyAll();
+      this.destroyAll("main-window:closed");
     });
+  }
+
+  private registerMediaControls(): void {
+    if (
+      !this.addon?.registerMediaControls ||
+      !this.mainWindow ||
+      this.mainWindow.isDestroyed()
+    ) {
+      return;
+    }
+
+    try {
+      this.mediaControlsRegistered = this.addon.registerMediaControls(
+        this.mainWindow.getNativeWindowHandle(),
+        (event) => {
+          const command = event?.command;
+          if (
+            command !== "toggle-play-pause" &&
+            command !== "play" &&
+            command !== "pause" &&
+            command !== "next" &&
+            command !== "previous"
+          ) {
+            return;
+          }
+          if (!this.canSendToRenderer()) return;
+          try {
+            this.mainWindow!.webContents.send("desktop:native-media-command", {
+              command,
+            });
+          } catch (error) {
+            console.warn("[libmpv] failed to send native media command", error);
+          }
+        },
+      );
+      if (!this.mediaControlsRegistered) {
+        console.warn(
+          "[libmpv] native media controls registration returned false",
+        );
+        return;
+      }
+      this.setNativeMediaPlaybackState(false);
+      this.broadcastLog("info", "media_controls_registered", {
+        platform: process.platform,
+      });
+    } catch (error) {
+      this.mediaControlsRegistered = false;
+      console.warn("[libmpv] native media controls unavailable", {
+        error: error instanceof Error ? error.message : String(error),
+      });
+    }
+  }
+
+  private unregisterMediaControls(): void {
+    try {
+      this.addon?.unregisterMediaControls?.();
+    } catch (error) {
+      console.warn("[libmpv] native media controls cleanup failed", {
+        error: error instanceof Error ? error.message : String(error),
+      });
+    } finally {
+      this.mediaControlsRegistered = false;
+    }
+  }
+
+  private setNativeMediaPlaybackState(playing: boolean): void {
+    try {
+      this.addon?.setMediaPlaybackState?.(playing);
+    } catch (error) {
+      console.warn("[libmpv] native media playback state failed", {
+        playing,
+        error: error instanceof Error ? error.message : String(error),
+      });
+    }
+  }
+
+  public setNativeMediaMetadata(metadata: NativeMediaMetadata): boolean {
+    if (!this.mediaControlsRegistered || !this.addon?.setMediaMetadata) {
+      return false;
+    }
+    try {
+      return this.addon.setMediaMetadata(
+        metadata.title,
+        metadata.artist,
+        metadata.albumTitle,
+      );
+    } catch (error) {
+      console.warn("[libmpv] native media metadata failed", {
+        error: error instanceof Error ? error.message : String(error),
+      });
+      return false;
+    }
+  }
+
+  public setNativeMediaNavigation(
+    availability: NativeMediaNavigationAvailability,
+  ): boolean {
+    if (
+      !this.mediaControlsRegistered ||
+      !this.addon?.setMediaNavigationAvailability
+    ) {
+      return false;
+    }
+    try {
+      return this.addon.setMediaNavigationAvailability(
+        availability.previousEnabled,
+        availability.nextEnabled,
+      );
+    } catch (error) {
+      console.warn("[libmpv] native media navigation failed", {
+        error: error instanceof Error ? error.message : String(error),
+      });
+      return false;
+    }
+  }
+
+  private syncNativeMediaPlaybackState(): void {
+    this.setNativeMediaPlaybackState(
+      [...this.players.values()].some((player) => !player.isPaused),
+    );
   }
 
   public warmup(): Promise<{ ok: boolean; message?: string }> {
@@ -437,6 +574,67 @@ export class LibMpvController {
       lastError: lastAddonLoadError,
       lastCreateError: lastPlayerCreateError,
     }));
+    ipcMain.handle("desktop:native-media-controls-state", (event) =>
+      this.mainWindow !== null &&
+      !this.mainWindow.isDestroyed() &&
+      event.sender === this.mainWindow.webContents
+        ? this.mediaControlsRegistered
+        : false,
+    );
+    ipcMain.handle(
+      "desktop:native-media-metadata",
+      (event, metadata: unknown) => {
+        if (
+          !this.mainWindow ||
+          this.mainWindow.isDestroyed() ||
+          event.sender !== this.mainWindow.webContents ||
+          !metadata ||
+          typeof metadata !== "object"
+        ) {
+          return false;
+        }
+        const value = metadata as Record<string, unknown>;
+        const title = value.title;
+        const artist = value.artist;
+        const albumTitle = value.albumTitle;
+        const isValidString = (candidate: unknown): candidate is string =>
+          typeof candidate === "string" &&
+          Buffer.byteLength(candidate, "utf8") <= 1024;
+        if (
+          !isValidString(title) ||
+          !isValidString(artist) ||
+          !isValidString(albumTitle)
+        ) {
+          return false;
+        }
+        return this.setNativeMediaMetadata({ title, artist, albumTitle });
+      },
+    );
+    ipcMain.handle(
+      "desktop:native-media-navigation",
+      (event, availability: unknown) => {
+        if (
+          !this.mainWindow ||
+          this.mainWindow.isDestroyed() ||
+          event.sender !== this.mainWindow.webContents ||
+          !availability ||
+          typeof availability !== "object"
+        ) {
+          return false;
+        }
+        const value = availability as Record<string, unknown>;
+        if (
+          typeof value.previousEnabled !== "boolean" ||
+          typeof value.nextEnabled !== "boolean"
+        ) {
+          return false;
+        }
+        return this.setNativeMediaNavigation({
+          previousEnabled: value.previousEnabled,
+          nextEnabled: value.nextEnabled,
+        });
+      },
+    );
   }
 
   public create(bounds: LibMpvBounds): string | null {
@@ -589,6 +787,7 @@ export class LibMpvController {
         autoplay: request.autoplay !== false,
       });
       player.isPaused = request.autoplay === false;
+      this.syncNativeMediaPlaybackState();
 
       // A torrent HTTP route can legitimately wait for peers indefinitely.
       // Keep the player alive; the renderer retries transient libmpv end-file
@@ -631,6 +830,7 @@ export class LibMpvController {
       this.addon.commandPlayer(playerId, command);
       if (command.type === "play") player.isPaused = false;
       if (command.type === "pause") player.isPaused = true;
+      this.syncNativeMediaPlaybackState();
       this.broadcastLog("debug", command.type, {
         playerId,
         generation: player.generation,
@@ -803,6 +1003,7 @@ export class LibMpvController {
       );
     } finally {
       this.players.delete(playerId);
+      this.syncNativeMediaPlaybackState();
       this.broadcastLog("info", "destroy", { playerId, reason });
     }
 
@@ -812,6 +1013,9 @@ export class LibMpvController {
   public destroyAll(reason = "controller:destroy-all"): void {
     for (const playerId of [...this.players.keys()]) {
       this.destroy(playerId, reason);
+    }
+    if (reason === "main-window:closed" || reason === "app:before-quit") {
+      this.unregisterMediaControls();
     }
   }
 
@@ -857,12 +1061,15 @@ export class LibMpvController {
         timingPhase: "video_frame",
       });
     } else if (event.type === "end-file") {
+      player.isPaused = true;
+      this.syncNativeMediaPlaybackState();
       this.broadcastLog("info", "end_file", eventData);
     } else if (event.type === "error") {
       this.broadcastLog("error", "error", eventData);
     } else if (event.type === "property") {
       if (event.name === "pause" && typeof event.data === "boolean") {
         player.isPaused = event.data;
+        this.syncNativeMediaPlaybackState();
         this.broadcastLog(
           event.data ? "info" : "info",
           event.data ? "pause" : "play",
@@ -879,7 +1086,10 @@ export class LibMpvController {
         event.name === "video-out-params" ||
         event.name === "pause" ||
         event.name === "seeking" ||
-        event.name === "paused-for-cache"
+        event.name === "paused-for-cache" ||
+        event.name === "hwdec-current" ||
+        event.name === "decoder-frame-drop-count" ||
+        event.name === "frame-drop-count"
       ) {
         this.broadcastLog("debug", "property", {
           ...eventData,

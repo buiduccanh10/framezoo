@@ -16,6 +16,8 @@ export interface TorrentStartRequest {
   trackers?: string[];
   fileIdx?: number;
   fileName?: string;
+  /** Stream quality hint from the addon, used for adaptive read-ahead. */
+  quality?: string;
   startAt?: number;
 }
 

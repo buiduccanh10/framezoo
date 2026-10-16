@@ -9,6 +9,9 @@ import type {
   LibMpvAudioRequest,
   LibMpvPlayerEvent,
   LibMpvSourceRequest,
+  NativeMediaCommandEvent,
+  NativeMediaMetadata,
+  NativeMediaNavigationAvailability,
   TorrentSession,
   TorrentSettings,
   TorrentStartRequest,
@@ -298,6 +301,17 @@ contextBridge.exposeInMainWorld("electronAPI", {
   } | null> {
     return ipcRenderer.invoke("desktop:libmpv-diagnostics");
   },
+  getNativeMediaControlsState(): Promise<boolean> {
+    return ipcRenderer.invoke("desktop:native-media-controls-state");
+  },
+  setNativeMediaMetadata(metadata: NativeMediaMetadata): Promise<boolean> {
+    return ipcRenderer.invoke("desktop:native-media-metadata", metadata);
+  },
+  setNativeMediaNavigation(
+    availability: NativeMediaNavigationAvailability,
+  ): Promise<boolean> {
+    return ipcRenderer.invoke("desktop:native-media-navigation", availability);
+  },
   onStartupNativeWarmupState(listener: (state: unknown) => void) {
     const handler = (_event: Electron.IpcRendererEvent, state: unknown) => {
       listener(state);
@@ -375,6 +389,20 @@ contextBridge.exposeInMainWorld("electronAPI", {
           ipcRenderer.on("desktop:libmpv-log", handler);
           return () => {
             ipcRenderer.removeListener("desktop:libmpv-log", handler);
+          };
+        },
+        onNativeMediaCommand(
+          listener: (event: NativeMediaCommandEvent) => void,
+        ) {
+          const handler = (
+            _event: Electron.IpcRendererEvent,
+            event: NativeMediaCommandEvent,
+          ) => {
+            listener(event);
+          };
+          ipcRenderer.on("desktop:native-media-command", handler);
+          return () => {
+            ipcRenderer.removeListener("desktop:native-media-command", handler);
           };
         },
       }

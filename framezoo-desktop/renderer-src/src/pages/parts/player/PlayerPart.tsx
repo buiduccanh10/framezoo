@@ -21,7 +21,7 @@ import { resolveNextEpisodeAction } from "@/components/player/utils/episodeNavig
 import type { DesktopPipAction } from "@/desktop/pip";
 import { useIsMacWindowed } from "@/hooks/useIsDesktopApp";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { PlayerMeta, playerStatus } from "@/stores/player/slices/source";
+import { PlayerMeta } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { useProgressStore } from "@/stores/progress";
 import { useWatchPartyStore } from "@/stores/watchParty";
@@ -38,7 +38,6 @@ export function PlayerPart(props: PlayerPartProps) {
   const isMacWindowed = useIsMacWindowed();
   const { onMetaChange } = props;
   const { showTargets } = useShouldShowControls();
-  const status = usePlayerStore((s) => s.status);
   const isLoading = usePlayerStore((s) => s.mediaPlaying.isLoading);
   const { isMobile } = useIsMobile();
   const { isHost, enabled } = useWatchPartyStore();
@@ -52,8 +51,7 @@ export function PlayerPart(props: PlayerPartProps) {
 
   const inControl = !enabled || isHost;
   const shouldShowBottomControls = showTargets;
-  const shouldShowCenterMobileControls =
-    status === playerStatus.PLAYING && !isLoading && isMobile && showTargets;
+  const shouldShowCenterMobileControls = !isLoading && isMobile && showTargets;
   const desktopActionIconClass = "text-[32px] leading-none";
   const desktopActionButtonClass =
     "h-14 w-14 shrink-0 flex items-center justify-center";
@@ -201,12 +199,10 @@ export function PlayerPart(props: PlayerPartProps) {
       <DocumentPipOverlay />
       <PlayerLoadingOverlay sourceLoading={props.sourceLoading} />
 
-      {status === playerStatus.PLAYING ? (
-        <Player.CenterControls>
-          <Player.AutoPlayStart />
-          <Player.CastingNotification />
-        </Player.CenterControls>
-      ) : null}
+      <Player.CenterControls>
+        <Player.AutoPlayStart />
+        <Player.CastingNotification />
+      </Player.CenterControls>
 
       <Player.CenterMobileControls
         className="text-white"
@@ -237,7 +233,7 @@ export function PlayerPart(props: PlayerPartProps) {
           <div className="flex flex-1 min-w-0 items-center gap-1 ssm:gap-2 z-10">
             {isMacWindowed && (
               <div
-                className="w-[72px] shrink-0 pointer-events-none"
+                className="w-18 shrink-0 pointer-events-none"
                 aria-hidden="true"
               />
             )}
@@ -296,18 +292,16 @@ export function PlayerPart(props: PlayerPartProps) {
             <Player.InfoButton />
             <Player.BookmarkButton />
             <Player.KeyboardCommandsButton />
-            {status === playerStatus.PLAYING ? (
-              <div
-                className="flex items-center gap-2"
-                style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
-              >
-                <Player.Airplay
-                  iconSizeClass={mobileActionIconClass}
-                  className={mobileActionButtonClass}
-                />
-                <Player.Chromecast />
-              </div>
-            ) : null}
+            <div
+              className="flex items-center gap-2"
+              style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
+            >
+              <Player.Airplay
+                iconSizeClass={mobileActionIconClass}
+                className={mobileActionButtonClass}
+              />
+              <Player.Chromecast />
+            </div>
             <WindowControls />
           </div>
         </div>
@@ -315,38 +309,32 @@ export function PlayerPart(props: PlayerPartProps) {
 
       <Player.BottomControls show={shouldShowBottomControls}>
         <div className="flex flex-col w-full">
-          {status === playerStatus.PLAYING ? (
-            <div className="w-full mb-2 flex items-center space-x-4">
-              <Player.ProgressBar />
-              {isMobile ? <Player.Time short /> : null}
-            </div>
-          ) : null}
+          <div className="w-full mb-2 flex items-center space-x-4">
+            <Player.ProgressBar />
+            {isMobile ? <Player.Time short /> : null}
+          </div>
         </div>
         <div className="hidden lg:flex justify-between" dir="ltr">
           <Player.LeftSideControls>
-            {status === playerStatus.PLAYING ? (
-              <>
-                <Player.Pause
-                  className={desktopActionButtonClass}
-                  iconSizeClass={desktopActionIconClass}
-                />
-                <Player.SkipBackward
-                  className={desktopActionButtonClass}
-                  iconSizeClass={desktopActionIconClass}
-                  inControl={inControl}
-                />
-                <Player.SkipForward
-                  className={desktopActionButtonClass}
-                  iconSizeClass={desktopActionIconClass}
-                  inControl={inControl}
-                />
-                <Player.Volume
-                  buttonClassName={desktopActionButtonClass}
-                  iconSizeClass={desktopActionIconClass}
-                />
-                <Player.Time />
-              </>
-            ) : null}
+            <Player.Pause
+              className={desktopActionButtonClass}
+              iconSizeClass={desktopActionIconClass}
+            />
+            <Player.SkipBackward
+              className={desktopActionButtonClass}
+              iconSizeClass={desktopActionIconClass}
+              inControl={inControl}
+            />
+            <Player.SkipForward
+              className={desktopActionButtonClass}
+              iconSizeClass={desktopActionIconClass}
+              inControl={inControl}
+            />
+            <Player.Volume
+              buttonClassName={desktopActionButtonClass}
+              iconSizeClass={desktopActionIconClass}
+            />
+            <Player.Time />
           </Player.LeftSideControls>
           <div className="flex items-center space-x-6">
             <Player.Episodes
@@ -364,26 +352,19 @@ export function PlayerPart(props: PlayerPartProps) {
               className={desktopActionButtonClass}
               iconSizeClass={desktopActionIconClass}
             />
-            {status === playerStatus.PLAYING ? (
-              <>
-                <Player.Pip
-                  className={desktopActionButtonClass}
-                  iconSizeClass={desktopActionIconClass}
-                />
-                <Player.Airplay
-                  className={desktopActionButtonClass}
-                  iconSizeClass={desktopActionIconClass}
-                />
-                <Player.Chromecast className={desktopActionButtonClass} />
-              </>
-            ) : null}
-            {status === playerStatus.PLAYBACK_ERROR ||
-            status === playerStatus.PLAYING ? (
-              <Player.Captions
-                className={desktopActionButtonClass}
-                iconSizeClass={desktopActionIconClass}
-              />
-            ) : null}
+            <Player.Pip
+              className={desktopActionButtonClass}
+              iconSizeClass={desktopActionIconClass}
+            />
+            <Player.Airplay
+              className={desktopActionButtonClass}
+              iconSizeClass={desktopActionIconClass}
+            />
+            <Player.Chromecast className={desktopActionButtonClass} />
+            <Player.Captions
+              className={desktopActionButtonClass}
+              iconSizeClass={desktopActionIconClass}
+            />
             <Player.Settings
               className={desktopActionButtonClass}
               iconSizeClass={desktopActionIconClass}
@@ -403,39 +384,33 @@ export function PlayerPart(props: PlayerPartProps) {
         </div>
         <div className="flex w-full items-center justify-center gap-1 ssm:gap-2 lg:hidden">
           {/* Disable PiP for iOS PWA */}
-          {!(isPWA && isIOS) && status === playerStatus.PLAYING && (
+          {!(isPWA && isIOS) && (
             <Player.Pip
               iconSizeClass={mobileActionIconClass}
               className={mobileActionButtonClass}
             />
           )}
-          {status === playerStatus.PLAYING && (
-            <Player.Pause
-              iconSizeClass={mobileActionIconClass}
-              className={mobileActionButtonClass}
-            />
-          )}
-          {status === playerStatus.PLAYING && (
-            <Player.Volume
-              iconSizeClass={mobileActionIconClass}
-              className="shrink-0"
-              buttonClassName={mobileActionButtonClass}
-            />
-          )}
+          <Player.Pause
+            iconSizeClass={mobileActionIconClass}
+            className={mobileActionButtonClass}
+          />
+          <Player.Volume
+            iconSizeClass={mobileActionIconClass}
+            className="shrink-0"
+            buttonClassName={mobileActionButtonClass}
+          />
           <Player.Episodes
             inControl={inControl}
             compact
             iconSizeClass={mobileActionIconClass}
             className={mobileActionButtonClass}
           />
-          {status === playerStatus.PLAYING ? (
-            <div className="hidden ssm:block">
-              <Player.Captions
-                iconSizeClass={mobileActionIconClass}
-                className={mobileActionButtonClass}
-              />
-            </div>
-          ) : null}
+          <div className="hidden ssm:block">
+            <Player.Captions
+              iconSizeClass={mobileActionIconClass}
+              className={mobileActionButtonClass}
+            />
+          </div>
           <Player.Settings
             iconSizeClass={mobileActionIconClass}
             className={mobileActionButtonClass}
@@ -444,26 +419,24 @@ export function PlayerPart(props: PlayerPartProps) {
             iconSizeClass="text-[20px] ssm:text-[22px]"
             className={mobileActionButtonClass}
           />
-          {status === playerStatus.PLAYING && (
-            <div
-              onTouchStart={handleTouchStart}
-              onTouchEnd={handleTouchEnd}
-              className="select-none touch-none"
-              style={{ WebkitTapHighlightColor: "transparent" }}
-            >
-              {isHoldingFullscreen ? (
-                <Player.Widescreen
-                  iconSizeClass={mobileActionIconClass}
-                  className={`${mobileActionButtonClass} text-white`}
-                />
-              ) : (
-                <Player.Fullscreen
-                  iconSizeClass={mobileActionIconClass}
-                  className={mobileActionButtonClass}
-                />
-              )}
-            </div>
-          )}
+          <div
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            className="select-none touch-none"
+            style={{ WebkitTapHighlightColor: "transparent" }}
+          >
+            {isHoldingFullscreen ? (
+              <Player.Widescreen
+                iconSizeClass={mobileActionIconClass}
+                className={`${mobileActionButtonClass} text-white`}
+              />
+            ) : (
+              <Player.Fullscreen
+                iconSizeClass={mobileActionIconClass}
+                className={mobileActionButtonClass}
+              />
+            )}
+          </div>
         </div>
       </Player.BottomControls>
 
