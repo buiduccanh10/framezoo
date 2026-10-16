@@ -1,5 +1,7 @@
 import { Icons } from "@/components/Icon";
 import { VideoPlayerButton } from "@/components/player/internals/Button";
+import { isPlaybackInteractionLocked } from "@/components/player/utils/playbackLock";
+import { playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { isSafari } from "@/utils/detectFeatures";
 
@@ -12,6 +14,9 @@ export function Airplay(props: AirplayProps) {
   const canAirplay = usePlayerStore((s) => s.interface.canAirplay);
   const display = usePlayerStore((s) => s.display);
   const source = usePlayerStore((s) => s.source);
+  const status = usePlayerStore((s) => s.status);
+  const mediaPlaying = usePlayerStore((s) => s.mediaPlaying);
+  const subtitleSyncActive = usePlayerStore((s) => s.subtitleSync.active);
 
   // Check if source is supported for casting
   // HLS is always supported (proxied if needed)
@@ -30,13 +35,19 @@ export function Airplay(props: AirplayProps) {
 
   // Show Airplay button on Safari browsers (which support AirPlay natively)
   // or when the webkit event has confirmed availability
-  if ((!canAirplay && !isSafari) || !isCastable) return null;
+  if (!canAirplay && !isSafari) return null;
 
   return (
     <VideoPlayerButton
       className={props.className}
       iconSizeClass={props.iconSizeClass}
       onClick={() => display?.startAirplay()}
+      disabled={
+        status !== playerStatus.PLAYING ||
+        !isCastable ||
+        mediaPlaying.isLoading ||
+        isPlaybackInteractionLocked(mediaPlaying, subtitleSyncActive)
+      }
       icon={Icons.AIRPLAY}
     />
   );

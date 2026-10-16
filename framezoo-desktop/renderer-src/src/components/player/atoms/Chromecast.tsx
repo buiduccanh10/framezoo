@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 
 import { VideoPlayerButton } from "@/components/player/internals/Button";
+import { isPlaybackInteractionLocked } from "@/components/player/utils/playbackLock";
+import { playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 
 // Allow the custom element in TSX
@@ -24,6 +26,9 @@ export function Chromecast({ className }: ChromecastProps) {
   const [castHidden, setCastHidden] = useState(false);
   const isCasting = usePlayerStore((s) => s.interface.isCasting);
   const source = usePlayerStore((s) => s.source);
+  const status = usePlayerStore((s) => s.status);
+  const mediaPlaying = usePlayerStore((s) => s.mediaPlaying);
+  const subtitleSyncActive = usePlayerStore((s) => s.subtitleSync.active);
   const launcherRef = useRef<HTMLDivElement>(null!);
 
   // Check if source is supported for casting
@@ -88,8 +93,14 @@ export function Chromecast({ className }: ChromecastProps) {
         "google-cast-button",
         "cast-button-container",
         isCasting ? "casting" : "",
-        castHidden || !isCastable ? "hidden" : "",
+        castHidden ? "hidden" : "",
       ].join(" ")}
+      disabled={
+        status !== playerStatus.PLAYING ||
+        !isCastable ||
+        mediaPlaying.isLoading ||
+        isPlaybackInteractionLocked(mediaPlaying, subtitleSyncActive)
+      }
     >
       <div ref={launcherRef} />
     </VideoPlayerButton>
