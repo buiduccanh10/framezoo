@@ -134,6 +134,8 @@ class TorrentRecord:
         if self.discovery is None:
             return {
                 "discoveryPhase": "unavailable",
+                "discoveryWorkerAlive": False,
+                "discoveryStopRequested": False,
                 "trackersAttempted": 0,
                 "trackersSucceeded": 0,
                 "peersDiscovered": 0,
@@ -264,8 +266,11 @@ class LibtorrentEngine:
     ) -> TorrentRecord:
         session = self._ensure_session()
         resume_data = b""
+        resume_data_parsed = False
         torrent_info = None
         cache_ready = False
+        resume_data_present = False
+        torrent_file_present = False
 
         if cache_key:
             cache_ready = os.path.isfile(
@@ -273,6 +278,8 @@ class LibtorrentEngine:
             )
             torrent_path = os.path.join(save_path, cache_key + ".torrent")
             resume_path = os.path.join(save_path, "resume.dat")
+            torrent_file_present = os.path.exists(torrent_path)
+            resume_data_present = os.path.exists(resume_path)
             if not cache_ready:
                 # Older versions saved this control state after metadata, even
                 # when no media bytes ever reached the player. Never restore it.
@@ -336,10 +343,33 @@ class LibtorrentEngine:
                 resume_params.url_seeds = url_seeds
                 resume_params.save_path = save_path
                 params = resume_params
+                resume_data_parsed = True
             except Exception as error:
                 sys.stderr.write(
                     f"[sidecar] Failed to parse resume data: {error}\n",
                 )
+
+        try:
+            info_hash = str(
+                torrent_info.info_hash()
+                if torrent_info is not None
+                else request.get("infoHash", "")
+            )
+        except Exception:
+            info_hash = None
+        log_event(
+            "torrent cache restore",
+            sessionId=session_id,
+            cacheKey=cache_key,
+            infoHash=info_hash,
+            cacheReady=cache_ready,
+            torrentFilePresent=torrent_file_present,
+            torrentInfoLoaded=torrent_info is not None,
+            resumeDataPresent=resume_data_present,
+            resumeDataBytes=len(resume_data),
+            resumeDataParsed=resume_data_parsed,
+            fileIdx=request.get("fileIdx"),
+        )
 
         params.trackers = merge_tracker_sources(
             getattr(params, "trackers", []),
@@ -361,6 +391,35 @@ class LibtorrentEngine:
                 pass
 
         handle = session.add_torrent(params)
+        try:
+            status = handle.status()
+            handle_state = getattr(status, "state", None)
+            if handle_state is not None:
+                handle_state = str(handle_state)
+            handle_snapshot = {
+                "paused": getattr(status, "paused", None),
+                "hasMetadata": getattr(status, "has_metadata", None),
+                "state": handle_state,
+                "connectedPeers": int(getattr(status, "num_peers", 0)),
+                "downloadRate": int(getattr(status, "download_rate", 0)),
+                "totalDone": int(getattr(status, "total_done", 0)),
+                "totalWanted": int(getattr(status, "total_wanted", 0)),
+            }
+        except Exception:
+            handle_snapshot = {}
+        log_event(
+            "torrent handle created",
+            sessionId=session_id,
+            cacheKey=cache_key,
+            restoreSource=(
+                "resume-data"
+                if resume_data_parsed
+                else "torrent-info"
+                if torrent_info is not None
+                else "magnet"
+            ),
+            **handle_snapshot,
+        )
         actual_save_path = handle.status().save_path
         if actual_save_path != save_path:
             try:
@@ -434,12 +493,14 @@ class LibtorrentEngine:
                 if record_was_idle:
                     record.reactivate(session_id)
                 runtime.start()
+                discovery_snapshot = record.snapshot()
                 log_event(
                     "torrent handle reused",
                     sessionId=session_id,
                     cacheKey=record_key,
                     activeSessions=len(record.session_ids),
                     reactivated=record_was_idle,
+                    **discovery_snapshot,
                 )
                 return runtime.session_payload()
 

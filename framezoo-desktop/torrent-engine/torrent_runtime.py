@@ -1081,6 +1081,7 @@ class TorrentRuntime:
         required_list = sorted(required_set)
         required_ranks = {p: i for i, p in enumerate(required_list)}
         first_piece_was_prioritized = False
+        prioritized_piece_bounds: list[int] = []
         with self._piece_priority_lock:
             for index, piece in enumerate(prefetch_pieces):
                 try:
@@ -1136,6 +1137,7 @@ class TorrentRuntime:
                         self._piece_priorities[piece] = priority
                     if piece == first_required_piece:
                         first_piece_was_prioritized = True
+                    prioritized_piece_bounds.append(piece)
                     missing_pieces += 1
                 except Exception:
                     continue
@@ -1157,8 +1159,20 @@ class TorrentRuntime:
                 sessionId=self.session_id,
                 reason=reason,
                 pieces=len(prefetch_pieces),
+                firstPiece=(prefetch_pieces[0] if prefetch_pieces else None),
+                lastPiece=(prefetch_pieces[-1] if prefetch_pieces else None),
                 requiredPieces=len(required_pieces),
                 missingPieces=missing_pieces,
+                firstMissingPiece=(
+                    prioritized_piece_bounds[0]
+                    if prioritized_piece_bounds
+                    else None
+                ),
+                lastMissingPiece=(
+                    prioritized_piece_bounds[-1]
+                    if prioritized_piece_bounds
+                    else None
+                ),
                 timingPhase=(
                     "first_chunk_prioritized"
                     if reason == "first-chunk"
@@ -1720,10 +1734,15 @@ class TorrentRuntime:
             total_done_bytes = None
             file_progress_bytes = None
             download_rate = None
+            connected_peers = None
+            handle_paused = None
+            discovery_status: dict[str, Any] = {}
             try:
                 status = self.handle.status()
                 total_done_bytes = int(getattr(status, "total_done", 0))
                 download_rate = int(getattr(status, "download_rate", 0))
+                connected_peers = int(getattr(status, "num_peers", 0))
+                handle_paused = getattr(status, "paused", None)
                 if self.file_index is not None:
                     file_progress_bytes = int(
                         self.handle.file_progress()[self.file_index],
@@ -1748,6 +1767,10 @@ class TorrentRuntime:
                     )
                     else None
                 )
+                record = getattr(self, "record", None)
+                engine = getattr(self, "engine", None)
+                if record is not None and engine is not None:
+                    discovery_status = engine.get_discovery_status(record)
             except Exception:
                 piece_count = None
                 first_piece_available = None
@@ -1766,8 +1789,11 @@ class TorrentRuntime:
                 totalDoneBytes=total_done_bytes,
                 fileProgressBytes=file_progress_bytes,
                 downloadRate=download_rate,
+                connectedPeers=connected_peers,
+                handlePaused=handle_paused,
                 trackPosition=track_position,
                 elapsedMs=self.elapsed_ms(),
+                **discovery_status,
                 **(sync_metadata or {}),
             )
 

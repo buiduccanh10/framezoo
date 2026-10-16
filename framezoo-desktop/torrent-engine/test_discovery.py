@@ -194,6 +194,26 @@ class TorrentDiscoveryTest(unittest.TestCase):
         self.assertFalse(runtime.thread.is_alive())
         self.assertEqual(runtime.snapshot()["discoveryPhase"], "stopped")
 
+    def test_reactivate_after_stop_reports_that_worker_cannot_run(self):
+        runtime = discovery.TorrentDiscovery(
+            SimpleNamespace(),
+            SimpleNamespace(),
+            lt.sha1_hash(bytes.fromhex("04" * 20)),
+            [],
+            b"-FZ0001-" + b"0" * 12,
+            6881,
+        )
+        runtime.start()
+        runtime.stop()
+
+        details = runtime.reactivate()
+        snapshot = runtime.snapshot()
+
+        self.assertFalse(details["workerAlive"])
+        self.assertTrue(details["stopRequested"])
+        self.assertFalse(snapshot["discoveryWorkerAlive"])
+        self.assertTrue(snapshot["discoveryStopRequested"])
+
     def test_reactivate_wakes_backoff_and_retries_known_peers(self):
         peer = discovery.PeerAddress("127.0.0.1", 6881)
 
