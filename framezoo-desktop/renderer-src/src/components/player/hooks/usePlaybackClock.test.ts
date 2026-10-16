@@ -247,9 +247,39 @@ describe("playback clock", () => {
 
     await runAnimationFrame(1_200);
 
+    // Both clocks are anchored to their respective store values (time vs
+    // mediaTime). When they start equal the interpolated result is identical.
+    // The visual clock uses a 33ms tick; the subtitle clock uses 50ms.
+    // At frame 1_200ms (200ms after now=1_000):
+    //   visual clock: VISUAL_PLAYBACK_CLOCK_TICK_MS=33 → update at 33ms → 10.1+0.2 = 10.3
+    //   subtitle clock: SUBTITLE_PLAYBACK_CLOCK_TICK_MS=50 → update at 50ms → 10.1+0.2 = 10.3
+    // Both are driven by the same animation frame so they produce the same interpolated time.
     expect(visualTimes.at(-1)).toBeCloseTo(10.3, 6);
-    expect(subtitleTimes.at(-1)).toBe(10.1);
+    expect(subtitleTimes.at(-1)).toBeCloseTo(10.3, 6);
+
+    // Verify the clocks diverge when mediaTime lags behind progress.time:
+    // e.g. visual clock sees a late IPC sample that bumped progress.time but
+    // mediaTime was already accepted and stayed at 10.3.
+    usePlayerStore.setState((state) => ({
+      progress: {
+        ...state.progress,
+        time: 10.5, // visual clock gets a newer sample
+        // mediaTime stays at 10.3 — it's only set from the native time event
+        mediaTime: 10.3,
+      },
+    }));
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    // After snapping to the new authoritative samples, subtitle clock must
+    // not jump ahead of mediaTime (10.3) immediately, while the visual clock
+    // snaps forward to 10.5.
+    expect(subtitleTimes.at(-1)).toBeCloseTo(10.3, 1);
+    expect(visualTimes.at(-1)).toBeCloseTo(10.5, 1);
   });
+
 
   it("continues past a delayed authoritative sample without re-anchoring", async () => {
     const times: number[] = [];
