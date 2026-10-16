@@ -120,7 +120,9 @@ export function PipPlaybackClockProvider(props: {
     duration: props.state.duration,
     playbackRate: props.state.playbackRate,
     isActive,
-    isLoading: props.state.isLoading,
+    // Loading can cover startup/metadata work while decoded frames continue.
+    // Only a confirmed playback stall may freeze the playback clock.
+    isLoading: props.state.isPlaybackStalled,
     isSeeking: props.state.isSeeking,
     resetKey: getPipPlaybackResetKey(props.state),
   };
@@ -228,12 +230,12 @@ export const PipCaptions = memo(function PipCaptionsView(props: {
 
   const frozenPrimary = useSeekFrozenCaptions(
     captions.primary,
-    props.state.isSeeking || props.state.isLoading,
+    props.state.isSeeking || props.state.isPlaybackStalled,
   );
 
   const frozenSecondary = useSeekFrozenCaptions(
     captions.secondary,
-    props.state.isSeeking || props.state.isLoading,
+    props.state.isSeeking || props.state.isPlaybackStalled,
   );
 
   const showSecondary =

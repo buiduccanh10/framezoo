@@ -18,6 +18,7 @@ describe("Desktop PiP subtitle state", () => {
         mediaPlaying: {
           isPaused: false,
           playbackRate: 1,
+          isPlaybackStalled: true,
         },
         meta: {
           title: "Test movie",
@@ -34,6 +35,7 @@ describe("Desktop PiP subtitle state", () => {
 
     expect(state?.primaryDelay).toBe(1.25);
     expect(state?.secondaryDelay).toBe(-0.5);
+    expect(state?.isPlaybackStalled).toBe(true);
   });
 
   it("keeps loading metadata and episode actions when the source is empty", () => {
