@@ -286,6 +286,9 @@ struct MpvPlayer {
     emit_property_snapshot("speed", MPV_FORMAT_DOUBLE);
     emit_property_snapshot("seeking", MPV_FORMAT_FLAG);
     emit_property_snapshot("paused-for-cache", MPV_FORMAT_FLAG);
+    emit_property_snapshot("hwdec-current", MPV_FORMAT_STRING);
+    emit_property_snapshot("decoder-frame-drop-count", MPV_FORMAT_INT64);
+    emit_property_snapshot("frame-drop-count", MPV_FORMAT_INT64);
     emit_property_snapshot("track-list", MPV_FORMAT_NODE);
     emit_property_snapshot("video-params", MPV_FORMAT_NODE);
     emit_property_snapshot("video-out-params", MPV_FORMAT_NODE);
@@ -545,8 +548,11 @@ struct MpvPlayer {
                 break;
               case MPV_FORMAT_STRING:
               case MPV_FORMAT_OSD_STRING:
-                native_event->string_value =
-                    static_cast<const char*>(property->data);
+                {
+                  auto* value = static_cast<char**>(property->data);
+                  native_event->string_value =
+                      value && *value ? *value : "";
+                }
                 break;
               case MPV_FORMAT_NODE:
                 native_event->string_value = node_to_json(
@@ -574,6 +580,9 @@ struct MpvPlayer {
                std::string(property->name) == "speed" ||
                std::string(property->name) == "seeking" ||
                std::string(property->name) == "paused-for-cache" ||
+               std::string(property->name) == "hwdec-current" ||
+               std::string(property->name) == "decoder-frame-drop-count" ||
+               std::string(property->name) == "frame-drop-count" ||
                std::string(property->name) == "video-params" ||
                std::string(property->name) == "video-out-params" ||
                std::string(property->name) == "track-list");
@@ -1377,6 +1386,9 @@ napi_value create_player(napi_env env, napi_callback_info info) {
       "speed",
       "seeking",
       "paused-for-cache",
+      "hwdec-current",
+      "decoder-frame-drop-count",
+      "frame-drop-count",
       "demuxer-cache-duration",
       "track-list",
       "video-params",
@@ -1390,6 +1402,9 @@ napi_value create_player(napi_env env, napi_callback_info info) {
       MPV_FORMAT_DOUBLE,
       MPV_FORMAT_FLAG,
       MPV_FORMAT_FLAG,
+      MPV_FORMAT_STRING,
+      MPV_FORMAT_INT64,
+      MPV_FORMAT_INT64,
       MPV_FORMAT_DOUBLE,
       MPV_FORMAT_NODE,
       MPV_FORMAT_NODE,
@@ -1612,6 +1627,47 @@ napi_value load_player(napi_env env, napi_callback_info info) {
       std::max(0.0, start_at),
       std::memory_order_release
   );
+
+  // Torrent HTTP ranges can briefly expose decoder-owned surfaces while the
+  // sidecar waits for the next available piece. Copy-back keeps libmpv's
+  // software renderer independent from that surface lifetime. Audio-clock
+  // pacing avoids display-clock frame drops while the torrent stalls.
+  if (
+      set_mpv_property(
+          player.get(),
+          "hwdec",
+          is_torrent ? "auto-copy" : "auto-safe"
+      ) < 0
+  ) {
+    return throw_error(env, "libmpv hardware decoder configuration failed");
+  }
+  if (
+      set_mpv_property(
+          player.get(),
+          "video-sync",
+          is_torrent ? "audio" : "display-resample"
+      ) < 0
+  ) {
+    return throw_error(env, "libmpv video sync configuration failed");
+  }
+  if (
+      set_mpv_property(
+          player.get(),
+          "framedrop",
+          is_torrent ? "no" : "vo"
+      ) < 0
+  ) {
+    return throw_error(env, "libmpv frame drop configuration failed");
+  }
+  if (
+      set_mpv_property(
+          player.get(),
+          "hr-seek-framedrop",
+          is_torrent ? "no" : "yes"
+      ) < 0
+  ) {
+    return throw_error(env, "libmpv seek frame drop configuration failed");
+  }
 
   const std::string headers = get_headers(env, argv[1]);
   if (
