@@ -285,6 +285,46 @@ describe("external subtitle source transitions", () => {
     );
   });
 
+  it("unloads the current source while a replacement torrent is preparing", () => {
+    const load = vi.fn();
+    const display = {
+      load,
+      destroy: vi.fn(),
+      getType: () => "web",
+      on: vi.fn(),
+      setCaption: vi.fn(),
+      setSecondaryCaption: vi.fn(),
+    } as unknown as DisplayInterface;
+    usePlayerStore.getState().setDisplay(display);
+
+    const store = usePlayerStore.getState();
+    store.setMeta(createMeta(1));
+    store.setSource(createSource("source-a"), [], 0);
+    usePlayerStore.setState((s) => {
+      s.sourceId = "source-a";
+      s.mediaPlaying.isPlaying = true;
+      s.mediaPlaying.isPaused = false;
+      s.mediaPlaying.hasRenderedFrame = true;
+      s.progress.time = 42;
+      s.progress.duration = 1200;
+    });
+
+    expect(store.prepareSourceSwitch()).toBe(true);
+
+    const state = usePlayerStore.getState();
+    expect(state.source?.id).toBe("source-a");
+    expect(state.sourceId).toBe("source-a");
+    expect(state.mediaPlaying.hasRenderedFrame).toBe(false);
+    expect(state.mediaPlaying.isLoading).toBe(true);
+    expect(state.progress.time).toBe(42);
+    expect(load).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        source: null,
+        reason: "store:prepare-source-switch",
+      }),
+    );
+  });
+
   it("keeps the translated task in sync when AI updates its VTT", () => {
     const sourceCaption = createCaption("source-caption");
     const translatedCaption: Caption = {

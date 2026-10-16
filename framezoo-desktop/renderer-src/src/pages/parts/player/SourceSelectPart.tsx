@@ -220,6 +220,10 @@ export function SourceSelectPart(props: {
     torrentStatus?.streamType === "pending" ? torrentStatus.sourceId : null;
   const currentSourceId = usePlayerStore((state) => state.sourceId);
   const currentSource = usePlayerStore((state) => state.source);
+  const prepareSourceSwitch = usePlayerStore(
+    (state) => state.prepareSourceSwitch,
+  );
+  const redisplaySource = usePlayerStore((state) => state.redisplaySource);
   const currentSourceIsTorrent =
     currentSource?.type === "file" && currentSource.isTorrent === true;
   const hasActiveTorrentSelection =
@@ -411,9 +415,11 @@ export function SourceSelectPart(props: {
       }
       setAddonError(null);
       const previousTorrentSessionId = getActiveTorrentSessionId();
+      let sourceSwitchPrepared = false;
 
       try {
         if (stream.kind === "torrent") {
+          sourceSwitchPrepared = prepareSourceSwitch();
           const wasStartFromBeginning = shouldStartFromBeginning;
           const startAt = wasStartFromBeginning
             ? 0
@@ -523,6 +529,12 @@ export function SourceSelectPart(props: {
         const message =
           reason instanceof Error ? reason.message : "Unable to start stream";
         if (message !== "Torrent session was replaced") {
+          if (
+            sourceSwitchPrepared &&
+            operationId === selectionOperation.current
+          ) {
+            redisplaySource(usePlayerStore.getState().progress.time);
+          }
           setAddonError(message);
         }
       } finally {
@@ -538,7 +550,9 @@ export function SourceSelectPart(props: {
       onLoadingChange,
       onSelected,
       playMedia,
+      prepareSourceSwitch,
       progressItems,
+      redisplaySource,
       setPreferredStream,
       setShouldStartFromBeginning,
       shouldStartFromBeginning,
