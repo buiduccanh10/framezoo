@@ -288,7 +288,8 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       if (
         destroyed ||
         source !== retrySource ||
-        generation !== retryGeneration
+        generation !== retryGeneration ||
+        firstFrameLoggedGeneration === retryGeneration
       ) {
         return;
       }
@@ -903,6 +904,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     if (event.type === "video-frame") {
       if (firstFrameLoggedGeneration !== generation) {
         firstFrameLoggedGeneration = generation;
+        clearTorrentRetry();
         logPlaybackMilestone("libmpv_video_frame", "video-frame");
       }
       const initialResumeTime = pendingInitialResumeTime;
