@@ -2,6 +2,7 @@
 
 #include "media_controls.h"
 
+#import <AppKit/AppKit.h>
 #import <Foundation/Foundation.h>
 #import <MediaPlayer/MediaPlayer.h>
 
@@ -115,6 +116,7 @@ bool media_controls_set_metadata(
     const std::string& title,
     const std::string& artist,
     const std::string& album_title,
+    const std::string& artwork_path,
     std::string* error
 ) {
   MPNowPlayingInfoCenter* center = [MPNowPlayingInfoCenter defaultCenter];
@@ -135,6 +137,19 @@ bool media_controls_set_metadata(
   }
   if (album_value.length > 0) {
     info[MPMediaItemPropertyAlbumTitle] = album_value;
+  }
+  if (!artwork_path.empty()) {
+    const std::string normalized_path = artwork_path;
+    NSString* path_value = string_from_utf8(normalized_path);
+    NSImage* image = path_value.length > 0
+        ? [[NSImage alloc] initWithContentsOfFile:path_value]
+        : nil;
+    if (image) {
+      MPMediaItemArtwork* artwork = [[MPMediaItemArtwork alloc]
+          initWithBoundsSize:image.size
+              requestHandler:^NSImage*(NSSize) { return image; }];
+      if (artwork) info[MPMediaItemPropertyArtwork] = artwork;
+    }
   }
   center.nowPlayingInfo = info;
   return true;

@@ -5,6 +5,8 @@
 #include <windows.h>
 #include <eventtoken.h>
 #include <windows.media.h>
+#include <windows.foundation.h>
+#include <windows.storage.streams.h>
 #include <SystemMediaTransportControlsInterop.h>
 #include <roapi.h>
 #include <wrl.h>
@@ -12,6 +14,7 @@
 #include <wrl/wrappers/corewrappers.h>
 
 #include <mutex>
+#include <algorithm>
 #include <string>
 
 namespace {
@@ -23,6 +26,10 @@ using ABI::Windows::Media::ISystemMediaTransportControls;
 using ABI::Windows::Media::ISystemMediaTransportControlsButtonPressedEventArgs;
 using ABI::Windows::Media::ISystemMediaTransportControlsDisplayUpdater;
 using ABI::Windows::Media::IVideoDisplayProperties;
+using ABI::Windows::Foundation::IUriRuntimeClass;
+using ABI::Windows::Foundation::IUriRuntimeClassFactory;
+using ABI::Windows::Storage::Streams::IRandomAccessStreamReference;
+using ABI::Windows::Storage::Streams::IRandomAccessStreamReferenceStatics;
 using ABI::Windows::Media::SystemMediaTransportControlsButton;
 using ABI::Windows::Media::SystemMediaTransportControlsButton_Next;
 using ABI::Windows::Media::SystemMediaTransportControlsButton_Pause;
@@ -240,6 +247,7 @@ bool media_controls_set_metadata(
     const std::string& title,
     const std::string& artist,
     const std::string& album_title,
+    const std::string& artwork_path,
     std::string* error
 ) {
   std::lock_guard<std::mutex> lock(controls_mutex);
@@ -298,6 +306,59 @@ bool media_controls_set_metadata(
   if (FAILED(result)) {
     if (error) *error = "SMTC metadata update failed: " + std::to_string(result);
     return false;
+  }
+
+  display_updater->put_Thumbnail(nullptr);
+  if (!artwork_path.empty()) {
+    std::wstring file_uri = L"file:///" + utf8_to_wide(artwork_path);
+    std::replace(file_uri.begin(), file_uri.end(), L'\\', L'/');
+    for (size_t position = 0;
+         (position = file_uri.find(L" ", position)) != std::wstring::npos;
+         position += 3) {
+      file_uri.replace(position, 1, L"%20");
+    }
+
+    HSTRING uri_text = nullptr;
+    ComPtr<IUriRuntimeClassFactory> uri_factory;
+    ComPtr<IUriRuntimeClass> uri;
+    ComPtr<IRandomAccessStreamReferenceStatics> stream_factory;
+    ComPtr<IRandomAccessStreamReference> stream_reference;
+    HRESULT artwork_result = WindowsCreateString(
+        file_uri.data(),
+        static_cast<UINT32>(file_uri.size()),
+        &uri_text
+    );
+    if (SUCCEEDED(artwork_result)) {
+      artwork_result = RoGetActivationFactory(
+          Microsoft::WRL::Wrappers::HStringReference(
+              RuntimeClass_Windows_Foundation_Uri
+          ).Get(),
+          IID_PPV_ARGS(&uri_factory)
+      );
+    }
+    if (SUCCEEDED(artwork_result)) {
+      artwork_result = uri_factory->CreateUri(uri_text, &uri);
+    }
+    if (uri_text) WindowsDeleteString(uri_text);
+    if (SUCCEEDED(artwork_result)) {
+      artwork_result = RoGetActivationFactory(
+          Microsoft::WRL::Wrappers::HStringReference(
+              RuntimeClass_Windows_Storage_Streams_RandomAccessStreamReference
+          ).Get(),
+          IID_PPV_ARGS(&stream_factory)
+      );
+    }
+    if (SUCCEEDED(artwork_result)) {
+      artwork_result = stream_factory->CreateFromUri(
+          uri.Get(),
+          &stream_reference
+      );
+    }
+    if (SUCCEEDED(artwork_result)) {
+      artwork_result = display_updater->put_Thumbnail(stream_reference.Get());
+    }
+    // Artwork is optional; preserve metadata and let Windows show its app icon
+    // if the poster is missing or cannot be read.
   }
 
   result = display_updater->Update();

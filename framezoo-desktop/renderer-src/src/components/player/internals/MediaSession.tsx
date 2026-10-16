@@ -134,6 +134,7 @@ export function MediaSession() {
         albumTitle: isShowEpisode
           ? (meta?.season?.title ?? `Season ${seasonNumber}`)
           : "",
+        artworkUrl: meta?.poster,
       })
       .catch(() => {});
     void api
@@ -147,6 +148,7 @@ export function MediaSession() {
     meta?.season?.title,
     meta?.title,
     meta?.type,
+    meta?.poster,
     nativeControlsAvailable,
   ]);
 

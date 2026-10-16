@@ -45,6 +45,7 @@ export interface NativeMediaMetadata {
   title: string;
   artist: string;
   albumTitle: string;
+  artworkUrl?: string;
 }
 
 export interface NativeMediaNavigationAvailability {

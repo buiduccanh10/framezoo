@@ -1907,28 +1907,31 @@ napi_value set_media_playback_state(napi_env env, napi_callback_info info) {
 }
 
 napi_value set_media_metadata(napi_env env, napi_callback_info info) {
-  size_t argc = 3;
-  napi_value argv[3];
+  size_t argc = 4;
+  napi_value argv[4];
   if (napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr) != napi_ok ||
-      argc < 3) {
+      argc < 4) {
     return throw_error(
         env,
-        "setMediaMetadata(title, artist, albumTitle) expected"
+        "setMediaMetadata(title, artist, albumTitle, artworkPath) expected"
     );
   }
 
   std::string title;
   std::string artist;
   std::string album_title;
+  std::string artwork_path;
   if (!get_value_string(env, argv[0], &title) ||
       !get_value_string(env, argv[1], &artist) ||
-      !get_value_string(env, argv[2], &album_title)) {
+      !get_value_string(env, argv[2], &album_title) ||
+      !get_value_string(env, argv[3], &artwork_path)) {
     return throw_error(env, "media metadata fields must be strings");
   }
   constexpr size_t MAX_METADATA_BYTES = 1024;
   if (title.size() > MAX_METADATA_BYTES ||
       artist.size() > MAX_METADATA_BYTES ||
-      album_title.size() > MAX_METADATA_BYTES) {
+      album_title.size() > MAX_METADATA_BYTES ||
+      artwork_path.size() > 8192) {
     return throw_error(env, "media metadata fields are too long");
   }
 
@@ -1937,6 +1940,7 @@ napi_value set_media_metadata(napi_env env, napi_callback_info info) {
           title,
           artist,
           album_title,
+          artwork_path,
           &error
       )) {
     return throw_error(

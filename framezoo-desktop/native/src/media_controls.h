@@ -19,6 +19,7 @@ bool media_controls_set_metadata(
     const std::string& title,
     const std::string& artist,
     const std::string& album_title,
+    const std::string& artwork_path,
     std::string* error
 );
 
