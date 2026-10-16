@@ -3,6 +3,7 @@
 #include "media_controls.h"
 
 #include <windows.h>
+#include <eventtoken.h>
 #include <windows.media.h>
 #include <SystemMediaTransportControlsInterop.h>
 #include <roapi.h>
@@ -17,7 +18,7 @@ namespace {
 
 using Microsoft::WRL::Callback;
 using Microsoft::WRL::ComPtr;
-using ABI::Windows::Foundation::EventRegistrationToken;
+using ::EventRegistrationToken;
 using ABI::Windows::Media::ISystemMediaTransportControls;
 using ABI::Windows::Media::ISystemMediaTransportControlsButtonPressedEventArgs;
 using ABI::Windows::Media::ISystemMediaTransportControlsDisplayUpdater;
