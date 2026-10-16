@@ -32,11 +32,12 @@ export interface PlayerPartProps {
   onLoad?: () => void;
   onMetaChange?: (meta: PlayerMeta) => void;
   sourceLoading?: boolean;
+  hideControls?: boolean;
 }
 
 export function PlayerPart(props: PlayerPartProps) {
   const isMacWindowed = useIsMacWindowed();
-  const { onMetaChange } = props;
+  const { onMetaChange, hideControls = false } = props;
   const { showTargets } = useShouldShowControls();
   const isLoading = usePlayerStore((s) => s.mediaPlaying.isLoading);
   const { isMobile } = useIsMobile();
@@ -50,8 +51,9 @@ export function PlayerPart(props: PlayerPartProps) {
   const updateProgress = useProgressStore((s) => s.updateItem);
 
   const inControl = !enabled || isHost;
-  const shouldShowBottomControls = showTargets;
-  const shouldShowCenterMobileControls = !isLoading && isMobile && showTargets;
+  const shouldShowBottomControls = !hideControls && showTargets;
+  const shouldShowCenterMobileControls =
+    !hideControls && !isLoading && isMobile && showTargets;
   const desktopActionIconClass = "text-[32px] leading-none";
   const desktopActionButtonClass =
     "h-14 w-14 shrink-0 flex items-center justify-center";
@@ -204,14 +206,16 @@ export function PlayerPart(props: PlayerPartProps) {
         <Player.CastingNotification />
       </Player.CenterControls>
 
-      <Player.CenterMobileControls
-        className="text-white"
-        show={shouldShowCenterMobileControls}
-      >
-        <Player.SkipBackward iconSizeClass="text-3xl" inControl={inControl} />
-        <Player.Pause iconSizeClass="text-5xl" />
-        <Player.SkipForward iconSizeClass="text-3xl" inControl={inControl} />
-      </Player.CenterMobileControls>
+      {!hideControls && (
+        <Player.CenterMobileControls
+          className="text-white"
+          show={shouldShowCenterMobileControls}
+        >
+          <Player.SkipBackward iconSizeClass="text-3xl" inControl={inControl} />
+          <Player.Pause iconSizeClass="text-5xl" />
+          <Player.SkipForward iconSizeClass="text-3xl" inControl={inControl} />
+        </Player.CenterMobileControls>
+      )}
 
       <div
         className={`absolute right-4 z-50 transition-all duration-300 ease-in-out ${
@@ -221,7 +225,7 @@ export function PlayerPart(props: PlayerPartProps) {
         <WatchPartyStatus />
       </div>
 
-      <Player.TopControls show={showTargets}>
+      <Player.TopControls show={hideControls || showTargets}>
         <div
           className={`relative flex w-full items-center gap-2 pointer-events-auto ${
             meta?.type === "show"
@@ -307,169 +311,174 @@ export function PlayerPart(props: PlayerPartProps) {
         </div>
       </Player.TopControls>
 
-      <Player.BottomControls show={shouldShowBottomControls}>
-        <div className="flex flex-col w-full">
-          <div className="w-full mb-2 flex items-center space-x-4">
-            <Player.ProgressBar />
-            {isMobile ? <Player.Time short /> : null}
-          </div>
-        </div>
-        <div className="hidden lg:flex justify-between" dir="ltr">
-          <Player.LeftSideControls>
-            <Player.Pause
-              className={desktopActionButtonClass}
-              iconSizeClass={desktopActionIconClass}
-            />
-            <Player.SkipBackward
-              className={desktopActionButtonClass}
-              iconSizeClass={desktopActionIconClass}
-              inControl={inControl}
-            />
-            <Player.SkipForward
-              className={desktopActionButtonClass}
-              iconSizeClass={desktopActionIconClass}
-              inControl={inControl}
-            />
-            <Player.Volume
-              buttonClassName={desktopActionButtonClass}
-              iconSizeClass={desktopActionIconClass}
-            />
-            <Player.Time />
-          </Player.LeftSideControls>
-          <div className="flex items-center space-x-6">
-            <Player.Episodes
-              className={desktopTextActionButtonClass}
-              inControl={inControl}
-              iconSizeClass={desktopActionIconClass}
-            />
-            <Player.SkipEpisodeButton
-              className={desktopActionButtonClass}
-              inControl={inControl}
-              iconSizeClass={desktopActionIconClass}
-              onChange={props.onMetaChange}
-            />
-            <TorrentNetworkStatus
-              className={desktopActionButtonClass}
-              iconSizeClass={desktopActionIconClass}
-            />
-            <Player.Pip
-              className={desktopActionButtonClass}
-              iconSizeClass={desktopActionIconClass}
-            />
-            <Player.Airplay
-              className={desktopActionButtonClass}
-              iconSizeClass={desktopActionIconClass}
-            />
-            <Player.Chromecast className={desktopActionButtonClass} />
-            <Player.Captions
-              className={desktopActionButtonClass}
-              iconSizeClass={desktopActionIconClass}
-            />
-            <Player.Settings
-              className={desktopActionButtonClass}
-              iconSizeClass={desktopActionIconClass}
-            />
-            {isShifting || isHoldingFullscreen ? (
-              <Player.Widescreen
-                className={desktopActionButtonClass}
-                iconSizeClass={desktopActionIconClass}
-              />
-            ) : (
-              <Player.Fullscreen
-                className={desktopActionButtonClass}
-                iconSizeClass={desktopActionIconClass}
-              />
-            )}
-          </div>
-        </div>
-        <div className="flex w-full items-center justify-center gap-1 ssm:gap-2 lg:hidden">
-          {/* Disable PiP for iOS PWA */}
-          {!(isPWA && isIOS) && (
-            <Player.Pip
-              iconSizeClass={mobileActionIconClass}
-              className={mobileActionButtonClass}
-            />
-          )}
-          <Player.Pause
-            iconSizeClass={mobileActionIconClass}
-            className={mobileActionButtonClass}
-          />
-          <Player.Volume
-            iconSizeClass={mobileActionIconClass}
-            className="shrink-0"
-            buttonClassName={mobileActionButtonClass}
-          />
-          <Player.Episodes
-            inControl={inControl}
-            compact
-            iconSizeClass={mobileActionIconClass}
-            className={mobileActionButtonClass}
-          />
-          <div className="hidden ssm:block">
-            <Player.Captions
-              iconSizeClass={mobileActionIconClass}
-              className={mobileActionButtonClass}
-            />
-          </div>
-          <Player.Settings
-            iconSizeClass={mobileActionIconClass}
-            className={mobileActionButtonClass}
-          />
-          <TorrentNetworkStatus
-            iconSizeClass="text-[20px] ssm:text-[22px]"
-            className={mobileActionButtonClass}
-          />
-          <div
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
-            className="select-none touch-none"
-            style={{ WebkitTapHighlightColor: "transparent" }}
-          >
-            {isHoldingFullscreen ? (
-              <Player.Widescreen
-                iconSizeClass={mobileActionIconClass}
-                className={`${mobileActionButtonClass} text-white`}
-              />
-            ) : (
-              <Player.Fullscreen
+      {!hideControls && (
+        <>
+          <Player.BottomControls show={shouldShowBottomControls}>
+            <div className="flex flex-col w-full">
+              <div className="w-full mb-2 flex items-center space-x-4">
+                <Player.ProgressBar />
+                {isMobile ? <Player.Time short /> : null}
+              </div>
+            </div>
+            <div className="hidden lg:flex justify-between" dir="ltr">
+              <Player.LeftSideControls>
+                <Player.Pause
+                  className={desktopActionButtonClass}
+                  iconSizeClass={desktopActionIconClass}
+                />
+                <Player.SkipBackward
+                  className={desktopActionButtonClass}
+                  iconSizeClass={desktopActionIconClass}
+                  inControl={inControl}
+                />
+                <Player.SkipForward
+                  className={desktopActionButtonClass}
+                  iconSizeClass={desktopActionIconClass}
+                  inControl={inControl}
+                />
+                <Player.Volume
+                  buttonClassName={desktopActionButtonClass}
+                  iconSizeClass={desktopActionIconClass}
+                />
+                <Player.Time />
+              </Player.LeftSideControls>
+              <div className="flex items-center space-x-6">
+                <Player.Episodes
+                  className={desktopTextActionButtonClass}
+                  inControl={inControl}
+                  iconSizeClass={desktopActionIconClass}
+                />
+                <Player.SkipEpisodeButton
+                  className={desktopActionButtonClass}
+                  inControl={inControl}
+                  iconSizeClass={desktopActionIconClass}
+                  onChange={props.onMetaChange}
+                />
+                <TorrentNetworkStatus
+                  className={desktopActionButtonClass}
+                  iconSizeClass={desktopActionIconClass}
+                />
+                <Player.Pip
+                  className={desktopActionButtonClass}
+                  iconSizeClass={desktopActionIconClass}
+                />
+                <Player.Airplay
+                  className={desktopActionButtonClass}
+                  iconSizeClass={desktopActionIconClass}
+                />
+                <Player.Chromecast className={desktopActionButtonClass} />
+                <Player.Captions
+                  className={desktopActionButtonClass}
+                  iconSizeClass={desktopActionIconClass}
+                />
+                <Player.Settings
+                  className={desktopActionButtonClass}
+                  iconSizeClass={desktopActionIconClass}
+                />
+                {isShifting || isHoldingFullscreen ? (
+                  <Player.Widescreen
+                    className={desktopActionButtonClass}
+                    iconSizeClass={desktopActionIconClass}
+                  />
+                ) : (
+                  <Player.Fullscreen
+                    className={desktopActionButtonClass}
+                    iconSizeClass={desktopActionIconClass}
+                  />
+                )}
+              </div>
+            </div>
+            <div className="flex w-full items-center justify-center gap-1 ssm:gap-2 lg:hidden">
+              {/* Disable PiP for iOS PWA */}
+              {!(isPWA && isIOS) && (
+                <Player.Pip
+                  iconSizeClass={mobileActionIconClass}
+                  className={mobileActionButtonClass}
+                />
+              )}
+              <Player.Pause
                 iconSizeClass={mobileActionIconClass}
                 className={mobileActionButtonClass}
               />
-            )}
-          </div>
-        </div>
-      </Player.BottomControls>
+              <Player.Volume
+                iconSizeClass={mobileActionIconClass}
+                className="shrink-0"
+                buttonClassName={mobileActionButtonClass}
+              />
+              <Player.Episodes
+                inControl={inControl}
+                compact
+                iconSizeClass={mobileActionIconClass}
+                className={mobileActionButtonClass}
+              />
+              <div className="hidden ssm:block">
+                <Player.Captions
+                  iconSizeClass={mobileActionIconClass}
+                  className={mobileActionButtonClass}
+                />
+              </div>
+              <Player.Settings
+                iconSizeClass={mobileActionIconClass}
+                className={mobileActionButtonClass}
+              />
+              <TorrentNetworkStatus
+                iconSizeClass="text-[20px] ssm:text-[22px]"
+                className={mobileActionButtonClass}
+              />
+              <div
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+                className="select-none touch-none"
+                style={{ WebkitTapHighlightColor: "transparent" }}
+              >
+                {isHoldingFullscreen ? (
+                  <Player.Widescreen
+                    iconSizeClass={mobileActionIconClass}
+                    className={`${mobileActionButtonClass} text-white`}
+                  />
+                ) : (
+                  <Player.Fullscreen
+                    iconSizeClass={mobileActionIconClass}
+                    className={mobileActionButtonClass}
+                  />
+                )}
+              </div>
+            </div>
+          </Player.BottomControls>
 
-      <Player.VolumeChangedPopout />
-      <Player.SubtitleDelayPopout />
-      <Player.SpeedChangedPopout />
-      <Player.TIDBSubmissionSuccessPopout />
+          <Player.VolumeChangedPopout />
+          <Player.SubtitleDelayPopout />
+          <Player.SpeedChangedPopout />
+          <Player.TIDBSubmissionSuccessPopout />
+
+          <Player.NextEpisodeButton
+            controlsShowing={showTargets}
+            onChange={props.onMetaChange}
+            inControl={inControl}
+          />
+
+          <SkipSegmentButton
+            controlsShowing={showTargets || isLoading}
+            segments={segments}
+            inControl={inControl}
+            onChangeMeta={props.onMetaChange}
+            onSkipTriggered={handleSkipTriggered}
+          />
+
+          <ThumbsFeedback
+            controlsShowing={showTargets}
+            feedbackData={thumbsFeedbackData}
+            onAction={handleThumbsFeedback}
+          />
+
+          <Player.SubtitleSyncBadge
+            controlsShowing={showTargets}
+            skipFeedbackActive={thumbsFeedbackData !== null}
+          />
+        </>
+      )}
+
       <Player.UnreleasedEpisodeOverlay />
-
-      <Player.NextEpisodeButton
-        controlsShowing={showTargets}
-        onChange={props.onMetaChange}
-        inControl={inControl}
-      />
-
-      <SkipSegmentButton
-        controlsShowing={showTargets || isLoading}
-        segments={segments}
-        inControl={inControl}
-        onChangeMeta={props.onMetaChange}
-        onSkipTriggered={handleSkipTriggered}
-      />
-
-      <ThumbsFeedback
-        controlsShowing={showTargets}
-        feedbackData={thumbsFeedbackData}
-        onAction={handleThumbsFeedback}
-      />
-
-      <Player.SubtitleSyncBadge
-        controlsShowing={showTargets}
-        skipFeedbackActive={thumbsFeedbackData !== null}
-      />
     </Player.Container>
   );
 }
