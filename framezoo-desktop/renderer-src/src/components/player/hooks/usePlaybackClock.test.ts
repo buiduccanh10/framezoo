@@ -15,6 +15,7 @@ import {
   reconcilePlaybackClockState,
   usePlaybackClock,
   useSmoothPlaybackClock,
+  useSubtitlePlaybackClock,
 } from "./usePlaybackClock";
 
 type ClockHarnessProps = {
@@ -41,6 +42,16 @@ function ClockHarness(props: ClockHarnessProps) {
 
 function StoreClockHarness({ onTime }: { onTime(time: number): void }) {
   const clockTime = usePlaybackClock();
+
+  useEffect(() => {
+    onTime(clockTime);
+  }, [clockTime, onTime]);
+
+  return null;
+}
+
+function SubtitleClockHarness({ onTime }: { onTime(time: number): void }) {
+  const clockTime = useSubtitlePlaybackClock();
 
   useEffect(() => {
     onTime(clockTime);
@@ -195,6 +206,49 @@ describe("playback clock", () => {
     await runAnimationFrame(1_068);
     expect(visualTimes.at(-1)).toBe(10.068);
     expect(subtitleTimes.at(-1)).toBe(10.051);
+  });
+
+  it("keeps subtitle evaluation on raw media time when the visual clock advances", async () => {
+    const visualTimes: number[] = [];
+    const subtitleTimes: number[] = [];
+
+    usePlayerStore.setState((state) => ({
+      status: playerStatus.PLAYING,
+      progress: {
+        ...state.progress,
+        time: 10.1,
+        mediaTime: 10.1,
+        duration: 120,
+      },
+      mediaPlaying: {
+        ...state.mediaPlaying,
+        isPlaying: true,
+        isPaused: false,
+        hasRenderedFrame: true,
+        isPlaybackStalled: false,
+        playbackRate: 1,
+      },
+    }));
+
+    await act(async () => {
+      root.render(
+        createElement(
+          "div",
+          null,
+          createElement(StoreClockHarness, {
+            onTime: (time) => visualTimes.push(time),
+          }),
+          createElement(SubtitleClockHarness, {
+            onTime: (time) => subtitleTimes.push(time),
+          }),
+        ),
+      );
+    });
+
+    await runAnimationFrame(1_200);
+
+    expect(visualTimes.at(-1)).toBeCloseTo(10.3, 6);
+    expect(subtitleTimes.at(-1)).toBe(10.1);
   });
 
   it("continues past a delayed authoritative sample without re-anchoring", async () => {

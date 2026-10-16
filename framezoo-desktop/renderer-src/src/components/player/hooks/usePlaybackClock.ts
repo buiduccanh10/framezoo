@@ -372,3 +372,11 @@ export function usePlaybackClock(): number {
     resetKey,
   });
 }
+
+/**
+ * Raw accepted libmpv time-pos for cue evaluation. This intentionally skips
+ * visual-clock interpolation: a delayed progress repaint must not skip a cue.
+ */
+export function useSubtitlePlaybackClock(): number {
+  return usePlayerStore((s) => s.progress.mediaTime);
+}

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
 
-import { usePlaybackClock } from "@/components/player/hooks/usePlaybackClock";
+import { useSubtitlePlaybackClock } from "@/components/player/hooks/usePlaybackClock";
 import {
   type CaptionCueType,
   captionIsVisible,
@@ -174,7 +174,7 @@ export function CaptionCue({
 
   return (
     <p
-      className="mb-1 inline-block max-w-[90vw] break-words rounded px-4 py-1 text-center leading-normal"
+      className="mb-1 inline-block max-w-[90vw] wrap-break-word rounded px-4 py-1 text-center leading-normal"
       style={{
         ...(nativePictureInPictureStyles ?? {
           marginBottom: "0.25rem",
@@ -242,7 +242,7 @@ function SubtitleTrackSlot({
 export function SubtitleRenderer(props?: {
   useNativePictureInPictureStyle?: boolean;
 }) {
-  const videoTime = usePlaybackClock();
+  const videoTime = useSubtitlePlaybackClock();
   const vttData = usePlayerStore((s) => s.caption.selected?.vttData);
   const dualSubEnabled = usePlayerStore((s) => s.caption.dualSubEnabled);
   const isSeeking = usePlayerStore((s) => s.interface.isSeeking);
@@ -291,7 +291,7 @@ export function SubtitleRenderer(props?: {
 export function SecondarySubtitleRenderer(props?: {
   useNativePictureInPictureStyle?: boolean;
 }) {
-  const videoTime = usePlaybackClock();
+  const videoTime = useSubtitlePlaybackClock();
   const vttData = usePlayerStore((s) => s.caption.secondary?.vttData);
   const dualSubEnabled = usePlayerStore((s) => s.caption.dualSubEnabled);
   const isSeeking = usePlayerStore((s) => s.interface.isSeeking);
