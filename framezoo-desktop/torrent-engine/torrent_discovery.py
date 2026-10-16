@@ -14,6 +14,7 @@ from urllib.request import Request, urlopen
 import libtorrent as lt
 
 import torrent_constants as constants
+from torrent_http import log_event
 
 
 @dataclass(frozen=True)
@@ -370,12 +371,16 @@ class TorrentDiscovery:
             "resumed": resumed,
             "reannounced": reannounced,
             "dhtAnnounced": dht_announced,
+            "workerAlive": self.thread.is_alive(),
+            "stopRequested": self.stop_event.is_set(),
         }
 
     def snapshot(self) -> dict[str, Any]:
         with self.lock:
             return {
                 "discoveryPhase": self.phase,
+                "discoveryWorkerAlive": self.thread.is_alive(),
+                "discoveryStopRequested": self.stop_event.is_set(),
                 "trackersAttempted": self.trackers_attempted,
                 "trackersSucceeded": self.trackers_succeeded,
                 "peersDiscovered": len(self.discovered_peers),
@@ -608,7 +613,25 @@ class TorrentDiscovery:
                 self.phase = "stopped"
             else:
                 self.phase = "ready" if self.injected_peers else "waiting"
+            cycle_phase = self.phase
+            trackers_attempted = self.trackers_attempted
+            trackers_succeeded = self.trackers_succeeded
+            discovered_peer_count = len(self.discovered_peers)
+            injected_peer_count = len(self.injected_peers)
         self._emit_status()
+        log_event(
+            "torrent discovery cycle complete",
+            infoHash=str(self.info_hash),
+            discoveryPhase=cycle_phase,
+            cycleTrackers=len(http_trackers),
+            trackersAttempted=trackers_attempted,
+            trackersSucceeded=trackers_succeeded,
+            peersDiscovered=discovered_peer_count,
+            peersInjected=injected_peer_count,
+            connectedPeers=self._connected_peers(),
+            workerAlive=self.thread.is_alive(),
+            stopRequested=self.stop_event.is_set(),
+        )
 
     def _run(self) -> None:
         self._bootstrap_dht()

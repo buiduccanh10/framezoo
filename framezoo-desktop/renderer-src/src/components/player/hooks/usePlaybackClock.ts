@@ -374,9 +374,43 @@ export function usePlaybackClock(): number {
 }
 
 /**
- * Raw accepted libmpv time-pos for cue evaluation. This intentionally skips
- * visual-clock interpolation: a delayed progress repaint must not skip a cue.
+ * Interpolated clock for cue evaluation, anchored to the raw libmpv
+ * `mediaTime` (not the visual clock). Ticks every 50 ms so narrow cue windows
+ * are not missed between sparse IPC samples, while still snapping on seeks so
+ * captions never lead the picture.
  */
 export function useSubtitlePlaybackClock(): number {
-  return usePlayerStore((s) => s.progress.mediaTime);
+  const time = usePlayerStore((s) => s.progress.mediaTime);
+  const duration = usePlayerStore((s) => s.progress.duration);
+  const playbackRate = usePlayerStore((s) => s.mediaPlaying.playbackRate);
+  const isPlaying = usePlayerStore((s) => s.mediaPlaying.isPlaying);
+  const isPaused = usePlayerStore((s) => s.mediaPlaying.isPaused);
+  const isSeeking = usePlayerStore((s) => s.interface.isSeeking);
+  const isPlaybackStalled = usePlayerStore(
+    (s) => s.mediaPlaying.isPlaybackStalled,
+  );
+  const hasRenderedFrame = usePlayerStore(
+    (s) => s.mediaPlaying.hasRenderedFrame,
+  );
+  const status = usePlayerStore((s) => s.status);
+  const resetKey = usePlayerStore((s) => getPlaybackClockResetKey(s));
+
+  const isActive =
+    isPlaying &&
+    !isPaused &&
+    !isSeeking &&
+    hasRenderedFrame &&
+    status === playerStatus.PLAYING &&
+    playbackRate > 0;
+
+  return useSmoothPlaybackClock({
+    time,
+    duration,
+    playbackRate,
+    isActive,
+    isLoading: isPlaybackStalled,
+    isSeeking,
+    resetKey,
+    tickIntervalMs: SUBTITLE_PLAYBACK_CLOCK_TICK_MS,
+  });
 }

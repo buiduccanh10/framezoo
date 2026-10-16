@@ -1,6 +1,9 @@
 import { app, BrowserWindow, ipcMain, screen } from "electron";
 import fs from "node:fs";
+import fsp from "node:fs/promises";
+import os from "node:os";
 import path from "node:path";
+import { createHash } from "node:crypto";
 import { createRequire } from "node:module";
 
 import type {
@@ -43,7 +46,12 @@ interface NativeLibMpvAddon {
   ): boolean;
   unregisterMediaControls?(): boolean;
   setMediaPlaybackState?(playing: boolean): boolean;
-  setMediaMetadata?(title: string, artist: string, albumTitle: string): boolean;
+  setMediaMetadata?(
+    title: string,
+    artist: string,
+    albumTitle: string,
+    artworkPath: string,
+  ): boolean;
   setMediaNavigationAvailability?(
     previousEnabled: boolean,
     nextEnabled: boolean,
@@ -251,6 +259,7 @@ export class LibMpvController {
   private warmupPromise: Promise<{ ok: boolean; message?: string }> | null =
     null;
   private mediaControlsRegistered = false;
+  private mediaMetadataRevision = 0;
 
   public init(
     mainWindow: BrowserWindow,
@@ -407,6 +416,7 @@ export class LibMpvController {
         metadata.title,
         metadata.artist,
         metadata.albumTitle,
+        metadata.artworkPath ?? "",
       );
     } catch (error) {
       console.warn("[libmpv] native media metadata failed", {
@@ -583,7 +593,7 @@ export class LibMpvController {
     );
     ipcMain.handle(
       "desktop:native-media-metadata",
-      (event, metadata: unknown) => {
+      async (event, metadata: unknown) => {
         if (
           !this.mainWindow ||
           this.mainWindow.isDestroyed() ||
@@ -597,6 +607,8 @@ export class LibMpvController {
         const title = value.title;
         const artist = value.artist;
         const albumTitle = value.albumTitle;
+        const artworkUrl = value.artworkUrl;
+        const revision = ++this.mediaMetadataRevision;
         const isValidString = (candidate: unknown): candidate is string =>
           typeof candidate === "string" &&
           Buffer.byteLength(candidate, "utf8") <= 1024;
@@ -607,7 +619,51 @@ export class LibMpvController {
         ) {
           return false;
         }
-        return this.setNativeMediaMetadata({ title, artist, albumTitle });
+        let artworkPath = "";
+        if (typeof artworkUrl === "string" && artworkUrl.length <= 4096) {
+          try {
+            const url = new URL(artworkUrl);
+            const allowedHosts = new Set([
+              "image.tmdb.org",
+              "media.themoviedb.org",
+              "images.justwatch.com",
+            ]);
+            if (url.protocol === "https:" && allowedHosts.has(url.hostname)) {
+              const response = await fetch(url, {
+                signal: AbortSignal.timeout(10_000),
+              });
+              const contentType = response.headers.get("content-type") ?? "";
+              const finalUrl = new URL(response.url);
+              if (
+                response.ok &&
+                allowedHosts.has(finalUrl.hostname) &&
+                finalUrl.protocol === "https:" &&
+                contentType.startsWith("image/")
+              ) {
+                const bytes = Buffer.from(await response.arrayBuffer());
+                if (bytes.length > 0 && bytes.length <= 8 * 1024 * 1024) {
+                  const extension = contentType.includes("png") ? "png" : "jpg";
+                  const cacheDir = path.join(os.tmpdir(), "framezoo-media-artwork");
+                  await fsp.mkdir(cacheDir, { recursive: true });
+                  const cacheName = createHash("sha256")
+                    .update(url.toString())
+                    .digest("hex");
+                  artworkPath = path.join(cacheDir, `${cacheName}.${extension}`);
+                  await fsp.writeFile(artworkPath, bytes);
+                }
+              }
+            }
+          } catch {
+            // Keep system-provided app artwork when the poster cannot be loaded.
+          }
+        }
+        if (revision !== this.mediaMetadataRevision) return false;
+        return this.setNativeMediaMetadata({
+          title,
+          artist,
+          albumTitle,
+          artworkPath,
+        });
       },
     );
     ipcMain.handle(

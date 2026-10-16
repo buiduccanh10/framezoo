@@ -263,11 +263,20 @@ export function RealPlayerView() {
     setStatus(playerStatus.SOURCE_SELECTION);
   }, [setStatus, setShouldStartFromBeginning, updateProgress, playerMeta]);
 
+  const isShowingSourcePicker = Boolean(
+    (status === playerStatus.SOURCE_SELECTION ||
+      status === playerStatus.PLAYBACK_ERROR) &&
+    playerMeta &&
+    !router.isRouterActive &&
+    (status === playerStatus.PLAYBACK_ERROR || shouldShowInitialSourcePicker),
+  );
+
   return (
     <PlayerPart
       backUrl={backUrl}
       onMetaChange={metaChange}
       sourceLoading={shouldShowSourceLoading}
+      hideControls={isShowingSourcePicker}
     >
       {status !== playerStatus.PLAYING ? <BlurEllipsis /> : null}
       {status === playerStatus.IDLE && !preloadedMeta ? (
@@ -280,12 +289,7 @@ export function RealPlayerView() {
           onMetaChange={metaChange}
         />
       ) : null}
-      {(status === playerStatus.SOURCE_SELECTION ||
-        status === playerStatus.PLAYBACK_ERROR) &&
-      playerMeta &&
-      !router.isRouterActive &&
-      (status === playerStatus.PLAYBACK_ERROR ||
-        shouldShowInitialSourcePicker) ? (
+      {isShowingSourcePicker && playerMeta ? (
         <SourceSelectPart
           meta={playerMeta}
           // Keep the fallback picker inside the player layout. "full" is
