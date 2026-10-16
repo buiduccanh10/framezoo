@@ -1531,6 +1531,7 @@ napi_value command_player(napi_env env, napi_callback_info info) {
   } else if (type == "pause") {
     const bool was_paused =
         player->is_paused.exchange(true, std::memory_order_acq_rel);
+    (void)was_paused;
     if (player->set_property_string("pause", "yes") < 0) {
       return throw_error(env, "libmpv command failed");
     }
