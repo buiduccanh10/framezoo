@@ -1408,6 +1408,8 @@ describe("libmpv display", () => {
     const display = makeLibMpvDisplayInterface();
     display.processContainerElement(makeElement());
     display.on("time", (time) => times.push(time));
+    const stalled: boolean[] = [];
+    display.on("playbackstalled", (value) => stalled.push(value));
     display.load({
       source: { type: "mp4", url: "https://example.test/video.mkv" } as Source,
       startAt: 0,
@@ -1426,10 +1428,12 @@ describe("libmpv display", () => {
         data,
       });
 
+    property("pause", false);
     property("time-pos", 60.2);
     property("paused-for-cache", true);
     property("time-pos", 60.4);
     expect(times).toEqual([60.2, 60.4]);
+    expect(stalled.at(-1)).toBe(false);
 
     property("paused-for-cache", false);
     property("time-pos", 60.6);

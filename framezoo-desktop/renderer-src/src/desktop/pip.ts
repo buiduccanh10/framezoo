@@ -65,6 +65,7 @@ export interface DesktopPipState {
   logo: string | null;
   backdrop: string | null;
   isLoading: boolean;
+  isPlaybackStalled: boolean;
   hasRenderedFrame: boolean;
   buffered: number;
   playbackTarget: "main" | "pip";
@@ -339,6 +340,7 @@ export function getDesktopPipStateFromPlayerState(
     logo: state.meta?.logo ?? null,
     backdrop: state.meta?.backdrop ?? state.meta?.poster ?? null,
     isLoading: state.mediaPlaying.isLoading,
+    isPlaybackStalled: state.mediaPlaying.isPlaybackStalled,
     hasRenderedFrame: state.mediaPlaying.hasRenderedFrame,
     buffered: Math.max(0, state.progress.buffered),
     playbackTarget: "pip",

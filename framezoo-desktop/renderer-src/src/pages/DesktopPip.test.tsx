@@ -69,6 +69,7 @@ function createPipState(
     logo: null,
     backdrop: null,
     isLoading: false,
+    isPlaybackStalled: false,
     hasRenderedFrame: true,
     buffered: 60,
     playbackTarget: "pip",
@@ -176,5 +177,19 @@ describe("Desktop PiP playback clocks", () => {
       onClock,
     );
     expect(clocks.at(-1)).toEqual({ visual: 2, subtitle: 2 });
+  });
+
+  it("does not freeze the PiP clock or captions for generic loading", async () => {
+    const clocks: Array<{ visual: number; subtitle: number }> = [];
+
+    await renderPip(
+      createPipState({ isLoading: true, isPlaybackStalled: false }),
+      1,
+      (clock) => clocks.push(clock),
+    );
+    expect(container.textContent).toContain("caption 1");
+
+    await runAnimationFrame(1_034);
+    expect(clocks.at(-1)).toEqual({ visual: 10.034, subtitle: 10 });
   });
 });

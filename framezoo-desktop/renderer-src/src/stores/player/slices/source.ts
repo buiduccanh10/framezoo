@@ -199,6 +199,7 @@ export interface SourceSlice {
     captions: CaptionListItem[],
     startAt: number,
   ): void;
+  prepareSourceSwitch(): boolean;
   switchQuality(quality: SourceQuality): void;
   setMeta(meta: PlayerMeta, status?: PlayerStatus): void;
   setCaption(caption: Caption | null): void;
@@ -691,6 +692,28 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
         });
       }, 100);
     }
+  },
+  prepareSourceSwitch() {
+    const store = get();
+    if (!store.source || store.status !== playerStatus.PLAYING) return false;
+
+    store.display?.load({
+      source: null,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+      reason: "store:prepare-source-switch",
+    });
+
+    set((s) => {
+      // Keep the current source metadata for recovery if the replacement fails,
+      // but stop its native player and freeze its clock immediately.
+      s.mediaPlaying.hasRenderedFrame = false;
+      s.mediaPlaying.isLoading = true;
+      s.mediaPlaying.isPlaybackStalled = false;
+    });
+
+    return true;
   },
   redisplaySource(startAt: number) {
     const store = get();

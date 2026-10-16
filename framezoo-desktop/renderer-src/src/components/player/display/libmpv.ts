@@ -801,6 +801,16 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     publishTimePosition(position);
   }
 
+  function isCacheStallActive() {
+    // mpv can expose the cache hint before it flips `pause`. Treating the
+    // hint alone as a stall freezes the UI clock while playback still runs.
+    return cachePaused && paused && !desiredPaused;
+  }
+
+  function emitPlaybackStallState() {
+    emit("playbackstalled", isCacheStallActive() || isSeeking);
+  }
+
   function handleEvent(event: LibMpvPlayerEvent) {
     if (!playerId || event.playerId !== playerId) {
       console.warn("[libmpv] dropped event: player mismatch", {
@@ -998,8 +1008,9 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
             if (cachePaused || !wasPaused) {
               emit("loading", false);
             }
+            emitPlaybackStallState();
             emit("play", undefined);
-          } else if (!cachePaused) {
+          } else if (!isCacheStallActive()) {
             // A pause that is not caused by input starvation is a real
             // (user or EOF) pause.
             emit("loading", false);
@@ -1018,6 +1029,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
             // Buffering stall: keep the UI in its current play state and
             // surface the wait through the loading indicator instead.
             syncPipState(true);
+            emitPlaybackStallState();
             emit("loading", true);
           }
         }
@@ -1047,7 +1059,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
           break;
         }
         isSeeking = false;
-        emit("playbackstalled", cachePaused);
+        emitPlaybackStallState();
         if (!paused || pendingSeekTarget !== null) {
           emit("loading", false);
         }
@@ -1061,8 +1073,8 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         break;
       case "paused-for-cache":
         cachePaused = event.data === true;
-        emit("playbackstalled", cachePaused || isSeeking);
-        emit("loading", cachePaused);
+        emitPlaybackStallState();
+        emit("loading", isCacheStallActive());
         break;
       case "demuxer-cache-duration":
         if (
