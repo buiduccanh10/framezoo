@@ -17,6 +17,7 @@
 #include <vector>
 
 #include "mpv_dynamic.h"
+#include "media_controls.h"
 #include "platform_surface.h"
 
 namespace {
@@ -38,6 +39,10 @@ struct NativeEvent {
   double number_value = 0;
   std::string string_value;
   mpv_node* node_value = nullptr;
+};
+
+struct NativeMediaCommand {
+  std::string command;
 };
 
 std::string escape_json(const std::string& value) {
@@ -598,6 +603,25 @@ std::atomic<uint64_t> next_player_id{1};
 std::mutex audio_requests_mutex;
 std::unordered_map<std::string, std::shared_ptr<std::atomic<bool>>>
     audio_request_cancellations;
+std::mutex media_callback_mutex;
+napi_threadsafe_function media_callback = nullptr;
+
+void native_media_command_callback(void*, const char* command) {
+  auto* event = new NativeMediaCommand();
+  event->command = command ? command : "";
+
+  std::lock_guard<std::mutex> lock(media_callback_mutex);
+  if (!media_callback || event->command.empty()) {
+    delete event;
+    return;
+  }
+  const napi_status status = napi_call_threadsafe_function(
+      media_callback,
+      event,
+      napi_tsfn_nonblocking
+  );
+  if (status != napi_ok) delete event;
+}
 
 void render_update_callback(void* user) {
   auto* player = static_cast<MpvPlayer*>(user);
@@ -1673,6 +1697,242 @@ napi_value configure_window(napi_env env, napi_callback_info info) {
   return result;
 }
 
+napi_value register_media_controls(napi_env env, napi_callback_info info) {
+  size_t argc = 2;
+  napi_value argv[2];
+  if (napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr) != napi_ok ||
+      argc < 2) {
+    return throw_error(
+        env,
+        "registerMediaControls(parentHandle, callback) expected"
+    );
+  }
+
+  bool is_buffer = false;
+  napi_is_buffer(env, argv[0], &is_buffer);
+  if (!is_buffer) return throw_error(env, "parentHandle must be a Buffer");
+
+  void* parent_handle = nullptr;
+  size_t handle_length = 0;
+  napi_get_buffer_info(env, argv[0], &parent_handle, &handle_length);
+  if (!parent_handle || handle_length < sizeof(void*)) {
+    return throw_error(env, "parentHandle is empty");
+  }
+
+  napi_valuetype callback_type = napi_undefined;
+  napi_typeof(env, argv[1], &callback_type);
+  if (callback_type != napi_function) {
+    return throw_error(env, "callback must be a function");
+  }
+
+  media_controls_unregister();
+  {
+    std::lock_guard<std::mutex> lock(media_callback_mutex);
+    if (media_callback) {
+      napi_release_threadsafe_function(media_callback, napi_tsfn_abort);
+      media_callback = nullptr;
+    }
+  }
+
+  napi_value resource_name;
+  napi_create_string_utf8(
+      env,
+      "framezoo-media-command",
+      NAPI_AUTO_LENGTH,
+      &resource_name
+  );
+  const napi_status tsfn_status = napi_create_threadsafe_function(
+      env,
+      argv[1],
+      nullptr,
+      resource_name,
+      0,
+      1,
+      nullptr,
+      nullptr,
+      nullptr,
+      [](napi_env callback_env, napi_value js_callback, void*, void* data) {
+        auto* event = static_cast<NativeMediaCommand*>(data);
+        if (!event) return;
+        if (!callback_env || !js_callback) {
+          delete event;
+          return;
+        }
+
+        napi_value object;
+        napi_create_object(callback_env, &object);
+        napi_value value;
+        napi_create_string_utf8(
+            callback_env,
+            event->command.c_str(),
+            NAPI_AUTO_LENGTH,
+            &value
+        );
+        napi_set_named_property(callback_env, object, "command", value);
+
+        napi_value global;
+        napi_get_global(callback_env, &global);
+        napi_call_function(
+            callback_env,
+            global,
+            js_callback,
+            1,
+            &object,
+            nullptr
+        );
+        delete event;
+      },
+      &media_callback
+  );
+  if (tsfn_status != napi_ok) {
+    return throw_error(env, "media command callback setup failed");
+  }
+
+  std::string error;
+  if (!media_controls_register(
+          *static_cast<void**>(parent_handle),
+          native_media_command_callback,
+          nullptr,
+          &error
+      )) {
+    std::lock_guard<std::mutex> lock(media_callback_mutex);
+    napi_release_threadsafe_function(media_callback, napi_tsfn_abort);
+    media_callback = nullptr;
+    return throw_error(
+        env,
+        error.empty() ? "native media controls registration failed" : error
+    );
+  }
+
+  napi_value result;
+  napi_get_boolean(env, true, &result);
+  return result;
+}
+
+napi_value unregister_media_controls(napi_env env, napi_callback_info) {
+  media_controls_unregister();
+  {
+    std::lock_guard<std::mutex> lock(media_callback_mutex);
+    if (media_callback) {
+      napi_release_threadsafe_function(media_callback, napi_tsfn_abort);
+      media_callback = nullptr;
+    }
+  }
+  napi_value result;
+  napi_get_boolean(env, true, &result);
+  return result;
+}
+
+napi_value set_media_playback_state(napi_env env, napi_callback_info info) {
+  size_t argc = 1;
+  napi_value argv[1];
+  if (napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr) != napi_ok ||
+      argc < 1) {
+    return throw_error(env, "setMediaPlaybackState(playing) expected");
+  }
+
+  bool playing = false;
+  if (napi_get_value_bool(env, argv[0], &playing) != napi_ok) {
+    return throw_error(env, "playing must be a boolean");
+  }
+
+  std::string error;
+  if (!media_controls_set_playback_state(playing, &error)) {
+    return throw_error(
+        env,
+        error.empty() ? "native media playback state failed" : error
+    );
+  }
+
+  napi_value result;
+  napi_get_boolean(env, true, &result);
+  return result;
+}
+
+napi_value set_media_metadata(napi_env env, napi_callback_info info) {
+  size_t argc = 3;
+  napi_value argv[3];
+  if (napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr) != napi_ok ||
+      argc < 3) {
+    return throw_error(
+        env,
+        "setMediaMetadata(title, artist, albumTitle) expected"
+    );
+  }
+
+  std::string title;
+  std::string artist;
+  std::string album_title;
+  if (!get_value_string(env, argv[0], &title) ||
+      !get_value_string(env, argv[1], &artist) ||
+      !get_value_string(env, argv[2], &album_title)) {
+    return throw_error(env, "media metadata fields must be strings");
+  }
+  constexpr size_t MAX_METADATA_BYTES = 1024;
+  if (title.size() > MAX_METADATA_BYTES ||
+      artist.size() > MAX_METADATA_BYTES ||
+      album_title.size() > MAX_METADATA_BYTES) {
+    return throw_error(env, "media metadata fields are too long");
+  }
+
+  std::string error;
+  if (!media_controls_set_metadata(
+          title,
+          artist,
+          album_title,
+          &error
+      )) {
+    return throw_error(
+        env,
+        error.empty() ? "native media metadata update failed" : error
+    );
+  }
+
+  napi_value result;
+  napi_get_boolean(env, true, &result);
+  return result;
+}
+
+napi_value set_media_navigation_availability(
+    napi_env env,
+    napi_callback_info info
+) {
+  size_t argc = 2;
+  napi_value argv[2];
+  if (napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr) != napi_ok ||
+      argc < 2) {
+    return throw_error(
+        env,
+        "setMediaNavigationAvailability(previousEnabled, nextEnabled) expected"
+    );
+  }
+
+  bool previous_enabled = false;
+  bool next_enabled = false;
+  if (napi_get_value_bool(env, argv[0], &previous_enabled) != napi_ok ||
+      napi_get_value_bool(env, argv[1], &next_enabled) != napi_ok) {
+    return throw_error(env, "media navigation availability must be boolean");
+  }
+
+  std::string error;
+  if (!media_controls_set_navigation_availability(
+          previous_enabled,
+          next_enabled,
+          &error
+      )) {
+    return throw_error(
+        env,
+        error.empty()
+            ? "native media navigation availability update failed"
+            : error
+    );
+  }
+
+  napi_value result;
+  napi_get_boolean(env, true, &result);
+  return result;
+}
+
 napi_value init(napi_env env, napi_value exports) {
   napi_property_descriptor methods[] = {
       {"warmup", nullptr, warmup, nullptr, nullptr, nullptr, napi_default,
@@ -1694,6 +1954,17 @@ napi_value init(napi_env env, napi_value exports) {
       {"destroyPlayer", nullptr, destroy_player, nullptr, nullptr, nullptr,
        napi_default, nullptr},
       {"configureWindow", nullptr, configure_window, nullptr, nullptr, nullptr,
+       napi_default, nullptr},
+      {"registerMediaControls", nullptr, register_media_controls, nullptr,
+       nullptr, nullptr, napi_default, nullptr},
+      {"unregisterMediaControls", nullptr, unregister_media_controls, nullptr,
+       nullptr, nullptr, napi_default, nullptr},
+      {"setMediaPlaybackState", nullptr, set_media_playback_state, nullptr,
+       nullptr, nullptr, napi_default, nullptr},
+      {"setMediaMetadata", nullptr, set_media_metadata, nullptr, nullptr,
+       nullptr, napi_default, nullptr},
+      {"setMediaNavigationAvailability", nullptr,
+       set_media_navigation_availability, nullptr, nullptr, nullptr,
        napi_default, nullptr},
   };
   napi_define_properties(

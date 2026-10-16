@@ -41,6 +41,17 @@ import type {
   TorrentStorageInfo,
 } from "./torrentTypes";
 
+export interface NativeMediaMetadata {
+  title: string;
+  artist: string;
+  albumTitle: string;
+}
+
+export interface NativeMediaNavigationAvailability {
+  previousEnabled: boolean;
+  nextEnabled: boolean;
+}
+
 declare global {
   interface Window {
     electronAPI?: {
@@ -71,6 +82,18 @@ declare global {
         lastError: string | null;
         lastCreateError: string | null;
       } | null>;
+      getNativeMediaControlsState?: () => Promise<boolean>;
+      setNativeMediaMetadata?: (
+        metadata: NativeMediaMetadata,
+      ) => Promise<boolean>;
+      setNativeMediaNavigation?: (
+        availability: NativeMediaNavigationAvailability,
+      ) => Promise<boolean>;
+      onNativeMediaCommand?: (
+        listener: (event: {
+          command: "toggle-play-pause" | "play" | "pause" | "next" | "previous";
+        }) => void,
+      ) => () => void;
       onStartupNativeWarmupState?: (
         listener: (state: NativeStartupWarmupState) => void,
       ) => () => void;

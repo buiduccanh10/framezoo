@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { isPlaybackInteractionLocked } from "@/components/player/utils/playbackLock";
 import { usePlayerStore } from "@/stores/player/store";
@@ -15,6 +15,7 @@ export function MediaSession() {
   const progress = usePlayerStore((s) => s.progress);
   const meta = usePlayerStore((s) => s.meta);
   const display = usePlayerStore((s) => s.display);
+  const [nativeControlsAvailable, setNativeControlsAvailable] = useState(false);
 
   const shouldUpdatePositionState = useRef(false);
   const lastPlaybackPosition = useRef(0);
@@ -42,6 +43,112 @@ export function MediaSession() {
     },
     [meta, setDirectMeta, setShouldStartFromBeginning],
   );
+
+  useEffect(() => {
+    const api = window.electronAPI;
+    if (typeof api?.getNativeMediaControlsState !== "function") return;
+    let active = true;
+    void api
+      .getNativeMediaControlsState()
+      .then((available) => {
+        if (active) setNativeControlsAvailable(available === true);
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!nativeControlsAvailable) return;
+    const onNativeMediaCommand = window.electronAPI?.onNativeMediaCommand;
+    if (typeof onNativeMediaCommand !== "function") return;
+
+    return onNativeMediaCommand(({ command }) => {
+      const state = usePlayerStore.getState();
+      if (
+        isPlaybackInteractionLocked(
+          state.mediaPlaying,
+          state.subtitleSync.active,
+        )
+      ) {
+        return;
+      }
+
+      if (command === "next") {
+        changeEpisode(1);
+        return;
+      }
+      if (command === "previous") {
+        changeEpisode(-1);
+        return;
+      }
+      if (command === "play") {
+        state.display?.play();
+        return;
+      }
+      if (command === "pause") {
+        state.display?.pause();
+        return;
+      }
+      if (state.mediaPlaying.isPaused) {
+        state.display?.play();
+      } else {
+        state.display?.pause();
+      }
+    });
+  }, [changeEpisode, nativeControlsAvailable]);
+
+  useEffect(() => {
+    if (!nativeControlsAvailable) return;
+    const api = window.electronAPI;
+    if (
+      typeof api?.setNativeMediaMetadata !== "function" ||
+      typeof api.setNativeMediaNavigation !== "function"
+    ) {
+      return;
+    }
+
+    const episodeNumber = meta?.episode?.number;
+    const seasonNumber = meta?.season?.number;
+    const isShowEpisode =
+      meta?.type === "show" &&
+      typeof episodeNumber === "number" &&
+      typeof seasonNumber === "number";
+    const title = isShowEpisode
+      ? `S${String(seasonNumber).padStart(2, "0")}E${String(episodeNumber).padStart(2, "0")}: ${meta?.episode?.title ?? ""}`
+      : (meta?.title ?? "");
+    const previousEnabled = Boolean(
+      isShowEpisode &&
+      meta?.episodes?.find((episode) => episode.number === episodeNumber - 1),
+    );
+    const nextEnabled = Boolean(
+      isShowEpisode &&
+      meta?.episodes?.find((episode) => episode.number === episodeNumber + 1),
+    );
+
+    void api
+      .setNativeMediaMetadata({
+        title,
+        artist: isShowEpisode ? (meta?.title ?? "") : "",
+        albumTitle: isShowEpisode
+          ? (meta?.season?.title ?? `Season ${seasonNumber}`)
+          : "",
+      })
+      .catch(() => {});
+    void api
+      .setNativeMediaNavigation({ previousEnabled, nextEnabled })
+      .catch(() => {});
+  }, [
+    meta?.episode?.number,
+    meta?.episode?.title,
+    meta?.episodes,
+    meta?.season?.number,
+    meta?.season?.title,
+    meta?.title,
+    meta?.type,
+    nativeControlsAvailable,
+  ]);
 
   const updatePositionState = useCallback(
     (position: number) => {
@@ -155,6 +262,14 @@ export function MediaSession() {
     let title: string | undefined;
     let artist: string | undefined;
 
+    const clearWebActionHandlers = () => {
+      navigator.mediaSession.setActionHandler("play", null);
+      navigator.mediaSession.setActionHandler("pause", null);
+      navigator.mediaSession.setActionHandler("seekto", null);
+      navigator.mediaSession.setActionHandler("previoustrack", null);
+      navigator.mediaSession.setActionHandler("nexttrack", null);
+    };
+
     if (meta?.type === "movie") {
       title = meta.title;
     } else if (meta?.type === "show") {
@@ -169,6 +284,11 @@ export function MediaSession() {
         { src: meta?.poster ?? "", sizes: "342x513", type: "image/png" },
       ],
     });
+
+    if (nativeControlsAvailable) {
+      clearWebActionHandlers();
+      return;
+    }
 
     navigator.mediaSession.setActionHandler("play", () => {
       const state = usePlayerStore.getState();
@@ -213,7 +333,13 @@ export function MediaSession() {
       updatePositionState(e.seekTime);
     });
 
-    if ((meta?.episode?.number ?? 1) > 1) {
+    const currentEpisodeNumber = meta?.episode?.number ?? 0;
+    const hasPreviousEpisode = Boolean(
+      meta?.episodes?.find(
+        (episode) => episode.number === currentEpisodeNumber - 1,
+      ),
+    );
+    if (hasPreviousEpisode) {
       navigator.mediaSession.setActionHandler("previoustrack", () =>
         changeEpisode(-1),
       );
@@ -221,15 +347,20 @@ export function MediaSession() {
       navigator.mediaSession.setActionHandler("previoustrack", null);
     }
 
-    const totalEpisodes = meta?.episodes?.length ?? 0;
-    const currentEpisodeNumber = meta?.episode?.number ?? 0;
-    if (currentEpisodeNumber > 0 && currentEpisodeNumber < totalEpisodes) {
+    const hasNextEpisode = Boolean(
+      meta?.episodes?.find(
+        (episode) => episode.number === currentEpisodeNumber + 1,
+      ),
+    );
+    if (hasNextEpisode) {
       navigator.mediaSession.setActionHandler("nexttrack", () =>
         changeEpisode(1),
       );
     } else {
       navigator.mediaSession.setActionHandler("nexttrack", null);
     }
+
+    return clearWebActionHandlers;
   }, [
     changeEpisode,
     updatePositionState,
@@ -239,12 +370,13 @@ export function MediaSession() {
     progress.duration,
     progress.time,
     meta?.episode?.number,
-    meta?.episodes?.length,
+    meta?.episodes,
     meta?.episode?.title,
     meta?.title,
     meta?.type,
     meta?.poster,
     meta?.season?.number,
+    nativeControlsAvailable,
   ]);
 
   return null;

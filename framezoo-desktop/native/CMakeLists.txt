@@ -20,8 +20,13 @@ add_library(libmpv MODULE
 )
 
 if(WIN32)
-  target_sources(libmpv PRIVATE src/platform_surface_win.cpp src/win_delay_load_hook.cpp)
-  target_link_libraries(libmpv PRIVATE opengl32 user32 gdi32 delayimp)
+  target_sources(libmpv PRIVATE
+    src/platform_surface_win.cpp
+    src/win_delay_load_hook.cpp
+    src/media_controls_win.cpp
+  )
+  target_link_libraries(libmpv PRIVATE opengl32 user32 gdi32 delayimp runtimeobject)
+  target_compile_definitions(libmpv PRIVATE WINVER=0x0A00 _WIN32_WINNT=0x0A00)
   if(NOT DEFINED NODE_LIB)
     message(FATAL_ERROR "NODE_LIB is required on Windows")
   endif()
@@ -39,8 +44,12 @@ if(WIN32)
   set_target_properties(libmpv PROPERTIES PREFIX "" SUFFIX ".node")
 else()
   enable_language(OBJCXX)
-  target_sources(libmpv PRIVATE src/platform_surface_mac.mm)
-  target_link_libraries(libmpv PRIVATE "-framework Cocoa" "-framework OpenGL")
+  target_sources(libmpv PRIVATE src/platform_surface_mac.mm src/media_controls_mac.mm)
+  target_link_libraries(libmpv PRIVATE
+    "-framework Cocoa"
+    "-framework OpenGL"
+    "-framework MediaPlayer"
+  )
   target_link_options(libmpv PRIVATE "-undefined" "dynamic_lookup")
   set_target_properties(libmpv PROPERTIES PREFIX "" SUFFIX ".node")
 endif()
