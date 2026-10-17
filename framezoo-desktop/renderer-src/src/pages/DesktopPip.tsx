@@ -23,10 +23,11 @@ import {
   useSeekFrozenCaptions,
 } from "@/components/player/base/SubtitleView";
 import {
-  SUBTITLE_PLAYBACK_CLOCK_TICK_MS,
+  MAX_EXTRAPOLATION_SECONDS,
   VISUAL_PLAYBACK_CLOCK_TICK_MS,
   useSmoothPlaybackClock,
 } from "@/components/player/hooks/usePlaybackClock";
+import { useSubtitleCueBoundaryWakeup } from "@/components/player/hooks/useSubtitleCueTimeline";
 import {
   captionIsVisible,
   tryParseCanonicalVtt,
@@ -59,8 +60,14 @@ type DesktopElectronApi = {
 
 const noDragRegionStyle = { ["WebkitAppRegion" as any]: "no-drag" };
 const CONTROL_AUTOHIDE_MS = 2200;
-const PipVisualClockContext = createContext(0);
-const PipSubtitleClockContext = createContext(0);
+type PipClockSnapshot = {
+  time: number;
+  timestamp: number;
+  duration: number;
+  playbackRate: number;
+  isRunning: boolean;
+};
+const PipVisualClockContext = createContext<PipClockSnapshot | null>(null);
 
 type PipDragState = {
   pointerId: number;
@@ -130,26 +137,49 @@ export function PipPlaybackClockProvider(props: {
     ...sharedOptions,
     tickIntervalMs: VISUAL_PLAYBACK_CLOCK_TICK_MS,
   });
-  const subtitleTime = useSmoothPlaybackClock({
-    ...sharedOptions,
-    tickIntervalMs: SUBTITLE_PLAYBACK_CLOCK_TICK_MS,
-  });
-
+  const snapshot = useMemo(
+    () => ({
+      time: visualTime,
+      timestamp: performance.now(),
+      duration: props.state.duration,
+      playbackRate: props.state.playbackRate,
+      isRunning: isActive && !props.state.isPlaybackStalled,
+    }),
+    [
+      isActive,
+      props.state.duration,
+      props.state.isPlaybackStalled,
+      props.state.playbackRate,
+      visualTime,
+    ],
+  );
   return (
-    <PipVisualClockContext.Provider value={visualTime}>
-      <PipSubtitleClockContext.Provider value={subtitleTime}>
-        {props.children}
-      </PipSubtitleClockContext.Provider>
+    <PipVisualClockContext.Provider value={snapshot}>
+      {props.children}
     </PipVisualClockContext.Provider>
   );
 }
 
 export function usePipVisualClock(): number {
-  return useContext(PipVisualClockContext);
+  const snapshot = useContext(PipVisualClockContext);
+  if (!snapshot) return 0;
+  const elapsed = snapshot.isRunning
+    ? Math.min(
+        MAX_EXTRAPOLATION_SECONDS,
+        Math.max(0, performance.now() - snapshot.timestamp) / 1000,
+      )
+    : 0;
+  return Math.max(
+    0,
+    Math.min(
+      snapshot.duration > 0 ? snapshot.duration : Number.POSITIVE_INFINITY,
+      snapshot.time + elapsed * snapshot.playbackRate,
+    ),
+  );
 }
 
 export function usePipSubtitleClock(): number {
-  return useContext(PipSubtitleClockContext);
+  return usePipVisualClock();
 }
 
 function DesktopPipButton(props: {
@@ -211,6 +241,28 @@ export const PipCaptions = memo(function PipCaptionsView(props: {
     () => (secondaryVttData ? tryParseCanonicalVtt(secondaryVttData) : []),
     [secondaryVttData],
   );
+  const isFrozen = props.state.isSeeking || props.state.isPlaybackStalled;
+  const resetKey = getPipPlaybackResetKey(props.state);
+  useSubtitleCueBoundaryWakeup(primary, props.state.primaryDelay, time, {
+    surface: "desktop-pip",
+    resetKey: `${resetKey}:primary:${primary.length}:${primary[0]?.start ?? ""}`,
+    playbackRate: props.state.playbackRate,
+    isFrozen,
+    isSeeking: props.state.isSeeking,
+    isPlaybackStalled: props.state.isPlaybackStalled,
+    status: props.state.status,
+    authoritativeTime: props.state.time,
+  });
+  useSubtitleCueBoundaryWakeup(secondary, props.state.secondaryDelay, time, {
+    surface: "desktop-pip",
+    resetKey: `${resetKey}:secondary:${secondary.length}:${secondary[0]?.start ?? ""}`,
+    playbackRate: props.state.playbackRate,
+    isFrozen,
+    isSeeking: props.state.isSeeking,
+    isPlaybackStalled: props.state.isPlaybackStalled,
+    status: props.state.status,
+    authoritativeTime: props.state.time,
+  });
   const captions = useMemo(() => {
     return {
       primary: primary.filter((cue) =>
@@ -228,15 +280,9 @@ export const PipCaptions = memo(function PipCaptionsView(props: {
     time,
   ]);
 
-  const frozenPrimary = useSeekFrozenCaptions(
-    captions.primary,
-    props.state.isSeeking || props.state.isPlaybackStalled,
-  );
+  const frozenPrimary = useSeekFrozenCaptions(captions.primary, isFrozen);
 
-  const frozenSecondary = useSeekFrozenCaptions(
-    captions.secondary,
-    props.state.isSeeking || props.state.isPlaybackStalled,
-  );
+  const frozenSecondary = useSeekFrozenCaptions(captions.secondary, isFrozen);
 
   const showSecondary =
     props.state.dualSubEnabled &&
