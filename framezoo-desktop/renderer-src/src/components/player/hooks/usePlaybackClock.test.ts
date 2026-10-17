@@ -7,7 +7,7 @@ import { usePlayerStore } from "@/stores/player/store";
 
 import {
   MAX_EXTRAPOLATION_SECONDS,
-  SUBTITLE_PLAYBACK_CLOCK_TICK_MS,
+  PlaybackClockProvider,
   VISUAL_PLAYBACK_CLOCK_TICK_MS,
   advancePlaybackClockState,
   createPlaybackClockState,
@@ -40,49 +40,30 @@ function ClockHarness(props: ClockHarnessProps) {
   return null;
 }
 
+function ClockReader({
+  onTime,
+  subtitle = false,
+}: {
+  onTime(time: number): void;
+  subtitle?: boolean;
+}) {
+  const visualTime = usePlaybackClock();
+  const subtitleTime = useSubtitlePlaybackClock();
+  const clockTime = subtitle ? subtitleTime : visualTime;
+
+  useEffect(() => {
+    onTime(clockTime);
+  }, [clockTime, onTime]);
+
+  return null;
+}
+
 function StoreClockHarness({ onTime }: { onTime(time: number): void }) {
-  const clockTime = usePlaybackClock();
-
-  useEffect(() => {
-    onTime(clockTime);
-  }, [clockTime, onTime]);
-
-  return null;
-}
-
-function SubtitleClockHarness({ onTime }: { onTime(time: number): void }) {
-  const clockTime = useSubtitlePlaybackClock();
-
-  useEffect(() => {
-    onTime(clockTime);
-  }, [clockTime, onTime]);
-
-  return null;
-}
-
-function ClockPairHarness(
-  props: Omit<ClockHarnessProps, "onTime" | "tickIntervalMs"> & {
-    onVisualTime(time: number): void;
-    onSubtitleTime(time: number): void;
-  },
-) {
-  const visualTime = useSmoothPlaybackClock({
-    ...props,
-    tickIntervalMs: VISUAL_PLAYBACK_CLOCK_TICK_MS,
-  });
-  const subtitleTime = useSmoothPlaybackClock({
-    ...props,
-    tickIntervalMs: SUBTITLE_PLAYBACK_CLOCK_TICK_MS,
-  });
-
-  useEffect(() => {
-    props.onVisualTime(visualTime);
-  }, [props, visualTime]);
-  useEffect(() => {
-    props.onSubtitleTime(subtitleTime);
-  }, [props, subtitleTime]);
-
-  return null;
+  return createElement(
+    PlaybackClockProvider,
+    null,
+    createElement(ClockReader, { onTime }),
+  );
 }
 
 describe("playback clock", () => {
@@ -174,21 +155,39 @@ describe("playback clock", () => {
     ).toBe(25.5);
   });
 
-  it("keeps visual and subtitle clocks on separate cadences", async () => {
+  it("keeps visual and subtitle consumers on one shared clock", async () => {
     const visualTimes: number[] = [];
     const subtitleTimes: number[] = [];
+    usePlayerStore.setState((state) => ({
+      status: playerStatus.PLAYING,
+      progress: { ...state.progress, time: 10, duration: 120 },
+      mediaPlaying: {
+        ...state.mediaPlaying,
+        isPlaying: true,
+        isPaused: false,
+        hasRenderedFrame: true,
+        isPlaybackStalled: false,
+        playbackRate: 1,
+      },
+    }));
 
     await act(async () => {
       root.render(
-        createElement(ClockPairHarness, {
-          time: 10,
-          duration: 120,
-          playbackRate: 1,
-          isActive: true,
-          resetKey: "source-a",
-          onVisualTime: (time) => visualTimes.push(time),
-          onSubtitleTime: (time) => subtitleTimes.push(time),
-        }),
+        createElement(
+          PlaybackClockProvider,
+          null,
+          createElement(
+            "div",
+            null,
+            createElement(ClockReader, {
+              onTime: (time) => visualTimes.push(time),
+            }),
+            createElement(ClockReader, {
+              subtitle: true,
+              onTime: (time) => subtitleTimes.push(time),
+            }),
+          ),
+        ),
       );
     });
     await act(async () => {
@@ -197,18 +196,10 @@ describe("playback clock", () => {
 
     await runAnimationFrame(1_034);
     expect(visualTimes.at(-1)).toBe(10.034);
-    expect(subtitleTimes.at(-1)).toBe(10);
-
-    await runAnimationFrame(1_051);
-    expect(visualTimes.at(-1)).toBe(10.034);
-    expect(subtitleTimes.at(-1)).toBe(10.051);
-
-    await runAnimationFrame(1_068);
-    expect(visualTimes.at(-1)).toBe(10.068);
-    expect(subtitleTimes.at(-1)).toBe(10.051);
+    expect(subtitleTimes.at(-1)).toBe(10.034);
   });
 
-  it("keeps subtitle evaluation on raw media time when the visual clock advances", async () => {
+  it("uses the same timeline even when mediaTime and visual progress temporarily differ", async () => {
     const visualTimes: number[] = [];
     const subtitleTimes: number[] = [];
 
@@ -233,38 +224,32 @@ describe("playback clock", () => {
     await act(async () => {
       root.render(
         createElement(
-          "div",
+          PlaybackClockProvider,
           null,
-          createElement(StoreClockHarness, {
-            onTime: (time) => visualTimes.push(time),
-          }),
-          createElement(SubtitleClockHarness, {
-            onTime: (time) => subtitleTimes.push(time),
-          }),
+          createElement(
+            "div",
+            null,
+            createElement(ClockReader, {
+              onTime: (time) => visualTimes.push(time),
+            }),
+            createElement(ClockReader, {
+              subtitle: true,
+              onTime: (time) => subtitleTimes.push(time),
+            }),
+          ),
         ),
       );
     });
 
     await runAnimationFrame(1_200);
 
-    // Both clocks are anchored to their respective store values (time vs
-    // mediaTime). When they start equal the interpolated result is identical.
-    // The visual clock uses a 33ms tick; the subtitle clock uses 50ms.
-    // At frame 1_200ms (200ms after now=1_000):
-    //   visual clock: VISUAL_PLAYBACK_CLOCK_TICK_MS=33 → update at 33ms → 10.1+0.2 = 10.3
-    //   subtitle clock: SUBTITLE_PLAYBACK_CLOCK_TICK_MS=50 → update at 50ms → 10.1+0.2 = 10.3
-    // Both are driven by the same animation frame so they produce the same interpolated time.
     expect(visualTimes.at(-1)).toBeCloseTo(10.3, 6);
     expect(subtitleTimes.at(-1)).toBeCloseTo(10.3, 6);
 
-    // Verify the clocks diverge when mediaTime lags behind progress.time:
-    // e.g. visual clock sees a late IPC sample that bumped progress.time but
-    // mediaTime was already accepted and stayed at 10.3.
     usePlayerStore.setState((state) => ({
       progress: {
         ...state.progress,
-        time: 10.5, // visual clock gets a newer sample
-        // mediaTime stays at 10.3 — it's only set from the native time event
+        time: 10.5,
         mediaTime: 10.3,
       },
     }));
@@ -273,13 +258,9 @@ describe("playback clock", () => {
       await Promise.resolve();
     });
 
-    // After snapping to the new authoritative samples, subtitle clock must
-    // not jump ahead of mediaTime (10.3) immediately, while the visual clock
-    // snaps forward to 10.5.
-    expect(subtitleTimes.at(-1)).toBeCloseTo(10.3, 1);
+    expect(subtitleTimes.at(-1)).toBe(visualTimes.at(-1));
     expect(visualTimes.at(-1)).toBeCloseTo(10.5, 1);
   });
-
 
   it("continues past a delayed authoritative sample without re-anchoring", async () => {
     const times: number[] = [];

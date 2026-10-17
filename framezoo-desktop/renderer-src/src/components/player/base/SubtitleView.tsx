@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
 
 import { useSubtitlePlaybackClock } from "@/components/player/hooks/usePlaybackClock";
+import { useSubtitleCueBoundaryWakeup } from "@/components/player/hooks/useSubtitleCueTimeline";
 import {
   type CaptionCueType,
   captionIsVisible,
@@ -252,12 +253,29 @@ export function SubtitleRenderer(props?: {
   const styling = useSubtitleStore((s) => s.styling);
   const overrideCasing = useSubtitleStore((s) => s.overrideCasing);
   const delay = useSubtitleStore((s) => s.primaryDelay);
+  const playbackRate = usePlayerStore((s) => s.mediaPlaying.playbackRate);
+  const authoritativeTime = usePlayerStore((s) => s.progress.mediaTime);
+  const status = usePlayerStore((s) => s.status);
+  const sourceId = usePlayerStore((s) => s.sourceId);
+  const captionId = usePlayerStore((s) => s.caption.selected?.id);
   const renderedStyling = getRenderedSubtitleStyling(styling, dualSubEnabled);
 
   const parsedCaptions = useMemo(
     () => tryParseCanonicalVtt(vttData),
     [vttData],
   );
+
+  useSubtitleCueBoundaryWakeup(parsedCaptions, delay, videoTime, {
+    surface: props?.useNativePictureInPictureStyle ? "document-pip" : "main",
+    sourceId,
+    resetKey: `${sourceId ?? ""}:${captionId ?? ""}`,
+    playbackRate,
+    isFrozen: isSeeking || isPlaybackStalled,
+    isSeeking,
+    isPlaybackStalled,
+    status,
+    authoritativeTime,
+  });
 
   const visibleCaptions = useMemo(() => {
     const results: VisibleCaptionCue[] = [];
@@ -302,6 +320,11 @@ export function SecondarySubtitleRenderer(props?: {
   const styling = useSubtitleStore((s) => s.secondaryStyling);
   const overrideCasing = useSubtitleStore((s) => s.overrideCasing);
   const delay = useSubtitleStore((s) => s.secondaryDelay);
+  const playbackRate = usePlayerStore((s) => s.mediaPlaying.playbackRate);
+  const authoritativeTime = usePlayerStore((s) => s.progress.mediaTime);
+  const status = usePlayerStore((s) => s.status);
+  const sourceId = usePlayerStore((s) => s.sourceId);
+  const captionId = usePlayerStore((s) => s.caption.secondary?.id);
   const renderedStyling = getRenderedSubtitleStyling(
     styling,
     dualSubEnabled,
@@ -312,6 +335,18 @@ export function SecondarySubtitleRenderer(props?: {
     () => tryParseCanonicalVtt(vttData),
     [vttData],
   );
+
+  useSubtitleCueBoundaryWakeup(parsedCaptions, delay, videoTime, {
+    surface: props?.useNativePictureInPictureStyle ? "document-pip" : "main",
+    sourceId,
+    resetKey: `${sourceId ?? ""}:${captionId ?? ""}`,
+    playbackRate,
+    isFrozen: isSeeking || isPlaybackStalled,
+    isSeeking,
+    isPlaybackStalled,
+    status,
+    authoritativeTime,
+  });
 
   const visibleCaptions = useMemo(() => {
     const results: VisibleCaptionCue[] = [];

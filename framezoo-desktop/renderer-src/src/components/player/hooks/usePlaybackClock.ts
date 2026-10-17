@@ -1,4 +1,13 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  type ReactNode,
+  createContext,
+  createElement,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import { getMediaKey, playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
@@ -34,7 +43,16 @@ export const MAX_EXTRAPOLATION_SECONDS = 10.0;
 export const SEEK_DISCONTINUITY_FORWARD_THRESHOLD = 0.5;
 export const SEEK_DISCONTINUITY_BACKWARD_THRESHOLD = 0.5;
 export const VISUAL_PLAYBACK_CLOCK_TICK_MS = 33;
-export const SUBTITLE_PLAYBACK_CLOCK_TICK_MS = 50;
+
+type PlaybackClockSnapshot = {
+  time: number;
+  duration: number;
+  timestamp: number;
+  playbackRate: number;
+  isRunning: boolean;
+};
+
+const PlaybackClockContext = createContext<PlaybackClockSnapshot | null>(null);
 
 function clampPlaybackTime(time: number, duration: number): number {
   return Math.max(
@@ -256,6 +274,11 @@ export function useSmoothPlaybackClock(
       if (sampleGap > 500 && now - lastClockDiagnosticAtRef.current > 5_000) {
         console.debug("[playback-clock] sparse-authoritative-sample", {
           gapMs: Math.round(sampleGap),
+          previousTime: previousSample.time,
+          currentTime: input.time,
+          sampleDeltaSeconds: Number(
+            (input.time - previousSample.time).toFixed(3),
+          ),
           isLoading: Boolean(input.isLoading),
           isSeeking: Boolean(input.isSeeking),
           isActive: input.isActive,
@@ -334,11 +357,11 @@ function getPlaybackClockResetKey(state: {
 }
 
 /**
- * Smooth the visual playback clock between native libmpv time-pos events.
- * The store remains authoritative; this only avoids a frozen/jumping UI clock
- * while decoded frames continue between IPC updates.
+ * One interpolated timeline shared by all visual player consumers. Keeping a
+ * single clock instance prevents timers, progress and captions from drifting
+ * because their independent animation frames ran at different times.
  */
-export function usePlaybackClock(): number {
+export function PlaybackClockProvider(props: { children: ReactNode }) {
   const time = usePlayerStore((s) => s.progress.time);
   const duration = usePlayerStore((s) => s.progress.duration);
   const playbackRate = usePlayerStore((s) => s.mediaPlaying.playbackRate);
@@ -362,7 +385,7 @@ export function usePlaybackClock(): number {
     status === playerStatus.PLAYING &&
     playbackRate > 0;
 
-  return useSmoothPlaybackClock({
+  const timeNow = useSmoothPlaybackClock({
     time,
     duration,
     playbackRate,
@@ -370,47 +393,49 @@ export function usePlaybackClock(): number {
     isLoading: isPlaybackStalled,
     isSeeking,
     resetKey,
+    tickIntervalMs: VISUAL_PLAYBACK_CLOCK_TICK_MS,
   });
+  const snapshot = useMemo(
+    () => ({
+      time: timeNow,
+      duration,
+      timestamp: performance.now(),
+      playbackRate,
+      isRunning: isActive && !isPlaybackStalled,
+    }),
+    [duration, isActive, isPlaybackStalled, playbackRate, timeNow],
+  );
+
+  return createElement(
+    PlaybackClockContext.Provider,
+    { value: snapshot },
+    props.children,
+  );
+}
+
+export function usePlaybackClock(): number {
+  const snapshot = useContext(PlaybackClockContext);
+  if (snapshot === null) {
+    throw new Error(
+      "usePlaybackClock must be used inside PlaybackClockProvider",
+    );
+  }
+  const elapsed = snapshot.isRunning
+    ? Math.min(
+        MAX_EXTRAPOLATION_SECONDS,
+        Math.max(0, performance.now() - snapshot.timestamp) / 1000,
+      )
+    : 0;
+  return clampPlaybackTime(
+    snapshot.time + elapsed * snapshot.playbackRate,
+    snapshot.duration,
+  );
 }
 
 /**
- * Interpolated clock for cue evaluation, anchored to the raw libmpv
- * `mediaTime` (not the visual clock). Ticks every 50 ms so narrow cue windows
- * are not missed between sparse IPC samples, while still snapping on seeks so
- * captions never lead the picture.
+ * Subtitle evaluation deliberately uses the same clock as the visible timer
+ * and progress bar. Cue boundary wakeups handle transitions between frames.
  */
 export function useSubtitlePlaybackClock(): number {
-  const time = usePlayerStore((s) => s.progress.mediaTime);
-  const duration = usePlayerStore((s) => s.progress.duration);
-  const playbackRate = usePlayerStore((s) => s.mediaPlaying.playbackRate);
-  const isPlaying = usePlayerStore((s) => s.mediaPlaying.isPlaying);
-  const isPaused = usePlayerStore((s) => s.mediaPlaying.isPaused);
-  const isSeeking = usePlayerStore((s) => s.interface.isSeeking);
-  const isPlaybackStalled = usePlayerStore(
-    (s) => s.mediaPlaying.isPlaybackStalled,
-  );
-  const hasRenderedFrame = usePlayerStore(
-    (s) => s.mediaPlaying.hasRenderedFrame,
-  );
-  const status = usePlayerStore((s) => s.status);
-  const resetKey = usePlayerStore((s) => getPlaybackClockResetKey(s));
-
-  const isActive =
-    isPlaying &&
-    !isPaused &&
-    !isSeeking &&
-    hasRenderedFrame &&
-    status === playerStatus.PLAYING &&
-    playbackRate > 0;
-
-  return useSmoothPlaybackClock({
-    time,
-    duration,
-    playbackRate,
-    isActive,
-    isLoading: isPlaybackStalled,
-    isSeeking,
-    resetKey,
-    tickIntervalMs: SUBTITLE_PLAYBACK_CLOCK_TICK_MS,
-  });
+  return usePlaybackClock();
 }

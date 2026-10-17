@@ -3,6 +3,7 @@ import { Subscription, fromEvent, merge, timer } from "rxjs";
 import { switchMap, tap } from "rxjs/operators";
 
 import { OverlayDisplay } from "@/components/overlays/OverlayDisplay";
+import { PlaybackClockProvider } from "@/components/player/hooks/usePlaybackClock";
 import { AutoSkipSegments } from "@/components/player/internals/AutoSkipSegments";
 import { CastingInternal } from "@/components/player/internals/CastingInternal";
 import { HeadUpdater } from "@/components/player/internals/HeadUpdater";
@@ -106,9 +107,11 @@ function BaseContainer(props: { children?: ReactNode }) {
 
   return (
     <div ref={containerEl} className="w-full h-full">
-      <OverlayDisplay>
-        <div className="h-screen select-none">{props.children}</div>
-      </OverlayDisplay>
+      <PlaybackClockProvider>
+        <OverlayDisplay>
+          <div className="h-screen select-none">{props.children}</div>
+        </OverlayDisplay>
+      </PlaybackClockProvider>
     </div>
   );
 }

@@ -35,7 +35,7 @@ function PipClockHarness(props: {
 }) {
   const state = {
     ...props.state,
-    caption: {
+    caption: props.state.caption ?? {
       language: "en",
       vttData: `WEBVTT\n\n00:00:09.000 --> 00:00:11.000\ncaption ${props.captionRevision}`,
     },
@@ -150,7 +150,7 @@ describe("Desktop PiP playback clocks", () => {
     });
   }
 
-  it("keeps the visual clock through a caption rerender and resets both clocks by source", async () => {
+  it("shares one clock through caption rerenders and resets by source", async () => {
     const clocks: Array<{ visual: number; subtitle: number }> = [];
     const onClock = (clock: { visual: number; subtitle: number }) => {
       clocks.push(clock);
@@ -159,10 +159,10 @@ describe("Desktop PiP playback clocks", () => {
 
     await renderPip(sourceA, 1, onClock);
     await runAnimationFrame(1_034);
-    expect(clocks.at(-1)).toEqual({ visual: 10.034, subtitle: 10 });
+    expect(clocks.at(-1)).toEqual({ visual: 10.034, subtitle: 10.034 });
 
     await renderPip({ ...sourceA }, 2, onClock);
-    expect(clocks.at(-1)).toEqual({ visual: 10.034, subtitle: 10 });
+    expect(clocks.at(-1)).toEqual({ visual: 10.034, subtitle: 10.034 });
 
     await runAnimationFrame(1_068);
     expect(clocks.at(-1)).toEqual({ visual: 10.068, subtitle: 10.068 });
@@ -190,6 +190,32 @@ describe("Desktop PiP playback clocks", () => {
     expect(container.textContent).toContain("caption 1");
 
     await runAnimationFrame(1_034);
-    expect(clocks.at(-1)).toEqual({ visual: 10.034, subtitle: 10 });
+    expect(clocks.at(-1)).toEqual({ visual: 10.034, subtitle: 10.034 });
+  });
+
+  it("renders a short cue at its boundary and removes it at the end", async () => {
+    vi.useFakeTimers();
+    const shortCueState = createPipState({
+      time: 0.95,
+      caption: {
+        language: "en",
+        vttData: "WEBVTT\n\n00:00:01.000 --> 00:00:01.120\nshort cue",
+      },
+    });
+
+    await renderPip(shortCueState, 1, () => {});
+    expect(container.textContent).not.toContain("short cue");
+
+    now = 1_050;
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(50);
+    });
+    expect(container.textContent).toContain("short cue");
+
+    now = 1_171;
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(121);
+    });
+    expect(container.textContent).not.toContain("short cue");
   });
 });
