@@ -1,14 +1,18 @@
+/* Hallmark · macrostructure: Workbench · tone: atmospheric · anchor hue: warm red · nav: N5 · footer: Ft5 · enrichment: none */
+/* Hallmark · pre-emit critique: P4 H4 E4 S4 R4 V4 */
+@import "../../tokens.css";
+
 .landing-shell {
-  --landing-bg: #090707;
-  --landing-surface: #130909;
-  --landing-surface-strong: #1c0e0d;
-  --landing-line: rgba(255, 225, 210, 0.15);
-  --landing-text: #fff8ee;
-  --landing-muted: #b99f95;
-  --landing-accent: #e44f4f;
-  --landing-accent-strong: #d74747;
-  --landing-amber: #fff599;
-  --landing-amber-strong: #fcec61;
+  --landing-bg: var(--color-paper);
+  --landing-surface: var(--color-paper-2);
+  --landing-surface-strong: var(--color-paper-3);
+  --landing-line: var(--color-rule);
+  --landing-text: var(--color-ink);
+  --landing-muted: var(--color-ink-2);
+  --landing-accent: var(--color-accent);
+  --landing-accent-strong: var(--color-accent-strong);
+  --landing-amber: var(--color-accent-warm);
+  --landing-amber-strong: var(--color-accent-warm-strong);
   position: relative;
   isolation: isolate;
   overflow: clip;
@@ -490,7 +494,7 @@
   display: inline-block;
   margin-top: 16px;
   color: var(--landing-muted);
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-family: var(--font-mono);
   font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -706,7 +710,7 @@
   max-width: 17ch;
   margin: 14px 0 0;
   color: var(--landing-text);
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-display);
   font-size: clamp(2.25rem, 4.4vw, 4.15rem);
   font-weight: 400;
   letter-spacing: -0.06em;
@@ -853,7 +857,7 @@
 
 .landing-movie-card-copy > span {
   color: rgba(255, 248, 238, 0.72);
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-family: var(--font-mono);
   font-size: 0.51rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -864,7 +868,7 @@
   margin: 0;
   overflow: hidden;
   color: var(--landing-text);
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-display);
   font-size: 0.92rem;
   font-weight: 400;
   letter-spacing: -0.035em;
@@ -899,7 +903,7 @@
 
 .landing-movie-drag-hint {
   color: rgba(255, 225, 210, 0.45);
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-family: var(--font-mono);
   font-size: 0.57rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -1182,7 +1186,7 @@
   background: rgba(255, 255, 255, 0.05);
   border-left: 2px solid rgba(228, 79, 79, 0.68);
   border-radius: 5px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-family: var(--font-mono);
   font-size: 0.6rem;
   font-weight: 800;
   letter-spacing: 0.1em;
@@ -1353,7 +1357,7 @@
 
 .landing-guide-number {
   color: var(--landing-accent);
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-family: var(--font-mono);
   font-size: 0.68rem;
   font-weight: 800;
   letter-spacing: 0.16em;
@@ -1388,7 +1392,7 @@
   padding: 9px 12px;
   border-bottom: 1px solid rgba(255, 225, 210, 0.12);
   color: var(--landing-accent);
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-family: var(--font-mono);
   font-size: 0.62rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1414,7 +1418,7 @@
   padding: 16px;
   overflow: auto;
   color: #f1cfb8;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-family: var(--font-mono);
   font-size: 0.72rem;
   line-height: 1.7;
   white-space: pre-wrap;
@@ -1436,7 +1440,7 @@
 
 .landing-guide-resource code {
   color: var(--landing-accent);
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-family: var(--font-mono);
   font-size: 0.78rem;
 }
 
@@ -1475,7 +1479,7 @@
 .landing-guide-example-copy li::before {
   color: var(--landing-accent);
   content: counter(addon-step, decimal-leading-zero);
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-family: var(--font-mono);
   font-size: 0.68rem;
   font-weight: 800;
 }
@@ -1896,7 +1900,7 @@
 
 @media (max-width: 900px) {
   .landing-hero {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 42px;
     min-height: auto;
     padding-block: 70px 88px;
@@ -1917,11 +1921,11 @@
   .landing-ecosystem,
   .landing-addon-guide,
   .landing-download-header {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .landing-showcase-row {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .landing-showcase-row-secondary {
@@ -1935,7 +1939,7 @@
 
   .landing-guide-layout,
   .landing-guide-examples {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .landing-download-header {
@@ -1984,7 +1988,7 @@
   }
 
   .landing-guide-resource-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .landing-particles-layer {
@@ -2118,7 +2122,7 @@
 
   .landing-feature-grid,
   .landing-platform-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .landing-feature-grid {
@@ -2130,7 +2134,7 @@
   }
 
   .landing-feature-line {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 16px;
     min-height: auto;
   }
@@ -2213,5 +2217,737 @@
 
   .landing-back-to-top {
     right: 16px;
+  }
+}
+
+/* Workbench pass: preserve the red-black canvas, make real product surfaces lead. */
+html,
+body {
+  overflow-x: clip;
+  background: var(--color-paper);
+}
+
+.landing-shell {
+  font-family: var(--font-body);
+  background:
+    radial-gradient(
+      circle at 82% 4%,
+      color-mix(in oklch, var(--color-accent) 18%, transparent),
+      transparent 30rem
+    ),
+    radial-gradient(
+      circle at 12% 38%,
+      color-mix(in oklch, var(--color-accent-strong) 20%, transparent),
+      transparent 34rem
+    ),
+    var(--color-paper);
+}
+
+.landing-shell::before {
+  background-image:
+    linear-gradient(
+      color-mix(in oklch, var(--color-ink) 4%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      color-mix(in oklch, var(--color-ink) 4%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 5.25rem 5.25rem;
+}
+
+.landing-ambient {
+  border-color: color-mix(in oklch, var(--color-accent) 18%, transparent);
+  animation: none;
+  opacity: 0.45;
+}
+
+.landing-particles-layer::before {
+  background:
+    conic-gradient(
+      from 90deg at 78% 50%,
+      transparent,
+      color-mix(in oklch, var(--color-accent) 12%, transparent)
+    ),
+    conic-gradient(
+      from 270deg at 22% 50%,
+      color-mix(in oklch, var(--color-accent-strong) 10%, transparent),
+      transparent
+    );
+  opacity: 0.46;
+}
+
+.landing-nav {
+  top: var(--space-sm);
+  width: max-content;
+  max-width: calc(100% - var(--space-lg));
+  min-height: 3.75rem;
+  margin-inline: auto;
+  padding: var(--space-2xs) var(--space-xs) var(--space-2xs) var(--space-sm);
+  background: color-mix(in oklch, var(--color-paper) 86%, transparent);
+  border: var(--rule-hair) solid var(--color-rule);
+  border-radius: var(--radius-pill);
+  box-shadow: 0 1.25rem 2.5rem -2rem var(--color-paper);
+  backdrop-filter: blur(14px) saturate(120%);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+}
+
+.landing-nav-links {
+  gap: var(--space-md);
+}
+
+.landing-nav-links a:first-child {
+  display: none;
+}
+
+.landing-nav-links a,
+.landing-language-toggle {
+  font-family: var(--font-body);
+  white-space: nowrap;
+}
+
+.landing-nav-links a {
+  transition:
+    color var(--dur-short) var(--ease-out),
+    transform var(--dur-short) var(--ease-out);
+}
+
+.landing-language-toggle {
+  border-color: color-mix(in oklch, var(--color-accent) 44%, transparent);
+  box-shadow: none;
+  transition:
+    color var(--dur-short) var(--ease-out),
+    border-color var(--dur-short) var(--ease-out),
+    background-color var(--dur-short) var(--ease-out);
+}
+
+.landing-language-toggle[aria-expanded="true"],
+.landing-language-toggle:hover {
+  background: color-mix(in oklch, var(--color-accent) 12%, transparent);
+  border-color: color-mix(in oklch, var(--color-accent) 72%, transparent);
+  box-shadow: none;
+}
+
+.landing-hero {
+  grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
+  gap: clamp(var(--space-lg), 6vw, var(--space-3xl));
+  min-height: auto;
+  padding-block: clamp(4.5rem, 8vw, 7rem) clamp(5rem, 9vw, 8rem);
+}
+
+.landing-home {
+  height: auto;
+}
+
+.landing-home > .landing-hero {
+  height: auto;
+  min-height: auto;
+  padding-block: clamp(4.5rem, 8vw, 7rem) clamp(5rem, 9vw, 8rem);
+}
+
+.landing-home .landing-hero-visual {
+  position: relative;
+  inset: auto;
+  width: auto;
+  margin: 0;
+  padding: 0;
+}
+
+.landing-hero-copy {
+  max-width: 35rem;
+}
+
+.landing-hero h1,
+.landing-section-heading h2,
+.landing-ecosystem h2,
+.landing-product-showcase h2,
+.landing-download h2,
+.landing-addon-guide-header h2 {
+  font-family: var(--font-display);
+  font-style: normal;
+  overflow-wrap: anywhere;
+}
+
+.landing-hero h1 {
+  max-width: 10ch;
+  font-size: var(--text-display);
+  line-height: 0.94;
+  letter-spacing: -0.075em;
+}
+
+.landing-hero h1 span {
+  color: var(--color-accent-warm);
+}
+
+.landing-hero-copy > p,
+.landing-section-heading p,
+.landing-ecosystem-copy p,
+.landing-showcase-copy p,
+.landing-addon-guide-header p,
+.landing-download-header > p {
+  font-family: var(--font-body);
+  color: var(--color-ink-2);
+}
+
+.landing-hero-actions {
+  align-items: center;
+  gap: var(--space-xs);
+  margin-top: var(--space-lg);
+}
+
+.landing-button {
+  min-height: 3rem;
+  padding-inline: var(--space-md);
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+  transition:
+    color var(--dur-short) var(--ease-out),
+    background-color var(--dur-short) var(--ease-out),
+    border-color var(--dur-short) var(--ease-out),
+    transform var(--dur-instant) var(--ease-out);
+}
+
+.landing-button-primary {
+  color: var(--color-accent-ink);
+  background: var(--color-accent-warm);
+  box-shadow: none;
+}
+
+.landing-button-primary:hover {
+  background: var(--color-accent-warm-strong);
+  transform: translateY(-2px);
+}
+
+.landing-button-quiet {
+  color: var(--color-ink);
+  background: color-mix(in oklch, var(--color-ink) 5%, transparent);
+  border-color: var(--color-rule);
+}
+
+.landing-button-quiet:hover {
+  color: var(--color-ink);
+  background: color-mix(in oklch, var(--color-ink) 9%, transparent);
+  border-color: color-mix(in oklch, var(--color-ink) 30%, transparent);
+}
+
+.landing-button:focus-visible,
+.landing-language-toggle:focus-visible,
+.landing-language-option:focus-visible,
+.landing-guide-code-bar button:focus-visible,
+.landing-platform-card:focus-visible,
+.landing-text-button:focus-visible,
+.landing-back-to-top:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 4px;
+}
+
+.landing-button:active,
+.landing-language-toggle:active,
+.landing-language-option:active,
+.landing-guide-code-bar button:active,
+.landing-platform-card:active,
+.landing-text-button:active,
+.landing-back-to-top:active {
+  transform: translateY(1px);
+}
+
+.landing-button:disabled,
+.landing-language-toggle:disabled,
+.landing-language-option:disabled,
+.landing-guide-code-bar button:disabled,
+.landing-text-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.landing-movies-hero .landing-movies-header {
+  max-width: 30rem;
+}
+
+.landing-movies-hero .landing-movies-header h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3vw, 2.7rem);
+  font-weight: 650;
+  letter-spacing: -0.06em;
+}
+
+.landing-movie-stage {
+  margin-top: var(--space-md);
+}
+
+.landing-movie-viewport {
+  background: color-mix(in oklch, var(--color-paper-2) 38%, transparent);
+  border-block: var(--rule-hair) solid color-mix(in oklch, var(--color-rule) 72%, transparent);
+}
+
+.landing-movie-rail {
+  gap: clamp(var(--space-sm), 2vw, var(--space-lg));
+  padding: var(--space-md) var(--space-lg) var(--space-xl) 0;
+}
+
+.landing-movie-card {
+  --movie-width: clamp(9.5rem, 14vw, 12rem);
+}
+
+.landing-movie-poster {
+  height: clamp(13.5rem, 23vw, 18rem);
+  border-color: color-mix(in oklch, var(--color-rule) 80%, transparent);
+  border-radius: var(--radius-panel);
+  box-shadow: none;
+}
+
+.landing-movie-card-copy h3 {
+  font-family: var(--font-display);
+}
+
+.landing-features {
+  padding-block: var(--space-3xl) var(--space-3xl);
+}
+
+.landing-section-heading h2,
+.landing-ecosystem h2,
+.landing-product-showcase h2,
+.landing-download h2 {
+  font-size: clamp(2.4rem, 4.4vw, 4.5rem);
+  letter-spacing: -0.07em;
+}
+
+.landing-feature-grid {
+  grid-template-columns: minmax(0, 1.16fr) minmax(0, 0.84fr);
+  gap: var(--space-lg);
+  margin-top: var(--space-2xl);
+}
+
+.landing-feature-card,
+.landing-guide-intro,
+.landing-guide-resource-panel,
+.landing-guide-examples {
+  border-color: var(--color-rule);
+  border-radius: var(--radius-card);
+  background: var(--color-paper-2);
+}
+
+.landing-feature-card {
+  min-height: 31rem;
+  padding: var(--space-lg);
+  background:
+    radial-gradient(
+      circle at 88% 10%,
+      color-mix(in oklch, var(--color-accent) 14%, transparent),
+      transparent 15rem
+    ),
+    var(--color-paper-2);
+}
+
+.landing-feature-card-sync {
+  background:
+    radial-gradient(
+      circle at 88% 10%,
+      color-mix(in oklch, var(--color-accent) 17%, transparent),
+      transparent 15rem
+    ),
+    var(--color-paper-2);
+}
+
+.landing-feature-preview {
+  background: var(--color-paper);
+  border-color: var(--color-rule);
+}
+
+.landing-feature-line {
+  min-height: 11.5rem;
+  border-color: var(--color-rule);
+}
+
+.landing-feature-card h3,
+.landing-feature-line h3,
+.landing-guide-layout h3,
+.landing-guide-examples h3 {
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-weight: 650;
+}
+
+.landing-ecosystem {
+  gap: clamp(var(--space-xl), 7vw, var(--space-3xl));
+  margin-top: var(--space-3xl);
+  padding: var(--space-2xl) 0 var(--space-2xl) var(--space-xl);
+  border-inline-start-color: var(--color-rule);
+}
+
+.landing-addon-orbit {
+  border-color: color-mix(in oklch, var(--color-accent) 24%, transparent);
+  border-radius: var(--radius-card) 0 0 var(--radius-card);
+  background:
+    radial-gradient(
+      circle at center,
+      color-mix(in oklch, var(--color-accent) 14%, transparent),
+      transparent 8rem
+    ),
+    var(--color-paper-2);
+}
+
+.landing-orbit-ring {
+  border-color: color-mix(in oklch, var(--color-accent) 24%, transparent);
+  animation: none;
+}
+
+.landing-orbit-ring-two {
+  border-color: color-mix(in oklch, var(--color-accent) 12%, transparent);
+}
+
+.landing-orbit-core {
+  color: var(--color-accent-ink);
+  background: var(--color-accent-warm);
+  box-shadow: none;
+}
+
+.landing-addon-tag {
+  color: var(--color-ink-2);
+  background: var(--color-paper);
+  border-color: var(--color-rule);
+}
+
+.landing-addon-guide {
+  margin-top: var(--space-3xl);
+  padding-block: var(--space-2xl) var(--space-3xl);
+  border-top-color: var(--color-rule);
+}
+
+.landing-guide-layout,
+.landing-guide-examples {
+  gap: var(--space-lg);
+  margin-top: var(--space-2xl);
+}
+
+.landing-guide-intro,
+.landing-guide-resource-panel,
+.landing-guide-examples {
+  padding: var(--space-lg);
+}
+
+.landing-guide-intro {
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in oklch, var(--color-accent) 12%, transparent),
+      transparent 48%
+    ),
+    var(--color-paper-2);
+}
+
+.landing-guide-code {
+  border-color: color-mix(in oklch, var(--color-accent) 28%, transparent);
+  border-radius: var(--radius-panel);
+  background: var(--color-paper);
+}
+
+.landing-guide-code-bar {
+  border-bottom-color: var(--color-rule);
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+}
+
+.landing-guide-code-bar button {
+  color: var(--color-ink);
+  background: var(--color-paper-3);
+  border-color: var(--color-rule);
+  border-radius: var(--radius-2xs);
+  transition:
+    color var(--dur-short) var(--ease-out),
+    border-color var(--dur-short) var(--ease-out),
+    background-color var(--dur-short) var(--ease-out);
+}
+
+.landing-guide-code-bar button:hover {
+  color: var(--color-accent-warm);
+  background: var(--color-paper-2);
+  border-color: var(--color-accent);
+}
+
+.landing-guide-resource {
+  border-inline-start: 0;
+  border-block-start: var(--rule-hair) solid var(--color-rule);
+  background: var(--color-paper);
+}
+
+.landing-product-showcase {
+  gap: var(--space-3xl);
+  margin-top: var(--space-3xl);
+}
+
+.landing-showcase-image,
+.landing-showcase-image-detail,
+.landing-showcase-image-discovery {
+  transform: none;
+  border-radius: var(--radius-card);
+  background: var(--color-paper);
+}
+
+.landing-showcase-image::after {
+  border-color: var(--color-rule);
+}
+
+.landing-showcase-image img {
+  opacity: 0.94;
+}
+
+.landing-download {
+  padding-block: var(--space-2xl) var(--space-3xl);
+  border-top-color: var(--color-rule);
+}
+
+.landing-download-header {
+  gap: var(--space-2xl);
+}
+
+.landing-platform-card {
+  background: var(--color-paper-2);
+  border-color: transparent;
+  border-radius: var(--radius-panel);
+  transition:
+    color var(--dur-short) var(--ease-out),
+    background-color var(--dur-short) var(--ease-out),
+    border-color var(--dur-short) var(--ease-out),
+    transform var(--dur-instant) var(--ease-out);
+}
+
+.landing-platform-card:hover {
+  background: var(--color-paper-3);
+  border-color: var(--color-rule);
+  transform: translateY(-2px);
+}
+
+.landing-platform-card.is-recommended {
+  background: color-mix(in oklch, var(--color-accent) 12%, var(--color-paper-2));
+  border-color: color-mix(in oklch, var(--color-accent) 48%, transparent);
+}
+
+.landing-download-state {
+  background: var(--color-paper-2);
+  border-color: var(--color-rule);
+  border-radius: var(--radius-panel);
+}
+
+.landing-text-button {
+  color: var(--color-accent-warm);
+  white-space: nowrap;
+}
+
+.landing-text-button:hover {
+  color: var(--color-ink);
+}
+
+.landing-footer {
+  display: block;
+  padding-block: var(--space-2xl) var(--space-xl);
+  border-top-color: var(--color-rule);
+  color: var(--color-ink-2);
+}
+
+.landing-footer > div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.landing-footer p {
+  order: -1;
+  max-width: 30ch;
+  margin: 0;
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 3.35rem);
+  font-weight: 650;
+  letter-spacing: -0.065em;
+  line-height: 0.98;
+}
+
+.landing-footer-nav {
+  gap: var(--space-xs) var(--space-md);
+  padding-top: var(--space-md);
+  border-top: var(--rule-hair) solid var(--color-rule);
+}
+
+.landing-footer-nav a {
+  color: var(--color-ink-2);
+  white-space: nowrap;
+  transition: color var(--dur-short) var(--ease-out);
+}
+
+.landing-footer-nav a:hover {
+  color: var(--color-ink);
+}
+
+.landing-back-to-top {
+  color: var(--color-accent-ink);
+  background: var(--color-accent-warm);
+  border-color: var(--color-ink);
+  box-shadow: none;
+  transition:
+    opacity var(--dur-short) var(--ease-out),
+    transform var(--dur-short) var(--ease-out),
+    background-color var(--dur-short) var(--ease-out);
+}
+
+.landing-back-to-top:hover {
+  background: var(--color-accent-warm-strong);
+}
+
+.landing-scroll-reveal {
+  transform: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .landing-shell.is-motion-ready .landing-scroll-reveal {
+    transform: translateY(0);
+    transition: opacity var(--dur-medium) var(--ease-out);
+  }
+}
+
+@media (max-width: 900px) {
+  .landing-hero,
+  .landing-home > .landing-hero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-xl);
+    padding-block: clamp(5rem, 13vw, 7rem) clamp(5rem, 13vw, 8rem);
+  }
+
+  .landing-home .landing-hero-visual {
+    width: 100%;
+  }
+
+  .landing-hero h1 {
+    max-width: 11ch;
+    font-size: clamp(3.25rem, 11vw, 5.5rem);
+  }
+
+  .landing-hero-visual {
+    padding-inline-start: 0;
+  }
+
+  .landing-feature-grid,
+  .landing-download-header {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .landing-feature-grid {
+    gap: var(--space-md);
+  }
+
+  .landing-download-header {
+    gap: var(--space-lg);
+  }
+}
+
+@media (max-width: 640px) {
+  .landing-nav {
+    top: var(--space-xs);
+    width: calc(100% - var(--space-md));
+    min-height: 3.5rem;
+    padding-inline: var(--space-xs);
+  }
+
+  .landing-brand img {
+    width: 6.5rem;
+  }
+
+  .landing-nav-links {
+    gap: var(--space-xs);
+  }
+
+  .landing-nav-links a:nth-child(-n + 4) {
+    display: none;
+  }
+
+  .landing-language-toggle {
+    width: auto;
+    min-width: 2.75rem;
+    padding-inline: var(--space-2xs);
+  }
+
+  .landing-language-toggle > span:nth-child(2) {
+    display: none;
+  }
+
+  .landing-hero,
+  .landing-home > .landing-hero {
+    gap: var(--space-xl);
+    padding-block: 5rem var(--space-2xl);
+  }
+
+  .landing-hero h1 {
+    max-width: 9ch;
+    margin-top: var(--space-xs);
+    font-size: clamp(2.65rem, 12vw, 4.15rem);
+  }
+
+  .landing-hero-actions {
+    gap: var(--space-2xs);
+  }
+
+  .landing-button {
+    width: 100%;
+  }
+
+  .landing-movie-rail {
+    padding-inline-start: 0;
+  }
+
+  .landing-movie-card {
+    --movie-width: 9.25rem;
+  }
+
+  .landing-movie-poster {
+    height: 13.75rem;
+  }
+
+  .landing-features {
+    padding-block: var(--space-2xl) var(--space-3xl);
+  }
+
+  .landing-feature-card {
+    min-height: 20rem;
+    padding: var(--space-md);
+  }
+
+  .landing-ecosystem {
+    margin-top: var(--space-2xl);
+    padding: var(--space-xl) 0;
+  }
+
+  .landing-addon-guide {
+    margin-top: var(--space-2xl);
+    padding-block: var(--space-xl) var(--space-2xl);
+  }
+
+  .landing-guide-layout,
+  .landing-guide-examples {
+    margin-top: var(--space-xl);
+  }
+
+  .landing-guide-intro,
+  .landing-guide-resource-panel,
+  .landing-guide-examples {
+    padding: var(--space-md);
+  }
+
+  .landing-product-showcase {
+    gap: var(--space-2xl);
+    margin-top: var(--space-2xl);
+  }
+
+  .landing-download {
+    padding-block: var(--space-xl) var(--space-2xl);
+  }
+
+  .landing-platform-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .landing-footer p {
+    max-width: 15ch;
+    font-size: clamp(2rem, 10vw, 3rem);
   }
 }

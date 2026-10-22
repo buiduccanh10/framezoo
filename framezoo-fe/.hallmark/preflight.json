@@ -1,0 +1,15 @@
+{
+  "scannedAt": "2026-10-22",
+  "framework": "Vite + React 19",
+  "frameworkEvidence": ["package.json", "src/index.tsx"],
+  "fontStack": "Avenir Next / Helvetica Neue / Segoe UI",
+  "fontEvidence": ["src/assets/css/index.css:3", "src/landing/landing.css:1"],
+  "palette": "dark red-black canvas with warm amber CTA and red accent",
+  "paletteEvidence": ["src/assets/css/index.css:19", "src/landing/landing.css:2-12"],
+  "motion": "@react-spring/web dependency plus CSS/canvas motion",
+  "motionEvidence": ["package.json", "src/landing/useLandingMotion.ts", "src/landing/LandingParticles.tsx"],
+  "spacing": "CSS spacing values; no shared spacing token block before this run",
+  "spacingEvidence": ["src/landing/landing.css"],
+  "preserve": ["font stack", "dark red-black palette", "locale/hash/download behavior", "existing component ownership"],
+  "introduce": ["Workbench rhythm", "floating pill nav", "statement footer", "named tokens", "reduced visual motion"]
+}
