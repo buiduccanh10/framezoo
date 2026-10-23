@@ -6,48 +6,14 @@ import { ensureGuestToken } from "@/backend/guestAuth";
 import type { LandingCopy } from "./i18n";
 
 const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
-const TMDB_TRENDING_PATH = "/api/tmdb/trending/all/day";
+const TMDB_COLUMN_COUNT = 3;
+const TMDB_ITEMS_PER_COLUMN = 6;
 
-const FALLBACK_POSTERS = ["/embed-preview-detail.png", "/embed-preview.png"];
-
-const FALLBACK_MOVIES: MovieCard[] = [
-  {
-    id: 157336,
-    mediaType: "movie",
-    title: "Interstellar",
-    posterPath: null,
-  },
-  {
-    id: 155,
-    mediaType: "movie",
-    title: "The Dark Knight",
-    posterPath: null,
-  },
-  {
-    id: 27205,
-    mediaType: "movie",
-    title: "Inception",
-    posterPath: null,
-  },
-  {
-    id: 603,
-    mediaType: "movie",
-    title: "The Matrix",
-    posterPath: null,
-  },
-  {
-    id: 13,
-    mediaType: "movie",
-    title: "Forrest Gump",
-    posterPath: null,
-  },
-  {
-    id: 680,
-    mediaType: "movie",
-    title: "Pulp Fiction",
-    posterPath: null,
-  },
-];
+export const TMDB_SHOWCASE_FEEDS = [
+  { path: "/api/tmdb/trending/all/day", defaultMediaType: "movie" },
+  { path: "/api/tmdb/movie/popular", defaultMediaType: "movie" },
+  { path: "/api/tmdb/tv/popular", defaultMediaType: "tv" },
+] as const;
 
 interface TmdbResult {
   id?: unknown;
@@ -61,12 +27,20 @@ export interface MovieCard {
   id: number;
   mediaType: "movie" | "tv";
   title: string;
-  posterPath: string | null;
+  posterPath: string;
 }
 
-function normalizeResult(result: TmdbResult): MovieCard | null {
+function normalizeResult(
+  result: TmdbResult,
+  defaultMediaType: "movie" | "tv" = "movie",
+): MovieCard | null {
   const id = Number(result.id);
-  const mediaType = result.media_type === "tv" ? "tv" : "movie";
+  const mediaType =
+    result.media_type === "tv"
+      ? "tv"
+      : result.media_type === "movie"
+        ? "movie"
+        : defaultMediaType;
   const title =
     typeof result.title === "string"
       ? result.title.trim()
@@ -74,20 +48,24 @@ function normalizeResult(result: TmdbResult): MovieCard | null {
         ? result.name.trim()
         : "";
 
-  if (!Number.isInteger(id) || id <= 0 || !title) return null;
+  const posterPath =
+    typeof result.poster_path === "string" ? result.poster_path.trim() : "";
+
+  if (!Number.isInteger(id) || id <= 0 || !title || !posterPath) return null;
 
   return {
     id,
     mediaType,
     title,
-    posterPath:
-      typeof result.poster_path === "string" && result.poster_path.trim()
-        ? result.poster_path
-        : null,
+    posterPath,
   };
 }
 
-export function normalizeTmdbResults(payload: unknown, limit = 10) {
+export function normalizeTmdbResults(
+  payload: unknown,
+  limit = 18,
+  defaultMediaType: "movie" | "tv" = "movie",
+) {
   if (!payload || typeof payload !== "object") return [];
 
   const results = (payload as { results?: unknown }).results;
@@ -97,12 +75,12 @@ export function normalizeTmdbResults(payload: unknown, limit = 10) {
   return results
     .map((result) =>
       result && typeof result === "object"
-        ? normalizeResult(result as TmdbResult)
+        ? normalizeResult(result as TmdbResult, defaultMediaType)
         : null,
     )
     .filter((result): result is MovieCard => {
       if (!result) return false;
-      const key = `${result.mediaType}:${result.id}`;
+      const key = getMovieKey(result);
       if (seen.has(key)) return false;
       seen.add(key);
       return true;
@@ -110,15 +88,84 @@ export function normalizeTmdbResults(payload: unknown, limit = 10) {
     .slice(0, limit);
 }
 
-function getTmdbEndpoint(backendUrl: string | null) {
-  if (!backendUrl) return TMDB_TRENDING_PATH;
-  return new URL(TMDB_TRENDING_PATH, `${backendUrl}/`).toString();
+export function partitionMovieColumns(
+  movies: MovieCard[],
+  columnCount = TMDB_COLUMN_COUNT,
+): MovieCard[][] {
+  if (columnCount <= 0) return [];
+
+  const columns = Array.from({ length: columnCount }, () => [] as MovieCard[]);
+  movies.forEach((movie, index) => {
+    columns[index % columnCount]?.push(movie);
+  });
+  return columns;
 }
 
-function getPosterUrl(movie: MovieCard, index: number) {
-  return movie.posterPath
-    ? `${TMDB_IMAGE_BASE_URL}/w500${movie.posterPath}`
-    : FALLBACK_POSTERS[index % FALLBACK_POSTERS.length];
+export function buildTmdbShowcaseColumns(
+  payloads: unknown[],
+  perColumnLimit = TMDB_ITEMS_PER_COLUMN,
+): MovieCard[][] {
+  if (perColumnLimit <= 0) {
+    return TMDB_SHOWCASE_FEEDS.map(() => []);
+  }
+
+  // Normalize each TMDB feed independently with its media type
+  const rawColumns = TMDB_SHOWCASE_FEEDS.map((feed, index) =>
+    normalizeTmdbResults(
+      payloads[index],
+      perColumnLimit * TMDB_COLUMN_COUNT,
+      feed.defaultMediaType,
+    ),
+  );
+
+  // Deduplicate across columns so the 3 columns show distinct titles
+  const usedKeys = new Set<string>();
+  const columns = rawColumns.map((column) => {
+    const uniqueColumn: MovieCard[] = [];
+    for (const movie of column) {
+      const key = getMovieKey(movie);
+      if (usedKeys.has(key)) continue;
+      usedKeys.add(key);
+      uniqueColumn.push(movie);
+      if (uniqueColumn.length >= perColumnLimit) break;
+    }
+    return uniqueColumn;
+  });
+
+  // Backfill any empty column from remaining unused pool if one endpoint failed
+  const unusedPool = rawColumns
+    .flat()
+    .filter((movie) => !usedKeys.has(getMovieKey(movie)));
+
+  let poolIndex = 0;
+  return columns.map((column) => {
+    if (column.length > 0) return column;
+    const fallbackColumn: MovieCard[] = [];
+    while (
+      fallbackColumn.length < perColumnLimit &&
+      poolIndex < unusedPool.length
+    ) {
+      const candidate = unusedPool[poolIndex++];
+      const key = getMovieKey(candidate);
+      if (usedKeys.has(key)) continue;
+      usedKeys.add(key);
+      fallbackColumn.push(candidate);
+    }
+    return fallbackColumn;
+  });
+}
+
+function getTmdbEndpoint(backendUrl: string | null, path: string) {
+  if (!backendUrl) return path;
+  return new URL(path, `${backendUrl}/`).toString();
+}
+
+function getMovieKey(movie: MovieCard) {
+  return `${movie.mediaType}:${movie.id}`;
+}
+
+function getPosterUrl(movie: MovieCard) {
+  return `${TMDB_IMAGE_BASE_URL}/w500${movie.posterPath}`;
 }
 
 interface MovieShowcaseSectionProps {
@@ -132,9 +179,12 @@ export function MovieShowcaseSection({
 }: MovieShowcaseSectionProps) {
   const viewportRef = useRef<HTMLDivElement>(null);
   const loopRailRef = useRef<HTMLDivElement>(null);
-  const [movies, setMovies] = useState<MovieCard[]>(FALLBACK_MOVIES);
+  const [movieColumns, setMovieColumns] = useState<MovieCard[][]>(() =>
+    TMDB_SHOWCASE_FEEDS.map(() => []),
+  );
   const [isLoading, setIsLoading] = useState(true);
   const backendUrl = getConfiguredBackendUrl();
+  const movies = movieColumns.flat();
 
   useEffect(() => {
     const controller = new AbortController();
@@ -147,24 +197,39 @@ export function MovieShowcaseSection({
           headers.Authorization = `Bearer ${guestToken}`;
         }
 
-        const response = await fetch(getTmdbEndpoint(backendUrl), {
-          signal: controller.signal,
-          headers,
-        });
+        const responses = await Promise.allSettled(
+          TMDB_SHOWCASE_FEEDS.map(async (feed) => {
+            const response = await fetch(
+              getTmdbEndpoint(backendUrl, feed.path),
+              {
+                signal: controller.signal,
+                headers,
+              },
+            );
 
-        if (!response.ok) {
-          throw new Error(`TMDB request failed: ${response.status}`);
-        }
+            if (!response.ok) {
+              throw new Error(`TMDB request failed: ${response.status}`);
+            }
 
-        const normalizedMovies = normalizeTmdbResults(await response.json());
-        if (normalizedMovies.length === 0) {
+            return response.json();
+          }),
+        );
+
+        if (controller.signal.aborted) return;
+
+        const payloads = responses.map((result) =>
+          result.status === "fulfilled" ? result.value : null,
+        );
+        const nextColumns = buildTmdbShowcaseColumns(payloads);
+
+        if (nextColumns.every((column) => column.length === 0)) {
           throw new Error("TMDB returned no titles");
         }
 
-        setMovies(normalizedMovies);
+        setMovieColumns(nextColumns);
       } catch {
         if (controller.signal.aborted) return;
-        setMovies(FALLBACK_MOVIES);
+        setMovieColumns(TMDB_SHOWCASE_FEEDS.map(() => []));
       } finally {
         if (!controller.signal.aborted) setIsLoading(false);
       }
@@ -272,22 +337,27 @@ export function MovieShowcaseSection({
   const renderMovieCard = (
     movie: MovieCard,
     index: number,
-    groupIndex: number,
-    className = "",
+    groupIndex: number | string,
   ) => {
     return (
       <article
-        className={`landing-movie-card${className ? ` ${className}` : ""}`}
+        className="landing-movie-card"
         key={`${groupIndex}:${movie.mediaType}:${movie.id}`}
       >
         <div className="landing-movie-poster">
           <img
-            src={getPosterUrl(movie, index)}
+            src={getPosterUrl(movie)}
             alt={`${movie.title} poster`}
             loading={index < 4 ? "eager" : "lazy"}
-            onError={(event) => {
-              event.currentTarget.src =
-                FALLBACK_POSTERS[index % FALLBACK_POSTERS.length];
+            onError={() => {
+              const targetKey = getMovieKey(movie);
+              setMovieColumns((currentColumns) =>
+                currentColumns.map((column) =>
+                  column.filter(
+                    (currentMovie) => getMovieKey(currentMovie) !== targetKey,
+                  ),
+                ),
+              );
             }}
           />
           <div className="landing-movie-shade" aria-hidden="true" />
@@ -300,16 +370,18 @@ export function MovieShowcaseSection({
   };
 
   if (variant === "hero") {
-    const sourceMovies = movies.length > 0 ? movies : FALLBACK_MOVIES;
-    const mosaicColumns = [0, 1, 2].map((columnIndex) => {
-      const columnMovies = Array.from(
-        { length: 6 },
-        (_, index) =>
-          sourceMovies[(index * 2 + columnIndex) % sourceMovies.length],
-      );
-
-      return [...columnMovies, ...columnMovies];
-    });
+    const columnLength = Math.max(
+      ...movieColumns.map((column) => column.length),
+      0,
+    );
+    const mosaicColumns = movieColumns.map((column) =>
+      column.length
+        ? Array.from(
+            { length: Math.max(columnLength, 1) },
+            (_, index) => column[index % column.length],
+          )
+        : [],
+    );
 
     return (
       <section
@@ -322,23 +394,34 @@ export function MovieShowcaseSection({
             <span className="landing-eyebrow">{copy.eyebrow}</span>
           </div>
           <div className="landing-movie-mosaic" aria-hidden="true">
-            {mosaicColumns.map((columnMovies, columnIndex) => (
-              <div
-                className={`landing-movie-mosaic-column landing-movie-mosaic-column-${columnIndex}`}
-                key={`mosaic-column-${columnIndex}`}
-              >
-                <div className="landing-movie-mosaic-track">
-                  {columnMovies.map((movie, index) =>
-                    renderMovieCard(
-                      movie,
-                      index % 6,
-                      columnIndex * 2 + Math.floor(index / 6),
-                      columnIndex === 1 ? "landing-movie-card-featured" : "",
-                    ),
-                  )}
+            {mosaicColumns.map((columnMovies, columnIndex) => {
+              const loopMovies = [...columnMovies, ...columnMovies];
+
+              return (
+                <div
+                  className="landing-movie-mosaic-column"
+                  key={`mosaic-column-${columnIndex}`}
+                >
+                  <div className="landing-movie-mosaic-track">
+                    {isLoading
+                      ? Array.from({ length: 4 }, (_, index) => (
+                          <div
+                            className="landing-movie-card landing-movie-card-skeleton"
+                            key={`mosaic-skeleton-${columnIndex}-${index}`}
+                            aria-hidden="true"
+                          />
+                        ))
+                      : loopMovies.map((movie, index) =>
+                          renderMovieCard(
+                            movie,
+                            index % Math.max(columnMovies.length, 1),
+                            `mosaic-${columnIndex}-${index}`,
+                          ),
+                        )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
