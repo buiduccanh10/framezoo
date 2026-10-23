@@ -13,9 +13,8 @@ vi.mock("@/backend/helpers/fetch", () => ({
   mwFetch: alignmentMocks.mwFetch,
 }));
 vi.mock("@/sync/aligner", async () => {
-  const actual = await vi.importActual<typeof import("@/sync/aligner")>(
-    "@/sync/aligner",
-  );
+  const actual =
+    await vi.importActual<typeof import("@/sync/aligner")>("@/sync/aligner");
   return {
     ...actual,
     alignWindowsLocal: alignmentMocks.alignWindowsLocal,
@@ -100,9 +99,7 @@ describe("subtitle alignment client", () => {
   });
 
   it("keeps full timeline evidence when a later playback position is synced", async () => {
-    alignmentMocks.alignWindowsLocal.mockRejectedValue(
-      new Error("use server"),
-    );
+    alignmentMocks.alignWindowsLocal.mockRejectedValue(new Error("use server"));
 
     await alignSubtitlesWithCurrentStream({
       sourceUrl: "https://example.test/video.m3u8",

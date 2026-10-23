@@ -1,8 +1,7 @@
 import { act } from "react";
 import { type Root, createRoot } from "react-dom/client";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-
 import { MemoryRouter } from "react-router-dom";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { MinimalPageLayout } from "@/pages/layouts/MinimalPageLayout";
 import { MigrationPart } from "@/pages/parts/migrations/MigrationPart";
@@ -36,14 +35,20 @@ describe("LargeTextPart", () => {
     expect(rootElement).not.toBeNull();
     expect(rootElement.getAttribute("data-app-region")).toBe("drag");
 
-    const header = rootElement.querySelector(".fixed.top-0.left-0.right-0") as HTMLElement;
+    const header = rootElement.querySelector(
+      ".fixed.top-0.left-0.right-0",
+    ) as HTMLElement;
     expect(header).not.toBeNull();
     expect(header.getAttribute("data-app-region")).toBe("drag");
 
-    const contentContainer = container.querySelector(".relative.z-10") as HTMLElement;
+    const contentContainer = container.querySelector(
+      ".relative.z-10",
+    ) as HTMLElement;
     expect(contentContainer).not.toBeNull();
     expect(contentContainer.getAttribute("data-app-region")).toBe("no-drag");
-    expect(contentContainer.textContent).toContain("Đang tải hồ sơ người dùng...");
+    expect(contentContainer.textContent).toContain(
+      "Đang tải hồ sơ người dùng...",
+    );
   });
 
   it("renders MigrationPart using draggable LargeTextPart structure", async () => {
@@ -70,11 +75,10 @@ describe("LargeTextPart", () => {
     const rootElement = container.firstElementChild as HTMLElement;
     expect(rootElement).not.toBeNull();
 
-    const header = rootElement.querySelector(".fixed.top-0.left-0.right-0") as HTMLElement;
+    const header = rootElement.querySelector(
+      ".fixed.top-0.left-0.right-0",
+    ) as HTMLElement;
     expect(header).not.toBeNull();
     expect(header.getAttribute("data-app-region")).toBe("drag");
   });
 });
-
-
-
