@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import os
 import re
-from enum import Enum
 from typing import Any
 
 from vad import get_vad_session

@@ -23,7 +23,6 @@ from alignment import (
 )
 from limiter import check_request_rate_limit, run_protected_inference
 from model_runtime import (
-    ModelArch,
     Transcriber,
     get_model_for_language,
     get_transcriber,
