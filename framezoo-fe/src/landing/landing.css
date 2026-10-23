@@ -741,7 +741,7 @@
   z-index: 1;
   overflow-x: auto;
   overflow-y: visible;
-  cursor: grab;
+  cursor: default;
   mask-image: linear-gradient(
     90deg,
     transparent 0,
@@ -767,15 +767,6 @@
 
 .landing-movie-viewport::-webkit-scrollbar {
   display: none;
-}
-
-.landing-movie-viewport.is-dragging {
-  cursor: grabbing;
-  scroll-behavior: auto;
-}
-
-.landing-movie-viewport.is-dragging .landing-movie-card {
-  transition: none;
 }
 
 .landing-movie-rail {
@@ -899,17 +890,6 @@
   display: flex;
   justify-content: center;
   padding: 24px 24px 0;
-}
-
-.landing-movie-drag-hint {
-  color: rgba(255, 225, 210, 0.45);
-  font-family: var(--font-mono);
-  font-size: 0.57rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  display: inline-flex;
-  color: rgba(255, 225, 210, 0.56);
-  white-space: nowrap;
 }
 
 @media (min-width: 901px) {
@@ -2062,10 +2042,6 @@
     padding: 22px 20px 0;
   }
 
-  .landing-movie-drag-hint {
-    font-size: 0.5rem;
-  }
-
   .landing-hero h1 {
     max-width: 15ch;
     margin-top: 18px;
@@ -3106,4 +3082,335 @@ body {
   .landing-platform-grid {
     grid-template-columns: minmax(0, 1fr);
   }
+}
+
+/* Hallmark · pre-emit critique: P4 H5 E4 S5 R4 V5
+ * DNA: split marquee · floating pill nav · vertical poster mosaic · red/amber anchor
+ */
+.landing-shell {
+  background:
+    radial-gradient(
+      circle at 76% 12%,
+      color-mix(in oklch, var(--color-accent) 13%, transparent),
+      transparent 30rem
+    ),
+    var(--color-paper);
+}
+
+.landing-shell::before {
+  background-image: radial-gradient(
+    circle,
+    color-mix(in oklch, var(--color-ink) 12%, transparent) 0.075rem,
+    transparent 0.1rem
+  );
+  background-size: 1.25rem 1.25rem;
+  mask-image: linear-gradient(90deg, transparent, black 25%, black 75%, transparent);
+  opacity: 0.62;
+}
+
+.landing-shell::after {
+  display: none;
+}
+
+.landing-particles-layer {
+  opacity: 0.16;
+}
+
+.landing-nav {
+  top: var(--space-md);
+  width: min(58rem, calc(100% - var(--space-2xl)));
+  min-height: 3.5rem;
+  padding: var(--space-2xs) var(--space-sm);
+  background: color-mix(in oklch, var(--color-paper) 82%, transparent);
+  border-color: color-mix(in oklch, var(--color-ink) 14%, transparent);
+  box-shadow: 0 1.5rem 3rem color-mix(in oklch, var(--color-paper) 75%, transparent);
+}
+
+.landing-nav-links {
+  gap: clamp(var(--space-sm), 2.4vw, var(--space-lg));
+}
+
+.landing-language-toggle {
+  border-color: color-mix(in oklch, var(--color-accent) 45%, transparent);
+}
+
+.landing-language-toggle[aria-expanded="true"],
+.landing-language-toggle:hover {
+  background: color-mix(in oklch, var(--color-accent) 12%, transparent);
+  border-color: color-mix(in oklch, var(--color-accent) 72%, transparent);
+}
+
+.landing-home {
+  height: auto;
+  min-height: calc(100svh - 5rem);
+}
+
+.landing-home > .landing-hero {
+  min-height: clamp(38rem, calc(100svh - 5rem), 52rem);
+  padding-block: clamp(4rem, 8vw, 7rem) clamp(4rem, 7vw, 6rem);
+}
+
+.landing-hero-copy {
+  max-width: 34rem;
+}
+
+.landing-hero-kicker {
+  display: inline-flex;
+  margin-bottom: var(--space-md);
+  color: var(--color-accent-warm);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.landing-hero h1 {
+  max-width: 10ch;
+  font-size: clamp(3.35rem, 6.2vw, 6.4rem);
+  line-height: 0.9;
+  letter-spacing: -0.08em;
+}
+
+.landing-hero h1 span {
+  color: var(--color-accent-warm);
+}
+
+.landing-hero-copy > p {
+  max-width: 31rem;
+  margin-top: var(--space-lg);
+}
+
+.landing-hero-actions {
+  margin-top: var(--space-xl);
+}
+
+.landing-button-primary {
+  color: var(--color-accent-ink);
+  background: var(--color-accent-warm);
+  box-shadow: 0 1rem 2.5rem color-mix(in oklch, var(--color-accent-warm) 18%, transparent);
+}
+
+.landing-button-primary:hover {
+  background: var(--color-accent-warm-strong);
+}
+
+.landing-button-quiet {
+  padding-inline: var(--space-xs);
+  color: var(--color-accent-warm);
+  background: transparent;
+  border-color: transparent;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in oklch, var(--color-accent-warm) 55%, transparent);
+  text-underline-offset: 0.25rem;
+}
+
+.landing-button-quiet:hover {
+  color: var(--color-ink);
+  background: transparent;
+  border-color: transparent;
+}
+
+.landing-hero-visual {
+  min-width: 0;
+  padding: 0;
+}
+
+.landing-movies-hero {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.landing-mosaic-shell {
+  position: relative;
+  height: min(48rem, calc(100svh - 8rem));
+  min-height: 31rem;
+  padding-top: var(--space-lg);
+}
+
+.landing-mosaic-label {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.landing-mosaic-label .landing-eyebrow {
+  color: var(--color-accent-warm);
+}
+
+.landing-movie-mosaic {
+  display: grid;
+  grid-template-columns: minmax(0, 0.84fr) minmax(0, 1fr) minmax(0, 0.84fr);
+  align-items: stretch;
+  gap: clamp(var(--space-2xs), 1.4vw, var(--space-sm));
+  height: 100%;
+  overflow: hidden;
+  mask-image: linear-gradient(
+    180deg,
+    transparent,
+    black 7%,
+    black 86%,
+    transparent
+  );
+}
+
+.landing-movie-mosaic-column {
+  min-width: 0;
+  overflow: hidden;
+  mask-image: linear-gradient(180deg, transparent, black 14%, black 82%, transparent);
+}
+
+.landing-movie-mosaic-column-0 {
+  padding-top: 9%;
+}
+
+.landing-movie-mosaic-column-1 {
+  z-index: 1;
+  padding-top: 0;
+}
+
+.landing-movie-mosaic-column-2 {
+  padding-top: 5%;
+}
+
+.landing-movie-mosaic-track {
+  display: grid;
+  gap: clamp(var(--space-xs), 1.2vw, var(--space-md));
+  min-width: 0;
+  animation: landing-mosaic-loop 26s linear infinite;
+}
+
+.landing-movie-mosaic-column-0 .landing-movie-mosaic-track {
+  --mosaic-offset: -9%;
+  animation-duration: 31s;
+}
+
+.landing-movie-mosaic-column-1 .landing-movie-mosaic-track {
+  --mosaic-offset: -2%;
+  animation-duration: 35s;
+}
+
+.landing-movie-mosaic-column-2 .landing-movie-mosaic-track {
+  --mosaic-offset: -6%;
+  animation-duration: 29s;
+}
+
+.landing-movie-mosaic .landing-movie-card {
+  width: 100%;
+  filter: none;
+  transform: none;
+  transition: transform var(--dur-short) var(--ease-out), filter var(--dur-short) var(--ease-out);
+}
+
+.landing-movie-mosaic .landing-movie-card:hover {
+  transform: translateY(-0.25rem) scale(1.02);
+}
+
+.landing-movie-mosaic .landing-movie-poster {
+  width: 100%;
+  height: clamp(9.25rem, 16vw, 13rem);
+  border-color: color-mix(in oklch, var(--color-ink) 16%, transparent);
+  border-radius: var(--radius-panel);
+  box-shadow: 0 1.5rem 2rem -1.5rem color-mix(in oklch, var(--color-paper) 90%, transparent);
+}
+
+.landing-movie-mosaic .landing-movie-card-featured .landing-movie-poster,
+.landing-movie-mosaic-column-1 .landing-movie-card:nth-child(3n + 2) .landing-movie-poster {
+  height: clamp(12.5rem, 23vw, 18rem);
+}
+
+.landing-movie-mosaic .landing-movie-card-copy {
+  opacity: 0;
+}
+
+.landing-movie-mosaic .landing-movie-card:hover .landing-movie-card-copy {
+  opacity: 1;
+}
+
+@keyframes landing-mosaic-loop {
+  from {
+    transform: translateY(var(--mosaic-offset, 0));
+  }
+  to {
+    transform: translateY(calc(var(--mosaic-offset, 0) - 50%));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-movie-mosaic-track {
+    animation: none;
+  }
+}
+
+@media (min-width: 901px) {
+  .landing-home > .landing-hero {
+    grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
+    gap: clamp(var(--space-xl), 5vw, var(--space-3xl));
+    height: auto;
+  }
+
+  .landing-home .landing-hero-visual {
+    position: relative;
+    inset: auto;
+    width: auto;
+    margin: 0;
+  }
+}
+
+@media (max-width: 900px) {
+  .landing-home > .landing-hero {
+    gap: var(--space-2xl);
+  }
+
+  .landing-mosaic-shell {
+    height: 34rem;
+    min-height: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .landing-nav {
+    width: calc(100% - var(--space-md));
+    padding-inline: var(--space-xs);
+  }
+
+  .landing-home > .landing-hero {
+    gap: var(--space-xl);
+    padding-block: 5rem var(--space-2xl);
+  }
+
+  .landing-hero-kicker {
+    margin-bottom: var(--space-sm);
+  }
+
+  .landing-hero h1 {
+    max-width: 9ch;
+    font-size: clamp(2.7rem, 12vw, 4.2rem);
+  }
+
+  .landing-mosaic-shell {
+    height: 28rem;
+  }
+
+  .landing-movie-mosaic {
+    gap: var(--space-2xs);
+  }
+
+  .landing-movie-mosaic .landing-movie-poster {
+    height: 10.75rem;
+    border-radius: var(--radius-2xs);
+  }
+
+  .landing-movie-mosaic .landing-movie-card-featured .landing-movie-poster,
+  .landing-movie-mosaic-column-1 .landing-movie-card:nth-child(3n + 2) .landing-movie-poster {
+    height: 14.5rem;
+  }
+
 }

@@ -5,5 +5,12 @@
     "theme": "Midnight",
     "enrichment": "none",
     "brief": "Framezoo FE landing redesign preserving the dark red and amber playback style"
+  },
+  {
+    "date": "2026-10-23",
+    "macrostructure": "Marquee Hero",
+    "theme": "Midnight",
+    "enrichment": "vertical poster mosaic",
+    "brief": "Framezoo FE landing redesign using vixsrc.to reference DNA: split hero, floating pill nav, dotted canvas, staggered poster columns"
   }
 ]

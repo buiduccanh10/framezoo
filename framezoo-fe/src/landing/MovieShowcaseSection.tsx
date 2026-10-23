@@ -1,9 +1,4 @@
-import {
-  type PointerEvent as ReactPointerEvent,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { getConfiguredBackendUrl } from "@/backend/download";
 import { ensureGuestToken } from "@/backend/guestAuth";
@@ -137,16 +132,8 @@ export function MovieShowcaseSection({
 }: MovieShowcaseSectionProps) {
   const viewportRef = useRef<HTMLDivElement>(null);
   const loopRailRef = useRef<HTMLDivElement>(null);
-  const isHoveringRef = useRef(false);
-  const dragRef = useRef({
-    active: false,
-    pointerId: -1,
-    startX: 0,
-    scrollLeft: 0,
-  });
   const [movies, setMovies] = useState<MovieCard[]>(FALLBACK_MOVIES);
   const [isLoading, setIsLoading] = useState(true);
-  const [isDragging, setIsDragging] = useState(false);
   const backendUrl = getConfiguredBackendUrl();
 
   useEffect(() => {
@@ -189,7 +176,9 @@ export function MovieShowcaseSection({
 
   useEffect(() => {
     const viewport = viewportRef.current;
-    if (!viewport || isLoading || movies.length === 0) return;
+    if (variant === "hero" || !viewport || isLoading || movies.length === 0) {
+      return;
+    }
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const normalizeLoopPosition = () => {
@@ -211,7 +200,7 @@ export function MovieShowcaseSection({
     const intervalId = window.setInterval(() => {
       if (document.hidden) return;
 
-      viewport.scrollLeft += isHoveringRef.current ? 0.28 : 1;
+      viewport.scrollLeft += 1;
     }, 32);
 
     viewport.addEventListener("scroll", normalizeLoopPosition, {
@@ -222,11 +211,13 @@ export function MovieShowcaseSection({
       window.clearInterval(intervalId);
       viewport.removeEventListener("scroll", normalizeLoopPosition);
     };
-  }, [isLoading, movies.length]);
+  }, [isLoading, movies.length, variant]);
 
   useEffect(() => {
     const viewport = viewportRef.current;
-    if (!viewport || isLoading || movies.length === 0) return;
+    if (variant === "hero" || !viewport || isLoading || movies.length === 0) {
+      return;
+    }
 
     let frameId = 0;
 
@@ -276,63 +267,17 @@ export function MovieShowcaseSection({
       window.removeEventListener("resize", schedulePerspectiveUpdate);
       if (frameId !== 0) window.cancelAnimationFrame(frameId);
     };
-  }, [isLoading, movies.length]);
-
-  const handlePointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
-    const viewport = viewportRef.current;
-    if (!viewport || (event.pointerType === "mouse" && event.button !== 0)) {
-      return;
-    }
-
-    event.preventDefault();
-    dragRef.current = {
-      active: true,
-      pointerId: event.pointerId,
-      startX: event.clientX,
-      scrollLeft: viewport.scrollLeft,
-    };
-    viewport.setPointerCapture(event.pointerId);
-    setIsDragging(true);
-  };
-
-  const handlePointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
-    const viewport = viewportRef.current;
-    const drag = dragRef.current;
-    if (!viewport || !drag.active || drag.pointerId !== event.pointerId) return;
-
-    event.preventDefault();
-    viewport.scrollLeft =
-      drag.scrollLeft - (event.clientX - drag.startX) * 1.18;
-  };
-
-  const endPointerDrag = (event: ReactPointerEvent<HTMLDivElement>) => {
-    const viewport = viewportRef.current;
-    if (viewport?.hasPointerCapture(event.pointerId)) {
-      viewport.releasePointerCapture(event.pointerId);
-    }
-
-    dragRef.current.active = false;
-    setIsDragging(false);
-  };
-
-  const handlePointerEnter = (event: ReactPointerEvent<HTMLDivElement>) => {
-    if (event.pointerType === "mouse") {
-      isHoveringRef.current = true;
-    }
-  };
-
-  const handlePointerLeave = () => {
-    isHoveringRef.current = false;
-  };
+  }, [isLoading, movies.length, variant]);
 
   const renderMovieCard = (
     movie: MovieCard,
     index: number,
     groupIndex: number,
+    className = "",
   ) => {
     return (
       <article
-        className="landing-movie-card"
+        className={`landing-movie-card${className ? ` ${className}` : ""}`}
         key={`${groupIndex}:${movie.mediaType}:${movie.id}`}
       >
         <div className="landing-movie-poster">
@@ -354,6 +299,52 @@ export function MovieShowcaseSection({
     );
   };
 
+  if (variant === "hero") {
+    const sourceMovies = movies.length > 0 ? movies : FALLBACK_MOVIES;
+    const mosaicColumns = [0, 1, 2].map((columnIndex) => {
+      const columnMovies = Array.from(
+        { length: 6 },
+        (_, index) =>
+          sourceMovies[(index * 2 + columnIndex) % sourceMovies.length],
+      );
+
+      return [...columnMovies, ...columnMovies];
+    });
+
+    return (
+      <section
+        className="landing-movies landing-movies-hero"
+        id="movies"
+        aria-label={copy.title}
+      >
+        <div className="landing-mosaic-shell">
+          <div className="landing-mosaic-label">
+            <span className="landing-eyebrow">{copy.eyebrow}</span>
+          </div>
+          <div className="landing-movie-mosaic" aria-hidden="true">
+            {mosaicColumns.map((columnMovies, columnIndex) => (
+              <div
+                className={`landing-movie-mosaic-column landing-movie-mosaic-column-${columnIndex}`}
+                key={`mosaic-column-${columnIndex}`}
+              >
+                <div className="landing-movie-mosaic-track">
+                  {columnMovies.map((movie, index) =>
+                    renderMovieCard(
+                      movie,
+                      index % 6,
+                      columnIndex * 2 + Math.floor(index / 6),
+                      columnIndex === 1 ? "landing-movie-card-featured" : "",
+                    ),
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section
       className={`landing-movies landing-movies-${variant}`}
@@ -362,16 +353,7 @@ export function MovieShowcaseSection({
     >
       <div className="landing-movie-stage">
         <div className="landing-movie-stage-glow" aria-hidden="true" />
-        <div
-          ref={viewportRef}
-          className={`landing-movie-viewport${isDragging ? " is-dragging" : ""}`}
-          onPointerEnter={handlePointerEnter}
-          onPointerDown={handlePointerDown}
-          onPointerMove={handlePointerMove}
-          onPointerUp={endPointerDrag}
-          onPointerCancel={endPointerDrag}
-          onPointerLeave={handlePointerLeave}
-        >
+        <div ref={viewportRef} className="landing-movie-viewport">
           <div className="landing-movie-track">
             <div className="landing-movie-rail" ref={loopRailRef}>
               {isLoading
