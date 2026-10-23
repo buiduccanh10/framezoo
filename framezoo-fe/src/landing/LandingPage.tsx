@@ -132,6 +132,7 @@ export function LandingPage() {
           <a
             href="/"
             data-scroll-target="#top"
+            aria-current="page"
             onClick={handleLandingHashClick}
           >
             {activeCopy.nav.home}

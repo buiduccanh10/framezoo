@@ -73,10 +73,30 @@ export function LandingCategoryPage({ category }: LandingCategoryPageProps) {
         </a>
         <nav className="landing-nav-links" aria-label="Primary navigation">
           <a href="/">{activeCopy.nav.home}</a>
-          <a href="/experience">{activeCopy.nav.features}</a>
-          <a href="/ecosystem">{activeCopy.nav.addons}</a>
-          <a href="/create-addon">{activeCopy.nav.addonGuide}</a>
-          <a href="/download">{activeCopy.nav.download}</a>
+          <a
+            href="/experience"
+            aria-current={category === "experience" ? "page" : undefined}
+          >
+            {activeCopy.nav.features}
+          </a>
+          <a
+            href="/ecosystem"
+            aria-current={category === "ecosystem" ? "page" : undefined}
+          >
+            {activeCopy.nav.addons}
+          </a>
+          <a
+            href="/create-addon"
+            aria-current={category === "create-addon" ? "page" : undefined}
+          >
+            {activeCopy.nav.addonGuide}
+          </a>
+          <a
+            href="/download"
+            aria-current={category === "download" ? "page" : undefined}
+          >
+            {activeCopy.nav.download}
+          </a>
           <LandingLanguageSelector
             locale={locale}
             label={activeCopy.nav.language}

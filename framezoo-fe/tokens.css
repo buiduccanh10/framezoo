@@ -1,16 +1,16 @@
 :root {
-  --color-paper: oklch(11% 0.025 28);
-  --color-paper-2: oklch(15% 0.03 28);
-  --color-paper-3: oklch(19% 0.035 28);
-  --color-ink: oklch(98% 0.014 86);
-  --color-ink-2: oklch(78% 0.035 35);
-  --color-rule: oklch(42% 0.03 28 / 0.55);
-  --color-accent: oklch(65% 0.19 28);
-  --color-accent-strong: oklch(59% 0.19 28);
-  --color-accent-warm: oklch(94% 0.17 96);
-  --color-accent-warm-strong: oklch(90% 0.17 96);
-  --color-accent-ink: oklch(22% 0.05 55);
-  --color-focus: oklch(88% 0.15 96);
+  --color-paper: oklch(12% 0.018 44);
+  --color-paper-2: oklch(16% 0.022 44);
+  --color-paper-3: oklch(21% 0.026 44);
+  --color-ink: oklch(97% 0.012 86);
+  --color-ink-2: oklch(76% 0.028 48);
+  --color-rule: oklch(43% 0.022 44 / 0.58);
+  --color-accent: oklch(63% 0.13 34);
+  --color-accent-strong: oklch(57% 0.14 32);
+  --color-accent-warm: oklch(91% 0.13 88);
+  --color-accent-warm-strong: oklch(95% 0.11 89);
+  --color-accent-ink: oklch(24% 0.035 50);
+  --color-focus: oklch(87% 0.12 86);
 
   --font-display: "Avenir Next", "Helvetica Neue", "Segoe UI", sans-serif;
   --font-body: "Avenir Next", "Helvetica Neue", "Segoe UI", sans-serif;

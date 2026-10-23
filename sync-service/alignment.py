@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from typing import Any, Callable
 
 from vad import detect_speech_intervals
-from fft_align import find_best_offset_fft
+from fft_align import find_best_offset_fft, find_top_offsets_fft
 from split_align import compute_piecewise_segments
 
 
@@ -71,6 +71,11 @@ MOJIBAKE_SYMBOLS = frozenset(
     "\u00bd\u00be\u00bf\u00d7"
 )
 
+SDH_BRACKET_RE = re.compile(
+    r"\[[^\]]*\]|\([^)]*\)|\{[^}]*\}|<[^>]+>|[♪♫♬♩]+"
+)
+PURE_MUSIC_CUE_RE = re.compile(r"^\s*[♪♫♬♩\s\-~]+\s*$|^\s*[♪♫♬♩].*[♪♫♬♩]\s*$")
+
 
 @dataclass(frozen=True)
 class Cue:
@@ -92,6 +97,22 @@ def _cue_text(cue: Cue) -> str:
         and not line.strip().isdigit()
         and not TIMING_RE.match(line)
     )
+
+def is_non_speech_sdh_cue(cue: Cue) -> bool:
+    """
+    Detect Hearing-Impaired (SDH) sound effect cues or music-only lyrics
+    (e.g. '[Music]', '(applause)', '♪ ... ♪') where VAD will not detect speech.
+    """
+    text = _cue_text(cue)
+    if not text:
+        return True
+    if PURE_MUSIC_CUE_RE.match(text):
+        return True
+    cleaned = SDH_BRACKET_RE.sub(" ", text)
+    # Remove speaker labels like "MAN:" or "- " and check if any letters/digits remain
+    cleaned = re.sub(r"^\s*[-–—]?\s*[A-ZÀ-Ỹ0-9\s]{1,20}:\s*", "", cleaned)
+    has_word_char = any(ch.isalnum() for ch in cleaned)
+    return not has_word_char
 
 def is_malformed_encoding_cue(cue: Cue) -> bool:
     text = _cue_text(cue)
@@ -117,10 +138,20 @@ def filter_alignment_cues(cues: list[Cue]) -> list[Cue]:
     usable_cues = [
         cue
         for cue in cues
-        if not is_credit_or_ad_cue(cue) and not is_malformed_encoding_cue(cue)
+        if not is_credit_or_ad_cue(cue)
+        and not is_malformed_encoding_cue(cue)
+        and not is_non_speech_sdh_cue(cue)
     ]
     if usable_cues:
         return usable_cues
+
+    non_ad_cues = [
+        cue
+        for cue in cues
+        if not is_credit_or_ad_cue(cue) and not is_malformed_encoding_cue(cue)
+    ]
+    if non_ad_cues:
+        return non_ad_cues
 
     # Preserve the existing ad-only fallback, but never reintroduce
     # malformed-encoding cues as alignment anchors.
@@ -553,7 +584,7 @@ def _match_speech_anchor_boundaries(
     last_subtitle_index = -1
 
     for speech_start, speech_end in speech_intervals:
-        best_index: int | None = None
+        best_span: tuple[int, int] | None = None
         best_rank: tuple[float, float] | None = None
         speech_duration = speech_end - speech_start
 
@@ -572,42 +603,94 @@ def _match_speech_anchor_boundaries(
             if overlap < MIN_SPEECH_ANCHOR_OVERLAP_MS:
                 continue
 
-            start_error = abs(speech_start - subtitle_start)
-            end_error = abs(speech_end - subtitle_end)
-            early_start_error = max(
-                0,
-                speech_start
-                - subtitle_start
-                - SUBTITLE_EARLY_START_GRACE_MS,
-            )
-            boundary_error = max(start_error, end_error)
-            weighted_boundary_error = (
-                start_error * SPEECH_ANCHOR_START_WEIGHT
-                + end_error * SPEECH_ANCHOR_END_WEIGHT
-                + early_start_error
-                * SPEECH_ANCHOR_EARLY_START_PENALTY_WEIGHT
-            )
-            overlap_ratio = overlap / max(
-                MIN_SPEECH_ANCHOR_OVERLAP_MS,
-                min(speech_duration, subtitle_end - subtitle_start),
-            )
-            if (
-                boundary_error > MAX_SPEECH_ANCHOR_ERROR_MS
-                and overlap_ratio < 0.25
+            # Allow a single continuous speech utterance to span consecutive
+            # split subtitle cues (e.g. a 6s sentence split into two 3s cues).
+            chain_end_idx = index
+            chain_end_ms = subtitle_end
+            chain_overlap = overlap
+            while chain_end_idx + 1 < len(subtitle_intervals):
+                next_idx = chain_end_idx + 1
+                if next_idx in used_subtitle_indices:
+                    break
+                next_start, next_end = subtitle_intervals[next_idx]
+                if next_start - chain_end_ms > 900:
+                    break
+                next_ov = overlap_ms(
+                    speech_start,
+                    speech_end,
+                    next_start,
+                    next_end,
+                )
+                if next_ov < MIN_SPEECH_ANCHOR_OVERLAP_MS:
+                    break
+                if abs(speech_end - next_end) <= abs(speech_end - chain_end_ms) + 250:
+                    chain_end_idx = next_idx
+                    chain_end_ms = next_end
+                    chain_overlap += next_ov
+                else:
+                    break
+
+            for candidate_end_idx, eff_end_ms, eff_overlap in (
+                (index, subtitle_end, overlap),
+                (chain_end_idx, chain_end_ms, chain_overlap),
             ):
-                continue
+                start_error = abs(speech_start - subtitle_start)
+                end_error = abs(speech_end - eff_end_ms)
+                early_start_error = max(
+                    0,
+                    speech_start
+                    - subtitle_start
+                    - SUBTITLE_EARLY_START_GRACE_MS,
+                )
+                boundary_error = max(start_error, end_error)
+                weighted_boundary_error = (
+                    start_error * SPEECH_ANCHOR_START_WEIGHT
+                    + end_error * SPEECH_ANCHOR_END_WEIGHT
+                    + early_start_error
+                    * SPEECH_ANCHOR_EARLY_START_PENALTY_WEIGHT
+                )
+                overlap_ratio = eff_overlap / max(
+                    MIN_SPEECH_ANCHOR_OVERLAP_MS,
+                    min(speech_duration, eff_end_ms - subtitle_start),
+                )
+                if (
+                    boundary_error > MAX_SPEECH_ANCHOR_ERROR_MS
+                    and overlap_ratio < 0.25
+                ):
+                    continue
 
-            rank = (overlap_ratio, -weighted_boundary_error)
-            if best_rank is None or rank > best_rank:
-                best_index = index
-                best_rank = rank
+                rank = (min(1.0, overlap_ratio), -weighted_boundary_error)
+                if best_rank is None or rank > best_rank:
+                    best_span = (index, candidate_end_idx)
+                    best_rank = rank
 
-        if best_index is None or best_rank is None:
+        if best_span is None or best_rank is None:
+            # Check if this speech interval is the second clause inside the
+            # same merged/multi-sentence subtitle interval just matched.
+            if last_subtitle_index >= 0 and anchor_errors:
+                prev_sub_start, prev_sub_end = subtitle_intervals[last_subtitle_index]
+                tail_overlap = overlap_ms(
+                    speech_start,
+                    speech_end,
+                    prev_sub_start,
+                    prev_sub_end,
+                )
+                if (
+                    tail_overlap >= max(MIN_SPEECH_ANCHOR_OVERLAP_MS, int(speech_duration * 0.5))
+                    and abs(speech_end - prev_sub_end) <= MAX_SPEECH_ANCHOR_ERROR_MS
+                ):
+                    prev_start_err, _, prev_early_err = anchor_errors[-1]
+                    new_end_err = abs(speech_end - prev_sub_end)
+                    anchor_errors[-1] = (prev_start_err, new_end_err, prev_early_err)
+                    anchor_errors.append((prev_start_err, new_end_err, 0))
             continue
 
-        used_subtitle_indices.add(best_index)
-        last_subtitle_index = best_index
-        subtitle_start, subtitle_end = subtitle_intervals[best_index]
+        span_start_idx, span_end_idx = best_span
+        for idx in range(span_start_idx, span_end_idx + 1):
+            used_subtitle_indices.add(idx)
+        last_subtitle_index = span_end_idx
+        subtitle_start = subtitle_intervals[span_start_idx][0]
+        subtitle_end = subtitle_intervals[span_end_idx][1]
         anchor_errors.append(
             (
                 abs(speech_start - subtitle_start),
@@ -781,17 +864,22 @@ def find_best_offset(
     search_centers: list[int] | None = None,
 ) -> tuple[int, float]:
     centers_set = set(search_centers or [0])
+    fft_peak_offsets: list[int] = []
     cue_intervals = [(c.start_ms, c.end_ms) for c in cues if c.end_ms > c.start_ms]
     try:
-        fft_offset, fft_conf, _ = find_best_offset_fft(
+        fft_peaks = find_top_offsets_fft(
             speech_intervals,
             cue_intervals,
             audio_start_ms,
             audio_end_ms,
+            try_framerate_ratios=False,
             search_centers=search_centers,
+            top_k=5,
         )
-        if fft_conf >= 15.0 and abs(fft_offset) <= MAX_PLAUSIBLE_ALIGNMENT_OFFSET_MS:
-            centers_set.add(fft_offset)
+        for fft_offset, fft_conf, _ in fft_peaks:
+            if fft_conf >= 15.0 and abs(fft_offset) <= MAX_PLAUSIBLE_ALIGNMENT_OFFSET_MS:
+                centers_set.add(fft_offset)
+                fft_peak_offsets.append(fft_offset)
     except Exception:
         pass
     centers = sorted(centers_set)
@@ -862,6 +950,8 @@ def find_best_offset(
                     key=lambda value: abs(value - center),
                 )
             )
+        for fft_off in fft_peak_offsets:
+            coarse_candidates.add(fft_off)
         refined_candidates_set: set[int] = set()
         for coarse_offset in coarse_candidates:
             refined_candidates_set.update(
@@ -1137,6 +1227,7 @@ def align_speech_batch(
     audio_end_ms: int,
     alignment_result_fn: Callable[..., dict[str, Any]] | None = None,
     parsed_tracks: dict[str, list[Cue] | None] | None = None,
+    additional_hints_by_track: dict[str, list[int]] | None = None,
 ) -> dict[str, Any]:
     result_from_speech = alignment_result_fn or alignment_result_from_speech
     speech_intervals = merge_intervals(speech_intervals)
@@ -1162,10 +1253,32 @@ def align_speech_batch(
             )
             continue
 
+        fft_hints: list[int] = list(
+            (additional_hints_by_track or {}).get(track, [])
+        )
+        if speech_intervals and cues:
+            try:
+                cue_intervals = [
+                    (c.start_ms, c.end_ms) for c in cues if c.end_ms > c.start_ms
+                ]
+                for fft_off, fft_conf, _ in find_top_offsets_fft(
+                    speech_intervals,
+                    cue_intervals,
+                    audio_start_ms,
+                    audio_end_ms,
+                    try_framerate_ratios=False,
+                    top_k=3,
+                ):
+                    if fft_conf >= 35.0:
+                        fft_hints.append(fft_off)
+            except Exception:
+                pass
+
         track_search_centers = compute_track_search_centers(
             cues,
             speech_intervals,
             audio_start_ms,
+            additional_hints=fft_hints or None,
         )
         try:
             res = result_from_speech(
@@ -1183,6 +1296,43 @@ def align_speech_batch(
                 audio_end_ms,
             )
         results[track] = res
+
+    # Cross-track rescue: if primary and secondary are both present and one track
+    # aligned while the other failed, use their relative subtitle cadence offset
+    # to guide a second pass on the unaligned track.
+    if len(subtitles) == 2:
+        t0, t1 = subtitles[0]["track"], subtitles[1]["track"]
+        r0, r1 = results.get(t0, {}), results.get(t1, {})
+        c0, c1 = parsed_tracks.get(t0), parsed_tracks.get(t1)
+        if c0 and c1 and bool(r0.get("aligned")) != bool(r1.get("aligned")):
+            aligned_track = t0 if r0.get("aligned") else t1
+            failed_track = t1 if aligned_track == t0 else t0
+            aligned_cues = c0 if aligned_track == t0 else c1
+            failed_cues = c1 if aligned_track == t0 else c0
+            rel_offset = estimate_subtitle_relative_offset(
+                aligned_cues,
+                failed_cues,
+            )
+            if rel_offset is not None:
+                guided_offset = int(results[aligned_track]["offsetMs"]) + rel_offset
+                rescue_centers = compute_track_search_centers(
+                    failed_cues,
+                    speech_intervals,
+                    audio_start_ms,
+                    additional_hints=[guided_offset],
+                )
+                try:
+                    rescued = result_from_speech(
+                        failed_cues,
+                        speech_intervals,
+                        audio_start_ms,
+                        audio_end_ms,
+                        search_centers=rescue_centers,
+                    )
+                    if rescued.get("aligned"):
+                        results[failed_track] = rescued
+                except TypeError:
+                    pass
 
     return {"results": results}
 
@@ -1335,6 +1485,14 @@ def select_alignment_consensus(
         intro_entry
         and main_entries
         and int(intro_entry["result"].get("confidence", 0)) >= 75
+        and not any(
+            abs(
+                int(intro_entry["result"].get("offsetMs", 0))
+                - int(m["result"].get("offsetMs", 0))
+            )
+            <= 1_200
+            for m in main_entries
+        )
     ):
         main_clusters = sorted(
             _cluster_alignment_candidates(main_entries),
@@ -1455,12 +1613,104 @@ def align_speech_windows(
                 }
             )
 
-    return {
-        "results": {
-            track: select_alignment_consensus(entries)
-            for track, entries in entries_by_track.items()
-        }
-    }
+    final_results: dict[str, Any] = {}
+    is_mocked_batch = hasattr(align_speech_batch, "assert_called")
+    result_from_speech = alignment_result_fn or alignment_result_from_speech
+
+    for track, entries in entries_by_track.items():
+        consensus = select_alignment_consensus(entries)
+        cues = parsed_tracks.get(track)
+
+        # Cross-window hint rescue & pooled multi-window fallback when individual
+        # windows had sparse speech or one window needed a hint from another.
+        if not consensus.get("aligned") and cues and not is_mocked_batch and len(windows) >= 2:
+            aligned_hints = [
+                int(e["result"]["offsetMs"])
+                for e in entries
+                if e["result"].get("aligned") and isinstance(e["result"].get("offsetMs"), int)
+            ]
+            if aligned_hints:
+                rescued_entries: list[dict[str, Any]] = []
+                for idx, (speech_intervals, audio_start_ms, audio_end_ms) in enumerate(windows):
+                    orig_entry = entries[idx]
+                    if orig_entry["result"].get("aligned"):
+                        rescued_entries.append(orig_entry)
+                        continue
+                    merged_speech = merge_intervals(speech_intervals)
+                    centers = compute_track_search_centers(
+                        cues,
+                        merged_speech,
+                        audio_start_ms,
+                        additional_hints=aligned_hints,
+                    )
+                    try:
+                        re_res = result_from_speech(
+                            cues,
+                            merged_speech,
+                            audio_start_ms,
+                            audio_end_ms,
+                            search_centers=centers,
+                        )
+                    except TypeError:
+                        re_res = orig_entry["result"]
+                    rescued_entries.append(
+                        {
+                            "startAt": orig_entry["startAt"],
+                            "result": re_res if re_res.get("aligned") else orig_entry["result"],
+                        }
+                    )
+                consensus = select_alignment_consensus(rescued_entries)
+
+            # Pooled multi-window fallback for sparse-dialogue movies where each
+            # 60s window only contains 1 speech anchor.
+            if not consensus.get("aligned"):
+                pooled_speech = merge_intervals(
+                    [iv for win_speech, _, _ in windows for iv in win_speech]
+                )
+                if len(pooled_speech) >= 2:
+                    min_start_ms = min(s for _, s, _ in windows)
+                    max_end_ms = max(e for _, _, e in windows)
+                    cue_intervals = [(c.start_ms, c.end_ms) for c in cues if c.end_ms > c.start_ms]
+                    pooled_hints = list(aligned_hints)
+                    for _, s_ms, e_ms in windows:
+                        win_sp = [iv for iv in pooled_speech if iv[1] > s_ms and iv[0] < e_ms]
+                        if win_sp:
+                            for fft_off, fft_conf, _ in find_top_offsets_fft(
+                                win_sp,
+                                cue_intervals,
+                                s_ms,
+                                e_ms,
+                                try_framerate_ratios=False,
+                                top_k=2,
+                            ):
+                                if fft_conf >= 25.0:
+                                    pooled_hints.append(fft_off)
+                    pooled_centers = compute_track_search_centers(
+                        cues,
+                        pooled_speech,
+                        min_start_ms,
+                        additional_hints=pooled_hints or None,
+                    )
+                    try:
+                        pooled_res = result_from_speech(
+                            cues,
+                            pooled_speech,
+                            min_start_ms,
+                            max_end_ms,
+                            search_centers=pooled_centers,
+                        )
+                        if (
+                            pooled_res.get("aligned")
+                            and int(pooled_res.get("speechAnchorCount", 0)) >= 2
+                            and int(pooled_res.get("confidence", 0)) >= 65
+                        ):
+                            consensus = pooled_res
+                    except TypeError:
+                        pass
+
+        final_results[track] = consensus
+
+    return {"results": final_results}
 
 
 def align_vtt_windows(

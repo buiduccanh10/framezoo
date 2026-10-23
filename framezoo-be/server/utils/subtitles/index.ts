@@ -11,18 +11,18 @@ export * from './types';
 export * from './languages';
 
 const SOURCE_PRIORITY: Record<string, number> = {
-  wyzie: 0,
-  opensubs: 1,
-  subsource: 2,
+  subsource: 0,
+  wyzie: 1,
+  opensubs: 2,
   granite: 3,
 };
 
 function getSourcePriority(source?: string): number {
   if (!source) return 99;
   const lower = source.toLowerCase();
+  if (lower.includes('subsource')) return SOURCE_PRIORITY.subsource;
   if (lower.includes('wyzie')) return SOURCE_PRIORITY.wyzie;
   if (lower.includes('opensubs')) return SOURCE_PRIORITY.opensubs;
-  if (lower.includes('subsource')) return SOURCE_PRIORITY.subsource;
   if (lower.includes('granite')) return SOURCE_PRIORITY.granite;
   return 99;
 }
@@ -31,7 +31,9 @@ export async function resolveSubtitleContext(
   type: 'movie' | 'series',
   idParam: string
 ): Promise<SubtitleSearchContext> {
-  const cleanId = decodeURIComponent(idParam).replace(/\.json$/, '').trim();
+  const cleanId = decodeURIComponent(idParam)
+    .replace(/\.json$/, '')
+    .trim();
   const parts = cleanId.split(':');
   const baseId = parts[0];
 
@@ -133,12 +135,13 @@ export async function searchAllSubtitles(
     preferredLanguages?: string[];
   }
 ): Promise<StremioSubtitle[]> {
-  const downloadBaseUrl = options?.subsourceDownloadBaseUrl || '/addon/subtitles/download/subsource';
+  const downloadBaseUrl =
+    options?.subsourceDownloadBaseUrl || '/addon/subtitles/download/subsource';
 
   const results = await Promise.allSettled([
+    fetchSubsourceSubtitlesList(context, options?.subsourceApiKey, downloadBaseUrl),
     fetchWyzieSubtitles(context, options?.wyzieApiKey, options?.preferredLanguages),
     fetchOpenSubtitles(context),
-    fetchSubsourceSubtitlesList(context, options?.subsourceApiKey, downloadBaseUrl),
     fetchVdrkSubtitles(context),
   ]);
 

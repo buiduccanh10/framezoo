@@ -690,6 +690,75 @@ would you use a place like this?
             delta=750,
         )
 
+    def test_filters_non_speech_sdh_and_music_cues(self):
+        vtt = """WEBVTT
+
+00:00:02.000 --> 00:00:06.000
+[Dramatic music playing]
+
+00:00:07.000 --> 00:00:11.000
+♪ Ooh la la ♪
+
+00:00:12.000 --> 00:00:15.000
+(Thunder rumbles)
+
+00:00:25.000 --> 00:00:29.000
+We need to leave right now.
+
+00:00:35.000 --> 00:00:39.000
+There is no time left.
+"""
+        cues = parse_alignment_cues(vtt)
+        self.assertEqual(len(cues), 2)
+        self.assertEqual(cues[0].start_ms, 25_000)
+        self.assertEqual(cues[1].start_ms, 35_000)
+
+    def test_matches_continuous_speech_spanning_split_subtitle_cues(self):
+        # Actor speaks continuously from 10s to 16s, split into two cues in VTT
+        vtt = """WEBVTT
+
+00:00:12.000 --> 00:00:14.700
+First half of a continuous sentence,
+
+00:00:15.100 --> 00:00:18.000
+and the second half right after.
+
+00:00:25.000 --> 00:00:28.000
+Another line of dialogue.
+"""
+        cues = parse_alignment_cues(vtt)
+        speech = [(10_000, 16_000), (23_000, 26_000)]
+        res = alignment_result_from_speech(cues, speech, 0, 40_000)
+        self.assertTrue(res["aligned"])
+        self.assertAlmostEqual(res["offsetMs"], -2_000, delta=250)
+        self.assertGreaterEqual(res["confidence"], 80)
+
+    def test_pooled_multi_window_fallback_rescues_sparse_dialogue_movie(self):
+        # Each 60s window only has 1 short utterance (which alone has 1 anchor < 80 conf),
+        # but across 3 windows they all agree on offset = -3000ms.
+        vtt = """WEBVTT
+
+00:00:13.000 --> 00:00:15.000
+Hello there.
+
+00:02:13.000 --> 00:02:15.000
+Are you ready?
+
+00:04:13.000 --> 00:04:15.000
+Let's move out.
+"""
+        windows = [
+            ([(10_000, 12_000)], 0, 60_000),
+            ([(130_000, 132_000)], 120_000, 180_000),
+            ([(250_000, 252_000)], 240_000, 300_000),
+        ]
+        result = align_speech_windows(
+            windows,
+            [{"track": "primary", "vttData": vtt}],
+        )
+        self.assertTrue(result["results"]["primary"]["aligned"])
+        self.assertAlmostEqual(result["results"]["primary"]["offsetMs"], -3_000, delta=250)
+
 
 if __name__ == "__main__":
     unittest.main()

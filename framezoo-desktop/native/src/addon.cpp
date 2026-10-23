@@ -895,6 +895,7 @@ void run_audio_extraction(AudioExtractionRequest* request) {
       !set_option("audio-format", "s16") ||
       !set_option("audio-channels", "mono") ||
       !set_option("audio-samplerate", "16000") ||
+      !set_option("hr-seek", "yes") ||
       !set_option("start", start_value.c_str()) ||
       !set_option("length", length_value.c_str()) ||
       !set_option("pause", "yes") ||

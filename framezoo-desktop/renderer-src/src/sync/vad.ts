@@ -1,6 +1,6 @@
 /**
- * Silero VAD (v5) inference runner in browser / WebWorker using onnxruntime-web.
- * Model size: ~1.2MB.
+ * Silero VAD (v6) inference runner in browser / WebWorker using onnxruntime-web.
+ * Model size: ~2.2MB.
  * Runs in < 50ms for 60s audio.
  */
 
@@ -8,8 +8,11 @@ import * as ort from "onnxruntime-web";
 
 export const SILERO_SAMPLE_RATE = 16_000;
 export const FRAME_SAMPLES = 512; // 32ms at 16kHz
-export const CONTEXT_SIZE = 64; // Silero VAD v5 requires 64 context samples (input length = 576)
+export const CONTEXT_SIZE = 64; // Silero VAD v5/v6 requires 64 context samples (input length = 576)
 export const VAD_THRESHOLD = 0.45;
+export const VAD_NEG_THRESHOLD_OFFSET = 0.15;
+export const MIN_SILENCE_FRAMES = 2; // ~64ms hangover to prevent mid-word dropouts
+export const SPEECH_PAD_MS = 30; // Pad speech onset/offset by 30ms for consonant boundaries
 export const MIN_SPEECH_INTERVAL_MS = 100;
 export const MERGE_SPEECH_GAP_MS = 300;
 
@@ -89,7 +92,8 @@ export function mergeSpeechIntervals(
 }
 
 /**
- * Detect speech intervals from 16kHz Float32Array audio using Silero VAD v5.
+ * Detect speech intervals from 16kHz Float32Array audio using Silero VAD v6
+ * with dual-threshold hysteresis and onset/offset padding.
  */
 export async function detectSpeechIntervals(
   audio: Float32Array,
@@ -102,8 +106,16 @@ export async function detectSpeechIntervals(
   const numSamples = samples.length;
   if (numSamples < FRAME_SAMPLES) return [];
 
+  const negThreshold = Math.max(0.15, threshold - VAD_NEG_THRESHOLD_OFFSET);
+  const frameDurationMs = Math.round(
+    (FRAME_SAMPLES / SILERO_SAMPLE_RATE) * 1000,
+  );
+  const totalDurationMs =
+    audioStartMs + Math.round((numSamples / SILERO_SAMPLE_RATE) * 1000);
+
   const rawIntervals: Array<[number, number]> = [];
   let currentSpeechStart: number | null = null;
+  let silenceFrames = 0;
 
   // Hidden state tensor: [2, 1, 128]
   let stateTensor: ort.Tensor = new ort.Tensor(
@@ -117,7 +129,7 @@ export async function detectSpeechIntervals(
     [],
   );
 
-  // Silero VAD v5 requires 64 context samples prepended to each 512-sample frame
+  // Silero VAD v6 requires 64 context samples prepended to each 512-sample frame
   const contextData = new Float32Array(CONTEXT_SIZE);
 
   for (let offset = 0; offset < numSamples; offset += FRAME_SAMPLES) {
@@ -155,21 +167,33 @@ export async function detectSpeechIntervals(
     const frameStartMs =
       audioStartMs + Math.round((offset / SILERO_SAMPLE_RATE) * 1000);
 
-    if (prob >= threshold) {
-      if (currentSpeechStart === null) {
-        currentSpeechStart = frameStartMs;
+    if (currentSpeechStart === null) {
+      if (prob >= threshold) {
+        currentSpeechStart = Math.max(
+          audioStartMs,
+          frameStartMs - SPEECH_PAD_MS,
+        );
+        silenceFrames = 0;
       }
+    } else if (prob >= negThreshold) {
+      silenceFrames = 0;
     } else {
-      if (currentSpeechStart !== null) {
-        rawIntervals.push([currentSpeechStart, frameStartMs]);
+      silenceFrames += 1;
+      if (silenceFrames >= MIN_SILENCE_FRAMES) {
+        const speechEndMs = Math.min(
+          totalDurationMs,
+          frameStartMs - (silenceFrames - 1) * frameDurationMs + SPEECH_PAD_MS,
+        );
+        if (speechEndMs > currentSpeechStart) {
+          rawIntervals.push([currentSpeechStart, speechEndMs]);
+        }
         currentSpeechStart = null;
+        silenceFrames = 0;
       }
     }
   }
 
   if (currentSpeechStart !== null) {
-    const totalDurationMs =
-      audioStartMs + Math.round((numSamples / SILERO_SAMPLE_RATE) * 1000);
     rawIntervals.push([currentSpeechStart, totalDurationMs]);
   }
 

@@ -8,9 +8,6 @@ from typing import Any
 from vad import get_vad_session
 
 
-class ModelArch(Enum):
-    TINY = 1
-    BASE = 2
 
 
 class Transcriber:
@@ -19,7 +16,7 @@ class Transcriber:
 
 
 def get_model_for_language(wanted_language: str, wanted_model_arch: Any = None):
-    return "silero_vad_v5", ModelArch.TINY
+    return "silero_vad_v6"
 
 
 LANGUAGE_RE = re.compile(
@@ -66,7 +63,7 @@ def normalize_language(language: str) -> str:
 
 
 def resolve_model_arch() -> str:
-    return "silero_vad_v5"
+    return "silero_vad_v6"
 
 
 def get_transcriber(language: str = "en") -> Any:

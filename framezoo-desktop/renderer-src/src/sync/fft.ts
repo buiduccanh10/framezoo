@@ -5,6 +5,8 @@
 
 export const FRAME_MS = 25; // 25ms per bin (40 frames per second)
 export const MAX_SEARCH_OFFSET_MS = 180_000; // ±3 minutes search range
+export const ONSET_BOOST_FRAMES = 8; // First 200ms of an utterance/cue receives onset emphasis
+export const ONSET_BOOST_WEIGHT = 1.45;
 
 export const FRAMERATE_RATIOS = [
   1.0,
@@ -96,13 +98,15 @@ function nextPow2(x: number): number {
 }
 
 /**
- * Convert speech or subtitle intervals [(start_ms, end_ms), ...] to binary float profile.
+ * Convert speech or subtitle intervals [(start_ms, end_ms), ...] to float profile
+ * with optional onset boundary boost.
  */
 export function intervalsToSignal(
   intervals: Array<[number, number]>,
   originMs: number,
   durationMs: number,
   frameMs: number = FRAME_MS,
+  onsetWeight = 1.0,
 ): Float32Array {
   const nFrames = Math.max(1, Math.ceil(durationMs / frameMs));
   const signal = new Float32Array(nFrames);
@@ -120,7 +124,13 @@ export function intervalsToSignal(
       Math.ceil((clippedEnd - originMs) / frameMs),
     );
     for (let f = startFrame; f < endFrame; f++) {
-      signal[f] = 1.0;
+      if (signal[f]! < 1.0) signal[f] = 1.0;
+    }
+    if (onsetWeight > 1.0 && startMs >= originMs) {
+      const onsetEnd = Math.min(endFrame, startFrame + ONSET_BOOST_FRAMES);
+      for (let f = startFrame; f < onsetEnd; f++) {
+        if (signal[f]! < onsetWeight) signal[f] = onsetWeight;
+      }
     }
   }
   return signal;
@@ -162,6 +172,208 @@ export function fftConvolveCorrelation(
   return realProd.subarray(0, outLen);
 }
 
+export interface FftOffsetCandidate {
+  offsetMs: number;
+  confidence: number;
+  ratio: number;
+}
+
+/**
+ * Return up to topK distinct candidate peaks using local-window energy normalized
+ * FFT cross-correlation with onset emphasis.
+ * Offset convention: speech_time = subtitle_time + offsetMs.
+ */
+export function findTopOffsetsFft(
+  speechIntervals: Array<[number, number]>,
+  subtitleIntervals: Array<[number, number]>,
+  audioStartMs: number,
+  audioEndMs: number,
+  maxOffsetMs: number = MAX_SEARCH_OFFSET_MS,
+  tryFramerateRatios = false,
+  searchCenters: number[] | null = null,
+  topK = 5,
+  minSeparationMs = 1500,
+): FftOffsetCandidate[] {
+  if (speechIntervals.length === 0 || subtitleIntervals.length === 0) {
+    return [];
+  }
+
+  const durationMs = audioEndMs - audioStartMs;
+  if (durationMs <= 0) {
+    return [];
+  }
+
+  const refSignal = intervalsToSignal(
+    speechIntervals,
+    audioStartMs,
+    durationMs,
+    FRAME_MS,
+    ONSET_BOOST_WEIGHT,
+  );
+  const nRef = refSignal.length;
+  let refEnergy = 0;
+  for (let i = 0; i < nRef; i++) {
+    refEnergy += refSignal[i]! * refSignal[i]!;
+  }
+  if (refEnergy <= 0) {
+    return [];
+  }
+
+  const ratios = tryFramerateRatios ? FRAMERATE_RATIOS : [1.0];
+  const queryOriginMs = audioStartMs - maxOffsetMs;
+  const queryDurationMs = durationMs + 2 * maxOffsetMs;
+  const maxOffsetFrames = Math.floor(maxOffsetMs / FRAME_MS);
+
+  const rawCandidates: Array<{
+    offsetMs: number;
+    score: number;
+    ratio: number;
+  }> = [];
+
+  for (const ratio of ratios) {
+    const scaledSubs: Array<[number, number]> =
+      ratio === 1.0
+        ? subtitleIntervals
+        : subtitleIntervals.map(([s, e]) => [
+            Math.round(audioStartMs + (s - audioStartMs) * ratio),
+            Math.round(audioStartMs + (e - audioStartMs) * ratio),
+          ]);
+
+    const querySignal = intervalsToSignal(
+      scaledSubs,
+      queryOriginMs,
+      queryDurationMs,
+      FRAME_MS,
+      ONSET_BOOST_WEIGHT,
+    );
+    const nQuery = querySignal.length;
+    const querySqCumsum = new Float64Array(nQuery + 1);
+    for (let i = 0; i < nQuery; i++) {
+      const v = querySignal[i]!;
+      querySqCumsum[i + 1] = querySqCumsum[i]! + v * v;
+    }
+    if (querySqCumsum[nQuery]! <= 0) continue;
+
+    const corr = fftConvolveCorrelation(refSignal, querySignal);
+    const zeroK = nQuery - 1;
+
+    const lowK = Math.max(0, zeroK - 2 * maxOffsetFrames);
+    const highK = Math.min(corr.length, zeroK + 1);
+    if (lowK >= highK) continue;
+
+    const ratioPenalty = ratio === 1.0 ? 1.0 : 0.985;
+    const minQueryEnergy = refEnergy * 0.2;
+
+    if (ratio === 1.0) {
+      const binScores: Array<{ k: number; score: number }> = [];
+      for (let k = lowK; k < highK; k++) {
+        const val = corr[k]!;
+        if (val <= 0) continue;
+        const qStart = Math.max(0, Math.min(nQuery, zeroK - k));
+        const qEnd = Math.max(0, Math.min(nQuery, qStart + nRef));
+        const localQEnergy = querySqCumsum[qEnd]! - querySqCumsum[qStart]!;
+        if (localQEnergy <= 0) continue;
+        const denom = Math.sqrt(
+          refEnergy * Math.max(localQEnergy, minQueryEnergy),
+        );
+        if (denom <= 0) continue;
+        const normScore = Math.min(
+          1.0,
+          Math.max(0.0, (val / denom) * ratioPenalty),
+        );
+        if (normScore > 0) {
+          binScores.push({ k, score: normScore });
+        }
+      }
+      binScores.sort((a, b) => b.score - a.score);
+      let picked = 0;
+      for (const item of binScores) {
+        const lag = item.k - zeroK;
+        const offsetMs = lag * FRAME_MS + maxOffsetMs;
+        if (
+          rawCandidates.some(
+            (c) =>
+              c.ratio === 1.0 &&
+              Math.abs(c.offsetMs - offsetMs) < minSeparationMs,
+          )
+        ) {
+          continue;
+        }
+        let adjustedScore = item.score;
+        if (searchCenters && searchCenters.length > 0) {
+          let closestDist = Infinity;
+          for (const c of searchCenters) {
+            const d = Math.abs(offsetMs - c);
+            if (d < closestDist) closestDist = d;
+          }
+          if (closestDist < 1000) adjustedScore *= 1.05;
+        }
+        rawCandidates.push({ offsetMs, score: adjustedScore, ratio });
+        picked += 1;
+        if (picked >= topK) break;
+      }
+    } else {
+      let bestK = -1;
+      let bestRatioScore = 0;
+      for (let k = lowK; k < highK; k++) {
+        const val = corr[k]!;
+        if (val <= 0) continue;
+        const qStart = Math.max(0, Math.min(nQuery, zeroK - k));
+        const qEnd = Math.max(0, Math.min(nQuery, qStart + nRef));
+        const localQEnergy = querySqCumsum[qEnd]! - querySqCumsum[qStart]!;
+        if (localQEnergy <= 0) continue;
+        const denom = Math.sqrt(
+          refEnergy * Math.max(localQEnergy, minQueryEnergy),
+        );
+        if (denom <= 0) continue;
+        const normScore = Math.min(
+          1.0,
+          Math.max(0.0, (val / denom) * ratioPenalty),
+        );
+        if (normScore > bestRatioScore) {
+          bestRatioScore = normScore;
+          bestK = k;
+        }
+      }
+      if (bestK >= 0 && bestRatioScore > 0) {
+        const lag = bestK - zeroK;
+        const offsetMs = lag * FRAME_MS + maxOffsetMs;
+        let adjustedScore = bestRatioScore;
+        if (searchCenters && searchCenters.length > 0) {
+          let closestDist = Infinity;
+          for (const c of searchCenters) {
+            const d = Math.abs(offsetMs - c);
+            if (d < closestDist) closestDist = d;
+          }
+          if (closestDist < 1000) adjustedScore *= 1.05;
+        }
+        rawCandidates.push({ offsetMs, score: adjustedScore, ratio });
+      }
+    }
+  }
+
+  rawCandidates.sort((a, b) => b.score - a.score);
+  const deduped: FftOffsetCandidate[] = [];
+  for (const cand of rawCandidates) {
+    if (
+      deduped.some(
+        (ex) => Math.abs(ex.offsetMs - cand.offsetMs) < minSeparationMs,
+      )
+    ) {
+      continue;
+    }
+    const confidence = Math.round(Math.min(1.0, cand.score) * 1000) / 10;
+    deduped.push({
+      offsetMs: cand.offsetMs,
+      confidence,
+      ratio: cand.ratio,
+    });
+    if (deduped.length >= topK) break;
+  }
+
+  return deduped;
+}
+
 /**
  * Find best (offsetMs, confidence, ratio) using FFT cross-correlation.
  * Offset convention: speech_time = subtitle_time + offsetMs.
@@ -175,101 +387,18 @@ export function findBestOffsetFft(
   tryFramerateRatios = true,
   searchCenters: number[] | null = null,
 ): { offsetMs: number; confidence: number; ratio: number } {
-  if (speechIntervals.length === 0 || subtitleIntervals.length === 0) {
-    return { offsetMs: 0, confidence: 0, ratio: 1.0 };
-  }
-
-  const durationMs = audioEndMs - audioStartMs;
-  if (durationMs <= 0) {
-    return { offsetMs: 0, confidence: 0, ratio: 1.0 };
-  }
-
-  const refSignal = intervalsToSignal(
+  const peaks = findTopOffsetsFft(
     speechIntervals,
+    subtitleIntervals,
     audioStartMs,
-    durationMs,
-    FRAME_MS,
+    audioEndMs,
+    maxOffsetMs,
+    tryFramerateRatios,
+    searchCenters,
+    1,
   );
-  let refEnergy = 0;
-  for (let i = 0; i < refSignal.length; i++) {
-    refEnergy += refSignal[i]! * refSignal[i]!;
-  }
-  if (refEnergy <= 0) {
+  if (peaks.length === 0) {
     return { offsetMs: 0, confidence: 0, ratio: 1.0 };
   }
-
-  const ratios = tryFramerateRatios ? FRAMERATE_RATIOS : [1.0];
-  let bestOffsetMs = 0;
-  let bestScore = 0;
-  let bestRatio = 1.0;
-
-  const queryOriginMs = audioStartMs - maxOffsetMs;
-  const queryDurationMs = durationMs + 2 * maxOffsetMs;
-  const maxOffsetFrames = Math.floor(maxOffsetMs / FRAME_MS);
-
-  for (const ratio of ratios) {
-    const scaledSubs: Array<[number, number]> =
-      ratio === 1.0
-        ? subtitleIntervals
-        : subtitleIntervals.map(([s, e]) => [
-            Math.round(s * ratio),
-            Math.round(e * ratio),
-          ]);
-
-    const querySignal = intervalsToSignal(
-      scaledSubs,
-      queryOriginMs,
-      queryDurationMs,
-      FRAME_MS,
-    );
-    let queryEnergy = 0;
-    for (let i = 0; i < querySignal.length; i++) {
-      queryEnergy += querySignal[i]! * querySignal[i]!;
-    }
-    if (queryEnergy <= 0) continue;
-
-    const corr = fftConvolveCorrelation(refSignal, querySignal);
-    const zeroK = querySignal.length - 1;
-
-    // k in [zeroK - 2 * maxOffsetFrames, zeroK]
-    const lowK = Math.max(0, zeroK - 2 * maxOffsetFrames);
-    const highK = Math.min(corr.length, zeroK + 1);
-    if (lowK >= highK) continue;
-
-    let bestK = -1;
-    let maxVal = -Infinity;
-    for (let k = lowK; k < highK; k++) {
-      const val = corr[k]!;
-      if (val > maxVal) {
-        maxVal = val;
-        bestK = k;
-      }
-    }
-
-    if (bestK < 0 || maxVal <= 0) continue;
-
-    const lag = bestK - zeroK;
-    const offsetMs = lag * FRAME_MS + maxOffsetMs;
-
-    let normScore = maxVal / Math.sqrt(refEnergy * queryEnergy);
-    normScore = Math.min(1.0, Math.max(0.0, normScore));
-
-    if (searchCenters && searchCenters.length > 0) {
-      let closestDist = Infinity;
-      for (const c of searchCenters) {
-        const d = Math.abs(offsetMs - c);
-        if (d < closestDist) closestDist = d;
-      }
-      if (closestDist < 1000) normScore *= 1.05;
-    }
-
-    if (normScore > bestScore) {
-      bestScore = normScore;
-      bestOffsetMs = offsetMs;
-      bestRatio = ratio;
-    }
-  }
-
-  const confidence = Math.round(Math.min(1.0, bestScore) * 1000) / 10;
-  return { offsetMs: bestOffsetMs, confidence, ratio: bestRatio };
+  return peaks[0]!;
 }

@@ -272,7 +272,7 @@ async def health() -> dict[str, Any]:
     return {
         "status": "ok",
         "engine": "vad_fft_split",
-        "model": "silero_vad_v5",
+        "model": "silero_vad_v6",
         "language": normalize_language(os.getenv("SYNC_LANGUAGE", "en")),
     }
 
