@@ -3247,9 +3247,9 @@ body {
 
 .landing-movie-mosaic {
   display: grid;
-  grid-template-columns: minmax(0, 0.84fr) minmax(0, 1fr) minmax(0, 0.84fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: stretch;
-  gap: clamp(var(--space-2xs), 1.4vw, var(--space-sm));
+  gap: clamp(var(--space-xs), 1.2vw, var(--space-md));
   height: 100%;
   overflow: hidden;
   mask-image: linear-gradient(
@@ -3263,43 +3263,17 @@ body {
 
 .landing-movie-mosaic-column {
   min-width: 0;
+  min-height: 0;
   overflow: hidden;
-  mask-image: linear-gradient(180deg, transparent, black 14%, black 82%, transparent);
-}
-
-.landing-movie-mosaic-column-0 {
-  padding-top: 9%;
-}
-
-.landing-movie-mosaic-column-1 {
-  z-index: 1;
-  padding-top: 0;
-}
-
-.landing-movie-mosaic-column-2 {
-  padding-top: 5%;
 }
 
 .landing-movie-mosaic-track {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: clamp(var(--space-xs), 1.2vw, var(--space-md));
   min-width: 0;
+  padding-bottom: clamp(var(--space-xs), 1.2vw, var(--space-md));
   animation: landing-mosaic-loop 26s linear infinite;
-}
-
-.landing-movie-mosaic-column-0 .landing-movie-mosaic-track {
-  --mosaic-offset: -9%;
-  animation-duration: 31s;
-}
-
-.landing-movie-mosaic-column-1 .landing-movie-mosaic-track {
-  --mosaic-offset: -2%;
-  animation-duration: 35s;
-}
-
-.landing-movie-mosaic-column-2 .landing-movie-mosaic-track {
-  --mosaic-offset: -6%;
-  animation-duration: 29s;
 }
 
 .landing-movie-mosaic .landing-movie-card {
@@ -3313,17 +3287,14 @@ body {
   transform: translateY(-0.25rem) scale(1.02);
 }
 
-.landing-movie-mosaic .landing-movie-poster {
+.landing-movie-mosaic .landing-movie-poster,
+.landing-movie-mosaic .landing-movie-card-skeleton {
   width: 100%;
   height: clamp(9.25rem, 16vw, 13rem);
+  min-height: 0;
   border-color: color-mix(in oklch, var(--color-ink) 16%, transparent);
   border-radius: var(--radius-panel);
   box-shadow: 0 1.5rem 2rem -1.5rem color-mix(in oklch, var(--color-paper) 90%, transparent);
-}
-
-.landing-movie-mosaic .landing-movie-card-featured .landing-movie-poster,
-.landing-movie-mosaic-column-1 .landing-movie-card:nth-child(3n + 2) .landing-movie-poster {
-  height: clamp(12.5rem, 23vw, 18rem);
 }
 
 .landing-movie-mosaic .landing-movie-card-copy {
@@ -3406,11 +3377,6 @@ body {
   .landing-movie-mosaic .landing-movie-poster {
     height: 10.75rem;
     border-radius: var(--radius-2xs);
-  }
-
-  .landing-movie-mosaic .landing-movie-card-featured .landing-movie-poster,
-  .landing-movie-mosaic-column-1 .landing-movie-card:nth-child(3n + 2) .landing-movie-poster {
-    height: 14.5rem;
   }
 
 }
