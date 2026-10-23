@@ -3288,40 +3288,21 @@ body {
   flex-direction: column;
   gap: var(--mosaic-gap);
   min-width: 0;
-  /* Trailing gap makes each duplicated half exactly 50% tall → seamless loop */
+  /* Trailing gap makes each duplicated half exactly 50% tall → seamless loop.
+     Motion is driven by requestAnimationFrame in MovieShowcaseSection. */
   padding-bottom: var(--mosaic-gap);
-  animation: landing-mosaic-loop 32s linear infinite;
   will-change: transform;
-}
-
-.landing-movie-mosaic-column-0 .landing-movie-mosaic-track {
-  animation-duration: 31s;
-  animation-delay: -4s;
-}
-
-.landing-movie-mosaic-column-1 .landing-movie-mosaic-track {
-  animation-duration: 38s;
-  animation-delay: -15s;
-}
-
-.landing-movie-mosaic-column-2 .landing-movie-mosaic-track {
-  animation-duration: 29s;
-  animation-delay: -9s;
-}
-
-.landing-movie-mosaic:hover .landing-movie-mosaic-track {
-  animation-play-state: paused;
 }
 
 .landing-movie-mosaic .landing-movie-card {
   width: 100%;
-  filter: none;
+  filter: brightness(0.92);
   transform: none;
-  transition: transform var(--dur-short) var(--ease-out), filter var(--dur-short) var(--ease-out);
+  transition: filter var(--dur-short) var(--ease-out);
 }
 
 .landing-movie-mosaic .landing-movie-card:hover {
-  transform: translateY(-0.25rem) scale(1.02);
+  filter: brightness(1.06);
 }
 
 .landing-movie-mosaic .landing-movie-poster,
@@ -3338,29 +3319,6 @@ body {
 .landing-movie-mosaic-column-1 .landing-movie-poster,
 .landing-movie-mosaic-column-1 .landing-movie-card-skeleton {
   height: clamp(12.5rem, 23vw, 18rem);
-}
-
-.landing-movie-mosaic .landing-movie-card-copy {
-  opacity: 0;
-}
-
-.landing-movie-mosaic .landing-movie-card:hover .landing-movie-card-copy {
-  opacity: 1;
-}
-
-@keyframes landing-mosaic-loop {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-  to {
-    transform: translate3d(0, -50%, 0);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .landing-movie-mosaic-track {
-    animation: none;
-  }
 }
 
 @media (min-width: 901px) {
