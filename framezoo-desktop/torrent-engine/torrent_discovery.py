@@ -570,9 +570,23 @@ class TorrentDiscovery:
                     for future in completed:
                         tracker = futures[future]
                         try:
-                            results.append(future.result())
+                            result = future.result()
                         except Exception as error:
-                            results.append(TrackerResult(tracker, (), str(error)))
+                            result = TrackerResult(tracker, (), str(error))
+                        results.append(result)
+                        if result.error is None:
+                            with self.lock:
+                                self.trackers_succeeded += 1
+                        if result.peers:
+                            batch = list(result.peers)
+                            if len(batch) > 10:
+                                batch.sort(key=lambda peer: peer.port == 6881)
+                            self._inject_peers(batch)
+                        elif result.error and result.error != "native tracker":
+                            with self.lock:
+                                self.last_error = result.error
+                        if self.stop_event.is_set():
+                            break
             finally:
                 for future in pending:
                     future.cancel()
@@ -580,20 +594,6 @@ class TorrentDiscovery:
 
         if self.stop_event.is_set():
             return
-
-        discovered: List[PeerAddress] = []
-        for result in results:
-            if result.error is None:
-                with self.lock:
-                    self.trackers_succeeded += 1
-            if result.peers:
-                discovered.extend(result.peers)
-            elif result.error and result.error != "native tracker":
-                with self.lock:
-                    self.last_error = result.error
-            if self.stop_event.is_set():
-                return
-        self._inject_peers(discovered)
 
         try:
             if self.stop_event.is_set():

@@ -30,7 +30,7 @@ class TrackerResponseTest(unittest.TestCase):
         def fake_urlopen(request, timeout):
             nonlocal request_url
             request_url = request.full_url
-            self.assertEqual(timeout, 5)
+            self.assertEqual(timeout, discovery.constants.TRACKER_REQUEST_TIMEOUT)
             return FakeResponse()
 
         with patch.object(discovery, "urlopen", side_effect=fake_urlopen):

@@ -69,13 +69,27 @@ FILE_OPEN_RETRY_INTERVAL = 0.2
 DEFAULT_MAX_TORRENT_BYTES = 5 * 1024 * 1024 * 1024
 
 DEFAULT_TRACKERS = (
+    "http://tracker.dler.org:6969/announce",
+    "http://tracker.opentrackr.org:1337/announce",
+    "https://tracker.opentrackr.org:443/announce",
+    "http://zer0day.ch:1337/announce",
+    "http://tracker.qu.ax:6969/announce",
+    "http://tracker.auctor.tv:6969/announce",
+    "http://tracker.ducks.party:1984/announce",
+    "http://bittorrent-tracker.e-n-c-r-y-p-t.net:1337/announce",
+    "http://t.overflow.biz:6969/announce",
+    "http://open.tracker.cl:1337/announce",
+    "http://tracker.tryhackx.org:6969/announce",
+    "https://tracker.zhuqiy.com:443/announce",
+    "http://tracker.renfei.net:8080/announce",
+    "https://tracker.pmman.tech:443/announce",
+    "https://ht.therarbg.to:443/announce",
     "udp://zer0day.ch:1337/announce",
     "udp://tracker.publictracker.xyz:6969/announce",
     "udp://tracker.opentrackr.org:1337/announce",
     "udp://tracker.openbittorrent.com:6969/announce",
     "udp://open.demonii.com:1337/announce",
     "udp://open.stealth.si:80/announce",
-    "http://tracker.renfei.net:8080/announce",
     "udp://udp.tracker.projectk.org:23333/announce",
     "udp://tracker.tryhackx.org:6969/announce",
     "udp://tracker.torrent.eu.org:451/announce",
@@ -99,10 +113,8 @@ DEFAULT_TRACKERS = (
     "udp://tracker.ducks.party:1984/announce",
     "udp://tracker.bluefrog.pw:2710/announce",
     "https://tracker.yemekyedim.com:443/announce",
-    "https://tracker.pmman.tech:443/announce",
     "https://tracker.bt4g.com:443/announce",
     "https://tr.zukizuki.org:443/announce",
-    "https://ht.therarbg.to:443/announce",
     "http://tracker810.xyz:11450/announce",
     "udp://opentor.net:6969",
     "http://bt.t-ru.org/ann?magnet",
@@ -114,7 +126,7 @@ TRACKER_NUMWANT = 50
 TRACKER_REQUEST_TIMEOUT = 3.5
 TRACKER_MAX_RESPONSE_BYTES = 1024 * 1024
 TRACKER_USER_AGENT = "Framezoo/1.1 torrent-discovery"
-DISCOVERY_TRACKER_CONCURRENCY = 10
+DISCOVERY_TRACKER_CONCURRENCY = 14
 DISCOVERY_MIN_PEERS = 40
 DISCOVERY_MAX_PEERS = 150
 DISCOVERY_PEER_RETRY_SECONDS = 5.0

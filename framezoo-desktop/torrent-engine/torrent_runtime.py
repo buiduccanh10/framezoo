@@ -703,11 +703,12 @@ class TorrentRuntime:
             combined_pieces = sorted(set(startup_pieces) | set(tail_pieces))
             # Focus critical bandwidth strictly on the container head pieces (playback playhead)
             # and the container tail pieces (Matroska Cues / MP4 moov index) so stream can fast-start.
+            required_count = 1 if piece_length >= 8 * 1024 * 1024 else 2
             required_pieces = set()
             if startup_pieces:
-                required_pieces.update(startup_pieces[:2])
+                required_pieces.update(startup_pieces[:required_count])
             if tail_pieces:
-                required_tail = set(tail_pieces[-2:])
+                required_tail = set(tail_pieces[-required_count:])
                 required_pieces.update(required_tail)
                 self._startup_required_tail_pieces = required_tail
             else:
@@ -1094,6 +1095,11 @@ class TorrentRuntime:
 
                 if piece in required_set:
                     focus_piece = getattr(self, "_focus_piece", None)
+                    protected_tail = getattr(
+                        self,
+                        "_startup_required_tail_pieces",
+                        set(),
+                    )
                     rank = required_ranks.get(piece, 0)
                     deadline_ms = min(250, rank * 25)
                     if is_sync:
@@ -1102,6 +1108,7 @@ class TorrentRuntime:
                     elif (
                         focus_piece is not None
                         and piece != focus_piece
+                        and piece not in protected_tail
                     ):
                         priority = constants.STREAM_HOT_PIECE_PRIORITY
                     else:
@@ -1373,9 +1380,15 @@ class TorrentRuntime:
                 return True
             self._focus_piece = target_piece
             demoted = 0
+            protected_tail = getattr(
+                self,
+                "_startup_required_tail_pieces",
+                set(),
+            )
             for piece, priority in list(self._piece_priorities.items()):
                 if (
                     piece == target_piece
+                    or piece in protected_tail
                     or priority != constants.STREAM_PIECE_PRIORITY
                 ):
                     continue
@@ -1466,6 +1479,23 @@ class TorrentRuntime:
             return False
         return min(target_blocks) > 0
 
+    def _target_piece_finished_blocks(
+        self,
+        target_piece: Optional[int],
+    ) -> int:
+        """Count blocks written for target_piece so active downloads are not kicked."""
+        if target_piece is None:
+            return 0
+        engine = getattr(self, "engine", None)
+        get_finished = getattr(engine, "finished_blocks_for", None)
+        if not callable(get_finished):
+            return 0
+        try:
+            finished = get_finished(self.handle)
+        except Exception:
+            return 0
+        return sum(1 for piece, _ in finished if piece == target_piece)
+
     def _kick_target_piece(self, target_piece: Optional[int]) -> None:
         """Cancel a stalled target piece so its blocks are re-requested.
 
@@ -1522,6 +1552,25 @@ class TorrentRuntime:
                 self._pending_kick_restore[target_piece] = (
                     time.monotonic() + constants.TARGET_KICK_RESTORE_DELAY
                 )
+                for tail_piece in getattr(
+                    self,
+                    "_startup_required_tail_pieces",
+                    set(),
+                ):
+                    if (
+                        tail_piece == target_piece
+                        or tail_piece in self._pending_kick_restore
+                        or self.handle.have_piece(tail_piece)
+                    ):
+                        continue
+                    self.handle.piece_priority(
+                        tail_piece,
+                        constants.STREAM_PIECE_PRIORITY,
+                    )
+                    self._piece_priorities[tail_piece] = (
+                        constants.STREAM_PIECE_PRIORITY
+                    )
+                    self._set_piece_deadline(tail_piece, 100)
         except Exception:
             return
 
@@ -1600,6 +1649,22 @@ class TorrentRuntime:
                     timingPhase="target_piece_escalated",
                     elapsedMs=self.elapsed_ms(),
                 )
+            for tail_piece in getattr(
+                self,
+                "_startup_required_tail_pieces",
+                set(),
+            ):
+                if tail_piece in pending:
+                    continue
+                try:
+                    if not handle.have_piece(tail_piece):
+                        handle.piece_priority(
+                            tail_piece,
+                            constants.STREAM_PIECE_PRIORITY,
+                        )
+                        self._set_piece_deadline(tail_piece, 25)
+                except Exception:
+                    continue
 
     def _force_reannounce_if_stalled(
         self,
@@ -1720,11 +1785,39 @@ class TorrentRuntime:
         is_sync: bool = False,
         sync_metadata: Optional[dict[str, Any]] = None,
     ) -> bool:
-        prefetch_length = max(
-            end - start + 1,
-            self._get_range_prefetch_bytes(is_sync),
+        is_tail_probe = start > 0 and not track_position and not is_sync
+        tail_pending = any(
+            not self._piece_have(tp)
+            for tp in getattr(self, "_startup_required_tail_pieces", set())
         )
+        startup_bounded = (
+            getattr(self, "info", None) is not None
+            and not is_sync
+            and (
+                not getattr(self, "_has_streamed_bytes", False)
+                or tail_pending
+            )
+        )
+        if is_tail_probe:
+            prefetch_length = max(1, end - start + 1)
+        elif startup_bounded:
+            try:
+                piece_length = int(self.info.piece_length())
+            except Exception:
+                piece_length = constants.STREAM_CHUNK_SIZE
+            prefetch_length = max(
+                end - start + 1,
+                piece_length * constants.STARTUP_WINDOW_PIECES,
+            )
+        else:
+            prefetch_length = max(
+                end - start + 1,
+                self._get_range_prefetch_bytes(is_sync),
+            )
         required_pieces = sorted(self.map_pieces(start, end - start + 1))
+        if is_tail_probe and required_pieces:
+            with self._piece_priority_lock:
+                self._startup_required_tail_pieces = set(required_pieces)
         all_pieces = sorted(self.map_pieces(start, prefetch_length))
         range_key = (start, end)
         first_required_piece = min(required_pieces) if required_pieces else None
@@ -1824,6 +1917,7 @@ class TorrentRuntime:
         last_replan_length = 0
         last_missing_signature = ""
         stalled_target_piece: Optional[int] = None
+        stalled_target_blocks = 0
         stalled_since = time.monotonic()
         target_stall_logged = False
         while (
@@ -1906,6 +2000,14 @@ class TorrentRuntime:
                 last_blocked_replan = now
                 blocked_replan_count += 1
                 target_piece = missing_required[0] if missing_required else None
+                target_blocks_done = self._target_piece_finished_blocks(
+                    target_piece,
+                )
+                target_blocks_delta = max(
+                    0,
+                    target_blocks_done - stalled_target_blocks,
+                )
+                stalled_target_blocks = target_blocks_done
                 if target_piece != stalled_target_piece:
                     previous_target = stalled_target_piece
                     stalled_target_piece = target_piece
@@ -1971,6 +2073,7 @@ class TorrentRuntime:
                         and stall_seconds >= constants.TARGET_KICK_DELAY
                         and now - last_kick
                         >= constants.TARGET_KICK_INTERVAL
+                        and target_blocks_delta < 16
                         and not self._range_target_piece_has_prefix(
                             start,
                             end,
@@ -1979,12 +2082,15 @@ class TorrentRuntime:
                     ):
                         self._kick_target_piece(target_piece)
                         last_kick = now
-                replan_cap = (
-                    max(
-                        prefetch_length,
-                        self._get_max_replan_prefetch_bytes(is_sync),
+                if is_tail_probe or startup_bounded:
+                    replan_cap = prefetch_length
+                else:
+                    replan_cap = (
+                        max(
+                            prefetch_length,
+                            self._get_max_replan_prefetch_bytes(is_sync),
+                        )
                     )
-                )
                 expansion = min(
                     2 ** min(2, blocked_replan_count),
                     max(1, replan_cap // max(1, prefetch_length)),

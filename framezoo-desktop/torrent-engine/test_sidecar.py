@@ -1920,6 +1920,62 @@ class SidecarStreamTest(unittest.TestCase):
         self.assertFalse(runtime._piece_deadlines)
         self.assertFalse(runtime._pending_kick_restore)
 
+    def test_target_focus_and_kick_preserve_startup_tail_pieces(self):
+        class FakeInfo:
+            def piece_length(self):
+                return 16 * 1024 * 1024
+
+            def num_pieces(self):
+                return 642
+
+        class FakeHandle:
+            def __init__(self):
+                self.priorities = {0: 7, 1: 7, 2: 7, 641: 7}
+                self.deadlines = {1: 0, 641: 100}
+
+            def have_piece(self, piece):
+                return piece == 0
+
+            def piece_priority(self, piece, priority):
+                self.priorities[piece] = priority
+
+            def set_piece_deadline(self, piece, deadline_ms, _flags=0):
+                self.deadlines[piece] = deadline_ms
+
+            def reset_piece_deadline(self, piece):
+                self.deadlines.pop(piece, None)
+
+            def clear_piece_deadlines(self):
+                self.deadlines.clear()
+
+        runtime = object.__new__(TorrentRuntime)
+        runtime.session_id = "tail-protection-test"
+        runtime.start_time = time.monotonic()
+        runtime.info = FakeInfo()
+        runtime.file_index = 0
+        runtime.file_size = 10_769_866_200
+        runtime.handle = FakeHandle()
+        runtime._piece_priority_lock = threading.RLock()
+        runtime._boosted_pieces = {0, 1, 2, 641}
+        runtime._piece_priorities = {0: 7, 1: 7, 2: 7, 641: 7}
+        runtime._piece_deadlines = {1: 0, 641: 100}
+        runtime._pending_kick_restore = {}
+        runtime._startup_required_pieces = [0]
+        runtime._startup_required_tail_pieces = [641]
+
+        runtime._activate_target_focus(1)
+        self.assertEqual(runtime.handle.priorities[641], 7)
+        self.assertEqual(runtime.handle.deadlines.get(641), 100)
+        self.assertEqual(
+            runtime.handle.priorities[2],
+            constants.STREAM_HOT_PIECE_PRIORITY,
+        )
+
+        runtime._kick_target_piece(1)
+        self.assertEqual(runtime.handle.priorities[641], 7)
+        self.assertEqual(runtime.handle.deadlines.get(641), 100)
+
+
 
 class TorrentProfileTest(unittest.TestCase):
     def test_profiles_scale_read_ahead_but_keep_sync_window(self):

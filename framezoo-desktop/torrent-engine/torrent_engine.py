@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import shutil
+import socket
 import sys
 import tempfile
 import threading
@@ -180,12 +181,40 @@ class LibtorrentEngine:
         self.listen_address = address
         if address:
             return {
-                "listen_interfaces": f"{address}:6881-6891",
+                "listen_interfaces": f"{address}:49160-49170",
                 "outgoing_interfaces": address,
             }
         return {
-            "listen_interfaces": "0.0.0.0:6881-6891",
+            "listen_interfaces": "0.0.0.0:49160-49170",
         }
+
+    def _probe_udp_and_enable_utp(self, session: Any) -> None:
+        """Enable uTP only after confirming outbound UDP is not firewall-dropped."""
+        ping_payload = (
+            b"d1:ad2:id20:" + self.peer_id[:20] + b"e1:q4:ping1:t2:aa1:y1:qe"
+        )
+        for host, port in constants.DHT_BOOTSTRAP_NODES:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            sock.settimeout(1.5)
+            try:
+                sock.sendto(ping_payload, (host, port))
+                data, _ = sock.recvfrom(512)
+                if data:
+                    apply_settings = getattr(session, "apply_settings", None)
+                    if callable(apply_settings):
+                        apply_settings(
+                            {
+                                "enable_outgoing_utp": True,
+                                "enable_incoming_utp": True,
+                            }
+                        )
+                    log_event("udp probe succeeded; utp enabled", host=host, port=port)
+                    return
+            except OSError:
+                continue
+            finally:
+                sock.close()
+        log_event("udp probe blocked; keeping tcp-only peer transport")
 
     def _ensure_session(self) -> Any:
         if self._session is not None:
@@ -193,19 +222,34 @@ class LibtorrentEngine:
         with self._session_lock:
             if self._session is not None:
                 return self._session
+            enc_policy = getattr(lt, "enc_policy", None)
+            enc_level = getattr(lt, "enc_level", None)
+            encryption_settings: dict[str, Any] = {}
+            if enc_policy is not None and hasattr(enc_policy, "pe_enabled"):
+                encryption_settings["out_enc_policy"] = int(enc_policy.pe_enabled)
+                encryption_settings["in_enc_policy"] = int(enc_policy.pe_enabled)
+            if enc_level is not None and hasattr(enc_level, "pe_both"):
+                encryption_settings["allowed_enc_level"] = int(enc_level.pe_both)
+                encryption_settings["prefer_rc4"] = True
+
             settings = {
                 **self._network_settings(),
+                **encryption_settings,
                 "connections_limit": 400,
                 "enable_dht": True,
                 "enable_lsd": True,
                 "enable_upnp": True,
                 "enable_natpmp": True,
+                # Start with TCP-only so corporate firewalls that silently drop
+                # UDP do not stall outbound peer connection slots on uTP timeouts.
+                "enable_outgoing_utp": False,
+                "enable_incoming_utp": False,
                 "connection_speed": 500,
                 "request_queue_time": 1,
                 "max_out_request_queue": 1500,
                 "max_allowed_in_request_queue": 2000,
                 "whole_pieces_threshold": 0,
-                "peer_connect_timeout": 2,
+                "peer_connect_timeout": 3,
                 "piece_timeout": 3,
                 "aio_threads": 8,
                 "send_buffer_watermark": 4 * 1024 * 1024,
@@ -240,8 +284,14 @@ class LibtorrentEngine:
             try:
                 self.listen_port = int(session.listen_port())
             except Exception:
-                self.listen_port = 6881
+                self.listen_port = 49160
             self._session = session
+            threading.Thread(
+                target=self._probe_udp_and_enable_utp,
+                args=(session,),
+                name="torrent-udp-probe",
+                daemon=True,
+            ).start()
             log_event(
                 "torrent network ready",
                 listenAddress=self.listen_address,
