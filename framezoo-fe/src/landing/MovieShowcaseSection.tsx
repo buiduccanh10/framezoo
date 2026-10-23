@@ -169,6 +169,40 @@ function getPosterUrl(movie: MovieCard) {
   return `${TMDB_IMAGE_BASE_URL}/w500${movie.posterPath}`;
 }
 
+const POSTER_PRELOAD_TIMEOUT_MS = 6000;
+// Pixels per second for each mosaic column; different speeds avoid a flat grid
+const MOSAIC_SPEEDS = [42, 34, 46];
+// Initial loop progress per column so columns start visually staggered
+const MOSAIC_START_PROGRESS = [0.12, 0.45, 0.28];
+const MAX_FRAME_DELTA_MS = 50;
+
+function preloadPoster(movie: MovieCard): Promise<boolean> {
+  return new Promise((resolve) => {
+    const image = new Image();
+    const timeoutId = window.setTimeout(
+      () => resolve(false),
+      POSTER_PRELOAD_TIMEOUT_MS,
+    );
+    const settle = (ok: boolean) => {
+      window.clearTimeout(timeoutId);
+      resolve(ok);
+    };
+    image.onload = () => settle(true);
+    image.onerror = () => settle(false);
+    image.src = getPosterUrl(movie);
+  });
+}
+
+// Drop broken posters before render so the loop never reflows mid-animation
+async function filterLoadablePosters(columns: MovieCard[][]) {
+  return Promise.all(
+    columns.map(async (column) => {
+      const results = await Promise.all(column.map(preloadPoster));
+      return column.filter((_, index) => results[index]);
+    }),
+  );
+}
+
 interface MovieShowcaseSectionProps {
   copy: LandingCopy["movies"];
   variant?: "default" | "hero";
@@ -180,6 +214,9 @@ export function MovieShowcaseSection({
 }: MovieShowcaseSectionProps) {
   const viewportRef = useRef<HTMLDivElement>(null);
   const loopRailRef = useRef<HTMLDivElement>(null);
+  const mosaicTrackRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const mosaicOffsetsRef = useRef<number[]>([]);
+  const isMosaicPausedRef = useRef(false);
   const [movieColumns, setMovieColumns] = useState<MovieCard[][]>(() =>
     TMDB_SHOWCASE_FEEDS.map(() => []),
   );
@@ -221,7 +258,10 @@ export function MovieShowcaseSection({
         const payloads = responses.map((result) =>
           result.status === "fulfilled" ? result.value : null,
         );
-        const nextColumns = buildTmdbShowcaseColumns(payloads);
+        const nextColumns = await filterLoadablePosters(
+          buildTmdbShowcaseColumns(payloads),
+        );
+        if (controller.signal.aborted) return;
 
         if (nextColumns.every((column) => column.length === 0)) {
           throw new Error("TMDB returned no titles");
@@ -239,6 +279,44 @@ export function MovieShowcaseSection({
     void loadMovies();
     return () => controller.abort();
   }, [backendUrl]);
+
+  useEffect(() => {
+    if (variant !== "hero" || isLoading) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let frameId = 0;
+    let lastTime: number | null = null;
+    const offsets = mosaicOffsetsRef.current;
+
+    const step = (time: number) => {
+      // Clamp delta so returning from a background tab does not jump
+      const delta =
+        lastTime === null ? 0 : Math.min(time - lastTime, MAX_FRAME_DELTA_MS);
+      lastTime = time;
+
+      mosaicTrackRefs.current.forEach((track, index) => {
+        if (!track) return;
+        // Track holds two identical halves (incl. trailing gap) → half = loop
+        const loopHeight = track.offsetHeight / 2;
+        if (loopHeight <= 0) return;
+
+        let offset =
+          offsets[index] ?? loopHeight * (MOSAIC_START_PROGRESS[index] ?? 0);
+        if (!isMosaicPausedRef.current) {
+          offset += ((MOSAIC_SPEEDS[index] ?? 40) * delta) / 1000;
+        }
+        // Modulo against the live height keeps the loop seamless after reflow
+        offset %= loopHeight;
+        offsets[index] = offset;
+        track.style.transform = `translate3d(0, ${-offset}px, 0)`;
+      });
+
+      frameId = window.requestAnimationFrame(step);
+    };
+
+    frameId = window.requestAnimationFrame(step);
+    return () => window.cancelAnimationFrame(frameId);
+  }, [isLoading, variant]);
 
   useEffect(() => {
     const viewport = viewportRef.current;
@@ -339,6 +417,7 @@ export function MovieShowcaseSection({
     movie: MovieCard,
     index: number,
     groupIndex: number | string,
+    showTitle = true,
   ) => {
     return (
       <article
@@ -349,22 +428,19 @@ export function MovieShowcaseSection({
           <img
             src={getPosterUrl(movie)}
             alt={`${movie.title} poster`}
-            loading={index < 4 ? "eager" : "lazy"}
-            onError={() => {
-              const targetKey = getMovieKey(movie);
-              setMovieColumns((currentColumns) =>
-                currentColumns.map((column) =>
-                  column.filter(
-                    (currentMovie) => getMovieKey(currentMovie) !== targetKey,
-                  ),
-                ),
-              );
+            loading={!showTitle || index < 4 ? "eager" : "lazy"}
+            decoding="async"
+            onError={(event) => {
+              // Hide instead of removing from state to avoid a layout jump
+              event.currentTarget.style.visibility = "hidden";
             }}
           />
           <div className="landing-movie-shade" aria-hidden="true" />
-          <div className="landing-movie-card-copy">
-            <h3>{movie.title}</h3>
-          </div>
+          {showTitle ? (
+            <div className="landing-movie-card-copy">
+              <h3>{movie.title}</h3>
+            </div>
+          ) : null}
         </div>
       </article>
     );
@@ -395,7 +471,16 @@ export function MovieShowcaseSection({
           <div className="landing-mosaic-label">
             <span className="landing-eyebrow">{copy.eyebrow}</span>
           </div>
-          <div className="landing-movie-mosaic" aria-hidden="true">
+          <div
+            className="landing-movie-mosaic"
+            aria-hidden="true"
+            onPointerEnter={() => {
+              isMosaicPausedRef.current = true;
+            }}
+            onPointerLeave={() => {
+              isMosaicPausedRef.current = false;
+            }}
+          >
             {mosaicColumns.map((columnMovies, columnIndex) => {
               const loopMovies = [...columnMovies, ...columnMovies];
 
@@ -404,7 +489,12 @@ export function MovieShowcaseSection({
                   className={`landing-movie-mosaic-column landing-movie-mosaic-column-${columnIndex}`}
                   key={`mosaic-column-${columnIndex}`}
                 >
-                  <div className="landing-movie-mosaic-track">
+                  <div
+                    className="landing-movie-mosaic-track"
+                    ref={(node) => {
+                      mosaicTrackRefs.current[columnIndex] = node;
+                    }}
+                  >
                     {isLoading
                       ? Array.from({ length: 4 }, (_, index) => (
                           <div
@@ -418,6 +508,7 @@ export function MovieShowcaseSection({
                             movie,
                             index % Math.max(columnMovies.length, 1),
                             `mosaic-${columnIndex}-${index}`,
+                            false,
                           ),
                         )}
                   </div>
