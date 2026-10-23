@@ -19,6 +19,7 @@ export function HeroSection({
   return (
     <section className="landing-hero" aria-labelledby="hero-title">
       <div className="landing-hero-copy landing-reveal landing-reveal-one">
+        <span className="landing-hero-kicker">{copy.version}</span>
         <h1 id="hero-title">
           {copy.title} <span>{copy.titleAccent}</span>
         </h1>
