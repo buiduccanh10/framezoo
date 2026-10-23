@@ -8,6 +8,7 @@ import type { LandingCopy } from "./i18n";
 const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
 const TMDB_COLUMN_COUNT = 3;
 const TMDB_ITEMS_PER_COLUMN = 6;
+const MIN_MOSAIC_ITEMS_PER_COLUMN = 5;
 
 export const TMDB_SHOWCASE_FEEDS = [
   { path: "/api/tmdb/trending/all/day", defaultMediaType: "movie" },
@@ -370,14 +371,15 @@ export function MovieShowcaseSection({
   };
 
   if (variant === "hero") {
+    // Each loop half must be taller than the viewport, otherwise the seam shows
     const columnLength = Math.max(
       ...movieColumns.map((column) => column.length),
-      0,
+      MIN_MOSAIC_ITEMS_PER_COLUMN,
     );
     const mosaicColumns = movieColumns.map((column) =>
       column.length
         ? Array.from(
-            { length: Math.max(columnLength, 1) },
+            { length: columnLength },
             (_, index) => column[index % column.length],
           )
         : [],
@@ -399,7 +401,7 @@ export function MovieShowcaseSection({
 
               return (
                 <div
-                  className="landing-movie-mosaic-column"
+                  className={`landing-movie-mosaic-column landing-movie-mosaic-column-${columnIndex}`}
                   key={`mosaic-column-${columnIndex}`}
                 >
                   <div className="landing-movie-mosaic-track">
