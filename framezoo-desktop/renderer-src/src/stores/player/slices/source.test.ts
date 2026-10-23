@@ -253,6 +253,35 @@ describe("external subtitle source transitions", () => {
     });
   });
 
+  it("prioritizes subsource subtitles ahead of wyzie subtitles in captionList", async () => {
+    const wyzieSub = createCaption("wyzie-1", {
+      source: "wyzie",
+      display: "Vietnamese (Wyzie)",
+    });
+    const subsourceSub = createCaption("subsource-1", {
+      source: "subsource",
+      display: "Vietnamese (Subsource)",
+    });
+
+    subtitleMocks.loadAll.mockResolvedValueOnce({
+      captions: [wyzieSub, subsourceSub],
+      errors: [],
+    });
+
+    const store = usePlayerStore.getState();
+    store.setMeta(createMeta(1));
+    store.setSource(createSource("source-1"), [], 0);
+    await vi.advanceTimersByTimeAsync(100);
+
+    const captionList = usePlayerStore.getState().captionList;
+    const subsourceIndex = captionList.findIndex((c) => c.id === "subsource-1");
+    const wyzieIndex = captionList.findIndex((c) => c.id === "wyzie-1");
+
+    expect(subsourceIndex).toBeGreaterThanOrEqual(0);
+    expect(wyzieIndex).toBeGreaterThanOrEqual(0);
+    expect(subsourceIndex).toBeLessThan(wyzieIndex);
+  });
+
   it("preserves playback intent across source switches", async () => {
     const load = vi.fn();
     const display = {

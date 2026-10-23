@@ -311,9 +311,9 @@ function getCaptionSourcePriority(caption: CaptionListItem): number {
   if (!caption.opensubtitles) return -1;
 
   const normalizedSource = caption.source?.toLowerCase() ?? "";
-  if (normalizedSource.includes("wyzie")) return 0;
-  if (normalizedSource.includes("opensubs")) return 1;
-  if (normalizedSource.includes("subsource")) return 2;
+  if (normalizedSource.includes("subsource")) return 0;
+  if (normalizedSource.includes("wyzie")) return 1;
+  if (normalizedSource.includes("opensubs")) return 2;
   if (normalizedSource.includes("granite")) return 3;
 
   return Number.MAX_SAFE_INTEGER;
