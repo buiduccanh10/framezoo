@@ -175,6 +175,9 @@ const MOSAIC_SPEEDS = [42, 34, 46];
 // Initial loop progress per column so columns start visually staggered
 const MOSAIC_START_PROGRESS = [0.12, 0.45, 0.28];
 const MAX_FRAME_DELTA_MS = 50;
+// Hover slows the mosaic to this fraction of its normal speed
+const MOSAIC_HOVER_SPEED_FACTOR = 0.25;
+const MOSAIC_SPEED_EASE_MS = 300;
 
 function preloadPoster(movie: MovieCard): Promise<boolean> {
   return new Promise((resolve) => {
@@ -216,7 +219,7 @@ export function MovieShowcaseSection({
   const loopRailRef = useRef<HTMLDivElement>(null);
   const mosaicTrackRefs = useRef<(HTMLDivElement | null)[]>([]);
   const mosaicOffsetsRef = useRef<number[]>([]);
-  const isMosaicPausedRef = useRef(false);
+  const isMosaicHoveredRef = useRef(false);
   const [movieColumns, setMovieColumns] = useState<MovieCard[][]>(() =>
     TMDB_SHOWCASE_FEEDS.map(() => []),
   );
@@ -286,6 +289,7 @@ export function MovieShowcaseSection({
 
     let frameId = 0;
     let lastTime: number | null = null;
+    let speedFactor = 1;
     const offsets = mosaicOffsetsRef.current;
 
     const step = (time: number) => {
@@ -293,6 +297,14 @@ export function MovieShowcaseSection({
       const delta =
         lastTime === null ? 0 : Math.min(time - lastTime, MAX_FRAME_DELTA_MS);
       lastTime = time;
+
+      // Ease toward the target speed so hover slows down smoothly, not abruptly
+      const targetFactor = isMosaicHoveredRef.current
+        ? MOSAIC_HOVER_SPEED_FACTOR
+        : 1;
+      speedFactor +=
+        (targetFactor - speedFactor) *
+        Math.min(1, delta / MOSAIC_SPEED_EASE_MS);
 
       mosaicTrackRefs.current.forEach((track, index) => {
         if (!track) return;
@@ -302,9 +314,7 @@ export function MovieShowcaseSection({
 
         let offset =
           offsets[index] ?? loopHeight * (MOSAIC_START_PROGRESS[index] ?? 0);
-        if (!isMosaicPausedRef.current) {
-          offset += ((MOSAIC_SPEEDS[index] ?? 40) * delta) / 1000;
-        }
+        offset += ((MOSAIC_SPEEDS[index] ?? 40) * speedFactor * delta) / 1000;
         // Modulo against the live height keeps the loop seamless after reflow
         offset %= loopHeight;
         offsets[index] = offset;
@@ -475,10 +485,10 @@ export function MovieShowcaseSection({
             className="landing-movie-mosaic"
             aria-hidden="true"
             onPointerEnter={() => {
-              isMosaicPausedRef.current = true;
+              isMosaicHoveredRef.current = true;
             }}
             onPointerLeave={() => {
-              isMosaicPausedRef.current = false;
+              isMosaicHoveredRef.current = false;
             }}
           >
             {mosaicColumns.map((columnMovies, columnIndex) => {
