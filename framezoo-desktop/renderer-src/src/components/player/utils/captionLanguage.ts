@@ -57,9 +57,7 @@ function extractLanguageFromFilename(filename: string): string | null {
     }
   }
   // Bracketed/parenthesized language tag, e.g. [es], (spa)
-  const bracketMatch = filename.match(
-    /[\[(]([a-z]{2,3}(?:-[a-z]{2,4})?)[\])]/i,
-  );
+  const bracketMatch = filename.match(/[[(]([a-z]{2,3}(?:-[a-z]{2,4})?)[\])]/i);
   if (bracketMatch) {
     const candidate = bracketMatch[1].toLowerCase();
     if (!SUBTITLE_EXTS.has(candidate)) return candidate;

@@ -296,7 +296,7 @@ describe("repairBrokenSrtTimeline", () => {
     const srt = `1
 00:02:32,450 --> 00:00:34,535
 Hello world`;
-    
+
     const vtt = normalizeSubtitleToVtt(srt);
     const cues = parseCanonicalVtt(vtt);
     expect(cues).toHaveLength(1);
@@ -308,7 +308,7 @@ Hello world`;
     const srt = `1
 00:02:36,450 --> 00:00:34,535
 Hello world`;
-    
+
     const vtt = normalizeSubtitleToVtt(srt);
     const cues = parseCanonicalVtt(vtt);
     expect(cues).toHaveLength(0);
@@ -318,7 +318,7 @@ Hello world`;
     const srt = `1
 00:00:32,450 --> 00:00:34,535
 Hello world`;
-    
+
     const vtt = normalizeSubtitleToVtt(srt);
     const cues = parseCanonicalVtt(vtt);
     expect(cues).toHaveLength(1);

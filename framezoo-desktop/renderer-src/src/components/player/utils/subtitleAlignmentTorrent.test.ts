@@ -36,12 +36,12 @@ vi.mock("../../../sync/aligner", async () => {
   };
 });
 
-import { decodeWav } from "../../../sync/aligner";
 import {
   type SubtitleAlignmentResponse,
   alignSubtitlesWithCurrentStream,
   applySubtitleAlignment,
 } from "./subtitleAlignment";
+import { decodeWav } from "../../../sync/aligner";
 
 /**
  * Creates a real, fully standard 16-bit mono PCM RIFF/WAVE buffer.
@@ -208,10 +208,7 @@ Torrent speech cue line`;
     expect(extractionCalls.length).toBeGreaterThan(0);
     expect(extractionCalls[0]?.windowIndex).toBe(0);
 
-    const alignedVtt = applySubtitleAlignment(
-      rawVtt,
-      result.results.primary!,
-    );
+    const alignedVtt = applySubtitleAlignment(rawVtt, result.results.primary!);
     expect(alignedVtt).toContain("00:10:03.500 --> 00:10:06.500");
   });
 
@@ -224,7 +221,9 @@ Torrent speech cue line`;
     });
 
     // Simulate local sync failure/skip
-    torrentMocks.alignWindowsLocal.mockRejectedValue(new Error("Local WASM disabled"));
+    torrentMocks.alignWindowsLocal.mockRejectedValue(
+      new Error("Local WASM disabled"),
+    );
 
     const mockServerResult: SubtitleAlignmentResponse = {
       aligned: true,

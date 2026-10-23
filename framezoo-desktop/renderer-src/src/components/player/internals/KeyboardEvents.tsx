@@ -141,9 +141,9 @@ export function KeyboardEvents() {
   }, []);
 
   const lastVolumeTargetRef = useRef<number | null>(null);
-  const volumeResetTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
-    undefined,
-  );
+  const volumeResetTimeoutRef = useRef<
+    ReturnType<typeof setTimeout> | undefined
+  >(undefined);
 
   const performVolumeChange = useCallback((delta: number) => {
     const currentVol =
