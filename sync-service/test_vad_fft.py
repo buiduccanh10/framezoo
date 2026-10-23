@@ -82,6 +82,42 @@ class VadFftTests(unittest.TestCase):
         self.assertEqual(segments[0]["startMs"], 0)
         self.assertEqual(segments[1]["endMs"], 9_007_199_254_740_991)
 
+    def test_fft_rejects_dense_distant_scene_false_positive(self):
+        # Sparse speech at 10s-12s and 20s-22s (true offset = 0ms)
+        speech = [(10_000, 12_000), (20_000, 22_000)]
+        # Exact matching cues at 10s-12s and 20s-22s, PLUS a super dense wall of
+        # dialogue 60s later (from 65s to 120s) that previously hijacked unnormalized FFT
+        dense_wall = [(t, t + 1_900) for t in range(65_000, 120_000, 2_000)]
+        subs = [(10_000, 12_000), (20_000, 22_000)] + dense_wall
+
+        offset_ms, conf, _ = find_best_offset_fft(
+            speech_intervals=speech,
+            subtitle_intervals=subs,
+            audio_start_ms=0,
+            audio_end_ms=60_000,
+            max_offset_ms=120_000,
+            try_framerate_ratios=False,
+        )
+        self.assertAlmostEqual(offset_ms, 0, delta=50)
+        self.assertGreaterEqual(conf, 90.0)
+
+    def test_fft_late_window_framerate_ratio_does_not_inject_global_drift(self):
+        # At 30 minutes (1,800,000ms), true offset is -2000ms
+        start_ms = 1_800_000
+        speech = [(start_ms + 10_000, start_ms + 14_000), (start_ms + 25_000, start_ms + 30_000)]
+        subs = [(s + 2_000, e + 2_000) for s, e in speech]
+
+        offset_ms, conf, _ = find_best_offset_fft(
+            speech_intervals=speech,
+            subtitle_intervals=subs,
+            audio_start_ms=start_ms,
+            audio_end_ms=start_ms + 60_000,
+            max_offset_ms=90_000,
+            try_framerate_ratios=True,
+        )
+        self.assertAlmostEqual(offset_ms, -2_000, delta=50)
+        self.assertGreaterEqual(conf, 90.0)
+
 
 if __name__ == "__main__":
     unittest.main()

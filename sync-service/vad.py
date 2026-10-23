@@ -13,8 +13,11 @@ SILERO_VAD_URL = (
 )
 SILERO_SAMPLE_RATE = 16_000
 FRAME_SAMPLES = 512  # 32ms at 16kHz
-CONTEXT_SIZE = 64  # Silero VAD v5 requires 64 context samples (input length = 576)
+CONTEXT_SIZE = 64  # Silero VAD v5/v6 requires 64 context samples (input length = 576)
 VAD_THRESHOLD = 0.45
+VAD_NEG_THRESHOLD_OFFSET = 0.15
+MIN_SILENCE_FRAMES = 2  # ~64ms hangover to prevent mid-word dropouts
+SPEECH_PAD_MS = 30  # Pad speech onset/offset by 30ms for consonant boundaries
 MIN_SPEECH_INTERVAL_MS = 100
 MERGE_SPEECH_GAP_MS = 300
 
@@ -84,7 +87,8 @@ def detect_speech_intervals(
     threshold: float = VAD_THRESHOLD,
 ) -> list[tuple[int, int]]:
     """
-    Run Silero VAD over the input audio.
+    Run Silero VAD v6 over the input audio with dual-threshold hysteresis,
+    amplitude normalization for quiet cinema tracks, and onset/offset padding.
     Returns merged [(start_ms, end_ms), ...] in absolute timestamps.
     """
     session = get_vad_session()
@@ -93,14 +97,22 @@ def detect_speech_intervals(
     if num_samples < FRAME_SAMPLES:
         return []
 
+    # Normalize quiet audio tracks (e.g. downmixed AC3/DTS 5.1/7.1 streams)
+    max_abs = float(np.max(np.abs(samples)))
+    if 0.0005 < max_abs < 0.25:
+        samples = np.clip(samples * (0.5 / max_abs), -1.0, 1.0).astype(np.float32)
+
+    neg_threshold = max(0.15, threshold - VAD_NEG_THRESHOLD_OFFSET)
     state = np.zeros((2, 1, 128), dtype=np.float32)
     context = np.zeros((1, CONTEXT_SIZE), dtype=np.float32)
     sr_tensor = np.array(SILERO_SAMPLE_RATE, dtype=np.int64)
 
     raw_intervals: list[tuple[int, int]] = []
     current_speech_start: int | None = None
+    silence_frames = 0
 
     frame_duration_ms = int(round((FRAME_SAMPLES / SILERO_SAMPLE_RATE) * 1000))
+    total_duration_ms = audio_start_ms + int(round((num_samples / SILERO_SAMPLE_RATE) * 1000))
 
     for offset in range(0, num_samples, FRAME_SAMPLES):
         frame = samples[offset : offset + FRAME_SAMPLES]
@@ -114,18 +126,29 @@ def detect_speech_intervals(
         context = x[:, -CONTEXT_SIZE:]
 
         frame_start_ms = audio_start_ms + int(round((offset / SILERO_SAMPLE_RATE) * 1000))
-        frame_end_ms = frame_start_ms + frame_duration_ms
 
-        if prob >= threshold:
-            if current_speech_start is None:
-                current_speech_start = frame_start_ms
+        if current_speech_start is None:
+            if prob >= threshold:
+                current_speech_start = max(audio_start_ms, frame_start_ms - SPEECH_PAD_MS)
+                silence_frames = 0
         else:
-            if current_speech_start is not None:
-                raw_intervals.append((current_speech_start, frame_start_ms))
-                current_speech_start = None
+            if prob >= neg_threshold:
+                silence_frames = 0
+            else:
+                silence_frames += 1
+                if silence_frames >= MIN_SILENCE_FRAMES:
+                    speech_end_ms = min(
+                        total_duration_ms,
+                        frame_start_ms
+                        - (silence_frames - 1) * frame_duration_ms
+                        + SPEECH_PAD_MS,
+                    )
+                    if speech_end_ms > current_speech_start:
+                        raw_intervals.append((current_speech_start, speech_end_ms))
+                    current_speech_start = None
+                    silence_frames = 0
 
     if current_speech_start is not None:
-        total_duration_ms = audio_start_ms + int(round((num_samples / SILERO_SAMPLE_RATE) * 1000))
         raw_intervals.append((current_speech_start, total_duration_ms))
 
     return merge_speech_intervals(raw_intervals)
