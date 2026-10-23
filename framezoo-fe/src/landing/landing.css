@@ -2313,6 +2313,21 @@ body {
     transform var(--dur-short) var(--ease-out);
 }
 
+.landing-nav-links a[aria-current="page"] {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+.landing-nav-links a[aria-current="page"]::after {
+  display: block;
+  width: 0.28rem;
+  height: 0.28rem;
+  margin: 0.35rem auto -0.63rem;
+  background: var(--color-accent-warm);
+  border-radius: 50%;
+  content: "";
+}
+
 .landing-language-toggle {
   border-color: color-mix(in oklch, var(--color-accent) 44%, transparent);
   box-shadow: none;
@@ -2949,5 +2964,146 @@ body {
   .landing-footer p {
     max-width: 15ch;
     font-size: clamp(2rem, 10vw, 3rem);
+  }
+}
+
+/* Editorial pass: cinematic workbench, restrained accent, readable rhythm. */
+.landing-shell {
+  background:
+    radial-gradient(
+      circle at 84% 2%,
+      color-mix(in oklch, var(--color-accent) 12%, transparent),
+      transparent 27rem
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, var(--color-paper) 92%, black),
+      var(--color-paper) 42%,
+      var(--color-paper-2)
+    );
+}
+
+.landing-shell::before {
+  background-size: 7rem 7rem;
+  opacity: 0.72;
+}
+
+.landing-shell::after {
+  position: fixed;
+  z-index: -1;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0,
+    transparent 8rem,
+    color-mix(in oklch, var(--color-ink) 1.2%, transparent) 8rem,
+    color-mix(in oklch, var(--color-ink) 1.2%, transparent) 8.0625rem
+  );
+  content: "";
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.landing-nav {
+  background: color-mix(in oklch, var(--color-paper) 92%, transparent);
+  border-color: color-mix(in oklch, var(--color-rule) 88%, transparent);
+  box-shadow: 0 1.5rem 3.5rem -2.75rem rgba(0, 0, 0, 0.92);
+}
+
+.landing-nav-links a:first-child[aria-current="page"] {
+  display: inline-flex;
+}
+
+.landing-eyebrow {
+  letter-spacing: 0.16em;
+  text-transform: lowercase;
+}
+
+.landing-hero h1,
+.landing-section-heading h2,
+.landing-ecosystem h2,
+.landing-product-showcase h2,
+.landing-download h2,
+.landing-addon-guide-header h2 {
+  text-wrap: balance;
+}
+
+.landing-hero-copy > p,
+.landing-section-heading p,
+.landing-ecosystem-copy p,
+.landing-showcase-copy p,
+.landing-addon-guide-header p,
+.landing-download-header > p {
+  text-wrap: pretty;
+}
+
+.landing-screenshot-frame {
+  border-color: color-mix(in oklch, var(--color-ink) 22%, transparent);
+  background: var(--color-paper);
+  box-shadow:
+    0 2rem 5rem -2.25rem rgba(0, 0, 0, 0.96),
+    0 0 0 0.5rem color-mix(in oklch, var(--color-accent) 7%, transparent);
+}
+
+.landing-movie-viewport {
+  background: color-mix(in oklch, var(--color-paper-2) 55%, transparent);
+  border-block-color: color-mix(in oklch, var(--color-rule) 82%, transparent);
+}
+
+.landing-movie-poster {
+  border-color: color-mix(in oklch, var(--color-ink) 12%, transparent);
+  box-shadow: 0 1.5rem 2.5rem -1.75rem rgba(0, 0, 0, 0.9);
+}
+
+.landing-feature-card,
+.landing-guide-intro,
+.landing-guide-resource-panel,
+.landing-guide-examples,
+.landing-platform-card,
+.landing-download-state {
+  box-shadow: inset 0 1px 0 color-mix(in oklch, var(--color-ink) 5%, transparent);
+}
+
+.landing-feature-card:hover,
+.landing-platform-card:hover {
+  border-color: color-mix(in oklch, var(--color-accent) 32%, var(--color-rule));
+}
+
+.landing-feature-line {
+  min-height: 0;
+  padding-block: clamp(1.25rem, 2.5vw, 1.75rem);
+}
+
+.landing-addon-orbit {
+  box-shadow: inset 0 1px 0 color-mix(in oklch, var(--color-ink) 7%, transparent);
+}
+
+.landing-guide-code {
+  box-shadow: inset 0 1px 0 color-mix(in oklch, var(--color-ink) 5%, transparent);
+}
+
+.landing-platform-grid {
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+}
+
+.landing-footer p {
+  text-wrap: balance;
+}
+
+@media (max-width: 640px) {
+  .landing-shell::after {
+    opacity: 0.18;
+  }
+
+  .landing-nav {
+    box-shadow: 0 1.25rem 2.5rem -2.25rem rgba(0, 0, 0, 0.96);
+  }
+
+  .landing-hero-copy > p {
+    max-width: 34ch;
+  }
+
+  .landing-platform-grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
