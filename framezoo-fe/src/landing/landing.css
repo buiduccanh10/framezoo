@@ -3246,10 +3246,12 @@ body {
 }
 
 .landing-movie-mosaic {
+  --mosaic-gap: clamp(var(--space-xs), 1.2vw, var(--space-md));
+
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 0.84fr) minmax(0, 1fr) minmax(0, 0.84fr);
   align-items: stretch;
-  gap: clamp(var(--space-xs), 1.2vw, var(--space-md));
+  gap: clamp(var(--space-2xs), 1.4vw, var(--space-sm));
   height: 100%;
   overflow: hidden;
   mask-image: linear-gradient(
@@ -3265,15 +3267,50 @@ body {
   min-width: 0;
   min-height: 0;
   overflow: hidden;
+  mask-image: linear-gradient(180deg, transparent, black 14%, black 82%, transparent);
+}
+
+/* Staggered column starts keep the mosaic from looking like a flat grid */
+.landing-movie-mosaic-column-0 {
+  padding-top: 9%;
+}
+
+.landing-movie-mosaic-column-1 {
+  z-index: 1;
+}
+
+.landing-movie-mosaic-column-2 {
+  padding-top: 5%;
 }
 
 .landing-movie-mosaic-track {
   display: flex;
   flex-direction: column;
-  gap: clamp(var(--space-xs), 1.2vw, var(--space-md));
+  gap: var(--mosaic-gap);
   min-width: 0;
-  padding-bottom: clamp(var(--space-xs), 1.2vw, var(--space-md));
-  animation: landing-mosaic-loop 26s linear infinite;
+  /* Trailing gap makes each duplicated half exactly 50% tall → seamless loop */
+  padding-bottom: var(--mosaic-gap);
+  animation: landing-mosaic-loop 32s linear infinite;
+  will-change: transform;
+}
+
+.landing-movie-mosaic-column-0 .landing-movie-mosaic-track {
+  animation-duration: 31s;
+  animation-delay: -4s;
+}
+
+.landing-movie-mosaic-column-1 .landing-movie-mosaic-track {
+  animation-duration: 38s;
+  animation-delay: -15s;
+}
+
+.landing-movie-mosaic-column-2 .landing-movie-mosaic-track {
+  animation-duration: 29s;
+  animation-delay: -9s;
+}
+
+.landing-movie-mosaic:hover .landing-movie-mosaic-track {
+  animation-play-state: paused;
 }
 
 .landing-movie-mosaic .landing-movie-card {
@@ -3297,6 +3334,12 @@ body {
   box-shadow: 0 1.5rem 2rem -1.5rem color-mix(in oklch, var(--color-paper) 90%, transparent);
 }
 
+/* Uniform per-column height so both loop halves stay identical */
+.landing-movie-mosaic-column-1 .landing-movie-poster,
+.landing-movie-mosaic-column-1 .landing-movie-card-skeleton {
+  height: clamp(12.5rem, 23vw, 18rem);
+}
+
 .landing-movie-mosaic .landing-movie-card-copy {
   opacity: 0;
 }
@@ -3307,10 +3350,10 @@ body {
 
 @keyframes landing-mosaic-loop {
   from {
-    transform: translateY(var(--mosaic-offset, 0));
+    transform: translate3d(0, 0, 0);
   }
   to {
-    transform: translateY(calc(var(--mosaic-offset, 0) - 50%));
+    transform: translate3d(0, -50%, 0);
   }
 }
 
@@ -3374,9 +3417,15 @@ body {
     gap: var(--space-2xs);
   }
 
-  .landing-movie-mosaic .landing-movie-poster {
+  .landing-movie-mosaic .landing-movie-poster,
+  .landing-movie-mosaic .landing-movie-card-skeleton {
     height: 10.75rem;
     border-radius: var(--radius-2xs);
+  }
+
+  .landing-movie-mosaic-column-1 .landing-movie-poster,
+  .landing-movie-mosaic-column-1 .landing-movie-card-skeleton {
+    height: 14.5rem;
   }
 
 }
