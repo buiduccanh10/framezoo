@@ -90,6 +90,7 @@ function addonDirectSource(stream: AddonStream): SourceSliceSource {
       type: "hls",
       quality,
       url: stream.url,
+      releaseTitle: `${stream.name} ${stream.title} ${stream.fileName ?? ""}`,
       headers: stream.headers,
     };
   }
@@ -99,6 +100,7 @@ function addonDirectSource(stream: AddonStream): SourceSliceSource {
       type: "dash",
       quality,
       url: stream.url,
+      releaseTitle: `${stream.name} ${stream.title} ${stream.fileName ?? ""}`,
       headers: stream.headers,
     };
   }
@@ -112,6 +114,7 @@ function addonDirectSource(stream: AddonStream): SourceSliceSource {
         url: stream.url,
       },
     } as Record<SourceQuality, { type: "mp4"; url: string }>,
+    releaseTitle: `${stream.name} ${stream.title} ${stream.fileName ?? ""}`,
     headers: stream.headers,
   };
 }
@@ -465,6 +468,7 @@ export function SourceSelectPart(props: {
             },
             duration: playable.duration ?? session.duration ?? undefined,
             isTorrent: true,
+            releaseTitle: `${stream.name} ${stream.title} ${stream.fileName ?? ""}`,
           };
 
           playMedia(

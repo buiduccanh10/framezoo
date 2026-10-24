@@ -216,6 +216,7 @@ export function MovieShowcaseSection({
   variant = "default",
 }: MovieShowcaseSectionProps) {
   const viewportRef = useRef<HTMLDivElement>(null);
+  const mosaicShellRef = useRef<HTMLDivElement>(null);
   const loopRailRef = useRef<HTMLDivElement>(null);
   const mosaicTrackRefs = useRef<(HTMLDivElement | null)[]>([]);
   const mosaicOffsetsRef = useRef<number[]>([]);
@@ -290,9 +291,36 @@ export function MovieShowcaseSection({
     let frameId = 0;
     let lastTime: number | null = null;
     let speedFactor = 1;
+    let isVisible = false;
+    const shell = mosaicShellRef.current;
+    const loopHeights: number[] = [];
     const offsets = mosaicOffsetsRef.current;
 
+    const updateLoopHeights = () => {
+      mosaicTrackRefs.current.forEach((track, index) => {
+        loopHeights[index] = track ? track.offsetHeight / 2 : 0;
+      });
+    };
+
+    updateLoopHeights();
+
+    const resizeObserver =
+      typeof ResizeObserver === "undefined"
+        ? null
+        : new ResizeObserver(updateLoopHeights);
+    mosaicTrackRefs.current.forEach((track) => {
+      if (track) resizeObserver?.observe(track);
+    });
+
+    const schedule = () => {
+      if (isVisible && !document.hidden && frameId === 0) {
+        frameId = window.requestAnimationFrame(step);
+      }
+    };
+
     const step = (time: number) => {
+      frameId = 0;
+      if (!isVisible || document.hidden) return;
       // Clamp delta so returning from a background tab does not jump
       const delta =
         lastTime === null ? 0 : Math.min(time - lastTime, MAX_FRAME_DELTA_MS);
@@ -308,8 +336,8 @@ export function MovieShowcaseSection({
 
       mosaicTrackRefs.current.forEach((track, index) => {
         if (!track) return;
-        // Track holds two identical halves (incl. trailing gap) → half = loop
-        const loopHeight = track.offsetHeight / 2;
+        // ResizeObserver keeps dimensions fresh without layout reads per frame.
+        const loopHeight = loopHeights[index] ?? 0;
         if (loopHeight <= 0) return;
 
         let offset =
@@ -321,11 +349,47 @@ export function MovieShowcaseSection({
         track.style.transform = `translate3d(0, ${-offset}px, 0)`;
       });
 
-      frameId = window.requestAnimationFrame(step);
+      schedule();
     };
 
-    frameId = window.requestAnimationFrame(step);
-    return () => window.cancelAnimationFrame(frameId);
+    const visibilityObserver =
+      typeof IntersectionObserver === "undefined"
+        ? null
+        : new IntersectionObserver(
+            ([entry]) => {
+              isVisible = Boolean(entry?.isIntersecting);
+              if (isVisible) {
+                lastTime = null;
+                schedule();
+              } else if (frameId !== 0) {
+                window.cancelAnimationFrame(frameId);
+                frameId = 0;
+              }
+            },
+            { threshold: 0 },
+          );
+    if (shell) visibilityObserver?.observe(shell);
+    // Keep animation functional on older browsers without IntersectionObserver.
+    if (!visibilityObserver) isVisible = true;
+
+    const handleVisibilityChange = () => {
+      if (document.hidden && frameId !== 0) {
+        window.cancelAnimationFrame(frameId);
+        frameId = 0;
+      } else {
+        lastTime = null;
+        schedule();
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    schedule();
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      visibilityObserver?.disconnect();
+      resizeObserver?.disconnect();
+      if (frameId !== 0) window.cancelAnimationFrame(frameId);
+    };
   }, [isLoading, variant]);
 
   useEffect(() => {
@@ -477,7 +541,7 @@ export function MovieShowcaseSection({
         id="movies"
         aria-label={copy.title}
       >
-        <div className="landing-mosaic-shell">
+        <div className="landing-mosaic-shell" ref={mosaicShellRef}>
           <div className="landing-mosaic-label">
             <span className="landing-eyebrow">{copy.eyebrow}</span>
           </div>

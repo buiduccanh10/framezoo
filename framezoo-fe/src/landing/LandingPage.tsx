@@ -18,6 +18,7 @@ import {
   getLandingCopy,
   getLandingLocaleOption,
 } from "./i18n";
+import { ArrowUpIcon } from "./LandingIcon";
 import { LandingLanguageSelector } from "./LandingLanguageSelector";
 import { LandingParticles } from "./LandingParticles";
 import { applyLandingSeo } from "./seo";
@@ -221,7 +222,7 @@ export function LandingPage() {
         tabIndex={showBackToTop ? 0 : -1}
         onClick={() => navigateToLandingHash("#top")}
       >
-        <span aria-hidden="true">↑</span>
+        <ArrowUpIcon />
       </button>
     </div>
   );

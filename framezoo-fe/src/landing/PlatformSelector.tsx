@@ -1,6 +1,7 @@
 import type { AppDownloadOption } from "@/backend/download";
 
 import type { LandingCopy } from "./i18n";
+import { DownloadIcon } from "./LandingIcon";
 
 interface PlatformSelectorProps {
   options: AppDownloadOption[];
@@ -38,7 +39,7 @@ export function PlatformSelector({
               </span>
               <span className="landing-platform-action">
                 {copy.download}
-                <span aria-hidden="true">↓</span>
+                <DownloadIcon />
               </span>
             </a>
           );

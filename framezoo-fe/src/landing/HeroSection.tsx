@@ -1,6 +1,7 @@
 import { type MouseEvent } from "react";
 
 import type { LandingCopy } from "./i18n";
+import { ArrowUpRightIcon } from "./LandingIcon";
 import { MovieShowcaseSection } from "./MovieShowcaseSection";
 
 interface HeroSectionProps {
@@ -31,7 +32,7 @@ export function HeroSection({
             onClick={onHashLinkClick}
           >
             {copy.primaryCta}
-            <span aria-hidden="true">↗</span>
+            <ArrowUpRightIcon />
           </a>
           <a
             className="landing-button landing-button-quiet"

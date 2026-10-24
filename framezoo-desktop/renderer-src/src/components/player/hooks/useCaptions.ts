@@ -11,6 +11,7 @@ import {
   getSubtitleAlignmentInputVtt,
   isSubtitleAlignmentResultApplicable,
 } from "@/components/player/utils/subtitleAlignment";
+import { scoreSubtitleReleaseMatch } from "@/components/player/utils/subtitleReleaseMatch";
 import { useLanguageStore } from "@/stores/language";
 import {
   Caption,
@@ -644,12 +645,15 @@ export function useCaptions() {
         (caption) => !caption.opensubtitles,
       );
       if (inSourceCaptions.length > 0) {
-        return inSourceCaptions.map((caption, index) => ({
-          caption,
-          index,
-          score: 100,
-          confidence: "high" as const,
-        }));
+        return inSourceCaptions
+          .map((caption, index) => ({
+            caption,
+            index,
+            score:
+              scoreSubtitleReleaseMatch(caption, source?.releaseTitle) ?? 100,
+            confidence: "high" as const,
+          }))
+          .sort((a, b) => b.score - a.score || a.index - b.index);
       }
 
       const videoDurationMs = videoDuration > 0 ? videoDuration * 1000 : 0;
@@ -682,11 +686,21 @@ export function useCaptions() {
                 setTimeout(() => resolve(null), AUTO_SCORE_PER_ITEM_TIMEOUT_MS);
               }),
             ]);
+            const releaseScore = scoreSubtitleReleaseMatch(
+              caption,
+              source?.releaseTitle,
+            );
+            const fitScore = fit?.score ?? -1;
 
             scored.push({
               caption,
               index: currentIndex,
-              score: fit?.score ?? -1,
+              score:
+                releaseScore === null
+                  ? fitScore
+                  : fitScore < 0
+                    ? releaseScore
+                    : Math.round(releaseScore * 0.75 + fitScore * 0.25),
               confidence: fit?.confidence ?? "low",
             });
           }
@@ -704,7 +718,7 @@ export function useCaptions() {
 
       return scored;
     },
-    [captions, segments, videoDuration],
+    [captions, segments, source?.releaseTitle, videoDuration],
   );
 
   const setDirectCaption = useCallback(
@@ -884,6 +898,43 @@ export function useCaptions() {
   const disableSecondary = useCallback(() => {
     setSecondaryCaption(null);
   }, [setSecondaryCaption]);
+
+  const selectNextBestCaptionForLanguage = useCallback(
+    async (language: string, track: "primary" | "secondary" = "primary") => {
+      const ranked = (await scoreCaptionsForLanguage(language)).filter(
+        (item) => item.score >= 0,
+      );
+      if (ranked.length === 0) return false;
+
+      const activeId =
+        track === "secondary"
+          ? usePlayerStore.getState().caption.secondary?.id
+          : usePlayerStore.getState().caption.selected?.id;
+      const activeIndex = ranked.findIndex(
+        (item) => item.caption.id === activeId,
+      );
+
+      for (let offset = 1; offset <= ranked.length; offset += 1) {
+        const index = (activeIndex + offset) % ranked.length;
+        const candidate = ranked[index];
+        if (!candidate || candidate.caption.id === activeId) continue;
+
+        if (track === "secondary") {
+          await selectSecondaryCaptionById(candidate.caption.id);
+          if (
+            usePlayerStore.getState().caption.secondary?.id ===
+            candidate.caption.id
+          ) {
+            return true;
+          }
+        } else if (await selectCaptionById(candidate.caption.id)) {
+          return true;
+        }
+      }
+      return false;
+    },
+    [scoreCaptionsForLanguage, selectCaptionById, selectSecondaryCaptionById],
+  );
 
   const selectLanguage = useCallback(
     async (
@@ -1197,6 +1248,7 @@ export function useCaptions() {
     setDirectCaption,
     selectCaptionById,
     selectBestCaptionFromLastUsedLanguage,
+    selectNextBestCaptionForLanguage,
     selectSecondaryCaptionById,
     disableSecondary,
     syncSelectedCaption,
