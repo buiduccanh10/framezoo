@@ -358,7 +358,7 @@
 }
 
 .landing-language-options {
-  z-index: 8;
+  z-index: 20;
   display: grid;
   width: min(250px, calc(100vw - 32px));
   max-height: min(360px, calc(100dvh - 96px));
