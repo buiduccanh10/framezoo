@@ -5,6 +5,7 @@
 #import <AppKit/AppKit.h>
 #import <Foundation/Foundation.h>
 #import <MediaPlayer/MediaPlayer.h>
+#import <IOKit/pwr_mgt/IOPMLib.h>
 
 #include <mutex>
 #include <string>
@@ -21,6 +22,38 @@ std::mutex controls_mutex;
 MediaCommandCallback controls_callback = nullptr;
 void* controls_user = nullptr;
 std::vector<Target> targets;
+IOPMAssertionID display_assertion = kIOPMNullAssertionID;
+id<NSObject> process_activity = nil;
+
+void acquire_display_sleep_assertion() {
+  if (display_assertion == kIOPMNullAssertionID) {
+    IOPMAssertionCreateWithName(
+        kIOPMAssertionTypePreventUserIdleDisplaySleep,
+        kIOPMAssertionLevelOn,
+        CFSTR("Framezoo video playback"),
+        &display_assertion
+    );
+  }
+  if (!process_activity) {
+    process_activity = [[[NSProcessInfo processInfo]
+        beginActivityWithOptions:(NSActivityIdleDisplaySleepDisabled |
+                                 NSActivityIdleSystemSleepDisabled |
+                                 NSActivityUserInitiated)
+                          reason:@"Framezoo video playback"] retain];
+  }
+}
+
+void release_display_sleep_assertion() {
+  if (display_assertion != kIOPMNullAssertionID) {
+    IOPMAssertionRelease(display_assertion);
+    display_assertion = kIOPMNullAssertionID;
+  }
+  if (process_activity) {
+    [[NSProcessInfo processInfo] endActivity:process_activity];
+    [process_activity release];
+    process_activity = nil;
+  }
+}
 
 void emit_command(const char* command) {
   MediaCommandCallback callback = nullptr;
@@ -96,11 +129,19 @@ bool media_controls_register(
 void media_controls_unregister() {
   std::lock_guard<std::mutex> lock(controls_mutex);
   remove_targets();
+  release_display_sleep_assertion();
   controls_callback = nullptr;
   controls_user = nullptr;
 }
 
 bool media_controls_set_playback_state(bool playing, std::string* error) {
+  std::lock_guard<std::mutex> lock(controls_mutex);
+  if (playing) {
+    acquire_display_sleep_assertion();
+  } else {
+    release_display_sleep_assertion();
+  }
+
   MPNowPlayingInfoCenter* center = [MPNowPlayingInfoCenter defaultCenter];
   if (!center) {
     if (error) *error = "MPNowPlayingInfoCenter unavailable";
