@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, screen } from "electron";
+import { app, BrowserWindow, ipcMain, powerSaveBlocker, screen } from "electron";
 import fs from "node:fs";
 import fsp from "node:fs/promises";
 import os from "node:os";
@@ -68,6 +68,9 @@ type PlayerRecord = {
   pipResizeListener?: () => void;
   pipWindow?: BrowserWindow;
   isPaused: boolean;
+  desiredPaused: boolean;
+  pausedForCache: boolean;
+  fileLoaded: boolean;
 };
 
 const DEFAULT_NATIVE_EVENT_TIMEOUT_MS = 120_000;
@@ -260,6 +263,7 @@ export class LibMpvController {
     null;
   private mediaControlsRegistered = false;
   private mediaMetadataRevision = 0;
+  private displaySleepBlockerId: number | null = null;
 
   public init(
     mainWindow: BrowserWindow,
@@ -448,10 +452,41 @@ export class LibMpvController {
     }
   }
 
+  private shouldKeepDisplayAwake(player: PlayerRecord): boolean {
+    // Keep screen awake whenever user desires playback (playing, loading, or buffering)
+    // Only allow display sleep when playback is explicitly paused by the user or ended.
+    return !player.desiredPaused;
+  }
+
   private syncNativeMediaPlaybackState(): void {
-    this.setNativeMediaPlaybackState(
-      [...this.players.values()].some((player) => !player.isPaused),
+    const isAnyAwake = [...this.players.values()].some((player) =>
+      this.shouldKeepDisplayAwake(player),
     );
+    this.setNativeMediaPlaybackState(isAnyAwake);
+
+    if (isAnyAwake) {
+      if (
+        this.displaySleepBlockerId === null ||
+        !powerSaveBlocker.isStarted(this.displaySleepBlockerId)
+      ) {
+        this.displaySleepBlockerId = powerSaveBlocker.start(
+          "prevent-display-sleep",
+        );
+        console.log(
+          `[libmpv] powerSaveBlocker started (id=${this.displaySleepBlockerId})`,
+        );
+      }
+    } else {
+      if (this.displaySleepBlockerId !== null) {
+        if (powerSaveBlocker.isStarted(this.displaySleepBlockerId)) {
+          powerSaveBlocker.stop(this.displaySleepBlockerId);
+          console.log(
+            `[libmpv] powerSaveBlocker stopped (id=${this.displaySleepBlockerId})`,
+          );
+        }
+        this.displaySleepBlockerId = null;
+      }
+    }
   }
 
   public warmup(): Promise<{ ok: boolean; message?: string }> {
@@ -741,6 +776,9 @@ export class LibMpvController {
         bounds: normalizedBounds,
         target: "main",
         isPaused: true,
+        desiredPaused: true,
+        pausedForCache: false,
+        fileLoaded: false,
       });
       lastPlayerCreateError = null;
       this.broadcastLog("info", "create", {
@@ -842,7 +880,10 @@ export class LibMpvController {
         startAt: Math.max(0, Number(request.startAt) || 0),
         autoplay: request.autoplay !== false,
       });
+      player.desiredPaused = request.autoplay === false;
       player.isPaused = request.autoplay === false;
+      player.fileLoaded = false;
+      player.pausedForCache = false;
       this.syncNativeMediaPlaybackState();
 
       // A torrent HTTP route can legitimately wait for peers indefinitely.
@@ -884,8 +925,14 @@ export class LibMpvController {
 
     try {
       this.addon.commandPlayer(playerId, command);
-      if (command.type === "play") player.isPaused = false;
-      if (command.type === "pause") player.isPaused = true;
+      if (command.type === "play") {
+        player.desiredPaused = false;
+        player.isPaused = false;
+      }
+      if (command.type === "pause") {
+        player.desiredPaused = true;
+        player.isPaused = true;
+      }
       this.syncNativeMediaPlaybackState();
       this.broadcastLog("debug", command.type, {
         playerId,
@@ -1072,6 +1119,12 @@ export class LibMpvController {
     }
     if (reason === "main-window:closed" || reason === "app:before-quit") {
       this.unregisterMediaControls();
+      if (this.displaySleepBlockerId !== null) {
+        if (powerSaveBlocker.isStarted(this.displaySleepBlockerId)) {
+          powerSaveBlocker.stop(this.displaySleepBlockerId);
+        }
+        this.displaySleepBlockerId = null;
+      }
     }
   }
 
@@ -1105,6 +1158,8 @@ export class LibMpvController {
     if (event.type === "log") {
       this.broadcastLog(event.level ?? "info", "mpv", eventData);
     } else if (event.type === "file-loaded") {
+      player.fileLoaded = true;
+      this.syncNativeMediaPlaybackState();
       this.broadcastLog("info", "file_loaded", {
         ...eventData,
         timingPhase: "file_loaded",
@@ -1117,15 +1172,29 @@ export class LibMpvController {
         timingPhase: "video_frame",
       });
     } else if (event.type === "end-file") {
-      player.isPaused = true;
+      player.fileLoaded = false;
+      player.pausedForCache = false;
+      if (!player.isTorrent) {
+        player.isPaused = true;
+        player.desiredPaused = true;
+      }
       this.syncNativeMediaPlaybackState();
       this.broadcastLog("info", "end_file", eventData);
     } else if (event.type === "error") {
       this.broadcastLog("error", "error", eventData);
     } else if (event.type === "property") {
       if (event.name === "pause" && typeof event.data === "boolean") {
-        player.isPaused = event.data;
-        this.syncNativeMediaPlaybackState();
+        if (
+          event.data &&
+          !player.fileLoaded &&
+          !player.desiredPaused &&
+          !player.pausedForCache
+        ) {
+          // Drop initial or teardown pause event before new file is loaded
+        } else {
+          player.isPaused = event.data;
+          this.syncNativeMediaPlaybackState();
+        }
         this.broadcastLog(
           event.data ? "info" : "info",
           event.data ? "pause" : "play",
@@ -1133,8 +1202,14 @@ export class LibMpvController {
         );
       } else if (event.name === "seeking" && event.data === true) {
         this.broadcastLog("debug", "seek", eventData);
-      } else if (event.name === "paused-for-cache" && event.data === true) {
-        this.broadcastLog("debug", "buffering", eventData);
+      } else if (event.name === "paused-for-cache") {
+        if (typeof event.data === "boolean") {
+          player.pausedForCache = event.data;
+          this.syncNativeMediaPlaybackState();
+        }
+        if (event.data === true) {
+          this.broadcastLog("debug", "buffering", eventData);
+        }
       } else if (
         event.name === "duration" ||
         event.name === "track-list" ||

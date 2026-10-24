@@ -153,10 +153,12 @@ async function main() {
   }
 
   try {
-    const result = addonModule.warmup();
-    if (result !== true) {
-      console.error(`[verify-libmpv] warmup returned ${String(result)}`);
-      process.exit(1);
+    for (let i = 1; i <= 3; i++) {
+      const result = addonModule.warmup();
+      if (result !== true) {
+        console.error(`[verify-libmpv] warmup pass ${i} returned ${String(result)}`);
+        process.exit(1);
+      }
     }
   } catch (error) {
     console.error(

@@ -28,10 +28,10 @@ if (!target.startsWith("win32-")) {
 
 const pinnedAssets = {
   "win32-x64": {
-    name: "mpv-dev-x86_64-v3-20261001-git-3186d369f9.7z",
-    url: "https://github.com/shinchiro/mpv-winbuild-cmake/releases/download/20261001/mpv-dev-x86_64-v3-20261001-git-3186d369f9.7z",
+    name: "mpv-dev-x86_64-20261001-git-3186d369f9.7z",
+    url: "https://github.com/shinchiro/mpv-winbuild-cmake/releases/download/20261001/mpv-dev-x86_64-20261001-git-3186d369f9.7z",
     sha256:
-      "f5ede11adaa383d13efbb7c711032e4b44d4126e4390eb746e35725348cbb592",
+      "de0aa24a39e27b07d9f663616f8d09c91586c7328d8c33fbfbc8e3888c35d89c",
   },
   "win32-arm64": {
     name: "mpv-dev-aarch64-20261001-git-3186d369f9.7z",

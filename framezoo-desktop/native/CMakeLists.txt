@@ -49,6 +49,7 @@ else()
     "-framework Cocoa"
     "-framework OpenGL"
     "-framework MediaPlayer"
+    "-framework IOKit"
   )
   target_link_options(libmpv PRIVATE "-undefined" "dynamic_lookup")
   set_target_properties(libmpv PROPERTIES PREFIX "" SUFFIX ".node")

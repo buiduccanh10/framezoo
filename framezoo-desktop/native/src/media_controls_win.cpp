@@ -50,6 +50,34 @@ EventRegistrationToken button_token{};
 MediaCommandCallback controls_callback = nullptr;
 void* controls_user = nullptr;
 bool ro_initialized = false;
+HANDLE power_request_handle = INVALID_HANDLE_VALUE;
+
+void acquire_display_sleep_assertion() {
+  SetThreadExecutionState(ES_CONTINUOUS | ES_DISPLAY_REQUIRED | ES_SYSTEM_REQUIRED);
+
+  if (power_request_handle == INVALID_HANDLE_VALUE) {
+    REASON_CONTEXT context{};
+    context.Version = POWER_REQUEST_CONTEXT_VERSION;
+    context.Flags = POWER_REQUEST_CONTEXT_SIMPLE_STRING;
+    context.Reason.SimpleReasonString = const_cast<wchar_t*>(L"Framezoo video playback");
+    power_request_handle = PowerCreateRequest(&context);
+    if (power_request_handle != INVALID_HANDLE_VALUE) {
+      PowerSetRequest(power_request_handle, PowerRequestDisplayRequired);
+      PowerSetRequest(power_request_handle, PowerRequestSystemRequired);
+    }
+  }
+}
+
+void release_display_sleep_assertion() {
+  SetThreadExecutionState(ES_CONTINUOUS);
+
+  if (power_request_handle != INVALID_HANDLE_VALUE) {
+    PowerClearRequest(power_request_handle, PowerRequestDisplayRequired);
+    PowerClearRequest(power_request_handle, PowerRequestSystemRequired);
+    CloseHandle(power_request_handle);
+    power_request_handle = INVALID_HANDLE_VALUE;
+  }
+}
 
 std::wstring utf8_to_wide(const std::string& value) {
   if (value.empty()) return {};
@@ -212,6 +240,7 @@ bool media_controls_register(
 
 void media_controls_unregister() {
   std::lock_guard<std::mutex> lock(controls_mutex);
+  release_display_sleep_assertion();
   if (controls && button_handler) {
     controls->remove_ButtonPressed(button_token);
   }
@@ -227,6 +256,12 @@ void media_controls_unregister() {
 
 bool media_controls_set_playback_state(bool playing, std::string* error) {
   std::lock_guard<std::mutex> lock(controls_mutex);
+  if (playing) {
+    acquire_display_sleep_assertion();
+  } else {
+    release_display_sleep_assertion();
+  }
+
   if (!controls) {
     if (error) *error = "SMTC is not registered";
     return false;
