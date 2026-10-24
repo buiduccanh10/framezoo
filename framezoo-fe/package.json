@@ -26,6 +26,7 @@
     ]
   },
   "dependencies": {
+    "@radix-ui/react-dropdown-menu": "^2.2.1",
     "@react-spring/web": "^10.1.2",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"

@@ -1,4 +1,5 @@
 import type { LandingCopy } from "./i18n";
+import { ArrowUpRightIcon } from "./LandingIcon";
 import { detectPlatformForManifest } from "./platform";
 import { PlatformSelector } from "./PlatformSelector";
 import type { DownloadState } from "./useDownloadManifest";
@@ -44,7 +45,7 @@ export function DownloadSection({
               type="button"
               onClick={onRetry}
             >
-              {copy.retry} <span aria-hidden="true">↗</span>
+              {copy.retry} <ArrowUpRightIcon />
             </button>
           </div>
         ) : state.status === "empty" ? (
@@ -55,7 +56,7 @@ export function DownloadSection({
               type="button"
               onClick={onRetry}
             >
-              {copy.retry} <span aria-hidden="true">↗</span>
+              {copy.retry} <ArrowUpRightIcon />
             </button>
           </div>
         ) : (

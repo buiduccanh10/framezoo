@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import type { LandingCopy } from "./i18n";
+import { ArrowUpRightIcon } from "./LandingIcon";
 
 interface AddonGuideSectionProps {
   copy: LandingCopy["addonGuide"];
@@ -119,7 +120,7 @@ export function AddonGuideSection({ copy }: AddonGuideSectionProps) {
               target="_blank"
               rel="noreferrer"
             >
-              {copy.advancedLink} <span aria-hidden="true">↗</span>
+              {copy.advancedLink} <ArrowUpRightIcon />
             </a>
           </div>
         </div>
