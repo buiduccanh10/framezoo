@@ -32,6 +32,7 @@ export type SourceSliceSource =
       quality?: SourceQuality;
       duration?: number;
       isTorrent?: boolean;
+      releaseTitle?: string;
       headers?: Stream["headers"];
       preferredHeaders?: Stream["preferredHeaders"];
     }
@@ -42,6 +43,7 @@ export type SourceSliceSource =
       quality?: SourceQuality;
       duration?: number;
       isTorrent?: boolean;
+      releaseTitle?: string;
       headers?: Stream["headers"];
       preferredHeaders?: Stream["preferredHeaders"];
     }
@@ -51,6 +53,7 @@ export type SourceSliceSource =
       url: string;
       quality?: SourceQuality;
       duration?: number;
+      releaseTitle?: string;
       headers?: Stream["headers"];
       preferredHeaders?: Stream["preferredHeaders"];
     };

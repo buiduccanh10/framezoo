@@ -89,11 +89,16 @@ export function LanguageSubtitlesView({
   const primaryDelay = useSubtitleStore((s) => s.primaryDelay);
   const secondaryDelay = useSubtitleStore((s) => s.secondaryDelay);
   const currentTranslateTask = usePlayerStore((s) => s.caption.translateTask);
-  const { selectCaptionById, selectSecondaryCaptionById } = useCaptions();
+  const {
+    selectCaptionById,
+    selectSecondaryCaptionById,
+    selectNextBestCaptionForLanguage,
+  } = useCaptions();
   const [currentlyDownloading, setCurrentlyDownloading] = useState<
     string | null
   >(null);
   const [scrollTrigger, setScrollTrigger] = useState(0);
+  const [isCyclingCaptions, setIsCyclingCaptions] = useState(false);
   const captionList = usePlayerStore((s) => s.captionList);
   const matchScore = useCaptionMatchScore();
 
@@ -171,13 +176,17 @@ export function LanguageSubtitlesView({
   );
 
   const handleRandomSelect = async () => {
-    if (languageCaptions.length === 0) return;
-
-    const randomIndex = Math.floor(Math.random() * languageCaptions.length);
-    const randomCaption = languageCaptions[randomIndex];
-
-    await startDownload(randomCaption.id);
-    setTimeout(() => scrollToActiveCaption(), 100);
+    if (languageCaptions.length === 0 || isCyclingCaptions) return;
+    setIsCyclingCaptions(true);
+    try {
+      await selectNextBestCaptionForLanguage(
+        language,
+        selectionMode === "secondary" ? "secondary" : "primary",
+      );
+      setTimeout(() => scrollToActiveCaption(), 100);
+    } finally {
+      setIsCyclingCaptions(false);
+    }
   };
 
   const renderSubtitleOption = (v: CaptionListItem) => {
@@ -313,10 +322,15 @@ export function LanguageSubtitlesView({
               <button
                 type="button"
                 onClick={handleRandomSelect}
+                disabled={isCyclingCaptions}
                 className="-mr-2 -my-1 px-2 p-[0.4em] rounded tabbable hover:bg-video-context-light/10"
-                title="Pick random subtitle"
+                title="Try the next best matching subtitle"
+                aria-label="Try the next best matching subtitle"
               >
-                <Icon icon={Icons.REPEAT} className="text-lg" />
+                <Icon
+                  icon={Icons.REPEAT}
+                  className={`text-lg ${isCyclingCaptions ? "animate-spin" : ""}`}
+                />
               </button>
             )
           }

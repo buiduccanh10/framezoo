@@ -42,6 +42,7 @@ export interface PlaybackClockState {
 export const MAX_EXTRAPOLATION_SECONDS = 10.0;
 export const SEEK_DISCONTINUITY_FORWARD_THRESHOLD = 0.5;
 export const SEEK_DISCONTINUITY_BACKWARD_THRESHOLD = 0.5;
+export const SEEK_DISCONTINUITY_AHEAD_THRESHOLD = 1.0;
 export const VISUAL_PLAYBACK_CLOCK_TICK_MS = 33;
 
 type PlaybackClockSnapshot = {
@@ -124,9 +125,24 @@ export function shouldSnapPlaybackClock(
     state.authoritativeTime - authoritativeTime >
       SEEK_DISCONTINUITY_BACKWARD_THRESHOLD;
 
+  // The interpolated clock can run ahead of mpv when playback stalls without
+  // a (timely) stall signal, or when a backward seek lands while the clock is
+  // frozen/loading. Seeks never move the clock backward on their own, so a
+  // fresh authoritative sample (or the moment the clock resumes) that is
+  // clearly behind the interpolated time must re-anchor it. Otherwise the
+  // subtitles stay offset until the next manual seek.
+  const isFreshSample =
+    state.authoritativeTime === undefined ||
+    state.authoritativeTime !== authoritativeTime;
+  const isResuming = !state.isRunning && isClockRunning(input);
+  const aheadDiscontinuity =
+    (isFreshSample || isResuming) &&
+    currentTime - authoritativeTime > SEEK_DISCONTINUITY_AHEAD_THRESHOLD;
+
   return (
     state.resetKey !== input.resetKey ||
     Boolean(input.isSeeking) ||
+    aheadDiscontinuity ||
     (!input.isLoading && (forwardDiscontinuity || backwardDiscontinuity))
   );
 }
