@@ -31,46 +31,53 @@ export function LandingLanguageSelector({
           </button>
         </DropdownMenu.Trigger>
 
-        <DropdownMenu.Content
-          className="landing-language-options"
-          aria-label={label}
-          align="end"
-          sideOffset={10}
-          collisionPadding={16}
-        >
-          <DropdownMenu.RadioGroup
-            value={locale}
-            onValueChange={(value) => onChange(value as LandingLocale)}
+        <DropdownMenu.Portal>
+          <DropdownMenu.Content
+            className="landing-language-options"
+            aria-label={label}
+            align="end"
+            sideOffset={10}
+            collisionPadding={16}
           >
-            {LANDING_LOCALES.map((option) => (
-              <DropdownMenu.RadioItem
-                className={`landing-language-option${
-                  option.id === locale ? " is-active" : ""
-                }`}
-                key={option.id}
-                value={option.id}
-              >
-                <span className="landing-language-flag" aria-hidden="true">
-                  {option.flag}
-                </span>
-                <span>{option.nativeLabel}</span>
-                <DropdownMenu.ItemIndicator asChild>
-                  <span className="landing-language-check" aria-hidden="true">
-                    <svg viewBox="0 0 16 16" width="13" height="13" fill="none">
-                      <path
-                        d="m3.25 8.25 3 3 6.5-6.5"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
+            <DropdownMenu.RadioGroup
+              value={locale}
+              onValueChange={(value) => onChange(value as LandingLocale)}
+            >
+              {LANDING_LOCALES.map((option) => (
+                <DropdownMenu.RadioItem
+                  className={`landing-language-option${
+                    option.id === locale ? " is-active" : ""
+                  }`}
+                  key={option.id}
+                  value={option.id}
+                >
+                  <span className="landing-language-flag" aria-hidden="true">
+                    {option.flag}
                   </span>
-                </DropdownMenu.ItemIndicator>
-              </DropdownMenu.RadioItem>
-            ))}
-          </DropdownMenu.RadioGroup>
-        </DropdownMenu.Content>
+                  <span>{option.nativeLabel}</span>
+                  <DropdownMenu.ItemIndicator asChild>
+                    <span className="landing-language-check" aria-hidden="true">
+                      <svg
+                        viewBox="0 0 16 16"
+                        width="13"
+                        height="13"
+                        fill="none"
+                      >
+                        <path
+                          d="m3.25 8.25 3 3 6.5-6.5"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </span>
+                  </DropdownMenu.ItemIndicator>
+                </DropdownMenu.RadioItem>
+              ))}
+            </DropdownMenu.RadioGroup>
+          </DropdownMenu.Content>
+        </DropdownMenu.Portal>
       </DropdownMenu.Root>
     </div>
   );
