@@ -1371,14 +1371,14 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         const api = getElectronApi();
         if (api?.exitPlayerFullscreen) {
           void api.exitPlayerFullscreen();
+        } else if (fscreen.fullscreenElement) {
+          void fscreen.exitFullscreen();
         } else if (api?.exitFullscreen) {
           void api.exitFullscreen();
         } else if (api?.setFullscreen) {
           void api.setFullscreen(false);
         } else if (api?.toggleFullscreen) {
           void api.toggleFullscreen();
-        } else if (fscreen.fullscreenElement) {
-          void fscreen.exitFullscreen();
         }
       }
       fscreen.removeEventListener("fullscreenchange", fullscreenChanged);
@@ -1526,6 +1526,14 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     },
     exitFullscreen() {
       const api = getElectronApi();
+      if (api?.exitPlayerFullscreen) {
+        void api.exitPlayerFullscreen();
+        return;
+      }
+      if (fscreen.fullscreenElement) {
+        void fscreen.exitFullscreen();
+        return;
+      }
       if (api?.exitFullscreen) {
         void api.exitFullscreen();
         return;
@@ -1534,16 +1542,8 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         void api.setFullscreen(false);
         return;
       }
-      if (api?.exitPlayerFullscreen) {
-        void api.exitPlayerFullscreen();
-        return;
-      }
       if (isFullscreen && api?.toggleFullscreen) {
         void api.toggleFullscreen();
-        return;
-      }
-      if (fscreen.fullscreenElement) {
-        void fscreen.exitFullscreen();
       }
     },
     setFullscreen(fullscreen: boolean) {
