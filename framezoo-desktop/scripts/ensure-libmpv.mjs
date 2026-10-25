@@ -1,3 +1,4 @@
+import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
@@ -76,10 +77,21 @@ if (!fs.existsSync(runtimePath)) {
   );
 }
 
-if (target.startsWith("darwin-")) {
+const runtimeBuffer = fs.readFileSync(runtimePath);
+const runtimeSha = crypto.createHash("sha256").update(runtimeBuffer).digest("hex");
+
+const V3_POISONED_SHA256 = "bf1edaaa16f6766f7359796c591c9d5479063ce21237b86eb7f6559d4ae0ccd3";
+const EXPECTED_WIN_X64_SHA256 = "ec77593d23735f36eb08e486154e89cf1cc6a5650327dab125736c1bb5d3af40";
+
+if (target === "win32-x64") {
+  if (runtimeSha === V3_POISONED_SHA256) {
+    throw new Error(
+      `[libmpv] FATAL: ${runtimePath} is the poisoned x86_64-v3 binary (sha256: ${runtimeSha}). Must use baseline x86-64 binary (${EXPECTED_WIN_X64_SHA256}).`,
+    );
+  }
 }
 
-console.log(`[libmpv] ready ${target}: ${runtimePath}`);
+console.log(`[libmpv] ready ${target}: ${runtimePath} (sha256: ${runtimeSha})`);
 
 function commandOutput(command, args) {
   return execFileSync(command, args, { encoding: "utf8" });

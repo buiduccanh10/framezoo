@@ -1,3 +1,4 @@
+import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
@@ -119,7 +120,27 @@ async function main() {
   const runtimePath = findRuntimePath(resolvedRuntimeDir);
   if (runtimeDir && runtimePath) {
     process.env.FRAMEZOO_LIBMPV_PATH = runtimePath;
+    const runtimeBuffer = fs.readFileSync(runtimePath);
+    const runtimeSha = crypto.createHash("sha256").update(runtimeBuffer).digest("hex");
     console.log(`[verify-libmpv] runtime: ${runtimePath}`);
+    console.log(`[verify-libmpv] runtime sha256: ${runtimeSha}`);
+
+    const V3_POISONED_SHA256 = "bf1edaaa16f6766f7359796c591c9d5479063ce21237b86eb7f6559d4ae0ccd3";
+    const EXPECTED_WIN_X64_SHA256 = "ec77593d23735f36eb08e486154e89cf1cc6a5650327dab125736c1bb5d3af40";
+
+    if (process.platform === "win32" && (expectArch === "x64" || (!expectArch && process.arch === "x64"))) {
+      if (runtimeSha === V3_POISONED_SHA256) {
+        console.error(
+          `[verify-libmpv] FATAL: ${runtimePath} is the poisoned x86_64-v3 binary (sha256: ${runtimeSha})! Release build blocked.`,
+        );
+        process.exit(1);
+      }
+      if (runtimeSha !== EXPECTED_WIN_X64_SHA256) {
+        console.error(
+          `[verify-libmpv] WARNING: ${runtimePath} sha256 (${runtimeSha}) does not match expected baseline win32-x64 sha256 (${EXPECTED_WIN_X64_SHA256})!`,
+        );
+      }
+    }
   } else if (runtimeDir) {
     console.error(
       `[verify-libmpv] runtime-dir was provided but no libmpv runtime was found in ${resolvedRuntimeDir}`,

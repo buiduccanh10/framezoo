@@ -1,9 +1,12 @@
 #include "mpv_dynamic.h"
 
 #include <cstdlib>
+#include <cwctype>
+#include <iomanip>
 #include <mutex>
 #include <sstream>
 #include <string>
+#include <unordered_set>
 #include <vector>
 
 #if defined(_WIN32)
@@ -38,6 +41,33 @@ std::wstring utf8_to_wide(const std::string& value) {
   return result;
 }
 
+std::string wide_to_utf8(const std::wstring& value) {
+  if (value.empty()) return {};
+  const int length = WideCharToMultiByte(
+      CP_UTF8,
+      0,
+      value.data(),
+      static_cast<int>(value.size()),
+      nullptr,
+      0,
+      nullptr,
+      nullptr
+  );
+  if (length <= 0) return {};
+  std::string result(static_cast<size_t>(length), '\0');
+  WideCharToMultiByte(
+      CP_UTF8,
+      0,
+      value.data(),
+      static_cast<int>(value.size()),
+      result.data(),
+      length,
+      nullptr,
+      nullptr
+  );
+  return result;
+}
+
 bool is_path_absolute(const std::string& path) {
   if (path.size() >= 2 && path[1] == ':') return true;
   if (path.size() >= 2 && (path[0] == '\\' || path[0] == '/') &&
@@ -45,6 +75,95 @@ bool is_path_absolute(const std::string& path) {
     return true;
   }
   return path.find('\\') != std::string::npos || path.find('/') != std::string::npos;
+}
+
+bool is_path_absolute_wide(const std::wstring& path) {
+  if (path.size() >= 2 && path[1] == L':') return true;
+  if (path.size() >= 2 && (path[0] == L'\\' || path[0] == L'/') &&
+      (path[1] == L'\\' || path[1] == L'/')) {
+    return true;
+  }
+  return path.find(L'\\') != std::wstring::npos || path.find(L'/') != std::wstring::npos;
+}
+
+std::wstring canonicalize_path(const std::wstring& path) {
+  if (path.empty()) return {};
+  wchar_t full[MAX_PATH] = {0};
+  if (is_path_absolute_wide(path)) {
+    if (GetFullPathNameW(path.c_str(), MAX_PATH, full, nullptr) > 0) {
+      std::wstring result(full);
+      for (auto& c : result) c = static_cast<wchar_t>(towlower(c));
+      return result;
+    }
+  } else {
+    if (SearchPathW(nullptr, path.c_str(), nullptr, MAX_PATH, full, nullptr) > 0) {
+      std::wstring result(full);
+      for (auto& c : result) c = static_cast<wchar_t>(towlower(c));
+      return result;
+    }
+  }
+  std::wstring result(path);
+  for (auto& c : result) c = static_cast<wchar_t>(towlower(c));
+  return result;
+}
+
+struct VehDiagnostic {
+  DWORD exception_code = 0;
+  void* exception_address = nullptr;
+  std::wstring fault_module;
+  uintptr_t fault_offset = 0;
+  uint8_t fault_bytes[8] = {0};
+  size_t fault_bytes_read = 0;
+};
+
+static thread_local bool t_catching_dll_init = false;
+static thread_local VehDiagnostic t_veh_diag{};
+
+static LONG CALLBACK DllInitVectoredHandler(PEXCEPTION_POINTERS ep) {
+  if (!t_catching_dll_init || !ep || !ep->ExceptionRecord) {
+    return EXCEPTION_CONTINUE_SEARCH;
+  }
+  const DWORD code = ep->ExceptionRecord->ExceptionCode;
+  if (code == 0xC000001D /* STATUS_ILLEGAL_INSTRUCTION */ ||
+      code == 0xC0000005 /* STATUS_ACCESS_VIOLATION */ ||
+      code == 0xC0000096 /* STATUS_PRIVILEGED_INSTRUCTION */ ||
+      code == 0xC0000028 /* STATUS_BAD_STACK */ ||
+      code == 0xC00000FD /* STATUS_STACK_OVERFLOW */) {
+    if (t_veh_diag.exception_code == 0) {
+      t_veh_diag.exception_code = code;
+      t_veh_diag.exception_address = ep->ExceptionRecord->ExceptionAddress;
+
+      HMODULE hMod = nullptr;
+      if (GetModuleHandleExW(
+              GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
+                  GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+              reinterpret_cast<LPCWSTR>(t_veh_diag.exception_address),
+              &hMod
+          ) &&
+          hMod) {
+        wchar_t modPath[MAX_PATH] = {0};
+        if (GetModuleFileNameW(hMod, modPath, MAX_PATH)) {
+          const wchar_t* baseName = wcsrchr(modPath, L'\\');
+          t_veh_diag.fault_module = baseName ? baseName + 1 : modPath;
+          t_veh_diag.fault_offset =
+              reinterpret_cast<uintptr_t>(t_veh_diag.exception_address) -
+              reinterpret_cast<uintptr_t>(hMod);
+        }
+      }
+
+      SIZE_T bytesRead = 0;
+      if (ReadProcessMemory(
+              GetCurrentProcess(),
+              t_veh_diag.exception_address,
+              t_veh_diag.fault_bytes,
+              sizeof(t_veh_diag.fault_bytes),
+              &bytesRead
+          )) {
+        t_veh_diag.fault_bytes_read = bytesRead;
+      }
+    }
+  }
+  return EXCEPTION_CONTINUE_SEARCH;
 }
 #endif
 
@@ -60,10 +179,15 @@ bool load_symbol(void* library, const char* name, T* target) {
   return *target != nullptr;
 }
 
-void* load_library(const std::string& path, unsigned long* last_error = nullptr) {
+void* load_library(const std::string& path, std::string* detailed_error = nullptr) {
 #if defined(_WIN32)
   const std::wstring wide_path = utf8_to_wide(path);
   HMODULE h = nullptr;
+
+  PVOID veh_handle = AddVectoredExceptionHandler(1, DllInitVectoredHandler);
+  t_catching_dll_init = true;
+  t_veh_diag = {};
+
   if (is_path_absolute(path)) {
     // For an absolute path to libmpv-2.dll, LOAD_WITH_ALTERED_SEARCH_PATH allows
     // Windows to resolve co-located dependency DLLs from the same folder.
@@ -74,7 +198,6 @@ void* load_library(const std::string& path, unsigned long* last_error = nullptr)
     );
     if (!h) {
       const DWORD err = GetLastError();
-      if (last_error) *last_error = err;
       // If initialization itself failed (1114), do not re-invoke DllMain.
       if (err != ERROR_DLL_INIT_FAILED) {
         h = LoadLibraryExW(
@@ -89,13 +212,47 @@ void* load_library(const std::string& path, unsigned long* last_error = nullptr)
     h = LoadLibraryW(wide_path.c_str());
   }
 
-  if (!h && last_error) {
-    *last_error = GetLastError();
+  const DWORD last_err = h ? 0 : GetLastError();
+
+  t_catching_dll_init = false;
+  if (veh_handle) {
+    RemoveVectoredExceptionHandler(veh_handle);
+  }
+
+  if (!h && detailed_error) {
+    std::ostringstream diag;
+    diag << "err " << last_err;
+    if (last_err == ERROR_DLL_INIT_FAILED) {
+      const bool has_avx = IsProcessorFeaturePresent(PF_AVX_INSTRUCTIONS_AVAILABLE) != 0;
+      const bool has_avx2 = IsProcessorFeaturePresent(PF_AVX2_INSTRUCTIONS_AVAILABLE) != 0;
+      diag << " [init_failed";
+      if (t_veh_diag.exception_code != 0) {
+        diag << ": code=0x" << std::hex << std::uppercase << t_veh_diag.exception_code;
+        if (!t_veh_diag.fault_module.empty()) {
+          diag << " mod=" << wide_to_utf8(t_veh_diag.fault_module) << "+0x"
+               << std::hex << std::nouppercase << t_veh_diag.fault_offset;
+        }
+        if (t_veh_diag.fault_bytes_read > 0) {
+          diag << " bytes=";
+          for (size_t b = 0; b < t_veh_diag.fault_bytes_read; ++b) {
+            diag << std::hex << std::setw(2) << std::setfill('0')
+                 << static_cast<int>(t_veh_diag.fault_bytes[b]);
+          }
+        }
+      }
+      diag << " avx=" << (has_avx ? "1" : "0") << " avx2=" << (has_avx2 ? "1" : "0") << "]";
+    }
+    *detailed_error = diag.str();
   }
   return static_cast<void*>(h);
 #else
-  if (last_error) *last_error = 0;
-  return dlopen(path.c_str(), RTLD_NOW | RTLD_LOCAL);
+  if (detailed_error) detailed_error->clear();
+  void* lib = dlopen(path.c_str(), RTLD_NOW | RTLD_LOCAL);
+  if (!lib && detailed_error) {
+    const char* dl_err = dlerror();
+    *detailed_error = dl_err ? dl_err : "dlopen failed";
+  }
+  return lib;
 #endif
 }
 
@@ -149,6 +306,7 @@ std::vector<std::string> library_candidates() {
 std::mutex g_api_mutex;
 MpvApi g_shared_api{};
 bool g_shared_api_loaded = false;
+bool g_shared_init_failed = false;
 std::string g_shared_load_error;
 
 }  // namespace
@@ -161,20 +319,35 @@ bool MpvApi::load(std::string* error) {
     return true;
   }
 
-  if (!g_shared_load_error.empty() && !g_shared_api_loaded) {
-    // If previous attempt failed, keep error string for diagnostics.
+  if (g_shared_init_failed) {
+    // If a fatal initialization failure (e.g. error 1114) occurred, do not
+    // re-invoke DllMain across candidates or subsequent load attempts.
+    if (error) *error = g_shared_load_error;
+    return false;
   }
 
+  std::unordered_set<std::string> attempted_canonical;
   std::ostringstream failures;
   for (const auto& path : library_candidates()) {
-    unsigned long err_code = 0;
-    void* lib = load_library(path, &err_code);
-    if (!lib) {
 #if defined(_WIN32)
-      failures << path << " (err " << err_code << "); ";
-#else
-      const char* dl_err = dlerror();
-      failures << path << (dl_err ? std::string(" (") + dl_err + ")" : "") << "; ";
+    const std::wstring canon_w = canonicalize_path(utf8_to_wide(path));
+    const std::string canon = wide_to_utf8(canon_w);
+    if (!canon.empty() && attempted_canonical.count(canon) > 0) {
+      continue;
+    }
+    if (!canon.empty()) {
+      attempted_canonical.insert(canon);
+    }
+#endif
+
+    std::string load_err;
+    void* lib = load_library(path, &load_err);
+    if (!lib) {
+      failures << path << " (" << load_err << "); ";
+#if defined(_WIN32)
+      if (load_err.find("err 1114") != std::string::npos) {
+        g_shared_init_failed = true;
+      }
 #endif
       continue;
     }

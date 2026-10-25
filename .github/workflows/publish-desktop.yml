@@ -415,11 +415,9 @@ jobs:
         uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830
         with:
           path: ./win-mpv-dev-${{ matrix.variant }}
-          # Keyed on the fetch script so SDK upgrades invalidate the cache,
-          # and on the lockfile so dependency changes never reuse stale SDK.
-          key: mpv-sdk-${{ matrix.variant }}-${{ hashFiles('framezoo-desktop/scripts/fetch-windows-libmpv.mjs') }}
-          restore-keys: |
-            mpv-sdk-${{ matrix.variant }}-
+          # Exact cache key only. Do NOT use restore-keys fallback so stale or
+          # incompatible SDK archives are never restored when the fetch script updates.
+          key: mpv-sdk-v2-${{ matrix.variant }}-${{ hashFiles('framezoo-desktop/scripts/fetch-windows-libmpv.mjs') }}
       - name: Setup Windows libmpv SDK
         run: node framezoo-desktop/scripts/fetch-windows-libmpv.mjs --target ${{ matrix.variant == 'win-x64' && 'win32-x64' || 'win32-arm64' }} --out ./win-mpv-dev-${{ matrix.variant }}
       - name: Build desktop artifacts
