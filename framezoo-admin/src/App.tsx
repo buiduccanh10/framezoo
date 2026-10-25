@@ -15,11 +15,13 @@ import {
   Check,
   RotateCcw,
   User,
+  Users,
   Clock,
   Search,
   Eye,
   X,
 } from "lucide-react";
+import { UserManagement } from "./components/UserManagement";
 
 const API_BASE = "/api";
 
@@ -47,10 +49,11 @@ function App() {
   const [loginError, setLoginError] = useState("");
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
-  // Navigation tab: "feedbacks" or "backups"
-  const [activeTab, setActiveTab] = useState<"feedbacks" | "backups">(
-    "feedbacks",
+  // Navigation tab: "users", "feedbacks" or "backups"
+  const [activeTab, setActiveTab] = useState<"users" | "feedbacks" | "backups">(
+    "users",
   );
+  const [totalUsersCount, setTotalUsersCount] = useState<number>(0);
 
   // Backups state
   const [status, setStatus] = useState<any>(null);
@@ -128,6 +131,7 @@ function App() {
     setStatus(null);
     setFiles([]);
     setFeedbacks([]);
+    setTotalUsersCount(0);
   };
 
   const loadBackupData = async () => {
@@ -450,6 +454,22 @@ function App() {
         <div className="flex items-center gap-3">
           <div className="flex bg-white/5 p-1 rounded-xl border border-white/10">
             <button
+              onClick={() => setActiveTab("users")}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                activeTab === "users"
+                  ? "bg-blue-600 text-white shadow"
+                  : "text-gray-400 hover:text-white"
+              }`}
+            >
+              <Users size={16} />
+              <span>Người dùng</span>
+              {totalUsersCount > 0 && (
+                <span className="px-2 py-0.5 text-xs font-bold rounded-full bg-blue-500/20 text-blue-200">
+                  {totalUsersCount}
+                </span>
+              )}
+            </button>
+            <button
               onClick={() => setActiveTab("feedbacks")}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                 activeTab === "feedbacks"
@@ -486,6 +506,17 @@ function App() {
           </button>
         </div>
       </header>
+
+      {/* Main Content: USERS TAB */}
+      {activeTab === "users" && (
+        <main className="max-w-6xl mx-auto space-y-6">
+          <UserManagement
+            api={api}
+            showMessage={showMessage}
+            onStatsUpdate={(total) => setTotalUsersCount(total)}
+          />
+        </main>
+      )}
 
       {/* Main Content: FEEDBACKS TAB */}
       {activeTab === "feedbacks" && (
