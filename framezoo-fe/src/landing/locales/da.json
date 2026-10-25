@@ -5,7 +5,8 @@
     "download": "Download",
     "language": "Sprog",
     "addonGuide": "Addon guide",
-    "home": "Hjem"
+    "home": "Hjem",
+    "installGuide": "Installationsvejledning"
   },
   "hero": {
     "eyebrow": "FRAMEZOO DESKTOP / 01",
@@ -110,5 +111,54 @@
     "eyebrow": "FRAMEZOO DISCOVERY",
     "title": "Populære historier til dit næste ur.",
     "movie": "Film"
+  },
+  "installGuide": {
+    "macTab": "Til macOS",
+    "subtitle": "Sådan omgår du Gatekeeper (macOS) og SmartScreen (Windows) sikkerhedsmeddelelser ved første lancering.",
+    "mac": {
+      "subtitle": "Apple Silicon (M1/M2/M3/M4) & Intel Mac",
+      "step1Desc": "Åbn den downloadede .dmg-fil, og træk Framezoo-ikonet til mappen Programmer.",
+      "title": "macOS installationsvejledning",
+      "step3Title": "Trin 3: Åbn sikkert via Finder",
+      "step1Title": "Trin 1: Træk til applikationer",
+      "step3Steps": [
+        "Åbn Finder, og naviger til mappen Programmer.",
+        "Højreklik (eller Ctrl-klik) på Framezoo.app.",
+        "Vælg \"Åbn\" fra kontekstmenuen.",
+        "Klik på \"Åbn alligevel\" eller \"Åbn\" i bekræftelsesdialogboksen."
+      ],
+      "step2Title": "Trin 2: Gatekeeper sikkerhedsadvarsel",
+      "step2Desc": "Fordi Framezoo er en uafhængig open source-afspiller uden et kommercielt Apple-udviklercertifikat, kan macOS vise: \"Framezoo er beskadiget og kan ikke åbnes\" eller \"Apple kan ikke bekræfte denne app\".",
+      "note": "Du behøver kun at gøre dette højreklik-trin ved første lancering. Efterfølgende lanceringer kan udføres normalt fra Launchpad eller Spotlight."
+    },
+    "title": "Framezoo installations- og startvejledning",
+    "winTab": "Til Windows",
+    "backHome": "Tilbage til Hjemmet",
+    "downloadApp": "Hent Framezoo",
+    "win": {
+      "title": "Windows installationsvejledning",
+      "subtitle": "Windows 10/11 (x64 & ARM64)",
+      "step1Title": "Trin 1: Kør .exe-installationsprogrammet",
+      "step1Desc": "Start det downloadede Framezoo-Setup-x64.exe-installationsprogram for at starte opsætningen.",
+      "step2Title": "Trin 2: Windows Defender SmartScreen-advarsel",
+      "step3Title": "Trin 3: Fortsæt installationen",
+      "step3Steps": [
+        "Klik på linket \"Mere info\" under beskrivelsen.",
+        "En \"Kør alligevel\"-knap vises i nederste højre hjørne.",
+        "Klik på \"Kør alligevel\" for at fortsætte med at installere Framezoo."
+      ],
+      "step2Desc": "Hvis Windows Defender viser en blå skærm med teksten \"Windows beskyttede din pc\":",
+      "note": "Denne advarsel vises, fordi den nye udgivelse endnu ikke har akkumuleret Microsoft EV Code Signing-ry. Binæren er 100 % sikker."
+    }
+  },
+  "downloadConfirm": {
+    "winTitle": "Installationsvejledning til Windows",
+    "macTitle": "Installationsvejledning til macOS",
+    "cancel": "Ophæve",
+    "winNotice": "SmartScreen-meddelelse: Hvis du ser den blå 'Windows beskyttede din pc'-skærm, skal du klikke på 'Mere info' -> klik på 'Kør alligevel'.",
+    "macNotice": "Gatekeeper-meddelelse: Hvis macOS rapporterer 'beskadiget' eller ubekræftet app, skal du gå til Programmer -> Højreklik på Framezoo -> Vælg Åbn -> Åbn alligevel.",
+    "confirmDownload": "Bekræft og download",
+    "downloading": "Starter download...",
+    "viewGuide": "Se den fulde installationsvejledning"
   }
 }

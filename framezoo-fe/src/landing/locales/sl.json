@@ -5,7 +5,8 @@
     "download": "Prenos",
     "language": "Jezik",
     "addonGuide": "Vodnik po dodatkih",
-    "home": "domov"
+    "home": "domov",
+    "installGuide": "Navodila za namestitev"
   },
   "hero": {
     "eyebrow": "FRAMEZOO DESKTOP / 01",
@@ -110,5 +111,54 @@
     "description": "Poiščite nekaj, kar je vredno ogleda, odprite podrobnosti in se odločite za boljši način gledanja s Framezoo.",
     "dragHint": "Povlecite za raziskovanje",
     "eyebrow": "FRAMEZOO DISCOVERY"
+  },
+  "installGuide": {
+    "backHome": "Nazaj na dom",
+    "subtitle": "Kako zaobiti varnostna obvestila Gatekeeper (macOS) in SmartScreen (Windows) ob prvem zagonu.",
+    "winTab": "Za Windows",
+    "macTab": "Za macOS",
+    "title": "Vodnik za namestitev in zagon Framezoo",
+    "downloadApp": "Prenesite Framezoo",
+    "mac": {
+      "step1Desc": "Odprite preneseno datoteko .dmg in povlecite ikono Framezoo v mapo Applications.",
+      "step2Title": "2. korak: varnostno opozorilo vratarja",
+      "step1Title": "1. korak: povlecite do Aplikacije",
+      "subtitle": "Apple Silicon (M1/M2/M3/M4) & Intel Mac",
+      "title": "Navodila za namestitev macOS",
+      "step2Desc": "Ker je Framezoo neodvisen odprtokodni predvajalnik brez komercialnega potrdila Apple Developer, lahko macOS prikaže: »Framezoo je poškodovan in ga ni mogoče odpreti« ali »Apple ne more preveriti te aplikacije«.",
+      "step3Title": "3. korak: Varno odprite prek Finderja",
+      "step3Steps": [
+        "Odprite Finder in se pomaknite do mape z aplikacijami.",
+        "Desni klik (ali Control-klik) na Framezoo.app.",
+        "V kontekstnem meniju izberite \"Odpri\".",
+        "V potrditvenem pogovornem oknu kliknite »Vseeno odpri« ali »Odpri«."
+      ],
+      "note": "Ta korak z desnim klikom morate narediti samo ob prvem zagonu. Poznejše zagone je mogoče izvesti običajno iz Launchpad ali Spotlight."
+    },
+    "win": {
+      "title": "Navodila za namestitev sistema Windows",
+      "step1Title": "1. korak: Zaženite namestitveni program .exe",
+      "subtitle": "Windows 10/11 (x64 & ARM64)",
+      "step2Title": "2. korak: Opozorilo Windows Defender SmartScreen",
+      "step2Desc": "Če Windows Defender prikaže moder zaslon z napisom »Windows je zaščitil vaš računalnik«:",
+      "step1Desc": "Za začetek namestitve zaženite preneseni namestitveni program Framezoo-Setup-x64.exe.",
+      "step3Title": "3. korak: Nadaljujte z namestitvijo",
+      "step3Steps": [
+        "Kliknite na povezavo \"Več informacij\" pod opisom.",
+        "V spodnjem desnem kotu se prikaže gumb »Vseeno zaženi«.",
+        "Kliknite »Vseeno zaženi«, da nadaljujete z namestitvijo Framezoo."
+      ],
+      "note": "To opozorilo se prikaže, ker nova izdaja še ni pridobila ugleda Microsoft EV Code Signing. Binarna datoteka je 100 % varna."
+    }
+  },
+  "downloadConfirm": {
+    "macTitle": "Navodila za namestitev za macOS",
+    "winTitle": "Navodila za namestitev za Windows",
+    "cancel": "Prekliči",
+    "downloading": "Začetek prenosa ...",
+    "macNotice": "Obvestilo vratarja: Če macOS poroča o 'poškodovani' ali nepreverjeni aplikaciji, pojdite na Aplikacije -> Desni klik Framezoo -> Izberite Odpri -> Vseeno odpri.",
+    "winNotice": "Opomba SmartScreen: Če vidite modri zaslon »Windows je zaščitil vaš računalnik«, kliknite »Več informacij« -> kliknite »Vseeno zaženi«.",
+    "confirmDownload": "Potrdi in prenesi",
+    "viewGuide": "Oglejte si celoten vodnik za namestitev"
   }
 }

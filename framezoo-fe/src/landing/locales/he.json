@@ -5,7 +5,8 @@
     "download": "הורד",
     "language": "שָׂפָה",
     "addonGuide": "מדריך הרחבות",
-    "home": "בַּיִת"
+    "home": "בַּיִת",
+    "installGuide": "מדריך התקנה"
   },
   "hero": {
     "eyebrow": "FRAMEZOO שולחן עבודה / 01",
@@ -110,5 +111,54 @@
     "title": "סיפורים פופולריים לשעון הבא שלך.",
     "eyebrow": "גילוי FRAMEZOO",
     "dragHint": "גרור כדי לחקור"
+  },
+  "installGuide": {
+    "backHome": "חזרה לבית",
+    "title": "מדריך התקנה והשקה של Framezoo",
+    "downloadApp": "הורד את Framezoo",
+    "mac": {
+      "title": "מדריך ההתקנה של macOS",
+      "step2Desc": "מכיוון ש-Framezoo הוא נגן קוד פתוח עצמאי ללא אישור Apple Developer מסחרי, macOS עשוי להראות: \"Framezoo פגום ולא ניתן לפתוח\" או \"אפל לא יכולה לאמת את האפליקציה הזו\".",
+      "step1Desc": "פתח את קובץ ה-.dmg שהורד וגרור את סמל Framezoo לתיקיית היישומים.",
+      "step1Title": "שלב 1: גרור ליישומים",
+      "step2Title": "שלב 2: אזהרת אבטחה של שומר סף",
+      "subtitle": "Apple Silicon (M1/M2/M3/M4) ו-Intel Mac",
+      "step3Title": "שלב 3: פתח בבטחה דרך Finder",
+      "step3Steps": [
+        "פתח את Finder ונווט אל תיקיית היישומים שלך.",
+        "לחץ לחיצה ימנית (או לחיצה על Control) על Framezoo.app.",
+        "בחר \"פתח\" מתפריט ההקשר.",
+        "בתיבת הדו-שיח לאישור, לחץ על \"פתח בכל מקרה\" או \"פתח\"."
+      ],
+      "note": "אתה רק צריך לעשות את השלב הזה בלחיצה ימנית בהפעלה הראשונה. ההשקות הבאות יכולות להיעשות בדרך כלל מ-Launchpad או Spotlight."
+    },
+    "winTab": "עבור Windows",
+    "macTab": "עבור macOS",
+    "subtitle": "כיצד לעקוף את הודעות האבטחה של Gatekeeper (macOS) ו-SmartScreen (Windows) בהפעלה הראשונה.",
+    "win": {
+      "title": "מדריך ההתקנה של Windows",
+      "subtitle": "Windows 10/11 (x64 ו-ARM64)",
+      "step2Desc": "אם Windows Defender מציג מסך כחול המציין \"Windows הגן על המחשב שלך\":",
+      "step1Desc": "הפעל את תוכנית ההתקנה של Framezoo-Setup-x64.exe שהורדת כדי להתחיל בהתקנה.",
+      "step3Steps": [
+        "לחץ על הקישור \"מידע נוסף\" מתחת לתיאור.",
+        "כפתור \"הפעל בכל זאת\" יופיע בפינה השמאלית התחתונה.",
+        "לחץ על \"הפעל בכל זאת\" כדי להמשיך בהתקנת Framezoo."
+      ],
+      "step3Title": "שלב 3: המשך בהתקנה",
+      "step1Title": "שלב 1: הפעל את תוכנית ההתקנה של .exe",
+      "step2Title": "שלב 2: אזהרת Windows Defender SmartScreen",
+      "note": "אזהרה זו מופיעה מכיוון שהמהדורה החדשה עדיין לא צברה מוניטין של Microsoft EV Code Signing. הבינארי בטוח ב-100%."
+    }
+  },
+  "downloadConfirm": {
+    "macTitle": "מדריך התקנה עבור macOS",
+    "macNotice": "הודעת שומר סף: אם macOS מדווחת על אפליקציה 'פגומה' או לא מאומתת, עבור אל יישומים -> לחץ לחיצה ימנית על Framezoo -> בחר פתח -> פתח בכל זאת.",
+    "cancel": "לְבַטֵל",
+    "winTitle": "מדריך התקנה עבור Windows",
+    "downloading": "מתחיל להוריד...",
+    "winNotice": "הודעת SmartScreen: אם אתה רואה את המסך הכחול 'Windows הגן על המחשב שלך', לחץ על 'מידע נוסף' -> לחץ על 'הפעל בכל זאת'.",
+    "viewGuide": "צפו במדריך ההתקנה המלא",
+    "confirmDownload": "אשר והורד"
   }
 }

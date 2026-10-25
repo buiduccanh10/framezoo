@@ -5,7 +5,8 @@
     "download": "Lataa",
     "language": "Kieli",
     "addonGuide": "Lisäyksen opas",
-    "home": "Kotiin"
+    "home": "Kotiin",
+    "installGuide": "Asennusopas"
   },
   "hero": {
     "eyebrow": "FRAMEZOO DESKTOP / 01",
@@ -110,5 +111,54 @@
     "description": "Löydä jotain katsomisen arvoista, avaa yksityiskohdat ja ryhdy parempaan katseluun Framezoon avulla.",
     "eyebrow": "FRAMEZOO LÖYTTÖ",
     "dragHint": "Vedä tutkiaksesi"
+  },
+  "installGuide": {
+    "backHome": "Takaisin etusivulle",
+    "macTab": "macOS:lle",
+    "winTab": "Windowsille",
+    "subtitle": "Gatekeeperin (macOS) ja SmartScreenin (Windows) suojausilmoitusten ohittaminen ensimmäisen käynnistyksen yhteydessä.",
+    "title": "Framezoon asennus- ja käynnistysopas",
+    "mac": {
+      "title": "macOS-asennusopas",
+      "step1Title": "Vaihe 1: Vedä kohtaan Sovellukset",
+      "step2Title": "Vaihe 2: Portinvartijan turvavaroitus",
+      "subtitle": "Apple Silicon (M1/M2/M3/M4) ja Intel Mac",
+      "step3Title": "Vaihe 3: Avaa turvallisesti Finderin kautta",
+      "step1Desc": "Avaa ladattu .dmg-tiedosto ja vedä Framezoo-kuvake Ohjelmat-kansioon.",
+      "step2Desc": "Koska Framezoo on itsenäinen avoimen lähdekoodin soitin ilman kaupallista Apple Developer -varmennetta, macOS saattaa näyttää: \"Framezoo on vaurioitunut eikä sitä voi avata\" tai \"Apple ei voi vahvistaa tätä sovellusta\".",
+      "note": "Sinun tarvitsee vain napsauttaa tätä hiiren kakkospainikkeella ensimmäisen käynnistyksen yhteydessä. Myöhemmät käynnistykset voidaan tehdä normaalisti Launchpadista tai Spotlightista.",
+      "step3Steps": [
+        "Avaa Finder ja siirry Sovellukset-kansioosi.",
+        "Napsauta hiiren kakkospainikkeella (tai Control-osoita) Framezoo.app-sovellusta.",
+        "Valitse pikavalikosta \"Avaa\".",
+        "Napsauta vahvistusikkunassa \"Avaa silti\" tai \"Avaa\"."
+      ]
+    },
+    "downloadApp": "Lataa Framezoo",
+    "win": {
+      "title": "Windowsin asennusopas",
+      "step3Title": "Vaihe 3: Jatka asennusta",
+      "step2Title": "Vaihe 2: Windows Defender SmartScreen -varoitus",
+      "step2Desc": "Jos Windows Defender näyttää sinisen näytön, jossa lukee \"Windows suojasi tietokonettasi\":",
+      "step1Desc": "Aloita asennus käynnistämällä ladattu Framezoo-Setup-x64.exe-asennusohjelma.",
+      "step1Title": "Vaihe 1: Suorita .exe-asennusohjelma",
+      "subtitle": "Windows 10/11 (x64 & ARM64)",
+      "step3Steps": [
+        "Napsauta kuvauksen alla olevaa \"Lisätietoja\" -linkkiä.",
+        "\"Suorita silti\" -painike tulee näkyviin oikeaan alakulmaan.",
+        "Napsauta \"Suorita silti\" jatkaaksesi Framezoon asentamista."
+      ],
+      "note": "Tämä varoitus tulee näkyviin, koska uudella julkaisulla ei ole vielä kertynyt Microsoft EV Code Signing -mainetta. Binaari on 100 % turvallinen."
+    }
+  },
+  "downloadConfirm": {
+    "macTitle": "Asennusopas macOS:lle",
+    "cancel": "Peruuttaa",
+    "winTitle": "Asennusopas Windowsille",
+    "winNotice": "SmartScreen-ilmoitus: Jos näet sinisen \"Windows suojasi tietokoneesi\" -näytön, napsauta \"Lisätietoja\" -> napsauta \"Suorita silti\".",
+    "macNotice": "Gatekeeper-ilmoitus: Jos macOS ilmoittaa \"vaurioituneen\" tai vahvistamattoman sovelluksen, siirry kohtaan Sovellukset -> Napsauta hiiren kakkospainikkeella Framezoo -> Valitse Avaa -> Avaa silti.",
+    "downloading": "Aloitetaan lataus...",
+    "confirmDownload": "Vahvista ja lataa",
+    "viewGuide": "Katso koko asennusopas"
   }
 }

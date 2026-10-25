@@ -5,7 +5,8 @@
     "download": "下载",
     "language": "语言",
     "addonGuide": "插件指南",
-    "home": "家"
+    "home": "家",
+    "installGuide": "安装指南"
   },
   "hero": {
     "eyebrow": "FRAMEZOO 桌面 / 01",
@@ -110,5 +111,54 @@
     "title": "您下一部观看的热门故事。",
     "description": "找到值得观看的内容，打开细节，然后通过 Framezoo 找到更好的观看方式。",
     "eyebrow": "框架动物园发现"
+  },
+  "installGuide": {
+    "macTab": "对于 macOS",
+    "backHome": "返回首页",
+    "winTab": "对于 Windows",
+    "downloadApp": "下载 Framezoo",
+    "mac": {
+      "title": "Mac OS 安装指南",
+      "subtitle": "Apple Silicon (M1/M2/M3/M4) 和 Intel Mac",
+      "step3Title": "第 3 步：通过 Finder 安全打开",
+      "step1Title": "第 1 步：拖至应用程序",
+      "step2Title": "第2步：Gatekeeper安全警告",
+      "step2Desc": "由于 Framezoo 是一个独立的开源播放器，没有商业 Apple 开发者证书，因此 macOS 可能会显示：“Framezoo 已损坏，无法打开”或“Apple 无法验证此应用程序”。",
+      "step1Desc": "打开下载的 .dmg 文件并将 Framezoo 图标拖到“应用程序”文件夹中。",
+      "step3Steps": [
+        "打开 Finder 并导航至您的应用程序文件夹。",
+        "右键单击（或按住 Control 单击）Framezoo.app。",
+        "从上下文菜单中选择“打开”。",
+        "在确认对话框中，单击“仍然打开”或“打开”。"
+      ],
+      "note": "您只需在首次启动时执行此右键单击步骤。后续启动可以从 Launchpad 或 Spotlight 正常完成。"
+    },
+    "title": "Framezoo 安装和启动指南",
+    "subtitle": "如何在首次启动时绕过 Gatekeeper (macOS) 和 SmartScreen (Windows) 安全通知。",
+    "win": {
+      "step1Title": "步骤 1：运行 .exe 安装程序",
+      "subtitle": "Windows 10 / 11（x64 和 ARM64）",
+      "title": "Windows 安装指南",
+      "step1Desc": "启动下载的 Framezoo-Setup-x64.exe 安装程序以开始安装。",
+      "step2Title": "步骤 2：Windows Defender SmartScreen 警告",
+      "step3Title": "第三步：继续安装",
+      "step3Steps": [
+        "单击说明下方的“更多信息”链接。",
+        "右下角将出现一个“仍然运行”按钮。",
+        "单击“仍然运行”继续安装 Framezoo。"
+      ],
+      "step2Desc": "如果 Windows Defender 显示蓝屏，提示“Windows 保护了您的电脑”：",
+      "note": "出现此警告是因为新版本尚未累积 Microsoft EV 代码签名声誉。二进制文件 100% 安全。"
+    }
+  },
+  "downloadConfirm": {
+    "confirmDownload": "确认并下载",
+    "macTitle": "macOS 安装指南",
+    "winTitle": "Windows 安装指南",
+    "cancel": "取消",
+    "macNotice": "Gatekeeper 注意：如果 macOS 报告“已损坏”或未经验证的应用程序，请转到“应用程序”-> 右键单击​​ Framezoo -> 选择“打开”->“仍然打开”。",
+    "winNotice": "SmartScreen 注意：如果您看到蓝色的“Windows 保护您的电脑”屏幕，请单击“更多信息”-> 单击“仍然运行”。",
+    "downloading": "开始下载...",
+    "viewGuide": "查看完整的安装指南"
   }
 }

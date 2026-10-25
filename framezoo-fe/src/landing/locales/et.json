@@ -5,7 +5,8 @@
     "download": "Laadi alla",
     "language": "Keel",
     "addonGuide": "Lisade juhend",
-    "home": "Kodu"
+    "home": "Kodu",
+    "installGuide": "Paigaldusjuhend"
   },
   "hero": {
     "eyebrow": "FRAMEZOO LAUAARV / 01",
@@ -110,5 +111,54 @@
     "movie": "Film",
     "title": "Populaarsed lood teie järgmise kella jaoks.",
     "dragHint": "Uurimiseks lohistage"
+  },
+  "installGuide": {
+    "backHome": "Tagasi avalehele",
+    "macTab": "macOS-i jaoks",
+    "downloadApp": "Laadige alla Framezoo",
+    "winTab": "Windowsi jaoks",
+    "subtitle": "Kuidas esimesel käivitamisel Gatekeeperi (macOS) ja SmartScreeni (Windows) turvamärguannetest mööda minna.",
+    "title": "Framezoo installi- ja käivitamisjuhend",
+    "mac": {
+      "step1Desc": "Avage allalaaditud dmg-fail ja lohistage Framezoo ikoon rakenduste kausta.",
+      "step1Title": "1. samm: lohistage jaotisesse Rakendused",
+      "subtitle": "Apple Silicon (M1/M2/M3/M4) ja Intel Mac",
+      "step3Title": "3. samm: avage Finderi kaudu ohutult",
+      "step2Title": "2. samm: väravavahi turvahoiatus",
+      "step2Desc": "Kuna Framezoo on sõltumatu avatud lähtekoodiga pleier, millel pole kaubanduslikku Apple'i arendaja sertifikaati, võib macOS näidata: \"Framezoo on kahjustatud ja seda ei saa avada\" või \"Apple ei saa seda rakendust kinnitada\".",
+      "title": "macOS-i installijuhend",
+      "step3Steps": [
+        "Avage Finder ja liikuge kausta Rakendused.",
+        "Paremklõpsake (või Control-klõpsake) saidil Framezoo.app.",
+        "Valige kontekstimenüüst \"Ava\".",
+        "Kinnitusdialoogis klõpsake \"Ava ikkagi\" või \"Ava\"."
+      ],
+      "note": "Peate seda paremklõpsake tegema ainult esimesel käivitamisel. Järgnevaid käivitamisi saab teha tavapäraselt Launchpadist või Spotlightist."
+    },
+    "win": {
+      "title": "Windowsi installijuhend",
+      "subtitle": "Windows 10/11 (x64 ja ARM64)",
+      "step1Desc": "Seadistamise alustamiseks käivitage allalaaditud installiprogramm Framezoo-Setup-x64.exe.",
+      "step2Desc": "Kui Windows Defender kuvab sinise ekraani teatega \"Windows kaitses teie arvutit\":",
+      "step1Title": "1. samm: käivitage .exe installiprogramm",
+      "step2Title": "2. samm: Windows Defender SmartScreeni hoiatus",
+      "step3Title": "3. samm: jätkake installimist",
+      "step3Steps": [
+        "Klõpsake kirjelduse all olevat linki \"Lisateave\".",
+        "Paremasse alanurka ilmub nupp \"Käivita ikkagi\".",
+        "Framezoo installimise jätkamiseks klõpsake \"Käivita ikkagi\"."
+      ],
+      "note": "See hoiatus ilmub, kuna uus versioon ei ole veel kogunud Microsoft EV Code Signing mainet. Kahendfail on 100% turvaline."
+    }
+  },
+  "downloadConfirm": {
+    "macTitle": "MacOS-i installijuhend",
+    "cancel": "Tühista",
+    "downloading": "Allalaadimise alustamine...",
+    "winTitle": "Windowsi installijuhend",
+    "viewGuide": "Vaadake täielikku paigaldusjuhendit",
+    "winNotice": "SmartScreeni teade: kui näete sinist ekraani \"Windows kaitses teie arvutit\", klõpsake \"Rohkem teavet\" -> klõpsake \"Käivita ikkagi\".",
+    "macNotice": "Gatekeeperi teade: kui macOS teatab, et rakendus on kahjustatud või kinnitamata, minge jaotisse Rakendused -> Paremklõpsake Framezoo -> Valige Ava -> Ava ikkagi.",
+    "confirmDownload": "Kinnitage ja laadige alla"
   }
 }

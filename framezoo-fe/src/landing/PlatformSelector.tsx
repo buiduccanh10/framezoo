@@ -1,5 +1,8 @@
+import { useState } from "react";
+
 import type { AppDownloadOption } from "@/backend/download";
 
+import { DownloadConfirmModal } from "./DownloadConfirmModal";
 import type { LandingCopy } from "./i18n";
 import { DownloadIcon } from "./LandingIcon";
 
@@ -7,13 +10,34 @@ interface PlatformSelectorProps {
   options: AppDownloadOption[];
   recommendedId: AppDownloadOption["id"] | null;
   copy: LandingCopy["download"];
+  fullCopy?: LandingCopy;
 }
 
 export function PlatformSelector({
   options,
   recommendedId,
   copy,
+  fullCopy,
 }: PlatformSelectorProps) {
+  const [pendingOption, setPendingOption] = useState<AppDownloadOption | null>(
+    null,
+  );
+
+  const handleCardClick = (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    option: AppDownloadOption,
+  ) => {
+    if (fullCopy) {
+      event.preventDefault();
+      setPendingOption(option);
+    }
+  };
+
+  const handleConfirmDownload = (option: AppDownloadOption) => {
+    setPendingOption(null);
+    window.open(option.url, "_blank", "noopener,noreferrer");
+  };
+
   return (
     <div className="landing-platforms" aria-label={copy.chooseBuild}>
       <div className="landing-platform-grid">
@@ -25,6 +49,7 @@ export function PlatformSelector({
               className={`landing-platform-card${isRecommended ? " is-recommended" : ""}`}
               key={option.id}
               href={option.url}
+              onClick={(e) => handleCardClick(e, option)}
               target="_blank"
               rel="noreferrer"
               aria-label={`${copy.download}: ${option.label}`}
@@ -45,6 +70,16 @@ export function PlatformSelector({
           );
         })}
       </div>
+
+      {fullCopy && (
+        <DownloadConfirmModal
+          isOpen={pendingOption !== null}
+          option={pendingOption}
+          copy={fullCopy}
+          onClose={() => setPendingOption(null)}
+          onConfirm={handleConfirmDownload}
+        />
+      )}
     </div>
   );
 }

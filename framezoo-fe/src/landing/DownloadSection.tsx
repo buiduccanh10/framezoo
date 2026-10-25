@@ -6,12 +6,14 @@ import type { DownloadState } from "./useDownloadManifest";
 
 interface DownloadSectionProps {
   copy: LandingCopy["download"];
+  fullCopy?: LandingCopy;
   onRetry: () => void;
   state: DownloadState;
 }
 
 export function DownloadSection({
   copy,
+  fullCopy,
   onRetry,
   state,
 }: DownloadSectionProps) {
@@ -64,6 +66,7 @@ export function DownloadSection({
             options={state.manifest.options}
             recommendedId={detection?.recommendedId ?? null}
             copy={copy}
+            fullCopy={fullCopy}
           />
         )}
       </div>

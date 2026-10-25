@@ -5,7 +5,8 @@
     "download": "İndirmek",
     "language": "Dil",
     "addonGuide": "Eklenti kılavuzu",
-    "home": "Ev"
+    "home": "Ev",
+    "installGuide": "Kurulum Kılavuzu"
   },
   "hero": {
     "eyebrow": "FRAMEZOO MASAÜSTÜ / 01",
@@ -110,5 +111,54 @@
     "description": "İzlemeye değer bir şey bulun, ayrıntıları açın ve Framezoo ile izlemenin daha iyi bir yolunu bulun.",
     "title": "Bir sonraki izlemeniz için popüler hikayeler.",
     "eyebrow": "FRAMEZOO KEŞFİ"
+  },
+  "installGuide": {
+    "backHome": "Ana Sayfaya Geri Dön",
+    "title": "Framezoo Kurulum ve Başlatma Kılavuzu",
+    "mac": {
+      "title": "macOS Kurulum Kılavuzu",
+      "subtitle": "Apple Silikon (M1/M2/M3/M4) ve Intel Mac",
+      "step1Desc": "İndirilen .dmg dosyasını açın ve Framezoo simgesini Uygulamalar klasörüne sürükleyin.",
+      "step3Steps": [
+        "Finder'ı açın ve Uygulamalar klasörünüze gidin.",
+        "Framezoo.app'e sağ tıklayın (veya Control tuşuna basarak tıklayın).",
+        "Bağlam menüsünden \"Aç\"ı seçin.",
+        "Onay iletişim kutusunda \"Yine de Aç\" veya \"Aç\" seçeneğini tıklayın."
+      ],
+      "step3Title": "3. Adım: Finder aracılığıyla güvenle açın",
+      "step1Title": "1. Adım: Uygulamalara Sürükleyin",
+      "step2Title": "Adım 2: Gatekeeper güvenlik uyarısı",
+      "note": "Bu sağ tıklama adımını yalnızca ilk başlatmada yapmanız gerekir. Sonraki başlatmalar normal şekilde Launchpad veya Spotlight'tan yapılabilir.",
+      "step2Desc": "Framezoo, ticari bir Apple Geliştirici sertifikası olmayan bağımsız bir açık kaynaklı oynatıcı olduğundan, macOS şunu gösterebilir: \"Framezoo hasarlı ve açılamıyor\" veya \"Apple bu uygulamayı doğrulayamıyor\"."
+    },
+    "downloadApp": "Framezoo'yu indirin",
+    "macTab": "MacOS için",
+    "winTab": "Windows için",
+    "subtitle": "İlk başlatmada Gatekeeper (macOS) ve SmartScreen (Windows) güvenlik bildirimleri nasıl atlanır?",
+    "win": {
+      "title": "Windows Kurulum Kılavuzu",
+      "step1Desc": "Kuruluma başlamak için indirilen Framezoo-Setup-x64.exe yükleyicisini başlatın.",
+      "step2Desc": "Windows Defender \"Windows bilgisayarınızı korudu\" ifadesini içeren mavi bir ekran görüntülerse:",
+      "subtitle": "Windows 10/11 (x64 ve ARM64)",
+      "step3Title": "3. Adım: Kuruluma devam edin",
+      "step2Title": "Adım 2: Windows Defender SmartScreen uyarısı",
+      "step1Title": "Adım 1: .exe yükleyicisini çalıştırın",
+      "step3Steps": [
+        "Açıklamanın altındaki \"Daha fazla bilgi\" bağlantısını tıklayın.",
+        "Sağ alt köşede \"Yine de çalıştır\" düğmesi görünecektir.",
+        "Framezoo'yu yüklemeye devam etmek için \"Yine de çalıştır\"ı tıklayın."
+      ],
+      "note": "Bu uyarı, yeni sürümün henüz Microsoft EV Kod İmzalama itibarını biriktirmediği için görüntülenir. İkili dosya %100 güvenlidir."
+    }
+  },
+  "downloadConfirm": {
+    "macTitle": "MacOS Kurulum Kılavuzu",
+    "winTitle": "Windows için Kurulum Kılavuzu",
+    "cancel": "İptal etmek",
+    "macNotice": "Gatekeeper Uyarısı: Eğer macOS uygulamayı 'hasarlı' veya doğrulanmamış olarak bildirirse, Uygulamalar'a gidin -> Framezoo'ya sağ tıklayın -> Aç'ı seçin -> Yine de Aç.",
+    "winNotice": "SmartScreen Uyarısı: Mavi 'Windows PC'nizi korudu' ekranını görürseniz, 'Daha fazla bilgi'yi tıklayın -> 'Yine de çalıştır'ı tıklayın.",
+    "viewGuide": "Tam kurulum kılavuzunu görüntüleyin",
+    "downloading": "İndirme başlatılıyor...",
+    "confirmDownload": "Onayla ve İndir"
   }
 }

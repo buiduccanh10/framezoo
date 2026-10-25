@@ -1,4 +1,5 @@
 import { DeepLinkPage } from "@/landing/DeepLinkPage";
+import { InstallGuidePage } from "@/landing/InstallGuidePage";
 import { LandingCategoryPage } from "@/landing/LandingCategoryPage";
 import { LandingPage } from "@/landing/LandingPage";
 import {
@@ -17,6 +18,15 @@ export default function App({ pathname, search }: AppProps = {}) {
     (typeof window !== "undefined" ? window.location.pathname : "/");
   const currentSearch =
     search ?? (typeof window !== "undefined" ? window.location.search : "");
+
+  if (
+    currentPathname === "/guide/install" ||
+    currentPathname === "/install-guide" ||
+    currentPathname === "/docs/install" ||
+    currentPathname.startsWith("/guide/install/")
+  ) {
+    return <InstallGuidePage />;
+  }
 
   const landingCategory = getLandingSeoCategory(currentPathname);
   if (landingCategory) {

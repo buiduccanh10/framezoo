@@ -40,6 +40,8 @@ describe("landing locale detection", () => {
     for (const locale of LANDING_LOCALES) {
       expect(getLandingCopy(locale.id).nav.features).toBeTruthy();
       expect(getLandingCopy(locale.id).download.download).toBeTruthy();
+      expect(getLandingCopy(locale.id).installGuide.title).toBeTruthy();
+      expect(getLandingCopy(locale.id).downloadConfirm.confirmDownload).toBeTruthy();
     }
   });
 

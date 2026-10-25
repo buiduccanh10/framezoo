@@ -5,7 +5,8 @@
     "download": "Lejupielādēt",
     "language": "Valoda",
     "addonGuide": "Papildinājuma ceļvedis",
-    "home": "Sākums"
+    "home": "Sākums",
+    "installGuide": "Uzstādīšanas rokasgrāmata"
   },
   "hero": {
     "eyebrow": "FRAMEZOO DESKTOP / 01",
@@ -110,5 +111,54 @@
     "eyebrow": "FRAMEZOO ATKLĀŠANA",
     "description": "Atrodiet kaut ko skatīšanās vērtu, atveriet detalizētu informāciju un iekārtojieties labākā skatīšanās veidā, izmantojot Framezoo.",
     "title": "Populāri stāsti nākamajam pulkstenim."
+  },
+  "installGuide": {
+    "backHome": "Atpakaļ uz sākumlapu",
+    "winTab": "Operētājsistēmai Windows",
+    "macTab": "MacOS",
+    "title": "Framezoo instalēšanas un palaišanas rokasgrāmata",
+    "downloadApp": "Lejupielādēt Framezoo",
+    "subtitle": "Kā apiet Gatekeeper (macOS) un SmartScreen (Windows) drošības paziņojumus pirmajā palaišanas reizē.",
+    "mac": {
+      "step1Title": "1. darbība. Velciet uz Programmas",
+      "step2Title": "2. darbība: vārtsarga drošības brīdinājums",
+      "step1Desc": "Atveriet lejupielādēto .dmg failu un velciet Framezoo ikonu uz mapi Programmas.",
+      "title": "macOS instalēšanas rokasgrāmata",
+      "subtitle": "Apple Silicon (M1/M2/M3/M4) un Intel Mac",
+      "step2Desc": "Tā kā Framezoo ir neatkarīgs atvērtā pirmkoda atskaņotājs bez komerciāla Apple izstrādātāja sertifikāta, macOS var parādīt: \"Framezoo ir bojāts un to nevar atvērt\" vai \"Apple nevar verificēt šo lietotni\".",
+      "step3Title": "3. darbība. Atveriet droši, izmantojot Finder",
+      "step3Steps": [
+        "Atveriet Finder un dodieties uz mapi Programmas.",
+        "Ar peles labo pogu noklikšķiniet (vai Control-klikšķis) uz Framezoo.app.",
+        "Konteksta izvēlnē atlasiet \"Atvērt\".",
+        "Apstiprinājuma dialoglodziņā noklikšķiniet uz \"Atvērt jebkurā gadījumā\" vai \"Atvērt\"."
+      ],
+      "note": "Jums tikai jāveic šī darbība ar peles labo pogu pirmajā palaišanas reizē. Turpmākās palaišanas var veikt parasti no Launchpad vai Spotlight."
+    },
+    "win": {
+      "step1Title": "1. darbība. Palaidiet .exe instalēšanas programmu",
+      "subtitle": "Windows 10/11 (x64 un ARM64)",
+      "title": "Windows instalēšanas rokasgrāmata",
+      "step3Title": "3. darbība: turpiniet instalēšanu",
+      "step3Steps": [
+        "Noklikšķiniet uz saites \"Papildinformācija\" zem apraksta.",
+        "Apakšējā labajā stūrī parādīsies poga \"Palaist jebkurā gadījumā\".",
+        "Noklikšķiniet uz \"Palaist jebkurā gadījumā\", lai turpinātu Framezoo instalēšanu."
+      ],
+      "step2Desc": "Ja programmā Windows Defender tiek parādīts zils ekrāns ar uzrakstu \"Windows aizsargāja jūsu datoru\":",
+      "step1Desc": "Palaidiet lejupielādēto Framezoo-Setup-x64.exe instalēšanas programmu, lai sāktu iestatīšanu.",
+      "step2Title": "2. darbība: Windows Defender SmartScreen brīdinājums",
+      "note": "Šis brīdinājums tiek parādīts, jo jaunais laidiens vēl nav uzkrājis Microsoft EV Code Signing reputāciju. Binārais fails ir 100% drošs."
+    }
+  },
+  "downloadConfirm": {
+    "macTitle": "MacOS instalēšanas rokasgrāmata",
+    "macNotice": "Paziņojums vārtsargam: ja macOS ziņo par “bojātu” vai nepārbaudītu lietotni, dodieties uz Programmas -> Ar peles labo pogu noklikšķiniet uz Framezoo -> Atlasiet Atvērt -> Atvērt jebkurā gadījumā.",
+    "cancel": "Atcelt",
+    "winTitle": "Instalācijas rokasgrāmata operētājsistēmai Windows",
+    "downloading": "Tiek sākta lejupielāde...",
+    "viewGuide": "Skatīt pilnu instalēšanas rokasgrāmatu",
+    "winNotice": "SmartScreen paziņojums: ja redzat zilu ekrānu “Windows aizsargā jūsu datoru”, noklikšķiniet uz “Papildinformācija” —> noklikšķiniet uz “Palaist jebkurā gadījumā”.",
+    "confirmDownload": "Apstiprināt un lejupielādēt"
   }
 }

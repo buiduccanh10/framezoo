@@ -3384,3 +3384,544 @@ body {
   }
 
 }
+
+/* ==========================================================================
+   Download Confirm Modal & Install Guide Styles
+   ========================================================================== */
+
+.landing-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: color-mix(in oklch, black 75%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: landingFadeIn 0.2s ease-out forwards;
+}
+
+@keyframes landingFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.landing-modal-card {
+  position: relative;
+  width: 100%;
+  max-width: 540px;
+  max-height: calc(100vh - 3rem);
+  overflow-y: auto;
+  padding: 2rem;
+  border-radius: 1.25rem;
+  border: 1px solid var(--landing-line);
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(228, 79, 79, 0.12),
+      transparent 18rem
+    ),
+    linear-gradient(
+      155deg,
+      rgba(32, 28, 30, 0.95),
+      rgba(18, 16, 17, 0.98)
+    );
+  box-shadow: 0 2rem 4rem -1rem rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  color: var(--color-ink);
+  animation: landingModalScale 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes landingModalScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.landing-modal-close {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--landing-muted);
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.15s ease;
+}
+
+.landing-modal-close:hover {
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+}
+
+.landing-modal-header {
+  margin-bottom: 1.25rem;
+  padding-right: 2rem;
+}
+
+.landing-platform-badge {
+  display: inline-block;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-radius: 9999px;
+  background: rgba(228, 79, 79, 0.2);
+  color: #ff8585;
+  border: 1px solid rgba(228, 79, 79, 0.35);
+  margin-bottom: 0.5rem;
+}
+
+.landing-modal-header h3 {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.01em;
+}
+
+.landing-modal-notice {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+  padding: 0.85rem 1rem;
+  border-radius: 0.75rem;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.28);
+  color: #fbbf24;
+  margin-bottom: 1.25rem;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.landing-modal-notice-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.landing-modal-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-bottom: 1.25rem;
+}
+
+.landing-step-row {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+  padding: 0.75rem;
+  border-radius: 0.65rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.landing-step-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.65rem;
+  height: 1.65rem;
+  border-radius: 50%;
+  background: rgba(228, 79, 79, 0.25);
+  color: #ff9b9b;
+  font-weight: 700;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.landing-step-row strong {
+  display: block;
+  font-size: 0.92rem;
+  color: #fff;
+  margin-bottom: 0.2rem;
+}
+
+.landing-step-row p {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--landing-muted);
+  line-height: 1.4;
+}
+
+.landing-modal-doc-link {
+  margin-bottom: 1.5rem;
+  font-size: 0.85rem;
+}
+
+.landing-modal-doc-link a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #ff8585;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 500;
+  transition: opacity 0.15s ease;
+}
+
+.landing-modal-doc-link a:hover {
+  opacity: 0.8;
+}
+
+.landing-modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 1.25rem;
+}
+
+.landing-button-quiet {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: var(--landing-muted);
+}
+
+.landing-button-quiet:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+}
+
+/* ==========================================================================
+   Install Guide Standalone Page Styles
+   ========================================================================== */
+
+.landing-guide-shell {
+  min-height: 100vh;
+}
+
+.install-guide-main {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 8rem 1.5rem 5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.install-guide-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.install-guide-title {
+  margin: 0.75rem 0 1rem;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.install-guide-subtitle {
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  color: var(--landing-muted);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.install-guide-tabs {
+  display: inline-flex;
+  padding: 0.35rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  gap: 0.5rem;
+}
+
+.install-guide-tab {
+  padding: 0.65rem 1.75rem;
+  border-radius: 9999px;
+  border: none;
+  background: transparent;
+  color: var(--landing-muted);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.install-guide-tab:hover {
+  color: #fff;
+}
+
+.install-guide-tab.is-active {
+  background: rgba(228, 79, 79, 0.85);
+  color: #fff;
+  box-shadow: 0 0.5rem 1rem rgba(228, 79, 79, 0.35);
+}
+
+.install-guide-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  margin-bottom: 4rem;
+}
+
+.install-guide-card {
+  padding: 2rem;
+  border-radius: 1.25rem;
+  border: 1px solid var(--landing-line);
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(228, 79, 79, 0.06),
+      transparent 16rem
+    ),
+    linear-gradient(
+      155deg,
+      rgba(255, 255, 255, 0.04),
+      rgba(255, 255, 255, 0.01)
+    );
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.install-guide-card-header {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1.25rem;
+}
+
+.install-guide-step-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: rgba(228, 79, 79, 0.2);
+  color: #ff8585;
+  font-size: 1.1rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.install-guide-card-header h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.install-guide-card-header p {
+  margin: 0;
+  color: var(--landing-muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.install-guide-mockup {
+  margin-top: 1rem;
+  padding: 1.5rem;
+  border-radius: 0.85rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  display: flex;
+  justify-content: center;
+}
+
+.mockup-row {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.mockup-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mockup-icon {
+  font-size: 2.5rem;
+}
+
+.mockup-app-icon {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  border-radius: 12px;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.45));
+}
+
+.mockup-folder-icon {
+  width: 56px;
+  height: 56px;
+  filter: drop-shadow(0 6px 14px rgba(0, 122, 255, 0.25));
+}
+
+.mockup-label {
+  font-size: 0.85rem;
+  color: #fff;
+  font-weight: 600;
+}
+
+.mockup-arrow {
+  font-size: 1.5rem;
+  color: #ff8585;
+}
+
+.install-guide-dialog-box {
+  padding: 1.25rem 1.5rem;
+  border-radius: 0.85rem;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  color: #fef3c7;
+}
+
+.dialog-box-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin-bottom: 0.35rem;
+  color: #fbbf24;
+}
+
+.dialog-box-desc {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: rgba(254, 243, 199, 0.85);
+}
+
+.win-smartscreen-box {
+  background: #0078d4;
+  border: none;
+  color: #fff;
+  border-radius: 0.5rem;
+}
+
+.smartscreen-banner {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.smartscreen-text {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+  opacity: 0.95;
+}
+
+.smartscreen-actions {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.smartscreen-link u {
+  cursor: pointer;
+  text-decoration: underline;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+.install-guide-highlight {
+  color: #ff8585 !important;
+  font-weight: 600;
+}
+
+.install-guide-steps-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.install-guide-step-item {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 0.85rem 1.15rem;
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #fff;
+}
+
+.install-guide-step-item .step-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: rgba(228, 79, 79, 0.8);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.install-guide-terminal-tip {
+  padding: 1rem 1.25rem;
+  border-radius: 0.75rem;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 1.25rem;
+}
+
+.install-guide-terminal-tip p {
+  margin: 0 0 0.5rem;
+  font-size: 0.88rem;
+  color: var(--landing-muted);
+}
+
+.install-guide-terminal-tip code {
+  display: block;
+  padding: 0.65rem 0.85rem;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.06);
+  font-family: monospace;
+  font-size: 0.9rem;
+  color: #4ade80;
+  user-select: all;
+}
+
+.install-guide-note {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 0.85rem 1.15rem;
+  border-radius: 0.75rem;
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  color: #93c5fd;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.install-guide-note p {
+  margin: 0;
+}
+
+.install-guide-download-cta {
+  border-top: 1px solid var(--landing-line);
+  padding-top: 2rem;
+}
+

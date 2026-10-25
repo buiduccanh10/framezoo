@@ -5,7 +5,8 @@
     "download": "Sækja",
     "language": "Tungumál",
     "addonGuide": "Addon leiðarvísir",
-    "home": "Heim"
+    "home": "Heim",
+    "installGuide": "Uppsetningarleiðbeiningar"
   },
   "hero": {
     "eyebrow": "FRAMEZOO SKJÁLFTRÖF / 01",
@@ -110,5 +111,54 @@
     "description": "Finndu eitthvað sem er þess virði að horfa á, opnaðu smáatriðin og komdu þér fyrir á betri leið til að horfa með Framezoo.",
     "movie": "Kvikmynd",
     "title": "Vinsælar sögur fyrir næsta úr þitt."
+  },
+  "installGuide": {
+    "downloadApp": "Sækja Framezoo",
+    "macTab": "Fyrir macOS",
+    "subtitle": "Hvernig á að komast framhjá Gatekeeper (macOS) og SmartScreen (Windows) öryggistilkynningum við fyrstu ræsingu.",
+    "title": "Framezoo uppsetningar- og ræsingarleiðbeiningar",
+    "mac": {
+      "title": "macOS uppsetningarleiðbeiningar",
+      "step1Title": "Skref 1: Dragðu í forrit",
+      "step3Title": "Skref 3: Opnaðu á öruggan hátt í gegnum Finder",
+      "step2Title": "Skref 2: Öryggisviðvörun hliðvarðar",
+      "subtitle": "Apple Silicon (M1/M2/M3/M4) & Intel Mac",
+      "step2Desc": "Vegna þess að Framezoo er óháður opinn spilari án viðskiptavottorðs fyrir Apple Developer, gæti macOS sýnt: „Framezoo er skemmd og ekki hægt að opna“ eða „Apple getur ekki staðfest þetta forrit“.",
+      "note": "Þú þarft aðeins að gera þetta hægrismelltu skref við fyrstu ræsingu. Síðari kynningar er hægt að gera venjulega frá Launchpad eða Spotlight.",
+      "step3Steps": [
+        "Opnaðu Finder og farðu í Applications möppuna þína.",
+        "Hægrismelltu (eða Control-smelltu) á Framezoo.app.",
+        "Veldu „Opna“ í samhengisvalmyndinni.",
+        "Í staðfestingarglugganum skaltu smella á „Opna samt“ eða „Opna“."
+      ],
+      "step1Desc": "Opnaðu niðurhalaða .dmg skrá og dragðu Framezoo táknið inn í Applications möppuna."
+    },
+    "backHome": "Aftur heim",
+    "winTab": "Fyrir Windows",
+    "win": {
+      "subtitle": "Windows 10/11 (x64 & ARM64)",
+      "title": "Uppsetningarleiðbeiningar fyrir Windows",
+      "step3Steps": [
+        "Smelltu á hlekkinn „Frekari upplýsingar“ fyrir neðan lýsinguna.",
+        "Hnappurinn „Hlaupa samt“ birtist neðst í hægra horninu.",
+        "Smelltu á „Hlaupa samt“ til að halda áfram að setja upp Framezoo."
+      ],
+      "step1Desc": "Ræstu niðurhalaða Framezoo-Setup-x64.exe uppsetningarforritið til að hefja uppsetningu.",
+      "step2Desc": "Ef Windows Defender sýnir bláan skjá sem segir „Windows varði tölvuna þína“:",
+      "step1Title": "Skref 1: Keyrðu .exe uppsetningarforritið",
+      "step2Title": "Skref 2: Windows Defender SmartScreen viðvörun",
+      "step3Title": "Skref 3: Haltu áfram uppsetningu",
+      "note": "Þessi viðvörun birtist vegna þess að nýja útgáfan hefur ekki enn safnað orðspori Microsoft EV Code Signing. Tvöfaldurinn er 100% öruggur."
+    }
+  },
+  "downloadConfirm": {
+    "macTitle": "Uppsetningarleiðbeiningar fyrir macOS",
+    "winTitle": "Uppsetningarleiðbeiningar fyrir Windows",
+    "macNotice": "Tilkynning hliðvarðar: Ef macOS tilkynnir um „skemmt“ eða óstaðfest forrit, farðu í Forrit -> Hægrismelltu á Framezoo -> Veldu Opna -> Opna samt.",
+    "cancel": "Hætta við",
+    "viewGuide": "Skoðaðu uppsetningarleiðbeiningar í heild sinni",
+    "winNotice": "SmartScreen Tilkynning: Ef þú sérð bláa 'Windows varði tölvuna þína' skjáinn, smelltu á 'Frekari upplýsingar' -> smelltu á 'Hlaupa samt'.",
+    "confirmDownload": "Staðfestu og hlaða niður",
+    "downloading": "Er að hefja niðurhal..."
   }
 }

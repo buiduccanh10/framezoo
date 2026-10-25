@@ -5,7 +5,8 @@
     "download": "Ladda ner",
     "language": "Språk",
     "addonGuide": "Addon guide",
-    "home": "Hem"
+    "home": "Hem",
+    "installGuide": "Installationsguide"
   },
   "hero": {
     "eyebrow": "FRAMEZOO DESKTOP / 01",
@@ -110,5 +111,54 @@
     "description": "Hitta något värt att titta på, öppna detaljerna och sätt dig in på ett bättre sätt att titta på med Framezoo.",
     "title": "Populära berättelser för din nästa klocka.",
     "dragHint": "Dra för att utforska"
+  },
+  "installGuide": {
+    "subtitle": "Hur man kringgår Gatekeeper (macOS) och SmartScreen (Windows) säkerhetsmeddelanden vid första lansering.",
+    "title": "Framezoo installations- och lanseringsguide",
+    "backHome": "Tillbaka till hemmet",
+    "mac": {
+      "title": "Installationsguide för macOS",
+      "step2Title": "Steg 2: Gatekeeper säkerhetsvarning",
+      "step1Title": "Steg 1: Dra till applikationer",
+      "subtitle": "Apple Silicon (M1/M2/M3/M4) & Intel Mac",
+      "step3Steps": [
+        "Öppna Finder och navigera till mappen Program.",
+        "Högerklicka (eller Ctrl-klicka) på Framezoo.app.",
+        "Välj \"Öppna\" från snabbmenyn.",
+        "Klicka på \"Öppna ändå\" eller \"Öppna\" i bekräftelsedialogrutan."
+      ],
+      "step3Title": "Steg 3: Öppna säkert via Finder",
+      "step1Desc": "Öppna den nedladdade .dmg-filen och dra Framezoo-ikonen till mappen Applications.",
+      "step2Desc": "Eftersom Framezoo är en oberoende spelare med öppen källkod utan ett kommersiellt Apple Developer-certifikat kan macOS visa: \"Framezoo är skadad och kan inte öppnas\" eller \"Apple kan inte verifiera den här appen\".",
+      "note": "Du behöver bara göra det här högerklickssteget vid första lanseringen. Efterföljande lanseringar kan göras normalt från Launchpad eller Spotlight."
+    },
+    "winTab": "För Windows",
+    "downloadApp": "Ladda ner Framezoo",
+    "macTab": "För macOS",
+    "win": {
+      "step1Title": "Steg 1: Kör .exe-installationsprogrammet",
+      "step1Desc": "Starta det nedladdade installationsprogrammet Framezoo-Setup-x64.exe för att påbörja installationen.",
+      "subtitle": "Windows 10/11 (x64 & ARM64)",
+      "title": "Windows Installationsguide",
+      "step3Title": "Steg 3: Fortsätt installationen",
+      "step2Title": "Steg 2: Windows Defender SmartScreen-varning",
+      "step2Desc": "Om Windows Defender visar en blå skärm som säger \"Windows skyddade din dator\":",
+      "step3Steps": [
+        "Klicka på länken \"Mer info\" under beskrivningen.",
+        "En \"Kör ändå\"-knapp visas i det nedre högra hörnet.",
+        "Klicka på \"Kör ändå\" för att fortsätta med installationen av Framezoo."
+      ],
+      "note": "Den här varningen visas eftersom den nya versionen ännu inte har samlat på sig Microsoft EV Code Signing-rykte. Binären är 100% säker."
+    }
+  },
+  "downloadConfirm": {
+    "macTitle": "Installationsguide för macOS",
+    "winNotice": "SmartScreen-meddelande: Om du ser den blå skärmen \"Windows skyddade din dator\", klicka på \"Mer info\" -> klicka på \"Kör ändå\".",
+    "macNotice": "Gatekeeper-meddelande: Om macOS rapporterar \"skadad\" eller overifierad app, gå till Program -> Högerklicka på Framezoo -> Välj Öppna -> Öppna ändå.",
+    "confirmDownload": "Bekräfta och ladda ner",
+    "cancel": "Avboka",
+    "winTitle": "Installationsguide för Windows",
+    "viewGuide": "Se hela installationsguiden",
+    "downloading": "Börjar ladda ner..."
   }
 }

@@ -5,7 +5,8 @@
     "download": "Descargar",
     "language": "Linguaxe",
     "addonGuide": "Guía de complementos",
-    "home": "Casa"
+    "home": "Casa",
+    "installGuide": "Guía de instalación"
   },
   "hero": {
     "eyebrow": "ESCRITORIO FRAMEZOO / 01",
@@ -110,5 +111,54 @@
     "movie": "Película",
     "title": "Historias populares para o teu próximo reloxo.",
     "description": "Busca algo que valga a pena ver, abre os detalles e asegúrate dunha mellor forma de ver con Framezoo."
+  },
+  "installGuide": {
+    "title": "Guía de instalación e lanzamento de Framezoo",
+    "downloadApp": "Descargar Framezoo",
+    "backHome": "Volver á casa",
+    "macTab": "Para macOS",
+    "winTab": "Para Windows",
+    "subtitle": "Como evitar os avisos de seguranza de Gatekeeper (macOS) e SmartScreen (Windows) no primeiro lanzamento.",
+    "mac": {
+      "step1Desc": "Abre o ficheiro .dmg descargado e arrastra a icona de Framezoo ao cartafol Aplicacións.",
+      "step1Title": "Paso 1: arrastra ata Aplicacións",
+      "step2Title": "Paso 2: aviso de seguridade do gatekeeper",
+      "subtitle": "Apple Silicon (M1/M2/M3/M4) e Intel Mac",
+      "step3Title": "Paso 3: Abre con seguridade a través do Finder",
+      "title": "Guía de instalación de macOS",
+      "step2Desc": "Como Framezoo é un reprodutor independente de código aberto sen un certificado comercial de programador de Apple, macOS pode mostrar: \"Framezoo está danado e non se pode abrir\" ou \"Apple non pode verificar esta aplicación\".",
+      "step3Steps": [
+        "Abre o Finder e desprázate ata o teu cartafol Aplicacións.",
+        "Fai clic co botón dereito do rato (ou prema Control-clic) en Framezoo.app.",
+        "Seleccione \"Abrir\" no menú contextual.",
+        "No diálogo de confirmación, faga clic en \"Abrir de todos os xeitos\" ou en \"Abrir\"."
+      ],
+      "note": "Só tes que facer este paso co botón dereito do rato no primeiro lanzamento. Os lanzamentos posteriores pódense facer normalmente desde Launchpad ou Spotlight."
+    },
+    "win": {
+      "subtitle": "Windows 10/11 (x64 e ARM64)",
+      "step1Title": "Paso 1: executa o instalador .exe",
+      "title": "Guía de instalación de Windows",
+      "step1Desc": "Inicie o instalador descargado de Framezoo-Setup-x64.exe para comezar a configuración.",
+      "step3Steps": [
+        "Fai clic na ligazón \"Máis información\" debaixo da descrición.",
+        "Na esquina inferior dereita aparecerá un botón \"Executar de todos os xeitos\".",
+        "Fai clic en \"Executar de todos os xeitos\" para continuar coa instalación de Framezoo."
+      ],
+      "step2Desc": "Se Windows Defender mostra unha pantalla azul que indica \"Windows protexeu o teu PC\":",
+      "step2Title": "Paso 2: aviso de Windows Defender SmartScreen",
+      "step3Title": "Paso 3: continúa a instalación",
+      "note": "Este aviso aparece porque a nova versión aínda non acumulou a reputación de Microsoft EV Code Signing. O binario é 100% seguro."
+    }
+  },
+  "downloadConfirm": {
+    "macTitle": "Guía de instalación para macOS",
+    "winTitle": "Guía de instalación para Windows",
+    "macNotice": "Aviso do gatekeeper: se macOS informa que unha aplicación \"dana\" ou non está verificada, vai a Aplicacións -> Fai clic co botón dereito do rato en Framezoo -> Selecciona Abrir -> Abrir de todos os xeitos.",
+    "winNotice": "Aviso de SmartScreen: se ves a pantalla azul \"Windows protexeu o teu PC\", fai clic en \"Máis información\" -> fai clic en \"Executar igualmente\".",
+    "confirmDownload": "Confirmar e descargar",
+    "cancel": "Cancelar",
+    "viewGuide": "Ver guía de instalación completa",
+    "downloading": "Comezando a descarga..."
   }
 }
