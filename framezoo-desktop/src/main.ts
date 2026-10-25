@@ -285,8 +285,10 @@ function getDirectorySize(dirPath: string): number {
 }
 
 function isTorrentCacheEntry(name: string) {
-  return /^torrent-[a-z0-9]{1,128}$/i.test(name) ||
-    /^framezoo-torrent-[a-z0-9_-]{6,}$/i.test(name);
+  return (
+    /^torrent-[a-z0-9]{1,128}$/i.test(name) ||
+    /^framezoo-torrent-[a-z0-9_-]{6,}$/i.test(name)
+  );
 }
 
 setupTorrentEnv();
@@ -1234,7 +1236,11 @@ function togglePlayerFullScreen() {
 
 function exitPlayerFullScreen() {
   if (!mainWindow || mainWindow.isDestroyed()) return;
-  setAppFullScreen(false, "player");
+  // ONLY restore previous window state if fullscreen was initiated by the player.
+  // If the user already had the app window maximized/fullscreen, do not touch it.
+  if (fullscreenOrigin === "player") {
+    setAppFullScreen(false, "player");
+  }
 }
 
 let pendingMinimize = false;

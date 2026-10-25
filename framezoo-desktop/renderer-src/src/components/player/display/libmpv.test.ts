@@ -2206,6 +2206,24 @@ describe("libmpv display", () => {
     display.destroy();
   });
 
+  it("prioritizes exitPlayerFullscreen when available to avoid exiting app-level fullscreen", async () => {
+    const exitPlayerFullscreen = vi.fn().mockResolvedValue(undefined);
+    const exitFullscreen = vi.fn().mockResolvedValue(undefined);
+    (window as any).electronAPI = {
+      exitPlayerFullscreen,
+      exitFullscreen,
+      getFullscreenState: vi.fn().mockResolvedValue(true),
+      onFullscreenState: vi.fn().mockReturnValue(() => undefined),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.exitFullscreen?.();
+
+    expect(exitPlayerFullscreen).toHaveBeenCalledTimes(1);
+    expect(exitFullscreen).not.toHaveBeenCalled();
+    display.destroy();
+  });
+
   it("emits volumechange optimistically and dispatches set-volume immediately", async () => {
     const commands: Array<{ type: string; volume?: number }> = [];
     const volumes: number[] = [];
