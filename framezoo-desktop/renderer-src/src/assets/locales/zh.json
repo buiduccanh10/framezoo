@@ -8,11 +8,16 @@
   "addons": {
     "manager": {
       "add": "添加",
+      "addWithoutConfiguring": "照常安装（可能无法正常工作）",
       "adding": "添加...",
       "ariaClose": "关闭插件管理器",
       "ariaManage": "管理插件",
+      "configRequiredDesc": "此插件需要配置（例如 API 密钥或语言设置）才能返回内容。请在浏览器中进行配置，然后将生成的清单 URL 复制粘贴到此处。",
+      "configRequiredTitle": "需要配置",
+      "configureAction": "配置",
       "errorFallback": "无法安装此插件。",
       "manageListButton": "管理插件列表",
+      "openConfigurePage": "打开配置页面",
       "subtitle": "我们不建议添加任何非官方或非法的附加组件。",
       "title": "桌面插件"
     },
@@ -24,6 +29,10 @@
     },
     "page": {
       "addAddonButton": "添加插件",
+      "configRequiredBadge": "需要配置",
+      "configRequiredWarning": "此插件尚未配置，可能无法加载视频流或字幕。",
+      "configureAddon": "配置此插件",
+      "configureRequiredAction": "配置此插件（必需）",
       "description": "插件是可选的。此应用程序不捆绑、推荐或托管任何插件。",
       "disabled": "残疾人",
       "emptyInstalled": "系统中尚未安装任何插件。",

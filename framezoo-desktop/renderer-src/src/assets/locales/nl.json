@@ -8,11 +8,16 @@
   "addons": {
     "manager": {
       "add": "Toevoegen",
+      "addWithoutConfiguring": "Toch installeren (werkt mogelijk niet)",
       "adding": "Toevoegen...",
       "ariaClose": "Sluit de add-onbeheerder",
       "ariaManage": "Beheer add-ons",
+      "configRequiredDesc": "Deze add-on vereist configuratie (zoals API-sleutels of taalinstellingen) voordat deze inhoud kan weergeven. Configureer de add-on in uw browser en kopieer en plak vervolgens de gegenereerde manifest-URL hier.",
+      "configRequiredTitle": "Configuratie vereist",
+      "configureAction": "Configure",
       "errorFallback": "Kan deze add-on niet installeren.",
       "manageListButton": "Beheer add-onlijst",
+      "openConfigurePage": "Open de configuratiepagina",
       "subtitle": "We raden niet aan om onofficiële of illegale add-ons toe te voegen.",
       "title": "Desktop-add-ons"
     },
@@ -24,6 +29,10 @@
     },
     "page": {
       "addAddonButton": "Add-on toevoegen",
+      "configRequiredBadge": "Vereist configuratie",
+      "configRequiredWarning": "Deze add-on is niet geconfigureerd en laadt mogelijk geen streams of ondertitels.",
+      "configureAddon": "Configureer deze add-on",
+      "configureRequiredAction": "Configureer deze add-on (verplicht)",
       "description": "Add-ons zijn optioneel. Deze app bundelt, beveelt of host geen enkele add-on.",
       "disabled": "Gehandicapt",
       "emptyInstalled": "Er zijn nog geen add-ons in het systeem geïnstalleerd.",

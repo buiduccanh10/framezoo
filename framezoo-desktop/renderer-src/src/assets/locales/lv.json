@@ -8,11 +8,16 @@
   "addons": {
     "manager": {
       "add": "Pievienot",
+      "addWithoutConfiguring": "Instalēt jebkurā gadījumā (var nedarboties)",
       "adding": "Notiek pievienošana...",
       "ariaClose": "Aizvērt papildinājumu pārvaldnieku",
       "ariaManage": "Pārvaldiet papildinājumus",
+      "configRequiredDesc": "Šim papildinājumam ir nepieciešama konfigurācija (piemēram, API atslēgas vai valodas iestatījumi), pirms tas var atgriezt saturu. Lūdzu, konfigurējiet to savā pārlūkprogrammā un pēc tam nokopējiet un ielīmējiet ģenerēto manifesta URL šeit.",
+      "configRequiredTitle": "Nepieciešama konfigurācija",
+      "configureAction": "Konfigurēt",
       "errorFallback": "Nevar instalēt šo papildinājumu.",
       "manageListButton": "Pārvaldīt papildinājumu sarakstu",
+      "openConfigurePage": "Atvērt konfigurācijas lapu",
       "subtitle": "Mēs neiesakām pievienot neoficiālus vai nelegālus papildinājumus.",
       "title": "Darbvirsmas papildinājumi"
     },
@@ -24,6 +29,10 @@
     },
     "page": {
       "addAddonButton": "Pievienojiet papildinājumu",
+      "configRequiredBadge": "Nepieciešama konfigurācija",
+      "configRequiredWarning": "Šis papildinājums nav konfigurēts, un, iespējams, neizdosies ielādēt straumes vai subtitrus.",
+      "configureAddon": "Konfigurējiet šo papildinājumu",
+      "configureRequiredAction": "Konfigurēt šo papildinājumu (obligāti)",
       "description": "Papildinājumi nav obligāti. Šī lietotne neapvieno, neiesaka vai mitina nevienu papildinājumu.",
       "disabled": "Atspējots",
       "emptyInstalled": "Sistēmā vēl nav instalēts neviens papildinājums.",

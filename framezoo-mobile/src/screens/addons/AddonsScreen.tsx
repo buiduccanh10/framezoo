@@ -58,6 +58,11 @@ export function AddonsScreen() {
         {addons.map((addon) => (
           <SettingsCard key={addon.manifest.id} title={addon.manifest.name} description={`${addon.manifest.id}  |  ${addon.manifest.version}`} icon="addons">
             {addon.manifest.description ? <AppText variant="muted" numberOfLines={2}>{addon.manifest.description}</AppText> : null}
+            {addon.manifest.behaviorHints?.configurationRequired ? (
+              <AppText variant="caption" style={{ color: colors.warning, marginTop: spacing.xs }}>
+                Configuration required - configure in browser before use
+              </AppText>
+            ) : null}
             <View style={styles.resourceRow}>
               {(addon.manifest.resources ?? []).map((resource) => (
                 <View key={typeof resource === 'string' ? resource : resource.name} style={styles.resource}>

@@ -8,11 +8,16 @@
   "addons": {
     "manager": {
       "add": "Tillägga",
+      "addWithoutConfiguring": "Installera ändå (kanske inte fungerar)",
       "adding": "Lägger till...",
       "ariaClose": "Stäng tilläggshanteraren",
       "ariaManage": "Hantera tillägg",
+      "configRequiredDesc": "Detta tillägg kräver konfiguration (som API-nycklar eller språkinställningar) innan det kan returnera innehåll. Konfigurera det i din webbläsare och kopiera och klistra sedan in den genererade manifest-URL:en här.",
+      "configRequiredTitle": "Konfiguration krävs",
+      "configureAction": "Konfigurera",
       "errorFallback": "Det går inte att installera detta tillägg.",
       "manageListButton": "Hantera tilläggslista",
+      "openConfigurePage": "Öppna konfigurationssidan",
       "subtitle": "Vi rekommenderar inte att du lägger till några inofficiella eller olagliga tillägg.",
       "title": "Skrivbordstillägg"
     },
@@ -24,6 +29,10 @@
     },
     "page": {
       "addAddonButton": "Lägg till addon",
+      "configRequiredBadge": "Kräver konfiguration",
+      "configRequiredWarning": "Det här tillägget är inte konfigurerat och kan misslyckas med att ladda strömmar eller undertexter.",
+      "configureAddon": "Konfigurera detta tillägg",
+      "configureRequiredAction": "Konfigurera detta tillägg (Obligatoriskt)",
       "description": "Tillägg är valfria. Denna app paketerar inte, rekommenderar eller är värd för något tillägg.",
       "disabled": "Inaktiverad",
       "emptyInstalled": "Inga tillägg installerade i systemet ännu.",

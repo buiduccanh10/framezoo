@@ -1,6 +1,7 @@
 import { updateSettings } from "@/backend/accounts/settings";
 import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
+import { queryClient } from "@/utils/queryClient";
 
 import type { InstalledAddon } from "./types";
 
@@ -154,12 +155,24 @@ function readAddons(): InstalledAddon[] {
 let addons: InstalledAddon[] = readAddons();
 const listeners = new Set<() => void>();
 
+export function invalidateExternalSubtitlesCache() {
+  try {
+    queryClient.removeQueries({ queryKey: ["externalSubtitles"] });
+  } catch (err) {
+    console.warn(
+      "[addons] Failed to invalidate external subtitles cache:",
+      err,
+    );
+  }
+}
+
 function publish(syncToBackend = true) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(addons));
   } catch (err) {
     console.warn("[addons] Failed to write to localStorage:", err);
   }
+  invalidateExternalSubtitlesCache();
   for (const listener of listeners) listener();
   if (syncToBackend) {
     syncAddonsToBackend();
@@ -170,9 +183,11 @@ export function getInstalledAddons(): InstalledAddon[] {
   return addons;
 }
 
-export function subscribeInstalledAddons(listener: () => void) {
+export function subscribeInstalledAddons(listener: () => void): () => void {
   listeners.add(listener);
-  return () => listeners.delete(listener);
+  return () => {
+    listeners.delete(listener);
+  };
 }
 
 export function upsertAddon(addon: InstalledAddon) {

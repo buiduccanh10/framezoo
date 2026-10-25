@@ -8,11 +8,16 @@
   "addons": {
     "manager": {
       "add": "Afegeix",
+      "addWithoutConfiguring": "Instal·la-ho igualment (potser no funcionarà)",
       "adding": "S'està afegint...",
       "ariaClose": "Tanqueu el gestor de complements",
       "ariaManage": "Gestiona els complements",
+      "configRequiredDesc": "Aquest complement requereix configuració (com ara claus d&#39;API o configuració d&#39;idioma) abans de poder retornar contingut. Configureu-lo al vostre navegador i, a continuació, copieu i enganxeu aquí l&#39;URL del manifest generat.",
+      "configRequiredTitle": "Configuració requerida",
+      "configureAction": "Configura",
       "errorFallback": "No es pot instal·lar aquest complement.",
       "manageListButton": "Gestioneu la llista de complements",
+      "openConfigurePage": "Obre la pàgina de configuració",
       "subtitle": "No recomanem afegir cap complement no oficial o il·legal.",
       "title": "Complements d'escriptori"
     },
@@ -24,6 +29,10 @@
     },
     "page": {
       "addAddonButton": "Afegeix un complement",
+      "configRequiredBadge": "Requereix configuració",
+      "configRequiredWarning": "Aquest complement no està configurat i és possible que no pugui carregar els fluxos o els subtítols.",
+      "configureAddon": "Configura aquest complement",
+      "configureRequiredAction": "Configura aquest complement (obligatori)",
       "description": "Els complements són opcionals. Aquesta aplicació no agrupa, recomana ni allotja cap complement.",
       "disabled": "Inhabilitat",
       "emptyInstalled": "Encara no hi ha cap complement instal·lat al sistema.",

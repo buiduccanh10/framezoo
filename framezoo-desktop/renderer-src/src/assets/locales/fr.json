@@ -8,11 +8,16 @@
   "addons": {
     "manager": {
       "add": "Ajouter",
+      "addWithoutConfiguring": "Installez quand même (cela peut ne pas fonctionner)",
       "adding": "Ajout...",
       "ariaClose": "Fermer le gestionnaire de modules complémentaires",
       "ariaManage": "Gérer les modules complémentaires",
+      "configRequiredDesc": "Cette extension nécessite une configuration (clés API ou paramètres de langue, par exemple) avant de pouvoir afficher du contenu. Veuillez la configurer dans votre navigateur, puis copier-coller l&#39;URL du manifeste généré ici.",
+      "configRequiredTitle": "Configuration requise",
+      "configureAction": "Configure",
       "errorFallback": "Impossible d'installer cet addon.",
       "manageListButton": "Gérer la liste des modules complémentaires",
+      "openConfigurePage": "Ouvrir la page de configuration",
       "subtitle": "Nous vous déconseillons d'ajouter des modules complémentaires non officiels ou illégaux.",
       "title": "Modules complémentaires de bureau"
     },
@@ -24,6 +29,10 @@
     },
     "page": {
       "addAddonButton": "Ajouter un module complémentaire",
+      "configRequiredBadge": "Configuration requise",
+      "configRequiredWarning": "Ce module complémentaire n&#39;est pas configuré et peut ne pas charger les flux ou les sous-titres.",
+      "configureAddon": "Configurer cette extension",
+      "configureRequiredAction": "Configurer ce module complémentaire (obligatoire)",
       "description": "Les modules complémentaires sont facultatifs. Cette application ne regroupe, ne recommande ni n'héberge aucun module complémentaire.",
       "disabled": "Désactivé",
       "emptyInstalled": "Aucun module complémentaire n'est encore installé dans le système.",

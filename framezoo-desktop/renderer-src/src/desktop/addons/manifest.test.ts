@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 
-import { normalizeManifest, normalizeManifestUrl } from "./manifest";
+import {
+  getAddonConfigureUrl,
+  isAddonConfigurable,
+  isAddonConfigurationRequired,
+  normalizeManifest,
+  normalizeManifestUrl,
+} from "./manifest";
 
 describe("Stremio manifest", () => {
   it("normalizes the URL and derives the addon base URL", () => {
@@ -72,5 +78,71 @@ describe("Stremio manifest", () => {
 
     expect(addon.manifest.logo).toBeUndefined();
     expect(addon.manifest.background).toBeUndefined();
+  });
+
+  it("detects configuration requirement and configurable state", () => {
+    expect(
+      isAddonConfigurationRequired({
+        id: "test",
+        version: "1.0.0",
+        name: "Test",
+        behaviorHints: { configurationRequired: true },
+      }),
+    ).toBe(true);
+
+    expect(
+      isAddonConfigurationRequired({
+        id: "test",
+        version: "1.0.0",
+        name: "Test",
+        behaviorHints: { configurable: true },
+      }),
+    ).toBe(false);
+
+    expect(
+      isAddonConfigurable({
+        id: "test",
+        version: "1.0.0",
+        name: "Test",
+        behaviorHints: { configurable: true },
+      }),
+    ).toBe(true);
+
+    expect(
+      isAddonConfigurable({
+        id: "test",
+        version: "1.0.0",
+        name: "Test",
+        behaviorHints: { configurationRequired: true },
+      }),
+    ).toBe(true);
+  });
+
+  it("derives the correct addon configuration URL", () => {
+    expect(
+      getAddonConfigureUrl("https://subdl.strem.top/manifest.json"),
+    ).toBe("https://subdl.strem.top/configure");
+
+    expect(
+      getAddonConfigureUrl(
+        "https://example.com/addons/v1/manifest.json",
+        "https://example.com/addons/v1/",
+      ),
+    ).toBe("https://example.com/addons/v1/configure");
+
+    expect(
+      getAddonConfigureUrl(
+        "https://subdl.strem.top/manifest.json",
+        "https://subdl.strem.top/",
+        {
+          id: "custom",
+          version: "1.0.0",
+          name: "Custom",
+          behaviorHints: {
+            configurationUrl: "https://custom.example.com/setup",
+          } as any,
+        },
+      ),
+    ).toBe("https://custom.example.com/setup");
   });
 });

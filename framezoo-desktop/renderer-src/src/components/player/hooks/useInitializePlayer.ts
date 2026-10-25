@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
 
+import { subscribeInstalledAddons } from "@/desktop/addons/storage";
 import { useLanguageStore } from "@/stores/language";
 import { getMediaKey } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
@@ -54,4 +55,14 @@ export function useInitializeSource() {
     if (!sourceIdentifier || !sourceId) return;
     void addExternalSubtitles(undefined, { forceRefresh: true });
   }, [addExternalSubtitles, appLanguage, sourceIdentifier, sourceId]);
+
+  useEffect(() => {
+    const unsubscribe = subscribeInstalledAddons(() => {
+      if (!sourceIdentifier || !sourceId) return;
+      void addExternalSubtitles(undefined, { forceRefresh: true });
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, [addExternalSubtitles, sourceIdentifier, sourceId]);
 }

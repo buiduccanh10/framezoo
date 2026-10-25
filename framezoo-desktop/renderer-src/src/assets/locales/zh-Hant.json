@@ -8,11 +8,16 @@
   "addons": {
     "manager": {
       "add": "添加",
+      "addWithoutConfiguring": "照常安裝（可能無法正常運作）",
       "adding": "新增...",
       "ariaClose": "關閉外掛程式管理器",
       "ariaManage": "管理插件",
+      "configRequiredDesc": "此外掛程式需要配置（例如 API 金鑰或語言設定）才能傳回內容。請在瀏覽器中進行配置，然後將產生的清單 URL 複製並貼上到此處。",
+      "configRequiredTitle": "需要配置",
+      "configureAction": "配置",
       "errorFallback": "無法安裝此外掛程式。",
       "manageListButton": "管理外掛程式列表",
+      "openConfigurePage": "開啟配置頁面",
       "subtitle": "我們不建議添加任何非官方或非法的附加元件。",
       "title": "桌面插件"
     },
@@ -24,6 +29,10 @@
     },
     "page": {
       "addAddonButton": "新增插件",
+      "configRequiredBadge": "需要配置",
+      "configRequiredWarning": "此插件尚未配置，可能無法載入視訊串流或字幕。",
+      "configureAddon": "配置此插件",
+      "configureRequiredAction": "配置此外掛程式（必需）",
       "description": "插件是可選的。此應用程式不捆綁、推薦或託管任何插件。",
       "disabled": "殘障人士",
       "emptyInstalled": "系統中尚未安裝任何插件。",

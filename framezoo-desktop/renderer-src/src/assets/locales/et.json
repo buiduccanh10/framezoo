@@ -8,11 +8,16 @@
   "addons": {
     "manager": {
       "add": "Lisa",
+      "addWithoutConfiguring": "Installi ikkagi (ei pruugi töötada)",
       "adding": "Lisamine...",
       "ariaClose": "Sule lisandmoodulite haldur",
       "ariaManage": "Lisandmoodulite haldamine",
+      "configRequiredDesc": "See lisandmoodul vajab enne sisu tagastamist konfigureerimist (nt API-võtmed või keeleseaded). Palun konfigureerige see oma brauseris ja seejärel kopeerige genereeritud manifesti URL siia.",
+      "configRequiredTitle": "Konfiguratsioon on nõutav",
+      "configureAction": "Konfigureeri",
       "errorFallback": "Seda lisandmoodulit ei saa installida.",
       "manageListButton": "Halda lisandmoodulite loendit",
+      "openConfigurePage": "Ava konfiguratsioonileht",
       "subtitle": "Me ei soovita lisada mitteametlikke või ebaseaduslikke lisandmooduleid.",
       "title": "Töölaua lisad"
     },
@@ -24,6 +29,10 @@
     },
     "page": {
       "addAddonButton": "Lisage Addon",
+      "configRequiredBadge": "Nõuab seadistamist",
+      "configRequiredWarning": "See lisandmoodul pole konfigureeritud ja voogedastuste või subtiitrite laadimine võib ebaõnnestuda.",
+      "configureAddon": "Selle lisandmooduli seadistamine",
+      "configureRequiredAction": "Lisandmooduli seadistamine (nõutav)",
       "description": "Lisad on valikulised. See rakendus ei koonda, ei soovita ega hosti ühtegi lisandmoodulit.",
       "disabled": "Keelatud",
       "emptyInstalled": "Süsteemi pole veel installitud ühtegi lisandmoodulit.",

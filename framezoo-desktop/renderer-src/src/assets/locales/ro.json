@@ -8,11 +8,16 @@
   "addons": {
     "manager": {
       "add": "Adăuga",
+      "addWithoutConfiguring": "Instalați oricum (s-ar putea să nu funcționeze)",
       "adding": "Se adaugă...",
       "ariaClose": "Închideți addon manager",
       "ariaManage": "Gestionați suplimente",
+      "configRequiredDesc": "Acest addon necesită configurare (cum ar fi chei API sau setări de limbă) înainte de a putea returna conținut. Configurați-l în browser, apoi copiați și lipiți adresa URL a manifestului generat aici.",
+      "configRequiredTitle": "Configurație necesară",
+      "configureAction": "Configurați",
       "errorFallback": "Imposibil de instalat acest addon.",
       "manageListButton": "Gestionați lista de suplimente",
+      "openConfigurePage": "Deschideți pagina de configurare",
       "subtitle": "Nu vă recomandăm să adăugați suplimente neoficiale sau ilegale.",
       "title": "Suplimente pentru desktop"
     },
@@ -24,6 +29,10 @@
     },
     "page": {
       "addAddonButton": "Adăugați Addon",
+      "configRequiredBadge": "Necesită configurare",
+      "configRequiredWarning": "Acest addon nu este configurat și este posibil să nu poată încărca fluxuri sau subtitrări.",
+      "configureAddon": "Configurați acest addon",
+      "configureRequiredAction": "Configurați acest addon (obligatoriu)",
       "description": "Suplimentele sunt opționale. Această aplicație nu include, nu recomandă sau găzduiește niciun supliment.",
       "disabled": "Dezactivat",
       "emptyInstalled": "Nu există încă suplimente instalate în sistem.",

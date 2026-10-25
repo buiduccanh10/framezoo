@@ -8,11 +8,16 @@
   "addons": {
     "manager": {
       "add": "Hinzufügen",
+      "addWithoutConfiguring": "Trotzdem installieren (funktioniert möglicherweise nicht)",
       "adding": "Hinzufügen...",
       "ariaClose": "Schließen Sie den Addon-Manager",
       "ariaManage": "Add-ons verwalten",
+      "configRequiredDesc": "Dieses Add-on benötigt Konfigurationen (z. B. API-Schlüssel oder Spracheinstellungen), bevor es Inhalte zurückgeben kann. Bitte konfigurieren Sie es in Ihrem Browser und kopieren Sie anschließend die generierte Manifest-URL hierher.",
+      "configRequiredTitle": "Konfiguration erforderlich",
+      "configureAction": "Konfigurieren",
       "errorFallback": "Dieses Add-on kann nicht installiert werden.",
       "manageListButton": "Add-on-Liste verwalten",
+      "openConfigurePage": "Konfigurationsseite öffnen",
       "subtitle": "Wir empfehlen, keine inoffiziellen oder illegalen Add-ons hinzuzufügen.",
       "title": "Desktop-Add-ons"
     },
@@ -24,6 +29,10 @@
     },
     "page": {
       "addAddonButton": "Add-on hinzufügen",
+      "configRequiredBadge": "Konfiguration erforderlich",
+      "configRequiredWarning": "Dieses Add-on ist nicht konfiguriert und kann möglicherweise keine Streams oder Untertitel laden.",
+      "configureAddon": "Dieses Add-on konfigurieren",
+      "configureRequiredAction": "Dieses Add-on konfigurieren (erforderlich)",
       "description": "Add-ons sind optional. Diese App bündelt, empfiehlt oder hostet kein Add-on.",
       "disabled": "Deaktiviert",
       "emptyInstalled": "Es sind noch keine Add-ons im System installiert.",

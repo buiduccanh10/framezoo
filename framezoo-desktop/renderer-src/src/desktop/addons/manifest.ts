@@ -124,3 +124,50 @@ export function getAddonResources(addon: InstalledAddon): string[] {
     .map((r) => (typeof r === "string" ? r : (r?.name ?? "")))
     .filter(Boolean);
 }
+
+export function isAddonConfigurationRequired(
+  manifest?: StremioManifest | null,
+): boolean {
+  return Boolean(manifest?.behaviorHints?.configurationRequired);
+}
+
+export function isAddonConfigurable(
+  manifest?: StremioManifest | null,
+): boolean {
+  return Boolean(
+    manifest?.behaviorHints?.configurable ||
+      manifest?.behaviorHints?.configurationRequired,
+  );
+}
+
+export function getAddonConfigureUrl(
+  manifestUrl: string,
+  baseUrl?: string,
+  manifest?: StremioManifest | null,
+): string {
+  const customConfigUrl = (
+    manifest?.behaviorHints as { configurationUrl?: string } | undefined
+  )?.configurationUrl;
+  if (typeof customConfigUrl === "string" && customConfigUrl.trim()) {
+    return customConfigUrl.trim();
+  }
+
+  const cleanManifestUrl = manifestUrl.trim();
+  if (cleanManifestUrl.endsWith("/manifest.json")) {
+    return `${cleanManifestUrl.slice(0, -"/manifest.json".length)}/configure`;
+  }
+
+  const base = baseUrl || cleanManifestUrl;
+  return `${base.replace(/\/+$/, "")}/configure`;
+}
+
+export async function openExternalUrl(url: string): Promise<void> {
+  const openExternal = window.electronAPI?.openExternal;
+  if (typeof openExternal === "function") {
+    await openExternal(url);
+    return;
+  }
+
+  window.open(url, "_blank", "noopener,noreferrer");
+}
+

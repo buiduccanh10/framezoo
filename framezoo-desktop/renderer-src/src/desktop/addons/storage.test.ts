@@ -1,9 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+import { queryClient } from "@/utils/queryClient";
+
 import {
   NATIVE_SUBTITLE_ADDON_ID,
   getCustomAddons,
   getInstalledAddons,
+  invalidateExternalSubtitlesCache,
   mergeAddonLists,
   removeAddon,
   resetAddonStorage,
@@ -97,6 +100,39 @@ describe("addons storage", () => {
     list = getInstalledAddons();
     expect(list).toHaveLength(1);
     expect(list[0].manifest.id).toBe(NATIVE_SUBTITLE_ADDON_ID);
+  });
+
+  it("invalidates external subtitle queries in queryClient when addons change", () => {
+    const removeQueriesSpy = vi.spyOn(queryClient, "removeQueries");
+
+    invalidateExternalSubtitlesCache();
+    expect(removeQueriesSpy).toHaveBeenCalledWith({
+      queryKey: ["externalSubtitles"],
+    });
+
+    removeQueriesSpy.mockClear();
+
+    const userAddon: InstalledAddon = {
+      manifestUrl: "https://example.com/manifest.json",
+      baseUrl: "https://example.com/",
+      manifest: {
+        id: "com.example.subs-addon",
+        version: "1.0.0",
+        name: "Subs Addon",
+        resources: ["subtitles"],
+        types: ["movie"],
+        catalogs: [],
+      },
+      enabled: true,
+      addedAt: Date.now(),
+    };
+
+    upsertAddon(userAddon);
+    expect(removeQueriesSpy).toHaveBeenCalledWith({
+      queryKey: ["externalSubtitles"],
+    });
+
+    removeQueriesSpy.mockRestore();
   });
 
   it("resets storage while preserving the native addon", () => {

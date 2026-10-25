@@ -8,11 +8,16 @@
   "addons": {
     "manager": {
       "add": "Eklemek",
+      "addWithoutConfiguring": "Yine de yükle (çalışmayabilir)",
       "adding": "Ekleniyor...",
       "ariaClose": "Eklenti yöneticisini kapat",
       "ariaManage": "Eklentileri yönet",
+      "configRequiredDesc": "Bu eklentinin içerik döndürebilmesi için önce yapılandırma (API anahtarları veya dil ayarları gibi) gereklidir. Lütfen tarayıcınızda yapılandırın, ardından oluşturulan manifest URL&#39;sini buraya kopyalayıp yapıştırın.",
+      "configRequiredTitle": "Yapılandırma Gerekli",
+      "configureAction": "Yapılandır",
       "errorFallback": "Bu eklenti yüklenemiyor.",
       "manageListButton": "Eklenti listesini yönet",
+      "openConfigurePage": "Yapılandırma Sayfasını Aç",
       "subtitle": "Resmi olmayan veya yasa dışı eklentiler eklemenizi önermiyoruz.",
       "title": "Masaüstü Eklentileri"
     },
@@ -24,6 +29,10 @@
     },
     "page": {
       "addAddonButton": "Eklenti Ekle",
+      "configRequiredBadge": "Yapılandırma gerektirir",
+      "configRequiredWarning": "Bu eklenti yapılandırılmamış ve yayınları veya altyazıları yüklemekte başarısız olabilir.",
+      "configureAddon": "Bu eklentiyi yapılandırın",
+      "configureRequiredAction": "Bu eklentiyi yapılandırın (Zorunlu)",
       "description": "Eklentiler isteğe bağlıdır. Bu uygulama herhangi bir eklentiyi paketlemez, önermez veya barındırmaz.",
       "disabled": "Engelli",
       "emptyInstalled": "Sistemde henüz eklenti yüklü değil.",

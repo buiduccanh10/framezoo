@@ -8,11 +8,16 @@
   "addons": {
     "manager": {
       "add": "Thêm",
+      "addWithoutConfiguring": "Cài đặt dù chưa cấu hình (có thể không hoạt động)",
       "adding": "Đang thêm...",
       "ariaClose": "Đóng cửa sổ quản lý addon",
       "ariaManage": "Quản lý Addons",
+      "configRequiredDesc": "Addon này yêu cầu cấu hình (như API key hoặc ngôn ngữ) trước khi sử dụng. Vui lòng mở trang cấu hình trên trình duyệt, sau đó copy và dán URL manifest đã tạo vào đây.",
+      "configRequiredTitle": "Yêu cầu cấu hình trước",
+      "configureAction": "Cấu hình",
       "errorFallback": "Không thể cài đặt tiện ích mở rộng này",
       "manageListButton": "Quản lý danh sách Addons",
+      "openConfigurePage": "Mở trang cấu hình",
       "subtitle": "Chúng tôi không khuyến khích thêm bất kỳ tiện ích bổ sung không chính thức hoặc bất hợp pháp nào.",
       "title": "Thêm Addons"
     },
@@ -24,6 +29,10 @@
     },
     "page": {
       "addAddonButton": "Thêm Addon",
+      "configRequiredBadge": "Chưa cấu hình",
+      "configRequiredWarning": "Addon này chưa được cấu hình và có thể không tải được nội dung hoặc phụ đề.",
+      "configureAddon": "Cấu hình addon này",
+      "configureRequiredAction": "Cấu hình addon này (Bắt buộc)",
       "description": "Addons là tùy chọn. Ứng dụng này không đóng gói, đề xuất hoặc lưu trữ bất kỳ tiện ích bổ sung nào.",
       "disabled": "Đã tắt",
       "emptyInstalled": "Chưa có Addon nào được cài đặt trong hệ thống.",
