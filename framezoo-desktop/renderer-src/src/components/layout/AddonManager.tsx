@@ -11,6 +11,11 @@ import { Spinner } from "@/components/layout/Spinner";
 import { OverlayPortal } from "@/components/overlays/OverlayDisplay";
 import { AddonLogo } from "@/desktop/addons/AddonLogo";
 import { loadAddonManifest } from "@/desktop/addons/client";
+import {
+  getAddonConfigureUrl,
+  isAddonConfigurationRequired,
+  openExternalUrl,
+} from "@/desktop/addons/manifest";
 import { installAddon } from "@/desktop/addons/store";
 import type { InstalledAddon } from "@/desktop/addons/types";
 import { useIsDesktopApp } from "@/hooks/useIsDesktopApp";
@@ -97,6 +102,14 @@ export function AddonManager({
 
   const isBusy = loading || previewLoading;
   const isAddonsPage = location.pathname === "/addons";
+  const isConfigRequired = isAddonConfigurationRequired(preview?.manifest);
+  const configureUrl = preview
+    ? getAddonConfigureUrl(
+        preview.manifestUrl,
+        preview.baseUrl,
+        preview.manifest,
+      )
+    : "";
 
   return (
     <>
@@ -170,8 +183,13 @@ export function AddonManager({
                   setError(null);
                 }}
                 onKeyDown={(event) => {
-                  if (event.key === "Enter" && url.trim() && !isBusy)
-                    void add();
+                  if (event.key === "Enter" && url.trim() && !isBusy) {
+                    if (isConfigRequired) {
+                      void openExternalUrl(configureUrl);
+                    } else {
+                      void add();
+                    }
+                  }
                 }}
                 placeholder="https://addon.example.com/manifest.json"
                 className="min-w-0 flex-1 rounded-xl border border-dropdown-border bg-dropdown-contentBackground px-3.5 py-2.5 text-sm text-white placeholder-dropdown-text/60 outline-none transition-colors focus:border-type-link"
@@ -180,11 +198,20 @@ export function AddonManager({
               <button
                 type="button"
                 className={classNames(
-                  "rounded-xl bg-buttons-purple px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-buttons-purpleHover hover:scale-105 active:scale-95",
+                  "rounded-xl px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 active:scale-95",
+                  isConfigRequired
+                    ? "bg-amber-600 hover:bg-amber-500 hover:scale-105"
+                    : "bg-buttons-purple hover:bg-buttons-purpleHover hover:scale-105",
                   (!url.trim() || isBusy) &&
                     "!cursor-not-allowed !scale-100 opacity-60 hover:bg-buttons-purple",
                 )}
-                onClick={() => void add()}
+                onClick={() => {
+                  if (isConfigRequired) {
+                    void openExternalUrl(configureUrl);
+                  } else {
+                    void add();
+                  }
+                }}
                 disabled={!url.trim() || isBusy}
                 aria-busy={isBusy}
               >
@@ -195,6 +222,13 @@ export function AddonManager({
                       ? t("addons.manager.adding", "Adding...")
                       : t("addons.page.processing", "Processing...")}
                   </>
+                ) : isConfigRequired ? (
+                  <span className="flex items-center gap-1.5">
+                    <Icon icon={Icons.SETTINGS} className="text-sm" />
+                    <span>
+                      {t("addons.manager.configureAction", "Configure")}
+                    </span>
+                  </span>
                 ) : (
                   t("addons.manager.add", "Add")
                 )}
@@ -210,30 +244,83 @@ export function AddonManager({
                 </div>
               </div>
             ) : preview ? (
-              <div className="mt-4 flex items-center gap-3 rounded-xl border border-dropdown-border bg-dropdown-contentBackground p-3">
-                <AddonLogo
-                  name={preview.manifest.name}
-                  logo={preview.manifest.logo}
-                  className="h-10 w-10 rounded bg-dropdown-border"
-                />
-                <div className="flex flex-col overflow-hidden">
-                  <span className="truncate font-semibold text-white">
-                    {preview.manifest.name}{" "}
-                    <span className="text-xs font-normal text-dropdown-text">
-                      v{preview.manifest.version}
-                    </span>
-                  </span>
-                  <AddonResourceBadges
-                    resources={preview.manifest.resources}
-                    className="mt-1"
+              <>
+                <div className="mt-4 flex items-center gap-3 rounded-xl border border-dropdown-border bg-dropdown-contentBackground p-3">
+                  <AddonLogo
+                    name={preview.manifest.name}
+                    logo={preview.manifest.logo}
+                    className="h-10 w-10 rounded bg-dropdown-border"
                   />
-                  {preview.manifest.description && (
-                    <span className="truncate text-xs text-dropdown-text">
-                      {preview.manifest.description}
+                  <div className="flex flex-col overflow-hidden">
+                    <span className="truncate font-semibold text-white">
+                      {preview.manifest.name}{" "}
+                      <span className="text-xs font-normal text-dropdown-text">
+                        v{preview.manifest.version}
+                      </span>
                     </span>
-                  )}
+                    <AddonResourceBadges
+                      resources={preview.manifest.resources}
+                      className="mt-1"
+                    />
+                    {preview.manifest.description && (
+                      <span className="truncate text-xs text-dropdown-text">
+                        {preview.manifest.description}
+                      </span>
+                    )}
+                  </div>
                 </div>
-              </div>
+
+                {isConfigRequired && (
+                  <div className="mt-3 rounded-xl border border-amber-500/40 bg-amber-500/10 p-3.5 text-xs text-amber-200">
+                    <div className="flex items-start gap-2.5">
+                      <Icon
+                        icon={Icons.WARNING}
+                        className="mt-0.5 shrink-0 text-base text-amber-400"
+                      />
+                      <div className="min-w-0 flex-1 space-y-2">
+                        <p className="font-semibold text-amber-300">
+                          {t(
+                            "addons.manager.configRequiredTitle",
+                            "Configuration Required",
+                          )}
+                        </p>
+                        <p className="leading-relaxed opacity-90">
+                          {t(
+                            "addons.manager.configRequiredDesc",
+                            "This addon requires configuration (such as API keys or language settings) before it can return content. Please configure it in your browser, then copy and paste the generated manifest URL here.",
+                          )}
+                        </p>
+                        <div className="flex flex-wrap items-center gap-2.5 pt-1">
+                          <button
+                            type="button"
+                            onClick={() => void openExternalUrl(configureUrl)}
+                            className="inline-flex items-center gap-1.5 rounded-lg bg-amber-500/25 px-3 py-1.5 font-semibold text-xs text-amber-200 transition-all hover:bg-amber-500/40 hover:text-white active:scale-95"
+                          >
+                            <Icon icon={Icons.SETTINGS} className="text-sm" />
+                            <span>
+                              {t(
+                                "addons.manager.openConfigurePage",
+                                "Open Configuration Page",
+                              )}
+                            </span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => void add()}
+                            disabled={isBusy}
+                            className="text-xs text-amber-300/70 underline underline-offset-2 transition-colors hover:text-amber-200"
+                          >
+                            {t(
+                              "addons.manager.addWithoutConfiguring",
+                              "Install anyway (may not work)",
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </>
             ) : null}
 
             {error ? (

@@ -8,11 +8,16 @@
   "addons": {
     "manager": {
       "add": "לְהוֹסִיף",
+      "addWithoutConfiguring": "התקן בכל מקרה (ייתכן שלא יעבוד)",
       "adding": "מוֹסִיף...",
       "ariaClose": "סגור את מנהל ההרחבות",
       "ariaManage": "נהל תוספות",
+      "configRequiredDesc": "תוסף זה דורש הגדרה (כגון מפתחות API או הגדרות שפה) לפני שהוא יכול להחזיר תוכן. אנא הגדר אותו בדפדפן שלך, לאחר מכן העתק והדבק את כתובת ה-URL של המניפסט שנוצרה כאן.",
+      "configRequiredTitle": "תצורה נדרשת",
+      "configureAction": "הגדרות",
       "errorFallback": "לא ניתן להתקין את התוסף הזה.",
       "manageListButton": "נהל רשימת תוספות",
+      "openConfigurePage": "פתיחת דף תצורה",
       "subtitle": "איננו ממליצים להוסיף תוספות לא רשמיות או לא חוקיות.",
       "title": "תוספות לשולחן העבודה"
     },
@@ -24,6 +29,10 @@
     },
     "page": {
       "addAddonButton": "הוסף Addon",
+      "configRequiredBadge": "דורש תצורה",
+      "configRequiredWarning": "תוסף זה אינו מוגדר וייתכן שלא יוכל לטעון שידורים או כתוביות.",
+      "configureAddon": "הגדר את התוסף הזה",
+      "configureRequiredAction": "הגדר תוסף זה (נדרש)",
       "description": "תוספות הן אופציונליות. אפליקציה זו אינה מאגדת, ממליצה או מארחת תוסף כלשהו.",
       "disabled": "נָכֶה",
       "emptyInstalled": "עדיין לא הותקנו תוספות במערכת.",

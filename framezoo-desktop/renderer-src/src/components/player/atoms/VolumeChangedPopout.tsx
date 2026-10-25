@@ -30,10 +30,12 @@ export function VolumeChangedPopout() {
             icon={volume > 0 ? Icons.VOLUME : Icons.VOLUME_X}
           />
           <div className="w-full flex items-center">
-            <div className="w-full h-1.5 rounded-full bg-video-context-slider/25">
+            <div className="w-full h-1.5 rounded-full bg-video-context-slider/25 overflow-hidden">
               <div
                 className="h-full bg-video-context-sliderFilled rounded-full transition-[width] duration-100"
-                style={{ width: `${volume * 100}%` }}
+                style={{
+                  width: `${Math.min(100, Math.max(0, (volume / 3) * 100))}%`,
+                }}
               />
             </div>
           </div>

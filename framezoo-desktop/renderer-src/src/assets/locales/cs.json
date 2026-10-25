@@ -8,11 +8,16 @@
   "addons": {
     "manager": {
       "add": "Přidat",
+      "addWithoutConfiguring": "Přesto nainstalovat (nemusí fungovat)",
       "adding": "Přidávání...",
       "ariaClose": "Zavřete správce doplňků",
       "ariaManage": "Spravujte doplňky",
+      "configRequiredDesc": "Tento doplněk vyžaduje konfiguraci (například klíče API nebo nastavení jazyka), než bude moci vrátit obsah. Nakonfigurujte jej prosím ve svém prohlížeči a poté zkopírujte a vložte vygenerovanou URL manifestu sem.",
+      "configRequiredTitle": "Požadovaná konfigurace",
+      "configureAction": "Konfigurovat",
       "errorFallback": "Tento doplněk nelze nainstalovat.",
       "manageListButton": "Správa seznamu doplňků",
+      "openConfigurePage": "Otevřít konfigurační stránku",
       "subtitle": "Nedoporučujeme přidávat žádné neoficiální nebo nelegální doplňky.",
       "title": "Desktopové doplňky"
     },
@@ -24,6 +29,10 @@
     },
     "page": {
       "addAddonButton": "Přidat doplněk",
+      "configRequiredBadge": "Vyžaduje konfiguraci",
+      "configRequiredWarning": "Tento doplněk není nakonfigurován a může se stát, že se mu nepodaří načíst streamy nebo titulky.",
+      "configureAddon": "Nakonfigurujte tento doplněk",
+      "configureRequiredAction": "Nakonfigurujte tento doplněk (Povinné)",
       "description": "Doplňky jsou volitelné. Tato aplikace nesbaluje, nedoporučuje ani nehostuje žádný doplněk.",
       "disabled": "Zakázáno",
       "emptyInstalled": "V systému zatím nejsou nainstalovány žádné doplňky.",

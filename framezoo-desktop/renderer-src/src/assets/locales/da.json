@@ -8,11 +8,16 @@
   "addons": {
     "manager": {
       "add": "Tilføje",
+      "addWithoutConfiguring": "Installer alligevel (virker muligvis ikke)",
       "adding": "Tilføjer...",
       "ariaClose": "Luk tilføjelsesadministrator",
       "ariaManage": "Administrer tilføjelser",
+      "configRequiredDesc": "Denne tilføjelse kræver konfiguration (f.eks. API-nøgler eller sprogindstillinger), før den kan returnere indhold. Konfigurer den i din browser, og kopier og indsæt derefter den genererede manifest-URL her.",
+      "configRequiredTitle": "Konfiguration påkrævet",
+      "configureAction": "Konfigurér",
       "errorFallback": "Kan ikke installere denne tilføjelse.",
       "manageListButton": "Administrer tilføjelsesliste",
+      "openConfigurePage": "Åbn konfigurationsside",
       "subtitle": "Vi anbefaler ikke at tilføje nogen uofficielle eller ulovlige tilføjelser.",
       "title": "Desktop tilføjelser"
     },
@@ -24,6 +29,10 @@
     },
     "page": {
       "addAddonButton": "Tilføj Addon",
+      "configRequiredBadge": "Kræver konfiguration",
+      "configRequiredWarning": "Denne tilføjelse er ikke konfigureret og kan muligvis ikke indlæse streams eller undertekster.",
+      "configureAddon": "Konfigurer denne tilføjelse",
+      "configureRequiredAction": "Konfigurer denne tilføjelse (påkrævet)",
       "description": "Tilføjelser er valgfrie. Denne app samler, anbefaler eller hoster ikke nogen tilføjelse.",
       "disabled": "Handicappet",
       "emptyInstalled": "Ingen tilføjelser installeret i systemet endnu.",

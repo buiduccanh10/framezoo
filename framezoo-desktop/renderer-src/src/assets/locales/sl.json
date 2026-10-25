@@ -8,11 +8,16 @@
   "addons": {
     "manager": {
       "add": "Dodaj",
+      "addWithoutConfiguring": "Vseeno namesti (morda ne bo delovalo)",
       "adding": "Dodajanje ...",
       "ariaClose": "Zapri upravitelja dodatkov",
       "ariaManage": "Upravljanje dodatkov",
+      "configRequiredDesc": "Ta dodatek zahteva konfiguracijo (kot so ključi API ali jezikovne nastavitve), preden lahko vrne vsebino. Konfigurirajte ga v brskalniku, nato pa kopirajte in prilepite ustvarjeni URL manifesta sem.",
+      "configRequiredTitle": "Zahtevana konfiguracija",
+      "configureAction": "Konfiguriraj",
       "errorFallback": "Tega dodatka ni mogoče namestiti.",
       "manageListButton": "Upravljanje seznama dodatkov",
+      "openConfigurePage": "Odpri konfiguracijsko stran",
       "subtitle": "Ne priporočamo dodajanja neuradnih ali nezakonitih dodatkov.",
       "title": "Namizni dodatki"
     },
@@ -24,6 +29,10 @@
     },
     "page": {
       "addAddonButton": "Dodaj dodatek",
+      "configRequiredBadge": "Zahteva konfiguracijo",
+      "configRequiredWarning": "Ta dodatek ni konfiguriran in morda ne bo naložil pretočnih vsebin ali podnapisov.",
+      "configureAddon": "Konfiguriraj ta dodatek",
+      "configureRequiredAction": "Konfiguriraj ta dodatek (obvezno)",
       "description": "Dodatki niso obvezni. Ta aplikacija ne združuje, priporoča ali gosti nobenega dodatka.",
       "disabled": "Onemogočen",
       "emptyInstalled": "V sistemu še ni nameščen noben dodatek.",

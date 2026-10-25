@@ -10,6 +10,12 @@ import { WideContainer } from "@/components/layout/WideContainer";
 import { Heading1 } from "@/components/utils/Text";
 import { AddonLogo } from "@/desktop/addons/AddonLogo";
 import {
+  getAddonConfigureUrl,
+  isAddonConfigurable,
+  isAddonConfigurationRequired,
+  openExternalUrl,
+} from "@/desktop/addons/manifest";
+import {
   removeAddon,
   setAddonEnabled,
   useInstalledAddons,
@@ -83,101 +89,145 @@ export function AddonsPage() {
               </p>
             </div>
           ) : (
-            addons.map((addon) => (
-              <div
-                key={addon.manifest.id}
-                className="flex items-center gap-4 rounded-xl border border-dropdown-border bg-dropdown-contentBackground/60 p-4 transition-all duration-200 hover:border-dropdown-border/80 hover:bg-dropdown-contentBackground"
-              >
-                <AddonLogo
-                  name={addon.manifest.name}
-                  logo={addon.manifest.logo}
-                  className="h-11 w-11 rounded-lg bg-black/20 p-1"
-                />
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2">
-                    <p className="truncate font-semibold text-base text-white">
-                      {addon.manifest.name}
-                    </p>
-                    {addon.manifest.version ? (
-                      <span className="shrink-0 rounded bg-dropdown-altBackground px-2 py-0.5 text-dropdown-text text-xs">
-                        v{addon.manifest.version}
-                      </span>
-                    ) : null}
-                    <p className="min-w-0 flex-1 truncate text-[11px] text-dropdown-text opacity-60 ml-1">
-                      {addon.manifestUrl}
-                    </p>
-                  </div>
-                  <AddonResourceBadges
-                    resources={addon.manifest.resources}
-                    className="mt-1"
+            addons.map((addon) => {
+              const isConfigRequired = isAddonConfigurationRequired(
+                addon.manifest,
+              );
+              const isConfigurable = isAddonConfigurable(addon.manifest);
+              const configureUrl = getAddonConfigureUrl(
+                addon.manifestUrl,
+                addon.baseUrl,
+                addon.manifest,
+              );
+
+              return (
+                <div
+                  key={addon.manifest.id}
+                  className="flex items-center gap-4 rounded-xl border border-dropdown-border bg-dropdown-contentBackground/60 p-4 transition-all duration-200 hover:border-dropdown-border/80 hover:bg-dropdown-contentBackground"
+                >
+                  <AddonLogo
+                    name={addon.manifest.name}
+                    logo={addon.manifest.logo}
+                    className="h-11 w-11 rounded-lg bg-black/20 p-1"
                   />
-                  {addon.manifest.description ? (
-                    <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-dropdown-text opacity-90">
-                      {addon.manifest.description}
-                    </p>
-                  ) : null}
-                </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    className="rounded-lg p-2 text-dropdown-text transition-colors hover:bg-blue-500/20 hover:text-blue-400"
-                    onClick={() => handleShareAddon(addon.manifestUrl)}
-                    aria-label={t("actions.copy")}
-                    title={t("actions.copy")}
-                  >
-                    <Icon icon={Icons.IOS_SHARE} className="text-base" />
-                  </button>
-                  {addon.manifest.behaviorHints?.configurable ? (
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2">
+                      <p className="truncate font-semibold text-base text-white">
+                        {addon.manifest.name}
+                      </p>
+                      {addon.manifest.version ? (
+                        <span className="shrink-0 rounded bg-dropdown-altBackground px-2 py-0.5 text-dropdown-text text-xs">
+                          v{addon.manifest.version}
+                        </span>
+                      ) : null}
+                      {isConfigRequired ? (
+                        <span className="shrink-0 rounded bg-amber-500/20 px-2 py-0.5 text-xs font-semibold text-amber-300">
+                          {t(
+                            "addons.page.configRequiredBadge",
+                            "Requires Configuration",
+                          )}
+                        </span>
+                      ) : null}
+                      <p className="min-w-0 flex-1 truncate text-[11px] text-dropdown-text opacity-60 ml-1">
+                        {addon.manifestUrl}
+                      </p>
+                    </div>
+                    <AddonResourceBadges
+                      resources={addon.manifest.resources}
+                      className="mt-1"
+                    />
+                    {isConfigRequired ? (
+                      <p className="mt-1.5 flex items-center gap-1.5 text-xs font-medium text-amber-300/90">
+                        <Icon
+                          icon={Icons.WARNING}
+                          className="shrink-0 text-sm text-amber-400"
+                        />
+                        <span>
+                          {t(
+                            "addons.page.configRequiredWarning",
+                            "This addon is not configured and may fail to load streams or subtitles.",
+                          )}
+                        </span>
+                      </p>
+                    ) : null}
+                    {addon.manifest.description ? (
+                      <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-dropdown-text opacity-90">
+                        {addon.manifest.description}
+                      </p>
+                    ) : null}
+                  </div>
+                  <div className="flex items-center gap-2">
                     <button
                       type="button"
-                      className="rounded-lg p-2 text-dropdown-text transition-colors hover:bg-green-500/20 hover:text-green-400"
+                      className="rounded-lg p-2 text-dropdown-text transition-colors hover:bg-blue-500/20 hover:text-blue-400"
+                      onClick={() => handleShareAddon(addon.manifestUrl)}
+                      aria-label={t("actions.copy")}
+                      title={t("actions.copy")}
+                    >
+                      <Icon icon={Icons.IOS_SHARE} className="text-base" />
+                    </button>
+                    {isConfigurable ? (
+                      <button
+                        type="button"
+                        className={classNames(
+                          "rounded-lg p-2 transition-colors",
+                          isConfigRequired
+                            ? "bg-amber-500/20 text-amber-300 hover:bg-amber-500/30"
+                            : "text-dropdown-text hover:bg-green-500/20 hover:text-green-400",
+                        )}
+                        onClick={() => void openExternalUrl(configureUrl)}
+                        title={
+                          isConfigRequired
+                            ? t(
+                                "addons.page.configureRequiredAction",
+                                "Configure this addon (Required)",
+                              )
+                            : t(
+                                "addons.page.configureAddon",
+                                "Configure this addon",
+                              )
+                        }
+                      >
+                        <Icon icon={Icons.SETTINGS} className="text-base" />
+                      </button>
+                    ) : null}
+                    <button
+                      type="button"
+                      className={classNames(
+                        "rounded-lg px-3.5 py-1.5 font-semibold text-xs transition-colors",
+                        addon.enabled
+                          ? "bg-buttons-purple text-white hover:bg-buttons-purpleHover"
+                          : "bg-dropdown-altBackground text-dropdown-text hover:bg-pill-backgroundHover hover:text-white",
+                      )}
                       onClick={() =>
-                        window.open(
-                          `${addon.baseUrl.replace(/\/+$/, "")}/configure`,
-                          "_blank",
-                        )
+                        setAddonEnabled(addon.manifest.id, !addon.enabled)
                       }
-                      title={t(
-                        "addons.page.configureAddon",
-                        "Configure this addon",
-                      )}
                     >
-                      <Icon icon={Icons.SETTINGS} className="text-base" />
+                      {addon.enabled
+                        ? t("addons.page.enabled", "Enabled")
+                        : t("addons.page.disabled", "Disabled")}
                     </button>
-                  ) : null}
-                  <button
-                    type="button"
-                    className={classNames(
-                      "rounded-lg px-3.5 py-1.5 font-semibold text-xs transition-colors",
-                      addon.enabled
-                        ? "bg-buttons-purple text-white hover:bg-buttons-purpleHover"
-                        : "bg-dropdown-altBackground text-dropdown-text hover:bg-pill-backgroundHover hover:text-white",
-                    )}
-                    onClick={() =>
-                      setAddonEnabled(addon.manifest.id, !addon.enabled)
-                    }
-                  >
-                    {addon.enabled
-                      ? t("addons.page.enabled", "Enabled")
-                      : t("addons.page.disabled", "Disabled")}
-                  </button>
-                  {!addon.isNative ? (
-                    <button
-                      type="button"
-                      className="rounded-lg p-2 text-dropdown-text transition-colors hover:bg-red-500/20 hover:text-red-400"
-                      onClick={() => removeAddon(addon.manifest.id)}
-                      aria-label={t(
-                        "addons.page.removeAddon",
-                        "Remove this addon",
-                      )}
-                      title={t("addons.page.removeAddon", "Remove this addon")}
-                    >
-                      <Icon icon={Icons.X} className="text-base" />
-                    </button>
-                  ) : null}
+                    {!addon.isNative ? (
+                      <button
+                        type="button"
+                        className="rounded-lg p-2 text-dropdown-text transition-colors hover:bg-red-500/20 hover:text-red-400"
+                        onClick={() => removeAddon(addon.manifest.id)}
+                        aria-label={t(
+                          "addons.page.removeAddon",
+                          "Remove this addon",
+                        )}
+                        title={t(
+                          "addons.page.removeAddon",
+                          "Remove this addon",
+                        )}
+                      >
+                        <Icon icon={Icons.X} className="text-base" />
+                      </button>
+                    ) : null}
+                  </div>
                 </div>
-              </div>
-            ))
+              );
+            })
           )}
         </div>
       </WideContainer>

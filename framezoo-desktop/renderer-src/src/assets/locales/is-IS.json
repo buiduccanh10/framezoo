@@ -8,11 +8,16 @@
   "addons": {
     "manager": {
       "add": "Bæta við",
+      "addWithoutConfiguring": "Setja samt upp (virkar kannski ekki)",
       "adding": "Bætir við...",
       "ariaClose": "Lokaðu viðbótarstjóra",
       "ariaManage": "Stjórna viðbótum",
+      "configRequiredDesc": "Þessi viðbót krefst stillinga (eins og API-lykla eða tungumálastillinga) áður en hún getur skilað efni. Vinsamlegast stilltu hana í vafranum þínum og afritaðu og límdu síðan myndaða slóðina á upplýsingaskrána hér.",
+      "configRequiredTitle": "Nauðsynleg stilling",
+      "configureAction": "Stilla",
       "errorFallback": "Ekki er hægt að setja upp þessa viðbót.",
       "manageListButton": "Stjórna viðbótarlista",
+      "openConfigurePage": "Opna stillingasíðu",
       "subtitle": "Við mælum ekki með því að bæta við neinum óopinberum eða ólöglegum viðbótum.",
       "title": "Viðbætur fyrir skjáborð"
     },
@@ -24,6 +29,10 @@
     },
     "page": {
       "addAddonButton": "Bæta við viðbót",
+      "configRequiredBadge": "Krefst stillingar",
+      "configRequiredWarning": "Þessi viðbót er ekki stillt og gæti mistekist að hlaða strauma eða texta.",
+      "configureAddon": "Stilla þessa viðbót",
+      "configureRequiredAction": "Stilla þessa viðbót (Nauðsynlegt)",
       "description": "Viðbætur eru valfrjálsar. Þetta app hefur ekki búnt, mælir með eða hýsir neina viðbót.",
       "disabled": "Öryrkjar",
       "emptyInstalled": "Engar viðbætur uppsettar í kerfinu ennþá.",

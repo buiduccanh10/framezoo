@@ -8,11 +8,16 @@
   "addons": {
     "manager": {
       "add": "Hozzáadás",
+      "addWithoutConfiguring": "Telepítés mindenképpen (lehet, hogy nem fog működni)",
       "adding": "Hozzáadás...",
       "ariaClose": "A bővítménykezelő bezárása",
       "ariaManage": "Kiegészítők kezelése",
+      "configRequiredDesc": "Ez a kiegészítő konfigurációt igényel (például API-kulcsok vagy nyelvi beállítások), mielőtt tartalmat tudna visszaadni. Kérjük, konfigurálja a böngészőjében, majd másolja ki és illessze be ide a létrehozott manifest URL-t.",
+      "configRequiredTitle": "Konfiguráció szükséges",
+      "configureAction": "Konfigurálás",
       "errorFallback": "Nem sikerült telepíteni ezt a kiegészítőt.",
       "manageListButton": "Kiegészítőlista kezelése",
+      "openConfigurePage": "Konfigurációs oldal megnyitása",
       "subtitle": "Nem javasoljuk nem hivatalos vagy illegális kiegészítők hozzáadását.",
       "title": "Asztali kiegészítők"
     },
@@ -24,6 +29,10 @@
     },
     "page": {
       "addAddonButton": "Addon hozzáadása",
+      "configRequiredBadge": "Konfigurációt igényel",
+      "configRequiredWarning": "Ez a kiegészítő nincs konfigurálva, és előfordulhat, hogy nem tölti be a streameket vagy a feliratokat.",
+      "configureAddon": "Konfigurálja ezt a kiegészítőt",
+      "configureRequiredAction": "Konfigurálja ezt a kiegészítőt (Kötelező)",
       "description": "A kiegészítők nem kötelezőek. Ez az alkalmazás nem köt össze, ajánl vagy fogad semmilyen kiegészítőt.",
       "disabled": "Letiltva",
       "emptyInstalled": "A rendszerbe még nincs telepítve kiegészítő.",

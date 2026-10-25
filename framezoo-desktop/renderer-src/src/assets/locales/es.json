@@ -8,11 +8,16 @@
   "addons": {
     "manager": {
       "add": "Agregar",
+      "addWithoutConfiguring": "Instálalo de todos modos (puede que no funcione).",
       "adding": "Añadiendo...",
       "ariaClose": "Cerrar administrador de complementos",
       "ariaManage": "Administrar complementos",
+      "configRequiredDesc": "Este complemento requiere configuración (como claves API o ajustes de idioma) antes de poder mostrar contenido. Configúrelo en su navegador y, a continuación, copie y pegue aquí la URL del manifiesto generado.",
+      "configRequiredTitle": "Se requiere configuración",
+      "configureAction": "Configurar",
       "errorFallback": "No se puede instalar este complemento.",
       "manageListButton": "Administrar lista de complementos",
+      "openConfigurePage": "Abrir página de configuración",
       "subtitle": "No recomendamos agregar ningún complemento no oficial o ilegal.",
       "title": "Complementos de escritorio"
     },
@@ -24,6 +29,10 @@
     },
     "page": {
       "addAddonButton": "Agregar complemento",
+      "configRequiredBadge": "Requiere configuración",
+      "configRequiredWarning": "Este complemento no está configurado y puede que no cargue las transmisiones o los subtítulos.",
+      "configureAddon": "Configura este complemento",
+      "configureRequiredAction": "Configura este complemento (obligatorio)",
       "description": "Los complementos son opcionales. Esta aplicación no incluye, recomienda ni aloja ningún complemento.",
       "disabled": "Desactivado",
       "emptyInstalled": "Aún no hay complementos instalados en el sistema.",

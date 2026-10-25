@@ -8,11 +8,16 @@
   "addons": {
     "manager": {
       "add": "Dodać",
+      "addWithoutConfiguring": "Zainstaluj mimo wszystko (może nie działać)",
       "adding": "Dodawanie...",
       "ariaClose": "Zamknij menedżera dodatków",
       "ariaManage": "Zarządzaj dodatkami",
+      "configRequiredDesc": "Ten dodatek wymaga konfiguracji (takiej jak klucze API lub ustawienia językowe), zanim będzie mógł zwracać zawartość. Skonfiguruj go w przeglądarce, a następnie skopiuj i wklej tutaj wygenerowany adres URL manifestu.",
+      "configRequiredTitle": "Wymagana konfiguracja",
+      "configureAction": "Konfiguruj",
       "errorFallback": "Nie można zainstalować tego dodatku.",
       "manageListButton": "Zarządzaj listą dodatków",
+      "openConfigurePage": "Otwórz stronę konfiguracji",
       "subtitle": "Nie zalecamy dodawania żadnych nieoficjalnych lub nielegalnych dodatków.",
       "title": "Dodatki do komputerów stacjonarnych"
     },
@@ -24,6 +29,10 @@
     },
     "page": {
       "addAddonButton": "Dodaj dodatek",
+      "configRequiredBadge": "Wymaga konfiguracji",
+      "configRequiredWarning": "Ten dodatek nie jest skonfigurowany, więc może nie załadować strumieni lub napisów.",
+      "configureAddon": "Skonfiguruj ten dodatek",
+      "configureRequiredAction": "Skonfiguruj ten dodatek (wymagane)",
       "description": "Dodatki są opcjonalne. Ta aplikacja nie łączy, nie poleca ani nie hostuje żadnych dodatków.",
       "disabled": "Wyłączony",
       "emptyInstalled": "W systemie nie zainstalowano jeszcze żadnych dodatków.",

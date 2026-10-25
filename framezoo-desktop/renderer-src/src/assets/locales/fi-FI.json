@@ -8,11 +8,16 @@
   "addons": {
     "manager": {
       "add": "Lisätä",
+      "addWithoutConfiguring": "Asenna joka tapauksessa (ei välttämättä toimi)",
       "adding": "Lisätään...",
       "ariaClose": "Sulje lisäosien hallinta",
       "ariaManage": "Hallinnoi lisäosia",
+      "configRequiredDesc": "Tämä lisäosa vaatii määrityksiä (kuten API-avaimet tai kieliasetukset) ennen kuin se voi palauttaa sisältöä. Määritä se selaimessasi ja kopioi ja liitä sitten luotu manifest-URL tähän.",
+      "configRequiredTitle": "Konfiguraatio vaaditaan",
+      "configureAction": "Määritä",
       "errorFallback": "Tätä lisäosaa ei voi asentaa.",
       "manageListButton": "Hallinnoi lisäosien luetteloa",
+      "openConfigurePage": "Avaa määrityssivu",
       "subtitle": "Emme suosittele epävirallisten tai laittomien lisäosien lisäämistä.",
       "title": "Työpöydän lisäosat"
     },
@@ -24,6 +29,10 @@
     },
     "page": {
       "addAddonButton": "Lisää Addon",
+      "configRequiredBadge": "Vaatii konfiguroinnin",
+      "configRequiredWarning": "Tätä lisäosaa ei ole määritetty, eikä se välttämättä lataa striimejä tai tekstityksiä.",
+      "configureAddon": "Määritä tämä lisäosa",
+      "configureRequiredAction": "Määritä tämä lisäosa (pakollinen)",
       "description": "Lisäosat ovat valinnaisia. Tämä sovellus ei niputa, suosittele tai isännöi mitään lisäosia.",
       "disabled": "Ei käytössä",
       "emptyInstalled": "Järjestelmään ei ole vielä asennettu lisäosia.",

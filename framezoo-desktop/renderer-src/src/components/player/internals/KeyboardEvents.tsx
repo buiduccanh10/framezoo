@@ -153,7 +153,7 @@ export function KeyboardEvents() {
 
     const targetVolume = Math.max(
       0,
-      Math.min(1, Math.round((currentVol + delta) * 100) / 100),
+      Math.min(3, Math.round((currentVol + delta) * 100) / 100),
     );
     lastVolumeTargetRef.current = targetVolume;
 
@@ -477,12 +477,12 @@ export function KeyboardEvents() {
       }
       if (isVolumeUp) {
         evt.preventDefault();
-        dataRef.current.performVolumeChange(0.15);
+        dataRef.current.performVolumeChange(0.1);
         return;
       }
       if (isVolumeDown) {
         evt.preventDefault();
-        dataRef.current.performVolumeChange(-0.15);
+        dataRef.current.performVolumeChange(-0.1);
         return;
       }
       // Mute - check customizable shortcut or m/M

@@ -8,11 +8,16 @@
   "addons": {
     "manager": {
       "add": "Adicionar",
+      "addWithoutConfiguring": "Instalar mesmo assim (pode não funcionar)",
       "adding": "Adicionando...",
       "ariaClose": "Fechar gerenciador de complementos",
       "ariaManage": "Gerenciar complementos",
+      "configRequiredDesc": "Este complemento requer configuração (como chaves de API ou configurações de idioma) antes de poder retornar conteúdo. Configure-o em seu navegador e, em seguida, copie e cole o URL do manifesto gerado aqui.",
+      "configRequiredTitle": "Configuração necessária",
+      "configureAction": "Configurar",
       "errorFallback": "Não foi possível instalar este complemento.",
       "manageListButton": "Gerenciar lista de complementos",
+      "openConfigurePage": "Abrir página de configuração",
       "subtitle": "Não recomendamos adicionar complementos não oficiais ou ilegais.",
       "title": "Complementos para área de trabalho"
     },
@@ -24,6 +29,10 @@
     },
     "page": {
       "addAddonButton": "Adicionar complemento",
+      "configRequiredBadge": "Requer configuração",
+      "configRequiredWarning": "Este complemento não está configurado e pode não conseguir carregar fluxos ou legendas.",
+      "configureAddon": "Configure este complemento.",
+      "configureRequiredAction": "Configure este complemento (Obrigatório)",
       "description": "Os complementos são opcionais. Este aplicativo não agrupa, recomenda ou hospeda nenhum complemento.",
       "disabled": "Desabilitado",
       "emptyInstalled": "Nenhum complemento instalado no sistema ainda.",

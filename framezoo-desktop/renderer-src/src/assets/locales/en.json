@@ -8,11 +8,16 @@
   "addons": {
     "manager": {
       "add": "Add",
+      "addWithoutConfiguring": "Install anyway (may not work)",
       "adding": "Adding...",
       "ariaClose": "Close addon manager",
       "ariaManage": "Manage addons",
+      "configRequiredDesc": "This addon requires configuration (such as API keys or language settings) before it can return content. Please configure it in your browser, then copy and paste the generated manifest URL here.",
+      "configRequiredTitle": "Configuration Required",
+      "configureAction": "Configure",
       "errorFallback": "Unable to install this addon.",
       "manageListButton": "Manage addon list",
+      "openConfigurePage": "Open Configuration Page",
       "subtitle": "We do not recommend adding any unofficial or illegal add-ons.",
       "title": "Add Addons"
     },
@@ -24,6 +29,10 @@
     },
     "page": {
       "addAddonButton": "Add Addon",
+      "configRequiredBadge": "Requires Configuration",
+      "configRequiredWarning": "This addon is not configured and may fail to load streams or subtitles.",
+      "configureAddon": "Configure this addon",
+      "configureRequiredAction": "Configure this addon (Required)",
       "description": "Addons are optional. This app does not bundle, recommend, or host any addon.",
       "disabled": "Disabled",
       "emptyInstalled": "No addons installed in the system yet.",

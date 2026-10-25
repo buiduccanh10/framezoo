@@ -8,11 +8,16 @@
   "addons": {
     "manager": {
       "add": "Aggiungere",
+      "addWithoutConfiguring": "Installa comunque (potrebbe non funzionare)",
       "adding": "Aggiunta...",
       "ariaClose": "Chiudi il gestore dei componenti aggiuntivi",
       "ariaManage": "Gestisci componenti aggiuntivi",
+      "configRequiredDesc": "Questo componente aggiuntivo richiede una configurazione (come chiavi API o impostazioni della lingua) prima di poter restituire contenuti. Configuralo nel tuo browser, quindi copia e incolla qui l&#39;URL del manifesto generato.",
+      "configRequiredTitle": "Configurazione richiesta",
+      "configureAction": "Specificare",
       "errorFallback": "Impossibile installare questo componente aggiuntivo.",
       "manageListButton": "Gestisci l'elenco dei componenti aggiuntivi",
+      "openConfigurePage": "Apri la pagina di configurazione",
       "subtitle": "Non consigliamo di aggiungere componenti aggiuntivi non ufficiali o illegali.",
       "title": "Componenti aggiuntivi per il desktop"
     },
@@ -24,6 +29,10 @@
     },
     "page": {
       "addAddonButton": "Aggiungi componente aggiuntivo",
+      "configRequiredBadge": "Richiede configurazione",
+      "configRequiredWarning": "Questo componente aggiuntivo non è configurato e potrebbe non riuscire a caricare i flussi video o i sottotitoli.",
+      "configureAddon": "Configura questo componente aggiuntivo",
+      "configureRequiredAction": "Configura questo componente aggiuntivo (obbligatorio)",
       "description": "I componenti aggiuntivi sono facoltativi. Questa app non raggruppa, consiglia o ospita alcun componente aggiuntivo.",
       "disabled": "Disabilitato",
       "emptyInstalled": "Nessun componente aggiuntivo ancora installato nel sistema.",

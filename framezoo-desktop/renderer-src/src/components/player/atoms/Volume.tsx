@@ -1,4 +1,4 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 import { Icon, Icons } from "@/components/Icon";
 import {
@@ -17,6 +17,8 @@ interface Props {
   buttonClassName?: string;
 }
 
+const MAX_VOLUME = 3;
+
 export function Volume(props: Props) {
   const ref = useRef<HTMLDivElement>(null!);
   const setHovering = usePlayerStore((s) => s.setHoveringLeftControls);
@@ -24,9 +26,27 @@ export function Volume(props: Props) {
   const volume = usePlayerStore((s) => s.mediaPlaying.volume);
   const { setVolume, toggleMute } = useVolume();
 
+  const lastRaf = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (lastRaf.current !== null) {
+        cancelAnimationFrame(lastRaf.current);
+      }
+    };
+  }, []);
+
   const commitVolume = useCallback(
-    (percentage: number) => {
-      setVolume(percentage);
+    (pos: number) => {
+      const nextVol = Math.max(0, Math.min(MAX_VOLUME, pos * MAX_VOLUME));
+      const rounded = Math.round(nextVol * 100) / 100;
+      if (lastRaf.current !== null) {
+        cancelAnimationFrame(lastRaf.current);
+      }
+      lastRaf.current = requestAnimationFrame(() => {
+        setVolume(rounded);
+        lastRaf.current = null;
+      });
     },
     [setVolume],
   );
@@ -54,16 +74,16 @@ export function Volume(props: Props) {
     document.body.classList.remove("overflow-y-hidden");
   };
 
-  let percentage = makePercentage(volume * 100);
-  if (dragging) percentage = makePercentage(dragPercentage);
-  const percentageString = makePercentageString(percentage);
+  let percentage = (volume / MAX_VOLUME) * 100;
+  if (dragging) percentage = dragPercentage;
+  const percentageString = makePercentageString(makePercentage(percentage));
 
   const handleWheel = useCallback(
     (event: React.WheelEvent<HTMLDivElement>) => {
       event.preventDefault();
       let newVolume = volume - event.deltaY / 1000;
-      newVolume = Math.max(0, Math.min(newVolume, 1));
-      setVolume(newVolume);
+      newVolume = Math.max(0, Math.min(MAX_VOLUME, newVolume));
+      setVolume(Math.round(newVolume * 100) / 100);
     },
     [volume, setVolume],
   );
@@ -93,7 +113,7 @@ export function Volume(props: Props) {
           className={`${props.buttonClassName ?? "p-3"} text-white ${props.iconSizeClass ?? "text-[32px]"}`}
           onClick={handleClick}
         >
-          <Icon icon={getVolumeIcon(percentage / 100)} />
+          <Icon icon={getVolumeIcon(volume / MAX_VOLUME)} />
         </div>
         <div
           className={`linear -ml-2 w-0 overflow-hidden transition-[width,opacity] duration-300 ${

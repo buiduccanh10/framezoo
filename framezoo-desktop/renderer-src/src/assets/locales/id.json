@@ -8,11 +8,16 @@
   "addons": {
     "manager": {
       "add": "Menambahkan",
+      "addWithoutConfiguring": "Tetap instal (mungkin tidak berfungsi)",
       "adding": "Menambahkan...",
       "ariaClose": "Tutup manajer addon",
       "ariaManage": "Kelola tambahan",
+      "configRequiredDesc": "Addon ini memerlukan konfigurasi (seperti kunci API atau pengaturan bahasa) sebelum dapat menampilkan konten. Silakan konfigurasikan di browser Anda, lalu salin dan tempel URL manifest yang dihasilkan di sini.",
+      "configRequiredTitle": "Konfigurasi Diperlukan",
+      "configureAction": "Konfigurasi",
       "errorFallback": "Tidak dapat memasang addon ini.",
       "manageListButton": "Kelola daftar tambahan",
+      "openConfigurePage": "Buka Halaman Konfigurasi",
       "subtitle": "Kami tidak menyarankan menambahkan add-on yang tidak resmi atau ilegal.",
       "title": "Tambahan Desktop"
     },
@@ -24,6 +29,10 @@
     },
     "page": {
       "addAddonButton": "Tambahkan Addon",
+      "configRequiredBadge": "Membutuhkan Konfigurasi",
+      "configRequiredWarning": "Addon ini belum dikonfigurasi dan mungkin gagal memuat aliran video atau subtitle.",
+      "configureAddon": "Konfigurasikan add-on ini",
+      "configureRequiredAction": "Konfigurasikan add-on ini (Wajib)",
       "description": "Add-on bersifat opsional. Aplikasi ini tidak memaketkan, merekomendasikan, atau menghosting add-on apa pun.",
       "disabled": "Dengan disabilitas",
       "emptyInstalled": "Belum ada tambahan yang terpasang di sistem.",

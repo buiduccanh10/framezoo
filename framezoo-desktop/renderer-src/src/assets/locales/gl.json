@@ -8,11 +8,16 @@
   "addons": {
     "manager": {
       "add": "Engadir",
+      "addWithoutConfiguring": "Instalar de todos os xeitos (pode que non funcione)",
       "adding": "Engadindo...",
       "ariaClose": "Pechar o xestor de complementos",
       "ariaManage": "Xestionar complementos",
+      "configRequiredDesc": "Este complemento require configuración (como claves API ou configuración de idioma) antes de poder devolver contido. Configúrao no teu navegador e, a seguir, copia e pega aquí o URL do manifesto xerado.",
+      "configRequiredTitle": "Configuración requirida",
+      "configureAction": "Configurar",
       "errorFallback": "Non se puido instalar este complemento.",
       "manageListButton": "Xestionar a lista de complementos",
+      "openConfigurePage": "Abrir a páxina de configuración",
       "subtitle": "Non recomendamos engadir complementos non oficiais ou ilegais.",
       "title": "Complementos de escritorio"
     },
@@ -24,6 +29,10 @@
     },
     "page": {
       "addAddonButton": "Engadir complemento",
+      "configRequiredBadge": "Require configuración",
+      "configRequiredWarning": "Este complemento non está configurado e pode fallar ao cargar as transmisións ou os subtítulos.",
+      "configureAddon": "Configurar este complemento",
+      "configureRequiredAction": "Configurar este complemento (obrigatorio)",
       "description": "Os complementos son opcionais. Esta aplicación non agrupa, recomenda nin aloxa ningún complemento.",
       "disabled": "Desactivado",
       "emptyInstalled": "Aínda non hai complementos instalados no sistema.",
