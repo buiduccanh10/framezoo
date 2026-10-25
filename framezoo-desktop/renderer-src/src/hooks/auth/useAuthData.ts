@@ -16,6 +16,10 @@ import {
   progressResponsesToEntries,
   watchHistoryResponsesToEntries,
 } from "@/backend/accounts/user";
+import {
+  resetAddonStorage,
+  syncAndMigrateAddons,
+} from "@/desktop/addons/store";
 import { useAuthStore } from "@/stores/auth";
 import { useBookmarkStore } from "@/stores/bookmarks";
 import { useGroupOrderStore } from "@/stores/groupOrder";
@@ -100,6 +104,7 @@ export function useAuthData() {
     clearWatchHistory();
     clearGroupOrder();
     setFebboxKey(null);
+    resetAddonStorage();
   }, [
     removeAccount,
     clearBookmarks,
@@ -183,6 +188,10 @@ export function useAuthData() {
 
       if (settings.keyboardShortcuts !== undefined) {
         setKeyboardShortcuts(settings.keyboardShortcuts);
+      }
+
+      if (settings.addons !== undefined) {
+        syncAndMigrateAddons(settings.addons);
       }
     },
     [

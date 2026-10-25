@@ -705,6 +705,7 @@
       "accountMenu": "Mở menu tài khoản",
       "addons": "Tiện ích bổ sung",
       "desktop": "Cài đặt ứng dụng",
+      "feedback": "Phản hồi",
       "logout": "Đăng xuất",
       "register": "Đồng bộ hóa với đám mây",
       "settings": "Cài đặt"
@@ -1371,6 +1372,22 @@
     "watching": "Đang xem",
     "withCount": "Với {{count}} người khác",
     "you": "Bạn"
+  },
+  "feedback": {
+    "modalTitle": "Gửi phản hồi",
+    "buttonLabel": "Phản hồi",
+    "subtitle": "Hãy cho chúng tôi biết vấn đề hoặc lỗi bạn gặp phải trong quá trình trải nghiệm.",
+    "titleLabel": "1. Tiêu đề vấn đề",
+    "titlePlaceholder": "Ví dụ: Lỗi tải phụ đề phim, Giật lag khi xem...",
+    "descriptionLabel": "2. Mô tả vấn đề",
+    "descriptionPlaceholder": "Mô tả chi tiết vấn đề bạn gặp phải, các bước dẫn tới lỗi, hoặc mong muốn cải thiện...",
+    "submit": "Gửi phản hồi",
+    "cancel": "Hủy",
+    "close": "Đóng",
+    "successTitle": "Đã gửi phản hồi thành công!",
+    "successDesc": "Cảm ơn bạn đã đóng góp ý kiến. Đội ngũ phát triển sẽ xem xét và xử lý vấn đề sớm nhất có thể.",
+    "errorRequired": "Vui lòng nhập đầy đủ tiêu đề và nội dung mô tả vấn đề.",
+    "errorSubmit": "Có lỗi xảy ra khi gửi phản hồi. Vui lòng thử lại sau."
   },
   "toasts": {
     "linkCopied": "Đã sao chép liên kết vào clipboard!",

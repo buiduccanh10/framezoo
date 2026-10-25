@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 import localeManifest from "./locale-manifest.json";
 import enCopy from "./locales/en.json";
 
@@ -110,4 +112,35 @@ export function getInitialLandingLocale() {
   }
 
   return "en";
+}
+
+export function setLandingLocale(locale: LandingLocale) {
+  try {
+    window.localStorage.setItem(LANDING_LOCALE_STORAGE_KEY, locale);
+  } catch {
+    // Storage unavailable
+  }
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(
+      new CustomEvent("landing-locale-change", { detail: locale }),
+    );
+  }
+}
+
+export function useLandingLocale(): LandingLocale {
+  const [locale, setLocale] = useState<LandingLocale>(getInitialLandingLocale);
+
+  useEffect(() => {
+    const handleLocaleChange = () => {
+      setLocale(getInitialLandingLocale());
+    };
+    window.addEventListener("storage", handleLocaleChange);
+    window.addEventListener("landing-locale-change", handleLocaleChange);
+    return () => {
+      window.removeEventListener("storage", handleLocaleChange);
+      window.removeEventListener("landing-locale-change", handleLocaleChange);
+    };
+  }, []);
+
+  return locale;
 }

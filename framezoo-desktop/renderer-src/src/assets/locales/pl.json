@@ -705,6 +705,7 @@
       "accountMenu": "Otwórz menu konta",
       "addons": "Dodatki",
       "desktop": "Ustawienia aplikacji",
+      "feedback": "Informacja zwrotna",
       "logout": "Wyloguj się",
       "register": "Synchronizuj z Chmurą",
       "settings": "Ustawienia"
@@ -1371,6 +1372,22 @@
     "watching": "Dozorujący",
     "withCount": "Z {{count}} innymi",
     "you": "Ty"
+  },
+  "feedback": {
+    "modalTitle": "Wyślij opinię",
+    "buttonLabel": "Informacja zwrotna",
+    "subtitle": "Poinformuj nas o wszelkich problemach i błędach, na jakie natrafiłeś w trakcie korzystania z naszego serwisu.",
+    "titleLabel": "1. Tytuł wydania",
+    "titlePlaceholder": "np. błąd ładowania napisów, zacinanie się odtwarzania...",
+    "descriptionLabel": "2. Opis problemu",
+    "descriptionPlaceholder": "Opisz problem szczegółowo, podaj kroki umożliwiające jego odtworzenie lub sugestie...",
+    "submit": "Prześlij opinię",
+    "cancel": "Anulować",
+    "close": "Zamknąć",
+    "successTitle": "Opinia wysłana!",
+    "successDesc": "Dziękujemy za opinię. Nasz zespół przeanalizuje problem i zajmie się nim tak szybko, jak to możliwe.",
+    "errorRequired": "Proszę wpisać tytuł i opis.",
+    "errorSubmit": "Wystąpił błąd podczas przesyłania opinii. Spróbuj ponownie później."
   },
   "toasts": {
     "linkCopied": "Link skopiowany do schowka!",

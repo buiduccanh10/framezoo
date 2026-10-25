@@ -5,7 +5,8 @@
     "download": "Download",
     "language": "Linguagem",
     "addonGuide": "Guia de complementos",
-    "home": "Lar"
+    "home": "Lar",
+    "installGuide": "Guia de instalação"
   },
   "hero": {
     "eyebrow": "DESKTOP FRAMEZOO / 01",
@@ -110,5 +111,83 @@
     "description": "Encontre algo que valha a pena assistir, abra os detalhes e escolha uma maneira melhor de assistir com o Framezoo.",
     "eyebrow": "DESCOBERTA DO FRAMEZOO",
     "title": "Histórias populares para sua próxima exibição."
+  },
+  "installGuide": {
+    "backHome": "De volta para casa",
+    "winTab": "Para Windows",
+    "mac": {
+      "title": "Guia de instalação do macOS",
+      "subtitle": "Apple Silicon (M1/M2/M3/M4) e Intel Mac",
+      "step1Title": "Etapa 1: arraste para aplicativos",
+      "step2Title": "Etapa 2: aviso de segurança do Gatekeeper",
+      "step3Title": "Etapa 3: abra com segurança via Finder",
+      "step3Steps": [
+        "Abra o Finder e navegue até a pasta Aplicativos.",
+        "Clique com o botão direito (ou clique com a tecla Control pressionada) em Framezoo.app.",
+        "Selecione \"Abrir\" no menu de contexto.",
+        "Na caixa de diálogo de confirmação, clique em \"Abrir mesmo assim\" ou \"Abrir\"."
+      ],
+      "step1Desc": "Abra o arquivo .dmg baixado e arraste o ícone do Framezoo para a pasta Aplicativos.",
+      "step2Desc": "Como o Framezoo é um player independente de código aberto sem um certificado comercial de desenvolvedor da Apple, o macOS pode mostrar: \"O Framezoo está danificado e não pode ser aberto\" ou \"A Apple não pode verificar este aplicativo\".",
+      "note": "Você só precisa executar esta etapa do clique com o botão direito na primeira inicialização. Os lançamentos subsequentes podem ser feitos normalmente no Launchpad ou Spotlight."
+    },
+    "macTab": "Para macOS",
+    "subtitle": "Como ignorar os avisos de segurança do Gatekeeper (macOS) e SmartScreen (Windows) na primeira inicialização.",
+    "title": "Guia de instalação e lançamento do Framezoo",
+    "downloadApp": "Baixar Framezoo",
+    "win": {
+      "subtitle": "Windows 10/11 (x64 e ARM64)",
+      "title": "Guia de instalação do Windows",
+      "step1Desc": "Inicie o instalador Framezoo-Setup-x64.exe baixado para iniciar a configuração.",
+      "step2Desc": "Se o Windows Defender exibir uma tela azul informando \"O Windows protegeu seu PC\":",
+      "step3Steps": [
+        "Clique no link \"Mais informações\" abaixo da descrição.",
+        "Um botão “Executar mesmo assim” aparecerá no canto inferior direito.",
+        "Clique em “Executar mesmo assim” para prosseguir com a instalação do Framezoo."
+      ],
+      "step1Title": "Etapa 1: execute o instalador .exe",
+      "step3Title": "Etapa 3: continuar a instalação",
+      "step2Title": "Etapa 2: aviso do Windows Defender SmartScreen",
+      "note": "Este aviso aparece porque a nova versão ainda não acumulou reputação de assinatura de código Microsoft EV. O binário é 100% seguro."
+    },
+    "eyebrow": "Documentação",
+    "macTerminalTip": "💡 Método de backup via Terminal:",
+    "macDialogTitle": "\"Framezoo\" está danificado e não pode ser aberto.",
+    "winDialogTitle": "O Windows protegeu seu PC",
+    "macTerminalDesc": "Se você ainda estiver bloqueado, abra o Terminal e execute:",
+    "macQuickSolution": "Solução rápida: abra através do menu de contexto do botão direito do Finder",
+    "macDialogDesc": "A Apple não pode verificar se há software malicioso. Isso acontece quando um aplicativo é baixado fora da Mac App Store sem um certificado comercial anual.",
+    "winMoreInfo": "Mais informações",
+    "winClickHere": "(Clique aqui)",
+    "winQuickSolution": "Clique em Mais informações → Executar mesmo assim",
+    "winDialogDesc": "O Microsoft Defender SmartScreen impediu a inicialização de um aplicativo não reconhecido. A execução deste aplicativo pode colocar seu PC em risco."
+  },
+  "downloadConfirm": {
+    "macTitle": "Guia de instalação para macOS",
+    "winTitle": "Guia de instalação para Windows",
+    "macNotice": "Aviso do Gatekeeper: se o macOS relatar um aplicativo 'danificado' ou não verificado, vá para Aplicativos -> Clique com o botão direito em Framezoo -> Selecione Abrir -> Abrir assim mesmo.",
+    "cancel": "Cancelar",
+    "confirmDownload": "Confirmar e baixar",
+    "winNotice": "Aviso do SmartScreen: Se você vir a tela azul 'O Windows protegeu seu PC', clique em 'Mais informações' -> clique em 'Executar mesmo assim'.",
+    "downloading": "Iniciando o download...",
+    "viewGuide": "Veja o guia de instalação completo"
+  },
+  "feedback": {
+    "button": "Opinião",
+    "badge": "Opinião",
+    "subtitle": "Conte-nos sobre quaisquer problemas ou dificuldades que você tenha enfrentado com o Framezoo.",
+    "descLabel": "2. Descrição detalhada",
+    "titleLabel": "1. Título da edição",
+    "modalTitle": "Envie-nos seu feedback",
+    "titlePlaceholder": "por exemplo Problema de sincronização de legendas, atraso durante a reprodução...",
+    "descPlaceholder": "Descreva o problema específico ou as etapas para reproduzi-lo...",
+    "cancel": "Cancelar",
+    "submitting": "Enviando...",
+    "close": "Fechar",
+    "successTitle": "Feedback enviado com sucesso!",
+    "errorSubmit": "Falha ao enviar comentários. Por favor, tente novamente mais tarde.",
+    "errorRequired": "Preencha o título e a descrição do problema.",
+    "submit": "Enviar comentários",
+    "successDesc": "Obrigado pelo seu feedback. Nossa equipe analisará e resolverá o problema o mais rápido possível."
   }
 }

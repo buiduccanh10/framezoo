@@ -9,6 +9,7 @@ import { Stepper } from "@/components/layout/Stepper";
 import { CenterContainer } from "@/components/layout/ThinContainer";
 import { Divider } from "@/components/utils/Divider";
 import { Heading2, Paragraph } from "@/components/utils/Text";
+import { getCustomAddons } from "@/desktop/addons/store";
 import { MinimalPageLayout } from "@/pages/layouts/MinimalPageLayout";
 import { PageTitle } from "@/pages/parts/util/PageTitle";
 import { useAuthStore } from "@/stores/auth";
@@ -67,6 +68,7 @@ export function MigrationDownloadPage() {
         },
         theme: persistedTheme.theme || null,
         language: persistedLocale.language || null,
+        addons: getCustomAddons(),
         exportDate: new Date().toISOString(),
       };
 

@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { createPortal } from "react-dom";
+import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
@@ -10,6 +10,7 @@ import { UserAvatar } from "@/components/Avatar";
 import { IconPatch } from "@/components/buttons/IconPatch";
 import { Icon, Icons } from "@/components/Icon";
 import { Spinner } from "@/components/layout/Spinner";
+import { OverlayPortal } from "@/components/overlays/OverlayDisplay";
 import { Transition } from "@/components/utils/Transition";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
@@ -193,84 +194,99 @@ export function WatchPartyJoinDialog({
     }
   };
 
-  if (!open) return null;
+  useEffect(() => {
+    if (!open) {
+      const timer = setTimeout(() => {
+        setCode("");
+        setError(null);
+      }, 200);
+      return () => clearTimeout(timer);
+    }
+  }, [open]);
 
-  return createPortal(
-    <div
-      className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/70 px-4"
-      onClick={onClose}
+  return (
+    <OverlayPortal
+      darken
+      close={onClose}
+      show={open}
+      durationClass="duration-200"
+      zIndex={1000}
     >
-      <div
-        className="w-full max-w-md rounded-xl border border-dropdown-border bg-dropdown-altBackground p-4 shadow-xl"
-        onClick={(evt) => evt.stopPropagation()}
-      >
-        <div className="mb-3 flex items-center justify-between">
-          <div className="flex items-center gap-2 text-white">
-            <Icon icon={Icons.WATCH_PARTY} className="text-xl" />
-            <h3 className="text-base font-semibold">
-              {t("player.menus.watchparty.watchpartyItem")}
-            </h3>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded p-1 text-dropdown-text transition-colors hover:bg-dropdown-contentBackground hover:text-white"
-            aria-label={t("watchParty.cancel")}
-          >
-            <Icon icon={Icons.X} className="text-lg" />
-          </button>
-        </div>
-
-        <p className="mb-3 text-sm text-dropdown-text">
-          {t("watchParty.enterCodeOrLink")}
-        </p>
-
-        <form onSubmit={handleSubmit} className="space-y-3">
-          <input
-            type="text"
-            value={code}
-            onChange={(e) => {
-              setCode(e.target.value);
-              setError(null);
-            }}
-            placeholder={`https://framezoo/...?...watchparty=ABCD123456`}
-            className="w-full rounded-lg border border-dropdown-border bg-dropdown-contentBackground px-3 py-2 text-white outline-none transition-colors focus:border-type-link"
-            disabled={isLoading}
-          />
-
-          {error && <p className="text-xs text-red-500">{error}</p>}
-
-          <div className="flex justify-end gap-2">
+      <Helmet>
+        <html data-no-scroll />
+      </Helmet>
+      <div className="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+        <div
+          className="pointer-events-auto w-full max-w-md rounded-2xl border border-dropdown-border bg-dropdown-altBackground/95 p-6 shadow-2xl backdrop-blur-xl"
+          onClick={(evt) => evt.stopPropagation()}
+        >
+          <div className="mb-4 flex items-center justify-between">
+            <div className="flex items-center gap-2.5 text-white">
+              <Icon icon={Icons.WATCH_PARTY} className="text-xl text-buttons-purple" />
+              <h3 className="text-base font-semibold">
+                {t("player.menus.watchparty.watchpartyItem")}
+              </h3>
+            </div>
             <button
               type="button"
-              className="rounded-lg px-3 py-2 text-sm text-dropdown-text transition-colors hover:bg-dropdown-contentBackground hover:text-white"
               onClick={onClose}
+              className="rounded-lg p-1.5 text-dropdown-text transition-colors hover:bg-dropdown-contentBackground hover:text-white"
+              aria-label={t("watchParty.cancel")}
             >
-              {t("watchParty.cancel")}
-            </button>
-            <button
-              type="submit"
-              className={classNames(
-                "rounded-lg bg-buttons-purple px-3 py-2 text-sm text-white transition-colors hover:bg-buttons-purpleHover",
-                (!code.trim() || isLoading) &&
-                  "cursor-not-allowed opacity-70 hover:bg-buttons-purple",
-              )}
-              disabled={!code.trim() || isLoading}
-            >
-              {isLoading ? (
-                <span className="flex items-center gap-1">
-                  <Spinner className="h-4 w-4" />
-                  {t("watchParty.validating")}
-                </span>
-              ) : (
-                t("watchParty.join")
-              )}
+              <Icon icon={Icons.X} className="text-lg" />
             </button>
           </div>
-        </form>
+
+          <p className="mb-4 text-xs text-dropdown-text">
+            {t("watchParty.enterCodeOrLink")}
+          </p>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <input
+              type="text"
+              value={code}
+              onChange={(e) => {
+                setCode(e.target.value);
+                setError(null);
+              }}
+              placeholder={`https://framezoo/...?...watchparty=ABCD123456`}
+              className="w-full rounded-xl border border-dropdown-border bg-dropdown-contentBackground px-3.5 py-2.5 text-sm text-white placeholder-dropdown-text/60 outline-none transition-colors focus:border-type-link"
+              disabled={isLoading}
+            />
+
+            {error && <p className="text-xs font-medium text-red-400">{error}</p>}
+
+            <div className="flex justify-end gap-2.5 pt-1">
+              <button
+                type="button"
+                className="rounded-xl px-4 py-2.5 text-sm font-semibold text-dropdown-text transition-colors hover:bg-dropdown-contentBackground hover:text-white"
+                onClick={onClose}
+              >
+                {t("watchParty.cancel")}
+              </button>
+              <button
+                type="submit"
+                className={classNames(
+                  "rounded-xl bg-buttons-purple px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-buttons-purpleHover hover:scale-105 active:scale-95",
+                  (!code.trim() || isLoading) &&
+                    "!cursor-not-allowed !scale-100 opacity-60 hover:bg-buttons-purple",
+                )}
+                disabled={!code.trim() || isLoading}
+              >
+                {isLoading ? (
+                  <span className="flex items-center gap-1.5">
+                    <Spinner className="h-4 w-4" />
+                    {t("watchParty.validating")}
+                  </span>
+                ) : (
+                  t("watchParty.join")
+                )}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>,
-    document.body,
+    </OverlayPortal>
   );
 }
 
@@ -289,7 +305,7 @@ export function WatchPartyInputLink() {
       <button
         type="button"
         onClick={openDialog}
-        className="text-lg text-white tabbable rounded-full backdrop-blur-lg pointer-events-auto"
+        className="shrink-0 flex items-center justify-center text-lg text-white tabbable rounded-full backdrop-blur-lg pointer-events-auto overflow-visible"
         aria-label={t("player.menus.watchparty.watchpartyItem")}
       >
         <IconPatch icon={Icons.WATCH_PARTY} clickable downsized navigation />
@@ -423,6 +439,15 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
             }}
           >
             {t("player.menus.watchparty.watchpartyItem")}
+          </DropdownLink>
+          <DropdownLink
+            icon={Icons.FEEDBACK}
+            onClick={() => {
+              setOpen(false);
+              useOverlayStack.getState().showModal("feedback");
+            }}
+          >
+            {t("navigation.menu.feedback", "Phản hồi")}
           </DropdownLink>
           <DropdownLink href="/settings" icon={Icons.SETTINGS}>
             {t("navigation.menu.settings")}

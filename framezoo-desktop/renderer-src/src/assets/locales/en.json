@@ -705,6 +705,7 @@
       "accountMenu": "Open account menu",
       "addons": "Addons",
       "desktop": "App Settings",
+      "feedback": "Feedback",
       "logout": "Log out",
       "register": "Sync to Cloud",
       "settings": "Settings"
@@ -1371,6 +1372,22 @@
     "watching": "Watching",
     "withCount": "With {{count}} others",
     "you": "You"
+  },
+  "feedback": {
+    "modalTitle": "Send Feedback",
+    "buttonLabel": "Feedback",
+    "subtitle": "Let us know about any issue or bug you encountered during your experience.",
+    "titleLabel": "1. Issue Title",
+    "titlePlaceholder": "e.g., Subtitle loading error, Stuttering playback...",
+    "descriptionLabel": "2. Issue Description",
+    "descriptionPlaceholder": "Describe the problem in detail, steps to reproduce, or suggestions...",
+    "submit": "Submit Feedback",
+    "cancel": "Cancel",
+    "close": "Close",
+    "successTitle": "Feedback Submitted!",
+    "successDesc": "Thank you for your feedback. Our team will review and address the issue as soon as possible.",
+    "errorRequired": "Please enter both title and description.",
+    "errorSubmit": "An error occurred while submitting feedback. Please try again later."
   },
   "toasts": {
     "linkCopied": "Link copied to clipboard!",

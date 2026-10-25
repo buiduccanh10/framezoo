@@ -5,7 +5,8 @@
     "download": "Descărcați",
     "language": "Limbă",
     "addonGuide": "Ghid de suplimente",
-    "home": "Acasă"
+    "home": "Acasă",
+    "installGuide": "Ghid de instalare"
   },
   "hero": {
     "eyebrow": "FRAMEZOO DESKTOP / 01",
@@ -110,5 +111,83 @@
     "dragHint": "Trageți pentru a explora",
     "description": "Găsiți ceva ce merită urmărit, deschideți detaliile și alegeți o modalitate mai bună de a viziona cu Framezoo.",
     "eyebrow": "DECOPERIRE FRAMEZOO"
+  },
+  "installGuide": {
+    "backHome": "Înapoi la Acasă",
+    "title": "Ghid de instalare și lansare Framezoo",
+    "downloadApp": "Descărcați Framezoo",
+    "winTab": "Pentru Windows",
+    "mac": {
+      "title": "Ghid de instalare macOS",
+      "step1Desc": "Deschideți fișierul .dmg descărcat și trageți pictograma Framezoo în folderul Aplicații.",
+      "step1Title": "Pasul 1: Trageți la Aplicații",
+      "subtitle": "Apple Silicon (M1/M2/M3/M4) și Intel Mac",
+      "step2Title": "Pasul 2: Avertisment de securitate Gatekeeper",
+      "step3Title": "Pasul 3: Deschideți în siguranță prin Finder",
+      "step2Desc": "Deoarece Framezoo este un player open-source independent, fără un certificat de dezvoltator Apple comercial, macOS poate afișa: „Framezoo este deteriorat și nu poate fi deschis” sau „Apple nu poate verifica această aplicație”.",
+      "note": "Trebuie doar să faceți acest pas cu clic dreapta la prima lansare. Lansările ulterioare se pot face în mod normal din Launchpad sau Spotlight.",
+      "step3Steps": [
+        "Deschideți Finder și navigați la folderul Aplicații.",
+        "Faceți clic dreapta (sau Control-clic) pe Framezoo.app.",
+        "Selectați „Deschidere” din meniul contextual.",
+        "În dialogul de confirmare, faceți clic pe „Deschide oricum” sau „Deschide”."
+      ]
+    },
+    "macTab": "Pentru macOS",
+    "subtitle": "Cum să ocoliți notificările de securitate Gatekeeper (macOS) și SmartScreen (Windows) la prima lansare.",
+    "win": {
+      "title": "Ghid de instalare Windows",
+      "step2Desc": "Dacă Windows Defender afișează un ecran albastru care indică „Windows v-a protejat computerul”:",
+      "step1Desc": "Lansați programul de instalare Framezoo-Setup-x64.exe descărcat pentru a începe configurarea.",
+      "step2Title": "Pasul 2: Avertizare Windows Defender SmartScreen",
+      "step1Title": "Pasul 1: Rulați programul de instalare .exe",
+      "subtitle": "Windows 10/11 (x64 și ARM64)",
+      "step3Title": "Pasul 3: Continuați instalarea",
+      "step3Steps": [
+        "Faceți clic pe linkul „Mai multe informații” de sub descriere.",
+        "În colțul din dreapta jos va apărea un buton „Rulează oricum”.",
+        "Faceți clic pe „Run oricum” pentru a continua cu instalarea Framezoo."
+      ],
+      "note": "Acest avertisment apare deoarece noua versiune nu a acumulat încă reputația Microsoft EV Code Signing. Binarul este 100% sigur."
+    },
+    "eyebrow": "Documentare",
+    "macTerminalDesc": "Dacă încă sunteți blocat, deschideți Terminal și rulați:",
+    "macTerminalTip": "💡 Metoda de backup prin terminal:",
+    "macDialogTitle": "„Framezoo” este deteriorat și nu poate fi deschis.",
+    "macQuickSolution": "Soluție rapidă: deschideți prin Finder, faceți clic dreapta pe meniul contextual",
+    "macDialogDesc": "Apple nu poate verifica software-ul rău intenționat. Acest lucru se întâmplă atunci când o aplicație este descărcată în afara Mac App Store fără un certificat comercial anual.",
+    "winMoreInfo": "Mai multe informații",
+    "winClickHere": "(Click aici)",
+    "winDialogTitle": "Windows v-a protejat computerul",
+    "winDialogDesc": "Microsoft Defender SmartScreen a împiedicat pornirea unei aplicații nerecunoscute. Rularea acestei aplicații poate pune computerul în pericol.",
+    "winQuickSolution": "Faceți clic pe Mai multe informații → Run oricum"
+  },
+  "downloadConfirm": {
+    "winTitle": "Ghid de instalare pentru Windows",
+    "macTitle": "Ghid de instalare pentru macOS",
+    "cancel": "Anula",
+    "viewGuide": "Vezi ghidul complet de instalare",
+    "confirmDownload": "Confirmați și descărcați",
+    "winNotice": "Notificare SmartScreen: Dacă vedeți ecranul albastru „Windows v-a protejat PC-ul”, faceți clic pe „Mai multe informații” -> faceți clic pe „Rulează oricum”.",
+    "macNotice": "Notificare Gatekeeper: Dacă macOS raportează o aplicație „deteriorată” sau neverificată, accesați Aplicații -> Faceți clic dreapta pe Framezoo -> Selectați Deschidere -> Deschideți oricum.",
+    "downloading": "Se începe descărcarea..."
+  },
+  "feedback": {
+    "button": "Feedback",
+    "badge": "Feedback",
+    "subtitle": "Anunțați-ne despre orice probleme sau dificultăți pe care le-ați întâmpinat cu Framezoo.",
+    "descLabel": "2. Descriere detaliată",
+    "modalTitle": "Trimite-ne feedback-ul tău",
+    "titleLabel": "1. Titlul emisiunii",
+    "titlePlaceholder": "de ex. Problemă de sincronizare a subtitrarilor, decalaj în timpul redării...",
+    "cancel": "Anula",
+    "submit": "Trimite feedback",
+    "submitting": "Se trimite...",
+    "successDesc": "Vă mulțumim pentru feedback. Echipa noastră va analiza și rezolva problema cât mai curând posibil.",
+    "descPlaceholder": "Descrieți problema specifică sau pașii pentru a o reproduce...",
+    "errorRequired": "Vă rugăm să completați atât titlul, cât și descrierea problemei.",
+    "errorSubmit": "Feedbackul nu a fost trimis. Vă rugăm să încercați din nou mai târziu.",
+    "successTitle": "Feedback trimis cu succes!",
+    "close": "Aproape"
   }
 }

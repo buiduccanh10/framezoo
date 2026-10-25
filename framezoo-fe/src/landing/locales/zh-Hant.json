@@ -5,7 +5,8 @@
     "download": "下載",
     "language": "語言",
     "addonGuide": "插件指南",
-    "home": "家"
+    "home": "家",
+    "installGuide": "安裝指南"
   },
   "hero": {
     "eyebrow": "FRAMEZOO 桌面 / 01",
@@ -110,5 +111,83 @@
     "description": "找到值得觀看的內容，打開細節，然後透過 Framezoo 找到更好的觀看方式。",
     "eyebrow": "框架動物園發現",
     "title": "您下一部觀看的熱門故事。"
+  },
+  "installGuide": {
+    "backHome": "回首頁",
+    "title": "Framezoo 安裝與啟動指南",
+    "macTab": "對於 macOS",
+    "mac": {
+      "subtitle": "Apple Silicon (M1/M2/M3/M4) 和 Intel Mac",
+      "title": "Mac OS 安裝指南",
+      "step1Title": "第 1 步：拖曳至應用程式",
+      "step1Desc": "打開下載的 .dmg 檔案並將 Framezoo 圖示拖曳到「應用程式」資料夾中。",
+      "step3Title": "第 3 步：透過 Finder 安全打開",
+      "step2Desc": "由於 Framezoo 是一個獨立的開源播放器，沒有商業 Apple 開發者證書，因此 macOS 可能會顯示：「Framezoo 已損壞，無法開啟」或「Apple 無法驗證此應用程式」。",
+      "step2Title": "步驟2：Gatekeeper安全警告",
+      "step3Steps": [
+        "打開 Finder 並導航至您的應用程式資料夾。",
+        "右鍵點選（或按住 Control 點選）Framezoo.app。",
+        "從上下文選單中選擇“開啟”。",
+        "在確認對話方塊中，按一下「仍開啟」或「開啟」。"
+      ],
+      "note": "您只需在首次啟動時執行此右鍵步驟。後續啟動可以從 Launchpad 或 Spotlight 正常完成。"
+    },
+    "subtitle": "如何在首次啟動時繞過 Gatekeeper (macOS) 和 SmartScreen (Windows) 安全通知。",
+    "winTab": "對於 Windows",
+    "downloadApp": "下載 Framezoo",
+    "win": {
+      "title": "Windows 安裝指南",
+      "step2Title": "步驟 2：Windows Defender SmartScreen 警告",
+      "step1Desc": "啟動下載的 Framezoo-Setup-x64.exe 安裝程式以開始安裝。",
+      "subtitle": "Windows 10 / 11（x64 和 ARM64）",
+      "step1Title": "步驟 1：執行 .exe 安裝程序",
+      "step3Steps": [
+        "點擊說明下方的“更多資訊”連結。",
+        "右下角將出現一個「仍然運行」按鈕。",
+        "按一下「仍然運行」繼續安裝 Framezoo。"
+      ],
+      "step2Desc": "如果 Windows Defender 顯示藍屏，提示「Windows 保護了您的電腦」：",
+      "note": "出現此警告是因為新版本尚未累積 Microsoft EV 程式碼簽署聲譽。二進位檔案 100% 安全。",
+      "step3Title": "第三步：繼續安裝"
+    },
+    "eyebrow": "文件",
+    "macDialogTitle": "“Framezoo”已損壞且無法開啟。",
+    "macTerminalDesc": "如果仍然被阻止，請打開終端並運行：",
+    "winMoreInfo": "更多資訊",
+    "winClickHere": "（點這裡）",
+    "macTerminalTip": "💡 透過終端備份方法：",
+    "macDialogDesc": "Apple 無法檢查其是否有惡意軟體。當在沒有年度商業證書的情況下從 Mac App Store 外部下載應用程式時，就會發生這種情況。",
+    "winDialogTitle": "Windows 保護您的 PC",
+    "winDialogDesc": "Microsoft Defender SmartScreen 阻止无法识别的应用程序启动。運行此應用程式可能會使您的電腦面臨風險。",
+    "macQuickSolution": "快速解決方案：透過 Finder 右鍵單擊上下文選單打開",
+    "winQuickSolution": "點擊更多資訊 → 仍然運行"
+  },
+  "downloadConfirm": {
+    "confirmDownload": "確認並下載",
+    "winTitle": "Windows 安裝指南",
+    "macTitle": "macOS 安裝指南",
+    "viewGuide": "查看完整的安裝指南",
+    "cancel": "取消",
+    "winNotice": "SmartScreen 注意：如果您看到藍色的「Windows 保護您的電腦」螢幕，請按一下「更多資訊」-> 按一下「仍在執行」。",
+    "downloading": "開始下載...",
+    "macNotice": "Gatekeeper 注意：如果 macOS 報告“已損壞”或未經驗證的應用程序，請轉到“應用程式”-> 右鍵單擊 Framezoo -> 選擇“打開”->“仍然打開”。"
+  },
+  "feedback": {
+    "badge": "回饋",
+    "button": "回饋",
+    "modalTitle": "向我們發送您的回饋",
+    "titleLabel": "1. 問題標題",
+    "descLabel": "2. 詳細說明",
+    "errorSubmit": "提交反饋失敗。請稍後重試。",
+    "errorRequired": "請填寫標題和問題描述。",
+    "subtitle": "請告訴我們您在使用 Framezoo 時遇到的任何問題或困難。",
+    "cancel": "取消",
+    "successTitle": "反饋發送成功！",
+    "submit": "提交回饋",
+    "submitting": "正在提交...",
+    "close": "關閉",
+    "successDesc": "感謝您的回饋。我們的團隊將盡快審查並解決該問題。",
+    "titlePlaceholder": "例如字幕同步問題，播放時延遲.....",
+    "descPlaceholder": "描述具體問題或重現問題的步驟..."
   }
 }

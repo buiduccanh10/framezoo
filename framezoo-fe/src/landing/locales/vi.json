@@ -5,7 +5,8 @@
     "addons": "Hệ sinh thái",
     "download": "Tải xuống",
     "language": "Ngôn ngữ",
-    "addonGuide": "Tạo addon"
+    "addonGuide": "Tạo addon",
+    "installGuide": "Hướng dẫn cài đặt"
   },
   "hero": {
     "title": "Một nơi xem phim",
@@ -101,5 +102,83 @@
     "backHome": "Quay lại trang chủ",
     "openingDescription": "Trình duyệt của bạn đang cố mở ứng dụng Framezoo Desktop. Nếu lời nhắc xuất hiện, vui lòng chọn <1>Open Framezoo</1>.",
     "retry": "Hãy thử mở lại Ứng dụng máy tính để bàn"
+  },
+  "installGuide": {
+    "eyebrow": "Tài liệu",
+    "title": "Hướng dẫn cài đặt & mở ứng dụng Framezoo",
+    "subtitle": "Cách vượt qua thông báo bảo mật Gatekeeper (macOS) và SmartScreen (Windows) khi mở app lần đầu.",
+    "backHome": "Về trang chủ",
+    "downloadApp": "Tải xuống Framezoo",
+    "macTab": "Dành cho macOS",
+    "winTab": "Dành cho Windows",
+    "macQuickSolution": "Giải pháp nhanh: Mở qua Menu chuột phải Finder",
+    "macTerminalTip": "💡 Cách dự phòng qua Terminal:",
+    "macTerminalDesc": "Nếu bạn vẫn bị chặn, mở Terminal và chạy lệnh:",
+    "macDialogTitle": "\"Framezoo\" bị hỏng và không thể mở được.",
+    "macDialogDesc": "Apple không thể kiểm tra phần mềm độc hại. Điều này xảy ra khi ứng dụng được tải ngoài Mac App Store mà chưa có chứng chỉ thương mại hàng năm.",
+    "winDialogTitle": "Windows đã bảo vệ PC của bạn",
+    "winDialogDesc": "Microsoft Defender SmartScreen đã ngăn một ứng dụng chưa được nhận diện khởi chạy. Việc chạy ứng dụng này có thể khiến PC gặp rủi ro.",
+    "winMoreInfo": "Thêm thông tin",
+    "winClickHere": "(Bấm vào đây)",
+    "winQuickSolution": "Bấm More info → Run anyway",
+    "mac": {
+      "title": "Hướng dẫn cài đặt trên macOS",
+      "subtitle": "Apple Silicon (M1/M2/M3/M4) & Intel Mac",
+      "step1Title": "Bước 1: Kéo ứng dụng vào Applications",
+      "step1Desc": "Mở file .dmg vừa tải về, kéo biểu tượng Framezoo vào thư mục Applications.",
+      "step2Title": "Bước 2: Xử lý cảnh báo Gatekeeper khi mở app",
+      "step2Desc": "Do Framezoo là ứng dụng độc lập chưa mua chứng chỉ Apple Developer thương mại, macOS có thể hiện thông báo: \"Framezoo is damaged and can't be opened\" hoặc \"Apple cannot verify this app\".",
+      "step3Title": "Bước 3: Mở ứng dụng an toàn qua Finder",
+      "step3Steps": [
+        "Mở Finder và truy cập vào thư mục Applications (Ứng dụng).",
+        "Click chuột phải (hoặc giữ phím Control và click) vào Framezoo.app.",
+        "Chọn \"Open\" (Mở) trong menu chuột phải.",
+        "Một hộp thoại xác nhận sẽ hiện lên, hãy chọn \"Open Anyway\" hoặc \"Open\" (Vẫn mở)."
+      ],
+      "note": "Bạn chỉ cần thực hiện thao tác chuột phải này trong lần đầu tiên mở ứng dụng. Các lần tiếp theo có thể mở bình thường từ Launchpad hoặc Spotlight."
+    },
+    "win": {
+      "title": "Hướng dẫn cài đặt trên Windows",
+      "subtitle": "Windows 10/11 (x64 & ARM64)",
+      "step1Title": "Bước 1: Chạy file cài đặt .exe",
+      "step1Desc": "Mở file Framezoo-Setup-x64.exe vừa tải về để tiến hành cài đặt.",
+      "step2Title": "Bước 2: Xử lý cảnh báo Windows Defender SmartScreen",
+      "step2Desc": "Nếu màn hình xanh cảnh báo của Windows Defender xuất hiện với thông báo \"Windows protected your PC\" (Windows đã bảo vệ PC của bạn):",
+      "step3Title": "Bước 3: Tiếp tục cài đặt",
+      "step3Steps": [
+        "Click vào dòng chữ gạch chân \"More info\" (Thông tin thêm) ở phía dưới.",
+        "Nút \"Run anyway\" (Vẫn chạy) sẽ xuất hiện ở góc dưới bên phải.",
+        "Click \"Run anyway\" để hoàn tất quá trình cài đặt Framezoo."
+      ],
+      "note": "Cảnh báo này xuất hiện do ứng dụng mới được phát hành và chưa tích lũy chứng chỉ số Microsoft EV Code Signing. Ứng dụng an toàn 100%."
+    }
+  },
+  "downloadConfirm": {
+    "macTitle": "Hướng dẫn cài đặt trên macOS",
+    "winTitle": "Hướng dẫn cài đặt trên Windows",
+    "macNotice": "Lưu ý Gatekeeper: Nếu macOS báo 'damaged' hoặc không mở được, hãy vào Applications -> Chuột phải vào Framezoo -> Chọn Open -> Open Anyway.",
+    "winNotice": "Lưu ý SmartScreen: Nếu hiện màn hình xanh 'Windows protected your PC', click 'More info' -> click 'Run anyway'.",
+    "confirmDownload": "Xác nhận & Tải xuống",
+    "viewGuide": "Xem hướng dẫn chi tiết",
+    "cancel": "Hủy",
+    "downloading": "Đang bắt đầu tải..."
+  },
+  "feedback": {
+    "button": "Phản hồi",
+    "badge": "Đóng góp ý kiến",
+    "modalTitle": "Gửi phản hồi cho chúng tôi",
+    "subtitle": "Hãy cho chúng tôi biết vấn đề hoặc khó khăn bạn gặp phải trong quá trình trải nghiệm Framezoo.",
+    "titleLabel": "1. Tiêu đề vấn đề",
+    "titlePlaceholder": "Ví dụ: Lỗi tải phụ đề phim, Giật lag khi phát...",
+    "descLabel": "2. Mô tả chi tiết vấn đề",
+    "descPlaceholder": "Mô tả cụ thể vấn đề hoặc các bước dẫn tới lỗi...",
+    "errorRequired": "Vui lòng nhập đầy đủ tiêu đề và nội dung mô tả vấn đề.",
+    "errorSubmit": "Có lỗi xảy ra trong quá trình gửi phản hồi. Vui lòng thử lại sau.",
+    "successTitle": "Gửi phản hồi thành công!",
+    "successDesc": "Cảm ơn bạn đã đóng góp ý kiến. Đội ngũ phát triển sẽ kiểm tra và xử lý vấn đề sớm nhất.",
+    "cancel": "Hủy",
+    "submit": "Gửi phản hồi",
+    "submitting": "Đang gửi...",
+    "close": "Đóng"
   }
 }

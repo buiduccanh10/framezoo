@@ -84,6 +84,7 @@ model user_settings {
   debrid_token                         String?  @db.VarChar(255)
   enable_auto_resume_on_playback_error Boolean  @default(false)
   tidb_key                             String?  @db.VarChar(255)
+  addons                               Json?    @default("[]")
 }
 
 model users {
@@ -116,3 +117,17 @@ model watch_history {
 
   @@unique([tmdb_id, user_id, season_id, episode_id], map: "watch_history_tmdb_id_user_id_season_id_episode_id_unique")
 }
+
+model feedbacks {
+  id          String   @id @db.Uuid
+  title       String   @db.VarChar(255)
+  description String   @db.Text
+  status      String   @default("pending") @db.VarChar(50)
+  user_id     String?  @db.VarChar(255)
+  created_at  DateTime @default(now()) @db.Timestamptz(0)
+  updated_at  DateTime @default(now()) @db.Timestamptz(0)
+
+  @@index([status], map: "feedbacks_status_idx")
+  @@index([created_at(sort: Desc)], map: "feedbacks_created_at_idx")
+}
+

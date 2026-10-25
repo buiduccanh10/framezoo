@@ -5,7 +5,8 @@
     "download": "Unduh",
     "language": "Bahasa",
     "addonGuide": "Panduan tambahan",
-    "home": "Rumah"
+    "home": "Rumah",
+    "installGuide": "Panduan Instalasi"
   },
   "hero": {
     "eyebrow": "DESKTOP FRAMEZOO / 01",
@@ -110,5 +111,83 @@
     "description": "Temukan sesuatu yang layak untuk ditonton, buka detailnya, dan nikmati cara menonton yang lebih baik dengan Framezoo.",
     "dragHint": "Tarik untuk menjelajah",
     "eyebrow": "PENEMUAN FRAMEZOO"
+  },
+  "installGuide": {
+    "macTab": "Untuk macOS",
+    "backHome": "Kembali ke Rumah",
+    "subtitle": "Cara melewati pemberitahuan keamanan Gatekeeper (macOS) dan SmartScreen (Windows) pada peluncuran pertama.",
+    "mac": {
+      "subtitle": "Silikon Apple (M1/M2/M3/M4) & Intel Mac",
+      "step1Title": "Langkah 1: Seret ke Aplikasi",
+      "step2Title": "Langkah 2: Peringatan keamanan penjaga gerbang",
+      "step3Title": "Langkah 3: Buka dengan aman melalui Finder",
+      "title": "Panduan Instalasi macOS",
+      "step3Steps": [
+        "Buka Finder dan navigasikan ke folder Aplikasi Anda.",
+        "Klik kanan (atau Kontrol-klik) pada Framezoo.app.",
+        "Pilih \"Buka\" dari menu konteks.",
+        "Dalam dialog konfirmasi, klik \"Tetap Terbuka\" atau \"Terbuka\"."
+      ],
+      "step1Desc": "Buka file .dmg yang diunduh dan seret ikon Framezoo ke folder Aplikasi.",
+      "note": "Anda hanya perlu melakukan langkah klik kanan ini pada peluncuran pertama. Peluncuran selanjutnya dapat dilakukan secara normal dari Launchpad atau Spotlight.",
+      "step2Desc": "Karena Framezoo adalah pemutar sumber terbuka independen tanpa sertifikat Pengembang Apple komersial, macOS mungkin menampilkan: \"Framezoo rusak dan tidak dapat dibuka\" atau \"Apple tidak dapat memverifikasi aplikasi ini\"."
+    },
+    "title": "Panduan Instalasi & Peluncuran Framezoo",
+    "downloadApp": "Unduh Framezoo.dll",
+    "winTab": "Untuk Windows",
+    "win": {
+      "title": "Panduan Instalasi Windows",
+      "subtitle": "Windows 10/11 (x64 & ARM64)",
+      "step2Desc": "Jika Windows Defender menampilkan layar biru yang menyatakan \"Windows melindungi PC Anda\":",
+      "step3Title": "Langkah 3: Lanjutkan instalasi",
+      "step1Desc": "Luncurkan penginstal Framezoo-Setup-x64.exe yang diunduh untuk memulai pengaturan.",
+      "step1Title": "Langkah 1: Jalankan penginstal .exe",
+      "step2Title": "Langkah 2: Peringatan Windows Defender SmartScreen",
+      "step3Steps": [
+        "Klik tautan \"Info selengkapnya\" di bawah deskripsi.",
+        "Tombol \"Lagi pula\" akan muncul di sudut kanan bawah.",
+        "Klik \"Lagi pula\" untuk melanjutkan instalasi Framezoo."
+      ],
+      "note": "Peringatan ini muncul karena rilis baru belum mengumpulkan reputasi Penandatanganan Kode Microsoft EV. Binernya 100% aman."
+    },
+    "eyebrow": "Dokumentasi",
+    "macQuickSolution": "Solusi cepat: Buka melalui menu konteks klik kanan Finder",
+    "winDialogTitle": "Windows melindungi PC Anda",
+    "winMoreInfo": "Informasi lebih lanjut",
+    "winClickHere": "(Klik disini)",
+    "macTerminalTip": "💡 Metode pencadangan melalui Terminal:",
+    "macTerminalDesc": "Jika Anda masih diblokir, buka Terminal dan jalankan:",
+    "macDialogTitle": "\"Framezoo\" rusak dan tidak dapat dibuka.",
+    "macDialogDesc": "Apple tidak dapat memeriksa perangkat lunak berbahaya di dalamnya. Hal ini terjadi ketika aplikasi diunduh di luar Mac App Store tanpa sertifikat komersial tahunan.",
+    "winQuickSolution": "Klik Info lebih lanjut → Jalankan saja",
+    "winDialogDesc": "Microsoft Defender SmartScreen mencegah aplikasi yang tidak dikenal untuk memulai. Menjalankan aplikasi ini mungkin membahayakan PC Anda."
+  },
+  "downloadConfirm": {
+    "macNotice": "Pemberitahuan Penjaga Gerbang: Jika macOS melaporkan aplikasi 'rusak' atau tidak terverifikasi, buka Aplikasi -> Klik kanan Framezoo -> Pilih Buka -> Tetap Buka.",
+    "cancel": "Membatalkan",
+    "winTitle": "Panduan Instalasi untuk Windows",
+    "macTitle": "Panduan Instalasi untuk macOS",
+    "viewGuide": "Lihat panduan instalasi lengkap",
+    "winNotice": "Pemberitahuan SmartScreen: Jika Anda melihat layar biru 'Windows melindungi PC Anda', klik 'Info lebih lanjut' -> klik 'Lagi pula'.",
+    "downloading": "Mulai mengunduh...",
+    "confirmDownload": "Konfirmasikan & Unduh"
+  },
+  "feedback": {
+    "badge": "Masukan",
+    "button": "Masukan",
+    "modalTitle": "Kirimkan masukan Anda kepada kami",
+    "descLabel": "2. Deskripsi rinci",
+    "titleLabel": "1. Judul terbitan",
+    "subtitle": "Beri tahu kami tentang masalah atau kesulitan apa pun yang Anda alami dengan Framezoo.",
+    "titlePlaceholder": "misalnya Masalah sinkronisasi subtitle, kelambatan saat pemutaran...",
+    "successTitle": "Masukan berhasil dikirim!",
+    "errorSubmit": "Gagal mengirimkan masukan. Silakan coba lagi nanti.",
+    "cancel": "Membatalkan",
+    "submitting": "Mengirimkan...",
+    "submit": "Kirim masukan",
+    "close": "Menutup",
+    "descPlaceholder": "Jelaskan masalah spesifik atau langkah-langkah untuk mereproduksinya...",
+    "errorRequired": "Silakan isi judul dan deskripsi terbitan.",
+    "successDesc": "Terima kasih atas tanggapan Anda. Tim kami akan meninjau dan menyelesaikan masalah ini sesegera mungkin."
   }
 }

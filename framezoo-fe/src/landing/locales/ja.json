@@ -5,7 +5,8 @@
     "download": "ダウンロード",
     "language": "言語",
     "addonGuide": "アドオンガイド",
-    "home": "家"
+    "home": "家",
+    "installGuide": "インストールガイド"
   },
   "hero": {
     "eyebrow": "アルファフリックス デスクトップ / 01",
@@ -110,5 +111,83 @@
     "description": "見る価値のあるものを見つけて詳細を開いて、Framezoo でより良い視聴方法を確立してください。",
     "dragHint": "ドラッグして探索する",
     "eyebrow": "フレームズー ディスカバリー"
+  },
+  "installGuide": {
+    "backHome": "ホームに戻る",
+    "macTab": "macOSの場合",
+    "downloadApp": "フレームズーをダウンロード",
+    "winTab": "Windowsの場合",
+    "mac": {
+      "title": "macOS インストールガイド",
+      "step1Title": "ステップ 1: アプリケーションにドラッグする",
+      "step2Title": "ステップ 2: ゲートキーパーのセキュリティ警告",
+      "step3Title": "ステップ 3: Finder 経由で安全に開く",
+      "subtitle": "Apple Silicon (M1/M2/M3/M4) & Intel Mac",
+      "step3Steps": [
+        "Finder を開き、アプリケーション フォルダーに移動します。",
+        "Framezoo.app を右クリック (または Control キーを押しながらクリック) します。",
+        "コンテキストメニューから「開く」を選択します。",
+        "確認ダイアログで「とにかく開く」または「開く」をクリックします。"
+      ],
+      "step1Desc": "ダウンロードした .dmg ファイルを開き、Framezoo アイコンをアプリケーション フォルダーにドラッグします。",
+      "step2Desc": "Framezoo は商用 Apple Developer 証明書を持たない独立したオープンソース プレーヤーであるため、macOS では「Framezoo が破損しているため開くことができません」または「Apple はこのアプリを検証できません」と表示される場合があります。",
+      "note": "この右クリック手順は、初回起動時にのみ実行する必要があります。以降の起動は、Launchpad または Spotlight から通常どおり実行できます。"
+    },
+    "subtitle": "初回起動時に Gatekeeper (macOS) および SmartScreen (Windows) のセキュリティ通知をバイパスする方法。",
+    "title": "Framezoo インストールおよび起動ガイド",
+    "win": {
+      "title": "Windows インストール ガイド",
+      "subtitle": "Windows 10 / 11 (x64 および ARM64)",
+      "step1Title": "ステップ 1: .exe インストーラーを実行する",
+      "step3Steps": [
+        "説明の下にある「詳細」リンクをクリックします。",
+        "「とにかく実行」ボタンが右下隅に表示されます。",
+        "「とにかく実行」をクリックして、Framezoo のインストールを続行します。"
+      ],
+      "step2Desc": "Windows Defender に「Windows が PC を保護しました」というブルー スクリーンが表示された場合:",
+      "step1Desc": "ダウンロードした Framezoo-Setup-x64.exe インストーラーを起動してセットアップを開始します。",
+      "step3Title": "ステップ 3: インストールを続行する",
+      "step2Title": "ステップ 2: Windows Defender SmartScreen の警告",
+      "note": "この警告は、新しいリリースが Microsoft EV コード署名の評価をまだ蓄積していないために表示されます。バイナリは 100% 安全です。"
+    },
+    "eyebrow": "ドキュメント",
+    "macTerminalTip": "💡 ターミナル経由のバックアップ方法:",
+    "winDialogTitle": "Windows が PC を保護しました",
+    "macDialogDesc": "Apple は悪意のあるソフトウェアをチェックできません。これは、年間商用証明書を取得せずに Mac App Store 以外でアプリをダウンロードした場合に発生します。",
+    "macTerminalDesc": "それでもブロックされている場合は、ターミナルを開いて次を実行します。",
+    "macDialogTitle": "「Framezoo」が破損していて開けません。",
+    "winClickHere": "（ここをクリック）",
+    "winMoreInfo": "詳細情報",
+    "macQuickSolution": "簡単な解決策: Finder の右クリック コンテキスト メニューから開く",
+    "winDialogDesc": "Microsoft Defender SmartScreen により、認識されないアプリの起動が妨げられました。このアプリを実行すると、PC が危険にさらされる可能性があります。",
+    "winQuickSolution": "「詳細」→「とにかく実行」をクリックします"
+  },
+  "downloadConfirm": {
+    "macTitle": "macOS 用インストールガイド",
+    "confirmDownload": "確認してダウンロード",
+    "macNotice": "Gatekeeper 注意: macOS が「破損した」アプリまたは未検証のアプリを報告した場合は、[アプリケーション] -> [Framezoo] を右クリック -> [開く] を選択 -> [とにかく開く] を選択します。",
+    "cancel": "キャンセル",
+    "winNotice": "SmartScreen の注意: 「Windows が PC を保護しました」という青い画面が表示された場合は、「詳細」をクリックし、「とにかく実行」をクリックします。",
+    "winTitle": "Windows 用インストールガイド",
+    "viewGuide": "完全なインストールガイドを見る",
+    "downloading": "ダウンロードを開始しています..."
+  },
+  "feedback": {
+    "badge": "フィードバック",
+    "button": "フィードバック",
+    "titlePlaceholder": "例えば字幕の同期の問題、再生中の遅延...",
+    "modalTitle": "フィードバックをお寄せください",
+    "titleLabel": "1. 号名",
+    "descPlaceholder": "特定の問題またはそれを再現する手順について説明します...",
+    "subtitle": "Framezoo で経験した問題や困難についてお知らせください。",
+    "cancel": "キャンセル",
+    "submit": "フィードバックを送信する",
+    "submitting": "送信中...",
+    "descLabel": "2. 詳細説明",
+    "close": "近い",
+    "errorSubmit": "フィードバックの送信に失敗しました。後でもう一度試してください。",
+    "successTitle": "フィードバックは正常に送信されました。",
+    "successDesc": "ご意見ありがとうございます。私たちのチームが問題を確認し、できるだけ早く解決します。",
+    "errorRequired": "タイトルと問題の説明の両方を入力してください。"
   }
 }

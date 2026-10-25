@@ -705,6 +705,7 @@
       "accountMenu": "Hesap menüsünü aç",
       "addons": "Eklentiler",
       "desktop": "Uygulama Ayarları",
+      "feedback": "Geri bildirim",
       "logout": "Çıkış yap",
       "register": "Buluta eşitle",
       "settings": "Ayarlar"
@@ -1371,6 +1372,22 @@
     "watching": "izliyorum",
     "withCount": "{{count}} diğer kişiyle birlikte",
     "you": "Sen"
+  },
+  "feedback": {
+    "modalTitle": "Geri Bildirim Gönder",
+    "buttonLabel": "Geri bildirim",
+    "subtitle": "Deneyiminiz sırasında karşılaştığınız herhangi bir sorun veya hatayı bize bildirin.",
+    "titleLabel": "1. Sayı Başlığı",
+    "titlePlaceholder": "Örneğin, altyazı yükleme hatası, takılarak oynatma...",
+    "descriptionLabel": "2. Sorun Tanımı",
+    "descriptionPlaceholder": "Sorunu ayrıntılı olarak açıklayın, sorunu yeniden oluşturmak için izlenecek adımları veya önerileri belirtin...",
+    "submit": "Geri Bildirim Gönder",
+    "cancel": "İptal etmek",
+    "close": "Kapalı",
+    "successTitle": "Geri bildirim gönderildi!",
+    "successDesc": "Geri bildiriminiz için teşekkür ederiz. Ekibimiz sorunu en kısa sürede inceleyip çözecektir.",
+    "errorRequired": "Lütfen hem başlığı hem de açıklamayı girin.",
+    "errorSubmit": "Geri bildirim gönderilirken bir hata oluştu. Lütfen daha sonra tekrar deneyin."
   },
   "toasts": {
     "linkCopied": "Bağlantı panoya kopyalandı!",

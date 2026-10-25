@@ -2,10 +2,13 @@ import { useSyncExternalStore } from "react";
 
 import { loadAddonManifest } from "./client";
 import {
+  getCustomAddons,
   getInstalledAddons,
   removeAddon,
+  resetAddonStorage,
   setAddonEnabled,
   subscribeInstalledAddons,
+  syncAndMigrateAddons,
   upsertAddon,
 } from "./storage";
 
@@ -23,4 +26,10 @@ export async function installAddon(input: string) {
   return addon;
 }
 
-export { removeAddon, setAddonEnabled };
+export {
+  getCustomAddons,
+  removeAddon,
+  resetAddonStorage,
+  setAddonEnabled,
+  syncAndMigrateAddons,
+};

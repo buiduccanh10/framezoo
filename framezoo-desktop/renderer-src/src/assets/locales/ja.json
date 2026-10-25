@@ -705,6 +705,7 @@
       "accountMenu": "アカウントメニューを開く",
       "addons": "アドオン",
       "desktop": "アプリの設定",
+      "feedback": "フィードバック",
       "logout": "退室",
       "register": "クラウドに同期して",
       "settings": "設定"
@@ -1371,6 +1372,22 @@
     "watching": "見てる",
     "withCount": "他の{{count}}人と",
     "you": "あなた"
+  },
+  "feedback": {
+    "modalTitle": "フィードバックを送信",
+    "buttonLabel": "フィードバック",
+    "subtitle": "ご利用中に発生した問題や不具合についてお知らせください。",
+    "titleLabel": "1. 号題",
+    "titlePlaceholder": "例：字幕読み込みエラー、再生の途切れなど...",
+    "descriptionLabel": "2. 問題の説明",
+    "descriptionPlaceholder": "問題の詳細、再現手順、または解決策を記述してください。",
+    "submit": "フィードバックを送信",
+    "cancel": "キャンセル",
+    "close": "近い",
+    "successTitle": "フィードバックを送信しました！",
+    "successDesc": "ご意見ありがとうございます。担当チームが問題を確認し、できるだけ早く対応いたします。",
+    "errorRequired": "タイトルと説明の両方を入力してください。",
+    "errorSubmit": "フィードバックの送信中にエラーが発生しました。しばらくしてからもう一度お試しください。"
   },
   "toasts": {
     "linkCopied": "リンクがクリップボードにコピーされました!",

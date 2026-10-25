@@ -705,6 +705,7 @@
       "accountMenu": "Accountmenu openen",
       "addons": "Add-ons",
       "desktop": "App-instellingen",
+      "feedback": "Feedback",
       "logout": "Log uit",
       "register": "Synchroniseren met de Cloud",
       "settings": "Instellingen"
@@ -1371,6 +1372,22 @@
     "watching": "Kijken",
     "withCount": "Met {{count}} anderen",
     "you": "Jij"
+  },
+  "feedback": {
+    "modalTitle": "Feedback verzenden",
+    "buttonLabel": "Feedback",
+    "subtitle": "Laat ons weten of u tijdens uw ervaring problemen of bugs bent tegengekomen.",
+    "titleLabel": "1. Titel van het probleem",
+    "titlePlaceholder": "Bijvoorbeeld: Fout bij het laden van ondertitels, haperende weergave...",
+    "descriptionLabel": "2. Probleemomschrijving",
+    "descriptionPlaceholder": "Beschrijf het probleem in detail, de stappen om het te reproduceren, of suggesties...",
+    "submit": "Feedback verzenden",
+    "cancel": "Annuleren",
+    "close": "Dichtbij",
+    "successTitle": "Feedback verzonden!",
+    "successDesc": "Bedankt voor uw feedback. Ons team zal het probleem zo snel mogelijk bekijken en oplossen.",
+    "errorRequired": "Voer zowel de titel als de beschrijving in.",
+    "errorSubmit": "Er is een fout opgetreden tijdens het verzenden van feedback. Probeer het later opnieuw."
   },
   "toasts": {
     "linkCopied": "Link gekopieerd naar klembord!",

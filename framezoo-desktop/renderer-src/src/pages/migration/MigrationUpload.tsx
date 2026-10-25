@@ -19,6 +19,8 @@ import { Stepper } from "@/components/layout/Stepper";
 import { CenterContainer } from "@/components/layout/ThinContainer";
 import { Divider } from "@/components/utils/Divider";
 import { Heading2, Paragraph } from "@/components/utils/Text";
+import { syncAndMigrateAddons } from "@/desktop/addons/store";
+import type { InstalledAddon } from "@/desktop/addons/types";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { MinimalPageLayout } from "@/pages/layouts/MinimalPageLayout";
 import { PageTitle } from "@/pages/parts/util/PageTitle";
@@ -48,6 +50,7 @@ interface UploadedData {
   settings?: any;
   theme?: string | null;
   language?: string;
+  addons?: InstalledAddon[];
   exportDate?: string;
 }
 
@@ -172,6 +175,10 @@ export function MigrationUploadPage() {
               {} as Record<string, WatchHistoryItem>,
             )
           : undefined,
+
+        addons: Array.isArray(parsedData.addons)
+          ? parsedData.addons
+          : undefined,
       };
 
       setUploadedData(validatedData);
@@ -262,7 +269,16 @@ export function MigrationUploadPage() {
     // Import settings
     if (uploadedData.settings) {
       importPromises.push(
-        importSettings(backendUrl, user.account, uploadedData.settings),
+        importSettings(backendUrl, user.account, {
+          ...uploadedData.settings,
+          ...(uploadedData.addons ? { addons: uploadedData.addons } : {}),
+        }),
+      );
+    } else if (uploadedData.addons) {
+      importPromises.push(
+        importSettings(backendUrl, user.account, {
+          addons: uploadedData.addons,
+        }),
       );
     }
 
@@ -288,6 +304,10 @@ export function MigrationUploadPage() {
 
     if (uploadedData.watchHistory) {
       replaceWatchHistory(uploadedData.watchHistory);
+    }
+
+    if (uploadedData.addons) {
+      syncAndMigrateAddons(uploadedData.addons);
     }
 
     // Import all data types to backend
@@ -332,6 +352,9 @@ export function MigrationUploadPage() {
           JSON.stringify({ state: { items: uploadedData.watchHistory } }),
         );
         replaceWatchHistory(uploadedData.watchHistory);
+      }
+      if (uploadedData.addons) {
+        syncAndMigrateAddons(uploadedData.addons);
       }
       if (uploadedData.groupOrder) {
         localStorage.setItem(
@@ -538,7 +561,7 @@ export function MigrationUploadPage() {
               </Heading2>
               <Divider marginClass="my-6 px-8 box-content -mx-8" />
 
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="p-4 bg-settings-card-altBackground rounded-lg border border-settings-card-border/40">
                   <div className="flex items-center gap-2 text-type-link">
                     <Icon icon={Icons.CLOCK} className="text-xl" />
@@ -571,7 +594,10 @@ export function MigrationUploadPage() {
                   <div className="flex items-center gap-2 text-type-link">
                     <Icon icon={Icons.CLOCK} className="text-xl" />
                     <span className="font-medium text-white">
-                      {t("migration.preview.items.progress")}
+                      {t(
+                        "migration.preview.items.watchHistory",
+                        "Watch History",
+                      )}
                     </span>
                   </div>
                   <div className="text-xl font-bold mt-2 text-white">
@@ -580,6 +606,18 @@ export function MigrationUploadPage() {
                       : 0}
                   </div>
                 </div>
+
+                {uploadedData.addons !== undefined && (
+                  <div className="p-4 bg-settings-card-altBackground rounded-lg border border-settings-card-border/40">
+                    <div className="flex items-center gap-2 text-type-link">
+                      <Icon icon={Icons.EXTENSION} className="text-xl" />
+                      <span className="font-medium text-white">Addons</span>
+                    </div>
+                    <div className="text-xl font-bold mt-2 text-white">
+                      {uploadedData.addons.length}
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div className="flex py-6 flex-col space-y-2 items-center justify-center">

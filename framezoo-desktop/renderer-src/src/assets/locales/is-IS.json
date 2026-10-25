@@ -705,6 +705,7 @@
       "accountMenu": "Opnaðu reikningsvalmynd",
       "addons": "Viðbætur",
       "desktop": "App Stillingar",
+      "feedback": "Ábendingar",
       "logout": "Skrá út",
       "register": "Samstilla við ský",
       "settings": "Stillingar"
@@ -1371,6 +1372,22 @@
     "watching": "Er að horfa á",
     "withCount": "Með {{count}} öðrum",
     "you": "Þú"
+  },
+  "feedback": {
+    "modalTitle": "Senda ábendingu",
+    "buttonLabel": "Ábendingar",
+    "subtitle": "Láttu okkur vita af öllum vandamálum eða villum sem þú lentir í viðskiptum þínum.",
+    "titleLabel": "1. Heiti tölublaðs",
+    "titlePlaceholder": "t.d. villa í hleðslu texta, hik í spilun...",
+    "descriptionLabel": "2. Lýsing á vandamáli",
+    "descriptionPlaceholder": "Lýstu vandamálinu í smáatriðum, skrefum til að endurtaka eða tillögum ...",
+    "submit": "Senda inn ábendingu",
+    "cancel": "Hætta við",
+    "close": "Loka",
+    "successTitle": "Ábending send inn!",
+    "successDesc": "Þakka þér fyrir ábendinguna. Teymið okkar mun fara yfir málið og leysa það eins fljótt og auðið er.",
+    "errorRequired": "Vinsamlegast sláðu inn bæði titil og lýsingu.",
+    "errorSubmit": "Villa kom upp við að senda inn ábendingu. Reyndu aftur síðar."
   },
   "toasts": {
     "linkCopied": "Tengill afritaður á klippiborð!",

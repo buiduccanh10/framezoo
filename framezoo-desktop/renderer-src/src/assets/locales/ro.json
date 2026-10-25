@@ -705,6 +705,7 @@
       "accountMenu": "Deschide meniul cont",
       "addons": "Suplimente",
       "desktop": "Setările aplicației",
+      "feedback": "Feedback",
       "logout": "Deconectați-vă",
       "register": "Sincronizare în Cloud",
       "settings": "Setări"
@@ -1371,6 +1372,22 @@
     "watching": "Privind",
     "withCount": "Cu alți {{count}}",
     "you": "Tu"
+  },
+  "feedback": {
+    "modalTitle": "Trimite feedback",
+    "buttonLabel": "Feedback",
+    "subtitle": "Spuneți-ne despre orice problemă sau eroare pe care ați întâmpinat-o în timpul experienței dumneavoastră.",
+    "titleLabel": "1. Titlul problemei",
+    "titlePlaceholder": "de exemplu, eroare la încărcarea subtitrării, redare sacadată...",
+    "descriptionLabel": "2. Descrierea problemei",
+    "descriptionPlaceholder": "Descrieți problema în detaliu, pașii pentru reproducere sau sugestii...",
+    "submit": "Trimiteți feedback",
+    "cancel": "Anula",
+    "close": "Aproape",
+    "successTitle": "Feedback trimis!",
+    "successDesc": "Vă mulțumim pentru feedback. Echipa noastră va analiza și va rezolva problema cât mai curând posibil.",
+    "errorRequired": "Vă rugăm să introduceți atât titlul, cât și descrierea.",
+    "errorSubmit": "A apărut o eroare la trimiterea feedback-ului. Vă rugăm să încercați din nou mai târziu."
   },
   "toasts": {
     "linkCopied": "Link copiat în clipboard!",

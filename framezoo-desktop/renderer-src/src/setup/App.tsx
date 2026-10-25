@@ -16,6 +16,7 @@ import {
 } from "@/backend/metadata/tmdb";
 import { AuthModal } from "@/components/overlays/AuthModal";
 import { DetailsModal } from "@/components/overlays/detailsModal";
+import { FeedbackModal } from "@/components/overlays/FeedbackModal";
 import { KeyboardCommandsEditModal } from "@/components/overlays/KeyboardCommandsEditModal";
 import { KeyboardCommandsModal } from "@/components/overlays/KeyboardCommandsModal";
 import { ToastProvider } from "@/components/overlays/ToastProvider";
@@ -229,6 +230,7 @@ function App() {
       <DetailsModal id="discover-details" />
       <DetailsModal id="player-details" />
       <AuthModal />
+      <FeedbackModal id="feedback" />
       <ToastProvider />
       {!showDowntime && (
         <>

@@ -705,6 +705,7 @@
       "accountMenu": "Atveriet konta izvēlni",
       "addons": "Papildinājumi",
       "desktop": "Lietotņu iestatījumi",
+      "feedback": "Atsauksmes",
       "logout": "Iziet",
       "register": "Sinhronizēt ar mākoni",
       "settings": "Iestādijumi"
@@ -1371,6 +1372,22 @@
     "watching": "Skatos",
     "withCount": "Ar {{count}} citiem",
     "you": "Tu"
+  },
+  "feedback": {
+    "modalTitle": "Sūtīt atsauksmes",
+    "buttonLabel": "Atsauksmes",
+    "subtitle": "Informējiet mūs par jebkuru problēmu vai kļūdu, ar kuru saskārāties savas pieredzes laikā.",
+    "titleLabel": "1. Izdevuma nosaukums",
+    "titlePlaceholder": "piem., subtitru ielādes kļūda, atskaņošanas raustīšanās...",
+    "descriptionLabel": "2. Problēmas apraksts",
+    "descriptionPlaceholder": "Detalizēti aprakstiet problēmu, sniedziet darbības, lai to atkārtotu, vai ieteikumus...",
+    "submit": "Iesniegt atsauksmes",
+    "cancel": "Atcelt",
+    "close": "Aizvērt",
+    "successTitle": "Atsauksme iesniegta!",
+    "successDesc": "Paldies par jūsu atsauksmi. Mūsu komanda pārskatīs un risinās šo problēmu, cik drīz vien iespējams.",
+    "errorRequired": "Lūdzu, ievadiet gan nosaukumu, gan aprakstu.",
+    "errorSubmit": "Iesniedzot atsauksmi, radās kļūda. Lūdzu, mēģiniet vēlreiz vēlāk."
   },
   "toasts": {
     "linkCopied": "Saite ir kopēta starpliktuvē!",

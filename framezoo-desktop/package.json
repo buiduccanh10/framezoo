@@ -1,7 +1,7 @@
 {
   "name": "Framezoo",
   "private": true,
-  "version": "2.0.3",
+  "version": "2.0.4",
   "main": "dist/main.cjs",
   "packageManager": "pnpm@12.8.1+sha512.f64ba907507f5ceafe06c8d38e6052d0179444580ec1279ddd5bfc11cb48aa8a2644b66598e07e761da84872a9fc57d5f902b87fa49d024198d558612aabbe45",
   "scripts": {
@@ -13,6 +13,7 @@
     "models:ensure": "node scripts/ensure-silero-vad.mjs",
     "build:renderer": "pnpm run models:ensure && cross-env VITE_BASE_URL=./ pnpm exec vite build --config renderer-src/vite.config.mts && node scripts/prune-desktop-renderer.mjs",
     "build:shell": "tsup",
+    "build:installer-art": "python3 scripts/generate-installer-art.py",
     "resources:ensure": "node scripts/ensure-libmpv.mjs",
     "resources:ensure:darwin-arm64": "node scripts/ensure-libmpv.mjs --target darwin-arm64",
     "resources:ensure:darwin-x64": "node scripts/ensure-libmpv.mjs --target darwin-x64",
@@ -238,29 +239,41 @@
       ],
       "artifactName": "${productName}-${version}-${arch}-mac.${ext}",
       "extraDistFiles": [
-        "README.txt"
+        "README.txt",
+        "build/HUONG_DAN_CAI_DAT.txt"
       ],
       "category": "public.app-category.entertainment",
       "icon": "build/icon.png",
       "darkModeSupport": true
     },
     "dmg": {
+      "background": "build/dmg-background.png",
+      "window": {
+        "width": 660,
+        "height": 450
+      },
       "contents": [
         {
-          "x": 130,
-          "y": 170
+          "x": 170,
+          "y": 150
         },
         {
-          "x": 410,
-          "y": 170,
+          "x": 490,
+          "y": 150,
           "type": "link",
           "path": "/Applications"
         },
         {
-          "x": 270,
-          "y": 270,
+          "x": 250,
+          "y": 320,
           "type": "file",
-          "path": "README.txt"
+          "path": "build/HUONG_DAN_CAI_DAT.txt"
+        },
+        {
+          "x": 410,
+          "y": 320,
+          "type": "file",
+          "path": "build/Huong-Dan-Online.webloc"
         }
       ]
     },
@@ -269,18 +282,22 @@
         "nsis"
       ],
       "extraFiles": [
-        "README.txt"
+        "README.txt",
+        "build/HUONG_DAN_CAI_DAT.txt"
       ],
       "icon": "build/icon.png"
     },
     "nsis": {
-      "oneClick": true,
+      "oneClick": false,
       "perMachine": false,
       "allowToChangeInstallationDirectory": false,
       "deleteAppDataOnUninstall": false,
       "shortcutName": "Framezoo",
       "createDesktopShortcut": "always",
       "createStartMenuShortcut": true,
+      "license": "build/HUONG_DAN_CAI_DAT.txt",
+      "installerSidebar": "build/installerSidebar.bmp",
+      "installerHeader": "build/installerHeader.bmp",
       "include": "build/installer.nsh",
       "installerIcon": "build/icon.ico",
       "uninstallerIcon": "build/icon.ico"

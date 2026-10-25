@@ -1,6 +1,7 @@
 import { ofetch } from "ofetch";
 
 import { getAuthHeaders, withAuthRetry } from "@/backend/accounts/auth";
+import type { InstalledAddon } from "@/desktop/addons/types";
 import { AccountWithToken } from "@/stores/auth";
 import { KeyboardShortcuts } from "@/utils/keyboardShortcuts";
 
@@ -28,6 +29,7 @@ export interface SettingsInput {
   enableNumberKeySeeking?: boolean;
   keyboardShortcuts?: KeyboardShortcuts;
   customTheme?: CustomThemeSettings;
+  addons?: InstalledAddon[];
 }
 
 export interface SettingsResponse {
@@ -48,6 +50,7 @@ export interface SettingsResponse {
   enableNumberKeySeeking?: boolean;
   keyboardShortcuts?: KeyboardShortcuts;
   customTheme?: CustomThemeSettings;
+  addons?: InstalledAddon[];
 }
 
 export function updateSettings(

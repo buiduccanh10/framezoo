@@ -89,7 +89,7 @@ export function FancyModal(props: {
       <Helmet>
         <html data-no-scroll />
       </Helmet>
-      <div className="flex absolute inset-0 items-center justify-center p-4 overflow-hidden">
+      <div className="flex absolute inset-0 items-center justify-center p-4 overflow-hidden pointer-events-none">
         <div className="overflow-y-auto max-h-[85vh] pointer-events-auto">
           <Flare.Base
             className={classNames(

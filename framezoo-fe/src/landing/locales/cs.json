@@ -5,7 +5,8 @@
     "download": "Stáhnout",
     "language": "Jazyk",
     "addonGuide": "Průvodce addony",
-    "home": "Domov"
+    "home": "Domov",
+    "installGuide": "Průvodce instalací"
   },
   "hero": {
     "eyebrow": "DESKTOP FRAMEZOO / 01",
@@ -110,5 +111,83 @@
     "eyebrow": "OBJEV FRAMEZOO",
     "title": "Oblíbené příběhy pro vaše příští hodinky.",
     "description": "Najděte něco, co stojí za to sledovat, otevřete podrobnosti a usaďte se na lepší způsob sledování s Framezoo."
+  },
+  "installGuide": {
+    "title": "Průvodce instalací a spuštěním Framezoo",
+    "subtitle": "Jak obejít bezpečnostní upozornění Gatekeeper (macOS) a SmartScreen (Windows) při prvním spuštění.",
+    "downloadApp": "Stáhněte si Framezoo",
+    "macTab": "Pro macOS",
+    "winTab": "Pro Windows",
+    "backHome": "Zpět na domovskou stránku",
+    "mac": {
+      "title": "Průvodce instalací macOS",
+      "step2Title": "Krok 2: Bezpečnostní varování Gatekeepera",
+      "step3Title": "Krok 3: Otevřete bezpečně pomocí Finderu",
+      "subtitle": "Apple Silicon (M1/M2/M3/M4) a Intel Mac",
+      "step1Title": "Krok 1: Přetáhněte na Aplikace",
+      "step1Desc": "Otevřete stažený soubor .dmg a přetáhněte ikonu Framezoo do složky Aplikace.",
+      "step3Steps": [
+        "Otevřete Finder a přejděte do složky Aplikace.",
+        "Klikněte pravým tlačítkem (nebo se stisknutou klávesou Ctrl) na Framezoo.app.",
+        "Z kontextové nabídky vyberte \"Otevřít\".",
+        "V potvrzovacím dialogu klikněte na „Přesto otevřít“ nebo „Otevřít“."
+      ],
+      "step2Desc": "Protože Framezoo je nezávislý přehrávač s otevřeným zdrojovým kódem bez komerčního certifikátu Apple Developer, macOS může zobrazovat: „Framezoo je poškozený a nelze jej otevřít“ nebo „Apple nemůže ověřit tuto aplikaci“.",
+      "note": "Tento krok musíte provést pouze kliknutím pravým tlačítkem při prvním spuštění. Následné spouštění lze provést normálně z Launchpadu nebo Spotlightu."
+    },
+    "win": {
+      "subtitle": "Windows 10/11 (x64 a ARM64)",
+      "title": "Průvodce instalací systému Windows",
+      "step3Title": "Krok 3: Pokračujte v instalaci",
+      "step2Title": "Krok 2: Varování SmartScreen programu Windows Defender",
+      "step1Title": "Krok 1: Spusťte instalační program .exe",
+      "step2Desc": "Pokud program Windows Defender zobrazí modrou obrazovku s oznámením „Windows ochránil váš počítač“:",
+      "step3Steps": [
+        "Klikněte na odkaz \"Další informace\" pod popisem.",
+        "V pravém dolním rohu se zobrazí tlačítko „Přesto spustit“.",
+        "Klikněte na „Přesto spustit“ a pokračujte v instalaci Framezoo."
+      ],
+      "step1Desc": "Spusťte stažený instalační program Framezoo-Setup-x64.exe a zahajte instalaci.",
+      "note": "Toto varování se zobrazuje, protože nové vydání ještě nezískalo reputaci Microsoft EV Code Signing. Binární soubor je 100% bezpečný."
+    },
+    "eyebrow": "Dokumentace",
+    "winDialogTitle": "Windows chránil váš počítač",
+    "macTerminalDesc": "Pokud jste stále blokováni, otevřete Terminál a spusťte:",
+    "macTerminalTip": "💡 Metoda zálohování přes terminál:",
+    "macDialogTitle": "„Framezoo“ je poškozen a nelze jej otevřít.",
+    "macQuickSolution": "Rychlé řešení: Otevřete pomocí kontextové nabídky pravým tlačítkem myši",
+    "macDialogDesc": "Apple nemůže zkontrolovat, zda neobsahuje škodlivý software. K tomu dochází, když je aplikace stažena mimo Mac App Store bez ročního komerčního certifikátu.",
+    "winQuickSolution": "Klikněte na Další informace → Přesto spustit",
+    "winDialogDesc": "Microsoft Defender SmartScreen zabránil spuštění neznámé aplikace. Spuštění této aplikace může ohrozit váš počítač.",
+    "winMoreInfo": "Více informací",
+    "winClickHere": "(klikněte zde)"
+  },
+  "downloadConfirm": {
+    "macNotice": "Upozornění Gatekeepera: Pokud macOS hlásí „poškozenou“ nebo neověřenou aplikaci, přejděte na Aplikace -> Klikněte pravým tlačítkem na Framezoo -> Vyberte Otevřít -> Přesto otevřít.",
+    "winTitle": "Instalační příručka pro Windows",
+    "macTitle": "Instalační příručka pro macOS",
+    "cancel": "Zrušit",
+    "viewGuide": "Zobrazit úplný průvodce instalací",
+    "downloading": "Spouštění stahování...",
+    "confirmDownload": "Potvrdit a stáhnout",
+    "winNotice": "Upozornění SmartScreen: Pokud vidíte modrou obrazovku „Windows protected your PC“, klikněte na „Další informace“ -> klikněte na „Přesto spustit“."
+  },
+  "feedback": {
+    "badge": "Zpětná vazba",
+    "button": "Zpětná vazba",
+    "subtitle": "Dejte nám vědět o jakýchkoli problémech nebo potížích, se kterými jste se setkali s Framezoo.",
+    "modalTitle": "Pošlete nám svůj názor",
+    "errorRequired": "Vyplňte prosím název i popis problému.",
+    "titlePlaceholder": "např. Problém se synchronizací titulků, zpoždění při přehrávání...",
+    "errorSubmit": "Zpětnou vazbu se nepodařilo odeslat. Zkuste to znovu později.",
+    "cancel": "Zrušit",
+    "submit": "Odeslat zpětnou vazbu",
+    "descLabel": "2. Podrobný popis",
+    "titleLabel": "1. Název vydání",
+    "descPlaceholder": "Popište konkrétní problém nebo kroky k jeho reprodukci...",
+    "close": "Blízko",
+    "successTitle": "Zpětná vazba byla úspěšně odeslána!",
+    "submitting": "Odesílání...",
+    "successDesc": "děkujeme za vaši zpětnou vazbu. Náš tým problém co nejdříve zkontroluje a vyřeší."
   }
 }

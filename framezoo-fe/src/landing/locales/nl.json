@@ -5,7 +5,8 @@
     "download": "Downloaden",
     "language": "Taal",
     "addonGuide": "Add-on-gids",
-    "home": "Thuis"
+    "home": "Thuis",
+    "installGuide": "Installatiehandleiding"
   },
   "hero": {
     "eyebrow": "FRAMEZOO-BUREAUBLAD / 01",
@@ -110,5 +111,83 @@
     "description": "Vind iets dat de moeite waard is om te bekijken, open de details en ga op zoek naar een betere manier om te kijken met Framezoo.",
     "dragHint": "Sleep om te verkennen",
     "eyebrow": "FRAMEZOO-ONTDEKKING"
+  },
+  "installGuide": {
+    "backHome": "Terug naar Thuis",
+    "mac": {
+      "title": "macOS-installatiegids",
+      "step2Title": "Stap 2: Beveiligingswaarschuwing van de poortwachter",
+      "step1Desc": "Open het gedownloade .dmg-bestand en sleep het Framezoo-pictogram naar de map Programma's.",
+      "step3Steps": [
+        "Open Finder en navigeer naar uw map Programma's.",
+        "Klik met de rechtermuisknop (of houd Control ingedrukt en klik) op Framezoo.app.",
+        "Selecteer \"Openen\" in het contextmenu.",
+        "Klik in het bevestigingsvenster op \"Toch openen\" of \"Openen\"."
+      ],
+      "step2Desc": "Omdat Framezoo een onafhankelijke open-source speler is zonder commercieel Apple Developer-certificaat, kan macOS de volgende melding geven: \"Framezoo is beschadigd en kan niet worden geopend\" of \"Apple kan deze app niet verifiëren\".",
+      "step1Title": "Stap 1: Sleep naar Toepassingen",
+      "subtitle": "Apple Silicon (M1/M2/M3/M4) en Intel Mac",
+      "step3Title": "Stap 3: Open veilig via Finder",
+      "note": "U hoeft deze stap met de rechtermuisknop alleen uit te voeren bij de eerste keer opstarten. Daaropvolgende lanceringen kunnen normaal gesproken worden uitgevoerd vanuit Launchpad of Spotlight."
+    },
+    "downloadApp": "Framezoo downloaden",
+    "winTab": "Voor Windows",
+    "subtitle": "Beveiligingsmeldingen van Gatekeeper (macOS) en SmartScreen (Windows) omzeilen bij de eerste keer opstarten.",
+    "title": "Framezoo Installatie- en startgids",
+    "macTab": "Voor macOS",
+    "win": {
+      "subtitle": "Windows 10/11 (x64 en ARM64)",
+      "step2Desc": "Als Windows Defender een blauw scherm weergeeft met de melding \"Windows heeft uw pc beschermd\":",
+      "step1Desc": "Start het gedownloade Framezoo-Setup-x64.exe-installatieprogramma om de installatie te starten.",
+      "title": "Windows-installatiehandleiding",
+      "step1Title": "Stap 1: Voer het .exe-installatieprogramma uit",
+      "step2Title": "Stap 2: Windows Defender SmartScreen-waarschuwing",
+      "step3Steps": [
+        "Klik op de link \"Meer info\" onder de beschrijving.",
+        "Er verschijnt een knop 'Toch uitvoeren' in de rechteronderhoek.",
+        "Klik op \"Toch uitvoeren\" om door te gaan met het installeren van Framezoo."
+      ],
+      "step3Title": "Stap 3: Ga door met de installatie",
+      "note": "Deze waarschuwing verschijnt omdat de nieuwe release nog geen reputatie voor Microsoft EV Code Signing heeft opgebouwd. Het binaire bestand is 100% veilig."
+    },
+    "eyebrow": "Documentatie",
+    "macDialogTitle": "\"Framezoo\" is beschadigd en kan niet worden geopend.",
+    "macTerminalTip": "💡 Back-upmethode via Terminal:",
+    "winDialogTitle": "Windows heeft uw pc beschermd",
+    "macQuickSolution": "Snelle oplossing: Open via Finder, klik met de rechtermuisknop op het contextmenu",
+    "macTerminalDesc": "Als je nog steeds geblokkeerd bent, open dan Terminal en voer het volgende uit:",
+    "macDialogDesc": "Apple kan het niet controleren op schadelijke software. Dit gebeurt wanneer een app buiten de Mac App Store wordt gedownload zonder een jaarlijks commercieel certificaat.",
+    "winMoreInfo": "Meer informatie",
+    "winQuickSolution": "Klik op Meer info → Toch uitvoeren",
+    "winClickHere": "(Klik hier)",
+    "winDialogDesc": "Microsoft Defender SmartScreen verhinderde dat een onbekende app startte. Als u deze app gebruikt, kan uw pc gevaar lopen."
+  },
+  "downloadConfirm": {
+    "macTitle": "Installatiehandleiding voor macOS",
+    "cancel": "Annuleren",
+    "confirmDownload": "Bevestigen en downloaden",
+    "winNotice": "SmartScreen-melding: Als u het blauwe scherm 'Windows heeft uw pc beschermd' ziet, klikt u op 'Meer info' -> klik op 'Toch uitvoeren'.",
+    "viewGuide": "Bekijk de volledige installatiehandleiding",
+    "winTitle": "Installatiehandleiding voor Windows",
+    "macNotice": "Gatekeeper-mededeling: Als macOS een 'beschadigde' of niet-geverifieerde app rapporteert, ga dan naar Programma's -> Klik met de rechtermuisknop op Framezoo -> Selecteer Openen -> Toch openen.",
+    "downloading": "Downloaden starten..."
+  },
+  "feedback": {
+    "badge": "Feedback",
+    "button": "Feedback",
+    "modalTitle": "Stuur ons uw feedback",
+    "subtitle": "Laat ons weten welke problemen of moeilijkheden u heeft ondervonden met Framezoo.",
+    "titlePlaceholder": "bijv. Probleem met ondertitelsynchronisatie, vertraging tijdens afspelen...",
+    "titleLabel": "1. Titel van het nummer",
+    "errorRequired": "Vul zowel de titel als de probleembeschrijving in.",
+    "descPlaceholder": "Beschrijf het specifieke probleem of de stappen om het te reproduceren...",
+    "cancel": "Annuleren",
+    "submitting": "Verzenden...",
+    "descLabel": "2. Gedetailleerde beschrijving",
+    "close": "Dichtbij",
+    "successTitle": "Feedback succesvol verzonden!",
+    "errorSubmit": "Het is niet gelukt om feedback in te dienen. Probeer het later opnieuw.",
+    "successDesc": "Bedankt voor uw feedback. Ons team zal het probleem zo snel mogelijk beoordelen en oplossen.",
+    "submit": "Geef feedback"
   }
 }

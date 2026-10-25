@@ -705,6 +705,7 @@
       "accountMenu": "Ava konto menüü",
       "addons": "Lisad",
       "desktop": "Rakenduse seaded",
+      "feedback": "Tagasiside",
       "logout": "Logi välja",
       "register": "Sünkrooni pilvega",
       "settings": "Sätted"
@@ -1371,6 +1372,22 @@
     "watching": "Vaatamine",
     "withCount": "Koos {{count}} teisega",
     "you": "Sina"
+  },
+  "feedback": {
+    "modalTitle": "Saada tagasisidet",
+    "buttonLabel": "Tagasiside",
+    "subtitle": "Andke meile teada kõigist probleemidest või vigadest, millega oma kogemuse käigus kokku puutusite.",
+    "titleLabel": "1. Väljaande pealkiri",
+    "titlePlaceholder": "nt subtiitrite laadimise viga, katkendlik taasesitus...",
+    "descriptionLabel": "2. Probleemi kirjeldus",
+    "descriptionPlaceholder": "Kirjeldage probleemi üksikasjalikult, esitage samme selle taasesitamiseks või ettepanekuid...",
+    "submit": "Esita tagasisidet",
+    "cancel": "Tühista",
+    "close": "Sule",
+    "successTitle": "Tagasiside esitatud!",
+    "successDesc": "Täname tagasiside eest. Meie meeskond vaatab probleemi üle ja lahendab selle esimesel võimalusel.",
+    "errorRequired": "Palun sisestage nii pealkiri kui ka kirjeldus.",
+    "errorSubmit": "Tagasiside esitamisel ilmnes viga. Palun proovige hiljem uuesti."
   },
   "toasts": {
     "linkCopied": "Link on lõikelauale kopeeritud!",

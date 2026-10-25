@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import { useEffect, useRef, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -7,6 +8,7 @@ import { AddonPlatformBadges } from "@/components/addons/AddonPlatformBadges";
 import { AddonResourceBadges } from "@/components/addons/AddonResourceBadges";
 import { Icon, Icons } from "@/components/Icon";
 import { Spinner } from "@/components/layout/Spinner";
+import { OverlayPortal } from "@/components/overlays/OverlayDisplay";
 import { AddonLogo } from "@/desktop/addons/AddonLogo";
 import { loadAddonManifest } from "@/desktop/addons/client";
 import { installAddon } from "@/desktop/addons/store";
@@ -61,6 +63,17 @@ export function AddonManager({
     return () => clearTimeout(timeout);
   }, [url]);
 
+  useEffect(() => {
+    if (!open) {
+      const timer = setTimeout(() => {
+        setUrl("");
+        setError(null);
+        setPreview(null);
+      }, 200);
+      return () => clearTimeout(timer);
+    }
+  }, [open]);
+
   if (!isDesktop) return null;
 
   const add = async () => {
@@ -103,13 +116,19 @@ export function AddonManager({
         </button>
       )}
 
-      {open ? (
-        <div
-          className="pointer-events-auto fixed inset-0 z-[1000] flex items-center justify-center bg-black/70 px-4"
-          onClick={() => setOpen(false)}
-        >
+      <OverlayPortal
+        darken
+        close={() => setOpen(false)}
+        show={open}
+        durationClass="duration-200"
+        zIndex={1000}
+      >
+        <Helmet>
+          <html data-no-scroll />
+        </Helmet>
+        <div className="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
           <div
-            className="w-full max-w-lg rounded-2xl border border-dropdown-border bg-dropdown-altBackground p-6 shadow-2xl"
+            className="pointer-events-auto w-full max-w-lg rounded-2xl border border-dropdown-border bg-dropdown-altBackground/95 p-6 shadow-2xl backdrop-blur-xl"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="mb-4 flex items-start justify-between">
@@ -246,7 +265,7 @@ export function AddonManager({
             </div>
           </div>
         </div>
-      ) : null}
+      </OverlayPortal>
     </>
   );
 }

@@ -5,7 +5,8 @@
     "download": "Pobierać",
     "language": "Język",
     "addonGuide": "Przewodnik po dodatkach",
-    "home": "Dom"
+    "home": "Dom",
+    "installGuide": "Przewodnik instalacji"
   },
   "hero": {
     "eyebrow": "KOMPUTER FRAMEZOO / 01",
@@ -110,5 +111,83 @@
     "eyebrow": "ODKRYCIE FRAMEZOO",
     "dragHint": "Przeciągnij, aby eksplorować",
     "description": "Znajdź coś wartego obejrzenia, otwórz szczegóły i wybierz lepszy sposób oglądania dzięki Framezoo."
+  },
+  "installGuide": {
+    "backHome": "Powrót do domu",
+    "title": "Przewodnik po instalacji i uruchomieniu Framezoo",
+    "subtitle": "Jak ominąć powiadomienia dotyczące zabezpieczeń Gatekeeper (macOS) i SmartScreen (Windows) przy pierwszym uruchomieniu.",
+    "winTab": "Dla systemu Windows",
+    "downloadApp": "Pobierz Framezoo",
+    "macTab": "Dla systemu macOS",
+    "mac": {
+      "title": "Przewodnik instalacji systemu macOS",
+      "step1Desc": "Otwórz pobrany plik .dmg i przeciągnij ikonę Framezoo do folderu Aplikacje.",
+      "step3Title": "Krok 3: Otwórz bezpiecznie za pomocą Findera",
+      "step2Title": "Krok 2: Ostrzeżenie dotyczące bezpieczeństwa strażnika",
+      "subtitle": "Apple Silicon (M1/M2/M3/M4) i Intel Mac",
+      "step1Title": "Krok 1: Przeciągnij do aplikacji",
+      "step2Desc": "Ponieważ Framezoo jest niezależnym odtwarzaczem typu open source bez komercyjnego certyfikatu Apple Developer, macOS może wyświetlać komunikat: „Framezoo jest uszkodzony i nie można go otworzyć” lub „Apple nie może zweryfikować tej aplikacji”.",
+      "step3Steps": [
+        "Otwórz Finder i przejdź do folderu Aplikacje.",
+        "Kliknij prawym przyciskiem myszy (lub kliknij z klawiszem Control) na Framezoo.app.",
+        "Z menu kontekstowego wybierz opcję „Otwórz”.",
+        "W oknie dialogowym potwierdzenia kliknij „Otwórz mimo to” lub „Otwórz”."
+      ],
+      "note": "Wystarczy wykonać ten krok prawym przyciskiem myszy przy pierwszym uruchomieniu. Kolejne uruchomienia można wykonać normalnie z Launchpada lub Spotlight."
+    },
+    "win": {
+      "step1Title": "Krok 1: Uruchom instalator .exe",
+      "title": "Przewodnik instalacji systemu Windows",
+      "subtitle": "Windows 10/11 (x64 i ARM64)",
+      "step2Title": "Krok 2: Ostrzeżenie Windows Defender SmartScreen",
+      "step1Desc": "Uruchom pobrany instalator Framezoo-Setup-x64.exe, aby rozpocząć instalację.",
+      "step2Desc": "Jeśli program Windows Defender wyświetla niebieski ekran z informacją „System Windows chronił Twój komputer”:",
+      "step3Steps": [
+        "Kliknij link „Więcej informacji” znajdujący się pod opisem.",
+        "W prawym dolnym rogu pojawi się przycisk „Uruchom mimo to”.",
+        "Kliknij „Uruchom mimo to”, aby kontynuować instalację Framezoo."
+      ],
+      "step3Title": "Krok 3: Kontynuuj instalację",
+      "note": "To ostrzeżenie pojawia się, ponieważ nowa wersja nie zyskała jeszcze reputacji Microsoft EV Code Signing. Plik binarny jest w 100% bezpieczny."
+    },
+    "eyebrow": "Dokumentacja",
+    "macQuickSolution": "Szybkie rozwiązanie: Otwórz menu kontekstowe prawym przyciskiem myszy w Finderze",
+    "macDialogDesc": "Apple nie może sprawdzić go pod kątem złośliwego oprogramowania. Dzieje się tak, gdy aplikacja jest pobierana poza sklepem Mac App Store bez rocznego certyfikatu komercyjnego.",
+    "macTerminalTip": "💡 Metoda tworzenia kopii zapasowych za pośrednictwem terminala:",
+    "macTerminalDesc": "Jeśli nadal jesteś zablokowany, otwórz Terminal i uruchom:",
+    "macDialogTitle": "„Framezoo” jest uszkodzone i nie można go otworzyć.",
+    "winDialogTitle": "Windows chronił Twój komputer",
+    "winMoreInfo": "Więcej informacji",
+    "winClickHere": "(Kliknij tutaj)",
+    "winQuickSolution": "Kliknij Więcej informacji → Uruchom mimo to",
+    "winDialogDesc": "Funkcja Microsoft Defender SmartScreen uniemożliwiła uruchomienie nierozpoznanej aplikacji. Uruchomienie tej aplikacji może narazić Twój komputer na ryzyko."
+  },
+  "downloadConfirm": {
+    "macTitle": "Przewodnik instalacji dla systemu macOS",
+    "cancel": "Anulować",
+    "winTitle": "Instrukcja instalacji dla systemu Windows",
+    "viewGuide": "Zobacz pełną instrukcję instalacji",
+    "winNotice": "Uwaga dotycząca SmartScreen: Jeśli zobaczysz niebieski ekran „System Windows chronił Twój komputer”, kliknij „Więcej informacji” -> kliknij „Uruchom mimo to”.",
+    "macNotice": "Uwaga strażnika: Jeśli macOS zgłosi aplikację „uszkodzoną” lub niezweryfikowaną, przejdź do Aplikacje -> Kliknij prawym przyciskiem myszy Framezoo -> Wybierz Otwórz -> Otwórz mimo to.",
+    "confirmDownload": "Potwierdź i pobierz",
+    "downloading": "Rozpoczynam pobieranie..."
+  },
+  "feedback": {
+    "badge": "Informacja zwrotna",
+    "button": "Informacja zwrotna",
+    "subtitle": "Daj nam znać o wszelkich problemach i trudnościach, jakie napotkałeś w Framezoo.",
+    "modalTitle": "Prześlij nam swoją opinię",
+    "errorSubmit": "Nie udało się przesłać opinii. Spróbuj ponownie później.",
+    "titlePlaceholder": "np. Problem z synchronizacją napisów, opóźnienie podczas odtwarzania...",
+    "descLabel": "2. Szczegółowy opis",
+    "titleLabel": "1. Tytuł wydania",
+    "errorRequired": "Proszę podać tytuł i opis problemu.",
+    "descPlaceholder": "Opisz konkretny problem lub kroki umożliwiające jego odtworzenie...",
+    "cancel": "Anulować",
+    "submitting": "Przedkładający...",
+    "close": "Zamknąć",
+    "successDesc": "Dziękujemy za Twoją opinię. Nasz zespół sprawdzi i rozwiąże problem tak szybko, jak to możliwe.",
+    "successTitle": "Opinia została wysłana pomyślnie!",
+    "submit": "Prześlij opinię"
   }
 }

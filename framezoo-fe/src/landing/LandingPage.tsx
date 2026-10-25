@@ -166,6 +166,7 @@ export function LandingPage() {
           >
             {activeCopy.nav.download}
           </a>
+          <a href="/guide/install">{activeCopy.nav.installGuide}</a>
           <LandingLanguageSelector
             locale={locale}
             label={activeCopy.nav.language}
@@ -196,6 +197,7 @@ export function LandingPage() {
         <AddonGuideSection copy={activeCopy.addonGuide} />
         <DownloadSection
           copy={activeCopy.download}
+          fullCopy={activeCopy}
           onRetry={loadManifest}
           state={downloadState}
         />
@@ -209,6 +211,7 @@ export function LandingPage() {
             <a href="/ecosystem">{activeCopy.nav.addons}</a>
             <a href="/create-addon">{activeCopy.nav.addonGuide}</a>
             <a href="/download">{activeCopy.nav.download}</a>
+            <a href="/guide/install">{activeCopy.nav.installGuide}</a>
           </nav>
           <p>{activeCopy.footer.line}</p>
         </div>

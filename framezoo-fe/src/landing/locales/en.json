@@ -4,6 +4,7 @@
     "features": "Experience",
     "addons": "Ecosystem",
     "addonGuide": "Build an addon",
+    "installGuide": "Installation Guide",
     "download": "Download",
     "language": "Language"
   },
@@ -101,5 +102,83 @@
     "retry": "Try opening Desktop App again",
     "download": "Download Framezoo",
     "backHome": "Go back to homepage"
+  },
+  "installGuide": {
+    "eyebrow": "Documentation",
+    "title": "Framezoo Installation & Launch Guide",
+    "subtitle": "How to bypass Gatekeeper (macOS) and SmartScreen (Windows) security notices on first launch.",
+    "backHome": "Back to Home",
+    "downloadApp": "Download Framezoo",
+    "macTab": "For macOS",
+    "winTab": "For Windows",
+    "macQuickSolution": "Quick solution: Open via Finder right-click context menu",
+    "macTerminalTip": "💡 Backup method via Terminal:",
+    "macTerminalDesc": "If you are still blocked, open Terminal and run:",
+    "macDialogTitle": "\"Framezoo\" is damaged and can't be opened.",
+    "macDialogDesc": "Apple cannot check it for malicious software. This happens when an app is downloaded outside the Mac App Store without an annual commercial certificate.",
+    "winDialogTitle": "Windows protected your PC",
+    "winDialogDesc": "Microsoft Defender SmartScreen prevented an unrecognized app from starting. Running this app might put your PC at risk.",
+    "winMoreInfo": "More info",
+    "winClickHere": "(Click here)",
+    "winQuickSolution": "Click More info → Run anyway",
+    "mac": {
+      "title": "macOS Installation Guide",
+      "subtitle": "Apple Silicon (M1/M2/M3/M4) & Intel Mac",
+      "step1Title": "Step 1: Drag to Applications",
+      "step1Desc": "Open the downloaded .dmg file and drag the Framezoo icon into the Applications folder.",
+      "step2Title": "Step 2: Gatekeeper security warning",
+      "step2Desc": "Because Framezoo is an independent open-source player without a commercial Apple Developer certificate, macOS may show: \"Framezoo is damaged and can't be opened\" or \"Apple cannot verify this app\".",
+      "step3Title": "Step 3: Open safely via Finder",
+      "step3Steps": [
+        "Open Finder and navigate to your Applications folder.",
+        "Right-click (or Control-click) on Framezoo.app.",
+        "Select \"Open\" from the context menu.",
+        "In the confirmation dialog, click \"Open Anyway\" or \"Open\"."
+      ],
+      "note": "You only need to do this right-click step on first launch. Subsequent launches can be done normally from Launchpad or Spotlight."
+    },
+    "win": {
+      "title": "Windows Installation Guide",
+      "subtitle": "Windows 10 / 11 (x64 & ARM64)",
+      "step1Title": "Step 1: Run the .exe installer",
+      "step1Desc": "Launch the downloaded Framezoo-Setup-x64.exe installer to begin setup.",
+      "step2Title": "Step 2: Windows Defender SmartScreen warning",
+      "step2Desc": "If Windows Defender displays a blue screen stating \"Windows protected your PC\":",
+      "step3Title": "Step 3: Continue installation",
+      "step3Steps": [
+        "Click on the \"More info\" link below the description.",
+        "A \"Run anyway\" button will appear in the bottom right corner.",
+        "Click \"Run anyway\" to proceed with installing Framezoo."
+      ],
+      "note": "This warning appears because the new release has not yet accumulated Microsoft EV Code Signing reputation. The binary is 100% safe."
+    }
+  },
+  "downloadConfirm": {
+    "macTitle": "Installation Guide for macOS",
+    "winTitle": "Installation Guide for Windows",
+    "macNotice": "Gatekeeper Notice: If macOS reports 'damaged' or unverified app, go to Applications -> Right-click Framezoo -> Select Open -> Open Anyway.",
+    "winNotice": "SmartScreen Notice: If you see the blue 'Windows protected your PC' screen, click 'More info' -> click 'Run anyway'.",
+    "confirmDownload": "Confirm & Download",
+    "viewGuide": "View full installation guide",
+    "cancel": "Cancel",
+    "downloading": "Starting download..."
+  },
+  "feedback": {
+    "button": "Feedback",
+    "badge": "Feedback",
+    "modalTitle": "Send us your feedback",
+    "subtitle": "Let us know about any issues or difficulties you experienced with Framezoo.",
+    "titleLabel": "1. Issue title",
+    "titlePlaceholder": "e.g. Subtitle sync issue, lag during playback...",
+    "descLabel": "2. Detailed description",
+    "descPlaceholder": "Describe the specific issue or the steps to reproduce it...",
+    "errorRequired": "Please fill in both the title and issue description.",
+    "errorSubmit": "Failed to submit feedback. Please try again later.",
+    "successTitle": "Feedback sent successfully!",
+    "successDesc": "Thank you for your feedback. Our team will review and resolve the issue as soon as possible.",
+    "cancel": "Cancel",
+    "submit": "Submit feedback",
+    "submitting": "Submitting...",
+    "close": "Close"
   }
 }

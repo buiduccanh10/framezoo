@@ -5,7 +5,8 @@
     "download": "Descarregar",
     "language": "Llengua",
     "addonGuide": "Guia de complements",
-    "home": "Casa"
+    "home": "Casa",
+    "installGuide": "Guia d'instal·lació"
   },
   "hero": {
     "eyebrow": "ESCRIPTORI FRAMEZOO / 01",
@@ -110,5 +111,83 @@
     "movie": "Pel·lícula",
     "description": "Trobeu alguna cosa que valgui la pena veure, obriu els detalls i instal·leu-vos en una millor manera de veure-ho amb Framezoo.",
     "series": "Sèrie"
+  },
+  "installGuide": {
+    "backHome": "Tornar a casa",
+    "subtitle": "Com evitar els avisos de seguretat de Gatekeeper (macOS) i SmartScreen (Windows) al primer llançament.",
+    "macTab": "Per a macOS",
+    "title": "Guia d'instal·lació i llançament de Framezoo",
+    "downloadApp": "Descarrega Framezoo",
+    "mac": {
+      "title": "Guia d'instal·lació de macOS",
+      "subtitle": "Apple Silicon (M1/M2/M3/M4) i Intel Mac",
+      "step1Title": "Pas 1: arrossegueu a Aplicacions",
+      "step1Desc": "Obriu el fitxer .dmg descarregat i arrossegueu la icona de Framezoo a la carpeta Aplicacions.",
+      "step2Title": "Pas 2: advertència de seguretat del porter",
+      "step3Title": "Pas 3: obriu amb seguretat mitjançant el Finder",
+      "step2Desc": "Com que Framezoo és un reproductor independent de codi obert sense un certificat comercial de desenvolupador d'Apple, macOS pot mostrar: \"Framezoo està malmès i no es pot obrir\" o \"Apple no pot verificar aquesta aplicació\".",
+      "step3Steps": [
+        "Obriu el Finder i aneu a la vostra carpeta d'aplicacions.",
+        "Feu clic amb el botó dret (o premeu Control-clic) a Framezoo.app.",
+        "Seleccioneu \"Obre\" al menú contextual.",
+        "Al diàleg de confirmació, feu clic a \"Obre de totes maneres\" o \"Obre\"."
+      ],
+      "note": "Només heu de fer aquest pas amb el botó dret al primer llançament. Els llançaments posteriors es poden fer normalment des de Launchpad o Spotlight."
+    },
+    "winTab": "Per a Windows",
+    "win": {
+      "title": "Guia d'instal·lació de Windows",
+      "step1Title": "Pas 1: executeu l'instal·lador .exe",
+      "step2Title": "Pas 2: advertència de Windows Defender SmartScreen",
+      "step1Desc": "Inicieu l'instal·lador Framezoo-Setup-x64.exe descarregat per començar la configuració.",
+      "subtitle": "Windows 10/11 (x64 i ARM64)",
+      "step2Desc": "Si Windows Defender mostra una pantalla blava que indica \"Windows va protegir el vostre PC\":",
+      "step3Title": "Pas 3: continueu amb la instal·lació",
+      "step3Steps": [
+        "Feu clic a l'enllaç \"Més informació\" a sota de la descripció.",
+        "A l'extrem inferior dret apareixerà un botó \"Executar igualment\".",
+        "Feu clic a \"Executar igualment\" per continuar amb la instal·lació de Framezoo."
+      ],
+      "note": "Aquest avís apareix perquè la nova versió encara no ha acumulat la reputació de Microsoft EV Code Signing. El binari és 100% segur."
+    },
+    "macTerminalTip": "💡 Mètode de còpia de seguretat mitjançant el terminal:",
+    "macTerminalDesc": "Si encara esteu bloquejat, obriu Terminal i executeu:",
+    "macQuickSolution": "Solució ràpida: Obriu el menú contextual amb el botó dret del ratolí del Finder",
+    "macDialogTitle": "\"Framezoo\" està danyat i no es pot obrir.",
+    "eyebrow": "Documentació",
+    "macDialogDesc": "Apple no pot comprovar si hi ha programari maliciós. Això passa quan es baixa una aplicació fora de la Mac App Store sense un certificat comercial anual.",
+    "winDialogTitle": "Windows va protegir el vostre ordinador",
+    "winQuickSolution": "Feu clic a Més informació → Executar igualment",
+    "winMoreInfo": "Més informació",
+    "winDialogDesc": "Microsoft Defender SmartScreen va impedir que s'iniciés una aplicació no reconeguda. L'execució d'aquesta aplicació pot posar en perill el vostre PC.",
+    "winClickHere": "(Cliqueu aquí)"
+  },
+  "downloadConfirm": {
+    "macTitle": "Guia d'instal·lació per a macOS",
+    "winTitle": "Guia d'instal·lació per a Windows",
+    "confirmDownload": "Confirmeu i descarregueu",
+    "macNotice": "Avís del Gatekeeper: si macOS informa d'una aplicació \"danyada\" o no verificada, aneu a Aplicacions -> Feu clic amb el botó dret a Framezoo -> Seleccioneu Obre -> Obre de totes maneres.",
+    "viewGuide": "Veure guia d'instal·lació completa",
+    "winNotice": "Avís de SmartScreen: si veieu la pantalla blava \"Windows protegit el vostre PC\", feu clic a \"Més informació\" -> feu clic a \"Executar igualment\".",
+    "cancel": "Cancel·la",
+    "downloading": "S'està iniciant la descàrrega..."
+  },
+  "feedback": {
+    "button": "Feedback",
+    "badge": "Feedback",
+    "titleLabel": "1. Títol de l'emissió",
+    "modalTitle": "Envieu-nos els vostres comentaris",
+    "descLabel": "2. Descripció detallada",
+    "subtitle": "Feu-nos saber qualsevol problema o dificultat que hàgiu experimentat amb Framezoo.",
+    "titlePlaceholder": "p. ex. Problema de sincronització dels subtítols, retard durant la reproducció...",
+    "descPlaceholder": "Descriu el problema concret o els passos per reproduir-lo...",
+    "errorRequired": "Si us plau, ompliu tant el títol com la descripció del problema.",
+    "errorSubmit": "No s'han pogut enviar comentaris. Si us plau, torna-ho a provar més tard.",
+    "cancel": "Cancel·la",
+    "successDesc": "Gràcies pels teus comentaris. El nostre equip revisarà i resoldrà el problema tan aviat com sigui possible.",
+    "successTitle": "Comentaris enviats correctament!",
+    "submit": "Envieu comentaris",
+    "close": "Tancar",
+    "submitting": "S'està enviant..."
   }
 }

@@ -705,6 +705,7 @@
       "accountMenu": "Avaa tilivalikko",
       "addons": "Lisäykset",
       "desktop": "Sovellusasetukset",
+      "feedback": "Palaute",
       "logout": "Kirjaudu ulos",
       "register": "Synkronoi pilveen",
       "settings": "Asetukset"
@@ -1371,6 +1372,22 @@
     "watching": "Katsomassa",
     "withCount": "{{count}} muun kanssa",
     "you": "sinä"
+  },
+  "feedback": {
+    "modalTitle": "Lähetä palautetta",
+    "buttonLabel": "Palaute",
+    "subtitle": "Kerro meille kaikista ongelmista tai bugeista, joita kohtasit kokemuksesi aikana.",
+    "titleLabel": "1. Julkaisun otsikko",
+    "titlePlaceholder": "esim. tekstityksen latausvirhe, nykivä toisto...",
+    "descriptionLabel": "2. Ongelman kuvaus",
+    "descriptionPlaceholder": "Kuvaile ongelmaa yksityiskohtaisesti, anna vaiheet sen toistamiseksi tai ehdotuksia...",
+    "submit": "Lähetä palautetta",
+    "cancel": "Peruuttaa",
+    "close": "Lähellä",
+    "successTitle": "Palaute lähetetty!",
+    "successDesc": "Kiitos palautteestasi. Tiimimme tarkistaa ja korjaa ongelman mahdollisimman pian.",
+    "errorRequired": "Anna sekä otsikko että kuvaus.",
+    "errorSubmit": "Palautteen lähettämisessä tapahtui virhe. Yritä myöhemmin uudelleen."
   },
   "toasts": {
     "linkCopied": "Linkki kopioitu leikepöydälle!",
