@@ -149,7 +149,18 @@
         "Framezoo'yu yüklemeye devam etmek için \"Yine de çalıştır\"ı tıklayın."
       ],
       "note": "Bu uyarı, yeni sürümün henüz Microsoft EV Kod İmzalama itibarını biriktirmediği için görüntülenir. İkili dosya %100 güvenlidir."
-    }
+    },
+    "eyebrow": "Dokümantasyon",
+    "macTerminalTip": "💡 Terminal aracılığıyla yedekleme yöntemi:",
+    "macTerminalDesc": "Hâlâ engellenmişseniz Terminal'i açın ve şunu çalıştırın:",
+    "macDialogDesc": "Apple, kötü amaçlı yazılım olup olmadığını kontrol edemez. Bu durum, bir uygulamanın yıllık ticari sertifika olmadan Mac App Store dışından indirilmesi durumunda meydana gelir.",
+    "macQuickSolution": "Hızlı çözüm: Finder'ın sağ tıklama bağlam menüsüyle açın",
+    "winClickHere": "(Buraya tıklayın)",
+    "winDialogTitle": "Windows bilgisayarınızı korudu",
+    "macDialogTitle": "\"Framezoo\" hasarlı ve açılamıyor.",
+    "winQuickSolution": "Daha fazla bilgi → Yine de çalıştır'a tıklayın",
+    "winDialogDesc": "Microsoft Defender SmartScreen, tanınmayan bir uygulamanın başlatılmasını engelledi. Bu uygulamayı çalıştırmak bilgisayarınızı riske atabilir.",
+    "winMoreInfo": "Daha fazla bilgi"
   },
   "downloadConfirm": {
     "macTitle": "MacOS Kurulum Kılavuzu",
@@ -160,5 +171,23 @@
     "viewGuide": "Tam kurulum kılavuzunu görüntüleyin",
     "downloading": "İndirme başlatılıyor...",
     "confirmDownload": "Onayla ve İndir"
+  },
+  "feedback": {
+    "button": "Geri bildirim",
+    "badge": "Geri bildirim",
+    "subtitle": "Framezoo ile yaşadığınız sorunları veya zorlukları bize bildirin.",
+    "titleLabel": "1. Sayı başlığı",
+    "descLabel": "2. Ayrıntılı açıklama",
+    "modalTitle": "Bize geri bildiriminizi gönderin",
+    "errorSubmit": "Geri bildirim gönderilemedi. Lütfen daha sonra tekrar deneyin.",
+    "titlePlaceholder": "örneğin Altyazı senkronizasyonu sorunu, oynatma sırasında gecikme...",
+    "errorRequired": "Lütfen hem başlığı hem de konu açıklamasını girin.",
+    "descPlaceholder": "Belirli bir sorunu veya sorunu yeniden oluşturma adımlarını açıklayın...",
+    "submitting": "Gönderiliyor...",
+    "cancel": "İptal etmek",
+    "close": "Kapalı",
+    "submit": "Geri bildirim gönder",
+    "successTitle": "Geri bildirim başarıyla gönderildi!",
+    "successDesc": "Geri bildiriminiz için teşekkür ederiz. Ekibimiz sorunu en kısa sürede inceleyip çözecektir."
   }
 }

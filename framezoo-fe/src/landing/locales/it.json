@@ -149,7 +149,18 @@
       "step3Title": "Passaggio 3: continuare l'installazione",
       "step2Title": "Passaggio 2: avviso di Windows Defender SmartScreen",
       "note": "Questo avviso viene visualizzato perché la nuova versione non ha ancora accumulato reputazione Microsoft EV Code Signing. Il binario è sicuro al 100%."
-    }
+    },
+    "eyebrow": "Documentazione",
+    "macQuickSolution": "Soluzione rapida: aprire tramite il menu contestuale del tasto destro del mouse del Finder",
+    "macDialogDesc": "Apple non può verificare la presenza di software dannoso. Ciò accade quando un'app viene scaricata al di fuori del Mac App Store senza un certificato commerciale annuale.",
+    "winMoreInfo": "Maggiori informazioni",
+    "winClickHere": "(Clicca qui)",
+    "macDialogTitle": "\"Framezoo\" è danneggiato e non può essere aperto.",
+    "winDialogTitle": "Windows ha protetto il tuo PC",
+    "macTerminalDesc": "Se sei ancora bloccato, apri Terminale ed esegui:",
+    "macTerminalTip": "💡 Metodo di backup tramite terminale:",
+    "winDialogDesc": "Microsoft Defender SmartScreen prevented an unrecognized app from starting. L'esecuzione di questa app potrebbe mettere a rischio il tuo PC.",
+    "winQuickSolution": "Fare clic su Maggiori informazioni → Esegui comunque"
   },
   "downloadConfirm": {
     "macTitle": "Guida all'installazione per macOS",
@@ -160,5 +171,23 @@
     "downloading": "Avvio download...",
     "confirmDownload": "Conferma e scarica",
     "viewGuide": "Visualizza la guida completa all'installazione"
+  },
+  "feedback": {
+    "button": "Feedback",
+    "badge": "Feedback",
+    "modalTitle": "Inviaci il tuo feedback",
+    "titleLabel": "1. Titolo del problema",
+    "titlePlaceholder": "per esempio. Problema di sincronizzazione dei sottotitoli, ritardo durante la riproduzione...",
+    "errorRequired": "Compila sia il titolo che la descrizione del problema.",
+    "descPlaceholder": "Descrivi il problema specifico o i passaggi per riprodurlo...",
+    "descLabel": "2. Descrizione dettagliata",
+    "cancel": "Cancellare",
+    "submitting": "Invio...",
+    "close": "Vicino",
+    "successTitle": "Feedback inviato con successo!",
+    "errorSubmit": "Impossibile inviare il feedback. Per favore riprova più tardi.",
+    "subtitle": "Fateci sapere eventuali problemi o difficoltà riscontrati con Framezoo.",
+    "successDesc": "Grazie per il tuo feedback Il nostro team esaminerà e risolverà il problema il prima possibile.",
+    "submit": "Invia feedback"
   }
 }

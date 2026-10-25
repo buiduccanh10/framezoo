@@ -705,6 +705,7 @@
       "accountMenu": "Kontomenü öffnen",
       "addons": "Add-ons",
       "desktop": "App-Einstellungen",
+      "feedback": "Rückmeldung",
       "logout": "Abmelden",
       "register": "Mit der Cloud synchronisieren",
       "settings": "Einstellungen"
@@ -1371,6 +1372,22 @@
     "watching": "Aufpassen",
     "withCount": "Mit {{count}} anderen",
     "you": "Du"
+  },
+  "feedback": {
+    "modalTitle": "Feedback senden",
+    "buttonLabel": "Rückmeldung",
+    "subtitle": "Bitte teilen Sie uns alle Probleme oder Fehler mit, die Ihnen während Ihrer Nutzung aufgefallen sind.",
+    "titleLabel": "1. Titel der Ausgabe",
+    "titlePlaceholder": "z. B. Fehler beim Laden der Untertitel, ruckelnde Wiedergabe...",
+    "descriptionLabel": "2. Problembeschreibung",
+    "descriptionPlaceholder": "Beschreiben Sie das Problem detailliert, die Schritte zur Reproduktion oder geben Sie Lösungsvorschläge an...",
+    "submit": "Feedback senden",
+    "cancel": "Stornieren",
+    "close": "Schließen",
+    "successTitle": "Feedback übermittelt!",
+    "successDesc": "Vielen Dank für Ihr Feedback. Unser Team wird das Problem schnellstmöglich prüfen und beheben.",
+    "errorRequired": "Bitte geben Sie sowohl einen Titel als auch eine Beschreibung ein.",
+    "errorSubmit": "Beim Absenden des Feedbacks ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut."
   },
   "toasts": {
     "linkCopied": "Link in die Zwischenablage kopiert!",

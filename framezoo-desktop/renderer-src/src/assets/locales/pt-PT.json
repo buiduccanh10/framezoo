@@ -705,6 +705,7 @@
       "accountMenu": "Abra o menu da conta",
       "addons": "Complementos",
       "desktop": "Configurações do aplicativo",
+      "feedback": "Opinião",
       "logout": "Sair",
       "register": "Sincronizar com a nuvem",
       "settings": "Configurações"
@@ -1371,6 +1372,22 @@
     "watching": "Assistindo",
     "withCount": "Com {{count}} outras pessoas",
     "you": "Você"
+  },
+  "feedback": {
+    "modalTitle": "Enviar feedback",
+    "buttonLabel": "Opinião",
+    "subtitle": "Informe-nos sobre qualquer problema ou erro que você encontrar durante sua experiência.",
+    "titleLabel": "1. Título da Edição",
+    "titlePlaceholder": "Por exemplo, erro ao carregar legendas, reprodução intermitente...",
+    "descriptionLabel": "2. Descrição do Problema",
+    "descriptionPlaceholder": "Descreva o problema em detalhes, os passos para reproduzi-lo ou sugestões...",
+    "submit": "Enviar feedback",
+    "cancel": "Cancelar",
+    "close": "Fechar",
+    "successTitle": "Feedback enviado!",
+    "successDesc": "Agradecemos seu feedback. Nossa equipe analisará e resolverá o problema o mais breve possível.",
+    "errorRequired": "Por favor, insira o título e a descrição.",
+    "errorSubmit": "Ocorreu um erro ao enviar o feedback. Tente novamente mais tarde."
   },
   "toasts": {
     "linkCopied": "Link copiado para a área de transferência!",

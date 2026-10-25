@@ -149,7 +149,18 @@
       "step2Desc": "Wenn Windows Defender einen Bluescreen mit der Meldung „Windows hat Ihren PC geschützt“ anzeigt:",
       "step3Title": "Schritt 3: Installation fortsetzen",
       "note": "Diese Warnung wird angezeigt, weil die neue Version noch nicht die Reputation von Microsoft EV Code Signing erlangt hat. Die Binärdatei ist 100 % sicher."
-    }
+    },
+    "eyebrow": "Dokumentation",
+    "macTerminalTip": "💡 Sicherungsmethode über Terminal:",
+    "macDialogTitle": "„Framezoo“ ist beschädigt und kann nicht geöffnet werden.",
+    "macDialogDesc": "Apple kann es nicht auf Schadsoftware prüfen. Dies geschieht, wenn eine App ohne jährliches kommerzielles Zertifikat außerhalb des Mac App Store heruntergeladen wird.",
+    "macQuickSolution": "Schnelle Lösung: Öffnen Sie das Kontextmenü mit der rechten Maustaste im Finder",
+    "winMoreInfo": "Weitere Informationen",
+    "winClickHere": "(Klicken Sie hier)",
+    "winDialogTitle": "Windows hat Ihren PC geschützt",
+    "macTerminalDesc": "Wenn Sie immer noch blockiert sind, öffnen Sie Terminal und führen Sie Folgendes aus:",
+    "winQuickSolution": "Klicken Sie auf Weitere Informationen → Trotzdem ausführen",
+    "winDialogDesc": "Microsoft Defender SmartScreen verhinderte den Start einer unbekannten App. Das Ausführen dieser App könnte Ihren PC gefährden."
   },
   "downloadConfirm": {
     "macTitle": "Installationsanleitung für macOS",
@@ -160,5 +171,23 @@
     "winNotice": "SmartScreen-Hinweis: Wenn Sie den blauen Bildschirm „Windows hat Ihren PC geschützt“ sehen, klicken Sie auf „Weitere Informationen“ -> klicken Sie auf „Trotzdem ausführen“.",
     "viewGuide": "Vollständige Installationsanleitung anzeigen",
     "downloading": "Download wird gestartet..."
+  },
+  "feedback": {
+    "button": "Rückmeldung",
+    "badge": "Rückmeldung",
+    "titleLabel": "1. Titel der Ausgabe",
+    "modalTitle": "Senden Sie uns Ihr Feedback",
+    "subtitle": "Teilen Sie uns alle Probleme oder Schwierigkeiten mit, die Sie mit Framezoo hatten.",
+    "titlePlaceholder": "z.B. Problem mit der Untertitelsynchronisierung, Verzögerung während der Wiedergabe ...",
+    "descPlaceholder": "Beschreiben Sie das spezifische Problem oder die Schritte, um es zu reproduzieren ...",
+    "cancel": "Stornieren",
+    "submit": "Feedback abgeben",
+    "descLabel": "2. Detaillierte Beschreibung",
+    "submitting": "Einreichen...",
+    "close": "Schließen",
+    "errorSubmit": "Feedback konnte nicht übermittelt werden. Bitte versuchen Sie es später noch einmal.",
+    "successTitle": "Feedback erfolgreich gesendet!",
+    "errorRequired": "Bitte geben Sie sowohl den Titel als auch die Problembeschreibung ein.",
+    "successDesc": "Vielen Dank für Ihr Feedback. Unser Team wird das Problem so schnell wie möglich prüfen und lösen."
   }
 }

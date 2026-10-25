@@ -705,6 +705,7 @@
       "accountMenu": "Nyissa meg a fiók menüt",
       "addons": "Kiegészítők",
       "desktop": "Alkalmazásbeállítások",
+      "feedback": "Visszacsatolás",
       "logout": "Kijelentkezés",
       "register": "Szinkronizálás a felhővel",
       "settings": "Beállítások"
@@ -1371,6 +1372,22 @@
     "watching": "Nézed",
     "withCount": "{{count}} másik emberrel",
     "you": "Te"
+  },
+  "feedback": {
+    "modalTitle": "Visszajelzés küldése",
+    "buttonLabel": "Visszacsatolás",
+    "subtitle": "Tudasd velünk a tapasztalatod során felmerült problémákat vagy hibákat.",
+    "titleLabel": "1. Kiadás címe",
+    "titlePlaceholder": "pl. felirat betöltési hiba, akadozó lejátszás...",
+    "descriptionLabel": "2. A probléma leírása",
+    "descriptionPlaceholder": "Írd le részletesen a problémát, adj lépéseket a reprodukálására, vagy javaslatokat...",
+    "submit": "Visszajelzés küldése",
+    "cancel": "Mégsem",
+    "close": "Közeli",
+    "successTitle": "Visszajelzés elküldve!",
+    "successDesc": "Köszönjük visszajelzését. Csapatunk a lehető leghamarabb megvizsgálja és megoldja a problémát.",
+    "errorRequired": "Kérjük, adja meg a címet és a leírást is.",
+    "errorSubmit": "Hiba történt a visszajelzés elküldése során. Kérjük, próbálja meg később."
   },
   "toasts": {
     "linkCopied": "Link a vágólapra másolva!",

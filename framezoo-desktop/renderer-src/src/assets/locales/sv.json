@@ -705,6 +705,7 @@
       "accountMenu": "Öppna kontomenyn",
       "addons": "Tillägg",
       "desktop": "Appinställningar",
+      "feedback": "Feed-back",
       "logout": "Logga ut",
       "register": "Synkronisera till molnet",
       "settings": "Inställningar"
@@ -1371,6 +1372,22 @@
     "watching": "Tittar på",
     "withCount": "Med {{count}} andra",
     "you": "Du"
+  },
+  "feedback": {
+    "modalTitle": "Skicka feedback",
+    "buttonLabel": "Feed-back",
+    "subtitle": "Berätta för oss om eventuella problem eller buggar du stötte på under din upplevelse.",
+    "titleLabel": "1. Utgåvatitel",
+    "titlePlaceholder": "t.ex. fel på textning, hackig uppspelning...",
+    "descriptionLabel": "2. Problembeskrivning",
+    "descriptionPlaceholder": "Beskriv problemet i detalj, steg för att reproducera det, eller förslag...",
+    "submit": "Skicka feedback",
+    "cancel": "Avboka",
+    "close": "Nära",
+    "successTitle": "Feedback skickad!",
+    "successDesc": "Tack för din feedback. Vårt team kommer att granska och åtgärda problemet så snart som möjligt.",
+    "errorRequired": "Vänligen ange både titel och beskrivning.",
+    "errorSubmit": "Ett fel uppstod när feedbacken skickades. Försök igen senare."
   },
   "toasts": {
     "linkCopied": "Länken har kopierats till urklipp!",

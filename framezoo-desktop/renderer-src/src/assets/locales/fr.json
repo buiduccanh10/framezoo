@@ -705,6 +705,7 @@
       "accountMenu": "Menu Ouvrir un compte",
       "addons": "Modules complémentaires",
       "desktop": "Paramètres de l'application",
+      "feedback": "Retour",
       "logout": "Se déconnecter",
       "register": "Synchroniser au Cloud",
       "settings": "Paramètres"
@@ -1371,6 +1372,22 @@
     "watching": "Regarde",
     "withCount": "Avec {{count}} autres",
     "you": "Toi"
+  },
+  "feedback": {
+    "modalTitle": "Envoyer des commentaires",
+    "buttonLabel": "Retour",
+    "subtitle": "N&#39;hésitez pas à nous signaler tout problème ou bug rencontré lors de votre expérience.",
+    "titleLabel": "1. Titre du problème",
+    "titlePlaceholder": "Par exemple : erreur de chargement des sous-titres, lecture saccadée…",
+    "descriptionLabel": "2. Description du problème",
+    "descriptionPlaceholder": "Décrivez le problème en détail, les étapes pour le reproduire ou faites des suggestions...",
+    "submit": "Envoyer des commentaires",
+    "cancel": "Annuler",
+    "close": "Fermer",
+    "successTitle": "Commentaires envoyés !",
+    "successDesc": "Merci pour votre commentaire. Notre équipe examinera et résoudra le problème dans les plus brefs délais.",
+    "errorRequired": "Veuillez saisir le titre et la description.",
+    "errorSubmit": "Une erreur s&#39;est produite lors de l&#39;envoi de vos commentaires. Veuillez réessayer plus tard."
   },
   "toasts": {
     "linkCopied": "Lien copié dans le presse-papier !",

@@ -705,6 +705,7 @@
       "accountMenu": "Odprite meni računa",
       "addons": "Dodatki",
       "desktop": "Nastavitve aplikacije",
+      "feedback": "Povratne informacije",
       "logout": "Odjava",
       "register": "Sinhronizacija z oblakom",
       "settings": "Nastavitve"
@@ -1371,6 +1372,22 @@
     "watching": "Gledanje",
     "withCount": "Z {{count}} drugimi",
     "you": "Ti"
+  },
+  "feedback": {
+    "modalTitle": "Pošlji povratne informacije",
+    "buttonLabel": "Povratne informacije",
+    "subtitle": "Sporočite nam vse težave ali napake, na katere ste naleteli med svojo izkušnjo.",
+    "titleLabel": "1. Naslov izdaje",
+    "titlePlaceholder": "npr. napaka pri nalaganju podnapisov, zatikanje pri predvajanju ...",
+    "descriptionLabel": "2. Opis težave",
+    "descriptionPlaceholder": "Podrobno opišite težavo, korake za reprodukcijo ali predloge ...",
+    "submit": "Pošlji povratne informacije",
+    "cancel": "Prekliči",
+    "close": "Zapri",
+    "successTitle": "Povratne informacije so bile poslane!",
+    "successDesc": "Hvala za vaše povratne informacije. Naša ekipa bo težavo pregledala in odpravila v najkrajšem možnem času.",
+    "errorRequired": "Vnesite naslov in opis.",
+    "errorSubmit": "Pri pošiljanju povratnih informacij je prišlo do napake. Poskusite znova pozneje."
   },
   "toasts": {
     "linkCopied": "Povezava je kopirana v odložišče!",

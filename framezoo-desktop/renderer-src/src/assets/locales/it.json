@@ -705,6 +705,7 @@
       "accountMenu": "Apri il menu dell'account",
       "addons": "Componenti aggiuntivi",
       "desktop": "Impostazioni dell'app",
+      "feedback": "Feedback",
       "logout": "Esci",
       "register": "Sincronizza al Cloud",
       "settings": "Impostazioni"
@@ -1371,6 +1372,22 @@
     "watching": "Guardando",
     "withCount": "Con altri {{count}}",
     "you": "Voi"
+  },
+  "feedback": {
+    "modalTitle": "Invia feedback",
+    "buttonLabel": "Feedback",
+    "subtitle": "Segnalaci eventuali problemi o bug riscontrati durante la tua esperienza.",
+    "titleLabel": "1. Titolo del numero",
+    "titlePlaceholder": "Ad esempio, errore di caricamento dei sottotitoli, riproduzione a scatti...",
+    "descriptionLabel": "2. Descrizione del problema",
+    "descriptionPlaceholder": "Descrivi il problema in dettaglio, i passaggi per riprodurlo o eventuali suggerimenti...",
+    "submit": "Invia feedback",
+    "cancel": "Cancellare",
+    "close": "Vicino",
+    "successTitle": "Feedback inviato!",
+    "successDesc": "Grazie per il tuo feedback. Il nostro team esaminerà il problema e lo risolverà il prima possibile.",
+    "errorRequired": "Inserisci sia il titolo che la descrizione.",
+    "errorSubmit": "Si è verificato un errore durante l&#39;invio del feedback. Riprova più tardi."
   },
   "toasts": {
     "linkCopied": "Link copiato negli appunti!",

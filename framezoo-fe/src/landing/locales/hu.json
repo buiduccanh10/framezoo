@@ -149,7 +149,18 @@
         "Kattintson a \"Futtatás mindenképpen\" gombra a Framezoo telepítésének folytatásához."
       ],
       "note": "Ez a figyelmeztetés azért jelenik meg, mert az új kiadás még nem szerzett Microsoft EV Code Signing hírnevet. A bináris 100%-ban biztonságos."
-    }
+    },
+    "eyebrow": "Dokumentáció",
+    "winDialogTitle": "A Windows megvédte számítógépét",
+    "macDialogTitle": "A \"Framezoo\" sérült, és nem nyitható meg.",
+    "macTerminalDesc": "Ha továbbra is blokkolva van, nyissa meg a Terminált, és futtassa:",
+    "macQuickSolution": "Gyors megoldás: Nyissa meg a Finder jobb gombbal történő helyi menüjében",
+    "macTerminalTip": "💡 Biztonsági mentés módja a terminálon keresztül:",
+    "macDialogDesc": "Az Apple nem tudja ellenőrizni, hogy nincsenek-e benne rosszindulatú szoftverek. Ez akkor fordul elő, ha egy alkalmazást a Mac App Store-on kívül töltenek le éves kereskedelmi tanúsítvány nélkül.",
+    "winMoreInfo": "További információ",
+    "winClickHere": "(Kattintson ide)",
+    "winQuickSolution": "Kattintson a További információ → Futtatás mindenképpen elemre",
+    "winDialogDesc": "A Microsoft Defender SmartScreen megakadályozta, hogy egy ismeretlen alkalmazás elinduljon. Az alkalmazás futtatása veszélybe sodorhatja számítógépét."
   },
   "downloadConfirm": {
     "macTitle": "Telepítési útmutató macOS-hez",
@@ -160,5 +171,23 @@
     "downloading": "Letöltés indítása...",
     "viewGuide": "Tekintse meg a teljes telepítési útmutatót",
     "confirmDownload": "Megerősítés és letöltés"
+  },
+  "feedback": {
+    "badge": "Visszacsatolás",
+    "button": "Visszacsatolás",
+    "modalTitle": "Küldje el nekünk visszajelzését",
+    "subtitle": "Értesítsen minket a Framezoo-val kapcsolatban tapasztalt problémákról vagy nehézségekről.",
+    "errorRequired": "Kérjük, töltse ki a címet és a probléma leírását is.",
+    "descPlaceholder": "Ismertesse a konkrét problémát vagy a reprodukálás lépéseit...",
+    "titlePlaceholder": "például Felirat szinkronizálási probléma, késés lejátszás közben...",
+    "errorSubmit": "Nem sikerült visszajelzést küldeni. Kérjük, próbálja újra később.",
+    "descLabel": "2. Részletes leírás",
+    "titleLabel": "1. Kiadás címe",
+    "submit": "Visszajelzés küldése",
+    "cancel": "Mégse",
+    "close": "Közeli",
+    "successTitle": "A visszajelzés sikeresen elküldve!",
+    "successDesc": "Köszönjük visszajelzését. Csapatunk a lehető leghamarabb megvizsgálja és megoldja a problémát.",
+    "submitting": "Beküldés..."
   }
 }

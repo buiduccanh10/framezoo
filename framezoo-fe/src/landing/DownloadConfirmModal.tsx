@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { createPortal } from "react-dom";
 
 import type { AppDownloadOption } from "@/backend/download";
 
@@ -22,13 +23,20 @@ export function DownloadConfirmModal({
 }: DownloadConfirmModalProps) {
   useEffect(() => {
     if (!isOpen) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         onClose();
       }
     };
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
   }, [isOpen, onClose]);
 
   if (!isOpen || !option) return null;
@@ -39,7 +47,7 @@ export function DownloadConfirmModal({
     : copy.downloadConfirm.winTitle;
   const guideHref = isMac ? "/guide/install#mac" : "/guide/install#windows";
 
-  return (
+  return createPortal(
     <div
       className="landing-modal-overlay"
       role="dialog"
@@ -151,6 +159,7 @@ export function DownloadConfirmModal({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

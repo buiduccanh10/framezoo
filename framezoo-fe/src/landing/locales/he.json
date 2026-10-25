@@ -149,7 +149,18 @@
       "step1Title": "שלב 1: הפעל את תוכנית ההתקנה של .exe",
       "step2Title": "שלב 2: אזהרת Windows Defender SmartScreen",
       "note": "אזהרה זו מופיעה מכיוון שהמהדורה החדשה עדיין לא צברה מוניטין של Microsoft EV Code Signing. הבינארי בטוח ב-100%."
-    }
+    },
+    "eyebrow": "תיעוד",
+    "macQuickSolution": "פתרון מהיר: פתח דרך Finder תפריט ההקשר בלחיצה ימנית",
+    "winDialogTitle": "Windows הגן על המחשב שלך",
+    "macDialogTitle": "\"Framezoo\" פגום ולא ניתן לפתוח אותו.",
+    "macTerminalTip": "💡 שיטת גיבוי דרך מסוף:",
+    "macTerminalDesc": "אם אתה עדיין חסום, פתח את המסוף והפעל:",
+    "winMoreInfo": "מידע נוסף",
+    "winQuickSolution": "לחץ על מידע נוסף ← הפעל בכל זאת",
+    "macDialogDesc": "אפל לא יכולה לבדוק אם יש תוכנות זדוניות. זה קורה כאשר מורידים אפליקציה מחוץ ל-Mac App Store ללא אישור מסחרי שנתי.",
+    "winDialogDesc": "Microsoft Defender SmartScreen מנע מאפליקציה לא מזוהה להתחיל. הפעלת אפליקציה זו עלולה לסכן את המחשב האישי שלך.",
+    "winClickHere": "(לחץ כאן)"
   },
   "downloadConfirm": {
     "macTitle": "מדריך התקנה עבור macOS",
@@ -160,5 +171,23 @@
     "winNotice": "הודעת SmartScreen: אם אתה רואה את המסך הכחול 'Windows הגן על המחשב שלך', לחץ על 'מידע נוסף' -> לחץ על 'הפעל בכל זאת'.",
     "viewGuide": "צפו במדריך ההתקנה המלא",
     "confirmDownload": "אשר והורד"
+  },
+  "feedback": {
+    "button": "מָשׁוֹב",
+    "badge": "מָשׁוֹב",
+    "titlePlaceholder": "לְמָשָׁל בעיה בסנכרון כתוביות, פיגור במהלך השמעה...",
+    "subtitle": "ספר לנו על בעיות או קשיים שחווית עם Framezoo.",
+    "descPlaceholder": "תאר את הבעיה הספציפית או את השלבים לשחזר אותה...",
+    "errorRequired": "נא למלא גם את הכותרת וגם את תיאור הבעיה.",
+    "modalTitle": "שלח לנו את המשוב שלך",
+    "descLabel": "2. תיאור מפורט",
+    "titleLabel": "1. כותרת גיליון",
+    "cancel": "לְבַטֵל",
+    "submitting": "הַגָשָׁה...",
+    "submit": "שלח משוב",
+    "close": "לִסְגוֹר",
+    "successTitle": "המשוב נשלח בהצלחה!",
+    "successDesc": "תודה על המשוב שלך. הצוות שלנו יבדוק ויפתור את הבעיה בהקדם האפשרי.",
+    "errorSubmit": "שליחת המשוב נכשלה. אנא נסה שוב מאוחר יותר."
   }
 }

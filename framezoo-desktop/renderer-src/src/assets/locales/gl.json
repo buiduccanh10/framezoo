@@ -705,6 +705,7 @@
       "accountMenu": "Abrir o menú da conta",
       "addons": "Complementos",
       "desktop": "Configuración da aplicación",
+      "feedback": "Comentarios",
       "logout": "Cerrar sesión",
       "register": "Sincronizar coa nube",
       "settings": "Configuración"
@@ -1371,6 +1372,22 @@
     "watching": "Mirando",
     "withCount": "Con {{count}} outras persoas",
     "you": "Ti"
+  },
+  "feedback": {
+    "modalTitle": "Enviar comentarios",
+    "buttonLabel": "Comentarios",
+    "subtitle": "Infórmanos de calquera problema ou erro que atopaches durante a túa experiencia.",
+    "titleLabel": "1. Título do problema",
+    "titlePlaceholder": "por exemplo, erro de carga de subtítulos, reprodución con atraso...",
+    "descriptionLabel": "2. Descrición do problema",
+    "descriptionPlaceholder": "Describe o problema en detalle, os pasos para reproducilo ou as suxestións...",
+    "submit": "Enviar comentarios",
+    "cancel": "Cancelar",
+    "close": "Pechar",
+    "successTitle": "Comentarios enviados!",
+    "successDesc": "Grazas polos teus comentarios. O noso equipo revisará e solucionará o problema canto antes.",
+    "errorRequired": "Introduza tanto o título como a descrición.",
+    "errorSubmit": "Produciuse un erro ao enviar os comentarios. Téntao de novo máis tarde."
   },
   "toasts": {
     "linkCopied": "A ligazón copiouse no portapapeis!",

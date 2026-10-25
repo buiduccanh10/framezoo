@@ -705,6 +705,7 @@
       "accountMenu": "开设账户菜单",
       "addons": "插件",
       "desktop": "应用程序设置",
+      "feedback": "反馈",
       "logout": "登出",
       "register": "同步到云端",
       "settings": "设置"
@@ -1371,6 +1372,22 @@
     "watching": "观看",
     "withCount": "与其他 {{count}} 人",
     "you": "你"
+  },
+  "feedback": {
+    "modalTitle": "发送反馈",
+    "buttonLabel": "反馈",
+    "subtitle": "如果您在使用过程中遇到任何问题或漏洞，请告知我们。",
+    "titleLabel": "1. 问题标题",
+    "titlePlaceholder": "例如：字幕加载错误、播放卡顿……",
+    "descriptionLabel": "2. 问题描述",
+    "descriptionPlaceholder": "请详细描述问题、重现步骤或提出建议……",
+    "submit": "提交反馈",
+    "cancel": "取消",
+    "close": "关闭",
+    "successTitle": "反馈已提交！",
+    "successDesc": "感谢您的反馈。我们的团队将尽快审核并解决问题。",
+    "errorRequired": "请同时输入标题和描述。",
+    "errorSubmit": "提交反馈时出错，请稍后再试。"
   },
   "toasts": {
     "linkCopied": "链接已复制到剪贴板！",

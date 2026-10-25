@@ -33,6 +33,7 @@ export function OverlayDisplay(props: { children: ReactNode }) {
 export function OverlayPortal(props: {
   children?: ReactNode;
   darken?: boolean;
+  darkenClass?: string;
   show?: boolean;
   close?: () => void;
   durationClass?: string;
@@ -84,6 +85,17 @@ export function OverlayPortal(props: {
       );
     };
   }, [resolvePortalElement]);
+
+  useEffect(() => {
+    if (!props.show || !props.close) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        props.close?.();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [props.show, props.close]);
 
   // Add global error handler for unhandled promise rejections
   useEffect(() => {
@@ -141,10 +153,10 @@ export function OverlayPortal(props: {
                   <Transition animation="fade" isChild>
                     <div
                       onClick={close}
-                      className={classNames({
-                        "absolute inset-0": true,
-                        "bg-black opacity-90": props.darken,
-                      })}
+                      className={classNames(
+                        "absolute inset-0",
+                        props.darken && (props.darkenClass ?? "bg-black/70"),
+                      )}
                     />
                   </Transition>
                   <Transition

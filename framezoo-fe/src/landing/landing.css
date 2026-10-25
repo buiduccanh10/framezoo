@@ -1740,6 +1740,39 @@
   transform: translateY(0) scale(0.96);
 }
 
+.landing-float-feedback {
+  position: fixed;
+  left: clamp(16px, 2vw, 28px);
+  bottom: calc(20px + env(safe-area-inset-bottom));
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  color: var(--color-ink);
+  background: rgba(30, 26, 28, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.landing-float-feedback:hover {
+  background: rgba(45, 38, 42, 0.95);
+  border-color: rgba(228, 79, 79, 0.4);
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 16px rgba(228, 79, 79, 0.2);
+}
+
+.landing-float-feedback:active {
+  transform: translateY(0) scale(0.97);
+}
+
 .landing-footer {
   display: flex;
   align-items: end;
@@ -2252,7 +2285,9 @@ body {
 }
 
 .landing-nav {
+  position: sticky;
   top: var(--space-sm);
+  z-index: 100;
   width: max-content;
   max-width: calc(100% - var(--space-lg));
   min-height: 3.75rem;
@@ -3392,7 +3427,7 @@ body {
 .landing-modal-overlay {
   position: fixed;
   inset: 0;
-  z-index: 1000;
+  z-index: 99999;
   display: flex;
   align-items: center;
   justify-content: center;

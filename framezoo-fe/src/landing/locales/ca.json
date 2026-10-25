@@ -149,7 +149,18 @@
       ],
       "step2Desc": "Si Windows Defender mostra una pantalla blava que indica \"Windows va protegir el vostre PC\":",
       "note": "Aquest avís apareix perquè la nova versió encara no ha acumulat la reputació de Microsoft EV Code Signing. El binari és 100% segur."
-    }
+    },
+    "eyebrow": "Documentació",
+    "macQuickSolution": "Solució ràpida: Obriu el menú contextual amb el botó dret del ratolí del Finder",
+    "winDialogTitle": "Windows va protegir el vostre ordinador",
+    "macDialogDesc": "Apple no pot comprovar si hi ha programari maliciós. Això passa quan es baixa una aplicació fora de la Mac App Store sense un certificat comercial anual.",
+    "macTerminalTip": "💡 Mètode de còpia de seguretat mitjançant el terminal:",
+    "macDialogTitle": "\"Framezoo\" està danyat i no es pot obrir.",
+    "macTerminalDesc": "Si encara esteu bloquejat, obriu Terminal i executeu:",
+    "winQuickSolution": "Feu clic a Més informació → Executar igualment",
+    "winDialogDesc": "Microsoft Defender SmartScreen va impedir que s'iniciés una aplicació no reconeguda. L'execució d'aquesta aplicació pot posar en perill el vostre PC.",
+    "winClickHere": "(Cliqueu aquí)",
+    "winMoreInfo": "Més informació"
   },
   "downloadConfirm": {
     "macTitle": "Guia d'instal·lació per a macOS",
@@ -160,5 +171,23 @@
     "confirmDownload": "Confirmeu i descarregueu",
     "downloading": "S'està iniciant la descàrrega...",
     "viewGuide": "Veure guia d'instal·lació completa"
+  },
+  "feedback": {
+    "button": "Feedback",
+    "badge": "Feedback",
+    "modalTitle": "Envieu-nos els vostres comentaris",
+    "descPlaceholder": "Descriu el problema concret o els passos per reproduir-lo...",
+    "errorRequired": "Si us plau, ompliu tant el títol com la descripció del problema.",
+    "subtitle": "Feu-nos saber qualsevol problema o dificultat que hàgiu experimentat amb Framezoo.",
+    "titleLabel": "1. Títol de l'emissió",
+    "cancel": "Cancel·la",
+    "successTitle": "Comentaris enviats correctament!",
+    "errorSubmit": "No s'han pogut enviar comentaris. Si us plau, torna-ho a provar més tard.",
+    "titlePlaceholder": "p. ex. Problema de sincronització dels subtítols, retard durant la reproducció...",
+    "close": "Tancar",
+    "submitting": "S'està enviant...",
+    "descLabel": "2. Descripció detallada",
+    "submit": "Envieu comentaris",
+    "successDesc": "Gràcies pels teus comentaris. El nostre equip revisarà i resoldrà el problema tan aviat com sigui possible."
   }
 }

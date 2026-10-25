@@ -149,7 +149,18 @@
       ],
       "step2Desc": "Hvis Windows Defender viser en blå skærm med teksten \"Windows beskyttede din pc\":",
       "note": "Denne advarsel vises, fordi den nye udgivelse endnu ikke har akkumuleret Microsoft EV Code Signing-ry. Binæren er 100 % sikker."
-    }
+    },
+    "eyebrow": "Dokumentation",
+    "winDialogTitle": "Windows beskyttede din pc",
+    "macDialogTitle": "\"Framezoo\" er beskadiget og kan ikke åbnes.",
+    "macDialogDesc": "Apple kan ikke kontrollere det for skadelig software. Dette sker, når en app downloades uden for Mac App Store uden et årligt kommercielt certifikat.",
+    "macQuickSolution": "Hurtig løsning: Åbn via Finder, højreklik på kontekstmenuen",
+    "macTerminalTip": "💡 Sikkerhedskopieringsmetode via terminal:",
+    "macTerminalDesc": "Hvis du stadig er blokeret, skal du åbne Terminal og køre:",
+    "winDialogDesc": "Microsoft Defender SmartScreen forhindrede en ikke-genkendt app i at starte. At køre denne app kan bringe din pc i fare.",
+    "winQuickSolution": "Klik på Mere info → Kør alligevel",
+    "winClickHere": "(Klik her)",
+    "winMoreInfo": "Mere info"
   },
   "downloadConfirm": {
     "winTitle": "Installationsvejledning til Windows",
@@ -160,5 +171,23 @@
     "confirmDownload": "Bekræft og download",
     "downloading": "Starter download...",
     "viewGuide": "Se den fulde installationsvejledning"
+  },
+  "feedback": {
+    "button": "Feedback",
+    "badge": "Feedback",
+    "subtitle": "Fortæl os om eventuelle problemer eller vanskeligheder, du har oplevet med Framezoo.",
+    "titleLabel": "1. Udgavetitel",
+    "modalTitle": "Send os din feedback",
+    "titlePlaceholder": "f.eks. Problem med synkronisering af undertekster, forsinkelse under afspilning...",
+    "descLabel": "2. Detaljeret beskrivelse",
+    "cancel": "Ophæve",
+    "errorSubmit": "Kunne ikke sende feedback. Prøv venligst igen senere.",
+    "successDesc": "Tak for din feedback. Vores team vil gennemgå og løse problemet så hurtigt som muligt.",
+    "errorRequired": "Udfyld venligst både titel og problembeskrivelse.",
+    "descPlaceholder": "Beskriv det specifikke problem eller trinene til at genskabe det...",
+    "close": "Tæt",
+    "successTitle": "Feedback sendt!",
+    "submitting": "Indsender...",
+    "submit": "Send feedback"
   }
 }

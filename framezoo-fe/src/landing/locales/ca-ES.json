@@ -149,7 +149,18 @@
         "Feu clic a \"Executar igualment\" per continuar amb la instal·lació de Framezoo."
       ],
       "note": "Aquest avís apareix perquè la nova versió encara no ha acumulat la reputació de Microsoft EV Code Signing. El binari és 100% segur."
-    }
+    },
+    "macTerminalTip": "💡 Mètode de còpia de seguretat mitjançant el terminal:",
+    "macTerminalDesc": "Si encara esteu bloquejat, obriu Terminal i executeu:",
+    "macQuickSolution": "Solució ràpida: Obriu el menú contextual amb el botó dret del ratolí del Finder",
+    "macDialogTitle": "\"Framezoo\" està danyat i no es pot obrir.",
+    "eyebrow": "Documentació",
+    "macDialogDesc": "Apple no pot comprovar si hi ha programari maliciós. Això passa quan es baixa una aplicació fora de la Mac App Store sense un certificat comercial anual.",
+    "winDialogTitle": "Windows va protegir el vostre ordinador",
+    "winQuickSolution": "Feu clic a Més informació → Executar igualment",
+    "winMoreInfo": "Més informació",
+    "winDialogDesc": "Microsoft Defender SmartScreen va impedir que s'iniciés una aplicació no reconeguda. L'execució d'aquesta aplicació pot posar en perill el vostre PC.",
+    "winClickHere": "(Cliqueu aquí)"
   },
   "downloadConfirm": {
     "macTitle": "Guia d'instal·lació per a macOS",
@@ -160,5 +171,23 @@
     "winNotice": "Avís de SmartScreen: si veieu la pantalla blava \"Windows protegit el vostre PC\", feu clic a \"Més informació\" -> feu clic a \"Executar igualment\".",
     "cancel": "Cancel·la",
     "downloading": "S'està iniciant la descàrrega..."
+  },
+  "feedback": {
+    "button": "Feedback",
+    "badge": "Feedback",
+    "titleLabel": "1. Títol de l'emissió",
+    "modalTitle": "Envieu-nos els vostres comentaris",
+    "descLabel": "2. Descripció detallada",
+    "subtitle": "Feu-nos saber qualsevol problema o dificultat que hàgiu experimentat amb Framezoo.",
+    "titlePlaceholder": "p. ex. Problema de sincronització dels subtítols, retard durant la reproducció...",
+    "descPlaceholder": "Descriu el problema concret o els passos per reproduir-lo...",
+    "errorRequired": "Si us plau, ompliu tant el títol com la descripció del problema.",
+    "errorSubmit": "No s'han pogut enviar comentaris. Si us plau, torna-ho a provar més tard.",
+    "cancel": "Cancel·la",
+    "successDesc": "Gràcies pels teus comentaris. El nostre equip revisarà i resoldrà el problema tan aviat com sigui possible.",
+    "successTitle": "Comentaris enviats correctament!",
+    "submit": "Envieu comentaris",
+    "close": "Tancar",
+    "submitting": "S'està enviant..."
   }
 }

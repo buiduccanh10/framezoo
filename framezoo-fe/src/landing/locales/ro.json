@@ -149,7 +149,18 @@
         "Faceți clic pe „Run oricum” pentru a continua cu instalarea Framezoo."
       ],
       "note": "Acest avertisment apare deoarece noua versiune nu a acumulat încă reputația Microsoft EV Code Signing. Binarul este 100% sigur."
-    }
+    },
+    "eyebrow": "Documentare",
+    "macTerminalDesc": "Dacă încă sunteți blocat, deschideți Terminal și rulați:",
+    "macTerminalTip": "💡 Metoda de backup prin terminal:",
+    "macDialogTitle": "„Framezoo” este deteriorat și nu poate fi deschis.",
+    "macQuickSolution": "Soluție rapidă: deschideți prin Finder, faceți clic dreapta pe meniul contextual",
+    "macDialogDesc": "Apple nu poate verifica software-ul rău intenționat. Acest lucru se întâmplă atunci când o aplicație este descărcată în afara Mac App Store fără un certificat comercial anual.",
+    "winMoreInfo": "Mai multe informații",
+    "winClickHere": "(Click aici)",
+    "winDialogTitle": "Windows v-a protejat computerul",
+    "winDialogDesc": "Microsoft Defender SmartScreen a împiedicat pornirea unei aplicații nerecunoscute. Rularea acestei aplicații poate pune computerul în pericol.",
+    "winQuickSolution": "Faceți clic pe Mai multe informații → Run oricum"
   },
   "downloadConfirm": {
     "winTitle": "Ghid de instalare pentru Windows",
@@ -160,5 +171,23 @@
     "winNotice": "Notificare SmartScreen: Dacă vedeți ecranul albastru „Windows v-a protejat PC-ul”, faceți clic pe „Mai multe informații” -> faceți clic pe „Rulează oricum”.",
     "macNotice": "Notificare Gatekeeper: Dacă macOS raportează o aplicație „deteriorată” sau neverificată, accesați Aplicații -> Faceți clic dreapta pe Framezoo -> Selectați Deschidere -> Deschideți oricum.",
     "downloading": "Se începe descărcarea..."
+  },
+  "feedback": {
+    "button": "Feedback",
+    "badge": "Feedback",
+    "subtitle": "Anunțați-ne despre orice probleme sau dificultăți pe care le-ați întâmpinat cu Framezoo.",
+    "descLabel": "2. Descriere detaliată",
+    "modalTitle": "Trimite-ne feedback-ul tău",
+    "titleLabel": "1. Titlul emisiunii",
+    "titlePlaceholder": "de ex. Problemă de sincronizare a subtitrarilor, decalaj în timpul redării...",
+    "cancel": "Anula",
+    "submit": "Trimite feedback",
+    "submitting": "Se trimite...",
+    "successDesc": "Vă mulțumim pentru feedback. Echipa noastră va analiza și rezolva problema cât mai curând posibil.",
+    "descPlaceholder": "Descrieți problema specifică sau pașii pentru a o reproduce...",
+    "errorRequired": "Vă rugăm să completați atât titlul, cât și descrierea problemei.",
+    "errorSubmit": "Feedbackul nu a fost trimis. Vă rugăm să încercați din nou mai târziu.",
+    "successTitle": "Feedback trimis cu succes!",
+    "close": "Aproape"
   }
 }

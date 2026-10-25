@@ -705,6 +705,7 @@
       "accountMenu": "Obre el menú del compte",
       "addons": "Complements",
       "desktop": "Configuració de l'aplicació",
+      "feedback": "Comentaris",
       "logout": "Tanca la sessió",
       "register": "Sincronitza amb el núvol",
       "settings": "Configuració"
@@ -1371,6 +1372,22 @@
     "watching": "Mirant",
     "withCount": "Amb {{count}} més",
     "you": "tu"
+  },
+  "feedback": {
+    "modalTitle": "Enviar comentaris",
+    "buttonLabel": "Comentaris",
+    "subtitle": "Feu-nos saber qualsevol problema o error que hàgiu trobat durant la vostra experiència.",
+    "titleLabel": "1. Títol del número",
+    "titlePlaceholder": "p. ex., error de càrrega de subtítols, reproducció entrecortada...",
+    "descriptionLabel": "2. Descripció del problema",
+    "descriptionPlaceholder": "Descriviu el problema detalladament, els passos per reproduir-lo o els suggeriments...",
+    "submit": "Envia comentaris",
+    "cancel": "Cancel·la",
+    "close": "Tanca",
+    "successTitle": "Comentaris enviats!",
+    "successDesc": "Gràcies pels vostres comentaris. El nostre equip revisarà i solucionarà el problema tan aviat com sigui possible.",
+    "errorRequired": "Si us plau, introduïu tant el títol com la descripció.",
+    "errorSubmit": "S&#39;ha produït un error en enviar els comentaris. Torna-ho a provar més tard."
   },
   "toasts": {
     "linkCopied": "S'ha copiat l'enllaç al porta-retalls!",

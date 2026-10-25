@@ -705,6 +705,7 @@
       "accountMenu": "Otevřete nabídku účtu",
       "addons": "Addons",
       "desktop": "Nastavení aplikace",
+      "feedback": "Zpětná vazba",
       "logout": "Odhlásit se",
       "register": "Synchronizovat do Cloudu",
       "settings": "Nastavení"
@@ -1371,6 +1372,22 @@
     "watching": "Sledování",
     "withCount": "S {{count}} dalšími",
     "you": "Vy"
+  },
+  "feedback": {
+    "modalTitle": "Odeslat zpětnou vazbu",
+    "buttonLabel": "Zpětná vazba",
+    "subtitle": "Dejte nám vědět o jakémkoli problému nebo chybě, na kterou jste se během vaší zkušenosti narazili.",
+    "titleLabel": "1. Název problému",
+    "titlePlaceholder": "např. chyba načítání titulků, zasekávání přehrávání...",
+    "descriptionLabel": "2. Popis problému",
+    "descriptionPlaceholder": "Popište problém podrobně, kroky k jeho reprodukci nebo návrhy...",
+    "submit": "Odeslat zpětnou vazbu",
+    "cancel": "Zrušit",
+    "close": "Blízko",
+    "successTitle": "Zpětná vazba odeslána!",
+    "successDesc": "Děkujeme za vaši zpětnou vazbu. Náš tým problém co nejdříve prověří a vyřeší.",
+    "errorRequired": "Zadejte prosím název i popis.",
+    "errorSubmit": "Při odesílání zpětné vazby došlo k chybě. Zkuste to prosím znovu později."
   },
   "toasts": {
     "linkCopied": "Odkaz zkopírován do schránky!",

@@ -149,7 +149,18 @@
       ],
       "step3Title": "Krok 3: Kontynuuj instalację",
       "note": "To ostrzeżenie pojawia się, ponieważ nowa wersja nie zyskała jeszcze reputacji Microsoft EV Code Signing. Plik binarny jest w 100% bezpieczny."
-    }
+    },
+    "eyebrow": "Dokumentacja",
+    "macQuickSolution": "Szybkie rozwiązanie: Otwórz menu kontekstowe prawym przyciskiem myszy w Finderze",
+    "macDialogDesc": "Apple nie może sprawdzić go pod kątem złośliwego oprogramowania. Dzieje się tak, gdy aplikacja jest pobierana poza sklepem Mac App Store bez rocznego certyfikatu komercyjnego.",
+    "macTerminalTip": "💡 Metoda tworzenia kopii zapasowych za pośrednictwem terminala:",
+    "macTerminalDesc": "Jeśli nadal jesteś zablokowany, otwórz Terminal i uruchom:",
+    "macDialogTitle": "„Framezoo” jest uszkodzone i nie można go otworzyć.",
+    "winDialogTitle": "Windows chronił Twój komputer",
+    "winMoreInfo": "Więcej informacji",
+    "winClickHere": "(Kliknij tutaj)",
+    "winQuickSolution": "Kliknij Więcej informacji → Uruchom mimo to",
+    "winDialogDesc": "Funkcja Microsoft Defender SmartScreen uniemożliwiła uruchomienie nierozpoznanej aplikacji. Uruchomienie tej aplikacji może narazić Twój komputer na ryzyko."
   },
   "downloadConfirm": {
     "macTitle": "Przewodnik instalacji dla systemu macOS",
@@ -160,5 +171,23 @@
     "macNotice": "Uwaga strażnika: Jeśli macOS zgłosi aplikację „uszkodzoną” lub niezweryfikowaną, przejdź do Aplikacje -> Kliknij prawym przyciskiem myszy Framezoo -> Wybierz Otwórz -> Otwórz mimo to.",
     "confirmDownload": "Potwierdź i pobierz",
     "downloading": "Rozpoczynam pobieranie..."
+  },
+  "feedback": {
+    "badge": "Informacja zwrotna",
+    "button": "Informacja zwrotna",
+    "subtitle": "Daj nam znać o wszelkich problemach i trudnościach, jakie napotkałeś w Framezoo.",
+    "modalTitle": "Prześlij nam swoją opinię",
+    "errorSubmit": "Nie udało się przesłać opinii. Spróbuj ponownie później.",
+    "titlePlaceholder": "np. Problem z synchronizacją napisów, opóźnienie podczas odtwarzania...",
+    "descLabel": "2. Szczegółowy opis",
+    "titleLabel": "1. Tytuł wydania",
+    "errorRequired": "Proszę podać tytuł i opis problemu.",
+    "descPlaceholder": "Opisz konkretny problem lub kroki umożliwiające jego odtworzenie...",
+    "cancel": "Anulować",
+    "submitting": "Przedkładający...",
+    "close": "Zamknąć",
+    "successDesc": "Dziękujemy za Twoją opinię. Nasz zespół sprawdzi i rozwiąże problem tak szybko, jak to możliwe.",
+    "successTitle": "Opinia została wysłana pomyślnie!",
+    "submit": "Prześlij opinię"
   }
 }

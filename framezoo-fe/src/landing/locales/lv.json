@@ -149,7 +149,18 @@
       "step1Desc": "Palaidiet lejupielādēto Framezoo-Setup-x64.exe instalēšanas programmu, lai sāktu iestatīšanu.",
       "step2Title": "2. darbība: Windows Defender SmartScreen brīdinājums",
       "note": "Šis brīdinājums tiek parādīts, jo jaunais laidiens vēl nav uzkrājis Microsoft EV Code Signing reputāciju. Binārais fails ir 100% drošs."
-    }
+    },
+    "eyebrow": "Dokumentācija",
+    "macTerminalTip": "💡 Dublēšanas metode, izmantojot termināli:",
+    "winDialogTitle": "Windows aizsargā jūsu datoru",
+    "macQuickSolution": "Ātrais risinājums: atveriet, izmantojot Finder, ar peles labo pogu noklikšķiniet uz konteksta izvēlnes",
+    "macTerminalDesc": "Ja joprojām esat bloķēts, atveriet termināli un palaidiet:",
+    "macDialogTitle": "\"Framezoo\" ir bojāts un to nevar atvērt.",
+    "macDialogDesc": "Apple nevar pārbaudīt, vai tajā nav ļaunprātīgas programmatūras. Tas notiek, ja lietotne tiek lejupielādēta ārpus Mac App Store bez ikgadēja komercsertifikāta.",
+    "winMoreInfo": "Vairāk informācijas",
+    "winClickHere": "(Noklikšķiniet šeit)",
+    "winQuickSolution": "Noklikšķiniet uz Papildinformācija → Palaist tik un tā",
+    "winDialogDesc": "Microsoft Defender SmartScreen neļāva startēt neatpazītai lietotnei. Šīs lietotnes palaišana var apdraudēt jūsu datoru."
   },
   "downloadConfirm": {
     "macTitle": "MacOS instalēšanas rokasgrāmata",
@@ -160,5 +171,23 @@
     "viewGuide": "Skatīt pilnu instalēšanas rokasgrāmatu",
     "winNotice": "SmartScreen paziņojums: ja redzat zilu ekrānu “Windows aizsargā jūsu datoru”, noklikšķiniet uz “Papildinformācija” —> noklikšķiniet uz “Palaist jebkurā gadījumā”.",
     "confirmDownload": "Apstiprināt un lejupielādēt"
+  },
+  "feedback": {
+    "button": "Atsauksmes",
+    "badge": "Atsauksmes",
+    "subtitle": "Pastāstiet mums par visām problēmām vai grūtībām, kas radušās saistībā ar Framezoo.",
+    "modalTitle": "Nosūtiet mums savas atsauksmes",
+    "titleLabel": "1. Izdevuma nosaukums",
+    "descLabel": "2. Detalizēts apraksts",
+    "errorSubmit": "Neizdevās iesniegt atsauksmes. Lūdzu, vēlāk mēģiniet vēlreiz.",
+    "titlePlaceholder": "piem. Subtitru sinhronizācijas problēma, aizkave atskaņošanas laikā...",
+    "cancel": "Atcelt",
+    "submit": "Iesniedziet atsauksmes",
+    "close": "Aizvērt",
+    "descPlaceholder": "Aprakstiet konkrēto problēmu vai darbības, lai to atveidotu...",
+    "errorRequired": "Lūdzu, aizpildiet gan nosaukumu, gan problēmas aprakstu.",
+    "successTitle": "Atsauksmes veiksmīgi nosūtītas!",
+    "successDesc": "Paldies par atsauksmēm. Mūsu komanda izskatīs un atrisinās problēmu, cik drīz vien iespējams.",
+    "submitting": "Notiek iesniegšana..."
   }
 }

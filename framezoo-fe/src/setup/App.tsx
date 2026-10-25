@@ -1,6 +1,7 @@
 import { DeepLinkPage } from "@/landing/DeepLinkPage";
 import { InstallGuidePage } from "@/landing/InstallGuidePage";
 import { LandingCategoryPage } from "@/landing/LandingCategoryPage";
+import { LandingFloatFeedback } from "@/landing/LandingFloatFeedback";
 import { LandingPage } from "@/landing/LandingPage";
 import {
   type LandingSeoCategoryId,
@@ -19,34 +20,43 @@ export default function App({ pathname, search }: AppProps = {}) {
   const currentSearch =
     search ?? (typeof window !== "undefined" ? window.location.search : "");
 
-  if (
-    currentPathname === "/guide/install" ||
-    currentPathname === "/install-guide" ||
-    currentPathname === "/docs/install" ||
-    currentPathname.startsWith("/guide/install/")
-  ) {
-    return <InstallGuidePage />;
-  }
-
-  const landingCategory = getLandingSeoCategory(currentPathname);
-  if (landingCategory) {
-    return (
-      <LandingCategoryPage
-        category={landingCategory.id as LandingSeoCategoryId}
-      />
-    );
-  }
-
-  // Paths that should trigger a deep link redirect instead of showing the landing page
   const isDeepLink =
     currentPathname.startsWith("/media/") ||
     currentPathname.startsWith("/browse/") ||
     currentPathname.startsWith("/discover");
 
-  if (isDeepLink) {
-    const fullPath = currentPathname + currentSearch;
-    return <DeepLinkPage path={fullPath} />;
-  }
+  const landingCategory = getLandingSeoCategory(currentPathname);
 
-  return <LandingPage />;
+  const renderContent = () => {
+    if (
+      currentPathname === "/guide/install" ||
+      currentPathname === "/install-guide" ||
+      currentPathname === "/docs/install" ||
+      currentPathname.startsWith("/guide/install/")
+    ) {
+      return <InstallGuidePage />;
+    }
+
+    if (landingCategory) {
+      return (
+        <LandingCategoryPage
+          category={landingCategory.id as LandingSeoCategoryId}
+        />
+      );
+    }
+
+    if (isDeepLink) {
+      const fullPath = currentPathname + currentSearch;
+      return <DeepLinkPage path={fullPath} />;
+    }
+
+    return <LandingPage />;
+  };
+
+  return (
+    <>
+      {renderContent()}
+      {!isDeepLink && <LandingFloatFeedback />}
+    </>
+  );
 }

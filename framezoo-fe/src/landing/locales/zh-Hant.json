@@ -149,7 +149,18 @@
       "step2Desc": "如果 Windows Defender 顯示藍屏，提示「Windows 保護了您的電腦」：",
       "note": "出現此警告是因為新版本尚未累積 Microsoft EV 程式碼簽署聲譽。二進位檔案 100% 安全。",
       "step3Title": "第三步：繼續安裝"
-    }
+    },
+    "eyebrow": "文件",
+    "macDialogTitle": "“Framezoo”已損壞且無法開啟。",
+    "macTerminalDesc": "如果仍然被阻止，請打開終端並運行：",
+    "winMoreInfo": "更多資訊",
+    "winClickHere": "（點這裡）",
+    "macTerminalTip": "💡 透過終端備份方法：",
+    "macDialogDesc": "Apple 無法檢查其是否有惡意軟體。當在沒有年度商業證書的情況下從 Mac App Store 外部下載應用程式時，就會發生這種情況。",
+    "winDialogTitle": "Windows 保護您的 PC",
+    "winDialogDesc": "Microsoft Defender SmartScreen 阻止无法识别的应用程序启动。運行此應用程式可能會使您的電腦面臨風險。",
+    "macQuickSolution": "快速解決方案：透過 Finder 右鍵單擊上下文選單打開",
+    "winQuickSolution": "點擊更多資訊 → 仍然運行"
   },
   "downloadConfirm": {
     "confirmDownload": "確認並下載",
@@ -160,5 +171,23 @@
     "winNotice": "SmartScreen 注意：如果您看到藍色的「Windows 保護您的電腦」螢幕，請按一下「更多資訊」-> 按一下「仍在執行」。",
     "downloading": "開始下載...",
     "macNotice": "Gatekeeper 注意：如果 macOS 報告“已損壞”或未經驗證的應用程序，請轉到“應用程式”-> 右鍵單擊 Framezoo -> 選擇“打開”->“仍然打開”。"
+  },
+  "feedback": {
+    "badge": "回饋",
+    "button": "回饋",
+    "modalTitle": "向我們發送您的回饋",
+    "titleLabel": "1. 問題標題",
+    "descLabel": "2. 詳細說明",
+    "errorSubmit": "提交反饋失敗。請稍後重試。",
+    "errorRequired": "請填寫標題和問題描述。",
+    "subtitle": "請告訴我們您在使用 Framezoo 時遇到的任何問題或困難。",
+    "cancel": "取消",
+    "successTitle": "反饋發送成功！",
+    "submit": "提交回饋",
+    "submitting": "正在提交...",
+    "close": "關閉",
+    "successDesc": "感謝您的回饋。我們的團隊將盡快審查並解決該問題。",
+    "titlePlaceholder": "例如字幕同步問題，播放時延遲.....",
+    "descPlaceholder": "描述具體問題或重現問題的步驟..."
   }
 }

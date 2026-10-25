@@ -705,6 +705,7 @@
       "accountMenu": "Abrir menú de cuenta",
       "addons": "Complementos",
       "desktop": "Configuración de la aplicación",
+      "feedback": "Comentario",
       "logout": "Cerrar sesión",
       "register": "Sincronizar con la nube",
       "settings": "Configuración"
@@ -1371,6 +1372,22 @@
     "watching": "Mirando",
     "withCount": "Con {{count}} otros",
     "you": "Tú"
+  },
+  "feedback": {
+    "modalTitle": "Enviar comentarios",
+    "buttonLabel": "Comentario",
+    "subtitle": "Infórmenos sobre cualquier problema o error que haya encontrado durante su experiencia.",
+    "titleLabel": "1. Título del número",
+    "titlePlaceholder": "p. ej., error al cargar los subtítulos, reproducción entrecortada...",
+    "descriptionLabel": "2. Descripción del problema",
+    "descriptionPlaceholder": "Describa el problema en detalle, los pasos para reproducirlo o sugerencias...",
+    "submit": "Enviar comentarios",
+    "cancel": "Cancelar",
+    "close": "Cerca",
+    "successTitle": "¡Comentarios enviados!",
+    "successDesc": "Gracias por sus comentarios. Nuestro equipo revisará y solucionará el problema lo antes posible.",
+    "errorRequired": "Por favor, introduzca tanto el título como la descripción.",
+    "errorSubmit": "Se produjo un error al enviar los comentarios. Inténtelo de nuevo más tarde."
   },
   "toasts": {
     "linkCopied": "¡Enlace copiado al portapapeles!",

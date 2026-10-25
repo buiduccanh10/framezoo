@@ -149,7 +149,18 @@
         "Klik \"Lagi pula\" untuk melanjutkan instalasi Framezoo."
       ],
       "note": "Peringatan ini muncul karena rilis baru belum mengumpulkan reputasi Penandatanganan Kode Microsoft EV. Binernya 100% aman."
-    }
+    },
+    "eyebrow": "Dokumentasi",
+    "macQuickSolution": "Solusi cepat: Buka melalui menu konteks klik kanan Finder",
+    "winDialogTitle": "Windows melindungi PC Anda",
+    "winMoreInfo": "Informasi lebih lanjut",
+    "winClickHere": "(Klik disini)",
+    "macTerminalTip": "💡 Metode pencadangan melalui Terminal:",
+    "macTerminalDesc": "Jika Anda masih diblokir, buka Terminal dan jalankan:",
+    "macDialogTitle": "\"Framezoo\" rusak dan tidak dapat dibuka.",
+    "macDialogDesc": "Apple tidak dapat memeriksa perangkat lunak berbahaya di dalamnya. Hal ini terjadi ketika aplikasi diunduh di luar Mac App Store tanpa sertifikat komersial tahunan.",
+    "winQuickSolution": "Klik Info lebih lanjut → Jalankan saja",
+    "winDialogDesc": "Microsoft Defender SmartScreen mencegah aplikasi yang tidak dikenal untuk memulai. Menjalankan aplikasi ini mungkin membahayakan PC Anda."
   },
   "downloadConfirm": {
     "macNotice": "Pemberitahuan Penjaga Gerbang: Jika macOS melaporkan aplikasi 'rusak' atau tidak terverifikasi, buka Aplikasi -> Klik kanan Framezoo -> Pilih Buka -> Tetap Buka.",
@@ -160,5 +171,23 @@
     "winNotice": "Pemberitahuan SmartScreen: Jika Anda melihat layar biru 'Windows melindungi PC Anda', klik 'Info lebih lanjut' -> klik 'Lagi pula'.",
     "downloading": "Mulai mengunduh...",
     "confirmDownload": "Konfirmasikan & Unduh"
+  },
+  "feedback": {
+    "badge": "Masukan",
+    "button": "Masukan",
+    "modalTitle": "Kirimkan masukan Anda kepada kami",
+    "descLabel": "2. Deskripsi rinci",
+    "titleLabel": "1. Judul terbitan",
+    "subtitle": "Beri tahu kami tentang masalah atau kesulitan apa pun yang Anda alami dengan Framezoo.",
+    "titlePlaceholder": "misalnya Masalah sinkronisasi subtitle, kelambatan saat pemutaran...",
+    "successTitle": "Masukan berhasil dikirim!",
+    "errorSubmit": "Gagal mengirimkan masukan. Silakan coba lagi nanti.",
+    "cancel": "Membatalkan",
+    "submitting": "Mengirimkan...",
+    "submit": "Kirim masukan",
+    "close": "Menutup",
+    "descPlaceholder": "Jelaskan masalah spesifik atau langkah-langkah untuk mereproduksinya...",
+    "errorRequired": "Silakan isi judul dan deskripsi terbitan.",
+    "successDesc": "Terima kasih atas tanggapan Anda. Tim kami akan meninjau dan menyelesaikan masalah ini sesegera mungkin."
   }
 }

@@ -149,7 +149,18 @@
         "Klicka på \"Kör ändå\" för att fortsätta med installationen av Framezoo."
       ],
       "note": "Den här varningen visas eftersom den nya versionen ännu inte har samlat på sig Microsoft EV Code Signing-rykte. Binären är 100% säker."
-    }
+    },
+    "eyebrow": "Dokumentation",
+    "macQuickSolution": "Snabb lösning: Öppna via Finder högerklicka på snabbmenyn",
+    "macDialogDesc": "Apple kan inte kontrollera den för skadlig programvara. Detta händer när en app laddas ner utanför Mac App Store utan ett årligt kommersiellt certifikat.",
+    "macTerminalDesc": "Om du fortfarande är blockerad, öppna Terminal och kör:",
+    "macDialogTitle": "\"Framezoo\" är skadad och kan inte öppnas.",
+    "winDialogDesc": "Microsoft Defender SmartScreen prevented an unrecognized app from starting. Att köra den här appen kan utsätta din dator för risker.",
+    "winClickHere": "(Klicka här)",
+    "winMoreInfo": "Mer info",
+    "winDialogTitle": "Windows skyddade din dator",
+    "winQuickSolution": "Klicka på Mer info → Kör ändå",
+    "macTerminalTip": "💡 Säkerhetskopieringsmetod via terminal:"
   },
   "downloadConfirm": {
     "macTitle": "Installationsguide för macOS",
@@ -160,5 +171,23 @@
     "winTitle": "Installationsguide för Windows",
     "viewGuide": "Se hela installationsguiden",
     "downloading": "Börjar ladda ner..."
+  },
+  "feedback": {
+    "button": "Feed-back",
+    "badge": "Feed-back",
+    "modalTitle": "Skicka oss din feedback",
+    "titleLabel": "1. Nummertitel",
+    "titlePlaceholder": "till exempel Subtitle sync issue, lag during playback...",
+    "errorRequired": "Vänligen fyll i både titel och problembeskrivning.",
+    "descPlaceholder": "Beskriv det specifika problemet eller stegen för att återskapa det...",
+    "errorSubmit": "Det gick inte att skicka feedback. Försök igen senare.",
+    "cancel": "Avboka",
+    "successDesc": "Tack för din feedback. Vårt team kommer att granska och lösa problemet så snart som möjligt.",
+    "subtitle": "Låt oss veta om eventuella problem eller svårigheter du upplevt med Framezoo.",
+    "close": "Nära",
+    "successTitle": "Feedback har skickats!",
+    "submit": "Skicka feedback",
+    "submitting": "Skickar...",
+    "descLabel": "2. Detaljerad beskrivning"
   }
 }

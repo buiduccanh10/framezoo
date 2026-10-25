@@ -20,8 +20,8 @@ const isGuestAuthRequest = (path: string, method: string) => {
 export default defineEventHandler(async event => {
   const path = event.path.split('?')[0] || '';
 
-  // Bypass admin backup routes (they handle their own auth)
-  if (path.startsWith('/api/backup')) {
+  // Bypass admin backup and feedback routes (they handle their own auth)
+  if (path.startsWith('/api/backup') || path.startsWith('/api/feedback')) {
     return;
   }
 

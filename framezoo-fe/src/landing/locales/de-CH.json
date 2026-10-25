@@ -149,7 +149,18 @@
       ],
       "step3Title": "Schritt 3: Installation fortsetzen",
       "note": "Diese Warnung wird angezeigt, weil die neue Version noch nicht die Reputation von Microsoft EV Code Signing erlangt hat. Die Binärdatei ist 100 % sicher."
-    }
+    },
+    "eyebrow": "Dokumentation",
+    "macDialogTitle": "„Framezoo“ ist beschädigt und kann nicht geöffnet werden.",
+    "macDialogDesc": "Apple kann es nicht auf Schadsoftware prüfen. Dies geschieht, wenn eine App ohne jährliches kommerzielles Zertifikat außerhalb des Mac App Store heruntergeladen wird.",
+    "macQuickSolution": "Schnelle Lösung: Öffnen Sie das Kontextmenü mit der rechten Maustaste im Finder",
+    "macTerminalTip": "💡 Sicherungsmethode über Terminal:",
+    "macTerminalDesc": "Wenn Sie immer noch blockiert sind, öffnen Sie Terminal und führen Sie Folgendes aus:",
+    "winMoreInfo": "Weitere Informationen",
+    "winDialogTitle": "Windows hat Ihren PC geschützt",
+    "winDialogDesc": "Microsoft Defender SmartScreen verhinderte den Start einer unbekannten App. Das Ausführen dieser App könnte Ihren PC gefährden.",
+    "winQuickSolution": "Klicken Sie auf Weitere Informationen → Trotzdem ausführen",
+    "winClickHere": "(Klicken Sie hier)"
   },
   "downloadConfirm": {
     "macTitle": "Installationsanleitung für macOS",
@@ -160,5 +171,23 @@
     "winTitle": "Installationsanleitung für Windows",
     "cancel": "Stornieren",
     "downloading": "Download wird gestartet..."
+  },
+  "feedback": {
+    "button": "Rückmeldung",
+    "titleLabel": "1. Titel der Ausgabe",
+    "subtitle": "Teilen Sie uns alle Probleme oder Schwierigkeiten mit, die Sie mit Framezoo hatten.",
+    "descLabel": "2. Detaillierte Beschreibung",
+    "modalTitle": "Senden Sie uns Ihr Feedback",
+    "titlePlaceholder": "z.B. Problem mit der Untertitelsynchronisierung, Verzögerung während der Wiedergabe ...",
+    "badge": "Rückmeldung",
+    "descPlaceholder": "Beschreiben Sie das spezifische Problem oder die Schritte, um es zu reproduzieren ...",
+    "errorRequired": "Bitte geben Sie sowohl den Titel als auch die Problembeschreibung ein.",
+    "errorSubmit": "Feedback konnte nicht übermittelt werden. Bitte versuchen Sie es später noch einmal.",
+    "successTitle": "Feedback erfolgreich gesendet!",
+    "cancel": "Stornieren",
+    "successDesc": "Vielen Dank für Ihr Feedback. Unser Team wird das Problem so schnell wie möglich prüfen und lösen.",
+    "close": "Schließen",
+    "submitting": "Einreichen...",
+    "submit": "Feedback abgeben"
   }
 }

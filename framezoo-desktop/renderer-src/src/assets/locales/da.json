@@ -705,6 +705,7 @@
       "accountMenu": "Åbn kontomenuen",
       "addons": "Tilføjelser",
       "desktop": "App-indstillinger",
+      "feedback": "Feedback",
       "logout": "Log ud",
       "register": "Synkroniser til Cloud",
       "settings": "Indstillinger"
@@ -1371,6 +1372,22 @@
     "watching": "Ser på",
     "withCount": "Med {{count}} andre",
     "you": "Du"
+  },
+  "feedback": {
+    "modalTitle": "Send feedback",
+    "buttonLabel": "Feedback",
+    "subtitle": "Fortæl os om eventuelle problemer eller fejl, du stødte på under din oplevelse.",
+    "titleLabel": "1. Udgavetitel",
+    "titlePlaceholder": "f.eks. fejl ved indlæsning af undertekster, hakkende afspilning...",
+    "descriptionLabel": "2. Problembeskrivelse",
+    "descriptionPlaceholder": "Beskriv problemet i detaljer, trin til reproduktion eller forslag...",
+    "submit": "Send feedback",
+    "cancel": "Ophæve",
+    "close": "Tæt",
+    "successTitle": "Feedback indsendt!",
+    "successDesc": "Tak for din feedback. Vores team vil gennemgå og løse problemet hurtigst muligt.",
+    "errorRequired": "Indtast venligst både titel og beskrivelse.",
+    "errorSubmit": "Der opstod en fejl under indsendelse af feedback. Prøv igen senere."
   },
   "toasts": {
     "linkCopied": "Linket er kopieret til udklipsholderen!",

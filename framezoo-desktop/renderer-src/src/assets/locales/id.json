@@ -705,6 +705,7 @@
       "accountMenu": "Buka menu akun",
       "addons": "tambahan",
       "desktop": "Pengaturan Aplikasi",
+      "feedback": "Masukan",
       "logout": "Keluar",
       "register": "Sinkronkan ke Cloud",
       "settings": "Pengaturan"
@@ -1371,6 +1372,22 @@
     "watching": "Menonton",
     "withCount": "Dengan {{count}} lainnya",
     "you": "Anda"
+  },
+  "feedback": {
+    "modalTitle": "Kirim Masukan",
+    "buttonLabel": "Masukan",
+    "subtitle": "Beri tahu kami tentang masalah atau bug apa pun yang Anda temui selama pengalaman Anda.",
+    "titleLabel": "1. Judul Masalah",
+    "titlePlaceholder": "Contoh: Kesalahan pemuatan subtitle, Pemutaran tersendat-sendat...",
+    "descriptionLabel": "2. Deskripsi Masalah",
+    "descriptionPlaceholder": "Jelaskan masalahnya secara detail, langkah-langkah untuk mereproduksinya, atau saran...",
+    "submit": "Kirim Masukan",
+    "cancel": "Membatalkan",
+    "close": "Menutup",
+    "successTitle": "Masukan telah disampaikan!",
+    "successDesc": "Terima kasih atas masukan Anda. Tim kami akan meninjau dan mengatasi masalah ini sesegera mungkin.",
+    "errorRequired": "Silakan masukkan judul dan deskripsi.",
+    "errorSubmit": "Terjadi kesalahan saat mengirimkan umpan balik. Silakan coba lagi nanti."
   },
   "toasts": {
     "linkCopied": "Tautan disalin ke papan klip!",

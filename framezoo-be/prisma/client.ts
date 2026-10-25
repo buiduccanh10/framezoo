@@ -16,4 +16,4 @@ export function createPrismaClient() {
 }
 
 export { PrismaClient };
-export type { bookmarks } from '../generated/prisma/client';
+export type { bookmarks, feedbacks } from '../generated/prisma/client';

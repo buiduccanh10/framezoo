@@ -94,7 +94,7 @@ export function InstallGuidePage() {
 
       <main className="install-guide-main">
         <div className="install-guide-header">
-          <span className="landing-eyebrow">Documentation</span>
+          <span className="landing-eyebrow">{guide.eyebrow ?? "Documentation"}</span>
           <h1 className="install-guide-title">{guide.title}</h1>
           <p className="install-guide-subtitle">{guide.subtitle}</p>
 
@@ -197,12 +197,10 @@ export function InstallGuidePage() {
               </div>
               <div className="install-guide-dialog-box">
                 <div className="dialog-box-title">
-                  &ldquo;Framezoo&rdquo; is damaged and can&rsquo;t be opened.
+                  {guide.macDialogTitle}
                 </div>
                 <div className="dialog-box-desc">
-                  Apple cannot check it for malicious software. This happens
-                  when an app is downloaded outside the Mac App Store without an
-                  annual commercial certificate.
+                  {guide.macDialogDesc}
                 </div>
               </div>
             </div>
@@ -213,7 +211,7 @@ export function InstallGuidePage() {
                 <div>
                   <h2>{guide.mac.step3Title}</h2>
                   <p className="install-guide-highlight">
-                    Giải pháp nhanh: Mở qua Menu chuột phải Finder
+                    {guide.macQuickSolution}
                   </p>
                 </div>
               </div>
@@ -229,8 +227,8 @@ export function InstallGuidePage() {
 
               <div className="install-guide-terminal-tip">
                 <p>
-                  <strong>💡 Cách dự phòng qua Terminal:</strong> Nếu bạn vẫn bị
-                  chặn, mở Terminal và chạy lệnh:
+                  <strong>{guide.macTerminalTip}</strong>{" "}
+                  {guide.macTerminalDesc}
                 </p>
                 <code>xattr -cr /Applications/Framezoo.app</code>
               </div>
@@ -263,15 +261,14 @@ export function InstallGuidePage() {
               </div>
               <div className="install-guide-dialog-box win-smartscreen-box">
                 <div className="smartscreen-banner">
-                  Windows protected your PC
+                  {guide.winDialogTitle}
                 </div>
                 <div className="smartscreen-text">
-                  Microsoft Defender SmartScreen prevented an unrecognized app
-                  from starting. Running this app might put your PC at risk.
+                  {guide.winDialogDesc}
                 </div>
                 <div className="smartscreen-actions">
                   <span className="smartscreen-link">
-                    <u>More info</u> (Bấm vào đây)
+                    <u>{guide.winMoreInfo}</u> {guide.winClickHere}
                   </span>
                 </div>
               </div>
@@ -283,7 +280,7 @@ export function InstallGuidePage() {
                 <div>
                   <h2>{guide.win.step3Title}</h2>
                   <p className="install-guide-highlight">
-                    Bấm More info &rarr; Run anyway
+                    {guide.winQuickSolution}
                   </p>
                 </div>
               </div>

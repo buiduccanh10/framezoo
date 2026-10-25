@@ -705,6 +705,7 @@
       "accountMenu": "開設帳戶菜單",
       "addons": "外掛",
       "desktop": "應用程式設定",
+      "feedback": "回饋",
       "logout": "登出",
       "register": "同步到雲端",
       "settings": "設定"
@@ -1371,6 +1372,22 @@
     "watching": "觀看",
     "withCount": "與其他 {{count}} 人",
     "you": "你"
+  },
+  "feedback": {
+    "modalTitle": "傳送回饋",
+    "buttonLabel": "回饋",
+    "subtitle": "如果您在使用過程中遇到任何問題或漏洞，請告知我們。",
+    "titleLabel": "1. 問題標題",
+    "titlePlaceholder": "例如：字幕載入錯誤、播放卡頓…",
+    "descriptionLabel": "2. 問題描述",
+    "descriptionPlaceholder": "請詳細描述問題、重現步驟或提出建議…",
+    "submit": "提交回饋",
+    "cancel": "取消",
+    "close": "關閉",
+    "successTitle": "反饋已提交！",
+    "successDesc": "感謝您的回饋。我們的團隊將盡快審核並解決問題。",
+    "errorRequired": "請同時輸入標題和描述。",
+    "errorSubmit": "提交回饋時出錯，請稍後再試。"
   },
   "toasts": {
     "linkCopied": "連結已複製到剪貼簿！",

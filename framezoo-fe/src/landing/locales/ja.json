@@ -149,7 +149,18 @@
       "step3Title": "ステップ 3: インストールを続行する",
       "step2Title": "ステップ 2: Windows Defender SmartScreen の警告",
       "note": "この警告は、新しいリリースが Microsoft EV コード署名の評価をまだ蓄積していないために表示されます。バイナリは 100% 安全です。"
-    }
+    },
+    "eyebrow": "ドキュメント",
+    "macTerminalTip": "💡 ターミナル経由のバックアップ方法:",
+    "winDialogTitle": "Windows が PC を保護しました",
+    "macDialogDesc": "Apple は悪意のあるソフトウェアをチェックできません。これは、年間商用証明書を取得せずに Mac App Store 以外でアプリをダウンロードした場合に発生します。",
+    "macTerminalDesc": "それでもブロックされている場合は、ターミナルを開いて次を実行します。",
+    "macDialogTitle": "「Framezoo」が破損していて開けません。",
+    "winClickHere": "（ここをクリック）",
+    "winMoreInfo": "詳細情報",
+    "macQuickSolution": "簡単な解決策: Finder の右クリック コンテキスト メニューから開く",
+    "winDialogDesc": "Microsoft Defender SmartScreen により、認識されないアプリの起動が妨げられました。このアプリを実行すると、PC が危険にさらされる可能性があります。",
+    "winQuickSolution": "「詳細」→「とにかく実行」をクリックします"
   },
   "downloadConfirm": {
     "macTitle": "macOS 用インストールガイド",
@@ -160,5 +171,23 @@
     "winTitle": "Windows 用インストールガイド",
     "viewGuide": "完全なインストールガイドを見る",
     "downloading": "ダウンロードを開始しています..."
+  },
+  "feedback": {
+    "badge": "フィードバック",
+    "button": "フィードバック",
+    "titlePlaceholder": "例えば字幕の同期の問題、再生中の遅延...",
+    "modalTitle": "フィードバックをお寄せください",
+    "titleLabel": "1. 号名",
+    "descPlaceholder": "特定の問題またはそれを再現する手順について説明します...",
+    "subtitle": "Framezoo で経験した問題や困難についてお知らせください。",
+    "cancel": "キャンセル",
+    "submit": "フィードバックを送信する",
+    "submitting": "送信中...",
+    "descLabel": "2. 詳細説明",
+    "close": "近い",
+    "errorSubmit": "フィードバックの送信に失敗しました。後でもう一度試してください。",
+    "successTitle": "フィードバックは正常に送信されました。",
+    "successDesc": "ご意見ありがとうございます。私たちのチームが問題を確認し、できるだけ早く解決します。",
+    "errorRequired": "タイトルと問題の説明の両方を入力してください。"
   }
 }

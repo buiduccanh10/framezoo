@@ -149,7 +149,18 @@
       "step2Title": "Paso 2: aviso de Windows Defender SmartScreen",
       "step3Title": "Paso 3: continúa a instalación",
       "note": "Este aviso aparece porque a nova versión aínda non acumulou a reputación de Microsoft EV Code Signing. O binario é 100% seguro."
-    }
+    },
+    "eyebrow": "Documentación",
+    "macTerminalTip": "💡 Método de copia de seguridade a través do terminal:",
+    "macTerminalDesc": "Se aínda estás bloqueado, abre o Terminal e executa:",
+    "macDialogTitle": "\"Framezoo\" está danado e non se pode abrir.",
+    "winDialogTitle": "Windows protexeu o teu PC",
+    "macQuickSolution": "Solución rápida: abre a través do Finder, fai clic co botón dereito do rato no menú contextual",
+    "macDialogDesc": "Apple non pode verificalo para detectar software malicioso. Isto ocorre cando se descarga unha aplicación fóra da Mac App Store sen un certificado comercial anual.",
+    "winDialogDesc": "Microsoft Defender SmartScreen impediu que se iniciara unha aplicación non recoñecida. Executar esta aplicación pode poñer en risco o teu PC.",
+    "winQuickSolution": "Fai clic en Máis información → Executar igualmente",
+    "winMoreInfo": "Máis información",
+    "winClickHere": "(Preme aquí)"
   },
   "downloadConfirm": {
     "macTitle": "Guía de instalación para macOS",
@@ -160,5 +171,23 @@
     "cancel": "Cancelar",
     "viewGuide": "Ver guía de instalación completa",
     "downloading": "Comezando a descarga..."
+  },
+  "feedback": {
+    "button": "Comentarios",
+    "badge": "Comentarios",
+    "subtitle": "Infórmanos sobre calquera problema ou dificultade que experimentou con Framezoo.",
+    "modalTitle": "Envíanos o teu comentario",
+    "descLabel": "2. Descrición detallada",
+    "titleLabel": "1. Título da emisión",
+    "descPlaceholder": "Describe o problema específico ou os pasos para reproducilo...",
+    "errorRequired": "Enche tanto o título como a descrición do problema.",
+    "cancel": "Cancelar",
+    "titlePlaceholder": "p.ex. Problema de sincronización de subtítulos, atraso durante a reprodución...",
+    "errorSubmit": "Produciuse un erro ao enviar comentarios. Téntao de novo máis tarde.",
+    "close": "Pechar",
+    "submitting": "Enviando...",
+    "submit": "Enviar comentarios",
+    "successTitle": "Comentarios enviados correctamente!",
+    "successDesc": "Grazas polos teus comentarios. O noso equipo revisará e resolverá o problema o antes posible."
   }
 }

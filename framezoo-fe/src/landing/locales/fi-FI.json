@@ -149,7 +149,18 @@
         "Napsauta \"Suorita silti\" jatkaaksesi Framezoon asentamista."
       ],
       "note": "Tämä varoitus tulee näkyviin, koska uudella julkaisulla ei ole vielä kertynyt Microsoft EV Code Signing -mainetta. Binaari on 100 % turvallinen."
-    }
+    },
+    "eyebrow": "Dokumentaatio",
+    "macTerminalTip": "💡 Varmuuskopiointitapa päätteen kautta:",
+    "macDialogTitle": "\"Framezoo\" on vaurioitunut eikä sitä voi avata.",
+    "winDialogTitle": "Windows suojasi tietokonettasi",
+    "macTerminalDesc": "Jos olet edelleen estetty, avaa Terminal ja suorita:",
+    "macDialogDesc": "Apple ei voi tarkistaa, onko siinä haittaohjelmia. Näin tapahtuu, kun sovellus ladataan Mac App Storen ulkopuolelta ilman vuosittaista kaupallista todistusta.",
+    "macQuickSolution": "Pikaratkaisu: Avaa Finderin hiiren kakkospainikkeella pikavalikosta",
+    "winQuickSolution": "Napsauta Lisätietoja → Suorita silti",
+    "winMoreInfo": "Lisätietoja",
+    "winClickHere": "(Napsauta tästä)",
+    "winDialogDesc": "Microsoft Defender SmartScreen esti tunnistamattoman sovelluksen käynnistymisen. Tämän sovelluksen käyttäminen saattaa vaarantaa tietokoneesi."
   },
   "downloadConfirm": {
     "macTitle": "Asennusopas macOS:lle",
@@ -160,5 +171,23 @@
     "downloading": "Aloitetaan lataus...",
     "confirmDownload": "Vahvista ja lataa",
     "viewGuide": "Katso koko asennusopas"
+  },
+  "feedback": {
+    "button": "Palaute",
+    "badge": "Palaute",
+    "modalTitle": "Lähetä meille palautetta",
+    "subtitle": "Kerro meille kaikista Framezoon kanssa kokemistasi ongelmista tai vaikeuksista.",
+    "titleLabel": "1. Numeron nimi",
+    "titlePlaceholder": "esim. Tekstityssynkronointiongelma, viive toiston aikana...",
+    "successTitle": "Palautteen lähetys onnistui!",
+    "errorSubmit": "Palautteen lähettäminen epäonnistui. Yritä myöhemmin uudelleen.",
+    "errorRequired": "Täytä sekä otsikko että ongelman kuvaus.",
+    "descPlaceholder": "Kuvaile tietty ongelma tai vaiheet sen toistamiseksi...",
+    "descLabel": "2. Yksityiskohtainen kuvaus",
+    "cancel": "Peruuttaa",
+    "close": "Lähellä",
+    "submitting": "Lähetetään...",
+    "successDesc": "Kiitos palautteestasi. Tiimimme tarkistaa ja ratkaisee ongelman mahdollisimman pian.",
+    "submit": "Lähetä palautetta"
   }
 }

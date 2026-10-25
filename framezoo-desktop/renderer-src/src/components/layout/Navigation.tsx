@@ -3,16 +3,14 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 import { NoUserAvatar, UserAvatar } from "@/components/Avatar";
-import { IconPatch } from "@/components/buttons/IconPatch";
-import { Icons } from "@/components/Icon";
-import { LinksDropdown, WatchPartyInputLink } from "@/components/LinksDropdown";
+import { LinksDropdown } from "@/components/LinksDropdown";
 import { Lightbar } from "@/components/utils/Lightbar";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { useIsMacWindowed } from "@/hooks/useIsDesktopApp";
 import { BlurEllipsis } from "@/pages/layouts/SubPageLayout";
 
-import { AddonManager } from "./AddonManager";
 import { BrandPill } from "./BrandPill";
+import { NavActionsCollapsible } from "./NavActionsCollapsible";
 import { WindowControls } from "./WindowControls";
 // import { DownloadAppButton } from "./DownloadAppButton";
 
@@ -137,65 +135,7 @@ export function Navigation(props: NavigationProps) {
                 )}
               {location.pathname !== "/login" &&
                 location.pathname !== "/register" &&
-                location.pathname !== "/settings" &&
-                (location.pathname === "/discover" ? (
-                  <Link
-                    to="/browse"
-                    onClick={() => window.scrollTo(0, 0)}
-                    className="shrink-0 text-lg text-white tabbable rounded-full backdrop-blur-lg"
-                    style={
-                      { WebkitAppRegion: "no-drag" } as React.CSSProperties
-                    }
-                  >
-                    <IconPatch
-                      icon={Icons.SEARCH}
-                      clickable
-                      downsized
-                      navigation
-                    />
-                  </Link>
-                ) : (
-                  <Link
-                    to="/discover"
-                    onClick={() => window.scrollTo(0, 0)}
-                    className="shrink-0 text-xl text-white tabbable rounded-full backdrop-blur-lg"
-                    style={
-                      { WebkitAppRegion: "no-drag" } as React.CSSProperties
-                    }
-                  >
-                    <IconPatch
-                      icon={Icons.RISING_STAR}
-                      clickable
-                      downsized
-                      navigation
-                    />
-                  </Link>
-                ))}
-              {location.pathname !== "/login" &&
-                location.pathname !== "/settings" &&
-                location.pathname !== "/register" && (
-                  <div
-                    style={
-                      { WebkitAppRegion: "no-drag" } as React.CSSProperties
-                    }
-                  >
-                    <WatchPartyInputLink />
-                  </div>
-                )}
-              {/* {location.pathname !== "/login" &&
-                location.pathname !== "/settings" &&
-                location.pathname !== "/register" && <DownloadAppButton />} */}
-              {location.pathname !== "/login" &&
-                location.pathname !== "/settings" &&
-                location.pathname !== "/register" && (
-                  <div
-                    style={
-                      { WebkitAppRegion: "no-drag" } as React.CSSProperties
-                    }
-                  >
-                    <AddonManager />
-                  </div>
-                )}
+                location.pathname !== "/settings" && <NavActionsCollapsible />}
               {location.pathname !== "/login" &&
                 location.pathname !== "/register" && (
                   <div

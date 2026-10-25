@@ -149,7 +149,18 @@
       ],
       "step1Desc": "Inicie el instalador Framezoo-Setup-x64.exe descargado para comenzar la instalación.",
       "note": "Esta advertencia aparece porque la nueva versión aún no ha acumulado reputación de firma de código EV de Microsoft. El binario es 100% seguro."
-    }
+    },
+    "eyebrow": "Documentación",
+    "macQuickSolution": "Solución rápida: abrir a través del menú contextual del botón derecho del Finder",
+    "macDialogDesc": "Apple no puede comprobarlo en busca de software malicioso. Esto sucede cuando se descarga una aplicación fuera de Mac App Store sin un certificado comercial anual.",
+    "macTerminalDesc": "Si todavía estás bloqueado, abre Terminal y ejecuta:",
+    "macDialogTitle": "\"Framezoo\" está dañado y no se puede abrir.",
+    "winDialogTitle": "Windows protegió tu PC",
+    "macTerminalTip": "💡 Método de copia de seguridad a través de Terminal:",
+    "winMoreInfo": "Más información",
+    "winClickHere": "(Haga clic aquí)",
+    "winDialogDesc": "Microsoft Defender SmartScreen impidió que se iniciara una aplicación no reconocida. La ejecución de esta aplicación puede poner en riesgo su PC.",
+    "winQuickSolution": "Haga clic en Más información → Ejecutar de todos modos"
   },
   "downloadConfirm": {
     "macNotice": "Aviso de Gatekeeper: si macOS informa que una aplicación está \"dañada\" o no verificada, vaya a Aplicaciones -> Haga clic con el botón derecho en Framezoo -> Seleccione Abrir -> Abrir de todos modos.",
@@ -160,5 +171,23 @@
     "viewGuide": "Ver guía de instalación completa",
     "macTitle": "Guía de instalación para macOS",
     "winTitle": "Guía de instalación para Windows"
+  },
+  "feedback": {
+    "button": "Comentario",
+    "badge": "Comentario",
+    "modalTitle": "Envíanos tus comentarios",
+    "titlePlaceholder": "p.ej. Problema de sincronización de subtítulos, retraso durante la reproducción...",
+    "subtitle": "Háganos saber acerca de cualquier problema o dificultad que haya experimentado con Framezoo.",
+    "errorSubmit": "No se pudieron enviar comentarios. Inténtelo de nuevo más tarde.",
+    "titleLabel": "1. Título del número",
+    "descLabel": "2. Descripción detallada",
+    "descPlaceholder": "Describe el problema específico o los pasos para reproducirlo...",
+    "cancel": "Cancelar",
+    "submitting": "Sumisión...",
+    "successDesc": "Gracias por tus comentarios. Nuestro equipo revisará y resolverá el problema lo antes posible.",
+    "errorRequired": "Complete el título y la descripción del problema.",
+    "close": "Cerca",
+    "successTitle": "¡Comentarios enviados exitosamente!",
+    "submit": "Enviar comentarios"
   }
 }

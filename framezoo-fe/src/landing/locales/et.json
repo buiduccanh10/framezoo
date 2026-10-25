@@ -149,7 +149,18 @@
         "Framezoo installimise jätkamiseks klõpsake \"Käivita ikkagi\"."
       ],
       "note": "See hoiatus ilmub, kuna uus versioon ei ole veel kogunud Microsoft EV Code Signing mainet. Kahendfail on 100% turvaline."
-    }
+    },
+    "eyebrow": "Dokumentatsioon",
+    "macTerminalTip": "💡 Varundusmeetod terminali kaudu:",
+    "macQuickSolution": "Kiirlahendus: avage Finderi paremklõpsu kontekstimenüü kaudu",
+    "macDialogDesc": "Apple ei saa seda ründetarkvara suhtes kontrollida. See juhtub siis, kui rakendus laaditakse alla väljaspool Mac App Store'i ilma iga-aastase kommertssertifikaadita.",
+    "macDialogTitle": "\"Framezoo\" on kahjustatud ja seda ei saa avada.",
+    "winDialogTitle": "Windows kaitses teie arvutit",
+    "macTerminalDesc": "Kui olete endiselt blokeeritud, avage terminal ja käivitage:",
+    "winDialogDesc": "Microsoft Defender SmartScreen takistas tundmatu rakenduse käivitamist. Selle rakenduse käivitamine võib teie arvuti ohtu seada.",
+    "winMoreInfo": "Rohkem infot",
+    "winClickHere": "(Kliki siia)",
+    "winQuickSolution": "Klõpsake valikul Rohkem teavet → Käivita ikkagi"
   },
   "downloadConfirm": {
     "macTitle": "MacOS-i installijuhend",
@@ -160,5 +171,23 @@
     "winNotice": "SmartScreeni teade: kui näete sinist ekraani \"Windows kaitses teie arvutit\", klõpsake \"Rohkem teavet\" -> klõpsake \"Käivita ikkagi\".",
     "macNotice": "Gatekeeperi teade: kui macOS teatab, et rakendus on kahjustatud või kinnitamata, minge jaotisse Rakendused -> Paremklõpsake Framezoo -> Valige Ava -> Ava ikkagi.",
     "confirmDownload": "Kinnitage ja laadige alla"
+  },
+  "feedback": {
+    "button": "Tagasiside",
+    "badge": "Tagasiside",
+    "subtitle": "Andke meile teada kõigist Framezooga seotud probleemidest või raskustest.",
+    "modalTitle": "Saatke meile oma tagasiside",
+    "titleLabel": "1. Väljaande pealkiri",
+    "descLabel": "2. Üksikasjalik kirjeldus",
+    "titlePlaceholder": "nt. Subtiitrite sünkroonimise probleem, viivitus taasesituse ajal...",
+    "errorRequired": "Sisestage nii pealkiri kui ka probleemi kirjeldus.",
+    "descPlaceholder": "Kirjeldage konkreetset probleemi või selle taasesitamise samme...",
+    "cancel": "Tühista",
+    "submit": "Esitage tagasisidet",
+    "close": "Sule",
+    "errorSubmit": "Tagasiside saatmine ebaõnnestus. Proovige hiljem uuesti.",
+    "successTitle": "Tagasiside saatmine õnnestus!",
+    "successDesc": "Täname teid tagasiside eest. Meie meeskond vaatab probleemi üle ja lahendab selle niipea kui võimalik.",
+    "submitting": "Esitamine..."
   }
 }

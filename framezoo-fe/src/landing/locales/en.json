@@ -104,12 +104,23 @@
     "backHome": "Go back to homepage"
   },
   "installGuide": {
+    "eyebrow": "Documentation",
     "title": "Framezoo Installation & Launch Guide",
     "subtitle": "How to bypass Gatekeeper (macOS) and SmartScreen (Windows) security notices on first launch.",
     "backHome": "Back to Home",
     "downloadApp": "Download Framezoo",
     "macTab": "For macOS",
     "winTab": "For Windows",
+    "macQuickSolution": "Quick solution: Open via Finder right-click context menu",
+    "macTerminalTip": "💡 Backup method via Terminal:",
+    "macTerminalDesc": "If you are still blocked, open Terminal and run:",
+    "macDialogTitle": "\"Framezoo\" is damaged and can't be opened.",
+    "macDialogDesc": "Apple cannot check it for malicious software. This happens when an app is downloaded outside the Mac App Store without an annual commercial certificate.",
+    "winDialogTitle": "Windows protected your PC",
+    "winDialogDesc": "Microsoft Defender SmartScreen prevented an unrecognized app from starting. Running this app might put your PC at risk.",
+    "winMoreInfo": "More info",
+    "winClickHere": "(Click here)",
+    "winQuickSolution": "Click More info → Run anyway",
     "mac": {
       "title": "macOS Installation Guide",
       "subtitle": "Apple Silicon (M1/M2/M3/M4) & Intel Mac",
@@ -151,5 +162,23 @@
     "viewGuide": "View full installation guide",
     "cancel": "Cancel",
     "downloading": "Starting download..."
+  },
+  "feedback": {
+    "button": "Feedback",
+    "badge": "Feedback",
+    "modalTitle": "Send us your feedback",
+    "subtitle": "Let us know about any issues or difficulties you experienced with Framezoo.",
+    "titleLabel": "1. Issue title",
+    "titlePlaceholder": "e.g. Subtitle sync issue, lag during playback...",
+    "descLabel": "2. Detailed description",
+    "descPlaceholder": "Describe the specific issue or the steps to reproduce it...",
+    "errorRequired": "Please fill in both the title and issue description.",
+    "errorSubmit": "Failed to submit feedback. Please try again later.",
+    "successTitle": "Feedback sent successfully!",
+    "successDesc": "Thank you for your feedback. Our team will review and resolve the issue as soon as possible.",
+    "cancel": "Cancel",
+    "submit": "Submit feedback",
+    "submitting": "Submitting...",
+    "close": "Close"
   }
 }

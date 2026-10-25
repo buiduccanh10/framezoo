@@ -97,6 +97,7 @@ export function LandingCategoryPage({ category }: LandingCategoryPageProps) {
           >
             {activeCopy.nav.download}
           </a>
+          <a href="/guide/install">{activeCopy.nav.installGuide}</a>
           <LandingLanguageSelector
             locale={locale}
             label={activeCopy.nav.language}
