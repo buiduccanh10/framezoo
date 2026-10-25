@@ -15,8 +15,21 @@ import {
   normalizeAddonManifestUrl,
 } from './protocol';
 import { mobileStorage } from '../storage/storage';
+import { useAuthStore } from '@/state/auth/store';
+import { updateSettings } from '../settings';
 
 const STORAGE_KEY = '@framezoo/mobile/addons';
+
+async function syncToBackend(addons: InstalledAddon[]) {
+  try {
+    const { account, backendUrl } = useAuthStore.getState();
+    if (account && backendUrl) {
+      await updateSettings(backendUrl, account, { addons });
+    }
+  } catch (err) {
+    console.warn('[addons] Failed to sync addons to mobile backend settings:', err);
+  }
+}
 
 interface StreamResponse {
   streams?: Array<{
@@ -112,9 +125,50 @@ export const addonRepository = {
   async list(): Promise<InstalledAddon[]> {
     return (await mobileStorage.getJson<InstalledAddon[]>(STORAGE_KEY)) ?? [];
   },
-  async save(addons: InstalledAddon[]) {
+  async save(addons: InstalledAddon[], shouldSyncToBackend = true) {
     await mobileStorage.setJson(STORAGE_KEY, addons);
+    if (shouldSyncToBackend) {
+      syncToBackend(addons).catch(() => undefined);
+    }
     return addons;
+  },
+  async syncAndMigrate(remoteAddons?: InstalledAddon[]) {
+    const local = await this.list();
+    const remote = Array.isArray(remoteAddons) ? remoteAddons : [];
+
+    const map = new Map<string, InstalledAddon>();
+    for (const addon of remote) {
+      const key = addon.manifest.id || addon.manifestUrl;
+      map.set(key, addon);
+    }
+    for (const addon of local) {
+      const key = addon.manifest.id || addon.manifestUrl;
+      if (!map.has(key)) {
+        map.set(key, addon);
+      } else {
+        const existing = map.get(key)!;
+        if (addon.addedAt > existing.addedAt) {
+          map.set(key, addon);
+        }
+      }
+    }
+    const merged = Array.from(map.values());
+    await this.save(merged, false);
+
+    const { account, backendUrl } = useAuthStore.getState();
+    if (account && backendUrl) {
+      const remoteIds = new Set(
+        remote.map((a) => a.manifest.id || a.manifestUrl),
+      );
+      const hasUnsyncedLocal = local.some(
+        (a) => !remoteIds.has(a.manifest.id || a.manifestUrl),
+      );
+      if (hasUnsyncedLocal || merged.length !== remote.length) {
+        syncToBackend(merged).catch(() => undefined);
+      }
+    }
+
+    return merged;
   },
   async install(input: string) {
     const manifestUrl = normalizeAddonManifestUrl(input);

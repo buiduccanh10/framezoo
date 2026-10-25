@@ -84,6 +84,7 @@ model user_settings {
   debrid_token                         String?  @db.VarChar(255)
   enable_auto_resume_on_playback_error Boolean  @default(false)
   tidb_key                             String?  @db.VarChar(255)
+  addons                               Json?    @default("[]")
 }
 
 model users {

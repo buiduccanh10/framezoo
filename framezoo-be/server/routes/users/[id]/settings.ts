@@ -32,6 +32,7 @@ const userSettingsSchema = z.object({
   manualSourceSelection: z.boolean().optional().default(false),
   enableDoubleClickToSeek: z.boolean().optional().default(true),
   enableAutoResumeOnPlaybackError: z.boolean().optional().default(false),
+  addons: z.array(z.any()).optional().default([]),
 });
 
 export default defineEventHandler(async event => {
@@ -85,6 +86,7 @@ export default defineEventHandler(async event => {
         manualSourceSelection: settings?.manual_source_selection ?? false,
         enableDoubleClickToSeek: settings?.enable_double_click_to_seek ?? true,
         enableAutoResumeOnPlaybackError: settings?.enable_auto_resume_on_playback_error ?? false,
+        addons: (settings?.addons as any[]) || [],
       };
     } catch (error) {
       log.error('Failed to get user settings', {
@@ -128,6 +130,7 @@ export default defineEventHandler(async event => {
         manual_source_selection: validatedBody.manualSourceSelection,
         enable_double_click_to_seek: validatedBody.enableDoubleClickToSeek,
         enable_auto_resume_on_playback_error: validatedBody.enableAutoResumeOnPlaybackError,
+        addons: validatedBody.addons || [],
       };
 
       const updateData: Partial<typeof createData> = {};
@@ -170,6 +173,8 @@ export default defineEventHandler(async event => {
       if (Object.prototype.hasOwnProperty.call(body, 'enableAutoResumeOnPlaybackError'))
         updateData.enable_auto_resume_on_playback_error =
           createData.enable_auto_resume_on_playback_error;
+      if (Object.prototype.hasOwnProperty.call(body, 'addons'))
+        updateData.addons = createData.addons;
 
       log.info('Preparing to upsert settings', {
         userId,
@@ -208,6 +213,7 @@ export default defineEventHandler(async event => {
         manualSourceSelection: settings.manual_source_selection,
         enableDoubleClickToSeek: settings.enable_double_click_to_seek,
         enableAutoResumeOnPlaybackError: settings.enable_auto_resume_on_playback_error,
+        addons: (settings.addons as any[]) || [],
       };
     } catch (error) {
       log.error('Failed to update user settings', {

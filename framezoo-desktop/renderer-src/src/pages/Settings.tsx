@@ -20,6 +20,7 @@ import { UserIcons } from "@/components/UserIcon";
 import { Divider } from "@/components/utils/Divider";
 import { Heading1, Heading2, Paragraph } from "@/components/utils/Text";
 import { Transition } from "@/components/utils/Transition";
+import { syncAndMigrateAddons } from "@/desktop/addons/store";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { useIsIOS, useIsMobile, useIsPWA } from "@/hooks/useIsMobile";
@@ -530,6 +531,9 @@ export function SettingsPage() {
           setCustomThemeBaseline(settings.customTheme);
         } else {
           setCustomThemeBaseline(useThemeStore.getState().customTheme);
+        }
+        if (settings.addons !== undefined) {
+          syncAndMigrateAddons(settings.addons);
         }
       }
     };

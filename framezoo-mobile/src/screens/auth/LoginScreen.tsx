@@ -7,6 +7,8 @@ import { AppText, Button, Screen, TextInput } from '@/components/primitives';
 import { login } from '@/services/api/auth';
 import { persistAuth } from '@/app/bootstrap';
 import { useAuthStore } from '@/state/auth/store';
+import { addonRepository } from '@/services/addons';
+import { getSettings } from '@/services/settings';
 import { colors, spacing } from '@/theme';
 
 import type { AuthStackParamList } from '@/navigation/AuthNavigator';
@@ -36,8 +38,17 @@ export function LoginScreen() {
     }
     setBusy(true);
     try {
-      setAccount(await login(backendUrl, { identifier: identifier.trim(), password }));
+      const loggedAccount = await login(backendUrl, { identifier: identifier.trim(), password });
+      setAccount(loggedAccount);
       await persistAuth();
+      try {
+        const settings = await getSettings(backendUrl, loggedAccount);
+        if (settings.addons) {
+          await addonRepository.syncAndMigrate(settings.addons);
+        }
+      } catch (settingsError) {
+        console.warn('Could not sync settings addons on login:', settingsError);
+      }
       navigation.getParent()?.goBack();
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : 'Login failed.');

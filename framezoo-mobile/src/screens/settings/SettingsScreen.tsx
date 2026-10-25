@@ -6,6 +6,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { persistAuth, persistBackendUrl, persistPreferences } from '@/app/bootstrap';
 import { getSessions, deleteAccount, removeSession, updateAccount, updateSession, type MobileSession } from '@/services/account';
 import { getSettings, updateSettings } from '@/services/settings';
+import { addonRepository } from '@/services/addons';
 import { AppText, Button, ErrorState, LoadingState, Screen, TextInput } from '@/components/primitives';
 import { ChoiceChips, SettingsCard, SettingsItem, SettingsSection, SettingsToggle } from '@/components/navigation';
 import type { RootStackParamList } from '@/navigation/routeTypes';
@@ -156,6 +157,9 @@ export function SettingsScreen() {
         setDraft(next);
         setBaseline(next);
         setSessions(remoteSessions);
+        if (remote.addons) {
+          addonRepository.syncAndMigrate(remote.addons).catch(() => undefined);
+        }
       })
       .catch((cause) => {
         if (!cancelled) {

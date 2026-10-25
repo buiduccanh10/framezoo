@@ -1,4 +1,4 @@
-import type { AccountWithToken } from '@/types';
+import type { AccountWithToken, InstalledAddon } from '@/types';
 
 import { apiRequest } from '../api/client';
 
@@ -13,6 +13,7 @@ export interface MobileSettings {
   enableDoubleClickToSeek?: boolean;
   proxyTmdb?: boolean;
   torrentMaxSizeBytes?: string | null;
+  addons?: InstalledAddon[];
 }
 
 export function getSettings(baseUrl: string, account: AccountWithToken) {
