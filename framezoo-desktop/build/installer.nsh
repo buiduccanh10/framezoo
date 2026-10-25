@@ -1,3 +1,7 @@
+!define MUI_LICENSEPAGE_TEXT_TOP "HƯỚNG DẪN CÀI ĐẶT & SMARTSCREEN (Có thể bôi đen & copy chữ bên dưới):"
+!define MUI_LICENSEPAGE_TEXT_BOTTOM "Bạn có thể bôi đen và copy (Ctrl+C) văn bản bên trên. Nhấn 'Tiếp tục' để bắt đầu cài đặt:"
+!define MUI_LICENSEPAGE_BUTTON "Tiếp tục / Next"
+
 !macro _FixedIsNativeARM64 _a _b _t _f
   !insertmacro _LOGICLIB_TEMP
   !define _FixedIsNativeARM64_True _FixedIsNativeARM64_True_${__COUNTER__}
