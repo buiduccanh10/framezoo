@@ -1,6 +1,15 @@
 import { usePlayerStore } from "@/stores/player/store";
 import { useVolumeStore } from "@/stores/volume";
 
+let persistTimeout: ReturnType<typeof setTimeout> | undefined;
+
+function debouncedSetStoredVolume(vol: number) {
+  if (persistTimeout) clearTimeout(persistTimeout);
+  persistTimeout = setTimeout(() => {
+    useVolumeStore.getState().setVolume(vol);
+  }, 250);
+}
+
 export function useVolume() {
   const volume = usePlayerStore((s) => s.mediaPlaying.volume);
   const lastVolume = usePlayerStore((s) => s.interface.lastVolume);
@@ -26,9 +35,9 @@ export function useVolume() {
       toggleVolume();
     },
     setVolume(vol: number) {
-      setStoredVolume(vol);
-      setLastVolume(vol);
       display?.setVolume(vol);
+      setLastVolume(vol);
+      debouncedSetStoredVolume(vol);
     },
   };
 }

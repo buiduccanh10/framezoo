@@ -143,7 +143,7 @@ function getElectronApi(): LibMpvElectronApi | null {
 
 function normalizeVolume(volume: number): number {
   if (!Number.isFinite(volume)) return 1;
-  return Math.max(0, Math.min(1, volume));
+  return Math.max(0, Math.min(3, volume));
 }
 
 function sourceType(source: LoadableSource): LibMpvSourceRequest["type"] {
