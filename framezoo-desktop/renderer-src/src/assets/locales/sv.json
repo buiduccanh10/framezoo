@@ -678,6 +678,11 @@
       "offline": "Det gick inte att ansluta till servern. Försök igen om några sekunder.",
       "lowSpace": "Din enhets lagringsutrymme börjar ta slut. Detta kan påverka streaming och nedladdning."
     },
+    "status": {
+      "offline": "Off-line",
+      "lowSpace": "Litet lagringsutrymme",
+      "lowSpaceWithPercent": "Återstående lagringsutrymme: {{percent}}%"
+    },
     "download": {
       "empty": "Inga nedladdningar är konfigurerade än.",
       "failed": "Det gick inte att ladda nedladdningsalternativ.",
@@ -1391,6 +1396,9 @@
     "descriptionLabel": "2. Problembeskrivning",
     "descriptionPlaceholder": "Beskriv problemet i detalj, steg för att reproducera det, eller förslag...",
     "submit": "Skicka feedback",
+    "attachmentsLabel": "Filer",
+    "attachmentsHint": "Bilder/videor · Maximalt 55 MB totalt",
+    "attachmentsTooLarge": "Den totala filstorleken får inte överstiga 55 MB.",
     "cancel": "Avboka",
     "close": "Nära",
     "successTitle": "Feedback skickad!",

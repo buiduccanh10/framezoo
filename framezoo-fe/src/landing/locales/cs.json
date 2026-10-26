@@ -188,6 +188,9 @@
     "close": "Blízko",
     "successTitle": "Zpětná vazba byla úspěšně odeslána!",
     "submitting": "Odesílání...",
-    "successDesc": "děkujeme za vaši zpětnou vazbu. Náš tým problém co nejdříve zkontroluje a vyřeší."
+    "successDesc": "děkujeme za vaši zpětnou vazbu. Náš tým problém co nejdříve zkontroluje a vyřeší.",
+    "attachmentsLabel": "Soubory",
+    "attachmentsTooLarge": "Celková velikost souboru nesmí přesáhnout 55 MB.",
+    "attachmentsHint": "Obrázky/videa · Celková maximální velikost 55 MB"
   }
 }

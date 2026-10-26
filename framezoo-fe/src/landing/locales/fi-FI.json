@@ -188,6 +188,9 @@
     "close": "Lähellä",
     "submitting": "Lähetetään...",
     "successDesc": "Kiitos palautteestasi. Tiimimme tarkistaa ja ratkaisee ongelman mahdollisimman pian.",
-    "submit": "Lähetä palautetta"
+    "submit": "Lähetä palautetta",
+    "attachmentsLabel": "Tiedostot",
+    "attachmentsHint": "Kuvat/videot · Enimmäiskoko 55 Mt",
+    "attachmentsTooLarge": "Tiedoston kokonaiskoko ei saa ylittää 55 megatavua."
   }
 }

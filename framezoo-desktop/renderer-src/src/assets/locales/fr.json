@@ -678,6 +678,11 @@
       "offline": "Impossible de se connecter au serveur. Veuillez réessayer dans quelques secondes.",
       "lowSpace": "Votre appareil manque d&#39;espace de stockage. Cela peut affecter la lecture en continu et le téléchargement."
     },
+    "status": {
+      "offline": "Hors ligne",
+      "lowSpace": "espace de stockage réduit",
+      "lowSpaceWithPercent": "Espace de stockage restant : {{percent}}%"
+    },
     "download": {
       "empty": "Aucun téléchargement n'est encore configuré.",
       "failed": "Échec du chargement des options de téléchargement.",
@@ -1391,6 +1396,9 @@
     "descriptionLabel": "2. Description du problème",
     "descriptionPlaceholder": "Décrivez le problème en détail, les étapes pour le reproduire ou faites des suggestions...",
     "submit": "Envoyer des commentaires",
+    "attachmentsLabel": "Fichiers",
+    "attachmentsHint": "Images/vidéos · 55 Mo maximum au total",
+    "attachmentsTooLarge": "La taille totale du fichier ne doit pas dépasser 55 Mo.",
     "cancel": "Annuler",
     "close": "Fermer",
     "successTitle": "Commentaires envoyés !",

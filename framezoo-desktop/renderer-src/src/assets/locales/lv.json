@@ -678,6 +678,11 @@
       "offline": "Nevar izveidot savienojumu ar serveri. Lūdzu, mēģiniet vēlreiz pēc dažām sekundēm.",
       "lowSpace": "Jūsu ierīcē trūkst vietas krātuvē. Tas var ietekmēt straumēšanu un lejupielādi."
     },
+    "status": {
+      "offline": "Bezsaistē",
+      "lowSpace": "Maz vietas glabāšanai",
+      "lowSpaceWithPercent": "Atlikušā krātuve: {{percent}}%"
+    },
     "download": {
       "empty": "Vēl nav konfigurēta neviena lejupielāde.",
       "failed": "Neizdevās ielādēt lejupielādes opcijas.",
@@ -1391,6 +1396,9 @@
     "descriptionLabel": "2. Problēmas apraksts",
     "descriptionPlaceholder": "Detalizēti aprakstiet problēmu, sniedziet darbības, lai to atkārtotu, vai ieteikumus...",
     "submit": "Iesniegt atsauksmes",
+    "attachmentsLabel": "Faili",
+    "attachmentsHint": "Attēli/video · Kopējais maksimālais apjoms 55 MB",
+    "attachmentsTooLarge": "Kopējais faila lielums nedrīkst pārsniegt 55 MB.",
     "cancel": "Atcelt",
     "close": "Aizvērt",
     "successTitle": "Atsauksme iesniegta!",

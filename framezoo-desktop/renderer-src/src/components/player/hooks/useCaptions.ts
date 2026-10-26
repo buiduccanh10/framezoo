@@ -901,9 +901,9 @@ export function useCaptions() {
 
   const selectNextBestCaptionForLanguage = useCallback(
     async (language: string, track: "primary" | "secondary" = "primary") => {
-      const ranked = (await scoreCaptionsForLanguage(language)).filter(
-        (item) => item.score >= 0,
-      );
+      // Manual cycling must include every ranked subtitle. A score of -1 means
+      // the fit scorer could not evaluate that item, not that it is unavailable.
+      const ranked = await scoreCaptionsForLanguage(language);
       if (ranked.length === 0) return false;
 
       const activeId =

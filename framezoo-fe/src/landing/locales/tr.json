@@ -188,6 +188,9 @@
     "close": "Kapalı",
     "submit": "Geri bildirim gönder",
     "successTitle": "Geri bildirim başarıyla gönderildi!",
-    "successDesc": "Geri bildiriminiz için teşekkür ederiz. Ekibimiz sorunu en kısa sürede inceleyip çözecektir."
+    "successDesc": "Geri bildiriminiz için teşekkür ederiz. Ekibimiz sorunu en kısa sürede inceleyip çözecektir.",
+    "attachmentsLabel": "Dosyalar",
+    "attachmentsTooLarge": "Toplam dosya boyutu 55 MB'ı geçmemelidir.",
+    "attachmentsHint": "Resimler/videolar · toplam maksimum 55 MB"
   }
 }

@@ -188,6 +188,9 @@
     "submitting": "Enviando...",
     "submit": "Enviar comentarios",
     "successTitle": "Comentarios enviados correctamente!",
-    "successDesc": "Grazas polos teus comentarios. O noso equipo revisará e resolverá o problema o antes posible."
+    "successDesc": "Grazas polos teus comentarios. O noso equipo revisará e resolverá o problema o antes posible.",
+    "attachmentsLabel": "Arquivos",
+    "attachmentsHint": "Imaxes/vídeos · 55 MB en total como máximo",
+    "attachmentsTooLarge": "O tamaño total do ficheiro non debe superar os 55 MB."
   }
 }

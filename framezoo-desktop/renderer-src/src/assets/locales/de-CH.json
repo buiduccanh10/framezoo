@@ -678,6 +678,11 @@
       "offline": "Verbindung zum Server konnte nicht hergestellt werden. Bitte versuchen Sie es in wenigen Sekunden erneut.",
       "lowSpace": "Auf Ihrem Gerät ist der Speicherplatz knapp. Dies kann das Streaming und Herunterladen beeinträchtigen."
     },
+    "status": {
+      "offline": "Offline",
+      "lowSpace": "Geringer Stauraum",
+      "lowSpaceWithPercent": "Verbleibender Speicherplatz: {{percent}}%"
+    },
     "download": {
       "empty": "Es sind noch keine Downloads konfiguriert.",
       "failed": "Download-Optionen konnten nicht geladen werden.",
@@ -1391,6 +1396,9 @@
     "descriptionLabel": "2. Problembeschreibung",
     "descriptionPlaceholder": "Beschreiben Sie das Problem detailliert, die Schritte zur Reproduktion oder geben Sie Lösungsvorschläge an...",
     "submit": "Feedback senden",
+    "attachmentsLabel": "Dateien",
+    "attachmentsHint": "Bilder/Videos · Maximal 55 MB Gesamtgröße",
+    "attachmentsTooLarge": "Die Gesamtdateigröße darf 55 MB nicht überschreiten.",
     "cancel": "Stornieren",
     "close": "Schließen",
     "successTitle": "Feedback übermittelt!",

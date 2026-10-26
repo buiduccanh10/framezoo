@@ -178,6 +178,9 @@
     "successDesc": "Thank you for your feedback. Our team will review and resolve the issue as soon as possible.",
     "cancel": "Cancel",
     "submit": "Submit feedback",
+    "attachmentsLabel": "Files",
+    "attachmentsHint": "Images/videos · 55 MB total maximum",
+    "attachmentsTooLarge": "The total file size must not exceed 55 MB.",
     "submitting": "Submitting...",
     "close": "Close"
   }

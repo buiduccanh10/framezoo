@@ -678,6 +678,11 @@
       "offline": "Nem sikerült csatlakozni a szerverhez. Próbáld újra néhány másodperc múlva.",
       "lowSpace": "Fogyóban van a tárhelyed az eszközödön. Ez befolyásolhatja a streamelést és a letöltést."
     },
+    "status": {
+      "offline": "Offline",
+      "lowSpace": "Kevés tárhely",
+      "lowSpaceWithPercent": "Fennmaradó tárhely: {{percent}}%"
+    },
     "download": {
       "empty": "Még nincsenek letöltések konfigurálva.",
       "failed": "Nem sikerült betölteni a letöltési lehetőségeket.",
@@ -1391,6 +1396,9 @@
     "descriptionLabel": "2. A probléma leírása",
     "descriptionPlaceholder": "Írd le részletesen a problémát, adj lépéseket a reprodukálására, vagy javaslatokat...",
     "submit": "Visszajelzés küldése",
+    "attachmentsLabel": "Fájlok",
+    "attachmentsHint": "Képek/videók · Összesen maximum 55 MB",
+    "attachmentsTooLarge": "A teljes fájlméret nem haladhatja meg az 55 MB-ot.",
     "cancel": "Mégsem",
     "close": "Közeli",
     "successTitle": "Visszajelzés elküldve!",

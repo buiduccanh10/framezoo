@@ -1,9 +1,9 @@
 {
   "name": "Framezoo",
   "private": true,
-  "version": "2.0.6",
+  "version": "2.0.7",
   "main": "dist/main.cjs",
-  "packageManager": "pnpm@12.8.1+sha512.f64ba907507f5ceafe06c8d38e6052d0179444580ec1279ddd5bfc11cb48aa8a2644b66598e07e761da84872a9fc57d5f902b87fa49d024198d558612aabbe45",
+  "packageManager": "pnpm@12.15.0",
   "scripts": {
     "dev": "pnpm run resources:ensure && pnpm run torrent:setup && concurrently -k -n renderer,shell,electron -c cyan,yellow,green \"pnpm run dev:renderer\" \"pnpm run dev:shell\" \"pnpm run dev:electron\"",
     "dev:renderer": "pnpm exec vite --config renderer-src/vite.config.mts --host 127.0.0.1 --port 5174",

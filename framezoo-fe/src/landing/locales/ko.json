@@ -188,6 +188,9 @@
     "cancel": "취소",
     "submitting": "제출 중...",
     "close": "닫다",
-    "submit": "피드백 제출"
+    "submit": "피드백 제출",
+    "attachmentsLabel": "파일",
+    "attachmentsTooLarge": "총 파일 크기는 55MB를 초과할 수 없습니다.",
+    "attachmentsHint": "이미지/비디오 · 총 최대 55MB"
   }
 }

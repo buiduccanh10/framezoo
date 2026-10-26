@@ -678,6 +678,11 @@
       "offline": "Não foi possível conectar ao servidor. Tente novamente em alguns segundos.",
       "lowSpace": "Seu dispositivo está ficando sem espaço de armazenamento. Isso pode afetar a reprodução e os downloads."
     },
+    "status": {
+      "offline": "Offline",
+      "lowSpace": "Pouco espaço de armazenamento",
+      "lowSpaceWithPercent": "Armazenamento restante: {{percent}}%"
+    },
     "download": {
       "empty": "Nenhum download está configurado ainda.",
       "failed": "Falha ao carregar as opções de download.",
@@ -1391,6 +1396,9 @@
     "descriptionLabel": "2. Descrição do Problema",
     "descriptionPlaceholder": "Descreva o problema em detalhes, os passos para reproduzi-lo ou sugestões...",
     "submit": "Enviar feedback",
+    "attachmentsLabel": "Arquivos",
+    "attachmentsHint": "Imagens/vídeos · 55 MB no total (máximo)",
+    "attachmentsTooLarge": "O tamanho total do arquivo não deve exceder 55 MB.",
     "cancel": "Cancelar",
     "close": "Fechar",
     "successTitle": "Feedback enviado!",

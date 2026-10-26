@@ -678,6 +678,11 @@
       "offline": "서버에 연결할 수 없습니다. 잠시 후 다시 시도해 주세요.",
       "lowSpace": "기기의 저장 공간이 부족합니다. 이로 인해 스트리밍 및 다운로드에 문제가 발생할 수 있습니다."
     },
+    "status": {
+      "offline": "오프라인",
+      "lowSpace": "수납 공간이 부족합니다",
+      "lowSpaceWithPercent": "남은 저장 용량: {{percent}}%"
+    },
     "download": {
       "empty": "아직 구성된 다운로드가 없습니다.",
       "failed": "다운로드 옵션을 로드하지 못했습니다.",
@@ -1391,6 +1396,9 @@
     "descriptionLabel": "2. 문제 설명",
     "descriptionPlaceholder": "문제점을 자세히 설명하고, 재현 단계 또는 제안 사항을 제시해 주세요.",
     "submit": "피드백 제출",
+    "attachmentsLabel": "파일",
+    "attachmentsHint": "이미지/동영상 · 총 최대 용량 55MB",
+    "attachmentsTooLarge": "전체 파일 크기는 55MB를 초과해서는 안 됩니다.",
     "cancel": "취소",
     "close": "닫다",
     "successTitle": "피드백 제출 완료!",

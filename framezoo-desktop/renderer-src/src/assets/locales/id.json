@@ -678,6 +678,11 @@
       "offline": "Tidak dapat terhubung ke server. Silakan coba lagi dalam beberapa detik.",
       "lowSpace": "Ruang penyimpanan perangkat Anda hampir habis. Hal ini dapat memengaruhi proses streaming dan pengunduhan."
     },
+    "status": {
+      "offline": "Offline",
+      "lowSpace": "Ruang penyimpanan terbatas",
+      "lowSpaceWithPercent": "Sisa penyimpanan: {{percent}}%"
+    },
     "download": {
       "empty": "Belum ada unduhan yang dikonfigurasi.",
       "failed": "Gagal memuat opsi unduhan.",
@@ -1391,6 +1396,9 @@
     "descriptionLabel": "2. Deskripsi Masalah",
     "descriptionPlaceholder": "Jelaskan masalahnya secara detail, langkah-langkah untuk mereproduksinya, atau saran...",
     "submit": "Kirim Masukan",
+    "attachmentsLabel": "Berkas",
+    "attachmentsHint": "Gambar/video · Maksimum total 55 MB",
+    "attachmentsTooLarge": "Ukuran total file tidak boleh melebihi 55 MB.",
     "cancel": "Membatalkan",
     "close": "Menutup",
     "successTitle": "Masukan telah disampaikan!",

@@ -678,6 +678,11 @@
       "offline": "Nu se poate conecta la server. Vă rugăm să încercați din nou în câteva secunde.",
       "lowSpace": "Dispozitivul tău rămâne fără spațiu de stocare. Acest lucru poate afecta redarea în flux și descărcarea."
     },
+    "status": {
+      "offline": "Offline",
+      "lowSpace": "Spațiu de stocare redus",
+      "lowSpaceWithPercent": "Spațiu de stocare rămas: {{percent}}%"
+    },
     "download": {
       "empty": "Nu sunt încă configurate descărcări.",
       "failed": "Opțiunile de descărcare nu au putut fi încărcate.",
@@ -1391,6 +1396,9 @@
     "descriptionLabel": "2. Descrierea problemei",
     "descriptionPlaceholder": "Descrieți problema în detaliu, pașii pentru reproducere sau sugestii...",
     "submit": "Trimiteți feedback",
+    "attachmentsLabel": "Fișiere",
+    "attachmentsHint": "Imagini/videoclipuri · 55 MB maxim total",
+    "attachmentsTooLarge": "Dimensiunea totală a fișierului nu trebuie să depășească 55 MB.",
     "cancel": "Anula",
     "close": "Aproape",
     "successTitle": "Feedback trimis!",

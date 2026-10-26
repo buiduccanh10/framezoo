@@ -678,6 +678,11 @@
       "offline": "Kan ikke oprette forbindelse til serveren. Prøv igen om et par sekunder.",
       "lowSpace": "Din enhed er ved at løbe tør for lagerplads. Dette kan påvirke streaming og download."
     },
+    "status": {
+      "offline": "Offline",
+      "lowSpace": "Lav lagerplads",
+      "lowSpaceWithPercent": "Resterende lagerplads: {{percent}}%"
+    },
     "download": {
       "empty": "Ingen downloads er konfigureret endnu.",
       "failed": "Kunne ikke indlæse downloadindstillinger.",
@@ -1391,6 +1396,9 @@
     "descriptionLabel": "2. Problembeskrivelse",
     "descriptionPlaceholder": "Beskriv problemet i detaljer, trin til reproduktion eller forslag...",
     "submit": "Send feedback",
+    "attachmentsLabel": "Filer",
+    "attachmentsHint": "Billeder/videoer · Maksimalt 55 MB i alt",
+    "attachmentsTooLarge": "Den samlede filstørrelse må ikke overstige 55 MB.",
     "cancel": "Ophæve",
     "close": "Tæt",
     "successTitle": "Feedback indsendt!",

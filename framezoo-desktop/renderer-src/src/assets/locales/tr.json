@@ -678,6 +678,11 @@
       "offline": "Sunucuya bağlanılamadı. Lütfen birkaç saniye sonra tekrar deneyin.",
       "lowSpace": "Cihazınızın depolama alanı azalıyor. Bu durum yayın akışını ve indirme işlemlerini etkileyebilir."
     },
+    "status": {
+      "offline": "Çevrimdışı",
+      "lowSpace": "Düşük depolama alanı",
+      "lowSpaceWithPercent": "Kalan depolama alanı: {{percent}}%"
+    },
     "download": {
       "empty": "Henüz hiçbir indirme işlemi yapılandırılmadı.",
       "failed": "İndirme seçenekleri yüklenemedi.",
@@ -1391,6 +1396,9 @@
     "descriptionLabel": "2. Sorun Tanımı",
     "descriptionPlaceholder": "Sorunu ayrıntılı olarak açıklayın, sorunu yeniden oluşturmak için izlenecek adımları veya önerileri belirtin...",
     "submit": "Geri Bildirim Gönder",
+    "attachmentsLabel": "Dosyalar",
+    "attachmentsHint": "Resimler/videolar · Toplam maksimum 55 MB",
+    "attachmentsTooLarge": "Toplam dosya boyutu 55 MB&#39;ı geçmemelidir.",
     "cancel": "İptal etmek",
     "close": "Kapalı",
     "successTitle": "Geri bildirim gönderildi!",

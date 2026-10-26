@@ -678,6 +678,11 @@
       "offline": "Palvelimeen ei saada yhteyttä. Yritä uudelleen muutaman sekunnin kuluttua.",
       "lowSpace": "Laitteesi tallennustila on loppumassa. Tämä voi vaikuttaa suoratoistoon ja lataukseen."
     },
+    "status": {
+      "offline": "Offline-tilassa",
+      "lowSpace": "Vähän säilytystilaa",
+      "lowSpaceWithPercent": "Jäljellä oleva tallennustila: {{percent}}%"
+    },
     "download": {
       "empty": "Latauksia ei ole vielä määritetty.",
       "failed": "Latausvaihtoehtojen lataaminen epäonnistui.",
@@ -1391,6 +1396,9 @@
     "descriptionLabel": "2. Ongelman kuvaus",
     "descriptionPlaceholder": "Kuvaile ongelmaa yksityiskohtaisesti, anna vaiheet sen toistamiseksi tai ehdotuksia...",
     "submit": "Lähetä palautetta",
+    "attachmentsLabel": "Tiedostot",
+    "attachmentsHint": "Kuvat/videot · Yhteensä enintään 55 Mt",
+    "attachmentsTooLarge": "Tiedoston kokonaiskoko ei saa ylittää 55 Mt.",
     "cancel": "Peruuttaa",
     "close": "Lähellä",
     "successTitle": "Palaute lähetetty!",

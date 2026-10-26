@@ -678,6 +678,11 @@
       "offline": "Kan geen verbinding maken met de server. Probeer het over een paar seconden opnieuw.",
       "lowSpace": "Uw apparaat heeft bijna geen opslagruimte meer. Dit kan gevolgen hebben voor het streamen en downloaden."
     },
+    "status": {
+      "offline": "Offline",
+      "lowSpace": "Beperkte opslagruimte",
+      "lowSpaceWithPercent": "Resterende opslag: {{percent}}%"
+    },
     "download": {
       "empty": "Er zijn nog geen downloads geconfigureerd.",
       "failed": "Kan downloadopties niet laden.",
@@ -1391,6 +1396,9 @@
     "descriptionLabel": "2. Probleemomschrijving",
     "descriptionPlaceholder": "Beschrijf het probleem in detail, de stappen om het te reproduceren, of suggesties...",
     "submit": "Feedback verzenden",
+    "attachmentsLabel": "Bestanden",
+    "attachmentsHint": "Afbeeldingen/video&#39;s · Totaal maximaal 55 MB",
+    "attachmentsTooLarge": "De totale bestandsgrootte mag niet groter zijn dan 55 MB.",
     "cancel": "Annuleren",
     "close": "Dichtbij",
     "successTitle": "Feedback verzonden!",

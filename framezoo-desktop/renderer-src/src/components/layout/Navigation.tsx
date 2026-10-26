@@ -135,7 +135,9 @@ export function Navigation(props: NavigationProps) {
                 )}
               {location.pathname !== "/login" &&
                 location.pathname !== "/register" &&
-                location.pathname !== "/settings" && <NavActionsCollapsible />}
+                !location.pathname.startsWith("/settings") && (
+                  <NavActionsCollapsible />
+                )}
               {location.pathname !== "/login" &&
                 location.pathname !== "/register" && (
                   <div

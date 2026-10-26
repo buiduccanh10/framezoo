@@ -188,6 +188,9 @@
     "close": "Zamknąć",
     "successDesc": "Dziękujemy za Twoją opinię. Nasz zespół sprawdzi i rozwiąże problem tak szybko, jak to możliwe.",
     "successTitle": "Opinia została wysłana pomyślnie!",
-    "submit": "Prześlij opinię"
+    "submit": "Prześlij opinię",
+    "attachmentsLabel": "Akta",
+    "attachmentsTooLarge": "Całkowity rozmiar pliku nie może przekraczać 55 MB.",
+    "attachmentsHint": "Obrazy/wideo · Maksymalnie 55 MB"
   }
 }

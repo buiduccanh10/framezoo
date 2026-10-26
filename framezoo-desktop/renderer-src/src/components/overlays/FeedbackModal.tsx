@@ -8,6 +8,8 @@ import { FancyModal, useModal } from "@/components/overlays/Modal";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { getBackendAuthHeadersAsync } from "@/utils/backendAuth";
 
+const MAX_FEEDBACK_FILE_BYTES = 55 * 1024 * 1024;
+
 export function FeedbackModal({ id = "feedback" }: { id?: string }) {
   const { t } = useTranslation();
   const modal = useModal(id);
@@ -15,6 +17,7 @@ export function FeedbackModal({ id = "feedback" }: { id?: string }) {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [attachments, setAttachments] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -22,6 +25,7 @@ export function FeedbackModal({ id = "feedback" }: { id?: string }) {
   const resetForm = useCallback(() => {
     setTitle("");
     setDescription("");
+    setAttachments([]);
     setError(null);
     setSuccess(false);
     setLoading(false);
@@ -56,17 +60,18 @@ export function FeedbackModal({ id = "feedback" }: { id?: string }) {
 
       const headers = await getBackendAuthHeadersAsync(
         endpoint,
-        { "Content-Type": "application/json" },
+        undefined,
         backendUrl || undefined,
       );
+      const formData = new FormData();
+      formData.append("title", title.trim());
+      formData.append("description", description.trim());
+      attachments.forEach((file) => formData.append("files", file));
 
       const response = await fetch(endpoint, {
         method: "POST",
         headers,
-        body: JSON.stringify({
-          title: title.trim(),
-          description: description.trim(),
-        }),
+        body: formData,
       });
 
       const data = await response.json().catch(() => null);
@@ -96,6 +101,24 @@ export function FeedbackModal({ id = "feedback" }: { id?: string }) {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleAttachments = (files: FileList | null) => {
+    const next = Array.from(files ?? []);
+    if (
+      next.reduce((sum, file) => sum + file.size, 0) > MAX_FEEDBACK_FILE_BYTES
+    ) {
+      setAttachments([]);
+      setError(
+        t(
+          "feedback.attachmentsTooLarge",
+          "Tổng dung lượng files không được vượt quá 55 MB.",
+        ),
+      );
+      return;
+    }
+    setError(null);
+    setAttachments(next);
   };
 
   return (
@@ -184,6 +207,28 @@ export function FeedbackModal({ id = "feedback" }: { id?: string }) {
                 "bg-video-context-border/30 border border-white/10 focus:border-buttons-purple focus:outline-none transition-colors",
               )}
             />
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="block text-xs font-semibold text-white/90 uppercase tracking-wide">
+              {t("feedback.attachmentsLabel", "Files đính kèm")}
+            </label>
+            <input
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/quicktime,video/webm"
+              multiple
+              onChange={(event) => handleAttachments(event.target.files)}
+              disabled={loading}
+              className="w-full rounded-xl px-4 py-2.5 text-sm text-white bg-video-context-border/30 border border-white/10 file:mr-3 file:rounded-lg file:border-0 file:bg-white/10 file:px-3 file:py-1.5 file:text-xs file:text-white"
+            />
+            <p className="text-xs text-type-secondary">
+              {t("feedback.attachmentsHint", "Ảnh/video · tổng tối đa 55 MB")}
+            </p>
+            {attachments.length > 0 && (
+              <p className="text-xs text-type-secondary truncate">
+                {attachments.map((file) => file.name).join(", ")}
+              </p>
+            )}
           </div>
 
           <div className="flex items-center justify-end gap-3 pt-4">

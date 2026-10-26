@@ -188,6 +188,9 @@
     "errorSubmit": "Povratnih informacij ni bilo mogoče poslati. Poskusite znova pozneje.",
     "successTitle": "Povratne informacije so bile uspešno poslane!",
     "successDesc": "Hvala za vaše povratne informacije. Naša ekipa bo pregledala in rešila težavo v najkrajšem možnem času.",
-    "submitting": "Pošiljanje ..."
+    "submitting": "Pošiljanje ...",
+    "attachmentsLabel": "Datoteke",
+    "attachmentsTooLarge": "Skupna velikost datoteke ne sme presegati 55 MB.",
+    "attachmentsHint": "Slike/videoposnetki · Skupno največ 55 MB"
   }
 }

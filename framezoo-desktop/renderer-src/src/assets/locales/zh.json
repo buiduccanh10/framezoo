@@ -678,6 +678,11 @@
       "offline": "无法连接到服务器。请稍后再试。",
       "lowSpace": "您的设备存储空间不足。这可能会影响流媒体播放和下载。"
     },
+    "status": {
+      "offline": "离线",
+      "lowSpace": "低储物空间",
+      "lowSpaceWithPercent": "剩余存储空间：{{percent}}%"
+    },
     "download": {
       "empty": "尚未配置下载。",
       "failed": "无法加载下载选项。",
@@ -1391,6 +1396,9 @@
     "descriptionLabel": "2. 问题描述",
     "descriptionPlaceholder": "请详细描述问题、重现步骤或提出建议……",
     "submit": "提交反馈",
+    "attachmentsLabel": "文件",
+    "attachmentsHint": "图片/视频 · 总大小最大 55 MB",
+    "attachmentsTooLarge": "文件总大小不得超过 55 MB。",
     "cancel": "取消",
     "close": "关闭",
     "successTitle": "反馈已提交！",

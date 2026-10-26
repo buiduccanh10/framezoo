@@ -8,8 +8,9 @@ packages:
 shamefullyHoist: true
 strictPeerDependencies: false
 
-# Known vulnerability with no upstream published fix:
-# - GHSA-86w9-cpqp-85rv: Nitro's build-only listhen chain (node-forge <=1.4.0)
+# Rechecked 2026-10-26: no published fix; npm latest node-forge is 1.4.0.
+# Dev/build-only path: framezoo-be > nitropack > listhen > node-forge.
+# - GHSA-86w9-cpqp-85rv: node-forge <=1.4.0
 auditConfig:
   ignoreGhsas:
     - GHSA-86w9-cpqp-85rv

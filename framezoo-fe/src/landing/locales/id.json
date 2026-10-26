@@ -188,6 +188,9 @@
     "close": "Menutup",
     "descPlaceholder": "Jelaskan masalah spesifik atau langkah-langkah untuk mereproduksinya...",
     "errorRequired": "Silakan isi judul dan deskripsi terbitan.",
-    "successDesc": "Terima kasih atas tanggapan Anda. Tim kami akan meninjau dan menyelesaikan masalah ini sesegera mungkin."
+    "successDesc": "Terima kasih atas tanggapan Anda. Tim kami akan meninjau dan menyelesaikan masalah ini sesegera mungkin.",
+    "attachmentsLabel": "File",
+    "attachmentsHint": "Gambar/video · Total maksimum 55 MB",
+    "attachmentsTooLarge": "Total ukuran file tidak boleh melebihi 55 MB."
   }
 }

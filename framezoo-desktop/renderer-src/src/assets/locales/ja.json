@@ -678,6 +678,11 @@
       "offline": "サーバーに接続できませんでした。数秒後にもう一度お試しください。",
       "lowSpace": "お使いのデバイスのストレージ容量が不足しています。ストリーミングやダウンロードに影響が出る可能性があります。"
     },
+    "status": {
+      "offline": "オフライン",
+      "lowSpace": "収納スペースが少ない",
+      "lowSpaceWithPercent": "残りのストレージ容量：{{percent}}%"
+    },
     "download": {
       "empty": "ダウンロードはまだ構成されていません。",
       "failed": "ダウンロード オプションの読み込みに失敗しました。",
@@ -1391,6 +1396,9 @@
     "descriptionLabel": "2. 問題の説明",
     "descriptionPlaceholder": "問題の詳細、再現手順、または解決策を記述してください。",
     "submit": "フィードバックを送信",
+    "attachmentsLabel": "ファイル",
+    "attachmentsHint": "画像/動画 · 合計最大55MB",
+    "attachmentsTooLarge": "ファイルの合計サイズは55MBを超えてはなりません。",
     "cancel": "キャンセル",
     "close": "近い",
     "successTitle": "フィードバックを送信しました！",

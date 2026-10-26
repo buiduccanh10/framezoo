@@ -678,6 +678,11 @@
       "offline": "無法連接到伺服器。請稍後再試。",
       "lowSpace": "您的設備儲存空間不足。這可能會影響串流媒體播放和下載。"
     },
+    "status": {
+      "offline": "離線",
+      "lowSpace": "低儲物空間",
+      "lowSpaceWithPercent": "剩餘儲存空間：{{percent}}%"
+    },
     "download": {
       "empty": "尚未配置下載。",
       "failed": "無法載入下載選項。",
@@ -1391,6 +1396,9 @@
     "descriptionLabel": "2. 問題描述",
     "descriptionPlaceholder": "請詳細描述問題、重現步驟或提出建議…",
     "submit": "提交回饋",
+    "attachmentsLabel": "文件",
+    "attachmentsHint": "圖片/影片 · 總大小最大 55 MB",
+    "attachmentsTooLarge": "檔案總大小不得超過 55 MB。",
     "cancel": "取消",
     "close": "關閉",
     "successTitle": "反饋已提交！",

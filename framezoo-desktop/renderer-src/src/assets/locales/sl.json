@@ -678,6 +678,11 @@
       "offline": "Ni mogoče vzpostaviti povezave s strežnikom. Poskusite znova čez nekaj sekund.",
       "lowSpace": "V vaši napravi zmanjkuje prostora za shranjevanje. To lahko vpliva na pretakanje in prenos."
     },
+    "status": {
+      "offline": "Brez povezave",
+      "lowSpace": "Malo prostora za shranjevanje",
+      "lowSpaceWithPercent": "Preostali prostor za shranjevanje: {{percent}}%"
+    },
     "download": {
       "empty": "Noben prenos še ni konfiguriran.",
       "failed": "Nalaganje možnosti prenosa ni uspelo.",
@@ -1391,6 +1396,9 @@
     "descriptionLabel": "2. Opis težave",
     "descriptionPlaceholder": "Podrobno opišite težavo, korake za reprodukcijo ali predloge ...",
     "submit": "Pošlji povratne informacije",
+    "attachmentsLabel": "Datoteke",
+    "attachmentsHint": "Slike/videoposnetki · največ 55 MB skupaj",
+    "attachmentsTooLarge": "Skupna velikost datoteke ne sme presegati 55 MB.",
     "cancel": "Prekliči",
     "close": "Zapri",
     "successTitle": "Povratne informacije so bile poslane!",

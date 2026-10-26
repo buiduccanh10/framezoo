@@ -188,6 +188,9 @@
     "successTitle": "Feedback har skickats!",
     "submit": "Skicka feedback",
     "submitting": "Skickar...",
-    "descLabel": "2. Detaljerad beskrivning"
+    "descLabel": "2. Detaljerad beskrivning",
+    "attachmentsLabel": "Filer",
+    "attachmentsTooLarge": "Den totala filstorleken får inte överstiga 55 MB.",
+    "attachmentsHint": "Bilder/videor · 55 MB totalt max"
   }
 }

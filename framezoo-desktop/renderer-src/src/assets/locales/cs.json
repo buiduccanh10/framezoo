@@ -678,6 +678,11 @@
       "offline": "Nelze se připojit k serveru. Zkuste to prosím znovu za několik sekund.",
       "lowSpace": "Vašemu zařízení dochází úložný prostor. To může ovlivnit streamování a stahování."
     },
+    "status": {
+      "offline": "Offline",
+      "lowSpace": "Málo úložného prostoru",
+      "lowSpaceWithPercent": "Zbývající úložiště: {{percent}}%"
+    },
     "download": {
       "empty": "Zatím nejsou nakonfigurována žádná stahování.",
       "failed": "Nepodařilo se načíst možnosti stahování.",
@@ -1391,6 +1396,9 @@
     "descriptionLabel": "2. Popis problému",
     "descriptionPlaceholder": "Popište problém podrobně, kroky k jeho reprodukci nebo návrhy...",
     "submit": "Odeslat zpětnou vazbu",
+    "attachmentsLabel": "Soubory",
+    "attachmentsHint": "Obrázky/videa · Celková velikost maximálně 55 MB",
+    "attachmentsTooLarge": "Celková velikost souboru nesmí překročit 55 MB.",
     "cancel": "Zrušit",
     "close": "Blízko",
     "successTitle": "Zpětná vazba odeslána!",

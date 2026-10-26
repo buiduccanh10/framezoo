@@ -188,6 +188,9 @@
     "close": "關閉",
     "successDesc": "感謝您的回饋。我們的團隊將盡快審查並解決該問題。",
     "titlePlaceholder": "例如字幕同步問題，播放時延遲.....",
-    "descPlaceholder": "描述具體問題或重現問題的步驟..."
+    "descPlaceholder": "描述具體問題或重現問題的步驟...",
+    "attachmentsLabel": "文件",
+    "attachmentsHint": "圖片/影片 · 總計最大 55 MB",
+    "attachmentsTooLarge": "檔案總大小不得超過 55 MB。"
   }
 }

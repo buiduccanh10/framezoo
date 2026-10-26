@@ -678,6 +678,11 @@
       "offline": "Serveriga ei õnnestu ühendust luua. Palun proovige uuesti mõne sekundi pärast.",
       "lowSpace": "Teie seadme salvestusruum hakkab otsa saama. See võib mõjutada voogedastust ja allalaadimist."
     },
+    "status": {
+      "offline": "Võrguühenduseta",
+      "lowSpace": "Vähe salvestusruumi",
+      "lowSpaceWithPercent": "Järelejäänud salvestusruum: {{percent}}%"
+    },
     "download": {
       "empty": "Ühtegi allalaadimist pole veel konfigureeritud.",
       "failed": "Allalaadimisvalikute laadimine ebaõnnestus.",
@@ -1391,6 +1396,9 @@
     "descriptionLabel": "2. Probleemi kirjeldus",
     "descriptionPlaceholder": "Kirjeldage probleemi üksikasjalikult, esitage samme selle taasesitamiseks või ettepanekuid...",
     "submit": "Esita tagasisidet",
+    "attachmentsLabel": "Failid",
+    "attachmentsHint": "Pildid/videod · Kokku maksimaalselt 55 MB",
+    "attachmentsTooLarge": "Faili kogumaht ei tohi ületada 55 MB.",
     "cancel": "Tühista",
     "close": "Sule",
     "successTitle": "Tagasiside esitatud!",

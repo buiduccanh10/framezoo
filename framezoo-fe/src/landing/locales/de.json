@@ -188,6 +188,9 @@
     "errorSubmit": "Feedback konnte nicht übermittelt werden. Bitte versuchen Sie es später noch einmal.",
     "successTitle": "Feedback erfolgreich gesendet!",
     "errorRequired": "Bitte geben Sie sowohl den Titel als auch die Problembeschreibung ein.",
-    "successDesc": "Vielen Dank für Ihr Feedback. Unser Team wird das Problem so schnell wie möglich prüfen und lösen."
+    "successDesc": "Vielen Dank für Ihr Feedback. Unser Team wird das Problem so schnell wie möglich prüfen und lösen.",
+    "attachmentsLabel": "Dateien",
+    "attachmentsHint": "Bilder/Videos · Maximal 55 MB insgesamt",
+    "attachmentsTooLarge": "Die Gesamtdateigröße darf 55 MB nicht überschreiten."
   }
 }

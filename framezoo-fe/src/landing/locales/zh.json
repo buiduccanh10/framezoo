@@ -188,6 +188,9 @@
     "submitting": "正在提交...",
     "close": "关闭",
     "successDesc": "感谢您的反馈。我们的团队将尽快审查并解决该问题。",
-    "successTitle": "反馈发送成功！"
+    "successTitle": "反馈发送成功！",
+    "attachmentsLabel": "文件",
+    "attachmentsHint": "图片/视频 · 总计最大 55 MB",
+    "attachmentsTooLarge": "文件总大小不得超过 55 MB。"
   }
 }

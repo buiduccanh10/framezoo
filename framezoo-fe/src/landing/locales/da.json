@@ -188,6 +188,9 @@
     "close": "Tæt",
     "successTitle": "Feedback sendt!",
     "submitting": "Indsender...",
-    "submit": "Send feedback"
+    "submit": "Send feedback",
+    "attachmentsLabel": "Filer",
+    "attachmentsTooLarge": "Den samlede filstørrelse må ikke overstige 55 MB.",
+    "attachmentsHint": "Billeder/videoer · 55 MB i alt maksimum"
   }
 }

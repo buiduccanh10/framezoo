@@ -188,6 +188,9 @@
     "errorSubmit": "Impossibile inviare il feedback. Per favore riprova più tardi.",
     "subtitle": "Fateci sapere eventuali problemi o difficoltà riscontrati con Framezoo.",
     "successDesc": "Grazie per il tuo feedback Il nostro team esaminerà e risolverà il problema il prima possibile.",
-    "submit": "Invia feedback"
+    "submit": "Invia feedback",
+    "attachmentsLabel": "File",
+    "attachmentsHint": "Immagini/video · Massimo 55 MB totali",
+    "attachmentsTooLarge": "La dimensione totale del file non deve superare i 55 MB."
   }
 }
