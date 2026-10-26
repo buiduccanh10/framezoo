@@ -134,8 +134,7 @@ export function Navigation(props: NavigationProps) {
                   </Link>
                 )}
               {location.pathname !== "/login" &&
-                location.pathname !== "/register" &&
-                location.pathname !== "/settings" && <NavActionsCollapsible />}
+                location.pathname !== "/register" && <NavActionsCollapsible />}
               {location.pathname !== "/login" &&
                 location.pathname !== "/register" && (
                   <div

@@ -74,6 +74,7 @@ export interface TorrentStorageInfo {
   usedBytes: number;
   maxBytes: number | null;
   freeBytes: number;
+  totalBytes: number;
 }
 
 export type NativeWarmupComponentState =

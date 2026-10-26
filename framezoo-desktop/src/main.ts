@@ -1949,7 +1949,7 @@ function registerIpcHandlers() {
 
   ipcMain.handle("desktop:torrent-get-storage-info", async () => {
     const torrentDir = getTorrentDataDir();
-    let totalBytes = 0;
+    let usedBytes = 0;
     try {
       if (fs.existsSync(torrentDir)) {
         const files = fs.readdirSync(torrentDir);
@@ -1958,9 +1958,9 @@ function registerIpcHandlers() {
           const fullPath = path.join(torrentDir, file);
           const stat = fs.statSync(fullPath);
           if (stat.isDirectory()) {
-            totalBytes += getDirectorySize(fullPath);
+            usedBytes += getDirectorySize(fullPath);
           } else {
-            totalBytes += stat.size;
+            usedBytes += stat.size;
           }
         }
       }
@@ -1969,19 +1969,22 @@ function registerIpcHandlers() {
     }
 
     let freeBytes = 0;
+    let totalBytes = 0;
     try {
       fs.mkdirSync(torrentDir, { recursive: true });
       const stats = fs.statfsSync(torrentDir);
       freeBytes = stats.bavail * stats.bsize;
+      totalBytes = stats.blocks * stats.bsize;
     } catch {
       // Fallback or ignore if statfs is not available or errors out
     }
 
     return {
       path: torrentDir,
-      usedBytes: totalBytes,
+      usedBytes,
       maxBytes: torrentSettings.maxBytes,
       freeBytes,
+      totalBytes,
     };
   });
 
