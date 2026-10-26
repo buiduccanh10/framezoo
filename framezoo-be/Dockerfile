@@ -5,7 +5,7 @@ ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 
 RUN corepack enable && apk add --no-cache curl postgresql-client \
-    && corepack install --global pnpm@12.8.1
+    && corepack install --global pnpm@12.15.0
 
 COPY framezoo-be/package.json ./framezoo-be/package.json
 COPY pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./

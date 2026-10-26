@@ -30,6 +30,24 @@ services:
     volumes:
       - redis-data:/data
 
+  clamav:
+    image: clamav/clamav:1.4.6@sha256:6ba4e78b29853b2fc7e3c111389596e2cad5ec4ed5f0fd2cb663d29ab6b0e6a3
+    platform: linux/amd64
+    restart: unless-stopped
+    expose:
+      - "3310"
+    environment:
+      CLAMD_CONF_StreamMaxLength: 60M
+      CLAMD_CONF_MaxScanSize: 60M
+      CLAMD_CONF_MaxFileSize: 60M
+      CLAMD_CONF_SelfCheck: 60
+      CLAMD_CONF_ConcurrentDatabaseReload: "yes"
+      FRESHCLAM_CHECKS: ${FEEDBACK_CLAMAV_CHECKS:-4}
+    volumes:
+      - clamav-db:/var/lib/clamav
+    networks:
+      - framezoo-network
+
   sync-service:
     build:
       context: .
@@ -86,13 +104,19 @@ services:
       SUBSOURCE_API_KEY: ${SUBSOURCE_API_KEY:-}
       PROXY_REQUIRE_UPSTREAM_ALLOWLIST: ${PROXY_REQUIRE_UPSTREAM_ALLOWLIST:-false}
       RATE_LIMIT_FAIL_CLOSED: ${RATE_LIMIT_FAIL_CLOSED:-false}
+      FEEDBACK_CLAMAV_HOST: clamav
+      FEEDBACK_CLAMAV_REQUIRED: ${FEEDBACK_CLAMAV_REQUIRED:-true}
     ports:
       - "3000:3000"
+    volumes:
+      - feedback-storage:/data/feedback
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_started
+      clamav:
+        condition: service_healthy
       sync-service:
         condition: service_healthy
     networks:
@@ -140,3 +164,5 @@ networks:
 volumes:
   postgres-data:
   redis-data:
+  feedback-storage:
+  clamav-db:

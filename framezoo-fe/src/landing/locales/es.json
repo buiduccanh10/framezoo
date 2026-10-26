@@ -188,6 +188,9 @@
     "errorRequired": "Complete el título y la descripción del problema.",
     "close": "Cerca",
     "successTitle": "¡Comentarios enviados exitosamente!",
-    "submit": "Enviar comentarios"
+    "submit": "Enviar comentarios",
+    "attachmentsLabel": "Archivos",
+    "attachmentsHint": "Imágenes/vídeos · 55 MB máximo total",
+    "attachmentsTooLarge": "El tamaño total del archivo no debe exceder los 55 MB."
   }
 }

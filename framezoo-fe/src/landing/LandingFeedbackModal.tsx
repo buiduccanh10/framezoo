@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+
 import { getConfiguredBackendUrl } from "@/backend/download";
+
 import type { LandingCopy } from "./i18n";
 import { MessageSquareIcon } from "./LandingIcon";
+
+const MAX_FEEDBACK_FILE_BYTES = 55 * 1024 * 1024;
 
 interface LandingFeedbackModalProps {
   isOpen: boolean;
@@ -30,6 +34,9 @@ const defaultFeedbackCopy: LandingCopy["feedback"] = {
   submit: "Gửi phản hồi",
   submitting: "Đang gửi...",
   close: "Đóng",
+  attachmentsLabel: "Files đính kèm",
+  attachmentsHint: "Ảnh/video · tổng tối đa 55 MB",
+  attachmentsTooLarge: "Tổng dung lượng files không được vượt quá 55 MB.",
 };
 
 export function LandingFeedbackModal({
@@ -39,6 +46,7 @@ export function LandingFeedbackModal({
 }: LandingFeedbackModalProps) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [attachments, setAttachments] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -49,6 +57,7 @@ export function LandingFeedbackModal({
     if (!isOpen) {
       setTitle("");
       setDescription("");
+      setAttachments([]);
       setError(null);
       setSuccess(false);
       setLoading(false);
@@ -88,9 +97,7 @@ export function LandingFeedbackModal({
         ? `${backendUrl.replace(/\/+$/, "")}/api/feedback`
         : "/api/feedback";
 
-      const headers: Record<string, string> = {
-        "Content-Type": "application/json",
-      };
+      const headers: Record<string, string> = {};
 
       // Check if user has token in localStorage
       try {
@@ -105,14 +112,16 @@ export function LandingFeedbackModal({
         // Ignore localStorage error
       }
 
+      const formData = new FormData();
+      formData.append("title", title.trim());
+      formData.append("description", description.trim());
+      attachments.forEach((file) => formData.append("files", file));
+
       const response = await fetch(endpoint, {
         method: "POST",
         headers,
         credentials: "include",
-        body: JSON.stringify({
-          title: title.trim(),
-          description: description.trim(),
-        }),
+        body: formData,
       });
 
       const data = await response.json().catch(() => null);
@@ -130,6 +139,18 @@ export function LandingFeedbackModal({
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleAttachments = (files: FileList | null) => {
+    const next = Array.from(files ?? []);
+    const total = next.reduce((sum, file) => sum + file.size, 0);
+    if (total > MAX_FEEDBACK_FILE_BYTES) {
+      setAttachments([]);
+      setError(fbCopy.attachmentsTooLarge);
+      return;
+    }
+    setError(null);
+    setAttachments(next);
   };
 
   return createPortal(
@@ -312,8 +333,58 @@ export function LandingFeedbackModal({
                     color: "var(--landing-muted)",
                   }}
                 >
-                  {fbCopy.descLabel}{" "}
-                  <span style={{ color: "#ef4444" }}>*</span>
+                  {fbCopy.attachmentsLabel}
+                </label>
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/quicktime,video/webm"
+                  multiple
+                  onChange={(event) => handleAttachments(event.target.files)}
+                  disabled={loading}
+                  style={{
+                    width: "100%",
+                    padding: "0.55rem 0.7rem",
+                    borderRadius: "0.625rem",
+                    background: "rgba(255, 255, 255, 0.05)",
+                    border: "1px solid var(--landing-line)",
+                    color: "var(--color-ink)",
+                    fontSize: "0.8125rem",
+                  }}
+                />
+                <small
+                  style={{ color: "var(--landing-muted)", fontSize: "0.75rem" }}
+                >
+                  {fbCopy.attachmentsHint}
+                </small>
+                {attachments.length > 0 && (
+                  <small
+                    style={{
+                      color: "var(--landing-muted)",
+                      fontSize: "0.75rem",
+                    }}
+                  >
+                    {attachments.map((file) => file.name).join(", ")}
+                  </small>
+                )}
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0.375rem",
+                }}
+              >
+                <label
+                  style={{
+                    fontSize: "0.75rem",
+                    fontWeight: 600,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.05em",
+                    color: "var(--landing-muted)",
+                  }}
+                >
+                  {fbCopy.descLabel} <span style={{ color: "#ef4444" }}>*</span>
                 </label>
                 <textarea
                   rows={4}

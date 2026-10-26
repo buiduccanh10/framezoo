@@ -188,6 +188,9 @@
     "close": "Közeli",
     "successTitle": "A visszajelzés sikeresen elküldve!",
     "successDesc": "Köszönjük visszajelzését. Csapatunk a lehető leghamarabb megvizsgálja és megoldja a problémát.",
-    "submitting": "Beküldés..."
+    "submitting": "Beküldés...",
+    "attachmentsLabel": "Fájlok",
+    "attachmentsHint": "Képek/videók · Maximum 55 MB",
+    "attachmentsTooLarge": "A teljes fájlméret nem haladhatja meg az 55 MB-ot."
   }
 }

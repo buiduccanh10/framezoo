@@ -188,6 +188,9 @@
     "close": "Loka",
     "successTitle": "Ábendingar sendar!",
     "successDesc": "Þakka þér fyrir álit þitt. Teymið okkar mun fara yfir og leysa málið eins fljótt og auðið er.",
-    "submitting": "Sendir inn..."
+    "submitting": "Sendir inn...",
+    "attachmentsLabel": "Skrár",
+    "attachmentsHint": "Myndir/myndbönd · 55 MB samtals að hámarki",
+    "attachmentsTooLarge": "Heildarskráarstærð má ekki vera meiri en 55 MB."
   }
 }

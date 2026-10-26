@@ -26,6 +26,24 @@ services:
     volumes:
       - redis-data:/data
 
+  clamav:
+    image: clamav/clamav:1.4.6@sha256:6ba4e78b29853b2fc7e3c111389596e2cad5ec4ed5f0fd2cb663d29ab6b0e6a3
+    platform: linux/amd64
+    restart: always
+    expose:
+      - "3310"
+    environment:
+      CLAMD_CONF_StreamMaxLength: 60M
+      CLAMD_CONF_MaxScanSize: 60M
+      CLAMD_CONF_MaxFileSize: 60M
+      CLAMD_CONF_SelfCheck: 60
+      CLAMD_CONF_ConcurrentDatabaseReload: "yes"
+      FRESHCLAM_CHECKS: ${FEEDBACK_CLAMAV_CHECKS:-4}
+    volumes:
+      - clamav-db:/var/lib/clamav
+    networks:
+      - framezoo-prod-network
+
   sync-service:
     build:
       context: .
@@ -81,6 +99,8 @@ services:
       PROXY_REQUIRE_UPSTREAM_ALLOWLIST: "true"
       PROXY_ALLOWED_UPSTREAM_HOSTS: ${PROXY_ALLOWED_UPSTREAM_HOSTS:-}
       RATE_LIMIT_FAIL_CLOSED: "true"
+      FEEDBACK_CLAMAV_HOST: clamav
+      FEEDBACK_CLAMAV_REQUIRED: "true"
       CORS_ALLOWED_ORIGINS: https://framezoo.top,app://renderer
       VIRTUAL_HOST: api.framezoo.top
       VIRTUAL_PORT: 3000
@@ -96,8 +116,12 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
+      clamav:
+        condition: service_healthy
       sync-service:
         condition: service_healthy
+    volumes:
+      - feedback-storage:/data/feedback
     networks:
       - framezoo-prod-network
       - betakiot_proxy_network
@@ -107,7 +131,7 @@ services:
       context: .
       dockerfile: framezoo-fe/Dockerfile
       args:
-        BACKEND_URL: ${VITE_BACKEND_URL}
+        BACKEND_URL: ${VITE_BACKEND_URL:-https://api.framezoo.top}
         CORS_PROXY_URL: ${VITE_CORS_PROXY_URL}
         APP_DOMAIN: https://framezoo.top
         PWA_ENABLED: ${VITE_PWA_ENABLED:-true}
@@ -170,3 +194,7 @@ volumes:
   redis-data:
     external: ${EXTERNAL_LEGACY_VOLUMES:-false}
     name: framezoo_backend_redis-data
+  clamav-db:
+    name: framezoo_backend_clamav-db
+  feedback-storage:
+    name: framezoo_backend_feedback-storage

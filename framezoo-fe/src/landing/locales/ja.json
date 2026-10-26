@@ -188,6 +188,9 @@
     "errorSubmit": "フィードバックの送信に失敗しました。後でもう一度試してください。",
     "successTitle": "フィードバックは正常に送信されました。",
     "successDesc": "ご意見ありがとうございます。私たちのチームが問題を確認し、できるだけ早く解決します。",
-    "errorRequired": "タイトルと問題の説明の両方を入力してください。"
+    "errorRequired": "タイトルと問題の説明の両方を入力してください。",
+    "attachmentsLabel": "ファイル",
+    "attachmentsHint": "画像/動画・合計最大55MB",
+    "attachmentsTooLarge": "ファイルの合計サイズは 55 MB を超えてはなりません。"
   }
 }

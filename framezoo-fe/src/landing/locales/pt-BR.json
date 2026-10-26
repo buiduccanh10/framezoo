@@ -188,6 +188,9 @@
     "errorSubmit": "Falha ao enviar comentários. Por favor, tente novamente mais tarde.",
     "errorRequired": "Preencha o título e a descrição do problema.",
     "submit": "Enviar comentários",
-    "successDesc": "Obrigado pelo seu feedback. Nossa equipe analisará e resolverá o problema o mais rápido possível."
+    "successDesc": "Obrigado pelo seu feedback. Nossa equipe analisará e resolverá o problema o mais rápido possível.",
+    "attachmentsLabel": "Arquivos",
+    "attachmentsTooLarge": "O tamanho total do arquivo não deve exceder 55 MB.",
+    "attachmentsHint": "Imagens/vídeos · Máximo de 55 MB no total"
   }
 }

@@ -188,6 +188,9 @@
     "successTitle": "Comentaris enviats correctament!",
     "submit": "Envieu comentaris",
     "close": "Tancar",
-    "submitting": "S'està enviant..."
+    "submitting": "S'està enviant...",
+    "attachmentsLabel": "Fitxers",
+    "attachmentsHint": "Imatges/vídeos · 55 MB total màxim",
+    "attachmentsTooLarge": "La mida total del fitxer no ha de superar els 55 MB."
   }
 }

@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import { getLandingCopy, useLandingLocale } from "./i18n";
 import { LandingFeedbackModal } from "./LandingFeedbackModal";
 import { MessageSquareIcon } from "./LandingIcon";

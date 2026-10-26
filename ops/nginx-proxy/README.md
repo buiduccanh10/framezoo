@@ -150,8 +150,8 @@ dung. Chi service app moi khai bao `VIRTUAL_HOST` va `ACME_HOST`.
 
 File trong `ops/nginx-proxy/vhost.d/<hostname>` se duoc nginx-proxy include vao
 server block cua vhost do. Vi du `vhost.d/api.framezoo.top` chua
-`client_max_body_size 20m;` (can thiet de `/api/subtitle-align` nhan upload WAV
-~2MB, nginx mac dinh gioi han 1MB).
+`client_max_body_size 60m;` (can thiet de `/api/feedback` nhan tong files toi da
+55 MB; nginx mac dinh gioi han 1MB).
 
 Volume `nginx_vhost` la volume named chia se, nen phai copy file vao trong
 volume (khong mount bind duoc):

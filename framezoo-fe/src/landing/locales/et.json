@@ -188,6 +188,9 @@
     "errorSubmit": "Tagasiside saatmine ebaõnnestus. Proovige hiljem uuesti.",
     "successTitle": "Tagasiside saatmine õnnestus!",
     "successDesc": "Täname teid tagasiside eest. Meie meeskond vaatab probleemi üle ja lahendab selle niipea kui võimalik.",
-    "submitting": "Esitamine..."
+    "submitting": "Esitamine...",
+    "attachmentsLabel": "Failid",
+    "attachmentsTooLarge": "Faili kogumaht ei tohi ületada 55 MB.",
+    "attachmentsHint": "Pildid/videod · Maksimaalselt 55 MB"
   }
 }

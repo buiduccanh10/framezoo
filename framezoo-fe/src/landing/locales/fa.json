@@ -188,6 +188,9 @@
     "submitting": "در حال ارسال...",
     "close": "بستن",
     "descPlaceholder": "موضوع خاص یا مراحل بازتولید آن را شرح دهید...",
-    "errorRequired": "لطفا عنوان و شرح موضوع را پر کنید."
+    "errorRequired": "لطفا عنوان و شرح موضوع را پر کنید.",
+    "attachmentsLabel": "فایل ها",
+    "attachmentsHint": "تصاویر/فیلم ها · حداکثر 55 مگابایت",
+    "attachmentsTooLarge": "حجم کل فایل نباید بیش از 55 مگابایت باشد."
   }
 }

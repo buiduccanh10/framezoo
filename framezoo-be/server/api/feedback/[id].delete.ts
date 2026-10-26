@@ -1,6 +1,7 @@
 import { defineEventHandler, getRouterParam, createError } from 'h3';
 import { prisma } from '~/utils/prisma';
 import { requireAdmin } from '~/utils/admin';
+import { parseFeedbackAttachments, removeFeedbackAttachments } from '~/utils/feedback-storage';
 
 export default defineEventHandler(async event => {
   await requireAdmin(event);
@@ -24,9 +25,18 @@ export default defineEventHandler(async event => {
     });
   }
 
-  await prisma.feedbacks.delete({
-    where: { id },
-  });
+  const attachments = parseFeedbackAttachments(existing.attachments);
+  try {
+    await removeFeedbackAttachments(attachments);
+  } catch (error) {
+    console.error('[feedback] attachment removal failed:', error);
+    throw createError({
+      statusCode: 503,
+      message: 'Không thể xóa files đính kèm, vui lòng thử lại sau',
+    });
+  }
+
+  await prisma.feedbacks.delete({ where: { id } });
 
   return {
     success: true,

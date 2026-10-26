@@ -8,11 +8,21 @@ export interface FeedbackItem {
   id: string;
   title: string;
   description: string;
-  status: 'pending' | 'resolved' | string;
+  status: "pending" | "resolved" | string;
   user_id: string | null;
   user: FeedbackUser | null;
+  attachments: FeedbackAttachment[];
   created_at: string;
   updated_at: string;
+}
+
+export interface FeedbackAttachment {
+  key: string;
+  name: string;
+  type: string;
+  kind: "image" | "video";
+  size: number;
+  url: string;
 }
 
 export interface UserProfile {

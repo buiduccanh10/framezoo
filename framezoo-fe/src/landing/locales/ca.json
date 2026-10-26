@@ -188,6 +188,9 @@
     "submitting": "S'està enviant...",
     "descLabel": "2. Descripció detallada",
     "submit": "Envieu comentaris",
-    "successDesc": "Gràcies pels teus comentaris. El nostre equip revisarà i resoldrà el problema tan aviat com sigui possible."
+    "successDesc": "Gràcies pels teus comentaris. El nostre equip revisarà i resoldrà el problema tan aviat com sigui possible.",
+    "attachmentsLabel": "Fitxers",
+    "attachmentsTooLarge": "La mida total del fitxer no ha de superar els 55 MB.",
+    "attachmentsHint": "Imatges/vídeos · 55 MB total màxim"
   }
 }

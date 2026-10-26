@@ -1,6 +1,7 @@
 import { defineEventHandler, getRouterParam, readBody, createError } from 'h3';
 import { prisma } from '~/utils/prisma';
 import { requireAdmin } from '~/utils/admin';
+import { parseFeedbackAttachments } from '~/utils/feedback-storage';
 
 export default defineEventHandler(async event => {
   await requireAdmin(event);
@@ -44,6 +45,16 @@ export default defineEventHandler(async event => {
 
   return {
     success: true,
-    feedback: updated,
+    feedback: {
+      ...updated,
+      attachments: parseFeedbackAttachments(updated.attachments).map(attachment => ({
+        key: attachment.key,
+        name: attachment.name,
+        type: attachment.type,
+        kind: attachment.kind,
+        size: attachment.size,
+        url: `/api/feedback/${encodeURIComponent(updated.id)}/attachments/${encodeURIComponent(attachment.key)}`,
+      })),
+    },
   };
 });

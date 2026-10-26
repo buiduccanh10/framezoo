@@ -125,6 +125,12 @@ code { font-family: var(--font-mono); }
 .modal-header h2 { display: flex; align-items: center; gap: 0.45rem; font-size: 1.35rem; }
 .modal-subtitle, .danger-heading p { margin-top: 0.3rem; color: var(--color-ink-2); font-size: var(--text-sm); }
 .modal-footer { display: flex; justify-content: end; gap: var(--space-sm); padding-top: var(--space-md); border-top: 1px solid var(--color-rule); }
+.feedback-attachments { display: grid; gap: var(--space-sm); }
+.feedback-attachments h3 { color: var(--color-ink-2); font-size: var(--text-sm); }
+.feedback-attachment-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: var(--space-sm); }
+.feedback-attachment-grid a { display: grid; gap: 0.35rem; min-width: 0; color: var(--color-ink-2); font-size: var(--text-xs); text-decoration: none; }
+.feedback-attachment-grid img, .feedback-attachment-grid video { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border: 1px solid var(--color-rule); border-radius: var(--radius-control); background: var(--color-paper); }
+.feedback-attachment-grid span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .detail-metrics { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0.5rem; }
 .detail-metrics > div { display: grid; gap: 0.25rem; padding: 0.65rem; border: 1px solid var(--color-rule); border-radius: var(--radius-control); color: var(--color-ink-2); font-size: var(--text-xs); }
 .detail-metrics strong { color: var(--color-ink); font: 650 1.2rem var(--font-mono); }

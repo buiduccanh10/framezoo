@@ -188,6 +188,9 @@
     "cancel": "Cancelar",
     "submit": "Enviar comentários",
     "successDesc": "Obrigado pelo seu feedback. Nossa equipe analisará e resolverá o problema o mais rápido possível.",
-    "close": "Fechar"
+    "close": "Fechar",
+    "attachmentsTooLarge": "O tamanho total do arquivo não deve exceder 55 MB.",
+    "attachmentsLabel": "Arquivos",
+    "attachmentsHint": "Imagens/vídeos · Máximo de 55 MB no total"
   }
 }

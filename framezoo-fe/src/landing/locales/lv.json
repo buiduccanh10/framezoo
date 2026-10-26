@@ -188,6 +188,9 @@
     "errorRequired": "Lūdzu, aizpildiet gan nosaukumu, gan problēmas aprakstu.",
     "successTitle": "Atsauksmes veiksmīgi nosūtītas!",
     "successDesc": "Paldies par atsauksmēm. Mūsu komanda izskatīs un atrisinās problēmu, cik drīz vien iespējams.",
-    "submitting": "Notiek iesniegšana..."
+    "submitting": "Notiek iesniegšana...",
+    "attachmentsLabel": "Faili",
+    "attachmentsHint": "Attēli/video · Maksimālais kopējais apjoms 55 MB",
+    "attachmentsTooLarge": "Kopējais faila lielums nedrīkst pārsniegt 55 MB."
   }
 }

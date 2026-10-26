@@ -188,6 +188,9 @@
     "successTitle": "Feedback succesvol verzonden!",
     "errorSubmit": "Het is niet gelukt om feedback in te dienen. Probeer het later opnieuw.",
     "successDesc": "Bedankt voor uw feedback. Ons team zal het probleem zo snel mogelijk beoordelen en oplossen.",
-    "submit": "Geef feedback"
+    "submit": "Geef feedback",
+    "attachmentsLabel": "Bestanden",
+    "attachmentsTooLarge": "De totale bestandsgrootte mag niet groter zijn dan 55 MB.",
+    "attachmentsHint": "Afbeeldingen/video's · Maximaal 55 MB totaal"
   }
 }

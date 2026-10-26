@@ -60,3 +60,30 @@ test('admin list routes clamp pagination and return metadata', () => {
   assert.match(backupRoute, /getBackupFiles\(page, limit\)/);
   assert.match(backup, /backupFiles\.slice\(start, start \+ safeLimit\)/);
 });
+
+test('feedback attachments stay bounded, private, and are cleaned up on deletion', () => {
+  const post = read('server/api/feedback/index.post.ts');
+  const storage = read('server/utils/feedback-storage.ts');
+  const attachment = read('server/api/feedback/[id]/attachments/[key].get.ts');
+  const deletion = read('server/api/feedback/[id].delete.ts');
+  const apiProxy = fs.readFileSync(new URL('../../ops/nginx-proxy/vhost.d/api.framezoo.top', import.meta.url), 'utf8');
+  const compose = fs.readFileSync(new URL('../../docker-compose.prod.yml', import.meta.url), 'utf8');
+
+  assert.match(storage, /MAX_FEEDBACK_FILE_BYTES = 55 \* 1024 \* 1024/);
+  assert.match(storage, /hasFileSignature/);
+  assert.match(storage, /hasSafeContainer/);
+  assert.match(storage, /FeedbackMalwareError/);
+  assert.match(storage, /zINSTREAM/);
+  assert.match(storage, /FEEDBACK_CLAMAV_REQUIRED/);
+  assert.match(storage, /FEEDBACK_STORAGE_DIR/);
+  assert.match(storage, /mode: 0o600/);
+  assert.match(post, /readMultipartFormData\(event\)/);
+  assert.match(attachment, /await requireAdmin\(event\)/);
+  assert.match(deletion, /removeFeedbackAttachments\(attachments\)/);
+  assert.match(apiProxy, /client_max_body_size 60m/);
+  assert.match(compose, /feedback-storage:\/data\/feedback/);
+  assert.match(compose, /clamav:1\.4\.6@sha256:/);
+  assert.match(compose, /FEEDBACK_CLAMAV_REQUIRED/);
+  assert.match(compose, /FRESHCLAM_CHECKS/);
+  assert.match(compose, /CLAMD_CONF_ConcurrentDatabaseReload/);
+});

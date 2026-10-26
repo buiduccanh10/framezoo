@@ -178,6 +178,9 @@
     "successDesc": "Cảm ơn bạn đã đóng góp ý kiến. Đội ngũ phát triển sẽ kiểm tra và xử lý vấn đề sớm nhất.",
     "cancel": "Hủy",
     "submit": "Gửi phản hồi",
+    "attachmentsLabel": "Files đính kèm",
+    "attachmentsHint": "Ảnh/video · tổng tối đa 55 MB",
+    "attachmentsTooLarge": "Tổng dung lượng files không được vượt quá 55 MB.",
     "submitting": "Đang gửi...",
     "close": "Đóng"
   }

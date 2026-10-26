@@ -188,6 +188,9 @@
     "successTitle": "Commentaires envoyés avec succès !",
     "close": "Fermer",
     "submitting": "Soumission...",
-    "successDesc": "Merci pour vos commentaires. Notre équipe examinera et résoudra le problème dans les plus brefs délais."
+    "successDesc": "Merci pour vos commentaires. Notre équipe examinera et résoudra le problème dans les plus brefs délais.",
+    "attachmentsLabel": "Fichiers",
+    "attachmentsHint": "Images/vidéos · 55 Mo maximum au total",
+    "attachmentsTooLarge": "La taille totale du fichier ne doit pas dépasser 55 Mo."
   }
 }

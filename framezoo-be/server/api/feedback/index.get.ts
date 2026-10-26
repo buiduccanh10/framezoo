@@ -1,6 +1,7 @@
 import { defineEventHandler, getQuery } from 'h3';
 import { prisma } from '~/utils/prisma';
 import { requireAdmin } from '~/utils/admin';
+import { parseFeedbackAttachments } from '~/utils/feedback-storage';
 
 export default defineEventHandler(async event => {
   await requireAdmin(event);
@@ -9,7 +10,8 @@ export default defineEventHandler(async event => {
   const search = typeof query.search === 'string' ? query.search.trim().slice(0, 120) : '';
   const page = Math.max(1, parseInt(String(query.page || '1'), 10) || 1);
   const limit = Math.min(100, Math.max(1, parseInt(String(query.limit || '20'), 10) || 20));
-  const status = query.status === 'pending' || query.status === 'resolved' ? query.status : undefined;
+  const status =
+    query.status === 'pending' || query.status === 'resolved' ? query.status : undefined;
   const matchingUsers = search
     ? await prisma.users.findMany({
         where: {
@@ -38,7 +40,12 @@ export default defineEventHandler(async event => {
     prisma.feedbacks.count({ where }),
     prisma.feedbacks.count({ where: { ...statsWhere, status: 'pending' } }),
     prisma.feedbacks.count({ where: { ...statsWhere, status: 'resolved' } }),
-    prisma.feedbacks.findMany({ where, orderBy: { created_at: 'desc' }, skip: (page - 1) * limit, take: limit }),
+    prisma.feedbacks.findMany({
+      where,
+      orderBy: { created_at: 'desc' },
+      skip: (page - 1) * limit,
+      take: limit,
+    }),
   ]);
 
   const userIds = [
@@ -80,6 +87,14 @@ export default defineEventHandler(async event => {
             email: user.email,
           }
         : null,
+      attachments: parseFeedbackAttachments(f.attachments).map(attachment => ({
+        key: attachment.key,
+        name: attachment.name,
+        type: attachment.type,
+        kind: attachment.kind,
+        size: attachment.size,
+        url: `/api/feedback/${encodeURIComponent(f.id)}/attachments/${encodeURIComponent(attachment.key)}`,
+      })),
       created_at: f.created_at,
       updated_at: f.updated_at,
     };

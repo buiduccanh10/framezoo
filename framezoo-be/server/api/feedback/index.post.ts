@@ -1,13 +1,63 @@
-import { defineEventHandler, readBody, createError, getHeader, getCookie } from 'h3';
+import {
+  defineEventHandler,
+  readBody,
+  createError,
+  getHeader,
+  getCookie,
+  readMultipartFormData,
+} from 'h3';
 import { randomUUID } from 'crypto';
 import { prisma } from '~/utils/prisma';
 import { useAuth } from '~/utils/auth';
+import {
+  MAX_FEEDBACK_FILE_BYTES,
+  FeedbackMalwareError,
+  FeedbackScannerUnavailableError,
+  removeFeedbackAttachments,
+  uploadFeedbackAttachments,
+  validateFeedbackFileParts,
+} from '~/utils/feedback-storage';
 
 export default defineEventHandler(async event => {
-  const body = await readBody<{ title?: string; description?: string }>(event);
+  const contentType = getHeader(event, 'content-type') || '';
+  const contentLength = Number(getHeader(event, 'content-length') || 0);
+  if (contentLength > MAX_FEEDBACK_FILE_BYTES + 1024 * 1024) {
+    throw createError({
+      statusCode: 413,
+      message: 'Tổng dung lượng files không được vượt quá 55 MB',
+    });
+  }
 
-  const title = body?.title?.trim();
-  const description = body?.description?.trim();
+  let title: string | undefined;
+  let description: string | undefined;
+  let fileParts: { filename?: string; type?: string; data: Uint8Array }[] = [];
+
+  if (contentType.toLowerCase().startsWith('multipart/form-data')) {
+    const parts = await readMultipartFormData(event);
+    const titlePart = parts?.find(part => part.name === 'title' && !part.filename);
+    const descriptionPart = parts?.find(part => part.name === 'description' && !part.filename);
+    title = titlePart ? Buffer.from(titlePart.data).toString('utf8').trim() : undefined;
+    description = descriptionPart
+      ? Buffer.from(descriptionPart.data).toString('utf8').trim()
+      : undefined;
+    fileParts = (parts || [])
+      .filter(
+        part =>
+          (part.name === 'files' || part.name === 'attachments' || part.name === 'images') &&
+          Boolean(part.filename)
+      )
+      .map(part => ({ filename: part.filename, type: part.type, data: part.data }));
+    try {
+      validateFeedbackFileParts(fileParts);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'File không hợp lệ';
+      throw createError({ statusCode: message.includes('vượt quá') ? 413 : 400, message });
+    }
+  } else {
+    const body = await readBody<{ title?: string; description?: string }>(event);
+    title = body?.title?.trim();
+    description = body?.description?.trim();
+  }
 
   if (!title || !description) {
     throw createError({
@@ -54,18 +104,60 @@ export default defineEventHandler(async event => {
     console.warn('[feedback] could not resolve user session:', err);
   }
 
-  const feedback = await prisma.feedbacks.create({
-    data: {
-      id: randomUUID(),
-      title,
-      description,
-      status: 'pending',
-      user_id: userId,
-    },
-  });
+  const feedbackId = randomUUID();
+  let attachments;
+  try {
+    attachments = await uploadFeedbackAttachments(feedbackId, fileParts);
+  } catch (error) {
+    if (error instanceof FeedbackMalwareError) {
+      throw createError({ statusCode: 400, message: error.message });
+    }
+    if (error instanceof FeedbackScannerUnavailableError) {
+      throw createError({
+        statusCode: 503,
+        message: 'Không thể kiểm tra an toàn file, vui lòng thử lại sau',
+      });
+    }
+    console.error('[feedback] attachment upload failed:', error);
+    throw createError({
+      statusCode: 503,
+      message: 'Không thể lưu file đính kèm, vui lòng thử lại sau',
+    });
+  }
 
-  return {
-    success: true,
-    feedback,
-  };
+  try {
+    const feedback = await prisma.feedbacks.create({
+      data: {
+        id: feedbackId,
+        title,
+        description,
+        status: 'pending',
+        user_id: userId,
+        attachments,
+      },
+    });
+
+    return {
+      success: true,
+      feedback: {
+        ...feedback,
+        attachments: attachments.map(attachment => ({
+          key: attachment.key,
+          name: attachment.name,
+          type: attachment.type,
+          kind: attachment.kind,
+          size: attachment.size,
+        })),
+      },
+    };
+  } catch (error) {
+    if (attachments.length > 0) {
+      try {
+        await removeFeedbackAttachments(attachments);
+      } catch (cleanupError) {
+        console.error('[feedback] attachment cleanup failed:', cleanupError);
+      }
+    }
+    throw error;
+  }
 });

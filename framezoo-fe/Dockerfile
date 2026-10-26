@@ -2,7 +2,7 @@ FROM node:22-alpine@sha256:0a7108bf6c7bf5de370ffb1a3ed6be93d405b43ff159f681a8d18
 WORKDIR /app
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable && corepack install --global pnpm@12.8.1
+RUN corepack enable && corepack install --global pnpm@12.15.0
 
 COPY framezoo-fe/package.json ./framezoo-fe/package.json
 COPY framezoo-desktop/package.json ./framezoo-desktop/package.json
