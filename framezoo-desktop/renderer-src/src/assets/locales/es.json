@@ -678,6 +678,11 @@
       "offline": "No se pudo conectar con el servidor. Inténtelo de nuevo en unos segundos.",
       "lowSpace": "Tu dispositivo se está quedando sin espacio de almacenamiento. Esto puede afectar la reproducción en streaming y las descargas."
     },
+    "status": {
+      "offline": "Desconectado",
+      "lowSpace": "Poco espacio de almacenamiento",
+      "lowSpaceWithPercent": "Almacenamiento restante: {{percent}}%"
+    },
     "download": {
       "empty": "Aún no se han configurado descargas.",
       "failed": "No se pudieron cargar las opciones de descarga.",

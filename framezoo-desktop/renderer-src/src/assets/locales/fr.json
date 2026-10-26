@@ -678,6 +678,11 @@
       "offline": "Impossible de se connecter au serveur. Veuillez réessayer dans quelques secondes.",
       "lowSpace": "Votre appareil manque d&#39;espace de stockage. Cela peut affecter la lecture en continu et le téléchargement."
     },
+    "status": {
+      "offline": "Hors ligne",
+      "lowSpace": "espace de stockage réduit",
+      "lowSpaceWithPercent": "Espace de stockage restant : {{percent}}%"
+    },
     "download": {
       "empty": "Aucun téléchargement n'est encore configuré.",
       "failed": "Échec du chargement des options de téléchargement.",

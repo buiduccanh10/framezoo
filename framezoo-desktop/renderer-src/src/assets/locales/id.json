@@ -678,6 +678,11 @@
       "offline": "Tidak dapat terhubung ke server. Silakan coba lagi dalam beberapa detik.",
       "lowSpace": "Ruang penyimpanan perangkat Anda hampir habis. Hal ini dapat memengaruhi proses streaming dan pengunduhan."
     },
+    "status": {
+      "offline": "Offline",
+      "lowSpace": "Ruang penyimpanan terbatas",
+      "lowSpaceWithPercent": "Sisa penyimpanan: {{percent}}%"
+    },
     "download": {
       "empty": "Belum ada unduhan yang dikonfigurasi.",
       "failed": "Gagal memuat opsi unduhan.",

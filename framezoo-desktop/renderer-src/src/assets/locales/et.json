@@ -678,6 +678,11 @@
       "offline": "Serveriga ei õnnestu ühendust luua. Palun proovige uuesti mõne sekundi pärast.",
       "lowSpace": "Teie seadme salvestusruum hakkab otsa saama. See võib mõjutada voogedastust ja allalaadimist."
     },
+    "status": {
+      "offline": "Võrguühenduseta",
+      "lowSpace": "Vähe salvestusruumi",
+      "lowSpaceWithPercent": "Järelejäänud salvestusruum: {{percent}}%"
+    },
     "download": {
       "empty": "Ühtegi allalaadimist pole veel konfigureeritud.",
       "failed": "Allalaadimisvalikute laadimine ebaõnnestus.",

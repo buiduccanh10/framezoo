@@ -678,6 +678,11 @@
       "offline": "Verbindung zum Server konnte nicht hergestellt werden. Bitte versuchen Sie es in wenigen Sekunden erneut.",
       "lowSpace": "Auf Ihrem Gerät ist der Speicherplatz knapp. Dies kann das Streaming und Herunterladen beeinträchtigen."
     },
+    "status": {
+      "offline": "Offline",
+      "lowSpace": "Geringer Stauraum",
+      "lowSpaceWithPercent": "Verbleibender Speicherplatz: {{percent}}%"
+    },
     "download": {
       "empty": "Es sind noch keine Downloads konfiguriert.",
       "failed": "Download-Optionen konnten nicht geladen werden.",

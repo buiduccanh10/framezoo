@@ -678,6 +678,11 @@
       "offline": "Ekki tókst að tengjast netþjóninum. Reyndu aftur eftir nokkrar sekúndur.",
       "lowSpace": "Geymslurými tækisins er að klárast. Þetta gæti haft áhrif á streymi og niðurhal."
     },
+    "status": {
+      "offline": "Ótengdur",
+      "lowSpace": "Lítið geymslurými",
+      "lowSpaceWithPercent": "Geymslurými eftir: {{percent}}%"
+    },
     "download": {
       "empty": "Engin niðurhal er stillt ennþá.",
       "failed": "Mistókst að hlaða niðurhalsvalkostum.",

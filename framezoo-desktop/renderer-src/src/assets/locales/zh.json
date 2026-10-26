@@ -678,6 +678,11 @@
       "offline": "无法连接到服务器。请稍后再试。",
       "lowSpace": "您的设备存储空间不足。这可能会影响流媒体播放和下载。"
     },
+    "status": {
+      "offline": "离线",
+      "lowSpace": "低储物空间",
+      "lowSpaceWithPercent": "剩余存储空间：{{percent}}%"
+    },
     "download": {
       "empty": "尚未配置下载。",
       "failed": "无法加载下载选项。",

@@ -678,6 +678,11 @@
       "offline": "Nie można połączyć się z serwerem. Spróbuj ponownie za kilka sekund.",
       "lowSpace": "Na Twoim urządzeniu kończy się miejsce. Może to mieć wpływ na strumieniowanie i pobieranie."
     },
+    "status": {
+      "offline": "Niedostępny",
+      "lowSpace": "Mało miejsca do przechowywania",
+      "lowSpaceWithPercent": "Pozostała pamięć: {{percent}}%"
+    },
     "download": {
       "empty": "Żadne pobieranie nie zostało jeszcze skonfigurowane.",
       "failed": "Nie udało się załadować opcji pobierania.",

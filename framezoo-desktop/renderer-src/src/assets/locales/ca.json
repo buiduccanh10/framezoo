@@ -678,6 +678,11 @@
       "offline": "No es pot connectar al servidor. Torna-ho a intentar d&#39;aquí a uns segons.",
       "lowSpace": "El dispositiu s&#39;està quedant sense espai d&#39;emmagatzematge. Això pot afectar la reproducció en temps real i les descàrregues."
     },
+    "status": {
+      "offline": "Fora de línia",
+      "lowSpace": "Poc espai d&#39;emmagatzematge",
+      "lowSpaceWithPercent": "Emmagatzematge restant: {{percent}}%"
+    },
     "download": {
       "empty": "Encara no s'ha configurat cap baixada.",
       "failed": "No s'han pogut carregar les opcions de baixada.",

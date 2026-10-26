@@ -678,6 +678,11 @@
       "offline": "Nem sikerült csatlakozni a szerverhez. Próbáld újra néhány másodperc múlva.",
       "lowSpace": "Fogyóban van a tárhelyed az eszközödön. Ez befolyásolhatja a streamelést és a letöltést."
     },
+    "status": {
+      "offline": "Offline",
+      "lowSpace": "Kevés tárhely",
+      "lowSpaceWithPercent": "Fennmaradó tárhely: {{percent}}%"
+    },
     "download": {
       "empty": "Még nincsenek letöltések konfigurálva.",
       "failed": "Nem sikerült betölteni a letöltési lehetőségeket.",

@@ -678,6 +678,11 @@
       "offline": "Sunucuya bağlanılamadı. Lütfen birkaç saniye sonra tekrar deneyin.",
       "lowSpace": "Cihazınızın depolama alanı azalıyor. Bu durum yayın akışını ve indirme işlemlerini etkileyebilir."
     },
+    "status": {
+      "offline": "Çevrimdışı",
+      "lowSpace": "Düşük depolama alanı",
+      "lowSpaceWithPercent": "Kalan depolama alanı: {{percent}}%"
+    },
     "download": {
       "empty": "Henüz hiçbir indirme işlemi yapılandırılmadı.",
       "failed": "İndirme seçenekleri yüklenemedi.",

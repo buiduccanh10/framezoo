@@ -678,6 +678,11 @@
       "offline": "Impossibile connettersi al server. Riprovare tra qualche secondo.",
       "lowSpace": "Lo spazio di archiviazione sul tuo dispositivo si sta esaurendo. Ciò potrebbe influire sullo streaming e sul download."
     },
+    "status": {
+      "offline": "Offline",
+      "lowSpace": "Poco spazio di archiviazione",
+      "lowSpaceWithPercent": "Spazio di archiviazione rimanente: {{percent}}%"
+    },
     "download": {
       "empty": "Nessun download è stato ancora configurato.",
       "failed": "Impossibile caricare le opzioni di download.",

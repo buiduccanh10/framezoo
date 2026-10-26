@@ -2,6 +2,11 @@ import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { BrandPill } from "@/components/layout/BrandPill";
+import {
+  StatusIndicators,
+  useAppUpdateIndicator,
+  useStorageWarning,
+} from "@/components/layout/StatusIndicators";
 import { WindowControls } from "@/components/layout/WindowControls";
 import { Player } from "@/components/player";
 import { PlayerLoadingOverlay } from "@/components/player/atoms/PlayerLoadingOverlay";
@@ -19,8 +24,9 @@ import { DocumentPipOverlay } from "@/components/player/internals/DocumentPipOve
 import { PauseOverlay } from "@/components/player/overlays/PauseOverlay";
 import { resolveNextEpisodeAction } from "@/components/player/utils/episodeNavigation";
 import type { DesktopPipAction } from "@/desktop/pip";
-import { useIsMacWindowed } from "@/hooks/useIsDesktopApp";
+import { useIsDesktopApp, useIsMacWindowed } from "@/hooks/useIsDesktopApp";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { useBannerStore } from "@/stores/banner";
 import { PlayerMeta } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { useProgressStore } from "@/stores/progress";
@@ -37,6 +43,7 @@ export interface PlayerPartProps {
 
 export function PlayerPart(props: PlayerPartProps) {
   const isMacWindowed = useIsMacWindowed();
+  const isDesktopApp = useIsDesktopApp();
   const { onMetaChange, hideControls = false } = props;
   const { showTargets } = useShouldShowControls();
   const isLoading = usePlayerStore((s) => s.mediaPlaying.isLoading);
@@ -50,6 +57,10 @@ export function PlayerPart(props: PlayerPartProps) {
   );
   const updateProgress = useProgressStore((s) => s.updateItem);
 
+  const isOnline = useBannerStore((s) => s.isOnline);
+  const isOffline = !isOnline;
+  const { isLowSpace } = useStorageWarning();
+  const { hasVisibleUpdate } = useAppUpdateIndicator();
   const inControl = !enabled || isHost;
   const shouldShowBottomControls = !hideControls && showTargets;
   const shouldShowCenterMobileControls =
@@ -225,6 +236,17 @@ export function PlayerPart(props: PlayerPartProps) {
         <WatchPartyStatus />
       </div>
 
+      {!showTargets && (hasVisibleUpdate || isOffline || isLowSpace) && (
+        <div
+          className={`absolute z-[55] pointer-events-auto transition-all duration-300 md:right-7 ${
+            enabled ? "right-76 top-4" : "right-4 top-5"
+          }`}
+          style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
+        >
+          <StatusIndicators showUpdate />
+        </div>
+      )}
+
       <Player.TopControls show={hideControls || showTargets}>
         <div
           className={`relative flex w-full items-center gap-2 pointer-events-auto ${
@@ -283,6 +305,7 @@ export function PlayerPart(props: PlayerPartProps) {
             className="hidden flex-1 lg:flex items-center justify-end gap-3 z-10"
             style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
           >
+            <StatusIndicators showUpdate />
             <Player.InfoButton />
             <Player.BookmarkButton />
             <Player.KeyboardCommandsButton />
@@ -293,6 +316,7 @@ export function PlayerPart(props: PlayerPartProps) {
             className="flex flex-1 lg:hidden items-center justify-end gap-2 z-10"
             style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
           >
+            <StatusIndicators showUpdate />
             <Player.InfoButton />
             <Player.BookmarkButton />
             <Player.KeyboardCommandsButton />

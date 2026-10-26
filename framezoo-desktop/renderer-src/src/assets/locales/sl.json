@@ -678,6 +678,11 @@
       "offline": "Ni mogoče vzpostaviti povezave s strežnikom. Poskusite znova čez nekaj sekund.",
       "lowSpace": "V vaši napravi zmanjkuje prostora za shranjevanje. To lahko vpliva na pretakanje in prenos."
     },
+    "status": {
+      "offline": "Brez povezave",
+      "lowSpace": "Malo prostora za shranjevanje",
+      "lowSpaceWithPercent": "Preostali prostor za shranjevanje: {{percent}}%"
+    },
     "download": {
       "empty": "Noben prenos še ni konfiguriran.",
       "failed": "Nalaganje možnosti prenosa ni uspelo.",

@@ -678,6 +678,11 @@
       "offline": "Kan geen verbinding maken met de server. Probeer het over een paar seconden opnieuw.",
       "lowSpace": "Uw apparaat heeft bijna geen opslagruimte meer. Dit kan gevolgen hebben voor het streamen en downloaden."
     },
+    "status": {
+      "offline": "Offline",
+      "lowSpace": "Beperkte opslagruimte",
+      "lowSpaceWithPercent": "Resterende opslag: {{percent}}%"
+    },
     "download": {
       "empty": "Er zijn nog geen downloads geconfigureerd.",
       "failed": "Kan downloadopties niet laden.",

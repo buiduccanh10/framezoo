@@ -673,10 +673,15 @@
         "download": "Download update",
         "later": "Later",
         "restart": "Restart to update",
-        "updating": "Updating..."
+        "updating": "Updating"
       },
       "offline": "Unable to connect to the server. Please retry in a few seconds.",
       "lowSpace": "Your device is running out of storage space. This may affect streaming and downloading."
+    },
+    "status": {
+      "offline": "Offline",
+      "lowSpace": "Low storage space",
+      "lowSpaceWithPercent": "Remaining storage: {{percent}}%"
     },
     "download": {
       "empty": "No downloads are configured yet.",

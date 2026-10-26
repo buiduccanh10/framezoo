@@ -678,6 +678,11 @@
       "offline": "Det gick inte att ansluta till servern. Försök igen om några sekunder.",
       "lowSpace": "Din enhets lagringsutrymme börjar ta slut. Detta kan påverka streaming och nedladdning."
     },
+    "status": {
+      "offline": "Off-line",
+      "lowSpace": "Litet lagringsutrymme",
+      "lowSpaceWithPercent": "Återstående lagringsutrymme: {{percent}}%"
+    },
     "download": {
       "empty": "Inga nedladdningar är konfigurerade än.",
       "failed": "Det gick inte att ladda nedladdningsalternativ.",

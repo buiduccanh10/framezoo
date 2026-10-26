@@ -678,6 +678,11 @@
       "offline": "Nelze se připojit k serveru. Zkuste to prosím znovu za několik sekund.",
       "lowSpace": "Vašemu zařízení dochází úložný prostor. To může ovlivnit streamování a stahování."
     },
+    "status": {
+      "offline": "Offline",
+      "lowSpace": "Málo úložného prostoru",
+      "lowSpaceWithPercent": "Zbývající úložiště: {{percent}}%"
+    },
     "download": {
       "empty": "Zatím nejsou nakonfigurována žádná stahování.",
       "failed": "Nepodařilo se načíst možnosti stahování.",
