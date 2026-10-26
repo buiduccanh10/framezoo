@@ -43,6 +43,7 @@ const normalizeOrigin = (value: string) => {
 const DEFAULT_ALLOWED_HEADERS = [
   'Content-Type',
   'Authorization',
+  'X-Admin-Request',
   'X-Requested-With',
   'Range',
   'If-Range',

@@ -1,10 +1,10 @@
-import { exec } from 'child_process';
+import { execFile } from 'child_process';
 import { promisify } from 'util';
 import * as fs from 'fs';
 import * as path from 'path';
 import { useSupabase } from './supabase';
 
-const execAsync = promisify(exec);
+const execFileAsync = promisify(execFile);
 const MAX_BACKUP_ARCHIVE_BYTES = 512 * 1024 * 1024;
 const MAX_BACKUP_UNCOMPRESSED_BYTES = 2 * 1024 * 1024 * 1024;
 
@@ -76,14 +76,20 @@ export const useBackup = () => {
     try {
       // Create SQL backup
       // --clean --if-exists ensures the restore can run without manual drop DB
-      const pgDumpCmd = `pg_dump --clean --if-exists --dbname="${dbUrl}" -F p -f "${sqlPath}"`;
       console.log('Executing pg_dump...');
-      await execAsync(pgDumpCmd);
+      await execFileAsync('pg_dump', [
+        '--clean',
+        '--if-exists',
+        `--dbname=${dbUrl}`,
+        '-F',
+        'p',
+        '-f',
+        sqlPath,
+      ]);
 
       // Create compressed archive
-      const tarCmd = `cd ${tempFolder} && tar -czf ${archiveFile} ${sqlFile}`;
       console.log('Creating tar.gz archive...');
-      await execAsync(tarCmd);
+      await execFileAsync('tar', ['-czf', archivePath, '-C', tempFolder, sqlFile]);
 
       // Upload to Supabase Storage
       const fileBuffer = fs.readFileSync(archivePath);
@@ -178,15 +184,19 @@ export const useBackup = () => {
     };
   };
 
-  const getBackupFiles = async (): Promise<{ files: BackupFileInfo[] }> => {
+  const getBackupFiles = async (page = 1, limit = 20): Promise<{ files: BackupFileInfo[]; pagination: { page: number; limit: number; total: number; totalPages: number } }> => {
     const storage = getStorage();
-    if (!storage) return { files: [] };
+    if (!storage) return { files: [], pagination: { page, limit, total: 0, totalPages: 1 } };
 
+    const safePage = Math.max(1, page);
+    const safeLimit = Math.min(100, Math.max(1, limit));
     const { data: files, error } = await storage.list('backups', {
+      limit: 1000,
+      offset: 0,
       sortBy: { column: 'created_at', order: 'desc' },
     });
 
-    if (error || !files) return { files: [] };
+    if (error || !files) return { files: [], pagination: { page: safePage, limit: safeLimit, total: 0, totalPages: 1 } };
 
     const backupFiles = files
       .filter(file => file.name.endsWith('.tar.gz'))
@@ -201,7 +211,11 @@ export const useBackup = () => {
         };
       });
 
-    return { files: backupFiles };
+    const start = (safePage - 1) * safeLimit;
+    return {
+      files: backupFiles.slice(start, start + safeLimit),
+      pagination: { page: safePage, limit: safeLimit, total: backupFiles.length, totalPages: Math.ceil(backupFiles.length / safeLimit) || 1 },
+    };
   };
 
   const downloadBackupFile = async (filename: string) => {
@@ -303,7 +317,9 @@ export const useBackup = () => {
 
       // If it's a tar.gz, extract it
       if (ext === '.tar.gz') {
-        const archiveListing = await execAsync(`tar -tzf ${safeFilename}`, { cwd: tempDir });
+        const archiveListing = await execFileAsync('tar', ['-tzf', safeFilename], {
+          cwd: tempDir,
+        });
         const members = archiveListing.stdout.split('\n').filter(Boolean);
         if (members.length === 0 || members.length > 10_000) {
           return { success: false, error: 'Backup archive has an invalid member count' };
@@ -321,25 +337,39 @@ export const useBackup = () => {
           }
         }
 
-        const archiveDetails = await execAsync(`tar -tvzf ${safeFilename}`, { cwd: tempDir });
+        const archiveDetails = await execFileAsync('tar', ['-tvzf', safeFilename], {
+          cwd: tempDir,
+        });
         let uncompressedBytes = 0;
         for (const line of archiveDetails.stdout.split('\n').filter(Boolean)) {
           if (/^[lhbcp]/.test(line)) {
-            return { success: false, error: 'Backup archive contains unsupported links or special files' };
+            return {
+              success: false,
+              error: 'Backup archive contains unsupported links or special files',
+            };
           }
           const size = line.match(/\s(\d+)\s+(?:\d{4}-\d{2}-\d{2}|[A-Z][a-z]{2}\s+\d{1,2}\s)/);
           if (!size) {
             return { success: false, error: 'Backup archive has an invalid member listing' };
           }
           uncompressedBytes += Number(size[1]);
-          if (!Number.isSafeInteger(uncompressedBytes) || uncompressedBytes > MAX_BACKUP_UNCOMPRESSED_BYTES) {
-            return { success: false, error: 'Backup archive expands beyond the maximum allowed size' };
+          if (
+            !Number.isSafeInteger(uncompressedBytes) ||
+            uncompressedBytes > MAX_BACKUP_UNCOMPRESSED_BYTES
+          ) {
+            return {
+              success: false,
+              error: 'Backup archive expands beyond the maximum allowed size',
+            };
           }
         }
 
-        const extractCmd = `cd ${tempDir} && tar -xzf ${safeFilename}`;
-        console.log(`Extracting backup: ${extractCmd}`);
-        await execAsync(extractCmd);
+        console.log(`Extracting backup archive in ${tempDir}`);
+        await execFileAsync(
+          'tar',
+          ['-xzf', safeFilename, '--no-same-owner', '--no-same-permissions'],
+          { cwd: tempDir }
+        );
 
         const extractedItems = fs.readdirSync(tempDir);
         const extractedFile = extractedItems.find(item => item.endsWith('.sql'));
@@ -356,8 +386,7 @@ export const useBackup = () => {
       console.log(`Restoring database from: ${backupFilePath}`);
 
       // Execute SQL via psql
-      const restoreCmd = `psql --dbname="${dbUrl}" -f "${backupFilePath}"`;
-      await execAsync(restoreCmd);
+      await execFileAsync('psql', ['--dbname', dbUrl, '-f', backupFilePath]);
 
       return { success: true, message: 'Restore completed successfully' };
     } catch (error) {

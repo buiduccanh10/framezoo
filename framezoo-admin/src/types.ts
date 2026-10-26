@@ -112,3 +112,10 @@ export interface UserPagination {
   total: number;
   totalPages: number;
 }
+
+export interface ListPagination {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+}

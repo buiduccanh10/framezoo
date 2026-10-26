@@ -1,0 +1,59 @@
+/* Hallmark · pre-emit critique: P4 H4 E4 S4 R4 V4
+ * genre: atmospheric workbench · anchor hue: warm red · source DNA: framezoo-fe
+ */
+:root {
+  --color-paper: oklch(12% 0.018 44);
+  --color-paper-2: oklch(16% 0.022 44);
+  --color-paper-3: oklch(21% 0.026 44);
+  --color-ink: oklch(97% 0.012 86);
+  --color-ink-2: oklch(76% 0.028 48);
+  --color-rule: oklch(43% 0.022 44 / 0.58);
+  --color-accent: oklch(63% 0.13 34);
+  --color-accent-strong: oklch(57% 0.14 32);
+  --color-accent-soft: oklch(63% 0.13 34 / 0.14);
+  --color-accent-warm: oklch(91% 0.13 88);
+  --color-focus: oklch(87% 0.12 86);
+  --color-success: oklch(73% 0.12 145);
+  --color-warning: oklch(84% 0.13 88);
+  --color-danger: oklch(70% 0.16 25);
+  --color-header: oklch(12% 0.018 44 / 0.94);
+  --color-overlay: oklch(8% 0.012 30 / 0.84);
+  --color-shadow: oklch(5% 0.012 30 / 0.46);
+  --color-muted: oklch(76% 0.028 48 / 0.66);
+  --color-muted-soft: oklch(76% 0.028 48 / 0.48);
+  --color-success-soft: oklch(73% 0.12 145 / 0.1);
+  --color-success-border: oklch(73% 0.12 145 / 0.34);
+  --color-warning-soft: oklch(84% 0.13 88 / 0.1);
+  --color-warning-border: oklch(84% 0.13 88 / 0.36);
+  --color-danger-soft: oklch(70% 0.16 25 / 0.1);
+  --color-danger-border: oklch(70% 0.16 25 / 0.34);
+
+  --font-display: "Avenir Next", "Helvetica Neue", "Segoe UI", sans-serif;
+  --font-body: "Avenir Next", "Helvetica Neue", "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2rem;
+  --space-xl: 3rem;
+  --space-2xl: 4.5rem;
+  --space-3xl: 7rem;
+  --text-xs: 0.68rem;
+  --text-sm: 0.84rem;
+  --text-md: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: clamp(2rem, 4vw, 3.6rem);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-short: 180ms;
+  --dur-medium: 420ms;
+  --radius-card: 1rem;
+  --radius-panel: 0.75rem;
+  --radius-control: 0.55rem;
+  --radius-pill: 999px;
+  --z-sticky: 20;
+  --z-modal: 100;
+  --z-toast: 120;
+}
