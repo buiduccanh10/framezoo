@@ -1,0 +1,9 @@
+{
+  "framework": "Vite + React 19 + TypeScript",
+  "styling": "Tailwind CSS 4 with appended token CSS",
+  "fontStack": "Avenir Next / Helvetica Neue system stack",
+  "palette": "OKLCH tokens in tokens.css",
+  "motion": "CSS transform and opacity transitions; no motion dependency",
+  "spacing": "4-point semantic spacing tokens",
+  "preserve": ["React/Vite entrypoint", "existing route/API contracts", "Framezoo logo assets"]
+}

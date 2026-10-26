@@ -1,13 +1,45 @@
-import { defineEventHandler } from 'h3';
+import { defineEventHandler, getQuery } from 'h3';
 import { prisma } from '~/utils/prisma';
 import { requireAdmin } from '~/utils/admin';
 
 export default defineEventHandler(async event => {
   await requireAdmin(event);
 
-  const feedbacks = await prisma.feedbacks.findMany({
-    orderBy: { created_at: 'desc' },
-  });
+  const query = getQuery(event);
+  const search = typeof query.search === 'string' ? query.search.trim().slice(0, 120) : '';
+  const page = Math.max(1, parseInt(String(query.page || '1'), 10) || 1);
+  const limit = Math.min(100, Math.max(1, parseInt(String(query.limit || '20'), 10) || 20));
+  const status = query.status === 'pending' || query.status === 'resolved' ? query.status : undefined;
+  const matchingUsers = search
+    ? await prisma.users.findMany({
+        where: {
+          OR: [
+            { nickname: { contains: search, mode: 'insensitive' } },
+            { email: { contains: search, mode: 'insensitive' } },
+            { id: { contains: search, mode: 'insensitive' } },
+          ],
+        },
+        select: { id: true },
+        take: 1000,
+      })
+    : [];
+  const where: any = {};
+  if (status) where.status = status;
+  if (search) {
+    where.OR = [
+      { title: { contains: search, mode: 'insensitive' } },
+      { description: { contains: search, mode: 'insensitive' } },
+      ...(matchingUsers.length ? [{ user_id: { in: matchingUsers.map(user => user.id) } }] : []),
+    ];
+  }
+  const statsWhere = search && where.OR ? { OR: where.OR } : {};
+
+  const [total, pending, resolved, feedbacks] = await Promise.all([
+    prisma.feedbacks.count({ where }),
+    prisma.feedbacks.count({ where: { ...statsWhere, status: 'pending' } }),
+    prisma.feedbacks.count({ where: { ...statsWhere, status: 'resolved' } }),
+    prisma.feedbacks.findMany({ where, orderBy: { created_at: 'desc' }, skip: (page - 1) * limit, take: limit }),
+  ]);
 
   const userIds = [
     ...new Set(
@@ -56,5 +88,7 @@ export default defineEventHandler(async event => {
   return {
     success: true,
     feedbacks: items,
+    pagination: { page, limit, total, totalPages: Math.ceil(total / limit) || 1 },
+    stats: { total, pending, resolved },
   };
 });

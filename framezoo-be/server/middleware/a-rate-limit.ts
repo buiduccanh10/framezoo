@@ -25,6 +25,14 @@ const getPositiveInt = (value: string | undefined, fallback: number) => {
 };
 
 const getRateLimitConfig = (path: string) => {
+  if (path === '/api/backup/login' || path.startsWith('/api/backup/login?')) {
+    return {
+      scope: 'admin-login',
+      windowMs: getPositiveInt(process.env.RATE_LIMIT_ADMIN_LOGIN_WINDOW_MS, 15 * 60_000),
+      maxRequests: getPositiveInt(process.env.RATE_LIMIT_ADMIN_LOGIN_MAX_REQUESTS, 5),
+    };
+  }
+
   const isAuthGuest =
     path === '/api/auth/guest' ||
     path.startsWith('/api/auth/guest?') ||
