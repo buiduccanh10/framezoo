@@ -1,4 +1,4 @@
-import { act } from "react";
+import { act, useEffect } from "react";
 import { type Root, createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -90,8 +90,17 @@ function createCaption(id: string): CaptionListItem {
   };
 }
 
-function CaptionsHarness() {
-  useCaptions();
+function CaptionsHarness({
+  onReady,
+}: {
+  onReady?: (controls: ReturnType<typeof useCaptions>) => void;
+}) {
+  const controls = useCaptions();
+
+  useEffect(() => {
+    onReady?.(controls);
+  }, [controls, onReady]);
+
   return null;
 }
 
@@ -194,6 +203,83 @@ describe("caption auto-selection across episode transitions", () => {
     expect(usePlayerStore.getState().caption.selected?.id).toBe(
       episodeTwoCaption.id,
     );
+  });
+});
+
+describe("manual subtitle cycling", () => {
+  let root: Root;
+  let container: HTMLDivElement;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    queryClient.clear();
+    usePlayerStore.getState().reset();
+    useSubtitleStore.setState({
+      enabled: false,
+      lastSelectedLanguage: "vi",
+    });
+    useLanguageStore.setState({ language: "en" });
+    mocks.downloadCaptionAsVtt.mockResolvedValue("WEBVTT");
+    mocks.scoreCaptionSourceFit.mockImplementation(async (caption) =>
+      caption.id === "rank-1" ? { score: 100, confidence: "high" } : null,
+    );
+    mocks.loadAllAddonSubtitles.mockResolvedValue({
+      captions: [],
+      errors: [],
+    });
+
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    root = createRoot(container);
+  });
+
+  afterEach(() => {
+    act(() => root.unmount());
+    container.remove();
+    usePlayerStore.getState().reset();
+    useSubtitleStore.setState({
+      enabled: false,
+      lastSelectedLanguage: null,
+    });
+  });
+
+  it("cycles through lower-ranked subtitles and wraps to the highest", async () => {
+    const captions = [
+      createCaption("rank-1"),
+      createCaption("rank-2"),
+      createCaption("rank-3"),
+    ];
+    const store = usePlayerStore.getState();
+    store.setMeta(createMeta(1));
+    store.setSource(createSource("source-1"), captions, 0);
+    store.setCaption({
+      id: "rank-1",
+      language: "vi",
+      url: captions[0].url,
+      vttData: "WEBVTT",
+    });
+
+    let controls: ReturnType<typeof useCaptions> | null = null;
+    await act(async () => {
+      root.render(<CaptionsHarness onReady={(value) => (controls = value)} />);
+      await Promise.resolve();
+    });
+
+    expect(controls).not.toBeNull();
+    await act(async () => {
+      await controls?.selectNextBestCaptionForLanguage("vi");
+    });
+    expect(usePlayerStore.getState().caption.selected?.id).toBe("rank-2");
+
+    await act(async () => {
+      await controls?.selectNextBestCaptionForLanguage("vi");
+    });
+    expect(usePlayerStore.getState().caption.selected?.id).toBe("rank-3");
+
+    await act(async () => {
+      await controls?.selectNextBestCaptionForLanguage("vi");
+    });
+    expect(usePlayerStore.getState().caption.selected?.id).toBe("rank-1");
   });
 });
 
