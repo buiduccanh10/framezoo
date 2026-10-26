@@ -49,7 +49,9 @@ export function getAddonStreamQuality(stream: AddonStream): string {
     .join(" ")
     .toLowerCase();
 
-  if (/\b(4k|2160p|uhd)\b/.test(text)) return "4K";
+  // Classify from an explicit resolution. UHD can describe the source/media
+  // format even when the encoded release is 1080p, so it is not a quality hint.
+  if (/\b(4k|2160p)\b/.test(text)) return "4K";
   if (/\b(1440p|2k|qhd)\b/.test(text)) return "1440p";
   if (/\b(1080p|1080i|fhd|full\s*hd)\b/.test(text)) return "1080p";
   if (/\b(720p|720i|hd)\b/.test(text)) return "720p";
