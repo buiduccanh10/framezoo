@@ -10,11 +10,11 @@ export function BackLink(props: { url: string }) {
     <div className="flex items-center">
       <Link
         to={props.url}
-        className="whitespace-nowrap py-1 -my-1 px-2 -mx-2 tabbable rounded-lg flex items-center cursor-pointer text-type-secondary hover:text-white transition-colors duration-200 font-medium"
+        aria-label={t("player.back.default")}
+        title={t("player.back.default")}
+        className="tabbable flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full bg-white/10 text-lg text-white/80 ring-1 ring-white/10 transition-colors duration-200 hover:bg-white/20 hover:text-white hover:ring-white/20"
       >
-        <Icon className="mr-2" icon={Icons.ARROW_LEFT} />
-        <span className="md:hidden">{t("player.back.short")}</span>
-        <span className="hidden w md:block">{t("player.back.default")}</span>
+        <Icon icon={Icons.ARROW_LEFT} />
       </Link>
     </div>
   );

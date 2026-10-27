@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <cmath>
+#include <cstring>
 #include <memory>
 #include <mutex>
 #include <sstream>
@@ -136,6 +137,16 @@ struct MpvPlayer {
   bool software_render = false;
   std::vector<uint8_t> sw_buffer;
 
+#if defined(__APPLE__)
+  std::mutex hdr_mutex;
+  std::mutex hdr_transition_mutex;
+  bool hdr_output_initialized = false;
+  bool hdr_output_active = false;
+  std::string hdr_gamma;
+  std::string hdr_primaries;
+  uint32_t hdr_display_id = 0;
+#endif
+
   int command(const char* const* commands) {
     std::lock_guard<std::mutex> lock(command_mutex);
     return api.command(handle, commands);
@@ -158,61 +169,225 @@ struct MpvPlayer {
   }
 
 #if defined(__APPLE__)
-  std::atomic<bool> is_hdr_active{false};
-
-  void update_edr_state() {
-    if (!handle || !surface) return;
-
+  struct HdrMetadata {
     std::string gamma;
     std::string primaries;
-    char* gamma_prop = api.get_property_string(handle, "video-params/gamma");
-    if (gamma_prop) {
-      gamma = gamma_prop;
-      api.free_memory(gamma_prop);
-    }
-    char* prim_prop = api.get_property_string(handle, "video-params/primaries");
-    if (prim_prop) {
-      primaries = prim_prop;
-      api.free_memory(prim_prop);
-    }
+  };
 
-    const bool is_hdr = (gamma == "pq" || gamma == "hlg");
-    SurfaceEdrInfo edr_info = surface_query_edr(surface);
+  static std::string node_string_value(
+      const mpv_node* node,
+      const char* key
+  ) {
+    if (
+        !node ||
+        node->format != MPV_FORMAT_NODE_MAP ||
+        !node->list ||
+        !key
+    ) {
+      return {};
+    }
+    for (int index = 0; index < node->list->num; ++index) {
+      if (
+          !node->list->keys[index] ||
+          std::strcmp(node->list->keys[index], key) != 0
+      ) {
+        continue;
+      }
+      const mpv_node& value = node->list->values[index];
+      if (
+          value.format == MPV_FORMAT_STRING ||
+          value.format == MPV_FORMAT_OSD_STRING
+      ) {
+        return value.string ? value.string : "";
+      }
+    }
+    return {};
+  }
 
-    std::fprintf(
-        stderr,
-        "[libmpv-native] update_edr_state player=%s gamma='%s' primaries='%s' "
-        "is_hdr=%d edr_supported=%d max_potential_edr=%.2f peak_nits=%d\n",
-        id.c_str(),
-        gamma.c_str(),
-        primaries.c_str(),
-        is_hdr ? 1 : 0,
-        edr_info.edr_supported ? 1 : 0,
-        edr_info.max_potential_edr,
-        edr_info.peak_nits
+  static HdrMetadata hdr_metadata_from_node(const mpv_node* node) {
+    return {
+        node_string_value(node, "gamma"),
+        node_string_value(node, "primaries"),
+    };
+  }
+
+  HdrMetadata read_hdr_metadata() {
+    HdrMetadata metadata;
+    if (!handle || !api.get_property_string) return metadata;
+
+    std::lock_guard<std::mutex> lock(command_mutex);
+    char* gamma = api.get_property_string(handle, "video-params/gamma");
+    if (gamma) {
+      metadata.gamma = gamma;
+      api.free_memory(gamma);
+    }
+    char* primaries = api.get_property_string(
+        handle,
+        "video-params/primaries"
     );
+    if (primaries) {
+      metadata.primaries = primaries;
+      api.free_memory(primaries);
+    }
+    return metadata;
+  }
 
-    if (is_hdr && edr_info.edr_supported) {
-      is_hdr_active.store(true, std::memory_order_release);
-      surface_set_hdr_mode(surface, true, primaries.c_str());
-      set_property_string("target-trc", "pq");
-      set_property_string(
+  int hdr_peak_nits(double max_potential_edr) const {
+    if (!std::isfinite(max_potential_edr) || max_potential_edr <= 1.0) {
+      return 203;
+    }
+    return std::min(
+        10'000,
+        std::max(
+            203,
+            static_cast<int>(std::lround(203.0 * max_potential_edr))
+        )
+    );
+  }
+
+  void set_hdr_property(const char* name, const char* value) {
+    const int result = set_property_string(name, value);
+    if (result < 0) {
+      std::fprintf(
+          stderr,
+          "[libmpv-native] HDR property failed name=%s result=%d\n",
+          name,
+          result
+      );
+    }
+  }
+
+  void apply_hdr_output(
+      bool enabled,
+      const std::string& gamma,
+      const std::string& primaries,
+      int peak_nits
+  ) {
+    if (!surface || !handle) return;
+
+    surface_set_hdr_mode(
+        surface,
+        enabled,
+        gamma.empty() ? nullptr : gamma.c_str(),
+        primaries.empty() ? nullptr : primaries.c_str()
+    );
+    if (enabled) {
+      set_hdr_property(
+          "target-trc",
+          gamma == "hlg" ? "hlg" : "pq"
+      );
+      set_hdr_property(
           "target-prim",
           primaries.empty() ? "bt.2020" : primaries.c_str()
       );
-      std::string peak_str = std::to_string(edr_info.peak_nits);
-      set_property_string("target-peak", peak_str.c_str());
-      set_property_string("tone-mapping", "bt.2390");
-      set_property_string("video-output-levels", "full");
+      const std::string peak = std::to_string(peak_nits);
+      set_hdr_property("target-peak", peak.c_str());
+      set_hdr_property("tone-mapping", "bt.2390");
     } else {
-      is_hdr_active.store(false, std::memory_order_release);
-      surface_set_hdr_mode(surface, false, nullptr);
-      set_property_string("target-trc", "auto");
-      set_property_string("target-prim", "auto");
-      set_property_string("target-peak", "auto");
-      set_property_string("tone-mapping", "bt.2390");
-      set_property_string("video-output-levels", "full");
+      set_hdr_property("target-trc", "auto");
+      set_hdr_property("target-prim", "auto");
+      set_hdr_property("target-peak", "auto");
+      set_hdr_property("tone-mapping", "auto");
+      set_hdr_property("video-output-levels", "auto");
+      return;
     }
+    set_hdr_property("video-output-levels", "full");
+  }
+
+  void reset_hdr_output() {
+    bool should_disable = false;
+    std::lock_guard<std::mutex> transition_lock(hdr_transition_mutex);
+    {
+      std::lock_guard<std::mutex> lock(hdr_mutex);
+      should_disable = hdr_output_initialized && hdr_output_active;
+      hdr_output_initialized = false;
+      hdr_output_active = false;
+      hdr_gamma.clear();
+      hdr_primaries.clear();
+      hdr_display_id = 0;
+    }
+    if (should_disable) {
+      apply_hdr_output(false, {}, {}, 203);
+    }
+  }
+
+  void update_hdr_output(const HdrMetadata* hinted_metadata = nullptr) {
+    if (
+        !running.load(std::memory_order_acquire) ||
+        !handle ||
+        !surface
+    ) {
+      return;
+    }
+
+    const HdrMetadata metadata = hinted_metadata
+        ? *hinted_metadata
+        : read_hdr_metadata();
+    if (metadata.gamma.empty()) return;
+
+    const SurfaceHdrInfo surface_info = surface_hdr_info(surface);
+    const bool hdr_source =
+        metadata.gamma == "pq" || metadata.gamma == "hlg";
+    const bool hdr_active = hdr_source && surface_info.supported;
+    bool changed = false;
+    bool was_initialized = false;
+    {
+      std::lock_guard<std::mutex> lock(hdr_mutex);
+      was_initialized = hdr_output_initialized;
+      changed =
+          !hdr_output_initialized ||
+          hdr_output_active != hdr_active ||
+          hdr_gamma != metadata.gamma ||
+          hdr_primaries != metadata.primaries ||
+          hdr_display_id != surface_info.display_id;
+      if (changed) {
+        hdr_output_initialized = true;
+        hdr_output_active = hdr_active;
+        hdr_gamma = metadata.gamma;
+        hdr_primaries = metadata.primaries;
+        hdr_display_id = surface_info.display_id;
+      }
+    }
+    if (!changed || (!was_initialized && !hdr_active)) return;
+
+    std::lock_guard<std::mutex> transition_lock(hdr_transition_mutex);
+    {
+      std::lock_guard<std::mutex> lock(hdr_mutex);
+      if (
+          hdr_output_active != hdr_active ||
+          hdr_gamma != metadata.gamma ||
+          hdr_primaries != metadata.primaries ||
+          hdr_display_id != surface_info.display_id
+      ) {
+        return;
+      }
+    }
+    const int peak_nits = hdr_peak_nits(surface_info.max_potential_edr);
+    std::fprintf(
+        stderr,
+        "[libmpv-native] HDR transition player=%s gamma=%s primaries=%s "
+        "source=%d active=%d float=%d edr_max=%.2f display=%u peak=%d\n",
+        id.c_str(),
+        metadata.gamma.c_str(),
+        metadata.primaries.c_str(),
+        hdr_source ? 1 : 0,
+        hdr_active ? 1 : 0,
+        surface_info.float_pixel_format ? 1 : 0,
+        surface_info.max_potential_edr,
+        surface_info.display_id,
+        peak_nits
+    );
+    apply_hdr_output(
+        hdr_active,
+        metadata.gamma,
+        metadata.primaries,
+        peak_nits
+    );
+  }
+
+  static void on_surface_display_change(void* user) {
+    auto* player = static_cast<MpvPlayer*>(user);
+    if (player) player->update_hdr_output();
   }
 #endif
 
@@ -378,30 +553,16 @@ struct MpvPlayer {
         (update_flags & MPV_RENDER_UPDATE_FRAME) != 0;
     if (!running.load(std::memory_order_acquire)) return;
     mpv_opengl_fbo fbo{};
-#if defined(__APPLE__)
-    fbo.fbo = surface_current_fbo(surface);
-    fbo.w = surface_width(surface);
-    fbo.h = surface_height(surface);
-    fbo.internal_format = surface_fbo_internal_format(surface);
-    int depth = surface_depth(surface);
-    int flip_y = 1;
-    mpv_render_param params[] = {
-        {MPV_RENDER_PARAM_OPENGL_FBO, &fbo},
-        {MPV_RENDER_PARAM_FLIP_Y, &flip_y},
-        {MPV_RENDER_PARAM_DEPTH, &depth},
-        {MPV_RENDER_PARAM_INVALID, nullptr},
-    };
-#else
     fbo.fbo = 0;
     fbo.w = surface_width(surface);
     fbo.h = surface_height(surface);
+
     int flip_y = 1;
     mpv_render_param params[] = {
         {MPV_RENDER_PARAM_OPENGL_FBO, &fbo},
         {MPV_RENDER_PARAM_FLIP_Y, &flip_y},
         {MPV_RENDER_PARAM_INVALID, nullptr},
     };
-#endif
     const int result = api.render_context_render(render_context, params);
     if (result < 0) {
       std::fprintf(
@@ -553,7 +714,7 @@ struct MpvPlayer {
           emit(native_event);
           emit_playback_property_snapshots();
 #if defined(__APPLE__)
-          update_edr_state();
+          update_hdr_output();
 #endif
 #if defined(_WIN32)
           // Windows renders through the native HWND instead of the custom
@@ -647,7 +808,12 @@ struct MpvPlayer {
                std::string(property->name) == "video-out-params")
           ) {
 #if defined(__APPLE__)
-            update_edr_state();
+            const HdrMetadata hinted_metadata = hdr_metadata_from_node(
+                static_cast<mpv_node*>(property->data)
+            );
+            update_hdr_output(
+                hinted_metadata.gamma.empty() ? nullptr : &hinted_metadata
+            );
 #endif
             surface_request_paint(surface);
           }
@@ -1264,6 +1430,13 @@ napi_value create_player(napi_env env, napi_callback_info info) {
       player.get()
   );
   if (!player->surface) return throw_error(env, "native surface creation failed");
+#if defined(__APPLE__)
+  surface_set_display_change_callback(
+      player->surface,
+      MpvPlayer::on_surface_display_change,
+      player.get()
+  );
+#endif
 
   player->handle = player->api.create();
   if (!player->handle) return throw_error(env, "mpv_create failed");
@@ -1274,12 +1447,10 @@ napi_value create_player(napi_env env, napi_callback_info info) {
       reinterpret_cast<uintptr_t>(surface_native_handle(player->surface))
   );
   set_mpv_option(player.get(), "wid", wid_str.c_str());
-  set_mpv_option(player.get(), "vo", "gpu-next,gpu,direct3d,null");
+  set_mpv_option(player.get(), "vo", "gpu,direct3d,null");
   set_mpv_option(player.get(), "gpu-api", "d3d11,auto");
   set_mpv_option(player.get(), "gpu-context", "d3d11,auto");
   set_mpv_option(player.get(), "d3d11-flip", "yes");
-  set_mpv_option(player.get(), "d3d11-output-format", "auto");
-  set_mpv_option(player.get(), "d3d11-output-csp", "auto");
   // Present at vblank.
   set_mpv_option(player.get(), "d3d11-sync-interval", "1");
 #else
@@ -1306,21 +1477,12 @@ napi_value create_player(napi_env env, napi_callback_info info) {
   set_mpv_option(player.get(), "ad-lavc-downmix", "yes");
   set_mpv_option(player.get(), "ad-lavc-ac3drc", "1");
 
-  // HDR tone mapping, color fidelity & Extended Dynamic Range (EDR)
 #if defined(__APPLE__)
-  // macOS uses vo=libmpv (OpenGL FBO). Dynamic HDR/EDR pipeline is managed via update_edr_state()
-  set_mpv_option(player.get(), "tone-mapping", "bt.2390");
-  set_mpv_option(player.get(), "video-output-levels", "full");
+  // HDR output is switched only after libmpv reports the actual transfer
+  // function. Keeping the surface in SDR until then avoids touching the
+  // streaming, seek, and pause paths during startup.
+  set_mpv_option(player.get(), "target-colorspace-hint", "yes");
   set_mpv_option(player.get(), "screenshot-tag-colorspace", "yes");
-#else
-  // Windows with vo=gpu-next / D3D11 swapchain
-  set_mpv_option(player.get(), "target-colorspace-hint", "auto");
-  set_mpv_option(player.get(), "tone-mapping", "bt.2390");
-  set_mpv_option(player.get(), "tone-mapping-mode", "auto");
-  set_mpv_option(player.get(), "tone-mapping-max-boost", "2.0");
-  set_mpv_option(player.get(), "hdr-compute-peak", "auto");
-  set_mpv_option(player.get(), "hdr-contrast-recovery", "0.30");
-  set_mpv_option(player.get(), "gamut-mapping-mode", "auto");
 #endif
 
   // Hardware decoding & multi-threading
@@ -1610,7 +1772,7 @@ napi_value reparent_player(napi_env env, napi_callback_info info) {
   if (!player) return throw_error(env, "player not found");
   surface_reparent(player->surface, parent);
 #if defined(__APPLE__)
-  player->update_edr_state();
+  player->update_hdr_output();
 #endif
   napi_value result;
   napi_get_boolean(env, true, &result);
@@ -1739,6 +1901,9 @@ napi_value load_player(napi_env env, napi_callback_info info) {
       std::max(0.0, start_at),
       std::memory_order_release
   );
+#if defined(__APPLE__)
+  player->reset_hdr_output();
+#endif
 
   // Torrent HTTP ranges can briefly expose decoder-owned surfaces while the
   // sidecar waits for the next available piece. Copy-back keeps libmpv's

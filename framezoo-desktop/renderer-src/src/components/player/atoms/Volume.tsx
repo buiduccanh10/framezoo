@@ -117,23 +117,23 @@ export function Volume(props: Props) {
         </div>
         <div
           className={`linear -ml-2 w-0 overflow-hidden transition-[width,opacity] duration-300 ${
-            hovering || dragging ? "!w-24 opacity-100" : "w-4 opacity-0"
+            hovering || dragging ? "!w-28 opacity-100" : "w-4 opacity-0"
           }`}
         >
           <div
             ref={ref}
-            className="flex h-10 w-20 items-center px-2"
+            className="flex h-10 w-24 items-center px-2"
             onMouseDown={dragMouseDown}
             onTouchStart={dragMouseDown}
           >
-            <div className="relative h-1 flex-1 rounded-full bg-gray-500/50">
+            <div className="relative h-1.5 flex-1 rounded-full bg-gray-500/50">
               <div
                 className="absolute inset-y-0 left-0 flex items-center justify-end rounded-full bg-video-audio-set"
                 style={{
                   width: percentageString,
                 }}
               >
-                <div className="absolute h-3 w-3 translate-x-1/2 rounded-full bg-white" />
+                <div className="absolute h-4 w-4 translate-x-1/2 rounded-full bg-white" />
               </div>
             </div>
           </div>

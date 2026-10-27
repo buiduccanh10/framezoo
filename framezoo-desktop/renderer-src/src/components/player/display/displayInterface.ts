@@ -73,6 +73,7 @@ export type DisplayInterfaceEvents = {
   error: DisplayError;
   segmentqualitydebug: SegmentQualityDebugInfo | null;
   videodimensions: { width: number; height: number } | null;
+  hdrchange: boolean;
 };
 
 export interface qualityChangeOptions {

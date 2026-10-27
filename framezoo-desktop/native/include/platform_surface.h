@@ -1,9 +1,14 @@
 #pragma once
 
+#include <cstdint>
+
 #include "mpv_abi.h"
 
 struct NativeSurface;
 using SurfacePaintCallback = void (*)(void* user, NativeSurface* surface);
+#if defined(__APPLE__)
+using SurfaceDisplayChangeCallback = void (*)(void* user);
+#endif
 
 struct SurfaceBounds {
   int x;
@@ -32,17 +37,25 @@ void* surface_native_handle(NativeSurface* surface);
 void surface_configure_window(void* parent_handle);
 
 #if defined(__APPLE__)
-struct SurfaceEdrInfo {
-  bool edr_supported = false;
+struct SurfaceHdrInfo {
+  bool supported = false;
+  bool float_pixel_format = false;
   double max_potential_edr = 1.0;
-  int peak_nits = 400;
+  uint32_t display_id = 0;
 };
 
-SurfaceEdrInfo surface_query_edr(NativeSurface* surface);
-void surface_set_hdr_mode(NativeSurface* surface, bool enable_hdr, const char* primaries);
-int surface_fbo_internal_format(NativeSurface* surface);
-int surface_depth(NativeSurface* surface);
-int surface_current_fbo(NativeSurface* surface);
+SurfaceHdrInfo surface_hdr_info(NativeSurface* surface);
+void surface_set_display_change_callback(
+    NativeSurface* surface,
+    SurfaceDisplayChangeCallback callback,
+    void* user
+);
+void surface_set_hdr_mode(
+    NativeSurface* surface,
+    bool enabled,
+    const char* gamma,
+    const char* primaries
+);
 #endif
 
 #if defined(_WIN32)

@@ -31,6 +31,7 @@ export interface InterfaceSlice {
     skipNextSavedProgressResume: boolean;
     error?: DisplayError;
     videoDimensions?: { width: number; height: number };
+    isHdr: boolean;
 
     volumeChangedWithKeybind: boolean; // has the volume recently been adjusted with the up/down arrows recently?
     volumeChangedWithKeybindDebounce: NodeJS.Timeout | null; // debounce for the duration of the "volume changed thingamajig"
@@ -79,6 +80,7 @@ export const createInterfaceSlice: MakeSlice<InterfaceSlice> = (set, get) => ({
     skipNextSavedProgressResume: false,
     isSpeedBoosted: false,
     showSpeedIndicator: false,
+    isHdr: false,
   },
 
   setShouldStartFromBeginning(val) {

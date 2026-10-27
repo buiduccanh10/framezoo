@@ -100,7 +100,7 @@ export function NoUserAvatar(props: { iconClass?: string }) {
     <div className="relative inline-block p-1 text-type-dimmed">
       <Icon
         className={props.iconClass ?? "text-base ssm:text-xl"}
-        icon={Icons.MENU}
+        icon={Icons.USER}
       />
     </div>
   );
