@@ -1,15 +1,21 @@
 #if defined(__APPLE__)
 
+#define GL_SILENCE_DEPRECATION 1
+
 #include "platform_surface.h"
 
 #import <Cocoa/Cocoa.h>
+#import <CoreGraphics/CoreGraphics.h>
 #import <OpenGL/gl3.h>
+#import <QuartzCore/QuartzCore.h>
 
 #include <algorithm>
 #include <atomic>
 #include <cmath>
 #include <cstdio>
+#include <cstring>
 #include <dlfcn.h>
+#include <memory>
 
 struct NativeSurface;
 
@@ -22,11 +28,17 @@ struct NativeSurface {
   NSView* anchor = nil;
   NSView* host = nil;
   SurfaceBounds bounds{};
+  bool float_pixel_format = false;
   std::atomic<double> backing_scale_factor{1.0};
+  std::atomic<double> max_potential_edr{1.0};
+  std::atomic<uint32_t> display_id{0};
   std::atomic<uint64_t> paint_count{0};
-  std::atomic<bool> paint_requested{false};
+  std::shared_ptr<std::atomic<bool>> paint_requested =
+      std::make_shared<std::atomic<bool>>(false);
   SurfacePaintCallback paint_callback = nullptr;
   void* user = nullptr;
+  std::atomic<SurfaceDisplayChangeCallback> display_change_callback{nullptr};
+  std::atomic<void*> display_change_user{nullptr};
 };
 
 void update_backing_scale_factor(NativeSurface* surface) {
@@ -42,6 +54,57 @@ void update_backing_scale_factor(NativeSurface* surface) {
     surface->backing_scale_factor.store(
         std::max<CGFloat>(1.0, screen.backingScaleFactor),
         std::memory_order_relaxed
+    );
+  }
+}
+
+void update_display_hdr_capabilities(NativeSurface* surface) {
+  if (!surface || !surface->view) return;
+
+  NSScreen* screen = surface->view.window
+      ? surface->view.window.screen
+      : NSScreen.mainScreen;
+  double max_potential_edr = 1.0;
+  if (
+      screen &&
+      [screen respondsToSelector:@selector(
+          maximumPotentialExtendedDynamicRangeColorComponentValue)]
+  ) {
+    max_potential_edr = std::max(
+        1.0,
+        screen.maximumPotentialExtendedDynamicRangeColorComponentValue
+    );
+  }
+  NSDictionary* description = screen ? screen.deviceDescription : nil;
+  NSNumber* screen_number = description
+      ? [description objectForKey:@"NSScreenNumber"]
+      : nil;
+  const double previous_max_potential_edr = surface->max_potential_edr.load(
+      std::memory_order_relaxed
+  );
+  const uint32_t previous_display_id = surface->display_id.load(
+      std::memory_order_relaxed
+  );
+  const uint32_t display_id =
+      screen_number ? screen_number.unsignedIntValue : 0;
+  surface->max_potential_edr.store(
+      max_potential_edr,
+      std::memory_order_relaxed
+  );
+  surface->display_id.store(
+      display_id,
+      std::memory_order_relaxed
+  );
+  const auto callback = surface->display_change_callback.load(
+      std::memory_order_acquire
+  );
+  if (
+      (previous_max_potential_edr != max_potential_edr ||
+       previous_display_id != display_id) &&
+      callback
+  ) {
+    callback(
+        surface->display_change_user.load(std::memory_order_acquire)
     );
   }
 }
@@ -111,14 +174,20 @@ void attach_surface(NativeSurface* surface, NSView* anchor) {
 - (void)viewDidChangeBackingProperties {
   [super viewDidChangeBackingProperties];
   update_backing_scale_factor(self.surface);
+  update_display_hdr_capabilities(self.surface);
   [self setNeedsDisplay:YES];
+}
+
+- (void)viewDidMoveToWindow {
+  [super viewDidMoveToWindow];
+  update_display_hdr_capabilities(self.surface);
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
   [super drawRect:dirtyRect];
   NativeSurface* surface = self.surface;
   if (!surface || !surface->paint_callback || !surface->user) return;
-  surface->paint_requested.store(false, std::memory_order_relaxed);
+  surface->paint_requested->store(false, std::memory_order_relaxed);
 
   const uint64_t paint_number = surface->paint_count.fetch_add(1) + 1;
   if (paint_number <= 5 || paint_number % 60 == 0) {
@@ -151,23 +220,43 @@ NativeSurface* surface_create(
   auto* parent = static_cast<NSView*>(parent_handle);
   if (!parent) return nullptr;
 
-  NSOpenGLPixelFormatAttribute attributes[] = {
+  NSOpenGLPixelFormatAttribute hdr_attributes[] = {
       NSOpenGLPFAOpenGLProfile,
       NSOpenGLProfileVersion3_2Core,
       NSOpenGLPFAAccelerated,
       NSOpenGLPFAColorSize,
-      24,
+      64,
+      NSOpenGLPFAColorFloat,
       NSOpenGLPFAAlphaSize,
-      8,
+      16,
       NSOpenGLPFADoubleBuffer,
       0,
   };
-  auto* pixel_format =
-      [[[NSOpenGLPixelFormat alloc] initWithAttributes:attributes] autorelease];
+  NSOpenGLPixelFormat* pixel_format =
+      [[[NSOpenGLPixelFormat alloc] initWithAttributes:hdr_attributes]
+          autorelease];
+  bool float_pixel_format = pixel_format != nil;
+  if (!pixel_format) {
+    NSOpenGLPixelFormatAttribute sdr_attributes[] = {
+        NSOpenGLPFAOpenGLProfile,
+        NSOpenGLProfileVersion3_2Core,
+        NSOpenGLPFAAccelerated,
+        NSOpenGLPFAColorSize,
+        24,
+        NSOpenGLPFAAlphaSize,
+        8,
+        NSOpenGLPFADoubleBuffer,
+        0,
+    };
+    pixel_format =
+        [[[NSOpenGLPixelFormat alloc] initWithAttributes:sdr_attributes]
+            autorelease];
+  }
   if (!pixel_format) return nullptr;
 
   auto* surface = new NativeSurface();
   surface->bounds = bounds;
+  surface->float_pixel_format = float_pixel_format;
   surface->paint_callback = paint_callback;
   surface->user = user;
   surface->view = [[FrameZooMpvView alloc]
@@ -187,8 +276,15 @@ NativeSurface* surface_create(
       NSViewWidthSizable | NSViewHeightSizable;
   GLint swap_interval = 1;
   [[surface->view openGLContext] setValues:&swap_interval
-                              forParameter:NSOpenGLCPSwapInterval];
+                              forParameter:NSOpenGLContextParameterSwapInterval];
   attach_surface(surface, parent);
+  update_display_hdr_capabilities(surface);
+  std::fprintf(
+      stderr,
+      "[libmpv-native] surface_format float=%d edr_max=%.2f\n",
+      float_pixel_format ? 1 : 0,
+      surface->max_potential_edr.load(std::memory_order_relaxed)
+  );
   [surface->view setNeedsDisplay:YES];
   return surface;
 }
@@ -197,6 +293,7 @@ void surface_resize(NativeSurface* surface, SurfaceBounds bounds) {
   if (!surface || !surface->view) return;
   surface->bounds = bounds;
   update_backing_scale_factor(surface);
+  update_display_hdr_capabilities(surface);
   [surface->view setFrame:surface_frame_in_host(surface)];
   [surface->view setNeedsDisplay:YES];
 }
@@ -206,19 +303,23 @@ void surface_reparent(NativeSurface* surface, void* parent_handle) {
   auto* parent = static_cast<NSView*>(parent_handle);
   [surface->view removeFromSuperview];
   attach_surface(surface, parent);
+  update_display_hdr_capabilities(surface);
   [surface->view setNeedsDisplay:YES];
 }
 
 void surface_request_paint(NativeSurface* surface) {
   if (!surface || !surface->view || !surface->paint_callback || !surface->user) return;
-  if (surface->paint_requested.exchange(true, std::memory_order_relaxed)) {
+  const auto paint_requested = surface->paint_requested;
+  FrameZooMpvView* view = surface->view;
+  if (paint_requested->exchange(true, std::memory_order_relaxed)) {
     return;
   }
-  FrameZooMpvView* view = surface->view;
   [view retain];
   dispatch_async(dispatch_get_main_queue(), ^{
-    surface->paint_requested.store(false, std::memory_order_relaxed);
-    [view setNeedsDisplay:YES];
+    paint_requested->store(false, std::memory_order_relaxed);
+    if (view.surface) {
+      [view setNeedsDisplay:YES];
+    }
     [view release];
   });
 }
@@ -227,6 +328,8 @@ void surface_disable_paint(NativeSurface* surface) {
   if (!surface) return;
   surface->paint_callback = nullptr;
   surface->user = nullptr;
+  surface->display_change_callback.store(nullptr, std::memory_order_release);
+  surface->display_change_user.store(nullptr, std::memory_order_release);
 }
 
 void surface_destroy(NativeSurface* surface) {
@@ -303,6 +406,118 @@ void surface_configure_window(void* parent_handle) {
                                                   blue:11.0 / 255.0
                                                  alpha:1.0]];
   [window setHasShadow:YES];
+}
+
+SurfaceHdrInfo surface_hdr_info(NativeSurface* surface) {
+  SurfaceHdrInfo info{};
+  if (!surface || !surface->view) return info;
+  info.float_pixel_format = surface->float_pixel_format;
+  info.max_potential_edr = surface->max_potential_edr.load(
+      std::memory_order_relaxed
+  );
+  info.display_id = surface->display_id.load(std::memory_order_relaxed);
+  info.supported = info.float_pixel_format && info.max_potential_edr > 1.0;
+  return info;
+}
+
+void surface_set_display_change_callback(
+    NativeSurface* surface,
+    SurfaceDisplayChangeCallback callback,
+    void* user
+) {
+  if (!surface) return;
+  surface->display_change_user.store(user, std::memory_order_release);
+  surface->display_change_callback.store(callback, std::memory_order_release);
+}
+
+void surface_set_hdr_mode(
+    NativeSurface* surface,
+    bool enabled,
+    const char* gamma,
+    const char* primaries
+) {
+  if (!surface || !surface->view) return;
+
+  FrameZooMpvView* view = surface->view;
+  const double max_potential_edr = surface->max_potential_edr.load(
+      std::memory_order_relaxed
+  );
+  [view retain];
+  const bool use_display_p3 =
+      primaries &&
+      (std::strcmp(primaries, "display-p3") == 0 ||
+       std::strcmp(primaries, "display-p3-pq") == 0);
+  const bool use_hlg = gamma && std::strcmp(gamma, "hlg") == 0;
+  void (^apply_mode)(void) = ^{
+    if (!view.surface) {
+      [view release];
+      return;
+    }
+
+    CGColorSpaceRef color_space = nullptr;
+    if (enabled) {
+      if (use_hlg) {
+        color_space = CGColorSpaceCreateWithName(
+            use_display_p3 ? kCGColorSpaceDisplayP3_HLG
+                           : kCGColorSpaceITUR_2100_HLG
+        );
+      } else {
+        color_space = CGColorSpaceCreateWithName(
+            use_display_p3 ? kCGColorSpaceDisplayP3_PQ
+                           : kCGColorSpaceITUR_2100_PQ
+        );
+      }
+    } else {
+      color_space = CGColorSpaceCreateWithName(kCGColorSpaceSRGB);
+    }
+    if (color_space) {
+      if (view.layer) {
+        @try {
+          [view.layer setValue:(id)color_space forKey:@"colorspace"];
+        } @catch (id) {
+          // Older macOS versions may not expose CALayer.colorspace.
+        }
+      }
+      CGColorSpaceRelease(color_space);
+    }
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    if (
+        [view respondsToSelector:@selector(
+            setWantsExtendedDynamicRangeOpenGLSurface:)]
+    ) {
+      view.wantsExtendedDynamicRangeOpenGLSurface = enabled;
+    }
+#pragma clang diagnostic pop
+    if (view.layer) {
+      @try {
+        [view.layer setValue:@(enabled)
+                      forKey:@"wantsExtendedDynamicRangeContent"];
+      } @catch (id) {
+        // Older macOS versions may not expose the EDR layer flag.
+      }
+    }
+    [view setNeedsDisplay:YES];
+    std::fprintf(
+        stderr,
+        "[libmpv-native] surface_hdr_mode enabled=%d colorspace=%s edr_max=%.2f\n",
+        enabled ? 1 : 0,
+        enabled
+            ? (use_hlg
+                   ? (use_display_p3 ? "display-p3-hlg" : "itur-2100-hlg")
+                   : (use_display_p3 ? "display-p3-pq" : "itur-2100-pq"))
+            : "srgb",
+        max_potential_edr
+    );
+    [view release];
+  };
+
+  if ([NSThread isMainThread]) {
+    apply_mode();
+  } else {
+    dispatch_async(dispatch_get_main_queue(), apply_mode);
+  }
 }
 
 #endif

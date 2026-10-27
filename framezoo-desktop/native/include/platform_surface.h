@@ -1,9 +1,14 @@
 #pragma once
 
+#include <cstdint>
+
 #include "mpv_abi.h"
 
 struct NativeSurface;
 using SurfacePaintCallback = void (*)(void* user, NativeSurface* surface);
+#if defined(__APPLE__)
+using SurfaceDisplayChangeCallback = void (*)(void* user);
+#endif
 
 struct SurfaceBounds {
   int x;
@@ -30,6 +35,28 @@ int surface_width(NativeSurface* surface);
 int surface_height(NativeSurface* surface);
 void* surface_native_handle(NativeSurface* surface);
 void surface_configure_window(void* parent_handle);
+
+#if defined(__APPLE__)
+struct SurfaceHdrInfo {
+  bool supported = false;
+  bool float_pixel_format = false;
+  double max_potential_edr = 1.0;
+  uint32_t display_id = 0;
+};
+
+SurfaceHdrInfo surface_hdr_info(NativeSurface* surface);
+void surface_set_display_change_callback(
+    NativeSurface* surface,
+    SurfaceDisplayChangeCallback callback,
+    void* user
+);
+void surface_set_hdr_mode(
+    NativeSurface* surface,
+    bool enabled,
+    const char* gamma,
+    const char* primaries
+);
+#endif
 
 #if defined(_WIN32)
 // Blit a packed top-down 32-bit RGB0 buffer into the surface window using GDI
