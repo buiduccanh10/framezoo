@@ -26,6 +26,60 @@ describe("libmpv display", () => {
     delete (window as any).electronAPI;
   });
 
+  it("reports HDR from libmpv video parameters and clears it on reload", async () => {
+    let eventListener:
+      | ((event: {
+          playerId: string;
+          generation: number;
+          type: "property";
+          name?: string;
+          data?: unknown;
+        }) => void)
+      | undefined;
+    const hdrStates: boolean[] = [];
+
+    (window as any).electronAPI = {
+      createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
+      loadLibMpvSource: vi.fn().mockResolvedValue(true),
+      sendLibMpvCommand: vi.fn().mockResolvedValue(true),
+      onLibMpvEvent: vi.fn((listener) => {
+        eventListener = listener;
+        return () => undefined;
+      }),
+      onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.processContainerElement(makeElement());
+    display.on("hdrchange", (isHdr) => hdrStates.push(isHdr));
+    display.load({
+      source: { type: "mp4", url: "https://example.test/hdr.mkv" } as Source,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    eventListener?.({
+      playerId: "player-1",
+      generation: 1,
+      type: "property",
+      name: "video-params",
+      data: JSON.stringify({ gamma: "pq", primaries: "bt.2020" }),
+    });
+
+    expect(hdrStates.at(-1)).toBe(true);
+
+    display.load({
+      source: null,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+    expect(hdrStates.at(-1)).toBe(false);
+    display.destroy();
+  });
+
   it("keeps only the latest load when player creation is shared", async () => {
     const loads: Array<{ url: string }> = [];
     const createPlayer = vi.fn().mockResolvedValue("player-1");

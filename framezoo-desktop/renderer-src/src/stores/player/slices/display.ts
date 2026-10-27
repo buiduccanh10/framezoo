@@ -21,6 +21,7 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
         s.mediaPlaying.isPlaybackStalled = false;
         s.interface.pictureInPictureMode = null;
         s.interface.documentPictureInPictureWindow = null;
+        s.interface.isHdr = false;
       });
       return;
     }
@@ -167,6 +168,11 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
         }
       });
     });
+    newDisplay.on("hdrchange", (isHdr) => {
+      set((s) => {
+        s.interface.isHdr = isHdr;
+      });
+    });
     newDisplay.on("error", (err) => {
       if (get().display !== newDisplay) return;
 
@@ -226,6 +232,7 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
       s.mediaPlaying.hasRenderedFrame = false;
       s.mediaPlaying.isLoading = false;
       s.mediaPlaying.isPlaybackStalled = false;
+      s.interface.isHdr = false;
     });
   },
   reset() {
@@ -261,6 +268,7 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
       s.mediaPlaying.isPlaybackStalled = false;
       s.mediaPlaying.hasPlayedOnce = false;
       s.mediaPlaying.hasRenderedFrame = false;
+      s.interface.isHdr = false;
     });
   },
 });

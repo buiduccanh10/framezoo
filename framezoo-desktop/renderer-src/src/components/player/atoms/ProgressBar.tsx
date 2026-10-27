@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Icon, Icons } from "@/components/Icon";
@@ -12,6 +12,7 @@ import { isPlaybackInteractionLocked } from "@/components/player/utils/playbackL
 import { useActiveTorrentStatus } from "@/desktop/torrentPlaybackStore";
 import { useProgressBar } from "@/hooks/useProgressBar";
 import { usePlayerStore } from "@/stores/player/store";
+import { formatSeconds } from "@/utils/formatSeconds";
 
 import { getTorrentPreloadedProgress } from "./torrentProgress";
 
@@ -37,6 +38,7 @@ export function ProgressBar() {
   const setSeeking = usePlayerStore((s) => s.setSeeking);
   const { isSeeking } = usePlayerStore((s) => s.interface);
   const segments = useSkipTime();
+  const [hoverPercentage, setHoverPercentage] = useState<number | null>(null);
   const isPlaybackLocked = isPlaybackInteractionLocked(
     mediaPlaying,
     subtitleSync.active,
@@ -141,6 +143,11 @@ export function ProgressBar() {
             "player.menus.subtitles.syncSubtitleWorking",
             "Framezoo is syncing subtitles...",
           );
+  const tooltipPercentage = dragging ? dragPercentage : hoverPercentage;
+  const tooltipTime =
+    duration > 0 && tooltipPercentage !== null
+      ? (tooltipPercentage / 100) * duration
+      : null;
 
   return (
     <div className="relative w-full" dir="ltr">
@@ -177,9 +184,26 @@ export function ProgressBar() {
             "group flex h-8 w-full items-center cursor-pointer",
             isPlaybackLocked ? "pointer-events-none" : "",
           ].join(" ")}
+          onMouseMove={(event) => {
+            if (duration <= 0) return;
+            const rect = event.currentTarget.getBoundingClientRect();
+            const percentage = ((event.clientX - rect.left) / rect.width) * 100;
+            setHoverPercentage(Math.max(0, Math.min(100, percentage)));
+          }}
+          onMouseLeave={() => setHoverPercentage(null)}
           onMouseDown={guardedDragMouseDown}
           onTouchStart={guardedDragMouseDown}
         >
+          {tooltipTime !== null ? (
+            <div
+              className="pointer-events-none absolute bottom-full z-30 mb-1 -translate-x-1/2 rounded bg-black/90 px-2 py-1 font-mono text-xs text-white shadow-lg"
+              style={{
+                left: `${Math.max(2, Math.min(98, tooltipPercentage ?? 0))}%`,
+              }}
+            >
+              {formatSeconds(tooltipTime, duration > 3600)}
+            </div>
+          ) : null}
           <div
             className={[
               "relative w-full h-[4px] bg-progress-background/25 rounded-sm transition-[height] duration-100 group-hover:h-[6px]",

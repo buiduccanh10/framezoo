@@ -1,6 +1,7 @@
 import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { Icon, Icons } from "@/components/Icon";
 import { BrandPill } from "@/components/layout/BrandPill";
 import {
   StatusIndicators,
@@ -51,6 +52,7 @@ export function PlayerPart(props: PlayerPartProps) {
   const { isHost, enabled } = useWatchPartyStore();
   const { t } = useTranslation();
   const meta = usePlayerStore((s) => s.meta);
+  const isHdr = usePlayerStore((s) => s.interface.isHdr);
   const { setDirectMeta } = usePlayerMeta();
   const setShouldStartFromBeginning = usePlayerStore(
     (s) => s.setShouldStartFromBeginning,
@@ -264,18 +266,24 @@ export function PlayerPart(props: PlayerPartProps) {
               />
             )}
             <div
-              className="flex items-center gap-1 ssm:gap-2 min-w-0"
+              className="flex items-center gap-4 ssm:gap-5 min-w-0"
               style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
             >
               <div className="shrink-0">
                 <Player.BackLink url={props.backUrl} />
               </div>
-              <span className="text mx-1.5 md:mx-3 text-type-secondary shrink-0 select-none">
-                /
-              </span>
               <div className="min-w-0 truncate">
                 <Player.Title />
               </div>
+              {isHdr ? (
+                <span
+                  aria-label="HDR"
+                  className="inline-flex h-8 w-12 shrink-0 items-center justify-center rounded bg-amber-400/20 text-amber-200"
+                  title="HDR"
+                >
+                  <Icon icon={Icons.HDR} className="text-2xl" />
+                </span>
+              ) : null}
 
               {isMobile && meta?.type === "show" && (
                 <span className="text-type-secondary text-sm whitespace-nowrap shrink-0">

@@ -12,7 +12,7 @@ export const volumeStore = createVersionedStore<Record<never, never>>()
     version: 0,
     create() {
       return {
-        volume: 1,
+        volume: 1.5,
       };
     },
     migrate(data: VolumeStoreData): Record<never, never> {

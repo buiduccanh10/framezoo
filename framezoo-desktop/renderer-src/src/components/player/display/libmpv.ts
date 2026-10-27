@@ -142,8 +142,41 @@ function getElectronApi(): LibMpvElectronApi | null {
 }
 
 function normalizeVolume(volume: number): number {
-  if (!Number.isFinite(volume)) return 1;
+  if (!Number.isFinite(volume)) return 1.5;
   return Math.max(0, Math.min(3, volume));
+}
+
+function isHdrVideoParams(data: unknown): boolean {
+  let params: Record<string, unknown> | null = null;
+  try {
+    params = (typeof data === "string" ? JSON.parse(data) : data) as Record<
+      string,
+      unknown
+    > | null;
+  } catch {
+    return false;
+  }
+
+  if (!params || typeof params !== "object") return false;
+
+  const transferValues = [
+    params.gamma,
+    params.transfer,
+    params["color-transfer"],
+    params["color-transfer-characteristics"],
+    params.colormatrix,
+  ]
+    .filter((value): value is string => typeof value === "string")
+    .map((value) => value.toLowerCase());
+
+  return transferValues.some(
+    (value) =>
+      value === "pq" ||
+      value === "hlg" ||
+      value.includes("smpte2084") ||
+      value.includes("arib-std-b67") ||
+      value.includes("dolbyvision"),
+  );
 }
 
 function sourceType(source: LoadableSource): LibMpvSourceRequest["type"] {
@@ -215,7 +248,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
   let duration = 0;
   let time = 0;
   let bufferedTime = 0;
-  let volume = 1;
+  let volume = 1.5;
   let playbackRate = 1;
   let paused = true;
   let isSeeking = false;
@@ -1106,6 +1139,10 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
           ) {
             emit("videodimensions", { width: dw, height: dh });
           }
+          const hdr = isHdrVideoParams(params);
+          if (event.name === "video-params" || hdr) {
+            emit("hdrchange", hdr);
+          }
         } catch {
           // ignore malformed data
         }
@@ -1392,6 +1429,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     load(ops) {
       clearTorrentRetry();
       source = ops.source;
+      emit("hdrchange", false);
       tracks = [];
       userSelectedAudioTrack = false;
       hasAppliedDefaultAudioTrack = false;
