@@ -44,6 +44,9 @@ struct SurfaceHdrInfo {
   uint32_t display_id = 0;
 };
 
+int surface_current_fbo(NativeSurface* surface);
+int surface_fbo_internal_format(NativeSurface* surface);
+int surface_fbo_depth(NativeSurface* surface);
 SurfaceHdrInfo surface_hdr_info(NativeSurface* surface);
 void surface_set_display_change_callback(
     NativeSurface* surface,
