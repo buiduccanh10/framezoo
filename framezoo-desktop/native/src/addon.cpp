@@ -553,7 +553,14 @@ struct MpvPlayer {
         (update_flags & MPV_RENDER_UPDATE_FRAME) != 0;
     if (!running.load(std::memory_order_acquire)) return;
     mpv_opengl_fbo fbo{};
+#if defined(__APPLE__)
+    fbo.fbo = surface_current_fbo(surface);
+    fbo.internal_format = surface_fbo_internal_format(surface);
+    int depth = surface_fbo_depth(surface);
+#else
     fbo.fbo = 0;
+    int depth = 8;
+#endif
     fbo.w = surface_width(surface);
     fbo.h = surface_height(surface);
 
@@ -561,6 +568,7 @@ struct MpvPlayer {
     mpv_render_param params[] = {
         {MPV_RENDER_PARAM_OPENGL_FBO, &fbo},
         {MPV_RENDER_PARAM_FLIP_Y, &flip_y},
+        {MPV_RENDER_PARAM_DEPTH, &depth},
         {MPV_RENDER_PARAM_INVALID, nullptr},
     };
     const int result = api.render_context_render(render_context, params);
@@ -808,12 +816,16 @@ struct MpvPlayer {
                std::string(property->name) == "video-out-params")
           ) {
 #if defined(__APPLE__)
-            const HdrMetadata hinted_metadata = hdr_metadata_from_node(
-                static_cast<mpv_node*>(property->data)
-            );
-            update_hdr_output(
-                hinted_metadata.gamma.empty() ? nullptr : &hinted_metadata
-            );
+            if (std::string(property->name) == "video-params") {
+              const HdrMetadata hinted_metadata = hdr_metadata_from_node(
+                  static_cast<mpv_node*>(property->data)
+              );
+              update_hdr_output(
+                  hinted_metadata.gamma.empty() ? nullptr : &hinted_metadata
+              );
+            } else {
+              update_hdr_output();
+            }
 #endif
             surface_request_paint(surface);
           }
@@ -1453,6 +1465,8 @@ napi_value create_player(napi_env env, napi_callback_info info) {
   set_mpv_option(player.get(), "d3d11-flip", "yes");
   // Present at vblank.
   set_mpv_option(player.get(), "d3d11-sync-interval", "1");
+  // Enable HDR passthrough on Windows 10/11 when Windows HDR is enabled.
+  set_mpv_option(player.get(), "target-colorspace-hint", "yes");
 #else
   set_mpv_option(player.get(), "vo", "libmpv");
 #if defined(__APPLE__)
@@ -1481,7 +1495,6 @@ napi_value create_player(napi_env env, napi_callback_info info) {
   // HDR output is switched only after libmpv reports the actual transfer
   // function. Keeping the surface in SDR until then avoids touching the
   // streaming, seek, and pause paths during startup.
-  set_mpv_option(player.get(), "target-colorspace-hint", "yes");
   set_mpv_option(player.get(), "screenshot-tag-colorspace", "yes");
 #endif
 

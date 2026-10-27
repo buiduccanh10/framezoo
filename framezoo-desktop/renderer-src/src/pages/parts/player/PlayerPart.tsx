@@ -278,10 +278,10 @@ export function PlayerPart(props: PlayerPartProps) {
               {isHdr ? (
                 <span
                   aria-label="HDR"
-                  className="inline-flex h-8 w-12 shrink-0 items-center justify-center rounded bg-amber-400/20 text-amber-200"
+                  className="inline-flex h-5 w-7 shrink-0 items-center justify-center rounded bg-amber-400/20 text-amber-200"
                   title="HDR"
                 >
-                  <Icon icon={Icons.HDR} className="text-2xl" />
+                  <Icon icon={Icons.HDR} className="text-xl" />
                 </span>
               ) : null}
 
