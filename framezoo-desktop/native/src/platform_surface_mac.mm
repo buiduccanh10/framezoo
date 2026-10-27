@@ -1,7 +1,5 @@
 #if defined(__APPLE__)
 
-#define GL_SILENCE_DEPRECATION 1
-
 #include "platform_surface.h"
 
 #import <Cocoa/Cocoa.h>
@@ -153,35 +151,19 @@ NativeSurface* surface_create(
   auto* parent = static_cast<NSView*>(parent_handle);
   if (!parent) return nullptr;
 
-  NSOpenGLPixelFormatAttribute edr_attributes[] = {
+  NSOpenGLPixelFormatAttribute attributes[] = {
       NSOpenGLPFAOpenGLProfile,
       NSOpenGLProfileVersion3_2Core,
       NSOpenGLPFAAccelerated,
       NSOpenGLPFAColorSize,
-      64,
-      NSOpenGLPFAColorFloat,
+      24,
       NSOpenGLPFAAlphaSize,
-      16,
+      8,
       NSOpenGLPFADoubleBuffer,
       0,
   };
-  NSOpenGLPixelFormat* pixel_format =
-      [[[NSOpenGLPixelFormat alloc] initWithAttributes:edr_attributes] autorelease];
-  if (!pixel_format) {
-    NSOpenGLPixelFormatAttribute sdr_attributes[] = {
-        NSOpenGLPFAOpenGLProfile,
-        NSOpenGLProfileVersion3_2Core,
-        NSOpenGLPFAAccelerated,
-        NSOpenGLPFAColorSize,
-        24,
-        NSOpenGLPFAAlphaSize,
-        8,
-        NSOpenGLPFADoubleBuffer,
-        0,
-    };
-    pixel_format =
-        [[[NSOpenGLPixelFormat alloc] initWithAttributes:sdr_attributes] autorelease];
-  }
+  auto* pixel_format =
+      [[[NSOpenGLPixelFormat alloc] initWithAttributes:attributes] autorelease];
   if (!pixel_format) return nullptr;
 
   auto* surface = new NativeSurface();
@@ -198,26 +180,14 @@ NativeSurface* surface_create(
 
   surface->view.surface = surface;
   surface->view.wantsBestResolutionOpenGLSurface = YES;
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-  if ([surface->view respondsToSelector:@selector(setWantsExtendedDynamicRangeOpenGLSurface:)]) {
-    surface->view.wantsExtendedDynamicRangeOpenGLSurface = YES;
-  }
-#pragma clang diagnostic pop
   surface->view.wantsLayer = YES;
   surface->view.layer.opaque = NO;
   surface->view.layer.backgroundColor = NSColor.clearColor.CGColor;
-  @try {
-    [surface->view.layer setValue:@YES forKey:@"wantsExtendedDynamicRangeContent"];
-  } @catch (id) {}
   surface->view.autoresizingMask =
       NSViewWidthSizable | NSViewHeightSizable;
   GLint swap_interval = 1;
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
   [[surface->view openGLContext] setValues:&swap_interval
                               forParameter:NSOpenGLCPSwapInterval];
-#pragma clang diagnostic pop
   attach_surface(surface, parent);
   [surface->view setNeedsDisplay:YES];
   return surface;
