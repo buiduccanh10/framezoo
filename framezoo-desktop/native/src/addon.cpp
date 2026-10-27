@@ -1314,11 +1314,11 @@ napi_value create_player(napi_env env, napi_callback_info info) {
   set_mpv_option(player.get(), "screenshot-tag-colorspace", "yes");
 #else
   // Windows with vo=gpu-next / D3D11 swapchain
-  set_mpv_option(player.get(), "target-colorspace-hint", "auto");
+  set_mpv_option(player.get(), "target-colorspace-hint", "yes");
   set_mpv_option(player.get(), "tone-mapping", "bt.2390");
   set_mpv_option(player.get(), "tone-mapping-mode", "auto");
   set_mpv_option(player.get(), "tone-mapping-max-boost", "2.0");
-  set_mpv_option(player.get(), "hdr-compute-peak", "auto");
+  set_mpv_option(player.get(), "hdr-compute-peak", "yes");
   set_mpv_option(player.get(), "hdr-contrast-recovery", "0.30");
   set_mpv_option(player.get(), "gamut-mapping-mode", "auto");
 #endif
