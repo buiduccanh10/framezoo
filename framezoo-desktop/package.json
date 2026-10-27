@@ -296,8 +296,8 @@
       "createDesktopShortcut": "always",
       "createStartMenuShortcut": true,
       "license": "build/HUONG_DAN_CAI_DAT.txt",
-      "installerSidebar": "build/installerSidebar.bmp",
-      "installerHeader": "build/installerHeader.bmp",
+      "installerSidebar": null,
+      "installerHeader": null,
       "include": "build/installer.nsh",
       "installerIcon": "build/icon.ico",
       "uninstallerIcon": "build/icon.ico"
