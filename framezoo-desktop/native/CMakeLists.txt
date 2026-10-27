@@ -48,8 +48,6 @@ else()
   target_link_libraries(libmpv PRIVATE
     "-framework Cocoa"
     "-framework OpenGL"
-    "-framework CoreGraphics"
-    "-framework QuartzCore"
     "-framework MediaPlayer"
     "-framework IOKit"
   )

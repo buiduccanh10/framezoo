@@ -157,65 +157,6 @@ struct MpvPlayer {
     return command_async(command);
   }
 
-#if defined(__APPLE__)
-  std::atomic<bool> is_hdr_active{false};
-
-  void update_edr_state() {
-    if (!handle || !surface) return;
-
-    std::string gamma;
-    std::string primaries;
-    char* gamma_prop = api.get_property_string(handle, "video-params/gamma");
-    if (gamma_prop) {
-      gamma = gamma_prop;
-      api.free_memory(gamma_prop);
-    }
-    char* prim_prop = api.get_property_string(handle, "video-params/primaries");
-    if (prim_prop) {
-      primaries = prim_prop;
-      api.free_memory(prim_prop);
-    }
-
-    const bool is_hdr = (gamma == "pq" || gamma == "hlg");
-    SurfaceEdrInfo edr_info = surface_query_edr(surface);
-
-    std::fprintf(
-        stderr,
-        "[libmpv-native] update_edr_state player=%s gamma='%s' primaries='%s' "
-        "is_hdr=%d edr_supported=%d max_potential_edr=%.2f peak_nits=%d\n",
-        id.c_str(),
-        gamma.c_str(),
-        primaries.c_str(),
-        is_hdr ? 1 : 0,
-        edr_info.edr_supported ? 1 : 0,
-        edr_info.max_potential_edr,
-        edr_info.peak_nits
-    );
-
-    if (is_hdr && edr_info.edr_supported) {
-      is_hdr_active.store(true, std::memory_order_release);
-      surface_set_hdr_mode(surface, true, primaries.c_str());
-      set_property_string("target-trc", "pq");
-      set_property_string(
-          "target-prim",
-          primaries.empty() ? "bt.2020" : primaries.c_str()
-      );
-      std::string peak_str = std::to_string(edr_info.peak_nits);
-      set_property_string("target-peak", peak_str.c_str());
-      set_property_string("tone-mapping", "bt.2390");
-      set_property_string("video-output-levels", "full");
-    } else {
-      is_hdr_active.store(false, std::memory_order_release);
-      surface_set_hdr_mode(surface, false, nullptr);
-      set_property_string("target-trc", "auto");
-      set_property_string("target-prim", "auto");
-      set_property_string("target-peak", "auto");
-      set_property_string("tone-mapping", "bt.2390");
-      set_property_string("video-output-levels", "full");
-    }
-  }
-#endif
-
   void stop() {
     const bool wasRunning = running.exchange(false, std::memory_order_acq_rel);
 
@@ -378,30 +319,16 @@ struct MpvPlayer {
         (update_flags & MPV_RENDER_UPDATE_FRAME) != 0;
     if (!running.load(std::memory_order_acquire)) return;
     mpv_opengl_fbo fbo{};
-#if defined(__APPLE__)
-    fbo.fbo = surface_current_fbo(surface);
-    fbo.w = surface_width(surface);
-    fbo.h = surface_height(surface);
-    fbo.internal_format = surface_fbo_internal_format(surface);
-    int depth = surface_depth(surface);
-    int flip_y = 1;
-    mpv_render_param params[] = {
-        {MPV_RENDER_PARAM_OPENGL_FBO, &fbo},
-        {MPV_RENDER_PARAM_FLIP_Y, &flip_y},
-        {MPV_RENDER_PARAM_DEPTH, &depth},
-        {MPV_RENDER_PARAM_INVALID, nullptr},
-    };
-#else
     fbo.fbo = 0;
     fbo.w = surface_width(surface);
     fbo.h = surface_height(surface);
+
     int flip_y = 1;
     mpv_render_param params[] = {
         {MPV_RENDER_PARAM_OPENGL_FBO, &fbo},
         {MPV_RENDER_PARAM_FLIP_Y, &flip_y},
         {MPV_RENDER_PARAM_INVALID, nullptr},
     };
-#endif
     const int result = api.render_context_render(render_context, params);
     if (result < 0) {
       std::fprintf(
@@ -552,9 +479,6 @@ struct MpvPlayer {
           native_event->type = "video-reconfig";
           emit(native_event);
           emit_playback_property_snapshots();
-#if defined(__APPLE__)
-          update_edr_state();
-#endif
 #if defined(_WIN32)
           // Windows renders through the native HWND instead of the custom
           // render callback used by macOS. Use reconfig as its closest
@@ -646,9 +570,6 @@ struct MpvPlayer {
               (std::string(property->name) == "video-params" ||
                std::string(property->name) == "video-out-params")
           ) {
-#if defined(__APPLE__)
-            update_edr_state();
-#endif
             surface_request_paint(surface);
           }
           const bool is_diagnostic_property =
@@ -1307,21 +1228,13 @@ napi_value create_player(napi_env env, napi_callback_info info) {
   set_mpv_option(player.get(), "ad-lavc-ac3drc", "1");
 
   // HDR tone mapping, color fidelity & Extended Dynamic Range (EDR)
-#if defined(__APPLE__)
-  // macOS uses vo=libmpv (OpenGL FBO). Dynamic HDR/EDR pipeline is managed via update_edr_state()
-  set_mpv_option(player.get(), "tone-mapping", "bt.2390");
-  set_mpv_option(player.get(), "video-output-levels", "full");
-  set_mpv_option(player.get(), "screenshot-tag-colorspace", "yes");
-#else
-  // Windows with vo=gpu-next / D3D11 swapchain
   set_mpv_option(player.get(), "target-colorspace-hint", "yes");
-  set_mpv_option(player.get(), "tone-mapping", "bt.2390");
+  set_mpv_option(player.get(), "tone-mapping", "spline");
   set_mpv_option(player.get(), "tone-mapping-mode", "auto");
   set_mpv_option(player.get(), "tone-mapping-max-boost", "2.0");
   set_mpv_option(player.get(), "hdr-compute-peak", "yes");
   set_mpv_option(player.get(), "hdr-contrast-recovery", "0.30");
   set_mpv_option(player.get(), "gamut-mapping-mode", "auto");
-#endif
 
   // Hardware decoding & multi-threading
   set_mpv_option(player.get(), "hwdec", "auto-safe");
@@ -1609,9 +1522,6 @@ napi_value reparent_player(napi_env env, napi_callback_info info) {
   auto player = find_player(id);
   if (!player) return throw_error(env, "player not found");
   surface_reparent(player->surface, parent);
-#if defined(__APPLE__)
-  player->update_edr_state();
-#endif
   napi_value result;
   napi_get_boolean(env, true, &result);
   return result;

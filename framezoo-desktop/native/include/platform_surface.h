@@ -31,20 +31,6 @@ int surface_height(NativeSurface* surface);
 void* surface_native_handle(NativeSurface* surface);
 void surface_configure_window(void* parent_handle);
 
-#if defined(__APPLE__)
-struct SurfaceEdrInfo {
-  bool edr_supported = false;
-  double max_potential_edr = 1.0;
-  int peak_nits = 400;
-};
-
-SurfaceEdrInfo surface_query_edr(NativeSurface* surface);
-void surface_set_hdr_mode(NativeSurface* surface, bool enable_hdr, const char* primaries);
-int surface_fbo_internal_format(NativeSurface* surface);
-int surface_depth(NativeSurface* surface);
-int surface_current_fbo(NativeSurface* surface);
-#endif
-
 #if defined(_WIN32)
 // Blit a packed top-down 32-bit RGB0 buffer into the surface window using GDI
 // (works even with software-only display drivers, e.g. VMs/remote desktop).
