@@ -10,6 +10,8 @@ export interface StremioMetaPreview {
   id: string;
   type: string;
   name: string;
+  imdb_id?: string;
+  tmdb_id?: string | number;
   poster?: string;
   posterShape?: "square" | "poster" | "landscape";
   background?: string;
@@ -23,6 +25,35 @@ export interface StremioMetaPreview {
   runtime?: string;
   released?: string;
   year?: number;
+}
+
+export type CatalogMediaIdentity =
+  { kind: "imdb"; id: string } | { kind: "tmdb"; id: string };
+
+/** Resolve a catalog item's app-facing identity without discarding addon IDs. */
+export function getCatalogMediaIdentity(
+  item: Pick<StremioMetaPreview, "id" | "imdb_id" | "tmdb_id">,
+): CatalogMediaIdentity | null {
+  const rawTmdbId = String(item.tmdb_id ?? "").trim();
+  const tmdbId = rawTmdbId.replace(/^tmdb:/i, "");
+  if (/^\d+$/.test(tmdbId)) {
+    return { kind: "tmdb", id: tmdbId };
+  }
+
+  const rawImdbId = item.imdb_id?.trim() ?? "";
+  if (/^tt\d+$/i.test(rawImdbId)) {
+    return { kind: "imdb", id: rawImdbId };
+  }
+
+  const rawId = item.id.trim();
+  if (/^tmdb:\d+$/i.test(rawId)) {
+    return { kind: "tmdb", id: rawId.slice("tmdb:".length) };
+  }
+  if (/^tt\d+$/i.test(rawId)) {
+    return { kind: "imdb", id: rawId };
+  }
+
+  return null;
 }
 
 export interface StremoCatalogResponse {

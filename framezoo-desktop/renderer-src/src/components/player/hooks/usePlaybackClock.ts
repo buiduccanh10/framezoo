@@ -23,6 +23,8 @@ export interface SmoothPlaybackClockOptions {
   isSeeking?: boolean;
   tickIntervalMs?: number;
   resetKey?: PlaybackClockResetKey;
+  // Keep delayed transport samples from moving an already-running clock back.
+  preserveMonotonicTime?: boolean;
 }
 
 export interface PlaybackClockAnchor {
@@ -129,13 +131,14 @@ export function shouldSnapPlaybackClock(
   // a (timely) stall signal, or when a backward seek lands while the clock is
   // frozen/loading. Seeks never move the clock backward on their own, so a
   // fresh authoritative sample (or the moment the clock resumes) that is
-  // clearly behind the interpolated time must re-anchor it. Otherwise the
-  // subtitles stay offset until the next manual seek.
+  // clearly behind the interpolated time must re-anchor it. External samples
+  // may opt out when the transport can deliver delayed-but-valid positions.
   const isFreshSample =
     state.authoritativeTime === undefined ||
     state.authoritativeTime !== authoritativeTime;
   const isResuming = !state.isRunning && isClockRunning(input);
   const aheadDiscontinuity =
+    !input.preserveMonotonicTime &&
     (isFreshSample || isResuming) &&
     currentTime - authoritativeTime > SEEK_DISCONTINUITY_AHEAD_THRESHOLD;
 
@@ -258,6 +261,7 @@ export function useSmoothPlaybackClock(
       isSeeking,
       tickIntervalMs,
       resetKey,
+      preserveMonotonicTime: options.preserveMonotonicTime,
     }),
     [
       duration,
@@ -268,6 +272,7 @@ export function useSmoothPlaybackClock(
       resetKey,
       tickIntervalMs,
       time,
+      options.preserveMonotonicTime,
     ],
   );
   const stateRef = useRef<PlaybackClockState | null>(null);
@@ -312,7 +317,9 @@ export function useSmoothPlaybackClock(
 
     if (
       nextState.time !== clockTime &&
-      (shouldSnap || clampPlaybackTime(time, duration) > clockTime)
+      (shouldSnap ||
+        (!input.preserveMonotonicTime &&
+          clampPlaybackTime(time, duration) > clockTime))
     ) {
       setClockTime(nextState.time);
     }

@@ -1347,9 +1347,13 @@ function createMainWindow() {
           titleBarStyle: "hiddenInset" as const,
           trafficLightPosition: { x: 20, y: 34 },
         }
-      : {
-          titleBarStyle: "default" as const,
-        }),
+      : process.platform === "win32"
+        ? {
+            // The renderer owns the Windows title bar and its drag regions.
+            // Keeping the native frame here makes WebkitAppRegion inert.
+            frame: false,
+          }
+        : {}),
     autoHideMenuBar: true,
     icon: getWindowIconPath(),
     webPreferences: {
