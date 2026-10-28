@@ -10,44 +10,13 @@
   },
   "hero": {
     "eyebrow": "FRAMEZOO SKJÁLFTRÖF / 01",
-    "title": "Horfðu betur.",
-    "titleAccent": "Á skjáborði.",
-    "description": "Framezoo er spilari með gervigreindartextasamstillingu, tvöföldum texta, lýsigögnum fyrir ríka miðla og viðbótarstuðning.",
     "primaryCta": "Sækja skrifborð",
     "secondaryCta": "Sjáðu reynsluna",
-    "imageAlt": "Framezoo spilari sem sýnir uppgötvunarskjáinn",
-    "version": "Útgáfa á skjáborði"
-  },
-  "features": {
-    "performanceTitle": "Bókasafnið þitt, án vafraskatts.",
-    "overviewDescription": "Samstilltu texta við gervigreind, hafðu tvöfaldan texta sýnilegan, skoðaðu lýsigögn fjölmiðla og stjórnaðu spilun án þess að yfirgefa söguna.",
-    "playback": "Innfædd spilun",
-    "playbackDescription": "Slétt myndband með skrifborðsmiðlun.",
-    "performance": "Rólegur árangur",
-    "performanceDescription": "Minni króm. Meiri einbeiting. Engin flipajuggling.",
-    "continuity": "Haltu flæðinu þínu",
-    "continuityDescription": "Haltu áfram, vafraðu og skiptu um heimildir án þess að missa augnablikið.",
-    "ecosystemTitle": "Tilbúinn fyrir það sem kemur næst.",
-    "ecosystemDescription": "Skrifborðsforritið er kjarninn. Viðbætur lengja brúnirnar, svo uppsetningin þín getur verið persónuleg án þess að verða flókin.",
-    "addonLabel": "VIÐBÆTTA TILBÚIN",
-    "addonOne": "Heimildatengi",
-    "addonTwo": "Textaverkfæri",
-    "addonThree": "Samfélagsframlengingar",
-    "showcaseTitle": "Upplýsingar áður en þú ýtir á spilun.",
-    "showcaseDescription": "Einbeittur skjáborðsyfirborð til að uppgötva, spila og allt í kringum söguna.",
-    "showcaseCaption": "Framezoo skjáborð / fókusstilling",
-    "featureLabel": "Leikmaðurinn, á þinn hátt",
-    "subtitleControls": "Stilltu spilarann ​​í kringum þig",
-    "experienceTitle": "Allt sem þú þarft í spilara.",
-    "subtitleSyncDescription": "Stilltu samræður við myndina á nokkrum sekúndum með gervigreindartextasamstillingu.",
-    "dualSubtitlesDescription": "Kveiktu á tvöföldum texta þegar þú ert að læra, bera saman eða einfaldlega kýst hvort tveggja.",
-    "subtitleSync": "Samstilltu texta við gervigreind",
-    "dualSubtitles": "Haltu tveimur textamálum sýnilegum",
-    "showcaseSecondaryTitle": "Uppgötvaðu eitthvað sem vert er að horfa á.",
-    "showcasePrimaryAlt": "Framezoo titilupplýsingaskjár með listaverkum, einkunnum, árstíðum og lýsigögnum",
-    "subtitleControlsDescription": "Veldu uppruna texta, tungumál, tímasetningu og birtingu án þess að brjóta flæði þitt.",
-    "showcaseSecondaryDescription": "Byrjaðu á hreinu uppgötvunaryfirborði, farðu síðan yfir í spilun án þess að missa þinn stað.",
-    "showcaseSecondaryAlt": "Uppgötvunarskjár Framezoo spilara með leitar-, flokkum og titlaröðum"
+    "version": "Útgáfa á skjáborði",
+    "title": "Straumaðu hratt,",
+    "description": "Framezoo er háhraða straumspilari með sléttu, leiðandi notendaviðmóti, ríkulegum lýsigögnum kvikmynda, ótakmarkaðri samstillingu straumtexta og stuðningi við margs konar texta.",
+    "imageAlt": "Framezoo háhraða streymisspilari sem sýnir uppgötvunarskjáinn",
+    "titleAccent": "passaðu þig."
   },
   "download": {
     "eyebrow": "VELDU BYGGINGU ÞÍNA",
@@ -69,8 +38,8 @@
     "hideAll": "Fela aðrar byggingar"
   },
   "footer": {
-    "line": "Rólegra heimili fyrir sögurnar sem þú kemur alltaf aftur til.",
-    "status": "Skrifborð fyrst. Viðbót tilbúin."
+    "status": "Skrifborð fyrst. Viðbót tilbúin.",
+    "line": "Háhraða, slétt streymi fyrir allar kvikmyndir og seríur sem þú elskar."
   },
   "addonGuide": {
     "manifestDescription": "Lýsigögn segja forritinu hver viðbótin þín er, hvaða auðlindir það styður og hvar táknið hennar býr.",
@@ -108,9 +77,9 @@
     "series": "Röð",
     "eyebrow": "FRAMEZOO UPPLÝSING",
     "dragHint": "Dragðu til að kanna",
-    "description": "Finndu eitthvað sem er þess virði að horfa á, opnaðu smáatriðin og komdu þér fyrir á betri leið til að horfa með Framezoo.",
     "movie": "Kvikmynd",
-    "title": "Vinsælar sögur fyrir næsta úr þitt."
+    "title": "Vinsælar sögur fyrir næsta úr þitt.",
+    "description": "Skoðaðu auðug lýsigögn kvikmynda, veldu strauminn þinn og byrjaðu að horfa samstundis með Framezoo."
   },
   "installGuide": {
     "downloadApp": "Sækja Framezoo",
@@ -192,5 +161,32 @@
     "attachmentsLabel": "Skrár",
     "attachmentsHint": "Myndir/myndbönd · 55 MB samtals að hámarki",
     "attachmentsTooLarge": "Heildarskráarstærð má ekki vera meiri en 55 MB."
+  },
+  "seo": {
+    "title": "Framezoo - Hröð og slétt myndstraumur",
+    "description": "Framezoo er háhraða myndbandsspilari sem er hannaður til að vera sléttur, leiðandi og auðveldur í notkun. Skoðaðu ríkuleg lýsigögn kvikmynda, samstilltu texta við myndbandsstrauma án takmarkana og hlaðaðu texta frá mörgum aðilum."
+  },
+  "features": {
+    "subtitleSyncDescription": "Samstilltu texta við hvaða myndstraum sem er án takmarkana - stilltu tímasetningu og stilltu samræður óaðfinnanlega á meðan þú horfir.",
+    "subtitleSync": "Ótakmarkað samstilling straumtexta",
+    "featureLabel": "Háhraða streymi, á þinn hátt",
+    "overviewDescription": "Njóttu háhraða straumspilunar á myndskeiðum í sléttu, auðvelt í notkun viðmóti með ríkulegum lýsigögnum kvikmynda, ótakmarkaðri samstillingu straumtexta og texta frá mörgum aðilum.",
+    "experienceTitle": "Byggt fyrir hraðvirkt, áreynslulaust streymi.",
+    "dualSubtitles": "Textar úr mörgum áttum",
+    "subtitleControls": "Slétt notendaviðmót og rík lýsigögn kvikmynda",
+    "ecosystemDescription": "Hraðspilun á straumi, texti með mörgum uppsprettum og ríkuleg lýsigögn kvikmynda eru innbyggð í kjarnann. Viðbætur gera þér kleift að tengja enn fleiri strauma, vörulista og textaveitur áreynslulaust.",
+    "dualSubtitlesDescription": "Hladdu texta sjálfkrafa frá mörgum veitum, skiptu um heimildir á flugi eða sýndu tvöfalda texta hlið við hlið.",
+    "subtitleControlsDescription": "Farðu í hreint, móttækilegt viðmót með yfirgripsmiklum lýsigögnum, einkunnum, upplýsingum um leikarahópa og þáttaleiðbeiningar.",
+    "showcaseTitle": "Rík lýsigögn áður en þú ýtir á play.",
+    "ecosystemTitle": "Háhraða streymi mætir opnu vistkerfi.",
+    "addonOne": "Háhraða lækir",
+    "addonLabel": "Inni í Framezoo",
+    "addonThree": "Marguppspretta textar",
+    "addonTwo": "Rík lýsigögn kvikmynda",
+    "showcaseSecondaryTitle": "Slétt, leiðandi uppgötvun.",
+    "showcaseSecondaryAlt": "Uppgötvunarskjár Framezoo spilara með leitar-, flokka- og titlaröðum",
+    "showcaseDescription": "Opnaðu hvaða titil sem er til að skoða veggspjöld, einkunnir, samantektir, árstíðir og leikaraupplýsingar á einni hreinni, leiðandi sýn.",
+    "showcaseSecondaryDescription": "Vafraðu áreynslulaust í gegnum slétt viðmót sem er hannað til að koma þér frá uppgötvun yfir í háhraða spilun á nokkrum sekúndum.",
+    "showcasePrimaryAlt": "Framezoo titilsskjár með listaverkum, einkunnum, árstíðum og ríkulegum lýsigögnum kvikmynda"
   }
 }

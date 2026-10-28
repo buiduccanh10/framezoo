@@ -10,44 +10,13 @@
   },
   "hero": {
     "eyebrow": "アルファフリックス デスクトップ / 01",
-    "title": "もっとよく見てください。",
-    "titleAccent": "デスクトップ上。",
-    "description": "Framezoo は、AI 字幕同期、デュアル字幕、リッチメディア メタデータ、アドオン サポートを備えたプレーヤーです。",
     "primaryCta": "デスクトップをダウンロード",
     "secondaryCta": "体験談を見る",
-    "imageAlt": "検出画面を表示している Framezoo プレーヤー",
-    "version": "デスクトップリリース"
-  },
-  "features": {
-    "performanceTitle": "ブラウザ税なしのあなたのライブラリ。",
-    "overviewDescription": "字幕を AI と同期し、二重字幕を表示したままにし、メディア メタデータを探索し、ストーリーから離れることなく再生を制御します。",
-    "playback": "ネイティブ再生",
-    "playbackDescription": "デスクトップグレードのメディア処理によるスムーズなビデオ。",
-    "performance": "静かなパフォーマンス",
-    "performanceDescription": "クロムが少ない。さらに集中力を高めます。タブジャグリングはありません。",
-    "continuity": "流れを維持する",
-    "continuityDescription": "瞬間を逃すことなくソースを再開、閲覧、切り替えできます。",
-    "ecosystemTitle": "次に何が起こるかに備えてください。",
-    "ecosystemDescription": "デスクトップ アプリが核となります。アドオンはエッジを拡張するため、セットアップが複雑になることなく個人的なものを維持できます。",
-    "addonLabel": "アドオン対応",
-    "addonOne": "ソースコネクタ",
-    "addonTwo": "字幕ツール",
-    "addonThree": "コミュニティ拡張機能",
-    "showcaseTitle": "再生を押す前に詳細を確認してください。",
-    "showcaseDescription": "発見、再生、ストーリーに関するすべてのことに集中したデスクトップ サーフェス。",
-    "showcaseCaption": "Framezoo デスクトップ / フォーカス モード",
-    "dualSubtitles": "2 つの字幕言語を表示したままにする",
-    "subtitleSync": "字幕を AI と同期する",
-    "experienceTitle": "プレーヤーに必要なものがすべて揃っています。",
-    "subtitleControls": "周りのプレーヤーをチューニングする",
-    "dualSubtitlesDescription": "学習中、比較中、または単に両方を好む場合は、デュアル字幕をオンにします。",
-    "subtitleSyncDescription": "AI 字幕同期により、セリフと画像を数秒で調整します。",
-    "featureLabel": "プレイヤーはあなたのやり方で",
-    "showcaseSecondaryTitle": "見る価値のあるものを発見してください。",
-    "showcaseSecondaryAlt": "検索、カテゴリ、タイトル行を備えた Framezoo プレーヤー検出画面",
-    "showcaseSecondaryDescription": "きれいな検出面から開始して、場所を見失うことなく再生に進みます。",
-    "subtitleControlsDescription": "流れを中断することなく、字幕ソース、言語、タイミング、表示を選択します。",
-    "showcasePrimaryAlt": "アートワーク、評価、シーズン、メタデータを含む Framezoo タイトル詳細画面"
+    "version": "デスクトップリリース",
+    "titleAccent": "気を付けてください。",
+    "description": "Framezoo は、スムーズで直感的な UI、豊富な映画メタデータ、無制限のストリーム字幕同期、およびマルチソース字幕サポートを備えた高速ストリーミング プレーヤーです。",
+    "imageAlt": "Framezoo 高速ストリーミング プレーヤーのディスカバリー画面",
+    "title": "高速ストリーミング、"
   },
   "download": {
     "eyebrow": "ビルドを選択してください",
@@ -69,8 +38,8 @@
     "ready": "このデバイスの準備ができています"
   },
   "footer": {
-    "line": "何度も戻ってくる物語のための、より静かな家。",
-    "status": "デスクトップファースト。アドオン対応。"
+    "status": "デスクトップファースト。アドオン対応。",
+    "line": "お気に入りの映画やシリーズをすべて高速かつスムーズにストリーミングできます。"
   },
   "addonGuide": {
     "eyebrow": "アドオンプロトコル/ガイド",
@@ -108,9 +77,9 @@
     "movie": "映画",
     "series": "シリーズ",
     "title": "次回の視聴には人気のストーリーが含まれます。",
-    "description": "見る価値のあるものを見つけて詳細を開いて、Framezoo でより良い視聴方法を確立してください。",
     "dragHint": "ドラッグして探索する",
-    "eyebrow": "フレームズー ディスカバリー"
+    "eyebrow": "フレームズー ディスカバリー",
+    "description": "Framezoo を使用すると、豊富な映画メタデータを参照し、ストリームを選択してすぐに視聴を開始できます。"
   },
   "installGuide": {
     "backHome": "ホームに戻る",
@@ -192,5 +161,32 @@
     "attachmentsLabel": "ファイル",
     "attachmentsHint": "画像/動画・合計最大55MB",
     "attachmentsTooLarge": "ファイルの合計サイズは 55 MB を超えてはなりません。"
+  },
+  "seo": {
+    "title": "Framezoo - 高速かつスムーズなビデオ ストリーミング",
+    "description": "Framezoo は、スムーズで直感的で使いやすいように設計された高速ビデオ ストリーミング プレーヤーです。豊富な映画メタデータを探索し、制限なく字幕をビデオ ストリームと同期し、複数のソースから字幕を読み込みます。"
+  },
+  "features": {
+    "featureLabel": "高速ストリーミングを思い通りに",
+    "experienceTitle": "高速で楽なストリーミングを実現するために構築されています。",
+    "subtitleSyncDescription": "制限なく字幕をあらゆるビデオ ストリームと同期し、視聴中にタイミングを調整し、対話をシームレスに調整します。",
+    "dualSubtitles": "複数のソースからの字幕",
+    "subtitleSync": "無制限のストリーム字幕同期",
+    "subtitleControlsDescription": "包括的なメタデータ、評価、キャストの詳細、エピソード ガイドが組み込まれた、クリーンで応答性の高いインターフェイスをナビゲートします。",
+    "dualSubtitlesDescription": "複数のプロバイダーから字幕を自動的にロードしたり、ソースをオンザフライで切り替えたり、デュアル字幕を並べて表示したりできます。",
+    "overviewDescription": "豊富な映画メタデータ、無制限のストリーム字幕同期、複数のソースからの字幕を備えた、スムーズで使いやすいインターフェイスで高速ビデオ ストリーミングをお楽しみください。",
+    "ecosystemDescription": "高速ストリーム再生、マルチソース字幕、豊富な映画メタデータがコアに組み込まれています。アドオンを使用すると、さらに多くのストリーム、カタログ、字幕プロバイダーを簡単に接続できます。",
+    "ecosystemTitle": "高速ストリーミングとオープン エコシステムが融合します。",
+    "subtitleControls": "スムーズな UI と豊富なムービーメタデータ",
+    "addonLabel": "フレームズーの内部",
+    "addonTwo": "豊富な映画メタデータ",
+    "addonOne": "高速ストリーム",
+    "addonThree": "マルチソース字幕",
+    "showcasePrimaryAlt": "アートワーク、評価、シーズン、豊富な映画メタデータを含む Framezoo タイトル詳細画面",
+    "showcaseDescription": "任意のタイトルを開いて、ポスター、評価、あらすじ、シーズン、キャストの詳細を 1 つのクリーンで直感的なビューで確認できます。",
+    "showcaseSecondaryTitle": "スムーズで直感的な発見。",
+    "showcaseTitle": "再生を押す前に豊富なメタデータを表示します。",
+    "showcaseSecondaryDescription": "発見から高速再生まで数秒で完了できるように設計された洗練されたインターフェイスを通じて、簡単にブラウジングできます。",
+    "showcaseSecondaryAlt": "検索、カテゴリ、タイトル行を備えた Framezoo プレーヤー検出画面"
   }
 }

@@ -4,6 +4,9 @@
     <loc>https://framezoo.top/</loc>
   </url>
   <url>
+    <loc>https://framezoo.top/download</loc>
+  </url>
+  <url>
     <loc>https://framezoo.top/experience</loc>
   </url>
   <url>
@@ -13,6 +16,6 @@
     <loc>https://framezoo.top/create-addon</loc>
   </url>
   <url>
-    <loc>https://framezoo.top/download</loc>
+    <loc>https://framezoo.top/guide/install</loc>
   </url>
 </urlset>

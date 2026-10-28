@@ -10,44 +10,13 @@
   },
   "hero": {
     "eyebrow": "DESKTOP FRAMEZOO / 01",
-    "title": "Sledujte lépe.",
-    "titleAccent": "Na ploše.",
-    "description": "Framezoo je přehrávač se synchronizací titulků s umělou inteligencí, duálními titulky, multimediálními metadaty a podporou doplňků.",
     "primaryCta": "Stáhnout desktop",
     "secondaryCta": "Podívejte se na zážitek",
-    "imageAlt": "Přehrávač Framezoo zobrazující obrazovku objevování",
-    "version": "Desktopová verze"
-  },
-  "features": {
-    "performanceTitle": "Vaše knihovna bez daně z prohlížeče.",
-    "overviewDescription": "Synchronizujte titulky s umělou inteligencí, udržujte duální titulky viditelné, prozkoumávejte metadata médií a ovládejte přehrávání, aniž byste opustili příběh.",
-    "playback": "Nativní přehrávání",
-    "playbackDescription": "Plynulé video se zpracováním médií na úrovni stolního počítače.",
-    "performance": "Tichý výkon",
-    "performanceDescription": "Méně chromu. Více soustředění. Žádné žonglování s kartami.",
-    "continuity": "Udržujte svůj tok",
-    "continuityDescription": "Obnovte, procházejte a přepínejte zdroje bez ztráty okamžiku.",
-    "ecosystemTitle": "Připraveni na to, co přijde dál.",
-    "ecosystemDescription": "Jádrem je desktopová aplikace. Doplňky rozšiřují okraje, takže vaše nastavení může zůstat osobní, aniž by se komplikovalo.",
-    "addonLabel": "PŘIPRAVENO PŘIDÁNÍ",
-    "addonOne": "Zdrojové konektory",
-    "addonTwo": "Nástroje pro titulky",
-    "addonThree": "Rozšíření komunity",
-    "showcaseTitle": "Podrobnosti před stisknutím tlačítka Přehrát.",
-    "showcaseDescription": "Zaměřený povrch plochy pro objevování, přehrávání a vše kolem příběhu.",
-    "showcaseCaption": "Framezoo Desktop / Režim zaostření",
-    "featureLabel": "Hráč, vaše cesta",
-    "subtitleSync": "Synchronizujte titulky s AI",
-    "dualSubtitlesDescription": "Zapněte duální titulky, když se učíte, porovnáváte nebo prostě preferujete obojí.",
-    "subtitleSyncDescription": "Zarovnejte dialog s obrázkem během několika sekund pomocí synchronizace titulků AI.",
-    "dualSubtitles": "Ponechte viditelné dva jazyky titulků",
-    "experienceTitle": "Vše, co v přehrávači potřebujete.",
-    "subtitleControls": "Nalaďte si přehrávač kolem sebe",
-    "showcaseSecondaryTitle": "Objevte něco, co stojí za to sledovat.",
-    "showcaseSecondaryAlt": "Obrazovka objevování přehrávače Framezoo s vyhledáváním, kategoriemi a řádky titulků",
-    "showcaseSecondaryDescription": "Začněte z čistého objevovacího povrchu a poté přejděte do přehrávání, aniž byste ztratili své místo.",
-    "showcasePrimaryAlt": "Obrazovka s podrobnostmi o titulu Framezoo s kresbou, hodnocením, sezónami a metadaty",
-    "subtitleControlsDescription": "Vyberte zdroj titulků, jazyk, časování a zobrazení, aniž byste narušili tok titulků."
+    "version": "Desktopová verze",
+    "title": "Streamujte rychle,",
+    "titleAccent": "pozor na cestu.",
+    "imageAlt": "Framezoo vysokorychlostní streamovací přehrávač zobrazující obrazovku objevování",
+    "description": "Framezoo je vysokorychlostní streamovací přehrávač s plynulým, intuitivním uživatelským rozhraním, bohatými metadaty filmů, neomezenou synchronizací titulků streamu a podporou titulků z více zdrojů."
   },
   "download": {
     "eyebrow": "VYBERTE SI SVOU STAVBU",
@@ -69,8 +38,8 @@
     "hideAll": "Skrýt další sestavení"
   },
   "footer": {
-    "line": "Tišší domov pro příběhy, ke kterým se stále vracíte.",
-    "status": "Desktop-first. Addon připraven."
+    "status": "Desktop-first. Addon připraven.",
+    "line": "Vysokorychlostní a plynulé streamování všech filmů a seriálů, které máte rádi."
   },
   "addonGuide": {
     "description": "Addon je malá služba HTTP. Podávejte manifest a zdroje, které potřebujete; Framezoo se postará o zbytek.",
@@ -110,7 +79,7 @@
     "dragHint": "Přetažením prozkoumejte",
     "eyebrow": "OBJEV FRAMEZOO",
     "title": "Oblíbené příběhy pro vaše příští hodinky.",
-    "description": "Najděte něco, co stojí za to sledovat, otevřete podrobnosti a usaďte se na lepší způsob sledování s Framezoo."
+    "description": "Procházejte bohatá metadata filmů, vyberte si stream a začněte okamžitě sledovat s Framezoo."
   },
   "installGuide": {
     "title": "Průvodce instalací a spuštěním Framezoo",
@@ -192,5 +161,32 @@
     "attachmentsLabel": "Soubory",
     "attachmentsTooLarge": "Celková velikost souboru nesmí přesáhnout 55 MB.",
     "attachmentsHint": "Obrázky/videa · Celková maximální velikost 55 MB"
+  },
+  "seo": {
+    "title": "Framezoo - Rychlé a plynulé streamování videa",
+    "description": "Framezoo je vysokorychlostní přehrávač pro streamování videa navržený tak, aby byl plynulý, intuitivní a snadno použitelný. Prozkoumejte bohatá metadata filmů, synchronizujte titulky s video streamy bez omezení a načtěte titulky z více zdrojů."
+  },
+  "features": {
+    "experienceTitle": "Vytvořeno pro rychlé a snadné streamování.",
+    "subtitleSync": "Neomezená synchronizace titulků streamu",
+    "featureLabel": "Vysokorychlostní streamování, vaše cesta",
+    "overviewDescription": "Užijte si vysokorychlostní streamování videa v hladkém a snadno použitelném rozhraní s bohatými metadaty filmu, neomezenou synchronizací titulků a titulky z více zdrojů.",
+    "subtitleSyncDescription": "Synchronizujte titulky s jakýmkoli video streamem bez omezení – upravte časování a zarovnejte dialogy během sledování.",
+    "dualSubtitles": "Titulky z více zdrojů",
+    "ecosystemTitle": "Vysokorychlostní streamování se setkává s otevřeným ekosystémem.",
+    "dualSubtitlesDescription": "Načtěte titulky automaticky od více poskytovatelů, přepínejte zdroje za chodu nebo zobrazte duální titulky vedle sebe.",
+    "subtitleControlsDescription": "Pohybujte se v čistém a citlivém rozhraní s integrovanými komplexními metadaty, hodnoceními, podrobnostmi o obsazení a průvodci epizodami.",
+    "ecosystemDescription": "Rychlé přehrávání streamu, titulky z více zdrojů a bohatá metadata filmu jsou zabudovány přímo do jádra. Doplňky vám umožní bez námahy připojit ještě více streamů, katalogů a poskytovatelů titulků.",
+    "subtitleControls": "Hladké uživatelské rozhraní a bohatá metadata filmu",
+    "addonTwo": "Bohatá filmová metadata",
+    "addonOne": "Vysokorychlostní proudy",
+    "addonThree": "Vícezdrojové titulky",
+    "addonLabel": "Uvnitř Framezoo",
+    "showcaseTitle": "Bohatá metadata před stisknutím tlačítka Přehrát.",
+    "showcasePrimaryAlt": "Obrazovka s podrobnostmi o titulu Framezoo s kresbou, hodnocením, sezónami a bohatými metadaty filmu",
+    "showcaseDescription": "Otevřete libovolný titul a prozkoumejte plakáty, hodnocení, synopse, roční období a detaily obsazení v jednom čistém a intuitivním zobrazení.",
+    "showcaseSecondaryTitle": "Hladké, intuitivní objevování.",
+    "showcaseSecondaryDescription": "Procházejte bez námahy prostřednictvím elegantního rozhraní navrženého tak, aby vás dostalo od objevu k vysokorychlostnímu přehrávání během několika sekund.",
+    "showcaseSecondaryAlt": "Obrazovka objevování přehrávače Framezoo s vyhledáváním, kategoriemi a řádky titulků"
   }
 }

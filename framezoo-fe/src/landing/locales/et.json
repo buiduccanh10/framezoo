@@ -10,44 +10,13 @@
   },
   "hero": {
     "eyebrow": "FRAMEZOO LAUAARV / 01",
-    "title": "Vaadake paremini.",
-    "titleAccent": "Töölaual.",
-    "description": "Framezoo on AI-subtiitrite sünkroonimise, topeltsubtiitrite, rikasmeedia metaandmete ja lisatoega mängija.",
     "primaryCta": "Laadige alla töölaud",
     "secondaryCta": "Vaata kogemust",
-    "imageAlt": "Framezoo pleier, mis näitab avastamisekraani",
-    "version": "Töölaua väljalase"
-  },
-  "features": {
-    "performanceTitle": "Teie raamatukogu ilma brauserimaksuta.",
-    "overviewDescription": "Sünkroonige subtiitrid tehisintellektiga, hoidke topeltsubtiitrid nähtaval, uurige meedia metaandmeid ja juhtige taasesitust loost lahkumata.",
-    "playback": "Algne taasesitus",
-    "playbackDescription": "Sujuv video töölauatasemel meediakäsitlusega.",
-    "performance": "Vaikne jõudlus",
-    "performanceDescription": "Vähem kroomi. Rohkem keskendumist. Ei mingit vahelehtede žongleerimist.",
-    "continuity": "Hoidke oma voolu",
-    "continuityDescription": "Jätkake, sirvige ja vahetage allikaid hetke kaotamata.",
-    "ecosystemTitle": "Valmis järgmiseks.",
-    "ecosystemDescription": "Töölauarakendus on tuum. Lisad laiendavad servi, nii et teie seadistus võib jääda isiklikuks, ilma et see muutuks keeruliseks.",
-    "addonLabel": "LISAKS VALMIS",
-    "addonOne": "Allika pistikud",
-    "addonTwo": "Subtiitrite tööriistad",
-    "addonThree": "kogukonna laiendused",
-    "showcaseTitle": "Üksikasjad enne esituse vajutamist.",
-    "showcaseDescription": "Fokuseeritud töölauapind avastamiseks, taasesituseks ja kõigeks loo ümber.",
-    "showcaseCaption": "Framezoo töölaua / fookuse režiim",
-    "dualSubtitles": "Hoidke kaks subtiitrite keelt nähtaval",
-    "dualSubtitlesDescription": "Lülitage topeltsubtiitrid sisse, kui õpite, võrdlete või lihtsalt eelistate mõlemat.",
-    "experienceTitle": "Kõik, mida mängijas vaja läheb.",
-    "featureLabel": "Mängija, teie tee",
-    "subtitleSyncDescription": "Joondage dialoog pildiga sekunditega tehisintellekti subtiitrite sünkroonimise abil.",
-    "subtitleSync": "Sünkroonige subtiitrid tehisintellektiga",
-    "showcasePrimaryAlt": "Framezoo pealkirja üksikasjade ekraan kunstiteoste, hinnangute, aastaaegade ja metaandmetega",
-    "showcaseSecondaryDescription": "Alustage puhtalt avastamispinnalt, seejärel liikuge taasesitusse ilma oma kohta kaotamata.",
-    "showcaseSecondaryTitle": "Avastage midagi, mida tasub vaadata.",
-    "subtitleControls": "Häälestage mängija enda ümber",
-    "showcaseSecondaryAlt": "Framezoo mängija avastamise ekraan otsingu, kategooriate ja tiitliridadega",
-    "subtitleControlsDescription": "Valige subtiitrite allikas, keel, ajastus ja ekraan ilma oma voogu katkestamata."
+    "version": "Töölaua väljalase",
+    "imageAlt": "Framezoo kiire voogesituspleier, mis näitab avastamisekraani",
+    "titleAccent": "jälgi oma teed.",
+    "title": "Voogesitage kiiresti,",
+    "description": "Framezoo on kiire voogesituspleier, millel on sujuv, intuitiivne kasutajaliides, rikkalikud filmi metaandmed, piiramatu voo subtiitrite sünkroonimine ja mitme allika subtiitrite tugi."
   },
   "download": {
     "eyebrow": "VALI OMA EHITUS",
@@ -69,8 +38,8 @@
     "ready": "Selle seadme jaoks valmis"
   },
   "footer": {
-    "line": "Vaiksem kodu lugudele, mille juurde sa ikka ja jälle tagasi tuled.",
-    "status": "Töölaud kõigepealt. Lisandmooduliks valmis."
+    "status": "Töölaud kõigepealt. Lisandmooduliks valmis.",
+    "line": "Kiire ja sujuv voogesitus kõikidele teile meeldivatele filmidele ja sarjadele."
   },
   "addonGuide": {
     "description": "Lisand on väike HTTP-teenus. Esitage manifest ja vajalikud vahendid; Framezoo tegeleb ülejäänuga.",
@@ -106,11 +75,11 @@
   },
   "movies": {
     "series": "seeria",
-    "description": "Leidke midagi vaatamisväärset, avage üksikasjad ja leidke Framezoo abil parem vaatamisviis.",
     "eyebrow": "FRAMEZOO AVASTAMINE",
     "movie": "Film",
     "title": "Populaarsed lood teie järgmise kella jaoks.",
-    "dragHint": "Uurimiseks lohistage"
+    "dragHint": "Uurimiseks lohistage",
+    "description": "Sirvige rikkalikke filmide metaandmeid, valige oma voog ja alustage Framezoo abil kohe vaatamist."
   },
   "installGuide": {
     "backHome": "Tagasi avalehele",
@@ -192,5 +161,32 @@
     "attachmentsLabel": "Failid",
     "attachmentsTooLarge": "Faili kogumaht ei tohi ületada 55 MB.",
     "attachmentsHint": "Pildid/videod · Maksimaalselt 55 MB"
+  },
+  "seo": {
+    "description": "Framezoo on kiire video voogedastuspleier, mis on loodud sujuvaks, intuitiivseks ja hõlpsasti kasutatavaks. Avastage rikkalikke filmide metaandmeid, sünkroonige subtiitreid piiranguteta videovoogudega ja laadige subtiitreid mitmest allikast.",
+    "title": "Framezoo – kiire ja sujuv video voogesitus"
+  },
+  "features": {
+    "featureLabel": "Kiire voogesitus, teie moodi",
+    "subtitleSyncDescription": "Sünkroonige subtiitrid piiranguteta mis tahes videovooga – reguleerige ajastust ja joondage dialoogi sujuvalt vaatamise ajal.",
+    "dualSubtitles": "Subtiitrid mitmest allikast",
+    "subtitleSync": "Piiramatu voo subtiitrite sünkroonimine",
+    "experienceTitle": "Loodud kiireks ja lihtsaks voogesituseks.",
+    "overviewDescription": "Nautige kiiret video voogesitust sujuvas ja hõlpsasti kasutatavas liideses koos rikkalike filmi metaandmete, piiramatu voo subtiitrite sünkroonimise ja mitmest allikast pärinevate subtiitritega.",
+    "ecosystemTitle": "Kiire voogesitus kohtub avatud ökosüsteemiga.",
+    "subtitleControls": "Sujuv kasutajaliides ja rikkalikud filmide metaandmed",
+    "subtitleControlsDescription": "Navigeerige puhtal ja tundlikul liidesel, mis sisaldab kõikehõlmavaid metaandmeid, hinnanguid, ülekande üksikasju ja osade juhendeid.",
+    "ecosystemDescription": "Kiire voo taasesitus, mitmest allikast pärinevad subtiitrid ja rikkalikud filmide metaandmed on sisse ehitatud otse tuuma. Lisandmoodulid võimaldavad teil hõlpsalt ühendada veelgi rohkem vooge, katalooge ja subtiitrite pakkujaid.",
+    "dualSubtitlesDescription": "Laadige automaatselt mitme teenusepakkuja subtiitrid, vahetage allikaid jooksvalt või kuvage topeltsubtiitreid kõrvuti.",
+    "addonLabel": "Framezoo sees",
+    "addonTwo": "Rikkalikud filmi metaandmed",
+    "showcaseTitle": "Rikkalikud metaandmed enne esituse vajutamist.",
+    "addonOne": "Kiired ojad",
+    "addonThree": "Mitme allika subtiitrid",
+    "showcasePrimaryAlt": "Framezoo pealkirja üksikasjade ekraan kunstiteoste, hinnangute, aastaaegade ja rikkalike filmi metaandmetega",
+    "showcaseSecondaryDescription": "Sirvige hõlpsalt elegantse liidese kaudu, mis viib teid mõne sekundiga avastamisest kiire taasesituseni.",
+    "showcaseDescription": "Avage mis tahes pealkiri, et uurida plakateid, hinnanguid, kokkuvõtteid, hooaegu ja esitada üksikasju ühes puhtas ja intuitiivses vaates.",
+    "showcaseSecondaryTitle": "Sujuv, intuitiivne avastus.",
+    "showcaseSecondaryAlt": "Framezoo mängija avastamise ekraan otsingu, kategooriate ja tiitliridadega"
   }
 }

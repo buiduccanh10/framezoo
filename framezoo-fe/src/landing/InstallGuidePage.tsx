@@ -45,13 +45,14 @@ export function InstallGuidePage() {
     document.documentElement.lang = locale;
     document.documentElement.dir =
       getLandingLocaleOption(locale)?.direction ?? "ltr";
+    document.title = `${activeCopy.installGuide.title} | Framezoo`;
 
     try {
       window.localStorage.setItem(LANDING_LOCALE_STORAGE_KEY, locale);
     } catch {
       // Storage unavailable in private browsing
     }
-  }, [locale]);
+  }, [activeCopy.installGuide.title, locale]);
 
   useEffect(() => {
     const handleHashChange = () => {

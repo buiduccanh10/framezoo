@@ -12,36 +12,44 @@ const routes = [
   {
     pathname: "/",
     output: "index.html",
-    title: "Framezoo Player | AI Subtitle Sync",
+    title: "Framezoo - Fast & Smooth Video Streaming",
     description:
-      "Framezoo is a player with AI subtitle sync, dual subtitles, rich media metadata, and addon support.",
-  },
-  {
-    pathname: "/experience",
-    output: "experience/index.html",
-    title: "Everything You Need in a Player | Framezoo",
-    description:
-      "Sync subtitles with AI, keep dual subtitles visible, explore media metadata, and control playback in Framezoo.",
-  },
-  {
-    pathname: "/ecosystem",
-    output: "ecosystem/index.html",
-    title: "Framezoo Addon Ecosystem | Sources, Catalogs and Tools",
-    description:
-      "Extend Framezoo with source connectors, catalog metadata, subtitle tools, and community addons.",
-  },
-  {
-    pathname: "/create-addon",
-    output: "create-addon/index.html",
-    title: "Create a Framezoo Addon | Addon Guide",
-    description:
-      "Build a Framezoo addon with a manifest, stream resources, subtitles, and catalog endpoints.",
+      "Framezoo is a high-speed video streaming player designed to be smooth, intuitive, and easy to use. Explore rich movie metadata, sync subtitles with video streams without limits, and load subtitles from multiple sources.",
   },
   {
     pathname: "/download",
     output: "download/index.html",
-    title: "Download Framezoo | macOS and Windows",
-    description: "Download the Framezoo desktop player for macOS or Windows.",
+    title: "Downloads | Framezoo - macOS and Windows",
+    description:
+      "Download Framezoo for macOS and Windows. Watch movies, TV series, and video streams instantly at high speed.",
+  },
+  {
+    pathname: "/experience",
+    output: "experience/index.html",
+    title: "Features & Experience | Framezoo",
+    description:
+      "Enjoy high-speed video streaming in a smooth, easy-to-use interface with rich movie metadata, unlimited stream subtitle sync, and subtitles from multiple sources.",
+  },
+  {
+    pathname: "/ecosystem",
+    output: "ecosystem/index.html",
+    title: "Addon Ecosystem | Framezoo",
+    description:
+      "Extend Framezoo with high-speed stream sources, rich movie metadata catalogs, and multi-source subtitle providers.",
+  },
+  {
+    pathname: "/create-addon",
+    output: "create-addon/index.html",
+    title: "Build an Addon | Framezoo",
+    description:
+      "Build a Framezoo addon with a simple HTTP manifest for video streams, multi-source subtitles, and movie metadata catalogs.",
+  },
+  {
+    pathname: "/guide/install",
+    output: "guide/install/index.html",
+    title: "Installation Guide | Framezoo",
+    description:
+      "Step-by-step installation and launch guide for the Framezoo desktop streaming player on macOS and Windows.",
   },
 ];
 

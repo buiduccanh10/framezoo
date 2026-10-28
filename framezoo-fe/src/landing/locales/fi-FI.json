@@ -10,44 +10,13 @@
   },
   "hero": {
     "eyebrow": "FRAMEZOO DESKTOP / 01",
-    "title": "Katso paremmin.",
-    "titleAccent": "työpöydällä.",
-    "description": "Framezoo on soitin, jossa on tekoälyn tekstityssynkronointi, kaksoistekstitys, multimedian metatiedot ja lisätuki.",
     "primaryCta": "Lataa työpöytä",
     "secondaryCta": "Katso kokemus",
-    "imageAlt": "Framezoo-soitin, joka näyttää etsintänäytön",
-    "version": "Työpöytäjulkaisu"
-  },
-  "features": {
-    "performanceTitle": "Kirjastosi ilman selainveroa.",
-    "overviewDescription": "Synkronoi tekstitykset tekoälyn kanssa, pidä kaksoistekstitys näkyvissä, tutki median metadataa ja ohjaa toistoa poistumatta tarinasta.",
-    "playback": "Alkuperäinen toisto",
-    "playbackDescription": "Tasainen video työpöytätason mediankäsittelyllä.",
-    "performance": "Hiljainen suorituskyky",
-    "performanceDescription": "Vähemmän kromia. Enemmän keskittymistä. Ei välilehtien jongleerausta.",
-    "continuity": "Pidä virtaus",
-    "continuityDescription": "Jatka, selaa ja vaihda lähteitä menettämättä hetkeä.",
-    "ecosystemTitle": "Valmiina seuraavaan.",
-    "ecosystemDescription": "Työpöytäsovellus on ydin. Lisäosat laajentavat reunoja, joten kokoonpanosi voi pysyä henkilökohtaisena ilman, että siitä tulee monimutkainen.",
-    "addonLabel": "LISÄYSVALMIS",
-    "addonOne": "Lähdeliittimet",
-    "addonTwo": "Tekstitystyökalut",
-    "addonThree": "Yhteisön laajennukset",
-    "showcaseTitle": "Tiedot ennen kuin painat play.",
-    "showcaseDescription": "Kohdistettu työpöytäpinta löytöjä, toistoa ja kaikkea tarinaa varten.",
-    "showcaseCaption": "Framezoo Desktop / Focus -tila",
-    "dualSubtitles": "Pidä kaksi tekstityskieltä näkyvissä",
-    "experienceTitle": "Kaikki mitä tarvitset soittimessa.",
-    "subtitleSync": "Synkronoi tekstitykset tekoälyn kanssa",
-    "featureLabel": "Pelaaja, sinun tapasi",
-    "subtitleSyncDescription": "Tasaa dialogi kuvan kanssa sekunneissa AI-tekstityksen synkronoinnin avulla.",
-    "subtitleControlsDescription": "Valitse tekstityksen lähde, kieli, ajoitus ja näyttö häiritsemättä kulkua.",
-    "dualSubtitlesDescription": "Ota kaksoistekstitys käyttöön, kun opit, vertaat tai pidät molemmista parempana.",
-    "subtitleControls": "Viritä soitin ympärilläsi",
-    "showcaseSecondaryTitle": "Löydä jotain katsomisen arvoista.",
-    "showcasePrimaryAlt": "Framezoo-otsikon yksityiskohtien näyttö, jossa on taideteoksia, luokituksia, vuodenaikoja ja metatietoja",
-    "showcaseSecondaryDescription": "Aloita puhtaalta etsintäpinnalta ja siirry sitten toistoon menettämättä paikkaasi.",
-    "showcaseSecondaryAlt": "Framezoo-soittimen etsintänäyttö, jossa on haku, luokat ja otsikkorivit"
+    "version": "Työpöytäjulkaisu",
+    "imageAlt": "Nopea Framezoo-suoratoistosoitin, joka näyttää löytönäytön",
+    "titleAccent": "tarkkaile tietäsi.",
+    "title": "Striimaa nopeasti,",
+    "description": "Framezoo on nopea suoratoistosoitin, jossa on sulava, intuitiivinen käyttöliittymä, monipuoliset elokuvan metatiedot, rajoittamaton suoratoiston tekstityssynkronointi ja usean lähteen tekstitystuki."
   },
   "download": {
     "eyebrow": "VALITSE RAKENNUSSI",
@@ -69,8 +38,8 @@
     "hideAll": "Piilota muut rakenteet"
   },
   "footer": {
-    "line": "Hiljaisempi koti tarinoille, joihin palaat jatkuvasti.",
-    "status": "Työpöytä ensin. Lisäys valmiina."
+    "status": "Työpöytä ensin. Lisäys valmiina.",
+    "line": "Nopea ja sujuva suoratoisto kaikille rakastamillesi elokuville ja sarjoille."
   },
   "addonGuide": {
     "manifestTitle": "Aloita tiedostosta manifest.json",
@@ -108,9 +77,9 @@
     "movie": "Elokuva",
     "series": "Sarja",
     "title": "Suosittuja tarinoita seuraavaan kelloosi.",
-    "description": "Löydä jotain katsomisen arvoista, avaa yksityiskohdat ja ryhdy parempaan katseluun Framezoon avulla.",
     "eyebrow": "FRAMEZOO LÖYTTÖ",
-    "dragHint": "Vedä tutkiaksesi"
+    "dragHint": "Vedä tutkiaksesi",
+    "description": "Selaa monipuolisia elokuvien metatietoja, valitse suoratoisto ja aloita katselu välittömästi Framezoon avulla."
   },
   "installGuide": {
     "backHome": "Takaisin etusivulle",
@@ -192,5 +161,32 @@
     "attachmentsLabel": "Tiedostot",
     "attachmentsHint": "Kuvat/videot · Enimmäiskoko 55 Mt",
     "attachmentsTooLarge": "Tiedoston kokonaiskoko ei saa ylittää 55 megatavua."
+  },
+  "seo": {
+    "description": "Framezoo on nopea videon suoratoistosoitin, joka on suunniteltu sujuvaksi, intuitiiviseksi ja helppokäyttöiseksi. Tutustu monipuolisiin elokuvien metatietoihin, synkronoi tekstitykset videovirtojen kanssa ilman rajoituksia ja lataa tekstityksiä useista lähteistä.",
+    "title": "Framezoo - Nopea ja sujuva videoiden suoratoisto"
+  },
+  "features": {
+    "subtitleSyncDescription": "Synkronoi tekstitykset minkä tahansa videovirran kanssa ilman rajoituksia – säädä ajoitusta ja kohdista dialogi saumattomasti katsellessasi.",
+    "featureLabel": "Nopea suoratoisto, haluamallasi tavalla",
+    "subtitleSync": "Rajoittamaton streamin tekstityssynkronointi",
+    "experienceTitle": "Rakennettu nopeaa ja vaivatonta suoratoistoa varten.",
+    "overviewDescription": "Nauti nopeasta videon suoratoistosta sujuvassa, helppokäyttöisessä käyttöliittymässä, jossa on monipuoliset elokuvan metatiedot, rajoittamaton suoratoiston tekstityssynkronointi ja tekstitykset useista lähteistä.",
+    "subtitleControls": "Tasainen käyttöliittymä ja monipuoliset elokuvan metatiedot",
+    "dualSubtitles": "Tekstitykset useista lähteistä",
+    "ecosystemTitle": "Nopea suoratoisto kohtaa avoimen ekosysteemin.",
+    "dualSubtitlesDescription": "Lataa tekstityksiä automaattisesti useilta palveluntarjoajilta, vaihda lähdettä lennossa tai näytä kaksoistekstitykset vierekkäin.",
+    "subtitleControlsDescription": "Navigoi selkeässä, reagoivassa käyttöliittymässä, jossa on sisäänrakennetut metatiedot, luokitukset, näyttelijätiedot ja jaksooppaat.",
+    "ecosystemDescription": "Nopea suoratoisto, usean lähteen tekstitykset ja rikkaat elokuvan metatiedot on rakennettu suoraan ytimeen. Lisäosien avulla voit yhdistää vaivattomasti entistä enemmän streameja, luetteloita ja tekstityksen tarjoajia.",
+    "addonLabel": "Framezoon sisällä",
+    "addonTwo": "Rikkaat elokuvan metatiedot",
+    "addonThree": "Tekstitykset useista lähteistä",
+    "showcaseDescription": "Avaa mikä tahansa nimike tutkiaksesi julisteita, luokituksia, tiivistelmiä, vuodenaikoja ja näyttelijäyksityiskohtia yhdessä selkeässä, intuitiivisessa näkymässä.",
+    "showcasePrimaryAlt": "Framezoo-otsikon yksityiskohtien näyttö, jossa on taideteoksia, luokituksia, vuodenaikoja ja monipuolisia elokuvan metatietoja",
+    "showcaseTitle": "Rikkaa metadataa ennen kuin painat toistoa.",
+    "addonOne": "Nopeat virrat",
+    "showcaseSecondaryDescription": "Selaa vaivattomasti tyylikkään käyttöliittymän läpi, joka on suunniteltu viemään sinut löydöstä nopeaan toistoon sekunneissa.",
+    "showcaseSecondaryAlt": "Framezoo-soittimen etsintänäyttö, jossa on haku, luokat ja otsikkorivit",
+    "showcaseSecondaryTitle": "Sujuva, intuitiivinen löytö."
   }
 }

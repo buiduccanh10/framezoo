@@ -10,44 +10,13 @@
   },
   "hero": {
     "eyebrow": "FRAMEZOO 桌面 / 01",
-    "title": "观察得更好。",
-    "titleAccent": "在桌面上。",
-    "description": "Framezoo 是一款具有 AI 字幕同步、双字幕、富媒体元数据和插件支持的播放器。",
     "primaryCta": "下载桌面",
     "secondaryCta": "查看体验",
-    "imageAlt": "显示发现屏幕的 Framezoo 播放器",
-    "version": "桌面版"
-  },
-  "features": {
-    "performanceTitle": "您的图书馆，无需支付浏览器税。",
-    "overviewDescription": "与 AI 同步字幕、保持双字幕可见、探索媒体元数据并在不离开故事的情况下控制播放。",
-    "playback": "原生播放",
-    "playbackDescription": "通过桌面级媒体处理实现流畅的视频。",
-    "performance": "安静的性能",
-    "performanceDescription": "少镀铬。更加专注。没有选项卡杂耍。",
-    "continuity": "保持流畅",
-    "continuityDescription": "继续、浏览和切换来源，不失时机。",
-    "ecosystemTitle": "为接下来的事情做好准备。",
-    "ecosystemDescription": "桌面应用程序是核心。插件扩展了边缘，因此您的设置可以保持个性化，而不会变得复杂。",
-    "addonLabel": "插件就绪",
-    "addonOne": "源连接器",
-    "addonTwo": "字幕工具",
-    "addonThree": "社区扩展",
-    "showcaseTitle": "按下播放键之前的详细信息。",
-    "showcaseDescription": "一个专注于发现、播放和故事相关一切的桌面界面。",
-    "showcaseCaption": "Framezoo 桌面/焦点模式",
-    "experienceTitle": "播放器所需的一切。",
-    "dualSubtitles": "保持两种字幕语言可见",
-    "dualSubtitlesDescription": "当您学习、比较或只是喜欢两者时，请打开双字幕。",
-    "subtitleSyncDescription": "通过 AI 字幕同步，几秒钟内即可将对话与图片对齐。",
-    "subtitleSync": "与AI同步字幕",
-    "featureLabel": "玩家，你的方式",
-    "subtitleControlsDescription": "选择字幕源、语言、时间和显示，而不会中断您的流程。",
-    "subtitleControls": "调整你周围的播放器",
-    "showcaseSecondaryTitle": "发现一些值得一看的东西。",
-    "showcasePrimaryAlt": "Framezoo 标题详细信息屏幕，包含艺术品、评级、季节和元数据",
-    "showcaseSecondaryDescription": "从干净的发现界面开始，然后进入播放状态，而不会丢失您的位置。",
-    "showcaseSecondaryAlt": "Framezoo 播放器发现屏幕，包含搜索、类别和标题行"
+    "version": "桌面版",
+    "title": "流速度快，",
+    "titleAccent": "注意你的方式。",
+    "description": "Framezoo 是一款高速流媒体播放器，具有流畅、直观的 UI、丰富的电影元数据、无限流字幕同步和多源字幕支持。",
+    "imageAlt": "Framezoo 高速流媒体播放器显示发现屏幕"
   },
   "download": {
     "eyebrow": "选择您的构建",
@@ -69,8 +38,8 @@
     "hideAll": "隐藏其他构建"
   },
   "footer": {
-    "line": "一个更安静的家，供您不断回顾的故事。",
-    "status": "桌面优先。插件就绪。"
+    "status": "桌面优先。插件就绪。",
+    "line": "高速、流畅地播放您喜爱的所有电影和电视剧。"
   },
   "addonGuide": {
     "description": "插件是一个小型 HTTP 服务。提供清单和您需要的资源； Framezoo 处理剩下的事情。",
@@ -109,8 +78,8 @@
     "series": "系列",
     "dragHint": "拖动探索",
     "title": "您下一部观看的热门故事。",
-    "description": "找到值得观看的内容，打开细节，然后通过 Framezoo 找到更好的观看方式。",
-    "eyebrow": "框架动物园发现"
+    "eyebrow": "框架动物园发现",
+    "description": "使用 Framezoo 浏览丰富的电影元数据、选择您的流并立即开始观看。"
   },
   "installGuide": {
     "macTab": "对于 macOS",
@@ -192,5 +161,32 @@
     "attachmentsLabel": "文件",
     "attachmentsHint": "图片/视频 · 总计最大 55 MB",
     "attachmentsTooLarge": "文件总大小不得超过 55 MB。"
+  },
+  "seo": {
+    "description": "Framezoo 是一款高速视频流播放器，设计流畅、直观且易于使用。探索丰富的电影元数据，无限制地将字幕与视频流同步，并从多个来源加载字幕。",
+    "title": "Framezoo - 快速流畅的视频流"
+  },
+  "features": {
+    "subtitleSync": "无限流字幕同步",
+    "overviewDescription": "在流畅、易于使用的界面中享受高速视频流，具有丰富的电影元数据、无限流字幕同步和来自多个来源的字幕。",
+    "subtitleSyncDescription": "无限制地将字幕与任何视频流同步 - 在观看时无缝调整时间并对齐对话。",
+    "featureLabel": "高速流媒体，随心所欲",
+    "experienceTitle": "专为快速、轻松的流媒体而设计。",
+    "dualSubtitles": "来自多个来源的字幕",
+    "dualSubtitlesDescription": "自动从多个提供商加载字幕、即时切换源或并排显示双字幕。",
+    "subtitleControlsDescription": "浏览干净、响应灵敏的界面，内置全面的元数据、评级、演员详细信息和剧集指南。",
+    "subtitleControls": "流畅的用户界面和丰富的电影元数据",
+    "ecosystemDescription": "快速流媒体播放、多源字幕和丰富的电影元数据都内置于核心中。插件可让您轻松连接更多流、目录和字幕提供商。",
+    "ecosystemTitle": "高速流媒体满足开放的生态系统。",
+    "addonLabel": "框架动物园内部",
+    "showcaseTitle": "在您按下播放按钮之前提供丰富的元数据。",
+    "addonTwo": "丰富的电影元数据",
+    "addonOne": "高速流",
+    "addonThree": "多源字幕",
+    "showcaseDescription": "打开任何标题即可在一个干净、直观的视图中探索海报、评分、剧情简介、季节和演员表详细信息。",
+    "showcasePrimaryAlt": "Framezoo 标题详细信息屏幕，包含插图、评级、季节和丰富的电影元数据",
+    "showcaseSecondaryAlt": "Framezoo 播放器发现屏幕，包含搜索、类别和标题行",
+    "showcaseSecondaryTitle": "流畅、直观的发现。",
+    "showcaseSecondaryDescription": "通过时尚的界面轻松浏览，旨在让您在几秒钟内从发现到高速播放。"
   }
 }

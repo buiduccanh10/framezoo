@@ -25,7 +25,7 @@ export function HeroSection({
           {copy.title} <span>{copy.titleAccent}</span>
         </h1>
         <p>{copy.description}</p>
-        <div className="landing-hero-actions">
+        <div className="landing-hero-actions" data-nosnippet>
           <a
             className="landing-button landing-button-primary"
             href="#download"

@@ -1,4 +1,8 @@
 {
+  "seo": {
+    "title": "Framezoo - Trình phát Stream tốc độ cao",
+    "description": "Framezoo là trình phát stream tốc độ cao với giao diện mượt đẹp, dễ dùng và tích hợp đa dạng metadata phim. Hỗ trợ đồng bộ phụ đề với video stream không giới hạn từ nhiều nguồn khác nhau."
+  },
   "nav": {
     "home": "Trang chủ",
     "features": "Trải nghiệm",
@@ -9,49 +13,49 @@
     "installGuide": "Hướng dẫn cài đặt"
   },
   "hero": {
-    "title": "Một nơi xem phim",
-    "titleAccent": "đúng ý bạn.",
-    "description": "Framezoo là trình phát có tính năng đồng bộ hóa phụ đề AI, phụ đề kép, siêu dữ liệu đa phương tiện và hỗ trợ tiện ích bổ sung.",
+    "title": "Stream tốc độ cao,",
+    "titleAccent": "mượt mà từng khung hình.",
+    "description": "Framezoo là trình phát stream tốc độ cao với giao diện mượt đẹp, dễ dùng, tích hợp đa dạng metadata phim và đồng bộ phụ đề không giới hạn từ nhiều nguồn.",
     "primaryCta": "Tải xuống",
-    "secondaryCta": "Xem trải nghiệm",
-    "imageAlt": "Trình phát Framezoo hiển thị màn hình khám phá",
+    "secondaryCta": "Khám phá trải nghiệm",
+    "imageAlt": "Trình phát stream tốc độ cao Framezoo hiển thị màn hình khám phá",
     "version": "Bản desktop"
   },
   "movies": {
     "eyebrow": "KHÁM PHÁ CÙNG FRAMEZOO",
-    "title": "Những câu chuyện nổi bật cho lần xem tiếp theo.",
-    "description": "Tìm bộ phim phù hợp, mở chi tiết và bắt đầu trải nghiệm xem trọn vẹn hơn với Framezoo.",
+    "title": "Những bộ phim nổi bật cho lần xem tiếp theo.",
+    "description": "Khám phá kho metadata phim đa dạng, chọn luồng phát và thưởng thức ngay lập tức với Framezoo.",
     "dragHint": "Kéo để khám phá",
-    "movie": "Phim",
-    "series": "Loạt"
+    "movie": "Phim lẻ",
+    "series": "Phim bộ"
   },
   "features": {
-    "featureLabel": "Player theo cách của bạn",
-    "experienceTitle": "Mọi thứ bạn cần ở một trình phát.",
-    "overviewDescription": "Đồng bộ hóa phụ đề với AI, hiển thị phụ đề kép, khám phá siêu dữ liệu đa phương tiện và kiểm soát quá trình phát lại mà không cần rời khỏi câu chuyện.",
-    "subtitleSync": "Đồng bộ phụ đề bằng AI",
-    "subtitleSyncDescription": "Căn chỉnh đoạn hội thoại với hình ảnh trong vài giây với tính năng đồng bộ phụ đề AI.",
-    "dualSubtitles": "Hiển thị hai ngôn ngữ cùng lúc",
-    "dualSubtitlesDescription": "Bật dualsub khi học, đối chiếu hoặc chỉ vì bạn thích xem như vậy.",
-    "subtitleControls": "Chỉnh player theo ý bạn",
-    "subtitleControlsDescription": "Chọn nguồn phụ đề, ngôn ngữ, thời gian và cách hiển thị mà không mất mạch xem.",
-    "ecosystemTitle": "Những gì cần thiết đã có trong player.",
-    "ecosystemDescription": "Phụ đề, metadata catalog và điều khiển playback là phần lõi. Addon bổ sung thêm nguồn phát, catalog và công cụ khi bạn cần.",
+    "featureLabel": "Trình phát tốc độ cao theo ý bạn",
+    "experienceTitle": "Tối ưu cho trải nghiệm stream nhanh và mượt mà.",
+    "overviewDescription": "Tận hưởng tốc độ phát stream vượt trội trên giao diện mượt đẹp, dễ dùng, tích hợp đa dạng metadata phim cùng khả năng đồng bộ phụ đề không giới hạn từ nhiều nguồn.",
+    "subtitleSync": "Đồng bộ phụ đề với video stream không giới hạn",
+    "subtitleSyncDescription": "Căn chỉnh và đồng bộ phụ đề trực tiếp với mọi luồng video stream không giới hạn, giúp lời thoại luôn khớp chuẩn xác với hình ảnh.",
+    "dualSubtitles": "Hỗ trợ phụ đề từ nhiều nguồn",
+    "dualSubtitlesDescription": "Tự động tìm và tải phụ đề từ nhiều nguồn khác nhau, chuyển đổi linh hoạt hoặc bật phụ đề kép song ngữ dễ dàng.",
+    "subtitleControls": "UI mượt đẹp & đa dạng metadata phim",
+    "subtitleControlsDescription": "Giao diện trực quan, phản hồi nhanh và dễ sử dụng, tích hợp đầy đủ thông tin phim, điểm đánh giá, danh sách tập và poster sắc nét.",
+    "ecosystemTitle": "Stream tốc độ cao kết hợp hệ sinh thái mở.",
+    "ecosystemDescription": "Trình phát stream tốc độ cao, phụ đề đa nguồn và metadata phim đa dạng đã có sẵn trong nhân ứng dụng. Addon giúp bạn kết nối thêm nhiều nguồn phát và danh mục mới.",
     "addonLabel": "Có sẵn trong Framezoo",
-    "addonOne": "Điều khiển phụ đề",
-    "addonTwo": "Metadata catalog",
-    "addonThree": "Addon mở rộng",
-    "showcaseTitle": "Chi tiết trước khi bạn nhấn play.",
-    "showcaseDescription": "Mở một tựa phim và thấy ngay poster, rating, mùa phim và metadata trong cùng một nơi.",
-    "showcasePrimaryAlt": "Màn hình chi tiết phim Framezoo với poster, rating, mùa phim và metadata",
-    "showcaseSecondaryTitle": "Khám phá một cái gì đó đáng xem.",
-    "showcaseSecondaryDescription": "Bắt đầu từ giao diện khám phá rõ ràng, sau đó vào playback mà không mất vị trí.",
-    "showcaseSecondaryAlt": "Màn hình khám phá trình phát Framezoo với các hàng tìm kiếm, danh mục và tiêu đề"
+    "addonOne": "Stream tốc độ cao",
+    "addonTwo": "Đa dạng metadata phim",
+    "addonThree": "Phụ đề nhiều nguồn",
+    "showcaseTitle": "Đầy đủ thông tin trước khi nhấn phát.",
+    "showcaseDescription": "Mở bất kỳ bộ phim nào để xem ngay poster, điểm đánh giá, tóm tắt, mùa chiếu và metadata chi tiết trong một giao diện trực quan.",
+    "showcasePrimaryAlt": "Màn hình chi tiết phim Framezoo với poster, điểm đánh giá, mùa phim và metadata đa dạng",
+    "showcaseSecondaryTitle": "Giao diện mượt đẹp, khám phá dễ dàng.",
+    "showcaseSecondaryDescription": "Trải nghiệm điều hướng mượt mà từ màn hình khám phá đến trình phát stream tốc độ cao chỉ trong tích tắc.",
+    "showcaseSecondaryAlt": "Màn hình khám phá trình phát Framezoo với tìm kiếm, danh mục và danh sách phim"
   },
   "download": {
     "eyebrow": "TẢI FRAMEZOO",
     "title": "Tải xuống Framezoo cho macOS hoặc Windows.",
-    "description": "Tải bản phù hợp với thiết bị hoặc chọn nền tảng khác.",
+    "description": "Tải bản cài đặt phù hợp với thiết bị của bạn hoặc chọn nền tảng khác.",
     "recommended": "Đề xuất cho bạn",
     "chooseBuild": "Chọn bản build",
     "selected": "Đã chọn",
@@ -68,33 +72,33 @@
     "version": "Bản phát hành"
   },
   "footer": {
-    "line": "Một nơi yên tĩnh hơn cho những câu chuyện bạn luôn muốn xem lại.",
+    "line": "Trình phát stream tốc độ cao, mượt mà cho mọi bộ phim yêu thích của bạn.",
     "status": "Desktop-first. Sẵn sàng cho addon."
   },
   "addonGuide": {
-    "description": "Tiện ích bổ sung là một dịch vụ HTTP nhỏ. Cung cấp bản kê khai và các tài nguyên bạn cần; Framezoo xử lý phần còn lại.",
-    "title": "Xây dựng một addon mà không cần tham gia quá trình ứng dụng.",
-    "manifestDescription": "Siêu dữ liệu cho ứng dụng biết tiện ích bổ sung của bạn là ai, tài nguyên nào nó hỗ trợ và biểu tượng của nó nằm ở đâu.",
-    "eyebrow": "GIAO THỨC THÊM / HƯỚNG DẪN",
-    "manifestTitle": "Bắt đầu với tệp kê khai.json",
+    "description": "Addon là một dịch vụ HTTP nhỏ gọn. Bạn chỉ cần cung cấp manifest và các tài nguyên cần thiết; Framezoo sẽ xử lý phần còn lại.",
+    "title": "Mở rộng nguồn phát mà không cần sửa đổi trình phát.",
+    "manifestDescription": "File manifest giúp ứng dụng nhận diện tên addon, các tài nguyên được hỗ trợ và biểu tượng hiển thị.",
+    "eyebrow": "PHÁT TRIỂN CÙNG FRAMEZOO",
+    "manifestTitle": "Khai báo qua manifest.json",
     "resources": {
-      "stream": "Torrent, HLS, DASH hoặc nguồn tệp trực tiếp.",
-      "meta": "Siêu dữ liệu phim hoặc loạt phim cho tiêu đề.",
-      "catalog": "Hàng loạt phim hoặc loạt phim để khám phá.",
-      "subtitles": "Tệp phụ đề có nhãn ngôn ngữ.",
-      "addon_catalog": "Một danh mục các addon khác."
+      "stream": "Luồng phát Torrent, HLS, DASH hoặc liên kết file trực tiếp.",
+      "meta": "Metadata chi tiết cho phim lẻ hoặc phim bộ.",
+      "catalog": "Danh sách phim lẻ hoặc phim bộ trên màn hình khám phá.",
+      "subtitles": "Các tệp phụ đề từ nhiều nguồn kèm nhãn ngôn ngữ.",
+      "addon_catalog": "Danh mục tổng hợp các addon khác."
     },
-    "resourcesDescription": "Chỉ triển khai các điểm cuối mà tiện ích bổ sung của bạn cần. Phản hồi là JSON và có thể được viết bằng bất kỳ ngôn ngữ nào.",
-    "runTitle": "Chạy, kiểm tra, cài đặt",
-    "resourcesTitle": "Chọn các tài nguyên",
+    "resourcesDescription": "Chỉ cần triển khai những endpoint mà addon của bạn sử dụng. Phản hồi ở định dạng JSON và có thể viết bằng bất kỳ ngôn ngữ lập trình nào.",
+    "runTitle": "Chạy thử, kiểm tra và cài đặt",
+    "resourcesTitle": "Chọn tài nguyên cung cấp",
     "steps": [
-      "Phục vụ /manifest.json và các điểm cuối tài nguyên của bạn từ máy chủ HTTP(S) cục bộ hoặc công cộng.",
-      "Kiểm tra từng điểm cuối bằng tính năng cuộn tròn và xác minh hình dạng JSON.",
-      "Dán URL tệp kê khai vào Framezoo > Addons."
+      "Khởi chạy /manifest.json và các endpoint tài nguyên từ máy chủ HTTP(S) cục bộ hoặc công khai.",
+      "Kiểm tra từng endpoint bằng curl và xác nhận cấu trúc JSON trả về.",
+      "Dán URL manifest vào mục Framezoo > Addons."
     ],
-    "advancedDescription": "SDK bổ trợ Stremio là tùy chọn. Sử dụng nó nếu bạn muốn người trợ giúp định tuyến và tuần tự hóa; nó không được yêu cầu bởi giao thức.",
-    "advancedTitle": "Cần một người trợ giúp Node?",
-    "advancedLink": "Mở tài liệu tham khảo SDK nâng cao"
+    "advancedDescription": "Stremio Addon SDK là tùy chọn không bắt buộc. Bạn có thể dùng SDK để hỗ trợ định tuyến và đóng gói dữ liệu nhanh hơn.",
+    "advancedTitle": "Cần bộ công cụ hỗ trợ?",
+    "advancedLink": "Xem tài liệu tham khảo SDK nâng cao"
   },
   "deepLink": {
     "opening": "Đang mở Framezoo...",
