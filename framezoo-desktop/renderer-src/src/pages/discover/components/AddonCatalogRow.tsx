@@ -7,6 +7,7 @@ import { getReleaseQualityVariantFromLabel } from "@/components/media/ReleaseQua
 import { WatchedMediaCard } from "@/components/media/WatchedMediaCard";
 import {
   type AddonCatalogEntry,
+  getCatalogMediaIdentity,
   loadAllAddonCatalogs,
 } from "@/desktop/addons/catalog";
 import { useInstalledAddons } from "@/desktop/addons/store";
@@ -213,24 +214,24 @@ export function AddonCatalogRow({
                                 : undefined,
                           };
                           let finalId = baseMedia.id;
-                          if (
-                            finalId.startsWith("tt") ||
-                            finalId.startsWith("tmdb:")
-                          ) {
-                            const extId =
-                              finalId.split(":")[1] &&
-                              finalId.startsWith("tmdb:")
-                                ? finalId.split(":")[1]
-                                : finalId.split(":")[0];
-                            const tmdbMedia =
-                              await getMediaFromExternalId(extId);
+                          let finalType = baseMedia.type;
+                          const identity = getCatalogMediaIdentity(item);
+                          if (identity?.kind === "tmdb") {
+                            finalId = identity.id;
+                          } else if (identity?.kind === "imdb") {
+                            const tmdbMedia = await getMediaFromExternalId(
+                              identity.id,
+                            );
                             if (tmdbMedia) {
                               finalId = tmdbMedia.id;
+                              finalType =
+                                tmdbMedia.type === "show" ? "show" : "movie";
                             }
                           }
                           onShowDetails?.({
                             ...baseMedia,
                             id: finalId,
+                            type: finalType,
                           });
                         }}
                       />
