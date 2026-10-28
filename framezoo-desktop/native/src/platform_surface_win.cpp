@@ -106,10 +106,12 @@ NativeSurface* surface_create(
   surface_configure_window(surface->parent);
 
   surface->hwnd = CreateWindowExA(
-      0,
+      WS_EX_NOACTIVATE,
       "FrameZooLibMpvSurface",
       "",
-      WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS,
+      // The native video child must never become the input target. Renderer
+      // overlays own playback clicks, hover state, and window drag regions.
+      WS_CHILD | WS_VISIBLE | WS_DISABLED | WS_CLIPSIBLINGS,
       bounds.x,
       bounds.y,
       bounds.width,
