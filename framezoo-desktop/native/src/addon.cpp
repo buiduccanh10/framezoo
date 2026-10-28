@@ -1483,8 +1483,8 @@ napi_value create_player(napi_env env, napi_callback_info info) {
   set_mpv_option(player.get(), "input-default-bindings", "no");
   set_mpv_option(player.get(), "input-vo-keyboard", "no");
 
-  // Audio volume amplification (boost up to 300%) & downmix dialogue enhancement
-  set_mpv_option(player.get(), "volume-max", "300");
+  // Audio volume amplification (boost up to 200%) & downmix dialogue enhancement
+  set_mpv_option(player.get(), "volume-max", "200");
   set_mpv_option(player.get(), "audio-buffer", "0.08");
   set_mpv_option(player.get(), "audio-channels", "auto-safe");
   set_mpv_option(player.get(), "audio-normalize-downmix", "yes");
@@ -1839,7 +1839,7 @@ napi_value command_player(napi_env env, napi_callback_info info) {
   } else if (
       type == "set-volume" && get_number(env, argv[1], "volume", &number)
   ) {
-    const double clamped = std::max(0.0, std::min(3.0, number));
+    const double clamped = std::max(0.0, std::min(2.0, number));
     const std::string volume_str = std::to_string(clamped * 100);
     if (player->set_property_string("volume", volume_str.c_str()) < 0) {
       return throw_error(env, "libmpv command failed");
