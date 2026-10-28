@@ -4,24 +4,25 @@ import { adminApi, getApiError, type BackupFile, type BackupStatus } from "../li
 import type { ListPagination } from "../types";
 
 const MAX_UPLOAD_BYTES = 512 * 1024 * 1024;
-const EMPTY_PAGINATION: ListPagination = { page: 1, limit: 20, total: 0, totalPages: 1 };
+const EMPTY_PAGINATION: ListPagination = { page: 1, limit: 10, total: 0, totalPages: 1 };
 
 export function useBackupManagement(onMessage: (message: string) => void) {
   const [status, setStatus] = useState<BackupStatus | null>(null);
   const [files, setFiles] = useState<BackupFile[]>([]);
   const [pagination, setPagination] = useState(EMPTY_PAGINATION);
   const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
   const [loading, setLoading] = useState(true);
   const [action, setAction] = useState<"backup" | "restore" | "delete" | null>(null);
   const [error, setError] = useState("");
 
-  const load = useCallback(async (targetPage = page) => {
+  const load = useCallback(async (targetPage = page, targetLimit = limit) => {
     setLoading(true);
     setError("");
     try {
       const [nextStatus, nextFiles] = await Promise.all([
         adminApi.getBackupStatus(),
-        adminApi.getBackupFiles(targetPage, pagination.limit),
+        adminApi.getBackupFiles(targetPage, targetLimit),
       ]);
       setStatus(nextStatus);
       setFiles(nextFiles.files);
@@ -34,19 +35,24 @@ export function useBackupManagement(onMessage: (message: string) => void) {
     } finally {
       setLoading(false);
     }
-  }, [page, pagination.limit]);
+  }, [limit, page]);
 
   useEffect(() => {
     // eslint-disable-next-line react/set-state-in-effect
-    void load(page);
-  }, [load, page]);
+    void load(page, limit);
+  }, [limit, load, page]);
+
+  const setLimitAndReset = (value: number) => {
+    setLimit(value);
+    setPage(1);
+  };
 
   const createBackup = async () => {
     setAction("backup");
     try {
       const result = await adminApi.triggerBackup();
       onMessage(result.message || "Đã tạo bản sao lưu.");
-      await load(page);
+      await load(page, limit);
     } catch (requestError) {
       onMessage(getApiError(requestError, "Không thể tạo bản sao lưu."));
     } finally { setAction(null); }
@@ -65,7 +71,7 @@ export function useBackupManagement(onMessage: (message: string) => void) {
     try {
       const result = await adminApi.restoreBackup(file);
       onMessage(result.message || "Đã phục hồi cơ sở dữ liệu.");
-      await load(page);
+      await load(page, limit);
     } catch (requestError) {
       onMessage(getApiError(requestError, "Không thể phục hồi cơ sở dữ liệu."));
     } finally { setAction(null); }
@@ -91,7 +97,7 @@ export function useBackupManagement(onMessage: (message: string) => void) {
     try {
       const result = await adminApi.deleteBackup(filename);
       onMessage(result.message || "Đã xóa bản sao lưu.");
-      await load(page);
+      await load(page, limit);
     } catch (requestError) {
       onMessage(getApiError(requestError, "Không thể xóa bản sao lưu."));
     } finally { setAction(null); }
@@ -103,12 +109,12 @@ export function useBackupManagement(onMessage: (message: string) => void) {
     try {
       const result = await adminApi.deleteAllBackups();
       onMessage(result.message || "Đã xóa toàn bộ bản sao lưu.");
-      if (page === 1) await load(1);
+      if (page === 1) await load(1, limit);
       else setPage(1);
     } catch (requestError) {
       onMessage(getApiError(requestError, "Không thể xóa bản sao lưu."));
     } finally { setAction(null); }
   };
 
-  return { status, files, pagination, page, setPage, loading, action, error, load, createBackup, restore, download, remove, removeAll };
+  return { status, files, pagination, page, limit, setPage, setLimit: setLimitAndReset, loading, action, error, load, createBackup, restore, download, remove, removeAll };
 }

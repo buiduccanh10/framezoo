@@ -6,7 +6,7 @@ type FeedbackFilter = "all" | "pending" | "resolved";
 
 const EMPTY_PAGINATION: ListPagination = {
   page: 1,
-  limit: 20,
+  limit: 10,
   total: 0,
   totalPages: 1,
 };
@@ -22,18 +22,24 @@ export function useFeedbackManagement(
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<FeedbackFilter>("all");
   const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
   const [selected, setSelected] = useState<FeedbackItem | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [error, setError] = useState("");
 
   const load = useCallback(
-    async (targetPage = page, targetSearch = search, targetFilter = filter) => {
+    async (
+      targetPage = page,
+      targetSearch = search,
+      targetFilter = filter,
+      targetLimit = limit,
+    ) => {
       setLoading(true);
       setError("");
       try {
         const result = await adminApi.listFeedback(
           targetPage,
-          pagination.limit,
+          targetLimit,
           targetSearch,
           targetFilter,
         );
@@ -55,13 +61,16 @@ export function useFeedbackManagement(
         setLoading(false);
       }
     },
-    [filter, onPendingChange, page, pagination.limit, search],
+    [filter, limit, onPendingChange, page, search],
   );
 
   useEffect(() => {
-    const timer = window.setTimeout(() => void load(page, search, filter), 220);
+    const timer = window.setTimeout(
+      () => void load(page, search, filter, limit),
+      search ? 220 : 0,
+    );
     return () => window.clearTimeout(timer);
-  }, [filter, load, page, search]);
+  }, [filter, limit, load, page, search]);
 
   const setSearchAndReset = (value: string) => {
     setSearch(value);
@@ -70,6 +79,11 @@ export function useFeedbackManagement(
 
   const setFilterAndReset = (value: FeedbackFilter) => {
     setFilter(value);
+    setPage(1);
+  };
+
+  const setLimitAndReset = (value: number) => {
+    setLimit(value);
     setPage(1);
   };
 
@@ -91,7 +105,7 @@ export function useFeedbackManagement(
           ? "Đã đánh dấu feedback đã xử lý."
           : "Đã đưa feedback về đang xử lý.",
       );
-      void load(page, search, filter);
+      void load(page, search, filter, limit);
     } catch (requestError) {
       onMessage(getApiError(requestError, "Không thể cập nhật feedback."));
     } finally {
@@ -111,7 +125,7 @@ export function useFeedbackManagement(
       await adminApi.deleteFeedback(item.id);
       setSelected(null);
       onMessage("Đã xóa feedback.");
-      void load(page, search, filter);
+      void load(page, search, filter, limit);
     } catch (requestError) {
       onMessage(getApiError(requestError, "Không thể xóa feedback."));
     } finally {
@@ -127,12 +141,14 @@ export function useFeedbackManagement(
     search,
     filter,
     page,
+    limit,
     selected,
     busyId,
     error,
     setSearch: setSearchAndReset,
     setFilter: setFilterAndReset,
     setPage,
+    setLimit: setLimitAndReset,
     setSelected,
     load,
     updateStatus,

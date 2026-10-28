@@ -174,6 +174,7 @@ export function FeedbackManagement({
           label="feedback"
           busy={feedback.loading}
           onPageChange={feedback.setPage}
+          onLimitChange={feedback.setLimit}
         />
       </div>
       {feedback.selected ? (

@@ -8,7 +8,7 @@ export default defineEventHandler(async event => {
   const query = getQuery(event);
   const search = typeof query.search === 'string' ? query.search.trim() : '';
   const page = Math.max(1, parseInt(String(query.page || '1'), 10) || 1);
-  const limit = Math.min(100, Math.max(1, parseInt(String(query.limit || '50'), 10) || 50));
+  const limit = Math.min(100, Math.max(1, parseInt(String(query.limit || '10'), 10) || 10));
   const sort = typeof query.sort === 'string' ? query.sort : 'created_desc';
 
   // Build where filter
@@ -88,6 +88,7 @@ export default defineEventHandler(async event => {
   let watchHistoryCountMap = new Map<string, number>();
   let progressCountMap = new Map<string, number>();
   let sessionsCountMap = new Map<string, number>();
+  let sessionMaxMap = new Map<string, Date | null>();
   let addonsCountMap = new Map<string, number>();
 
   if (userIds.length > 0) {
@@ -112,6 +113,7 @@ export default defineEventHandler(async event => {
           by: ['user'],
           where: { user: { in: userIds } },
           _count: { _all: true },
+          _max: { accessed_at: true },
         }),
         prisma.user_settings.findMany({
           where: { id: { in: userIds } },
@@ -123,6 +125,7 @@ export default defineEventHandler(async event => {
     watchHistoryCountMap = new Map(watchHistoryGroup.map(g => [g.user_id, g._count._all]));
     progressCountMap = new Map(progressGroup.map(g => [g.user_id, g._count._all]));
     sessionsCountMap = new Map(sessionsGroup.map(g => [g.user, g._count._all]));
+    sessionMaxMap = new Map(sessionsGroup.map(g => [g.user, g._max.accessed_at]));
 
     addonsCountMap = new Map(
       settingsList.map(s => {
@@ -132,22 +135,30 @@ export default defineEventHandler(async event => {
     );
   }
 
-  const items = users.map(u => ({
-    id: u.id,
-    nickname: u.nickname,
-    email: u.email,
-    created_at: u.created_at,
-    last_logged_in: u.last_logged_in,
-    permissions: u.permissions,
-    profile: u.profile,
-    counts: {
-      bookmarks: bookmarksCountMap.get(u.id) || 0,
-      watchHistory: watchHistoryCountMap.get(u.id) || 0,
-      progress: progressCountMap.get(u.id) || 0,
-      sessions: sessionsCountMap.get(u.id) || 0,
-      addons: addonsCountMap.get(u.id) || 0,
-    },
-  }));
+  const items = users.map(u => {
+    const sessionAccessedAt = sessionMaxMap.get(u.id);
+    const lastActive =
+      sessionAccessedAt && (!u.last_logged_in || sessionAccessedAt > u.last_logged_in)
+        ? sessionAccessedAt
+        : u.last_logged_in;
+
+    return {
+      id: u.id,
+      nickname: u.nickname,
+      email: u.email,
+      created_at: u.created_at,
+      last_logged_in: lastActive,
+      permissions: u.permissions,
+      profile: u.profile,
+      counts: {
+        bookmarks: bookmarksCountMap.get(u.id) || 0,
+        watchHistory: watchHistoryCountMap.get(u.id) || 0,
+        progress: progressCountMap.get(u.id) || 0,
+        sessions: sessionsCountMap.get(u.id) || 0,
+        addons: addonsCountMap.get(u.id) || 0,
+      },
+    };
+  });
 
   return {
     items,
