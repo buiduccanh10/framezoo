@@ -107,11 +107,10 @@ export const adminApi = {
     return data;
   },
 
-  async getBackupFiles(page = 1, limit = 20) {
-    const { data } = await adminHttp.get<BackupFileList>(
-      "/backup/files",
-      { params: { page, limit } },
-    );
+  async getBackupFiles(page = 1, limit = 10) {
+    const { data } = await adminHttp.get<BackupFileList>("/backup/files", {
+      params: { page, limit },
+    });
     return {
       files: data.files || [],
       pagination: data.pagination || { page, limit, total: 0, totalPages: 1 },
@@ -157,9 +156,19 @@ export const adminApi = {
     return data;
   },
 
-  async listFeedback(page = 1, limit = 20, search = "", status: "all" | "pending" | "resolved" = "all") {
+  async listFeedback(
+    page = 1,
+    limit = 10,
+    search = "",
+    status: "all" | "pending" | "resolved" = "all",
+  ) {
     const { data } = await adminHttp.get<FeedbackListResponse>("/feedback", {
-      params: { page, limit, search: search || undefined, status: status === "all" ? undefined : status },
+      params: {
+        page,
+        limit,
+        search: search || undefined,
+        status: status === "all" ? undefined : status,
+      },
     });
     return {
       items: data.feedbacks || [],
@@ -180,7 +189,7 @@ export const adminApi = {
     await adminHttp.delete(`/feedback/${encodeURIComponent(id)}`);
   },
 
-  async listUsers(page: number, search: string, sort: string, limit = 50) {
+  async listUsers(page = 1, search = "", sort = "created_desc", limit = 10) {
     const { data } = await adminHttp.get<UserListResponse>("/admin/users", {
       params: { page, limit, search: search || undefined, sort },
     });
@@ -194,7 +203,10 @@ export const adminApi = {
     return data;
   },
 
-  async updateUser(id: string, input: { nickname: string; email: string | null }) {
+  async updateUser(
+    id: string,
+    input: { nickname: string; email: string | null },
+  ) {
     const { data } = await adminHttp.patch<{ user: AdminUserItem }>(
       `/admin/users/${encodeURIComponent(id)}`,
       input,

@@ -184,7 +184,7 @@ export const useBackup = () => {
     };
   };
 
-  const getBackupFiles = async (page = 1, limit = 20): Promise<{ files: BackupFileInfo[]; pagination: { page: number; limit: number; total: number; totalPages: number } }> => {
+  const getBackupFiles = async (page = 1, limit = 10): Promise<{ files: BackupFileInfo[]; pagination: { page: number; limit: number; total: number; totalPages: number } }> => {
     const storage = getStorage();
     if (!storage) return { files: [], pagination: { page, limit, total: 0, totalPages: 1 } };
 

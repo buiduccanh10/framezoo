@@ -46,13 +46,20 @@ export default defineEventHandler(async event => {
       prisma.watch_history.count({ where: { user_id: userId } }),
     ]);
 
+  const latestSessionAccessedAt = sessionsList[0]?.accessed_at;
+  const lastActive =
+    latestSessionAccessedAt &&
+    (!user.last_logged_in || latestSessionAccessedAt > user.last_logged_in)
+      ? latestSessionAccessedAt
+      : user.last_logged_in;
+
   return {
     user: {
       id: user.id,
       nickname: user.nickname,
       email: user.email,
       created_at: user.created_at,
-      last_logged_in: user.last_logged_in,
+      last_logged_in: lastActive,
       permissions: user.permissions,
       profile: user.profile,
       public_key: user.public_key,
