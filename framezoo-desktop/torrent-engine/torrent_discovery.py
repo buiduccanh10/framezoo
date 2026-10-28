@@ -268,6 +268,7 @@ class TorrentDiscovery:
         peer_id: bytes,
         listen_port: int,
         status_callback: Optional[Callable[[dict[str, Any]], None]] = None,
+        initial_peers: Optional[Iterable[Tuple[str, int]]] = None,
     ) -> None:
         self.session = session
         self.handle = handle
@@ -283,10 +284,22 @@ class TorrentDiscovery:
         self.peer_last_attempt_at: dict[Tuple[str, int], float] = {}
         self.peer_rotation = 0
         self.discovered_peers: Set[Tuple[str, int]] = set()
+        if initial_peers:
+            for endpoint in initial_peers:
+                if isinstance(endpoint, tuple) and len(endpoint) == 2:
+                    h, p = endpoint
+                    try:
+                        p_int = int(p)
+                        if p_int > 0 and str(h) not in ("0.0.0.0", "127.0.0.1"):
+                            self.discovered_peers.add((str(h), p_int))
+                    except Exception:
+                        pass
         self.trackers_attempted = 0
         self.trackers_succeeded = 0
         self.last_discovery_at: Optional[float] = None
         self.phase = "pending"
+        self.paused = False
+        self.retry_index = 0
         self.last_error: Optional[str] = None
         self.dht_running = False
         self.thread = threading.Thread(
@@ -295,13 +308,45 @@ class TorrentDiscovery:
             daemon=True,
         )
 
+    def _harvest_peers_from_handle(self) -> None:
+        try:
+            get_peers = getattr(self.handle, "get_peer_info", None)
+            if not callable(get_peers):
+                return
+            peer_infos = get_peers()
+            for p in peer_infos:
+                ip_endpoint = getattr(p, "ip", None)
+                if ip_endpoint and isinstance(ip_endpoint, tuple) and len(ip_endpoint) == 2:
+                    host, port = ip_endpoint
+                    try:
+                        port_int = int(port)
+                        if port_int > 0 and str(host) not in ("0.0.0.0", "127.0.0.1"):
+                            with self.lock:
+                                self.discovered_peers.add((str(host), port_int))
+                    except Exception:
+                        pass
+        except Exception:
+            pass
+
     def start(self) -> None:
         self.thread.start()
+        with self.lock:
+            known = [PeerAddress(h, p) for h, p in self.discovered_peers]
+        if known:
+            self._inject_peers(known)
+
+    def pause(self) -> None:
+        self._harvest_peers_from_handle()
+        with self.lock:
+            self.paused = True
+            self.phase = "idle"
+        self._emit_status()
 
     def stop(self) -> None:
         self.stop_event.set()
         self.wake_event.set()
         with self.lock:
+            self.paused = False
             self.phase = "stopped"
         if self.thread.is_alive() and threading.current_thread() is not self.thread:
             self.thread.join(timeout=2)
@@ -313,6 +358,7 @@ class TorrentDiscovery:
 
     def reactivate(self) -> dict[str, int | bool]:
         """Prompt an idle retained handle to find and reconnect to its swarm."""
+        self._harvest_peers_from_handle()
         try:
             status = self.handle.status()
         except Exception:
@@ -321,6 +367,8 @@ class TorrentDiscovery:
         rate_before = max(0, int(getattr(status, "download_rate", 0)))
 
         with self.lock:
+            self.paused = False
+            self.retry_index = 0
             known_peers = [
                 PeerAddress(host, port)
                 for host, port in self.discovered_peers
@@ -362,7 +410,8 @@ class TorrentDiscovery:
                 dht_announced = True
             except Exception:
                 pass
-        self._inject_peers(known_peers)
+        if known_peers:
+            self._inject_peers(known_peers)
         self._emit_status()
         return {
             "peersBefore": peers_before,
@@ -428,16 +477,21 @@ class TorrentDiscovery:
         if parsed.scheme not in ("http", "https"):
             return TrackerResult(tracker, (), "native tracker")
 
-        downloaded = int(getattr(status, "total_done", 0))
         total_wanted = int(getattr(status, "total_wanted", 0))
-        # Stremio's metadata bootstrap omits `left` until the torrent
-        # metadata is known. Some HTTP trackers, including Renfei, treat
-        # `left=1` as a different cached announce and may stall it.
-        left = (
-            max(0, total_wanted - downloaded)
-            if total_wanted > 0
-            else None
+        total_wanted_done = int(
+            getattr(
+                status,
+                "total_wanted_done",
+                getattr(status, "total_done", 0),
+            )
         )
+        if total_wanted > 0:
+            left = max(0, total_wanted - total_wanted_done)
+            downloaded = total_wanted_done
+        else:
+            left = None
+            downloaded = 0
+
         return announce_http_tracker(
             tracker,
             self.info_hash.to_bytes(),
@@ -529,6 +583,7 @@ class TorrentDiscovery:
         return False
 
     def _run_cycle(self) -> None:
+        self._harvest_peers_from_handle()
         try:
             status = self.handle.status()
         except Exception:
@@ -635,17 +690,23 @@ class TorrentDiscovery:
 
     def _run(self) -> None:
         self._bootstrap_dht()
-        retry_index = 0
+        self.retry_index = 0
         while not self.stop_event.is_set():
+            if getattr(self, "paused", False):
+                self.wake_event.wait(constants.DISCOVERY_COOL_OFF_SECONDS)
+                self.wake_event.clear()
+                continue
             backoff = constants.DISCOVERY_BACKOFF_SECONDS[
-                min(retry_index, len(constants.DISCOVERY_BACKOFF_SECONDS) - 1)
+                min(self.retry_index, len(constants.DISCOVERY_BACKOFF_SECONDS) - 1)
             ]
             if self.wake_event.wait(backoff):
                 self.wake_event.clear()
             if self.stop_event.is_set():
                 break
+            if getattr(self, "paused", False):
+                continue
             self._run_cycle()
-            retry_index += 1
+            self.retry_index += 1
             if not self._wait_for_peer_deficit():
                 break
         with self.lock:

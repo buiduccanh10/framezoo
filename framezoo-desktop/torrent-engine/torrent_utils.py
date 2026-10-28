@@ -342,3 +342,38 @@ def enforce_storage_limit(
             sys.stderr.write(
                 f"[sidecar] Failed to prune {absolute_dir}: {error}\n"
             )
+
+
+def write_atomic_resume_data(handle: Any, save_path: str) -> bool:
+    """Atomically write bencoded resume data with flushed disk cache."""
+    try:
+        flush_cache = getattr(handle, "flush_cache", None)
+        if callable(flush_cache):
+            try:
+                flush_cache()
+            except Exception:
+                pass
+        write_resume = getattr(handle, "write_resume_data", None)
+        if not callable(write_resume):
+            return False
+        entry = write_resume()
+        try:
+            import libtorrent as lt
+            data = lt.bencode(entry)
+        except Exception:
+            return False
+        os.makedirs(save_path, exist_ok=True)
+        target = os.path.join(save_path, "resume.dat")
+        temp_target = target + ".tmp"
+        with open(temp_target, "wb") as file:
+            file.write(data)
+        os.replace(temp_target, target)
+        try:
+            os.utime(save_path, None)
+        except OSError:
+            pass
+        return True
+    except Exception as error:
+        sys.stderr.write(f"[sidecar] Failed to save resume data: {error}\n")
+        return False
+

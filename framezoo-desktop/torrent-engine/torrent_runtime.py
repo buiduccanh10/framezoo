@@ -19,6 +19,7 @@ from torrent_utils import (
     parse_range,
     select_file,
     torrent_hash,
+    write_atomic_resume_data,
 )
 from torrent_fast_blocks import (
     Endpoint,
@@ -57,6 +58,17 @@ class TorrentRuntime:
         self.file_index: Optional[int] = None
         self.file_path = ""
         self.file_size = 0
+        try:
+            if self.handle is not None and getattr(self.handle.status(), "has_metadata", False):
+                self.info = self.handle.torrent_file()
+                if self.info is not None:
+                    (
+                        self.file_index,
+                        self.file_path,
+                        self.file_size,
+                    ) = select_file(self.info, self.request)
+        except Exception:
+            pass
         self.stream_url = ""
         self.raw_stream_url = ""  # always points to /torrent/ route
         self.stream_type = "pending"
@@ -166,7 +178,17 @@ class TorrentRuntime:
             if self.metadata_ready.is_set():
                 return
             status = self.handle.status()
+            checking_states = (
+                getattr(getattr(lt, "torrent_status", None), "checking_resume_data", None),
+                getattr(getattr(lt, "torrent_status", None), "checking_files", None),
+            )
             if status.has_metadata:
+                handle_state = getattr(status, "state", None)
+                if handle_state in checking_states and (
+                    deadline is None or time.monotonic() + 0.1 < deadline
+                ):
+                    time.sleep(0.05)
+                    continue
                 with self._metadata_lock:
                     if self.metadata_ready.is_set():
                         return
@@ -315,6 +337,14 @@ class TorrentRuntime:
         absolute_path = self.selected_file_path()
         os.makedirs(os.path.dirname(absolute_path), exist_ok=True)
         try:
+            if (
+                os.path.exists(absolute_path)
+                and os.path.getsize(absolute_path) == self.file_size
+            ):
+                return
+        except OSError:
+            pass
+        try:
             stream = open(absolute_path, "r+b")
         except FileNotFoundError:
             stream = open(absolute_path, "w+b")
@@ -379,23 +409,21 @@ class TorrentRuntime:
                 record.cache_ready = True
             else:
                 self._cache_ready = True
+            self.save_resume_data_sync()
 
     def save_resume_data_sync(self) -> bool:
         if not self.persistent_cache or not self._cache_is_ready():
             return False
-        with self._resume_lock:
-            try:
-                entry = self.handle.write_resume_data()
-                data = lt.bencode(entry)
-                with open(
-                    os.path.join(self.save_path, "resume.dat"),
-                    "wb",
-                ) as f:
-                    f.write(data)
-                return True
-            except Exception as error:
-                sys.stderr.write(f"[sidecar] Failed to save resume data: {error}\n")
-                return False
+        handle = getattr(self, "handle", None)
+        if handle is None:
+            return False
+        lock = getattr(self, "_resume_lock", None)
+        if lock is None:
+            lock = getattr(self, "_metadata_lock", None)
+        if lock is not None:
+            with lock:
+                return write_atomic_resume_data(handle, self.save_path)
+        return write_atomic_resume_data(handle, self.save_path)
 
     def stop(self, remove_torrent: bool = True) -> None:
         self.stop_event.set()
@@ -420,9 +448,8 @@ class TorrentRuntime:
         """Drop this idle runtime's deadlines without discarding downloaded pieces."""
         with self._piece_priority_lock:
             stale_pieces = set(getattr(self, "_boosted_pieces", set()))
-            stale_pieces.update(
-                getattr(self, "_pending_kick_restore", {}).keys(),
-            )
+            stale_kicked = set(getattr(self, "_pending_kick_restore", {}).keys())
+            stale_pieces.update(stale_kicked)
             stale_pieces.update(getattr(self, "_piece_priorities", {}).keys())
             self._boosted_pieces.clear()
             self._piece_priorities.clear()
@@ -447,7 +474,7 @@ class TorrentRuntime:
         demoted = 0
         for piece in stale_pieces:
             try:
-                if self.handle.have_piece(piece):
+                if self.handle.have_piece(piece) and piece not in stale_kicked:
                     continue
                 self.handle.piece_priority(
                     piece,
@@ -531,6 +558,13 @@ class TorrentRuntime:
     def _observe_status_milestones(self, status: Any) -> None:
         peers = int(getattr(status, "num_peers", 0))
         download_rate = int(getattr(status, "download_rate", 0))
+        if peers > 0:
+            record = getattr(self, "record", None)
+            if record is not None and getattr(record, "discovery", None) is not None:
+                try:
+                    record.discovery._harvest_peers_from_handle()
+                except Exception:
+                    pass
         if peers > 0 and not self._first_peer_logged:
             self._first_peer_logged = True
             log_event(
@@ -1609,6 +1643,10 @@ class TorrentRuntime:
                 pending.pop(piece, None)
                 try:
                     if handle.have_piece(piece):
+                        handle.piece_priority(
+                            piece,
+                            constants.STREAM_IDLE_FILE_PRIORITY,
+                        )
                         continue
                     handle.piece_priority(
                         piece,
@@ -2017,6 +2055,10 @@ class TorrentRuntime:
                     focus_claimed = False
                     if previous_target is not None:
                         self._release_target_focus(previous_target)
+                elif target_blocks_delta > 0:
+                    stalled_since = now
+                    target_stall_logged = False
+                    focus_claimed = False
                 target_availability = self._piece_availability(target_piece)
                 target_have = self._piece_have(target_piece)
                 stall_seconds = max(0.0, now - stalled_since)

@@ -239,11 +239,53 @@ const DEFAULT_TORRENT_DATA_DIR =
   process.env.FRAMEZOO_TORRENT_DATA_DIR ||
   path.join(app.getPath("userData"), "torrents");
 
-let torrentSettings: TorrentSettings = {
-  maxBytes: DEFAULT_TORRENT_MAX_BYTES,
-  cacheRoot: null,
-  profile: "default",
-};
+const TORRENT_SETTINGS_FILE = path.join(
+  app.getPath("userData"),
+  "torrent-settings.json",
+);
+
+function loadSavedTorrentSettings(): TorrentSettings {
+  try {
+    if (fs.existsSync(TORRENT_SETTINGS_FILE)) {
+      const raw = fs.readFileSync(TORRENT_SETTINGS_FILE, "utf-8");
+      const parsed = JSON.parse(raw);
+      if (
+        parsed &&
+        typeof parsed === "object" &&
+        (parsed.maxBytes === null ||
+          (typeof parsed.maxBytes === "number" &&
+            Number.isSafeInteger(parsed.maxBytes) &&
+            parsed.maxBytes >= 0)) &&
+        (parsed.cacheRoot === null || typeof parsed.cacheRoot === "string") &&
+        typeof parsed.profile === "string" &&
+        TORRENT_PROFILES.has(parsed.profile as TorrentProfile)
+      ) {
+        return {
+          maxBytes: parsed.maxBytes,
+          cacheRoot: parsed.cacheRoot ? path.resolve(parsed.cacheRoot) : null,
+          profile: parsed.profile as TorrentProfile,
+        };
+      }
+    }
+  } catch {
+    // fallback to default
+  }
+  return {
+    maxBytes: DEFAULT_TORRENT_MAX_BYTES,
+    cacheRoot: null,
+    profile: "default",
+  };
+}
+
+function saveTorrentSettingsToDisk(settings: TorrentSettings): void {
+  try {
+    fs.writeFileSync(TORRENT_SETTINGS_FILE, JSON.stringify(settings), "utf-8");
+  } catch (error) {
+    console.warn("[main] Failed to save torrent settings:", error);
+  }
+}
+
+let torrentSettings: TorrentSettings = loadSavedTorrentSettings();
 
 function getTorrentDataDir(cacheRoot = torrentSettings.cacheRoot) {
   return cacheRoot
@@ -2041,6 +2083,7 @@ function registerIpcHandlers() {
       }
 
       torrentSettings = settings;
+      saveTorrentSettingsToDisk(settings);
       torrentManager.configure(settings);
       return true;
     },

@@ -53,6 +53,9 @@ def seed_forever(torrent_path: str, ready: threading.Event):
     h = ses.add_torrent(
         {"save_path": str(SEED_DIR), "ti": lt.torrent_info(torrent_path)}
     )
+    while not h.status().is_seeding:
+        ses.pop_alerts()
+        time.sleep(0.05)
     ready.set()
     while True:
         ses.pop_alerts()

@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import json
+import os
+import signal
 import sys
 
 from torrent_engine import LibtorrentEngine
@@ -11,6 +13,16 @@ from torrent_http import emit
 
 def main() -> None:
     engine = LibtorrentEngine()
+
+    def handle_signal(_signum: int, _frame: object) -> None:
+        sys.exit(0)
+
+    try:
+        signal.signal(signal.SIGTERM, handle_signal)
+        signal.signal(signal.SIGINT, handle_signal)
+    except Exception:
+        pass
+
     try:
         for line in sys.stdin:
             if not line.strip():
@@ -57,6 +69,8 @@ def main() -> None:
                                     record.handle.pause()
                                 except Exception:
                                     pass
+                                if record.persistent_cache and record.cache_ready:
+                                    engine._save_record_resume_data(record)
                     emit(
                         {
                             "type": "response",
@@ -88,7 +102,11 @@ def main() -> None:
                     },
                 )
     finally:
-        engine.close()
+        try:
+            engine.close()
+        except Exception:
+            pass
+        os._exit(0)
 
 
 if __name__ == "__main__":
