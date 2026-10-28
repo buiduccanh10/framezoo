@@ -179,6 +179,27 @@ describe("Desktop PiP playback clocks", () => {
     expect(clocks.at(-1)).toEqual({ visual: 2, subtitle: 2 });
   });
 
+  it("keeps the timer and subtitles monotonic when an IPC sample is delayed", async () => {
+    const clocks: Array<{ visual: number; subtitle: number }> = [];
+    const sourceA = createPipState();
+
+    await renderPip(sourceA, 1, (clock) => clocks.push(clock));
+    await runAnimationFrame(1_400);
+    expect(clocks.at(-1)?.visual).toBeCloseTo(10.4, 6);
+
+    await runAnimationFrame(2_600);
+    expect(clocks.at(-1)?.visual).toBeCloseTo(11.6, 6);
+
+    await renderPip({ ...sourceA, time: 10.1 }, 2, (clock) =>
+      clocks.push(clock),
+    );
+    expect(clocks.at(-1)).toEqual({ visual: 11.6, subtitle: 11.6 });
+
+    await runAnimationFrame(2_850);
+    expect(clocks.at(-1)?.visual).toBeCloseTo(11.85, 6);
+    expect(clocks.at(-1)?.subtitle).toBeCloseTo(11.85, 6);
+  });
+
   it("does not freeze the PiP clock or captions for generic loading", async () => {
     const clocks: Array<{ visual: number; subtitle: number }> = [];
 

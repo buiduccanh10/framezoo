@@ -284,6 +284,33 @@ describe("playback clock", () => {
     expect(times.at(-1)).toBe(10.65);
   });
 
+  it("preserves monotonic time for delayed external samples", () => {
+    const input = {
+      time: 10,
+      duration: 120,
+      playbackRate: 1,
+      isActive: true,
+      resetKey: "source-a",
+      preserveMonotonicTime: true,
+    };
+    let state = createPlaybackClockState(input, 1_000);
+    state = advancePlaybackClockState(state, input.duration, 1_400);
+
+    state = reconcilePlaybackClockState(state, { ...input, time: 10.1 }, 2_600);
+
+    expect(state.time).toBe(11.6);
+    expect(advancePlaybackClockState(state, input.duration, 2_850).time).toBe(
+      11.85,
+    );
+
+    state = reconcilePlaybackClockState(
+      state,
+      { ...input, time: 5, isSeeking: true },
+      2_900,
+    );
+    expect(state.time).toBe(5);
+  });
+
   it("freezes during buffering and resumes from the latest sample", async () => {
     const times: number[] = [];
     const onTime = (time: number) => times.push(time);

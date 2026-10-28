@@ -62,6 +62,7 @@ const noDragRegionStyle = { ["WebkitAppRegion" as any]: "no-drag" };
 const CONTROL_AUTOHIDE_MS = 2200;
 type PipClockSnapshot = {
   time: number;
+  authoritativeTime: number;
   timestamp: number;
   duration: number;
   playbackRate: number;
@@ -132,6 +133,7 @@ export function PipPlaybackClockProvider(props: {
     isLoading: props.state.isPlaybackStalled,
     isSeeking: props.state.isSeeking,
     resetKey: getPipPlaybackResetKey(props.state),
+    preserveMonotonicTime: true,
   };
   const visualTime = useSmoothPlaybackClock({
     ...sharedOptions,
@@ -140,6 +142,7 @@ export function PipPlaybackClockProvider(props: {
   const snapshot = useMemo(
     () => ({
       time: visualTime,
+      authoritativeTime: props.state.time,
       timestamp: performance.now(),
       duration: props.state.duration,
       playbackRate: props.state.playbackRate,
@@ -150,6 +153,7 @@ export function PipPlaybackClockProvider(props: {
       props.state.duration,
       props.state.isPlaybackStalled,
       props.state.playbackRate,
+      props.state.time,
       visualTime,
     ],
   );
