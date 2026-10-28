@@ -39,7 +39,18 @@
   },
   "footer": {
     "status": "Desktop primeiro. Pronto para complemento.",
-    "line": "Streaming suave e de alta velocidade para todos os filmes e séries que você adora."
+    "line": "Streaming suave e de alta velocidade para todos os filmes e séries que você adora.",
+    "productTitle": "Produto",
+    "terms": "Termos de Serviço",
+    "legalTitle": "Jurídico e Políticas",
+    "resourcesTitle": "Recursos e suporte",
+    "privacy": "Política de Privacidade e Dados",
+    "disclaimer": "Framezoo é um software reprodutor de mídia neutro e não hospeda, armazena, distribui ou controla quaisquer arquivos de mídia ou complementos de terceiros. Os usuários são os únicos responsáveis ​​pelos complementos e conteúdos que acessam em conformidade com as leis locais.",
+    "copyright": "Direitos autorais e DMCA",
+    "rights": "© 2026 Framezoo. Todos os direitos reservados.",
+    "reportIssue": "Enviar feedback/relatório",
+    "addonPolicy": "Política de complementos",
+    "metadataAttribution": "Os metadados são fornecidos por bancos de dados públicos de filmes (TMDB, IMDb) para fins informativos."
   },
   "addonGuide": {
     "eyebrow": "PROTOCOLO / GUIA ADDON",

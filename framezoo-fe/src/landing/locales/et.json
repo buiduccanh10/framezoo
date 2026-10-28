@@ -39,7 +39,18 @@
   },
   "footer": {
     "status": "Töölaud kõigepealt. Lisandmooduliks valmis.",
-    "line": "Kiire ja sujuv voogesitus kõikidele teile meeldivatele filmidele ja sarjadele."
+    "line": "Kiire ja sujuv voogesitus kõikidele teile meeldivatele filmidele ja sarjadele.",
+    "productTitle": "Toode",
+    "terms": "Kasutustingimused",
+    "resourcesTitle": "Ressursid ja tugi",
+    "disclaimer": "Framezoo on neutraalne meediumipleieri tarkvara ja see ei majuta, talleta, levita ega juhi meediumifaile ega kolmandate osapoolte lisandmooduleid. Kasutajad vastutavad ainuüksi lisandmoodulite ja sisu eest, millele nad vastavalt kohalikele seadustele juurde pääsevad.",
+    "reportIssue": "Saada tagasisidet / aruanne",
+    "rights": "© 2026 Framezoo. Kõik õigused kaitstud.",
+    "copyright": "Autoriõigus ja DMCA",
+    "addonPolicy": "Lisapoliitika",
+    "legalTitle": "Õigusaktid ja eeskirjad",
+    "privacy": "Privaatsus- ja andmepoliitika",
+    "metadataAttribution": "Metaandmeid pakuvad teavitamise eesmärgil avalikud filmide andmebaasid (TMDB, IMDb)."
   },
   "addonGuide": {
     "description": "Lisand on väike HTTP-teenus. Esitage manifest ja vajalikud vahendid; Framezoo tegeleb ülejäänuga.",

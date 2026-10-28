@@ -39,7 +39,18 @@
   },
   "footer": {
     "status": "Desktop først. Addon-klar.",
-    "line": "Højhastigheds, jævn streaming af alle de film og serier, du elsker."
+    "line": "Højhastigheds, jævn streaming af alle de film og serier, du elsker.",
+    "productTitle": "Produkt",
+    "legalTitle": "Juridisk og politikker",
+    "terms": "Servicevilkår",
+    "disclaimer": "Framezoo er en neutral medieafspillersoftware og hoster, gemmer, distribuerer eller kontrollerer ikke nogen mediefiler eller tredjeparts tilføjelser. Brugere er alene ansvarlige for de tilføjelser og indhold, de får adgang til i overensstemmelse med lokale love.",
+    "reportIssue": "Send feedback / rapport",
+    "resourcesTitle": "Ressourcer og support",
+    "addonPolicy": "Tilføjelsespolitik",
+    "copyright": "Copyright & DMCA",
+    "privacy": "Privatlivs- og datapolitik",
+    "rights": "© 2026 Framezoo. Alle rettigheder forbeholdes.",
+    "metadataAttribution": "Metadata leveres af offentlige filmdatabaser (TMDB, IMDb) til informationsformål."
   },
   "addonGuide": {
     "title": "Byg en tilføjelse uden at deltage i app-processen.",

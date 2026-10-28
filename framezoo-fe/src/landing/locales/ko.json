@@ -39,7 +39,18 @@
   },
   "footer": {
     "status": "데스크탑 우선. 애드온이 준비되어 있습니다.",
-    "line": "좋아하는 모든 영화와 시리즈를 빠르고 원활하게 스트리밍하세요."
+    "line": "좋아하는 모든 영화와 시리즈를 빠르고 원활하게 스트리밍하세요.",
+    "terms": "서비스 약관",
+    "legalTitle": "법률 및 정책",
+    "resourcesTitle": "리소스 및 지원",
+    "productTitle": "제품",
+    "privacy": "개인정보 보호 및 데이터 정책",
+    "rights": "© 2026 프레임주. 모든 권리 보유.",
+    "copyright": "저작권 및 DMCA",
+    "addonPolicy": "애드온 정책",
+    "reportIssue": "피드백 보내기/신고",
+    "disclaimer": "Framezoo는 중립적인 미디어 플레이어 소프트웨어이며 미디어 파일이나 타사 애드온을 호스팅, 저장, 배포 또는 제어하지 않습니다. 사용자는 현지 법률에 따라 액세스하는 애드온과 콘텐츠에 대해 전적인 책임을 집니다.",
+    "metadataAttribution": "메타데이터는 정보 제공 목적으로 공개 영화 데이터베이스(TMDB, IMDb)에서 제공됩니다."
   },
   "addonGuide": {
     "manifestTitle": "매니페스트.json으로 시작",

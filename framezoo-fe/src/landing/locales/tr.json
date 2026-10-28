@@ -39,7 +39,18 @@
   },
   "footer": {
     "status": "Önce masaüstü. Eklentiye hazır.",
-    "line": "Sevdiğiniz tüm filmler ve diziler için yüksek hızlı, sorunsuz akış."
+    "line": "Sevdiğiniz tüm filmler ve diziler için yüksek hızlı, sorunsuz akış.",
+    "productTitle": "Ürün",
+    "resourcesTitle": "Kaynaklar ve Destek",
+    "legalTitle": "Yasal ve Politikalar",
+    "terms": "Hizmet Şartları",
+    "disclaimer": "Framezoo tarafsız bir medya oynatıcı yazılımıdır ve herhangi bir medya dosyasını veya üçüncü taraf eklentilerini barındırmaz, saklamaz, dağıtmaz veya kontrol etmez. Kullanıcılar, yerel yasalara uygun olarak eriştikleri eklentilerden ve içerikten yalnızca sorumludur.",
+    "addonPolicy": "Eklenti Politikası",
+    "reportIssue": "Geri Bildirim / Rapor Gönder",
+    "privacy": "Gizlilik ve Veri Politikası",
+    "copyright": "Telif hakkı ve DMCA",
+    "rights": "© 2026 Framezoo. Her hakkı saklıdır.",
+    "metadataAttribution": "Meta veriler, halka açık film veritabanları (TMDB, IMDb) tarafından bilgilendirme amaçlı sağlanmaktadır."
   },
   "addonGuide": {
     "eyebrow": "ADDON PROTOKOLÜ / KILAVUZU",

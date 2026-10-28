@@ -73,7 +73,18 @@
   },
   "footer": {
     "line": "Trình phát stream tốc độ cao, mượt mà cho mọi bộ phim yêu thích của bạn.",
-    "status": "Desktop-first. Sẵn sàng cho addon."
+    "status": "Desktop-first. Sẵn sàng cho addon.",
+    "disclaimer": "Framezoo là phần mềm trình phát đa phương tiện trung lập, không lưu trữ, không tải lên, không phân phối hay kiểm soát bất kỳ tệp video hoặc addon bên thứ ba nào. Người dùng tự chịu trách nhiệm tuân thủ pháp luật khi cài đặt và truy cập các nguồn nội dung.",
+    "productTitle": "Sản phẩm",
+    "resourcesTitle": "Tài nguyên & Hỗ trợ",
+    "legalTitle": "Pháp lý & Chính sách",
+    "terms": "Điều khoản sử dụng",
+    "privacy": "Chính sách bảo mật & Dữ liệu",
+    "copyright": "Bản quyền & Miễn trừ (DMCA)",
+    "addonPolicy": "Chính sách Addon",
+    "reportIssue": "Gửi phản hồi / Báo cáo",
+    "rights": "© 2026 Framezoo. Bảo lưu mọi quyền.",
+    "metadataAttribution": "Thông tin metadata phim được tổng hợp từ các cơ sở dữ liệu công khai (TMDB, IMDb) nhằm mục đích tra cứu."
   },
   "addonGuide": {
     "description": "Addon là một dịch vụ HTTP nhỏ gọn. Bạn chỉ cần cung cấp manifest và các tài nguyên cần thiết; Framezoo sẽ xử lý phần còn lại.",

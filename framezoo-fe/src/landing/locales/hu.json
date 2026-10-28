@@ -39,7 +39,18 @@
   },
   "footer": {
     "status": "Asztali első. Addon kész.",
-    "line": "Nagy sebességű, zökkenőmentes streamelés az összes kedvenc filmhez és sorozathoz."
+    "line": "Nagy sebességű, zökkenőmentes streamelés az összes kedvenc filmhez és sorozathoz.",
+    "terms": "Szolgáltatási feltételek",
+    "productTitle": "Termék",
+    "disclaimer": "A Framezoo egy semleges médialejátszó szoftver, amely nem tárol, tárol, terjeszt és nem vezérel semmilyen médiafájlt vagy harmadik féltől származó kiegészítőt. A felhasználók kizárólagos felelősséget vállalnak az általuk elért kiegészítőkért és tartalmakért a helyi törvényeknek megfelelően.",
+    "copyright": "Szerzői jog és DMCA",
+    "resourcesTitle": "Erőforrások és támogatás",
+    "privacy": "Adatvédelmi és adatvédelmi szabályzat",
+    "reportIssue": "Visszajelzés küldése / jelentés",
+    "addonPolicy": "Addon szabályzat",
+    "legalTitle": "Jogi és szabályzatok",
+    "metadataAttribution": "A metaadatokat nyilvános filmadatbázisok (TMDB, IMDb) biztosítják információs célból.",
+    "rights": "© 2026 Framezoo. Minden jog fenntartva."
   },
   "addonGuide": {
     "manifestTitle": "Kezdje a manifest.json fájllal",

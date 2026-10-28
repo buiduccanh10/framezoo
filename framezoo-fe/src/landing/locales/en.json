@@ -98,7 +98,18 @@
   },
   "footer": {
     "line": "High-speed, smooth streaming for all the movies and series you love.",
-    "status": "Desktop-first. Addon-ready."
+    "status": "Desktop-first. Addon-ready.",
+    "disclaimer": "Framezoo is a neutral media player software and does not host, store, distribute, or control any media files or third-party addons. Users are solely responsible for the addons and content they access in compliance with local laws.",
+    "productTitle": "Product",
+    "resourcesTitle": "Resources & Support",
+    "legalTitle": "Legal & Policies",
+    "terms": "Terms of Service",
+    "privacy": "Privacy & Data Policy",
+    "copyright": "Copyright & DMCA",
+    "addonPolicy": "Addon Policy",
+    "reportIssue": "Send Feedback / Report",
+    "rights": "© 2026 Framezoo. All rights reserved.",
+    "metadataAttribution": "Metadata is provided by public movie databases (TMDB, IMDb) for informational purposes."
   },
   "deepLink": {
     "opening": "Opening Framezoo...",

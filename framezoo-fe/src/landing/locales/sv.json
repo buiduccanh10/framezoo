@@ -39,7 +39,18 @@
   },
   "footer": {
     "status": "Desktop-först. Addon-klar.",
-    "line": "Höghastighets, smidig streaming för alla filmer och serier du älskar."
+    "line": "Höghastighets, smidig streaming för alla filmer och serier du älskar.",
+    "resourcesTitle": "Resurser och support",
+    "legalTitle": "Juridik och policyer",
+    "terms": "Användarvillkor",
+    "productTitle": "Produkt",
+    "copyright": "Copyright & DMCA",
+    "addonPolicy": "Tilläggspolicy",
+    "rights": "© 2026 Framezoo. Alla rättigheter reserverade.",
+    "reportIssue": "Skicka feedback/rapportera",
+    "disclaimer": "Framezoo är en neutral mediaspelare och är inte värd för, lagrar, distribuerar eller kontrollerar några mediefiler eller tredjepartstillägg. Användare är ensamt ansvariga för de tillägg och innehåll de får tillgång till i enlighet med lokala lagar.",
+    "privacy": "Integritets- och datapolicy",
+    "metadataAttribution": "Metadata tillhandahålls av offentliga filmdatabaser (TMDB, IMDb) i informationssyfte."
   },
   "addonGuide": {
     "manifestTitle": "Börja med manifest.json",

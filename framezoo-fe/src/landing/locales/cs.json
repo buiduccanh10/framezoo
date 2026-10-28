@@ -39,7 +39,18 @@
   },
   "footer": {
     "status": "Desktop-first. Addon připraven.",
-    "line": "Vysokorychlostní a plynulé streamování všech filmů a seriálů, které máte rádi."
+    "line": "Vysokorychlostní a plynulé streamování všech filmů a seriálů, které máte rádi.",
+    "productTitle": "Produkt",
+    "terms": "Podmínky služby",
+    "disclaimer": "Framezoo je neutrální software přehrávače médií a nehostuje, neukládá, nedistribuuje ani neřídí žádné mediální soubory ani doplňky třetích stran. Uživatelé jsou výhradně odpovědní za doplňky a obsah, ke kterému přistupují v souladu s místními zákony.",
+    "legalTitle": "Právní předpisy a zásady",
+    "addonPolicy": "Zásady doplňků",
+    "copyright": "Copyright & DMCA",
+    "privacy": "Zásady ochrany osobních údajů a údajů",
+    "resourcesTitle": "Zdroje a podpora",
+    "rights": "© 2026 Framezoo. Všechna práva vyhrazena.",
+    "reportIssue": "Odeslat zpětnou vazbu / zprávu",
+    "metadataAttribution": "Metadata poskytují veřejné filmové databáze (TMDB, IMDb) pro informační účely."
   },
   "addonGuide": {
     "description": "Addon je malá služba HTTP. Podávejte manifest a zdroje, které potřebujete; Framezoo se postará o zbytek.",

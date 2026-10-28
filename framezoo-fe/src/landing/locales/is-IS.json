@@ -39,7 +39,18 @@
   },
   "footer": {
     "status": "Skrifborð fyrst. Viðbót tilbúin.",
-    "line": "Háhraða, slétt streymi fyrir allar kvikmyndir og seríur sem þú elskar."
+    "line": "Háhraða, slétt streymi fyrir allar kvikmyndir og seríur sem þú elskar.",
+    "productTitle": "Vara",
+    "terms": "Þjónustuskilmálar",
+    "disclaimer": "Framezoo er hlutlaus miðlunarspilarahugbúnaður og hýsir ekki, geymir, dreifir eða stjórnar neinum fjölmiðlaskrám eða viðbótum frá þriðja aðila. Notendur eru einir ábyrgir fyrir viðbótum og efni sem þeir fá aðgang að í samræmi við staðbundin lög.",
+    "legalTitle": "Lög og reglur",
+    "resourcesTitle": "Auðlindir og stuðningur",
+    "addonPolicy": "Viðbótarstefna",
+    "copyright": "Höfundarréttur og DMCA",
+    "privacy": "Persónuverndar- og gagnastefnu",
+    "metadataAttribution": "Lýsigögn eru veitt af opinberum kvikmyndagagnagrunnum (TMDB, IMDb) í upplýsingaskyni.",
+    "reportIssue": "Sendu athugasemdir / skýrslu",
+    "rights": "© 2026 Framezoo. Allur réttur áskilinn."
   },
   "addonGuide": {
     "manifestDescription": "Lýsigögn segja forritinu hver viðbótin þín er, hvaða auðlindir það styður og hvar táknið hennar býr.",

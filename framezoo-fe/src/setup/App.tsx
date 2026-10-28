@@ -3,6 +3,7 @@ import { InstallGuidePage } from "@/landing/InstallGuidePage";
 import { LandingCategoryPage } from "@/landing/LandingCategoryPage";
 import { LandingFloatFeedback } from "@/landing/LandingFloatFeedback";
 import { LandingPage } from "@/landing/LandingPage";
+import { LegalPage, getLegalTabFromPathname } from "@/landing/LegalPage";
 import {
   type LandingSeoCategoryId,
   getLandingSeoCategory,
@@ -26,8 +27,13 @@ export default function App({ pathname, search }: AppProps = {}) {
     currentPathname.startsWith("/discover");
 
   const landingCategory = getLandingSeoCategory(currentPathname);
+  const legalTab = getLegalTabFromPathname(currentPathname);
 
   const renderContent = () => {
+    if (legalTab) {
+      return <LegalPage initialTab={legalTab} />;
+    }
+
     if (
       currentPathname === "/guide/install" ||
       currentPathname === "/install-guide" ||

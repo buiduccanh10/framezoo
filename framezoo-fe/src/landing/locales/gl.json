@@ -39,7 +39,18 @@
   },
   "footer": {
     "status": "O escritorio primeiro. Listo para complementos.",
-    "line": "Transmisión fluida e de alta velocidade para todas as películas e series que che gustan."
+    "line": "Transmisión fluida e de alta velocidade para todas as películas e series que che gustan.",
+    "productTitle": "Produto",
+    "disclaimer": "Framezoo é un software de reprodutor multimedia neutral e non aloxa, almacena, distribúe nin controla ningún ficheiro multimedia ou complemento de terceiros. Os usuarios son os únicos responsables dos complementos e contidos aos que acceden de acordo coas leis locais.",
+    "privacy": "Política de privacidade e datos",
+    "copyright": "Dereitos de autor e DMCA",
+    "resourcesTitle": "Recursos e apoio",
+    "reportIssue": "Enviar comentarios/informes",
+    "legalTitle": "Legal & Políticas",
+    "terms": "Condicións de servizo",
+    "addonPolicy": "Política de complementos",
+    "rights": "© 2026 Framezoo. Todos os dereitos reservados.",
+    "metadataAttribution": "Os metadatos son proporcionados polas bases de datos de películas públicas (TMDB, IMDb) con fins informativos."
   },
   "addonGuide": {
     "title": "Crea un complemento sen unirte ao proceso da aplicación.",

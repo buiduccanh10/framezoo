@@ -39,7 +39,18 @@
   },
   "footer": {
     "status": "Najprej namizje. Pripravljen za dodatek.",
-    "line": "Hitro in tekoče pretakanje za vse filme in serije, ki jih imate radi."
+    "line": "Hitro in tekoče pretakanje za vse filme in serije, ki jih imate radi.",
+    "productTitle": "Izdelek",
+    "terms": "Pogoji storitve",
+    "resourcesTitle": "Viri in podpora",
+    "reportIssue": "Pošljite povratne informacije / poročilo",
+    "privacy": "Politika zasebnosti in podatkov",
+    "legalTitle": "Pravni in pravilniki",
+    "copyright": "Avtorske pravice in DMCA",
+    "disclaimer": "Framezoo je nevtralna programska oprema za predvajanje medijev in ne gosti, shranjuje, distribuira ali nadzoruje nobenih predstavnostnih datotek ali dodatkov tretjih oseb. Uporabniki so izključno odgovorni za dodatke in vsebino, do katere dostopajo v skladu z lokalno zakonodajo.",
+    "addonPolicy": "Politika dodatkov",
+    "metadataAttribution": "Metapodatke zagotavljajo javne zbirke podatkov o filmih (TMDB, IMDb) v informativne namene.",
+    "rights": "© 2026 Framezoo. Vse pravice pridržane."
   },
   "addonGuide": {
     "manifestTitle": "Začnite z manifest.json",

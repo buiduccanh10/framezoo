@@ -39,7 +39,18 @@
   },
   "footer": {
     "status": "Prima il desktop. Pronto per il componente aggiuntivo.",
-    "line": "Streaming fluido e ad alta velocità per tutti i film e le serie che ami."
+    "line": "Streaming fluido e ad alta velocità per tutti i film e le serie che ami.",
+    "productTitle": "Prodotto",
+    "terms": "Termini di servizio",
+    "legalTitle": "Legale e politiche",
+    "resourcesTitle": "Risorse e supporto",
+    "privacy": "Politica sulla privacy e sui dati",
+    "reportIssue": "Invia feedback/segnalazione",
+    "addonPolicy": "Politica sui componenti aggiuntivi",
+    "copyright": "Diritto d'autore e DMCA",
+    "disclaimer": "Framezoo è un software di riproduzione multimediale neutro e non ospita, archivia, distribuisce o controlla file multimediali o componenti aggiuntivi di terze parti. Gli utenti sono gli unici responsabili dei componenti aggiuntivi e dei contenuti a cui accedono in conformità con le leggi locali.",
+    "metadataAttribution": "I metadati sono forniti dai database di film pubblici (TMDB, IMDb) a scopo informativo.",
+    "rights": "© 2026 Framezoo. Tutti i diritti riservati."
   },
   "addonGuide": {
     "manifestDescription": "I metadati dicono all'app chi è il tuo componente aggiuntivo, quali risorse supporta e dove si trova la sua icona.",

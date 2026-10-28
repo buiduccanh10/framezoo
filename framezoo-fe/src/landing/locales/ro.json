@@ -39,7 +39,18 @@
   },
   "footer": {
     "status": "Desktop-în primul rând. Pregătit pentru suplimente.",
-    "line": "Streaming fluid și de mare viteză pentru toate filmele și serialele pe care le iubiți."
+    "line": "Streaming fluid și de mare viteză pentru toate filmele și serialele pe care le iubiți.",
+    "productTitle": "Produs",
+    "terms": "Termeni și condiții",
+    "disclaimer": "Framezoo este un software de redare media neutru și nu găzduiește, stochează, distribuie sau controlează niciun fișier media sau suplimente de la terți. Utilizatorii sunt singurii responsabili pentru suplimentele și conținutul pe care îl accesează în conformitate cu legile locale.",
+    "addonPolicy": "Politica de completare",
+    "privacy": "Politica de confidențialitate și date",
+    "legalTitle": "Legal & Politici",
+    "resourcesTitle": "Resurse și suport",
+    "copyright": "Drepturi de autor și DMCA",
+    "reportIssue": "Trimiteți feedback/raport",
+    "metadataAttribution": "Metadatele sunt furnizate de bazele de date publice de filme (TMDB, IMDb) în scop informativ.",
+    "rights": "© 2026 Framezoo. Toate drepturile rezervate."
   },
   "addonGuide": {
     "eyebrow": "ADDON PROTOCOL / GHID",

@@ -51,6 +51,34 @@ const routes = [
     description:
       "Step-by-step installation and launch guide for the Framezoo desktop streaming player on macOS and Windows.",
   },
+  {
+    pathname: "/legal/terms",
+    output: "legal/terms/index.html",
+    title: "Terms of Service | Framezoo",
+    description:
+      "Terms of Service and software license for the Framezoo desktop media player.",
+  },
+  {
+    pathname: "/legal/privacy",
+    output: "legal/privacy/index.html",
+    title: "Privacy & Personal Data Protection Policy | Framezoo",
+    description:
+      "Privacy policy and personal data protection compliance (Vietnam 2026 PDPD Law) for Framezoo.",
+  },
+  {
+    pathname: "/legal/copyright",
+    output: "legal/copyright/index.html",
+    title: "Copyright, DMCA & Content Disclaimer | Framezoo",
+    description:
+      "Intermediary software disclaimer, metadata attribution, and DMCA notice procedure for Framezoo.",
+  },
+  {
+    pathname: "/legal/addon-policy",
+    output: "legal/addon-policy/index.html",
+    title: "Addon Policy & Community Guidelines | Framezoo",
+    description:
+      "Safety standards and legal compliance guidelines for third-party community addons on Framezoo.",
+  },
 ];
 
 function escapeHtml(value) {

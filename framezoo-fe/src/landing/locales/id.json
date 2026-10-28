@@ -39,7 +39,18 @@
   },
   "footer": {
     "status": "Desktop-pertama. Siap tambahan.",
-    "line": "Streaming berkecepatan tinggi dan lancar untuk semua film dan serial yang Anda sukai."
+    "line": "Streaming berkecepatan tinggi dan lancar untuk semua film dan serial yang Anda sukai.",
+    "terms": "Ketentuan Layanan",
+    "productTitle": "Produk",
+    "privacy": "Privasi & Kebijakan Data",
+    "resourcesTitle": "Sumber Daya & Dukungan",
+    "copyright": "Hak Cipta & DMCA",
+    "legalTitle": "Hukum & Kebijakan",
+    "rights": "© 2026 Bingkaizoo. Semua hak dilindungi undang-undang.",
+    "addonPolicy": "Kebijakan Tambahan",
+    "disclaimer": "Framezoo adalah perangkat lunak pemutar media netral dan tidak menghosting, menyimpan, mendistribusikan, atau mengontrol file media atau tambahan pihak ketiga apa pun. Pengguna sepenuhnya bertanggung jawab atas add-on dan konten yang mereka akses sesuai dengan hukum setempat.",
+    "reportIssue": "Kirim Masukan / Laporan",
+    "metadataAttribution": "Metadata disediakan oleh database film publik (TMDB, IMDb) untuk tujuan informasi."
   },
   "addonGuide": {
     "eyebrow": "PROTOKOL / PANDUAN TAMBAHAN",

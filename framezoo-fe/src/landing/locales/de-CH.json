@@ -39,7 +39,18 @@
   },
   "footer": {
     "status": "Desktop-first. Addon-bereit.",
-    "line": "Schnelles, reibungsloses Streaming für alle Filme und Serien, die Sie lieben."
+    "line": "Schnelles, reibungsloses Streaming für alle Filme und Serien, die Sie lieben.",
+    "resourcesTitle": "Ressourcen und Support",
+    "productTitle": "Produkt",
+    "disclaimer": "Framezoo ist eine neutrale Media-Player-Software und hostet, speichert, verteilt oder kontrolliert keine Mediendateien oder Add-ons von Drittanbietern. Benutzer tragen die alleinige Verantwortung für die Add-ons und Inhalte, auf die sie zugreifen, und zwar in Übereinstimmung mit den örtlichen Gesetzen.",
+    "privacy": "Datenschutz und Datenrichtlinie",
+    "legalTitle": "Rechtliche Hinweise und Richtlinien",
+    "terms": "Nutzungsbedingungen",
+    "copyright": "Urheberrecht & DMCA",
+    "addonPolicy": "Add-on-Richtlinie",
+    "reportIssue": "Feedback/Bericht senden",
+    "rights": "© 2026 Framezoo. Alle Rechte vorbehalten.",
+    "metadataAttribution": "Metadaten werden von öffentlichen Filmdatenbanken (TMDB, IMDb) zu Informationszwecken bereitgestellt."
   },
   "addonGuide": {
     "manifestTitle": "Beginnen Sie mit manifest.json",

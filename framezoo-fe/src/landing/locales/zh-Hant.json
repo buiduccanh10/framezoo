@@ -39,7 +39,18 @@
   },
   "footer": {
     "status": "桌面優先。插件就緒。",
-    "line": "高速、流暢地播放您喜愛的所有電影和電視節目。"
+    "line": "高速、流暢地播放您喜愛的所有電影和電視節目。",
+    "terms": "服務條款",
+    "productTitle": "產品",
+    "resourcesTitle": "資源與支持",
+    "privacy": "隱私權和資料政策",
+    "copyright": "版權與數位千禧年版權法案 (DMCA)",
+    "legalTitle": "法律與政策",
+    "reportIssue": "發送回饋/報告",
+    "rights": "© 2026 Framezoo。版權所有。",
+    "addonPolicy": "插件政策",
+    "disclaimer": "Framezoo 是一個中立的媒體播放器軟體，不託管、儲存、散佈或控制任何媒體檔案或第三方外掛程式。用戶根據當地法律對他們訪問的插件和內容承擔全部責任。",
+    "metadataAttribution": "元資料由公共電影資料庫（TMDB、IMDb）提供，僅供參考。"
   },
   "addonGuide": {
     "resourcesTitle": "選擇資源",

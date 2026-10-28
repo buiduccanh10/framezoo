@@ -39,7 +39,18 @@
   },
   "footer": {
     "status": "Primer l'escriptori. Preparat per a complements.",
-    "line": "Transmissió fluida i d'alta velocitat per a totes les pel·lícules i sèries que t'agraden."
+    "line": "Transmissió fluida i d'alta velocitat per a totes les pel·lícules i sèries que t'agraden.",
+    "productTitle": "Producte",
+    "disclaimer": "Framezoo és un programari de reproductor multimèdia neutral i no allotja, emmagatzema, distribueix ni controla cap fitxer multimèdia ni complement de tercers. Els usuaris són els únics responsables dels complements i continguts als quals accedeixen d'acord amb les lleis locals.",
+    "terms": "Condicions del servei",
+    "resourcesTitle": "Recursos i suport",
+    "addonPolicy": "Política de complements",
+    "privacy": "Política de privadesa i dades",
+    "copyright": "Copyright i DMCA",
+    "legalTitle": "Legal i Polítiques",
+    "metadataAttribution": "Les bases de dades públiques de pel·lícules (TMDB, IMDb) proporcionen metadades amb finalitats informatives.",
+    "reportIssue": "Enviar comentaris/informes",
+    "rights": "© 2026 Framezoo. Tots els drets reservats."
   },
   "addonGuide": {
     "manifestTitle": "Comenceu amb manifest.json",

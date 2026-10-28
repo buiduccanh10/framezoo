@@ -39,7 +39,18 @@
   },
   "footer": {
     "status": "Najpierw komputer stacjonarny. Gotowy na dodatek.",
-    "line": "Szybkie i płynne przesyłanie strumieniowe wszystkich ulubionych filmów i seriali."
+    "line": "Szybkie i płynne przesyłanie strumieniowe wszystkich ulubionych filmów i seriali.",
+    "terms": "Warunki świadczenia usług",
+    "productTitle": "Produkt",
+    "resourcesTitle": "Zasoby i wsparcie",
+    "privacy": "Polityka prywatności i danych",
+    "legalTitle": "Informacje prawne i zasady",
+    "reportIssue": "Wyślij opinię/raport",
+    "copyright": "Prawa autorskie i DMCA",
+    "addonPolicy": "Polityka dodatków",
+    "disclaimer": "Framezoo jest neutralnym oprogramowaniem do odtwarzania multimediów i nie hostuje, nie przechowuje, nie rozpowszechnia ani nie kontroluje żadnych plików multimedialnych ani dodatków stron trzecich. Użytkownicy ponoszą wyłączną odpowiedzialność za dodatki i treści, do których uzyskują dostęp, zgodnie z lokalnymi przepisami.",
+    "metadataAttribution": "Metadane udostępniane są przez publiczne bazy filmów (TMDB, IMDb) w celach informacyjnych.",
+    "rights": "© 2026 Framezoo. Wszelkie prawa zastrzeżone."
   },
   "addonGuide": {
     "title": "Utwórz dodatek bez dołączania do procesu aplikacji.",

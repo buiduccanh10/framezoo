@@ -39,7 +39,18 @@
   },
   "footer": {
     "status": "Vispirms galddators. Gatavs papildinājumam.",
-    "line": "Ātra, vienmērīga straumēšana visām jūsu iecienītajām filmām un seriāliem."
+    "line": "Ātra, vienmērīga straumēšana visām jūsu iecienītajām filmām un seriāliem.",
+    "productTitle": "Produkts",
+    "terms": "Pakalpojuma noteikumi",
+    "legalTitle": "Tiesību akti un politikas",
+    "copyright": "Autortiesības un DMCA",
+    "addonPolicy": "Papildinājuma politika",
+    "reportIssue": "Sūtīt atsauksmes / ziņojumu",
+    "privacy": "Privātuma un datu politika",
+    "resourcesTitle": "Resursi un atbalsts",
+    "disclaimer": "Framezoo ir neitrāla multivides atskaņotāja programmatūra, un tajā netiek mitināti, uzglabāti, neizplatīti vai kontrolēti multivides faili vai trešās puses papildinājumi. Lietotāji ir pilnībā atbildīgi par papildinājumiem un saturu, kam viņi piekļūst saskaņā ar vietējiem likumiem.",
+    "metadataAttribution": "Informācijas nolūkos metadatus nodrošina publiskās filmu datu bāzes (TMDB, IMDb).",
+    "rights": "© 2026 Framezoo. Visas tiesības paturētas."
   },
   "addonGuide": {
     "manifestTitle": "Sāciet ar manifest.json",

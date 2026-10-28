@@ -39,7 +39,18 @@
   },
   "footer": {
     "status": "Le bureau d’abord. Prêt pour les modules complémentaires.",
-    "line": "Streaming fluide et haut débit pour tous les films et séries que vous aimez."
+    "line": "Streaming fluide et haut débit pour tous les films et séries que vous aimez.",
+    "legalTitle": "Mentions légales et politiques",
+    "productTitle": "Produit",
+    "terms": "Conditions d'utilisation",
+    "addonPolicy": "Politique des modules complémentaires",
+    "reportIssue": "Envoyer des commentaires/rapport",
+    "copyright": "Droits d'auteur et DMCA",
+    "resourcesTitle": "Ressources et assistance",
+    "privacy": "Politique de confidentialité et de données",
+    "disclaimer": "Framezoo est un logiciel de lecteur multimédia neutre et n'héberge, ne stocke, ne distribue ni ne contrôle aucun fichier multimédia ou module complémentaire tiers. Les utilisateurs sont seuls responsables des modules complémentaires et du contenu auxquels ils accèdent conformément aux lois locales.",
+    "rights": "© 2026 Framezoo. Tous droits réservés.",
+    "metadataAttribution": "Les métadonnées sont fournies par des bases de données publiques de films (TMDB, IMDb) à des fins d'information."
   },
   "addonGuide": {
     "manifestDescription": "Les métadonnées indiquent à l'application qui est votre module complémentaire, quelles ressources il prend en charge et où se trouve son icône.",

@@ -39,7 +39,18 @@
   },
   "footer": {
     "status": "Työpöytä ensin. Lisäys valmiina.",
-    "line": "Nopea ja sujuva suoratoisto kaikille rakastamillesi elokuville ja sarjoille."
+    "line": "Nopea ja sujuva suoratoisto kaikille rakastamillesi elokuville ja sarjoille.",
+    "productTitle": "Tuote",
+    "terms": "Palveluehdot",
+    "disclaimer": "Framezoo on neutraali mediasoitinohjelmisto, joka ei isännöi, tallenna, jaa tai ohjaa mediatiedostoja tai kolmannen osapuolen lisäosia. Käyttäjät ovat yksin vastuussa lisäosista ja sisällöstä, jota he käyttävät paikallisten lakien mukaisesti.",
+    "legalTitle": "Laki ja käytännöt",
+    "resourcesTitle": "Resurssit ja tuki",
+    "addonPolicy": "Lisäyskäytäntö",
+    "privacy": "Tietosuoja- ja tietosuojakäytäntö",
+    "copyright": "Tekijänoikeus ja DMCA",
+    "reportIssue": "Lähetä palautetta / Raportti",
+    "rights": "© 2026 Framezoo. Kaikki oikeudet pidätetään.",
+    "metadataAttribution": "Metadata tarjotaan julkisista elokuvatietokannoista (TMDB, IMDb) tiedoksi."
   },
   "addonGuide": {
     "manifestTitle": "Aloita tiedostosta manifest.json",

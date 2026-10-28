@@ -39,7 +39,18 @@
   },
   "footer": {
     "status": "Desktop-eerst. Klaar voor add-ons.",
-    "line": "Snelle, vloeiende streaming voor alle films en series waar je van houdt."
+    "line": "Snelle, vloeiende streaming voor alle films en series waar je van houdt.",
+    "productTitle": "Product",
+    "legalTitle": "Juridisch en beleid",
+    "terms": "Servicevoorwaarden",
+    "resourcesTitle": "Hulpbronnen en ondersteuning",
+    "disclaimer": "Framezoo is neutrale mediaspelersoftware en host, bewaart, distribueert of beheert geen mediabestanden of add-ons van derden. Gebruikers zijn als enige verantwoordelijk voor de add-ons en inhoud waartoe zij toegang krijgen, in overeenstemming met de lokale wetgeving.",
+    "copyright": "Auteursrecht en DMCA",
+    "reportIssue": "Feedback / rapport verzenden",
+    "addonPolicy": "Add-onbeleid",
+    "privacy": "Privacy- en gegevensbeleid",
+    "rights": "© 2026 Framezoo. Alle rechten voorbehouden.",
+    "metadataAttribution": "Metagegevens worden ter informatie verstrekt door openbare filmdatabases (TMDB, IMDb)."
   },
   "addonGuide": {
     "manifestDescription": "Metadata vertellen de app wie uw add-on is, welke bronnen deze ondersteunt en waar het pictogram zich bevindt.",

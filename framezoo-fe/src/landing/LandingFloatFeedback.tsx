@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { getLandingCopy, useLandingLocale } from "./i18n";
 import { LandingFeedbackModal } from "./LandingFeedbackModal";
@@ -9,6 +9,14 @@ export function LandingFloatFeedback() {
   const locale = useLandingLocale();
   const copy = getLandingCopy(locale);
   const feedbackCopy = copy.feedback;
+
+  useEffect(() => {
+    const handleOpen = () => setIsOpen(true);
+    window.addEventListener("open-landing-feedback", handleOpen);
+    return () => {
+      window.removeEventListener("open-landing-feedback", handleOpen);
+    };
+  }, []);
 
   return (
     <>
