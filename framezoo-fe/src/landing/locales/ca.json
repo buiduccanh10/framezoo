@@ -10,44 +10,13 @@
   },
   "hero": {
     "eyebrow": "ESCRIPTORI FRAMEZOO / 01",
-    "title": "Mira millor.",
-    "titleAccent": "A l'escriptori.",
-    "description": "Framezoo és un reproductor amb sincronització de subtítols amb intel·ligència artificial, subtítols duals, metadades de mitjans enriquits i suport per a complements.",
     "primaryCta": "Descarrega l'escriptori",
     "secondaryCta": "Veure l'experiència",
-    "imageAlt": "El reproductor de Framezoo mostra la pantalla de descobriment",
-    "version": "Alliberament d'escriptori"
-  },
-  "features": {
-    "performanceTitle": "La teva biblioteca, sense l'impost del navegador.",
-    "overviewDescription": "Sincronitza subtítols amb IA, mantén visibles els subtítols dobles, explora metadades multimèdia i controla la reproducció sense sortir de la història.",
-    "playback": "Reproducció nativa",
-    "playbackDescription": "Vídeo suau amb maneig de suports d'escriptori.",
-    "performance": "Rendiment tranquil",
-    "performanceDescription": "Menys crom. Més enfocament. Sense malabars de pestanyes.",
-    "continuity": "Mantingueu el vostre flux",
-    "continuityDescription": "Reprèn, navega i canvia de font sense perdre el moment.",
-    "ecosystemTitle": "Preparat pel que vindrà després.",
-    "ecosystemDescription": "L'aplicació d'escriptori és el nucli. Els complements amplien les vores, de manera que la vostra configuració es pot mantenir personal sense complicar-se.",
-    "addonLabel": "PREPARAT PER ADDONS",
-    "addonOne": "Connectors de font",
-    "addonTwo": "Eines de subtítols",
-    "addonThree": "Extensions de comunitat",
-    "showcaseTitle": "Detalls abans de prémer play.",
-    "showcaseDescription": "Una superfície d'escriptori centrada per al descobriment, la reproducció i tot el que envolta la història.",
-    "showcaseCaption": "Framezoo Desktop / Mode Focus",
-    "dualSubtitles": "Mantén visibles dos idiomes de subtítols",
-    "dualSubtitlesDescription": "Activeu els subtítols duals quan apreneu, compareu o simplement preferiu tots dos.",
-    "subtitleSyncDescription": "Alineeu el diàleg amb la imatge en segons amb la sincronització de subtítols AI.",
-    "experienceTitle": "Tot el que necessites en un jugador.",
-    "featureLabel": "El jugador, a la teva manera",
-    "subtitleSync": "Sincronitza subtítols amb IA",
-    "subtitleControlsDescription": "Trieu la font dels subtítols, l'idioma, el temps i la visualització sense interrompre el vostre flux.",
-    "subtitleControls": "Sintonitza el reproductor al teu voltant",
-    "showcaseSecondaryTitle": "Descobriu alguna cosa que val la pena veure.",
-    "showcaseSecondaryDescription": "Comença des d'una superfície de descobriment neta i després passa a la reproducció sense perdre el teu lloc.",
-    "showcaseSecondaryAlt": "Pantalla de descobriment del reproductor de Framezoo amb cerca, categories i files de títol",
-    "showcasePrimaryAlt": "Pantalla de detalls del títol de Framezoo amb obres d'art, classificacions, temporades i metadades"
+    "version": "Alliberament d'escriptori",
+    "imageAlt": "Reproductor de transmissió d'alta velocitat Framezoo que mostra la pantalla de descobriment",
+    "titleAccent": "vigila el teu camí.",
+    "title": "Transmet ràpidament,",
+    "description": "Framezoo és un reproductor de streaming d'alta velocitat amb una interfície d'usuari fluida i intuïtiva, metadades de pel·lícules riques, sincronització de subtítols de transmissió il·limitada i suport de subtítols multifons."
   },
   "download": {
     "eyebrow": "TRIA LA TEVA CONSTRUCCIÓ",
@@ -69,8 +38,19 @@
     "hideAll": "Amaga altres compilacions"
   },
   "footer": {
-    "line": "Una casa més tranquil·la per a les històries a les quals continueu tornant.",
-    "status": "Primer l'escriptori. Preparat per a complements."
+    "status": "Primer l'escriptori. Preparat per a complements.",
+    "line": "Transmissió fluida i d'alta velocitat per a totes les pel·lícules i sèries que t'agraden.",
+    "productTitle": "Producte",
+    "disclaimer": "Framezoo és un programari de reproductor multimèdia neutral i no allotja, emmagatzema, distribueix ni controla cap fitxer multimèdia ni complement de tercers. Els usuaris són els únics responsables dels complements i continguts als quals accedeixen d'acord amb les lleis locals.",
+    "terms": "Condicions del servei",
+    "resourcesTitle": "Recursos i suport",
+    "addonPolicy": "Política de complements",
+    "privacy": "Política de privadesa i dades",
+    "copyright": "Copyright i DMCA",
+    "legalTitle": "Legal i Polítiques",
+    "metadataAttribution": "Les bases de dades públiques de pel·lícules (TMDB, IMDb) proporcionen metadades amb finalitats informatives.",
+    "reportIssue": "Enviar comentaris/informes",
+    "rights": "© 2026 Framezoo. Tots els drets reservats."
   },
   "addonGuide": {
     "manifestTitle": "Comenceu amb manifest.json",
@@ -108,9 +88,9 @@
     "series": "Sèrie",
     "title": "Històries populars per al teu proper rellotge.",
     "movie": "Pel·lícula",
-    "description": "Trobeu alguna cosa que valgui la pena veure, obriu els detalls i instal·leu-vos en una millor manera de veure-ho amb Framezoo.",
     "dragHint": "Arrossegueu per explorar",
-    "eyebrow": "DESCOBRIMENT DE FRAMEZOO"
+    "eyebrow": "DESCOBRIMENT DE FRAMEZOO",
+    "description": "Exploreu metadades de pel·lícules enriquides, trieu la vostra reproducció i comenceu a mirar-les a l'instant amb Framezoo."
   },
   "installGuide": {
     "backHome": "Tornar a casa",
@@ -192,5 +172,32 @@
     "attachmentsLabel": "Fitxers",
     "attachmentsTooLarge": "La mida total del fitxer no ha de superar els 55 MB.",
     "attachmentsHint": "Imatges/vídeos · 55 MB total màxim"
+  },
+  "seo": {
+    "title": "Framezoo - Transmissió de vídeo ràpida i suau",
+    "description": "Framezoo és un reproductor de transmissió de vídeo d'alta velocitat dissenyat per ser suau, intuïtiu i fàcil d'utilitzar. Exploreu metadades de pel·lícules enriquides, sincronitzeu subtítols amb fluxos de vídeo sense límits i carregueu subtítols de diverses fonts."
+  },
+  "features": {
+    "overviewDescription": "Gaudeix de la transmissió de vídeo d'alta velocitat en una interfície suau i fàcil d'utilitzar amb metadades de pel·lícules riques, sincronització de subtítols de reproducció il·limitada i subtítols de diverses fonts.",
+    "experienceTitle": "Creat per a una reproducció ràpida i sense esforç.",
+    "featureLabel": "Transmissió d'alta velocitat, a la teva manera",
+    "subtitleSync": "Sincronització de subtítols de reproducció il·limitada",
+    "subtitleSyncDescription": "Sincronitza els subtítols amb qualsevol reproducció de vídeo sense límits; ajusta el temps i alinea els diàlegs sense problemes mentre mires.",
+    "subtitleControlsDescription": "Navegueu per una interfície neta i sensible amb metadades completes, puntuacions, detalls del repartiment i guies d'episodis integrades.",
+    "dualSubtitlesDescription": "Carregueu subtítols automàticament de diversos proveïdors, canvieu de font sobre la marxa o visualitzeu subtítols dobles un al costat de l'altre.",
+    "ecosystemTitle": "La transmissió d'alta velocitat es troba amb un ecosistema obert.",
+    "subtitleControls": "Interfície d'usuari suau i metadades de pel·lícules riques",
+    "dualSubtitles": "Subtítols de diverses fonts",
+    "addonOne": "Corrents d'alta velocitat",
+    "addonThree": "Subtítols multifons",
+    "ecosystemDescription": "La reproducció de flux ràpid, els subtítols de fonts múltiples i les metadades de pel·lícules riques s'incorporen directament al nucli. Els complements us permeten connectar encara més fluxos, catàlegs i proveïdors de subtítols sense esforç.",
+    "showcasePrimaryAlt": "Pantalla de detalls del títol de Framezoo amb obres d'art, classificacions, temporades i metadades de pel·lícules riques",
+    "showcaseDescription": "Obre qualsevol títol per explorar pòsters, puntuacions, sinopsis, temporades i detalls del repartiment en una vista neta i intuïtiva.",
+    "addonTwo": "Metadades de pel·lícules riques",
+    "addonLabel": "Dins de Framezoo",
+    "showcaseTitle": "Metadades riques abans de prémer Reproduir.",
+    "showcaseSecondaryDescription": "Navega sense esforç a través d'una interfície elegant dissenyada per passar del descobriment a la reproducció a alta velocitat en segons.",
+    "showcaseSecondaryAlt": "Pantalla de descobriment del reproductor de Framezoo amb cerca, categories i files de títol",
+    "showcaseSecondaryTitle": "Descobriment suau i intuïtiu."
   }
 }

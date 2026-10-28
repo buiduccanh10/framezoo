@@ -10,44 +10,13 @@
   },
   "hero": {
     "eyebrow": "FRAMEZOO DESKTOP / 01",
-    "title": "Privește mai bine.",
-    "titleAccent": "Pe desktop.",
-    "description": "Framezoo este un player cu sincronizare a subtitrarilor AI, subtitrări duale, metadate media îmbogățite și suport pentru suplimente.",
     "primaryCta": "Descărcați desktop",
     "secondaryCta": "Vezi experiența",
-    "imageAlt": "Player Framezoo care arată ecranul de descoperire",
-    "version": "Lansare desktop"
-  },
-  "features": {
-    "performanceTitle": "Biblioteca dvs., fără taxa de browser.",
-    "overviewDescription": "Sincronizați subtitrările cu AI, păstrați subtitrările duble vizibile, explorați metadatele media și controlați redarea fără a părăsi povestea.",
-    "playback": "Redare nativă",
-    "playbackDescription": "Video fluide cu manipulare media de calitate desktop.",
-    "performance": "Performanță liniștită",
-    "performanceDescription": "Mai puțin crom. Mai multă concentrare. Fără jonglare cu file.",
-    "continuity": "Păstrează-ți fluxul",
-    "continuityDescription": "Reluați, răsfoiți și schimbați sursele fără a pierde momentul.",
-    "ecosystemTitle": "Gata pentru ce urmează.",
-    "ecosystemDescription": "Aplicația desktop este nucleul. Suplimentele extind marginile, astfel încât configurarea dvs. poate rămâne personală fără a deveni complicată.",
-    "addonLabel": "ADDON-GATA",
-    "addonOne": "Conectori sursă",
-    "addonTwo": "Instrumente de subtitrare",
-    "addonThree": "Extensii comunitare",
-    "showcaseTitle": "Detalii înainte de a apăsa pe play.",
-    "showcaseDescription": "O suprafață desktop concentrată pentru descoperire, redare și tot ce se află în jurul poveștii.",
-    "showcaseCaption": "Framezoo Desktop / Modul Focus",
-    "subtitleSync": "Sincronizați subtitrările cu AI",
-    "featureLabel": "Jucătorul, în felul tău",
-    "dualSubtitlesDescription": "Activați subtitrările duble atunci când învățați, comparați sau pur și simplu le preferați pe ambele.",
-    "experienceTitle": "Tot ce ai nevoie într-un jucător.",
-    "subtitleControls": "Reglați playerul din jurul vostru",
-    "dualSubtitles": "Păstrați două limbi de subtitrare vizibile",
-    "showcasePrimaryAlt": "Ecran cu detalii de titlu Framezoo cu lucrări de artă, evaluări, anotimpuri și metadate",
-    "subtitleSyncDescription": "Aliniați dialogul cu imaginea în câteva secunde cu sincronizarea subtitrarilor AI.",
-    "showcaseSecondaryAlt": "Ecran de descoperire a jucătorului Framezoo cu căutare, categorii și rânduri de titlu",
-    "subtitleControlsDescription": "Alegeți sursa de subtitrare, limba, sincronizarea și afișarea fără a vă întrerupe fluxul.",
-    "showcaseSecondaryTitle": "Descoperă ceva ce merită urmărit.",
-    "showcaseSecondaryDescription": "Începeți de la o suprafață de descoperire curată, apoi treceți la redare fără a vă pierde locul."
+    "version": "Lansare desktop",
+    "description": "Framezoo este un player de streaming de mare viteză, cu o interfață de utilizare fluidă, intuitivă, metadate bogate ale filmului, sincronizare nelimitată a subtitrarilor în flux și suport pentru subtitrare cu mai multe surse.",
+    "titleAccent": "ai grijă de drumul tău.",
+    "title": "Transmite rapid,",
+    "imageAlt": "Player de streaming de mare viteză Framezoo care arată ecranul de descoperire"
   },
   "download": {
     "eyebrow": "ALEGE-ȚI CONSTRUCȚIA",
@@ -69,8 +38,19 @@
     "ready": "Gata pentru acest dispozitiv"
   },
   "footer": {
-    "line": "O casă mai liniștită pentru poveștile la care te întorci.",
-    "status": "Desktop-în primul rând. Pregătit pentru suplimente."
+    "status": "Desktop-în primul rând. Pregătit pentru suplimente.",
+    "line": "Streaming fluid și de mare viteză pentru toate filmele și serialele pe care le iubiți.",
+    "productTitle": "Produs",
+    "terms": "Termeni și condiții",
+    "disclaimer": "Framezoo este un software de redare media neutru și nu găzduiește, stochează, distribuie sau controlează niciun fișier media sau suplimente de la terți. Utilizatorii sunt singurii responsabili pentru suplimentele și conținutul pe care îl accesează în conformitate cu legile locale.",
+    "addonPolicy": "Politica de completare",
+    "privacy": "Politica de confidențialitate și date",
+    "legalTitle": "Legal & Politici",
+    "resourcesTitle": "Resurse și suport",
+    "copyright": "Drepturi de autor și DMCA",
+    "reportIssue": "Trimiteți feedback/raport",
+    "metadataAttribution": "Metadatele sunt furnizate de bazele de date publice de filme (TMDB, IMDb) în scop informativ.",
+    "rights": "© 2026 Framezoo. Toate drepturile rezervate."
   },
   "addonGuide": {
     "eyebrow": "ADDON PROTOCOL / GHID",
@@ -109,8 +89,8 @@
     "series": "Serie",
     "title": "Povești populare pentru următorul tău ceas.",
     "dragHint": "Trageți pentru a explora",
-    "description": "Găsiți ceva ce merită urmărit, deschideți detaliile și alegeți o modalitate mai bună de a viziona cu Framezoo.",
-    "eyebrow": "DECOPERIRE FRAMEZOO"
+    "eyebrow": "DECOPERIRE FRAMEZOO",
+    "description": "Răsfoiți metadatele bogate ale filmului, alegeți-vă fluxul și începeți să vizionați instantaneu cu Framezoo."
   },
   "installGuide": {
     "backHome": "Înapoi la Acasă",
@@ -192,5 +172,32 @@
     "attachmentsLabel": "Fișiere",
     "attachmentsHint": "Imagini/videoclipuri · 55 MB total maxim",
     "attachmentsTooLarge": "Dimensiunea totală a fișierului nu trebuie să depășească 55 MB."
+  },
+  "seo": {
+    "title": "Framezoo - Streaming video rapid și fără probleme",
+    "description": "Framezoo este un player de streaming video de mare viteză conceput pentru a fi fluid, intuitiv și ușor de utilizat. Explorați metadatele bogate ale filmului, sincronizați subtitrări cu fluxuri video fără limite și încărcați subtitrări din mai multe surse."
+  },
+  "features": {
+    "featureLabel": "Streaming de mare viteză, în felul tău",
+    "experienceTitle": "Creat pentru streaming rapid, fără efort.",
+    "dualSubtitlesDescription": "Încărcați automat subtitrări de la mai mulți furnizori, schimbați sursele din mers sau afișați subtitrări duble una lângă alta.",
+    "subtitleSyncDescription": "Sincronizați subtitrările cu orice flux video fără limite - ajustați sincronizarea și aliniați dialogul fără probleme în timp ce vizionați.",
+    "subtitleSync": "Sincronizare nelimitată a subtitrarilor în flux",
+    "dualSubtitles": "Subtitrări din mai multe surse",
+    "subtitleControls": "Interfață de utilizare fluidă și metadate bogate ale filmului",
+    "overviewDescription": "Bucurați-vă de streaming video de mare viteză într-o interfață fluidă, ușor de utilizat, cu metadate bogate ale filmului, sincronizare nelimitată a subtitrarilor în flux și subtitrări din mai multe surse.",
+    "ecosystemDescription": "Redare rapidă în flux, subtitrări cu mai multe surse și metadatele bogate ale filmului sunt integrate chiar în nucleu. Suplimentele vă permit să conectați fără efort și mai multe fluxuri, cataloage și furnizori de subtitrări.",
+    "addonTwo": "Metadate bogate ale filmului",
+    "addonLabel": "În interiorul Framezoo",
+    "subtitleControlsDescription": "Navigați într-o interfață curată și receptivă, cu metadate complete, evaluări, detalii de distribuție și ghiduri pentru episoade încorporate.",
+    "ecosystemTitle": "Streamingul de mare viteză întâlnește un ecosistem deschis.",
+    "addonOne": "Fluxuri de mare viteză",
+    "addonThree": "Subtitrări cu mai multe surse",
+    "showcasePrimaryAlt": "Ecran cu detalii de titlu Framezoo cu lucrări de artă, evaluări, sezoane și metadate bogate ale filmului",
+    "showcaseSecondaryDescription": "Răsfoiți fără efort printr-o interfață elegantă concepută pentru a vă duce de la descoperire la redare de mare viteză în câteva secunde.",
+    "showcaseDescription": "Deschide orice titlu pentru a explora postere, evaluări, rezumate, anotimpuri și detalii despre distribuție într-o vizualizare curată, intuitivă.",
+    "showcaseSecondaryTitle": "Descoperire lină, intuitivă.",
+    "showcaseTitle": "Metadate bogate înainte de a apăsa pe redare.",
+    "showcaseSecondaryAlt": "Ecran de descoperire a jucătorului Framezoo cu căutare, categorii și rânduri de titlu"
   }
 }

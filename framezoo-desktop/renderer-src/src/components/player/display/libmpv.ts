@@ -142,8 +142,8 @@ function getElectronApi(): LibMpvElectronApi | null {
 }
 
 function normalizeVolume(volume: number): number {
-  if (!Number.isFinite(volume)) return 1.5;
-  return Math.max(0, Math.min(3, volume));
+  if (!Number.isFinite(volume)) return 1;
+  return Math.max(0, Math.min(2, volume));
 }
 
 function isHdrVideoParams(data: unknown): boolean {
@@ -248,7 +248,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
   let duration = 0;
   let time = 0;
   let bufferedTime = 0;
-  let volume = 1.5;
+  let volume = 1;
   let playbackRate = 1;
   let paused = true;
   let isSeeking = false;

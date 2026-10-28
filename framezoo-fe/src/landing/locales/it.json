@@ -10,44 +10,13 @@
   },
   "hero": {
     "eyebrow": "DESKTOP FRAMEZOO / 01",
-    "title": "Guarda meglio.",
-    "titleAccent": "Sulla scrivania.",
-    "description": "Framezoo è un lettore con sincronizzazione dei sottotitoli AI, doppi sottotitoli, metadati multimediali e supporto per componenti aggiuntivi.",
     "primaryCta": "Scarica desktop",
     "secondaryCta": "Vedi l'esperienza",
-    "imageAlt": "Lettore Framezoo che mostra la schermata di rilevamento",
-    "version": "Versione desktop"
-  },
-  "features": {
-    "performanceTitle": "La tua biblioteca, senza la tassa sul browser.",
-    "overviewDescription": "Sincronizza i sottotitoli con l'intelligenza artificiale, mantieni visibili i doppi sottotitoli, esplora i metadati multimediali e controlla la riproduzione senza abbandonare la storia.",
-    "playback": "Riproduzione nativa",
-    "playbackDescription": "Video fluidi con gestione multimediale di livello desktop.",
-    "performance": "Prestazioni silenziose",
-    "performanceDescription": "Meno cromature. Maggiore concentrazione. Nessuna giocoleria con le schede.",
-    "continuity": "Mantieni il tuo flusso",
-    "continuityDescription": "Riprendi, sfoglia e cambia fonte senza perdere l'attimo.",
-    "ecosystemTitle": "Pronti per quello che verrà dopo.",
-    "ecosystemDescription": "L'app desktop è il nucleo. I componenti aggiuntivi estendono i margini, così la tua configurazione può rimanere personale senza diventare complicata.",
-    "addonLabel": "PRONTO PER L'AGGIUNTA",
-    "addonOne": "Connettori di origine",
-    "addonTwo": "Strumenti per i sottotitoli",
-    "addonThree": "Estensioni della comunità",
-    "showcaseTitle": "Dettagli prima di premere play.",
-    "showcaseDescription": "Una superficie desktop focalizzata per la scoperta, la riproduzione e tutto ciò che riguarda la storia.",
-    "showcaseCaption": "Modalità desktop/messa a fuoco Framezoo",
-    "subtitleSyncDescription": "Allinea il dialogo con l'immagine in pochi secondi grazie alla sincronizzazione dei sottotitoli AI.",
-    "subtitleSync": "Sincronizza i sottotitoli con l'intelligenza artificiale",
-    "featureLabel": "Il giocatore, a modo tuo",
-    "dualSubtitles": "Mantieni visibili due lingue dei sottotitoli",
-    "experienceTitle": "Tutto ciò di cui hai bisogno in un lettore.",
-    "dualSubtitlesDescription": "Attiva i doppi sottotitoli quando stai imparando, confrontando o semplicemente preferisci entrambi.",
-    "subtitleControls": "Sintonizza il lettore intorno a te",
-    "showcaseSecondaryAlt": "Schermata di scoperta del lettore Framezoo con ricerca, categorie e righe del titolo",
-    "showcasePrimaryAlt": "Schermata dei dettagli del titolo Framezoo con grafica, valutazioni, stagioni e metadati",
-    "subtitleControlsDescription": "Scegli la fonte, la lingua, i tempi e la visualizzazione dei sottotitoli senza interrompere il flusso.",
-    "showcaseSecondaryDescription": "Inizia da una superficie di scoperta pulita, quindi passa alla riproduzione senza perdere la posizione.",
-    "showcaseSecondaryTitle": "Scopri qualcosa che vale la pena guardare."
+    "version": "Versione desktop",
+    "imageAlt": "Lettore di streaming ad alta velocità Framezoo che mostra la schermata di rilevamento",
+    "titleAccent": "guarda la tua strada.",
+    "title": "Trasmetti velocemente,",
+    "description": "Framezoo è un lettore di streaming ad alta velocità con un'interfaccia utente fluida e intuitiva, ricchi metadati di film, sincronizzazione illimitata dei sottotitoli in streaming e supporto dei sottotitoli multi-sorgente."
   },
   "download": {
     "eyebrow": "SCEGLI LA TUA COSTRUZIONE",
@@ -69,8 +38,19 @@
     "ready": "Pronto per questo dispositivo"
   },
   "footer": {
-    "line": "Una casa più tranquilla per le storie a cui continui a tornare.",
-    "status": "Prima il desktop. Pronto per il componente aggiuntivo."
+    "status": "Prima il desktop. Pronto per il componente aggiuntivo.",
+    "line": "Streaming fluido e ad alta velocità per tutti i film e le serie che ami.",
+    "productTitle": "Prodotto",
+    "terms": "Termini di servizio",
+    "legalTitle": "Legale e politiche",
+    "resourcesTitle": "Risorse e supporto",
+    "privacy": "Politica sulla privacy e sui dati",
+    "reportIssue": "Invia feedback/segnalazione",
+    "addonPolicy": "Politica sui componenti aggiuntivi",
+    "copyright": "Diritto d'autore e DMCA",
+    "disclaimer": "Framezoo è un software di riproduzione multimediale neutro e non ospita, archivia, distribuisce o controlla file multimediali o componenti aggiuntivi di terze parti. Gli utenti sono gli unici responsabili dei componenti aggiuntivi e dei contenuti a cui accedono in conformità con le leggi locali.",
+    "metadataAttribution": "I metadati sono forniti dai database di film pubblici (TMDB, IMDb) a scopo informativo.",
+    "rights": "© 2026 Framezoo. Tutti i diritti riservati."
   },
   "addonGuide": {
     "manifestDescription": "I metadati dicono all'app chi è il tuo componente aggiuntivo, quali risorse supporta e dove si trova la sua icona.",
@@ -108,9 +88,9 @@
     "movie": "Film",
     "series": "Serie",
     "title": "Storie popolari per il tuo prossimo orologio.",
-    "description": "Trova qualcosa che valga la pena guardare, scopri i dettagli e trova un modo migliore di guardare con Framezoo.",
     "dragHint": "Trascina per esplorare",
-    "eyebrow": "LA SCOPERTA DI FRAMEZOO"
+    "eyebrow": "LA SCOPERTA DI FRAMEZOO",
+    "description": "Sfoglia i metadati dei film, scegli il tuo stream e inizia a guardarli immediatamente con Framezoo."
   },
   "installGuide": {
     "title": "Guida all'installazione e al lancio di Framezoo",
@@ -192,5 +172,32 @@
     "attachmentsLabel": "File",
     "attachmentsHint": "Immagini/video · Massimo 55 MB totali",
     "attachmentsTooLarge": "La dimensione totale del file non deve superare i 55 MB."
+  },
+  "seo": {
+    "title": "Framezoo: streaming video veloce e fluido",
+    "description": "Framezoo è un lettore di streaming video ad alta velocità progettato per essere fluido, intuitivo e facile da usare. Esplora ricchi metadati di film, sincronizza i sottotitoli con i flussi video senza limiti e carica i sottotitoli da più fonti."
+  },
+  "features": {
+    "subtitleSyncDescription": "Sincronizza i sottotitoli con qualsiasi flusso video senza limiti: regola i tempi e allinea perfettamente i dialoghi mentre guardi.",
+    "experienceTitle": "Progettato per uno streaming veloce e senza sforzo.",
+    "featureLabel": "Streaming ad alta velocità, a modo tuo",
+    "subtitleSync": "Sincronizzazione illimitata dei sottotitoli in streaming",
+    "overviewDescription": "Goditi lo streaming video ad alta velocità in un'interfaccia fluida e facile da usare con ricchi metadati di film, sincronizzazione illimitata dei sottotitoli in streaming e sottotitoli da più fonti.",
+    "dualSubtitlesDescription": "Carica automaticamente i sottotitoli da più fornitori, cambia sorgente al volo o visualizza i sottotitoli doppi uno accanto all'altro.",
+    "subtitleControlsDescription": "Naviga in un'interfaccia pulita e reattiva con metadati completi, valutazioni, dettagli sul cast e guide agli episodi integrate.",
+    "ecosystemDescription": "Riproduzione veloce dello streaming, sottotitoli multi-sorgente e ricchi metadati di film sono integrati direttamente nel core. I componenti aggiuntivi ti consentono di connettere ancora più stream, cataloghi e fornitori di sottotitoli senza sforzo.",
+    "ecosystemTitle": "Lo streaming ad alta velocità incontra un ecosistema aperto.",
+    "subtitleControls": "Interfaccia utente fluida e metadati ricchi di film",
+    "dualSubtitles": "Sottotitoli da più fonti",
+    "addonLabel": "All'interno di Framezoo",
+    "addonOne": "Flussi ad alta velocità",
+    "addonThree": "Sottotitoli multi-sorgente",
+    "addonTwo": "Metadati di film ricchi",
+    "showcaseTitle": "Metadati ricchi prima di premere play.",
+    "showcaseSecondaryAlt": "Schermata di scoperta del lettore Framezoo con ricerca, categorie e righe del titolo",
+    "showcaseDescription": "Apri qualsiasi titolo per esplorare poster, valutazioni, sinossi, stagioni e dettagli sul cast in un'unica visualizzazione chiara e intuitiva.",
+    "showcaseSecondaryDescription": "Naviga senza sforzo attraverso un'interfaccia elegante progettata per portarti dalla scoperta alla riproduzione ad alta velocità in pochi secondi.",
+    "showcasePrimaryAlt": "Schermata dei dettagli del titolo Framezoo con grafica, valutazioni, stagioni e ricchi metadati dei film",
+    "showcaseSecondaryTitle": "Scoperta fluida e intuitiva."
   }
 }

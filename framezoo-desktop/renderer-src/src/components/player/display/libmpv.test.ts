@@ -2312,15 +2312,15 @@ describe("libmpv display", () => {
     expect(volumes).toContain(0.85);
     expect(commands).toContainEqual({ type: "set-volume", volume: 0.85 });
 
-    // Test volume boost up to 300% (3.0)
-    display.setVolume(2.5);
-    expect(volumes).toContain(2.5);
-    expect(commands).toContainEqual({ type: "set-volume", volume: 2.5 });
+    // Test volume boost up to 200% (2.0)
+    display.setVolume(1.8);
+    expect(volumes).toContain(1.8);
+    expect(commands).toContainEqual({ type: "set-volume", volume: 1.8 });
 
-    // Test volume clamp at 300% (3.0)
-    display.setVolume(3.5);
-    expect(volumes).toContain(3);
-    expect(commands).toContainEqual({ type: "set-volume", volume: 3 });
+    // Test volume clamp at 200% (2.0)
+    display.setVolume(2.5);
+    expect(volumes).toContain(2);
+    expect(commands).toContainEqual({ type: "set-volume", volume: 2 });
 
     display.destroy();
   });

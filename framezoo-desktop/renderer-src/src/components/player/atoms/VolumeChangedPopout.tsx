@@ -34,7 +34,7 @@ export function VolumeChangedPopout() {
               <div
                 className="h-full bg-video-context-sliderFilled rounded-full transition-[width] duration-100"
                 style={{
-                  width: `${Math.min(100, Math.max(0, (volume / 3) * 100))}%`,
+                  width: `${Math.min(100, Math.max(0, (volume / 2) * 100))}%`,
                 }}
               />
             </div>

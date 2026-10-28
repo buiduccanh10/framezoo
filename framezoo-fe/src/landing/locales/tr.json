@@ -10,44 +10,13 @@
   },
   "hero": {
     "eyebrow": "FRAMEZOO MASAÜSTÜ / 01",
-    "title": "Daha iyi izle.",
-    "titleAccent": "Masaüstünde.",
-    "description": "Framezoo, AI altyazı senkronizasyonu, çift altyazı, zengin medya meta verileri ve eklenti desteğine sahip bir oynatıcıdır.",
     "primaryCta": "Masaüstünü indir",
     "secondaryCta": "Deneyimi görün",
-    "imageAlt": "Keşif ekranını gösteren Framezoo oynatıcısı",
-    "version": "Masaüstü sürümü"
-  },
-  "features": {
-    "performanceTitle": "Tarayıcı vergisi olmadan kitaplığınız.",
-    "overviewDescription": "Altyazıları AI ile senkronize edin, çift altyazıyı görünür tutun, medya meta verilerini keşfedin ve hikayeden ayrılmadan oynatmayı kontrol edin.",
-    "playback": "Yerel oynatma",
-    "playbackDescription": "Masaüstü düzeyinde medya işlemeyle akıcı video.",
-    "performance": "Sessiz performans",
-    "performanceDescription": "Daha az krom. Daha fazla odaklanma. Sekme hokkabazlığı yok.",
-    "continuity": "Akışınızı koruyun",
-    "continuityDescription": "Anı kaybetmeden devam edin, göz atın ve kaynaklar arasında geçiş yapın.",
-    "ecosystemTitle": "Bundan sonra olacaklara hazırız.",
-    "ecosystemDescription": "Masaüstü uygulaması temeldir. Eklentiler sınırları genişletir, böylece kurulumunuz karmaşıklaşmadan kişisel kalabilir.",
-    "addonLabel": "ADDON'A HAZIR",
-    "addonOne": "Kaynak konnektörleri",
-    "addonTwo": "Altyazı araçları",
-    "addonThree": "Topluluk uzantıları",
-    "showcaseTitle": "Ayrıntılar, oynat tuşuna basmadan önce.",
-    "showcaseDescription": "Keşif, oynatma ve hikayeyle ilgili her şey için odaklanmış bir masaüstü yüzeyi.",
-    "showcaseCaption": "Framezoo Masaüstü / Odak modu",
-    "experienceTitle": "Bir oynatıcıda ihtiyacınız olan her şey.",
-    "featureLabel": "Oyuncu, sizin tarzınız",
-    "subtitleSync": "Altyazıları AI ile senkronize edin",
-    "dualSubtitlesDescription": "Öğrenirken, karşılaştırırken veya sadece ikisini birden tercih ederken çift altyazıyı açın.",
-    "subtitleSyncDescription": "AI altyazı senkronizasyonu ile diyaloğu saniyeler içinde resimle hizalayın.",
-    "dualSubtitles": "İki altyazı dilini görünür tutun",
-    "showcasePrimaryAlt": "Çizimler, derecelendirmeler, sezonlar ve meta veriler içeren Framezoo başlık ayrıntısı ekranı",
-    "subtitleControlsDescription": "Akışınızı bozmadan altyazı kaynağını, dilini, zamanlamasını ve gösterimini seçin.",
-    "showcaseSecondaryTitle": "İzlemeye değer bir şey keşfedin.",
-    "subtitleControls": "Çevrenizdeki oynatıcıyı ayarlayın",
-    "showcaseSecondaryDescription": "Temiz bir keşif yüzeyinden başlayın, ardından yerinizi kaybetmeden oynatmaya geçin.",
-    "showcaseSecondaryAlt": "Arama, kategoriler ve başlık satırlarını içeren Framezoo oynatıcı keşif ekranı"
+    "version": "Masaüstü sürümü",
+    "title": "Hızlı akış yapın,",
+    "titleAccent": "yoluna dikkat et.",
+    "imageAlt": "Keşif ekranını gösteren Framezoo yüksek hızlı yayın oynatıcısı",
+    "description": "Framezoo, pürüzsüz, sezgisel bir kullanıcı arayüzüne, zengin film meta verilerine, sınırsız akış altyazı senkronizasyonuna ve çok kaynaklı altyazı desteğine sahip, yüksek hızlı bir akış oynatıcısıdır."
   },
   "download": {
     "eyebrow": "YAPINIZI SEÇİN",
@@ -69,8 +38,19 @@
     "ready": "Bu cihaz için hazır"
   },
   "footer": {
-    "line": "Sürekli geri döndüğünüz hikayeler için daha sessiz bir yuva.",
-    "status": "Önce masaüstü. Eklentiye hazır."
+    "status": "Önce masaüstü. Eklentiye hazır.",
+    "line": "Sevdiğiniz tüm filmler ve diziler için yüksek hızlı, sorunsuz akış.",
+    "productTitle": "Ürün",
+    "resourcesTitle": "Kaynaklar ve Destek",
+    "legalTitle": "Yasal ve Politikalar",
+    "terms": "Hizmet Şartları",
+    "disclaimer": "Framezoo tarafsız bir medya oynatıcı yazılımıdır ve herhangi bir medya dosyasını veya üçüncü taraf eklentilerini barındırmaz, saklamaz, dağıtmaz veya kontrol etmez. Kullanıcılar, yerel yasalara uygun olarak eriştikleri eklentilerden ve içerikten yalnızca sorumludur.",
+    "addonPolicy": "Eklenti Politikası",
+    "reportIssue": "Geri Bildirim / Rapor Gönder",
+    "privacy": "Gizlilik ve Veri Politikası",
+    "copyright": "Telif hakkı ve DMCA",
+    "rights": "© 2026 Framezoo. Her hakkı saklıdır.",
+    "metadataAttribution": "Meta veriler, halka açık film veritabanları (TMDB, IMDb) tarafından bilgilendirme amaçlı sağlanmaktadır."
   },
   "addonGuide": {
     "eyebrow": "ADDON PROTOKOLÜ / KILAVUZU",
@@ -108,9 +88,9 @@
     "movie": "Film",
     "series": "Seri",
     "dragHint": "Keşfetmek için sürükleyin",
-    "description": "İzlemeye değer bir şey bulun, ayrıntıları açın ve Framezoo ile izlemenin daha iyi bir yolunu bulun.",
     "title": "Bir sonraki izlemeniz için popüler hikayeler.",
-    "eyebrow": "FRAMEZOO KEŞFİ"
+    "eyebrow": "FRAMEZOO KEŞFİ",
+    "description": "Zengin film meta verilerine göz atın, akışınızı seçin ve Framezoo ile anında izlemeye başlayın."
   },
   "installGuide": {
     "backHome": "Ana Sayfaya Geri Dön",
@@ -192,5 +172,32 @@
     "attachmentsLabel": "Dosyalar",
     "attachmentsTooLarge": "Toplam dosya boyutu 55 MB'ı geçmemelidir.",
     "attachmentsHint": "Resimler/videolar · toplam maksimum 55 MB"
+  },
+  "seo": {
+    "description": "Framezoo akıcı, sezgisel ve kullanımı kolay olacak şekilde tasarlanmış yüksek hızlı bir video akış oynatıcısıdır. Zengin film meta verilerini keşfedin, altyazıları sınırsız video akışlarıyla senkronize edin ve birden fazla kaynaktan altyazı yükleyin.",
+    "title": "Framezoo - Hızlı ve Sorunsuz Video Akışı"
+  },
+  "features": {
+    "featureLabel": "Yüksek hızlı akış, istediğiniz gibi",
+    "subtitleSync": "Sınırsız akış altyazı senkronizasyonu",
+    "dualSubtitles": "Birden fazla kaynaktan altyazılar",
+    "experienceTitle": "Hızlı, zahmetsiz akış için tasarlandı.",
+    "overviewDescription": "Zengin film meta verileri, sınırsız akışlı altyazı senkronizasyonu ve birden fazla kaynaktan gelen altyazılarla sorunsuz, kullanımı kolay bir arayüzde yüksek hızlı video akışının keyfini çıkarın.",
+    "subtitleSyncDescription": "Altyazıları herhangi bir video akışıyla sınırsızca senkronize edin; izlerken zamanlamayı ayarlayın ve diyalogları sorunsuz bir şekilde hizalayın.",
+    "dualSubtitlesDescription": "Birden fazla sağlayıcıdan altyazıları otomatik olarak yükleyin, kaynakları anında değiştirin veya çift altyazıyı yan yana görüntüleyin.",
+    "subtitleControlsDescription": "Kapsamlı meta veriler, derecelendirmeler, oyuncu ayrıntıları ve yerleşik bölüm kılavuzları içeren temiz, hızlı yanıt veren bir arayüzde gezinin.",
+    "ecosystemDescription": "Hızlı akış oynatma, çok kaynaklı altyazılar ve zengin film meta verileri, tam da çekirdeğin içine yerleştirilmiştir. Eklentiler daha fazla yayına, kataloga ve altyazı sağlayıcısına zahmetsizce bağlanmanıza olanak tanır.",
+    "subtitleControls": "Sorunsuz kullanıcı arayüzü ve zengin film meta verileri",
+    "ecosystemTitle": "Yüksek hızlı akış açık bir ekosistemle buluşuyor.",
+    "addonTwo": "Zengin film meta verileri",
+    "addonThree": "Çok kaynaklı altyazılar",
+    "addonOne": "Yüksek hızlı akışlar",
+    "addonLabel": "Framezoo'nun İçinde",
+    "showcaseDescription": "Posterleri, derecelendirmeleri, özetleri, sezonları ve oyuncu kadrosu ayrıntılarını tek bir net, sezgisel görünümde keşfetmek için herhangi bir başlığı açın.",
+    "showcaseTitle": "Oynat tuşuna basmadan önce zengin meta veriler.",
+    "showcaseSecondaryTitle": "Sorunsuz, sezgisel keşif.",
+    "showcaseSecondaryAlt": "Arama, kategoriler ve başlık satırlarını içeren Framezoo oynatıcı keşif ekranı",
+    "showcaseSecondaryDescription": "Sizi keşif aşamasından yüksek hızlı oynatmaya saniyeler içinde ulaştırmak için tasarlanmış şık bir arayüz aracılığıyla zahmetsizce gezinin.",
+    "showcasePrimaryAlt": "Sanat eserleri, derecelendirmeler, sezonlar ve zengin film meta verileri içeren Framezoo başlık ayrıntısı ekranı"
   }
 }

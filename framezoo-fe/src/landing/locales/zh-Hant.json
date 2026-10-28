@@ -10,44 +10,13 @@
   },
   "hero": {
     "eyebrow": "FRAMEZOO 桌面 / 01",
-    "title": "觀察得更好。",
-    "titleAccent": "在桌面上。",
-    "description": "Framezoo 是一款具有 AI 字幕同步、雙字幕、富媒體元資料和外掛程式支援的播放器。",
     "primaryCta": "下載桌面",
     "secondaryCta": "查看體驗",
-    "imageAlt": "顯示發現畫面的 Framezoo 播放器",
-    "version": "桌面版"
-  },
-  "features": {
-    "performanceTitle": "您的圖書館，無需支付瀏覽器稅。",
-    "overviewDescription": "與 AI 同步字幕、保持雙字幕可見、探索媒體元數據並在不離開故事的情況下控製播放。",
-    "playback": "原生播放",
-    "playbackDescription": "透過桌面級媒體處理實現流暢的影片。",
-    "performance": "安靜的性能",
-    "performanceDescription": "少鍍鉻。更加專注。沒有選項卡雜耍。",
-    "continuity": "保持流暢",
-    "continuityDescription": "繼續、瀏覽和切換來源，不失時機。",
-    "ecosystemTitle": "為接下來的事情做好準備。",
-    "ecosystemDescription": "桌面應用程式是核心。插件擴展了邊緣，因此您的設定可以保持個性化，而不會變得複雜。",
-    "addonLabel": "插件就緒",
-    "addonOne": "來源連接器",
-    "addonTwo": "字幕工具",
-    "addonThree": "社區擴展",
-    "showcaseTitle": "按下播放鍵之前的詳細資訊。",
-    "showcaseDescription": "一個專注於發現、播放和故事相關一切的桌面介面。",
-    "showcaseCaption": "Framezoo 桌面/焦點模式",
-    "featureLabel": "玩家，你的方式",
-    "subtitleSync": "與AI同步字幕",
-    "dualSubtitlesDescription": "當您學習、比較或只是喜歡兩者時，請打開雙字幕。",
-    "experienceTitle": "播放器所需的一切。",
-    "dualSubtitles": "保持兩種字幕語言可見",
-    "subtitleSyncDescription": "透過 AI 字幕同步，幾秒鐘內即可將對話與圖片對齊。",
-    "showcasePrimaryAlt": "Framezoo 標題詳細資訊螢幕，包含藝術品、評級、季節和元數據",
-    "showcaseSecondaryDescription": "從乾淨的發現介面開始，然後進入播放狀態，而不會丟失您的位置。",
-    "showcaseSecondaryAlt": "Framezoo 播放器發現螢幕，包含搜尋、類別和標題行",
-    "subtitleControlsDescription": "選擇字幕來源、語言、時間和顯示，而不會中斷您的流程。",
-    "showcaseSecondaryTitle": "發現一些值得一看的東西。",
-    "subtitleControls": "調整你周圍的播放器"
+    "version": "桌面版",
+    "imageAlt": "Framezoo 高速串流媒體播放器顯示發現螢幕",
+    "titleAccent": "注意你的方式。",
+    "title": "流量速度快，",
+    "description": "Framezoo 是一款高速串流播放器，具有流暢、直覺的 UI、豐富的電影元資料、無限串流字幕同步和多來源字幕支援。"
   },
   "download": {
     "eyebrow": "選擇您的構建",
@@ -69,8 +38,19 @@
     "ready": "準備好使用此設備"
   },
   "footer": {
-    "line": "一個更安靜的家，供您不斷回顧的故事。",
-    "status": "桌面優先。插件就緒。"
+    "status": "桌面優先。插件就緒。",
+    "line": "高速、流暢地播放您喜愛的所有電影和電視節目。",
+    "terms": "服務條款",
+    "productTitle": "產品",
+    "resourcesTitle": "資源與支持",
+    "privacy": "隱私權和資料政策",
+    "copyright": "版權與數位千禧年版權法案 (DMCA)",
+    "legalTitle": "法律與政策",
+    "reportIssue": "發送回饋/報告",
+    "rights": "© 2026 Framezoo。版權所有。",
+    "addonPolicy": "插件政策",
+    "disclaimer": "Framezoo 是一個中立的媒體播放器軟體，不託管、儲存、散佈或控制任何媒體檔案或第三方外掛程式。用戶根據當地法律對他們訪問的插件和內容承擔全部責任。",
+    "metadataAttribution": "元資料由公共電影資料庫（TMDB、IMDb）提供，僅供參考。"
   },
   "addonGuide": {
     "resourcesTitle": "選擇資源",
@@ -108,9 +88,9 @@
     "movie": "電影",
     "dragHint": "拖曳探索",
     "series": "系列",
-    "description": "找到值得觀看的內容，打開細節，然後透過 Framezoo 找到更好的觀看方式。",
     "eyebrow": "框架動物園發現",
-    "title": "您下一部觀看的熱門故事。"
+    "title": "您下一部觀看的熱門故事。",
+    "description": "使用 Framezoo 瀏覽豐富的電影元資料、選擇您的串流並立即開始觀看。"
   },
   "installGuide": {
     "backHome": "回首頁",
@@ -192,5 +172,32 @@
     "attachmentsLabel": "文件",
     "attachmentsHint": "圖片/影片 · 總計最大 55 MB",
     "attachmentsTooLarge": "檔案總大小不得超過 55 MB。"
+  },
+  "seo": {
+    "title": "Framezoo - 快速流暢的影片串流",
+    "description": "Framezoo 是一款高速影片串流播放器，設計流暢、直覺且易於使用。探索豐富的電影元數據，無限制地將字幕與視訊串流同步，並從多個來源載入字幕。"
+  },
+  "features": {
+    "experienceTitle": "專為快速、輕鬆的串流媒體而設計。",
+    "featureLabel": "高速串流媒體，隨心所欲",
+    "subtitleSync": "無限串流字幕同步",
+    "subtitleSyncDescription": "無限制地將字幕與任​​何視訊串流同步 - 在觀看時無縫調整時間並對齊對話。",
+    "dualSubtitles": "來自多個來源的字幕",
+    "overviewDescription": "在流暢、易於使用的介面中享受高速視訊串流，具有豐富的電影元資料、無限流字幕同步和來自多個來源的字幕。",
+    "dualSubtitlesDescription": "自動從多個提供者載入字幕、即時切換來源或並排顯示雙字幕。",
+    "subtitleControlsDescription": "瀏覽乾淨、響應靈敏的介面，內建全面的元數據、評分、演員詳細資訊和劇集指南。",
+    "addonOne": "高速流",
+    "ecosystemTitle": "高速串流媒體滿足開放的生態系統。",
+    "subtitleControls": "流暢的使用者介面和豐富的電影元數據",
+    "ecosystemDescription": "快速串流媒體播放、多來源字幕和豐富的電影元資料都內建在核心中。外掛程式可讓您輕鬆連接更多串流、目錄和字幕提供者。",
+    "showcaseDescription": "打開任何標題即可在乾淨、直觀的視圖中探索海報、評分、劇情簡介、季節和演員表詳細資訊。",
+    "showcaseTitle": "在您按下播放按鈕之前提供豐富的元資料。",
+    "addonThree": "多源字幕",
+    "addonLabel": "框架動物園內部",
+    "addonTwo": "豐富的電影元數據",
+    "showcasePrimaryAlt": "Framezoo 標題詳細資訊螢幕，包含插圖、評分、季節和豐富的電影元數據",
+    "showcaseSecondaryTitle": "流暢、直覺的發現。",
+    "showcaseSecondaryAlt": "Framezoo 播放器發現螢幕，包含搜尋、類別和標題行",
+    "showcaseSecondaryDescription": "透過時尚的介面輕鬆瀏覽，旨在讓您在幾秒鐘內從發現到高速播放。"
   }
 }

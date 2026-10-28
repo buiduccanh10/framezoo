@@ -10,44 +10,13 @@
   },
   "hero": {
     "eyebrow": "FRAMEZOO DESKTOP / 01",
-    "title": "Schauen Sie besser zu.",
-    "titleAccent": "Auf dem Desktop.",
-    "description": "Framezoo ist ein Player mit KI-Untertitelsynchronisierung, zwei Untertiteln, Rich Media-Metadaten und Add-on-Unterstützung.",
     "primaryCta": "Desktop herunterladen",
     "secondaryCta": "Erleben Sie die Erfahrung",
-    "imageAlt": "Framezoo-Player zeigt den Entdeckungsbildschirm an",
-    "version": "Desktop-Version"
-  },
-  "features": {
-    "performanceTitle": "Ihre Bibliothek, ohne Browsersteuer.",
-    "overviewDescription": "Synchronisieren Sie Untertitel mit KI, halten Sie doppelte Untertitel sichtbar, erkunden Sie Medienmetadaten und steuern Sie die Wiedergabe, ohne die Geschichte zu verlassen.",
-    "playback": "Native Wiedergabe",
-    "playbackDescription": "Reibungsloses Video mit Medienverarbeitung auf Desktop-Niveau.",
-    "performance": "Ruhige Leistung",
-    "performanceDescription": "Weniger Chrom. Mehr Fokus. Kein Tab-Jonglieren.",
-    "continuity": "Bleiben Sie im Fluss",
-    "continuityDescription": "Machen Sie weiter, durchsuchen Sie und wechseln Sie die Quelle, ohne den Moment zu verlieren.",
-    "ecosystemTitle": "Bereit für das, was als nächstes kommt.",
-    "ecosystemDescription": "Die Desktop-App ist das Herzstück. Add-Ons erweitern die Möglichkeiten, sodass Ihr Setup persönlich bleibt, ohne kompliziert zu werden.",
-    "addonLabel": "ADDON-FERTIG",
-    "addonOne": "Quellanschlüsse",
-    "addonTwo": "Untertitel-Tools",
-    "addonThree": "Community-Erweiterungen",
-    "showcaseTitle": "Details, bevor Sie auf Play drücken.",
-    "showcaseDescription": "Eine fokussierte Desktop-Oberfläche zum Entdecken, Abspielen und allem rund um die Geschichte.",
-    "showcaseCaption": "Framezoo Desktop / Fokusmodus",
-    "experienceTitle": "Alles, was Sie in einem Player brauchen.",
-    "subtitleSyncDescription": "Passen Sie Dialoge mit der KI-Untertitelsynchronisierung in Sekundenschnelle an das Bild an.",
-    "dualSubtitlesDescription": "Schalten Sie die doppelten Untertitel ein, wenn Sie lernen, vergleichen oder einfach beides bevorzugen.",
-    "dualSubtitles": "Lassen Sie zwei Untertitelsprachen sichtbar",
-    "subtitleSync": "Untertitel mit KI synchronisieren",
-    "featureLabel": "Der Spieler, auf deine Art",
-    "showcaseSecondaryDescription": "Beginnen Sie mit einer sauberen Entdeckungsoberfläche und wechseln Sie dann zur Wiedergabe, ohne Ihren Platz zu verlieren.",
-    "subtitleControlsDescription": "Wählen Sie Untertitelquelle, Sprache, Timing und Anzeige, ohne Ihren Ablauf zu unterbrechen.",
-    "showcaseSecondaryTitle": "Entdecken Sie etwas, das es wert ist, gesehen zu werden.",
-    "subtitleControls": "Stimmen Sie den Player um Sie herum ab",
-    "showcasePrimaryAlt": "Framezoo-Titeldetailbildschirm mit Bildmaterial, Bewertungen, Staffeln und Metadaten",
-    "showcaseSecondaryAlt": "Framezoo-Player-Erkennungsbildschirm mit Suche, Kategorien und Titelzeilen"
+    "version": "Desktop-Version",
+    "title": "Schnell streamen,",
+    "titleAccent": "Pass auf deinen Weg auf.",
+    "description": "Framezoo ist ein Hochgeschwindigkeits-Streaming-Player mit einer reibungslosen, intuitiven Benutzeroberfläche, umfangreichen Filmmetadaten, unbegrenzter Synchronisierung von Stream-Untertiteln und Unterstützung für Untertitel aus mehreren Quellen.",
+    "imageAlt": "Framezoo-Hochgeschwindigkeits-Streaming-Player mit Anzeige des Erkennungsbildschirms"
   },
   "download": {
     "eyebrow": "WÄHLEN SIE IHREN GEBÄUDE",
@@ -69,8 +38,19 @@
     "hideAll": "Andere Builds ausblenden"
   },
   "footer": {
-    "line": "Ein ruhigeres Zuhause für die Geschichten, zu denen Sie immer wieder zurückkehren.",
-    "status": "Desktop-first. Addon-bereit."
+    "status": "Desktop-first. Addon-bereit.",
+    "line": "Schnelles, reibungsloses Streaming für alle Filme und Serien, die Sie lieben.",
+    "resourcesTitle": "Ressourcen und Support",
+    "productTitle": "Produkt",
+    "disclaimer": "Framezoo ist eine neutrale Media-Player-Software und hostet, speichert, verteilt oder kontrolliert keine Mediendateien oder Add-ons von Drittanbietern. Benutzer tragen die alleinige Verantwortung für die Add-ons und Inhalte, auf die sie zugreifen, und zwar in Übereinstimmung mit den örtlichen Gesetzen.",
+    "privacy": "Datenschutz und Datenrichtlinie",
+    "legalTitle": "Rechtliche Hinweise und Richtlinien",
+    "terms": "Nutzungsbedingungen",
+    "copyright": "Urheberrecht & DMCA",
+    "addonPolicy": "Add-on-Richtlinie",
+    "reportIssue": "Feedback/Bericht senden",
+    "rights": "© 2026 Framezoo. Alle Rechte vorbehalten.",
+    "metadataAttribution": "Metadaten werden von öffentlichen Filmdatenbanken (TMDB, IMDb) zu Informationszwecken bereitgestellt."
   },
   "addonGuide": {
     "manifestTitle": "Beginnen Sie mit manifest.json",
@@ -109,8 +89,8 @@
     "movie": "Film",
     "title": "Beliebte Geschichten für Ihre nächste Uhr.",
     "dragHint": "Zum Erkunden ziehen",
-    "description": "Finden Sie etwas, das es wert ist, gesehen zu werden, öffnen Sie die Details und finden Sie mit Framezoo eine bessere Möglichkeit, es anzusehen.",
-    "series": "Serie"
+    "series": "Serie",
+    "description": "Durchsuchen Sie umfangreiche Filmmetadaten, wählen Sie Ihren Stream aus und beginnen Sie sofort mit der Wiedergabe mit Framezoo."
   },
   "installGuide": {
     "downloadApp": "Laden Sie Framezoo herunter",
@@ -192,5 +172,32 @@
     "attachmentsLabel": "Dateien",
     "attachmentsHint": "Bilder/Videos · Maximal 55 MB insgesamt",
     "attachmentsTooLarge": "Die Gesamtdateigröße darf 55 MB nicht überschreiten."
+  },
+  "seo": {
+    "title": "Framezoo – Schnelles und reibungsloses Video-Streaming",
+    "description": "Framezoo ist ein Hochgeschwindigkeits-Video-Streaming-Player, der reibungslos, intuitiv und einfach zu bedienen ist. Entdecken Sie umfangreiche Filmmetadaten, synchronisieren Sie Untertitel ohne Einschränkungen mit Videostreams und laden Sie Untertitel aus mehreren Quellen."
+  },
+  "features": {
+    "featureLabel": "Hochgeschwindigkeits-Streaming, ganz nach Ihren Wünschen",
+    "subtitleSync": "Unbegrenzte Synchronisierung von Stream-Untertiteln",
+    "experienceTitle": "Entwickelt für schnelles und müheloses Streaming.",
+    "overviewDescription": "Genießen Sie Hochgeschwindigkeits-Videostreaming in einer reibungslosen, benutzerfreundlichen Oberfläche mit umfangreichen Filmmetadaten, unbegrenzter Stream-Untertitelsynchronisierung und Untertiteln aus mehreren Quellen.",
+    "dualSubtitles": "Untertitel aus mehreren Quellen",
+    "subtitleSyncDescription": "Synchronisieren Sie Untertitel ohne Einschränkungen mit jedem Videostream – passen Sie das Timing an und passen Sie Dialoge nahtlos an, während Sie zuschauen.",
+    "subtitleControls": "Reibungslose Benutzeroberfläche und umfangreiche Filmmetadaten",
+    "subtitleControlsDescription": "Navigieren Sie über eine übersichtliche, reaktionsfähige Benutzeroberfläche mit umfassenden Metadaten, Bewertungen, Besetzungsdetails und integrierten Episodenführern.",
+    "ecosystemTitle": "Hochgeschwindigkeits-Streaming trifft auf ein offenes Ökosystem.",
+    "ecosystemDescription": "Schnelle Stream-Wiedergabe, Untertitel aus mehreren Quellen und umfangreiche Filmmetadaten sind direkt in den Kern integriert. Mit Add-Ons können Sie mühelos noch mehr Streams, Kataloge und Untertitelanbieter verbinden.",
+    "addonLabel": "Im Framezoo",
+    "addonTwo": "Umfangreiche Filmmetadaten",
+    "addonOne": "Hochgeschwindigkeits-Streams",
+    "addonThree": "Untertitel aus mehreren Quellen",
+    "showcaseTitle": "Umfangreiche Metadaten, bevor Sie auf „Play“ klicken.",
+    "dualSubtitlesDescription": "Laden Sie Untertitel automatisch von mehreren Anbietern, wechseln Sie die Quelle im Handumdrehen oder zeigen Sie zwei Untertitel nebeneinander an.",
+    "showcaseDescription": "Öffnen Sie einen beliebigen Titel, um Poster, Bewertungen, Synopsen, Staffeln und Besetzungsdetails in einer übersichtlichen, intuitiven Ansicht zu erkunden.",
+    "showcaseSecondaryTitle": "Reibungslose, intuitive Entdeckung.",
+    "showcasePrimaryAlt": "Framezoo-Titeldetailbildschirm mit Bildmaterial, Bewertungen, Staffeln und umfangreichen Filmmetadaten",
+    "showcaseSecondaryDescription": "Navigieren Sie mühelos durch eine elegante Benutzeroberfläche, die Sie in Sekundenschnelle von der Entdeckung zur Hochgeschwindigkeitswiedergabe bringt.",
+    "showcaseSecondaryAlt": "Framezoo-Player-Erkennungsbildschirm mit Suche, Kategorien und Titelzeilen"
   }
 }

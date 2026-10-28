@@ -153,7 +153,7 @@ export function KeyboardEvents() {
 
     const targetVolume = Math.max(
       0,
-      Math.min(3, Math.round((currentVol + delta) * 100) / 100),
+      Math.min(2, Math.round((currentVol + delta) * 100) / 100),
     );
     lastVolumeTargetRef.current = targetVolume;
 

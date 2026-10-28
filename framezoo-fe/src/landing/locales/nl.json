@@ -10,44 +10,13 @@
   },
   "hero": {
     "eyebrow": "FRAMEZOO-BUREAUBLAD / 01",
-    "title": "Kijk beter.",
-    "titleAccent": "Op bureaublad.",
-    "description": "Framezoo is een speler met AI-ondertitelsynchronisatie, dubbele ondertitels, rijke media-metagegevens en ondersteuning voor add-ons.",
     "primaryCta": "Bureaublad downloaden",
     "secondaryCta": "Bekijk de ervaring",
-    "imageAlt": "Framezoo-speler die het ontdekkingsscherm toont",
-    "version": "Desktop-versie"
-  },
-  "features": {
-    "performanceTitle": "Uw bibliotheek, zonder browserbelasting.",
-    "overviewDescription": "Synchroniseer ondertitels met AI, houd dubbele ondertitels zichtbaar, verken mediametagegevens en bedien het afspelen zonder het verhaal te verlaten.",
-    "playback": "Native afspelen",
-    "playbackDescription": "Vloeiende video met mediaverwerking op desktopniveau.",
-    "performance": "Stille prestaties",
-    "performanceDescription": "Minder chroom. Meer aandacht. Geen tab-jongleren.",
-    "continuity": "Houd je stroom vast",
-    "continuityDescription": "Hervat, blader en wissel van bron zonder het moment te verliezen.",
-    "ecosystemTitle": "Klaar voor wat hierna komt.",
-    "ecosystemDescription": "De desktop-app is de kern. Add-ons breiden de randen uit, zodat uw installatie persoonlijk kan blijven zonder ingewikkeld te worden.",
-    "addonLabel": "ADDON-KLAAR",
-    "addonOne": "Bronconnectoren",
-    "addonTwo": "Hulpmiddelen voor ondertiteling",
-    "addonThree": "Community-extensies",
-    "showcaseTitle": "Details voordat u op play drukt.",
-    "showcaseDescription": "Een gericht bureaubladoppervlak voor ontdekken, afspelen en alles rondom het verhaal.",
-    "showcaseCaption": "Framezoo Desktop / Focusmodus",
-    "featureLabel": "De speler, op jouw manier",
-    "experienceTitle": "Alles wat je nodig hebt in een speler.",
-    "dualSubtitlesDescription": "Schakel dubbele ondertiteling in als je aan het leren, vergelijken bent of gewoon de voorkeur geeft aan beide.",
-    "dualSubtitles": "Houd twee ondertiteltalen zichtbaar",
-    "showcasePrimaryAlt": "Framezoo-titeldetailscherm met artwork, beoordelingen, seizoenen en metadata",
-    "subtitleControlsDescription": "Kies ondertitelbron, taal, timing en weergave zonder uw stroom te onderbreken.",
-    "subtitleSyncDescription": "Stem de dialoog binnen enkele seconden af ​​op het beeld met AI-ondertitelsynchronisatie.",
-    "subtitleSync": "Synchroniseer ondertitels met AI",
-    "subtitleControls": "Stem de speler om je heen af",
-    "showcaseSecondaryDescription": "Begin vanaf een schoon ontdekkingsoppervlak en ga vervolgens naar het afspelen zonder uw plaats te verliezen.",
-    "showcaseSecondaryTitle": "Ontdek iets dat de moeite waard is om te bekijken.",
-    "showcaseSecondaryAlt": "Framezoo speler-ontdekkingsscherm met zoek-, categorieën- en titelrijen"
+    "version": "Desktop-versie",
+    "title": "Stream snel,",
+    "description": "Framezoo is een supersnelle streamingspeler met een soepele, intuïtieve gebruikersinterface, rijke filmmetagegevens, onbeperkte ondertitelsynchronisatie en ondersteuning voor ondertitels van meerdere bronnen.",
+    "imageAlt": "Framezoo high-speed streaming-speler die het ontdekkingsscherm toont",
+    "titleAccent": "let op je weg."
   },
   "download": {
     "eyebrow": "KIES UW BOUW",
@@ -69,8 +38,19 @@
     "hideAll": "Verberg andere builds"
   },
   "footer": {
-    "line": "Een rustiger huis voor de verhalen waar je steeds naar terugkomt.",
-    "status": "Desktop-eerst. Klaar voor add-ons."
+    "status": "Desktop-eerst. Klaar voor add-ons.",
+    "line": "Snelle, vloeiende streaming voor alle films en series waar je van houdt.",
+    "productTitle": "Product",
+    "legalTitle": "Juridisch en beleid",
+    "terms": "Servicevoorwaarden",
+    "resourcesTitle": "Hulpbronnen en ondersteuning",
+    "disclaimer": "Framezoo is neutrale mediaspelersoftware en host, bewaart, distribueert of beheert geen mediabestanden of add-ons van derden. Gebruikers zijn als enige verantwoordelijk voor de add-ons en inhoud waartoe zij toegang krijgen, in overeenstemming met de lokale wetgeving.",
+    "copyright": "Auteursrecht en DMCA",
+    "reportIssue": "Feedback / rapport verzenden",
+    "addonPolicy": "Add-onbeleid",
+    "privacy": "Privacy- en gegevensbeleid",
+    "rights": "© 2026 Framezoo. Alle rechten voorbehouden.",
+    "metadataAttribution": "Metagegevens worden ter informatie verstrekt door openbare filmdatabases (TMDB, IMDb)."
   },
   "addonGuide": {
     "manifestDescription": "Metadata vertellen de app wie uw add-on is, welke bronnen deze ondersteunt en waar het pictogram zich bevindt.",
@@ -108,9 +88,9 @@
     "movie": "Film",
     "series": "Serie",
     "title": "Populaire verhalen voor je volgende horloge.",
-    "description": "Vind iets dat de moeite waard is om te bekijken, open de details en ga op zoek naar een betere manier om te kijken met Framezoo.",
     "dragHint": "Sleep om te verkennen",
-    "eyebrow": "FRAMEZOO-ONTDEKKING"
+    "eyebrow": "FRAMEZOO-ONTDEKKING",
+    "description": "Blader door rijke filmmetadata, kies je stream en begin direct met kijken met Framezoo."
   },
   "installGuide": {
     "backHome": "Terug naar Thuis",
@@ -192,5 +172,32 @@
     "attachmentsLabel": "Bestanden",
     "attachmentsTooLarge": "De totale bestandsgrootte mag niet groter zijn dan 55 MB.",
     "attachmentsHint": "Afbeeldingen/video's · Maximaal 55 MB totaal"
+  },
+  "seo": {
+    "title": "Framezoo - Snelle en vloeiende videostreaming",
+    "description": "Framezoo is een snelle videostreamingspeler die is ontworpen voor soepel, intuïtief en gebruiksvriendelijk. Ontdek rijke filmmetadata, synchroniseer ondertitels zonder beperkingen met videostreams en laad ondertitels uit meerdere bronnen."
+  },
+  "features": {
+    "featureLabel": "Streamen op hoge snelheid, op jouw manier",
+    "experienceTitle": "Gebouwd voor snel en moeiteloos streamen.",
+    "subtitleControls": "Vlotte gebruikersinterface en rijke filmmetagegevens",
+    "dualSubtitles": "Ondertitels uit meerdere bronnen",
+    "subtitleSync": "Onbeperkte ondertitelsynchronisatie van streams",
+    "dualSubtitlesDescription": "Laad ondertitels automatisch van meerdere providers, wissel direct van bron of geef dubbele ondertitels naast elkaar weer.",
+    "overviewDescription": "Geniet van supersnelle videostreaming in een soepele, gebruiksvriendelijke interface met rijke filmmetadata, onbeperkte ondertitelsynchronisatie en ondertitels uit meerdere bronnen.",
+    "subtitleSyncDescription": "Synchroniseer ondertitels zonder beperkingen met elke videostream, pas de timing aan en lijn de dialogen naadloos op elkaar af terwijl je kijkt.",
+    "subtitleControlsDescription": "Navigeer door een overzichtelijke, responsieve interface met uitgebreide metadata, beoordelingen, castdetails en ingebouwde afleveringsgidsen.",
+    "ecosystemDescription": "Snelle streamweergave, ondertiteling uit meerdere bronnen en rijke filmmetagegevens zijn rechtstreeks in de kern ingebouwd. Met add-ons kunt u moeiteloos nog meer streams, catalogi en ondertitelaanbieders verbinden.",
+    "ecosystemTitle": "Streaming op hoge snelheid voldoet aan een open ecosysteem.",
+    "addonTwo": "Rijke filmmetagegevens",
+    "addonOne": "Hogesnelheidsstreams",
+    "addonLabel": "Binnen Framezoo",
+    "addonThree": "Ondertiteling met meerdere bronnen",
+    "showcaseSecondaryTitle": "Vlotte, intuïtieve ontdekking.",
+    "showcaseTitle": "Rijke metadata voordat je op play drukt.",
+    "showcaseDescription": "Open een titel om posters, kijkcijfers, samenvattingen, seizoenen en castdetails te bekijken in één overzichtelijke, intuïtieve weergave.",
+    "showcaseSecondaryDescription": "Blader moeiteloos door een gestroomlijnde interface die is ontworpen om u binnen enkele seconden van ontdekking naar afspelen op hoge snelheid te brengen.",
+    "showcasePrimaryAlt": "Framezoo-titeldetailscherm met artwork, beoordelingen, seizoenen en rijke filmmetadata",
+    "showcaseSecondaryAlt": "Framezoo speler-ontdekkingsscherm met zoek-, categorieën- en titelrijen"
   }
 }

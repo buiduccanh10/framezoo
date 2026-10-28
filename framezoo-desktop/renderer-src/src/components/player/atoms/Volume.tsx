@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Icon, Icons } from "@/components/Icon";
 import {
@@ -17,7 +17,7 @@ interface Props {
   buttonClassName?: string;
 }
 
-const MAX_VOLUME = 3;
+const MAX_VOLUME = 2;
 
 export function Volume(props: Props) {
   const ref = useRef<HTMLDivElement>(null!);
@@ -27,11 +27,16 @@ export function Volume(props: Props) {
   const { setVolume, toggleMute } = useVolume();
 
   const lastRaf = useRef<number | null>(null);
+  const [isWheeling, setIsWheeling] = useState(false);
+  const wheelTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     return () => {
       if (lastRaf.current !== null) {
         cancelAnimationFrame(lastRaf.current);
+      }
+      if (wheelTimeout.current !== null) {
+        clearTimeout(wheelTimeout.current);
       }
     };
   }, []);
@@ -78,12 +83,26 @@ export function Volume(props: Props) {
   if (dragging) percentage = dragPercentage;
   const percentageString = makePercentageString(makePercentage(percentage));
 
+  const currentVolume = dragging
+    ? Math.max(0, Math.min(MAX_VOLUME, (dragPercentage / 100) * MAX_VOLUME))
+    : volume;
+  const volumePercentage = Math.round(currentVolume * 100);
+  const showTooltip = dragging || isWheeling;
+
   const handleWheel = useCallback(
     (event: React.WheelEvent<HTMLDivElement>) => {
       event.preventDefault();
       let newVolume = volume - event.deltaY / 1000;
       newVolume = Math.max(0, Math.min(MAX_VOLUME, newVolume));
       setVolume(Math.round(newVolume * 100) / 100);
+      setIsWheeling(true);
+      if (wheelTimeout.current !== null) {
+        clearTimeout(wheelTimeout.current);
+      }
+      wheelTimeout.current = setTimeout(() => {
+        setIsWheeling(false);
+        wheelTimeout.current = null;
+      }, 800);
     },
     [volume, setVolume],
   );
@@ -116,8 +135,10 @@ export function Volume(props: Props) {
           <Icon icon={getVolumeIcon(volume / MAX_VOLUME)} />
         </div>
         <div
-          className={`linear -ml-2 w-0 overflow-hidden transition-[width,opacity] duration-300 ${
-            hovering || dragging ? "!w-28 opacity-100" : "w-4 opacity-0"
+          className={`linear -ml-2 w-0 transition-[width,opacity] duration-300 ${
+            hovering || dragging
+              ? "!w-28 opacity-100 overflow-visible"
+              : "w-4 opacity-0 overflow-hidden"
           }`}
         >
           <div
@@ -133,7 +154,15 @@ export function Volume(props: Props) {
                   width: percentageString,
                 }}
               >
-                <div className="absolute h-4 w-4 translate-x-1/2 rounded-full bg-white" />
+                <div className="absolute right-0 top-1/2 flex -translate-y-1/2 translate-x-1/2 items-center justify-center">
+                  <div className="h-4 w-4 rounded-full bg-white shadow" />
+                  {showTooltip && (
+                    <div className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-2 -translate-x-1/2 select-none whitespace-nowrap rounded bg-black/90 px-1.5 py-0.5 font-mono text-[11px] font-semibold text-white shadow-lg">
+                      {volumePercentage}%
+                      <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 border-x-4 border-t-4 border-x-transparent border-t-black/90" />
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>

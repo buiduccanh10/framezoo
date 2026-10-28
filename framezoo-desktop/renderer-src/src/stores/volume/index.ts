@@ -15,7 +15,7 @@ export interface EmpheralVolumeStore {
 export const useVolumeStore = create(
   persist(
     immer<VolumeStore>((set) => ({
-      volume: 1.5,
+      volume: 1,
       setVolume(v: number) {
         set((s) => {
           s.volume = v;

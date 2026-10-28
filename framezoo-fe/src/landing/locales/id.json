@@ -10,44 +10,13 @@
   },
   "hero": {
     "eyebrow": "DESKTOP FRAMEZOO / 01",
-    "title": "Tonton lebih baik.",
-    "titleAccent": "Di desktop.",
-    "description": "Framezoo adalah pemutar dengan sinkronisasi subtitle AI, subtitle ganda, metadata media kaya, dan dukungan addon.",
     "primaryCta": "Unduh desktop",
     "secondaryCta": "Lihat pengalamannya",
-    "imageAlt": "Pemutar Framezoo menampilkan layar penemuan",
-    "version": "Rilis desktop"
-  },
-  "features": {
-    "performanceTitle": "Perpustakaan Anda, tanpa pajak browser.",
-    "overviewDescription": "Sinkronkan subtitle dengan AI, pertahankan tampilan subtitle ganda, jelajahi metadata media, dan kontrol pemutaran tanpa meninggalkan cerita.",
-    "playback": "Pemutaran asli",
-    "playbackDescription": "Video halus dengan penanganan media kelas desktop.",
-    "performance": "Performa yang tenang",
-    "performanceDescription": "Kurang krom. Lebih fokus. Tidak ada tab juggling.",
-    "continuity": "Pertahankan aliran Anda",
-    "continuityDescription": "Lanjutkan, jelajahi, dan ganti sumber tanpa kehilangan momen.",
-    "ecosystemTitle": "Siap untuk apa yang terjadi selanjutnya.",
-    "ecosystemDescription": "Aplikasi desktop adalah intinya. Addons memperluas keunggulannya, sehingga pengaturan Anda tetap personal tanpa menjadi rumit.",
-    "addonLabel": "TAMBAHAN-SIAP",
-    "addonOne": "Konektor sumber",
-    "addonTwo": "Alat subtitle",
-    "addonThree": "Ekstensi komunitas",
-    "showcaseTitle": "Detail sebelum Anda menekan putar.",
-    "showcaseDescription": "Permukaan desktop yang terfokus untuk penemuan, pemutaran, dan segala hal seputar cerita.",
-    "showcaseCaption": "Mode Desktop / Fokus Framezoo",
-    "experienceTitle": "Semua yang Anda butuhkan dalam seorang pemain.",
-    "dualSubtitlesDescription": "Aktifkan subtitle ganda saat Anda mempelajari, membandingkan, atau sekadar memilih keduanya.",
-    "subtitleSyncDescription": "Sejajarkan dialog dengan gambar dalam hitungan detik dengan sinkronisasi subtitle AI.",
-    "dualSubtitles": "Jaga agar dua bahasa subtitle tetap terlihat",
-    "featureLabel": "Pemain, sesuai keinginan Anda",
-    "subtitleControls": "Sesuaikan pemutar di sekitar Anda",
-    "subtitleControlsDescription": "Pilih sumber subtitle, bahasa, waktu, dan tampilan tanpa mengganggu alur Anda.",
-    "showcaseSecondaryTitle": "Temukan sesuatu yang layak untuk ditonton.",
-    "showcaseSecondaryDescription": "Mulai dari permukaan penemuan yang bersih, lalu lanjutkan ke pemutaran tanpa kehilangan tempat.",
-    "subtitleSync": "Sinkronkan subtitle dengan AI",
-    "showcaseSecondaryAlt": "Layar penemuan pemutar Framezoo dengan pencarian, kategori, dan baris judul",
-    "showcasePrimaryAlt": "Layar detail judul Framezoo dengan karya seni, peringkat, musim, dan metadata"
+    "version": "Rilis desktop",
+    "title": "Streaming cepat,",
+    "titleAccent": "perhatikan jalanmu.",
+    "imageAlt": "Pemutar streaming berkecepatan tinggi Framezoo menampilkan layar penemuan",
+    "description": "Framezoo adalah pemutar streaming berkecepatan tinggi dengan UI yang halus dan intuitif, metadata film yang kaya, sinkronisasi subtitle streaming tanpa batas, dan dukungan subtitle multi-sumber."
   },
   "download": {
     "eyebrow": "PILIH BANGUNAN ANDA",
@@ -69,8 +38,19 @@
     "ready": "Siap untuk perangkat ini"
   },
   "footer": {
-    "line": "Rumah yang lebih tenang untuk cerita yang selalu Anda ingat.",
-    "status": "Desktop-pertama. Siap tambahan."
+    "status": "Desktop-pertama. Siap tambahan.",
+    "line": "Streaming berkecepatan tinggi dan lancar untuk semua film dan serial yang Anda sukai.",
+    "terms": "Ketentuan Layanan",
+    "productTitle": "Produk",
+    "privacy": "Privasi & Kebijakan Data",
+    "resourcesTitle": "Sumber Daya & Dukungan",
+    "copyright": "Hak Cipta & DMCA",
+    "legalTitle": "Hukum & Kebijakan",
+    "rights": "© 2026 Bingkaizoo. Semua hak dilindungi undang-undang.",
+    "addonPolicy": "Kebijakan Tambahan",
+    "disclaimer": "Framezoo adalah perangkat lunak pemutar media netral dan tidak menghosting, menyimpan, mendistribusikan, atau mengontrol file media atau tambahan pihak ketiga apa pun. Pengguna sepenuhnya bertanggung jawab atas add-on dan konten yang mereka akses sesuai dengan hukum setempat.",
+    "reportIssue": "Kirim Masukan / Laporan",
+    "metadataAttribution": "Metadata disediakan oleh database film publik (TMDB, IMDb) untuk tujuan informasi."
   },
   "addonGuide": {
     "eyebrow": "PROTOKOL / PANDUAN TAMBAHAN",
@@ -108,9 +88,9 @@
     "movie": "Film",
     "series": "Seri",
     "title": "Cerita populer untuk tontonan Anda berikutnya.",
-    "description": "Temukan sesuatu yang layak untuk ditonton, buka detailnya, dan nikmati cara menonton yang lebih baik dengan Framezoo.",
     "dragHint": "Tarik untuk menjelajah",
-    "eyebrow": "PENEMUAN FRAMEZOO"
+    "eyebrow": "PENEMUAN FRAMEZOO",
+    "description": "Telusuri metadata film yang kaya, pilih streaming Anda, dan mulailah menonton secara instan dengan Framezoo."
   },
   "installGuide": {
     "macTab": "Untuk macOS",
@@ -192,5 +172,32 @@
     "attachmentsLabel": "File",
     "attachmentsHint": "Gambar/video · Total maksimum 55 MB",
     "attachmentsTooLarge": "Total ukuran file tidak boleh melebihi 55 MB."
+  },
+  "seo": {
+    "title": "Framezoo - Streaming Video Cepat & Lancar",
+    "description": "Framezoo adalah pemutar streaming video berkecepatan tinggi yang dirancang agar lancar, intuitif, dan mudah digunakan. Jelajahi metadata film yang kaya, sinkronkan subtitle dengan streaming video tanpa batas, dan muat subtitle dari berbagai sumber."
+  },
+  "features": {
+    "featureLabel": "Streaming berkecepatan tinggi, sesuai keinginan Anda",
+    "experienceTitle": "Dibuat untuk streaming yang cepat dan mudah.",
+    "dualSubtitles": "Subtitle dari berbagai sumber",
+    "subtitleSync": "Sinkronisasi subtitle streaming tanpa batas",
+    "subtitleControls": "UI halus & metadata film kaya",
+    "dualSubtitlesDescription": "Memuat subtitle secara otomatis dari beberapa penyedia, mengganti sumber dengan cepat, atau menampilkan dua subtitle secara berdampingan.",
+    "subtitleSyncDescription": "Sinkronkan subtitle dengan streaming video apa pun tanpa batas—sesuaikan waktu dan selaraskan dialog dengan lancar saat Anda menonton.",
+    "ecosystemTitle": "Streaming berkecepatan tinggi bertemu dengan ekosistem terbuka.",
+    "addonLabel": "Di dalam Framezoo",
+    "addonOne": "Aliran berkecepatan tinggi",
+    "overviewDescription": "Nikmati streaming video berkecepatan tinggi dalam antarmuka yang lancar dan mudah digunakan dengan metadata film yang kaya, sinkronisasi subtitle streaming tanpa batas, dan subtitle dari berbagai sumber.",
+    "subtitleControlsDescription": "Navigasikan antarmuka yang bersih dan responsif dengan metadata komprehensif, peringkat, detail pemeran, dan panduan episode bawaan.",
+    "ecosystemDescription": "Pemutaran streaming cepat, subtitle multi-sumber, dan metadata film yang kaya dibangun langsung ke dalam intinya. Addons memungkinkan Anda menghubungkan lebih banyak streaming, katalog, dan penyedia subtitle dengan mudah.",
+    "showcaseTitle": "Metadata yang kaya sebelum Anda menekan putar.",
+    "addonTwo": "Metadata film yang kaya",
+    "addonThree": "Subtitle multi-sumber",
+    "showcaseSecondaryTitle": "Penemuan yang mulus dan intuitif.",
+    "showcasePrimaryAlt": "Layar detail judul Framezoo dengan karya seni, peringkat, musim, dan metadata film yang kaya",
+    "showcaseSecondaryAlt": "Layar penemuan pemutar Framezoo dengan pencarian, kategori, dan baris judul",
+    "showcaseDescription": "Buka judul apa pun untuk menjelajahi poster, rating, sinopsis, musim, dan detail pemeran dalam satu tampilan yang bersih dan intuitif.",
+    "showcaseSecondaryDescription": "Jelajahi dengan mudah melalui antarmuka ramping yang dirancang untuk membawa Anda mulai dari penemuan hingga pemutaran berkecepatan tinggi dalam hitungan detik."
   }
 }

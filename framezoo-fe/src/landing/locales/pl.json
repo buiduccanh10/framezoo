@@ -10,44 +10,13 @@
   },
   "hero": {
     "eyebrow": "KOMPUTER FRAMEZOO / 01",
-    "title": "Oglądaj lepiej.",
-    "titleAccent": "Na pulpicie.",
-    "description": "Framezoo to odtwarzacz z synchronizacją napisów AI, podwójnymi napisami, metadanymi multimedialnymi i obsługą dodatków.",
     "primaryCta": "Pobierz pulpit",
     "secondaryCta": "Zobacz doświadczenie",
-    "imageAlt": "Odtwarzacz Framezoo pokazujący ekran wykrywania",
-    "version": "Wydanie na komputer stacjonarny"
-  },
-  "features": {
-    "performanceTitle": "Twoja biblioteka bez podatku od przeglądarki.",
-    "overviewDescription": "Synchronizuj napisy z AI, utrzymuj widoczność podwójnych napisów, przeglądaj metadane multimediów i kontroluj odtwarzanie bez opuszczania historii.",
-    "playback": "Natywne odtwarzanie",
-    "playbackDescription": "Płynne wideo z obsługą multimediów na poziomie komputera stacjonarnego.",
-    "performance": "Cicha wydajność",
-    "performanceDescription": "Mniej chromu. Więcej skupienia. Żadnego żonglowania zakładkami.",
-    "continuity": "Utrzymuj płynność",
-    "continuityDescription": "Wznów, przeglądaj i przełączaj źródła, nie tracąc chwili.",
-    "ecosystemTitle": "Gotowy na to, co będzie dalej.",
-    "ecosystemDescription": "Podstawą jest aplikacja komputerowa. Dodatki poszerzają możliwości, dzięki czemu konfiguracja może pozostać osobista i nie będzie skomplikowana.",
-    "addonLabel": "GOTOWY NA DODATKI",
-    "addonOne": "Złącza źródłowe",
-    "addonTwo": "Narzędzia napisów",
-    "addonThree": "Rozszerzenia społecznościowe",
-    "showcaseTitle": "Szczegóły przed naciśnięciem przycisku odtwarzania.",
-    "showcaseDescription": "Skoncentrowana powierzchnia pulpitu do odkrywania, odtwarzania i wszystkiego, co dotyczy historii.",
-    "showcaseCaption": "Tryb pulpitu / ostrości Framezoo",
-    "subtitleSyncDescription": "Dopasuj dialog do obrazu w ciągu kilku sekund dzięki synchronizacji napisów AI.",
-    "dualSubtitlesDescription": "Włącz podwójne napisy, gdy się uczysz, porównujesz lub po prostu wolisz jedno i drugie.",
-    "subtitleSync": "Synchronizuj napisy z AI",
-    "featureLabel": "Gracz, na swój sposób",
-    "experienceTitle": "Wszystko, czego potrzebujesz w odtwarzaczu.",
-    "dualSubtitles": "Zachowaj widoczność dwóch języków napisów",
-    "showcasePrimaryAlt": "Ekran szczegółów tytułu Framezoo z grafiką, ocenami, porami roku i metadanymi",
-    "showcaseSecondaryDescription": "Zacznij od czystej powierzchni do odkrywania, a następnie rozpocznij odtwarzanie, nie tracąc miejsca.",
-    "subtitleControlsDescription": "Wybierz źródło napisów, język, czas i sposób wyświetlania, nie przerywając przepływu.",
-    "showcaseSecondaryAlt": "Ekran odkrywania odtwarzacza Framezoo z wyszukiwaniem, kategoriami i wierszami tytułów",
-    "showcaseSecondaryTitle": "Odkryj coś, co warto obejrzeć.",
-    "subtitleControls": "Dostrój odtwarzacz wokół siebie"
+    "version": "Wydanie na komputer stacjonarny",
+    "imageAlt": "Szybki odtwarzacz strumieniowy Framezoo wyświetlający ekran wykrywania",
+    "description": "Framezoo to szybki odtwarzacz strumieniowy z płynnym, intuicyjnym interfejsem użytkownika, bogatymi metadanymi filmów, nieograniczoną synchronizacją napisów strumieniowych i obsługą napisów z wielu źródeł.",
+    "title": "Przesyłaj strumieniowo szybko,",
+    "titleAccent": "uważaj na swoją drogę."
   },
   "download": {
     "eyebrow": "WYBIERZ SWOJĄ KONSTRUKCJĘ",
@@ -69,8 +38,19 @@
     "hideAll": "Ukryj inne kompilacje"
   },
   "footer": {
-    "line": "Cichszy dom dla historii, do których wciąż wracasz.",
-    "status": "Najpierw komputer stacjonarny. Gotowy na dodatek."
+    "status": "Najpierw komputer stacjonarny. Gotowy na dodatek.",
+    "line": "Szybkie i płynne przesyłanie strumieniowe wszystkich ulubionych filmów i seriali.",
+    "terms": "Warunki świadczenia usług",
+    "productTitle": "Produkt",
+    "resourcesTitle": "Zasoby i wsparcie",
+    "privacy": "Polityka prywatności i danych",
+    "legalTitle": "Informacje prawne i zasady",
+    "reportIssue": "Wyślij opinię/raport",
+    "copyright": "Prawa autorskie i DMCA",
+    "addonPolicy": "Polityka dodatków",
+    "disclaimer": "Framezoo jest neutralnym oprogramowaniem do odtwarzania multimediów i nie hostuje, nie przechowuje, nie rozpowszechnia ani nie kontroluje żadnych plików multimedialnych ani dodatków stron trzecich. Użytkownicy ponoszą wyłączną odpowiedzialność za dodatki i treści, do których uzyskują dostęp, zgodnie z lokalnymi przepisami.",
+    "metadataAttribution": "Metadane udostępniane są przez publiczne bazy filmów (TMDB, IMDb) w celach informacyjnych.",
+    "rights": "© 2026 Framezoo. Wszelkie prawa zastrzeżone."
   },
   "addonGuide": {
     "title": "Utwórz dodatek bez dołączania do procesu aplikacji.",
@@ -110,7 +90,7 @@
     "title": "Popularne historie do następnego zegarka.",
     "eyebrow": "ODKRYCIE FRAMEZOO",
     "dragHint": "Przeciągnij, aby eksplorować",
-    "description": "Znajdź coś wartego obejrzenia, otwórz szczegóły i wybierz lepszy sposób oglądania dzięki Framezoo."
+    "description": "Przeglądaj bogate metadane filmów, wybierz swój strumień i natychmiast rozpocznij oglądanie dzięki Framezoo."
   },
   "installGuide": {
     "backHome": "Powrót do domu",
@@ -192,5 +172,32 @@
     "attachmentsLabel": "Akta",
     "attachmentsTooLarge": "Całkowity rozmiar pliku nie może przekraczać 55 MB.",
     "attachmentsHint": "Obrazy/wideo · Maksymalnie 55 MB"
+  },
+  "seo": {
+    "title": "Framezoo — szybkie i płynne przesyłanie strumieniowe wideo",
+    "description": "Framezoo to szybki odtwarzacz strumieniowego przesyłania wideo, zaprojektowany tak, aby był płynny, intuicyjny i łatwy w użyciu. Przeglądaj bogate metadane filmów, synchronizuj napisy ze strumieniami wideo bez ograniczeń i ładuj napisy z wielu źródeł."
+  },
+  "features": {
+    "subtitleSyncDescription": "Synchronizuj napisy z dowolnym strumieniem wideo bez ograniczeń — dostosuj czas i płynnie dostosuj dialogi podczas oglądania.",
+    "subtitleSync": "Nieograniczona synchronizacja napisów strumieniowych",
+    "experienceTitle": "Stworzony do szybkiego i łatwego przesyłania strumieniowego.",
+    "featureLabel": "Szybkie przesyłanie strumieniowe na Twój sposób",
+    "overviewDescription": "Ciesz się szybkim przesyłaniem strumieniowym wideo w płynnym, łatwym w obsłudze interfejsie z bogatymi metadanymi filmów, synchronizacją napisów z nieograniczonym strumieniem i napisami z wielu źródeł.",
+    "dualSubtitles": "Napisy z wielu źródeł",
+    "subtitleControls": "Płynny interfejs użytkownika i bogate metadane filmów",
+    "ecosystemTitle": "Szybkie przesyłanie strumieniowe w otwartym ekosystemie.",
+    "dualSubtitlesDescription": "Ładuj napisy automatycznie od wielu dostawców, przełączaj źródła w locie lub wyświetlaj podwójne napisy obok siebie.",
+    "ecosystemDescription": "Szybkie odtwarzanie strumieniowe, napisy z wielu źródeł i bogate metadane filmów są wbudowane w rdzeń. Dodatki umożliwiają bezproblemowe łączenie jeszcze większej liczby strumieni, katalogów i dostawców napisów.",
+    "subtitleControlsDescription": "Poruszaj się po przejrzystym, responsywnym interfejsie z wbudowanymi kompleksowymi metadanymi, ocenami, szczegółami obsady i przewodnikami po odcinkach.",
+    "addonThree": "Napisy z wielu źródeł",
+    "addonOne": "Szybkie strumienie",
+    "addonTwo": "Bogate metadane filmu",
+    "addonLabel": "Wewnątrz Framezoo",
+    "showcaseDescription": "Otwórz dowolny tytuł, aby przeglądać plakaty, oceny, streszczenia, sezony i szczegóły obsady w jednym przejrzystym, intuicyjnym widoku.",
+    "showcasePrimaryAlt": "Ekran szczegółów tytułu Framezoo z grafiką, ocenami, porami roku i bogatymi metadanymi filmów",
+    "showcaseTitle": "Bogate metadane przed naciśnięciem przycisku odtwarzania.",
+    "showcaseSecondaryTitle": "Płynne i intuicyjne odkrywanie.",
+    "showcaseSecondaryAlt": "Ekran odkrywania odtwarzacza Framezoo z wyszukiwaniem, kategoriami i wierszami tytułów",
+    "showcaseSecondaryDescription": "Przeglądaj bez wysiłku elegancki interfejs zaprojektowany tak, aby w ciągu kilku sekund przejść od odkrywania do szybkiego odtwarzania."
   }
 }

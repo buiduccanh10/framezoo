@@ -10,44 +10,13 @@
   },
   "hero": {
     "eyebrow": "FRAMEZOO DESKTOP / 01",
-    "title": "Nézd jobban.",
-    "titleAccent": "Asztali számítógépen.",
-    "description": "A Framezoo egy mesterséges intelligencia szinkronizálással, kettős felirattal, multimédiás metaadatokkal és kiegészítő támogatással rendelkező lejátszó.",
     "primaryCta": "Asztali letöltése",
     "secondaryCta": "Lásd az élményt",
-    "imageAlt": "Framezoo lejátszó, amely a felfedezési képernyőt mutatja",
-    "version": "Asztali kiadás"
-  },
-  "features": {
-    "performanceTitle": "Az Ön könyvtára, böngészőadó nélkül.",
-    "overviewDescription": "Szinkronizálja a feliratokat az AI-val, tartsa láthatóan a kettős feliratokat, fedezze fel a média metaadatait, és irányítsa a lejátszást anélkül, hogy elhagyná a történetet.",
-    "playback": "Natív lejátszás",
-    "playbackDescription": "Sima videó asztali szintű médiakezeléssel.",
-    "performance": "Csendes teljesítmény",
-    "performanceDescription": "Kevesebb króm. Több fókusz. Nincs lapos zsonglőrködés.",
-    "continuity": "Tartsa meg az áramlását",
-    "continuityDescription": "Folytatás, böngészés és forrásváltás anélkül, hogy elveszítené a pillanatot.",
-    "ecosystemTitle": "Készen áll a következőre.",
-    "ecosystemDescription": "Az asztali alkalmazás a lényeg. A kiegészítők kiterjesztik a széleket, így a beállítás személyes maradhat anélkül, hogy bonyolulttá válna.",
-    "addonLabel": "HOZZÁADÁSRA KÉSZ",
-    "addonOne": "Forrás csatlakozók",
-    "addonTwo": "Felirateszközök",
-    "addonThree": "Közösségi bővítések",
-    "showcaseTitle": "Részletek a lejátszás megnyomása előtt.",
-    "showcaseDescription": "Fókuszált asztali felület a felfedezéshez, lejátszáshoz és mindenhez, ami a történet körül van.",
-    "showcaseCaption": "Framezoo asztali / fókusz mód",
-    "subtitleSync": "Szinkronizálja a feliratokat az AI-val",
-    "experienceTitle": "Minden, ami egy lejátszóban kell.",
-    "featureLabel": "A játékos, a te utad",
-    "subtitleControls": "Hangolja be a lejátszót maga körül",
-    "subtitleSyncDescription": "Az AI feliratszinkron segítségével másodpercek alatt igazítsa a párbeszédet a képhez.",
-    "dualSubtitlesDescription": "Kapcsolja be a kettős feliratot, amikor tanul, összehasonlít, vagy egyszerűen mindkettőt részesíti előnyben.",
-    "dualSubtitles": "Két feliratnyelv legyen látható",
-    "subtitleControlsDescription": "Válassza ki a felirat forrását, nyelvét, időzítését és megjelenítését anélkül, hogy megszakítaná a folyamatot.",
-    "showcaseSecondaryTitle": "Fedezz fel valamit, amit érdemes megnézni.",
-    "showcaseSecondaryDescription": "Kezdje egy tiszta felfedezési felületről, majd lépjen lejátszásba anélkül, hogy elveszítené a helyét.",
-    "showcaseSecondaryAlt": "Framezoo lejátszó felfedező képernyő kereséssel, kategóriákkal és címsorokkal",
-    "showcasePrimaryAlt": "A Framezoo címrészletek képernyője alkotásokkal, értékelésekkel, évszakokkal és metaadatokkal"
+    "version": "Asztali kiadás",
+    "imageAlt": "Framezoo nagy sebességű streaming lejátszó, amely a felfedezési képernyőt mutatja",
+    "title": "Gyors közvetítés,",
+    "titleAccent": "figyeld az utat.",
+    "description": "A Framezoo egy nagy sebességű streaming lejátszó sima, intuitív felhasználói felülettel, gazdag film metaadatokkal, korlátlan adatfolyam-feliratszinkronizálással és több forrású felirat támogatással."
   },
   "download": {
     "eyebrow": "VÁLASZD KI AZ ÉPÜLETET",
@@ -69,8 +38,19 @@
     "hideAll": "Más buildek elrejtése"
   },
   "footer": {
-    "line": "Egy csendesebb otthon a történetek számára, amelyekhez folyamatosan visszatér.",
-    "status": "Asztali első. Addon kész."
+    "status": "Asztali első. Addon kész.",
+    "line": "Nagy sebességű, zökkenőmentes streamelés az összes kedvenc filmhez és sorozathoz.",
+    "terms": "Szolgáltatási feltételek",
+    "productTitle": "Termék",
+    "disclaimer": "A Framezoo egy semleges médialejátszó szoftver, amely nem tárol, tárol, terjeszt és nem vezérel semmilyen médiafájlt vagy harmadik féltől származó kiegészítőt. A felhasználók kizárólagos felelősséget vállalnak az általuk elért kiegészítőkért és tartalmakért a helyi törvényeknek megfelelően.",
+    "copyright": "Szerzői jog és DMCA",
+    "resourcesTitle": "Erőforrások és támogatás",
+    "privacy": "Adatvédelmi és adatvédelmi szabályzat",
+    "reportIssue": "Visszajelzés küldése / jelentés",
+    "addonPolicy": "Addon szabályzat",
+    "legalTitle": "Jogi és szabályzatok",
+    "metadataAttribution": "A metaadatokat nyilvános filmadatbázisok (TMDB, IMDb) biztosítják információs célból.",
+    "rights": "© 2026 Framezoo. Minden jog fenntartva."
   },
   "addonGuide": {
     "manifestTitle": "Kezdje a manifest.json fájllal",
@@ -110,7 +90,7 @@
     "title": "Népszerű történetek a következő órához.",
     "dragHint": "Húzza a felfedezéshez",
     "eyebrow": "FRAMEZOO FELFEDEZÉS",
-    "description": "Keressen valamit, amit érdemes megnézni, nyissa meg a részleteket, és döntsön a Framezoo segítségével egy jobb nézési módban."
+    "description": "Böngésszen a filmek gazdag metaadatai között, válassza ki a streamet, és azonnal kezdje el a nézést a Framezoo segítségével."
   },
   "installGuide": {
     "subtitle": "A Gatekeeper (macOS) és a SmartScreen (Windows) biztonsági figyelmeztetések megkerülése az első indításkor.",
@@ -192,5 +172,32 @@
     "attachmentsLabel": "Fájlok",
     "attachmentsHint": "Képek/videók · Maximum 55 MB",
     "attachmentsTooLarge": "A teljes fájlméret nem haladhatja meg az 55 MB-ot."
+  },
+  "seo": {
+    "title": "Framezoo – Gyors és zökkenőmentes videoközvetítés",
+    "description": "A Framezoo egy nagy sebességű video streaming lejátszó, amelyet úgy terveztek, hogy sima, intuitív és könnyen használható legyen. Fedezze fel a filmek gazdag metaadatait, korlátlanul szinkronizálja a feliratokat a videofolyamokkal, és töltse be a feliratokat több forrásból."
+  },
+  "features": {
+    "subtitleSyncDescription": "Korlátlanul szinkronizálhatja a feliratokat bármilyen videofolyammal – állítsa be az időzítést és zökkenőmentesen igazítsa a párbeszédet nézése közben.",
+    "featureLabel": "Nagy sebességű streaming, az Ön módján",
+    "experienceTitle": "Gyors, könnyed streaminghez készült.",
+    "subtitleSync": "Korlátlan adatfolyam-feliratszinkronizálás",
+    "overviewDescription": "Élvezze a nagy sebességű videostreaminget egy gördülékeny, könnyen használható felületen, gazdag filmmetaadatokkal, korlátlan adatfolyam-feliratszinkronizálással és több forrásból származó feliratokkal.",
+    "ecosystemDescription": "A gyors adatfolyam-lejátszás, a több forrásból származó feliratok és a filmek gazdag metaadatai közvetlenül a magba vannak beépítve. A kiegészítők segítségével még több adatfolyamot, katalógust és feliratszolgáltatót csatlakoztathat könnyedén.",
+    "subtitleControlsDescription": "Navigáljon egy tiszta, érzékeny felületen átfogó metaadatokkal, értékelésekkel, szereplők részleteivel és beépített epizódútmutatókkal.",
+    "dualSubtitlesDescription": "Töltse be automatikusan a feliratokat több szolgáltatótól, váltson forrást menet közben, vagy jelenítsen meg kettős feliratokat egymás mellett.",
+    "ecosystemTitle": "A nagy sebességű streaming találkozik a nyitott ökoszisztémával.",
+    "dualSubtitles": "Feliratok több forrásból",
+    "subtitleControls": "Sima felhasználói felület és gazdag filmmetaadatok",
+    "showcaseTitle": "Gazdag metaadatok a lejátszás megnyomása előtt.",
+    "showcasePrimaryAlt": "Framezoo címrészletek képernyő grafikával, értékelésekkel, évszakokkal és gazdag filmmetaadatokkal",
+    "showcaseDescription": "Nyisson meg bármilyen címet, hogy egyetlen tiszta, intuitív nézetben fedezze fel a posztereket, értékeléseket, szinopszisokat, évszakokat és a leadási részleteket.",
+    "addonTwo": "Gazdag film metaadatok",
+    "addonOne": "Nagy sebességű folyamok",
+    "addonThree": "Több forrásból származó feliratok",
+    "addonLabel": "A Framezoo belsejében",
+    "showcaseSecondaryDescription": "Könnyedén böngészhet a karcsú felületen, amelyet úgy terveztek, hogy másodpercek alatt eljuthasson a felfedezéstől a nagy sebességű lejátszásig.",
+    "showcaseSecondaryAlt": "Framezoo lejátszó felfedező képernyő kereséssel, kategóriákkal és címsorokkal",
+    "showcaseSecondaryTitle": "Sima, intuitív felfedezés."
   }
 }

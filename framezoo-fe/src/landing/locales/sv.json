@@ -10,44 +10,13 @@
   },
   "hero": {
     "eyebrow": "FRAMEZOO DESKTOP / 01",
-    "title": "Titta bättre.",
-    "titleAccent": "På skrivbordet.",
-    "description": "Framezoo är en spelare med AI-undertextsynkronisering, dubbla undertexter, rich media-metadata och tilläggsstöd.",
     "primaryCta": "Ladda ner skrivbordet",
     "secondaryCta": "Se upplevelsen",
-    "imageAlt": "Framezoo-spelare som visar upptäcktsskärmen",
-    "version": "Skrivbordsversion"
-  },
-  "features": {
-    "performanceTitle": "Ditt bibliotek, utan webbläsarskatten.",
-    "overviewDescription": "Synkronisera undertexter med AI, håll dubbla undertexter synliga, utforska mediametadata och styr uppspelningen utan att lämna historien.",
-    "playback": "Inbyggd uppspelning",
-    "playbackDescription": "Smidig video med mediehantering av skrivbordskvalitet.",
-    "performance": "Tyst prestanda",
-    "performanceDescription": "Mindre krom. Mer fokus. Ingen flikjonglering.",
-    "continuity": "Håll ditt flöde",
-    "continuityDescription": "Återuppta, bläddra och byt källa utan att förlora ögonblicket.",
-    "ecosystemTitle": "Redo för vad som kommer härnäst.",
-    "ecosystemDescription": "Desktop-appen är kärnan. Tillägg förlänger kanterna, så att din installation kan förbli personlig utan att bli komplicerad.",
-    "addonLabel": "ADDON-KLAR",
-    "addonOne": "Källkontakter",
-    "addonTwo": "Undertextverktyg",
-    "addonThree": "Community-tillägg",
-    "showcaseTitle": "Detaljer innan du trycker på play.",
-    "showcaseDescription": "En fokuserad skrivbordsyta för upptäckt, uppspelning och allt runt historien.",
-    "showcaseCaption": "Framezoo Desktop / Fokusläge",
-    "dualSubtitles": "Håll två undertextspråk synliga",
-    "dualSubtitlesDescription": "Slå på dubbla undertexter när du lär dig, jämför eller helt enkelt föredrar båda.",
-    "featureLabel": "Spelaren, på ditt sätt",
-    "subtitleSyncDescription": "Rikta in dialogen med bilden på några sekunder med AI-undertextsynkronisering.",
-    "subtitleSync": "Synkronisera undertexter med AI",
-    "experienceTitle": "Allt du behöver i en spelare.",
-    "subtitleControls": "Ställ in spelaren runt dig",
-    "showcaseSecondaryTitle": "Upptäck något värt att titta på.",
-    "subtitleControlsDescription": "Välj undertextkälla, språk, timing och visning utan att bryta ditt flöde.",
-    "showcaseSecondaryAlt": "Framezoo-spelarens upptäcktsskärm med sökning, kategorier och titelrader",
-    "showcaseSecondaryDescription": "Börja från en ren upptäcktsyta och gå sedan till uppspelning utan att förlora din plats.",
-    "showcasePrimaryAlt": "Framezoo-titeldetaljskärm med konstverk, betyg, säsonger och metadata"
+    "version": "Skrivbordsversion",
+    "imageAlt": "Framezoo höghastighetsstreamingspelare som visar upptäcktsskärmen",
+    "title": "Streama snabbt,",
+    "description": "Framezoo är en höghastighetsströmningsspelare med ett smidigt, intuitivt användargränssnitt, rik filmmetadata, obegränsad synkronisering av undertexter för streaming och stöd för undertexter med flera källor.",
+    "titleAccent": "akta dig."
   },
   "download": {
     "eyebrow": "VÄLJ DIN BYGG",
@@ -69,8 +38,19 @@
     "ready": "Klar för den här enheten"
   },
   "footer": {
-    "line": "Ett lugnare hem för berättelserna du hela tiden kommer tillbaka till.",
-    "status": "Desktop-först. Addon-klar."
+    "status": "Desktop-först. Addon-klar.",
+    "line": "Höghastighets, smidig streaming för alla filmer och serier du älskar.",
+    "resourcesTitle": "Resurser och support",
+    "legalTitle": "Juridik och policyer",
+    "terms": "Användarvillkor",
+    "productTitle": "Produkt",
+    "copyright": "Copyright & DMCA",
+    "addonPolicy": "Tilläggspolicy",
+    "rights": "© 2026 Framezoo. Alla rättigheter reserverade.",
+    "reportIssue": "Skicka feedback/rapportera",
+    "disclaimer": "Framezoo är en neutral mediaspelare och är inte värd för, lagrar, distribuerar eller kontrollerar några mediefiler eller tredjepartstillägg. Användare är ensamt ansvariga för de tillägg och innehåll de får tillgång till i enlighet med lokala lagar.",
+    "privacy": "Integritets- och datapolicy",
+    "metadataAttribution": "Metadata tillhandahålls av offentliga filmdatabaser (TMDB, IMDb) i informationssyfte."
   },
   "addonGuide": {
     "manifestTitle": "Börja med manifest.json",
@@ -108,9 +88,9 @@
     "movie": "Film",
     "series": "Serie",
     "eyebrow": "FRAMEZOO UPPTÄCKT",
-    "description": "Hitta något värt att titta på, öppna detaljerna och sätt dig in på ett bättre sätt att titta på med Framezoo.",
     "title": "Populära berättelser för din nästa klocka.",
-    "dragHint": "Dra för att utforska"
+    "dragHint": "Dra för att utforska",
+    "description": "Bläddra bland rik filmmetadata, välj din stream och börja titta direkt med Framezoo."
   },
   "installGuide": {
     "subtitle": "Hur man kringgår Gatekeeper (macOS) och SmartScreen (Windows) säkerhetsmeddelanden vid första lansering.",
@@ -192,5 +172,32 @@
     "attachmentsLabel": "Filer",
     "attachmentsTooLarge": "Den totala filstorleken får inte överstiga 55 MB.",
     "attachmentsHint": "Bilder/videor · 55 MB totalt max"
+  },
+  "seo": {
+    "description": "Framezoo är en höghastighetsvideospelare som är designad för att vara smidig, intuitiv och enkel att använda. Utforska rik filmmetadata, synkronisera undertexter med videoströmmar utan begränsningar och ladda undertexter från flera källor.",
+    "title": "Framezoo - Snabb och smidig videoströmning"
+  },
+  "features": {
+    "featureLabel": "Höghastighetsstreaming, på ditt sätt",
+    "dualSubtitles": "Undertexter från flera källor",
+    "experienceTitle": "Byggd för snabb, enkel streaming.",
+    "overviewDescription": "Njut av höghastighetsvideoströmning i ett smidigt, lättanvänt gränssnitt med rik filmmetadata, obegränsad streaming av undertextsynkronisering och undertexter från flera källor.",
+    "subtitleSync": "Obegränsad synkronisering av undertexter för stream",
+    "ecosystemTitle": "Höghastighetsstreaming möter ett öppet ekosystem.",
+    "dualSubtitlesDescription": "Ladda undertexter automatiskt från flera leverantörer, byt källa i farten eller visa dubbla undertexter sida vid sida.",
+    "subtitleControlsDescription": "Navigera i ett rent, responsivt gränssnitt med omfattande metadata, betyg, skådespelardetaljer och avsnittsguider inbyggda.",
+    "subtitleSyncDescription": "Synkronisera undertexter med vilken videoström som helst utan begränsningar – justera timing och anpassa dialogen sömlöst medan du tittar.",
+    "ecosystemDescription": "Snabbströmsuppspelning, undertexter med flera källor och rik filmmetadata är inbyggd i kärnan. Tillägg låter dig ansluta ännu fler strömmar, kataloger och undertextleverantörer utan ansträngning.",
+    "subtitleControls": "Smidigt gränssnitt och rik filmmetadata",
+    "addonLabel": "Inuti Framezoo",
+    "addonThree": "Undertexter med flera källor",
+    "addonOne": "Höghastighetsströmmar",
+    "showcaseSecondaryDescription": "Bläddra enkelt genom ett elegant gränssnitt som är utformat för att ta dig från upptäckt till höghastighetsuppspelning på några sekunder.",
+    "showcaseDescription": "Öppna valfri titel för att utforska affischer, betyg, synopser, säsonger och castdetaljer i en ren, intuitiv vy.",
+    "showcasePrimaryAlt": "Framezoo titeldetaljskärm med konstverk, betyg, säsonger och rik filmmetadata",
+    "addonTwo": "Rik filmmetadata",
+    "showcaseSecondaryTitle": "Smidig, intuitiv upptäckt.",
+    "showcaseTitle": "Rik med metadata innan du trycker på play.",
+    "showcaseSecondaryAlt": "Framezoo-spelarens upptäcktsskärm med sökning, kategorier och titelrader"
   }
 }

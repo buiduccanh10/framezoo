@@ -1,4 +1,8 @@
 {
+  "seo": {
+    "title": "Framezoo - Fast & Smooth Video Streaming",
+    "description": "Framezoo is a high-speed video streaming player designed to be smooth, intuitive, and easy to use. Explore rich movie metadata, sync subtitles with video streams without limits, and load subtitles from multiple sources."
+  },
   "nav": {
     "home": "Home",
     "features": "Experience",
@@ -9,43 +13,43 @@
     "language": "Language"
   },
   "hero": {
-    "title": "A better place",
-    "titleAccent": "to watch.",
-    "description": "Framezoo is a player with AI subtitle sync, dual subtitles, rich media metadata, and addon support.",
+    "title": "Stream fast,",
+    "titleAccent": "watch your way.",
+    "description": "Framezoo is a high-speed streaming player with a smooth, intuitive UI, rich movie metadata, unlimited stream subtitle sync, and multi-source subtitle support.",
     "primaryCta": "Download",
     "secondaryCta": "Explore the experience",
-    "imageAlt": "Framezoo player showing the discovery screen",
+    "imageAlt": "Framezoo high-speed streaming player showing the discovery screen",
     "version": "Desktop release"
   },
   "movies": {
     "eyebrow": "FRAMEZOO DISCOVERY",
     "title": "Popular stories for your next watch.",
-    "description": "Find something worth watching, open the details, and settle into a better way to watch with Framezoo.",
+    "description": "Browse rich movie metadata, pick your stream, and start watching instantly with Framezoo.",
     "dragHint": "Drag to explore",
     "movie": "Movie",
     "series": "Series"
   },
   "features": {
-    "featureLabel": "The player, your way",
-    "experienceTitle": "Everything you need in a player.",
-    "overviewDescription": "Sync subtitles with AI, keep dual subtitles visible, explore media metadata, and control playback without leaving the story.",
-    "subtitleSync": "Sync subtitles with AI",
-    "subtitleSyncDescription": "Align dialogue with the picture in seconds with AI subtitle sync.",
-    "dualSubtitles": "Keep two subtitle languages visible",
-    "dualSubtitlesDescription": "Switch on dual subtitles when you are learning, comparing, or simply prefer both.",
-    "subtitleControls": "Tune the player around you",
-    "subtitleControlsDescription": "Choose subtitle source, language, timing, and display without breaking your flow.",
-    "ecosystemTitle": "The essentials live in the player.",
-    "ecosystemDescription": "Subtitles, catalog metadata, and playback controls are built in. Addons extend the edges with more sources and catalogs when you need them.",
+    "featureLabel": "High-speed streaming, your way",
+    "experienceTitle": "Built for fast, effortless streaming.",
+    "overviewDescription": "Enjoy high-speed video streaming in a smooth, easy-to-use interface with rich movie metadata, unlimited stream subtitle sync, and subtitles from multiple sources.",
+    "subtitleSync": "Unlimited stream subtitle sync",
+    "subtitleSyncDescription": "Synchronize subtitles with any video stream without limits—adjust timing and align dialogue seamlessly while you watch.",
+    "dualSubtitles": "Subtitles from multiple sources",
+    "dualSubtitlesDescription": "Load subtitles automatically from multiple providers, switch sources on the fly, or display dual subtitles side by side.",
+    "subtitleControls": "Smooth UI & rich movie metadata",
+    "subtitleControlsDescription": "Navigate a clean, responsive interface with comprehensive metadata, ratings, cast details, and episode guides built in.",
+    "ecosystemTitle": "High-speed streaming meets an open ecosystem.",
+    "ecosystemDescription": "Fast stream playback, multi-source subtitles, and rich movie metadata are built right into the core. Addons let you connect even more streams, catalogs, and subtitle providers effortlessly.",
     "addonLabel": "Inside Framezoo",
-    "addonOne": "Subtitle controls",
-    "addonTwo": "Catalog metadata",
-    "addonThree": "Addon support",
-    "showcaseTitle": "Details before you press play.",
-    "showcaseDescription": "Open a title and get the story around it: artwork, ratings, seasons, and metadata in one place.",
-    "showcasePrimaryAlt": "Framezoo title detail screen with artwork, ratings, seasons, and metadata",
-    "showcaseSecondaryTitle": "Discover something worth watching.",
-    "showcaseSecondaryDescription": "Start from a clean discovery surface, then move into playback without losing your place.",
+    "addonOne": "High-speed streams",
+    "addonTwo": "Rich movie metadata",
+    "addonThree": "Multi-source subtitles",
+    "showcaseTitle": "Rich metadata before you press play.",
+    "showcaseDescription": "Open any title to explore posters, ratings, synopses, seasons, and cast details in one clean, intuitive view.",
+    "showcasePrimaryAlt": "Framezoo title detail screen with artwork, ratings, seasons, and rich movie metadata",
+    "showcaseSecondaryTitle": "Smooth, intuitive discovery.",
+    "showcaseSecondaryDescription": "Browse effortlessly through a sleek interface designed to get you from discovery to high-speed playback in seconds.",
     "showcaseSecondaryAlt": "Framezoo player discovery screen with search, categories, and title rows"
   },
   "addonGuide": {
@@ -93,8 +97,19 @@
     "version": "Release"
   },
   "footer": {
-    "line": "A quieter place for the stories you keep coming back to.",
-    "status": "Desktop-first. Addon-ready."
+    "line": "High-speed, smooth streaming for all the movies and series you love.",
+    "status": "Desktop-first. Addon-ready.",
+    "disclaimer": "Framezoo is a neutral media player software and does not host, store, distribute, or control any media files or third-party addons. Users are solely responsible for the addons and content they access in compliance with local laws.",
+    "productTitle": "Product",
+    "resourcesTitle": "Resources & Support",
+    "legalTitle": "Legal & Policies",
+    "terms": "Terms of Service",
+    "privacy": "Privacy & Data Policy",
+    "copyright": "Copyright & DMCA",
+    "addonPolicy": "Addon Policy",
+    "reportIssue": "Send Feedback / Report",
+    "rights": "© 2026 Framezoo. All rights reserved.",
+    "metadataAttribution": "Metadata is provided by public movie databases (TMDB, IMDb) for informational purposes."
   },
   "deepLink": {
     "opening": "Opening Framezoo...",

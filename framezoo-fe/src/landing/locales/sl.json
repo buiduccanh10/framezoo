@@ -10,44 +10,13 @@
   },
   "hero": {
     "eyebrow": "FRAMEZOO DESKTOP / 01",
-    "title": "Glej bolje.",
-    "titleAccent": "Na namizju.",
-    "description": "Framezoo je predvajalnik s sinhronizacijo podnapisov AI, dvojnimi podnapisi, obogatenimi metapodatki in podporo za dodatke.",
     "primaryCta": "Prenesite namizje",
     "secondaryCta": "Glej izkušnjo",
-    "imageAlt": "Predvajalnik Framezoo, ki prikazuje zaslon za odkrivanje",
-    "version": "Izdaja za namizne računalnike"
-  },
-  "features": {
-    "performanceTitle": "Vaša knjižnica, brez davka na brskalnik.",
-    "overviewDescription": "Sinhronizirajte podnapise z umetno inteligenco, ohranite dvojne podnapise vidne, raziščite medijske metapodatke in nadzorujte predvajanje, ne da bi zapustili zgodbo.",
-    "playback": "Izvorno predvajanje",
-    "playbackDescription": "Gladek videoposnetek z upravljanjem medijev v namiznem razredu.",
-    "performance": "Tiho delovanje",
-    "performanceDescription": "Manj kroma. Več fokusa. Brez žongliranja z zavihki.",
-    "continuity": "Ohranite svoj tok",
-    "continuityDescription": "Nadaljujte, brskajte in preklapljajte med viri, ne da bi izgubili trenutek.",
-    "ecosystemTitle": "Pripravljen na tisto, kar sledi.",
-    "ecosystemDescription": "Namizna aplikacija je jedro. Dodatki razširijo robove, tako da lahko vaša nastavitev ostane osebna, ne da bi postala zapletena.",
-    "addonLabel": "PRIPRAVLJEN ZA DODATKE",
-    "addonOne": "Izvorni priključki",
-    "addonTwo": "Orodja za podnapise",
-    "addonThree": "razširitve skupnosti",
-    "showcaseTitle": "Podrobnosti, preden pritisnete predvajanje.",
-    "showcaseDescription": "Osredotočena površina namizja za odkrivanje, predvajanje in vse, kar je povezano z zgodbo.",
-    "showcaseCaption": "Framezoo Desktop/Focus način",
-    "subtitleSyncDescription": "Poravnajte dialog s sliko v nekaj sekundah s sinhronizacijo podnapisov AI.",
-    "featureLabel": "Igralec na svoj način",
-    "subtitleSync": "Sinhronizirajte podnapise z AI",
-    "dualSubtitlesDescription": "Dvojne podnapise vklopite, ko se učite, primerjate ali preprosto imate raje oboje.",
-    "experienceTitle": "Vse, kar potrebujete v predvajalniku.",
-    "dualSubtitles": "Dva jezika podnapisov naj bodo vidna",
-    "showcaseSecondaryTitle": "Odkrijte nekaj, kar je vredno ogleda.",
-    "subtitleControls": "Uglasite predvajalnik okoli sebe",
-    "showcaseSecondaryAlt": "Zaslon za odkrivanje predvajalnika Framezoo z vrsticami za iskanje, kategorije in naslove",
-    "showcasePrimaryAlt": "Zaslon s podrobnostmi naslova Framezoo z umetninami, ocenami, letnimi časi in metapodatki",
-    "subtitleControlsDescription": "Izberite vir podnapisov, jezik, čas in prikaz, ne da bi prekinili vaš tok.",
-    "showcaseSecondaryDescription": "Začnite s čiste površine za odkrivanje, nato se premaknite na predvajanje, ne da bi izgubili svoje mesto."
+    "version": "Izdaja za namizne računalnike",
+    "title": "Pretočno hitro,",
+    "titleAccent": "pazi na pot.",
+    "description": "Framezoo je hitri pretočni predvajalnik z gladkim, intuitivnim uporabniškim vmesnikom, bogatimi metapodatki o filmih, neomejeno sinhronizacijo podnapisov tokov in podporo za podnapise iz več virov.",
+    "imageAlt": "Hitri pretočni predvajalnik Framezoo, ki prikazuje zaslon za odkrivanje"
   },
   "download": {
     "eyebrow": "IZBERITE SVOJO ZGRADBO",
@@ -69,8 +38,19 @@
     "ready": "Pripravljen za to napravo"
   },
   "footer": {
-    "line": "Tišji dom za zgodbe, h katerim se vedno znova vračate.",
-    "status": "Najprej namizje. Pripravljen za dodatek."
+    "status": "Najprej namizje. Pripravljen za dodatek.",
+    "line": "Hitro in tekoče pretakanje za vse filme in serije, ki jih imate radi.",
+    "productTitle": "Izdelek",
+    "terms": "Pogoji storitve",
+    "resourcesTitle": "Viri in podpora",
+    "reportIssue": "Pošljite povratne informacije / poročilo",
+    "privacy": "Politika zasebnosti in podatkov",
+    "legalTitle": "Pravni in pravilniki",
+    "copyright": "Avtorske pravice in DMCA",
+    "disclaimer": "Framezoo je nevtralna programska oprema za predvajanje medijev in ne gosti, shranjuje, distribuira ali nadzoruje nobenih predstavnostnih datotek ali dodatkov tretjih oseb. Uporabniki so izključno odgovorni za dodatke in vsebino, do katere dostopajo v skladu z lokalno zakonodajo.",
+    "addonPolicy": "Politika dodatkov",
+    "metadataAttribution": "Metapodatke zagotavljajo javne zbirke podatkov o filmih (TMDB, IMDb) v informativne namene.",
+    "rights": "© 2026 Framezoo. Vse pravice pridržane."
   },
   "addonGuide": {
     "manifestTitle": "Začnite z manifest.json",
@@ -108,9 +88,9 @@
     "series": "serija",
     "title": "Priljubljene zgodbe za vaš naslednji ogled.",
     "movie": "Film",
-    "description": "Poiščite nekaj, kar je vredno ogleda, odprite podrobnosti in se odločite za boljši način gledanja s Framezoo.",
     "dragHint": "Povlecite za raziskovanje",
-    "eyebrow": "FRAMEZOO DISCOVERY"
+    "eyebrow": "FRAMEZOO DISCOVERY",
+    "description": "Brskajte po bogatih metapodatkih filmov, izberite svoj tok in takoj začnite gledati s Framezoo."
   },
   "installGuide": {
     "backHome": "Nazaj na dom",
@@ -192,5 +172,32 @@
     "attachmentsLabel": "Datoteke",
     "attachmentsTooLarge": "Skupna velikost datoteke ne sme presegati 55 MB.",
     "attachmentsHint": "Slike/videoposnetki · Skupno največ 55 MB"
+  },
+  "seo": {
+    "title": "Framezoo - Hitro in gladko pretakanje videa",
+    "description": "Framezoo je hitri predvajalnik za pretakanje videa, ki je zasnovan tako, da je gladek, intuitiven in enostaven za uporabo. Raziščite bogate metapodatke o filmih, sinhronizirajte podnapise z video tokovi brez omejitev in naložite podnapise iz več virov."
+  },
+  "features": {
+    "subtitleSync": "Neomejena sinhronizacija podnapisov toka",
+    "subtitleSyncDescription": "Sinhronizirajte podnapise s katerim koli video tokom brez omejitev – prilagodite čas in brezhibno uskladite dialog med gledanjem.",
+    "overviewDescription": "Uživajte v hitrem pretakanju videa v gladkem, za uporabo preprostem vmesniku z bogatimi metapodatki o filmih, neomejeno sinhronizacijo podnapisov tokov in podnapisi iz več virov.",
+    "experienceTitle": "Ustvarjen za hitro pretakanje brez napora.",
+    "featureLabel": "Visokohitrostno pretakanje, na vaš način",
+    "dualSubtitles": "Podnapisi iz več virov",
+    "ecosystemTitle": "Hitro pretakanje se sreča z odprtim ekosistemom.",
+    "subtitleControls": "Gladek uporabniški vmesnik in bogati metapodatki o filmu",
+    "subtitleControlsDescription": "Krmarite po čistem, odzivnem vmesniku z vgrajenimi obsežnimi metapodatki, ocenami, podrobnostmi o zasedbi in vodniki po epizodah.",
+    "ecosystemDescription": "Hitro pretočno predvajanje, podnapisi iz več virov in bogati metapodatki o filmih so vgrajeni prav v jedro. Dodatki vam omogočajo, da brez težav povežete še več tokov, katalogov in ponudnikov podnapisov.",
+    "dualSubtitlesDescription": "Samodejno naložite podnapise od več ponudnikov, sproti zamenjajte vire ali prikažite dvojne podnapise enega poleg drugega.",
+    "addonLabel": "Znotraj Framezoo",
+    "addonThree": "Podnapisi iz več virov",
+    "addonOne": "Visokohitrostni tokovi",
+    "showcasePrimaryAlt": "Zaslon s podrobnostmi o naslovu Framezoo z umetninami, ocenami, sezonami in bogatimi metapodatki filma",
+    "showcaseSecondaryDescription": "Z lahkoto brskajte po elegantnem vmesniku, ki je zasnovan tako, da vas v nekaj sekundah popelje od odkritja do hitrega predvajanja.",
+    "addonTwo": "Bogati metapodatki filma",
+    "showcaseTitle": "Bogati metapodatki, preden pritisnete predvajanje.",
+    "showcaseSecondaryTitle": "Gladko, intuitivno odkrivanje.",
+    "showcaseDescription": "Odprite kateri koli naslov, da raziščete plakate, ocene, sinopsise, sezone in podrobnosti o igralskih zasedbah v enem čistem, intuitivnem pogledu.",
+    "showcaseSecondaryAlt": "Zaslon za odkrivanje predvajalnika Framezoo z vrsticami za iskanje, kategorije in naslove"
   }
 }

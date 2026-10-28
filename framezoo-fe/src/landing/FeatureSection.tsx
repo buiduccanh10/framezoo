@@ -33,7 +33,7 @@ export function FeatureSection({ copy, variant = "all" }: FeatureSectionProps) {
                 aria-hidden="true"
               >
                 <div className="landing-preview-toolbar">
-                  <span>AI</span>
+                  <span>STREAM</span>
                   <span>SYNC</span>
                 </div>
                 <div className="landing-sync-track">

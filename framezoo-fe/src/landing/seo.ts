@@ -2,9 +2,9 @@ import { type LandingLocale, getLandingCopy } from "./i18n";
 
 const SITE_URL = "https://framezoo.top";
 const SOCIAL_IMAGE_URL = `${SITE_URL}/embed-preview-1.png`;
-const DEFAULT_SEO_TITLE = "Framezoo Player | AI Subtitle Sync";
+const DEFAULT_SEO_TITLE = "Framezoo - Fast & Smooth Video Streaming";
 const DEFAULT_SEO_DESCRIPTION =
-  "Framezoo is a player with AI subtitle sync, dual subtitles, rich media metadata, and addon support.";
+  "Framezoo is a high-speed video streaming player designed to be smooth, intuitive, and easy to use. Explore rich movie metadata, sync subtitles with video streams without limits, and load subtitles from multiple sources.";
 
 export const LANDING_SEO_CATEGORIES = [
   { id: "experience", path: "/experience" },
@@ -28,12 +28,8 @@ export function getLandingSeoMetadata(
 
   if (!category) {
     return {
-      title:
-        locale === "en"
-          ? DEFAULT_SEO_TITLE
-          : `${copy.hero.title} ${copy.hero.titleAccent} | Framezoo`,
-      description:
-        locale === "en" ? DEFAULT_SEO_DESCRIPTION : copy.hero.description,
+      title: copy.seo?.title || DEFAULT_SEO_TITLE,
+      description: copy.seo?.description || DEFAULT_SEO_DESCRIPTION,
       canonical: `${SITE_URL}/`,
     };
   }

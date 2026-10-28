@@ -10,44 +10,13 @@
   },
   "hero": {
     "eyebrow": "DESKTOP FRAMEZOO / 01",
-    "title": "Observe melhor.",
-    "titleAccent": "Na área de trabalho.",
-    "description": "Framezoo é um player com sincronização de legendas AI, legendas duplas, metadados rich media e suporte a complementos.",
     "primaryCta": "Baixar área de trabalho",
     "secondaryCta": "Veja a experiência",
-    "imageAlt": "Player Framezoo mostrando a tela de descoberta",
-    "version": "Versão para desktop"
-  },
-  "features": {
-    "performanceTitle": "Sua biblioteca, sem a taxa do navegador.",
-    "overviewDescription": "Sincronize legendas com IA, mantenha as legendas duplas visíveis, explore metadados de mídia e controle a reprodução sem sair da história.",
-    "playback": "Reprodução nativa",
-    "playbackDescription": "Vídeo suave com manipulação de mídia de nível desktop.",
-    "performance": "Desempenho silencioso",
-    "performanceDescription": "Menos cromo. Mais foco. Sem malabarismo com guias.",
-    "continuity": "Mantenha seu fluxo",
-    "continuityDescription": "Retome, navegue e troque de fonte sem perder o momento.",
-    "ecosystemTitle": "Pronto para o que vem a seguir.",
-    "ecosystemDescription": "O aplicativo de desktop é o núcleo. Os complementos ampliam os limites, para que sua configuração possa permanecer pessoal sem se tornar complicada.",
-    "addonLabel": "PRONTO PARA ADDON",
-    "addonOne": "Conectores de origem",
-    "addonTwo": "Ferramentas de legenda",
-    "addonThree": "Extensões da comunidade",
-    "showcaseTitle": "Detalhes antes de apertar play.",
-    "showcaseDescription": "Uma superfície de desktop focada para descoberta, reprodução e tudo o que envolve a história.",
-    "showcaseCaption": "Framezoo Desktop / modo Foco",
-    "subtitleSync": "Sincronize legendas com IA",
-    "featureLabel": "O jogador, do seu jeito",
-    "dualSubtitles": "Mantenha dois idiomas de legenda visíveis",
-    "experienceTitle": "Tudo que você precisa em um player.",
-    "subtitleSyncDescription": "Alinhe o diálogo com a imagem em segundos com a sincronização de legendas AI.",
-    "subtitleControls": "Sintonize o player ao seu redor",
-    "subtitleControlsDescription": "Escolha a fonte da legenda, o idioma, o tempo e a exibição sem interromper o fluxo.",
-    "showcaseSecondaryTitle": "Descubra algo que vale a pena assistir.",
-    "showcasePrimaryAlt": "Tela de detalhes do título do Framezoo com arte, classificações, temporadas e metadados",
-    "showcaseSecondaryDescription": "Comece com uma superfície de descoberta limpa e depois passe para a reprodução sem perder o seu lugar.",
-    "dualSubtitlesDescription": "Ative legendas duplas quando estiver aprendendo, comparando ou simplesmente preferir ambas.",
-    "showcaseSecondaryAlt": "Tela de descoberta do player Framezoo com pesquisa, categorias e linhas de título"
+    "version": "Versão para desktop",
+    "title": "Transmita rápido,",
+    "description": "Framezoo é um reprodutor de streaming de alta velocidade com uma interface de usuário suave e intuitiva, metadados de filmes ricos, sincronização ilimitada de legendas e suporte para legendas de várias fontes.",
+    "titleAccent": "observe seu caminho.",
+    "imageAlt": "Player de streaming de alta velocidade Framezoo mostrando a tela de descoberta"
   },
   "download": {
     "eyebrow": "ESCOLHA SUA CONSTRUÇÃO",
@@ -69,8 +38,19 @@
     "ready": "Pronto para este dispositivo"
   },
   "footer": {
-    "line": "Uma casa mais tranquila para as histórias às quais você sempre volta.",
-    "status": "Desktop primeiro. Pronto para complemento."
+    "status": "Desktop primeiro. Pronto para complemento.",
+    "line": "Streaming suave e de alta velocidade para todos os filmes e séries que você adora.",
+    "disclaimer": "Framezoo é um software reprodutor de mídia neutro e não hospeda, armazena, distribui ou controla quaisquer arquivos de mídia ou complementos de terceiros. Os usuários são os únicos responsáveis ​​pelos complementos e conteúdos que acessam em conformidade com as leis locais.",
+    "productTitle": "Produto",
+    "legalTitle": "Jurídico e Políticas",
+    "resourcesTitle": "Recursos e suporte",
+    "copyright": "Direitos autorais e DMCA",
+    "terms": "Termos de Serviço",
+    "addonPolicy": "Política de complementos",
+    "privacy": "Política de Privacidade e Dados",
+    "reportIssue": "Enviar feedback/relatório",
+    "rights": "© 2026 Framezoo. Todos os direitos reservados.",
+    "metadataAttribution": "Os metadados são fornecidos por bancos de dados públicos de filmes (TMDB, IMDb) para fins informativos."
   },
   "addonGuide": {
     "eyebrow": "PROTOCOLO / GUIA ADDON",
@@ -106,11 +86,11 @@
   },
   "movies": {
     "eyebrow": "DESCOBERTA DO FRAMEZOO",
-    "description": "Encontre algo que valha a pena assistir, abra os detalhes e escolha uma maneira melhor de assistir com o Framezoo.",
     "title": "Histórias populares para sua próxima exibição.",
     "movie": "Filme",
     "series": "Série",
-    "dragHint": "Arraste para explorar"
+    "dragHint": "Arraste para explorar",
+    "description": "Navegue por metadados avançados de filmes, escolha seu stream e comece a assistir instantaneamente com o Framezoo."
   },
   "installGuide": {
     "subtitle": "Como ignorar os avisos de segurança do Gatekeeper (macOS) e SmartScreen (Windows) na primeira inicialização.",
@@ -192,5 +172,32 @@
     "attachmentsTooLarge": "O tamanho total do arquivo não deve exceder 55 MB.",
     "attachmentsLabel": "Arquivos",
     "attachmentsHint": "Imagens/vídeos · Máximo de 55 MB no total"
+  },
+  "seo": {
+    "description": "Framezoo é um reprodutor de streaming de vídeo de alta velocidade projetado para ser suave, intuitivo e fácil de usar. Explore metadados avançados de filmes, sincronize legendas com streams de vídeo sem limites e carregue legendas de diversas fontes.",
+    "title": "Framezoo - Streaming de vídeo rápido e suave"
+  },
+  "features": {
+    "featureLabel": "Streaming de alta velocidade, do seu jeito",
+    "dualSubtitles": "Legendas de múltiplas fontes",
+    "experienceTitle": "Construído para streaming rápido e sem esforço.",
+    "subtitleSync": "Sincronização ilimitada de legendas de stream",
+    "subtitleSyncDescription": "Sincronize legendas com qualquer stream de vídeo sem limites — ajuste o tempo e alinhe os diálogos perfeitamente enquanto assiste.",
+    "overviewDescription": "Desfrute de streaming de vídeo de alta velocidade em uma interface suave e fácil de usar com metadados de filmes avançados, sincronização ilimitada de legendas e legendas de várias fontes.",
+    "dualSubtitlesDescription": "Carregue legendas automaticamente de vários provedores, troque de fonte rapidamente ou exiba legendas duplas lado a lado.",
+    "ecosystemTitle": "O streaming de alta velocidade encontra um ecossistema aberto.",
+    "ecosystemDescription": "Reprodução rápida de stream, legendas de várias fontes e metadados de filmes ricos estão integrados no núcleo. Os complementos permitem conectar ainda mais streams, catálogos e provedores de legendas sem esforço.",
+    "addonLabel": "Por dentro do Framezoo",
+    "subtitleControlsDescription": "Navegue em uma interface limpa e responsiva com metadados abrangentes, classificações, detalhes do elenco e guias de episódios integrados.",
+    "subtitleControls": "UI suave e metadados de filmes ricos",
+    "addonOne": "Fluxos de alta velocidade",
+    "addonTwo": "Metadados ricos de filmes",
+    "showcaseTitle": "Metadados ricos antes de você apertar play.",
+    "showcaseDescription": "Abra qualquer título para explorar pôsteres, classificações, sinopses, temporadas e detalhes do elenco em uma visualização limpa e intuitiva.",
+    "addonThree": "Legendas de várias fontes",
+    "showcasePrimaryAlt": "Tela de detalhes do título do Framezoo com arte, classificações, temporadas e metadados ricos de filmes",
+    "showcaseSecondaryTitle": "Descoberta suave e intuitiva.",
+    "showcaseSecondaryDescription": "Navegue sem esforço por uma interface elegante projetada para levar você da descoberta à reprodução em alta velocidade em segundos.",
+    "showcaseSecondaryAlt": "Tela de descoberta do player Framezoo com pesquisa, categorias e linhas de título"
   }
 }

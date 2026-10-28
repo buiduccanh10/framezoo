@@ -10,44 +10,13 @@
   },
   "hero": {
     "eyebrow": "ESCRITORIO FRAMEZOO / 01",
-    "title": "Mira mellor.",
-    "titleAccent": "No escritorio.",
-    "description": "Framezoo é un reprodutor con sincronización de subtítulos AI, subtítulos dobres, metadatos multimedia enriquecidos e compatibilidade con complementos.",
     "primaryCta": "Descargar escritorio",
     "secondaryCta": "Vexa a experiencia",
-    "imageAlt": "O reprodutor de Framezoo mostra a pantalla de descubrimento",
-    "version": "Lanzamento de escritorio"
-  },
-  "features": {
-    "performanceTitle": "A túa biblioteca, sen o imposto do navegador.",
-    "overviewDescription": "Sincroniza os subtítulos coa IA, mantén visibles os subtítulos dobres, explora metadatos multimedia e controla a reprodución sen saír da historia.",
-    "playback": "Reprodución nativa",
-    "playbackDescription": "Vídeo fluido con manexo de medios de escritorio.",
-    "performance": "Actuación silenciosa",
-    "performanceDescription": "Menos cromo. Máis foco. Sen malabares de fichas.",
-    "continuity": "Mantén o teu fluxo",
-    "continuityDescription": "Retoma, explora e cambia de fonte sen perder o momento.",
-    "ecosystemTitle": "Listo para o que vén despois.",
-    "ecosystemDescription": "A aplicación de escritorio é o núcleo. Os complementos estenden os bordos, polo que a súa configuración pode permanecer persoal sen complicarse.",
-    "addonLabel": "PREPARADO PARA ADDON",
-    "addonOne": "Conectores de orixe",
-    "addonTwo": "Ferramentas de subtítulos",
-    "addonThree": "Extensións comunitarias",
-    "showcaseTitle": "Detalles antes de premer play.",
-    "showcaseDescription": "Unha superficie de escritorio enfocada para o descubrimento, a reprodución e todo o que rodea a historia.",
-    "showcaseCaption": "Framezoo Desktop / Modo de enfoque",
-    "subtitleSyncDescription": "Aliña o diálogo coa imaxe en segundos coa sincronización de subtítulos AI.",
-    "featureLabel": "O xogador, á túa maneira",
-    "dualSubtitles": "Mantén visibles dous idiomas dos subtítulos",
-    "experienceTitle": "Todo o que necesitas nun xogador.",
-    "subtitleSync": "Sincronizar subtítulos con AI",
-    "dualSubtitlesDescription": "Activa os subtítulos dobres cando esteas aprendendo, comparando ou simplemente prefires ambos.",
-    "subtitleControls": "Sintoniza o reprodutor ao teu redor",
-    "showcasePrimaryAlt": "Pantalla de detalles do título de Framezoo con obras de arte, clasificacións, estacións e metadatos",
-    "showcaseSecondaryAlt": "Pantalla de descubrimento do xogador de Framezoo con busca, categorías e filas de títulos",
-    "showcaseSecondaryDescription": "Comeza desde unha superficie de descubrimento limpa e despois pasa á reprodución sen perder o teu lugar.",
-    "showcaseSecondaryTitle": "Descubre algo que vale a pena ver.",
-    "subtitleControlsDescription": "Escolle a fonte dos subtítulos, o idioma, o tempo e a visualización sen interromper o teu fluxo."
+    "version": "Lanzamento de escritorio",
+    "imageAlt": "Reproductor de streaming de alta velocidade Framezoo que mostra a pantalla de descubrimento",
+    "description": "Framezoo é un reprodutor de streaming de alta velocidade cunha interface de usuario suave e intuitiva, ricos metadatos de películas, sincronización ilimitada de subtítulos e compatibilidade con subtítulos de fontes múltiples.",
+    "title": "Transmite rápido,",
+    "titleAccent": "observa o teu camiño."
   },
   "download": {
     "eyebrow": "ESCOLLE A SÚA CONSTRUCCIÓN",
@@ -69,8 +38,19 @@
     "hideAll": "Ocultar outras construcións"
   },
   "footer": {
-    "line": "Un fogar máis tranquilo para as historias ás que segues volvendo.",
-    "status": "O escritorio primeiro. Listo para complementos."
+    "status": "O escritorio primeiro. Listo para complementos.",
+    "line": "Transmisión fluida e de alta velocidade para todas as películas e series que che gustan.",
+    "productTitle": "Produto",
+    "disclaimer": "Framezoo é un software de reprodutor multimedia neutral e non aloxa, almacena, distribúe nin controla ningún ficheiro multimedia ou complemento de terceiros. Os usuarios son os únicos responsables dos complementos e contidos aos que acceden de acordo coas leis locais.",
+    "privacy": "Política de privacidade e datos",
+    "copyright": "Dereitos de autor e DMCA",
+    "resourcesTitle": "Recursos e apoio",
+    "reportIssue": "Enviar comentarios/informes",
+    "legalTitle": "Legal & Políticas",
+    "terms": "Condicións de servizo",
+    "addonPolicy": "Política de complementos",
+    "rights": "© 2026 Framezoo. Todos os dereitos reservados.",
+    "metadataAttribution": "Os metadatos son proporcionados polas bases de datos de películas públicas (TMDB, IMDb) con fins informativos."
   },
   "addonGuide": {
     "title": "Crea un complemento sen unirte ao proceso da aplicación.",
@@ -110,7 +90,7 @@
     "eyebrow": "DESCUBRIMENTO DE FRAMEZOO",
     "movie": "Película",
     "title": "Historias populares para o teu próximo reloxo.",
-    "description": "Busca algo que valga a pena ver, abre os detalles e asegúrate dunha mellor forma de ver con Framezoo."
+    "description": "Explora metadatos de películas enriquecidos, escolle a túa emisión e comeza a velo ao instante con Framezoo."
   },
   "installGuide": {
     "title": "Guía de instalación e lanzamento de Framezoo",
@@ -192,5 +172,32 @@
     "attachmentsLabel": "Arquivos",
     "attachmentsHint": "Imaxes/vídeos · 55 MB en total como máximo",
     "attachmentsTooLarge": "O tamaño total do ficheiro non debe superar os 55 MB."
+  },
+  "seo": {
+    "description": "Framezoo é un reprodutor de transmisión de vídeo de alta velocidade deseñado para ser suave, intuitivo e fácil de usar. Explora metadatos de películas enriquecidos, sincroniza subtítulos con fluxos de vídeo sen límites e carga subtítulos de varias fontes.",
+    "title": "Framezoo - Transmisión de vídeo rápida e fluida"
+  },
+  "features": {
+    "experienceTitle": "Deseñado para unha transmisión rápida e sen esforzo.",
+    "subtitleSync": "Sincronización de subtítulos de emisión ilimitada",
+    "featureLabel": "Transmisión de alta velocidade, ao teu xeito",
+    "subtitleSyncDescription": "Sincroniza os subtítulos con calquera emisión de vídeo sen límites: axusta o tempo e aliña os diálogos sen problemas mentres miras.",
+    "overviewDescription": "Goza de transmisión de vídeo a alta velocidade nunha interface sinxela e sinxela de usar con ricos metadatos de películas, sincronización ilimitada de subtítulos e subtítulos de varias fontes.",
+    "subtitleControlsDescription": "Navega por unha interface limpa e sensible con metadatos completos, valoracións, detalles do reparto e guías de episodios integradas.",
+    "dualSubtitlesDescription": "Carga subtítulos automaticamente de varios provedores, cambia de fonte sobre a marcha ou mostra subtítulos dobres en paralelo.",
+    "dualSubtitles": "Subtítulos de varias fontes",
+    "subtitleControls": "IU suave e ricos metadatos de películas",
+    "ecosystemTitle": "A transmisión de alta velocidade atópase cun ecosistema aberto.",
+    "showcaseTitle": "Metadatos enriquecidos antes de premer Reproducir.",
+    "addonLabel": "Dentro de Framezoo",
+    "showcaseDescription": "Abre calquera título para explorar carteis, clasificacións, sinopsis, tempadas e detalles do elenco nunha vista limpa e intuitiva.",
+    "ecosystemDescription": "A reprodución de emisión rápida, os subtítulos de fontes múltiples e os ricos metadatos de películas están integrados directamente no núcleo. Os complementos permítenche conectar aínda máis fluxos, catálogos e provedores de subtítulos sen esforzo.",
+    "addonTwo": "Metadatos ricos de películas",
+    "addonOne": "Fluxos de alta velocidade",
+    "addonThree": "Subtítulos de fontes múltiples",
+    "showcasePrimaryAlt": "Pantalla de detalles do título de Framezoo con ilustracións, clasificacións, tempadas e ricos metadatos de películas",
+    "showcaseSecondaryDescription": "Navega sen esforzo a través dunha interface elegante deseñada para pasar de descubrir a reprodución a alta velocidade en segundos.",
+    "showcaseSecondaryAlt": "Pantalla de descubrimento do xogador de Framezoo con busca, categorías e filas de títulos",
+    "showcaseSecondaryTitle": "Descubrimento suave e intuitivo."
   }
 }

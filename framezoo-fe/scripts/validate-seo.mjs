@@ -17,7 +17,7 @@ const softwareApplication = graph.find(
 
 const requiredSnippets = [
   '<html lang="en">',
-  "<title>Framezoo Player | AI Subtitle Sync</title>",
+  "<title>Framezoo - Fast & Smooth Video Streaming</title>",
   'name="robots" content="index,follow,max-image-preview:large"',
   'name="thumbnail" content="https://framezoo.top/embed-preview-1.png"',
   'rel="canonical" href="https://framezoo.top/"',
