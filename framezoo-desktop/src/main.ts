@@ -1339,9 +1339,11 @@ function createMainWindow() {
     minWidth: 960,
     minHeight: 600,
     show: false,
-    // Windows transparent layered windows can hit-test through the native player.
-    backgroundColor: process.platform === "win32" ? "#000000" : "#00000000",
-    transparent: process.platform !== "win32",
+    // The Windows libmpv surface is a popup behind this window. Keep the
+    // player renderer transparent so native video remains visible underneath
+    // while DOM controls stay composited above it.
+    backgroundColor: "#00000000",
+    transparent: true,
     fullscreenable: true,
     ...(process.platform === "darwin"
       ? {
