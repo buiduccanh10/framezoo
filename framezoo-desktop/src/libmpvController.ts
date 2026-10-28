@@ -294,8 +294,7 @@ export class LibMpvController {
 
     this.registerIpc();
 
-    mainWindow.on("resize", () => {
-      this.broadcastLog("debug", "window_resized");
+    const syncMainSurfaces = () => {
       if (!mainWindow || mainWindow.isDestroyed()) return;
       const [contentWidth, contentHeight] = mainWindow.getContentSize();
       const scale = getNativeScaleFactor(mainWindow);
@@ -310,27 +309,29 @@ export class LibMpvController {
           this.addon?.resizePlayer(player.id, player.bounds);
         }
       }
+    };
+    mainWindow.on("resize", () => {
+      this.broadcastLog("debug", "window_resized");
+      syncMainSurfaces();
     });
+    const refreshMainSurfaceOrder = () => {
+      // Windows video surfaces are top-level popups positioned below the
+      // Electron window. Re-apply their physical bounds and z-order when the
+      // window moves between displays or regains focus.
+      syncMainSurfaces();
+    };
+    mainWindow.on("move", refreshMainSurfaceOrder);
+    mainWindow.on("focus", refreshMainSurfaceOrder);
+    mainWindow.on("show", refreshMainSurfaceOrder);
     mainWindow.on("minimize", () => {
       for (const player of this.players.values()) {
-        this.addon?.resizePlayer(player.id, player.bounds);
+        if (player.target === "main") {
+          this.addon?.resizePlayer(player.id, player.bounds);
+        }
       }
     });
     mainWindow.on("restore", () => {
-      if (!mainWindow || mainWindow.isDestroyed()) return;
-      const [contentWidth, contentHeight] = mainWindow.getContentSize();
-      const scale = getNativeScaleFactor(mainWindow);
-      for (const player of this.players.values()) {
-        if (player.target === "main") {
-          player.bounds = {
-            x: 0,
-            y: 0,
-            width: Math.max(1, Math.round(contentWidth * scale)),
-            height: Math.max(1, Math.round(contentHeight * scale)),
-          };
-          this.addon?.resizePlayer(player.id, player.bounds);
-        }
-      }
+      syncMainSurfaces();
     });
     mainWindow.on("closed", () => {
       this.destroyAll("main-window:closed");
@@ -1023,6 +1024,8 @@ export class LibMpvController {
 
     if (player.pipResizeListener && player.pipWindow) {
       player.pipWindow.off("resize", player.pipResizeListener);
+      player.pipWindow.off("move", player.pipResizeListener);
+      player.pipWindow.off("focus", player.pipResizeListener);
       player.pipResizeListener = undefined;
       player.pipWindow = undefined;
     }
@@ -1052,6 +1055,8 @@ export class LibMpvController {
         };
         resizePip();
         parentWindow.on("resize", resizePip);
+        parentWindow.on("move", resizePip);
+        parentWindow.on("focus", resizePip);
         player.pipResizeListener = resizePip;
         player.pipWindow = parentWindow;
       } else {
@@ -1087,6 +1092,8 @@ export class LibMpvController {
 
     if (player.pipResizeListener && player.pipWindow) {
       player.pipWindow.off("resize", player.pipResizeListener);
+      player.pipWindow.off("move", player.pipResizeListener);
+      player.pipWindow.off("focus", player.pipResizeListener);
       player.pipResizeListener = undefined;
       player.pipWindow = undefined;
     }

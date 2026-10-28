@@ -19,6 +19,24 @@ namespace {
 
 std::once_flag register_class_once;
 
+RECT screen_bounds(HWND parent, const SurfaceBounds& bounds) {
+  POINT origin{0, 0};
+  if (parent) ClientToScreen(parent, &origin);
+  return RECT{
+      origin.x + bounds.x,
+      origin.y + bounds.y,
+      origin.x + bounds.x + bounds.width,
+      origin.y + bounds.y + bounds.height,
+  };
+}
+
+UINT surface_position_flags(HWND parent) {
+  return SWP_NOACTIVATE |
+      (parent && (!IsWindowVisible(parent) || IsIconic(parent))
+           ? SWP_HIDEWINDOW
+           : SWP_SHOWWINDOW);
+}
+
 void register_surface_class() {
   std::call_once(register_class_once, [] {
     WNDCLASSA window_class{};
@@ -35,6 +53,8 @@ void register_surface_class() {
         }
         case WM_NCHITTEST:
           return HTTRANSPARENT;
+        case WM_MOUSEACTIVATE:
+          return MA_NOACTIVATE;
         case WM_DESTROY:
           return 0;
         default:
@@ -51,42 +71,10 @@ void register_surface_class() {
 }  // namespace
 
 void surface_configure_window(void* parent_handle) {
-  if (!parent_handle) return;
-  HWND parent = static_cast<HWND>(parent_handle);
-  LONG_PTR style = GetWindowLongPtrA(parent, GWL_STYLE);
-  if (!(style & WS_CLIPCHILDREN)) {
-    SetWindowLongPtrA(parent, GWL_STYLE, style | WS_CLIPCHILDREN);
-    SetWindowPos(
-        parent,
-        nullptr,
-        0,
-        0,
-        0,
-        0,
-        SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED
-    );
-  }
-
-  EnumChildWindows(
-      parent,
-      [](HWND child, LPARAM) -> BOOL {
-        LONG_PTR child_style = GetWindowLongPtrA(child, GWL_STYLE);
-        if (!(child_style & WS_CLIPSIBLINGS)) {
-          SetWindowLongPtrA(child, GWL_STYLE, child_style | WS_CLIPSIBLINGS);
-          SetWindowPos(
-              child,
-              nullptr,
-              0,
-              0,
-              0,
-              0,
-              SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED
-          );
-        }
-        return TRUE;
-      },
-      0
-  );
+  // Windows uses a separate top-level popup for the video surface. Mutating
+  // Chromium's child styles here creates an HWND airspace conflict: mpv's
+  // first painted frame can cover the renderer controls permanently.
+  (void)parent_handle;
 }
 
 NativeSurface* surface_create(
@@ -103,20 +91,22 @@ NativeSurface* surface_create(
   surface->paint_callback = paint_callback;
   surface->user = user;
 
-  surface_configure_window(surface->parent);
-
+  const RECT target = screen_bounds(surface->parent, bounds);
   surface->hwnd = CreateWindowExA(
-      WS_EX_NOACTIVATE,
+      WS_EX_NOACTIVATE | WS_EX_TOOLWINDOW,
       "FrameZooLibMpvSurface",
       "",
-      // The native video child must never become the input target. Renderer
-      // overlays own playback clicks, hover state, and window drag regions.
-      WS_CHILD | WS_VISIBLE | WS_DISABLED | WS_CLIPSIBLINGS,
-      bounds.x,
-      bounds.y,
+      // Keep the native video outside Chromium's child-window tree. The
+      // transparent Electron player remains above this popup, so its DOM
+      // header, toolbar, subtitles, and click targets stay composited.
+      // ponytail: avoids raw frame IPC; upgrade to a shared D3D texture when
+      // Chromium exposes a stable native-surface import path.
+      WS_POPUP | WS_VISIBLE | WS_CLIPSIBLINGS,
+      target.left,
+      target.top,
       bounds.width,
       bounds.height,
-      surface->parent,
+      nullptr,
       nullptr,
       GetModuleHandleA(nullptr),
       nullptr
@@ -138,12 +128,12 @@ NativeSurface* surface_create(
   );
   SetWindowPos(
       surface->hwnd,
-      HWND_BOTTOM,
-      bounds.x,
-      bounds.y,
+      surface->parent,
+      target.left,
+      target.top,
       bounds.width,
       bounds.height,
-      SWP_NOACTIVATE | SWP_SHOWWINDOW
+      surface_position_flags(surface->parent)
   );
   return surface;
 }
@@ -151,31 +141,30 @@ NativeSurface* surface_create(
 void surface_resize(NativeSurface* surface, SurfaceBounds bounds) {
   if (!surface || !surface->hwnd) return;
   surface->bounds = bounds;
+  const RECT target = screen_bounds(surface->parent, bounds);
   SetWindowPos(
       surface->hwnd,
-      HWND_BOTTOM,
-      bounds.x,
-      bounds.y,
+      surface->parent,
+      target.left,
+      target.top,
       bounds.width,
       bounds.height,
-      SWP_NOACTIVATE | SWP_SHOWWINDOW
+      surface_position_flags(surface->parent)
   );
-  surface_configure_window(surface->parent);
 }
 
 void surface_reparent(NativeSurface* surface, void* parent_handle) {
   if (!surface || !surface->hwnd || !parent_handle) return;
   surface->parent = static_cast<HWND>(parent_handle);
-  SetParent(surface->hwnd, surface->parent);
-  surface_configure_window(surface->parent);
+  const RECT target = screen_bounds(surface->parent, surface->bounds);
   SetWindowPos(
       surface->hwnd,
-      HWND_BOTTOM,
-      0,
-      0,
+      surface->parent,
+      target.left,
+      target.top,
       surface->bounds.width,
       surface->bounds.height,
-      SWP_NOACTIVATE | SWP_SHOWWINDOW
+      surface_position_flags(surface->parent)
   );
 }
 
