@@ -64,11 +64,8 @@ def main() -> None:
                     with engine.lock:
                         for record in list(engine.records.values()):
                             if not record.session_ids:
-                                record.stop_discovery()
-                                try:
-                                    record.handle.pause()
-                                except Exception:
-                                    pass
+                                record.pause_discovery()
+                                record.update_file_priorities()
                                 if record.persistent_cache and record.cache_ready:
                                     engine._save_record_resume_data(record)
                     emit(
