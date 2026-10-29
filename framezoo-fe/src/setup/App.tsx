@@ -1,6 +1,7 @@
 import { DeepLinkPage } from "@/landing/DeepLinkPage";
 import { InstallGuidePage } from "@/landing/InstallGuidePage";
 import { LandingCategoryPage } from "@/landing/LandingCategoryPage";
+import { LandingFloatDonate } from "@/landing/LandingFloatDonate";
 import { LandingFloatFeedback } from "@/landing/LandingFloatFeedback";
 import { LandingPage } from "@/landing/LandingPage";
 import { LegalPage, getLegalTabFromPathname } from "@/landing/LegalPage";
@@ -62,7 +63,12 @@ export default function App({ pathname, search }: AppProps = {}) {
   return (
     <>
       {renderContent()}
-      {!isDeepLink && <LandingFloatFeedback />}
+      {!isDeepLink && (
+        <>
+          <LandingFloatDonate />
+          <LandingFloatFeedback />
+        </>
+      )}
     </>
   );
 }

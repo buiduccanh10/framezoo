@@ -199,5 +199,19 @@
     "showcaseSecondaryAlt": "Arama, kategoriler ve başlık satırlarını içeren Framezoo oynatıcı keşif ekranı",
     "showcaseSecondaryDescription": "Sizi keşif aşamasından yüksek hızlı oynatmaya saniyeler içinde ulaştırmak için tasarlanmış şık bir arayüz aracılığıyla zahmetsizce gezinin.",
     "showcasePrimaryAlt": "Sanat eserleri, derecelendirmeler, sezonlar ve zengin film meta verileri içeren Framezoo başlık ayrıntısı ekranı"
+  },
+  "donate": {
+    "note": "Framezoo'yu önemsediğiniz ve arkasındaki çalışmayı desteklediğiniz için teşekkür ederiz. Katkınız, herkes için daha iyi bir deneyim oluşturmamız için bize daha fazla alan sağlıyor.",
+    "subtitle": "Her katkı, oynatıcıyı geliştirmemize, daha fazla platforma genişlememize ve fikirlerinizi dinlemeye devam etmemize yardımcı olur.",
+    "paypalLabel": "PayPal",
+    "modalTitle": "Framezoo'yu geliştirmeye devam etmemize yardımcı olun",
+    "scanHint": "Bu QR kodunu bankacılık uygulamanızla tarayın.",
+    "badge": "Framezoo'dan bir not",
+    "button": "Framezoo'yu Destekleyin",
+    "momoLabel": "MoMo",
+    "close": "Belki daha sonra",
+    "momoImageAlt": "MoMo bağışı QR kodu",
+    "viewQr": "QR kodunu daha büyük görüntüle",
+    "paypalImageAlt": "PayPal bağışı QR kodu"
   }
 }

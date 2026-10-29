@@ -1406,6 +1406,20 @@
     "errorRequired": "Lütfen hem başlığı hem de açıklamayı girin.",
     "errorSubmit": "Geri bildirim gönderilirken bir hata oluştu. Lütfen daha sonra tekrar deneyin."
   },
+  "donate": {
+    "button": "Destek Framezoo",
+    "badge": "Framezoo&#39;dan bir not",
+    "modalTitle": "BRAND_0__ markasını geliştirmeye devam etmemize yardımcı olun.",
+    "subtitle": "Her katkı, oynatıcıyı geliştirmemize, daha fazla platforma yayılmamıza ve fikirlerinizi dinlemeye devam etmemize yardımcı oluyor.",
+    "note": "Framezoo&#39;a önem verdiğiniz ve arkasındaki çalışmaları desteklediğiniz için teşekkür ederiz. Katkınız, herkes için daha iyi bir deneyim oluşturmamıza daha fazla olanak sağlıyor.",
+    "scanHint": "Bankacılık uygulamanızla bu QR kodunu tarayın.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "Anne",
+    "paypalImageAlt": "PayPal bağış QR kodu",
+    "momoImageAlt": "MoMo bağış QR kodu",
+    "viewQr": "{{label}} QR kodunu daha büyük görüntüle",
+    "close": "Kapalı"
+  },
   "toasts": {
     "linkCopied": "Bağlantı panoya kopyalandı!",
     "loginSuccess": "Başarıyla giriş yaptınız!",

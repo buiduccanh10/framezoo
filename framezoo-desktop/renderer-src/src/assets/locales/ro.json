@@ -1406,6 +1406,20 @@
     "errorRequired": "Vă rugăm să introduceți atât titlul, cât și descrierea.",
     "errorSubmit": "A apărut o eroare la trimiterea feedback-ului. Vă rugăm să încercați din nou mai târziu."
   },
+  "donate": {
+    "button": "Suport Framezoo",
+    "badge": "O notă de la Framezoo",
+    "modalTitle": "Ajută-ne să continuăm să construim Framezoo",
+    "subtitle": "Fiecare contribuție ne ajută să îmbunătățim playerul, să ne extindem pe mai multe platforme și să fim atenți la ideile voastre.",
+    "note": "Îți mulțumim că îți pasă de Framezoo și că susții munca din spatele acesteia. Contribuția ta ne oferă mai mult spațiu pentru a construi o experiență mai bună pentru toată lumea.",
+    "scanHint": "Scanează acest cod QR cu aplicația ta bancară.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "Mamă",
+    "paypalImageAlt": "Cod QR pentru donații PayPal",
+    "momoImageAlt": "Cod QR pentru donații MoMo",
+    "viewQr": "Vizualizați codul QR {{label}} mai mare",
+    "close": "Aproape"
+  },
   "toasts": {
     "linkCopied": "Link copiat în clipboard!",
     "loginSuccess": "Autentificat cu succes!",

@@ -1406,6 +1406,20 @@
     "errorRequired": "Indtast venligst både titel og beskrivelse.",
     "errorSubmit": "Der opstod en fejl under indsendelse af feedback. Prøv igen senere."
   },
+  "donate": {
+    "button": "Støt Framezoo",
+    "badge": "En bemærkning fra Framezoo",
+    "modalTitle": "Hjælp os med at fortsætte med at bygge Framezoo",
+    "subtitle": "Hvert bidrag hjælper os med at forbedre afspilleren, udvide til flere platforme og blive ved med at lytte til dine idéer.",
+    "note": "Tak fordi du bekymrer dig om Framezoo og støtter arbejdet bag det. Dit bidrag giver os mere plads til at skabe en bedre oplevelse for alle.",
+    "scanHint": "Scan denne QR-kode med din bankapp.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "Mor",
+    "paypalImageAlt": "PayPal-donations QR-kode",
+    "momoImageAlt": "MoMo-donations QR-kode",
+    "viewQr": "Se {{label}} QR-kode større",
+    "close": "Tæt"
+  },
   "toasts": {
     "linkCopied": "Linket er kopieret til udklipsholderen!",
     "loginSuccess": "Log ind med succes!",

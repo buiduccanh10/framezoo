@@ -1406,6 +1406,20 @@
     "errorRequired": "Zadejte prosím název i popis.",
     "errorSubmit": "Při odesílání zpětné vazby došlo k chybě. Zkuste to prosím znovu později."
   },
+  "donate": {
+    "button": "Podpora Framezoo",
+    "badge": "Vzkaz od Framezoo",
+    "modalTitle": "Pomozte nám dále budovat Framezoo",
+    "subtitle": "Každý příspěvek nám pomáhá vylepšovat přehrávač, rozšiřovat ho na více platforem a neustále naslouchat vašim nápadům.",
+    "note": "Děkujeme, že vám záleží na Framezoo a podporujete práci, která za ní stojí. Váš příspěvek nám dává více prostoru k vybudování lepšího zážitku pro všechny.",
+    "scanHint": "Naskenujte tento QR kód pomocí své bankovní aplikace.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "Maminka",
+    "paypalImageAlt": "QR kód pro darování přes PayPal",
+    "momoImageAlt": "QR kód pro darování MoMo",
+    "viewQr": "Zobrazit větší QR kód {{label}}",
+    "close": "Blízko"
+  },
   "toasts": {
     "linkCopied": "Odkaz zkopírován do schránky!",
     "loginSuccess": "Úspěšně přihlášen!",

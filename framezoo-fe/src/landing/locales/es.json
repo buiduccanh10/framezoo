@@ -199,5 +199,19 @@
     "addonThree": "Subtítulos de múltiples fuentes",
     "showcaseSecondaryDescription": "Navegue sin esfuerzo a través de una elegante interfaz diseñada para pasar del descubrimiento a la reproducción de alta velocidad en segundos.",
     "showcaseSecondaryAlt": "Pantalla de descubrimiento del reproductor Framezoo con búsqueda, categorías y filas de títulos"
+  },
+  "donate": {
+    "subtitle": "Cada contribución nos ayuda a mejorar el reproductor, expandirlo a más plataformas y seguir escuchando tus ideas.",
+    "scanHint": "Escanea este código QR con tu aplicación bancaria.",
+    "modalTitle": "Ayúdanos a seguir construyendo Framezoo",
+    "paypalLabel": "PayPal",
+    "badge": "Una nota de Framezoo",
+    "button": "Soporte Framezoo",
+    "close": "tal vez más tarde",
+    "momoLabel": "Momo",
+    "momoImageAlt": "Código QR de donación MoMo",
+    "viewQr": "Ver código QR más grande",
+    "paypalImageAlt": "Código QR de donación de PayPal",
+    "note": "Gracias por preocuparse por Framezoo y apoyar el trabajo que hay detrás. Su contribución nos brinda más espacio para construir una mejor experiencia para todos."
   }
 }

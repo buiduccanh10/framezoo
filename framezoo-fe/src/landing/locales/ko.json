@@ -199,5 +199,19 @@
     "showcaseSecondaryDescription": "검색부터 고속 재생까지 단 몇 초 만에 완료할 수 있도록 설계된 세련된 인터페이스를 통해 손쉽게 탐색하세요.",
     "showcaseSecondaryTitle": "부드럽고 직관적인 발견.",
     "showcaseSecondaryAlt": "검색, 카테고리, 제목 행이 포함된 Framezoo 플레이어 검색 화면"
+  },
+  "donate": {
+    "note": "Framezoo에 관심을 갖고 그 뒤에 있는 작업을 지원해 주셔서 감사합니다. 여러분의 참여로 우리는 모두를 위한 더 나은 경험을 구축할 수 있는 더 많은 공간을 확보할 수 있습니다.",
+    "subtitle": "모든 기여는 플레이어를 개선하고, 더 많은 플랫폼으로 확장하며, 여러분의 아이디어를 계속 듣는 데 도움이 됩니다.",
+    "momoLabel": "모모",
+    "paypalLabel": "페이팔",
+    "modalTitle": "Framezoo를 계속 구축할 수 있도록 도와주세요",
+    "momoImageAlt": "모모 기부 QR코드",
+    "badge": "Framezoo의 메모",
+    "paypalImageAlt": "PayPal 기부 QR 코드",
+    "button": "프레임주 지원",
+    "scanHint": "뱅킹 앱으로 이 QR 코드를 스캔하세요.",
+    "viewQr": "QR코드 크게 보기",
+    "close": "어쩌면 나중에"
   }
 }

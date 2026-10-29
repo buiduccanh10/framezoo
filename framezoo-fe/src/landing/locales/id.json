@@ -199,5 +199,19 @@
     "showcaseSecondaryAlt": "Layar penemuan pemutar Framezoo dengan pencarian, kategori, dan baris judul",
     "showcaseDescription": "Buka judul apa pun untuk menjelajahi poster, rating, sinopsis, musim, dan detail pemeran dalam satu tampilan yang bersih dan intuitif.",
     "showcaseSecondaryDescription": "Jelajahi dengan mudah melalui antarmuka ramping yang dirancang untuk membawa Anda mulai dari penemuan hingga pemutaran berkecepatan tinggi dalam hitungan detik."
+  },
+  "donate": {
+    "scanHint": "Pindai kode QR ini dengan aplikasi perbankan Anda.",
+    "modalTitle": "Bantu kami terus membangun Framezoo",
+    "paypalLabel": "PayPal",
+    "momoLabel": "Momo",
+    "badge": "Catatan dari Framezoo",
+    "button": "Mendukung Framezoo",
+    "close": "mungkin nanti",
+    "subtitle": "Setiap kontribusi membantu kami meningkatkan kualitas pemain, memperluas ke lebih banyak platform, dan terus mendengarkan ide-ide Anda.",
+    "paypalImageAlt": "Kode QR donasi PayPal",
+    "momoImageAlt": "Kode QR donasi MoMo",
+    "viewQr": "Lihat kode QR lebih besar",
+    "note": "Terima kasih telah peduli terhadap Framezoo dan mendukung pekerjaan di baliknya. Kontribusi Anda memberi kami lebih banyak ruang untuk menciptakan pengalaman yang lebih baik bagi semua orang."
   }
 }

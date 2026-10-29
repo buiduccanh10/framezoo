@@ -1406,6 +1406,20 @@
     "errorRequired": "Silakan masukkan judul dan deskripsi.",
     "errorSubmit": "Terjadi kesalahan saat mengirimkan umpan balik. Silakan coba lagi nanti."
   },
+  "donate": {
+    "button": "Dukungan Framezoo",
+    "badge": "Catatan dari __BRAND__",
+    "modalTitle": "Bantu kami terus membangun __BRAND__",
+    "subtitle": "Setiap kontribusi membantu kami meningkatkan pemutar media, memperluas ke lebih banyak platform, dan terus mendengarkan ide-ide Anda.",
+    "note": "Terima kasih atas kepedulian Anda terhadap Framezoo dan dukungan Anda terhadap pekerjaan di baliknya. Kontribusi Anda memberi kami lebih banyak ruang untuk membangun pengalaman yang lebih baik bagi semua orang.",
+    "scanHint": "Pindai kode QR ini dengan aplikasi perbankan Anda.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "Mama",
+    "paypalImageAlt": "Kode QR donasi PayPal",
+    "momoImageAlt": "Kode QR donasi MoMo",
+    "viewQr": "Lihat kode QR __PH__0__ lebih besar",
+    "close": "Menutup"
+  },
   "toasts": {
     "linkCopied": "Tautan disalin ke papan klip!",
     "loginSuccess": "Berhasil masuk!",

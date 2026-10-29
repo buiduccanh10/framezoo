@@ -1406,6 +1406,20 @@
     "errorRequired": "請同時輸入標題和描述。",
     "errorSubmit": "提交回饋時出錯，請稍後再試。"
   },
+  "donate": {
+    "button": "支援 Framezoo",
+    "badge": "來自Framezoo的留言",
+    "modalTitle": "請幫助我們繼續打造Framezoo",
+    "subtitle": "您的每項貢獻都能幫助我們改進遊戲，擴展到更多平台，並讓我們繼續傾聽您的想法。",
+    "note": "感謝您關注Framezoo並支持我們所做的工作。您的貢獻讓我們有更多空間為所有人打造更好的體驗。",
+    "scanHint": "使用您的銀行應用程式掃描此二維碼。",
+    "paypalLabel": "PayPal",
+    "momoLabel": "媽媽",
+    "paypalImageAlt": "PayPal捐款二維碼",
+    "momoImageAlt": "MoMo捐贈二維碼",
+    "viewQr": "查看{{label}}二維碼（放大）",
+    "close": "關閉"
+  },
   "toasts": {
     "linkCopied": "連結已複製到剪貼簿！",
     "loginSuccess": "登入成功！",

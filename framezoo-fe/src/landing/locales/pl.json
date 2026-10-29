@@ -199,5 +199,19 @@
     "showcaseSecondaryTitle": "Płynne i intuicyjne odkrywanie.",
     "showcaseSecondaryAlt": "Ekran odkrywania odtwarzacza Framezoo z wyszukiwaniem, kategoriami i wierszami tytułów",
     "showcaseSecondaryDescription": "Przeglądaj bez wysiłku elegancki interfejs zaprojektowany tak, aby w ciągu kilku sekund przejść od odkrywania do szybkiego odtwarzania."
+  },
+  "donate": {
+    "button": "Wesprzyj Framezoo",
+    "scanHint": "Zeskanuj ten kod QR za pomocą aplikacji bankowej.",
+    "note": "Dziękujemy za troskę o Framezoo i wspieranie stojącej za nim pracy. Twój wkład daje nam więcej możliwości, aby zapewnić wszystkim lepsze doświadczenia.",
+    "subtitle": "Każdy wkład pomaga nam ulepszyć odtwarzacz, rozszerzyć go na więcej platform i dalej słuchać Twoich pomysłów.",
+    "modalTitle": "Pomóż nam dalej budować Framezoo",
+    "paypalLabel": "PayPal",
+    "badge": "Notatka od Framezoo",
+    "close": "Może później",
+    "momoLabel": "Mamo",
+    "paypalImageAlt": "Kod QR darowizny PayPal",
+    "viewQr": "Wyświetl kod QR w większym formacie",
+    "momoImageAlt": "Kod QR darowizny MoMo"
   }
 }

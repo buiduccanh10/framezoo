@@ -199,5 +199,19 @@
     "showcaseSecondaryTitle": "流暢、直覺的發現。",
     "showcaseSecondaryAlt": "Framezoo 播放器發現螢幕，包含搜尋、類別和標題行",
     "showcaseSecondaryDescription": "透過時尚的介面輕鬆瀏覽，旨在讓您在幾秒鐘內從發現到高速播放。"
+  },
+  "donate": {
+    "modalTitle": "幫助我們繼續建構 Framezoo",
+    "paypalLabel": "貝寶",
+    "momoLabel": "莫莫",
+    "note": "感謝您對Framezoo的關心和支持其背後的工作。您的貢獻讓我們有更多空間為每個人打造更好的體驗。",
+    "scanHint": "使用您的銀行應用程式掃描此二維碼。",
+    "button": "支持框架動物園",
+    "viewQr": "查看二維碼放大",
+    "close": "也許稍後",
+    "subtitle": "每項貢獻都有助於我們改進播放器、擴展到更多平台並不斷傾聽您的想法。",
+    "badge": "來自 Framezoo 的註釋",
+    "momoImageAlt": "MoMo捐款二維碼",
+    "paypalImageAlt": "PayPal捐款二維碼"
   }
 }

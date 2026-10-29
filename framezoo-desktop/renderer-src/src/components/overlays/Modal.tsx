@@ -36,7 +36,11 @@ export function ModalCard(props: { children?: ReactNode; className?: string }) {
   );
 }
 
-export function Modal(props: { id: string; children?: ReactNode }) {
+export function Modal(props: {
+  id: string;
+  children?: ReactNode;
+  darkenClass?: string;
+}) {
   const modal = useModal(props.id);
   const { modalStack } = useOverlayStack();
   const modalIndex = modalStack.indexOf(props.id);
@@ -45,6 +49,7 @@ export function Modal(props: { id: string; children?: ReactNode }) {
   return (
     <OverlayPortal
       darken
+      darkenClass={props.darkenClass}
       close={modal.hide}
       show={modal.isShown}
       zIndex={zIndex}

@@ -199,5 +199,19 @@
     "showcaseSecondaryTitle": "Descoperire lină, intuitivă.",
     "showcaseTitle": "Metadate bogate înainte de a apăsa pe redare.",
     "showcaseSecondaryAlt": "Ecran de descoperire a jucătorului Framezoo cu căutare, categorii și rânduri de titlu"
+  },
+  "donate": {
+    "badge": "O notă de la Framezoo",
+    "paypalLabel": "PayPal",
+    "subtitle": "Fiecare contribuție ne ajută să îmbunătățim playerul, să ne extindem pe mai multe platforme și să continuăm să vă ascultăm ideile.",
+    "note": "Vă mulțumim că vă pasă de Framezoo și că susțineți munca din spatele acestuia. Contribuția dvs. ne oferă mai mult spațiu pentru a construi o experiență mai bună pentru toată lumea.",
+    "modalTitle": "Ajutați-ne să continuăm să construim Framezoo",
+    "scanHint": "Scanați acest cod QR cu aplicația dvs. bancară.",
+    "momoLabel": "MoMo",
+    "button": "Suport Framezoo",
+    "momoImageAlt": "Cod QR de donație MoMo",
+    "paypalImageAlt": "Cod QR pentru donație PayPal",
+    "viewQr": "Vedeți codul QR mai mare",
+    "close": "Poate mai târziu"
   }
 }

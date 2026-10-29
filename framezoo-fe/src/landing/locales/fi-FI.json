@@ -199,5 +199,19 @@
     "showcaseSecondaryDescription": "Selaa vaivattomasti tyylikkään käyttöliittymän läpi, joka on suunniteltu viemään sinut löydöstä nopeaan toistoon sekunneissa.",
     "showcaseSecondaryAlt": "Framezoo-soittimen etsintänäyttö, jossa on haku, luokat ja otsikkorivit",
     "showcaseSecondaryTitle": "Sujuva, intuitiivinen löytö."
+  },
+  "donate": {
+    "subtitle": "Jokainen panos auttaa meitä parantamaan pelaajaa, laajentamaan toimintaamme useammille alustoille ja kuuntelemaan ideoitasi.",
+    "note": "Kiitos, että välität Framezoosta ja tuet sen takana olevaa työtä. Panoksesi antaa meille enemmän tilaa rakentaa parempi kokemus kaikille.",
+    "paypalLabel": "PayPal",
+    "modalTitle": "Auta meitä jatkamaan Framezoon rakentamista",
+    "scanHint": "Skannaa tämä QR-koodi pankkisovelluksellasi.",
+    "momoLabel": "MoMo",
+    "paypalImageAlt": "PayPal-lahjoitus QR-koodi",
+    "button": "Tuki Framezoo",
+    "close": "Ehkä myöhemmin",
+    "badge": "Huomautus Framezoosta",
+    "momoImageAlt": "MoMo-lahjoitus QR-koodi",
+    "viewQr": "Katso QR-koodi isompana"
   }
 }

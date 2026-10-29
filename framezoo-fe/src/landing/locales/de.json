@@ -199,5 +199,19 @@
     "showcaseSecondaryTitle": "Reibungslose, intuitive Entdeckung.",
     "showcaseSecondaryDescription": "Navigieren Sie mühelos durch eine elegante Benutzeroberfläche, die Sie in Sekundenschnelle von der Entdeckung zur Hochgeschwindigkeitswiedergabe bringt.",
     "showcaseSecondaryAlt": "Framezoo-Player-Erkennungsbildschirm mit Suche, Kategorien und Titelzeilen"
+  },
+  "donate": {
+    "badge": "Eine Notiz von Framezoo",
+    "button": "Unterstützen Sie Framezoo",
+    "paypalLabel": "PayPal",
+    "subtitle": "Jeder Beitrag hilft uns, den Player zu verbessern, auf weitere Plattformen zu expandieren und weiterhin auf Ihre Ideen zu hören.",
+    "note": "Vielen Dank, dass Sie sich um Framezoo kümmern und die Arbeit dahinter unterstützen. Ihr Beitrag gibt uns mehr Raum, um ein besseres Erlebnis für alle zu schaffen.",
+    "modalTitle": "Helfen Sie uns, Framezoo weiter aufzubauen",
+    "close": "Vielleicht später",
+    "momoLabel": "MoMo",
+    "scanHint": "Scannen Sie diesen QR-Code mit Ihrer Banking-App.",
+    "paypalImageAlt": "PayPal-Spenden-QR-Code",
+    "momoImageAlt": "MoMo-Spenden-QR-Code",
+    "viewQr": "QR-Code größer anzeigen"
   }
 }

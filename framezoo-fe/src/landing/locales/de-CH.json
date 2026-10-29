@@ -199,5 +199,19 @@
     "showcasePrimaryAlt": "Framezoo-Titeldetailbildschirm mit Bildmaterial, Bewertungen, Staffeln und umfangreichen Filmmetadaten",
     "showcaseSecondaryDescription": "Navigieren Sie mühelos durch eine elegante Benutzeroberfläche, die Sie in Sekundenschnelle von der Entdeckung zur Hochgeschwindigkeitswiedergabe bringt.",
     "showcaseSecondaryAlt": "Framezoo-Player-Erkennungsbildschirm mit Suche, Kategorien und Titelzeilen"
+  },
+  "donate": {
+    "badge": "Eine Notiz von Framezoo",
+    "modalTitle": "Helfen Sie uns, Framezoo weiter aufzubauen",
+    "button": "Unterstützen Sie Framezoo",
+    "scanHint": "Scannen Sie diesen QR-Code mit Ihrer Banking-App.",
+    "subtitle": "Jeder Beitrag hilft uns, den Player zu verbessern, auf weitere Plattformen zu expandieren und weiterhin auf Ihre Ideen zu hören.",
+    "note": "Vielen Dank, dass Sie sich um Framezoo kümmern und die Arbeit dahinter unterstützen. Ihr Beitrag gibt uns mehr Raum, um ein besseres Erlebnis für alle zu schaffen.",
+    "paypalLabel": "PayPal",
+    "viewQr": "QR-Code größer anzeigen",
+    "momoLabel": "MoMo",
+    "momoImageAlt": "MoMo-Spenden-QR-Code",
+    "paypalImageAlt": "PayPal-Spenden-QR-Code",
+    "close": "Vielleicht später"
   }
 }

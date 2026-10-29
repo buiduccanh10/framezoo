@@ -1406,6 +1406,20 @@
     "errorRequired": "Si us plau, introduïu tant el títol com la descripció.",
     "errorSubmit": "S&#39;ha produït un error en enviar els comentaris. Torna-ho a provar més tard."
   },
+  "donate": {
+    "button": "Suport a Framezoo",
+    "badge": "Una nota de Framezoo",
+    "modalTitle": "Ajuda&#39;ns a seguir construint Framezoo",
+    "subtitle": "Cada contribució ens ajuda a millorar el reproductor, expandir-nos a més plataformes i seguir escoltant les vostres idees.",
+    "note": "Gràcies per preocupar-te per Framezoo i donar suport a la feina que hi ha al darrere. La teva contribució ens dóna més marge per construir una millor experiència per a tothom.",
+    "scanHint": "Escaneja aquest codi QR amb la teva aplicació bancària.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "Mare",
+    "paypalImageAlt": "Codi QR de donació per PayPal",
+    "momoImageAlt": "Codi QR de donació de MoMo",
+    "viewQr": "Veure el codi QR {{label}} més gran",
+    "close": "Tanca"
+  },
   "toasts": {
     "linkCopied": "S'ha copiat l'enllaç al porta-retalls!",
     "loginSuccess": "S'ha iniciat sessió correctament!",

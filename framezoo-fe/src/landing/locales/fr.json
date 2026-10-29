@@ -199,5 +199,19 @@
     "showcaseTitle": "Des métadonnées riches avant d'appuyer sur play.",
     "showcaseDescription": "Ouvrez n'importe quel titre pour explorer les affiches, les notes, les synopsis, les saisons et les détails du casting dans une vue claire et intuitive.",
     "showcaseSecondaryAlt": "Écran de découverte du lecteur Framezoo avec recherche, catégories et lignes de titre"
+  },
+  "donate": {
+    "note": "Merci de vous soucier de Framezoo et de soutenir le travail qui se cache derrière. Votre contribution nous donne plus de marge de manœuvre pour créer une meilleure expérience pour chacun.",
+    "subtitle": "Chaque contribution nous aide à améliorer le lecteur, à l'étendre sur davantage de plateformes et à rester à l'écoute de vos idées.",
+    "paypalLabel": "Paypal",
+    "modalTitle": "Aidez-nous à continuer à construire Framezoo",
+    "scanHint": "Scannez ce code QR avec votre application bancaire.",
+    "paypalImageAlt": "Code QR de don PayPal",
+    "momoImageAlt": "Code QR du don MoMo",
+    "momoLabel": "MoMo",
+    "badge": "Un message de Framezoo",
+    "button": "Soutenir Framezoo",
+    "viewQr": "Agrandir le code QR",
+    "close": "Peut-être plus tard"
   }
 }

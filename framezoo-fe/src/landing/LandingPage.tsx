@@ -18,8 +18,8 @@ import {
   getLandingCopy,
   getLandingLocaleOption,
 } from "./i18n";
-import { ArrowUpIcon } from "./LandingIcon";
 import { LandingFooter } from "./LandingFooter";
+import { ArrowUpIcon } from "./LandingIcon";
 import { LandingLanguageSelector } from "./LandingLanguageSelector";
 import { LandingParticles } from "./LandingParticles";
 import { applyLandingSeo } from "./seo";

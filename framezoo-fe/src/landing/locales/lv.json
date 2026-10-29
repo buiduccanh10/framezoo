@@ -199,5 +199,19 @@
     "showcaseDescription": "Atveriet jebkuru nosaukumu, lai izpētītu plakātus, vērtējumus, kopsavilkumus, gadalaikus un sniegtu informāciju vienā tīrā, intuitīvā skatā.",
     "showcaseSecondaryDescription": "Pārlūkojiet bez piepūles, izmantojot eleganto interfeisu, kas izveidots, lai dažu sekunžu laikā nokļūtu no atklāšanas līdz liela ātruma atskaņošanai.",
     "showcaseSecondaryAlt": "Framezoo atskaņotāja atklāšanas ekrāns ar meklēšanu, kategorijām un virsraksta rindām"
+  },
+  "donate": {
+    "badge": "Piezīme no Framezoo",
+    "modalTitle": "Palīdziet mums turpināt Framezoo veidošanu",
+    "button": "Atbalstiet Framezoo",
+    "scanHint": "Skenējiet šo QR kodu, izmantojot savu bankas lietotni.",
+    "subtitle": "Katrs ieguldījums palīdz mums uzlabot atskaņotāju, paplašināties uz vairāk platformu un turpināt klausīties jūsu idejas.",
+    "note": "Paldies, ka rūpējaties par Framezoo un atbalstāt darbu. Jūsu ieguldījums sniedz mums vairāk vietas, lai radītu labāku pieredzi ikvienam.",
+    "paypalImageAlt": "PayPal ziedojuma QR kods",
+    "momoImageAlt": "MoMo ziedojuma QR kods",
+    "viewQr": "Skatīt QR kodu lielāku",
+    "momoLabel": "MoMo",
+    "paypalLabel": "PayPal",
+    "close": "Varbūt vēlāk"
   }
 }

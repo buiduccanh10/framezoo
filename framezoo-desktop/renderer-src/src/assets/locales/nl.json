@@ -1406,6 +1406,20 @@
     "errorRequired": "Voer zowel de titel als de beschrijving in.",
     "errorSubmit": "Er is een fout opgetreden tijdens het verzenden van feedback. Probeer het later opnieuw."
   },
+  "donate": {
+    "button": "Ondersteuning Framezoo",
+    "badge": "Een bericht van Framezoo",
+    "modalTitle": "Help ons Framezoo verder op te bouwen",
+    "subtitle": "Elke bijdrage helpt ons de speler te verbeteren, uit te breiden naar meer platformen en naar uw ideeën te blijven luisteren.",
+    "note": "Bedankt voor je betrokkenheid bij Framezoo en je steun aan het werk erachter. Jouw bijdrage geeft ons meer ruimte om een ​​betere ervaring voor iedereen te creëren.",
+    "scanHint": "Scan deze QR-code met uw bankapp.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "Mama",
+    "paypalImageAlt": "QR-code voor PayPal-donatie",
+    "momoImageAlt": "MoMo donatie QR-code",
+    "viewQr": "Bekijk de QR-code van {{label}} groter",
+    "close": "Dichtbij"
+  },
   "toasts": {
     "linkCopied": "Link gekopieerd naar klembord!",
     "loginSuccess": "Succesvol ingelogd!",

@@ -1406,6 +1406,20 @@
     "errorRequired": "Vnesite naslov in opis.",
     "errorSubmit": "Pri pošiljanju povratnih informacij je prišlo do napake. Poskusite znova pozneje."
   },
+  "donate": {
+    "button": "Podpora Framezoo",
+    "badge": "Sporočilo od Framezoo",
+    "modalTitle": "Pomagajte nam graditi __BLAGOVNO ZNAMKO_0__",
+    "subtitle": "Vsak prispevek nam pomaga izboljšati predvajalnik, ga razširiti na več platform in še naprej prisluhniti vašim idejam.",
+    "note": "Hvala, ker vam je mar za Framezoo in podpirate delo, ki stoji za njo. Vaš prispevek nam daje več prostora za izgradnjo boljše izkušnje za vse.",
+    "scanHint": "Skenirajte to QR kodo s svojo bančno aplikacijo.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "Mama",
+    "paypalImageAlt": "QR koda za donacijo prek PayPala",
+    "momoImageAlt": "QR koda za donacijo MoMo",
+    "viewQr": "Ogled povečane QR kode {{label}}",
+    "close": "Zapri"
+  },
   "toasts": {
     "linkCopied": "Povezava je kopirana v odložišče!",
     "loginSuccess": "Uspešno prijavljeni!",

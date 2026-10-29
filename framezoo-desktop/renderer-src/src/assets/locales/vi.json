@@ -1406,6 +1406,20 @@
     "errorRequired": "Vui lòng nhập đầy đủ tiêu đề và nội dung mô tả vấn đề.",
     "errorSubmit": "Có lỗi xảy ra khi gửi phản hồi. Vui lòng thử lại sau."
   },
+  "donate": {
+    "button": "Ủng hộ Framezoo",
+    "badge": "Lời cảm ơn từ Framezoo",
+    "modalTitle": "Cùng Framezoo phát triển lâu dài",
+    "subtitle": "Mỗi sự ủng hộ giúp chúng tôi tiếp tục hoàn thiện trình phát, mở rộng ứng dụng trên nhiều nền tảng và lắng nghe ý kiến của bạn.",
+    "note": "Xin chân thành cảm ơn bạn đã quan tâm và đồng hành. Sự ủng hộ của bạn là động lực để Framezoo phát triển bền vững hơn.",
+    "scanHint": "Quét mã QR bằng ứng dụng ngân hàng để gửi lời ủng hộ.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "MoMo",
+    "paypalImageAlt": "Mã QR ủng hộ qua PayPal",
+    "momoImageAlt": "Mã QR ủng hộ qua MoMo",
+    "viewQr": "Xem mã QR {{label}} lớn hơn",
+    "close": "Đóng"
+  },
   "toasts": {
     "linkCopied": "Đã sao chép liên kết vào clipboard!",
     "loginSuccess": "Đăng nhập thành công!",

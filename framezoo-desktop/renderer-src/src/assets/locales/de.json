@@ -1406,6 +1406,20 @@
     "errorRequired": "Bitte geben Sie sowohl einen Titel als auch eine Beschreibung ein.",
     "errorSubmit": "Beim Absenden des Feedbacks ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut."
   },
+  "donate": {
+    "button": "Unterstützung für Framezoo",
+    "badge": "Eine Notiz von Framezoo",
+    "modalTitle": "Hilf uns, die Marke Framezoo weiter auszubauen.",
+    "subtitle": "Jeder Beitrag hilft uns, den Player zu verbessern, auf weitere Plattformen zu expandieren und weiterhin auf Ihre Ideen einzugehen.",
+    "note": "Vielen Dank, dass Sie sich für Framezoo interessieren und die dahinterstehende Arbeit unterstützen. Ihr Beitrag ermöglicht es uns, ein noch besseres Erlebnis für alle zu schaffen.",
+    "scanHint": "Scannen Sie diesen QR-Code mit Ihrer Banking-App.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "Mama",
+    "paypalImageAlt": "PayPal-Spenden-QR-Code",
+    "momoImageAlt": "MoMo-Spenden-QR-Code",
+    "viewQr": "QR-Code {{label}} vergrößern",
+    "close": "Schließen"
+  },
   "toasts": {
     "linkCopied": "Link in die Zwischenablage kopiert!",
     "loginSuccess": "Erfolgreich angemeldet!",

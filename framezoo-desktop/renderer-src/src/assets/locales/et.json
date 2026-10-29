@@ -1406,6 +1406,20 @@
     "errorRequired": "Palun sisestage nii pealkiri kui ka kirjeldus.",
     "errorSubmit": "Tagasiside esitamisel ilmnes viga. Palun proovige hiljem uuesti."
   },
+  "donate": {
+    "button": "Toetus Framezoo",
+    "badge": "Märkus kasutajalt Framezoo",
+    "modalTitle": "Aita meil Framezoo brändi edasi arendada",
+    "subtitle": "Iga panus aitab meil mängijat täiustada, laieneda rohkematele platvormidele ja kuulata teie ideid.",
+    "note": "Täname teid Framezoo eest hoolitsemise ja selle taga oleva töö toetamise eest. Teie panus annab meile rohkem võimalusi kõigile parema kogemuse loomiseks.",
+    "scanHint": "Skannige see QR-kood oma pangarakendusega.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "Ema",
+    "paypalImageAlt": "PayPali annetuse QR-kood",
+    "momoImageAlt": "MoMo annetuse QR-kood",
+    "viewQr": "Kuva {{label}} QR-koodi suuremalt",
+    "close": "Sule"
+  },
   "toasts": {
     "linkCopied": "Link on lõikelauale kopeeritud!",
     "loginSuccess": "Sisselogimine õnnestus!",

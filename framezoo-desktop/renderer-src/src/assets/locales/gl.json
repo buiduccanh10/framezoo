@@ -1406,6 +1406,20 @@
     "errorRequired": "Introduza tanto o título como a descrición.",
     "errorSubmit": "Produciuse un erro ao enviar os comentarios. Téntao de novo máis tarde."
   },
+  "donate": {
+    "button": "Apoio a Framezoo",
+    "badge": "Unha nota de Framezoo",
+    "modalTitle": "Axúdanos a seguir construíndo Framezoo",
+    "subtitle": "Cada contribución axúdanos a mellorar o reprodutor, a expandirnos a máis plataformas e a seguir escoitando as túas ideas.",
+    "note": "Grazas por preocuparte por Framezoo e apoiar o traballo que hai detrás. A túa contribución dános máis espazo para construír unha mellor experiencia para todos.",
+    "scanHint": "Escanea este código QR coa túa aplicación bancaria.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "Mamá",
+    "paypalImageAlt": "Código QR de doazón de PayPal",
+    "momoImageAlt": "Código QR de doazón de MoMo",
+    "viewQr": "Ver o código QR {{label}} máis grande",
+    "close": "Pechar"
+  },
   "toasts": {
     "linkCopied": "A ligazón copiouse no portapapeis!",
     "loginSuccess": "Inicia sesión con éxito!",

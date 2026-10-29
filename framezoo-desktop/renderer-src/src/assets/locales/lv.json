@@ -1406,6 +1406,20 @@
     "errorRequired": "Lūdzu, ievadiet gan nosaukumu, gan aprakstu.",
     "errorSubmit": "Iesniedzot atsauksmi, radās kļūda. Lūdzu, mēģiniet vēlreiz vēlāk."
   },
+  "donate": {
+    "button": "Atbalsts Framezoo",
+    "badge": "Piezīme no Framezoo",
+    "modalTitle": "Palīdziet mums turpināt veidot Framezoo",
+    "subtitle": "Katrs ieguldījums palīdz mums uzlabot atskaņotāju, paplašināties uz vairāk platformām un uzklausīt jūsu idejas.",
+    "note": "Paldies, ka rūpējaties par Framezoo un atbalstāt tā pamatā esošo darbu. Jūsu ieguldījums dod mums vairāk iespēju veidot labāku pieredzi ikvienam.",
+    "scanHint": "Noskenējiet šo QR kodu, izmantojot savu bankas lietotni.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "Mamma",
+    "paypalImageAlt": "PayPal ziedojumu QR kods",
+    "momoImageAlt": "MoMo ziedojuma QR kods",
+    "viewQr": "Skatīt {{label}} QR kodu lielāku",
+    "close": "Aizvērt"
+  },
   "toasts": {
     "linkCopied": "Saite ir kopēta starpliktuvē!",
     "loginSuccess": "Veiksmīgi pieteicies!",

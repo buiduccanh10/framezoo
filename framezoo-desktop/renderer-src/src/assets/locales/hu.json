@@ -1406,6 +1406,20 @@
     "errorRequired": "Kérjük, adja meg a címet és a leírást is.",
     "errorSubmit": "Hiba történt a visszajelzés elküldése során. Kérjük, próbálja meg később."
   },
+  "donate": {
+    "button": "Támogatás Framezoo",
+    "badge": "Egy üzenet a Framezoo-tól",
+    "modalTitle": "Segíts nekünk tovább építeni a Framezoo márkát",
+    "subtitle": "Minden hozzájárulás segít nekünk fejleszteni a lejátszót, több platformra terjeszkedni, és folyamatosan meghallgatni az ötleteiteket.",
+    "note": "Köszönjük, hogy törődsz a Framezoo márkával és támogatod a mögötte álló munkát. Hozzájárulásod teret enged nekünk, hogy jobb élményt teremtsünk mindenki számára.",
+    "scanHint": "Olvasd be ezt a QR-kódot a banki alkalmazásoddal.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "Anya",
+    "paypalImageAlt": "PayPal adomány QR-kód",
+    "momoImageAlt": "MoMo adomány QR-kód",
+    "viewQr": "{{label}} QR-kód nagyobb méretben történő megtekintése",
+    "close": "Közeli"
+  },
   "toasts": {
     "linkCopied": "Link a vágólapra másolva!",
     "loginSuccess": "Sikeres bejelentkezés!",

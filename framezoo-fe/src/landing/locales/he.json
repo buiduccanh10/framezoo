@@ -199,5 +199,19 @@
     "showcasePrimaryAlt": "מסך פירוט הכותרת של Framezoo עם יצירות אמנות, דירוגים, עונות ומטא נתונים עשירים של סרטים",
     "showcaseSecondaryAlt": "מסך גילוי נגן Framezoo עם חיפוש, קטגוריות ושורות כותרת",
     "showcaseSecondaryTitle": "גילוי חלק ואינטואיטיבי."
+  },
+  "donate": {
+    "badge": "הערה מ-Framezoo",
+    "scanHint": "סרוק את קוד ה-QR הזה עם אפליקציית הבנקאות שלך.",
+    "modalTitle": "עזרו לנו להמשיך לבנות את Framezoo",
+    "paypalLabel": "PayPal",
+    "momoLabel": "MoMo",
+    "button": "תמיכה ב-Framezoo",
+    "note": "תודה לך על שאכפת לך מ-Framezoo ועל תמיכתך בעבודה שמאחוריה. התרומה שלך נותנת לנו יותר מקום לבנות חוויה טובה יותר לכולם.",
+    "subtitle": "כל תרומה עוזרת לנו לשפר את הנגן, להתרחב לפלטפורמות נוספות ולהמשיך להקשיב לרעיונות שלך.",
+    "viewQr": "הצג קוד QR גדול יותר",
+    "momoImageAlt": "קוד QR לתרומת MoMo",
+    "paypalImageAlt": "קוד QR לתרומת PayPal",
+    "close": "אולי מאוחר יותר"
   }
 }

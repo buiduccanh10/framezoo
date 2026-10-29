@@ -14,6 +14,7 @@ import {
   decodeTMDBId,
   generateQuickSearchMediaUrl,
 } from "@/backend/metadata/tmdb";
+import { DonateModal } from "@/components/donate/DonateModal";
 import { AuthModal } from "@/components/overlays/AuthModal";
 import { DetailsModal } from "@/components/overlays/detailsModal";
 import { FeedbackModal } from "@/components/overlays/FeedbackModal";
@@ -231,6 +232,7 @@ function App() {
       <DetailsModal id="player-details" />
       <AuthModal />
       <FeedbackModal id="feedback" />
+      <DonateModal id="donate" />
       <ToastProvider />
       {!showDowntime && (
         <>

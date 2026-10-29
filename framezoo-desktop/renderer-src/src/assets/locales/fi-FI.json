@@ -1406,6 +1406,20 @@
     "errorRequired": "Anna sekä otsikko että kuvaus.",
     "errorSubmit": "Palautteen lähettämisessä tapahtui virhe. Yritä myöhemmin uudelleen."
   },
+  "donate": {
+    "button": "Tuki Framezoo:lle",
+    "badge": "Viesti käyttäjältä Framezoo",
+    "modalTitle": "Auta meitä jatkamaan Framezoo:n rakentamista",
+    "subtitle": "Jokainen panos auttaa meitä parantamaan soitinta, laajentamaan sitä useammille alustoille ja kuuntelemaan ideoitasi.",
+    "note": "Kiitos, että välität Framezoo -brändistä ja tuet sen taustalla olevaa työtä. Panoksesi antaa meille enemmän tilaa rakentaa parempi kokemus kaikille.",
+    "scanHint": "Skannaa tämä QR-koodi pankkisovelluksellasi.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "Äiti",
+    "paypalImageAlt": "PayPal-lahjoituksen QR-koodi",
+    "momoImageAlt": "MoMo-lahjoituksen QR-koodi",
+    "viewQr": "Näytä {{label}} QR-koodi suurempana",
+    "close": "Lähellä"
+  },
   "toasts": {
     "linkCopied": "Linkki kopioitu leikepöydälle!",
     "loginSuccess": "Sisäänkirjautuminen onnistui!",

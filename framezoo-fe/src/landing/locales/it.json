@@ -199,5 +199,19 @@
     "showcaseSecondaryDescription": "Naviga senza sforzo attraverso un'interfaccia elegante progettata per portarti dalla scoperta alla riproduzione ad alta velocità in pochi secondi.",
     "showcasePrimaryAlt": "Schermata dei dettagli del titolo Framezoo con grafica, valutazioni, stagioni e ricchi metadati dei film",
     "showcaseSecondaryTitle": "Scoperta fluida e intuitiva."
+  },
+  "donate": {
+    "subtitle": "Ogni contributo ci aiuta a migliorare il player, a espanderlo su più piattaforme e a continuare ad ascoltare le tue idee.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "MoMo",
+    "badge": "Una nota da Framezoo",
+    "button": "Supporta Framezoo",
+    "modalTitle": "Aiutaci a continuare a costruire Framezoo",
+    "scanHint": "Scansiona questo codice QR con la tua app bancaria.",
+    "close": "Forse più tardi",
+    "note": "Grazie per esserti preso cura di Framezoo e per aver sostenuto il lavoro che c'è dietro. Il tuo contributo ci dà più spazio per creare un'esperienza migliore per tutti.",
+    "paypalImageAlt": "Codice QR per donazioni PayPal",
+    "momoImageAlt": "Codice QR per le donazioni MoMo",
+    "viewQr": "Visualizza il codice QR ingrandito"
   }
 }

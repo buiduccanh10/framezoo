@@ -199,5 +199,19 @@
     "showcaseSecondaryAlt": "Framezoo 播放器发现屏幕，包含搜索、类别和标题行",
     "showcaseSecondaryTitle": "流畅、直观的发现。",
     "showcaseSecondaryDescription": "通过时尚的界面轻松浏览，旨在让您在几秒钟内从发现到高速播放。"
+  },
+  "donate": {
+    "scanHint": "使用您的银行应用程序扫描此二维码。",
+    "paypalLabel": "贝宝",
+    "momoLabel": "莫莫",
+    "badge": "来自 Framezoo 的注释",
+    "button": "支持框架动物园",
+    "note": "感谢您对Framezoo的关心和支持其背后的工作。您的贡献让我们有更多空间为每个人打造更好的体验。",
+    "modalTitle": "帮助我们继续构建 Framezoo",
+    "close": "也许稍后",
+    "subtitle": "每一项贡献都有助于我们改进播放器、扩展到更多平台并不断倾听您的想法。",
+    "paypalImageAlt": "PayPal捐款二维码",
+    "momoImageAlt": "MoMo捐款二维码",
+    "viewQr": "查看二维码放大"
   }
 }

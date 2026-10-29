@@ -199,5 +199,19 @@
     "showcaseDescription": "Opnaðu hvaða titil sem er til að skoða veggspjöld, einkunnir, samantektir, árstíðir og leikaraupplýsingar á einni hreinni, leiðandi sýn.",
     "showcaseSecondaryDescription": "Vafraðu áreynslulaust í gegnum slétt viðmót sem er hannað til að koma þér frá uppgötvun yfir í háhraða spilun á nokkrum sekúndum.",
     "showcasePrimaryAlt": "Framezoo titilsskjár með listaverkum, einkunnum, árstíðum og ríkulegum lýsigögnum kvikmynda"
+  },
+  "donate": {
+    "modalTitle": "Hjálpaðu okkur að halda áfram að byggja Framezoo",
+    "note": "Þakka þér fyrir að hugsa um Framezoo og styðja við bakið á því starfi. Framlag þitt gefur okkur meira svigrúm til að búa til betri upplifun fyrir alla.",
+    "subtitle": "Hvert framlag hjálpar okkur að bæta spilarann, stækka á fleiri vettvang og halda áfram að hlusta á hugmyndir þínar.",
+    "paypalLabel": "PayPal",
+    "button": "Styðja Framezoo",
+    "badge": "Minnisblað frá Framezoo",
+    "scanHint": "Skannaðu þennan QR kóða með bankaappinu þínu.",
+    "momoLabel": "MoMo",
+    "momoImageAlt": "MoMo framlag QR kóða",
+    "viewQr": "Skoða QR kóða stærri",
+    "paypalImageAlt": "PayPal framlag QR kóða",
+    "close": "Kannski seinna"
   }
 }

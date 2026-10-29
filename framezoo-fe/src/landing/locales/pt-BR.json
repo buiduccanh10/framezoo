@@ -199,5 +199,19 @@
     "showcaseSecondaryAlt": "Tela de descoberta do player Framezoo com pesquisa, categorias e linhas de título",
     "showcasePrimaryAlt": "Tela de detalhes do título do Framezoo com arte, classificações, temporadas e metadados ricos de filmes",
     "showcaseDescription": "Abra qualquer título para explorar pôsteres, classificações, sinopses, temporadas e detalhes do elenco em uma visualização limpa e intuitiva."
+  },
+  "donate": {
+    "button": "Suporte Framezoo",
+    "badge": "Uma nota do Framezoo",
+    "modalTitle": "Ajude-nos a continuar construindo o Framezoo",
+    "paypalLabel": "PayPal",
+    "subtitle": "Cada contribuição nos ajuda a melhorar o player, expandir para mais plataformas e continuar ouvindo suas ideias.",
+    "note": "Obrigado por se preocupar com o Framezoo e apoiar o trabalho por trás dele. Sua contribuição nos dá mais espaço para construir uma experiência melhor para todos.",
+    "close": "Talvez mais tarde",
+    "paypalImageAlt": "Código QR de doação do PayPal",
+    "momoLabel": "MoMo",
+    "scanHint": "Digitalize este código QR com seu aplicativo bancário.",
+    "momoImageAlt": "Código QR de doação MoMo",
+    "viewQr": "Veja o código QR ampliado"
   }
 }

@@ -1406,6 +1406,20 @@
     "errorRequired": "タイトルと説明の両方を入力してください。",
     "errorSubmit": "フィードバックの送信中にエラーが発生しました。しばらくしてからもう一度お試しください。"
   },
+  "donate": {
+    "button": "Framezoo をサポート",
+    "badge": "Framezooからのメッセージ",
+    "modalTitle": "Framezooの構築を継続できるよう、ご協力をお願いします。",
+    "subtitle": "皆様からのご支援は、プレイヤーの改善、対応プラットフォームの拡大、そして皆様のご意見を伺い続けるために役立ちます。",
+    "note": "Framezooにご関心をお寄せいただき、またその活動を支援してくださったことに感謝いたします。皆様のご支援のおかげで、より良い体験を皆様にお届けするための可能性が広がります。",
+    "scanHint": "お使いの銀行アプリでこのQRコードをスキャンしてください。",
+    "paypalLabel": "ペイパル",
+    "momoLabel": "お母さん",
+    "paypalImageAlt": "PayPal寄付用QRコード",
+    "momoImageAlt": "MoMo寄付用QRコード",
+    "viewQr": "{{label}} QRコードを拡大表示する",
+    "close": "近い"
+  },
   "toasts": {
     "linkCopied": "リンクがクリップボードにコピーされました!",
     "loginSuccess": "ログインに成功しました！",
