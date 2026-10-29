@@ -6,6 +6,9 @@
     "copy": "Kopiera"
   },
   "addons": {
+    "catalog": {
+      "badge": "Tillägg"
+    },
     "manager": {
       "add": "Tillägga",
       "addWithoutConfiguring": "Installera ändå (kanske inte fungerar)",
@@ -202,16 +205,22 @@
       "thisWeek": "Denna vecka",
       "title": {
         "4kReleases": "4K Releaserna",
+        "addons": "Tillägg",
+        "editorPicks": "Redaktörens val",
         "editorPicksMovies": "Redaktören väljer filmer",
         "editorPicksShows": "Redaktören väljer program",
         "forYou": "För dig",
+        "genres": "Genrer",
         "inCinemas": "På biografer",
+        "latest": "Senaste utgåvorna",
         "latestReleases": "Senaste releaserna",
         "latestTVReleases": "Senaste TV Serier",
         "movies": "{{category}} Filmer",
         "moviesOn": "Filmer på {{provider}}",
         "onTheAir": "I sändning",
         "popular": "Mest populära",
+        "providers": "Leverantörer",
+        "recommendations": "Rekommendationer",
         "recommended": "Eftersom du tittade på: {{title}}",
         "top10": "Topp 10",
         "topRated": "Topprankad",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "Dubbeltryck för att söka",
       "doubleClickToSeekDescription": "Dubbelklicka på spelarens vänstra eller högra sida för att söka 10 sekunder framåt eller bakåt.",
       "doubleClickToSeekLabel": "Aktivera dubbeltryck för att söka",
+      "homeSectionOrder": "Kategoriordning",
+      "homeSectionOrderDescription": "Dra och släpp för att ändra ordningen på kategorierna som visas på din startsida och upptäck sidor (inklusive tillägg).",
+      "resetHomeSectionOrder": "Återställ till standardordning",
       "keyboardShortcuts": "Kortkommandon",
       "keyboardShortcutsDescription": "Anpassa kortkommandon för programmet. Håll ` för att visa denna hjälp när som helst",
       "keyboardShortcutsLabel": "Anpassa kortkommandon",

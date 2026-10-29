@@ -6,6 +6,9 @@
     "copy": "複製"
   },
   "addons": {
+    "catalog": {
+      "badge": "外掛"
+    },
     "manager": {
       "add": "添加",
       "addWithoutConfiguring": "照常安裝（可能無法正常運作）",
@@ -202,16 +205,22 @@
       "thisWeek": "本星期",
       "title": {
         "4kReleases": "4K 發布",
+        "addons": "外掛",
+        "editorPicks": "編輯精選",
         "editorPicksMovies": "編輯精選電影",
         "editorPicksShows": "編輯精選節目",
         "forYou": "為你",
+        "genres": "類型",
         "inCinemas": "在電影院",
+        "latest": "最新發布",
         "latestReleases": "最新發布",
         "latestTVReleases": "最新電視節目",
         "movies": "{{category}} 電影",
         "moviesOn": "{{provider}} 上的電影",
         "onTheAir": "直播中",
         "popular": "最受歡迎",
+        "providers": "提供者",
+        "recommendations": "建議",
         "recommended": "因為您觀看了：{{title}}",
         "top10": "前10名",
         "topRated": "最受好評",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "按兩下進行搜尋",
       "doubleClickToSeekDescription": "雙擊播放器的左側或右側可向前或向後搜尋 10 秒。",
       "doubleClickToSeekLabel": "啟用雙擊搜尋",
+      "homeSectionOrder": "類別排序",
+      "homeSectionOrderDescription": "拖放即可重新排列首頁和發現頁面（包括外掛程式）上顯示的類別。",
+      "resetHomeSectionOrder": "重設為預設順序",
       "keyboardShortcuts": "鍵盤快速鍵",
       "keyboardShortcutsDescription": "自訂應用程式的鍵盤快速鍵。按住 ` 隨時顯示此協助",
       "keyboardShortcutsLabel": "自訂鍵盤快速鍵",

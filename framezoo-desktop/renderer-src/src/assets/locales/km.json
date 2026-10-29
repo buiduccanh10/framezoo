@@ -6,6 +6,9 @@
     "copy": "ចម្លង"
   },
   "addons": {
+    "catalog": {
+      "badge": "កម្មវិធីបន្ថែម"
+    },
     "manager": {
       "add": "បន្ថែម",
       "addWithoutConfiguring": "ដំឡើង​ដោយ​មិន​ចាំបាច់​ដំឡើង​ទេ (អាច​នឹង​មិន​ដំណើរការ)",
@@ -202,16 +205,22 @@
       "thisWeek": "សប្តាហ៍នេះ។",
       "title": {
         "4kReleases": "ការចេញផ្សាយ 4K",
+        "addons": "កម្មវិធីបន្ថែម",
+        "editorPicks": "ជម្រើសរបស់អ្នកកែសម្រួល",
         "editorPicksMovies": "កម្មវិធីនិពន្ធជ្រើសរើសភាពយន្ត",
         "editorPicksShows": "កម្មវិធីនិពន្ធជ្រើសរើសការបង្ហាញ",
         "forYou": "សម្រាប់អ្នក",
+        "genres": "ប្រភេទ",
         "inCinemas": "នៅក្នុងរោងកុន",
+        "latest": "ការចេញផ្សាយចុងក្រោយបំផុត",
         "latestReleases": "ការចេញផ្សាយចុងក្រោយបំផុត។",
         "latestTVReleases": "កម្មវិធីទូរទស្សន៍ថ្មីៗ",
         "movies": "{{category}} ភាពយន្ត",
         "moviesOn": "ភាពយន្តនៅលើ {{provider}}",
         "onTheAir": "នៅលើអាកាស",
         "popular": "ពេញនិយមបំផុត។",
+        "providers": "អ្នកផ្តល់សេវា",
+        "recommendations": "អនុសាសន៍",
         "recommended": "ដោយសារតែអ្នកបានមើល៖ {{title}}",
         "top10": "កំពូល 10",
         "topRated": "ចំណាត់ថ្នាក់កំពូល",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "ចុចពីរដងដើម្បីស្វែងរក",
       "doubleClickToSeekDescription": "ចុចពីរដងនៅផ្នែកខាងឆ្វេង ឬខាងស្តាំរបស់អ្នកលេង ដើម្បីស្វែងរក 10 វិនាទីទៅមុខ ឬថយក្រោយ។",
       "doubleClickToSeekLabel": "បើកការប៉ះពីរដងដើម្បីស្វែងរក",
+      "homeSectionOrder": "លំដាប់​ប្រភេទ",
+      "homeSectionOrderDescription": "អូស និងទម្លាក់ ដើម្បីតម្រៀបឡើងវិញនូវប្រភេទដែលបង្ហាញនៅលើទំព័រដើមរបស់អ្នក និងស្វែងរកទំព័រ (រួមទាំង Addons)។",
+      "resetHomeSectionOrder": "កំណត់ឡើងវិញទៅលំដាប់លំនាំដើម",
       "keyboardShortcuts": "ផ្លូវកាត់ក្តារចុច",
       "keyboardShortcutsDescription": "ប្ដូរផ្លូវកាត់ក្តារចុចតាមបំណងសម្រាប់កម្មវិធី។ សង្កត់ ` ដើម្បីបង្ហាញជំនួយនេះគ្រប់ពេល",
       "keyboardShortcutsLabel": "ប្ដូរផ្លូវកាត់ក្តារចុចតាមបំណង",

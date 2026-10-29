@@ -6,6 +6,9 @@
     "copy": "કૉપી"
   },
   "addons": {
+    "catalog": {
+      "badge": "એડઓન્સ"
+    },
     "manager": {
       "add": "ઉમેરો",
       "addWithoutConfiguring": "ગમે તે રીતે ઇન્સ્ટોલ કરો (કદાચ કામ ન કરે)",
@@ -202,16 +205,22 @@
       "thisWeek": "આ અઠવાડિયે",
       "title": {
         "4kReleases": "4K રિલીઝ",
+        "addons": "એડઓન્સ",
+        "editorPicks": "સંપાદકની પસંદગીઓ",
         "editorPicksMovies": "એડિટર મૂવીઝ પસંદ કરે છે",
         "editorPicksShows": "સંપાદક પસંદ શો",
         "forYou": "તમારા માટે",
+        "genres": "શૈલીઓ",
         "inCinemas": "સિનેમાઘરોમાં",
+        "latest": "નવીનતમ પ્રકાશનો",
         "latestReleases": "નવીનતમ પ્રકાશનો",
         "latestTVReleases": "નવીનતમ ટીવી શો",
         "movies": "{{category}} મૂવીઝ",
         "moviesOn": "{{provider}} પરની મૂવીઝ",
         "onTheAir": "ઓન ધ એર",
         "popular": "સૌથી વધુ લોકપ્રિય",
+        "providers": "પ્રદાતાઓ",
+        "recommendations": "ભલામણો",
         "recommended": "કારણ કે તમે જોયું: {{title}}",
         "top10": "ટોચના 10",
         "topRated": "ટોચના રેટેડ",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "શોધવા માટે બે વાર ટૅપ કરો",
       "doubleClickToSeekDescription": "10 સેકન્ડ આગળ અથવા પાછળ જવા માટે પ્લેયરની ડાબી અથવા જમણી બાજુ પર બે વાર ટૅપ કરો.",
       "doubleClickToSeekLabel": "શોધવા માટે બે વાર ટૅપ ચાલુ કરો",
+      "homeSectionOrder": "શ્રેણી ક્રમ",
+      "homeSectionOrderDescription": "તમારા હોમ પર પ્રદર્શિત શ્રેણીઓને ફરીથી ગોઠવવા અને પૃષ્ઠો શોધવા (એડઓન્સ સહિત) ખેંચો અને છોડો.",
+      "resetHomeSectionOrder": "ડિફોલ્ટ ક્રમમાં રીસેટ કરો",
       "keyboardShortcuts": "કીબોર્ડ શૉર્ટકટ્સ",
       "keyboardShortcutsDescription": "એપ્લિકેશન માટે કીબોર્ડ શોર્ટકટ્સ કસ્ટમાઇઝ કરો. કોઈપણ સમયે આ મદદ બતાવવા માટે `ને પકડી રાખો",
       "keyboardShortcutsLabel": "કીબોર્ડ શૉર્ટકટ્સ કસ્ટમાઇઝ કરો",

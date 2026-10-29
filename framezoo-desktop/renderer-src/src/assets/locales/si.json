@@ -6,6 +6,9 @@
     "copy": "පිටපත්"
   },
   "addons": {
+    "catalog": {
+      "badge": "ඇඩෝන"
+    },
     "manager": {
       "add": "එකතු කරන්න",
       "addWithoutConfiguring": "කෙසේ වෙතත් ස්ථාපනය කරන්න (ක්‍රියා නොකරනු ඇත)",
@@ -202,16 +205,22 @@
       "thisWeek": "මෙම සතිය",
       "title": {
         "4kReleases": "4K නිකුත් කිරීම්",
+        "addons": "ඇඩෝන",
+        "editorPicks": "සංස්කාරක තේරීම්",
         "editorPicksMovies": "සංස්කාරක චිත්‍රපට තෝරා ගනී",
         "editorPicksShows": "සංස්කාරක තේරීම් සංදර්ශන",
         "forYou": "ඔයා වෙනුවෙන්",
+        "genres": "ප්‍රභේද",
         "inCinemas": "සිනමා ශාලාවල",
+        "latest": "නවතම නිකුතු",
         "latestReleases": "නවතම නිකුතු",
         "latestTVReleases": "නවතම රූපවාහිනී වැඩසටහන්",
         "movies": "{{category}} චිත්‍රපට",
         "moviesOn": "{{provider}} හි චිත්‍රපට",
         "onTheAir": "ගුවන්විදුලිය",
         "popular": "වඩාත්ම ජනප්රිය",
+        "providers": "සපයන්නන්",
+        "recommendations": "නිර්දේශ",
         "recommended": "ඔබ නැරඹූ නිසා: {{title}}",
         "top10": "ඉහළම 10",
         "topRated": "ඉහළම ශ්රේණිගත කර ඇත",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "සෙවීමට දෙවරක් තට්ටු කරන්න",
       "doubleClickToSeekDescription": "තත්පර 10ක් ඉදිරියට හෝ පසුපසට සෙවීමට ක්‍රීඩකයාගේ වම් හෝ දකුණු පැත්තේ දෙවරක් තට්ටු කරන්න.",
       "doubleClickToSeekLabel": "සෙවීමට දෙවරක් තට්ටු කිරීම සබල කරන්න",
+      "homeSectionOrder": "කාණ්ඩ අනුපිළිවෙල",
+      "homeSectionOrderDescription": "ඔබගේ මුල් පිටුවේ පෙන්වන කාණ්ඩ නැවත සකස් කිරීමට සහ පිටු සොයා ගැනීමට (ඇඩෝන ඇතුළුව) ඇද දමන්න.",
+      "resetHomeSectionOrder": "පෙරනිමි අනුපිළිවෙලට නැවත සකසන්න",
       "keyboardShortcuts": "යතුරුපුවරු කෙටිමං",
       "keyboardShortcutsDescription": "යෙදුම සඳහා යතුරුපුවරු කෙටිමං අභිරුචිකරණය කරන්න. ඕනෑම වේලාවක මෙම උදවු පෙන්වීමට ` අල්ලාගෙන සිටින්න",
       "keyboardShortcutsLabel": "යතුරුපුවරු කෙටිමං අභිරුචිකරණය කරන්න",

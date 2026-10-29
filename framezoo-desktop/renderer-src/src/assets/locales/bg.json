@@ -6,6 +6,9 @@
     "copy": "Копирай"
   },
   "addons": {
+    "catalog": {
+      "badge": "Добавки"
+    },
     "manager": {
       "add": "Добавете",
       "addWithoutConfiguring": "Инсталирай въпреки това (може да не работи)",
@@ -202,16 +205,22 @@
       "thisWeek": "Тази седмица",
       "title": {
         "4kReleases": "4K издания",
+        "addons": "Добавки",
+        "editorPicks": "Избор на редактора",
         "editorPicksMovies": "Редакторът избира филми",
         "editorPicksShows": "Редакторът избира предавания",
         "forYou": "За теб",
+        "genres": "Жанрове",
         "inCinemas": "В кината",
+        "latest": "Най-новите издания",
         "latestReleases": "Последни издания",
         "latestTVReleases": "Най-новите телевизионни предавания",
         "movies": "{{category}} Филми",
         "moviesOn": "Филми на {{provider}}",
         "onTheAir": "В ефира",
         "popular": "Най-популярни",
+        "providers": "Доставчици",
+        "recommendations": "Препоръки",
         "recommended": "Защото сте гледали: {{title}}",
         "top10": "Топ 10",
         "topRated": "Най-високо оценени",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "Докоснете двукратно за търсене",
       "doubleClickToSeekDescription": "Докоснете двукратно от лявата или дясната страна на плейъра, за да превъртите 10 секунди напред или назад.",
       "doubleClickToSeekLabel": "Активирайте двойно докосване за търсене",
+      "homeSectionOrder": "Подреждане по категории",
+      "homeSectionOrderDescription": "Плъзнете и пуснете, за да пренаредите категориите, показани на началната ви страница и страницата „Открийте“ (включително добавки).",
+      "resetHomeSectionOrder": "Възстановяване на реда по подразбиране",
       "keyboardShortcuts": "Клавишни комбинации",
       "keyboardShortcutsDescription": "Персонализирайте клавишните комбинации за приложението. Задръжте `, за да покажете тази помощ по всяко време",
       "keyboardShortcutsLabel": "Персонализиране на клавишните комбинации",

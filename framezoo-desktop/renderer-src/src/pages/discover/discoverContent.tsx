@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { t } from "i18next";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/buttons/Button";
@@ -9,6 +9,10 @@ import { WatchingCarousel } from "@/pages/parts/home/WatchingCarousel";
 import { useDiscoverStore } from "@/stores/discover";
 import type { Category } from "@/stores/discover";
 import { useOverlayStack } from "@/stores/interface/overlayStack";
+import {
+  DEFAULT_HOME_SECTIONS,
+  usePreferencesStore,
+} from "@/stores/preferences";
 import { useProgressStore } from "@/stores/progress";
 import { MediaItem } from "@/utils/mediaTypes";
 
@@ -102,300 +106,275 @@ export function DiscoverContent({
     originCountry: filterCountry || undefined,
   };
 
+  const homeSectionOrder =
+    usePreferencesStore((s) => s.homeSectionOrder) || DEFAULT_HOME_SECTIONS;
+
+  const dedicatedAddonIds = homeSectionOrder
+    .filter((key) => key.startsWith("addon:"))
+    .map((key) => key.replace("addon:", ""));
+
+  const sortAndPrioritize = (sectionMap: Record<string, React.ReactNode>) => {
+    const orderedKeys = [
+      ...homeSectionOrder.filter((key) => key in sectionMap),
+      ...Object.keys(sectionMap).filter(
+        (key) => !homeSectionOrder.includes(key),
+      ),
+    ];
+
+    const result: React.ReactNode[] = [];
+    orderedKeys.forEach((key) => {
+      const node = sectionMap[key];
+      if (node) {
+        result.push(node);
+      }
+    });
+
+    return result.map((carousel, index) => {
+      if (React.isValidElement(carousel) && index < 2) {
+        return React.cloneElement(carousel as React.ReactElement<any>, {
+          priority: true,
+        });
+      }
+      return carousel;
+    });
+  };
+
   // Render Movies content with lazy loading
   const renderMoviesContent = () => {
-    const carousels = [];
-
-    // Trending Movies
-    carousels.push(
-      <LazyMediaCarousel
-        key="movie-trending"
-        content={{ type: "trending" }}
-        isTVShow={false}
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-        moreContent
-        priority={carousels.length < 2}
-        {...filtersProps}
-      />,
-    );
-
-    // Provider Movies
-    carousels.push(
-      <LazyMediaCarousel
-        key="movie-providers"
-        content={{ type: "provider" }}
-        isTVShow={false}
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-        showProviders
-        moreContent
-        {...filtersProps}
-      />,
-    );
-
-    // Top Rated
-    carousels.push(
-      <LazyMediaCarousel
-        key="movie-top-rated"
-        content={{ type: "topRated" }}
-        isTVShow={false}
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-        moreContent
-        priority={carousels.length < 2}
-        {...filtersProps}
-      />,
-    );
-
-    carousels.push(
-      <LazyMediaCarousel
-        key="movie-editor-picks"
-        content={{ type: "editorPicks" }}
-        isTVShow={false}
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-        moreContent
-        priority={carousels.length < 2}
-        {...filtersProps}
-      />,
-    );
-
-    // Latest Releases
-    carousels.push(
-      <LazyMediaCarousel
-        key="movie-latest"
-        content={{ type: "latest", fallback: "nowPlaying" }}
-        isTVShow={false}
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-        moreContent
-        priority={carousels.length < 2}
-        {...filtersProps}
-      />,
-    );
-
-    // For You - personal recommendations from watch history, progress, and bookmarks
-    carousels.push(
-      <PersonalRecommendationsCarousel
-        key="movie-for-you"
-        isTVShow={false}
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-        {...filtersProps}
-      />,
-    );
-
-    // Movie Recommendations - only show if there are movie progress items
-    if (movieProgressItems.length > 0) {
-      carousels.push(
+    const sectionMap: Record<string, React.ReactNode> = {
+      trending: (
         <LazyMediaCarousel
-          key="movie-recommendations"
-          content={{ type: "recommendations" }}
+          key="movie-trending"
+          content={{ type: "trending" }}
           isTVShow={false}
           carouselRefs={carouselRefs}
           onShowDetails={handleShowDetails}
           moreContent
-          showRecommendations
-          priority={carousels.length < 2} // First 2 carousels load immediately
           {...filtersProps}
-        />,
+        />
+      ),
+      providers: (
+        <LazyMediaCarousel
+          key="movie-providers"
+          content={{ type: "provider" }}
+          isTVShow={false}
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+          showProviders
+          moreContent
+          {...filtersProps}
+        />
+      ),
+      "top-rated": (
+        <LazyMediaCarousel
+          key="movie-top-rated"
+          content={{ type: "topRated" }}
+          isTVShow={false}
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+          moreContent
+          {...filtersProps}
+        />
+      ),
+      "editor-picks": (
+        <LazyMediaCarousel
+          key="movie-editor-picks"
+          content={{ type: "editorPicks" }}
+          isTVShow={false}
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+          moreContent
+          {...filtersProps}
+        />
+      ),
+      latest: (
+        <LazyMediaCarousel
+          key="movie-latest"
+          content={{ type: "latest", fallback: "nowPlaying" }}
+          isTVShow={false}
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+          moreContent
+          {...filtersProps}
+        />
+      ),
+      "for-you": (
+        <PersonalRecommendationsCarousel
+          key="movie-for-you"
+          isTVShow={false}
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+          {...filtersProps}
+        />
+      ),
+      recommendations:
+        movieProgressItems.length > 0 ? (
+          <LazyMediaCarousel
+            key="movie-recommendations"
+            content={{ type: "recommendations" }}
+            isTVShow={false}
+            carouselRefs={carouselRefs}
+            onShowDetails={handleShowDetails}
+            moreContent
+            showRecommendations
+            {...filtersProps}
+          />
+        ) : null,
+      genres: (
+        <LazyMediaCarousel
+          key="movie-genres"
+          content={{ type: "genre" }}
+          isTVShow={false}
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+          showGenres
+          moreContent
+          {...filtersProps}
+        />
+      ),
+      addons: (
+        <AddonCatalogRow
+          key="addon-catalog-movie"
+          type="movie"
+          excludeAddonIds={dedicatedAddonIds}
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+        />
+      ),
+    };
+
+    dedicatedAddonIds.forEach((addonId) => {
+      sectionMap[`addon:${addonId}`] = (
+        <AddonCatalogRow
+          key={`addon-catalog-movie-${addonId}`}
+          type="movie"
+          addonId={addonId}
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+        />
       );
-    }
+    });
 
-    // // Top 10 Movies
-    // carousels.push(
-    //   <LazyMediaCarousel
-    //     key="movie-top10"
-    //     content={{ type: "top10", fallback: "popular" }}
-    //     isTVShow={false}
-    //     carouselRefs={carouselRefs}
-    //     onShowDetails={handleShowDetails}
-    //     moreContent
-    //     priority={carousels.length < 2}
-    //   />,
-    // );
-
-    // Genre Movies
-    carousels.push(
-      <LazyMediaCarousel
-        key="movie-genres"
-        content={{ type: "genre" }}
-        isTVShow={false}
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-        showGenres
-        moreContent
-        {...filtersProps}
-      />,
-    );
-
-    // 4K Releases
-    // carousels.push(
-    //   <LazyMediaCarousel
-    //     key="movie-4k"
-    //     content={{ type: "latest4k", fallback: "popular" }}
-    //     isTVShow={false}
-    //     carouselRefs={carouselRefs}
-    //     onShowDetails={handleShowDetails}
-    //     moreContent
-    //     priority={carousels.length < 2}
-    //   />,
-    // );
-
-    // Addon catalogs — appended last so native content always comes first
-    carousels.push(
-      <AddonCatalogRow
-        key="addon-catalog-movie"
-        type="movie"
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-      />,
-    );
-
-    return carousels;
+    return sortAndPrioritize(sectionMap);
   };
 
   // Render TV Shows content with lazy loading
   const renderTVShowsContent = () => {
-    const carousels = [];
-
-    // Trending TV Shows
-    carousels.push(
-      <LazyMediaCarousel
-        key="tv-trending"
-        content={{ type: "trending" }}
-        isTVShow
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-        moreContent
-        priority={carousels.length < 2}
-        {...filtersProps}
-      />,
-    );
-
-    // Popular
-    // carousels.push(
-    //   <LazyMediaCarousel
-    //     key="tv-popular"
-    //     content={{ type: "popular" }}
-    //     isTVShow
-    //     carouselRefs={carouselRefs}
-    //     onShowDetails={handleShowDetails}
-    //     moreContent
-    //     priority
-    //     {...filtersProps}
-    //   />,
-    // );
-
-    // Provider TV Shows
-    carousels.push(
-      <LazyMediaCarousel
-        key="tv-providers"
-        content={{ type: "provider" }}
-        isTVShow
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-        showProviders
-        moreContent
-        {...filtersProps}
-      />,
-    );
-
-    // Top Rated
-    carousels.push(
-      <LazyMediaCarousel
-        key="tv-top-rated"
-        content={{ type: "topRated" }}
-        isTVShow
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-        moreContent
-        priority={carousels.length < 2}
-        {...filtersProps}
-      />,
-    );
-
-    carousels.push(
-      <LazyMediaCarousel
-        key="tv-editor-picks"
-        content={{ type: "editorPicks" }}
-        isTVShow
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-        moreContent
-        priority={carousels.length < 2}
-        {...filtersProps}
-      />,
-    );
-
-    // On Air
-    carousels.push(
-      <LazyMediaCarousel
-        key="tv-on-air"
-        content={{ type: "latesttv", fallback: "onTheAir" }}
-        isTVShow
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-        moreContent
-        priority={carousels.length < 2}
-        {...filtersProps}
-      />,
-    );
-
-    // For You - personal recommendations from watch history, progress, and bookmarks
-    carousels.push(
-      <PersonalRecommendationsCarousel
-        key="tv-for-you"
-        isTVShow
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-        {...filtersProps}
-      />,
-    );
-
-    // TV Show Recommendations - only show if there are TV show progress items
-    if (tvProgressItems.length > 0) {
-      carousels.push(
+    const sectionMap: Record<string, React.ReactNode> = {
+      trending: (
         <LazyMediaCarousel
-          key="tv-recommendations"
-          content={{ type: "recommendations" }}
+          key="tv-trending"
+          content={{ type: "trending" }}
           isTVShow
           carouselRefs={carouselRefs}
           onShowDetails={handleShowDetails}
           moreContent
-          showRecommendations
-          priority={carousels.length < 2} // First 2 carousels load immediately
           {...filtersProps}
-        />,
+        />
+      ),
+      providers: (
+        <LazyMediaCarousel
+          key="tv-providers"
+          content={{ type: "provider" }}
+          isTVShow
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+          showProviders
+          moreContent
+          {...filtersProps}
+        />
+      ),
+      "top-rated": (
+        <LazyMediaCarousel
+          key="tv-top-rated"
+          content={{ type: "topRated" }}
+          isTVShow
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+          moreContent
+          {...filtersProps}
+        />
+      ),
+      "editor-picks": (
+        <LazyMediaCarousel
+          key="tv-editor-picks"
+          content={{ type: "editorPicks" }}
+          isTVShow
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+          moreContent
+          {...filtersProps}
+        />
+      ),
+      latest: (
+        <LazyMediaCarousel
+          key="tv-on-air"
+          content={{ type: "latesttv", fallback: "onTheAir" }}
+          isTVShow
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+          moreContent
+          {...filtersProps}
+        />
+      ),
+      "for-you": (
+        <PersonalRecommendationsCarousel
+          key="tv-for-you"
+          isTVShow
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+          {...filtersProps}
+        />
+      ),
+      recommendations:
+        tvProgressItems.length > 0 ? (
+          <LazyMediaCarousel
+            key="tv-recommendations"
+            content={{ type: "recommendations" }}
+            isTVShow
+            carouselRefs={carouselRefs}
+            onShowDetails={handleShowDetails}
+            moreContent
+            showRecommendations
+            {...filtersProps}
+          />
+        ) : null,
+      genres: (
+        <LazyMediaCarousel
+          key="tv-genres"
+          content={{ type: "genre" }}
+          isTVShow
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+          showGenres
+          moreContent
+          {...filtersProps}
+        />
+      ),
+      addons: (
+        <AddonCatalogRow
+          key="addon-catalog-series"
+          type="series"
+          excludeAddonIds={dedicatedAddonIds}
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+        />
+      ),
+    };
+
+    dedicatedAddonIds.forEach((addonId) => {
+      sectionMap[`addon:${addonId}`] = (
+        <AddonCatalogRow
+          key={`addon-catalog-series-${addonId}`}
+          type="series"
+          addonId={addonId}
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+        />
       );
-    }
+    });
 
-    // Genre TV Shows
-    carousels.push(
-      <LazyMediaCarousel
-        key="tv-genres"
-        content={{ type: "genre" }}
-        isTVShow
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-        showGenres
-        moreContent
-        {...filtersProps}
-      />,
-    );
-
-    // Addon catalogs for TV Shows
-    carousels.push(
-      <AddonCatalogRow
-        key="addon-catalog-series"
-        type="series"
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-      />,
-    );
-
-    return carousels;
+    return sortAndPrioritize(sectionMap);
   };
 
   const renderPopularContent = () => {
@@ -414,96 +393,128 @@ export function DiscoverContent({
     );
   };
 
-  const renderAllContent = () => (
-    <>
-      <LazyMediaCarousel
-        key="all-trending"
-        content={{ type: "trending" }}
-        isTVShow={false}
-        isMixed
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-        moreContent
-        priority
-        {...filtersProps}
-      />
-      <LazyMediaCarousel
-        key="all-popular"
-        content={{ type: "popular" }}
-        isTVShow={false}
-        isMixed
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-        moreContent
-        priority
-        {...filtersProps}
-      />
-      <LazyMediaCarousel
-        key="all-providers"
-        content={{ type: "provider" }}
-        isTVShow={false}
-        isMixed
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-        showProviders
-        moreContent
-        {...filtersProps}
-      />
-      <LazyMediaCarousel
-        key="all-top-rated"
-        content={{ type: "topRated" }}
-        isTVShow={false}
-        isMixed
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-        moreContent
-        {...filtersProps}
-      />
-      <LazyMediaCarousel
-        key="all-editor-picks"
-        content={{ type: "editorPicks" }}
-        isTVShow={false}
-        isMixed
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-        moreContent
-        {...filtersProps}
-      />
-      <LazyMediaCarousel
-        key="all-latest"
-        content={{ type: "latest" }}
-        isTVShow={false}
-        isMixed
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-        moreContent
-        {...filtersProps}
-      />
-      <LazyMediaCarousel
-        key="all-genres"
-        content={{ type: "genre" }}
-        isTVShow={false}
-        isMixed
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-        showGenres
-        moreContent
-        {...filtersProps}
-      />
-      <AddonCatalogRow
-        key="addon-catalog-all"
-        type="movie"
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-      />
-      <AddonCatalogRow
-        key="addon-catalog-all-series"
-        type="series"
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-      />
-    </>
-  );
+  const renderAllContent = () => {
+    const sectionMap: Record<string, React.ReactNode> = {
+      trending: (
+        <LazyMediaCarousel
+          key="all-trending"
+          content={{ type: "trending" }}
+          isTVShow={false}
+          isMixed
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+          moreContent
+          {...filtersProps}
+        />
+      ),
+      popular: (
+        <LazyMediaCarousel
+          key="all-popular"
+          content={{ type: "popular" }}
+          isTVShow={false}
+          isMixed
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+          moreContent
+          {...filtersProps}
+        />
+      ),
+      providers: (
+        <LazyMediaCarousel
+          key="all-providers"
+          content={{ type: "provider" }}
+          isTVShow={false}
+          isMixed
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+          showProviders
+          moreContent
+          {...filtersProps}
+        />
+      ),
+      "top-rated": (
+        <LazyMediaCarousel
+          key="all-top-rated"
+          content={{ type: "topRated" }}
+          isTVShow={false}
+          isMixed
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+          moreContent
+          {...filtersProps}
+        />
+      ),
+      "editor-picks": (
+        <LazyMediaCarousel
+          key="all-editor-picks"
+          content={{ type: "editorPicks" }}
+          isTVShow={false}
+          isMixed
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+          moreContent
+          {...filtersProps}
+        />
+      ),
+      latest: (
+        <LazyMediaCarousel
+          key="all-latest"
+          content={{ type: "latest" }}
+          isTVShow={false}
+          isMixed
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+          moreContent
+          {...filtersProps}
+        />
+      ),
+      genres: (
+        <LazyMediaCarousel
+          key="all-genres"
+          content={{ type: "genre" }}
+          isTVShow={false}
+          isMixed
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+          showGenres
+          moreContent
+          {...filtersProps}
+        />
+      ),
+      addons: (
+        <>
+          <AddonCatalogRow
+            key="addon-catalog-all"
+            type="movie"
+            excludeAddonIds={dedicatedAddonIds}
+            carouselRefs={carouselRefs}
+            onShowDetails={handleShowDetails}
+          />
+          <AddonCatalogRow
+            key="addon-catalog-all-series"
+            type="series"
+            excludeAddonIds={dedicatedAddonIds}
+            carouselRefs={carouselRefs}
+            onShowDetails={handleShowDetails}
+          />
+        </>
+      ),
+    };
+
+    dedicatedAddonIds.forEach((addonId) => {
+      sectionMap[`addon:${addonId}`] = (
+        <AddonCatalogRow
+          key={`addon-catalog-all-${addonId}`}
+          type="movie"
+          addonId={addonId}
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+        />
+      );
+    });
+
+    return <>{sortAndPrioritize(sectionMap)}</>;
+  };
 
   const renderSelectedGenreContent = () => {
     if (!selectedGenreId) return null;

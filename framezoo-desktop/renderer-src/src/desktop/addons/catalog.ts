@@ -98,23 +98,30 @@ export function getAddonCatalogQueryKey(
 
 /**
  * Fetches a single catalog from one addon.
- * URL pattern: {baseUrl}/catalog/{type}/{catalogId}.json
+ * URL pattern: {baseUrl}/catalog/{type}/{catalogId}.json (with optional /skip={skip}.json)
  */
 export async function loadAddonCatalog(
   addon: InstalledAddon,
   type: string,
   catalogId: string,
+  options?: { skip?: number },
 ): Promise<StremioMetaPreview[]> {
-  const url = new URL(
-    `catalog/${type}/${encodeURIComponent(catalogId)}.json`,
-    addon.baseUrl,
-  );
+  const skip = options?.skip;
+  const path =
+    skip && skip > 0
+      ? `catalog/${type}/${encodeURIComponent(catalogId)}/skip=${skip}.json`
+      : `catalog/${type}/${encodeURIComponent(catalogId)}.json`;
+  const url = new URL(path, addon.baseUrl);
+  if (skip && skip > 0) {
+    url.searchParams.set("skip", String(skip));
+  }
 
   console.debug("[desktop-addon] catalog request", {
     addonId: addon.manifest.id,
     addonName: addon.manifest.name,
     type,
     catalogId,
+    skip,
     url: url.toString(),
   });
 
@@ -146,10 +153,19 @@ export async function loadAllAddonCatalogs(
   addons: InstalledAddon[],
   type: string,
   catalogId?: string,
+  options?: { skip?: number; addonId?: string; excludeAddonIds?: string[] },
 ): Promise<AddonCatalogLoadResult> {
   const eligibleAddons = addons
     .filter((addon) => addon.enabled)
     .filter((addon) => hasResource(addon, "catalog"))
+    .filter(
+      (addon) => !options?.addonId || addon.manifest.id === options.addonId,
+    )
+    .filter(
+      (addon) =>
+        !options?.excludeAddonIds ||
+        !options.excludeAddonIds.includes(addon.manifest.id),
+    )
     .filter(
       (addon) =>
         !addon.manifest.catalogs?.length ||
@@ -176,7 +192,12 @@ export async function loadAllAddonCatalogs(
           string | undefined) ??
         "top";
 
-      const metas = await loadAddonCatalog(addon, type, targetCatalogId);
+      const metas = await loadAddonCatalog(
+        addon,
+        type,
+        targetCatalogId,
+        options,
+      );
       console.debug("[desktop-addon] catalog loaded", {
         addonId: addon.manifest.id,
         catalogId: targetCatalogId,

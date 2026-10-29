@@ -6,6 +6,9 @@
     "copy": "Afrita"
   },
   "addons": {
+    "catalog": {
+      "badge": "Viðbætur"
+    },
     "manager": {
       "add": "Bæta við",
       "addWithoutConfiguring": "Setja samt upp (virkar kannski ekki)",
@@ -202,16 +205,22 @@
       "thisWeek": "Í þessari viku",
       "title": {
         "4kReleases": "4K útgáfur",
+        "addons": "Viðbætur",
+        "editorPicks": "Val ritstjórans",
         "editorPicksMovies": "Ritstjóri velur kvikmyndir",
         "editorPicksShows": "Ritstjóri velur sýningar",
         "forYou": "Fyrir þig",
+        "genres": "Tegundir",
         "inCinemas": "Í kvikmyndahúsum",
+        "latest": "Nýjustu útgáfur",
         "latestReleases": "Nýjustu útgáfur",
         "latestTVReleases": "Nýjustu sjónvarpsþættirnir",
         "movies": "{{category}} Kvikmyndir",
         "moviesOn": "Kvikmyndir á {{provider}}",
         "onTheAir": "On The Air",
         "popular": "Vinsælast",
+        "providers": "Þjónustuaðilar",
+        "recommendations": "Tillögur",
         "recommended": "Vegna þess að þú horfðir á: {{title}}",
         "top10": "Topp 10",
         "topRated": "Hæsta einkunn",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "Ýttu tvisvar til að leita",
       "doubleClickToSeekDescription": "Ýttu tvisvar vinstra eða hægra megin á spilaranum til að leita 10 sekúndur áfram eða afturábak.",
       "doubleClickToSeekLabel": "Virkjaðu tvisvar til að leita",
+      "homeSectionOrder": "Flokkaröð",
+      "homeSectionOrderDescription": "Dragðu og slepptu til að endurraða flokkunum sem birtast á forsíðunni þinni og uppgötva síðunum (þar á meðal viðbætur).",
+      "resetHomeSectionOrder": "Endurstilla í sjálfgefna röðun",
       "keyboardShortcuts": "Flýtivísar",
       "keyboardShortcutsDescription": "Sérsníddu flýtilykla fyrir forritið. Haltu ` til að sýna þessa hjálp hvenær sem er",
       "keyboardShortcutsLabel": "Sérsníddu flýtilykla",

@@ -6,6 +6,9 @@
     "copy": "Copiați"
   },
   "addons": {
+    "catalog": {
+      "badge": "Suplimente"
+    },
     "manager": {
       "add": "Adăuga",
       "addWithoutConfiguring": "Instalați oricum (s-ar putea să nu funcționeze)",
@@ -202,16 +205,22 @@
       "thisWeek": "În această săptămână",
       "title": {
         "4kReleases": "Lansări 4K",
+        "addons": "Suplimente",
+        "editorPicks": "Alegerile editorului",
         "editorPicksMovies": "Editorul alege filme",
         "editorPicksShows": "Editorul alege emisiunile",
         "forYou": "Pentru dumneavoastră",
+        "genres": "Genuri",
         "inCinemas": "În Cinematografe",
+        "latest": "Ultimele lansări",
         "latestReleases": "Ultimele lansări",
         "latestTVReleases": "Cele mai recente emisiuni TV",
         "movies": "{{category}} Filme",
         "moviesOn": "Filme pe {{provider}}",
         "onTheAir": "Pe Aer",
         "popular": "Cele mai populare",
+        "providers": "Furnizori",
+        "recommendations": "Recomandări",
         "recommended": "Pentru că ați vizionat: {{title}}",
         "top10": "Top 10",
         "topRated": "Cel mai bine evaluat",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "Atingeți de două ori pentru a căuta",
       "doubleClickToSeekDescription": "Atingeți de două ori partea stângă sau dreaptă a playerului pentru a căuta 10 secunde înainte sau înapoi.",
       "doubleClickToSeekLabel": "Activați atingerea de două ori pentru a căuta",
+      "homeSectionOrder": "Ordinea categoriilor",
+      "homeSectionOrderDescription": "Trageți și plasați pentru a reordona categoriile afișate pe paginile principală și Descoperiți (inclusiv Add-ons).",
+      "resetHomeSectionOrder": "Resetare la ordinea implicită",
       "keyboardShortcuts": "Comenzi rapide de la tastatură",
       "keyboardShortcutsDescription": "Personalizați comenzile rapide de la tastatură pentru aplicație. Țineți apăsat ` pentru a afișa acest ajutor oricând",
       "keyboardShortcutsLabel": "Personalizați comenzile rapide de la tastatură",

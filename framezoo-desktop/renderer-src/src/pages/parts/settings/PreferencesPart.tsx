@@ -1,15 +1,18 @@
 import classNames from "classnames";
-import { ReactNode } from "react";
+import { ReactNode, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/buttons/Button";
 import { Toggle } from "@/components/buttons/Toggle";
 import { FlagIcon } from "@/components/FlagIcon";
 import { Dropdown } from "@/components/form/Dropdown";
+import { SortableList } from "@/components/form/SortableList";
 import { SettingsCard } from "@/components/layout/SettingsCard";
 import { Heading1 } from "@/components/utils/Text";
+import { useInstalledAddons } from "@/desktop/addons/store";
 import { appLanguageOptions } from "@/setup/i18n";
 import { useOverlayStack } from "@/stores/interface/overlayStack";
+import { DEFAULT_HOME_SECTIONS } from "@/stores/preferences";
 import { isAutoplayAllowed } from "@/utils/autoplay";
 import { getLocaleInfo, sortLangCodes } from "@/utils/language";
 
@@ -70,9 +73,12 @@ export function PreferencesPart(props: {
   setEnableDoubleClickToSeek: (v: boolean) => void;
   enableAutoResumeOnPlaybackError: boolean;
   setEnableAutoResumeOnPlaybackError: (v: boolean) => void;
+  homeSectionOrder: string[];
+  setHomeSectionOrder: (v: string[]) => void;
 }) {
   const { t } = useTranslation();
   const { showModal } = useOverlayStack();
+  const addons = useInstalledAddons();
   const sorted = sortLangCodes(appLanguageOptions.map((item) => item.code));
 
   const allowAutoplay = isAutoplayAllowed();
@@ -89,6 +95,73 @@ export function PreferencesPart(props: {
   const selected = options.find(
     (item) => item.id === getLocaleInfo(props.language)?.code,
   );
+
+  const getSectionName = (id: string) => {
+    if (id.startsWith("addon:")) {
+      const addonId = id.replace("addon:", "");
+      const addon = addons.find((a) => a.manifest.id === addonId);
+      return addon ? `${addon.manifest.name} (Addon)` : id;
+    }
+    switch (id) {
+      case "trending":
+        return t("discover.carousel.title.trending", "Xu hướng");
+      case "popular":
+        return t("discover.carousel.title.popular", "Phổ biến");
+      case "providers":
+        return t("discover.carousel.title.providers", "Nhà cung cấp");
+      case "top-rated":
+        return t("discover.carousel.title.topRated", "Đánh giá cao");
+      case "editor-picks":
+        return t("discover.carousel.title.editorPicks", "Biên tập viên chọn");
+      case "latest":
+        return t("discover.carousel.title.latest", "Mới phát hành");
+      case "for-you":
+        return t("discover.carousel.title.forYou", "Dành cho bạn");
+      case "recommendations":
+        return t("discover.carousel.title.recommendations", "Gợi ý cho bạn");
+      case "genres":
+        return t("discover.carousel.title.genres", "Thể loại");
+      case "addons":
+        return t("discover.carousel.title.addons", "Addons");
+      default:
+        return id;
+    }
+  };
+
+  const sortableItems = useMemo(() => {
+    const list = [...(props.homeSectionOrder || DEFAULT_HOME_SECTIONS)];
+
+    // Ensure all default sections are included
+    DEFAULT_HOME_SECTIONS.forEach((sec) => {
+      if (!list.includes(sec)) {
+        list.push(sec);
+      }
+    });
+
+    // Also include any currently enabled addons that declare catalogs
+    addons
+      .filter((a) => a.enabled && a.manifest.catalogs?.length)
+      .forEach((a) => {
+        const addonKey = `addon:${a.manifest.id}`;
+        if (!list.includes(addonKey)) {
+          list.push(addonKey);
+        }
+      });
+
+    // Filter out addons that are no longer installed
+    return list
+      .filter((id) => {
+        if (id.startsWith("addon:")) {
+          const aId = id.replace("addon:", "");
+          return addons.some((a) => a.manifest.id === aId);
+        }
+        return true;
+      })
+      .map((id) => ({
+        id,
+        name: getSectionName(id),
+      }));
+  }, [props.homeSectionOrder, addons, t]);
 
   return (
     <div className="space-y-12">
@@ -198,6 +271,42 @@ export function PreferencesPart(props: {
             >
               {t("settings.preferences.keyboardShortcutsLabel")}
             </Button>
+          </PreferenceCard>
+
+          <PreferenceCard
+            title={t(
+              "settings.preferences.homeSectionOrder",
+              "Sắp xếp danh mục",
+            )}
+            description={t(
+              "settings.preferences.homeSectionOrderDescription",
+              "Kéo thả để sắp xếp lại thứ tự hiển thị các danh mục trên trang chủ và khám phá (bao gồm cả Addons).",
+            )}
+          >
+            <div className="space-y-2">
+              <div className="max-h-[22rem] overflow-y-auto overscroll-contain pr-2">
+                <SortableList
+                  items={sortableItems}
+                  setItems={(newItems) => {
+                    props.setHomeSectionOrder(newItems.map((item) => item.id));
+                  }}
+                />
+              </div>
+              <div className="flex justify-end pt-2">
+                <button
+                  type="button"
+                  className="text-xs text-type-secondary hover:text-white transition-colors"
+                  onClick={() => {
+                    props.setHomeSectionOrder(DEFAULT_HOME_SECTIONS);
+                  }}
+                >
+                  {t(
+                    "settings.preferences.resetHomeSectionOrder",
+                    "Đặt lại thứ tự mặc định",
+                  )}
+                </button>
+              </div>
+            </div>
           </PreferenceCard>
         </div>
       </div>

@@ -6,6 +6,9 @@
     "copy": "Salin"
   },
   "addons": {
+    "catalog": {
+      "badge": "Addons"
+    },
     "manager": {
       "add": "Menambahkan",
       "addWithoutConfiguring": "Tetap instal (mungkin tidak berfungsi)",
@@ -202,16 +205,22 @@
       "thisWeek": "Minggu ini",
       "title": {
         "4kReleases": "Rilis 4K",
+        "addons": "Addons",
+        "editorPicks": "Pilihan Editor",
         "editorPicksMovies": "Editor Memilih Film",
         "editorPicksShows": "Pertunjukan Pilihan Editor",
         "forYou": "Untukmu",
+        "genres": "Genre",
         "inCinemas": "Di Bioskop",
+        "latest": "Rilis Terbaru",
         "latestReleases": "Rilis Terbaru",
         "latestTVReleases": "Acara TV Terbaru",
         "movies": "{{category}} Film",
         "moviesOn": "Film di {{provider}}",
         "onTheAir": "Di Udara",
         "popular": "Paling Populer",
+        "providers": "Penyedia",
+        "recommendations": "Rekomendasi",
         "recommended": "Karena Anda Menonton: {{title}}",
         "top10": "10 teratas",
         "topRated": "Nilai Tertinggi",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "Ketuk dua kali untuk mencari",
       "doubleClickToSeekDescription": "Ketuk dua kali di sisi kiri atau kanan pemutar untuk mencari 10 detik maju atau mundur.",
       "doubleClickToSeekLabel": "Aktifkan ketuk dua kali untuk mencari",
+      "homeSectionOrder": "Urutan kategori",
+      "homeSectionOrderDescription": "Seret dan lepas untuk mengubah urutan kategori yang ditampilkan di halaman beranda dan halaman penemuan Anda (termasuk Add-ons).",
+      "resetHomeSectionOrder": "Atur ulang ke urutan default",
       "keyboardShortcuts": "Pintasan Papan Ketik",
       "keyboardShortcutsDescription": "Sesuaikan pintasan keyboard untuk aplikasi. Tahan ` untuk menampilkan bantuan ini kapan saja",
       "keyboardShortcutsLabel": "Sesuaikan Pintasan Keyboard",

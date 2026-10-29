@@ -6,6 +6,9 @@
     "copy": "Kopiuj"
   },
   "addons": {
+    "catalog": {
+      "badge": "Dodatki"
+    },
     "manager": {
       "add": "Dodać",
       "addWithoutConfiguring": "Zainstaluj mimo wszystko (może nie działać)",
@@ -202,16 +205,22 @@
       "thisWeek": "W tym tygodniu",
       "title": {
         "4kReleases": "Wydania 4K",
+        "addons": "Dodatki",
+        "editorPicks": "Wybór redaktora",
         "editorPicksMovies": "Redaktor wybiera filmy",
         "editorPicksShows": "Redakcja wybiera programy",
         "forYou": "Dla Ciebie",
+        "genres": "Gatunki",
         "inCinemas": "W kinach",
+        "latest": "Najnowsze wydania",
         "latestReleases": "Najnowsze wydania",
         "latestTVReleases": "Najnowsze programy telewizyjne",
         "movies": "{{category}} Filmy",
         "moviesOn": "Filmy na {{provider}}",
         "onTheAir": "Na antenie",
         "popular": "Najpopularniejsze",
+        "providers": "Dostawcy",
+        "recommendations": "Zalecenia",
         "recommended": "Ponieważ oglądałeś: {{title}}",
         "top10": "Najlepsze 10",
         "topRated": "Najwyżej oceniane",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "Kliknij dwukrotnie, aby wyszukać",
       "doubleClickToSeekDescription": "Kliknij dwukrotnie lewą lub prawą stronę odtwarzacza, aby przewinąć o 10 sekund do przodu lub do tyłu.",
       "doubleClickToSeekLabel": "Włącz podwójne dotknięcie, aby wyszukać",
+      "homeSectionOrder": "Kolejność kategorii",
+      "homeSectionOrderDescription": "Przeciągnij i upuść, aby zmienić kolejność kategorii wyświetlanych na stronie głównej i stronach odkrywania (w tym dodatków).",
+      "resetHomeSectionOrder": "Przywróć domyślną kolejność",
       "keyboardShortcuts": "Skróty klawiaturowe",
       "keyboardShortcutsDescription": "Dostosuj skróty klawiaturowe dla aplikacji. Przytrzymaj `, aby wyświetlić tę pomoc w dowolnym momencie",
       "keyboardShortcutsLabel": "Dostosuj skróty klawiaturowe",

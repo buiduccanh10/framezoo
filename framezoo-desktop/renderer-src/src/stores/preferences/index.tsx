@@ -8,6 +8,19 @@ import {
   KeyboardShortcuts,
 } from "@/utils/keyboardShortcuts";
 
+export const DEFAULT_HOME_SECTIONS = [
+  "trending",
+  "popular",
+  "providers",
+  "top-rated",
+  "editor-picks",
+  "latest",
+  "for-you",
+  "recommendations",
+  "genres",
+  "addons",
+];
+
 export interface PreferencesStore {
   enableAutoplay: boolean;
   enableTrailer: boolean;
@@ -27,6 +40,7 @@ export interface PreferencesStore {
   torrentMaxSize: string | null;
   torrentCacheRoot: string | null;
   torrentProfile: TorrentProfile;
+  homeSectionOrder: string[];
 
   setEnableAutoplay(v: boolean): void;
   setEnableTrailer(v: boolean): void;
@@ -46,6 +60,7 @@ export interface PreferencesStore {
   setTorrentMaxSize(v: string | null): void;
   setTorrentCacheRoot(v: string | null): void;
   setTorrentProfile(v: TorrentProfile): void;
+  setHomeSectionOrder(v: string[]): void;
 }
 
 export const usePreferencesStore = create(
@@ -69,6 +84,7 @@ export const usePreferencesStore = create(
       torrentMaxSize: null,
       torrentCacheRoot: null,
       torrentProfile: "default",
+      homeSectionOrder: DEFAULT_HOME_SECTIONS,
 
       setEnableAutoplay(v) {
         set((s) => {
@@ -158,6 +174,11 @@ export const usePreferencesStore = create(
       setTorrentProfile(v) {
         set((s) => {
           s.torrentProfile = v;
+        });
+      },
+      setHomeSectionOrder(v) {
+        set((s) => {
+          s.homeSectionOrder = v;
         });
       },
     })),

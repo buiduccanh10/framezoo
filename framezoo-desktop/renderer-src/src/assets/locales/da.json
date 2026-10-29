@@ -6,6 +6,9 @@
     "copy": "Kopier"
   },
   "addons": {
+    "catalog": {
+      "badge": "Tilføjelser"
+    },
     "manager": {
       "add": "Tilføje",
       "addWithoutConfiguring": "Installer alligevel (virker muligvis ikke)",
@@ -202,16 +205,22 @@
       "thisWeek": "Denne uge",
       "title": {
         "4kReleases": "4K udgivelser",
+        "addons": "Tilføjelser",
+        "editorPicks": "Redaktørens valg",
         "editorPicksMovies": "Redaktøren vælger film",
         "editorPicksShows": "Redaktøren vælger programmer",
         "forYou": "Til dig",
+        "genres": "Genrer",
         "inCinemas": "I Biografer",
+        "latest": "Seneste udgivelser",
         "latestReleases": "Seneste udgivelser",
         "latestTVReleases": "Seneste tv-serier",
         "movies": "{{category}} film",
         "moviesOn": "Film på {{provider}}",
         "onTheAir": "On The Air",
         "popular": "Mest populær",
+        "providers": "Udbydere",
+        "recommendations": "Anbefalinger",
         "recommended": "Fordi du så: {{title}}",
         "top10": "Top 10",
         "topRated": "Topbedømte",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "Dobbelttryk for at søge",
       "doubleClickToSeekDescription": "Dobbelttryk på venstre eller højre side af afspilleren for at søge 10 sekunder frem eller tilbage.",
       "doubleClickToSeekLabel": "Aktiver dobbelttryk for at søge",
+      "homeSectionOrder": "Kategorirækkefølge",
+      "homeSectionOrderDescription": "Træk og slip for at omarrangere de kategorier, der vises på din startside og dine opdagelsessider (inklusive tilføjelser).",
+      "resetHomeSectionOrder": "Nulstil til standardrækkefølge",
       "keyboardShortcuts": "Tastaturgenveje",
       "keyboardShortcutsDescription": "Tilpas tastaturgenvejene til applikationen. Hold ` for at vise denne hjælp når som helst",
       "keyboardShortcutsLabel": "Tilpas tastaturgenveje",

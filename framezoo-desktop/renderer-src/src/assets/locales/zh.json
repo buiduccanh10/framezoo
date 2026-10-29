@@ -6,6 +6,9 @@
     "copy": "复制"
   },
   "addons": {
+    "catalog": {
+      "badge": "插件"
+    },
     "manager": {
       "add": "添加",
       "addWithoutConfiguring": "照常安装（可能无法正常工作）",
@@ -202,16 +205,22 @@
       "thisWeek": "本星期",
       "title": {
         "4kReleases": "4K 发布",
+        "addons": "插件",
+        "editorPicks": "编辑精选",
         "editorPicksMovies": "编辑精选电影",
         "editorPicksShows": "编辑精选节目",
         "forYou": "为你",
+        "genres": "类型",
         "inCinemas": "电影院中",
+        "latest": "最新发布",
         "latestReleases": "最新发布",
         "latestTVReleases": "最新电视节目",
         "movies": "{{category}}电影",
         "moviesOn": "{{provider}} 上的电影",
         "onTheAir": "直播中",
         "popular": "最受欢迎",
+        "providers": "提供者",
+        "recommendations": "建议",
         "recommended": "因为您观看了：{{title}}",
         "top10": "前10名",
         "topRated": "最受好评",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "双击进行搜索",
       "doubleClickToSeekDescription": "双击播放器的左侧或右侧可向前或向后搜索 10 秒。",
       "doubleClickToSeekLabel": "启用双击搜索",
+      "homeSectionOrder": "类别排序",
+      "homeSectionOrderDescription": "拖放即可重新排列首页和发现页面（包括插件）上显示的类别。",
+      "resetHomeSectionOrder": "重置为默认顺序",
       "keyboardShortcuts": "键盘快捷键",
       "keyboardShortcutsDescription": "自定义应用程序的键盘快捷键。按住 ` 可随时显示此帮助",
       "keyboardShortcutsLabel": "自定义键盘快捷键",

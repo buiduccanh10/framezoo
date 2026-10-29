@@ -6,6 +6,9 @@
     "copy": "Másolás"
   },
   "addons": {
+    "catalog": {
+      "badge": "Kiegészítők"
+    },
     "manager": {
       "add": "Hozzáadás",
       "addWithoutConfiguring": "Telepítés mindenképpen (lehet, hogy nem fog működni)",
@@ -202,16 +205,22 @@
       "thisWeek": "Ezen a héten",
       "title": {
         "4kReleases": "4K kiadások",
+        "addons": "Kiegészítők",
+        "editorPicks": "Szerkesztő válogatásai",
         "editorPicksMovies": "Szerkesztői válogatás filmekből",
         "editorPicksShows": "Szerkesztői válogatás sorozatokból",
         "forYou": "Neked",
+        "genres": "Műfajok",
         "inCinemas": "Mozikban",
+        "latest": "Legújabb kiadások",
         "latestReleases": "Legújabbak",
         "latestTVReleases": "Legújabb sorozatok",
         "movies": "{{category}} Filmek",
         "moviesOn": "Filmek {{provider}}-on/-ön",
         "onTheAir": "Adásban",
         "popular": "Leghíresebb",
+        "providers": "Szolgáltatók",
+        "recommendations": "Ajánlások",
         "recommended": "Mert ezt is nézted: {{title}}",
         "top10": "Top 10",
         "topRated": "Legjobban értékelt",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "Koppintson duplán a kereséshez",
       "doubleClickToSeekDescription": "Koppintson duplán a lejátszó bal vagy jobb oldalán, hogy 10 másodperccel előre vagy hátra léphessen.",
       "doubleClickToSeekLabel": "Dupla koppintás engedélyezése a kereséshez",
+      "homeSectionOrder": "Kategória sorrend",
+      "homeSectionOrderDescription": "Húzd át az egérrel a kezdőlapodon és a felfedező oldalakon megjelenített kategóriák (beleértve a kiegészítőket is) sorrendjét.",
+      "resetHomeSectionOrder": "Visszaállítás az alapértelmezett sorrendre",
       "keyboardShortcuts": "Billentyűparancsok",
       "keyboardShortcutsDescription": "Testreszabhatja az alkalmazás billentyűparancsait. Tartsa lenyomva a ` gombot, hogy bármikor megjelenítse ezt a segítséget",
       "keyboardShortcutsLabel": "A billentyűparancsok testreszabása",

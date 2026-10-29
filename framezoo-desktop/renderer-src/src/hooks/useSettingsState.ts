@@ -68,6 +68,7 @@ export function useSettingsState(
     secondary: string;
     tertiary: string;
   },
+  homeSectionOrder: string[],
 ) {
   const [proxyUrlsState, setProxyUrls, resetProxyUrls, proxyUrlsChanged] =
     useDerived(proxyUrls);
@@ -158,6 +159,12 @@ export function useSettingsState(
     resetCustomTheme,
     customThemeChanged,
   ] = useDerived(customTheme);
+  const [
+    homeSectionOrderState,
+    setHomeSectionOrderState,
+    resetHomeSectionOrder,
+    homeSectionOrderChanged,
+  ] = useDerived(homeSectionOrder);
   const setCustomThemeStore = useThemeStore((s) => s.setCustomTheme);
 
   function reset() {
@@ -183,6 +190,7 @@ export function useSettingsState(
     resetEnableDoubleClickToSeek();
     resetEnableAutoResumeOnPlaybackError();
     resetCustomTheme();
+    resetHomeSectionOrder();
   }
 
   const changed =
@@ -205,7 +213,8 @@ export function useSettingsState(
     proxyTmdbChanged ||
     enableDoubleClickToSeekChanged ||
     enableAutoResumeOnPlaybackErrorChanged ||
-    customThemeChanged;
+    customThemeChanged ||
+    homeSectionOrderChanged;
 
   return {
     reset,
@@ -313,6 +322,11 @@ export function useSettingsState(
         setCustomThemeStore(v);
       },
       changed: customThemeChanged,
+    },
+    homeSectionOrder: {
+      state: homeSectionOrderState,
+      set: setHomeSectionOrderState,
+      changed: homeSectionOrderChanged,
     },
   };
 }

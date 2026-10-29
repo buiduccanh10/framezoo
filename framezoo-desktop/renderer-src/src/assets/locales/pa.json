@@ -6,6 +6,9 @@
     "copy": "ਕਾਪੀ"
   },
   "addons": {
+    "catalog": {
+      "badge": "ਐਡਆਨ"
+    },
     "manager": {
       "add": "ਸ਼ਾਮਲ ਕਰੋ",
       "addWithoutConfiguring": "ਫਿਰ ਵੀ ਇੰਸਟਾਲ ਕਰੋ (ਸ਼ਾਇਦ ਕੰਮ ਨਾ ਕਰੇ)",
@@ -202,16 +205,22 @@
       "thisWeek": "ਇਸ ਹਫ਼ਤੇ",
       "title": {
         "4kReleases": "4K ਰੀਲੀਜ਼",
+        "addons": "ਐਡਆਨ",
+        "editorPicks": "ਸੰਪਾਦਕ ਦੀਆਂ ਚੋਣਾਂ",
         "editorPicksMovies": "ਸੰਪਾਦਕ ਫਿਲਮਾਂ ਦੀ ਚੋਣ ਕਰਦਾ ਹੈ",
         "editorPicksShows": "ਸੰਪਾਦਕ ਪਿਕਸ ਸ਼ੋਅ",
         "forYou": "ਤੁਹਾਡੇ ਲਈ",
+        "genres": "ਸ਼ੈਲੀਆਂ",
         "inCinemas": "ਸਿਨੇਮਾ ਵਿੱਚ",
+        "latest": "ਨਵੀਨਤਮ ਰਿਲੀਜ਼ਾਂ",
         "latestReleases": "ਨਵੀਨਤਮ ਰਿਲੀਜ਼ਾਂ",
         "latestTVReleases": "ਨਵੀਨਤਮ ਟੀਵੀ ਸ਼ੋਅ",
         "movies": "{{category}} ਫਿਲਮਾਂ",
         "moviesOn": "{{provider}} 'ਤੇ ਫਿਲਮਾਂ",
         "onTheAir": "ਹਵਾ 'ਤੇ",
         "popular": "ਸਭ ਤੋਂ ਮਸ਼ਹੂਰ",
+        "providers": "ਪ੍ਰਦਾਤਾ",
+        "recommendations": "ਸਿਫ਼ਾਰਸ਼ਾਂ",
         "recommended": "ਕਿਉਂਕਿ ਤੁਸੀਂ ਦੇਖਿਆ ਸੀ: {{title}}",
         "top10": "ਸਿਖਰ 10",
         "topRated": "ਚੋਟੀ ਦਾ ਦਰਜਾ",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "ਲੱਭਣ ਲਈ ਡਬਲ ਟੈਪ ਕਰੋ",
       "doubleClickToSeekDescription": "10 ਸਕਿੰਟ ਅੱਗੇ ਜਾਂ ਪਿੱਛੇ ਜਾਣ ਲਈ ਪਲੇਅਰ ਦੇ ਖੱਬੇ ਜਾਂ ਸੱਜੇ ਪਾਸੇ ਡਬਲ ਟੈਪ ਕਰੋ।",
       "doubleClickToSeekLabel": "ਖੋਜਣ ਲਈ ਡਬਲ ਟੈਪ ਚਾਲੂ ਕਰੋ",
+      "homeSectionOrder": "ਸ਼੍ਰੇਣੀ ਕ੍ਰਮ",
+      "homeSectionOrderDescription": "ਆਪਣੇ ਘਰ ਅਤੇ ਖੋਜ ਪੰਨਿਆਂ (ਐਡਆਨ ਸਮੇਤ) 'ਤੇ ਪ੍ਰਦਰਸ਼ਿਤ ਸ਼੍ਰੇਣੀਆਂ ਨੂੰ ਮੁੜ ਕ੍ਰਮਬੱਧ ਕਰਨ ਲਈ ਖਿੱਚੋ ਅਤੇ ਛੱਡੋ।",
+      "resetHomeSectionOrder": "ਡਿਫਾਲਟ ਕ੍ਰਮ ਤੇ ਰੀਸੈਟ ਕਰੋ",
       "keyboardShortcuts": "ਕੀਬੋਰਡ ਸ਼ਾਰਟਕੱਟ",
       "keyboardShortcutsDescription": "ਐਪਲੀਕੇਸ਼ਨ ਲਈ ਕੀਬੋਰਡ ਸ਼ਾਰਟਕੱਟਾਂ ਨੂੰ ਅਨੁਕੂਲਿਤ ਕਰੋ। ਕਿਸੇ ਵੀ ਸਮੇਂ ਇਸ ਮਦਦ ਨੂੰ ਦਿਖਾਉਣ ਲਈ ' ਨੂੰ ਦਬਾ ਕੇ ਰੱਖੋ",
       "keyboardShortcutsLabel": "ਕੀਬੋਰਡ ਸ਼ਾਰਟਕੱਟਾਂ ਨੂੰ ਅਨੁਕੂਲਿਤ ਕਰੋ",

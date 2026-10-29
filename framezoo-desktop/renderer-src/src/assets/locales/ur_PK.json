@@ -6,6 +6,9 @@
     "copy": "کاپی"
   },
   "addons": {
+    "catalog": {
+      "badge": "ایڈونز"
+    },
     "manager": {
       "add": "شامل کریں۔",
       "addWithoutConfiguring": "بہر حال انسٹال کریں (شاید کام نہ کرے)",
@@ -202,16 +205,22 @@
       "thisWeek": "اس ہفتے",
       "title": {
         "4kReleases": "4K ریلیز",
+        "addons": "ایڈونز",
+        "editorPicks": "ایڈیٹر کا انتخاب",
         "editorPicksMovies": "ایڈیٹر فلمیں چنتا ہے۔",
         "editorPicksShows": "ایڈیٹر پکس شوز",
         "forYou": "آپ کے لیے",
+        "genres": "انواع",
         "inCinemas": "سینما گھروں میں",
+        "latest": "تازہ ترین ریلیز",
         "latestReleases": "تازہ ترین ریلیز",
         "latestTVReleases": "تازہ ترین ٹی وی شوز",
         "movies": "{{category}} موویز",
         "moviesOn": "{{provider}} پر فلمیں",
         "onTheAir": "آن دی ایئر",
         "popular": "سب سے زیادہ مقبول",
+        "providers": "فراہم کرنے والے",
+        "recommendations": "سفارشات",
         "recommended": "کیونکہ آپ نے دیکھا: {{title}}",
         "top10": "ٹاپ 10",
         "topRated": "ٹاپ ریٹیڈ",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "تلاش کرنے کے لیے دو بار تھپتھپائیں۔",
       "doubleClickToSeekDescription": "10 سیکنڈ آگے یا پیچھے جانے کے لیے پلیئر کے بائیں یا دائیں جانب دو بار تھپتھپائیں۔",
       "doubleClickToSeekLabel": "تلاش کرنے کے لیے ڈبل تھپتھپائیں کو فعال کریں۔",
+      "homeSectionOrder": "زمرہ آرڈر",
+      "homeSectionOrderDescription": "اپنے گھر پر دکھائے گئے زمروں کو دوبارہ ترتیب دینے کے لیے گھسیٹیں اور چھوڑیں اور صفحات دریافت کریں (بشمول ایڈونز)۔",
+      "resetHomeSectionOrder": "ڈیفالٹ آرڈر پر ری سیٹ کریں۔",
       "keyboardShortcuts": "کی بورڈ شارٹ کٹس",
       "keyboardShortcutsDescription": "ایپلیکیشن کے لیے کی بورڈ شارٹ کٹس کو حسب ضرورت بنائیں۔ کسی بھی وقت یہ مدد دکھانے کے لیے ` کو دبائے رکھیں",
       "keyboardShortcutsLabel": "کی بورڈ شارٹ کٹس کو حسب ضرورت بنائیں",

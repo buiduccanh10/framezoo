@@ -6,6 +6,9 @@
     "copy": "コピー"
   },
   "addons": {
+    "catalog": {
+      "badge": "アドオン"
+    },
     "manager": {
       "add": "追加",
       "addWithoutConfiguring": "とにかくインストールしてください（動作しない可能性があります）",
@@ -202,16 +205,22 @@
       "thisWeek": "今週",
       "title": {
         "4kReleases": "4K リリース",
+        "addons": "アドオン",
+        "editorPicks": "編集者のおすすめ",
         "editorPicksMovies": "編集者が選ぶ映画",
         "editorPicksShows": "編集者が番組を選ぶ",
         "forYou": "あなたのために",
+        "genres": "ジャンル",
         "inCinemas": "映画館で",
+        "latest": "最新リリース",
         "latestReleases": "最新リリース",
         "latestTVReleases": "最新のテレビ番組",
         "movies": "{{category}} 映画",
         "moviesOn": "{{provider}} の映画",
         "onTheAir": "オン・ザ・エア",
         "popular": "最も人気のある",
+        "providers": "プロバイダー",
+        "recommendations": "推奨事項",
         "recommended": "あなたが見ていたから: {{title}}",
         "top10": "トップ10",
         "topRated": "最高評価",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "ダブルタップしてシークします",
       "doubleClickToSeekDescription": "プレーヤーの左側または右側をダブルタップすると、10 秒前または後ろに移動します。",
       "doubleClickToSeekLabel": "ダブルタップによるシークを有効にする",
+      "homeSectionOrder": "カテゴリ順",
+      "homeSectionOrderDescription": "ドラッグ＆ドロップで、ホームページと発見ページ（アドオンを含む）に表示されるカテゴリの順序を変更できます。",
+      "resetHomeSectionOrder": "デフォルトの順序にリセット",
       "keyboardShortcuts": "キーボードショートカット",
       "keyboardShortcutsDescription": "アプリケーションのキーボード ショートカットをカスタマイズします。 ` を押し続けると、いつでもこのヘルプが表示されます",
       "keyboardShortcutsLabel": "キーボード ショートカットをカスタマイズする",

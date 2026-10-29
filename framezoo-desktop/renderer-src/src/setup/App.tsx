@@ -260,6 +260,10 @@ function App() {
             <Route path="/browse/:query?" element={<HomePage />} />
             <Route path="/discover" element={<Discover />} />
             <Route
+              path="/discover/more/addon/:addonId/:mediaType/:catalogId?"
+              element={<MoreContent />}
+            />
+            <Route
               path="/discover/more/:contentType/:mediaType"
               element={<MoreContent />}
             />

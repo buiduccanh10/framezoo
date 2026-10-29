@@ -6,6 +6,9 @@
     "copy": "Kopiere"
   },
   "addons": {
+    "catalog": {
+      "badge": "Add-ons"
+    },
     "manager": {
       "add": "Hinzufügen",
       "addWithoutConfiguring": "Trotzdem installieren (funktioniert möglicherweise nicht)",
@@ -202,16 +205,22 @@
       "thisWeek": "Diese Woche",
       "title": {
         "4kReleases": "4K Veröffentlicht",
+        "addons": "Add-ons",
+        "editorPicks": "Empfehlungen der Redaktion",
         "editorPicksMovies": "Herausgeber wählt Filme aus",
         "editorPicksShows": "Herausgeber wählt Sendungen aus",
         "forYou": "Für Sie",
+        "genres": "Genres",
         "inCinemas": "Im Kino",
+        "latest": "Neueste Veröffentlichungen",
         "latestReleases": "Zletscht erschene",
         "latestTVReleases": "Neuschti Serie",
         "movies": "{{category}} Filme",
         "moviesOn": "Felm of {{provider}}",
         "onTheAir": "I der Loft",
         "popular": "Am Beliebtischte",
+        "providers": "Anbieter",
+        "recommendations": "Empfehlungen",
         "recommended": "Wel du {{title}} gse hesch",
         "top10": "Top 10",
         "topRated": "Top Bewärtige",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "Doppeltippen, um zu suchen",
       "doubleClickToSeekDescription": "Tippen Sie zweimal auf die linke oder rechte Seite des Players, um 10 Sekunden vorwärts oder rückwärts zu suchen.",
       "doubleClickToSeekLabel": "Aktivieren Sie Doppeltippen zum Suchen",
+      "homeSectionOrder": "Kategorienreihenfolge",
+      "homeSectionOrderDescription": "Per Drag & Drop können Sie die auf Ihrer Startseite und Entdecken-Seite angezeigten Kategorien (einschließlich Add-ons) neu anordnen.",
+      "resetHomeSectionOrder": "Auf Standardreihenfolge zurücksetzen",
       "keyboardShortcuts": "Tastaturkürzel",
       "keyboardShortcutsDescription": "Passen Sie die Tastaturkürzel für die Anwendung an. Halten Sie ` gedrückt, um diese Hilfe jederzeit anzuzeigen",
       "keyboardShortcutsLabel": "Passen Sie Tastaturkürzel an",

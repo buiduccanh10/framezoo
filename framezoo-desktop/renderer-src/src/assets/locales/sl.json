@@ -6,6 +6,9 @@
     "copy": "Kopiraj"
   },
   "addons": {
+    "catalog": {
+      "badge": "Dodatki"
+    },
     "manager": {
       "add": "Dodaj",
       "addWithoutConfiguring": "Vseeno namesti (morda ne bo delovalo)",
@@ -202,16 +205,22 @@
       "thisWeek": "Ta teden",
       "title": {
         "4kReleases": "Izdaje 4K",
+        "addons": "Dodatki",
+        "editorPicks": "Izbor urednika",
         "editorPicksMovies": "Urednik izbere filme",
         "editorPicksShows": "Urednik izbira oddaje",
         "forYou": "Za vas",
+        "genres": "Žanri",
         "inCinemas": "V kinematografih",
+        "latest": "Najnovejše izdaje",
         "latestReleases": "Najnovejše izdaje",
         "latestTVReleases": "Najnovejše TV oddaje",
         "movies": "{{category}} filmi",
         "moviesOn": "Filmi na {{provider}}",
         "onTheAir": "V zraku",
         "popular": "Najbolj priljubljena",
+        "providers": "Ponudniki",
+        "recommendations": "Priporočila",
         "recommended": "Ker ste gledali: {{title}}",
         "top10": "10 najboljših",
         "topRated": "Najbolje ocenjeno",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "Za iskanje se dvakrat dotaknite",
       "doubleClickToSeekDescription": "Dvakrat se dotaknite leve ali desne strani predvajalnika za pomik 10 sekund naprej ali nazaj.",
       "doubleClickToSeekLabel": "Omogoči dvojni dotik za iskanje",
+      "homeSectionOrder": "Vrstni red kategorij",
+      "homeSectionOrderDescription": "Povlecite in spustite, da spremenite vrstni red kategorij, prikazanih na domači strani in strani za odkrivanje (vključno z dodatki).",
+      "resetHomeSectionOrder": "Ponastavi na privzeti vrstni red",
       "keyboardShortcuts": "Bližnjice na tipkovnici",
       "keyboardShortcutsDescription": "Prilagodite bližnjice na tipkovnici za aplikacijo. Držite `, če želite kadar koli prikazati to pomoč",
       "keyboardShortcutsLabel": "Prilagodite bližnjice na tipkovnici",

@@ -6,6 +6,9 @@
     "copy": "Copier"
   },
   "addons": {
+    "catalog": {
+      "badge": "Modules complémentaires"
+    },
     "manager": {
       "add": "Ajouter",
       "addWithoutConfiguring": "Installez quand même (cela peut ne pas fonctionner)",
@@ -202,16 +205,22 @@
       "thisWeek": "Cette semaine",
       "title": {
         "4kReleases": "Sorties 4K",
+        "addons": "Modules complémentaires",
+        "editorPicks": "Sélection de la rédaction",
         "editorPicksMovies": "Films sélectionnés",
         "editorPicksShows": "Séries sélectionnées",
         "forYou": "Pour toi",
+        "genres": "Genres",
         "inCinemas": "Au cinéma",
+        "latest": "Dernières sorties",
         "latestReleases": "Dernières sorties",
         "latestTVReleases": "Dernières émissions de télévision",
         "movies": "Films {{category}}",
         "moviesOn": "Films sur {{provider}}",
         "onTheAir": "En cours de diffusion",
         "popular": "Les plus populaires",
+        "providers": "Fournisseurs",
+        "recommendations": "Recommandations",
         "recommended": "Parce que tu as regardé : {{title}}",
         "top10": "Top 10",
         "topRated": "Les mieux notés",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "Appuyez deux fois pour rechercher",
       "doubleClickToSeekDescription": "Appuyez deux fois sur le côté gauche ou droit du lecteur pour rechercher 10 secondes en avant ou en arrière.",
       "doubleClickToSeekLabel": "Activer le double appui pour rechercher",
+      "homeSectionOrder": "Ordre des catégories",
+      "homeSectionOrderDescription": "Faites glisser et déposez pour réorganiser les catégories affichées sur vos pages d'accueil et de découverte (y compris les modules complémentaires).",
+      "resetHomeSectionOrder": "Rétablir l&#39;ordre par défaut",
       "keyboardShortcuts": "Raccourcis clavier",
       "keyboardShortcutsDescription": "Personnalisez les raccourcis clavier de l'application. Maintenez ` pour afficher cette aide à tout moment",
       "keyboardShortcutsLabel": "Personnaliser les raccourcis clavier",
