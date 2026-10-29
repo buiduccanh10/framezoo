@@ -31,7 +31,8 @@ export interface PlayerLoadingOverlayInput {
 export function getPlayerLoadingOverlayState(input: PlayerLoadingOverlayInput) {
   const isDesktopPipPlayback = input.isDesktopPipPlayback === true;
   const isBufferingCurrentPlaybackSegment =
-    input.status === playerStatus.PLAYING &&
+    (input.status === playerStatus.PLAYING ||
+      input.status === playerStatus.PLAYBACK_ERROR) &&
     input.isLoading &&
     !isDesktopPipPlayback;
   const isPreparingSource =
@@ -39,7 +40,8 @@ export function getPlayerLoadingOverlayState(input: PlayerLoadingOverlayInput) {
   const torrentStatus = input.torrentStatus;
   const isTorrentPreparing =
     Boolean(torrentStatus) &&
-    input.status === playerStatus.PLAYING &&
+    (input.status === playerStatus.PLAYING ||
+      input.status === playerStatus.PLAYBACK_ERROR) &&
     torrentStatus?.state !== "error" &&
     (!input.hasRenderedFrame ||
       torrentStatus?.streamType === "pending" ||
@@ -73,7 +75,9 @@ export function getPlayerLoadingOverlayState(input: PlayerLoadingOverlayInput) {
         isPreparingSource ||
         isBufferingCurrentPlaybackSegment ||
         isTorrentPreparing ||
-        (input.status === playerStatus.PLAYING && !input.hasRenderedFrame)),
+        ((input.status === playerStatus.PLAYING ||
+          input.status === playerStatus.PLAYBACK_ERROR) &&
+          !input.hasRenderedFrame)),
     loadingProgress: Math.min(95, rawLoadingProgress),
   };
 }
@@ -482,7 +486,9 @@ export function PlayerLoadingOverlay(props: { sourceLoading?: boolean }) {
     showOverlay &&
     (status === playerStatus.IDLE ||
       loadingState.isPreparingSource ||
-      (status === playerStatus.PLAYING && !hasRenderedFrame) ||
+      ((status === playerStatus.PLAYING ||
+        status === playerStatus.PLAYBACK_ERROR) &&
+        !hasRenderedFrame) ||
       (playbackKey !== null && initialLoadPlaybackKey === playbackKey));
   return (
     <PlayerLoadingOverlayView

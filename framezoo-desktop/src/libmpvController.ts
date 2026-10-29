@@ -1179,6 +1179,11 @@ export class LibMpvController {
         timingPhase: "video_frame",
       });
     } else if (event.type === "end-file") {
+      const reason =
+        typeof event.data === "string" ? event.data : (event as any).data?.reason;
+      if (!player.fileLoaded && (reason === "stop" || (event as any).data === "stop")) {
+        return;
+      }
       player.fileLoaded = false;
       player.pausedForCache = false;
       if (!player.isTorrent) {

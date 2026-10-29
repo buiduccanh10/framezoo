@@ -4,7 +4,7 @@ import type { DisplayInterface } from "@/components/player/display/displayInterf
 import { queryClient } from "@/utils/queryClient";
 
 import { usePlayerStore } from "../store";
-import type { Caption, CaptionListItem, PlayerMeta } from "./source";
+import { playerStatus, type Caption, type CaptionListItem, type PlayerMeta } from "./source";
 import type { SourceSliceSource } from "../utils/qualities";
 
 const subtitleMocks = vi.hoisted(() => ({
@@ -351,6 +351,71 @@ describe("external subtitle source transitions", () => {
         source: null,
         reason: "store:prepare-source-switch",
       }),
+    );
+  });
+
+  it("unloads the current source even when in playback error state", () => {
+    const load = vi.fn();
+    const display = {
+      load,
+      destroy: vi.fn(),
+      getType: () => "web",
+      on: vi.fn(),
+      setCaption: vi.fn(),
+      setSecondaryCaption: vi.fn(),
+    } as unknown as DisplayInterface;
+    usePlayerStore.getState().setDisplay(display);
+
+    const store = usePlayerStore.getState();
+    store.setMeta(createMeta(1));
+    store.setSource(createSource("source-err"), [], 0);
+    usePlayerStore.setState((s) => {
+      s.sourceId = "source-err";
+      s.status = playerStatus.PLAYBACK_ERROR;
+      s.mediaPlaying.isPlaying = false;
+      s.mediaPlaying.isPaused = true;
+      s.mediaPlaying.hasRenderedFrame = false;
+    });
+
+    expect(store.prepareSourceSwitch()).toBe(true);
+
+    const state = usePlayerStore.getState();
+    expect(state.mediaPlaying.hasRenderedFrame).toBe(false);
+    expect(state.mediaPlaying.isLoading).toBe(true);
+    expect(load).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        source: null,
+        reason: "store:prepare-source-switch",
+      }),
+    );
+  });
+
+  it("forces autoplay when autoplay option is passed to setSource", () => {
+    const load = vi.fn();
+    const display = {
+      load,
+      destroy: vi.fn(),
+      getType: () => "web",
+      on: vi.fn(),
+      setCaption: vi.fn(),
+      setSecondaryCaption: vi.fn(),
+    } as unknown as DisplayInterface;
+    usePlayerStore.getState().setDisplay(display);
+
+    const store = usePlayerStore.getState();
+    store.setMeta(createMeta(1));
+    usePlayerStore.setState((s) => {
+      s.mediaPlaying.isPlaying = false;
+      s.mediaPlaying.isPaused = true;
+    });
+
+    store.setSource(createSource("source-new"), [], 0, { autoplay: true });
+
+    const state = usePlayerStore.getState();
+    expect(state.mediaPlaying.isPlaying).toBe(true);
+    expect(state.mediaPlaying.isPaused).toBe(false);
+    expect(load).toHaveBeenLastCalledWith(
+      expect.objectContaining({ autoplay: true }),
     );
   });
 

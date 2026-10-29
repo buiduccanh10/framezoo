@@ -424,9 +424,12 @@ export function SourceSelectPart(props: {
         if (stream.kind === "torrent") {
           sourceSwitchPrepared = prepareSourceSwitch();
           const wasStartFromBeginning = shouldStartFromBeginning;
+          const currentProgressTime = usePlayerStore.getState().progress.time;
           const startAt = wasStartFromBeginning
             ? 0
-            : getSavedProgressTime(progressItems, meta);
+            : currentProgressTime > 0.5
+              ? currentProgressTime
+              : getSavedProgressTime(progressItems, meta);
           if (wasStartFromBeginning) setShouldStartFromBeginning(false);
 
           const session = await startTorrent({
@@ -478,21 +481,19 @@ export function SourceSelectPart(props: {
             playbackStartAt,
           );
           saveLastTorrentSelection(meta, stream);
-          if (meta.type === "show") {
-            const quality = getAddonStreamQuality(stream);
-            setPreferredStream({
-              seriesId: meta.tmdbId,
-              mediaKey: getPlaybackSelectionKey(meta) ?? undefined,
-              addonId: stream.addonId,
-              sourceKind: stream.kind,
-              quality,
-              name: stream.name || "",
-              title: stream.title || "",
-              bingeGroup: stream.bingeGroup,
-              savedAt: Date.now(),
-            });
-            saveLastStreamPreference(meta, stream, quality);
-          }
+          const quality = getAddonStreamQuality(stream);
+          setPreferredStream({
+            seriesId: meta.tmdbId,
+            mediaKey: getPlaybackSelectionKey(meta) ?? undefined,
+            addonId: stream.addonId,
+            sourceKind: stream.kind,
+            quality,
+            name: stream.name || "",
+            title: stream.title || "",
+            bingeGroup: stream.bingeGroup,
+            savedAt: Date.now(),
+          });
+          saveLastStreamPreference(meta, stream, quality);
           onSelected?.();
 
           // Chromium can issue one more Range request for the old source after
@@ -504,27 +505,36 @@ export function SourceSelectPart(props: {
             scheduleTorrentStop(previousTorrentSessionId);
           }
         } else {
+          sourceSwitchPrepared = prepareSourceSwitch();
+          const wasStartFromBeginning = shouldStartFromBeginning;
+          const currentProgressTime = usePlayerStore.getState().progress.time;
+          const startAt = wasStartFromBeginning
+            ? 0
+            : currentProgressTime > 0.5
+              ? currentProgressTime
+              : getSavedProgressTime(progressItems, meta);
+          if (wasStartFromBeginning) setShouldStartFromBeginning(false);
+
           playMedia(
             addonDirectSource(stream),
             addonCaptions(stream),
             stream.id,
+            startAt,
           );
           clearLastTorrentSelection(meta);
-          if (meta.type === "show") {
-            const quality = getAddonStreamQuality(stream);
-            setPreferredStream({
-              seriesId: meta.tmdbId,
-              mediaKey: getPlaybackSelectionKey(meta) ?? undefined,
-              addonId: stream.addonId,
-              sourceKind: stream.kind,
-              quality,
-              name: stream.name || "",
-              title: stream.title || "",
-              bingeGroup: stream.bingeGroup,
-              savedAt: Date.now(),
-            });
-            saveLastStreamPreference(meta, stream, quality);
-          }
+          const quality = getAddonStreamQuality(stream);
+          setPreferredStream({
+            seriesId: meta.tmdbId,
+            mediaKey: getPlaybackSelectionKey(meta) ?? undefined,
+            addonId: stream.addonId,
+            sourceKind: stream.kind,
+            quality,
+            name: stream.name || "",
+            title: stream.title || "",
+            bingeGroup: stream.bingeGroup,
+            savedAt: Date.now(),
+          });
+          saveLastStreamPreference(meta, stream, quality);
           onSelected?.();
           if (previousTorrentSessionId) {
             await clearTorrentSession(previousTorrentSessionId);
@@ -997,7 +1007,7 @@ export function SourceSelectPart(props: {
             })}
           </Menu.ScrollToActiveSection>
         )}
-        {activeError ? (
+        {activeError && import.meta.env.DEV ? (
           <div className="px-1 pt-2">
             <ErrorCard
               error={activeError}
