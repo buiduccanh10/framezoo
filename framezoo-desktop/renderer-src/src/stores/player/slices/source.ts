@@ -825,7 +825,10 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     const requestedMeta = store.meta;
     if (!mediaKey || !requestedMediaKey) return;
     const queryKey = getExternalSubtitleQueryKey(mediaKey);
-    const forceRefresh = options?.forceRefresh === true;
+    const forceRefresh =
+      options?.forceRefresh === true ||
+      (!!requestedMediaKey &&
+        store.externalSubtitleRefreshMediaKey === requestedMediaKey);
     const preferredLanguages = getExternalSubtitleLanguageKey(
       useSubtitleStore.getState().lastSelectedLanguage,
       useLanguageStore.getState().language,
@@ -836,6 +839,9 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     set((s) => {
       if (requestId == null) {
         s.externalSubtitleRequestId = activeRequestId;
+      }
+      if (s.externalSubtitleRefreshMediaKey === requestedMediaKey) {
+        s.externalSubtitleRefreshMediaKey = null;
       }
       if (
         s.externalSubtitleRequestId === activeRequestId ||

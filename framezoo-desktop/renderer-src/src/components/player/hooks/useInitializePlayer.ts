@@ -34,16 +34,28 @@ export function useInitializeSource() {
   );
   const { selectLastUsedLanguageIfEnabled } = useCaptions();
 
-  const previousMediaKeyRef = useRef<string | null>(null);
+  const previousSubtitleMediaKeyRef = useRef<string | null>(null);
+  const previousLanguageMediaKeyRef = useRef<string | null>(null);
   const previousAppLanguageRef = useRef(appLanguage);
+
+  // Decoupled external subtitle fetching:
+  // As soon as mediaKey is available (entering player or changing episode),
+  // fetch external subtitles immediately without waiting for stream selection or loading.
+  useEffect(() => {
+    if (!mediaKey) return;
+    if (previousSubtitleMediaKeyRef.current === mediaKey) return;
+    previousSubtitleMediaKeyRef.current = mediaKey;
+
+    void addExternalSubtitles(undefined);
+  }, [addExternalSubtitles, mediaKey]);
 
   useEffect(() => {
     if (
       sourceIdentifier &&
       sourceId &&
-      previousMediaKeyRef.current !== mediaKey
+      previousLanguageMediaKeyRef.current !== mediaKey
     ) {
-      previousMediaKeyRef.current = mediaKey;
+      previousLanguageMediaKeyRef.current = mediaKey;
       void selectLastUsedLanguageIfEnabled();
     }
   }, [sourceIdentifier, sourceId, mediaKey, selectLastUsedLanguageIfEnabled]);
@@ -52,17 +64,17 @@ export function useInitializeSource() {
     if (previousAppLanguageRef.current === appLanguage) return;
     previousAppLanguageRef.current = appLanguage;
 
-    if (!sourceIdentifier || !sourceId) return;
+    if (!mediaKey) return;
     void addExternalSubtitles(undefined, { forceRefresh: true });
-  }, [addExternalSubtitles, appLanguage, sourceIdentifier, sourceId]);
+  }, [addExternalSubtitles, appLanguage, mediaKey]);
 
   useEffect(() => {
     const unsubscribe = subscribeInstalledAddons(() => {
-      if (!sourceIdentifier || !sourceId) return;
+      if (!mediaKey) return;
       void addExternalSubtitles(undefined, { forceRefresh: true });
     });
     return () => {
       unsubscribe();
     };
-  }, [addExternalSubtitles, sourceIdentifier, sourceId]);
+  }, [addExternalSubtitles, mediaKey]);
 }

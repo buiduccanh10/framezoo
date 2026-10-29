@@ -263,16 +263,16 @@ export function SourceSelectPart(props: {
   const [selectedAddonId, setSelectedAddonId] = React.useState<string | null>(
     null,
   );
+  const [showingAddonList, setShowingAddonList] = React.useState(false);
   const [autoSelectionResolved, setAutoSelectionResolved] =
     React.useState(false);
   const isInitialSelection = mode === "initial";
 
   const hasAttemptedAutoSelect = useRef(false);
-  const keepAddonListOpen = useRef(false);
   const selectionOperation = useRef(0);
   useEffect(() => {
     hasAttemptedAutoSelect.current = false;
-    keepAddonListOpen.current = false;
+    setShowingAddonList(false);
     setAutoSelectionResolved(false);
   }, [meta.tmdbId, meta.season?.tmdbId, meta.episode?.tmdbId]);
 
@@ -391,7 +391,7 @@ export function SourceSelectPart(props: {
   ]);
   const currentAddonId = currentStream?.addonId ?? null;
   const displayedSelectedAddonId =
-    selectedAddonId ?? (!keepAddonListOpen.current ? currentAddonId : null);
+    selectedAddonId ?? (!showingAddonList ? currentAddonId : null);
   const selectedAddon = useMemo(
     () =>
       addons.find((addon) => addon.manifest.id === displayedSelectedAddonId) ??
@@ -401,6 +401,7 @@ export function SourceSelectPart(props: {
 
   useEffect(() => {
     setSelectedAddonId(null);
+    setShowingAddonList(false);
     setAddonError(null);
     setSelectedQuality(qualityOptions[0]);
   }, [addonMedia, qualityOptions]);
@@ -666,7 +667,12 @@ export function SourceSelectPart(props: {
     setAutoSelectionResolved(true);
 
     // Fallback: pre-select the preferred addon to show in the UI.
-    if (preferredQuery && !selectedAddonId && streamPreference.addonId) {
+    if (
+      preferredQuery &&
+      !showingAddonList &&
+      !selectedAddonId &&
+      streamPreference.addonId
+    ) {
       const isAddonEnabled = enabledAddons.some(
         (a) => a.manifest.id === streamPreference.addonId,
       );
@@ -730,6 +736,8 @@ export function SourceSelectPart(props: {
   );
 
   const hasMultipleAddonsWithStreams = addonIdsWithStreams.size > 1;
+  const hasMultipleAddons =
+    eligibleAddons.length > 1 || hasMultipleAddonsWithStreams;
 
   const selectedAddonError = useMemo(
     () =>
@@ -758,7 +766,7 @@ export function SourceSelectPart(props: {
   const content = (
     <Menu.CardWithScrollable>
       {showAddonList &&
-      (isInitialSelection || !onCancel || !hasMultipleAddonsWithStreams) ? (
+      (isInitialSelection || !onCancel || !hasMultipleAddons) ? (
         <Menu.Title rightSide={inlineDropdown}>
           {t("addons.player.chooseAddon", "Choose an addon")}
         </Menu.Title>
@@ -770,11 +778,11 @@ export function SourceSelectPart(props: {
         <SelectedAddonHeader
           addon={selectedAddon}
           onBack={() => {
-            keepAddonListOpen.current = true;
+            setShowingAddonList(true);
             setSelectedAddonId(null);
             setAddonError(null);
           }}
-          showBack={hasMultipleAddonsWithStreams}
+          showBack={hasMultipleAddons}
           rightSide={inlineDropdown}
         />
       )}
@@ -857,7 +865,7 @@ export function SourceSelectPart(props: {
                       hasNoStreams
                         ? undefined
                         : () => {
-                            keepAddonListOpen.current = false;
+                            setShowingAddonList(false);
                             setSelectedAddonId(addon.manifest.id);
                           }
                     }
