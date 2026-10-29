@@ -63,7 +63,7 @@ export function usePlayer() {
       setCaption(null);
       setEmbedId(null);
       setSourceId(sourceId);
-      setSource(source, captions, start);
+      setSource(source, captions, start, { autoplay: true });
       setStatus(playerStatus.PLAYING);
       setSkipNextSavedProgressResume(hasExplicitStart);
       if (shouldStartFromBeginning) {

@@ -4,13 +4,21 @@ import { useTranslation } from "react-i18next";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useWindowSize } from "react-use";
 
+import { getMediaFromExternalId } from "@/backend/metadata/tmdb";
 import { Button } from "@/components/buttons/Button";
 import { Dropdown, OptionItem } from "@/components/form/Dropdown";
 import { Icon, Icons } from "@/components/Icon";
 import { WideContainer } from "@/components/layout/WideContainer";
 import { MediaGrid } from "@/components/media/MediaGrid";
+import { getReleaseQualityVariantFromLabel } from "@/components/media/ReleaseQualityBadge";
 import { WatchedMediaCard } from "@/components/media/WatchedMediaCard";
 import { Heading1 } from "@/components/utils/Text";
+import {
+  type StremioMetaPreview,
+  getCatalogMediaIdentity,
+  loadAddonCatalog,
+} from "@/desktop/addons/catalog";
+import { useInstalledAddons } from "@/desktop/addons/store";
 import {
   DiscoverContentType,
   DiscoverMediaType,
@@ -30,18 +38,32 @@ interface MoreContentProps {
 }
 
 export function MoreContent({ onShowDetails }: MoreContentProps) {
-  const { mediaType = "movie", contentType, id, category } = useParams();
+  const {
+    mediaType = "movie",
+    contentType,
+    id,
+    category,
+    addonId,
+    catalogId,
+  } = useParams();
   const [searchParams] = useSearchParams();
   const selectedReleaseYear = searchParams.get("year") || "";
   const selectedOriginCountry = searchParams.get("country") || "";
 
-  const key = `${mediaType}-${contentType || ""}-${id || ""}-${category || ""}-${selectedReleaseYear}-${selectedOriginCountry}`;
+  const key = `${mediaType}-${contentType || ""}-${id || ""}-${category || ""}-${addonId || ""}-${catalogId || ""}-${selectedReleaseYear}-${selectedOriginCountry}`;
 
   return <MoreContentInner key={key} onShowDetails={onShowDetails} />;
 }
 
 function MoreContentInner({ onShowDetails }: MoreContentProps) {
-  const { mediaType = "movie", contentType, id, category } = useParams();
+  const {
+    mediaType = "movie",
+    contentType,
+    id,
+    category,
+    addonId,
+    catalogId,
+  } = useParams();
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProvider, setSelectedProvider] = useState<OptionItem | null>(
     null,
@@ -61,6 +83,55 @@ function MoreContentInner({ onShowDetails }: MoreContentProps) {
   // Get available providers and genres
   const actualMediaType: DiscoverMediaType =
     mediaType === "tv" ? "tv" : mediaType === "all" ? "all" : "movie";
+
+  const isAddonCatalog = Boolean(addonId) || contentType === "addon";
+  const targetAddonId = addonId || (contentType === "addon" ? id : undefined);
+  const addons = useInstalledAddons();
+  const targetAddon = addons.find((a) => a.manifest.id === targetAddonId);
+  const targetCatalogId =
+    catalogId ||
+    (targetAddon?.manifest.catalogs?.find((c) => c.type === actualMediaType)
+      ?.id as string | undefined) ||
+    "top";
+
+  const [addonItems, setAddonItems] = useState<StremioMetaPreview[]>([]);
+  const [addonLoading, setAddonLoading] = useState(false);
+  const [addonHasMore, setAddonHasMore] = useState(true);
+
+  useEffect(() => {
+    if (!isAddonCatalog || !targetAddon) return;
+
+    let cancelled = false;
+    setAddonLoading(true);
+
+    const skip = (currentPage - 1) * 50;
+
+    loadAddonCatalog(targetAddon, actualMediaType, targetCatalogId, { skip })
+      .then((metas) => {
+        if (cancelled) return;
+        setAddonItems((prev) =>
+          currentPage === 1 ? metas : [...prev, ...metas],
+        );
+        setAddonHasMore(metas.length >= 20);
+      })
+      .catch((err) => {
+        console.warn("Failed to load addon catalog more content", err);
+        if (!cancelled) setAddonHasMore(false);
+      })
+      .finally(() => {
+        if (!cancelled) setAddonLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [
+    isAddonCatalog,
+    targetAddon,
+    actualMediaType,
+    targetCatalogId,
+    currentPage,
+  ]);
 
   const { providers, genres, countries } = useDiscoverOptions(actualMediaType, {
     includeCountries: true,
@@ -160,9 +231,15 @@ function MoreContentInner({ onShowDetails }: MoreContentProps) {
     timeWindow: selectedTimeWindow,
   });
 
+  const finalLoading = isAddonCatalog ? addonLoading : isLoading;
+  const finalHasMore = isAddonCatalog ? addonHasMore : hasMore;
+  const finalSectionTitle = isAddonCatalog
+    ? targetAddon?.manifest.name || "Addon"
+    : sectionTitle;
+
   // Handle content visibility
   useEffect(() => {
-    if (!isLoading || currentPage > 1) {
+    if (!finalLoading || currentPage > 1) {
       // Small delay to ensure smooth transition
       const timer = setTimeout(() => {
         setIsContentVisible(true);
@@ -170,7 +247,7 @@ function MoreContentInner({ onShowDetails }: MoreContentProps) {
       return () => clearTimeout(timer);
     }
     setIsContentVisible(false);
-  }, [isLoading, mediaItems, currentPage]);
+  }, [finalLoading, mediaItems, addonItems, currentPage]);
 
   // Scroll to top when entering the page
   useEffect(() => {
@@ -216,9 +293,28 @@ function MoreContentInner({ onShowDetails }: MoreContentProps) {
       onShowDetails(media);
       return;
     }
+
+    let finalId = media.id;
+    let finalType: "movie" | "show" = media.type === "show" ? "show" : "movie";
+
+    if (isAddonCatalog) {
+      const identity = getCatalogMediaIdentity({
+        id: media.id,
+      });
+      if (identity?.kind === "tmdb") {
+        finalId = identity.id;
+      } else if (identity?.kind === "imdb") {
+        const tmdbMedia = await getMediaFromExternalId(identity.id);
+        if (tmdbMedia) {
+          finalId = tmdbMedia.id;
+          finalType = tmdbMedia.type === "show" ? "show" : "movie";
+        }
+      }
+    }
+
     showModal("discover-details", {
-      id: Number(media.id),
-      type: media.type === "movie" ? "movie" : "show",
+      id: Number(finalId) || (finalId as any),
+      type: finalType,
     });
   };
 
@@ -231,11 +327,11 @@ function MoreContentInner({ onShowDetails }: MoreContentProps) {
   useEffect(() => {
     const target = loadMoreRef.current;
 
-    if (!target || !hasMore) return;
+    if (!target || !finalHasMore) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry?.isIntersecting && !isLoading) {
+        if (entry?.isIntersecting && !finalLoading) {
           handleLoadMore();
         }
       },
@@ -249,7 +345,7 @@ function MoreContentInner({ onShowDetails }: MoreContentProps) {
     return () => {
       observer.disconnect();
     };
-  }, [hasMore, isLoading]);
+  }, [finalHasMore, finalLoading]);
 
   useEffect(() => {
     if (actualContentType !== "trending") return;
@@ -344,7 +440,7 @@ function MoreContentInner({ onShowDetails }: MoreContentProps) {
     return { visibleButtons: visible, dropdownButtons: dropdown };
   }, [contentType, providers, genres, windowWidth]);
 
-  if (isLoading && currentPage === 1) {
+  if (finalLoading && currentPage === 1) {
     return (
       <SubPageLayout>
         <WideContainer>
@@ -377,9 +473,9 @@ function MoreContentInner({ onShowDetails }: MoreContentProps) {
         <div className="flex items-center justify-between gap-8">
           <div className="flex items-center gap-4">
             <Heading1 className="text-2xl font-bold text-white">
-              {sectionTitle}
+              {finalSectionTitle}
             </Heading1>
-            {actualContentType === "trending" && (
+            {!isAddonCatalog && actualContentType === "trending" && (
               <div className="inline-flex items-center rounded-full bg-mediaCard-hoverBackground p-1">
                 <button
                   type="button"
@@ -420,7 +516,7 @@ function MoreContentInner({ onShowDetails }: MoreContentProps) {
               </div>
             )}
           </div>
-          {contentType === "recommendations" && (
+          {!isAddonCatalog && contentType === "recommendations" && (
             <div className="relative pr-4 whitespace-nowrap">
               <Dropdown
                 selectedItem={
@@ -506,127 +602,96 @@ function MoreContentInner({ onShowDetails }: MoreContentProps) {
           )} */}
         </div>
 
-        {(contentType === "provider" || contentType === "genre") && (
-          <div className="mb-4 flex flex-wrap items-center gap-2">
-            {visibleButtons.map((item: any) => (
-              <button
-                type="button"
-                key={item.id}
-                onClick={() => {
-                  setCurrentPage(1);
-                  if (contentType === "provider") {
-                    setSelectedProvider({ id: item.id, name: item.name });
-                  } else {
-                    setSelectedGenre({
-                      id: item.id.toString(),
-                      name: item.name,
-                    });
-                  }
-                }}
-                className={`px-3 py-1 text-sm rounded-full transition-colors whitespace-nowrap flex-shrink-0 ${
-                  item.id.toString() ===
-                  (selectedProvider?.id || selectedGenre?.id)
-                    ? "bg-mediaCard-background"
-                    : "bg-mediaCard-hoverBackground hover:bg-mediaCard-background"
-                }`}
-              >
-                {item.name}
-              </button>
-            ))}
-            {dropdownButtons.length > 0 && (
-              <div className="relative whitespace-nowrap">
-                <Dropdown
-                  selectedItem={
-                    contentType === "provider"
-                      ? selectedProvider || { id: "", name: "..." }
-                      : selectedGenre || { id: "", name: "..." }
-                  }
-                  setSelectedItem={(item) => {
+        {!isAddonCatalog &&
+          (contentType === "provider" || contentType === "genre") && (
+            <div className="mb-4 flex flex-wrap items-center gap-2">
+              {visibleButtons.map((item: any) => (
+                <button
+                  type="button"
+                  key={item.id}
+                  onClick={() => {
                     setCurrentPage(1);
                     if (contentType === "provider") {
-                      setSelectedProvider(item);
+                      setSelectedProvider({ id: item.id, name: item.name });
                     } else {
-                      setSelectedGenre(item);
+                      setSelectedGenre({
+                        id: item.id.toString(),
+                        name: item.name,
+                      });
                     }
                   }}
-                  options={dropdownButtons.map((item: any) => ({
-                    id:
-                      contentType === "provider" ? item.id : item.id.toString(),
-                    name: item.name,
-                  }))}
-                  customButton={
-                    <button
-                      type="button"
-                      className="flex items-center gap-1 rounded-full bg-mediaCard-hoverBackground px-4 py-2 text-sm font-medium text-type-secondary transition-colors hover:bg-mediaCard-background md:text-base"
-                    >
-                      <span>...</span>
-                      <Icon
-                        icon={Icons.UP_DOWN_ARROW}
-                        className="text-xs text-dropdown-secondary"
-                      />
-                    </button>
-                  }
-                />
-              </div>
-            )}
+                  className={`px-3 py-1 text-sm rounded-full transition-colors whitespace-nowrap flex-shrink-0 ${
+                    item.id.toString() ===
+                    (selectedProvider?.id || selectedGenre?.id)
+                      ? "bg-mediaCard-background"
+                      : "bg-mediaCard-hoverBackground hover:bg-mediaCard-background"
+                  }`}
+                >
+                  {item.name}
+                </button>
+              ))}
+              {dropdownButtons.length > 0 && (
+                <div className="relative whitespace-nowrap">
+                  <Dropdown
+                    selectedItem={
+                      contentType === "provider"
+                        ? selectedProvider || { id: "", name: "..." }
+                        : selectedGenre || { id: "", name: "..." }
+                    }
+                    setSelectedItem={(item) => {
+                      setCurrentPage(1);
+                      if (contentType === "provider") {
+                        setSelectedProvider(item);
+                      } else {
+                        setSelectedGenre(item);
+                      }
+                    }}
+                    options={dropdownButtons.map((item: any) => ({
+                      id:
+                        contentType === "provider"
+                          ? item.id
+                          : item.id.toString(),
+                      name: item.name,
+                    }))}
+                    customButton={
+                      <button
+                        type="button"
+                        className="flex items-center gap-1 rounded-full bg-mediaCard-hoverBackground px-4 py-2 text-sm font-medium text-type-secondary transition-colors hover:bg-mediaCard-background md:text-base"
+                      >
+                        <span>...</span>
+                        <Icon
+                          icon={Icons.UP_DOWN_ARROW}
+                          className="text-xs text-dropdown-secondary"
+                        />
+                      </button>
+                    }
+                  />
+                </div>
+              )}
 
-            <div className="relative whitespace-nowrap">
-              <Dropdown
-                selectedItem={selectedCountryOption}
-                setSelectedItem={(item) => {
-                  setCurrentPage(1);
-                  const nextParams = new URLSearchParams(searchParams);
-                  if (item.id) {
-                    nextParams.set("country", item.id);
-                  } else {
-                    nextParams.delete("country");
-                  }
-                  setSearchParams(nextParams);
-                }}
-                options={countryOptions}
-                customButton={
-                  <button
-                    type="button"
-                    className="flex items-center gap-1 rounded-full bg-mediaCard-hoverBackground px-4 py-2 text-sm font-medium text-type-secondary transition-colors hover:bg-mediaCard-background md:text-base"
-                  >
-                    <span>
-                      {selectedOriginCountry
-                        ? `${countryLabel}: ${selectedCountryOption.name}`
-                        : countryLabel}
-                    </span>
-                    <Icon
-                      icon={Icons.UP_DOWN_ARROW}
-                      className="text-xs text-dropdown-secondary"
-                    />
-                  </button>
-                }
-              />
-            </div>
-
-            {selectedYearOption && (
-              <div className="relative pr-2">
+              <div className="relative whitespace-nowrap">
                 <Dropdown
-                  selectedItem={selectedYearOption}
+                  selectedItem={selectedCountryOption}
                   setSelectedItem={(item) => {
                     setCurrentPage(1);
                     const nextParams = new URLSearchParams(searchParams);
                     if (item.id) {
-                      nextParams.set("year", item.id);
+                      nextParams.set("country", item.id);
                     } else {
-                      nextParams.delete("year");
+                      nextParams.delete("country");
                     }
                     setSearchParams(nextParams);
                   }}
-                  options={yearOptions}
+                  options={countryOptions}
                   customButton={
                     <button
                       type="button"
                       className="flex items-center gap-1 rounded-full bg-mediaCard-hoverBackground px-4 py-2 text-sm font-medium text-type-secondary transition-colors hover:bg-mediaCard-background md:text-base"
                     >
                       <span>
-                        {selectedReleaseYear
-                          ? `${t("home.bookmarks.edit.yearLabel")}: ${selectedReleaseYear}`
-                          : t("home.bookmarks.edit.yearLabel")}
+                        {selectedOriginCountry
+                          ? `${countryLabel}: ${selectedCountryOption.name}`
+                          : countryLabel}
                       </span>
                       <Icon
                         icon={Icons.UP_DOWN_ARROW}
@@ -634,13 +699,47 @@ function MoreContentInner({ onShowDetails }: MoreContentProps) {
                       />
                     </button>
                   }
-                  preventWrap
-                  className="!my-0"
                 />
               </div>
-            )}
-          </div>
-        )}
+
+              {selectedYearOption && (
+                <div className="relative pr-2">
+                  <Dropdown
+                    selectedItem={selectedYearOption}
+                    setSelectedItem={(item) => {
+                      setCurrentPage(1);
+                      const nextParams = new URLSearchParams(searchParams);
+                      if (item.id) {
+                        nextParams.set("year", item.id);
+                      } else {
+                        nextParams.delete("year");
+                      }
+                      setSearchParams(nextParams);
+                    }}
+                    options={yearOptions}
+                    customButton={
+                      <button
+                        type="button"
+                        className="flex items-center gap-1 rounded-full bg-mediaCard-hoverBackground px-4 py-2 text-sm font-medium text-type-secondary transition-colors hover:bg-mediaCard-background md:text-base"
+                      >
+                        <span>
+                          {selectedReleaseYear
+                            ? `${t("home.bookmarks.edit.yearLabel")}: ${selectedReleaseYear}`
+                            : t("home.bookmarks.edit.yearLabel")}
+                        </span>
+                        <Icon
+                          icon={Icons.UP_DOWN_ARROW}
+                          className="text-xs text-dropdown-secondary"
+                        />
+                      </button>
+                    }
+                    preventWrap
+                    className="!my-0"
+                  />
+                </div>
+              )}
+            </div>
+          )}
 
         <div
           className={`transition-opacity duration-300 ease-in-out ${
@@ -648,49 +747,87 @@ function MoreContentInner({ onShowDetails }: MoreContentProps) {
           }`}
         >
           <MediaGrid>
-            {mediaItems.map((item) => {
-              const isTVShow =
-                item.type === "show" || Boolean(item.first_air_date);
-              const releaseDate = isTVShow
-                ? item.first_air_date
-                : item.release_date;
-              const year = releaseDate
-                ? parseInt(releaseDate.split("-")[0], 10)
-                : undefined;
+            {isAddonCatalog
+              ? addonItems.map((item, idx) => {
+                  const isTVShow =
+                    actualMediaType === "tv" ||
+                    mediaType === "series" ||
+                    item.type === "series";
+                  const mediaItem: MediaItem = {
+                    id: item.id.toString(),
+                    title: item.name || "",
+                    poster: item.poster || "/placeholder.png",
+                    type: isTVShow ? "show" : "movie",
+                    releaseQuality: getReleaseQualityVariantFromLabel(
+                      item.releaseInfo,
+                    ),
+                    year: item.year
+                      ? parseInt(item.year.toString(), 10)
+                      : item.releaseInfo
+                        ? parseInt(item.releaseInfo.split("-")[0], 10)
+                        : undefined,
+                  };
 
-              const mediaItem: MediaItem = {
-                id: item.id.toString(),
-                title: item.title || item.name || "",
-                poster: item.poster_path
-                  ? `https://image.tmdb.org/t/p/w342${item.poster_path}`
-                  : "/placeholder.png",
-                type: isTVShow ? "show" : "movie",
-                releaseQuality: item.releaseQuality,
-                year,
-                release_date: releaseDate ? new Date(releaseDate) : undefined,
-              };
+                  return (
+                    <div
+                      key={`${item.id}-${idx}`}
+                      style={{ userSelect: "none" }}
+                      onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
+                        e.preventDefault()
+                      }
+                    >
+                      <WatchedMediaCard
+                        media={mediaItem}
+                        onShowDetails={() => handleShowDetails(mediaItem)}
+                      />
+                    </div>
+                  );
+                })
+              : mediaItems.map((item) => {
+                  const isTVShow =
+                    item.type === "show" || Boolean(item.first_air_date);
+                  const releaseDate = isTVShow
+                    ? item.first_air_date
+                    : item.release_date;
+                  const year = releaseDate
+                    ? parseInt(releaseDate.split("-")[0], 10)
+                    : undefined;
 
-              return (
-                <div
-                  key={item.id}
-                  style={{ userSelect: "none" }}
-                  onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
-                    e.preventDefault()
-                  }
-                >
-                  <WatchedMediaCard
-                    media={mediaItem}
-                    onShowDetails={handleShowDetails}
-                  />
-                </div>
-              );
-            })}
+                  const mediaItem: MediaItem = {
+                    id: item.id.toString(),
+                    title: item.title || item.name || "",
+                    poster: item.poster_path
+                      ? `https://image.tmdb.org/t/p/w342${item.poster_path}`
+                      : "/placeholder.png",
+                    type: isTVShow ? "show" : "movie",
+                    releaseQuality: item.releaseQuality,
+                    year,
+                    release_date: releaseDate
+                      ? new Date(releaseDate)
+                      : undefined,
+                  };
+
+                  return (
+                    <div
+                      key={item.id}
+                      style={{ userSelect: "none" }}
+                      onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
+                        e.preventDefault()
+                      }
+                    >
+                      <WatchedMediaCard
+                        media={mediaItem}
+                        onShowDetails={handleShowDetails}
+                      />
+                    </div>
+                  );
+                })}
           </MediaGrid>
 
-          {hasMore && <div ref={loadMoreRef} className="h-1 w-full" />}
+          {finalHasMore && <div ref={loadMoreRef} className="h-1 w-full" />}
         </div>
 
-        {isLoading && currentPage > 1 && (
+        {finalLoading && currentPage > 1 && (
           <div className="flex justify-center mt-8">
             <Button theme="purple" disabled>
               {t("discover.page.loading")}

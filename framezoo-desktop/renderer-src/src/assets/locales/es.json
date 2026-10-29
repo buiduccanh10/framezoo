@@ -6,6 +6,9 @@
     "copy": "Copiar"
   },
   "addons": {
+    "catalog": {
+      "badge": "Complementos"
+    },
     "manager": {
       "add": "Agregar",
       "addWithoutConfiguring": "Instálalo de todos modos (puede que no funcione).",
@@ -202,16 +205,22 @@
       "thisWeek": "Esta semana",
       "title": {
         "4kReleases": "Lanzamientos 4K",
+        "addons": "Complementos",
+        "editorPicks": "Selección del editor",
         "editorPicksMovies": "El editor elige películas",
         "editorPicksShows": "Programas seleccionados por el editor",
         "forYou": "Para ti",
+        "genres": "Géneros",
         "inCinemas": "En cines",
+        "latest": "Últimos lanzamientos",
         "latestReleases": "Últimos lanzamientos",
         "latestTVReleases": "Últimos programas de televisión",
         "movies": "{{category}} Películas",
         "moviesOn": "Películas en {{provider}}",
         "onTheAir": "En el aire",
         "popular": "Más Popular",
+        "providers": "Proveedores",
+        "recommendations": "Recomendaciones",
         "recommended": "Porque miraste: {{title}}",
         "top10": "10 mejores",
         "topRated": "Mejor valorados",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "Toca dos veces para buscar",
       "doubleClickToSeekDescription": "Toca dos veces en el lado izquierdo o derecho del reproductor para buscar 10 segundos hacia adelante o hacia atrás.",
       "doubleClickToSeekLabel": "Habilitar doble toque para buscar",
+      "homeSectionOrder": "Orden de categoría",
+      "homeSectionOrderDescription": "Arrastra y suelta para reordenar las categorías que se muestran en tu página de inicio y en la página de descubrimiento (incluidos los complementos).",
+      "resetHomeSectionOrder": "Restablecer al orden predeterminado",
       "keyboardShortcuts": "Atajos de teclado",
       "keyboardShortcutsDescription": "Personaliza los atajos de teclado para la aplicación. Mantenga presionado ` para mostrar esta ayuda en cualquier momento",
       "keyboardShortcutsLabel": "Personalizar atajos de teclado",

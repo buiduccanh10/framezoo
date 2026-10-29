@@ -6,6 +6,9 @@
     "copy": "Copiar"
   },
   "addons": {
+    "catalog": {
+      "badge": "Complementos"
+    },
     "manager": {
       "add": "Engadir",
       "addWithoutConfiguring": "Instalar de todos os xeitos (pode que non funcione)",
@@ -202,16 +205,22 @@
       "thisWeek": "Esta semana",
       "title": {
         "4kReleases": "Lanzamentos 4K",
+        "addons": "Complementos",
+        "editorPicks": "Seleccións do editor",
         "editorPicksMovies": "O editor escolle películas",
         "editorPicksShows": "O editor escolle espectáculos",
         "forYou": "Para ti",
+        "genres": "Xéneros",
         "inCinemas": "En Cines",
+        "latest": "Últimos lanzamentos",
         "latestReleases": "Últimos Lanzamentos",
         "latestTVReleases": "Últimos programas de televisión",
         "movies": "{{category}} Películas",
         "moviesOn": "Películas en {{provider}}",
         "onTheAir": "No Ar",
         "popular": "O máis popular",
+        "providers": "Provedores",
+        "recommendations": "Recomendacións",
         "recommended": "Porque miraches: {{title}}",
         "top10": "Top 10",
         "topRated": "Mellor valorados",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "Toca dúas veces para buscar",
       "doubleClickToSeekDescription": "Toca dúas veces no lado esquerdo ou dereito do reprodutor para buscar 10 segundos cara adiante ou cara atrás.",
       "doubleClickToSeekLabel": "Activa o toque dúas veces para buscar",
+      "homeSectionOrder": "Orde de categorías",
+      "homeSectionOrderDescription": "Arrastra e solta para reordenar as categorías que se mostran nas páxinas de inicio e Descubrir (incluídos os complementos).",
+      "resetHomeSectionOrder": "Restablecer á orde predeterminada",
       "keyboardShortcuts": "Atallos de teclado",
       "keyboardShortcutsDescription": "Personaliza os atallos de teclado para a aplicación. Mantén premido ` para mostrar esta axuda en calquera momento",
       "keyboardShortcutsLabel": "Personaliza os atallos do teclado",

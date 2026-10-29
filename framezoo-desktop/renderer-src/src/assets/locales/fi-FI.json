@@ -6,6 +6,9 @@
     "copy": "Kopioi"
   },
   "addons": {
+    "catalog": {
+      "badge": "Lisäosat"
+    },
     "manager": {
       "add": "Lisätä",
       "addWithoutConfiguring": "Asenna joka tapauksessa (ei välttämättä toimi)",
@@ -202,16 +205,22 @@
       "thisWeek": "Tällä viikolla",
       "title": {
         "4kReleases": "4K-julkaisut",
+        "addons": "Lisäosat",
+        "editorPicks": "Toimittajan valinnat",
         "editorPicksMovies": "Toimittaja valitsee elokuvia",
         "editorPicksShows": "Toimittaja valitsee ohjelmat",
         "forYou": "Sinulle",
+        "genres": "Genret",
         "inCinemas": "Elokuvateattereissa",
+        "latest": "Uusimmat julkaisut",
         "latestReleases": "Uusimmat julkaisut",
         "latestTVReleases": "Uusimmat TV-ohjelmat",
         "movies": "{{category}} Elokuvat",
         "moviesOn": "Elokuvat palvelussa {{provider}}",
         "onTheAir": "On The Air",
         "popular": "Suosituin",
+        "providers": "Palveluntarjoajat",
+        "recommendations": "Suositukset",
         "recommended": "Koska katsoit: {{title}}",
         "top10": "Top 10",
         "topRated": "Parhaiksi arvioitu",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "Etsi kaksoisnapauttamalla",
       "doubleClickToSeekDescription": "Kaksoisnapauta soittimen vasenta tai oikeaa reunaa etsiäksesi 10 sekuntia eteen- tai taaksepäin.",
       "doubleClickToSeekLabel": "Ota käyttöön etsiminen kaksoisnapauttamalla",
+      "homeSectionOrder": "Luokkajärjestys",
+      "homeSectionOrderDescription": "Vedä ja pudota järjestääksesi aloitussivullasi ja Discover-sivuillasi näkyvät kategoriat (mukaan lukien lisäosat).",
+      "resetHomeSectionOrder": "Palauta oletusjärjestys",
       "keyboardShortcuts": "Pikanäppäimet",
       "keyboardShortcutsDescription": "Mukauta sovelluksen pikanäppäimiä. Pidä ` painettuna näyttääksesi tämän ohjeen milloin tahansa",
       "keyboardShortcutsLabel": "Mukauta pikanäppäimiä",

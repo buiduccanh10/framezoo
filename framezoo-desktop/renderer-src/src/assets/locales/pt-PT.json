@@ -6,6 +6,9 @@
     "copy": "Copiar"
   },
   "addons": {
+    "catalog": {
+      "badge": "Complementos"
+    },
     "manager": {
       "add": "Adicionar",
       "addWithoutConfiguring": "Instalar mesmo assim (pode não funcionar)",
@@ -202,16 +205,22 @@
       "thisWeek": "Essa semana",
       "title": {
         "4kReleases": "Lançamentos em 4K",
+        "addons": "Complementos",
+        "editorPicks": "Escolhas do Editor",
         "editorPicksMovies": "Editor escolhe filmes",
         "editorPicksShows": "Editor escolhe programas",
         "forYou": "Para você",
+        "genres": "Gêneros",
         "inCinemas": "Nos cinemas",
+        "latest": "Lançamentos mais recentes",
         "latestReleases": "Últimos lançamentos",
         "latestTVReleases": "Últimos programas de TV",
         "movies": "{{category}} Filmes",
         "moviesOn": "Filmes em {{provider}}",
         "onTheAir": "No ar",
         "popular": "Mais populares",
+        "providers": "Fornecedores",
+        "recommendations": "Recomendações",
         "recommended": "Porque você assistiu: {{title}}",
         "top10": "10 principais",
         "topRated": "Mais bem avaliados",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "Toque duas vezes para procurar",
       "doubleClickToSeekDescription": "Toque duas vezes no lado esquerdo ou direito do player para avançar ou retroceder 10 segundos.",
       "doubleClickToSeekLabel": "Ative o toque duplo para buscar",
+      "homeSectionOrder": "Ordem por categoria",
+      "homeSectionOrderDescription": "Arraste e solte para reordenar as categorias exibidas na sua página inicial e na página de descoberta (incluindo complementos).",
+      "resetHomeSectionOrder": "Restaurar ordem padrão",
       "keyboardShortcuts": "Atalhos de teclado",
       "keyboardShortcutsDescription": "Personalize os atalhos de teclado do aplicativo. Segure ` para mostrar esta ajuda a qualquer momento",
       "keyboardShortcutsLabel": "Personalize atalhos de teclado",

@@ -180,7 +180,12 @@ function maskPlaceholders(text) {
 }
 
 function unmaskPlaceholders(text, saved) {
-  let out = text;
+  let out = text
+    .replace(/&#39;/g, "'")
+    .replace(/&quot;/g, '"')
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">");
   for (const [token, raw] of saved) out = out.replaceAll(token, raw);
   return out;
 }
@@ -350,7 +355,7 @@ async function main() {
       }
 
       // Sleep to avoid rate limit
-      await new Promise((r) => setTimeout(r, 1000));
+      await new Promise((r) => setTimeout(r, 200));
     }
 
     if (args.write) {

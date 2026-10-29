@@ -6,6 +6,9 @@
     "copy": "कॉपी"
   },
   "addons": {
+    "catalog": {
+      "badge": "ऐड-ऑन"
+    },
     "manager": {
       "add": "जोड़ना",
       "addWithoutConfiguring": "फिर भी इंस्टॉल करें (हो सकता है काम न करे)",
@@ -202,16 +205,22 @@
       "thisWeek": "इस सप्ताह",
       "title": {
         "4kReleases": "4K रिलीज़",
+        "addons": "ऐड-ऑन",
+        "editorPicks": "संपादक की पसंद",
         "editorPicksMovies": "संपादक फिल्में चुनता है",
         "editorPicksShows": "संपादक शो चुनता है",
         "forYou": "आपके लिए",
+        "genres": "शैलियां",
         "inCinemas": "सिनेमाघरों में",
+        "latest": "नवीनतम रिलीज़",
         "latestReleases": "नवीनतम रिलीज़",
         "latestTVReleases": "नवीनतम टीवी शो",
         "movies": "{{श्रेणी}} फ़िल्में",
         "moviesOn": "{{provider}} पर फिल्में",
         "onTheAir": "ऑन द एयर",
         "popular": "सबसे लोकप्रिय",
+        "providers": "प्रदाताओं",
+        "recommendations": "सिफारिशों",
         "recommended": "क्योंकि आपने देखा: {{title}}",
         "top10": "सर्वोत्तम 10",
         "topRated": "टॉप रेटेड",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "खोजने के लिए दो बार टैप करें",
       "doubleClickToSeekDescription": "10 सेकंड आगे या पीछे देखने के लिए प्लेयर के बाईं या दाईं ओर दो बार टैप करें।",
       "doubleClickToSeekLabel": "खोजने के लिए डबल टैप सक्षम करें",
+      "homeSectionOrder": "श्रेणी क्रम",
+      "homeSectionOrderDescription": "अपने होम पेज और डिस्कवर पेज पर प्रदर्शित श्रेणियों (ऐडऑन सहित) को पुनर्व्यवस्थित करने के लिए ड्रैग और ड्रॉप करें।",
+      "resetHomeSectionOrder": "डिफ़ॉल्ट क्रम पर रीसेट करें",
       "keyboardShortcuts": "कुंजीपटल अल्प मार्ग",
       "keyboardShortcutsDescription": "एप्लिकेशन के लिए कीबोर्ड शॉर्टकट कस्टमाइज़ करें. किसी भी समय यह सहायता दिखाने के लिए ` दबाए रखें",
       "keyboardShortcutsLabel": "कीबोर्ड शॉर्टकट कस्टमाइज़ करें",

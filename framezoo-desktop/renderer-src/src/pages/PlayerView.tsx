@@ -265,11 +265,10 @@ export function RealPlayerView() {
   }, [setStatus, setShouldStartFromBeginning, updateProgress, playerMeta]);
 
   const isShowingSourcePicker = Boolean(
-    (status === playerStatus.SOURCE_SELECTION ||
-      status === playerStatus.PLAYBACK_ERROR) &&
+    status === playerStatus.SOURCE_SELECTION &&
     playerMeta &&
     !router.isRouterActive &&
-    (status === playerStatus.PLAYBACK_ERROR || shouldShowInitialSourcePicker),
+    shouldShowInitialSourcePicker,
   );
 
   return (

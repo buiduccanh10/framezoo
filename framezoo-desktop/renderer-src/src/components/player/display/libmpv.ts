@@ -212,17 +212,19 @@ function toDisplayError(event: LibMpvPlayerEvent): DisplayError {
   };
 }
 
-function isWaitingForTorrentBytes(
+function isWaitingForStreamBytes(
   currentSource: LoadableSource | null,
   event: LibMpvPlayerEvent,
   hasRenderedFrame: boolean,
 ) {
-  if (currentSource?.isTorrent !== true || hasRenderedFrame) {
+  if (hasRenderedFrame) {
     return false;
   }
-  const torrentStatus = getActiveTorrentStatus();
-  if (torrentStatus?.state === "error") {
-    return false;
+  if (currentSource?.isTorrent === true) {
+    const torrentStatus = getActiveTorrentStatus();
+    if (torrentStatus?.state === "error") {
+      return false;
+    }
   }
   if (event.type === "end-file") {
     return true;
@@ -230,11 +232,14 @@ function isWaitingForTorrentBytes(
   return (
     event.type === "error" &&
     (event.name === "end-file" ||
-      /^libmpv end-file error -\d+$/.test(event.message ?? ""))
+      /^libmpv end-file error -\d+$/.test(event.message ?? "") ||
+      event.message?.includes("end-file") ||
+      event.message?.includes("libmpv"))
   );
 }
 
 const TORRENT_RETRY_DELAY_MS = 1_000;
+const HTTP_RETRY_DELAY_MS = 2_000;
 
 export function makeLibMpvDisplayInterface(): DisplayInterface {
   const { emit, on, off } = makeEmitter<DisplayInterfaceEvents>();
@@ -291,7 +296,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
   let unbindDesktopPipTorrent: (() => void) | null = null;
   let unbindDesktopPipWatchParty: (() => void) | null = null;
   let unbindFullscreen: (() => void) | null = null;
-  let torrentRetryTimer: ReturnType<typeof setTimeout> | null = null;
+  let playbackRetryTimer: ReturnType<typeof setTimeout> | null = null;
   let initialStartAt = 0;
 
   // Tracks whether the current generation's file has fully loaded.
@@ -305,19 +310,23 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
   // time-pos can advance while libmpv is still resolving the initial seek.
   let pendingInitialResumeTime: number | null = null;
 
-  function clearTorrentRetry() {
-    if (!torrentRetryTimer) return;
-    clearTimeout(torrentRetryTimer);
-    torrentRetryTimer = null;
+  function clearPlaybackRetry() {
+    if (!playbackRetryTimer) return;
+    clearTimeout(playbackRetryTimer);
+    playbackRetryTimer = null;
   }
 
-  function scheduleTorrentRetry() {
-    if (torrentRetryTimer || !source) return;
+  function schedulePlaybackRetry() {
+    if (playbackRetryTimer || !source) return;
     const retrySource = source;
     const retryGeneration = generation;
     const retryStartAt = initialStartAt;
-    torrentRetryTimer = setTimeout(() => {
-      torrentRetryTimer = null;
+    const delay =
+      retrySource.isTorrent === true
+        ? TORRENT_RETRY_DELAY_MS
+        : HTTP_RETRY_DELAY_MS;
+    playbackRetryTimer = setTimeout(() => {
+      playbackRetryTimer = null;
       if (
         destroyed ||
         source !== retrySource ||
@@ -333,7 +342,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         preferredQuality: null,
         autoplay: !desiredPaused,
       });
-    }, TORRENT_RETRY_DELAY_MS);
+    }, delay);
   }
 
   function logPlaybackMilestone(
@@ -899,17 +908,15 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
 
     if (event.type === "error") {
       if (
-        isWaitingForTorrentBytes(
+        isWaitingForStreamBytes(
           source,
           event,
           firstFrameLoggedGeneration === generation,
         )
       ) {
-        // mpv can end the provisional torrent URL before its first bytes are
-        // available. Keep the session alive; the local route can keep waiting
-        // until the torrent supplies them.
+        // Keep the session alive and retry indefinitely like Stremio
         emit("loading", true);
-        scheduleTorrentRetry();
+        schedulePlaybackRetry();
         return;
       }
       emit("error", toDisplayError(event));
@@ -937,7 +944,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     if (event.type === "video-frame") {
       if (firstFrameLoggedGeneration !== generation) {
         firstFrameLoggedGeneration = generation;
-        clearTorrentRetry();
+        clearPlaybackRetry();
         logPlaybackMilestone("libmpv_video_frame", "video-frame");
       }
       const initialResumeTime = pendingInitialResumeTime;
@@ -954,15 +961,25 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     }
 
     if (event.type === "end-file") {
+      const reason =
+        typeof event.data === "string"
+          ? event.data
+          : (event.data as Record<string, unknown> | null | undefined)?.reason;
+      if (!fileLoaded && (reason === "stop" || event.data === "stop")) {
+        console.debug(
+          "[libmpv] dropping stale end-file stop event before file-loaded",
+        );
+        return;
+      }
       if (
-        isWaitingForTorrentBytes(
+        isWaitingForStreamBytes(
           source,
           event,
           firstFrameLoggedGeneration === generation,
         )
       ) {
         emit("loading", true);
-        scheduleTorrentRetry();
+        schedulePlaybackRetry();
         return;
       }
       if (
@@ -1364,7 +1381,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     },
     destroy(reason = "display:destroy") {
       destroyed = true;
-      clearTorrentRetry();
+      clearPlaybackRetry();
       pendingLoad = null;
       lastTimePosValue = -1;
       const pipApi = getElectronApi() as {
@@ -1427,7 +1444,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       unbindDesktopPipWatchParty = null;
     },
     load(ops) {
-      clearTorrentRetry();
+      clearPlaybackRetry();
       source = ops.source;
       emit("hdrchange", false);
       tracks = [];

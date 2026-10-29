@@ -6,6 +6,9 @@
     "copy": "คัดลอก"
   },
   "addons": {
+    "catalog": {
+      "badge": "ส่วนเสริม"
+    },
     "manager": {
       "add": "เพิ่ม",
       "addWithoutConfiguring": "ติดตั้งต่อไป (อาจไม่ได้ผล)",
@@ -202,16 +205,22 @@
       "thisWeek": "สัปดาห์นี้",
       "title": {
         "4kReleases": "การเผยแพร่ 4K",
+        "addons": "ส่วนเสริม",
+        "editorPicks": "บทความแนะนำจากบรรณาธิการ",
         "editorPicksMovies": "บรรณาธิการเลือกภาพยนตร์",
         "editorPicksShows": "บรรณาธิการเลือกรายการ",
         "forYou": "สำหรับคุณ",
+        "genres": "ประเภท",
         "inCinemas": "ในโรงภาพยนตร์",
+        "latest": "สินค้าออกใหม่ล่าสุด",
         "latestReleases": "รุ่นล่าสุด",
         "latestTVReleases": "รายการทีวีล่าสุด",
         "movies": "{{category}} ภาพยนตร์",
         "moviesOn": "ภาพยนตร์บน {{provider}}",
         "onTheAir": "ออนแอร์",
         "popular": "ยอดนิยมที่สุด",
+        "providers": "ผู้ให้บริการ",
+        "recommendations": "คำแนะนำ",
         "recommended": "เพราะคุณดู: {{title}}",
         "top10": "10 อันดับแรก",
         "topRated": "คะแนนสูงสุด",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "แตะสองครั้งเพื่อค้นหา",
       "doubleClickToSeekDescription": "แตะสองครั้งที่ด้านซ้ายหรือขวาของเครื่องเล่นเพื่อเดินหน้าหรือถอยหลัง 10 วินาที",
       "doubleClickToSeekLabel": "เปิดใช้งานการแตะสองครั้งเพื่อค้นหา",
+      "homeSectionOrder": "ลำดับหมวดหมู่",
+      "homeSectionOrderDescription": "ลากและวางเพื่อจัดเรียงลำดับหมวดหมู่ใหม่ที่แสดงบนหน้าแรกและหน้าค้นหา (รวมถึงส่วนเสริม)",
+      "resetHomeSectionOrder": "รีเซ็ตเป็นลำดับเริ่มต้น",
       "keyboardShortcuts": "แป้นพิมพ์ลัด",
       "keyboardShortcutsDescription": "ปรับแต่งแป้นพิมพ์ลัดสำหรับแอปพลิเคชัน กด ` ค้างไว้เพื่อแสดงความช่วยเหลือนี้ได้ตลอดเวลา",
       "keyboardShortcutsLabel": "ปรับแต่งแป้นพิมพ์ลัด",

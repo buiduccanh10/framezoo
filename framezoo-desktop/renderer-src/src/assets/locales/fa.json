@@ -6,6 +6,9 @@
     "copy": "کپی"
   },
   "addons": {
+    "catalog": {
+      "badge": "افزونه‌ها"
+    },
     "manager": {
       "add": "اضافه کنید",
       "addWithoutConfiguring": "در هر صورت نصب کنید (ممکن است کار نکند)",
@@ -202,16 +205,22 @@
       "thisWeek": "این هفته",
       "title": {
         "4kReleases": "4K منتشر شد",
+        "addons": "افزونه‌ها",
+        "editorPicks": "برگزیده‌های سردبیر",
         "editorPicksMovies": "ویرایشگر فیلم ها را انتخاب می کند",
         "editorPicksShows": "ویرایشگر را نشان می دهد",
         "forYou": "برای شما",
+        "genres": "ژانرها",
         "inCinemas": "در سینماها",
+        "latest": "آخرین نسخه‌ها",
         "latestReleases": "آخرین نسخه ها",
         "latestTVReleases": "آخرین برنامه های تلویزیونی",
         "movies": "{{category}} فیلم",
         "moviesOn": "فیلم‌ها در {{provider}}",
         "onTheAir": "در هوا",
         "popular": "محبوب ترین",
+        "providers": "ارائه دهندگان",
+        "recommendations": "توصیه‌ها",
         "recommended": "چون تماشا کردید: {{title}}",
         "top10": "10 تا",
         "topRated": "رتبه برتر",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "برای جستجو دو ضربه سریع بزنید",
       "doubleClickToSeekDescription": "روی سمت چپ یا راست پخش کننده دو ضربه سریع بزنید تا 10 ثانیه به جلو یا عقب بگردید.",
       "doubleClickToSeekLabel": "برای جستجو دو ضربه سریع را فعال کنید",
+      "homeSectionOrder": "ترتیب دسته بندی",
+      "homeSectionOrderDescription": "برای مرتب‌سازی مجدد دسته‌بندی‌های نمایش داده شده در صفحات خانه و کاوش (از جمله افزونه‌ها)، بکشید و رها کنید.",
+      "resetHomeSectionOrder": "تنظیم مجدد به ترتیب پیش‌فرض",
       "keyboardShortcuts": "میانبرهای صفحه کلید",
       "keyboardShortcutsDescription": "میانبرهای صفحه کلید را برای برنامه سفارشی کنید. برای نشان دادن این کمک در هر زمان، آن را نگه دارید",
       "keyboardShortcutsLabel": "سفارشی کردن میانبرهای صفحه کلید",

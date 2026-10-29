@@ -6,6 +6,9 @@
     "copy": "Sao chép"
   },
   "addons": {
+    "catalog": {
+      "badge": "Addons"
+    },
     "manager": {
       "add": "Thêm",
       "addWithoutConfiguring": "Cài đặt dù chưa cấu hình (có thể không hoạt động)",
@@ -202,16 +205,22 @@
       "thisWeek": "Tuần này",
       "title": {
         "4kReleases": "Phát hành 4K",
+        "addons": "Tiện ích mở rộng (Addons)",
+        "editorPicks": "Biên tập viên chọn",
         "editorPicksMovies": "Phim điện ảnh biên tập viên chọn",
         "editorPicksShows": "Phim truyền hình biên tập viên chọn",
         "forYou": "Dành cho bạn",
+        "genres": "Thể loại",
         "inCinemas": "Đang chiếu rạp",
+        "latest": "Mới phát hành",
         "latestReleases": "Phát hành mới nhất",
         "latestTVReleases": "Phim truyền hình mới nhất",
         "movies": "Phim {{category}}",
         "moviesOn": "Phim điện ảnh trên {{provider}}",
         "onTheAir": "Đang phát sóng",
         "popular": "Phổ biến nhất",
+        "providers": "Nhà cung cấp",
+        "recommendations": "Gợi ý cho bạn",
         "recommended": "Vì bạn đã xem: {{title}}",
         "top10": "Top 10",
         "topRated": "Đánh giá cao nhất",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "Nhấn đúp để tua",
       "doubleClickToSeekDescription": "Nhấn đúp vào bên trái hoặc bên phải của trình phát để tua lùi hoặc tua đi 10 giây.",
       "doubleClickToSeekLabel": "Bật nhấn đúp để tua",
+      "homeSectionOrder": "Sắp xếp danh mục",
+      "homeSectionOrderDescription": "Kéo thả để sắp xếp lại thứ tự hiển thị các danh mục trên trang chủ và khám phá (bao gồm cả Addons).",
+      "resetHomeSectionOrder": "Đặt lại thứ tự mặc định",
       "keyboardShortcuts": "Phím tắt bàn phím",
       "keyboardShortcutsDescription": "Tùy chỉnh các phím tắt cho ứng dụng. Nhấn giữ ` để xem trợ giúp này bất cứ lúc nào",
       "keyboardShortcutsLabel": "Tùy chỉnh phím tắt bàn phím",

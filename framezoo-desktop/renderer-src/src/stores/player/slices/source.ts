@@ -198,6 +198,7 @@ export interface SourceSlice {
     stream: SourceSliceSource,
     captions: CaptionListItem[],
     startAt: number,
+    options?: { autoplay?: boolean },
   ): void;
   prepareSourceSwitch(): boolean;
   switchQuality(quality: SourceQuality): void;
@@ -210,7 +211,7 @@ export interface SourceSlice {
   setSourceId(id: string | null): void;
   setEmbedId(id: string | null): void;
   enableAutomaticQuality(): void;
-  redisplaySource(startAt: number): void;
+  redisplaySource(startAt: number, options?: { autoplay?: boolean }): void;
   setCaptionAsTrack(asTrack: boolean): void;
   addExternalSubtitles(
     requestId?: number,
@@ -584,6 +585,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     stream: SourceSliceSource,
     captions: CaptionListItem[],
     startAt: number,
+    options?: { autoplay?: boolean },
   ) {
     const store = get();
     const currentMediaKey = getExternalSubtitleMediaKey(store.meta);
@@ -660,7 +662,9 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       }
       s.interface.error = undefined;
       s.status = playerStatus.PLAYING;
-      const autoplayNext = store.mediaPlaying.isPlaying || isAutoplayAllowed();
+      const autoplayNext =
+        options?.autoplay ??
+        (store.mediaPlaying.isPlaying || isAutoplayAllowed());
       s.mediaPlaying.isPaused = !autoplayNext;
       s.mediaPlaying.isPlaying = autoplayNext;
       s.audioTracks = [];
@@ -669,7 +673,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     });
     const nextStore = get();
     const requestId = nextStore.externalSubtitleRequestId;
-    nextStore.redisplaySource(startAt);
+    nextStore.redisplaySource(startAt, options);
     nextStore.display?.setCaption(preservedSelectedCaption);
     nextStore.display?.setSecondaryCaption?.(
       nextStore.caption.dualSubEnabled ? preservedSecondaryCaption : null,
@@ -696,7 +700,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
   },
   prepareSourceSwitch() {
     const store = get();
-    if (!store.source || store.status !== playerStatus.PLAYING) return false;
+    if (!store.source) return false;
 
     store.display?.load({
       source: null,
@@ -716,7 +720,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
 
     return true;
   },
-  redisplaySource(startAt: number) {
+  redisplaySource(startAt: number, options?: { autoplay?: boolean }) {
     const store = get();
     if (!store.source) return;
     const qualityPreferences = useQualityStore.getState();
@@ -733,7 +737,9 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       startAt,
       automaticQuality: qualityPreferences.quality.automaticQuality,
       preferredQuality: qualityPreferences.quality.lastChosenQuality,
-      autoplay: store.mediaPlaying.isPlaying || isAutoplayAllowed(),
+      autoplay:
+        options?.autoplay ??
+        (store.mediaPlaying.isPlaying || isAutoplayAllowed()),
     });
   },
   switchQuality(quality) {
@@ -819,7 +825,10 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     const requestedMeta = store.meta;
     if (!mediaKey || !requestedMediaKey) return;
     const queryKey = getExternalSubtitleQueryKey(mediaKey);
-    const forceRefresh = options?.forceRefresh === true;
+    const forceRefresh =
+      options?.forceRefresh === true ||
+      (!!requestedMediaKey &&
+        store.externalSubtitleRefreshMediaKey === requestedMediaKey);
     const preferredLanguages = getExternalSubtitleLanguageKey(
       useSubtitleStore.getState().lastSelectedLanguage,
       useLanguageStore.getState().language,
@@ -830,6 +839,9 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     set((s) => {
       if (requestId == null) {
         s.externalSubtitleRequestId = activeRequestId;
+      }
+      if (s.externalSubtitleRefreshMediaKey === requestedMediaKey) {
+        s.externalSubtitleRefreshMediaKey = null;
       }
       if (
         s.externalSubtitleRequestId === activeRequestId ||

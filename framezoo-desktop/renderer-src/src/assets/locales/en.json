@@ -6,6 +6,9 @@
     "copy": "Copy"
   },
   "addons": {
+    "catalog": {
+      "badge": "Addons"
+    },
     "manager": {
       "add": "Add",
       "addWithoutConfiguring": "Install anyway (may not work)",
@@ -202,16 +205,22 @@
       "thisWeek": "This Week",
       "title": {
         "4kReleases": "4K Releases",
+        "addons": "Addons",
+        "editorPicks": "Editor's Picks",
         "editorPicksMovies": "Editor Picks Movies",
         "editorPicksShows": "Editor Picks Shows",
         "forYou": "For You",
+        "genres": "Genres",
         "inCinemas": "In Cinemas",
+        "latest": "Latest Releases",
         "latestReleases": "Latest Releases",
         "latestTVReleases": "Latest TV Shows",
         "movies": "{{category}} Movies",
         "moviesOn": "Movies on {{provider}}",
         "onTheAir": "On The Air",
         "popular": "Most Popular",
+        "providers": "Providers",
+        "recommendations": "Recommendations",
         "recommended": "Because You Watched: {{title}}",
         "top10": "Top 10",
         "topRated": "Top Rated",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "Double tap to seek",
       "doubleClickToSeekDescription": "Double tap on the left or right side of the player to seek 10 seconds forward or backward.",
       "doubleClickToSeekLabel": "Enable double tap to seek",
+      "homeSectionOrder": "Category order",
+      "homeSectionOrderDescription": "Drag and drop to reorder the categories displayed on your home and discover pages (including Addons).",
+      "resetHomeSectionOrder": "Reset to default order",
       "keyboardShortcuts": "Keyboard Shortcuts",
       "keyboardShortcutsDescription": "Customize the keyboard shortcuts for the application. Hold ` to show this help anytime",
       "keyboardShortcutsLabel": "Customize Keyboard Shortcuts",

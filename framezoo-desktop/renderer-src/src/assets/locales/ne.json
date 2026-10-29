@@ -6,6 +6,9 @@
     "copy": "कपी"
   },
   "addons": {
+    "catalog": {
+      "badge": "एडअनहरू"
+    },
     "manager": {
       "add": "थप्नुहोस्",
       "addWithoutConfiguring": "जे भए पनि स्थापना गर्नुहोस् (काम नगर्न सक्छ)",
@@ -202,16 +205,22 @@
       "thisWeek": "यो हप्ता",
       "title": {
         "4kReleases": "4K रिलीज",
+        "addons": "एडअनहरू",
+        "editorPicks": "सम्पादकको रोजाइ",
         "editorPicksMovies": "सम्पादकले चलचित्रहरू छान्छन्",
         "editorPicksShows": "सम्पादक चयन शो",
         "forYou": "तिम्रो लागि",
+        "genres": "विधाहरू",
         "inCinemas": "सिनेमाघरहरूमा",
+        "latest": "पछिल्ला विज्ञप्तिहरू",
         "latestReleases": "पछिल्लो विज्ञप्ति",
         "latestTVReleases": "नवीनतम टिभी शोहरू",
         "movies": "{{category}} चलचित्रहरू",
         "moviesOn": "{{provider}} मा चलचित्रहरू",
         "onTheAir": "अन द एयर",
         "popular": "सबैभन्दा लोकप्रिय",
+        "providers": "प्रदायकहरू",
+        "recommendations": "सिफारिसहरू",
         "recommended": "तपाईंले हेर्नुभएको कारण: {{title}}",
         "top10": "शीर्ष १०",
         "topRated": "शीर्ष मूल्याङ्कन",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "खोज्न डबल ट्याप गर्नुहोस्",
       "doubleClickToSeekDescription": "10 सेकेन्ड अगाडि वा पछाडि खोज्न खेलाडीको बायाँ वा दायाँ छेउमा डबल ट्याप गर्नुहोस्।",
       "doubleClickToSeekLabel": "खोज्न डबल ट्याप सक्षम गर्नुहोस्",
+      "homeSectionOrder": "कोटी क्रम",
+      "homeSectionOrderDescription": "तपाईंको गृहमा प्रदर्शित कोटीहरू पुन: क्रमबद्ध गर्न र पृष्ठहरू पत्ता लगाउन (एडअनहरू सहित) तान्नुहोस् र छोड्नुहोस्।",
+      "resetHomeSectionOrder": "पूर्वनिर्धारित क्रममा रिसेट गर्नुहोस्",
       "keyboardShortcuts": "किबोर्ड सर्टकटहरू",
       "keyboardShortcutsDescription": "अनुप्रयोगको लागि किबोर्ड सर्टकटहरू अनुकूलित गर्नुहोस्। कुनै पनि समयमा यो मद्दत देखाउनको लागि होल्ड गर्नुहोस्",
       "keyboardShortcutsLabel": "किबोर्ड सर्टकटहरू अनुकूलित गर्नुहोस्",

@@ -6,6 +6,9 @@
     "copy": "Còpia"
   },
   "addons": {
+    "catalog": {
+      "badge": "Complements"
+    },
     "manager": {
       "add": "Afegeix",
       "addWithoutConfiguring": "Instal·la-ho igualment (potser no funcionarà)",
@@ -202,16 +205,22 @@
       "thisWeek": "Aquesta setmana",
       "title": {
         "4kReleases": "Llançaments 4K",
+        "addons": "Complements",
+        "editorPicks": "Seleccions de l'editor",
         "editorPicksMovies": "L'editor tria pel·lícules",
         "editorPicksShows": "L'editor tria espectacles",
         "forYou": "Per a tu",
+        "genres": "Gèneres",
         "inCinemas": "Als Cinemes",
+        "latest": "Últims llançaments",
         "latestReleases": "Darrers llançaments",
         "latestTVReleases": "Últims programes de televisió",
         "movies": "{{category}} Pel·lícules",
         "moviesOn": "Pel·lícules a {{provider}}",
         "onTheAir": "A l'aire",
         "popular": "El més popular",
+        "providers": "Proveïdors",
+        "recommendations": "Recomanacions",
         "recommended": "Perquè has mirat: {{title}}",
         "top10": "Top 10",
         "topRated": "Millor valorat",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "Fes doble toc per cercar",
       "doubleClickToSeekDescription": "Fes doble toc al costat esquerre o dret del reproductor per buscar 10 segons cap endavant o cap enrere.",
       "doubleClickToSeekLabel": "Habiliteu doble toc per cercar",
+      "homeSectionOrder": "Ordre de categoria",
+      "homeSectionOrderDescription": "Arrossega i deixa anar per reordenar les categories que es mostren a les pàgines d'inici i de descobriment (inclosos els complements).",
+      "resetHomeSectionOrder": "Restableix a l'ordre predeterminat",
       "keyboardShortcuts": "Dreceres de teclat",
       "keyboardShortcutsDescription": "Personalitzeu les dreceres de teclat per a l'aplicació. Manteniu premut ` per mostrar aquesta ajuda en qualsevol moment",
       "keyboardShortcutsLabel": "Personalitza les dreceres del teclat",

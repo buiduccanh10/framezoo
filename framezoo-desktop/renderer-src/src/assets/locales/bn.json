@@ -6,6 +6,9 @@
     "copy": "অনুলিপি"
   },
   "addons": {
+    "catalog": {
+      "badge": "অ্যাডঅন"
+    },
     "manager": {
       "add": "যোগ করুন",
       "addWithoutConfiguring": "তবুও ইনস্টল করুন (কাজ নাও করতে পারে)",
@@ -202,16 +205,22 @@
       "thisWeek": "এই সপ্তাহে",
       "title": {
         "4kReleases": "4K রিলিজ",
+        "addons": "অ্যাডঅন",
+        "editorPicks": "সম্পাদকের পছন্দ",
         "editorPicksMovies": "সম্পাদক মুভি বাছাই",
         "editorPicksShows": "সম্পাদক বাছাই শো",
         "forYou": "তোমার জন্য",
+        "genres": "ধরণ",
         "inCinemas": "সিনেমায়",
+        "latest": "সর্বশেষ রিলিজ",
         "latestReleases": "সর্বশেষ রিলিজ",
         "latestTVReleases": "সর্বশেষ টিভি শো",
         "movies": "{{category}} চলচ্চিত্র",
         "moviesOn": "{{provider}} এ চলচ্চিত্রগুলি",
         "onTheAir": "অন ​​দ্য এয়ার",
         "popular": "সর্বাধিক জনপ্রিয়",
+        "providers": "সরবরাহকারী",
+        "recommendations": "সুপারিশসমূহ",
         "recommended": "কারণ আপনি দেখেছেন: {{title}}",
         "top10": "শীর্ষ 10",
         "topRated": "শীর্ষ রেট",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "খুঁজতে ডবল ট্যাপ করুন",
       "doubleClickToSeekDescription": "10 সেকেন্ড এগিয়ে বা পিছনে যেতে প্লেয়ারের বাম বা ডান দিকে ডবল ট্যাপ করুন।",
       "doubleClickToSeekLabel": "খুঁজতে ডবল ট্যাপ চালু করুন",
+      "homeSectionOrder": "বিভাগ ক্রম",
+      "homeSectionOrderDescription": "আপনার হোম এবং ডিসকভার পেজে প্রদর্শিত ক্যাটাগরিগুলোর (অ্যাডঅন সহ) ক্রম পরিবর্তন করতে ড্র্যাগ ও ড্রপ করুন।",
+      "resetHomeSectionOrder": "ডিফল্ট ক্রমে রিসেট করুন",
       "keyboardShortcuts": "কীবোর্ড শর্টকাট",
       "keyboardShortcutsDescription": "অ্যাপ্লিকেশনের জন্য কীবোর্ড শর্টকাট কাস্টমাইজ করুন। যেকোন সময় এই সাহায্য দেখাতে ধরুন",
       "keyboardShortcutsLabel": "কীবোর্ড শর্টকাট কাস্টমাইজ করুন",

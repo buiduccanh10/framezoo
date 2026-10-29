@@ -6,6 +6,9 @@
     "copy": "نسخ"
   },
   "addons": {
+    "catalog": {
+      "badge": "إضافات"
+    },
     "manager": {
       "add": "يضيف",
       "addWithoutConfiguring": "قم بالتثبيت على أي حال (قد لا يعمل)",
@@ -202,16 +205,22 @@
       "thisWeek": "هذا الاسبوع",
       "title": {
         "4kReleases": "إصدارات 4K",
+        "addons": "إضافات",
+        "editorPicks": "اختيارات المحرر",
         "editorPicksMovies": "أفلام مختارة بعناية",
         "editorPicksShows": "مسلسلات مختارة بعناية",
         "forYou": "لك",
+        "genres": "الأنواع",
         "inCinemas": "في السينما",
+        "latest": "أحدث الإصدارات",
         "latestReleases": "أحدث الإصدارات",
         "latestTVReleases": "أحدث المسلسلات",
         "movies": "أفلام {{category}}",
         "moviesOn": "أفلام على {{provider}}",
         "onTheAir": "يعرض حالياً",
         "popular": "الأكثر شعبية",
+        "providers": "مقدمو الخدمات",
+        "recommendations": "التوصيات",
         "recommended": "لأنك شاهدت: {{title}}",
         "top10": "أعلى 10",
         "topRated": "الأعلى تقييم",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "انقر نقرا مزدوجا للبحث",
       "doubleClickToSeekDescription": "انقر نقرًا مزدوجًا على الجانب الأيسر أو الأيمن من اللاعب للبحث عن 10 ثوانٍ للأمام أو للخلف.",
       "doubleClickToSeekLabel": "تمكين النقر المزدوج للبحث",
+      "homeSectionOrder": "ترتيب الفئات",
+      "homeSectionOrderDescription": "اسحب وأفلت لإعادة ترتيب الفئات المعروضة على صفحتك الرئيسية وصفحات الاكتشاف (بما في ذلك الإضافات).",
+      "resetHomeSectionOrder": "إعادة التعيين إلى الترتيب الافتراضي",
       "keyboardShortcuts": "اختصارات لوحة المفاتيح",
       "keyboardShortcutsDescription": "تخصيص اختصارات لوحة المفاتيح للتطبيق. اضغط باستمرار لإظهار هذه المساعدة في أي وقت",
       "keyboardShortcutsLabel": "تخصيص اختصارات لوحة المفاتيح",

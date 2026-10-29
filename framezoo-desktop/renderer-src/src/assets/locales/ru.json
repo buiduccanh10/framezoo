@@ -6,6 +6,9 @@
     "copy": "Скопировать"
   },
   "addons": {
+    "catalog": {
+      "badge": "Дополнения"
+    },
     "manager": {
       "add": "Добавлять",
       "addWithoutConfiguring": "Установите в любом случае (может не сработать)",
@@ -202,16 +205,22 @@
       "thisWeek": "На этой неделе",
       "title": {
         "4kReleases": "4K-релизы",
+        "addons": "Дополнения",
+        "editorPicks": "Выбор редакции",
         "editorPicksMovies": "Редактор выбирает фильмы",
         "editorPicksShows": "Редактор выбирает шоу",
         "forYou": "Для тебя",
+        "genres": "Жанры",
         "inCinemas": "В кинотеатрах",
+        "latest": "Последние релизы",
         "latestReleases": "Последние релизы",
         "latestTVReleases": "Последние телешоу",
         "movies": "{{category}} Фильмы",
         "moviesOn": "Фильмы на {{provider}}",
         "onTheAir": "В эфире",
         "popular": "Самый популярный",
+        "providers": "Поставщики",
+        "recommendations": "Рекомендации",
         "recommended": "Потому что вы смотрели: {{title}}",
         "top10": "Топ 10",
         "topRated": "Самый рейтинговый",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "Нажмите дважды, чтобы найти",
       "doubleClickToSeekDescription": "Дважды коснитесь левой или правой стороны плеера, чтобы перейти на 10 секунд вперед или назад.",
       "doubleClickToSeekLabel": "Включить двойное нажатие для поиска",
+      "homeSectionOrder": "Порядок категорий",
+      "homeSectionOrderDescription": "Перетаскивайте категории, чтобы изменить их порядок на главной странице и странице поиска (включая дополнения).",
+      "resetHomeSectionOrder": "Сбросить до порядка по умолчанию",
       "keyboardShortcuts": "Сочетания клавиш",
       "keyboardShortcutsDescription": "Настройте сочетания клавиш для приложения. Удерживайте `, чтобы показать эту помощь в любое время.",
       "keyboardShortcutsLabel": "Настройка сочетаний клавиш",

@@ -6,6 +6,9 @@
     "copy": "Kopieer"
   },
   "addons": {
+    "catalog": {
+      "badge": "Addons"
+    },
     "manager": {
       "add": "Toevoegen",
       "addWithoutConfiguring": "Toch installeren (werkt mogelijk niet)",
@@ -202,16 +205,22 @@
       "thisWeek": "Deze week",
       "title": {
         "4kReleases": "4K-releases",
+        "addons": "Addons",
+        "editorPicks": "Keuze van de redactie",
         "editorPicksMovies": "Editor kiest films",
         "editorPicksShows": "Editor kiest shows",
         "forYou": "Voor jou",
+        "genres": "Genres",
         "inCinemas": "In de bioscoop",
+        "latest": "Nieuwste releases",
         "latestReleases": "Nieuwste releases",
         "latestTVReleases": "Nieuwste tv-programma's",
         "movies": "{{category}} Films",
         "moviesOn": "Films op {{provider}}",
         "onTheAir": "In de lucht",
         "popular": "Meest populair",
+        "providers": "Aanbieders",
+        "recommendations": "Aanbevelingen",
         "recommended": "Omdat je hebt gekeken: {{title}}",
         "top10": "Top-10",
         "topRated": "Hoogst gewaardeerd",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "Dubbeltik om te zoeken",
       "doubleClickToSeekDescription": "Dubbeltik op de linker- of rechterkant van de speler om 10 seconden vooruit of achteruit te zoeken.",
       "doubleClickToSeekLabel": "Schakel dubbeltikken om te zoeken in",
+      "homeSectionOrder": "Categorievolgorde",
+      "homeSectionOrderDescription": "Sleep de categorieën op je startpagina en ontdekkingspagina (inclusief add-ons) om de volgorde ervan te wijzigen.",
+      "resetHomeSectionOrder": "Terugzetten naar standaardvolgorde",
       "keyboardShortcuts": "Sneltoetsen op het toetsenbord",
       "keyboardShortcutsDescription": "Pas de sneltoetsen voor de toepassing aan. Houd ` vast om deze hulp op elk gewenst moment weer te geven",
       "keyboardShortcutsLabel": "Pas sneltoetsen aan",

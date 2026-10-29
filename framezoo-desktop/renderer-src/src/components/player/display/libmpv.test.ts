@@ -202,6 +202,109 @@ describe("libmpv display", () => {
     display.destroy();
   });
 
+  it("keeps waiting and retries when an HTTP stream emits end-file error -13 before first frame", async () => {
+    let eventListener:
+      | ((event: {
+          playerId: string;
+          generation: number;
+          type: "error";
+          name?: string;
+          message?: string;
+        }) => void)
+      | undefined;
+    const errors: unknown[] = [];
+    const loading: boolean[] = [];
+
+    (window as any).electronAPI = {
+      createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
+      loadLibMpvSource: vi.fn().mockResolvedValue(true),
+      sendLibMpvCommand: vi.fn().mockResolvedValue(true),
+      onLibMpvEvent: vi.fn((listener) => {
+        eventListener = listener;
+        return () => undefined;
+      }),
+      onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.processContainerElement(makeElement());
+    display.on("error", (error) => errors.push(error));
+    display.on("loading", (isLoading) => loading.push(isLoading));
+    display.load({
+      source: {
+        type: "mp4",
+        url: "https://pixeldrain.dev/api/file/ShMrbA9K?download:0",
+      } as Source,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    eventListener?.({
+      playerId: "player-1",
+      generation: 1,
+      type: "error",
+      name: "end-file",
+      message: "libmpv end-file error -13",
+    });
+
+    expect(errors).toEqual([]);
+    expect(loading.at(-1)).toBe(true);
+    display.destroy();
+  });
+
+  it("drops stale end-file stop event emitted during old-file teardown before new file loads", async () => {
+    let eventListener:
+      | ((event: {
+          playerId: string;
+          generation: number;
+          type: "end-file";
+          data?: unknown;
+        }) => void)
+      | undefined;
+    const loading: boolean[] = [];
+
+    (window as any).electronAPI = {
+      createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
+      loadLibMpvSource: vi.fn().mockResolvedValue(true),
+      sendLibMpvCommand: vi.fn().mockResolvedValue(true),
+      onLibMpvEvent: vi.fn((listener) => {
+        eventListener = listener;
+        return () => undefined;
+      }),
+      onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.processContainerElement(makeElement());
+    display.on("loading", (isLoading) => loading.push(isLoading));
+    display.load({
+      source: {
+        type: "mp4",
+        url: "https://example.com/stream2.mp4",
+      } as Source,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    // Teardown stop event from the previous file arrives before file-loaded
+    eventListener?.({
+      playerId: "player-1",
+      generation: 1,
+      type: "end-file",
+      data: "stop",
+    });
+
+    // Loading state must remain true (not flipped to false by the stale stop event)
+    expect(loading.at(-1)).toBe(true);
+    display.destroy();
+  });
+
   it("keeps waiting when a torrent URL emits end-file event (error 0) before its first bytes", async () => {
     let eventListener:
       | ((event: {

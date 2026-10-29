@@ -6,6 +6,9 @@
     "copy": "복사하기"
   },
   "addons": {
+    "catalog": {
+      "badge": "추가 기능"
+    },
     "manager": {
       "add": "추가하다",
       "addWithoutConfiguring": "그래도 설치해 보세요 (작동하지 않을 수도 있습니다).",
@@ -202,16 +205,22 @@
       "thisWeek": "이번 주",
       "title": {
         "4kReleases": "4K 릴리스",
+        "addons": "추가 기능",
+        "editorPicks": "에디터 추천",
         "editorPicksMovies": "편집자 추천 영화",
         "editorPicksShows": "편집자 추천 프로그램",
         "forYou": "당신을 위한",
+        "genres": "장르",
         "inCinemas": "영화관에서",
+        "latest": "최신 릴리스",
         "latestReleases": "최신 릴리스",
         "latestTVReleases": "최신 TV 프로그램",
         "movies": "{{category}} 영화",
         "moviesOn": "{{provider}}의 영화",
         "onTheAir": "온더에어",
         "popular": "가장 인기있는",
+        "providers": "제공업체",
+        "recommendations": "권장 사항",
         "recommended": "시청했기 때문에: {{title}}",
         "top10": "상위 10위",
         "topRated": "최고 평점",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "탐색하려면 두 번 탭하세요.",
       "doubleClickToSeekDescription": "플레이어의 왼쪽이나 오른쪽을 두 번 탭하면 10초 앞이나 뒤로 탐색됩니다.",
       "doubleClickToSeekLabel": "탐색하려면 두 번 탭하세요.",
+      "homeSectionOrder": "카테고리 순서",
+      "homeSectionOrderDescription": "드래그 앤 드롭으로 홈 페이지와 탐색 페이지(애드온 포함)에 표시되는 카테고리 순서를 변경하세요.",
+      "resetHomeSectionOrder": "기본 순서로 재설정",
       "keyboardShortcuts": "키보드 단축키",
       "keyboardShortcutsDescription": "애플리케이션의 키보드 단축키를 사용자 정의합니다. 언제든지 이 도움말을 표시하려면 `를 누르세요.",
       "keyboardShortcutsLabel": "키보드 단축키 사용자 정의",

@@ -78,7 +78,7 @@ export function AddonsPage() {
             {t("addons.page.installedHeading", "Installed Addons")}
           </h2>
         </div>
-        <div className="space-y-3 pb-16">
+        <div className="max-h-[62vh] overflow-y-auto overscroll-contain pr-2 space-y-3 pb-6">
           {addons.length === 0 ? (
             <div className="rounded-2xl border border-dropdown-border border-dashed bg-dropdown-contentBackground/20 p-8 text-center text-dropdown-text">
               <p className="font-medium text-sm">

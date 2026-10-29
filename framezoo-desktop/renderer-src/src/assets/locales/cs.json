@@ -6,6 +6,9 @@
     "copy": "Zkopírovat"
   },
   "addons": {
+    "catalog": {
+      "badge": "Doplňky"
+    },
     "manager": {
       "add": "Přidat",
       "addWithoutConfiguring": "Přesto nainstalovat (nemusí fungovat)",
@@ -202,16 +205,22 @@
       "thisWeek": "Tento týden",
       "title": {
         "4kReleases": "4K vydání",
+        "addons": "Doplňky",
+        "editorPicks": "Výběr editora",
         "editorPicksMovies": "Editor vybírá filmy",
         "editorPicksShows": "Výběr pořadů redaktora",
         "forYou": "Pro vás",
+        "genres": "Žánry",
         "inCinemas": "V kinech",
+        "latest": "Nejnovější vydání",
         "latestReleases": "Nejnovější verze",
         "latestTVReleases": "Nejnovější televizní pořady",
         "movies": "{{category}} filmy",
         "moviesOn": "Filmy na {{provider}}",
         "onTheAir": "On The Air",
         "popular": "Nejoblíbenější",
+        "providers": "Poskytovatelé",
+        "recommendations": "Doporučení",
         "recommended": "Protože jste sledovali: {{title}}",
         "top10": "Top 10",
         "topRated": "Nejlépe hodnocené",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "Dvojitým klepnutím vyhledáte",
       "doubleClickToSeekDescription": "Dvojitým klepnutím na levou nebo pravou stranu přehrávače přejdete o 10 sekund dopředu nebo dozadu.",
       "doubleClickToSeekLabel": "Povolte vyhledávání dvojitým klepnutím",
+      "homeSectionOrder": "Pořadí kategorií",
+      "homeSectionOrderDescription": "Přetažením můžete změnit pořadí kategorií zobrazených na domovské stránce a stránce objevování (včetně doplňků).",
+      "resetHomeSectionOrder": "Obnovit výchozí pořadí",
       "keyboardShortcuts": "Klávesové zkratky",
       "keyboardShortcutsDescription": "Přizpůsobte si klávesové zkratky pro aplikaci. Podržením ` tuto nápovědu kdykoli zobrazíte",
       "keyboardShortcutsLabel": "Přizpůsobte si klávesové zkratky",

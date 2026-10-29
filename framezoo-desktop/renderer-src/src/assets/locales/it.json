@@ -6,6 +6,9 @@
     "copy": "Copia"
   },
   "addons": {
+    "catalog": {
+      "badge": "Componenti aggiuntivi"
+    },
     "manager": {
       "add": "Aggiungere",
       "addWithoutConfiguring": "Installa comunque (potrebbe non funzionare)",
@@ -202,16 +205,22 @@
       "thisWeek": "Questa settimana",
       "title": {
         "4kReleases": "Versioni 4K",
+        "addons": "Componenti aggiuntivi",
+        "editorPicks": "Scelte della redazione",
         "editorPicksMovies": "L'editor sceglie i film",
         "editorPicksShows": "L'editor sceglie gli spettacoli",
         "forYou": "Per te",
+        "genres": "Generi",
         "inCinemas": "Nei cinema",
+        "latest": "Ultime uscite",
         "latestReleases": "Ultime uscite",
         "latestTVReleases": "Ultimi programmi TV",
         "movies": "{{category}} Film",
         "moviesOn": "Film su {{provider}}",
         "onTheAir": "In onda",
         "popular": "Il più popolare",
+        "providers": "Fornitori",
+        "recommendations": "Raccomandazioni",
         "recommended": "Perché hai guardato: {{title}}",
         "top10": "I primi 10",
         "topRated": "I più votati",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "Tocca due volte per cercare",
       "doubleClickToSeekDescription": "Tocca due volte sul lato sinistro o destro del lettore per cercare 10 secondi avanti o indietro.",
       "doubleClickToSeekLabel": "Abilita il doppio tocco per cercare",
+      "homeSectionOrder": "Ordine delle categorie",
+      "homeSectionOrderDescription": "Trascina e rilascia per riordinare le categorie visualizzate nella tua home page e nella pagina Scopri (inclusi i componenti aggiuntivi).",
+      "resetHomeSectionOrder": "Ripristina l'ordine predefinito",
       "keyboardShortcuts": "Scorciatoie da tastiera",
       "keyboardShortcutsDescription": "Personalizza le scorciatoie da tastiera per l'applicazione. Tieni premuto ` per mostrare questo aiuto in qualsiasi momento",
       "keyboardShortcutsLabel": "Personalizza le scorciatoie da tastiera",

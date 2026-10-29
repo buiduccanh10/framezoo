@@ -6,6 +6,9 @@
     "copy": "Kopeeri"
   },
   "addons": {
+    "catalog": {
+      "badge": "Lisad"
+    },
     "manager": {
       "add": "Lisa",
       "addWithoutConfiguring": "Installi ikkagi (ei pruugi töötada)",
@@ -202,16 +205,22 @@
       "thisWeek": "Sellel nädalal",
       "title": {
         "4kReleases": "4K väljalasked",
+        "addons": "Lisad",
+        "editorPicks": "Toimetaja valikud",
         "editorPicksMovies": "Toimetaja valib filmid",
         "editorPicksShows": "Toimetaja valib saateid",
         "forYou": "Sinu jaoks",
+        "genres": "Žanrid",
         "inCinemas": "Kinodes",
+        "latest": "Viimased väljaanded",
         "latestReleases": "Viimased väljaanded",
         "latestTVReleases": "Viimased telesaated",
         "movies": "{{category}} Filmid",
         "moviesOn": "Filmid saidil {{provider}}",
         "onTheAir": "Eetris",
         "popular": "Kõige populaarsem",
+        "providers": "Pakkujad",
+        "recommendations": "Soovitused",
         "recommended": "Kuna vaatasite: {{title}}",
         "top10": "Top 10",
         "topRated": "Kõrgeimalt hinnatud",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "Otsimiseks topeltpuudutage",
       "doubleClickToSeekDescription": "Topeltpuudutage mängija vasakul või paremal küljel, et otsida 10 sekundit edasi või tagasi.",
       "doubleClickToSeekLabel": "Otsimiseks lubage topeltpuudutamine",
+      "homeSectionOrder": "Kategooria järjekord",
+      "homeSectionOrderDescription": "Avalehel ja avalehtedel kuvatavate kategooriate (sh lisandmoodulite) järjekorra muutmiseks lohista ja aseta.",
+      "resetHomeSectionOrder": "Lähtesta vaikesjärjestusele",
       "keyboardShortcuts": "Klaviatuuri otseteed",
       "keyboardShortcutsDescription": "Kohandage rakenduse klaviatuuri otseteid. Hoidke klahvi all, et seda abi igal ajal kuvada",
       "keyboardShortcutsLabel": "Kohandage klaviatuuri otseteid",

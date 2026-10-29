@@ -99,7 +99,7 @@ export function getLastTorrentSelection(
 export function getLastStreamPreference(
   meta: PlayerMeta,
 ): SavedStreamPreference | null {
-  if (meta.type !== "show" || !meta.tmdbId) return null;
+  if (!meta.tmdbId) return null;
 
   const preference = readPreferences()[meta.tmdbId];
   if (!preference || preference.version !== STORAGE_VERSION) return null;
@@ -111,7 +111,7 @@ export function saveLastStreamPreference(
   stream: AddonStream,
   quality: string,
 ): void {
-  if (meta.type !== "show" || !meta.tmdbId) return;
+  if (!meta.tmdbId) return;
 
   const preferences = readPreferences();
   preferences[meta.tmdbId] = {

@@ -6,6 +6,9 @@
     "copy": "Kopyala"
   },
   "addons": {
+    "catalog": {
+      "badge": "Eklentiler"
+    },
     "manager": {
       "add": "Eklemek",
       "addWithoutConfiguring": "Yine de yükle (çalışmayabilir)",
@@ -202,16 +205,22 @@
       "thisWeek": "Bu hafta",
       "title": {
         "4kReleases": "4K Yayınları",
+        "addons": "Eklentiler",
+        "editorPicks": "Editörün Seçtikleri",
         "editorPicksMovies": "Editörün Filmleri Seçmesi",
         "editorPicksShows": "Editörün Seçtiği Gösteriler",
         "forYou": "Senin için",
+        "genres": "Türler",
         "inCinemas": "Sinemalarda",
+        "latest": "Son Yayınlar",
         "latestReleases": "Son Sürümler",
         "latestTVReleases": "En Son TV Programları",
         "movies": "{{category}} Filmler",
         "moviesOn": "{{provider}} tarihindeki filmler",
         "onTheAir": "Yayında",
         "popular": "En Popüler",
+        "providers": "Sağlayıcılar",
+        "recommendations": "Öneriler",
         "recommended": "Çünkü İzlediniz: {{title}}",
         "top10": "İlk 10",
         "topRated": "En Çok Oy Alan",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "Aramak için iki kez dokunun",
       "doubleClickToSeekDescription": "10 saniye ileri veya geri gitmek için oynatıcının sol veya sağ tarafına iki kez dokunun.",
       "doubleClickToSeekLabel": "Aramak için iki kez dokunmayı etkinleştirin",
+      "homeSectionOrder": "Kategori sırası",
+      "homeSectionOrderDescription": "Ana sayfanızda ve keşfet sayfalarınızda görüntülenen kategorilerin (eklentiler dahil) sıralamasını değiştirmek için sürükle bırak özelliğini kullanın.",
+      "resetHomeSectionOrder": "Varsayılan sıraya sıfırla",
       "keyboardShortcuts": "Klavye Kısayolları",
       "keyboardShortcutsDescription": "Uygulama için klavye kısayollarını özelleştirin. Bu yardımı istediğiniz zaman göstermek için ` tuşunu basılı tutun",
       "keyboardShortcutsLabel": "Klavye Kısayollarını Özelleştirin",

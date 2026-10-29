@@ -458,6 +458,8 @@ export function SettingsPage() {
   const setEnableNumberKeySeeking = usePreferencesStore(
     (s) => s.setEnableNumberKeySeeking,
   );
+  const homeSectionOrder = usePreferencesStore((s) => s.homeSectionOrder);
+  const setHomeSectionOrder = usePreferencesStore((s) => s.setHomeSectionOrder);
 
   const account = useAuthStore((s) => s.account);
   const updateProfile = useAuthStore((s) => s.setAccountProfile);
@@ -580,6 +582,7 @@ export function SettingsPage() {
     true,
     enableAutoResumeOnPlaybackError,
     customThemeBaseline ?? customTheme,
+    homeSectionOrder,
   );
 
   useEffect(() => {
@@ -679,6 +682,7 @@ export function SettingsPage() {
     setEnableAutoResumeOnPlaybackError(
       state.enableAutoResumeOnPlaybackError.state,
     );
+    setHomeSectionOrder(state.homeSectionOrder.state);
     setCustomTheme(state.customTheme.state);
     setCustomThemeBaseline(state.customTheme.state);
 
@@ -727,6 +731,7 @@ export function SettingsPage() {
     setProxyTmdb,
     setEnableDoubleClickToSeek,
     setEnableAutoResumeOnPlaybackError,
+    setHomeSectionOrder,
     setCustomTheme,
   ]);
   return (
@@ -822,6 +827,8 @@ export function SettingsPage() {
                 setEnableAutoResumeOnPlaybackError={
                   state.enableAutoResumeOnPlaybackError.set
                 }
+                homeSectionOrder={state.homeSectionOrder.state}
+                setHomeSectionOrder={state.homeSectionOrder.set}
               />
             </div>
           )}

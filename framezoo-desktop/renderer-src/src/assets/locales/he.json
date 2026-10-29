@@ -6,6 +6,9 @@
     "copy": "להעתיק"
   },
   "addons": {
+    "catalog": {
+      "badge": "תוספים"
+    },
     "manager": {
       "add": "לְהוֹסִיף",
       "addWithoutConfiguring": "התקן בכל מקרה (ייתכן שלא יעבוד)",
@@ -202,16 +205,22 @@
       "thisWeek": "השבוע",
       "title": {
         "4kReleases": "השקות ב-4K",
+        "addons": "תוספים",
+        "editorPicks": "בחירות העורך",
         "editorPicksMovies": "סרטים שנבחרו על ידי העורך",
         "editorPicksShows": "סדרות שנבחרו על ידי העורך",
         "forYou": "בשבילך",
+        "genres": "ז'אנרים",
         "inCinemas": "בקולנוע",
+        "latest": "מהדורות אחרונות",
         "latestReleases": "ההשקות האחרונות",
         "latestTVReleases": "סדרות טלוויזיה חדשות",
         "movies": "{{category}} סרטים",
         "moviesOn": "סרטים ב-{{provider}}",
         "onTheAir": "משודר עכשיו",
         "popular": "הפופולריים ביותר",
+        "providers": "ספקים",
+        "recommendations": "המלצות",
         "recommended": "כי צפית ב-{{title}}",
         "top10": "10 המובילים",
         "topRated": "המדורגים ביותר",
@@ -1259,6 +1268,9 @@
       "doubleClickToSeek": "הקש פעמיים כדי לחפש",
       "doubleClickToSeekDescription": "הקש פעמיים על הצד השמאלי או הימני של הנגן כדי לחפש 10 שניות קדימה או אחורה.",
       "doubleClickToSeekLabel": "אפשר הקשה כפולה כדי לחפש",
+      "homeSectionOrder": "סדר קטגוריות",
+      "homeSectionOrderDescription": "גרור ושחרר כדי לסדר מחדש את הקטגוריות המוצגות בדפי הבית והגילוי שלך (כולל תוספים).",
+      "resetHomeSectionOrder": "איפוס לסדר ברירת המחדל",
       "keyboardShortcuts": "קיצורי מקלדת",
       "keyboardShortcutsDescription": "התאם אישית את קיצורי המקלדת עבור האפליקציה. החזק ` כדי להציג את העזרה הזו בכל עת",
       "keyboardShortcutsLabel": "התאם אישית את קיצורי המקלדת",
