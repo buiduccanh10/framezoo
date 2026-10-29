@@ -258,14 +258,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Disclaimer",
-      "disclaimerText": "Framezoo offre un'esperienza di intrattenimento sicura, moderna e senza soluzione di continuità. Con la sua interfaccia facile da usare e una libreria di contenuti diversificata, incluso il supporto 4K HDR, gli utenti possono godersi i loro film e programmi TV preferiti. E con il suo impegno per la sicurezza, Framezoo è la scelta definitiva per un'esperienza di streaming di alta qualità e senza preoccupazioni."
+      "disclaimerText": "Framezoo è un software di riproduzione multimediale neutrale. Non ospita, archivia, distribuisce o controlla file multimediali o componenti aggiuntivi di terze parti. Esplora metadati cinematografici dettagliati, sincronizza i sottotitoli in streaming illimitati e accedi ai sottotitoli da diverse fonti, mantenendo sempre il controllo sui contenuti a cui accedi."
     },
     "links": {
       "fluxer": "Flussante",
       "funding": "Supportaci",
       "github": "GitHub"
     },
-    "tagline": "Un riproduttore di streaming moderno e sicuro per un'esperienza visiva fluida e di alta qualità."
+    "tagline": "Streaming fluido e ad alta velocità con metadati dettagliati dei film, sincronizzazione illimitata dei sottotitoli e sottotitoli provenienti da diverse fonti."
   },
   "global": {
     "keyboardShortcuts": {
@@ -1405,6 +1405,20 @@
     "successDesc": "Grazie per il tuo feedback. Il nostro team esaminerà il problema e lo risolverà il prima possibile.",
     "errorRequired": "Inserisci sia il titolo che la descrizione.",
     "errorSubmit": "Si è verificato un errore durante l&#39;invio del feedback. Riprova più tardi."
+  },
+  "donate": {
+    "button": "Supporto Framezoo",
+    "badge": "Un messaggio da Framezoo",
+    "modalTitle": "Aiutaci a continuare a costruire Framezoo",
+    "subtitle": "Ogni contributo ci aiuta a migliorare il lettore, ad espanderci su più piattaforme e a continuare ad ascoltare le vostre idee.",
+    "note": "Grazie per l&#39;interesse che dimostrate verso Framezoo e per il supporto che offrite al progetto. Il vostro contributo ci permette di creare un&#39;esperienza migliore per tutti.",
+    "scanHint": "Scansiona questo codice QR con l&#39;app della tua banca.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "Mamma",
+    "paypalImageAlt": "Codice QR per le donazioni PayPal",
+    "momoImageAlt": "Codice QR per le donazioni MoMo",
+    "viewQr": "Visualizza il codice QR {{label}} ingrandito",
+    "close": "Vicino"
   },
   "toasts": {
     "linkCopied": "Link copiato negli appunti!",

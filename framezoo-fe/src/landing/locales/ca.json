@@ -199,5 +199,19 @@
     "showcaseSecondaryDescription": "Navega sense esforç a través d'una interfície elegant dissenyada per passar del descobriment a la reproducció a alta velocitat en segons.",
     "showcaseSecondaryAlt": "Pantalla de descobriment del reproductor de Framezoo amb cerca, categories i files de títol",
     "showcaseSecondaryTitle": "Descobriment suau i intuïtiu."
+  },
+  "donate": {
+    "button": "Suport Framezoo",
+    "note": "Gràcies per preocupar-se per Framezoo i donar suport a la feina que hi ha darrere. La teva contribució ens dóna més marge per crear una experiència millor per a tothom.",
+    "subtitle": "Cada contribució ens ajuda a millorar el reproductor, expandir-nos a més plataformes i seguir escoltant les vostres idees.",
+    "badge": "Una nota de Framezoo",
+    "modalTitle": "Ajuda'ns a seguir construint Framezoo",
+    "scanHint": "Escaneja aquest codi QR amb la teva aplicació bancària.",
+    "momoImageAlt": "Codi QR de donació de MoMo",
+    "paypalImageAlt": "Codi QR de donació de PayPal",
+    "momoLabel": "MoMo",
+    "paypalLabel": "PayPal",
+    "close": "Potser més tard",
+    "viewQr": "Veure el codi QR més gran"
   }
 }

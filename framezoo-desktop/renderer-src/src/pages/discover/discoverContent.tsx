@@ -585,7 +585,13 @@ export function DiscoverContent({
             : "hidden",
         )}
       >
-        <Button theme="purple" onClick={() => navigate("/discover/all")}>
+        <Button
+          theme="purple"
+          onClick={() => {
+            window.scrollTo(0, 0);
+            navigate("/discover/all");
+          }}
+        >
           {t("discover.viewLists")}
         </Button>
       </div>

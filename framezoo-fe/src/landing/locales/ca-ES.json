@@ -199,5 +199,19 @@
     "showcasePrimaryAlt": "Pantalla de detalls del títol de Framezoo amb obres d'art, classificacions, temporades i metadades de pel·lícules riques",
     "showcaseSecondaryDescription": "Navega sense esforç a través d'una interfície elegant dissenyada per passar del descobriment a la reproducció a alta velocitat en segons.",
     "showcaseSecondaryAlt": "Pantalla de descobriment del reproductor de Framezoo amb cerca, categories i files de títol"
+  },
+  "donate": {
+    "subtitle": "Cada contribució ens ajuda a millorar el reproductor, expandir-nos a més plataformes i seguir escoltant les vostres idees.",
+    "badge": "Una nota de Framezoo",
+    "modalTitle": "Ajuda'ns a seguir construint Framezoo",
+    "button": "Suport Framezoo",
+    "note": "Gràcies per preocupar-se per Framezoo i donar suport a la feina que hi ha darrere. La teva contribució ens dóna més marge per crear una experiència millor per a tothom.",
+    "scanHint": "Escaneja aquest codi QR amb la teva aplicació bancària.",
+    "paypalLabel": "PayPal",
+    "paypalImageAlt": "Codi QR de donació de PayPal",
+    "momoImageAlt": "Codi QR de donació de MoMo",
+    "momoLabel": "MoMo",
+    "viewQr": "Veure el codi QR més gran",
+    "close": "Potser més tard"
   }
 }

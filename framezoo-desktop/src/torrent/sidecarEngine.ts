@@ -152,6 +152,9 @@ export class SidecarTorrentEngine implements TorrentEngine {
           proc.kill();
         }
       } else {
+        try {
+          proc.stdin?.end();
+        } catch {}
         proc.kill("SIGTERM");
         setTimeout(() => {
           try {

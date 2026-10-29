@@ -258,14 +258,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Disclaimer ",
-      "disclaimerText": "Framezoo offers a secure, modern and seamless entertainment experience. With its easy-to-use interface and diverse content library, including 4K HDR support, users can enjoy their favorite movies and TV shows. And with its commitment to security, Framezoo is the ultimate choice for a worry-free, high-quality streaming experience."
+      "disclaimerText": "Framezoo is a neutral media player software. It does not host, store, distribute, or control media files or third-party addons. Explore rich movie metadata, unlimited stream subtitle sync, and subtitles from multiple sources while keeping control of the content you access."
     },
     "links": {
       "fluxer": "Fluxer",
       "funding": "Support us",
       "github": "GitHub"
     },
-    "tagline": "A secure, modern stream player for a seamless, high-quality viewing experience."
+    "tagline": "High-speed, smooth streaming with rich movie metadata, unlimited stream subtitle sync, and subtitles from multiple sources."
   },
   "global": {
     "keyboardShortcuts": {
@@ -1405,6 +1405,20 @@
     "successDesc": "Thank you for your feedback. Our team will review and address the issue as soon as possible.",
     "errorRequired": "Please enter both title and description.",
     "errorSubmit": "An error occurred while submitting feedback. Please try again later."
+  },
+  "donate": {
+    "button": "Support Framezoo",
+    "badge": "A note from Framezoo",
+    "modalTitle": "Help us keep building Framezoo",
+    "subtitle": "Every contribution helps us improve the player, expand to more platforms, and keep listening to your ideas.",
+    "note": "Thank you for caring about Framezoo and supporting the work behind it. Your contribution gives us more room to build a better experience for everyone.",
+    "scanHint": "Scan this QR code with your banking app.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "MoMo",
+    "paypalImageAlt": "PayPal donation QR code",
+    "momoImageAlt": "MoMo donation QR code",
+    "viewQr": "View {{label}} QR code larger",
+    "close": "Close"
   },
   "toasts": {
     "linkCopied": "Link copied to clipboard!",

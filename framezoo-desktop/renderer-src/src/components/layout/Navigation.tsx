@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 import { NoUserAvatar, UserAvatar } from "@/components/Avatar";
+import { DonateFloatingButton } from "@/components/donate/DonateFloatingButton";
 import { LinksDropdown } from "@/components/LinksDropdown";
 import { Lightbar } from "@/components/utils/Lightbar";
 import { useAuth } from "@/hooks/auth/useAuth";
@@ -146,6 +147,7 @@ export function Navigation(props: NavigationProps) {
                       { WebkitAppRegion: "no-drag" } as React.CSSProperties
                     }
                   >
+                    <DonateFloatingButton />
                     <LinksDropdown>
                       {loggedIn ? <UserAvatar withName /> : <NoUserAvatar />}
                     </LinksDropdown>

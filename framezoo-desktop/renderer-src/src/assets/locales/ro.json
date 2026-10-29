@@ -258,14 +258,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Declinare a răspunderii",
-      "disclaimerText": "Framezoo oferă o experiență de divertisment sigură, modernă și perfectă. Cu interfața sa ușor de utilizat și biblioteca diversă de conținut, inclusiv suportul 4K HDR, utilizatorii se pot bucura de filmele și emisiunile TV preferate. Și prin angajamentul său față de securitate, Framezoo este alegerea supremă pentru o experiență de streaming de înaltă calitate, fără griji."
+      "disclaimerText": "Framezoo este un software neutru pentru playere media. Nu găzduiește, stochează, distribuie și controlează fișiere media sau suplimente terțe. Explorează metadate bogate pentru filme, sincronizare nelimitată a subtitrărilor în flux și subtitrări din mai multe surse, păstrând în același timp controlul asupra conținutului pe care îl accesezi."
     },
     "links": {
       "fluxer": "Fluxer",
       "funding": "Ajută-ne",
       "github": "GitHub"
     },
-    "tagline": "Un stream player securizat și modern pentru o experiență de vizionare perfectă și de înaltă calitate."
+    "tagline": "Streaming de mare viteză și fluid, cu metadate bogate pentru filme, sincronizare nelimitată a subtitrărilor și subtitrări din mai multe surse."
   },
   "global": {
     "keyboardShortcuts": {
@@ -1405,6 +1405,20 @@
     "successDesc": "Vă mulțumim pentru feedback. Echipa noastră va analiza și va rezolva problema cât mai curând posibil.",
     "errorRequired": "Vă rugăm să introduceți atât titlul, cât și descrierea.",
     "errorSubmit": "A apărut o eroare la trimiterea feedback-ului. Vă rugăm să încercați din nou mai târziu."
+  },
+  "donate": {
+    "button": "Suport Framezoo",
+    "badge": "O notă de la Framezoo",
+    "modalTitle": "Ajută-ne să continuăm să construim Framezoo",
+    "subtitle": "Fiecare contribuție ne ajută să îmbunătățim playerul, să ne extindem pe mai multe platforme și să fim atenți la ideile voastre.",
+    "note": "Îți mulțumim că îți pasă de Framezoo și că susții munca din spatele acesteia. Contribuția ta ne oferă mai mult spațiu pentru a construi o experiență mai bună pentru toată lumea.",
+    "scanHint": "Scanează acest cod QR cu aplicația ta bancară.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "Mamă",
+    "paypalImageAlt": "Cod QR pentru donații PayPal",
+    "momoImageAlt": "Cod QR pentru donații MoMo",
+    "viewQr": "Vizualizați codul QR {{label}} mai mare",
+    "close": "Aproape"
   },
   "toasts": {
     "linkCopied": "Link copiat în clipboard!",

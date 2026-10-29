@@ -199,5 +199,19 @@
     "showcaseSecondaryDescription": "Navega sen esforzo a través dunha interface elegante deseñada para pasar de descubrir a reprodución a alta velocidade en segundos.",
     "showcaseSecondaryAlt": "Pantalla de descubrimento do xogador de Framezoo con busca, categorías e filas de títulos",
     "showcaseSecondaryTitle": "Descubrimento suave e intuitivo."
+  },
+  "donate": {
+    "button": "Soporte Framezoo",
+    "badge": "Unha nota de Framezoo",
+    "note": "Grazas por preocuparse por Framezoo e apoiar o traballo detrás del. A túa contribución dános máis espazo para crear unha experiencia mellor para todos.",
+    "subtitle": "Cada contribución axúdanos a mellorar o reprodutor, a expandirnos a máis plataformas e a seguir escoitando as túas ideas.",
+    "modalTitle": "Axúdanos a seguir construíndo Framezoo",
+    "scanHint": "Escanee este código QR coa súa aplicación bancaria.",
+    "paypalImageAlt": "Código QR de donación de PayPal",
+    "momoLabel": "MoMo",
+    "paypalLabel": "PayPal",
+    "viewQr": "Ver código QR máis grande",
+    "close": "Quizais máis tarde",
+    "momoImageAlt": "Código QR de doazón MoMo"
   }
 }

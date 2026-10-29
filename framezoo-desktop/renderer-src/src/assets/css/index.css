@@ -15,6 +15,203 @@ body {
   scroll-behavior: smooth;
 }
 
+.donate-qr-frame {
+  display: grid;
+  min-height: 220px;
+  max-height: min(65dvh, 520px);
+  place-items: center;
+  padding: 0.55rem;
+  background: #fff;
+  border: 0;
+  border-radius: 11px;
+  cursor: zoom-in;
+  font: inherit;
+}
+
+.donate-qr-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: min(64dvh, 500px);
+  object-fit: contain;
+  object-position: center;
+}
+
+.donate-modal-card {
+  position: relative;
+  width: min(100%, 760px);
+  max-height: calc(100dvh - 2rem);
+  margin: 1rem;
+  overflow-y: auto;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  color: #fff8ee;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(228, 79, 79, 0.2), transparent 20rem),
+    linear-gradient(150deg, rgba(34, 20, 21, 0.98), rgba(15, 11, 12, 0.98));
+  border: 1px solid rgba(255, 225, 210, 0.18);
+  border-radius: 24px;
+  box-shadow:
+    0 28px 90px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.04);
+  animation: donate-modal-reveal 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes donate-modal-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.donate-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: grid;
+  width: 2.15rem;
+  height: 2.15rem;
+  place-items: center;
+  color: #b99f95;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.donate-modal-close:hover {
+  color: #fff8ee;
+  background: rgba(255, 255, 255, 0.16);
+  transform: rotate(8deg);
+}
+
+.donate-modal-heading {
+  max-width: 600px;
+  padding-right: 3rem;
+}
+
+.donate-modal-badge {
+  display: inline-flex;
+  padding: 0.32rem 0.68rem;
+  color: #fff599;
+  background: rgba(252, 236, 97, 0.1);
+  border: 1px solid rgba(252, 236, 97, 0.22);
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.donate-modal-heading h2 {
+  margin: 0.85rem 0 0;
+  color: #fff8ee;
+  font-size: clamp(1.6rem, 4vw, 2.25rem);
+  letter-spacing: -0.045em;
+  line-height: 1.04;
+}
+
+.donate-modal-heading p {
+  max-width: 58ch;
+  margin: 0.85rem 0 0;
+  color: #b99f95;
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+.donate-modal-note {
+  max-width: 68ch;
+  margin: 1.1rem 0 0;
+  padding: 0.8rem 0.95rem;
+  color: #f4d7cc;
+  background: rgba(228, 79, 79, 0.08);
+  border-left: 2px solid #e44f4f;
+  border-radius: 0 10px 10px 0;
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+.donate-modal-scan-hint {
+  margin: 1.1rem 0 0;
+  color: #b99f95;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.donate-modal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+  margin-top: 1.25rem;
+}
+
+.donate-modal-method {
+  min-width: 0;
+  margin: 0;
+  padding: 0.65rem;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 225, 210, 0.12);
+  border-radius: 16px;
+}
+
+.donate-modal-image-frame {
+  width: 100%;
+}
+
+.donate-modal-method-caption {
+  padding: 0.7rem 0.25rem 0.15rem;
+}
+
+.donate-modal-method-caption strong {
+  color: #fff8ee;
+  font-size: 0.86rem;
+}
+
+.donate-modal-dismiss {
+  display: block;
+  margin: 1.2rem 0 0 auto;
+  padding: 0.65rem 1rem;
+  color: #b99f95;
+  background: transparent;
+  border: 1px solid rgba(255, 225, 210, 0.14);
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 180ms ease, color 180ms ease;
+}
+
+.donate-modal-dismiss:hover {
+  color: #fff8ee;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.donate-modal-card button:focus-visible {
+  outline: 2px solid #fff599;
+  outline-offset: 3px;
+}
+
+@media (max-width: 560px) {
+  .donate-modal-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .donate-qr-frame {
+    min-height: 180px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .donate-modal-card {
+    animation: none;
+  }
+}
+
 html[data-full],
 html[data-full] body {
   overscroll-behavior-y: none;

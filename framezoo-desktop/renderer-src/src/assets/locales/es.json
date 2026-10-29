@@ -258,14 +258,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Descargo de responsabilidad",
-      "disclaimerText": "Framezoo ofrece una experiencia de entretenimiento segura, moderna y fluida. Con su interfaz fácil de usar y su diversa biblioteca de contenidos, incluida la compatibilidad con 4K HDR, los usuarios pueden disfrutar de sus películas y programas de televisión favoritos. Y con su compromiso con la seguridad, Framezoo es la mejor opción para una experiencia de transmisión de alta calidad y sin preocupaciones."
+      "disclaimerText": "Framezoo es un reproductor multimedia neutral. No aloja, almacena, distribuye ni controla archivos multimedia ni complementos de terceros. Explora metadatos detallados de películas, sincronización ilimitada de subtítulos y subtítulos de múltiples fuentes, manteniendo el control del contenido al que accedes."
     },
     "links": {
       "fluxer": "fluxor",
       "funding": "Apóyanos",
       "github": "GitHub"
     },
-    "tagline": "Un reproductor de streaming moderno y seguro para una experiencia visual fluida y de alta calidad."
+    "tagline": "Transmisión fluida y de alta velocidad con metadatos de película completos, sincronización ilimitada de subtítulos y subtítulos de múltiples fuentes."
   },
   "global": {
     "keyboardShortcuts": {
@@ -1405,6 +1405,20 @@
     "successDesc": "Gracias por sus comentarios. Nuestro equipo revisará y solucionará el problema lo antes posible.",
     "errorRequired": "Por favor, introduzca tanto el título como la descripción.",
     "errorSubmit": "Se produjo un error al enviar los comentarios. Inténtelo de nuevo más tarde."
+  },
+  "donate": {
+    "button": "Soporte Framezoo",
+    "badge": "Una nota de Framezoo",
+    "modalTitle": "Ayúdanos a seguir construyendo Framezoo",
+    "subtitle": "Cada contribución nos ayuda a mejorar el reproductor, expandirnos a más plataformas y seguir escuchando tus ideas.",
+    "note": "Gracias por preocuparte por Framezoo y apoyar el trabajo que hay detrás. Tu contribución nos da más margen para crear una mejor experiencia para todos.",
+    "scanHint": "Escanea este código QR con tu aplicación bancaria.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "Mamá",
+    "paypalImageAlt": "Código QR para donaciones por PayPal",
+    "momoImageAlt": "Código QR de donación de MoMo",
+    "viewQr": "Ver el código QR {{label}} en tamaño más grande",
+    "close": "Cerca"
   },
   "toasts": {
     "linkCopied": "¡Enlace copiado al portapapeles!",

@@ -22,6 +22,8 @@ from torrent_utils import (
     get_torrent_data_dir,
     get_torrent_info_trackers,
     merge_tracker_sources,
+    select_file,
+    write_atomic_resume_data,
 )
 
 
@@ -39,6 +41,7 @@ class TorrentRecord:
         cache_root: str,
         max_bytes: Optional[int],
         trackers: list[str],
+        initial_peers: Optional[Iterable[Tuple[str, int]]] = None,
     ) -> None:
         self.engine = engine
         self.key = key
@@ -65,6 +68,7 @@ class TorrentRecord:
                 trackers,
                 engine.peer_id,
                 engine.listen_port,
+                initial_peers=initial_peers,
             )
             if info_hash is not None
             else None
@@ -92,13 +96,48 @@ class TorrentRecord:
         if self.discovery is not None:
             self.discovery.add_trackers(trackers)
 
+    def pause_discovery(self) -> None:
+        if self.discovery is not None:
+            self.discovery.pause()
+
     def reactivate(self, session_id: str) -> None:
+        try:
+            status = self.handle.status()
+            if getattr(status, "paused", False):
+                self.handle.resume()
+        except Exception:
+            pass
         try:
             self.handle.resume()
         except Exception:
             pass
+        try:
+            self.handle.set_sequential_download(True)
+        except Exception:
+            pass
+        self.update_file_priorities()
         if self.discovery is None:
             return
+        if not self.discovery.thread.is_alive():
+            try:
+                info_hash = self.handle.info_hash()
+            except Exception:
+                info_hash = None
+            if info_hash is not None:
+                new_discovery = TorrentDiscovery(
+                    self.engine.session,
+                    self.handle,
+                    info_hash,
+                    self.discovery.trackers,
+                    self.engine.peer_id,
+                    self.engine.listen_port,
+                )
+                with self.discovery.lock:
+                    new_discovery.discovered_peers = set(
+                        self.discovery.discovered_peers,
+                    )
+                self.discovery = new_discovery
+                self.discovery.start()
         details = self.discovery.reactivate()
         try:
             info_hash = str(self.handle.info_hash())
@@ -168,21 +207,12 @@ class LibtorrentEngine:
         self.listen_address: Optional[str] = None
         self.listen_port = 6881
 
-        try:
-            root = get_torrent_data_dir()
-            enforce_storage_limit(root)
-        except Exception as error:
-            sys.stderr.write(
-                f"[sidecar] Initial storage cleanup error: {error}\n",
-            )
-
     def _network_settings(self) -> dict[str, Any]:
         address = get_local_ipv4()
         self.listen_address = address
         if address:
             return {
-                "listen_interfaces": f"{address}:49160-49170",
-                "outgoing_interfaces": address,
+                "listen_interfaces": f"{address}:49160-49170,127.0.0.1:49160-49170",
             }
         return {
             "listen_interfaces": "0.0.0.0:49160-49170",
@@ -369,10 +399,12 @@ class LibtorrentEngine:
             params = lt.add_torrent_params()
             params.ti = torrent_info
         params.save_path = save_path
+        initial_peers = []
 
         if resume_data:
             try:
                 resume_params = lt.read_resume_data(resume_data)
+                initial_peers = list(getattr(resume_params, "peers", []))
                 if torrent_info is not None and getattr(
                     resume_params,
                     "ti",
@@ -392,6 +424,23 @@ class LibtorrentEngine:
                         url_seeds.append(url_seed)
                 resume_params.url_seeds = url_seeds
                 resume_params.save_path = save_path
+                # Clear stale piece priorities so pieces are not held at 0/2/4/7 from a previous session.
+                try:
+                    resume_params.piece_priorities = []
+                except Exception:
+                    pass
+                # Ensure the selected file has STREAM_IDLE_FILE_PRIORITY (1) so libtorrent
+                # does not start with total_wanted == 0 (which triggers finished state and drops seeds).
+                if torrent_info is not None:
+                    try:
+                        file_index, _, _ = select_file(torrent_info, request)
+                        if file_index is not None:
+                            num_files = torrent_info.files().num_files()
+                            file_priors = [0] * num_files
+                            file_priors[file_index] = constants.STREAM_IDLE_FILE_PRIORITY
+                            resume_params.file_priorities = file_priors
+                    except Exception:
+                        pass
                 params = resume_params
                 resume_data_parsed = True
             except Exception as error:
@@ -494,6 +543,7 @@ class LibtorrentEngine:
                 trackers,
                 constants.DEFAULT_TRACKERS,
             ),
+            initial_peers=initial_peers,
         )
         with self.lock:
             self.records[key] = record
@@ -542,6 +592,8 @@ class LibtorrentEngine:
                     self.session_records[session_id] = record_key
                 if record_was_idle:
                     record.reactivate(session_id)
+                else:
+                    record.update_file_priorities()
                 runtime.start()
                 discovery_snapshot = record.snapshot()
                 log_event(
@@ -665,17 +717,7 @@ class LibtorrentEngine:
     def _save_record_resume_data(self, record: TorrentRecord) -> bool:
         if not record.persistent_cache or not record.cache_ready:
             return False
-        try:
-            data = lt.bencode(record.handle.write_resume_data())
-            with open(
-                os.path.join(record.save_path, "resume.dat"),
-                "wb",
-            ) as file:
-                file.write(data)
-            return True
-        except Exception as error:
-            sys.stderr.write(f"[sidecar] Failed to save resume data: {error}\n")
-            return False
+        return write_atomic_resume_data(record.handle, record.save_path)
 
     def stop(self, session_id: str) -> None:
         with self._start_lock:
@@ -685,18 +727,19 @@ class LibtorrentEngine:
                 record = self.records.get(record_key) if record_key else None
             if runtime is None:
                 return
+            if record is not None:
+                # Demote active boosted pieces back to STREAM_IDLE_FILE_PRIORITY
+                # before saving resume data so pieces are not saved at 0/2/4/7.
+                runtime.release_playback_schedule()
             runtime.stop(remove_torrent=False)
             if record is not None:
                 is_empty = record.remove_session(session_id)
-                if is_empty:
-                    runtime.release_playback_schedule()
-                    record.stop_discovery()
-                    try:
-                        record.handle.pause()
-                    except Exception:
-                        pass
+                # Keep active peer connections warm during the grace period by setting
+                # file priorities to 0 (idle) rather than calling record.handle.pause()
+                # which abruptly drops all TCP/uTP sockets in the swarm.
                 record.update_file_priorities()
                 if is_empty:
+                    record.pause_discovery()
                     self._save_record_resume_data(record)
                     self._schedule_record_removal(record.key)
 

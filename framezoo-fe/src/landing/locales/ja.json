@@ -199,5 +199,19 @@
     "showcaseTitle": "再生を押す前に豊富なメタデータを表示します。",
     "showcaseSecondaryDescription": "発見から高速再生まで数秒で完了できるように設計された洗練されたインターフェイスを通じて、簡単にブラウジングできます。",
     "showcaseSecondaryAlt": "検索、カテゴリ、タイトル行を備えた Framezoo プレーヤー検出画面"
+  },
+  "donate": {
+    "note": "Framezoo を気にかけていただき、その背後にある取り組みをサポートしていただきありがとうございます。あなたの貢献により、すべての人にとってより良いエクスペリエンスを構築する余地がさらに広がります。",
+    "subtitle": "あらゆる貢献は、プレーヤーを改善し、より多くのプラットフォームに拡張し、あなたのアイデアに耳を傾け続けるのに役立ちます。",
+    "paypalLabel": "ペイパル",
+    "momoLabel": "モモ",
+    "button": "サポートフレームズー",
+    "momoImageAlt": "MoMo寄付QRコード",
+    "paypalImageAlt": "PayPal寄付QRコード",
+    "badge": "Framezoo からのメモ",
+    "close": "たぶん後で",
+    "scanHint": "銀行アプリでこの QR コードをスキャンします。",
+    "viewQr": "QRコードを拡大して見る",
+    "modalTitle": "Framezoo の構築にご協力ください"
   }
 }

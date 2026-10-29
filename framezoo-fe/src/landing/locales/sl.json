@@ -199,5 +199,19 @@
     "showcaseSecondaryTitle": "Gladko, intuitivno odkrivanje.",
     "showcaseDescription": "Odprite kateri koli naslov, da raziščete plakate, ocene, sinopsise, sezone in podrobnosti o igralskih zasedbah v enem čistem, intuitivnem pogledu.",
     "showcaseSecondaryAlt": "Zaslon za odkrivanje predvajalnika Framezoo z vrsticami za iskanje, kategorije in naslove"
+  },
+  "donate": {
+    "button": "Podprite Framezoo",
+    "paypalLabel": "PayPal",
+    "badge": "Opomba iz Framezoo",
+    "subtitle": "Vsak prispevek nam pomaga izboljšati predvajalnik, razširiti na več platform in še naprej poslušati vaše zamisli.",
+    "note": "Hvala, ker vam je mar za Framezoo in podpirate delo, ki stoji za njim. Vaš prispevek nam daje več prostora za ustvarjanje boljše izkušnje za vse.",
+    "modalTitle": "Pomagajte nam še naprej graditi Framezoo",
+    "scanHint": "Skenirajte to kodo QR s svojo bančno aplikacijo.",
+    "momoImageAlt": "Koda QR donacije MoMo",
+    "momoLabel": "MoMo",
+    "close": "Mogoče kasneje",
+    "paypalImageAlt": "QR koda donacije PayPal",
+    "viewQr": "Oglejte si povečano kodo QR"
   }
 }

@@ -258,14 +258,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Aviso legal",
-      "disclaimerText": "Framezoo oferece uma experiência de entretenimento segura, moderna e perfeita. Com sua interface fácil de usar e biblioteca de conteúdo diversificada, incluindo suporte 4K HDR, os usuários podem desfrutar de seus filmes e programas de TV favoritos. E com seu compromisso com a segurança, o Framezoo é a melhor escolha para uma experiência de streaming de alta qualidade e sem preocupações."
+      "disclaimerText": "Framezoo é um software reprodutor de mídia neutro. Ele não hospeda, armazena, distribui ou controla arquivos de mídia ou complementos de terceiros. Explore metadados de filmes completos, sincronização ilimitada de legendas em streaming e legendas de múltiplas fontes, mantendo o controle do conteúdo que você acessa."
     },
     "links": {
       "fluxer": "Fluxador",
       "funding": "Contribui",
       "github": "GitHub"
     },
-    "tagline": "Um reprodutor de stream moderno e seguro para uma experiência de visualização perfeita e de alta qualidade."
+    "tagline": "Streaming rápido e fluido com metadados completos de filmes, sincronização ilimitada de legendas e legendas de múltiplas fontes."
   },
   "global": {
     "keyboardShortcuts": {
@@ -1405,6 +1405,20 @@
     "successDesc": "Agradecemos seu feedback. Nossa equipe analisará e resolverá o problema o mais breve possível.",
     "errorRequired": "Por favor, insira o título e a descrição.",
     "errorSubmit": "Ocorreu um erro ao enviar o feedback. Tente novamente mais tarde."
+  },
+  "donate": {
+    "button": "Suporte __MARCA_0__",
+    "badge": "Uma nota da __MARCA_0__",
+    "modalTitle": "Ajude-nos a continuar construindo a Framezoo",
+    "subtitle": "Cada contribuição nos ajuda a aprimorar o player, expandir para mais plataformas e continuar ouvindo suas ideias.",
+    "note": "Obrigado por se importar com a Framezoo e apoiar o trabalho por trás dela. Sua contribuição nos dá mais espaço para construir uma experiência melhor para todos.",
+    "scanHint": "Escaneie este código QR com o aplicativo do seu banco.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "Mãe",
+    "paypalImageAlt": "Código QR para doação via PayPal",
+    "momoImageAlt": "Código QR para doações da MoMo",
+    "viewQr": "Visualizar o código QR {{label}} em tamanho maior",
+    "close": "Fechar"
   },
   "toasts": {
     "linkCopied": "Link copiado para a área de transferência!",

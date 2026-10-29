@@ -258,14 +258,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Descargo de responsabilidade",
-      "disclaimerText": "Framezoo ofrece unha experiencia de entretemento segura, moderna e sen problemas. Coa súa interface fácil de usar e a súa biblioteca de contido diversa, incluíndo compatibilidade con 4K HDR, os usuarios poden gozar das súas películas e programas de televisión favoritos. E co seu compromiso coa seguridade, Framezoo é a opción definitiva para unha experiencia de streaming de alta calidade sen preocupacións."
+      "disclaimerText": "Framezoo é un software de reprodutor multimedia neutral. Non aloxa, almacena, distribúe nin controla ficheiros multimedia nin complementos de terceiros. Explora metadatos enriquecidos de películas, sincronización ilimitada de subtítulos en streaming e subtítulos de múltiples fontes, mantendo o control do contido ao que accedes."
     },
     "links": {
       "fluxer": "Fluxador",
       "funding": "Acompáñanos",
       "github": "GitHub"
     },
-    "tagline": "Un reprodutor de emisións moderno e seguro para unha experiencia de visualización perfecta e de alta calidade."
+    "tagline": "Transmisión fluída e de alta velocidade con metadatos de películas enriquecidos, sincronización de subtítulos de transmisión ilimitada e subtítulos de múltiples fontes."
   },
   "global": {
     "keyboardShortcuts": {
@@ -1405,6 +1405,20 @@
     "successDesc": "Grazas polos teus comentarios. O noso equipo revisará e solucionará o problema canto antes.",
     "errorRequired": "Introduza tanto o título como a descrición.",
     "errorSubmit": "Produciuse un erro ao enviar os comentarios. Téntao de novo máis tarde."
+  },
+  "donate": {
+    "button": "Apoio a Framezoo",
+    "badge": "Unha nota de Framezoo",
+    "modalTitle": "Axúdanos a seguir construíndo Framezoo",
+    "subtitle": "Cada contribución axúdanos a mellorar o reprodutor, a expandirnos a máis plataformas e a seguir escoitando as túas ideas.",
+    "note": "Grazas por preocuparte por Framezoo e apoiar o traballo que hai detrás. A túa contribución dános máis espazo para construír unha mellor experiencia para todos.",
+    "scanHint": "Escanea este código QR coa túa aplicación bancaria.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "Mamá",
+    "paypalImageAlt": "Código QR de doazón de PayPal",
+    "momoImageAlt": "Código QR de doazón de MoMo",
+    "viewQr": "Ver o código QR {{label}} máis grande",
+    "close": "Pechar"
   },
   "toasts": {
     "linkCopied": "A ligazón copiouse no portapapeis!",

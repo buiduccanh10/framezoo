@@ -258,14 +258,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Sorumluluk Reddi",
-      "disclaimerText": "Framezoo güvenli, modern ve kusursuz bir eğlence deneyimi sunar. Kullanımı kolay arayüzü ve 4K HDR desteği de dahil olmak üzere zengin içerik kütüphanesi ile kullanıcılar en sevdikleri film ve dizilerin keyfini çıkarabiliyor. Güvenlik taahhüdüyle Framezoo, sorunsuz, yüksek kaliteli bir yayın deneyimi için en iyi seçimdir."
+      "disclaimerText": "Framezoo tarafsız bir medya oynatıcı yazılımıdır. Medya dosyalarını veya üçüncü taraf eklentilerini barındırmaz, depolamaz, dağıtmaz veya kontrol etmez. Zengin film meta verilerini, sınırsız akış altyazı senkronizasyonunu ve birden fazla kaynaktan altyazıları keşfederken, eriştiğiniz içeriğin kontrolünü elinizde tutun."
     },
     "links": {
       "fluxer": "Fluxer",
       "funding": "Bizi destekleyin",
       "github": "GitHub"
     },
-    "tagline": "Sorunsuz, yüksek kaliteli bir izleme deneyimi için güvenli, modern bir yayın oynatıcısı."
+    "tagline": "Zengin film meta verileriyle yüksek hızlı, sorunsuz yayın akışı, sınırsız yayın altyazı senkronizasyonu ve birden fazla kaynaktan altyazı desteği."
   },
   "global": {
     "keyboardShortcuts": {
@@ -1405,6 +1405,20 @@
     "successDesc": "Geri bildiriminiz için teşekkür ederiz. Ekibimiz sorunu en kısa sürede inceleyip çözecektir.",
     "errorRequired": "Lütfen hem başlığı hem de açıklamayı girin.",
     "errorSubmit": "Geri bildirim gönderilirken bir hata oluştu. Lütfen daha sonra tekrar deneyin."
+  },
+  "donate": {
+    "button": "Destek Framezoo",
+    "badge": "Framezoo&#39;dan bir not",
+    "modalTitle": "BRAND_0__ markasını geliştirmeye devam etmemize yardımcı olun.",
+    "subtitle": "Her katkı, oynatıcıyı geliştirmemize, daha fazla platforma yayılmamıza ve fikirlerinizi dinlemeye devam etmemize yardımcı oluyor.",
+    "note": "Framezoo&#39;a önem verdiğiniz ve arkasındaki çalışmaları desteklediğiniz için teşekkür ederiz. Katkınız, herkes için daha iyi bir deneyim oluşturmamıza daha fazla olanak sağlıyor.",
+    "scanHint": "Bankacılık uygulamanızla bu QR kodunu tarayın.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "Anne",
+    "paypalImageAlt": "PayPal bağış QR kodu",
+    "momoImageAlt": "MoMo bağış QR kodu",
+    "viewQr": "{{label}} QR kodunu daha büyük görüntüle",
+    "close": "Kapalı"
   },
   "toasts": {
     "linkCopied": "Bağlantı panoya kopyalandı!",

@@ -199,5 +199,19 @@
     "showcaseSecondaryTitle": "Hladké, intuitivní objevování.",
     "showcaseSecondaryDescription": "Procházejte bez námahy prostřednictvím elegantního rozhraní navrženého tak, aby vás dostalo od objevu k vysokorychlostnímu přehrávání během několika sekund.",
     "showcaseSecondaryAlt": "Obrazovka objevování přehrávače Framezoo s vyhledáváním, kategoriemi a řádky titulků"
+  },
+  "donate": {
+    "subtitle": "Každý příspěvek nám pomáhá zlepšovat přehrávač, rozšiřovat se na více platforem a neustále naslouchat vašim nápadům.",
+    "paypalLabel": "PayPal",
+    "note": "Děkujeme, že vám na Framezoo záleží a podporujete práci, která za ním stojí. Váš příspěvek nám dává více prostoru pro vytváření lepšího prostředí pro všechny.",
+    "modalTitle": "Pomozte nám pokračovat v budování Framezoo",
+    "scanHint": "Naskenujte tento QR kód pomocí své bankovní aplikace.",
+    "button": "Podpora Framezoo",
+    "badge": "Poznámka od Framezoo",
+    "close": "Možná později",
+    "momoImageAlt": "QR kód dárcovství MoMo",
+    "paypalImageAlt": "Dárcovský QR kód PayPal",
+    "momoLabel": "MoMo",
+    "viewQr": "Zobrazit větší QR kód"
   }
 }

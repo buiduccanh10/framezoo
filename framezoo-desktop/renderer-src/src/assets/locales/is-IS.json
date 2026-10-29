@@ -258,14 +258,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Fyrirvari",
-      "disclaimerText": "Framezoo býður upp á örugga, nútímalega og óaðfinnanlega afþreyingarupplifun. Með auðveldu viðmóti og fjölbreyttu efnissafni, þar á meðal 4K HDR stuðningi, geta notendur notið uppáhaldskvikmynda sinna og sjónvarpsþátta. Og með skuldbindingu sinni um öryggi er Framezoo fullkominn kostur fyrir áhyggjulausa, hágæða streymisupplifun."
+      "disclaimerText": "Framezoo er hlutlaus hugbúnaður fyrir margmiðlunarspilun. Hann hýsir ekki, geymir, dreifir eða stjórnar margmiðlunarskrám eða viðbótum frá þriðja aðila. Skoðaðu fjölbreytt lýsigögn kvikmynda, ótakmarkaða samstillingu texta og texta frá mörgum aðilum og haltu stjórn á efninu sem þú nálgast."
     },
     "links": {
       "fluxer": "Fluxer",
       "funding": "Styðjið okkur",
       "github": "GitHub"
     },
-    "tagline": "Öruggur, nútímalegur straumspilari fyrir óaðfinnanlega, hágæða útsýnisupplifun."
+    "tagline": "Hraðvirk og mjúk streymi með ríkulegum lýsigögnum kvikmynda, ótakmarkaðri samstillingu texta og textum úr mörgum áttum."
   },
   "global": {
     "keyboardShortcuts": {
@@ -1405,6 +1405,20 @@
     "successDesc": "Þakka þér fyrir ábendinguna. Teymið okkar mun fara yfir málið og leysa það eins fljótt og auðið er.",
     "errorRequired": "Vinsamlegast sláðu inn bæði titil og lýsingu.",
     "errorSubmit": "Villa kom upp við að senda inn ábendingu. Reyndu aftur síðar."
+  },
+  "donate": {
+    "button": "Styðjið Framezoo",
+    "badge": "Athugasemd frá Framezoo",
+    "modalTitle": "Hjálpaðu okkur að halda áfram að byggja upp Framezoo",
+    "subtitle": "Sérhvert framlag hjálpar okkur að bæta spilara, stækka hann á fleiri vettvanga og halda áfram að hlusta á hugmyndir ykkar.",
+    "note": "Þakka þér fyrir að láta þig varða Framezoo og styðja vinnuna sem liggur að baki því. Framlag þitt gefur okkur meira svigrúm til að byggja upp betri upplifun fyrir alla.",
+    "scanHint": "Skannaðu þennan QR kóða með bankaforritinu þínu.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "Mamma",
+    "paypalImageAlt": "QR kóði fyrir PayPal-framlög",
+    "momoImageAlt": "QR kóði fyrir framlög frá MoMo",
+    "viewQr": "Skoða {{label}} QR kóða stærra",
+    "close": "Loka"
   },
   "toasts": {
     "linkCopied": "Tengill afritaður á klippiborð!",

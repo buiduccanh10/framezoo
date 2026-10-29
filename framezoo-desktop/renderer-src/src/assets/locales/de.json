@@ -258,14 +258,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Hinweis",
-      "disclaimerText": "Framezoo bietet ein sicheres, modernes und nahtloses Unterhaltungserlebnis. Mit seiner benutzerfreundlichen Oberfläche und der vielfältigen Inhaltsbibliothek, einschließlich 4K HDR-Unterstützung, können Benutzer ihre Lieblingsfilme und Fernsehsendungen genießen. Und mit seinem Engagement für Sicherheit ist Framezoo die ultimative Wahl für ein sorgenfreies Streaming-Erlebnis in hoher Qualität."
+      "disclaimerText": "Framezoo ist eine neutrale Mediaplayer-Software. Sie hostet, speichert, verteilt oder kontrolliert weder Mediendateien noch Add-ons von Drittanbietern. Entdecken Sie umfangreiche Filmmetadaten, unbegrenzte Untertitelsynchronisierung und Untertitel aus verschiedenen Quellen und behalten Sie dabei die Kontrolle über die abgerufenen Inhalte."
     },
     "links": {
       "fluxer": "Fluxer",
       "funding": "Unterstütze uns",
       "github": "GitHub"
     },
-    "tagline": "Ein sicherer, moderner Stream-Player für ein nahtloses, hochwertiges Seherlebnis."
+    "tagline": "Schnelles, flüssiges Streaming mit umfangreichen Filmmetadaten, unbegrenzter Untertitelsynchronisation und Untertiteln aus mehreren Quellen."
   },
   "global": {
     "keyboardShortcuts": {
@@ -1405,6 +1405,20 @@
     "successDesc": "Vielen Dank für Ihr Feedback. Unser Team wird das Problem schnellstmöglich prüfen und beheben.",
     "errorRequired": "Bitte geben Sie sowohl einen Titel als auch eine Beschreibung ein.",
     "errorSubmit": "Beim Absenden des Feedbacks ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut."
+  },
+  "donate": {
+    "button": "Unterstützung für Framezoo",
+    "badge": "Eine Notiz von Framezoo",
+    "modalTitle": "Hilf uns, die Marke Framezoo weiter auszubauen.",
+    "subtitle": "Jeder Beitrag hilft uns, den Player zu verbessern, auf weitere Plattformen zu expandieren und weiterhin auf Ihre Ideen einzugehen.",
+    "note": "Vielen Dank, dass Sie sich für Framezoo interessieren und die dahinterstehende Arbeit unterstützen. Ihr Beitrag ermöglicht es uns, ein noch besseres Erlebnis für alle zu schaffen.",
+    "scanHint": "Scannen Sie diesen QR-Code mit Ihrer Banking-App.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "Mama",
+    "paypalImageAlt": "PayPal-Spenden-QR-Code",
+    "momoImageAlt": "MoMo-Spenden-QR-Code",
+    "viewQr": "QR-Code {{label}} vergrößern",
+    "close": "Schließen"
   },
   "toasts": {
     "linkCopied": "Link in die Zwischenablage kopiert!",

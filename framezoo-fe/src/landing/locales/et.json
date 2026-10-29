@@ -199,5 +199,19 @@
     "showcaseDescription": "Avage mis tahes pealkiri, et uurida plakateid, hinnanguid, kokkuvõtteid, hooaegu ja esitada üksikasju ühes puhtas ja intuitiivses vaates.",
     "showcaseSecondaryTitle": "Sujuv, intuitiivne avastus.",
     "showcaseSecondaryAlt": "Framezoo mängija avastamise ekraan otsingu, kategooriate ja tiitliridadega"
+  },
+  "donate": {
+    "badge": "Märkus Framezoolt",
+    "button": "Toetage Framezoo",
+    "note": "Täname, et hoolite Framezoost ja toetate selle taga olevat tööd. Teie panus annab meile rohkem ruumi kõigi jaoks parema kogemuse loomiseks.",
+    "subtitle": "Iga panus aitab meil mängijat täiustada, laieneda rohkematele platvormidele ja teie ideid kuulata.",
+    "modalTitle": "Aidake meil Framezoo ehitamist jätkata",
+    "scanHint": "Skannige see QR-kood oma pangarakendusega.",
+    "close": "Võib-olla hiljem",
+    "paypalLabel": "PayPal",
+    "viewQr": "Vaadake QR-koodi suuremalt",
+    "momoLabel": "MoMo",
+    "momoImageAlt": "MoMo annetuse QR-kood",
+    "paypalImageAlt": "PayPali annetuse QR-kood"
   }
 }

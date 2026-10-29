@@ -199,5 +199,19 @@
     "showcaseSecondaryDescription": "Könnyedén böngészhet a karcsú felületen, amelyet úgy terveztek, hogy másodpercek alatt eljuthasson a felfedezéstől a nagy sebességű lejátszásig.",
     "showcaseSecondaryAlt": "Framezoo lejátszó felfedező képernyő kereséssel, kategóriákkal és címsorokkal",
     "showcaseSecondaryTitle": "Sima, intuitív felfedezés."
+  },
+  "donate": {
+    "subtitle": "Minden hozzájárulás segít nekünk fejleszteni a lejátszót, további platformokra terjeszkedni, és folyamatosan figyelni az Ön ötleteit.",
+    "note": "Köszönjük, hogy törődik a Framezoo-val, és támogatja a mögötte végzett munkát. Hozzájárulása több teret biztosít számunkra, hogy jobb élményt építsünk mindenki számára.",
+    "momoLabel": "MoMo",
+    "badge": "Jegyzet a Framezoo-tól",
+    "button": "Támogassa a Framezoo-t",
+    "scanHint": "Olvassa be ezt a QR-kódot a banki alkalmazással.",
+    "modalTitle": "Segítsen nekünk a Framezoo felépítésében",
+    "paypalLabel": "PayPal",
+    "paypalImageAlt": "PayPal adomány QR-kód",
+    "momoImageAlt": "MoMo adomány QR-kód",
+    "close": "Talán később",
+    "viewQr": "A QR-kód megtekintése nagyobb méretben"
   }
 }

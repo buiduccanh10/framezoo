@@ -199,5 +199,19 @@
     "showcaseSecondaryDescription": "Blader moeiteloos door een gestroomlijnde interface die is ontworpen om u binnen enkele seconden van ontdekking naar afspelen op hoge snelheid te brengen.",
     "showcasePrimaryAlt": "Framezoo-titeldetailscherm met artwork, beoordelingen, seizoenen en rijke filmmetadata",
     "showcaseSecondaryAlt": "Framezoo speler-ontdekkingsscherm met zoek-, categorieën- en titelrijen"
+  },
+  "donate": {
+    "badge": "Een opmerking van Framezoo",
+    "button": "Ondersteuning Framezoo",
+    "paypalLabel": "PayPal",
+    "momoLabel": "MoMo",
+    "subtitle": "Elke bijdrage helpt ons de speler te verbeteren, uit te breiden naar meer platforms en naar uw ideeën te blijven luisteren.",
+    "modalTitle": "Help ons Framezoo verder te bouwen",
+    "close": "Misschien later",
+    "note": "Bedankt dat u om Framezoo geeft en het werk erachter steunt. Jouw bijdrage geeft ons meer ruimte om een ​​betere ervaring voor iedereen op te bouwen.",
+    "paypalImageAlt": "QR-code voor PayPal-donatie",
+    "momoImageAlt": "MoMo donatie QR-code",
+    "scanHint": "Scan deze QR-code met uw bankapp.",
+    "viewQr": "Bekijk QR-code groter"
   }
 }

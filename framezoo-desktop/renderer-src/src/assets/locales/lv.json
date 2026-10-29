@@ -258,14 +258,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Atruna",
-      "disclaimerText": "Framezoo piedāvā drošu, modernu un nevainojamu izklaides pieredzi. Izmantojot tā ērti lietojamo saskarni un daudzveidīgo satura bibliotēku, tostarp 4K HDR atbalstu, lietotāji var baudīt savas iecienītākās filmas un TV pārraides. Un ar savu apņemšanos nodrošināt drošību, Framezoo ir labākā izvēle bezrūpīgai augstas kvalitātes straumēšanas pieredzei."
+      "disclaimerText": "Framezoo ir neitrāla multivides atskaņotāja programmatūra. Tā nemitina, neuzglabā, neizplata un nekontrolē multivides failus vai trešo pušu pievienojumprogrammas. Izpētiet bagātīgus filmu metadatus, neierobežotu subtitru straumēšanas sinhronizāciju un subtitrus no vairākiem avotiem, vienlaikus saglabājot kontroli pār saturu, kuram piekļūstat."
     },
     "links": {
       "fluxer": "Fluxer",
       "funding": "Atbalstiet mūs",
       "github": "GitHub"
     },
-    "tagline": "Drošs, moderns straumēšanas atskaņotājs nevainojamai augstas kvalitātes skatīšanās pieredzei."
+    "tagline": "Lielātruma, vienmērīga straumēšana ar bagātīgiem filmu metadatiem, neierobežotu subtitru sinhronizāciju un subtitriem no vairākiem avotiem."
   },
   "global": {
     "keyboardShortcuts": {
@@ -1405,6 +1405,20 @@
     "successDesc": "Paldies par jūsu atsauksmi. Mūsu komanda pārskatīs un risinās šo problēmu, cik drīz vien iespējams.",
     "errorRequired": "Lūdzu, ievadiet gan nosaukumu, gan aprakstu.",
     "errorSubmit": "Iesniedzot atsauksmi, radās kļūda. Lūdzu, mēģiniet vēlreiz vēlāk."
+  },
+  "donate": {
+    "button": "Atbalsts Framezoo",
+    "badge": "Piezīme no Framezoo",
+    "modalTitle": "Palīdziet mums turpināt veidot Framezoo",
+    "subtitle": "Katrs ieguldījums palīdz mums uzlabot atskaņotāju, paplašināties uz vairāk platformām un uzklausīt jūsu idejas.",
+    "note": "Paldies, ka rūpējaties par Framezoo un atbalstāt tā pamatā esošo darbu. Jūsu ieguldījums dod mums vairāk iespēju veidot labāku pieredzi ikvienam.",
+    "scanHint": "Noskenējiet šo QR kodu, izmantojot savu bankas lietotni.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "Mamma",
+    "paypalImageAlt": "PayPal ziedojumu QR kods",
+    "momoImageAlt": "MoMo ziedojuma QR kods",
+    "viewQr": "Skatīt {{label}} QR kodu lielāku",
+    "close": "Aizvērt"
   },
   "toasts": {
     "linkCopied": "Saite ir kopēta starpliktuvē!",

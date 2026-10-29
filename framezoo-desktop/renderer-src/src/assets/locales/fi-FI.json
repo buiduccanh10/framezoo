@@ -258,14 +258,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Vastuuvapauslauseke",
-      "disclaimerText": "Framezoo tarjoaa turvallisen, modernin ja saumattoman viihdekokemuksen. Helppokäyttöisen käyttöliittymän ja monipuolisen sisältökirjaston, mukaan lukien 4K HDR -tuen, ansiosta käyttäjät voivat nauttia suosikkielokuvistaan ​​ja TV-ohjelmistaan. Ja sitoutumisensa turvallisuuteen Framezoo on täydellinen valinta huolettomaan, laadukkaaseen suoratoistokokemukseen."
+      "disclaimerText": "Framezoo on neutraali mediasoitinohjelmisto. Se ei isännöi, tallenna, jaa tai hallinnoi mediatiedostoja tai kolmansien osapuolten lisäosia. Tutustu monipuoliseen elokuvien metadataan, rajoittamattomaan tekstitysten synkronointiin ja tekstityksiin useista lähteistä säilyttäen samalla hallinnan käyttämästäsi sisällöstä."
     },
     "links": {
       "fluxer": "Fluxer",
       "funding": "Tue meitä",
       "github": "GitHub"
     },
-    "tagline": "Suojattu, moderni suoratoistosoitin saumattomaan ja laadukkaaseen katselukokemukseen."
+    "tagline": "Nopea ja sujuva suoratoisto rikkailla elokuvametatiedoilla, rajoittamattomalla tekstitysten synkronoinnilla ja tekstityksillä useista lähteistä."
   },
   "global": {
     "keyboardShortcuts": {
@@ -1405,6 +1405,20 @@
     "successDesc": "Kiitos palautteestasi. Tiimimme tarkistaa ja korjaa ongelman mahdollisimman pian.",
     "errorRequired": "Anna sekä otsikko että kuvaus.",
     "errorSubmit": "Palautteen lähettämisessä tapahtui virhe. Yritä myöhemmin uudelleen."
+  },
+  "donate": {
+    "button": "Tuki Framezoo:lle",
+    "badge": "Viesti käyttäjältä Framezoo",
+    "modalTitle": "Auta meitä jatkamaan Framezoo:n rakentamista",
+    "subtitle": "Jokainen panos auttaa meitä parantamaan soitinta, laajentamaan sitä useammille alustoille ja kuuntelemaan ideoitasi.",
+    "note": "Kiitos, että välität Framezoo -brändistä ja tuet sen taustalla olevaa työtä. Panoksesi antaa meille enemmän tilaa rakentaa parempi kokemus kaikille.",
+    "scanHint": "Skannaa tämä QR-koodi pankkisovelluksellasi.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "Äiti",
+    "paypalImageAlt": "PayPal-lahjoituksen QR-koodi",
+    "momoImageAlt": "MoMo-lahjoituksen QR-koodi",
+    "viewQr": "Näytä {{label}} QR-koodi suurempana",
+    "close": "Lähellä"
   },
   "toasts": {
     "linkCopied": "Linkki kopioitu leikepöydälle!",

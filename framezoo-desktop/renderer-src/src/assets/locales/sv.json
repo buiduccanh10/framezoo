@@ -258,14 +258,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Friskriver sig från ansvar",
-      "disclaimerText": "Framezoo erbjuder en säker, modern och sömlös underhållningsupplevelse. Med sitt lättanvända gränssnitt och mångsidiga innehållsbibliotek, inklusive 4K HDR-stöd, kan användare njuta av sina favoritfilmer och TV-program. Och med sitt engagemang för säkerhet är Framezoo det ultimata valet för en bekymmersfri streamingupplevelse av hög kvalitet."
+      "disclaimerText": "Framezoo är en neutral mediaspelare. Den varken lagrar, distribuerar eller kontrollerar mediefiler eller tredjepartstillägg. Utforska omfattande filmmetadata, obegränsad synkronisering av undertexter och undertexter från flera källor samtidigt som du behåller kontrollen över innehållet du får åtkomst till."
     },
     "links": {
       "fluxer": "Fluxer",
       "funding": "Stöd oss",
       "github": "GitHub"
     },
-    "tagline": "En säker, modern stream-spelare för en sömlös, högkvalitativ tittarupplevelse."
+    "tagline": "Höghastighets, smidig streaming med omfattande filmmetadata, obegränsad synkronisering av undertexter och undertexter från flera källor."
   },
   "global": {
     "keyboardShortcuts": {
@@ -1405,6 +1405,20 @@
     "successDesc": "Tack för din feedback. Vårt team kommer att granska och åtgärda problemet så snart som möjligt.",
     "errorRequired": "Vänligen ange både titel och beskrivning.",
     "errorSubmit": "Ett fel uppstod när feedbacken skickades. Försök igen senare."
+  },
+  "donate": {
+    "button": "Stöd Framezoo",
+    "badge": "En anteckning från Framezoo",
+    "modalTitle": "Hjälp oss att fortsätta bygga Framezoo",
+    "subtitle": "Varje bidrag hjälper oss att förbättra spelaren, expandera till fler plattformar och fortsätta lyssna på era idéer.",
+    "note": "Tack för att du bryr dig om Framezoo och stöder arbetet bakom det. Ditt bidrag ger oss mer utrymme att bygga en bättre upplevelse för alla.",
+    "scanHint": "Skanna den här QR-koden med din bankapp.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "Mamma",
+    "paypalImageAlt": "PayPal-donations-QR-kod",
+    "momoImageAlt": "MoMo-donations-QR-kod",
+    "viewQr": "Visa {{label}} QR-kod större",
+    "close": "Nära"
   },
   "toasts": {
     "linkCopied": "Länken har kopierats till urklipp!",

@@ -258,14 +258,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Figyelmeztetés",
-      "disclaimerText": "A Framezoo biztonságos, modern és zökkenőmentes szórakozási élményt kínál. Könnyen használható kezelőfelületének és sokrétű tartalomkönyvtárának köszönhetően, beleértve a 4K HDR támogatást is, a felhasználók élvezhetik kedvenc filmeiket és tévéműsoraikat. A biztonság iránti elkötelezettségével a Framezoo a tökéletes választás a gondtalan, kiváló minőségű streaming élményhez."
+      "disclaimerText": "A Framezoo egy semleges médialejátszó szoftver. Nem tárol, nem terjeszt és nem kezel médiafájlokat vagy harmadik féltől származó kiegészítőket. Fedezze fel a gazdag film metaadatokat, a korlátlan felirat-szinkronizációt és a feliratokat több forrásból, miközben megtartja az Ön által elért tartalom feletti irányítást."
     },
     "links": {
       "fluxer": "Fluxer",
       "funding": "Támogass minket",
       "github": "GitHub"
     },
-    "tagline": "Biztonságos, modern streamlejátszó a zökkenőmentes, kiváló minőségű megtekintési élményért."
+    "tagline": "Nagy sebességű, gördülékeny streamelés gazdag film metaadatokkal, korlátlan feliratszinkronizációval és feliratokkal több forrásból."
   },
   "global": {
     "keyboardShortcuts": {
@@ -1405,6 +1405,20 @@
     "successDesc": "Köszönjük visszajelzését. Csapatunk a lehető leghamarabb megvizsgálja és megoldja a problémát.",
     "errorRequired": "Kérjük, adja meg a címet és a leírást is.",
     "errorSubmit": "Hiba történt a visszajelzés elküldése során. Kérjük, próbálja meg később."
+  },
+  "donate": {
+    "button": "Támogatás Framezoo",
+    "badge": "Egy üzenet a Framezoo-tól",
+    "modalTitle": "Segíts nekünk tovább építeni a Framezoo márkát",
+    "subtitle": "Minden hozzájárulás segít nekünk fejleszteni a lejátszót, több platformra terjeszkedni, és folyamatosan meghallgatni az ötleteiteket.",
+    "note": "Köszönjük, hogy törődsz a Framezoo márkával és támogatod a mögötte álló munkát. Hozzájárulásod teret enged nekünk, hogy jobb élményt teremtsünk mindenki számára.",
+    "scanHint": "Olvasd be ezt a QR-kódot a banki alkalmazásoddal.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "Anya",
+    "paypalImageAlt": "PayPal adomány QR-kód",
+    "momoImageAlt": "MoMo adomány QR-kód",
+    "viewQr": "{{label}} QR-kód nagyobb méretben történő megtekintése",
+    "close": "Közeli"
   },
   "toasts": {
     "linkCopied": "Link a vágólapra másolva!",

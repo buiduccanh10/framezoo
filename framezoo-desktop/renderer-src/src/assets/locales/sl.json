@@ -258,14 +258,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Opozorilo",
-      "disclaimerText": "Framezoo ponuja varno, sodobno in brezhibno izkušnjo zabave. Z vmesnikom, ki je enostaven za uporabo, in raznoliko knjižnico vsebin, vključno s podporo za 4K HDR, lahko uporabniki uživajo v svojih najljubših filmih in TV-oddajah. S svojo predanostjo varnosti je Framezoo najboljša izbira za brezskrbno visokokakovostno pretočno izkušnjo."
+      "disclaimerText": "Framezoo je nevtralna programska oprema za predvajalnik medijev. Ne gosti, shranjuje, distribuira ali nadzoruje medijskih datotek ali dodatkov tretjih oseb. Raziščite bogate metapodatke filmov, neomejeno sinhronizacijo podnapisov v pretočnih predvajalnikih in podnapise iz več virov, hkrati pa ohranite nadzor nad vsebino, do katere dostopate."
     },
     "links": {
       "fluxer": "Fluxer",
       "funding": "Podpri nas",
       "github": "GitHub"
     },
-    "tagline": "Varen, sodoben pretočni predvajalnik za brezhibno in visokokakovostno izkušnjo gledanja."
+    "tagline": "Visokohitrostno in gladko pretakanje z bogatimi metapodatki filmov, neomejeno sinhronizacijo podnapisov in podnapisi iz več virov."
   },
   "global": {
     "keyboardShortcuts": {
@@ -1405,6 +1405,20 @@
     "successDesc": "Hvala za vaše povratne informacije. Naša ekipa bo težavo pregledala in odpravila v najkrajšem možnem času.",
     "errorRequired": "Vnesite naslov in opis.",
     "errorSubmit": "Pri pošiljanju povratnih informacij je prišlo do napake. Poskusite znova pozneje."
+  },
+  "donate": {
+    "button": "Podpora Framezoo",
+    "badge": "Sporočilo od Framezoo",
+    "modalTitle": "Pomagajte nam graditi __BLAGOVNO ZNAMKO_0__",
+    "subtitle": "Vsak prispevek nam pomaga izboljšati predvajalnik, ga razširiti na več platform in še naprej prisluhniti vašim idejam.",
+    "note": "Hvala, ker vam je mar za Framezoo in podpirate delo, ki stoji za njo. Vaš prispevek nam daje več prostora za izgradnjo boljše izkušnje za vse.",
+    "scanHint": "Skenirajte to QR kodo s svojo bančno aplikacijo.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "Mama",
+    "paypalImageAlt": "QR koda za donacijo prek PayPala",
+    "momoImageAlt": "QR koda za donacijo MoMo",
+    "viewQr": "Ogled povečane QR kode {{label}}",
+    "close": "Zapri"
   },
   "toasts": {
     "linkCopied": "Povezava je kopirana v odložišče!",

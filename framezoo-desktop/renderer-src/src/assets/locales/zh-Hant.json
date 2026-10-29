@@ -258,14 +258,14 @@
   "footer": {
     "legal": {
       "disclaimer": "免責聲明",
-      "disclaimerText": "Framezoo 提供安全、現代且無縫的娛樂體驗。憑藉其易於使用的介面和多樣化的內容庫（包括 4K HDR 支援），用戶可以欣賞自己喜愛的電影和電視節目。憑藉對安全性的承諾，Framezoo 是無憂、高品質串流體驗的終極選擇。"
+      "disclaimerText": "Framezoo 是一款中立的媒體播放器軟體。它不託管、儲存、分發或控制媒體檔案或第三方插件。您可以探索豐富的電影元資料、無限的字幕同步以及來自多個來源的字幕，同時完全掌控您造訪的內容。"
     },
     "links": {
       "fluxer": "助焊劑",
       "funding": "支持我們",
       "github": "GitHub"
     },
-    "tagline": "安全、現代的串流媒體播放器，可提供無縫、高品質的觀看體驗。"
+    "tagline": "高速流暢的串流播放，豐富的電影元數據，無限的串流字幕同步，以及來自多個來源的字幕。"
   },
   "global": {
     "keyboardShortcuts": {
@@ -1405,6 +1405,20 @@
     "successDesc": "感謝您的回饋。我們的團隊將盡快審核並解決問題。",
     "errorRequired": "請同時輸入標題和描述。",
     "errorSubmit": "提交回饋時出錯，請稍後再試。"
+  },
+  "donate": {
+    "button": "支援 Framezoo",
+    "badge": "來自Framezoo的留言",
+    "modalTitle": "請幫助我們繼續打造Framezoo",
+    "subtitle": "您的每項貢獻都能幫助我們改進遊戲，擴展到更多平台，並讓我們繼續傾聽您的想法。",
+    "note": "感謝您關注Framezoo並支持我們所做的工作。您的貢獻讓我們有更多空間為所有人打造更好的體驗。",
+    "scanHint": "使用您的銀行應用程式掃描此二維碼。",
+    "paypalLabel": "PayPal",
+    "momoLabel": "媽媽",
+    "paypalImageAlt": "PayPal捐款二維碼",
+    "momoImageAlt": "MoMo捐贈二維碼",
+    "viewQr": "查看{{label}}二維碼（放大）",
+    "close": "關閉"
   },
   "toasts": {
     "linkCopied": "連結已複製到剪貼簿！",

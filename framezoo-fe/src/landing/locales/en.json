@@ -198,5 +198,19 @@
     "attachmentsTooLarge": "The total file size must not exceed 55 MB.",
     "submitting": "Submitting...",
     "close": "Close"
+  },
+  "donate": {
+    "button": "Support Framezoo",
+    "badge": "A note from Framezoo",
+    "modalTitle": "Help us keep building Framezoo",
+    "subtitle": "Every contribution helps us improve the player, expand to more platforms, and keep listening to your ideas.",
+    "note": "Thank you for caring about Framezoo and supporting the work behind it. Your contribution gives us more room to build a better experience for everyone.",
+    "scanHint": "Scan this QR code with your banking app.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "MoMo",
+    "paypalImageAlt": "PayPal donation QR code",
+    "momoImageAlt": "MoMo donation QR code",
+    "viewQr": "View QR code larger",
+    "close": "Maybe later"
   }
 }

@@ -199,5 +199,19 @@
     "showcaseSecondaryTitle": "Smidig, intuitiv upptäckt.",
     "showcaseTitle": "Rik med metadata innan du trycker på play.",
     "showcaseSecondaryAlt": "Framezoo-spelarens upptäcktsskärm med sökning, kategorier och titelrader"
+  },
+  "donate": {
+    "subtitle": "Varje bidrag hjälper oss att förbättra spelaren, expandera till fler plattformar och fortsätta lyssna på dina idéer.",
+    "note": "Tack för att du bryr dig om Framezoo och stödjer arbetet bakom. Ditt bidrag ger oss mer utrymme för att skapa en bättre upplevelse för alla.",
+    "paypalLabel": "PayPal",
+    "button": "Stöd Framezoo",
+    "modalTitle": "Hjälp oss att fortsätta bygga Framezoo",
+    "scanHint": "Skanna den här QR-koden med din bankapp.",
+    "close": "Kanske senare",
+    "paypalImageAlt": "PayPal-donations QR-kod",
+    "badge": "En anteckning från Framezoo",
+    "momoLabel": "MoMo",
+    "viewQr": "Visa QR-koden större",
+    "momoImageAlt": "MoMo donation QR-kod"
   }
 }

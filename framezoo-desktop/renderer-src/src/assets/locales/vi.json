@@ -258,14 +258,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Tuyên bố miễn trừ trách nhiệm",
-      "disclaimerText": "Framezoo mang đến trải nghiệm giải trí an toàn, hiện đại và liền mạch. Với giao diện dễ sử dụng và thư viện nội dung đa dạng, bao gồm hỗ trợ 4K HDR, người dùng có thể thưởng thức các bộ phim và chương trình TV yêu thích của mình. Và với cam kết về bảo mật, Framezoo là lựa chọn tối ưu để mang lại trải nghiệm phát trực tuyến chất lượng cao, an tâm."
+      "disclaimerText": "Framezoo là phần mềm trình phát đa phương tiện trung lập. Nó không lưu trữ, phân phối hoặc kiểm soát các tệp đa phương tiện hoặc tiện ích bổ sung của bên thứ ba. Khám phá siêu dữ liệu phim phong phú, đồng bộ phụ đề trực tuyến không giới hạn và phụ đề từ nhiều nguồn khác nhau trong khi vẫn giữ quyền kiểm soát nội dung bạn truy cập."
     },
     "links": {
       "fluxer": "thông lượng",
       "funding": "Hỗ trợ chúng tôi",
       "github": "GitHub"
     },
-    "tagline": "Trình phát trực tuyến hiện đại, an toàn mang lại trải nghiệm xem liền mạch, chất lượng cao."
+    "tagline": "Phát trực tuyến tốc độ cao, mượt mà với siêu dữ liệu phim phong phú, đồng bộ phụ đề trực tuyến không giới hạn và phụ đề từ nhiều nguồn khác nhau."
   },
   "global": {
     "keyboardShortcuts": {
@@ -1405,6 +1405,20 @@
     "successDesc": "Cảm ơn bạn đã đóng góp ý kiến. Đội ngũ phát triển sẽ xem xét và xử lý vấn đề sớm nhất có thể.",
     "errorRequired": "Vui lòng nhập đầy đủ tiêu đề và nội dung mô tả vấn đề.",
     "errorSubmit": "Có lỗi xảy ra khi gửi phản hồi. Vui lòng thử lại sau."
+  },
+  "donate": {
+    "button": "Ủng hộ Framezoo",
+    "badge": "Lời cảm ơn từ Framezoo",
+    "modalTitle": "Cùng Framezoo phát triển lâu dài",
+    "subtitle": "Mỗi sự ủng hộ giúp chúng tôi tiếp tục hoàn thiện trình phát, mở rộng ứng dụng trên nhiều nền tảng và lắng nghe ý kiến của bạn.",
+    "note": "Xin chân thành cảm ơn bạn đã quan tâm và đồng hành. Sự ủng hộ của bạn là động lực để Framezoo phát triển bền vững hơn.",
+    "scanHint": "Quét mã QR bằng ứng dụng ngân hàng để gửi lời ủng hộ.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "MoMo",
+    "paypalImageAlt": "Mã QR ủng hộ qua PayPal",
+    "momoImageAlt": "Mã QR ủng hộ qua MoMo",
+    "viewQr": "Xem mã QR {{label}} lớn hơn",
+    "close": "Đóng"
   },
   "toasts": {
     "linkCopied": "Đã sao chép liên kết vào clipboard!",

@@ -258,14 +258,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Sanggahan",
-      "disclaimerText": "Framezoo menawarkan pengalaman hiburan yang aman, modern, dan lancar. Dengan antarmuka yang mudah digunakan dan pustaka konten yang beragam, termasuk dukungan 4K HDR, pengguna dapat menikmati film dan acara TV favorit mereka. Dan dengan komitmennya terhadap keamanan, Framezoo adalah pilihan utama untuk pengalaman streaming berkualitas tinggi tanpa rasa khawatir."
+      "disclaimerText": "Framezoo adalah perangkat lunak pemutar media netral. Perangkat lunak ini tidak menghosting, menyimpan, mendistribusikan, atau mengontrol file media atau add-on pihak ketiga. Jelajahi metadata film yang kaya, sinkronisasi subtitle streaming tanpa batas, dan subtitle dari berbagai sumber sambil tetap memegang kendali atas konten yang Anda akses."
     },
     "links": {
       "fluxer": "fluks",
       "funding": "Dukung kami",
       "github": "GitHub"
     },
-    "tagline": "Pemutar streaming yang aman dan modern untuk pengalaman menonton yang mulus dan berkualitas tinggi."
+    "tagline": "Streaming berkecepatan tinggi dan lancar dengan metadata film yang kaya, sinkronisasi subtitle streaming tanpa batas, dan subtitle dari berbagai sumber."
   },
   "global": {
     "keyboardShortcuts": {
@@ -1405,6 +1405,20 @@
     "successDesc": "Terima kasih atas masukan Anda. Tim kami akan meninjau dan mengatasi masalah ini sesegera mungkin.",
     "errorRequired": "Silakan masukkan judul dan deskripsi.",
     "errorSubmit": "Terjadi kesalahan saat mengirimkan umpan balik. Silakan coba lagi nanti."
+  },
+  "donate": {
+    "button": "Dukungan Framezoo",
+    "badge": "Catatan dari __BRAND__",
+    "modalTitle": "Bantu kami terus membangun __BRAND__",
+    "subtitle": "Setiap kontribusi membantu kami meningkatkan pemutar media, memperluas ke lebih banyak platform, dan terus mendengarkan ide-ide Anda.",
+    "note": "Terima kasih atas kepedulian Anda terhadap Framezoo dan dukungan Anda terhadap pekerjaan di baliknya. Kontribusi Anda memberi kami lebih banyak ruang untuk membangun pengalaman yang lebih baik bagi semua orang.",
+    "scanHint": "Pindai kode QR ini dengan aplikasi perbankan Anda.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "Mama",
+    "paypalImageAlt": "Kode QR donasi PayPal",
+    "momoImageAlt": "Kode QR donasi MoMo",
+    "viewQr": "Lihat kode QR __PH__0__ lebih besar",
+    "close": "Menutup"
   },
   "toasts": {
     "linkCopied": "Tautan disalin ke papan klip!",

@@ -97,7 +97,7 @@ export function UserAvatar(props: {
 
 export function NoUserAvatar(props: { iconClass?: string }) {
   return (
-    <div className="relative inline-block p-1 text-type-dimmed">
+    <div className="relative inline-block p-1 text-white">
       <Icon
         className={props.iconClass ?? "text-base ssm:text-xl"}
         icon={Icons.USER}

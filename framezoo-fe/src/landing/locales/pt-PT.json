@@ -199,5 +199,19 @@
     "showcaseSecondaryTitle": "Descoberta suave e intuitiva.",
     "showcaseSecondaryDescription": "Navegue sem esforço por uma interface elegante projetada para levar você da descoberta à reprodução em alta velocidade em segundos.",
     "showcaseSecondaryAlt": "Tela de descoberta do player Framezoo com pesquisa, categorias e linhas de título"
+  },
+  "donate": {
+    "button": "Suporte Framezoo",
+    "badge": "Uma nota do Framezoo",
+    "subtitle": "Cada contribuição nos ajuda a melhorar o player, expandir para mais plataformas e continuar ouvindo suas ideias.",
+    "modalTitle": "Ajude-nos a continuar construindo o Framezoo",
+    "note": "Obrigado por se preocupar com o Framezoo e apoiar o trabalho por trás dele. Sua contribuição nos dá mais espaço para construir uma experiência melhor para todos.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "MoMo",
+    "scanHint": "Digitalize este código QR com seu aplicativo bancário.",
+    "momoImageAlt": "Código QR de doação MoMo",
+    "paypalImageAlt": "Código QR de doação do PayPal",
+    "viewQr": "Veja o código QR ampliado",
+    "close": "Talvez mais tarde"
   }
 }

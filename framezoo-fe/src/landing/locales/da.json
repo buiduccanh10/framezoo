@@ -199,5 +199,19 @@
     "showcaseSecondaryAlt": "Framezoo-afspilleropdagelsesskærm med søgning, kategorier og titelrækker",
     "showcaseSecondaryDescription": "Gennemse ubesværet gennem en slank grænseflade designet til at få dig fra opdagelse til højhastighedsafspilning på få sekunder.",
     "showcaseSecondaryTitle": "Glat, intuitiv opdagelse."
+  },
+  "donate": {
+    "button": "Support Framezoo",
+    "paypalLabel": "PayPal",
+    "badge": "En note fra Framezoo",
+    "scanHint": "Scan denne QR-kode med din bankapp.",
+    "modalTitle": "Hjælp os med at blive ved med at bygge Framezoo",
+    "subtitle": "Hvert bidrag hjælper os med at forbedre afspilleren, udvide til flere platforme og blive ved med at lytte til dine ideer.",
+    "note": "Tak fordi du bekymrer dig om Framezoo og støtter arbejdet bag det. Dit bidrag giver os mere plads til at skabe en bedre oplevelse for alle.",
+    "close": "Måske senere",
+    "momoLabel": "MoMo",
+    "momoImageAlt": "MoMo donation QR-kode",
+    "viewQr": "Se QR-koden større",
+    "paypalImageAlt": "PayPal donation QR-kode"
   }
 }
