@@ -1753,7 +1753,9 @@
   background: rgba(30, 26, 28, 0.85);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 9999px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   font-size: 0.8125rem;
@@ -1766,7 +1768,9 @@
   background: rgba(45, 38, 42, 0.95);
   border-color: rgba(228, 79, 79, 0.4);
   transform: translateY(-2px) scale(1.03);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 16px rgba(228, 79, 79, 0.2);
+  box-shadow:
+    0 16px 36px rgba(0, 0, 0, 0.5),
+    0 0 16px rgba(228, 79, 79, 0.2);
 }
 
 .landing-float-feedback:active {
@@ -2501,7 +2505,8 @@ body {
 
 .landing-movie-viewport {
   background: color-mix(in oklch, var(--color-paper-2) 38%, transparent);
-  border-block: var(--rule-hair) solid color-mix(in oklch, var(--color-rule) 72%, transparent);
+  border-block: var(--rule-hair) solid
+    color-mix(in oklch, var(--color-rule) 72%, transparent);
 }
 
 .landing-movie-rail {
@@ -2743,7 +2748,11 @@ body {
 }
 
 .landing-platform-card.is-recommended {
-  background: color-mix(in oklch, var(--color-accent) 12%, var(--color-paper-2));
+  background: color-mix(
+    in oklch,
+    var(--color-accent) 12%,
+    var(--color-paper-2)
+  );
   border-color: color-mix(in oklch, var(--color-accent) 48%, transparent);
 }
 
@@ -3069,7 +3078,8 @@ body {
 .landing-guide-examples,
 .landing-platform-card,
 .landing-download-state {
-  box-shadow: inset 0 1px 0 color-mix(in oklch, var(--color-ink) 5%, transparent);
+  box-shadow: inset 0 1px 0
+    color-mix(in oklch, var(--color-ink) 5%, transparent);
 }
 
 .landing-feature-card:hover,
@@ -3083,11 +3093,13 @@ body {
 }
 
 .landing-addon-orbit {
-  box-shadow: inset 0 1px 0 color-mix(in oklch, var(--color-ink) 7%, transparent);
+  box-shadow: inset 0 1px 0
+    color-mix(in oklch, var(--color-ink) 7%, transparent);
 }
 
 .landing-guide-code {
-  box-shadow: inset 0 1px 0 color-mix(in oklch, var(--color-ink) 5%, transparent);
+  box-shadow: inset 0 1px 0
+    color-mix(in oklch, var(--color-ink) 5%, transparent);
 }
 
 .landing-platform-grid {
@@ -3136,7 +3148,13 @@ body {
     transparent 0.1rem
   );
   background-size: 1.25rem 1.25rem;
-  mask-image: linear-gradient(90deg, transparent, black 25%, black 75%, transparent);
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    black 25%,
+    black 75%,
+    transparent
+  );
   opacity: 0.62;
 }
 
@@ -3155,7 +3173,8 @@ body {
   padding: var(--space-2xs) var(--space-sm);
   background: color-mix(in oklch, var(--color-paper) 82%, transparent);
   border-color: color-mix(in oklch, var(--color-ink) 14%, transparent);
-  box-shadow: 0 1.5rem 3rem color-mix(in oklch, var(--color-paper) 75%, transparent);
+  box-shadow: 0 1.5rem 3rem
+    color-mix(in oklch, var(--color-paper) 75%, transparent);
 }
 
 .landing-nav-links {
@@ -3220,7 +3239,8 @@ body {
 .landing-button-primary {
   color: var(--color-accent-ink);
   background: var(--color-accent-warm);
-  box-shadow: 0 1rem 2.5rem color-mix(in oklch, var(--color-accent-warm) 18%, transparent);
+  box-shadow: 0 1rem 2.5rem
+    color-mix(in oklch, var(--color-accent-warm) 18%, transparent);
 }
 
 .landing-button-primary:hover {
@@ -3233,7 +3253,11 @@ body {
   background: transparent;
   border-color: transparent;
   text-decoration: underline;
-  text-decoration-color: color-mix(in oklch, var(--color-accent-warm) 55%, transparent);
+  text-decoration-color: color-mix(
+    in oklch,
+    var(--color-accent-warm) 55%,
+    transparent
+  );
   text-underline-offset: 0.25rem;
 }
 
@@ -3299,7 +3323,13 @@ body {
   min-width: 0;
   min-height: 0;
   overflow: hidden;
-  mask-image: linear-gradient(180deg, transparent, black 14%, black 82%, transparent);
+  mask-image: linear-gradient(
+    180deg,
+    transparent,
+    black 14%,
+    black 82%,
+    transparent
+  );
 }
 
 /* Staggered column starts keep the mosaic from looking like a flat grid */
@@ -3344,7 +3374,8 @@ body {
   min-height: 0;
   border-color: color-mix(in oklch, var(--color-ink) 16%, transparent);
   border-radius: var(--radius-panel);
-  box-shadow: 0 1.5rem 2rem -1.5rem color-mix(in oklch, var(--color-paper) 90%, transparent);
+  box-shadow: 0 1.5rem 2rem -1.5rem
+    color-mix(in oklch, var(--color-paper) 90%, transparent);
 }
 
 /* Uniform per-column height so both loop halves stay identical */
@@ -3356,8 +3387,10 @@ body {
 @media (min-width: 901px) {
   .landing-home > .landing-hero {
     grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
+    align-items: start;
     gap: clamp(var(--space-xl), 5vw, var(--space-3xl));
     height: auto;
+    padding-block: clamp(2rem, 4vw, 3.5rem) clamp(4rem, 7vw, 6rem);
   }
 
   .landing-home .landing-hero-visual {
@@ -3417,7 +3450,6 @@ body {
   .landing-movie-mosaic-column-1 .landing-movie-card-skeleton {
     height: 14.5rem;
   }
-
 }
 
 /* ==========================================================================
@@ -3462,12 +3494,10 @@ body {
       rgba(228, 79, 79, 0.12),
       transparent 18rem
     ),
-    linear-gradient(
-      155deg,
-      rgba(32, 28, 30, 0.95),
-      rgba(18, 16, 17, 0.98)
-    );
-  box-shadow: 0 2rem 4rem -1rem rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    linear-gradient(155deg, rgba(32, 28, 30, 0.95), rgba(18, 16, 17, 0.98));
+  box-shadow:
+    0 2rem 4rem -1rem rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
   color: var(--color-ink);
   animation: landingModalScale 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
@@ -4302,4 +4332,3 @@ body {
     grid-template-columns: minmax(0, 1fr);
   }
 }
-
