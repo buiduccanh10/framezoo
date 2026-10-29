@@ -258,14 +258,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Fyrirvari",
-      "disclaimerText": "Framezoo býður upp á örugga, nútímalega og óaðfinnanlega afþreyingarupplifun. Með auðveldu viðmóti og fjölbreyttu efnissafni, þar á meðal 4K HDR stuðningi, geta notendur notið uppáhaldskvikmynda sinna og sjónvarpsþátta. Og með skuldbindingu sinni um öryggi er Framezoo fullkominn kostur fyrir áhyggjulausa, hágæða streymisupplifun."
+      "disclaimerText": "Framezoo er hlutlaus hugbúnaður fyrir margmiðlunarspilun. Hann hýsir ekki, geymir, dreifir eða stjórnar margmiðlunarskrám eða viðbótum frá þriðja aðila. Skoðaðu fjölbreytt lýsigögn kvikmynda, ótakmarkaða samstillingu texta og texta frá mörgum aðilum og haltu stjórn á efninu sem þú nálgast."
     },
     "links": {
       "fluxer": "Fluxer",
       "funding": "Styðjið okkur",
       "github": "GitHub"
     },
-    "tagline": "Öruggur, nútímalegur straumspilari fyrir óaðfinnanlega, hágæða útsýnisupplifun."
+    "tagline": "Hraðvirk og mjúk streymi með ríkulegum lýsigögnum kvikmynda, ótakmarkaðri samstillingu texta og textum úr mörgum áttum."
   },
   "global": {
     "keyboardShortcuts": {

@@ -258,14 +258,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Sorumluluk Reddi",
-      "disclaimerText": "Framezoo güvenli, modern ve kusursuz bir eğlence deneyimi sunar. Kullanımı kolay arayüzü ve 4K HDR desteği de dahil olmak üzere zengin içerik kütüphanesi ile kullanıcılar en sevdikleri film ve dizilerin keyfini çıkarabiliyor. Güvenlik taahhüdüyle Framezoo, sorunsuz, yüksek kaliteli bir yayın deneyimi için en iyi seçimdir."
+      "disclaimerText": "Framezoo tarafsız bir medya oynatıcı yazılımıdır. Medya dosyalarını veya üçüncü taraf eklentilerini barındırmaz, depolamaz, dağıtmaz veya kontrol etmez. Zengin film meta verilerini, sınırsız akış altyazı senkronizasyonunu ve birden fazla kaynaktan altyazıları keşfederken, eriştiğiniz içeriğin kontrolünü elinizde tutun."
     },
     "links": {
       "fluxer": "Fluxer",
       "funding": "Bizi destekleyin",
       "github": "GitHub"
     },
-    "tagline": "Sorunsuz, yüksek kaliteli bir izleme deneyimi için güvenli, modern bir yayın oynatıcısı."
+    "tagline": "Zengin film meta verileriyle yüksek hızlı, sorunsuz yayın akışı, sınırsız yayın altyazı senkronizasyonu ve birden fazla kaynaktan altyazı desteği."
   },
   "global": {
     "keyboardShortcuts": {

@@ -258,14 +258,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Figyelmeztetés",
-      "disclaimerText": "A Framezoo biztonságos, modern és zökkenőmentes szórakozási élményt kínál. Könnyen használható kezelőfelületének és sokrétű tartalomkönyvtárának köszönhetően, beleértve a 4K HDR támogatást is, a felhasználók élvezhetik kedvenc filmeiket és tévéműsoraikat. A biztonság iránti elkötelezettségével a Framezoo a tökéletes választás a gondtalan, kiváló minőségű streaming élményhez."
+      "disclaimerText": "A Framezoo egy semleges médialejátszó szoftver. Nem tárol, nem terjeszt és nem kezel médiafájlokat vagy harmadik féltől származó kiegészítőket. Fedezze fel a gazdag film metaadatokat, a korlátlan felirat-szinkronizációt és a feliratokat több forrásból, miközben megtartja az Ön által elért tartalom feletti irányítást."
     },
     "links": {
       "fluxer": "Fluxer",
       "funding": "Támogass minket",
       "github": "GitHub"
     },
-    "tagline": "Biztonságos, modern streamlejátszó a zökkenőmentes, kiváló minőségű megtekintési élményért."
+    "tagline": "Nagy sebességű, gördülékeny streamelés gazdag film metaadatokkal, korlátlan feliratszinkronizációval és feliratokkal több forrásból."
   },
   "global": {
     "keyboardShortcuts": {

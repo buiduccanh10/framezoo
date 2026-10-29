@@ -258,14 +258,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Hewis",
-      "disclaimerText": "Framezoo bietet ein sicheres, modernes und nahtloses Unterhaltungserlebnis. Mit seiner benutzerfreundlichen Oberfläche und der vielfältigen Inhaltsbibliothek, einschließlich 4K HDR-Unterstützung, können Benutzer ihre Lieblingsfilme und Fernsehsendungen genießen. Und mit seinem Engagement für Sicherheit ist Framezoo die ultimative Wahl für ein sorgenfreies Streaming-Erlebnis in hoher Qualität."
+      "disclaimerText": "Framezoo ist eine neutrale Mediaplayer-Software. Sie hostet, speichert, verteilt oder kontrolliert weder Mediendateien noch Add-ons von Drittanbietern. Entdecken Sie umfangreiche Filmmetadaten, unbegrenzte Untertitelsynchronisierung und Untertitel aus verschiedenen Quellen und behalten Sie dabei die Kontrolle über die abgerufenen Inhalte."
     },
     "links": {
       "fluxer": "Fluxer",
       "funding": "Onterstötz üs",
       "github": "GitHub"
     },
-    "tagline": "Ein sicherer, moderner Stream-Player für ein nahtloses, hochwertiges Seherlebnis."
+    "tagline": "Schnelles, flüssiges Streaming mit umfangreichen Filmmetadaten, unbegrenzter Untertitelsynchronisation und Untertiteln aus mehreren Quellen."
   },
   "global": {
     "keyboardShortcuts": {

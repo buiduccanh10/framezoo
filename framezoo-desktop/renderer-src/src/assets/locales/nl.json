@@ -258,14 +258,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Disclaimer",
-      "disclaimerText": "Framezoo biedt een veilige, moderne en naadloze entertainmentervaring. Dankzij de gebruiksvriendelijke interface en de gevarieerde inhoudsbibliotheek, inclusief 4K HDR-ondersteuning, kunnen gebruikers genieten van hun favoriete films en tv-programma's. En met zijn toewijding aan beveiliging is Framezoo de ultieme keuze voor een zorgeloze streamingervaring van hoge kwaliteit."
+      "disclaimerText": "Framezoo is neutrale mediaspelersoftware. Het host, bewaart, distribueert of beheert geen mediabestanden of add-ons van derden. Ontdek uitgebreide filmmetadata, onbeperkte synchronisatie van ondertitels en ondertitels uit meerdere bronnen, terwijl u de controle behoudt over de inhoud waartoe u toegang hebt."
     },
     "links": {
       "fluxer": "Fluxer",
       "funding": "Steun ons",
       "github": "Github"
     },
-    "tagline": "Een veilige, moderne streamspeler voor een naadloze, hoogwaardige kijkervaring."
+    "tagline": "Supersnel en vloeiend streamen met uitgebreide filmmetadata, onbeperkte synchronisatie van ondertitels en ondertitels uit meerdere bronnen."
   },
   "global": {
     "keyboardShortcuts": {

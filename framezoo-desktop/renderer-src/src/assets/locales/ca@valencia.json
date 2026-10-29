@@ -258,14 +258,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Exempció de responsabilitat",
-      "disclaimerText": "Framezoo ofereix una experiència d'entreteniment segura, moderna i perfecta. Amb la seva interfície fàcil d'utilitzar i una biblioteca de contingut diversa, inclosa la compatibilitat amb 4K HDR, els usuaris poden gaudir de les seves pel·lícules i programes de televisió preferits. I amb el seu compromís amb la seguretat, Framezoo és l'opció definitiva per a una experiència de transmissió d'alta qualitat i sense preocupacions."
+      "disclaimerText": "Framezoo és un programari de reproductor multimèdia neutral. No allotja, emmagatzema, distribueix ni controla fitxers multimèdia ni complements de tercers. Explora metadades de pel·lícules enriquides, sincronització il·limitada de subtítols en streaming i subtítols de diverses fonts, mantenint alhora el control del contingut al qual accedeixes."
     },
     "links": {
       "fluxer": "Fluxer",
       "funding": "Doneu-nos suport",
       "github": "GitHub"
     },
-    "tagline": "Un reproductor de reproducció modern i segur per a una experiència de visualització perfecta i d'alta qualitat."
+    "tagline": "Transmissió fluida i d&#39;alta velocitat amb metadades de pel·lícules riques, sincronització de subtítols de transmissió il·limitada i subtítols de diverses fonts."
   },
   "global": {
     "keyboardShortcuts": {

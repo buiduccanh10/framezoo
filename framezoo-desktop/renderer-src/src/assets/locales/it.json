@@ -258,14 +258,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Disclaimer",
-      "disclaimerText": "Framezoo offre un'esperienza di intrattenimento sicura, moderna e senza soluzione di continuità. Con la sua interfaccia facile da usare e una libreria di contenuti diversificata, incluso il supporto 4K HDR, gli utenti possono godersi i loro film e programmi TV preferiti. E con il suo impegno per la sicurezza, Framezoo è la scelta definitiva per un'esperienza di streaming di alta qualità e senza preoccupazioni."
+      "disclaimerText": "Framezoo è un software di riproduzione multimediale neutrale. Non ospita, archivia, distribuisce o controlla file multimediali o componenti aggiuntivi di terze parti. Esplora metadati cinematografici dettagliati, sincronizza i sottotitoli in streaming illimitati e accedi ai sottotitoli da diverse fonti, mantenendo sempre il controllo sui contenuti a cui accedi."
     },
     "links": {
       "fluxer": "Flussante",
       "funding": "Supportaci",
       "github": "GitHub"
     },
-    "tagline": "Un riproduttore di streaming moderno e sicuro per un'esperienza visiva fluida e di alta qualità."
+    "tagline": "Streaming fluido e ad alta velocità con metadati dettagliati dei film, sincronizzazione illimitata dei sottotitoli e sottotitoli provenienti da diverse fonti."
   },
   "global": {
     "keyboardShortcuts": {

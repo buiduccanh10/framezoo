@@ -258,14 +258,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Lahtiütlemine",
-      "disclaimerText": "Framezoo pakub turvalist, kaasaegset ja sujuvat meelelahutuskogemust. Selle hõlpsasti kasutatava liidese ja mitmekesise sisukogu, sealhulgas 4K HDR-toega, saavad kasutajad nautida oma lemmikfilme ja telesaateid. Tänu oma turvalisusele on Framezoo parim valik muretu ja kvaliteetse voogesituse jaoks."
+      "disclaimerText": "Framezoo on neutraalne meediapleieri tarkvara. See ei majuta, salvesta, levita ega halda meediafaile ega kolmandate osapoolte lisandmooduleid. Avastage rikkalikke filmide metaandmeid, piiramatut subtiitrite sünkroonimist ja subtiitreid mitmest allikast, säilitades samal ajal kontrolli oma sisu üle."
     },
     "links": {
       "fluxer": "Fluxer",
       "funding": "Toetage meid",
       "github": "GitHub"
     },
-    "tagline": "Turvaline ja kaasaegne voomängija sujuvaks ja kvaliteetseks vaatamiskogemuseks."
+    "tagline": "Kiire ja sujuv voogedastus rikkalike filmide metaandmetega, piiramatu subtiitrite sünkroonimise ja subtiitritega mitmest allikast."
   },
   "global": {
     "keyboardShortcuts": {

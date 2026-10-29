@@ -258,14 +258,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Zřeknutí odpovědnosti",
-      "disclaimerText": "Framezoo nabízí bezpečný, moderní a bezproblémový zážitek ze zábavy. Díky snadno použitelnému rozhraní a rozmanité knihovně obsahu, včetně podpory 4K HDR, si uživatelé mohou vychutnat své oblíbené filmy a televizní pořady. A díky svému závazku k zabezpečení je Framezoo tou nejlepší volbou pro bezstarostné a vysoce kvalitní streamování."
+      "disclaimerText": "Framezoo je neutrální software pro přehrávání médií. Nehostuje, neukládá, nedistribuuje ani nekontroluje mediální soubory ani doplňky třetích stran. Prozkoumejte bohatá metadata filmů, neomezenou synchronizaci titulků a titulky z více zdrojů a zároveň si zachovejte kontrolu nad obsahem, ke kterému přistupujete."
     },
     "links": {
       "fluxer": "Fluxer",
       "funding": "Podpořte nás",
       "github": "GitHub"
     },
-    "tagline": "Bezpečný, moderní přehrávač streamů pro bezproblémový a vysoce kvalitní zážitek ze sledování."
+    "tagline": "Vysokorychlostní a plynulé streamování s bohatými metadaty filmů, neomezenou synchronizací titulků a titulky z více zdrojů."
   },
   "global": {
     "keyboardShortcuts": {

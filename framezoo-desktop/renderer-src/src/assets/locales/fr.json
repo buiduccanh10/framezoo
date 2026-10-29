@@ -258,14 +258,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Avertissement",
-      "disclaimerText": "Framezoo offre une expérience de divertissement sécurisée, moderne et transparente. Grâce à son interface facile à utiliser et à sa bibliothèque de contenus diversifiée, notamment la prise en charge 4K HDR, les utilisateurs peuvent profiter de leurs films et émissions de télévision préférés. Et grâce à son engagement en faveur de la sécurité, Framezoo est le choix ultime pour une expérience de streaming de haute qualité et sans souci."
+      "disclaimerText": "Framezoo est un logiciel de lecture multimédia neutre. Il n&#39;héberge, ne stocke, ne distribue ni ne contrôle les fichiers multimédias ou les extensions tierces. Accédez à des métadonnées de films enrichies, à la synchronisation illimitée des sous-titres et aux sous-titres provenant de sources multiples, tout en gardant le contrôle du contenu auquel vous accédez."
     },
     "links": {
       "fluxer": "Fluxeur",
       "funding": "Soutenez-nous",
       "github": "GitHub"
     },
-    "tagline": "Un lecteur de flux sécurisé et moderne pour une expérience visuelle fluide et de haute qualité."
+    "tagline": "Streaming fluide et rapide avec des métadonnées de film riches, synchronisation illimitée des sous-titres et sous-titres provenant de sources multiples."
   },
   "global": {
     "keyboardShortcuts": {

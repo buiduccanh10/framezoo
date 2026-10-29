@@ -258,14 +258,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Vastuuvapauslauseke",
-      "disclaimerText": "Framezoo tarjoaa turvallisen, modernin ja saumattoman viihdekokemuksen. Helppokäyttöisen käyttöliittymän ja monipuolisen sisältökirjaston, mukaan lukien 4K HDR -tuen, ansiosta käyttäjät voivat nauttia suosikkielokuvistaan ​​ja TV-ohjelmistaan. Ja sitoutumisensa turvallisuuteen Framezoo on täydellinen valinta huolettomaan, laadukkaaseen suoratoistokokemukseen."
+      "disclaimerText": "Framezoo on neutraali mediasoitinohjelmisto. Se ei isännöi, tallenna, jaa tai hallinnoi mediatiedostoja tai kolmansien osapuolten lisäosia. Tutustu monipuoliseen elokuvien metadataan, rajoittamattomaan tekstitysten synkronointiin ja tekstityksiin useista lähteistä säilyttäen samalla hallinnan käyttämästäsi sisällöstä."
     },
     "links": {
       "fluxer": "Fluxer",
       "funding": "Tue meitä",
       "github": "GitHub"
     },
-    "tagline": "Suojattu, moderni suoratoistosoitin saumattomaan ja laadukkaaseen katselukokemukseen."
+    "tagline": "Nopea ja sujuva suoratoisto rikkailla elokuvametatiedoilla, rajoittamattomalla tekstitysten synkronoinnilla ja tekstityksillä useista lähteistä."
   },
   "global": {
     "keyboardShortcuts": {

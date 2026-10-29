@@ -258,14 +258,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Sanggahan",
-      "disclaimerText": "Framezoo menawarkan pengalaman hiburan yang aman, modern, dan lancar. Dengan antarmuka yang mudah digunakan dan pustaka konten yang beragam, termasuk dukungan 4K HDR, pengguna dapat menikmati film dan acara TV favorit mereka. Dan dengan komitmennya terhadap keamanan, Framezoo adalah pilihan utama untuk pengalaman streaming berkualitas tinggi tanpa rasa khawatir."
+      "disclaimerText": "Framezoo adalah perangkat lunak pemutar media netral. Perangkat lunak ini tidak menghosting, menyimpan, mendistribusikan, atau mengontrol file media atau add-on pihak ketiga. Jelajahi metadata film yang kaya, sinkronisasi subtitle streaming tanpa batas, dan subtitle dari berbagai sumber sambil tetap memegang kendali atas konten yang Anda akses."
     },
     "links": {
       "fluxer": "fluks",
       "funding": "Dukung kami",
       "github": "GitHub"
     },
-    "tagline": "Pemutar streaming yang aman dan modern untuk pengalaman menonton yang mulus dan berkualitas tinggi."
+    "tagline": "Streaming berkecepatan tinggi dan lancar dengan metadata film yang kaya, sinkronisasi subtitle streaming tanpa batas, dan subtitle dari berbagai sumber."
   },
   "global": {
     "keyboardShortcuts": {
