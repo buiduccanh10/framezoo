@@ -489,9 +489,6 @@ function Overview({
           <Info label="Bỏ qua credits">
             {settings?.enableSkipCredits ? "Bật" : "Tắt"}
           </Info>
-          <Info label="Debrid">
-            {settings?.debridService || "Chưa cấu hình"}
-          </Info>
         </dl>
       </div>
     </div>

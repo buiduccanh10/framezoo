@@ -17,21 +17,9 @@ const userSettingsSchema = z.object({
     .optional(),
   applicationLanguage: z.string().optional().default('en'),
   defaultSubtitleLanguage: z.string().nullable().optional(),
-  proxyUrls: z.array(z.string()).nullable().optional(),
-  febboxKey: z.string().nullable().optional(),
-  debridToken: z.string().nullable().optional(),
-  debridService: z.string().nullable().optional(),
-  tidbKey: z.string().nullable().optional(),
   enableAutoplay: z.boolean().optional().default(true),
   enableSkipCredits: z.boolean().optional().default(false),
-  disabledSources: z.array(z.string()).optional().default([]),
-  embedOrder: z.array(z.string()).optional().default([]),
-  enableEmbedOrder: z.boolean().optional().default(false),
-  disabledEmbeds: z.array(z.string()).optional().default([]),
   proxyTmdb: z.boolean().optional().default(false),
-  manualSourceSelection: z.boolean().optional().default(false),
-  enableDoubleClickToSeek: z.boolean().optional().default(true),
-  enableAutoResumeOnPlaybackError: z.boolean().optional().default(false),
   addons: z.array(z.any()).optional().default([]),
 });
 
@@ -71,21 +59,9 @@ export default defineEventHandler(async event => {
         customTheme: settings?.custom_theme || null,
         applicationLanguage: settings?.application_language || 'en',
         defaultSubtitleLanguage: settings?.default_subtitle_language || null,
-        proxyUrls: settings?.proxy_urls.length === 0 ? null : settings?.proxy_urls || null,
-        febboxKey: settings?.febbox_key || null,
-        debridToken: settings?.debrid_token || null,
-        debridService: settings?.debrid_service || null,
-        tidbKey: settings?.tidb_key || null,
         enableAutoplay: settings?.enable_autoplay ?? true,
         enableSkipCredits: settings?.enable_skip_credits ?? false,
-        disabledSources: settings?.disabled_sources || [],
-        embedOrder: settings?.embed_order || [],
-        enableEmbedOrder: settings?.enable_embed_order ?? false,
-        disabledEmbeds: settings?.disabled_embeds || [],
         proxyTmdb: settings?.proxy_tmdb ?? false,
-        manualSourceSelection: settings?.manual_source_selection ?? false,
-        enableDoubleClickToSeek: settings?.enable_double_click_to_seek ?? true,
-        enableAutoResumeOnPlaybackError: settings?.enable_auto_resume_on_playback_error ?? false,
         addons: (settings?.addons as any[]) || [],
       };
     } catch (error) {
@@ -115,21 +91,9 @@ export default defineEventHandler(async event => {
         custom_theme: validatedBody.customTheme ?? null,
         application_language: validatedBody.applicationLanguage,
         default_subtitle_language: validatedBody.defaultSubtitleLanguage ?? null,
-        proxy_urls: validatedBody.proxyUrls === null ? [] : validatedBody.proxyUrls || [],
-        febbox_key: validatedBody.febboxKey ?? null,
-        debrid_token: validatedBody.debridToken ?? null,
-        debrid_service: validatedBody.debridService ?? null,
-        tidb_key: validatedBody.tidbKey ?? null,
         enable_autoplay: validatedBody.enableAutoplay,
         enable_skip_credits: validatedBody.enableSkipCredits,
-        disabled_sources: validatedBody.disabledSources || [],
-        embed_order: validatedBody.embedOrder || [],
-        enable_embed_order: validatedBody.enableEmbedOrder,
-        disabled_embeds: validatedBody.disabledEmbeds || [],
         proxy_tmdb: validatedBody.proxyTmdb,
-        manual_source_selection: validatedBody.manualSourceSelection,
-        enable_double_click_to_seek: validatedBody.enableDoubleClickToSeek,
-        enable_auto_resume_on_playback_error: validatedBody.enableAutoResumeOnPlaybackError,
         addons: validatedBody.addons || [],
       };
 
@@ -142,37 +106,12 @@ export default defineEventHandler(async event => {
         updateData.application_language = createData.application_language;
       if (Object.prototype.hasOwnProperty.call(body, 'defaultSubtitleLanguage'))
         updateData.default_subtitle_language = createData.default_subtitle_language;
-      if (Object.prototype.hasOwnProperty.call(body, 'proxyUrls'))
-        updateData.proxy_urls = createData.proxy_urls;
-      if (Object.prototype.hasOwnProperty.call(body, 'febboxKey'))
-        updateData.febbox_key = createData.febbox_key;
-      if (Object.prototype.hasOwnProperty.call(body, 'debridToken'))
-        updateData.debrid_token = createData.debrid_token;
-      if (Object.prototype.hasOwnProperty.call(body, 'debridService'))
-        updateData.debrid_service = createData.debrid_service;
-      if (Object.prototype.hasOwnProperty.call(body, 'tidbKey'))
-        updateData.tidb_key = createData.tidb_key;
       if (Object.prototype.hasOwnProperty.call(body, 'enableAutoplay'))
         updateData.enable_autoplay = createData.enable_autoplay;
       if (Object.prototype.hasOwnProperty.call(body, 'enableSkipCredits'))
         updateData.enable_skip_credits = createData.enable_skip_credits;
-      if (Object.prototype.hasOwnProperty.call(body, 'disabledSources'))
-        updateData.disabled_sources = createData.disabled_sources;
-      if (Object.prototype.hasOwnProperty.call(body, 'embedOrder'))
-        updateData.embed_order = createData.embed_order;
-      if (Object.prototype.hasOwnProperty.call(body, 'enableEmbedOrder'))
-        updateData.enable_embed_order = createData.enable_embed_order;
-      if (Object.prototype.hasOwnProperty.call(body, 'disabledEmbeds'))
-        updateData.disabled_embeds = createData.disabled_embeds;
       if (Object.prototype.hasOwnProperty.call(body, 'proxyTmdb'))
         updateData.proxy_tmdb = createData.proxy_tmdb;
-      if (Object.prototype.hasOwnProperty.call(body, 'manualSourceSelection'))
-        updateData.manual_source_selection = createData.manual_source_selection;
-      if (Object.prototype.hasOwnProperty.call(body, 'enableDoubleClickToSeek'))
-        updateData.enable_double_click_to_seek = createData.enable_double_click_to_seek;
-      if (Object.prototype.hasOwnProperty.call(body, 'enableAutoResumeOnPlaybackError'))
-        updateData.enable_auto_resume_on_playback_error =
-          createData.enable_auto_resume_on_playback_error;
       if (Object.prototype.hasOwnProperty.call(body, 'addons'))
         updateData.addons = createData.addons;
 
@@ -198,21 +137,9 @@ export default defineEventHandler(async event => {
         customTheme: settings.custom_theme,
         applicationLanguage: settings.application_language,
         defaultSubtitleLanguage: settings.default_subtitle_language,
-        proxyUrls: settings.proxy_urls.length === 0 ? null : settings.proxy_urls,
-        febboxKey: settings.febbox_key,
-        debridToken: settings.debrid_token,
-        debridService: settings.debrid_service,
-        tidbKey: settings.tidb_key,
         enableAutoplay: settings.enable_autoplay,
         enableSkipCredits: settings.enable_skip_credits,
-        disabledSources: settings.disabled_sources,
-        embedOrder: settings.embed_order,
-        enableEmbedOrder: settings.enable_embed_order,
-        disabledEmbeds: settings.disabled_embeds,
         proxyTmdb: settings.proxy_tmdb,
-        manualSourceSelection: settings.manual_source_selection,
-        enableDoubleClickToSeek: settings.enable_double_click_to_seek,
-        enableAutoResumeOnPlaybackError: settings.enable_auto_resume_on_playback_error,
         addons: (settings.addons as any[]) || [],
       };
     } catch (error) {

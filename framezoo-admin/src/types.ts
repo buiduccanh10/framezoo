@@ -86,9 +86,6 @@ export interface UserSettingsDetail {
   enableAutoplay?: boolean;
   enableSkipCredits?: boolean;
   proxyTmdb?: boolean;
-  debridService?: string | null;
-  febboxKey?: string | null;
-  proxyUrls?: string[] | null;
   addons?: UserInstalledAddon[];
 }
 

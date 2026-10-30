@@ -69,10 +69,6 @@ export function PreferencesPart(props: {
   setEnableSkipCredits: (v: boolean) => void;
   enableAutoSkipSegments: boolean;
   setEnableAutoSkipSegments: (v: boolean) => void;
-  enableDoubleClickToSeek: boolean;
-  setEnableDoubleClickToSeek: (v: boolean) => void;
-  enableAutoResumeOnPlaybackError: boolean;
-  setEnableAutoResumeOnPlaybackError: (v: boolean) => void;
   homeSectionOrder: string[];
   setHomeSectionOrder: (v: string[]) => void;
 }) {
@@ -243,23 +239,6 @@ export function PreferencesPart(props: {
         </div>
 
         <div className="space-y-6">
-          <PreferenceCard
-            title={t("settings.preferences.autoResumeOnPlaybackError")}
-            description={t(
-              "settings.preferences.autoResumeOnPlaybackErrorDescription",
-            )}
-          >
-            <PreferenceToggleRow
-              enabled={props.enableAutoResumeOnPlaybackError}
-              label={t("settings.preferences.autoResumeOnPlaybackErrorLabel")}
-              onClick={() =>
-                props.setEnableAutoResumeOnPlaybackError(
-                  !props.enableAutoResumeOnPlaybackError,
-                )
-              }
-            />
-          </PreferenceCard>
-
           <PreferenceCard
             title={t("settings.preferences.keyboardShortcuts")}
             description={t("settings.preferences.keyboardShortcutsDescription")}

@@ -558,7 +558,9 @@ class TorrentRuntime:
     def _observe_status_milestones(self, status: Any) -> None:
         peers = int(getattr(status, "num_peers", 0))
         download_rate = int(getattr(status, "download_rate", 0))
-        if peers > 0:
+        now = time.monotonic()
+        if peers > 0 and now - getattr(self, "_last_peer_harvest", 0.0) >= 10.0:
+            self._last_peer_harvest = now
             record = getattr(self, "record", None)
             if record is not None and getattr(record, "discovery", None) is not None:
                 try:
@@ -2055,10 +2057,12 @@ class TorrentRuntime:
                     focus_claimed = False
                     if previous_target is not None:
                         self._release_target_focus(previous_target)
-                elif target_blocks_delta > 0:
+                elif target_blocks_delta >= 16:
+                    # Steady fast download (> 1 MB/s): defer kick because progress is healthy.
+                    # Slow trickles (< 16 blocks / 250ms) must NOT reset stalled_since, so
+                    # stall_seconds can accumulate and trigger TARGET_KICK / TARGET_FOCUS.
                     stalled_since = now
                     target_stall_logged = False
-                    focus_claimed = False
                 target_availability = self._piece_availability(target_piece)
                 target_have = self._piece_have(target_piece)
                 stall_seconds = max(0.0, now - stalled_since)

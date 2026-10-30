@@ -210,9 +210,14 @@ class LibtorrentEngine:
     def _network_settings(self) -> dict[str, Any]:
         address = get_local_ipv4()
         self.listen_address = address
+        if os.environ.get("FRAMEZOO_TEST_LOOPBACK") == "1":
+            return {
+                "listen_interfaces": f"{address or '127.0.0.1'}:49160-49170,127.0.0.1:49160-49170",
+            }
         if address:
             return {
-                "listen_interfaces": f"{address}:49160-49170,127.0.0.1:49160-49170",
+                "listen_interfaces": f"{address}:49160-49170",
+                "outgoing_interfaces": address,
             }
         return {
             "listen_interfaces": "0.0.0.0:49160-49170",
@@ -424,11 +429,6 @@ class LibtorrentEngine:
                         url_seeds.append(url_seed)
                 resume_params.url_seeds = url_seeds
                 resume_params.save_path = save_path
-                # Clear stale piece priorities so pieces are not held at 0/2/4/7 from a previous session.
-                try:
-                    resume_params.piece_priorities = []
-                except Exception:
-                    pass
                 # Ensure the selected file has STREAM_IDLE_FILE_PRIORITY (1) so libtorrent
                 # does not start with total_wanted == 0 (which triggers finished state and drops seeds).
                 if torrent_info is not None:
@@ -543,7 +543,6 @@ class LibtorrentEngine:
                 trackers,
                 constants.DEFAULT_TRACKERS,
             ),
-            initial_peers=initial_peers,
         )
         with self.lock:
             self.records[key] = record

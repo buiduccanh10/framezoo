@@ -64,27 +64,15 @@ model user_group_order {
 }
 
 model user_settings {
-  id                                   String   @id
-  application_theme                    String?  @default("ember") @db.VarChar(255)
-  custom_theme                         Json?
-  application_language                 String?  @db.VarChar(255)
-  default_subtitle_language            String?  @db.VarChar(255)
-  proxy_urls                           String[]
-  febbox_key                           String?  @db.VarChar(255)
-  enable_autoplay                      Boolean  @default(true)
-  enable_skip_credits                  Boolean  @default(false)
-  proxy_tmdb                           Boolean  @default(false)
-  disabled_embeds                      String[] @default([])
-  disabled_sources                     String[] @default([])
-  embed_order                          String[] @default([])
-  enable_double_click_to_seek          Boolean  @default(true)
-  enable_embed_order                   Boolean  @default(false)
-  manual_source_selection              Boolean  @default(false)
-  debrid_service                       String?  @db.VarChar(255)
-  debrid_token                         String?  @db.VarChar(255)
-  enable_auto_resume_on_playback_error Boolean  @default(false)
-  tidb_key                             String?  @db.VarChar(255)
-  addons                               Json?    @default("[]")
+  id                        String   @id
+  application_theme         String?  @default("ember") @db.VarChar(255)
+  custom_theme              Json?
+  application_language      String?  @db.VarChar(255)
+  default_subtitle_language String?  @db.VarChar(255)
+  enable_autoplay           Boolean  @default(true)
+  enable_skip_credits       Boolean  @default(false)
+  proxy_tmdb                Boolean  @default(false)
+  addons                    Json?    @default("[]")
 }
 
 model users {

@@ -47,11 +47,6 @@ export function VerifyPasswordPart(props: VerifyPasswordProps) {
     enableAutoplay: store.enableAutoplay,
     enableSkipCredits: store.enableSkipCredits,
     proxyTmdb: store.proxyTmdb,
-    febboxKey: store.febboxKey,
-    debridToken: store.debridToken,
-    debridService: store.debridService,
-    enableDoubleClickToSeek: store.enableDoubleClickToSeek,
-    enableAutoResumeOnPlaybackError: store.enableAutoResumeOnPlaybackError,
   }));
 
   const { t } = useTranslation();
@@ -96,7 +91,6 @@ export function VerifyPasswordPart(props: VerifyPasswordProps) {
         applicationLanguage,
         defaultSubtitleLanguage: defaultSubtitleLanguage ?? undefined,
         applicationTheme: applicationTheme ?? undefined,
-        proxyUrls: undefined,
         ...preferences,
       });
 

@@ -144,10 +144,6 @@ export function useAuthData() {
         setTheme(settings.applicationTheme);
       }
 
-      if (settings.proxyUrls) {
-        setProxySet(settings.proxyUrls);
-      }
-
       if (settings.enableAutoplay !== undefined) {
         setEnableAutoplay(settings.enableAutoplay);
       }
@@ -158,28 +154,6 @@ export function useAuthData() {
 
       if (settings.proxyTmdb !== undefined) {
         setProxyTmdb(settings.proxyTmdb);
-      }
-
-      if (settings.febboxKey !== undefined) {
-        setFebboxKey(settings.febboxKey);
-      }
-
-      if (settings.debridToken !== undefined) {
-        setdebridToken(settings.debridToken);
-      }
-
-      if (settings.debridService !== undefined) {
-        setdebridService(settings.debridService);
-      }
-
-      if (settings.enableDoubleClickToSeek !== undefined) {
-        setEnableDoubleClickToSeek(settings.enableDoubleClickToSeek);
-      }
-
-      if (settings.enableAutoResumeOnPlaybackError !== undefined) {
-        setEnableAutoResumeOnPlaybackError(
-          settings.enableAutoResumeOnPlaybackError,
-        );
       }
 
       if (settings.enableNumberKeySeeking !== undefined) {
