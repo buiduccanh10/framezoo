@@ -10,6 +10,7 @@ from pathlib import Path
 from urllib.request import Request, urlopen
 
 sys.path.insert(0, str(Path(__file__).parent))
+os.environ.setdefault("FRAMEZOO_TEST_LOOPBACK", "1")
 
 import libtorrent as lt
 

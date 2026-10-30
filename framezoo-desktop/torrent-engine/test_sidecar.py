@@ -11,6 +11,7 @@ from types import MethodType
 from types import ModuleType
 
 sys.path.insert(0, str(Path(__file__).parent))
+os.environ.setdefault("FRAMEZOO_TEST_LOOPBACK", "1")
 
 try:
     import torrent_constants as constants
@@ -2190,9 +2191,9 @@ class SidecarStorageTest(unittest.TestCase):
 
         runtime.handle = FakeHandle()
 
-        # Simulate steady block arrivals on every check
+        # Simulate steady fast block arrivals (>= 16 blocks per tick, > 1 MB/s)
         def finished_blocks(_target_piece):
-            blocks_done[0] += 2
+            blocks_done[0] += 16
             return blocks_done[0]
 
         runtime._target_piece_finished_blocks = finished_blocks
