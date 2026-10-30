@@ -3861,6 +3861,7 @@ body {
 
 .landing-donate-image-frame {
   display: grid;
+  width: 100%;
   min-height: 220px;
   max-height: min(65dvh, 520px);
   padding: 0.55rem;
