@@ -53,6 +53,19 @@ export default defineEventHandler(async event => {
       ? latestSessionAccessedAt
       : user.last_logged_in;
 
+  let userSettings = null;
+  if (settings) {
+    userSettings = {
+      applicationTheme: settings.application_theme,
+      applicationLanguage: settings.application_language,
+      defaultSubtitleLanguage: settings.default_subtitle_language,
+      enableAutoplay: settings.enable_autoplay,
+      enableSkipCredits: settings.enable_skip_credits,
+      proxyTmdb: settings.proxy_tmdb,
+      addons: Array.isArray(settings.addons) ? settings.addons : [],
+    };
+  }
+
   return {
     user: {
       id: user.id,
@@ -65,20 +78,7 @@ export default defineEventHandler(async event => {
       public_key: user.public_key,
       namespace: user.namespace,
     },
-    settings: settings
-      ? {
-          applicationTheme: settings.application_theme,
-          applicationLanguage: settings.application_language,
-          defaultSubtitleLanguage: settings.default_subtitle_language,
-          enableAutoplay: settings.enable_autoplay,
-          enableSkipCredits: settings.enable_skip_credits,
-          proxyTmdb: settings.proxy_tmdb,
-          debridService: settings.debrid_service,
-          febboxKey: settings.febbox_key,
-          proxyUrls: settings.proxy_urls,
-          addons: Array.isArray(settings.addons) ? settings.addons : [],
-        }
-      : null,
+    settings: userSettings,
     sessions: sessionsList,
     counts: {
       bookmarks: bookmarksCount,

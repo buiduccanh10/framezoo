@@ -100,7 +100,6 @@ export default defineEventHandler(async event => {
     update: {},
     create: {
       id: user.id,
-      proxy_urls: [],
       application_theme: 'ember',
     },
   });
