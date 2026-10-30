@@ -37,6 +37,12 @@ export function useDerived<T>(
   return [data, setter, reset, changed];
 }
 
+export interface ProfileSettings {
+  colorA: string;
+  colorB: string;
+  icon: string;
+}
+
 export function useSettingsState(
   theme: string | null,
   appLanguage: string,
@@ -44,25 +50,12 @@ export function useSettingsState(
   secondarySubtitleStyling: SubtitleStyling,
   deviceName: string,
   nickname: string,
-  proxyUrls: string[] | null,
   backendUrl: string | null,
-  febboxKey: string | null,
-  debridToken: string | null,
-  debridService: string,
-  tidbKey: string | null,
-  profile:
-    | {
-        colorA: string;
-        colorB: string;
-        icon: string;
-      }
-    | undefined,
+  profile: ProfileSettings | undefined,
   enableAutoplay: boolean,
   enableSkipCredits: boolean,
   enableAutoSkipSegments: boolean,
   proxyTmdb: boolean,
-  enableDoubleClickToSeek: boolean,
-  enableAutoResumeOnPlaybackError: boolean,
   customTheme: {
     primary: string;
     secondary: string;
@@ -70,26 +63,8 @@ export function useSettingsState(
   },
   homeSectionOrder: string[],
 ) {
-  const [proxyUrlsState, setProxyUrls, resetProxyUrls, proxyUrlsChanged] =
-    useDerived(proxyUrls);
   const [backendUrlState, setBackendUrl, resetBackendUrl, backendUrlChanged] =
     useDerived(backendUrl);
-  const [febboxKeyState, setFebboxKey, resetFebboxKey, febboxKeyChanged] =
-    useDerived(febboxKey);
-  const [
-    debridTokenState,
-    setdebridToken,
-    resetdebridToken,
-    debridTokenChanged,
-  ] = useDerived(debridToken);
-  const [
-    debridServiceState,
-    setdebridService,
-    _resetdebridService,
-    debridServiceChanged,
-  ] = useDerived(debridService);
-  const [tidbKeyState, setTIDBKey, resetTIDBKey, tidbKeyChanged] =
-    useDerived(tidbKey);
   const [themeState, setTheme, resetTheme, themeChanged] = useDerived(theme);
   const setPreviewTheme = usePreviewThemeStore((s) => s.setPreviewTheme);
   const resetPreviewTheme = useCallback(
@@ -102,8 +77,12 @@ export function useSettingsState(
     resetAppLanguage,
     appLanguageChanged,
   ] = useDerived(appLanguage);
-  const [subStylingState, setSubStyling, resetSubStyling, subStylingChanged] =
-    useDerived(subtitleStyling);
+  const [
+    subStylingState,
+    setSubStyling,
+    resetSubStyling,
+    subStylingChanged,
+  ] = useDerived(subtitleStyling);
   const [
     secondarySubStylingState,
     setSecondarySubStyling,
@@ -139,20 +118,13 @@ export function useSettingsState(
     resetEnableAutoSkipSegments,
     enableAutoSkipSegmentsChanged,
   ] = useDerived(enableAutoSkipSegments);
-  const [proxyTmdbState, setProxyTmdbState, resetProxyTmdb, proxyTmdbChanged] =
-    useDerived(proxyTmdb);
+
   const [
-    enableDoubleClickToSeekState,
-    setEnableDoubleClickToSeekState,
-    resetEnableDoubleClickToSeek,
-    enableDoubleClickToSeekChanged,
-  ] = useDerived(enableDoubleClickToSeek);
-  const [
-    enableAutoResumeOnPlaybackErrorState,
-    setEnableAutoResumeOnPlaybackErrorState,
-    resetEnableAutoResumeOnPlaybackError,
-    enableAutoResumeOnPlaybackErrorChanged,
-  ] = useDerived(enableAutoResumeOnPlaybackError);
+    proxyTmdbState,
+    setProxyTmdbState,
+    resetProxyTmdb,
+    proxyTmdbChanged,
+  ] = useDerived(proxyTmdb);
   const [
     customThemeState,
     setCustomThemeState,
@@ -173,11 +145,7 @@ export function useSettingsState(
     resetAppLanguage();
     resetSubStyling();
     resetSecondarySubStyling();
-    resetProxyUrls();
     resetBackendUrl();
-    resetFebboxKey();
-    resetdebridToken();
-    resetTIDBKey();
     resetDeviceName();
     resetNickname();
     resetProfile();
@@ -187,8 +155,6 @@ export function useSettingsState(
     resetEnableAutoSkipSegments();
 
     resetProxyTmdb();
-    resetEnableDoubleClickToSeek();
-    resetEnableAutoResumeOnPlaybackError();
     resetCustomTheme();
     resetHomeSectionOrder();
   }
@@ -201,18 +167,11 @@ export function useSettingsState(
     deviceNameChanged ||
     nicknameChanged ||
     backendUrlChanged ||
-    proxyUrlsChanged ||
-    febboxKeyChanged ||
-    debridTokenChanged ||
-    debridServiceChanged ||
-    tidbKeyChanged ||
     profileChanged ||
     enableAutoplayChanged ||
     enableSkipCreditsChanged ||
     enableAutoSkipSegmentsChanged ||
     proxyTmdbChanged ||
-    enableDoubleClickToSeekChanged ||
-    enableAutoResumeOnPlaybackErrorChanged ||
     customThemeChanged ||
     homeSectionOrderChanged;
 
@@ -249,35 +208,10 @@ export function useSettingsState(
       set: setNicknameState,
       changed: nicknameChanged,
     },
-    proxyUrls: {
-      state: proxyUrlsState,
-      set: setProxyUrls,
-      changed: proxyUrlsChanged,
-    },
     backendUrl: {
       state: backendUrlState,
       set: setBackendUrl,
       changed: backendUrlChanged,
-    },
-    febboxKey: {
-      state: febboxKeyState,
-      set: setFebboxKey,
-      changed: febboxKeyChanged,
-    },
-    debridToken: {
-      state: debridTokenState,
-      set: setdebridToken,
-      changed: debridTokenChanged,
-    },
-    debridService: {
-      state: debridServiceState,
-      set: setdebridService,
-      changed: debridServiceChanged,
-    },
-    tidbKey: {
-      state: tidbKeyState,
-      set: setTIDBKey,
-      changed: tidbKeyChanged,
     },
     profile: {
       state: profileState,
@@ -304,16 +238,6 @@ export function useSettingsState(
       state: proxyTmdbState,
       set: setProxyTmdbState,
       changed: proxyTmdbChanged,
-    },
-    enableDoubleClickToSeek: {
-      state: enableDoubleClickToSeekState,
-      set: setEnableDoubleClickToSeekState,
-      changed: enableDoubleClickToSeekChanged,
-    },
-    enableAutoResumeOnPlaybackError: {
-      state: enableAutoResumeOnPlaybackErrorState,
-      set: setEnableAutoResumeOnPlaybackErrorState,
-      changed: enableAutoResumeOnPlaybackErrorChanged,
     },
     customTheme: {
       state: customThemeState,

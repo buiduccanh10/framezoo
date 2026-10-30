@@ -29,7 +29,6 @@ import { AccountActionsPart } from "@/pages/parts/settings/AccountActionsPart";
 import { AccountEditPart } from "@/pages/parts/settings/AccountEditPart";
 import { AppearancePart } from "@/pages/parts/settings/AppearancePart";
 import { CaptionsPart } from "@/pages/parts/settings/CaptionsPart";
-import { ConnectionsPart } from "@/pages/parts/settings/ConnectionsPart";
 import { DeviceListPart } from "@/pages/parts/settings/DeviceListPart";
 import { RegisterCalloutPart } from "@/pages/parts/settings/RegisterCalloutPart";
 import { SidebarPart } from "@/pages/parts/settings/SidebarPart";
@@ -416,17 +415,6 @@ export function SettingsPage() {
   const backendUrlSetting = useAuthStore((s) => s.backendUrl);
   const setBackendUrl = useAuthStore((s) => s.setBackendUrl);
 
-  const febboxKey = usePreferencesStore((s) => s.febboxKey);
-  const setFebboxKey = usePreferencesStore((s) => s.setFebboxKey);
-
-  const debridToken = usePreferencesStore((s) => s.debridToken);
-  const setdebridToken = usePreferencesStore((s) => s.setdebridToken);
-  const debridService = usePreferencesStore((s) => s.debridService);
-  const setdebridService = usePreferencesStore((s) => s.setdebridService);
-
-  const tidbKey = usePreferencesStore((s) => s.tidbKey);
-  const setTIDBKey = usePreferencesStore((s) => s.setTIDBKey);
-
   const enableAutoplay = usePreferencesStore((s) => s.enableAutoplay);
   const setEnableAutoplay = usePreferencesStore((s) => s.setEnableAutoplay);
 
@@ -444,17 +432,6 @@ export function SettingsPage() {
 
   const proxyTmdb = usePreferencesStore((s) => s.proxyTmdb);
   const setProxyTmdb = usePreferencesStore((s) => s.setProxyTmdb);
-
-  const setEnableDoubleClickToSeek = usePreferencesStore(
-    (s) => s.setEnableDoubleClickToSeek,
-  );
-
-  const enableAutoResumeOnPlaybackError = usePreferencesStore(
-    (s) => s.enableAutoResumeOnPlaybackError,
-  );
-  const setEnableAutoResumeOnPlaybackError = usePreferencesStore(
-    (s) => s.setEnableAutoResumeOnPlaybackError,
-  );
   const setEnableNumberKeySeeking = usePreferencesStore(
     (s) => s.setEnableNumberKeySeeking,
   );
@@ -491,19 +468,6 @@ export function SettingsPage() {
         if (settings.applicationLanguage) {
           setAppLanguage(settings.applicationLanguage);
         }
-        if (settings.proxyUrls !== undefined) {
-          setProxySet(settings.proxyUrls?.filter((v) => v !== "") ?? null);
-        }
-        if (settings.febboxKey !== undefined) {
-          setFebboxKey(settings.febboxKey);
-        }
-        if (settings.debridToken !== undefined) {
-          setdebridToken(settings.debridToken);
-        }
-        if (settings.debridService) {
-          setdebridService(settings.debridService);
-        }
-
         if (settings.enableAutoplay !== undefined) {
           setEnableAutoplay(settings.enableAutoplay);
         }
@@ -516,14 +480,6 @@ export function SettingsPage() {
 
         if (settings.proxyTmdb !== undefined) {
           setProxyTmdb(settings.proxyTmdb);
-        }
-        if (settings.enableDoubleClickToSeek !== undefined) {
-          setEnableDoubleClickToSeek(settings.enableDoubleClickToSeek);
-        }
-        if (settings.enableAutoResumeOnPlaybackError !== undefined) {
-          setEnableAutoResumeOnPlaybackError(
-            settings.enableAutoResumeOnPlaybackError,
-          );
         }
         if (settings.enableNumberKeySeeking !== undefined) {
           setEnableNumberKeySeeking(settings.enableNumberKeySeeking);
@@ -545,17 +501,10 @@ export function SettingsPage() {
     backendUrl,
     setTheme,
     setAppLanguage,
-    setProxySet,
-    setFebboxKey,
-    setdebridToken,
-    setdebridService,
-
     setEnableAutoplay,
     setEnableSkipCredits,
     setEnableAutoSkipSegments,
     setProxyTmdb,
-    setEnableDoubleClickToSeek,
-    setEnableAutoResumeOnPlaybackError,
     setEnableNumberKeySeeking,
     setCustomTheme,
   ]);
@@ -567,20 +516,12 @@ export function SettingsPage() {
     subSecondaryStyling,
     decryptedName,
     account?.nickname || "",
-    proxySet,
     backendUrlSetting,
-    febboxKey,
-    debridToken,
-    debridService,
-    tidbKey,
     account ? account.profile : undefined,
-
     enableAutoplay,
     enableSkipCredits,
     enableAutoSkipSegments,
     proxyTmdb,
-    true,
-    enableAutoResumeOnPlaybackError,
     customThemeBaseline ?? customTheme,
     homeSectionOrder,
   );
@@ -609,34 +550,19 @@ export function SettingsPage() {
       if (
         state.appLanguage.changed ||
         state.theme.changed ||
-        state.proxyUrls.changed ||
-        state.febboxKey.changed ||
-        state.debridToken.changed ||
-        state.debridService.changed ||
         state.enableAutoplay.changed ||
         state.enableSkipCredits.changed ||
         state.enableAutoSkipSegments.changed ||
         state.proxyTmdb.changed ||
-        state.enableDoubleClickToSeek.changed ||
-        state.enableAutoResumeOnPlaybackError.changed ||
         state.customTheme.changed
       ) {
         await updateSettings(backendUrl, account, {
           applicationLanguage: state.appLanguage.state,
           applicationTheme: state.theme.state,
-          proxyUrls: state.proxyUrls.state?.filter((v) => v !== "") ?? null,
-          febboxKey: state.febboxKey.state,
-          debridToken: state.debridToken.state,
-          debridService: state.debridService.state,
-
           enableAutoplay: state.enableAutoplay.state,
           enableSkipCredits: state.enableSkipCredits.state,
           enableAutoSkipSegments: state.enableAutoSkipSegments.state,
-
           proxyTmdb: state.proxyTmdb.state,
-          enableDoubleClickToSeek: state.enableDoubleClickToSeek.state,
-          enableAutoResumeOnPlaybackError:
-            state.enableAutoResumeOnPlaybackError.state,
           customTheme: state.customTheme.state,
         });
       }
@@ -672,16 +598,7 @@ export function SettingsPage() {
     setTheme(state.theme.state);
     setSubStyling(state.subtitleStyling.state);
     setSubSecondaryStyling(state.secondarySubtitleStyling.state);
-    setProxySet(state.proxyUrls.state?.filter((v) => v !== "") ?? null);
-    setFebboxKey(state.febboxKey.state);
-    setdebridToken(state.debridToken.state);
-    setdebridService(state.debridService.state);
-    setTIDBKey(state.tidbKey.state);
     setProxyTmdb(state.proxyTmdb.state);
-    setEnableDoubleClickToSeek(state.enableDoubleClickToSeek.state);
-    setEnableAutoResumeOnPlaybackError(
-      state.enableAutoResumeOnPlaybackError.state,
-    );
     setHomeSectionOrder(state.homeSectionOrder.state);
     setCustomTheme(state.customTheme.state);
     setCustomThemeBaseline(state.customTheme.state);
@@ -712,11 +629,6 @@ export function SettingsPage() {
     setPendingBackendChange,
     state,
     setBackendUrl,
-
-    setFebboxKey,
-    setdebridToken,
-    setdebridService,
-    setTIDBKey,
     setEnableAutoplay,
     setEnableSkipCredits,
     setEnableAutoSkipSegments,
@@ -724,13 +636,10 @@ export function SettingsPage() {
     setTheme,
     setSubStyling,
     setSubSecondaryStyling,
-    setProxySet,
     updateDeviceName,
     updateProfile,
     updateNickname,
     setProxyTmdb,
-    setEnableDoubleClickToSeek,
-    setEnableAutoResumeOnPlaybackError,
     setHomeSectionOrder,
     setCustomTheme,
   ]);
@@ -784,19 +693,19 @@ export function SettingsPage() {
                   setNickname={state.nickname.set}
                   colorA={state.profile.state.colorA}
                   setColorA={(v) => {
-                    state.profile.set((s) =>
+                    state.profile.set((s: any) =>
                       s ? { ...s, colorA: v } : undefined,
                     );
                   }}
                   colorB={state.profile.state.colorB}
                   setColorB={(v) =>
-                    state.profile.set((s) =>
+                    state.profile.set((s: any) =>
                       s ? { ...s, colorB: v } : undefined,
                     )
                   }
                   userIcon={state.profile.state.icon as any}
                   setUserIcon={(v) =>
-                    state.profile.set((s) =>
+                    state.profile.set((s: any) =>
                       s ? { ...s, icon: v } : undefined,
                     )
                   }
@@ -819,14 +728,6 @@ export function SettingsPage() {
                 setEnableSkipCredits={state.enableSkipCredits.set}
                 enableAutoSkipSegments={state.enableAutoSkipSegments.state}
                 setEnableAutoSkipSegments={state.enableAutoSkipSegments.set}
-                enableDoubleClickToSeek
-                setEnableDoubleClickToSeek={() => undefined}
-                enableAutoResumeOnPlaybackError={
-                  state.enableAutoResumeOnPlaybackError.state
-                }
-                setEnableAutoResumeOnPlaybackError={
-                  state.enableAutoResumeOnPlaybackError.set
-                }
                 homeSectionOrder={state.homeSectionOrder.state}
                 setHomeSectionOrder={state.homeSectionOrder.set}
               />
@@ -864,17 +765,6 @@ export function SettingsPage() {
               <TorrentPart />
             </div>
           )}
-          {shouldShowConnections &&
-            (searchQuery.trim() ||
-              !selectedCategory ||
-              selectedCategory === "settings-connection") && (
-              <div id="settings-connection">
-                <ConnectionsPart
-                  tidbKey={state.tidbKey.state}
-                  setTIDBKey={state.tidbKey.set}
-                />
-              </div>
-            )}
         </SettingsLayout>
       </div>
       <Transition
