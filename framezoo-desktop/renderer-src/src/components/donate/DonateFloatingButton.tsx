@@ -9,7 +9,7 @@ export function DonateFloatingButton() {
   return (
     <button
       type="button"
-      className="fixed bottom-[calc(1.25rem+env(safe-area-inset-bottom))] left-[calc(1.25rem+env(safe-area-inset-left))] z-[600] shrink-0 rounded-full tabbable transition-all duration-200 ease-out hover:scale-105 hover:brightness-110 active:scale-95 motion-reduce:transition-none"
+      className="fixed bottom-[calc(1.25rem+env(safe-area-inset-bottom))] right-[calc(1.25rem+env(safe-area-inset-right))] z-[600] shrink-0 rounded-full tabbable transition-all duration-200 ease-out hover:scale-105 hover:brightness-110 active:scale-95 motion-reduce:transition-none"
       onClick={modal.show}
       aria-label={t("donate.button", "Support Framezoo")}
       title={t("donate.modalTitle", "Help us keep building Framezoo")}

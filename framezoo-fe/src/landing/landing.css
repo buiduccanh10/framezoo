@@ -1780,7 +1780,7 @@
 .landing-float-donate {
   position: fixed;
   left: clamp(16px, 2vw, 28px);
-  bottom: calc(20px + env(safe-area-inset-bottom));
+  bottom: calc(30px + env(safe-area-inset-bottom));
   z-index: 99;
   display: flex;
   align-items: center;
@@ -1801,7 +1801,7 @@
 
 .landing-float-donate-image {
   display: block;
-  width: min(171px, calc(100vw - 32px));
+  width: min(120px, calc(100vw - 32px));
   height: auto;
 }
 
