@@ -4,7 +4,7 @@ stages:
 
 variables:
   GIT_STRATEGY: none
-  PNPM_VERSION: "12.8.1"
+  PNPM_VERSION: "12.16.1"
 
 # Required CI/CD variables (GitLab > Settings > CI/CD > Variables):
 # - VPS_HOST: SSH host of your VPS

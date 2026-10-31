@@ -4,7 +4,7 @@ WORKDIR /app
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 
-RUN corepack enable && corepack install --global pnpm@12.15.0
+RUN corepack enable && corepack install --global pnpm@12.16.1
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 COPY framezoo-admin/package.json ./framezoo-admin/package.json
