@@ -1,2 +1,2 @@
-libtorrent==2.0.13
+libtorrent>=2.1.1,<=2.1.2
 pyinstaller>=6,<7

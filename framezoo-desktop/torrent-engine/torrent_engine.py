@@ -312,10 +312,11 @@ class LibtorrentEngine:
             if block_progress is not None:
                 settings["alert_mask"] = int(block_progress)
             session = lt.session(settings)
-            try:
-                session.start_dht()
-            except Exception:
-                pass
+            if not settings.get("enable_dht"):
+                try:
+                    session.start_dht()
+                except Exception:
+                    pass
             try:
                 self.listen_port = int(session.listen_port())
             except Exception:

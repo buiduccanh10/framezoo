@@ -452,9 +452,15 @@ class TorrentDiscovery:
 
     def _bootstrap_dht(self) -> None:
         try:
-            start_dht = getattr(self.session, "start_dht", None)
-            if callable(start_dht):
-                start_dht()
+            is_dht_running = getattr(self.session, "is_dht_running", None)
+            if callable(is_dht_running) and not is_dht_running():
+                apply_settings = getattr(self.session, "apply_settings", None)
+                if callable(apply_settings):
+                    apply_settings({"enable_dht": True})
+                else:
+                    start_dht = getattr(self.session, "start_dht", None)
+                    if callable(start_dht):
+                        start_dht()
             add_dht_node = getattr(self.session, "add_dht_node", None)
             if callable(add_dht_node):
                 for host, port in constants.DHT_BOOTSTRAP_NODES:
