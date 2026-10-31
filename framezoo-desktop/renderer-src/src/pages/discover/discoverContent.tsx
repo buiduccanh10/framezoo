@@ -130,7 +130,11 @@ export function DiscoverContent({
     });
 
     return result.map((carousel, index) => {
-      if (React.isValidElement(carousel) && index < 2) {
+      if (
+        React.isValidElement(carousel) &&
+        carousel.type !== React.Fragment &&
+        index < 2
+      ) {
         return React.cloneElement(carousel as React.ReactElement<any>, {
           priority: true,
         });
@@ -482,7 +486,7 @@ export function DiscoverContent({
         />
       ),
       addons: (
-        <>
+        <React.Fragment key="all-addons">
           <AddonCatalogRow
             key="addon-catalog-all"
             type="movie"
@@ -497,7 +501,7 @@ export function DiscoverContent({
             carouselRefs={carouselRefs}
             onShowDetails={handleShowDetails}
           />
-        </>
+        </React.Fragment>
       ),
     };
 
@@ -513,7 +517,7 @@ export function DiscoverContent({
       );
     });
 
-    return <>{sortAndPrioritize(sectionMap)}</>;
+    return sortAndPrioritize(sectionMap);
   };
 
   const renderSelectedGenreContent = () => {

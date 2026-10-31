@@ -1459,7 +1459,7 @@ napi_value create_player(napi_env env, napi_callback_info info) {
       reinterpret_cast<uintptr_t>(surface_native_handle(player->surface))
   );
   set_mpv_option(player.get(), "wid", wid_str.c_str());
-  set_mpv_option(player.get(), "vo", "gpu,direct3d,null");
+  set_mpv_option(player.get(), "vo", "gpu-next,gpu,direct3d,null");
   set_mpv_option(player.get(), "gpu-api", "d3d11,auto");
   set_mpv_option(player.get(), "gpu-context", "d3d11,auto");
   set_mpv_option(player.get(), "d3d11-flip", "yes");
