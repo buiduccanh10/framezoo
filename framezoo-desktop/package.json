@@ -3,7 +3,7 @@
   "private": true,
   "version": "2.1.0",
   "main": "dist/main.cjs",
-  "packageManager": "pnpm@12.15.0",
+  "packageManager": "pnpm@12.16.1",
   "scripts": {
     "dev": "pnpm run resources:ensure && pnpm run torrent:setup && concurrently -k -n renderer,shell,electron -c cyan,yellow,green \"pnpm run dev:renderer\" \"pnpm run dev:shell\" \"pnpm run dev:electron\"",
     "dev:renderer": "pnpm exec vite --config renderer-src/vite.config.mts --host 127.0.0.1 --port 5174",
