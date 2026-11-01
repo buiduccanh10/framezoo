@@ -784,7 +784,17 @@
     },
     "menus": {
       "audio": {
-        "default": "Výchozí"
+        "default": "Výchozí",
+        "modeSection": "Režim zvukového výstupu",
+        "tracksSection": "Zvukové stopy",
+        "modes": {
+          "auto": "Prostorový zvuk / Automatický",
+          "autoDesc": "5.1/7.1, Dolby Atmos, Apple Spatial Audio, Windows Sonic",
+          "stereoDialogue": "Stereo (Zesílení dialogů)",
+          "stereoDialogueDesc": "Vylepšená srozumitelnost hlasu pro reproduktory notebooku nebo noční poslech",
+          "passthrough": "Průchod (bitový tok)",
+          "passthroughDesc": "Přímý digitální stream pro externí soundbary a AV receivery"
+        }
       },
       "episodes": {
         "button": "Epizody",

@@ -21,7 +21,10 @@ export const DEFAULT_HOME_SECTIONS = [
   "addons",
 ];
 
+export type AudioOutputMode = "auto" | "stereo-dialogue" | "passthrough";
+
 export interface PreferencesStore {
+  audioOutputMode: AudioOutputMode;
   enableAutoplay: boolean;
   enableTrailer: boolean;
   enableTrailerAudio: boolean;
@@ -42,6 +45,7 @@ export interface PreferencesStore {
   torrentProfile: TorrentProfile;
   homeSectionOrder: string[];
 
+  setAudioOutputMode(v: AudioOutputMode): void;
   setEnableAutoplay(v: boolean): void;
   setEnableTrailer(v: boolean): void;
   setEnableTrailerAudio(v: boolean): void;
@@ -66,6 +70,7 @@ export interface PreferencesStore {
 export const usePreferencesStore = create(
   persist(
     immer<PreferencesStore>((set) => ({
+      audioOutputMode: "auto",
       enableAutoplay: true,
       enableTrailer: true,
       enableTrailerAudio: false,
@@ -86,6 +91,11 @@ export const usePreferencesStore = create(
       torrentProfile: "default",
       homeSectionOrder: DEFAULT_HOME_SECTIONS,
 
+      setAudioOutputMode(v) {
+        set((s) => {
+          s.audioOutputMode = v;
+        });
+      },
       setEnableAutoplay(v) {
         set((s) => {
           s.enableAutoplay = v;

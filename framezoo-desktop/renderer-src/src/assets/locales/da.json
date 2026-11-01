@@ -784,7 +784,17 @@
     },
     "menus": {
       "audio": {
-        "default": "Misligholdelse"
+        "default": "Misligholdelse",
+        "modeSection": "Lydudgangstilstand",
+        "tracksSection": "Lydspor",
+        "modes": {
+          "auto": "Surroundlyd / Automatisk",
+          "autoDesc": "5.1/7.1, Dolby Atmos, Apple Spatial Audio, Windows Sonic",
+          "stereoDialogue": "Stereo (dialogforstærkning)",
+          "stereoDialogueDesc": "Forbedret stemmeklarhed til bærbare computerhøjttalere eller lytning om natten",
+          "passthrough": "Passthrough (bitstream)",
+          "passthroughDesc": "Direkte digital stream til eksterne soundbars og AV-receivere"
+        }
       },
       "episodes": {
         "button": "Episoder",

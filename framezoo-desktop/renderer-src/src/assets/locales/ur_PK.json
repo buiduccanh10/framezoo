@@ -784,7 +784,17 @@
     },
     "menus": {
       "audio": {
-        "default": "طے شدہ"
+        "default": "طے شدہ",
+        "modeSection": "آڈیو آؤٹ پٹ موڈ",
+        "tracksSection": "آڈیو ٹریکس",
+        "modes": {
+          "auto": "گھیراؤ آواز / آٹو",
+          "autoDesc": "5.1/7.1، Dolby Atmos، Apple Spatial Audio، Windows Sonic",
+          "stereoDialogue": "سٹیریو (ڈائیلاگ بوسٹ)",
+          "stereoDialogueDesc": "لیپ ٹاپ اسپیکرز یا رات کو سننے کے لیے بہتر آواز کی وضاحت",
+          "passthrough": "پاس تھرو (بٹ اسٹریم)",
+          "passthroughDesc": "بیرونی ساؤنڈ بارز اور اے وی ریسیورز کے لیے براہ راست ڈیجیٹل سٹریم"
+        }
       },
       "episodes": {
         "button": "اقساط",

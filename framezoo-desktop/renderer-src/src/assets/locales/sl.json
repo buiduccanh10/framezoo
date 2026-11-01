@@ -784,7 +784,17 @@
     },
     "menus": {
       "audio": {
-        "default": "Privzeto"
+        "default": "Privzeto",
+        "modeSection": "Način zvočnega izhoda",
+        "tracksSection": "Zvočni posnetki",
+        "modes": {
+          "auto": "Prostorski zvok / Samodejno",
+          "autoDesc": "5.1/7.1, Dolby Atmos, Apple Spatial Audio, Windows Sonic",
+          "stereoDialogue": "Stereo (ojačanje dialoga)",
+          "stereoDialogueDesc": "Izboljšana jasnost glasu za zvočnike prenosnika ali poslušanje ponoči",
+          "passthrough": "Prehod (bitni tok)",
+          "passthroughDesc": "Neposredni digitalni prenos za zunanje zvočne module in AV sprejemnike"
+        }
       },
       "episodes": {
         "button": "Epizode",

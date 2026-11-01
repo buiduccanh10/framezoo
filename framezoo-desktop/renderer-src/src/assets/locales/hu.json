@@ -784,7 +784,17 @@
     },
     "menus": {
       "audio": {
-        "default": "Alap"
+        "default": "Alap",
+        "modeSection": "Hangkimeneti mód",
+        "tracksSection": "Hangsávok",
+        "modes": {
+          "auto": "Térhatású hang / Automatikus",
+          "autoDesc": "5.1/7.1, Dolby Atmos, Apple Spatial Audio, Windows Sonic",
+          "stereoDialogue": "Sztereó (párbeszéd erősítés)",
+          "stereoDialogueDesc": "Fokozott hangtisztaság laptop hangszórókhoz vagy éjszakai zenehallgatáshoz",
+          "passthrough": "Áthaladás (bitfolyam)",
+          "passthroughDesc": "Közvetlen digitális stream külső soundbarokhoz és AV receiverekhez"
+        }
       },
       "episodes": {
         "button": "Részek",

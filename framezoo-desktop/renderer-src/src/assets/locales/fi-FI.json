@@ -784,7 +784,17 @@
     },
     "menus": {
       "audio": {
-        "default": "Oletus"
+        "default": "Oletus",
+        "modeSection": "Äänilähtötila",
+        "tracksSection": "Ääniraidat",
+        "modes": {
+          "auto": "Surround-ääni / Automaattinen",
+          "autoDesc": "5.1/7.1, Dolby Atmos, Apple Spatial Audio, Windows Sonic",
+          "stereoDialogue": "Stereo (Dialogin tehostus)",
+          "stereoDialogueDesc": "Parannettu äänen selkeys kannettavan tietokoneen kaiuttimissa tai yökuunteluun",
+          "passthrough": "Läpikulku (bittivirta)",
+          "passthroughDesc": "Suora digitaalinen suoratoisto ulkoisille soundbar-kaiuttimille ja AV-viritinvahvistimille"
+        }
       },
       "episodes": {
         "button": "Jaksot",

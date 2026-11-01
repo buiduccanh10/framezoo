@@ -784,7 +784,17 @@
     },
     "menus": {
       "audio": {
-        "default": "Standard"
+        "default": "Standard",
+        "modeSection": "Audioausgabemodus",
+        "tracksSection": "Audiospuren",
+        "modes": {
+          "auto": "Surround-Sound / Auto",
+          "autoDesc": "5.1/7.1, Dolby Atmos, Apple Spatial Audio, Windows Sonic",
+          "stereoDialogue": "Stereo (Dialogverstärkung)",
+          "stereoDialogueDesc": "Verbesserte Sprachverständlichkeit für Laptop-Lautsprecher oder beim Hören im Dunkeln",
+          "passthrough": "Durchleitung (Bitstrom)",
+          "passthroughDesc": "Direkter digitaler Stream für externe Soundbars und AV-Receiver"
+        }
       },
       "episodes": {
         "button": "Folg",

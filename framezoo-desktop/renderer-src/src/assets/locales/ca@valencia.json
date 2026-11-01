@@ -784,7 +784,17 @@
     },
     "menus": {
       "audio": {
-        "default": "Per defecte"
+        "default": "Per defecte",
+        "modeSection": "Mode de sortida d'àudio",
+        "tracksSection": "Pistes d'àudio",
+        "modes": {
+          "auto": "So envoltant / Automàtic",
+          "autoDesc": "5.1/7.1, Dolby Atmos, Apple Spatial Audio, Windows Sonic",
+          "stereoDialogue": "Estèreo (augment de diàleg)",
+          "stereoDialogueDesc": "Claredat de veu millorada per a altaveus d'ordinador portàtil o escolta nocturna",
+          "passthrough": "Passthrough (Bitstream)",
+          "passthroughDesc": "Transmissió digital directa per a barres de so externes i receptors AV"
+        }
       },
       "episodes": {
         "button": "Episodis",

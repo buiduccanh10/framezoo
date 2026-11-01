@@ -784,7 +784,17 @@
     },
     "menus": {
       "audio": {
-        "default": "Implicit"
+        "default": "Implicit",
+        "modeSection": "Mod de ieșire audio",
+        "tracksSection": "Piste audio",
+        "modes": {
+          "auto": "Sunet surround / Automat",
+          "autoDesc": "5.1/7.1, Dolby Atmos, Apple Spatial Audio, Windows Sonic",
+          "stereoDialogue": "Stereo (amplificare dialog)",
+          "stereoDialogueDesc": "Claritate vocală îmbunătățită pentru difuzoarele laptopului sau ascultarea pe timp de noapte",
+          "passthrough": "Transmisie (Bitstream)",
+          "passthroughDesc": "Flux digital direct pentru soundbar-uri externe și receivere AV"
+        }
       },
       "episodes": {
         "button": "Episoade",

@@ -784,7 +784,17 @@
     },
     "menus": {
       "audio": {
-        "default": "ברירת מחדל"
+        "default": "ברירת מחדל",
+        "modeSection": "מצב פלט שמע",
+        "tracksSection": "רצועות שמע",
+        "modes": {
+          "auto": "סראונד / אוטומטי",
+          "autoDesc": "5.1/7.1, דולבי אטמוס, Apple Spatial Audio, Windows Sonic",
+          "stereoDialogue": "סטריאו (הגברת דיאלוג)",
+          "stereoDialogueDesc": "בהירות קול משופרת לרמקולים של מחשב נייד או להאזנה בלילה",
+          "passthrough": "מעבר (Bitstream)",
+          "passthroughDesc": "הזרמה דיגיטלית ישירה עבור סאונדברים חיצוניים ומקלטים AV"
+        }
       },
       "episodes": {
         "button": "פרקים",

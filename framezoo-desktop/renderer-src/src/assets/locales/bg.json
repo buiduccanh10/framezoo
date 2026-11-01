@@ -784,7 +784,17 @@
     },
     "menus": {
       "audio": {
-        "default": "По подразбиране"
+        "default": "По подразбиране",
+        "modeSection": "Режим на аудио изход",
+        "tracksSection": "Аудио записи",
+        "modes": {
+          "auto": "Съраунд звук / Автоматичен",
+          "autoDesc": "5.1/7.1, Dolby Atmos, Apple Spatial Audio, Windows Sonic",
+          "stereoDialogue": "Стерео (Усилване на диалога)",
+          "stereoDialogueDesc": "Подобрена яснота на гласа за високоговорители на лаптоп или слушане през нощта",
+          "passthrough": "Преминаване (битов поток)",
+          "passthroughDesc": "Директен цифров поток за външни саундбари и AV приемници"
+        }
       },
       "episodes": {
         "button": "епизоди",

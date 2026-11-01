@@ -784,7 +784,17 @@
     },
     "menus": {
       "audio": {
-        "default": "Vaikimisi"
+        "default": "Vaikimisi",
+        "modeSection": "Heliväljundi režiim",
+        "tracksSection": "Heliribad",
+        "modes": {
+          "auto": "Ruumiline heli / Automaatne",
+          "autoDesc": "5.1/7.1, Dolby Atmos, Apple'i ruumiline heli, Windows Sonic",
+          "stereoDialogue": "Stereo (dialoogi võimendus)",
+          "stereoDialogueDesc": "Täiustatud hääle selgus sülearvuti kõlarites või öisel kuulamisel",
+          "passthrough": "Läbilaskmine (bitivoog)",
+          "passthroughDesc": "Otsene digitaalvoog välistele heliribadele ja AV-vastuvõtjatele"
+        }
       },
       "episodes": {
         "button": "Episoodid",

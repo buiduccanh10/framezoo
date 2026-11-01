@@ -784,7 +784,17 @@
     },
     "menus": {
       "audio": {
-        "default": "기본"
+        "default": "기본",
+        "modeSection": "오디오 출력 모드",
+        "tracksSection": "오디오 트랙",
+        "modes": {
+          "auto": "서라운드 사운드 / 자동",
+          "autoDesc": "5.1/7.1, 돌비 애트모스, 애플 스페이셜 오디오, 윈도우 소닉",
+          "stereoDialogue": "스테레오(대화 증폭)",
+          "stereoDialogueDesc": "노트북 스피커 또는 야간 청취 시 향상된 음성 선명도",
+          "passthrough": "패스스루(비트스트림)",
+          "passthroughDesc": "외부 사운드바 및 AV 리시버용 직접 디지털 스트림"
+        }
       },
       "episodes": {
         "button": "회차",

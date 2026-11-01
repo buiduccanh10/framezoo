@@ -784,7 +784,17 @@
     },
     "menus": {
       "audio": {
-        "default": "Standaard"
+        "default": "Standaard",
+        "modeSection": "Audio-uitvoermodus",
+        "tracksSection": "Audiotracks",
+        "modes": {
+          "auto": "Surround Sound / Auto",
+          "autoDesc": "5.1/7.1, Dolby Atmos, Apple Spatial Audio, Windows Sonic",
+          "stereoDialogue": "Stereo (Dialogue Boost)",
+          "stereoDialogueDesc": "Verbeterde spraakhelderheid voor laptopluidsprekers of luisteren in het donker.",
+          "passthrough": "Doorvoer (bitstroom)",
+          "passthroughDesc": "Directe digitale stream voor externe soundbars en AV-receivers"
+        }
       },
       "episodes": {
         "button": "Afleveringen",
