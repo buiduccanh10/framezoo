@@ -53,6 +53,7 @@ class TorrentRecord:
         # Metadata alone must not make a failed startup reusable.
         self.cache_ready = cache_ready
         self.session_ids: Set[str] = set()
+        self.last_file_index: Optional[int] = None
         self.lock = threading.RLock()
         self.removal_timer: Optional[threading.Timer] = None
         info_hash = None
@@ -160,13 +161,48 @@ class TorrentRecord:
             info = self.handle.torrent_file()
             if info is None:
                 return
-            priorities = [0] * info.files().num_files()
+            num_files = info.files().num_files()
+            priorities = [0] * num_files
+            has_active_session = False
             with self.lock:
+                has_active_session = bool(self.session_ids)
                 for session_id in self.session_ids:
                     runtime = self.engine.sessions.get(session_id)
-                    if runtime is not None and runtime.file_index is not None:
+                    if (
+                        runtime is not None
+                        and runtime.file_index is not None
+                        and 0 <= runtime.file_index < num_files
+                    ):
                         priorities[runtime.file_index] = constants.STREAM_IDLE_FILE_PRIORITY
+                        self.last_file_index = runtime.file_index
+                if not any(priorities) and (
+                    self.last_file_index is not None
+                    and 0 <= self.last_file_index < num_files
+                ):
+                    # Keep the last active file at STREAM_IDLE_FILE_PRIORITY (1) while
+                    # idle during the grace window so total_wanted stays > 0. Setting all
+                    # file priorities to 0 forces libtorrent 2.x into `finished`
+                    # (upload_only: 1) state, which immediately disconnects all seeds
+                    # ("upload to upload connection") and puts them on reconnect cooldown.
+                    priorities[self.last_file_index] = constants.STREAM_IDLE_FILE_PRIORITY
+                    try:
+                        files = info.files()
+                        progress = self.handle.file_progress()
+                        if (
+                            progress
+                            and len(progress) == num_files
+                            and progress[self.last_file_index] >= files.file_size(self.last_file_index)
+                        ):
+                            for idx in range(num_files):
+                                if progress[idx] < files.file_size(idx):
+                                    priorities[idx] = constants.STREAM_IDLE_FILE_PRIORITY
+                                    break
+                    except Exception:
+                        pass
             self.handle.prioritize_files(priorities)
+            set_download_limit = getattr(self.handle, "set_download_limit", None)
+            if callable(set_download_limit):
+                set_download_limit(0 if has_active_session else 1)
         except Exception:
             pass
 
@@ -286,6 +322,9 @@ class LibtorrentEngine:
                 "whole_pieces_threshold": 0,
                 "peer_connect_timeout": 3,
                 "piece_timeout": 3,
+                "min_reconnect_time": 2,
+                "max_failcount": 1,
+                "ignore_limits_on_local_network": False,
                 "aio_threads": 8,
                 "send_buffer_watermark": 4 * 1024 * 1024,
                 "suggest_mode": 1,
@@ -304,13 +343,23 @@ class LibtorrentEngine:
                 "category_t",
                 None,
             )
+            mask = 0
             block_progress = getattr(
                 alert_category,
                 "block_progress_notification",
                 None,
             )
             if block_progress is not None:
-                settings["alert_mask"] = int(block_progress)
+                mask |= int(block_progress)
+            progress_notif = getattr(
+                alert_category,
+                "progress_notification",
+                None,
+            )
+            if progress_notif is not None:
+                mask |= int(progress_notif)
+            if mask:
+                settings["alert_mask"] = mask
             session = lt.session(settings)
             if not settings.get("enable_dht"):
                 try:
@@ -432,11 +481,18 @@ class LibtorrentEngine:
                 resume_params.save_path = save_path
                 # Ensure the selected file has STREAM_IDLE_FILE_PRIORITY (1) so libtorrent
                 # does not start with total_wanted == 0 (which triggers finished state and drops seeds).
-                if torrent_info is not None:
+                # Also clear saved piece_priorities so stale 0-priority pieces from a previous
+                # episode or idle save cannot override file_priorities in libtorrent 2.x.
+                try:
+                    resume_params.piece_priorities = []
+                except Exception:
+                    pass
+                effective_ti = torrent_info or getattr(resume_params, "ti", None)
+                if effective_ti is not None:
                     try:
-                        file_index, _, _ = select_file(torrent_info, request)
+                        file_index, _, _ = select_file(effective_ti, request)
                         if file_index is not None:
-                            num_files = torrent_info.files().num_files()
+                            num_files = effective_ti.files().num_files()
                             file_priors = [0] * num_files
                             file_priors[file_index] = constants.STREAM_IDLE_FILE_PRIORITY
                             resume_params.file_priorities = file_priors
@@ -587,6 +643,18 @@ class LibtorrentEngine:
                     record=record,
                     torrent_profile=request.get("torrentProfile", "default"),
                 )
+                try:
+                    if record.handle.status().has_metadata:
+                        info = record.handle.torrent_file()
+                        if info is not None:
+                            (
+                                runtime.file_index,
+                                runtime.file_path,
+                                runtime.file_size,
+                            ) = select_file(info, request)
+                            record.last_file_index = runtime.file_index
+                except Exception:
+                    pass
                 with self.lock:
                     self.sessions[session_id] = runtime
                     self.session_records[session_id] = record_key
@@ -728,15 +796,21 @@ class LibtorrentEngine:
             if runtime is None:
                 return
             if record is not None:
+                if record.discovery is not None:
+                    try:
+                        record.discovery._harvest_peers_from_handle()
+                    except Exception:
+                        pass
                 # Demote active boosted pieces back to STREAM_IDLE_FILE_PRIORITY
                 # before saving resume data so pieces are not saved at 0/2/4/7.
                 runtime.release_playback_schedule()
             runtime.stop(remove_torrent=False)
             if record is not None:
                 is_empty = record.remove_session(session_id)
-                # Keep active peer connections warm during the grace period by setting
-                # file priorities to 0 (idle) rather than calling record.handle.pause()
-                # which abruptly drops all TCP/uTP sockets in the swarm.
+                # Keep active peer connections warm during the grace period by keeping
+                # the last active file at STREAM_IDLE_FILE_PRIORITY (1) and throttling
+                # download_limit to 1 B/s rather than setting all files to 0 (which forces
+                # libtorrent into finished/upload-only state and drops all seeds).
                 record.update_file_priorities()
                 if is_empty:
                     record.pause_discovery()
@@ -761,8 +835,16 @@ class LibtorrentEngine:
                 alerts = self.session.pop_alerts()
             except Exception:
                 alerts = []
+            block_alert_types = tuple(
+                a
+                for a in (
+                    getattr(lt, "block_finished_alert", None),
+                    getattr(lt, "block_downloading_alert", None),
+                )
+                if a is not None
+            )
             for alert in alerts:
-                if not isinstance(alert, lt.block_finished_alert):
+                if not isinstance(alert, block_alert_types):
                     continue
                 try:
                     alert_handle = alert.handle

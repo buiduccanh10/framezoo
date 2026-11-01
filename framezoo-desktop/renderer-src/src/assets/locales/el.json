@@ -784,7 +784,17 @@
     },
     "menus": {
       "audio": {
-        "default": "Αθέτηση"
+        "default": "Αθέτηση",
+        "modeSection": "Λειτουργία εξόδου ήχου",
+        "tracksSection": "Ηχητικά κομμάτια",
+        "modes": {
+          "auto": "Ήχος Surround / Αυτόματο",
+          "autoDesc": "5.1/7.1, Dolby Atmos, Apple Spatial Audio, Windows Sonic",
+          "stereoDialogue": "Στερεοφωνικό (Ενίσχυση Διαλόγου)",
+          "stereoDialogueDesc": "Βελτιωμένη καθαρότητα φωνής για ηχεία φορητού υπολογιστή ή νυχτερινή ακρόαση",
+          "passthrough": "Διέλευση (Bitstream)",
+          "passthroughDesc": "Άμεση ψηφιακή ροή για εξωτερικές μπάρες ήχου και δέκτες AV"
+        }
       },
       "episodes": {
         "button": "Επεισόδια",

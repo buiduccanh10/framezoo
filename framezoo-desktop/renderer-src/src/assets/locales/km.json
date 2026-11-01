@@ -784,7 +784,17 @@
     },
     "menus": {
       "audio": {
-        "default": "លំនាំដើម"
+        "default": "លំនាំដើម",
+        "modeSection": "របៀបបញ្ចេញសំឡេង",
+        "tracksSection": "បទភ្លេង",
+        "modes": {
+          "auto": "សំឡេងព័ទ្ធជុំវិញ / ស្វ័យប្រវត្តិ",
+          "autoDesc": "5.1/7.1, Dolby Atmos, Apple Spatial Audio, Windows Sonic",
+          "stereoDialogue": "ស្តេរ៉េអូ (ការជំរុញការសន្ទនា)",
+          "stereoDialogueDesc": "ភាពច្បាស់នៃសំឡេងកាន់តែប្រសើរឡើងសម្រាប់ឧបករណ៍បំពងសម្លេងកុំព្យូទ័រយួរដៃ ឬការស្តាប់ពេលយប់",
+          "passthrough": "ឆ្លងកាត់ (ប៊ីតស្ទ្រីម)",
+          "passthroughDesc": "ស្ទ្រីមឌីជីថលដោយផ្ទាល់សម្រាប់ Soundbars ខាងក្រៅ និងឧបករណ៍ទទួល AV"
+        }
       },
       "episodes": {
         "button": "ភាគ",

@@ -784,7 +784,17 @@
     },
     "menus": {
       "audio": {
-        "default": "デフォルト"
+        "default": "デフォルト",
+        "modeSection": "オーディオ出力モード",
+        "tracksSection": "オーディオトラック",
+        "modes": {
+          "auto": "サラウンドサウンド / オート",
+          "autoDesc": "5.1/7.1、Dolby Atmos、Apple Spatial Audio、Windows Sonic",
+          "stereoDialogue": "ステレオ（ダイアログ強調）",
+          "stereoDialogueDesc": "ノートパソコンのスピーカーや夜間のリスニング時の音声明瞭度を向上",
+          "passthrough": "パススルー（ビットストリーム）",
+          "passthroughDesc": "外部サウンドバーおよびAVレシーバーへの直接デジタルストリーム"
+        }
       },
       "episodes": {
         "button": "エピソード",

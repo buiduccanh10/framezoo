@@ -109,7 +109,7 @@ function SettingsOverlay({ id }: { id: string }) {
         <OverlayPage
           id={id}
           path="/audio"
-          width={defaultWidth}
+          width={wideWidth}
           height={defaultHeight}
         >
           <Menu.Card>

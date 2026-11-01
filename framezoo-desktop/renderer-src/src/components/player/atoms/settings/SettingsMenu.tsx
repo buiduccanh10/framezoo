@@ -117,11 +117,7 @@ export function SettingsMenu({ id }: { id: string }) {
             </span>
           </Menu.ChevronLink>
         ) : (
-          <Menu.ChevronLink
-            box
-            onClick={() => router.navigate("/audio")}
-            disabled
-          >
+          <Menu.ChevronLink box onClick={() => router.navigate("/audio")}>
             <span className="w-full text-center truncate">
               {t("player.menus.settings.audioItem")}
             </span>

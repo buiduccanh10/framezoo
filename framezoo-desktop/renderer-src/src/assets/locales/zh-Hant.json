@@ -784,7 +784,17 @@
     },
     "menus": {
       "audio": {
-        "default": "預設"
+        "default": "預設",
+        "modeSection": "音訊輸出模式",
+        "tracksSection": "音訊軌道",
+        "modes": {
+          "auto": "環繞聲/自動",
+          "autoDesc": "5.1/7.1聲道、杜比全景聲、Apple Spatial Audio、Windows Sonic",
+          "stereoDialogue": "立體聲（對話增強）",
+          "stereoDialogueDesc": "增強筆記型電腦揚聲器或夜間聆聽時的語音清晰度",
+          "passthrough": "直通（比特流）",
+          "passthroughDesc": "外置條形音箱和AV接收器的直接數位流"
+        }
       },
       "episodes": {
         "button": "集數",

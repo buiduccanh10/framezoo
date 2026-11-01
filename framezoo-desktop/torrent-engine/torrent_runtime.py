@@ -237,9 +237,21 @@ class TorrentRuntime:
                     # race the first HTTP response and playback may present
                     # offset zero while the UI already shows saved progress.
                     self.prime_startup_ranges()
+                    record = getattr(self, "record", None)
+                    discovery = getattr(record, "discovery", None)
+                    if discovery is not None:
+                        try:
+                            if int(getattr(self.handle.status(), "num_peers", 0)) == 0:
+                                discovery.reactivate()
+                        except Exception:
+                            pass
                     self.wait_for_initial_chunk()
                     self.metadata_ready.set()
                     self.stream_type = "file"
+                    try:
+                        emit({"type": "status", "status": self.current_status()})
+                    except Exception:
+                        pass
                     log_event(
                         "stream ready",
                         sessionId=self.session_id,
@@ -256,7 +268,7 @@ class TorrentRuntime:
             ):
                 self._force_reannounce_for_metadata()
                 last_reannounce = now
-            time.sleep(0.2)
+            time.sleep(0.05)
         if self.stop_event.is_set():
             return
         raise TimeoutError("timed out waiting for torrent metadata")
@@ -868,7 +880,14 @@ class TorrentRuntime:
     ) -> bool:
         """Ignore mpv's early EOF probe when tracking the playback cursor."""
         if request_number > constants.INITIAL_TAIL_PROBE_MAX_REQUESTS:
-            return False
+            startup_tail_pieces = getattr(self, "_startup_tail_pieces", None)
+            last_stream_start = getattr(self, "_last_stream_start", None) or 0
+            if (
+                not startup_tail_pieces
+                or last_stream_start >= constants.STARTUP_HEAD_BYTES
+                or all(self._piece_have(piece) for piece in startup_tail_pieces)
+            ):
+                return False
         if total <= 1024 * 1024:
             return False
         tail_window = (
@@ -1438,6 +1457,7 @@ class TorrentRuntime:
                     self._piece_priorities[piece] = (
                         constants.STREAM_HOT_PIECE_PRIORITY
                     )
+                    self._reset_piece_deadline(piece)
                     demoted += 1
                 except Exception:
                     continue
@@ -2057,10 +2077,8 @@ class TorrentRuntime:
                     focus_claimed = False
                     if previous_target is not None:
                         self._release_target_focus(previous_target)
-                elif target_blocks_delta >= 16:
-                    # Steady fast download (> 1 MB/s): defer kick because progress is healthy.
-                    # Slow trickles (< 16 blocks / 250ms) must NOT reset stalled_since, so
-                    # stall_seconds can accumulate and trigger TARGET_KICK / TARGET_FOCUS.
+                elif target_blocks_delta >= 8:
+                    # Steady download (>= 8 blocks / 250ms, > 500 KB/s on target piece): defer kick.
                     stalled_since = now
                     target_stall_logged = False
                 target_availability = self._piece_availability(target_piece)
@@ -2119,12 +2137,7 @@ class TorrentRuntime:
                         and stall_seconds >= constants.TARGET_KICK_DELAY
                         and now - last_kick
                         >= constants.TARGET_KICK_INTERVAL
-                        and target_blocks_delta < 16
-                        and not self._range_target_piece_has_prefix(
-                            start,
-                            end,
-                            target_piece,
-                        )
+                        and target_blocks_delta < 8
                     ):
                         self._kick_target_piece(target_piece)
                         last_kick = now

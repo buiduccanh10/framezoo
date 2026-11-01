@@ -784,7 +784,17 @@
     },
     "menus": {
       "audio": {
-        "default": "Sjálfgefið"
+        "default": "Sjálfgefið",
+        "modeSection": "Hljóðútgangsstilling",
+        "tracksSection": "Hljóðrásir",
+        "modes": {
+          "auto": "Hljóð í kring / Sjálfvirkt",
+          "autoDesc": "5.1/7.1, Dolby Atmos, Apple Spatial Audio, Windows Sonic",
+          "stereoDialogue": "Steríó (samræðustyrking)",
+          "stereoDialogueDesc": "Aukin skýrleiki raddar fyrir fartölvuhátalara eða næturhlustun",
+          "passthrough": "Bitastraumur (Gangleið)",
+          "passthroughDesc": "Bein stafræn straumspilun fyrir ytri hljóðstikur og AV-viðtæki"
+        }
       },
       "episodes": {
         "button": "Þættir",

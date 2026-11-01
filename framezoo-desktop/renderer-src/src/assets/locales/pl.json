@@ -784,7 +784,17 @@
     },
     "menus": {
       "audio": {
-        "default": "Domyślny"
+        "default": "Domyślny",
+        "modeSection": "Tryb wyjścia audio",
+        "tracksSection": "Ścieżki audio",
+        "modes": {
+          "auto": "Dźwięk przestrzenny / Automatyczny",
+          "autoDesc": "5.1/7.1, Dolby Atmos, Apple Spatial Audio, Windows Sonic",
+          "stereoDialogue": "Stereo (wzmocnienie dialogów)",
+          "stereoDialogueDesc": "Lepsza klarowność głosu w głośnikach laptopa lub podczas słuchania w nocy",
+          "passthrough": "Przejście (strumień bitów)",
+          "passthroughDesc": "Bezpośredni strumień cyfrowy dla zewnętrznych soundbarów i amplitunerów AV"
+        }
       },
       "episodes": {
         "button": "Odcinki",

@@ -784,7 +784,17 @@
     },
     "menus": {
       "audio": {
-        "default": "ค่าเริ่มต้น"
+        "default": "ค่าเริ่มต้น",
+        "modeSection": "โหมดเอาต์พุตเสียง",
+        "tracksSection": "แทร็กเสียง",
+        "modes": {
+          "auto": "ระบบเสียงรอบทิศทาง / อัตโนมัติ",
+          "autoDesc": "5.1/7.1, Dolby Atmos, Apple Spatial Audio, Windows Sonic",
+          "stereoDialogue": "ระบบเสียงสเตอริโอ (เพิ่มเสียงสนทนา)",
+          "stereoDialogueDesc": "ปรับปรุงคุณภาพเสียงให้คมชัดยิ่งขึ้นสำหรับการใช้งานกับลำโพงแล็ปท็อปหรือการฟังในเวลากลางคืน",
+          "passthrough": "การส่งผ่าน (บิตสตรีม)",
+          "passthroughDesc": "สตรีมดิจิทัลโดยตรงสำหรับซาวด์บาร์และเครื่องรับสัญญาณ AV ภายนอก"
+        }
       },
       "episodes": {
         "button": "ตอน",

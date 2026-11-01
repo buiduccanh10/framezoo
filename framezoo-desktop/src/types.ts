@@ -171,6 +171,8 @@ export interface LibMpvPlayerEvent {
   level?: string;
 }
 
+export type AudioOutputMode = "auto" | "stereo-dialogue" | "passthrough";
+
 export type LibMpvCommand =
   | { type: "play" }
   | { type: "pause" }
@@ -179,6 +181,7 @@ export type LibMpvCommand =
   | { type: "set-mute"; muted: boolean }
   | { type: "set-playback-rate"; rate: number }
   | { type: "set-audio-track"; trackId: string }
+  | { type: "set-audio-mode"; mode: AudioOutputMode }
   | { type: "set-subtitle-track"; trackId: string }
   | { type: "set-secondary-subtitle-track"; trackId: string };
 

@@ -24,8 +24,11 @@ export function useShouldShowControls() {
   // 4. Video is paused (isPaused)
   // 5. Video is loading (isLoading)
   // 6. Video hasn't started rendering yet (!hasRenderedFrame)
-  // NOTE: We only consider the unrendered frame state when the player is actually in the playing state.
-  const isPendingStart = status === playerStatus.PLAYING && !hasRenderedFrame;
+  // NOTE: We only consider the unrendered frame state when the player is actually in the playing state or preparing initial source.
+  const isPendingStart =
+    (status === playerStatus.PLAYING ||
+      status === playerStatus.SOURCE_SELECTION) &&
+    !hasRenderedFrame;
 
   const showTargets =
     isHovering ||

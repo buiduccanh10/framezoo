@@ -784,7 +784,17 @@
     },
     "menus": {
       "audio": {
-        "default": "Varsayılan"
+        "default": "Varsayılan",
+        "modeSection": "Ses Çıkış Modu",
+        "tracksSection": "Ses Parçaları",
+        "modes": {
+          "auto": "Çevresel Ses / Otomatik",
+          "autoDesc": "5.1/7.1, Dolby Atmos, Apple Spatial Audio, Windows Sonic",
+          "stereoDialogue": "Stereo (Diyalog Güçlendirme)",
+          "stereoDialogueDesc": "Dizüstü bilgisayar hoparlörleri veya gece dinleme için geliştirilmiş ses netliği.",
+          "passthrough": "Geçiş (Bit akışı)",
+          "passthroughDesc": "Harici ses çubukları ve AV alıcıları için doğrudan dijital akış"
+        }
       },
       "episodes": {
         "button": "Bölümler",

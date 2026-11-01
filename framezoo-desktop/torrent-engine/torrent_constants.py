@@ -47,7 +47,7 @@ BLOCKED_REPLAN_REASSERT_INTERVAL = 5
 # blocks it downloaded are kept and re-picked, so kicking while the swarm is
 # busy is safe.
 TARGET_KICK_DELAY = 1.0
-TARGET_KICK_INTERVAL = 4.0
+TARGET_KICK_INTERVAL = 2.5
 # A kick drops the target to priority 0 to cancel its in-flight requests,
 # then restores top priority after this delay. Raising it back within the
 # same picker tick is a no-op: the cancellation is never processed, so the
@@ -56,7 +56,7 @@ TARGET_KICK_INTERVAL = 4.0
 TARGET_KICK_RESTORE_DELAY = 0.5
 # After the target stalls this long, demote every other priority-7 piece to
 # hot priority so the stuck piece receives the swarm's full bandwidth.
-TARGET_FOCUS_DELAY = 3.0
+TARGET_FOCUS_DELAY = 2.0
 TARGET_STALL_REANNOUNCE_DELAY = 1.0
 REANNOUNCE_COOLDOWN = 5
 # Minimum seconds to wait before declaring client disconnected.

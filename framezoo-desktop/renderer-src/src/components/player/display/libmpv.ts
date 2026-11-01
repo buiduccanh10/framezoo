@@ -22,6 +22,7 @@ import {
 } from "@/desktop/torrentPlaybackStore";
 import { usePlayerStore } from "@/stores/player/store";
 import { LoadableSource } from "@/stores/player/utils/qualities";
+import { usePreferencesStore } from "@/stores/preferences";
 import { useSubtitleStore } from "@/stores/subtitles";
 import { useWatchPartyStore } from "@/stores/watchParty";
 import { makeEmitter } from "@/utils/events";
@@ -74,6 +75,7 @@ type LibMpvCommand =
   | { type: "set-mute"; muted: boolean }
   | { type: "set-playback-rate"; rate: number }
   | { type: "set-audio-track"; trackId: string }
+  | { type: "set-audio-mode"; mode: "auto" | "stereo-dialogue" | "passthrough" }
   | { type: "set-subtitle-track"; trackId: string }
   | { type: "set-secondary-subtitle-track"; trackId: string };
 
@@ -716,6 +718,14 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
           type: "set-playback-rate",
           rate: playbackRate,
         });
+        const currentAudioMode =
+          usePreferencesStore.getState().audioOutputMode ?? "auto";
+        if (currentAudioMode !== "auto") {
+          await electronApi?.sendLibMpvCommand?.(id, {
+            type: "set-audio-mode",
+            mode: currentAudioMode,
+          });
+        }
         await electronApi?.sendLibMpvCommand?.(id, {
           type: desiredPaused ? "pause" : "play",
         });
@@ -965,7 +975,16 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         typeof event.data === "string"
           ? event.data
           : (event.data as Record<string, unknown> | null | undefined)?.reason;
-      if (!fileLoaded && (reason === "stop" || event.data === "stop")) {
+      const loadElapsedMs =
+        loadStartedAt > 0
+          ? Math.max(0, performance.now() - loadStartedAt)
+          : Infinity;
+      if (
+        !fileLoaded &&
+        (reason === "stop" ||
+          event.data === "stop" ||
+          (generation > 1 && reason === undefined && loadElapsedMs < 250))
+      ) {
         console.debug(
           "[libmpv] dropping stale end-file stop event before file-loaded",
         );
@@ -1551,6 +1570,13 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         trackId: track.id,
       });
       emit("changedaudiotrack", track);
+    },
+    setAudioMode(mode) {
+      if (!playerId) return;
+      void sendNativeCommand(playerId, {
+        type: "set-audio-mode",
+        mode,
+      });
     },
     processContainerElement(container) {
       containerElement = container;

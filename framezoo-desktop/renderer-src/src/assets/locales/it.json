@@ -784,7 +784,17 @@
     },
     "menus": {
       "audio": {
-        "default": "Predefinito"
+        "default": "Predefinito",
+        "modeSection": "Modalità di uscita audio",
+        "tracksSection": "Tracce audio",
+        "modes": {
+          "auto": "Audio surround / Automatico",
+          "autoDesc": "5.1/7.1, Dolby Atmos, Apple Spatial Audio, Windows Sonic",
+          "stereoDialogue": "Stereo (amplificazione del dialogo)",
+          "stereoDialogueDesc": "Chiarezza vocale migliorata per gli altoparlanti del laptop o per l'ascolto notturno.",
+          "passthrough": "Passaggio (flusso di bit)",
+          "passthroughDesc": "Streaming digitale diretto per soundbar e ricevitori AV esterni"
+        }
       },
       "episodes": {
         "button": "Episodi",

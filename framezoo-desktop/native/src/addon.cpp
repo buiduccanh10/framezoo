@@ -740,7 +740,10 @@ struct MpvPlayer {
         case MPV_EVENT_END_FILE: {
           auto* end_file =
               static_cast<mpv_event_end_file*>(event->data);
-          if (end_file && end_file->error < 0) {
+          if (end_file && end_file->reason == 2) {
+            native_event->type = "end-file";
+            native_event->string_value = "stop";
+          } else if (end_file && end_file->error < 0) {
             native_event->type = "error";
             native_event->name = "end-file";
             native_event->message =
@@ -1467,6 +1470,8 @@ napi_value create_player(napi_env env, napi_callback_info info) {
   set_mpv_option(player.get(), "d3d11-sync-interval", "1");
   // Enable HDR passthrough on Windows 10/11 when Windows HDR is enabled.
   set_mpv_option(player.get(), "target-colorspace-hint", "yes");
+  // Use WASAPI audio output on Windows to support spatial sound and multi-channel endpoints.
+  set_mpv_option(player.get(), "ao", "wasapi");
 #else
   set_mpv_option(player.get(), "vo", "libmpv");
 #if defined(__APPLE__)
@@ -1483,12 +1488,12 @@ napi_value create_player(napi_env env, napi_callback_info info) {
   set_mpv_option(player.get(), "input-default-bindings", "no");
   set_mpv_option(player.get(), "input-vo-keyboard", "no");
 
-  // Audio volume amplification (boost up to 200%) & downmix dialogue enhancement
+  // Audio volume amplification (boost up to 200%) & multi-channel spatialization
   set_mpv_option(player.get(), "volume-max", "200");
   set_mpv_option(player.get(), "audio-buffer", "0.08");
-  set_mpv_option(player.get(), "audio-channels", "auto-safe");
+  set_mpv_option(player.get(), "audio-channels", "auto");
   set_mpv_option(player.get(), "audio-normalize-downmix", "yes");
-  set_mpv_option(player.get(), "ad-lavc-downmix", "yes");
+  set_mpv_option(player.get(), "ad-lavc-downmix", "no");
   set_mpv_option(player.get(), "ad-lavc-ac3drc", "1");
 
 #if defined(__APPLE__)
@@ -1872,6 +1877,24 @@ napi_value command_player(napi_env env, napi_callback_info info) {
                                                        : "sid";
     if (player->set_property_string(prop_name, value.c_str()) < 0) {
       return throw_error(env, "libmpv command failed");
+    }
+  } else if (
+      type == "set-audio-mode" &&
+      get_string(env, argv[1], "mode", &value)
+  ) {
+    if (value == "stereo-dialogue") {
+      player->set_property_string("audio-spdif", "");
+      player->set_property_string("audio-channels", "stereo");
+      player->set_property_string("af", "lavfi=[dynaudnorm=f=250:g=31:p=0.5]");
+    } else if (value == "passthrough") {
+      player->set_property_string("af", "");
+      player->set_property_string("audio-channels", "auto");
+      player->set_property_string("audio-spdif", "ac3,eac3,dts,dts-hd,truehd");
+    } else {
+      // Default: auto multi-channel / spatial audio
+      player->set_property_string("audio-spdif", "");
+      player->set_property_string("af", "");
+      player->set_property_string("audio-channels", "auto");
     }
   } else {
     return throw_error(env, "unsupported libmpv command");

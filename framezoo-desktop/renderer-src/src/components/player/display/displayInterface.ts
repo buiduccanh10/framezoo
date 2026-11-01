@@ -117,6 +117,7 @@ export interface DisplayInterface extends Listener<DisplayInterfaceEvents> {
     preferredQuality: SourceQuality | null,
   ): void;
   changeAudioTrack(audioTrack: AudioTrack): void;
+  setAudioMode?(mode: "auto" | "stereo-dialogue" | "passthrough"): void;
   processContainerElement(container: HTMLElement): void;
   processSurfaceElement?(container: HTMLElement | null): void;
   toggleFullscreen(): void;

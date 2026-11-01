@@ -784,7 +784,17 @@
     },
     "menus": {
       "audio": {
-        "default": "Standard"
+        "default": "Standard",
+        "modeSection": "Ljudutgångsläge",
+        "tracksSection": "Ljudspår",
+        "modes": {
+          "auto": "Surroundljud / Auto",
+          "autoDesc": "5.1/7.1, Dolby Atmos, Apple Spatial Audio, Windows Sonic",
+          "stereoDialogue": "Stereo (dialogförstärkning)",
+          "stereoDialogueDesc": "Förbättrad röstklarhet för bärbara datorhögtalare eller nattlyssning",
+          "passthrough": "Genomströmning (bitström)",
+          "passthroughDesc": "Direkt digital strömning för externa soundbars och AV-receivrar"
+        }
       },
       "episodes": {
         "button": "Avsnitt",

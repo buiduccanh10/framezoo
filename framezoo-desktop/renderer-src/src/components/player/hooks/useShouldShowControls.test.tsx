@@ -138,6 +138,31 @@ describe("useShouldShowControls", () => {
     expect(latestResult.showTargets).toBe(true);
   });
 
+  it("shows controls before the first frame has rendered in SOURCE_SELECTION state", () => {
+    let latestResult: { showTargets: boolean } = { showTargets: false };
+
+    usePlayerStore.setState((s) => {
+      s.status = playerStatus.SOURCE_SELECTION;
+      s.mediaPlaying.hasRenderedFrame = false;
+      s.mediaPlaying.isPlaying = false;
+      s.mediaPlaying.isPaused = false;
+      s.mediaPlaying.isLoading = false;
+      s.interface.hovering = PlayerHoverState.NOT_HOVERING;
+    });
+
+    act(() => {
+      root.render(
+        <ControlsHarness
+          onResult={(res) => {
+            latestResult = res;
+          }}
+        />,
+      );
+    });
+
+    expect(latestResult.showTargets).toBe(true);
+  });
+
   it("hides controls when playing smoothly without hovering or open overlays", () => {
     let latestResult: { showTargets: boolean } = { showTargets: true };
 

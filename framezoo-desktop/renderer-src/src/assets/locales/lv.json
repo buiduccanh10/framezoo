@@ -784,7 +784,17 @@
     },
     "menus": {
       "audio": {
-        "default": "Noklusējums"
+        "default": "Noklusējums",
+        "modeSection": "Audio izejas režīms",
+        "tracksSection": "Audio celiņi",
+        "modes": {
+          "auto": "Telpiskā skaņa / Automātiska",
+          "autoDesc": "5.1/7.1, Dolby Atmos, Apple telpiskā audio sistēma, Windows Sonic",
+          "stereoDialogue": "Stereo (dialoga pastiprinājums)",
+          "stereoDialogueDesc": "Uzlabota balss skaidrība klēpjdatora skaļruņiem vai klausīšanās naktī",
+          "passthrough": "Caurlaide (bitu plūsma)",
+          "passthroughDesc": "Tieša digitālā straumēšana ārējiem skaņas paneļiem un AV uztvērējiem"
+        }
       },
       "episodes": {
         "button": "Epizodes",

@@ -210,9 +210,17 @@ export function SourceSelectPart(props: {
   onSelected?: () => void;
   onLoadingChange?: (loading: boolean) => void;
   onStateChange?: (state: "addons" | "streams") => void;
+  onPickerVisibilityChange?: (visible: boolean) => void;
 }) {
-  const { meta, mode, onCancel, onSelected, onLoadingChange, onStateChange } =
-    props;
+  const {
+    meta,
+    mode,
+    onCancel,
+    onSelected,
+    onLoadingChange,
+    onStateChange,
+    onPickerVisibilityChange,
+  } = props;
   const { t } = useTranslation();
   const navigate = useNavigate();
   const addons = useInstalledAddons();
@@ -267,6 +275,14 @@ export function SourceSelectPart(props: {
   const [autoSelectionResolved, setAutoSelectionResolved] =
     React.useState(false);
   const isInitialSelection = mode === "initial";
+  const isPickerVisible = mode === "full" || autoSelectionResolved;
+
+  useEffect(() => {
+    onPickerVisibilityChange?.(isPickerVisible);
+    return () => {
+      onPickerVisibilityChange?.(false);
+    };
+  }, [isPickerVisible, onPickerVisibilityChange]);
 
   const hasAttemptedAutoSelect = useRef(false);
   const selectionOperation = useRef(0);

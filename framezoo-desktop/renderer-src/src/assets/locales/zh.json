@@ -784,7 +784,17 @@
     },
     "menus": {
       "audio": {
-        "default": "默认"
+        "default": "默认",
+        "modeSection": "音频输出模式",
+        "tracksSection": "音频轨道",
+        "modes": {
+          "auto": "环绕声/自动",
+          "autoDesc": "5.1/7.1声道、杜比全景声、Apple Spatial Audio、Windows Sonic",
+          "stereoDialogue": "立体声（对话增强）",
+          "stereoDialogueDesc": "增强笔记本电脑扬声器或夜间聆听时的语音清晰度",
+          "passthrough": "直通（比特流）",
+          "passthroughDesc": "外置条形音箱和AV接收器的直接数字流"
+        }
       },
       "episodes": {
         "button": "分集",

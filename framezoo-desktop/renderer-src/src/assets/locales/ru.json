@@ -784,7 +784,17 @@
     },
     "menus": {
       "audio": {
-        "default": "По умолчанию"
+        "default": "По умолчанию",
+        "modeSection": "Режим вывода звука",
+        "tracksSection": "Аудиодорожки",
+        "modes": {
+          "auto": "Объемный звук / Авто",
+          "autoDesc": "5.1/7.1, Dolby Atmos, Apple Spatial Audio, Windows Sonic",
+          "stereoDialogue": "Стерео (усиление диалогов)",
+          "stereoDialogueDesc": "Улучшенная четкость передачи голоса через динамики ноутбука или при прослушивании в ночное время.",
+          "passthrough": "Сквозная передача (битовый поток)",
+          "passthroughDesc": "Прямая цифровая передача сигнала на внешние саундбары и AV-ресиверы."
+        }
       },
       "episodes": {
         "button": "Эпизоды",

@@ -784,7 +784,17 @@
     },
     "menus": {
       "audio": {
-        "default": "Bawaan"
+        "default": "Bawaan",
+        "modeSection": "Mode Output Audio",
+        "tracksSection": "Trek Audio",
+        "modes": {
+          "auto": "Suara Surround / Otomatis",
+          "autoDesc": "5.1/7.1, Dolby Atmos, Apple Spatial Audio, Windows Sonic",
+          "stereoDialogue": "Stereo (Peningkatan Dialog)",
+          "stereoDialogueDesc": "Peningkatan kejernihan suara untuk speaker laptop atau mendengarkan di malam hari.",
+          "passthrough": "Penerusan (Bitstream)",
+          "passthroughDesc": "Streaming digital langsung untuk soundbar dan penerima AV eksternal."
+        }
       },
       "episodes": {
         "button": "Episode",

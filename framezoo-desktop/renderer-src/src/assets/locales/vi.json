@@ -784,7 +784,17 @@
     },
     "menus": {
       "audio": {
-        "default": "Mặc định"
+        "default": "Mặc định",
+        "modeSection": "Chế độ âm thanh",
+        "tracksSection": "Ngôn ngữ thoại",
+        "modes": {
+          "auto": "Tự động / Âm thanh vòm",
+          "autoDesc": "Tận dụng 5.1/7.1, Dolby Atmos, Apple Spatial Audio, Windows Sonic",
+          "stereoDialogue": "Stereo (Tăng cường giọng thoại)",
+          "stereoDialogueDesc": "Làm rõ lời thoại, chống chói gắt cho loa laptop hoặc ban đêm",
+          "passthrough": "Passthrough (Bitstream)",
+          "passthroughDesc": "Truyền trực tiếp tín hiệu số cho Soundbar & Amply ngoài"
+        }
       },
       "episodes": {
         "button": "Tập phim",
