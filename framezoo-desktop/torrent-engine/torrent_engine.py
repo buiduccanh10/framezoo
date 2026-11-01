@@ -343,13 +343,23 @@ class LibtorrentEngine:
                 "category_t",
                 None,
             )
+            mask = 0
             block_progress = getattr(
                 alert_category,
                 "block_progress_notification",
                 None,
             )
             if block_progress is not None:
-                settings["alert_mask"] = int(block_progress)
+                mask |= int(block_progress)
+            progress_notif = getattr(
+                alert_category,
+                "progress_notification",
+                None,
+            )
+            if progress_notif is not None:
+                mask |= int(progress_notif)
+            if mask:
+                settings["alert_mask"] = mask
             session = lt.session(settings)
             if not settings.get("enable_dht"):
                 try:
@@ -825,8 +835,16 @@ class LibtorrentEngine:
                 alerts = self.session.pop_alerts()
             except Exception:
                 alerts = []
+            block_alert_types = tuple(
+                a
+                for a in (
+                    getattr(lt, "block_finished_alert", None),
+                    getattr(lt, "block_downloading_alert", None),
+                )
+                if a is not None
+            )
             for alert in alerts:
-                if not isinstance(alert, lt.block_finished_alert):
+                if not isinstance(alert, block_alert_types):
                     continue
                 try:
                     alert_handle = alert.handle
