@@ -965,7 +965,16 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         typeof event.data === "string"
           ? event.data
           : (event.data as Record<string, unknown> | null | undefined)?.reason;
-      if (!fileLoaded && (reason === "stop" || event.data === "stop")) {
+      const loadElapsedMs =
+        loadStartedAt > 0
+          ? Math.max(0, performance.now() - loadStartedAt)
+          : Infinity;
+      if (
+        !fileLoaded &&
+        (reason === "stop" ||
+          event.data === "stop" ||
+          (generation > 1 && reason === undefined && loadElapsedMs < 250))
+      ) {
         console.debug(
           "[libmpv] dropping stale end-file stop event before file-loaded",
         );

@@ -1368,6 +1368,104 @@ class SidecarStreamTest(unittest.TestCase):
         )
         self.assertIsNone(runtime._focus_piece)
 
+    def test_kick_fires_for_mid_piece_range_when_stalled(self):
+        old_reannounce_delay = constants.TARGET_STALL_REANNOUNCE_DELAY
+        old_focus_delay = constants.TARGET_FOCUS_DELAY
+        old_kick_delay = constants.TARGET_KICK_DELAY
+        old_kick_interval = constants.TARGET_KICK_INTERVAL
+        try:
+            constants.TARGET_STALL_REANNOUNCE_DELAY = 0.05
+            constants.TARGET_FOCUS_DELAY = 10.0
+            constants.TARGET_KICK_DELAY = 0.05
+            constants.TARGET_KICK_INTERVAL = 0.2
+
+            runtime = object.__new__(TorrentRuntime)
+            runtime.stop_event = threading.Event()
+            runtime.file_size = 16 * 1024 * 1024
+            runtime.file_index = 0
+            runtime.session_id = "mid-piece-kick-test"
+            runtime.last_range_key = None
+            runtime._piece_priority_lock = threading.RLock()
+            runtime._boosted_pieces = set()
+            runtime._piece_priorities = {0: 7}
+            runtime._piece_deadlines = {}
+            runtime._pending_kick_restore = {}
+            runtime._reannounce_lock = threading.Lock()
+            runtime._last_reannounce = 0.0
+            runtime.elapsed_ms = lambda: 0
+            runtime.info = type(
+                "Info",
+                (),
+                {
+                    "piece_length": lambda _self: 16 * 1024 * 1024,
+                    "num_pieces": lambda _self: 2,
+                    "files": lambda _self: type(
+                        "Files",
+                        (),
+                        {"file_offset": lambda _self, _index: 0},
+                    )(),
+                },
+            )()
+
+            def map_pieces(self, _start, _length):
+                return {0}
+
+            def noop(self, *_args, **_kwargs):
+                return None
+
+            kicks = []
+
+            class FakeStatus:
+                has_metadata = True
+                download_rate = 0
+                pieces = [False, False]
+                num_peers = 5
+                total_done = 0
+                block_size = 16 * 1024
+
+            class FakeHandle:
+                def status(self):
+                    return FakeStatus()
+
+                def piece_availability(self):
+                    return [5, 5]
+
+                def have_piece(self, _piece):
+                    return False
+
+                def piece_priority(self, piece, *priority):
+                    if priority and priority[0] == 0:
+                        kicks.append(("kick", piece))
+                    return 0
+
+                def set_piece_deadline(self, _piece, _deadline, _flags=0):
+                    return None
+
+                def reset_piece_deadline(self, _piece):
+                    return None
+
+            runtime.map_pieces = MethodType(map_pieces, runtime)
+            runtime._force_reannounce_if_stalled = MethodType(noop, runtime)
+            runtime.handle = FakeHandle()
+
+            self.assertTrue(
+                runtime._range_target_piece_has_prefix(
+                    32768,
+                    65535,
+                    0,
+                )
+            )
+
+            runtime.wait_for_range(32768, 65535, timeout=0.6, track_position=False)
+        finally:
+            constants.TARGET_STALL_REANNOUNCE_DELAY = old_reannounce_delay
+            constants.TARGET_FOCUS_DELAY = old_focus_delay
+            constants.TARGET_KICK_DELAY = old_kick_delay
+            constants.TARGET_KICK_INTERVAL = old_kick_interval
+
+        self.assertGreaterEqual(len(kicks), 1)
+        self.assertEqual(kicks[0], ("kick", 0))
+
     def test_kick_holds_piece_at_zero_through_replans_then_restores(self):
         old_restore_delay = constants.TARGET_KICK_RESTORE_DELAY
         old_kick_delay = constants.TARGET_KICK_DELAY
@@ -2254,7 +2352,7 @@ class SidecarStorageTest(unittest.TestCase):
 
         class FakeFileEntry:
             def num_files(self):
-                return 1
+                return 2
 
         class FakeInfo:
             def files(self):
@@ -2269,8 +2367,9 @@ class SidecarStorageTest(unittest.TestCase):
         class FakeHandle:
             def __init__(self):
                 self.paused = False
-                self.file_priorities = [1]
+                self.file_priorities = [1, 0]
                 self.sequential = False
+                self.download_limit = 0
 
             def status(self):
                 s = FakeStatus()
@@ -2288,6 +2387,9 @@ class SidecarStorageTest(unittest.TestCase):
 
             def prioritize_files(self, priorities):
                 self.file_priorities = list(priorities)
+
+            def set_download_limit(self, limit):
+                self.download_limit = limit
 
             def torrent_file(self):
                 return FakeInfo()
@@ -2316,7 +2418,7 @@ class SidecarStorageTest(unittest.TestCase):
         )
         engine.records["test-grace-key"] = record
 
-        # Start session 1
+        # Start session 1 (Episode 1)
         req = {"sourceId": "s1", "infoHash": "68a3810de8b2faffda6a431e89c7fe97c85645b3"}
         runtime1 = TorrentRuntime(engine, "s1", req, handle, "/tmp", persistent_cache=True, record=record)
         runtime1.file_index = 0
@@ -2324,27 +2426,36 @@ class SidecarStorageTest(unittest.TestCase):
         engine.session_records["s1"] = "test-grace-key"
         record.session_ids.add("s1")
         record.update_file_priorities()
-        self.assertEqual(handle.file_priorities, [1])
+        self.assertEqual(handle.file_priorities, [1, 0])
+        self.assertEqual(handle.download_limit, 0)
 
         # User exits to Home: stop session 1
         engine.stop("s1")
 
-        # Crucial assertions: Handle must NOT be paused, file priorities are 0 (idle)
+        # Crucial assertions: Handle must NOT be paused, last file priority stays 1
+        # (so libtorrent 2.x does not enter finished/upload-only state and drop seeds),
+        # while download_limit is throttled to 1 B/s during the grace window.
         self.assertFalse(handle.paused, "Handle was paused on stop, dropping swarm connections!")
-        self.assertEqual(handle.file_priorities, [0], "Files were not idled when session emptied")
+        self.assertEqual(
+            handle.file_priorities,
+            [1, 0],
+            "Last active file must retain idle priority 1 so seeds are not dropped with upload-to-upload",
+        )
+        self.assertEqual(handle.download_limit, 1, "Handle was not throttled during idle grace window")
         self.assertIsNotNone(record.removal_timer, "Grace timer was not scheduled")
 
-        # User returns to continue watching: start session 2
+        # User clicks Episode 2: start session 2
         runtime2 = TorrentRuntime(engine, "s2", req, handle, "/tmp", persistent_cache=True, record=record)
-        runtime2.file_index = 0
+        runtime2.file_index = 1
         engine.sessions["s2"] = runtime2
         engine.session_records["s2"] = "test-grace-key"
         record_was_idle = record.add_session("s2")
         self.assertTrue(record_was_idle)
         record.reactivate("s2")
 
-        # Reactivated session must immediately unchoke file priorities back to 1
-        self.assertEqual(handle.file_priorities, [1], "Reactivated file was not unchoked")
+        # Reactivated session must immediately switch file priorities to Episode 2 and unthrottle
+        self.assertEqual(handle.file_priorities, [0, 1], "Reactivated episode file was not prioritized")
+        self.assertEqual(handle.download_limit, 0, "Reactivated handle was not unthrottled")
         self.assertFalse(handle.paused)
         self.assertTrue(handle.sequential)
 

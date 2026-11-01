@@ -740,7 +740,10 @@ struct MpvPlayer {
         case MPV_EVENT_END_FILE: {
           auto* end_file =
               static_cast<mpv_event_end_file*>(event->data);
-          if (end_file && end_file->error < 0) {
+          if (end_file && end_file->reason == 2) {
+            native_event->type = "end-file";
+            native_event->string_value = "stop";
+          } else if (end_file && end_file->error < 0) {
             native_event->type = "error";
             native_event->name = "end-file";
             native_event->message =
