@@ -55,6 +55,7 @@ export function RealPlayerView() {
     torrentStatus?.streamType === "pending" ? torrentStatus.sourceId : null;
   const torrentPromotionRef = useRef<string | null>(null);
   const [sourceLoading, setSourceLoading] = useState(false);
+  const [isManualPickerVisible, setIsManualPickerVisible] = useState(false);
   const isSourceSwitchInProgress =
     status === playerStatus.SOURCE_SELECTION &&
     (sourceId !== null || pendingTorrentSourceId !== null);
@@ -63,7 +64,7 @@ export function RealPlayerView() {
   const shouldShowSourceLoading =
     sourceLoading ||
     (status === playerStatus.SOURCE_SELECTION &&
-      pendingTorrentSourceId !== null);
+      (pendingTorrentSourceId !== null || !isManualPickerVisible));
   const preloadedMeta = (
     location.state as PlayerNavigationState | null | undefined
   )?.playerMeta;
@@ -94,6 +95,7 @@ export function RealPlayerView() {
 
     reset();
     setSourceLoading(false);
+    setIsManualPickerVisible(false);
     openedWatchPartyRef.current = false;
     initializedMetaRef.current = null;
   }, [paramsData, reset, params.season, params.episode]);
@@ -276,7 +278,7 @@ export function RealPlayerView() {
       backUrl={backUrl}
       onMetaChange={metaChange}
       sourceLoading={shouldShowSourceLoading}
-      hideControls={isShowingSourcePicker}
+      hideControls={isShowingSourcePicker && isManualPickerVisible}
     >
       {status !== playerStatus.PLAYING ? <BlurEllipsis /> : null}
       {status === playerStatus.IDLE && !preloadedMeta ? (
@@ -298,8 +300,12 @@ export function RealPlayerView() {
           onCancel={() =>
             setStatus(sourceId ? playerStatus.PLAYING : playerStatus.IDLE)
           }
-          onSelected={() => setStatus(playerStatus.PLAYING)}
+          onSelected={() => {
+            setIsManualPickerVisible(false);
+            setStatus(playerStatus.PLAYING);
+          }}
           onLoadingChange={setSourceLoading}
+          onPickerVisibilityChange={setIsManualPickerVisible}
         />
       ) : null}
     </PlayerPart>
