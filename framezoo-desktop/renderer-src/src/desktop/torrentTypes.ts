@@ -19,6 +19,7 @@ export interface TorrentStartRequest {
   /** Stream quality hint from the addon, used for adaptive read-ahead. */
   quality?: string;
   startAt?: number;
+  duration?: number;
 }
 
 export interface TorrentStatus {

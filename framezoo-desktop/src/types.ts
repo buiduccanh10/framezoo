@@ -14,6 +14,7 @@ export interface TorrentStartRequest {
   /** Stream quality hint from the addon, used for adaptive read-ahead. */
   quality?: string;
   startAt?: number;
+  duration?: number;
   /** Electron main-process settings, added before the request reaches the sidecar. */
   maxBytes?: number | null;
   cacheRoot?: string | null;

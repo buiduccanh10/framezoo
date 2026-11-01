@@ -73,6 +73,7 @@ class TorrentRuntime:
         self.raw_stream_url = ""  # always points to /torrent/ route
         self.stream_type = "pending"
         self.start_time = self._get_requested_start_time()
+        self.duration = self._get_requested_duration()
         self._torrent_cleaned = False
         self.stop_event = threading.Event()
         self.metadata_ready = threading.Event()
@@ -122,6 +123,14 @@ class TorrentRuntime:
 
     def _get_requested_start_time(self) -> float:
         value = self.request.get("startAt", 0)
+        try:
+            value = float(value)
+        except (TypeError, ValueError):
+            return 0.0
+        return max(0.0, value) if math.isfinite(value) else 0.0
+
+    def _get_requested_duration(self) -> float:
+        value = self.request.get("duration", 0)
         try:
             value = float(value)
         except (TypeError, ValueError):
@@ -322,7 +331,7 @@ class TorrentRuntime:
             "streamUrl": self.stream_url,
             "streamType": self.stream_type,
             "startAt": self.start_time,
-            "duration": None,
+            "duration": self.duration if getattr(self, "duration", 0.0) > 0 else None,
             "fileName": (
                 self.file_path.rsplit("/", 1)[-1]
                 or self.request.get("fileName")
@@ -561,7 +570,7 @@ class TorrentRuntime:
             "streamType": self.stream_type,
             "streamUrl": self.stream_url or None,
             "startAt": self.start_time,
-            "duration": None,
+            "duration": self.duration if getattr(self, "duration", 0.0) > 0 else None,
             "error": stream_error,
             "updatedAt": int(time.time() * 1000),
             **discovery_status,
@@ -747,10 +756,31 @@ class TorrentRuntime:
             tail_start = max(0, self.file_size - tail_length)
             tail_pieces = sorted(self.map_pieces(tail_start, tail_length))
             self._startup_tail_pieces = set(tail_pieces)
-            
-            combined_pieces = sorted(set(startup_pieces) | set(tail_pieces))
-            # Focus critical bandwidth strictly on the container head pieces (playback playhead)
-            # and the container tail pieces (Matroska Cues / MP4 moov index) so stream can fast-start.
+
+            # Pre-prioritize pieces at startAt if resume/seek offset and duration are known
+            target_pieces: list[int] = []
+            start_time = getattr(self, "start_time", 0.0) or 0.0
+            duration = getattr(self, "duration", 0.0) or 0.0
+            file_size = getattr(self, "file_size", 0) or 0
+            if start_time > 0 and duration > 0 and file_size > 0:
+                target_byte = int(
+                    (min(start_time, duration) / duration) * file_size
+                )
+                target_pieces = sorted(
+                    self.map_pieces(
+                        target_byte,
+                        max(
+                            constants.STARTUP_PREFETCH_BYTES,
+                            piece_length * constants.STARTUP_WINDOW_PIECES,
+                        ),
+                    )
+                )
+
+            combined_pieces = sorted(
+                set(startup_pieces) | set(tail_pieces) | set(target_pieces)
+            )
+            # Focus critical bandwidth strictly on the container head pieces (playback playhead),
+            # the container tail pieces (Matroska Cues / MP4 moov index), and resume target pieces.
             required_count = 1 if piece_length >= 8 * 1024 * 1024 else 2
             required_pieces = set()
             if startup_pieces:
@@ -761,6 +791,8 @@ class TorrentRuntime:
                 self._startup_required_tail_pieces = required_tail
             else:
                 self._startup_required_tail_pieces = set()
+            if target_pieces:
+                required_pieces.update(target_pieces[:required_count])
 
             if combined_pieces:
                 self._schedule_pieces(
@@ -862,15 +894,17 @@ class TorrentRuntime:
         should_refocus = False
         with self._piece_priority_lock:
             previous = self._last_stream_start
-            if (
-                self._has_streamed_bytes
-                and previous is not None
-                and abs(start - previous) > constants.RANGE_PREFETCH_BYTES
-            ):
+            if previous is None:
+                if start > constants.RANGE_PREFETCH_BYTES:
+                    should_refocus = True
+            elif abs(start - previous) > constants.RANGE_PREFETCH_BYTES:
                 should_refocus = True
             self._last_stream_start = start
         if should_refocus:
             self.refocus_piece_window()
+            first_piece = min(self.map_pieces(start, 1), default=None)
+            if first_piece is not None:
+                self._focus_playback_piece(first_piece)
 
     def is_initial_tail_probe(
         self,
@@ -1304,6 +1338,7 @@ class TorrentRuntime:
                 == target_piece
             ):
                 return
+            prev_target = getattr(self, "_playback_focus_piece", None)
             self._playback_focus_piece = target_piece
             clear_deadlines = getattr(
                 self.handle,
@@ -1339,6 +1374,46 @@ class TorrentRuntime:
                     demoted += 1
                 except Exception:
                     continue
+
+            # Switch sequential download mode based on target position:
+            # At piece 0, sequential mode ensures normal linear streaming.
+            # At target_piece > 0, disabling global sequential download prevents
+            # libtorrent from clogging peer pipelines with pieces 0..N-1.
+            set_seq = getattr(self.handle, "set_sequential_download", None)
+            if callable(set_seq):
+                try:
+                    set_seq(target_piece == 0)
+                except Exception:
+                    pass
+
+            # Suppress uncompleted pieces prior to target_piece (except piece 0 & tail)
+            # so 100% bandwidth focuses on the seek/resume position.
+            if target_piece > 0 and getattr(self, "info", None) is not None:
+                protected_startup = {0} | protected_tail
+                try:
+                    for piece in range(target_piece):
+                        if piece in protected_startup:
+                            continue
+                        if self.handle.have_piece(piece):
+                            continue
+                        if piece in self._boosted_pieces:
+                            continue
+                        if self.handle.piece_priority(piece) != 0:
+                            self.handle.piece_priority(piece, 0)
+                            self._piece_priorities[piece] = 0
+                            demoted += 1
+                except Exception:
+                    pass
+
+            # When seeking backward, un-filter pieces between new target_piece and old target_piece
+            if prev_target is not None and target_piece < prev_target:
+                try:
+                    for piece in range(target_piece, prev_target + 1):
+                        if not self.handle.have_piece(piece) and self.handle.piece_priority(piece) == 0:
+                            self.handle.piece_priority(piece, constants.STREAM_IDLE_FILE_PRIORITY)
+                            self._piece_priorities[piece] = constants.STREAM_IDLE_FILE_PRIORITY
+                except Exception:
+                    pass
 
             # Re-assert deadlines and priority for uncompleted startup tail pieces
             required_tail = getattr(self, "_startup_required_tail_pieces", set())
@@ -1850,11 +1925,15 @@ class TorrentRuntime:
             not self._piece_have(tp)
             for tp in getattr(self, "_startup_required_tail_pieces", set())
         )
+        is_startup_header_probe = (
+            start < constants.RANGE_PREFETCH_BYTES
+            and not getattr(self, "_has_streamed_bytes", False)
+        )
         startup_bounded = (
             getattr(self, "info", None) is not None
             and not is_sync
             and (
-                not getattr(self, "_has_streamed_bytes", False)
+                is_startup_header_probe
                 or tail_pending
             )
         )
@@ -2077,8 +2156,8 @@ class TorrentRuntime:
                     focus_claimed = False
                     if previous_target is not None:
                         self._release_target_focus(previous_target)
-                elif target_blocks_delta >= 8:
-                    # Steady download (>= 8 blocks / 250ms, > 500 KB/s on target piece): defer kick.
+                elif target_blocks_delta > 0:
+                    # Active progress on target piece: defer kick.
                     stalled_since = now
                     target_stall_logged = False
                 target_availability = self._piece_availability(target_piece)
@@ -2137,7 +2216,7 @@ class TorrentRuntime:
                         and stall_seconds >= constants.TARGET_KICK_DELAY
                         and now - last_kick
                         >= constants.TARGET_KICK_INTERVAL
-                        and target_blocks_delta < 8
+                        and target_blocks_delta == 0
                     ):
                         self._kick_target_piece(target_piece)
                         last_kick = now

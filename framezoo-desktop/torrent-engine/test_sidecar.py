@@ -878,6 +878,138 @@ class SidecarStreamTest(unittest.TestCase):
             ],
         )
 
+    def test_prime_startup_ranges_with_start_at_and_duration(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.info = type(
+            "FakeInfo",
+            (),
+            {"piece_length": lambda _self: 256 * 1024},
+        )()
+        runtime.file_index = 0
+        runtime.file_size = 100 * 1024 * 1024  # 100MB
+        runtime.start_time = 50.0  # 50s
+        runtime.duration = 100.0  # 100s -> target offset is 50% = 50MB
+        runtime.session_id = "startat-prefetch-test"
+        scheduled = []
+
+        def map_pieces(self, start, length):
+            if start == 0:
+                return {0, 1}
+            elif start >= 90 * 1024 * 1024:
+                return {398, 399}
+            elif start == 50 * 1024 * 1024:
+                return {200, 201}
+            return set()
+
+        def schedule(self, pieces, required, reason):
+            scheduled.append((pieces, required, reason))
+
+        runtime.map_pieces = MethodType(map_pieces, runtime)
+        runtime._schedule_pieces = MethodType(schedule, runtime)
+        runtime.prime_startup_ranges()
+
+        self.assertEqual(len(scheduled), 1)
+        pieces, required, reason = scheduled[0]
+        self.assertEqual(reason, "startup-prefetch")
+        # Must include target pieces around 50MB (pieces 200, 201) in combined pieces and required
+        self.assertIn(200, pieces)
+        self.assertIn(201, pieces)
+        self.assertIn(200, required)
+
+    def test_focus_playback_piece_suppresses_prior_uncompleted_pieces(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime._piece_priority_lock = threading.RLock()
+        runtime._boosted_pieces = set()
+        runtime._piece_priorities = {}
+        runtime._piece_deadlines = {}
+        runtime.session_id = "focus-seek-test"
+        runtime.elapsed_ms = lambda: 0
+        runtime.info = type(
+            "FakeInfo",
+            (),
+            {"piece_length": lambda _self: 1024 * 1024},
+        )()
+
+        class FakeHandle:
+            def __init__(self):
+                self.priorities = {i: 1 for i in range(200)}
+                self.deadlines = {}
+                self.sequential = None
+                self.cleared_deadlines = 0
+
+            def have_piece(self, piece):
+                # Only piece 0 (header) was previously finished
+                return piece == 0
+
+            def piece_priority(self, piece, *priority):
+                if priority:
+                    self.priorities[piece] = priority[0]
+                    return None
+                return self.priorities.get(piece, 0)
+
+            def set_piece_deadline(self, piece, deadline, flags=0):
+                self.deadlines[piece] = deadline
+
+            def clear_piece_deadlines(self):
+                self.cleared_deadlines += 1
+
+            def set_sequential_download(self, val):
+                self.sequential = val
+
+        runtime.handle = FakeHandle()
+        # Focus on piece 150 (resume / seek)
+        runtime._focus_playback_piece(150)
+
+        # Sequential download must be disabled when seeking so piece 0..N are not forced
+        self.assertFalse(runtime.handle.sequential)
+        # Deadlines cleared
+        self.assertEqual(runtime.handle.cleared_deadlines, 1)
+        # Piece 0 (completed / header) untouched
+        self.assertEqual(runtime.handle.piece_priority(0), 1)
+        # Uncompleted pieces before 150 (e.g. piece 1, 50, 149) must be demoted to 0 to stop wasting bandwidth!
+        self.assertEqual(runtime.handle.piece_priority(1), 0)
+        self.assertEqual(runtime.handle.piece_priority(50), 0)
+        self.assertEqual(runtime.handle.piece_priority(149), 0)
+
+        # Now test backward seek: seeking back to piece 50
+        runtime._focus_playback_piece(50)
+        # Pieces between 50 and 150 should be restored back to STREAM_IDLE_FILE_PRIORITY
+        self.assertEqual(
+            runtime.handle.piece_priority(50),
+            constants.STREAM_IDLE_FILE_PRIORITY,
+        )
+        self.assertEqual(
+            runtime.handle.piece_priority(100),
+            constants.STREAM_IDLE_FILE_PRIORITY,
+        )
+
+    def test_maybe_refocus_on_initial_seek_away_from_zero(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime._piece_priority_lock = threading.RLock()
+        runtime._last_stream_start = None
+        runtime._has_streamed_bytes = False
+        runtime._boosted_pieces = {0, 1}
+        runtime.session_id = "initial-seek-refocus-test"
+        runtime.elapsed_ms = lambda: 0
+        focused = []
+        runtime.map_pieces = lambda start, _len: {150} if start > 1000 else {0}
+        runtime._focus_playback_piece = lambda piece: focused.append(piece)
+        runtime.handle = type(
+            "FakeHandle",
+            (),
+            {
+                "have_piece": lambda _self, _p: False,
+                "piece_priority": lambda _self, _p, _prio: None,
+                "reset_piece_deadline": lambda _self, _p: None,
+            },
+        )()
+
+        # Seeking to 800 MB on first stream request
+        runtime.maybe_refocus(800 * 1024 * 1024)
+
+        # Must trigger refocus and call _focus_playback_piece(150)
+        self.assertEqual(focused, [150])
+
     def test_reannounces_when_target_piece_is_unavailable_with_active_rate(self):
         runtime = object.__new__(TorrentRuntime)
         runtime.session_id = "torrent-target-stall-test"

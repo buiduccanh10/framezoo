@@ -54,7 +54,10 @@ import type {
   SourceSliceSource,
 } from "@/stores/player/utils/qualities";
 import { useProgressStore } from "@/stores/progress";
-import { getSavedProgressTime } from "@/stores/progress/selectors";
+import {
+  getSavedProgressItem,
+  getSavedProgressTime,
+} from "@/stores/progress/selectors";
 
 function addonMediaId(meta: PlayerMeta) {
   // Addons usually do not support IMDB IDs for Season 0 (Specials).
@@ -442,11 +445,16 @@ export function SourceSelectPart(props: {
           sourceSwitchPrepared = prepareSourceSwitch();
           const wasStartFromBeginning = shouldStartFromBeginning;
           const currentProgressTime = usePlayerStore.getState().progress.time;
+          const savedProgressItem = getSavedProgressItem(progressItems, meta);
           const startAt = wasStartFromBeginning
             ? 0
             : currentProgressTime > 0.5
               ? currentProgressTime
-              : getSavedProgressTime(progressItems, meta);
+              : (savedProgressItem?.watched ?? 0);
+          const savedDuration =
+            savedProgressItem?.duration ||
+            usePlayerStore.getState().progress.duration ||
+            undefined;
           if (wasStartFromBeginning) setShouldStartFromBeginning(false);
 
           const session = await startTorrent({
@@ -458,6 +466,7 @@ export function SourceSelectPart(props: {
             fileName: stream.fileName ?? undefined,
             quality: getTorrentQuality(stream),
             startAt,
+            duration: savedDuration,
           });
 
           if (operationId !== selectionOperation.current) {
