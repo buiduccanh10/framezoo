@@ -521,6 +521,12 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
   setCaption(caption) {
     const store = get();
     store.display?.setCaption(caption);
+    const shouldEnableDualSubtitles = Boolean(
+      caption && store.caption.secondary,
+    );
+    store.display?.setSecondaryCaption?.(
+      shouldEnableDualSubtitles ? store.caption.secondary : null,
+    );
     if (
       !caption ||
       (store.caption.translateTask &&
@@ -531,6 +537,11 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     }
     set((s) => {
       s.caption.selected = caption;
+      s.caption.dualSubEnabled = shouldEnableDualSubtitles;
+      if (!caption) {
+        s.caption.secondary = null;
+        s.caption.activeTrack = "primary";
+      }
       if (
         caption &&
         s.caption.translateTask?.translatedCaption?.id === caption.id
@@ -550,11 +561,16 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
   },
   setSecondaryCaption(caption) {
     const store = get();
+    const shouldEnableDualSubtitles = Boolean(
+      caption && store.caption.selected,
+    );
     store.display?.setSecondaryCaption?.(
-      store.caption.dualSubEnabled ? caption : null,
+      shouldEnableDualSubtitles ? caption : null,
     );
     set((s) => {
       s.caption.secondary = caption;
+      s.caption.dualSubEnabled = shouldEnableDualSubtitles;
+      if (!caption) s.caption.activeTrack = "primary";
       if (
         caption &&
         s.caption.translateTask?.translatedCaption?.id === caption.id

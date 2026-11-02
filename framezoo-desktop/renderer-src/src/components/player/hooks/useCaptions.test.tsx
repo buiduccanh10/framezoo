@@ -281,6 +281,34 @@ describe("manual subtitle cycling", () => {
     });
     expect(usePlayerStore.getState().caption.selected?.id).toBe("rank-1");
   });
+
+  it("uses the same ranked cycle for the Auto select action", async () => {
+    const captions = [
+      createCaption("rank-1"),
+      createCaption("rank-2"),
+      createCaption("rank-3"),
+    ];
+    const store = usePlayerStore.getState();
+    store.setMeta(createMeta(1));
+    store.setSource(createSource("source-1"), captions, 0);
+    store.setCaption({
+      id: "rank-1",
+      language: "vi",
+      url: captions[0].url,
+      vttData: "WEBVTT",
+    });
+
+    let controls: ReturnType<typeof useCaptions> | null = null;
+    await act(async () => {
+      root.render(<CaptionsHarness onReady={(value) => (controls = value)} />);
+      await Promise.resolve();
+    });
+
+    await act(async () => {
+      await controls?.selectBestCaptionFromLastUsedLanguage();
+    });
+    expect(usePlayerStore.getState().caption.selected?.id).toBe("rank-2");
+  });
 });
 
 describe("subtitle sync pause barrier", () => {

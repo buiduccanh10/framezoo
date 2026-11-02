@@ -657,3 +657,32 @@ describe("external subtitle source transitions", () => {
     expect(usePlayerStore.getState().captionList).toContainEqual(captionEp2);
   });
 });
+
+describe("dual subtitle selection", () => {
+  afterEach(() => {
+    usePlayerStore.getState().reset();
+  });
+
+  it("enables dual subtitles only after both tracks are selected", () => {
+    const store = usePlayerStore.getState();
+    const primary: Caption = {
+      id: "primary",
+      language: "en",
+      vttData: "WEBVTT",
+    };
+    const secondary: Caption = {
+      id: "secondary",
+      language: "vi",
+      vttData: "WEBVTT",
+    };
+
+    store.setSecondaryCaption(secondary);
+    expect(usePlayerStore.getState().caption.dualSubEnabled).toBe(false);
+
+    store.setCaption(primary);
+    expect(usePlayerStore.getState().caption.dualSubEnabled).toBe(true);
+
+    store.setSecondaryCaption(null);
+    expect(usePlayerStore.getState().caption.dualSubEnabled).toBe(false);
+  });
+});
