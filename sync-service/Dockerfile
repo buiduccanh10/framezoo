@@ -5,8 +5,8 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-COPY sync-service/requirements.txt ./requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+COPY sync-service/requirements.lock ./requirements.lock
+RUN pip install --no-cache-dir -r requirements.lock
 
 COPY sync-service/silero_vad.onnx ./silero_vad.onnx
 COPY sync-service/vad.py ./vad.py
