@@ -416,7 +416,6 @@ export function useCaptions() {
           target,
           result,
           currentCaption,
-          inputVttData,
           baseVttData,
         } of applicableTargets) {
           if (!result || !currentCaption) continue;
@@ -506,12 +505,7 @@ export function useCaptions() {
         });
       }
     },
-    [
-      resetSubtitleSpecificSettings,
-      setCaption,
-      setSecondaryCaption,
-      setSubtitleSyncState,
-    ],
+    [setCaption, setSecondaryCaption, setSubtitleSyncState],
   );
 
   const captions = useMemo(
@@ -1078,23 +1072,8 @@ export function useCaptions() {
       lastSelectedLanguage,
       userLanguage,
     );
-    const scoredCaptions = await scoreCaptionsForLanguage(language);
-    if (scoredCaptions.length === 0) return;
-
-    const bestAlternativeCaption =
-      scoredCaptions.find(
-        (item) => item.score >= 0 && item.caption.id !== selectedCaption?.id,
-      )?.caption ?? scoredCaptions.find((item) => item.score >= 0)?.caption;
-
-    if (!bestAlternativeCaption) return;
-    await selectCaptionById(bestAlternativeCaption.id);
-  }, [
-    lastSelectedLanguage,
-    userLanguage,
-    selectedCaption,
-    scoreCaptionsForLanguage,
-    selectCaptionById,
-  ]);
+    await selectNextBestCaptionForLanguage(language);
+  }, [lastSelectedLanguage, userLanguage, selectNextBestCaptionForLanguage]);
 
   // Validate selected caption when caption list changes
   useEffect(() => {

@@ -225,7 +225,12 @@ function SubtitleTrackSlot({
   return (
     <div
       className="relative flex w-full flex-col items-center justify-center text-center"
-      style={{ opacity }}
+      style={{
+        opacity,
+        minHeight: "1px",
+        transform: "translateZ(0)",
+        willChange: "transform, opacity",
+      }}
     >
       {currentCaptions.map(({ cue, sourceIndex }) => (
         <CaptionCue
@@ -441,6 +446,8 @@ export function SubtitleView(props: { controlsShown: boolean }) {
         alignItems: "center",
         pointerEvents: "none",
         color: "white",
+        transform: "translateZ(0)",
+        willChange: "transform, bottom",
         transition: "bottom 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
         bottom:
           pictureInPictureMode === "document"

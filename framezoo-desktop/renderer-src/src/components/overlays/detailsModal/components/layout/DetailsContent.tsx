@@ -209,6 +209,7 @@ function buildPlayerMeta(
     tmdbId: data.id.toString(),
     imdbId: data.imdbId,
     overview: data.overview,
+    originalLanguage: data.language,
   };
 
   if (data.type === "movie") {

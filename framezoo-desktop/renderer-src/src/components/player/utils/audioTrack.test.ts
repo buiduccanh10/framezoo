@@ -96,6 +96,24 @@ describe("audioTrack utilities", () => {
   });
 
   describe("resolveDefaultAudioTrack", () => {
+    it("prefers the movie original language before English", () => {
+      const tracks = [
+        { id: "1", language: "ko", label: "Korean" },
+        { id: "2", language: "en", label: "English" },
+      ];
+      const result = resolveDefaultAudioTrack(tracks, tracks[1], "kor");
+      expect(result).toEqual(tracks[0]);
+    });
+
+    it("falls back to English when the movie language is unavailable", () => {
+      const tracks = [
+        { id: "1", language: "ja", label: "Japanese" },
+        { id: "2", language: "en", label: "English" },
+      ];
+      const result = resolveDefaultAudioTrack(tracks, tracks[0], "ko");
+      expect(result).toEqual(tracks[1]);
+    });
+
     it("selects English track instead of first index", () => {
       const tracks = [
         { id: "1", language: "ru", label: "Russian" },

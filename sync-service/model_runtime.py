@@ -15,7 +15,7 @@ class Transcriber:
 
 
 def get_model_for_language(wanted_language: str, wanted_model_arch: Any = None):
-    return "silero_vad_v6"
+    return "silero_vad_v6.2"
 
 
 LANGUAGE_RE = re.compile(
@@ -62,7 +62,7 @@ def normalize_language(language: str) -> str:
 
 
 def resolve_model_arch() -> str:
-    return "silero_vad_v6"
+    return "silero_vad_v6.2"
 
 
 def get_transcriber(language: str = "en") -> Any:

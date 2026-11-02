@@ -28,7 +28,11 @@ import {
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { useLanguageStore } from "@/stores/language";
-import { CaptionListItem, SubtitleTrack } from "@/stores/player/slices/source";
+import {
+  CaptionListItem,
+  SubtitleTrack,
+  isEmbeddedCaption,
+} from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { useSubtitleStore } from "@/stores/subtitles";
 import {
@@ -65,6 +69,8 @@ export interface CaptionOptionProps {
 }
 
 function CaptionOptionRightSide(props: CaptionOptionProps) {
+  const { t } = useTranslation();
+
   if (props.loading) {
     // should override selected and error and not show translate button
     return <Spinner className="text-lg" />;
@@ -123,12 +129,16 @@ function CaptionOptionRightSide(props: CaptionOptionProps) {
             ) : null}
             {props.primarySelected && !props.selected ? (
               <span className="flex items-center rounded bg-video-context-type-accent/20 px-2 py-0.5 text-xs font-medium text-video-context-type-accent">
-                1st
+                {t("player.menus.subtitles.dualSubPrimaryBadge", {
+                  defaultValue: "Primary",
+                })}
               </span>
             ) : null}
             {props.secondarySelected && !props.selected ? (
               <span className="flex items-center rounded bg-purple-500/20 px-2 py-0.5 text-xs font-medium text-purple-300">
-                2nd
+                {t("player.menus.subtitles.dualSubSecondaryBadge", {
+                  defaultValue: "Secondary",
+                })}
               </span>
             ) : null}
           </>
@@ -560,6 +570,7 @@ export interface CaptionsViewProps {
   onChooseLanguage?: (language: string) => void;
   selectionMode?: SubtitleSelectionMode;
   onSelectionModeChange?: (mode: SubtitleSelectionMode) => void;
+  dualSelectionMode?: SubtitleSelectionMode;
 }
 
 export function CaptionsView({
@@ -568,6 +579,7 @@ export function CaptionsView({
   onChooseLanguage,
   selectionMode = "primary",
   onSelectionModeChange,
+  dualSelectionMode,
 }: CaptionsViewProps) {
   const { t } = useTranslation();
   const router = useOverlayRouter(id);
@@ -575,10 +587,16 @@ export function CaptionsView({
   const selectedCaption = usePlayerStore((s) => s.caption.selected);
   const secondaryCaption = usePlayerStore((s) => s.caption.secondary);
   const isDualSubEnabled = usePlayerStore((s) => s.caption.dualSubEnabled);
-  const setDualSubEnabled = usePlayerStore((s) => s.setDualSubEnabled);
   const currentTranslateTask = usePlayerStore((s) => s.caption.translateTask);
-  const { disable, selectBestCaptionFromLastUsedLanguage, disableSecondary } =
-    useCaptions();
+  const {
+    canSyncSelectedCaption,
+    disable,
+    selectBestCaptionFromLastUsedLanguage,
+    disableSecondary,
+  } = useCaptions();
+  const hasRenderedFrame = usePlayerStore(
+    (s) => s.mediaPlaying.hasRenderedFrame,
+  );
   const [isRandomSelecting, setIsRandomSelecting] = useState(false);
   const scrollableContainerRef = useRef<HTMLDivElement>(null!);
 
@@ -684,6 +702,21 @@ export function CaptionsView({
       captionList.length !== 0 ? captionList : (getHlsCaptionList?.() ?? []),
     [captionList, getHlsCaptionList],
   );
+  const activeCaptionListItem = activeCaption
+    ? (captions.find((caption) => caption.id === activeCaption.id) ??
+      activeCaption.sourceCaption ??
+      null)
+    : null;
+  const isNativeCaption = Boolean(
+    activeCaption &&
+    (activeCaption.trackId ||
+      (activeCaptionListItem && isEmbeddedCaption(activeCaptionListItem))),
+  );
+  const canOpenTranscript = Boolean(
+    activeCaption &&
+    !isNativeCaption &&
+    activeCaption.vttData.trim().length > 0,
+  );
 
   // Split captions into source and external (opensubtitles)
   const sourceCaptions = useMemo(
@@ -735,6 +768,57 @@ export function CaptionsView({
       return a.languageName.localeCompare(b.languageName);
     });
   }, [sourceCaptions, externalCaptions, t, appLanguage]);
+
+  const renderLanguageOptions = (languageRoute: string) =>
+    groupedCaptions.map(
+      ({ language, languageName, captions: captionsForLang }) => {
+        const isPrimarySelected =
+          (!currentTranslateTask && selectedLanguage === language) ||
+          (!!currentTranslateTask &&
+            !currentTranslateTask.error &&
+            currentTranslateTask.targetCaption.language === language);
+        const isSecondarySelected = secondaryCaption?.language === language;
+
+        return (
+          <Menu.ChevronLink
+            key={language}
+            selected={
+              selectionMode === "primary"
+                ? isPrimarySelected
+                : isSecondarySelected
+            }
+            rightText={captionsForLang.length.toString()}
+            onClick={() => {
+              onChooseLanguage?.(language);
+              router.navigate(languageRoute);
+            }}
+          >
+            <span className="flex items-center">
+              <FlagIcon langCode={language} />
+              <span className="ml-3">{languageName}</span>
+              {(isDualSubEnabled || dualSelectionMode) &&
+                isPrimarySelected &&
+                selectionMode === "secondary" && (
+                  <span className="ml-2 rounded bg-video-context-type-accent/20 px-1.5 py-0.5 text-xs font-medium text-video-context-type-accent">
+                    {t("player.menus.subtitles.dualSubPrimaryBadge", {
+                      defaultValue: "Primary",
+                    })}
+                  </span>
+                )}
+              {(isDualSubEnabled || dualSelectionMode) &&
+                isSecondarySelected &&
+                selectionMode === "primary" && (
+                  <span className="ml-2 rounded bg-white/10 px-1.5 py-0.5 text-xs font-medium text-video-context-type-secondary">
+                    {t("player.menus.subtitles.dualSubSecondaryBadge", {
+                      defaultValue: "Secondary",
+                    })}
+                  </span>
+                )}
+            </span>
+          </Menu.ChevronLink>
+        );
+      },
+    );
 
   // Get current subtitle text preview
   const currentSubtitleText = useMemo(() => {
@@ -817,6 +901,33 @@ export function CaptionsView({
     selectionMode,
     currentTranslateTask,
   ]);
+
+  if (dualSelectionMode) {
+    const trackLabel = t(`player.menus.subtitles.${dualSelectionMode}`);
+
+    return (
+      <>
+        <div className="px-6">
+          <Menu.BackLink
+            onClick={() => router.navigate("/captions/dual")}
+            rightSide={renderHeaderActions("/captions/settings")}
+          >
+            <span className="truncate">{trackLabel}</span>
+          </Menu.BackLink>
+        </div>
+        <div className="mt-2 h-full overflow-y-auto overflow-x-hidden px-6 !pt-1 pb-3 scrollbar-none">
+          <p className="mb-2 px-1 text-xs leading-relaxed text-video-context-type-secondary">
+            {t("player.menus.subtitles.dualSubSelectHint", {
+              defaultValue: "Choose a subtitle track for this slot",
+            })}
+          </p>
+          {renderLanguageOptions(
+            `/captions/dual/${dualSelectionMode}/languages`,
+          )}
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -967,6 +1078,50 @@ export function CaptionsView({
           </div>
         )}
 
+        {canSyncSelectedCaption && canOpenTranscript && (
+          <button
+            type="button"
+            onClick={() => router.navigate("/captions/transcript/sync")}
+            disabled={!hasRenderedFrame}
+            className={classNames(
+              "group mt-3 flex w-full items-center gap-3 rounded-xl border px-3 py-3 text-left transition-[background-color,border-color,transform] duration-150",
+              "mb-2 border-video-context-type-accent/35 bg-video-context-type-accent/10 hover:border-video-context-type-accent/55 hover:bg-video-context-type-accent/15 active:scale-[0.99]",
+              "tabbable disabled:cursor-not-allowed disabled:opacity-50",
+            )}
+            aria-label={t("player.menus.subtitles.autoSyncAction", "Auto sync")}
+          >
+            <span className="flex h-9 w-9 flex-none items-center justify-center rounded-lg bg-video-context-type-accent/20 text-video-context-type-accent">
+              <Icon icon={Icons.WAND} className="text-xl" />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="flex items-center gap-2">
+                <span className="truncate text-sm font-semibold text-white">
+                  {t("player.menus.subtitles.autoSyncTitle", {
+                    defaultValue: "Auto sync",
+                  })}
+                </span>
+                <span className="rounded-full bg-video-context-type-accent/20 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-video-context-type-accent">
+                  {t("player.menus.subtitles.autoSyncBadge", {
+                    defaultValue: "Auto",
+                  })}
+                </span>
+              </span>
+              <span className="mt-0.5 block truncate text-xs text-video-context-type-secondary">
+                {t("player.menus.subtitles.autoSyncDescription", {
+                  defaultValue:
+                    "Match subtitles to the spoken dialogue automatically",
+                })}
+              </span>
+            </span>
+            <span className="flex flex-none items-center gap-1 text-xs font-semibold text-video-context-type-main transition-transform group-hover:translate-x-0.5">
+              {t("player.menus.subtitles.autoSyncAction", {
+                defaultValue: "Auto sync",
+              })}
+              <Icon icon={Icons.CHEVRON_RIGHT} className="text-base" />
+            </span>
+          </button>
+        )}
+
         <div>
           {/* Off button */}
           <CaptionOption
@@ -976,79 +1131,19 @@ export function CaptionsView({
             {t("player.menus.subtitles.offChoice")}
           </CaptionOption>
 
-          {/* Dual sub toggle (player store; SubtitleView reads dualSubEnabled) */}
-          <div>
-            <SelectableLink
-              selected={isDualSubEnabled}
-              onClick={() => {
-                const next = !isDualSubEnabled;
-                setDualSubEnabled(next);
-                if (!next) {
-                  onSelectionModeChange?.("primary");
-                }
-              }}
-              rightSide={
-                <div
-                  className={classNames(
-                    "w-8 h-4 rounded-full transition-colors relative",
-                    isDualSubEnabled ? "bg-purple-500" : "bg-white/20",
-                  )}
-                >
-                  <div
-                    className={classNames(
-                      "absolute top-0.5 w-3 h-3 rounded-full bg-white transition-transform",
-                      isDualSubEnabled ? "translate-x-4" : "translate-x-0.5",
-                    )}
-                  />
-                </div>
-              }
-            >
-              <span className="flex flex-col">
-                <span>{t("player.menus.subtitles.dualSub")}</span>
-                <span className="text-xs text-video-context-type-secondary mt-0.5">
-                  {t("player.menus.subtitles.dualSubDesc")}
-                </span>
+          <Menu.ChevronLink
+            selected={isDualSubEnabled}
+            onClick={() => router.navigate("/captions/dual")}
+          >
+            <span className="flex min-w-0 flex-1 flex-col">
+              <span>{t("player.menus.subtitles.dualSub")}</span>
+              <span className="mt-0.5 truncate text-xs text-video-context-type-secondary">
+                {selectedCaption && secondaryCaption
+                  ? `${getPrettyLanguageNameFromLocale(selectedCaption.language) ?? selectedCaption.language} + ${getPrettyLanguageNameFromLocale(secondaryCaption.language) ?? secondaryCaption.language}`
+                  : t("player.menus.subtitles.dualSubDesc")}
               </span>
-            </SelectableLink>
-
-            {/* Primary / Secondary tab selector — only visible when dual sub is on */}
-            {isDualSubEnabled && (
-              <div
-                className="my-2 grid w-full grid-cols-2 gap-1 rounded-xl bg-white/[0.06] p-1"
-                role="tablist"
-                aria-label={t("player.menus.subtitles.dualSub")}
-              >
-                <button
-                  type="button"
-                  onClick={() => onSelectionModeChange?.("primary")}
-                  className={classNames(
-                    "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                    selectionMode === "primary"
-                      ? "bg-video-context-type-accent text-white shadow-sm"
-                      : "text-video-context-type-secondary hover:bg-white/10",
-                  )}
-                  role="tab"
-                  aria-selected={selectionMode === "primary"}
-                >
-                  {t("player.menus.subtitles.primary")}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => onSelectionModeChange?.("secondary")}
-                  className={classNames(
-                    "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                    selectionMode === "secondary"
-                      ? "bg-purple-600 text-white shadow-sm"
-                      : "text-video-context-type-secondary hover:bg-white/10",
-                  )}
-                  role="tab"
-                  aria-selected={selectionMode === "secondary"}
-                >
-                  {t("player.menus.subtitles.secondary")}
-                </button>
-              </div>
-            )}
-          </div>
+            </span>
+          </Menu.ChevronLink>
 
           {/* Automatically select subtitles option */}
           {captions.length > 0 && selectionMode === "primary" && (
@@ -1096,11 +1191,13 @@ export function CaptionsView({
           {activeCaption && (
             <Menu.ChevronLink
               onClick={() => router.navigate("/captions/transcript")}
+              disabled={!canOpenTranscript}
             >
-              {t("player.menus.subtitles.transcriptChoice")}
+              {t("player.menus.subtitles.transcriptChoice", {
+                defaultValue: "Transcript",
+              })}
             </Menu.ChevronLink>
           )}
-
           <div className="h-1" />
 
           {/* No subtitles available message */}
@@ -1125,55 +1222,10 @@ export function CaptionsView({
 
           {/* Language selection */}
           {groupedCaptions.length > 0 &&
-            groupedCaptions.map(
-              ({ language, languageName, captions: captionsForLang }) => {
-                const isPrimarySelected =
-                  (!currentTranslateTask && selectedLanguage === language) ||
-                  (!!currentTranslateTask &&
-                    !currentTranslateTask.error &&
-                    currentTranslateTask.targetCaption.language === language);
-                const isSecondarySelected =
-                  secondaryCaption?.language === language;
-
-                return (
-                  <Menu.ChevronLink
-                    key={language}
-                    selected={
-                      selectionMode === "primary"
-                        ? isPrimarySelected
-                        : isSecondarySelected
-                    }
-                    rightText={captionsForLang.length.toString()}
-                    onClick={() => {
-                      onChooseLanguage?.(language);
-                      router.navigate(
-                        backLink
-                          ? "/captions/languages"
-                          : "/captionsOverlay/languagesOverlay",
-                      );
-                    }}
-                  >
-                    <span className="flex items-center">
-                      <FlagIcon langCode={language} />
-                      <span className="ml-3">{languageName}</span>
-                      {isDualSubEnabled &&
-                        isPrimarySelected &&
-                        selectionMode === "secondary" && (
-                          <span className="ml-2 text-xs font-medium text-video-context-type-accent bg-video-context-type-accent/20 px-1.5 py-0.5 rounded">
-                            1st
-                          </span>
-                        )}
-                      {isDualSubEnabled &&
-                        isSecondarySelected &&
-                        selectionMode === "primary" && (
-                          <span className="ml-2 text-xs font-medium text-purple-400 bg-purple-500/20 px-1.5 py-0.5 rounded">
-                            2nd
-                          </span>
-                        )}
-                    </span>
-                  </Menu.ChevronLink>
-                );
-              },
+            renderLanguageOptions(
+              backLink
+                ? "/captions/languages"
+                : "/captionsOverlay/languagesOverlay",
             )}
         </div>
       </div>

@@ -73,6 +73,8 @@ export interface LanguageSubtitlesViewProps {
   overlayBackLink?: boolean;
   onTranslateSubtitle?: (caption: CaptionListItem) => void;
   selectionMode?: SubtitleSelectionMode;
+  backPath?: string;
+  onCaptionSelected?: () => void;
 }
 
 export function LanguageSubtitlesView({
@@ -81,6 +83,8 @@ export function LanguageSubtitlesView({
   overlayBackLink,
   onTranslateSubtitle,
   selectionMode = "primary",
+  backPath,
+  onCaptionSelected,
 }: LanguageSubtitlesViewProps) {
   const { t } = useTranslation();
   const router = useOverlayRouter(id);
@@ -101,6 +105,15 @@ export function LanguageSubtitlesView({
   const [isCyclingCaptions, setIsCyclingCaptions] = useState(false);
   const captionList = usePlayerStore((s) => s.captionList);
   const matchScore = useCaptionMatchScore();
+
+  const handleCaptionSelect = async (captionId: string) => {
+    await startDownload(captionId);
+    const activeCaptionId =
+      selectionMode === "secondary"
+        ? usePlayerStore.getState().caption.secondary?.id
+        : usePlayerStore.getState().caption.selected?.id;
+    if (activeCaptionId === captionId) onCaptionSelected?.();
+  };
 
   useEffect(() => {
     if (selectionMode === "primary" ? selectedCaptionId : secondaryCaptionId) {
@@ -276,7 +289,7 @@ export function LanguageSubtitlesView({
             ? downloadReq.error.toString()
             : undefined
         }
-        onClick={() => !isTranslating && startDownload(v.id)}
+        onClick={() => !isTranslating && void handleCaptionSelect(v.id)}
         onTranslate={() => {
           onTranslateSubtitle?.(v);
           router.navigate(
@@ -315,7 +328,9 @@ export function LanguageSubtitlesView({
       <div>
         <Menu.BackLink
           onClick={() =>
-            router.navigate(overlayBackLink ? "/captionsOverlay" : "/captions")
+            router.navigate(
+              backPath ?? (overlayBackLink ? "/captionsOverlay" : "/captions"),
+            )
           }
           rightSide={
             languageCaptions.length > 0 && (

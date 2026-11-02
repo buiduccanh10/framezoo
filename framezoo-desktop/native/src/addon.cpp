@@ -565,10 +565,12 @@ struct MpvPlayer {
     fbo.h = surface_height(surface);
 
     int flip_y = 1;
+    int block_for_target_time = 0;
     mpv_render_param params[] = {
         {MPV_RENDER_PARAM_OPENGL_FBO, &fbo},
         {MPV_RENDER_PARAM_FLIP_Y, &flip_y},
         {MPV_RENDER_PARAM_DEPTH, &depth},
+        {MPV_RENDER_PARAM_BLOCK_FOR_TARGET_TIME, &block_for_target_time},
         {MPV_RENDER_PARAM_INVALID, nullptr},
     };
     const int result = api.render_context_render(render_context, params);
@@ -1537,7 +1539,7 @@ napi_value create_player(napi_env env, napi_callback_info info) {
   set_mpv_option(player.get(), "demuxer-lavf-probesize", "1048576");
 
   // Frame pacing & decoding fidelity
-  set_mpv_option(player.get(), "video-sync", "display-resample");
+  set_mpv_option(player.get(), "video-sync", "audio");
   set_mpv_option(player.get(), "framedrop", "vo");
   set_mpv_option(player.get(), "hr-seek", "yes");
   set_mpv_option(player.get(), "hr-seek-framedrop", "yes");
@@ -1941,15 +1943,14 @@ napi_value load_player(napi_env env, napi_callback_info info) {
   player->reset_hdr_output();
 #endif
 
-  // Torrent HTTP ranges can briefly expose decoder-owned surfaces while the
-  // sidecar waits for the next available piece. Copy-back keeps libmpv's
-  // software renderer independent from that surface lifetime. Audio-clock
-  // pacing avoids display-clock frame drops while the torrent stalls.
+  // Use zero-copy hardware decoding for all playback streams (including 4K/UHD)
+  // to avoid saturated memory bandwidth and frame drops caused by GPU->RAM->GPU roundtrips.
+  // Audio-clock pacing ensures stable frame presentation without VSync estimation drift.
   if (
       set_mpv_property(
           player.get(),
           "hwdec",
-          is_torrent ? "auto-copy" : "auto-safe"
+          "auto-safe"
       ) < 0
   ) {
     return throw_error(env, "libmpv hardware decoder configuration failed");
@@ -1958,7 +1959,7 @@ napi_value load_player(napi_env env, napi_callback_info info) {
       set_mpv_property(
           player.get(),
           "video-sync",
-          is_torrent ? "audio" : "display-resample"
+          "audio"
       ) < 0
   ) {
     return throw_error(env, "libmpv video sync configuration failed");
@@ -1967,7 +1968,9 @@ napi_value load_player(napi_env env, napi_callback_info info) {
       set_mpv_property(
           player.get(),
           "framedrop",
-          is_torrent ? "no" : "vo"
+          // Drop stale video frames after a window is occluded or regains
+          // focus; audio remains the clock for torrent playback.
+          "vo"
       ) < 0
   ) {
     return throw_error(env, "libmpv frame drop configuration failed");

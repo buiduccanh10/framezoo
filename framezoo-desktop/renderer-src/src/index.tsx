@@ -249,7 +249,10 @@ function AuthWrapper() {
   const isCustomUrl = backendUrl !== userBackendUrl;
 
   if (status.loading) return <LoadingScreen type="user" />;
-  if (status.error)
+  if (status.error) {
+    if (typeof navigator !== "undefined" && !navigator.onLine) {
+      return <App />;
+    }
     return (
       <ErrorScreen
         showResetButton={isCustomUrl}
@@ -263,6 +266,7 @@ function AuthWrapper() {
         )}
       </ErrorScreen>
     );
+  }
   return <App />;
 }
 

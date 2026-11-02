@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useWindowSize } from "react-use";
 
 import { Icons } from "@/components/Icon";
@@ -20,6 +20,7 @@ import { usePlayerStore } from "@/stores/player/store";
 import { AudioView } from "./settings/AudioView";
 import { CaptionSettingsView } from "./settings/CaptionSettingsView";
 import { CaptionsView } from "./settings/CaptionsView";
+import { DualSubtitlesView } from "./settings/DualSubtitlesView";
 import { LanguageSubtitlesView } from "./settings/LanguageSubtitlesView";
 import { PlaybackSettingsView } from "./settings/PlaybackSettingsView";
 import { QualityView } from "./settings/QualityView";
@@ -53,6 +54,26 @@ function SettingsOverlay({ id }: { id: string }) {
   );
   const setSubtitleSelectionMode = usePlayerStore(
     (state) => state.setActiveCaptionTrack,
+  );
+  const handleDualCaptionSelected = useCallback(
+    (track: "primary" | "secondary") => {
+      const captionState = usePlayerStore.getState().caption;
+
+      if (track === "primary" && !captionState.secondary) {
+        setSubtitleSelectionMode("secondary");
+        router.navigate("/captions/dual/secondary");
+        return;
+      }
+
+      if (track === "secondary" && !captionState.selected) {
+        setSubtitleSelectionMode("primary");
+        router.navigate("/captions/dual/primary");
+        return;
+      }
+
+      router.navigate("/captions/dual");
+    },
+    [router, setSubtitleSelectionMode],
   );
 
   const isLandscape = viewportWidth > viewportHeight;
@@ -132,6 +153,34 @@ function SettingsOverlay({ id }: { id: string }) {
             />
           </Menu.CardWithScrollable>
         </OverlayPage>
+        <OverlayPage
+          id={id}
+          path="/captions/dual"
+          width={defaultWidth}
+          height={defaultHeight}
+        >
+          <DualSubtitlesView id={id} />
+        </OverlayPage>
+        {(["primary", "secondary"] as const).map((track) => (
+          <OverlayPage
+            key={`dual-${track}`}
+            id={id}
+            path={`/captions/dual/${track}`}
+            width={defaultWidth}
+            height={defaultHeight}
+          >
+            <Menu.CardWithScrollable>
+              <CaptionsView
+                id={id}
+                backLink
+                dualSelectionMode={track}
+                onChooseLanguage={setChosenLanguage}
+                selectionMode={track}
+                onSelectionModeChange={setSubtitleSelectionMode}
+              />
+            </Menu.CardWithScrollable>
+          </OverlayPage>
+        ))}
         {/* This is used by the captions shortcut in bottomControls of player */}
         <OverlayPage
           id={id}
@@ -283,6 +332,28 @@ function SettingsOverlay({ id }: { id: string }) {
             )}
           </Menu.CardWithScrollable>
         </OverlayPage>
+        {(["primary", "secondary"] as const).map((track) => (
+          <OverlayPage
+            key={`dual-${track}-language`}
+            id={id}
+            path={`/captions/dual/${track}/languages`}
+            width={wideWidth}
+            height={defaultHeight}
+          >
+            <Menu.CardWithScrollable>
+              {chosenLanguage && (
+                <LanguageSubtitlesView
+                  id={id}
+                  language={chosenLanguage}
+                  onTranslateSubtitle={setCaptionToTranslate}
+                  backPath={`/captions/dual/${track}`}
+                  onCaptionSelected={() => handleDualCaptionSelected(track)}
+                  selectionMode={track}
+                />
+              )}
+            </Menu.CardWithScrollable>
+          </OverlayPage>
+        ))}
         <OverlayPage
           id={id}
           path="/captions/languages/translateSubtitleOverlay"

@@ -21,10 +21,35 @@ export function useOnlineListener() {
   const account = useAuthStore((s) => s.account);
   const backendUrl = useBackendUrl();
   const isDesktopApp = useIsDesktopApp();
-  const isOnlineRef = useRef<boolean>(true);
-  const failureCountRef = useRef<number>(0);
+  const isOnlineRef = useRef<boolean>(
+    typeof navigator !== "undefined" ? navigator.onLine : true,
+  );
+  const failureCountRef = useRef<number>(
+    typeof navigator !== "undefined" && !navigator.onLine
+      ? MAX_CONSECUTIVE_FAILURES
+      : 0,
+  );
 
   useEffect(() => {
+    const handleOffline = () => {
+      isOnlineRef.current = false;
+      failureCountRef.current = MAX_CONSECUTIVE_FAILURES;
+      updateOnline(false);
+    };
+
+    const handleOnline = () => {
+      isOnlineRef.current = true;
+      failureCountRef.current = 0;
+      updateOnline(true);
+    };
+
+    window.addEventListener("offline", handleOffline);
+    window.addEventListener("online", handleOnline);
+
+    if (typeof navigator !== "undefined" && !navigator.onLine) {
+      handleOffline();
+    }
+
     const backendBase = backendUrl?.replace(/\/+$/, "");
     const isAuthenticated = !!account && !!backendBase;
     const pingUrl = isAuthenticated
@@ -40,6 +65,13 @@ export function useOnlineListener() {
 
     let abort: null | AbortController = null;
     const interval = setInterval(() => {
+      if (typeof navigator !== "undefined" && !navigator.onLine) {
+        if (isOnlineRef.current) {
+          handleOffline();
+        }
+        return;
+      }
+
       counter += 1;
       // If currently online and no recent failures, skip ticks to reduce polling frequency.
       // If we experienced failures, poll every tick (5s) to retry and confirm status.
@@ -98,6 +130,8 @@ export function useOnlineListener() {
     return () => {
       clearInterval(interval);
       if (abort) abort.abort();
+      window.removeEventListener("offline", handleOffline);
+      window.removeEventListener("online", handleOnline);
     };
   }, [account, backendUrl, isDesktopApp, updateOnline]);
 }

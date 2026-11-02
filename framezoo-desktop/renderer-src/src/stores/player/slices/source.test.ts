@@ -4,7 +4,12 @@ import type { DisplayInterface } from "@/components/player/display/displayInterf
 import { queryClient } from "@/utils/queryClient";
 
 import { usePlayerStore } from "../store";
-import { playerStatus, type Caption, type CaptionListItem, type PlayerMeta } from "./source";
+import {
+  type Caption,
+  type CaptionListItem,
+  type PlayerMeta,
+  playerStatus,
+} from "./source";
 import type { SourceSliceSource } from "../utils/qualities";
 
 const subtitleMocks = vi.hoisted(() => ({
@@ -650,5 +655,34 @@ describe("external subtitle source transitions", () => {
       }),
     );
     expect(usePlayerStore.getState().captionList).toContainEqual(captionEp2);
+  });
+});
+
+describe("dual subtitle selection", () => {
+  afterEach(() => {
+    usePlayerStore.getState().reset();
+  });
+
+  it("enables dual subtitles only after both tracks are selected", () => {
+    const store = usePlayerStore.getState();
+    const primary: Caption = {
+      id: "primary",
+      language: "en",
+      vttData: "WEBVTT",
+    };
+    const secondary: Caption = {
+      id: "secondary",
+      language: "vi",
+      vttData: "WEBVTT",
+    };
+
+    store.setSecondaryCaption(secondary);
+    expect(usePlayerStore.getState().caption.dualSubEnabled).toBe(false);
+
+    store.setCaption(primary);
+    expect(usePlayerStore.getState().caption.dualSubEnabled).toBe(true);
+
+    store.setSecondaryCaption(null);
+    expect(usePlayerStore.getState().caption.dualSubEnabled).toBe(false);
   });
 });

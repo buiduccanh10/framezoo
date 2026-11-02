@@ -41,7 +41,7 @@ export function RegisterScreen() {
     try {
       setAccount(await register(backendUrl, {
         nickname: nickname.trim(),
-        email: email.trim(),
+        email: email.trim().toLowerCase(),
         password,
         profile: { colorA: colors.accent, colorB: colors.accentStrong, icon: 'user' },
       }));
@@ -59,8 +59,8 @@ export function RegisterScreen() {
       <View style={styles.form}>
         <AppText variant="heading">Create account</AppText>
         <AppText variant="muted">Sync bookmarks, progress and history across devices.</AppText>
-        <TextInput onChangeText={setNickname} placeholder="Nickname" value={nickname} />
-        <TextInput autoCapitalize="none" keyboardType="email-address" onChangeText={setEmail} placeholder="Email" value={email} />
+        <TextInput onChangeText={(value) => setNickname(value.replace(/\s/g, ''))} placeholder="Nickname" value={nickname} />
+        <TextInput autoCapitalize="none" keyboardType="email-address" onChangeText={(value) => setEmail(value.trim().toLowerCase())} placeholder="Email" value={email} />
         <TextInput autoCapitalize="none" secureTextEntry onChangeText={setPassword} placeholder="Password or passphrase" value={password} />
         <TextInput autoCapitalize="none" secureTextEntry onChangeText={setConfirmPassword} placeholder="Confirm password" value={confirmPassword} />
         {error ? <AppText style={styles.error}>{error}</AppText> : null}

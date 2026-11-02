@@ -1956,6 +1956,21 @@ class SidecarStreamTest(unittest.TestCase):
             ),
         )
 
+    def test_late_seek_probe_does_not_crash_while_startup_tail_is_pending(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.start_time = 0
+        runtime._startup_tail_pieces = {99}
+        runtime._last_stream_start = 0
+        runtime._piece_have = lambda _piece: False
+
+        self.assertFalse(
+            runtime.is_initial_tail_probe(
+                50 * 1024 * 1024,
+                100 * 1024 * 1024,
+                constants.INITIAL_TAIL_PROBE_MAX_REQUESTS + 1,
+            ),
+        )
+
     def test_initial_tail_probe_does_not_mark_streamed_cursor(self):
         runtime = object.__new__(TorrentRuntime)
         runtime.stop_event = threading.Event()

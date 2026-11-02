@@ -17,6 +17,7 @@ import {
   tryParseCanonicalVtt,
 } from "@/components/player/utils/captions";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
+import { isEmbeddedCaption } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { useSubtitleStore } from "@/stores/subtitles";
 import { durationExceedsHour, formatSeconds } from "@/utils/formatSeconds";
@@ -53,6 +54,27 @@ export function TranscriptView({
     selectionMode === "secondary" ? setSecondaryDelay : setPrimaryDelay;
   const changeSelectionMode = onSelectionModeChange ?? setActiveCaptionTrack;
   const { canSyncSelectedCaption } = useCaptions();
+  const captionList = usePlayerStore((s) => s.captionList);
+  const getHlsCaptionList = usePlayerStore((s) => s.display?.getCaptionList);
+  const activeCaptionListItem = activeCaption
+    ? (captionList.find((caption) => caption.id === activeCaption.id) ??
+      activeCaption.sourceCaption ??
+      getHlsCaptionList?.().find(
+        (caption) => caption.id === activeCaption.id,
+      ) ??
+      null)
+    : null;
+  const isNativeCaption = Boolean(
+    activeCaption &&
+    (activeCaption.trackId ||
+      (activeCaptionListItem && isEmbeddedCaption(activeCaptionListItem))),
+  );
+  const canSyncActiveCaption = Boolean(
+    canSyncSelectedCaption &&
+    activeCaption &&
+    !isNativeCaption &&
+    activeCaption.vttData.trim().length > 0,
+  );
   const hasRenderedFrame = usePlayerStore(
     (s) => s.mediaPlaying.hasRenderedFrame,
   );
@@ -253,22 +275,24 @@ export function TranscriptView({
       <Menu.BackLink
         onClick={() => router.navigate("/captions")}
         rightSide={
-          canSyncSelectedCaption ? (
+          canSyncActiveCaption ? (
             <button
               type="button"
               onClick={() => router.navigate("/captions/transcript/sync")}
               disabled={!hasRenderedFrame}
-              className="mr-[-0.5rem] flex h-8 w-8 items-center justify-center rounded-md text-video-context-type-accent transition-colors hover:bg-video-context-type-accent/15 disabled:cursor-not-allowed disabled:opacity-50"
+              className="mr-[-0.5rem] flex h-8 items-center gap-1.5 rounded-lg border border-video-context-type-accent/35 bg-video-context-type-accent/10 px-2 text-xs font-semibold text-video-context-type-accent transition-[background-color,border-color] hover:border-video-context-type-accent/55 hover:bg-video-context-type-accent/15 disabled:cursor-not-allowed disabled:opacity-50"
               aria-label={t(
-                "player.menus.subtitles.syncSubtitleOpen",
-                "Sync subtitle with AI",
+                "player.menus.subtitles.autoSyncAction",
+                "Auto sync",
               )}
-              title={t(
-                "player.menus.subtitles.syncSubtitleOpen",
-                "Sync subtitle with AI",
-              )}
+              title={t("player.menus.subtitles.autoSyncAction", "Auto sync")}
             >
-              <Icon icon={Icons.WAND} className="text-2xl" />
+              <Icon icon={Icons.WAND} className="text-base" />
+              <span className="hidden sm:inline">
+                {t("player.menus.subtitles.autoSyncAction", {
+                  defaultValue: "Auto sync",
+                })}
+              </span>
             </button>
           ) : null
         }

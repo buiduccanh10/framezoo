@@ -1,4 +1,10 @@
-import { app, BrowserWindow, ipcMain, powerSaveBlocker, screen } from "electron";
+import {
+  app,
+  BrowserWindow,
+  ipcMain,
+  powerSaveBlocker,
+  screen,
+} from "electron";
 import fs from "node:fs";
 import fsp from "node:fs/promises";
 import os from "node:os";
@@ -264,6 +270,30 @@ export class LibMpvController {
   private mediaControlsRegistered = false;
   private mediaMetadataRevision = 0;
   private displaySleepBlockerId: number | null = null;
+
+  private isTrustedRendererEvent(event: {
+    sender: Electron.WebContents;
+    senderFrame?: Electron.WebFrameMain | null;
+  }) {
+    if (
+      !this.mainWindow ||
+      this.mainWindow.isDestroyed() ||
+      event.sender !== this.mainWindow.webContents ||
+      !event.senderFrame
+    ) {
+      return false;
+    }
+    try {
+      const senderUrl = new URL(event.senderFrame.url);
+      const windowUrl = new URL(this.mainWindow.webContents.getURL());
+      return (
+        senderUrl.protocol === windowUrl.protocol &&
+        senderUrl.host === windowUrl.host
+      );
+    } catch {
+      return false;
+    }
+  }
 
   public init(
     mainWindow: BrowserWindow,
@@ -560,7 +590,7 @@ export class LibMpvController {
     ipcMain.handle(
       "desktop:libmpv-create",
       async (event, request: LibMpvPlayerRequest) => {
-        if (!this.mainWindow || event.sender !== this.mainWindow.webContents) {
+        if (!this.isTrustedRendererEvent(event)) {
           return null;
         }
         await this.waitForStartupPreflight();
@@ -570,70 +600,79 @@ export class LibMpvController {
 
     ipcMain.handle(
       "desktop:libmpv-resize",
-      async (_event, playerId: string, bounds: LibMpvBounds) => {
+      async (event, playerId: string, bounds: LibMpvBounds) => {
+        if (!this.isTrustedRendererEvent(event)) return false;
         return this.resize(playerId, bounds);
       },
     );
 
     ipcMain.handle(
       "desktop:libmpv-load",
-      async (_event, playerId: string, request: LibMpvSourceRequest) => {
+      async (event, playerId: string, request: LibMpvSourceRequest) => {
+        if (!this.isTrustedRendererEvent(event)) return false;
         return this.load(playerId, request);
       },
     );
 
     ipcMain.handle(
       "desktop:libmpv-command",
-      async (_event, playerId: string, command: LibMpvCommand) => {
+      async (event, playerId: string, command: LibMpvCommand) => {
+        if (!this.isTrustedRendererEvent(event)) return false;
         return this.command(playerId, command);
       },
     );
 
     ipcMain.handle(
       "desktop:libmpv-extract-audio",
-      async (_event, request: LibMpvAudioRequest) => {
+      async (event, request: LibMpvAudioRequest) => {
+        if (!this.isTrustedRendererEvent(event)) {
+          throw new Error("Unauthorized renderer IPC sender");
+        }
         await this.waitForStartupPreflight();
         return this.extractAudio(request);
       },
     );
     ipcMain.handle(
       "desktop:libmpv-cancel-audio",
-      async (_event, requestId: string) => this.cancelAudio(requestId),
+      async (event, requestId: string) => {
+        if (!this.isTrustedRendererEvent(event)) return false;
+        return this.cancelAudio(requestId);
+      },
     );
 
     ipcMain.handle(
       "desktop:libmpv-reparent",
-      async (_event, playerId: string, target: "main" | "pip") => {
+      async (event, playerId: string, target: "main" | "pip") => {
+        if (!this.isTrustedRendererEvent(event)) return false;
         return this.reparent(playerId, target);
       },
     );
 
     ipcMain.handle(
       "desktop:libmpv-destroy",
-      async (_event, playerId: string, reason?: string) => {
+      async (event, playerId: string, reason?: string) => {
+        if (!this.isTrustedRendererEvent(event)) return false;
         return this.destroy(playerId, reason);
       },
     );
 
-    ipcMain.handle("desktop:libmpv-diagnostics", () => ({
-      diagnostics: getAddonDiagnostics(),
-      lastError: lastAddonLoadError,
-      lastCreateError: lastPlayerCreateError,
-    }));
+    ipcMain.handle("desktop:libmpv-diagnostics", (event) =>
+      this.isTrustedRendererEvent(event)
+        ? {
+            diagnostics: getAddonDiagnostics(),
+            lastError: lastAddonLoadError,
+            lastCreateError: lastPlayerCreateError,
+          }
+        : null,
+    );
     ipcMain.handle("desktop:native-media-controls-state", (event) =>
-      this.mainWindow !== null &&
-      !this.mainWindow.isDestroyed() &&
-      event.sender === this.mainWindow.webContents
-        ? this.mediaControlsRegistered
-        : false,
+      this.isTrustedRendererEvent(event) ? this.mediaControlsRegistered : false,
     );
     ipcMain.handle(
       "desktop:native-media-metadata",
       async (event, metadata: unknown) => {
         if (
-          !this.mainWindow ||
-          this.mainWindow.isDestroyed() ||
-          event.sender !== this.mainWindow.webContents ||
+          !this.isTrustedRendererEvent(event) ||
           !metadata ||
           typeof metadata !== "object"
         ) {
@@ -679,12 +718,18 @@ export class LibMpvController {
                 const bytes = Buffer.from(await response.arrayBuffer());
                 if (bytes.length > 0 && bytes.length <= 8 * 1024 * 1024) {
                   const extension = contentType.includes("png") ? "png" : "jpg";
-                  const cacheDir = path.join(os.tmpdir(), "framezoo-media-artwork");
+                  const cacheDir = path.join(
+                    os.tmpdir(),
+                    "framezoo-media-artwork",
+                  );
                   await fsp.mkdir(cacheDir, { recursive: true });
                   const cacheName = createHash("sha256")
                     .update(url.toString())
                     .digest("hex");
-                  artworkPath = path.join(cacheDir, `${cacheName}.${extension}`);
+                  artworkPath = path.join(
+                    cacheDir,
+                    `${cacheName}.${extension}`,
+                  );
                   await fsp.writeFile(artworkPath, bytes);
                 }
               }
@@ -706,9 +751,7 @@ export class LibMpvController {
       "desktop:native-media-navigation",
       (event, availability: unknown) => {
         if (
-          !this.mainWindow ||
-          this.mainWindow.isDestroyed() ||
-          event.sender !== this.mainWindow.webContents ||
+          !this.isTrustedRendererEvent(event) ||
           !availability ||
           typeof availability !== "object"
         ) {
@@ -1180,8 +1223,13 @@ export class LibMpvController {
       });
     } else if (event.type === "end-file") {
       const reason =
-        typeof event.data === "string" ? event.data : (event as any).data?.reason;
-      if (!player.fileLoaded && (reason === "stop" || (event as any).data === "stop")) {
+        typeof event.data === "string"
+          ? event.data
+          : (event as any).data?.reason;
+      if (
+        !player.fileLoaded &&
+        (reason === "stop" || (event as any).data === "stop")
+      ) {
         return;
       }
       player.fileLoaded = false;

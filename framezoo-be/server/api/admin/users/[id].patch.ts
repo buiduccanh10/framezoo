@@ -2,6 +2,7 @@ import { defineEventHandler, createError, readBody } from 'h3';
 import { z } from 'zod';
 import { prisma } from '~/utils/prisma';
 import { requireAdmin } from '~/utils/admin';
+import { normalizeEmail } from '~/utils/accountIdentifier';
 
 const updateSchema = z.object({
   nickname: z.string().min(1, 'Nickname cannot be empty').max(50, 'Nickname too long').optional(),
@@ -53,7 +54,7 @@ export default defineEventHandler(async event => {
   }
 
   if (validated.email !== undefined) {
-    const newEmail = validated.email === '' ? null : validated.email;
+    const newEmail = validated.email === '' ? null : normalizeEmail(validated.email);
     if (newEmail !== user.email) {
       if (newEmail) {
         // Check if new email is already taken by another user

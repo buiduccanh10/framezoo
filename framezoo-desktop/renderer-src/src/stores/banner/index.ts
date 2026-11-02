@@ -25,7 +25,7 @@ interface BannerStore {
 export const useBannerStore = create(
   immer<BannerStore>((set) => ({
     banners: [],
-    isOnline: true,
+    isOnline: typeof navigator !== "undefined" ? navigator.onLine : true,
     isTurnstile: false,
     location: null,
     ignoredBannerIds: [],

@@ -6,7 +6,6 @@ import {
 } from "./captions";
 import { mwFetch } from "../../../backend/helpers/fetch";
 import { conf } from "../../../setup/config";
-import { alignWindowsLocal } from "../../../sync/aligner";
 
 export const SUBTITLE_ALIGNMENT_AUDIO_WINDOW_SECONDS = 60;
 export const SUBTITLE_ALIGNMENT_MAX_WINDOWS = 6;
@@ -132,13 +131,6 @@ function appendAudio(body: FormData, audio: Uint8Array, index: number) {
     "audio",
     new Blob([audioCopy.buffer], { type: "audio/wav" }),
     `capture-${index}.wav`,
-  );
-}
-
-function isAbortError(error: unknown, signal?: AbortSignal) {
-  return (
-    signal?.aborted === true ||
-    (error instanceof DOMException && error.name === "AbortError")
   );
 }
 
@@ -395,54 +387,9 @@ export async function alignSubtitlesWithCurrentStream(options: {
     throw new Error("Failed to capture any valid audio windows for alignment");
   }
 
-  // 1. Try 100% on-device local VAD + FFT + Split alignment first!
-  try {
-    const localBatchResults: Partial<
-      Record<SubtitleAlignmentTrack, SubtitleAlignmentResponse>
-    > = {};
-    for (const subtitle of options.subtitles) {
-      const localRes = await alignWindowsLocal({
-        windows: capturedWindows.map((w) => ({
-          audioWav: w.audio,
-          startMs: w.startMs,
-        })),
-        vttData: subtitle.vttData,
-      });
-      if (localRes.aligned) {
-        localBatchResults[subtitle.track] = {
-          aligned: true,
-          offsetMs: localRes.offsetMs,
-          confidence: localRes.confidence,
-          speechIntervals: localRes.speechIntervals,
-          segments: localRes.segments,
-          reason: null,
-        };
-      }
-    }
-
-    if (
-      options.subtitles.length > 0 &&
-      options.subtitles.every((s) => localBatchResults[s.track]?.aligned)
-    ) {
-      logSyncTelemetry("alignment_complete_local_on_device", {
-        windowCount: capturedWindows.length,
-        confidence: Object.values(localBatchResults).map((r) => r?.confidence),
-      });
-      options.onProgress?.(1, "analyzing");
-      return { results: localBatchResults };
-    }
-    console.warn(
-      "[subtitle-align] local on-device VAD+FFT produced low confidence / no speech; falling back to server",
-      localBatchResults,
-    );
-  } catch (localError) {
-    console.warn(
-      "[subtitle-align] local on-device VAD+FFT sync skipped/failed; falling back to server",
-      localError,
-    );
-  }
-
-  // 2. Fallback to server sync-service
+  // ponytail: keep alignment off the renderer thread; reintroduce local inference
+  // only behind a Worker with transferable audio buffers.
+  // The renderer captures bounded audio windows and applies the server result.
   const body = new FormData();
   body.append(
     "subtitles",

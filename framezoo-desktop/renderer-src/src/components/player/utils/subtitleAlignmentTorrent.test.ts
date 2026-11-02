@@ -14,7 +14,6 @@ import {
 const torrentMocks = vi.hoisted(() => ({
   extractAudioWindow: vi.fn(),
   mwFetch: vi.fn(),
-  alignWindowsLocal: vi.fn(),
 }));
 
 vi.mock("./audioCapture", () => ({
@@ -26,15 +25,6 @@ vi.mock("../../../backend/helpers/fetch", () => ({
 vi.mock("../../../setup/config", () => ({
   conf: () => ({ BACKEND_URL: "http://backend.test" }),
 }));
-vi.mock("../../../sync/aligner", async () => {
-  const actual = await vi.importActual<typeof import("../../../sync/aligner")>(
-    "../../../sync/aligner",
-  );
-  return {
-    ...actual,
-    alignWindowsLocal: torrentMocks.alignWindowsLocal,
-  };
-});
 
 import {
   type SubtitleAlignmentResponse,
@@ -142,7 +132,7 @@ describe("torrent subtitle alignment integration with real multi-MB audio data",
     receivedTorrentRequests.length = 0;
   });
 
-  it("extracts multi-MB audio windows from a torrent source and aligns with local VAD+FFT engine", async () => {
+  it("extracts multi-MB audio windows and aligns with the backend core", async () => {
     const WINDOW_DURATION_SECONDS = 60;
     const multiMbWavBuffer = createRealWavBuffer(WINDOW_DURATION_SECONDS, 440);
     expect(multiMbWavBuffer.byteLength).toBeGreaterThan(1_900_000); // ~1.92 MB
@@ -169,13 +159,16 @@ describe("torrent subtitle alignment integration with real multi-MB audio data",
       );
     });
 
-    // Mock local aligner success
-    torrentMocks.alignWindowsLocal.mockResolvedValue({
-      aligned: true,
-      offsetMs: -1500,
-      confidence: 94,
-      speechIntervals: [{ startMs: 10_000, endMs: 25_000 }],
-      reason: null,
+    torrentMocks.mwFetch.mockResolvedValue({
+      results: {
+        primary: {
+          aligned: true,
+          offsetMs: -1500,
+          confidence: 94,
+          speechIntervals: [{ startMs: 10_000, endMs: 25_000 }],
+          reason: null,
+        },
+      },
     });
 
     const progressEvents: Array<{
@@ -212,18 +205,13 @@ Torrent speech cue line`;
     expect(alignedVtt).toContain("00:10:03.500 --> 00:10:06.500");
   });
 
-  it("handles fallback to backend when local on-device sync is unavailable", async () => {
+  it("uses the backend result for torrent sources", async () => {
     const WINDOW_DURATION_SECONDS = 60;
     torrentMocks.extractAudioWindow.mockImplementation(async (request) => {
       const torrentQueryUrl = `${request.url}?client=sync&syncWindowIndex=${request.windowIndex}`;
       await fetch(torrentQueryUrl, { headers: { Range: "bytes=0-1023" } });
       return createRealWavBuffer(WINDOW_DURATION_SECONDS, 523);
     });
-
-    // Simulate local sync failure/skip
-    torrentMocks.alignWindowsLocal.mockRejectedValue(
-      new Error("Local WASM disabled"),
-    );
 
     const mockServerResult: SubtitleAlignmentResponse = {
       aligned: true,

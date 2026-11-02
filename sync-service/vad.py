@@ -9,7 +9,9 @@ from scipy.signal import resample_poly
 
 SILERO_VAD_FILENAME = "silero_vad.onnx"
 SILERO_VAD_URL = (
-    "https://github.com/snakers4/silero-vad/raw/master/src/silero_vad/data/silero_vad.onnx"
+    "https://raw.githubusercontent.com/snakers4/silero-vad/"
+    "bfdc0193023f121ea5b3cc7b176dbed570a68a59"
+    "/src/silero_vad/data/silero_vad.onnx"
 )
 SILERO_SAMPLE_RATE = 16_000
 FRAME_SAMPLES = 512  # 32ms at 16kHz
@@ -87,7 +89,7 @@ def detect_speech_intervals(
     threshold: float = VAD_THRESHOLD,
 ) -> list[tuple[int, int]]:
     """
-    Run Silero VAD v6 over the input audio with dual-threshold hysteresis,
+    Run Silero VAD v6.2 over the input audio with dual-threshold hysteresis,
     amplitude normalization for quiet cinema tracks, and onset/offset padding.
     Returns merged [(start_ms, end_ms), ...] in absolute timestamps.
     """

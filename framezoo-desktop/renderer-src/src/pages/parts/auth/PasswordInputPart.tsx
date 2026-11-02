@@ -252,7 +252,7 @@ export function PasswordInputPart(props: PasswordInputPartProps) {
               : (t("auth.register.nicknameLabel") ?? "Choose a nickname")
           }
           value={nickname}
-          onChange={setNickname}
+          onChange={(value) => setNickname(value.replace(/\s/g, ""))}
           name="username"
           autoComplete="username"
           placeholder={
