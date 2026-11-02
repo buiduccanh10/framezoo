@@ -213,5 +213,59 @@
     "paypalLabel": "PayPal",
     "close": "Potser més tard",
     "viewQr": "Veure el codi QR més gran"
+  },
+  "subtitlesConfigure": {
+    "pageTitle": "Configura els subtítols de Framezoo | Framezoo",
+    "hero": {
+      "title": "Configura els subtítols de Framezoo",
+      "description": "Configureu la vostra clau de l'API Wyzie personal per obtenir subtítols més ràpids i evitar els límits de tarifa compartida de la comunitat."
+    },
+    "account": {
+      "verifying": "S'està verificant el bitllet del compte des de l'aplicació d'escriptori...",
+      "configuringFor": "Configuració del compte:",
+      "desktopLinked": "Escriptori enllaçat",
+      "saveButton": "Desa al compte de Framezoo",
+      "saving": "S'està desant al compte...",
+      "instantHint": "(Se sincronitza amb l'aplicació d'escriptori a l'instant)",
+      "saveSuccess": "S'ha desat correctament al vostre compte! L'aplicació d'escriptori utilitzarà aquesta clau automàticament.",
+      "saveFailed": "No s'ha pogut desar.",
+      "saveNetworkError": "Error de xarxa en desar al compte."
+    },
+    "step1": {
+      "title": "Obteniu la vostra clau d'API Wyzie gratuïta",
+      "description": "Wyzie Subtitles ofereix un gran catàleg de subtítols en diversos idiomes. Pots generar o bescanviar la teva clau API personal al seu portal oficial:",
+      "openStore": "Obre la botiga Wyzie (becanvia)",
+      "step2": "Copieu la cadena de clau de l'API generada.",
+      "step1": "Visiteu l'enllaç anterior per obtenir o bescanviar una clau d'API.",
+      "step3": "Torneu aquí i enganxeu-lo al pas 2 a continuació."
+    },
+    "step2": {
+      "title": "Introduïu la clau de l'API Wyzie",
+      "placeholder": "Enganxeu aquí la vostra clau de l'API Wyzie...",
+      "show": "Mostra",
+      "hide": "Amaga",
+      "testButton": "Prova la clau de l'API",
+      "testing": "S'està verificant...",
+      "messages": {
+        "empty": "Introduïu una clau API abans de provar.",
+        "verifying": "S'està verificant amb Wyzie...",
+        "valid": "La clau API és vàlida i funciona!",
+        "invalid": "La clau de l'API no és vàlida o ha caducat.",
+        "rateLimit": "La clau d'API ha superat els límits de velocitat.",
+        "serverError": "El servidor Wyzie ha retornat HTTP {{status}}.",
+        "networkError": "Error de xarxa en connectar-se a sub.wyzie.io. Comproveu la vostra connexió."
+      },
+      "clearButton": "Esborra clau"
+    },
+    "step3": {
+      "title": "Instal·la i aplica",
+      "copyManifest": "Copia l'URL del manifest",
+      "copied": "Copiat!",
+      "noticeLabel": "Avís:",
+      "noticeText": "La vostra clau API s'emmagatzema de manera segura al vostre dispositiu. Només es reenvia per cercar i recuperar subtítols de pel·lícules i sèries. Podeu actualitzar-lo o eliminar-lo en qualsevol moment.",
+      "openFramezoo": "Obriu Framezoo",
+      "openFramezooDisabledTooltip": "Requereix l'obertura des de Framezoo Desktop mentre s'ha iniciat sessió",
+      "notConnectedNotice": "Nota: no esteu connectat amb un bitllet de compte de Framezoo. Per sincronitzar directament amb \"Obre Framezoo\", obriu aquesta pàgina des de la vostra aplicació d'escriptori Framezoo mentre esteu connectat. En cas contrari, copieu l'URL del manifest a continuació per utilitzar-lo."
+    }
   }
 }

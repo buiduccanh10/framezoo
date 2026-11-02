@@ -213,5 +213,59 @@
     "scanHint": "Digitalize este código QR com seu aplicativo bancário.",
     "momoImageAlt": "Código QR de doação MoMo",
     "viewQr": "Veja o código QR ampliado"
+  },
+  "subtitlesConfigure": {
+    "account": {
+      "verifying": "Verificando o tíquete da conta no aplicativo de desktop...",
+      "configuringFor": "Configurando para conta:",
+      "desktopLinked": "Desktop vinculado",
+      "saveFailed": "Falha ao salvar.",
+      "instantHint": "(Sincroniza com o aplicativo de desktop instantaneamente)",
+      "saving": "Salvando na conta...",
+      "saveButton": "Salvar na conta Framezoo",
+      "saveSuccess": "Salvo com sucesso em sua conta! O aplicativo de desktop agora usará essa chave automaticamente.",
+      "saveNetworkError": "Erro de rede ao salvar na conta."
+    },
+    "hero": {
+      "title": "Configurar legendas Framezoo",
+      "description": "Configure sua chave de API Wyzie pessoal para obter legendas mais rápidas e contornar os limites de taxa da comunidade compartilhada."
+    },
+    "pageTitle": "Configurar legendas Framezoo | Quadrozoo",
+    "step1": {
+      "description": "Wyzie Subtitles oferece um enorme catálogo de legendas em vários idiomas. Você pode gerar ou resgatar sua chave API pessoal no portal oficial:",
+      "title": "Obtenha sua chave de API Wyzie gratuita",
+      "step3": "Volte aqui e cole-o na Etapa 2 abaixo.",
+      "openStore": "Abrir Wyzie Store (Resgatar)",
+      "step2": "Copie a string da chave de API gerada.",
+      "step1": "Visite o link acima para obter ou resgatar uma chave de API."
+    },
+    "step2": {
+      "placeholder": "Cole sua chave de API Wyzie aqui...",
+      "hide": "Esconder",
+      "testing": "Verificando...",
+      "show": "Mostrar",
+      "testButton": "Chave de API de teste",
+      "clearButton": "Limpar chave",
+      "title": "Insira a chave da API Wyzie",
+      "messages": {
+        "verifying": "Verificando com Wyzie...",
+        "empty": "Insira uma chave de API antes de testar.",
+        "rateLimit": "A chave de API excedeu os limites de taxa.",
+        "invalid": "A chave de API é inválida ou expirou.",
+        "networkError": "Erro de rede ao conectar-se a sub.wyzie.io. Por favor, verifique sua conexão.",
+        "valid": "A chave de API é válida e está funcionando!",
+        "serverError": "O servidor Wyzie retornou HTTP {{status}}."
+      }
+    },
+    "step3": {
+      "copied": "Copiado!",
+      "noticeLabel": "Perceber:",
+      "openFramezoo": "Abra o Framezoo",
+      "copyManifest": "Copiar URL do manifesto",
+      "title": "Instalar e aplicar",
+      "openFramezooDisabledTooltip": "Requer abertura no Framezoo Desktop enquanto estiver logado",
+      "notConnectedNotice": "Obs: Você não está conectado com um ticket de conta Framezoo. Para sincronizar diretamente com o 'Open Framezoo', abra esta página em seu aplicativo Framezoo Desktop enquanto estiver conectado. Caso contrário, copie o URL do manifesto abaixo para usá-lo.",
+      "noticeText": "Sua chave API é armazenada com segurança em seu dispositivo. Ele é encaminhado apenas para buscar e recuperar legendas de filmes e séries. Você pode atualizá-lo ou removê-lo a qualquer momento."
+    }
   }
 }

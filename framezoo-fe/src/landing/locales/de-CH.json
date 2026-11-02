@@ -213,5 +213,59 @@
     "momoImageAlt": "MoMo-Spenden-QR-Code",
     "paypalImageAlt": "PayPal-Spenden-QR-Code",
     "close": "Vielleicht später"
+  },
+  "subtitlesConfigure": {
+    "pageTitle": "Framezoo-Untertitel konfigurieren | Framezoo",
+    "hero": {
+      "title": "Konfigurieren Sie Framezoo-Untertitel",
+      "description": "Richten Sie Ihren persönlichen Wyzie-API-Schlüssel ein, um schnellere Untertitel zu erhalten und gemeinsam genutzte Community-Ratenbeschränkungen zu umgehen."
+    },
+    "account": {
+      "verifying": "Kontoticket wird über die Desktop-App überprüft...",
+      "saveButton": "Im Framezoo-Konto speichern",
+      "desktopLinked": "Desktop-verknüpft",
+      "configuringFor": "Konfigurieren für Konto:",
+      "instantHint": "(Synchronisiert sofort mit der Desktop-App)",
+      "saving": "Auf Konto speichern...",
+      "saveSuccess": "Erfolgreich in Ihrem Konto gespeichert! Die Desktop-App verwendet diesen Schlüssel nun automatisch.",
+      "saveNetworkError": "Netzwerkfehler beim Speichern im Konto.",
+      "saveFailed": "Speichern fehlgeschlagen."
+    },
+    "step1": {
+      "title": "Holen Sie sich Ihren kostenlosen Wyzie-API-Schlüssel",
+      "description": "Wyzie Subtitles bietet einen riesigen mehrsprachigen Untertitelkatalog. Sie können Ihren persönlichen API-Schlüssel auf ihrem offiziellen Portal generieren oder einlösen:",
+      "openStore": "Wyzie Store eröffnen (Einlösen)",
+      "step1": "Besuchen Sie den Link oben, um einen API-Schlüssel zu erhalten oder einzulösen.",
+      "step2": "Kopieren Sie die generierte API-Schlüsselzeichenfolge.",
+      "step3": "Kehren Sie hierher zurück und fügen Sie es in Schritt 2 unten ein."
+    },
+    "step2": {
+      "title": "Geben Sie den Wyzie-API-Schlüssel ein",
+      "placeholder": "Fügen Sie hier Ihren Wyzie-API-Schlüssel ein...",
+      "show": "Zeigen",
+      "hide": "Verstecken",
+      "clearButton": "Schlüssel löschen",
+      "testButton": "API-Schlüssel testen",
+      "testing": "Überprüfung...",
+      "messages": {
+        "empty": "Bitte geben Sie vor dem Testen einen API-Schlüssel ein.",
+        "verifying": "Überprüfung mit Wyzie...",
+        "valid": "Der API-Schlüssel ist gültig und funktioniert!",
+        "invalid": "Der API-Schlüssel ist ungültig oder abgelaufen.",
+        "serverError": "Der Wyzie-Server hat HTTP {{status}} zurückgegeben.",
+        "rateLimit": "Der API-Schlüssel hat die Ratengrenzen überschritten.",
+        "networkError": "Netzwerkfehler beim Herstellen der Verbindung zu sub.wyzie.io. Bitte überprüfen Sie Ihre Verbindung."
+      }
+    },
+    "step3": {
+      "title": "Installieren und anwenden",
+      "openFramezoo": "Öffnen Sie Framezoo",
+      "openFramezooDisabledTooltip": "Erfordert das Öffnen über Framezoo Desktop, während Sie angemeldet sind",
+      "notConnectedNotice": "Hinweis: Sie sind nicht mit einem Framezoo-Kontoticket verbunden. Um direkt mit „Open Framezoo“ zu synchronisieren, öffnen Sie diese Seite über Ihre Framezoo-Desktop-App, während Sie angemeldet sind. Andernfalls kopieren Sie die Manifest-URL unten, um sie zu verwenden.",
+      "noticeLabel": "Beachten:",
+      "copied": "Kopiert!",
+      "copyManifest": "Manifest-URL kopieren",
+      "noticeText": "Ihr API-Schlüssel wird sicher auf Ihrem Gerät gespeichert. Die Weiterleitung erfolgt ausschließlich zum Suchen und Abrufen von Untertiteln für Filme und Serien. Sie können es jederzeit aktualisieren oder entfernen."
+    }
   }
 }

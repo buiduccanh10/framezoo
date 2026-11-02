@@ -213,5 +213,59 @@
     "momoImageAlt": "Kode QR donasi MoMo",
     "viewQr": "Lihat kode QR lebih besar",
     "note": "Terima kasih telah peduli terhadap Framezoo dan mendukung pekerjaan di baliknya. Kontribusi Anda memberi kami lebih banyak ruang untuk menciptakan pengalaman yang lebih baik bagi semua orang."
+  },
+  "subtitlesConfigure": {
+    "hero": {
+      "description": "Siapkan Kunci API Wyzie pribadi Anda untuk mendapatkan subtitle yang lebih cepat dan melewati batas kecepatan komunitas bersama.",
+      "title": "Konfigurasikan Subtitle Framezoo"
+    },
+    "account": {
+      "configuringFor": "Konfigurasi untuk akun:",
+      "desktopLinked": "Desktop Tertaut",
+      "saveButton": "Simpan ke Akun Framezoo",
+      "saveFailed": "Gagal menyimpan.",
+      "verifying": "Memverifikasi tiket akun dari Aplikasi Desktop...",
+      "saveNetworkError": "Kesalahan jaringan saat menyimpan ke akun.",
+      "saveSuccess": "Berhasil disimpan ke akun Anda! Aplikasi Desktop sekarang akan menggunakan kunci ini secara otomatis.",
+      "instantHint": "(Disinkronkan ke Aplikasi Desktop secara instan)",
+      "saving": "Menyimpan ke rekening..."
+    },
+    "pageTitle": "Konfigurasikan Subtitle Framezoo | kebun binatang bingkai",
+    "step1": {
+      "description": "Wyzie Subtitles menyediakan katalog subtitle multi-bahasa yang sangat banyak. Anda dapat membuat atau menukarkan kunci API pribadi Anda di portal resmi mereka:",
+      "title": "Dapatkan Kunci API Wyzie gratis Anda",
+      "openStore": "Buka Toko Wyzie (Tukarkan)",
+      "step3": "Kembali ke sini dan tempelkan ke Langkah 2 di bawah.",
+      "step2": "Salin string Kunci API yang dihasilkan.",
+      "step1": "Kunjungi tautan di atas untuk mendapatkan atau menukarkan Kunci API."
+    },
+    "step2": {
+      "hide": "Bersembunyi",
+      "show": "Menunjukkan",
+      "clearButton": "Hapus kunci",
+      "testing": "Memverifikasi...",
+      "title": "Masukkan Kunci API Wyzie",
+      "testButton": "Uji Kunci API",
+      "placeholder": "Tempelkan Kunci API Wyzie Anda di sini...",
+      "messages": {
+        "invalid": "Kunci API tidak valid atau kedaluwarsa.",
+        "empty": "Silakan masukkan Kunci API sebelum pengujian.",
+        "valid": "Kunci API valid dan berfungsi!",
+        "serverError": "Server Wyzie mengembalikan HTTP {{status}}.",
+        "rateLimit": "Kunci API telah melampaui batas kapasitas.",
+        "verifying": "Memverifikasi dengan Wyzie...",
+        "networkError": "Kesalahan jaringan saat menyambung ke sub.wyzie.io. Silakan periksa koneksi Anda."
+      }
+    },
+    "step3": {
+      "openFramezooDisabledTooltip": "Memerlukan pembukaan dari Framezoo Desktop saat login",
+      "copied": "Disalin!",
+      "noticeLabel": "Melihat:",
+      "notConnectedNotice": "Catatan: Anda tidak terhubung dengan tiket akun Framezoo. Untuk melakukan sinkronisasi langsung dengan 'Open Framezoo', buka halaman ini dari aplikasi Framezoo Desktop Anda saat login. Jika tidak, salin URL Manifes di bawah untuk menggunakannya.",
+      "copyManifest": "Salin URL Manifes",
+      "title": "Instal & Terapkan",
+      "openFramezoo": "Buka Framezoo",
+      "noticeText": "Kunci API Anda disimpan dengan aman di perangkat Anda. Itu diteruskan hanya untuk mencari dan mengambil subtitle untuk film dan serial. Anda dapat memperbarui atau menghapusnya kapan saja."
+    }
   }
 }

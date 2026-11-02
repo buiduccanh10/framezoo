@@ -213,5 +213,59 @@
     "viewQr": "Skoða QR kóða stærri",
     "paypalImageAlt": "PayPal framlag QR kóða",
     "close": "Kannski seinna"
+  },
+  "subtitlesConfigure": {
+    "hero": {
+      "description": "Settu upp persónulega Wyzie API lykilinn þinn til að fá hraðari texta og komast framhjá gjaldtakmörkum samfélagsins.",
+      "title": "Stilla Framezoo texta"
+    },
+    "account": {
+      "configuringFor": "Stillir fyrir reikning:",
+      "verifying": "Staðfestir reikningsmiða úr skjáborðsforriti...",
+      "saveFailed": "Vistun mistókst.",
+      "saveButton": "Vistaðu á Framezoo reikningi",
+      "saving": "Vistar á reikning...",
+      "instantHint": "(Samstillist við skjáborðsforritið samstundis)",
+      "saveSuccess": "Vistað á reikningnum þínum! Skrifborðsforrit mun nú nota þennan lykil sjálfkrafa.",
+      "desktopLinked": "Skrifborð tengt",
+      "saveNetworkError": "Netvilla við vistun á reikningi."
+    },
+    "pageTitle": "Stilla Framezoo texta | Framezoo",
+    "step1": {
+      "description": "Wyzie Subtitles býður upp á risastóran fjölda tungumála textaskrá. Þú getur búið til eða innleyst persónulega API lykilinn þinn á opinberu vefsíðunni þeirra:",
+      "title": "Fáðu ókeypis Wyzie API lykilinn þinn",
+      "step2": "Afritaðu myndaða API lykilstrenginn.",
+      "openStore": "Opna Wyzie Store (innleysa)",
+      "step1": "Farðu á hlekkinn hér að ofan til að fá eða innleysa API lykil.",
+      "step3": "Farðu aftur hingað og límdu það inn í skref 2 hér að neðan."
+    },
+    "step2": {
+      "show": "Sýna",
+      "title": "Sláðu inn Wyzie API lykil",
+      "hide": "Fela",
+      "messages": {
+        "empty": "Vinsamlegast sláðu inn API lykil áður en þú prófar.",
+        "invalid": "API lykill er ógildur eða útrunninn.",
+        "rateLimit": "API lykill hefur farið yfir hámarkshraða.",
+        "valid": "API lykill er í gildi og virkar!",
+        "verifying": "Staðfestir með Wyzie...",
+        "networkError": "Netvilla við að tengjast sub.wyzie.io. Vinsamlegast athugaðu tenginguna þína.",
+        "serverError": "Wyzie þjónn skilaði HTTP {{status}}."
+      },
+      "placeholder": "Límdu Wyzie API lykilinn þinn hér...",
+      "testButton": "Prófaðu API lykil",
+      "clearButton": "Hreinsa lykill",
+      "testing": "Staðfestir..."
+    },
+    "step3": {
+      "openFramezoo": "Opnaðu Framezoo",
+      "title": "Settu upp og notaðu",
+      "openFramezooDisabledTooltip": "Krefst opnunar frá Framezoo Desktop á meðan þú ert skráður inn",
+      "notConnectedNotice": "Athugið: Þú ert ekki tengdur við Framezoo reikningsmiða. Til að samstilla beint við 'Open Framezoo' skaltu opna þessa síðu úr Framezoo Desktop appinu þínu á meðan þú ert skráður inn. Annars skaltu afrita Manifest URL fyrir neðan til að nota hana.",
+      "noticeText": "API lykillinn þinn er geymdur á öruggan hátt í tækinu þínu. Það er aðeins framsent til að leita og sækja texta fyrir kvikmyndir og seríur. Þú getur uppfært eða fjarlægt það hvenær sem er.",
+      "noticeLabel": "Tilkynning:",
+      "copied": "Afritað!",
+      "copyManifest": "Afritaðu vefslóð yfirlýsingarinnar"
+    }
   }
 }

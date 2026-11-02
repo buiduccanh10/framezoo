@@ -43,6 +43,13 @@ if (process.env.FRAMEZOO_ADDON_GUIDE_URL || process.env.VITE_ADDON_GUIDE_URL) {
     runtimeConfig.VITE_ADDON_GUIDE_URL;
 }
 
+if (process.env.FRAMEZOO_APP_DOMAIN || process.env.VITE_APP_DOMAIN) {
+  runtimeConfig.VITE_APP_DOMAIN =
+    process.env.FRAMEZOO_APP_DOMAIN ??
+    process.env.VITE_APP_DOMAIN ??
+    runtimeConfig.VITE_APP_DOMAIN;
+}
+
 contextBridge.exposeInMainWorld("__CONFIG__", runtimeConfig);
 
 contextBridge.exposeInMainWorld("__FRAMEZOO_DESKTOP__", true);

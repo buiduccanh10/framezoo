@@ -250,6 +250,12 @@ export function AddonManager({
                     name={preview.manifest.name}
                     logo={preview.manifest.logo}
                     className="h-10 w-10 rounded bg-dropdown-border"
+                    fallbackIcon={
+                      preview.isNative ||
+                      preview.manifest.resources?.includes("subtitles")
+                        ? Icons.CAPTIONS
+                        : Icons.EXTENSION
+                    }
                   />
                   <div className="flex flex-col overflow-hidden">
                     <span className="truncate font-semibold text-white">

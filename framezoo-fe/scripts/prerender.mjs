@@ -45,6 +45,13 @@ const routes = [
       "Build a Framezoo addon with a simple HTTP manifest for video streams, multi-source subtitles, and movie metadata catalogs.",
   },
   {
+    pathname: "/addon/subtitles/configure",
+    output: "addon/subtitles/configure/index.html",
+    title: "Configure Framezoo Subtitles | Framezoo",
+    description:
+      "Configure your personal Wyzie Subtitles API Key to enjoy fast, multi-source subtitles without shared rate limits.",
+  },
+  {
     pathname: "/guide/install",
     output: "guide/install/index.html",
     title: "Installation Guide | Framezoo",

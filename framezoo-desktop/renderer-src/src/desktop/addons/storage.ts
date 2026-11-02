@@ -1,6 +1,7 @@
 import { updateSettings } from "@/backend/accounts/settings";
 import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
+import { resolvePublicUrl } from "@/utils/publicUrl";
 import { queryClient } from "@/utils/queryClient";
 
 import type { InstalledAddon } from "./types";
@@ -27,6 +28,23 @@ export function getNativeSubtitlesAddon(): InstalledAddon {
     ? `${base}/addon/subtitles/manifest.json`
     : "/addon/subtitles/manifest.json";
   const baseUrl = base ? `${base}/addon/subtitles/` : "/addon/subtitles/";
+  const logoUrl =
+    resolvePublicUrl("/addon-subtitles-logo.png") ||
+    "https://framezoo.top/favicon-192.png";
+
+  const frontendOrigin = (() => {
+    if (appDomain && appDomain !== "https://framezoo.top") {
+      return appDomain;
+    }
+    if (
+      typeof window !== "undefined" &&
+      window.location.origin &&
+      window.location.origin.startsWith("http")
+    ) {
+      return window.location.origin;
+    }
+    return appDomain || "https://framezoo.top";
+  })();
 
   return {
     manifestUrl,
@@ -37,11 +55,14 @@ export function getNativeSubtitlesAddon(): InstalledAddon {
       name: "Framezoo Subtitles",
       description:
         "Native subtitle provider (Wyzie, OpenSubtitles, SubSource, Granite)",
+      logo: logoUrl,
       resources: ["subtitles"],
       types: ["movie", "series"],
       catalogs: [],
       behaviorHints: {
-        configurable: false,
+        configurable: true,
+        configurationRequired: false,
+        configurationUrl: `${frontendOrigin}/addon/subtitles/configure`,
       },
     },
     enabled: true,

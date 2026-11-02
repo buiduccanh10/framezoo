@@ -213,5 +213,59 @@
     "badge": "Huomautus Framezoosta",
     "momoImageAlt": "MoMo-lahjoitus QR-koodi",
     "viewQr": "Katso QR-koodi isompana"
+  },
+  "subtitlesConfigure": {
+    "account": {
+      "verifying": "Vahvistetaan tililippua työpöytäsovelluksesta...",
+      "saving": "Tallennetaan tilille...",
+      "configuringFor": "Tilin määrittäminen:",
+      "saveButton": "Tallenna Framezoo-tilille",
+      "saveFailed": "Tallennus epäonnistui.",
+      "desktopLinked": "Desktop Linked",
+      "saveNetworkError": "Verkkovirhe tilille tallennettaessa.",
+      "instantHint": "(Synkronoituu työpöytäsovellukseen välittömästi)",
+      "saveSuccess": "Tallennettiin tilillesi onnistuneesti! Työpöytäsovellus käyttää nyt tätä avainta automaattisesti."
+    },
+    "hero": {
+      "title": "Määritä Framezoo-tekstitykset",
+      "description": "Määritä henkilökohtainen Wyzie API Key saadaksesi nopeammat tekstitykset ja ohittaaksesi jaetut yhteisön rajat."
+    },
+    "pageTitle": "Configure Framezoo Tekstitykset | Framezoo",
+    "step1": {
+      "description": "Wyzie Subtitles tarjoaa valtavan monikielisen tekstitysluettelon. Voit luoda tai lunastaa henkilökohtaisen API-avaimesi heidän virallisessa portaalissaan:",
+      "step1": "Vieraile yllä olevasta linkistä saadaksesi tai lunastaaksesi API-avaimen.",
+      "title": "Hanki ilmainen Wyzie API Key",
+      "step3": "Palaa tähän ja liitä se alla olevaan vaiheeseen 2.",
+      "openStore": "Avaa Wyzie Store (lunasteta)",
+      "step2": "Kopioi luotu API-avainmerkkijono."
+    },
+    "step2": {
+      "show": "Show",
+      "hide": "Piilottaa",
+      "testing": "Vahvistetaan...",
+      "title": "Anna Wyzie API Key",
+      "testButton": "Testaa API-avain",
+      "messages": {
+        "verifying": "Vahvistetaan Wyzien kanssa...",
+        "empty": "Anna API-avain ennen testausta.",
+        "valid": "API-avain on voimassa ja toimii!",
+        "invalid": "API-avain on virheellinen tai vanhentunut.",
+        "rateLimit": "API-avain on ylittänyt nopeusrajoitukset.",
+        "serverError": "Wyzie-palvelin palautti HTTP {{status}}.",
+        "networkError": "Verkkovirhe muodostettaessa yhteyttä osoitteeseen sub.wyzie.io. Tarkista yhteys."
+      },
+      "clearButton": "Tyhjennä avain",
+      "placeholder": "Liitä Wyzie API-avain tähän..."
+    },
+    "step3": {
+      "copied": "Kopioitu!",
+      "title": "Asenna ja käytä",
+      "copyManifest": "Kopioi luettelon URL-osoite",
+      "openFramezoo": "Avaa Framezoo",
+      "noticeLabel": "Huomautus:",
+      "openFramezooDisabledTooltip": "Vaatii avaamisen Framezoo Desktopista sisäänkirjautuneena",
+      "noticeText": "API-avaimesi on tallennettu turvallisesti laitteellesi. Se välitetään vain elokuvien ja sarjojen tekstitysten etsimiseen ja hakemiseen. Voit päivittää tai poistaa sen milloin tahansa.",
+      "notConnectedNotice": "Huomautus: Sinua ei ole yhdistetty Framezoo-tilin lippuun. Jos haluat synkronoida suoraan Open Framezoo -sovelluksen kanssa, avaa tämä sivu Framezoo Desktop -sovelluksesta ollessasi kirjautuneena sisään. Muussa tapauksessa kopioi alla oleva manifestin URL-osoite käyttääksesi sitä."
+    }
   }
 }

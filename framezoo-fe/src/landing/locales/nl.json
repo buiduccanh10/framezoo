@@ -213,5 +213,59 @@
     "momoImageAlt": "MoMo donatie QR-code",
     "scanHint": "Scan deze QR-code met uw bankapp.",
     "viewQr": "Bekijk QR-code groter"
+  },
+  "subtitlesConfigure": {
+    "account": {
+      "configuringFor": "Configureren voor account:",
+      "verifying": "Accountticket verifiëren via desktop-app...",
+      "saveButton": "Opslaan in Framezoo-account",
+      "desktopLinked": "Desktop gekoppeld",
+      "saving": "Op rekening opslaan...",
+      "saveSuccess": "Succesvol opgeslagen op uw account! Desktop App zal deze sleutel nu automatisch gebruiken.",
+      "instantHint": "(Synchroniseert onmiddellijk met de desktop-app)",
+      "saveFailed": "Opslaan mislukt.",
+      "saveNetworkError": "Netwerkfout tijdens opslaan naar account."
+    },
+    "hero": {
+      "title": "Configureer Framezoo-ondertitels",
+      "description": "Stel uw persoonlijke Wyzie API-sleutel in om snellere ondertitels te krijgen en de gedeelde tarieflimieten van de community te omzeilen."
+    },
+    "pageTitle": "Framezoo-ondertitels configureren | Framezoo",
+    "step1": {
+      "openStore": "Wyzie-winkel openen (inwisselen)",
+      "title": "Ontvang uw gratis Wyzie API-sleutel",
+      "description": "Wyzie Subtitles biedt een enorme meertalige ondertitelcatalogus. U kunt uw persoonlijke API-sleutel genereren of inwisselen op hun officiële portal:",
+      "step1": "Ga naar de bovenstaande link om een ​​API-sleutel te verkrijgen of in te wisselen.",
+      "step2": "Kopieer de gegenereerde API Key-tekenreeks.",
+      "step3": "Keer hier terug en plak het in stap 2 hieronder."
+    },
+    "step2": {
+      "show": "Show",
+      "hide": "Verbergen",
+      "placeholder": "Plak hier uw Wyzie API-sleutel...",
+      "testing": "Verifiëren...",
+      "testButton": "API-sleutel testen",
+      "title": "Voer de Wyzie API-sleutel in",
+      "clearButton": "Sleutel wissen",
+      "messages": {
+        "verifying": "Verifiëren met Wyzie...",
+        "empty": "Voer een API-sleutel in voordat u gaat testen.",
+        "serverError": "Wyzie-server heeft HTTP {{status}} geretourneerd.",
+        "valid": "API Key is geldig en werkt!",
+        "rateLimit": "API-sleutel heeft de snelheidslimieten overschreden.",
+        "networkError": "Netwerkfout bij verbinden met sub.wyzie.io. Controleer uw verbinding.",
+        "invalid": "API-sleutel is ongeldig of verlopen."
+      }
+    },
+    "step3": {
+      "copied": "Gekopieerd!",
+      "noticeLabel": "Kennisgeving:",
+      "title": "Installeren en toepassen",
+      "openFramezoo": "Framezoo openen",
+      "copyManifest": "Kopieer de manifest-URL",
+      "noticeText": "Uw API-sleutel wordt veilig opgeslagen op uw apparaat. Het wordt alleen doorgestuurd om ondertitels voor films en series te zoeken en op te halen. Je kunt het op elk gewenst moment bijwerken of verwijderen.",
+      "openFramezooDisabledTooltip": "Vereist openen vanuit Framezoo Desktop terwijl u bent ingelogd",
+      "notConnectedNotice": "Let op: U bent niet verbonden met een Framezoo-accountticket. Om rechtstreeks te synchroniseren met 'Open Framezoo', opent u deze pagina vanuit uw Framezoo Desktop-app terwijl u bent ingelogd. Kopieer anders de onderstaande Manifest-URL om deze te gebruiken."
+    }
   }
 }

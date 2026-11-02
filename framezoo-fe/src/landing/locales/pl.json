@@ -213,5 +213,59 @@
     "paypalImageAlt": "Kod QR darowizny PayPal",
     "viewQr": "Wyświetl kod QR w większym formacie",
     "momoImageAlt": "Kod QR darowizny MoMo"
+  },
+  "subtitlesConfigure": {
+    "hero": {
+      "description": "Skonfiguruj swój osobisty klucz API Wyzie, aby uzyskać szybsze napisy i ominąć wspólne limity stawek społeczności.",
+      "title": "Skonfiguruj napisy Framezoo"
+    },
+    "account": {
+      "saveButton": "Zapisz na koncie Framezoo",
+      "configuringFor": "Konfiguracja dla konta:",
+      "verifying": "Weryfikacja biletu konta z aplikacji komputerowej...",
+      "instantHint": "(Błyskawicznie synchronizuje się z aplikacją komputerową)",
+      "saving": "Zapisuję na koncie...",
+      "saveSuccess": "Pomyślnie zapisano na Twoim koncie! Aplikacja komputerowa będzie teraz automatycznie używać tego klucza.",
+      "desktopLinked": "Pulpit połączony",
+      "saveFailed": "Zapisywanie nie powiodło się.",
+      "saveNetworkError": "Błąd sieci podczas zapisywania na koncie."
+    },
+    "pageTitle": "Skonfiguruj napisy Framezoo | Ramazoo",
+    "step1": {
+      "title": "Zdobądź darmowy klucz API Wyzie",
+      "step3": "Wróć tutaj i wklej go w kroku 2 poniżej.",
+      "step2": "Skopiuj wygenerowany ciąg klucza API.",
+      "openStore": "Otwórz sklep Wyzie (wykorzystaj)",
+      "step1": "Kliknij powyższy link, aby otrzymać lub zrealizować klucz API.",
+      "description": "Wyzie Subtitles zapewnia ogromny, wielojęzyczny katalog napisów. Możesz wygenerować lub zrealizować swój osobisty klucz API na ich oficjalnym portalu:"
+    },
+    "step2": {
+      "show": "Pokazywać",
+      "hide": "Ukrywać",
+      "title": "Wprowadź klucz API Wyzie",
+      "testing": "Weryfikuję...",
+      "testButton": "Testuj klucz API",
+      "messages": {
+        "empty": "Przed testowaniem wprowadź klucz API.",
+        "valid": "Klucz API jest ważny i działa!",
+        "verifying": "Weryfikacja z Wyziem...",
+        "serverError": "Serwer Wyzie zwrócił HTTP {{status}}.",
+        "rateLimit": "Klucz API przekroczył limity szybkości.",
+        "invalid": "Klucz API jest nieprawidłowy lub wygasł.",
+        "networkError": "Błąd sieciowy podczas łączenia się z sub.wyzie.io. Sprawdź swoje połączenie."
+      },
+      "placeholder": "Wklej tutaj swój klucz API Wyzie...",
+      "clearButton": "Wyczyść klucz"
+    },
+    "step3": {
+      "copied": "Skopiowano!",
+      "noticeLabel": "Ogłoszenie:",
+      "openFramezooDisabledTooltip": "Wymaga otwarcia z poziomu pulpitu Framezoo po zalogowaniu",
+      "openFramezoo": "Otwórz Framezoo",
+      "title": "Zainstaluj i zastosuj",
+      "noticeText": "Twój klucz API jest bezpiecznie przechowywany na Twoim urządzeniu. Jest przekazywany wyłącznie w celu wyszukiwania i pobierania napisów do filmów i seriali. Możesz go zaktualizować lub usunąć w dowolnym momencie.",
+      "notConnectedNotice": "Uwaga: nie masz połączenia z biletem na konto Framezoo. Aby zsynchronizować się bezpośrednio z „Open Framezoo”, otwórz tę stronę w aplikacji komputerowej Framezoo po zalogowaniu. W przeciwnym razie skopiuj adres URL manifestu poniżej, aby z niego skorzystać.",
+      "copyManifest": "Skopiuj adres URL manifestu"
+    }
   }
 }

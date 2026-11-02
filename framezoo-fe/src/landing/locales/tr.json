@@ -213,5 +213,59 @@
     "momoImageAlt": "MoMo bağışı QR kodu",
     "viewQr": "QR kodunu daha büyük görüntüle",
     "paypalImageAlt": "PayPal bağışı QR kodu"
+  },
+  "subtitlesConfigure": {
+    "account": {
+      "verifying": "Hesap bileti Masaüstü Uygulamasından doğrulanıyor...",
+      "saving": "Hesaba kaydediliyor...",
+      "saveFailed": "Kaydetme başarısız oldu.",
+      "configuringFor": "Hesap için yapılandırma:",
+      "saveButton": "Framezoo Hesabına Kaydet",
+      "desktopLinked": "Masaüstü Bağlantılı",
+      "saveNetworkError": "Hesaba kaydederken ağ hatası.",
+      "saveSuccess": "Başarıyla hesabınıza kaydedildi! Masaüstü Uygulaması artık bu anahtarı otomatik olarak kullanacak.",
+      "instantHint": "(Masaüstü Uygulamasına anında senkronize edilir)"
+    },
+    "hero": {
+      "title": "Framezoo Altyazılarını Yapılandırma",
+      "description": "Daha hızlı altyazılara ulaşmak ve paylaşılan topluluk oranı sınırlarını aşmak için kişisel Wyzie API Anahtarınızı kurun."
+    },
+    "pageTitle": "Framezoo Altyazılarını Yapılandırma | Çerçeve Hayvanat Bahçesi",
+    "step1": {
+      "openStore": "Wyzie Mağazasını Aç (Kullan)",
+      "step2": "Oluşturulan API Anahtarı dizesini kopyalayın.",
+      "title": "Ücretsiz Wyzie API Anahtarınızı alın",
+      "step3": "Buraya dönün ve aşağıdaki 2. Adım'a yapıştırın.",
+      "description": "Wyzie Subtitles, çok dilli devasa bir altyazı kataloğu sağlar. Kişisel API anahtarınızı resmi portallarında oluşturabilir veya kullanabilirsiniz:",
+      "step1": "API Anahtarını almak veya kullanmak için yukarıdaki bağlantıyı ziyaret edin."
+    },
+    "step2": {
+      "show": "Göstermek",
+      "hide": "Saklamak",
+      "placeholder": "Wyzie API Anahtarınızı buraya yapıştırın...",
+      "messages": {
+        "empty": "Lütfen test etmeden önce bir API Anahtarı girin.",
+        "verifying": "Wyzie ile doğrulanıyor...",
+        "valid": "API Anahtarı geçerli ve çalışıyor!",
+        "serverError": "Wyzie sunucusu HTTP {{status}} döndürdü.",
+        "invalid": "API Anahtarı geçersiz veya süresi dolmuş.",
+        "networkError": "Sub.wyzie.io'ya bağlanırken ağ hatası. Lütfen bağlantınızı kontrol edin.",
+        "rateLimit": "API Anahtarı hız sınırlarını aştı."
+      },
+      "title": "Wyzie API Anahtarını Girin",
+      "testButton": "API Anahtarını Test Et",
+      "testing": "Doğrulanıyor...",
+      "clearButton": "Anahtarı temizle"
+    },
+    "step3": {
+      "title": "Yükle ve Uygula",
+      "copied": "Kopyalandı!",
+      "noticeLabel": "Fark etme:",
+      "copyManifest": "Bildirim URL'sini kopyala",
+      "openFramezoo": "Framezoo'yu aç",
+      "noticeText": "API Anahtarınız cihazınızda güvenle saklanır. Yalnızca film ve dizilerin altyazılarını aramak ve almak için iletilir. İstediğiniz zaman güncelleyebilir veya kaldırabilirsiniz.",
+      "openFramezooDisabledTooltip": "Oturum açtığınızda Framezoo Masaüstünden açılması gerekir",
+      "notConnectedNotice": "Not: Framezoo hesap biletiyle bağlı değilsiniz. Doğrudan 'Framezoo'yu Aç' ile senkronizasyon yapmak için, oturum açmışken bu sayfayı Framezoo Masaüstü uygulamanızdan açın. Aksi takdirde, kullanmak için aşağıdaki Manifest URL'sini kopyalayın."
+    }
   }
 }

@@ -64,9 +64,31 @@ export default defineEventHandler(async event => {
   }
 
   const config = useRuntimeConfig();
-  const wyzieApiKey =
-    ((config.wyzieApiKey as string | undefined) || process.env.WYZIE_API_KEY || '').trim() ||
-    undefined;
+  const serverWyzieApiKey =
+    (config.wyzieApiKey || process.env.WYZIE_API_KEY || '').trim() || undefined;
+
+  // 1. Check if an API key was passed in query parameter (e.g. Stremio encoded URL)
+  const queryWyzieKey =
+    typeof query.key === 'string' && query.key.trim() ? query.key.trim() : undefined;
+
+  // 2. Check if request belongs to an authenticated user with a custom saved key
+  let userWyzieKey: string | undefined;
+  try {
+    const authSession =
+      event.context.session || (await useAuth().getOptionalCurrentSessionForEvent(event));
+    if (authSession?.user) {
+      const storage = useStorage('cache');
+      const savedKey = await storage.getItem<string>(`user:wyzie_key:${authSession.user}`);
+      if (typeof savedKey === 'string' && savedKey.trim()) {
+        userWyzieKey = savedKey.trim();
+      }
+    }
+  } catch {
+    // Non-blocking fallback
+  }
+
+  // Priority: Stremio URL param > Logged-in user's custom key > Server default key
+  const wyzieApiKey = queryWyzieKey || userWyzieKey || serverWyzieApiKey;
   const subsourceApiKey =
     (
       (config.subsourceApiKey as string | undefined) ||

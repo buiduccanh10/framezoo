@@ -9,6 +9,7 @@ import {
   type LandingSeoCategoryId,
   getLandingSeoCategory,
 } from "@/landing/seo";
+import { SubtitlesConfigurePage } from "@/landing/SubtitlesConfigurePage";
 
 interface AppProps {
   pathname?: string;
@@ -31,6 +32,13 @@ export default function App({ pathname, search }: AppProps = {}) {
   const legalTab = getLegalTabFromPathname(currentPathname);
 
   const renderContent = () => {
+    if (
+      currentPathname === "/addon/subtitles/configure" ||
+      currentPathname === "/addon/subtitles/configure/"
+    ) {
+      return <SubtitlesConfigurePage />;
+    }
+
     if (legalTab) {
       return <LegalPage initialTab={legalTab} />;
     }

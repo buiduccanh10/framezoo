@@ -212,5 +212,63 @@
     "momoImageAlt": "Mã QR ủng hộ qua MoMo",
     "viewQr": "Xem mã QR lớn hơn",
     "close": "Để sau"
+  },
+  "subtitlesConfigure": {
+    "pageTitle": "Cấu hình Phụ đề Framezoo Subtitles | Framezoo",
+    "hero": {
+      "title": "Cấu hình Phụ đề Framezoo",
+      "description": "Tùy biến nguồn phụ đề Wyzie cá nhân để tải phụ đề nhanh chóng, không lo dính hạn mức chung của hệ thống."
+    },
+    "account": {
+      "verifying": "Đang xác thực thông tin tài khoản từ Desktop App...",
+      "configuringFor": "Đang cấu hình cho tài khoản:",
+      "desktopLinked": "Đã liên kết Desktop",
+      "saveButton": "Lưu vào tài khoản Framezoo",
+      "saving": "Đang lưu vào tài khoản...",
+      "instantHint": "(Áp dụng ngay cho Desktop App)",
+      "saveSuccess": "Đã lưu thành công vào tài khoản của bạn! Desktop App sẽ tự động dùng key này khi xem phim.",
+      "saveFailed": "Lưu thất bại.",
+      "saveNetworkError": "Lỗi mạng khi lưu vào tài khoản."
+    },
+    "step1": {
+      "step": "1",
+      "title": "Lấy Wyzie API Key miễn phí",
+      "description": "Wyzie Subtitles cung cấp kho phụ đề lớn cho phim và series. Bạn có thể nhận hoặc đổi mã kích hoạt (Redeem) API Key cá nhân miễn phí tại trang chính thức:",
+      "openStore": "Mở trang Store Wyzie (Redeem)",
+      "step1": "Truy cập đường dẫn trên để tạo hoặc nhận API Key.",
+      "step2": "Sao chép chuỗi mã API Key được cấp (dạng chuỗi chữ số).",
+      "step3": "Quay lại đây và dán vào Bước 2 bên dưới."
+    },
+    "step2": {
+      "step": "2",
+      "title": "Nhập Wyzie API Key",
+      "placeholder": "Dán Wyzie API Key vào đây...",
+      "show": "Hiện",
+      "hide": "Ẩn",
+      "testButton": "Kiểm tra API Key",
+      "testing": "Đang kiểm tra...",
+      "clearButton": "Xóa key",
+      "messages": {
+        "empty": "Vui lòng nhập API Key trước khi kiểm tra.",
+        "verifying": "Đang kiểm tra kết nối Wyzie...",
+        "valid": "API Key hợp lệ và hoạt động tốt!",
+        "invalid": "API Key không hợp lệ hoặc đã hết hạn.",
+        "rateLimit": "API Key đã chạm giới hạn yêu cầu (Rate Limit).",
+        "serverError": "Lỗi máy chủ Wyzie (HTTP {{status}}).",
+        "networkError": "Không thể kết nối tới sub.wyzie.io. Vui lòng kiểm tra lại mạng hoặc thử lại sau."
+      }
+    },
+    "step3": {
+      "step": "3",
+      "title": "Cài đặt & Áp dụng",
+      "openFramezoo": "Open Framezoo",
+      "openFramezooDisabledTooltip": "Cần mở từ Framezoo Desktop sau khi đã đăng nhập",
+      "notConnectedNotice": "Lưu ý: Trang này chưa được liên kết tài khoản Framezoo. Để đồng bộ tự động bằng nút 'Open Framezoo', vui lòng mở cấu hình từ Framezoo Desktop (sau khi đã đăng nhập). Hoặc bạn có thể dùng 'Copy Manifest URL' để dùng cho Stremio hoặc cài đặt thủ công.",
+      "or": "hoặc",
+      "copyManifest": "Copy Manifest URL",
+      "copied": "Đã sao chép!",
+      "noticeLabel": "Lưu ý:",
+      "noticeText": "API Key được lưu trên trình duyệt của bạn. Khi sử dụng Framezoo Desktop hoặc Stremio, key này sẽ được chuyển tiếp an toàn để tìm kiếm phụ đề. Bạn có thể thay đổi hoặc xóa bất kỳ lúc nào."
+    }
   }
 }

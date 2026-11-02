@@ -212,5 +212,63 @@
     "momoImageAlt": "MoMo donation QR code",
     "viewQr": "View QR code larger",
     "close": "Maybe later"
+  },
+  "subtitlesConfigure": {
+    "pageTitle": "Configure Framezoo Subtitles | Framezoo",
+    "hero": {
+      "title": "Configure Framezoo Subtitles",
+      "description": "Set up your personal Wyzie API Key to get faster subtitles and bypass shared community rate limits."
+    },
+    "account": {
+      "verifying": "Verifying account ticket from Desktop App...",
+      "configuringFor": "Configuring for account:",
+      "desktopLinked": "Desktop Linked",
+      "saveButton": "Save to Framezoo Account",
+      "saving": "Saving to account...",
+      "instantHint": "(Syncs to Desktop App instantly)",
+      "saveSuccess": "Successfully saved to your account! Desktop App will now use this key automatically.",
+      "saveFailed": "Save failed.",
+      "saveNetworkError": "Network error while saving to account."
+    },
+    "step1": {
+      "step": "1",
+      "title": "Get your free Wyzie API Key",
+      "description": "Wyzie Subtitles provides a huge multi-language subtitle catalog. You can generate or redeem your personal API key on their official portal:",
+      "openStore": "Open Wyzie Store (Redeem)",
+      "step1": "Visit the link above to get or redeem an API Key.",
+      "step2": "Copy the generated API Key string.",
+      "step3": "Return here and paste it into Step 2 below."
+    },
+    "step2": {
+      "step": "2",
+      "title": "Enter Wyzie API Key",
+      "placeholder": "Paste your Wyzie API Key here...",
+      "show": "Show",
+      "hide": "Hide",
+      "testButton": "Test API Key",
+      "testing": "Verifying...",
+      "clearButton": "Clear key",
+      "messages": {
+        "empty": "Please enter an API Key before testing.",
+        "verifying": "Verifying with Wyzie...",
+        "valid": "API Key is valid and working!",
+        "invalid": "API Key is invalid or expired.",
+        "rateLimit": "API Key has exceeded rate limits.",
+        "serverError": "Wyzie server returned HTTP {{status}}.",
+        "networkError": "Network error connecting to sub.wyzie.io. Please check your connection."
+      }
+    },
+    "step3": {
+      "step": "3",
+      "title": "Install & Apply",
+      "openFramezoo": "Open Framezoo",
+      "openFramezooDisabledTooltip": "Requires opening from Framezoo Desktop while logged in",
+      "notConnectedNotice": "Note: You are not connected with a Framezoo account ticket. To sync directly with 'Open Framezoo', open this page from your Framezoo Desktop app while logged in. Otherwise, copy the Manifest URL below to use it.",
+      "or": "or",
+      "copyManifest": "Copy Manifest URL",
+      "copied": "Copied!",
+      "noticeLabel": "Notice:",
+      "noticeText": "Your API Key is stored safely on your device. It is forwarded only to search and retrieve subtitles for movies and series. You can update or remove it anytime."
+    }
   }
 }

@@ -213,5 +213,59 @@
     "paypalImageAlt": "Cod QR pentru donație PayPal",
     "viewQr": "Vedeți codul QR mai mare",
     "close": "Poate mai târziu"
+  },
+  "subtitlesConfigure": {
+    "hero": {
+      "description": "Configurați-vă cheia API Wyzie personală pentru a obține subtitrări mai rapide și pentru a ocoli limitele ratelor comunității partajate.",
+      "title": "Configurați subtitrări Framezoo"
+    },
+    "account": {
+      "configuringFor": "Configurare pentru cont:",
+      "desktopLinked": "Desktop conectat",
+      "verifying": "Se verifică biletul de cont din aplicația desktop...",
+      "saveSuccess": "Salvat cu succes în contul dvs.! Aplicația Desktop va folosi acum această cheie automat.",
+      "instantHint": "(Se sincronizează cu aplicația desktop instantaneu)",
+      "saveButton": "Salvați în contul Framezoo",
+      "saveFailed": "Salvarea nu a reușit.",
+      "saving": "Se salvează în cont...",
+      "saveNetworkError": "Eroare de rețea la salvarea în cont."
+    },
+    "pageTitle": "Configurați subtitrări Framezoo | Framezoo",
+    "step1": {
+      "step1": "Accesați linkul de mai sus pentru a obține sau a valorifica o cheie API.",
+      "description": "Wyzie Subtitles oferă un catalog uriaș de subtitrări în mai multe limbi. Puteți genera sau valorifica cheia personală API pe portalul lor oficial:",
+      "step2": "Copiați șirul cheie API generat.",
+      "step3": "Reveniți aici și inserați-l în Pasul 2 de mai jos.",
+      "title": "Obțineți cheia API Wyzie gratuită",
+      "openStore": "Deschideți magazinul Wyzie (Valorați)"
+    },
+    "step2": {
+      "show": "Spectacol",
+      "hide": "Ascunde",
+      "testing": "Se verifică...",
+      "title": "Introduceți cheia API Wyzie",
+      "placeholder": "Inserați aici cheia Wyzie API...",
+      "messages": {
+        "valid": "Cheia API este validă și funcționează!",
+        "verifying": "Se verifică cu Wyzie...",
+        "empty": "Vă rugăm să introduceți o cheie API înainte de a testa.",
+        "rateLimit": "Cheia API a depășit limitele de rată.",
+        "networkError": "Eroare de rețea la conectarea la sub.wyzie.io. Vă rugăm să vă verificați conexiunea.",
+        "invalid": "Cheia API este nevalidă sau a expirat.",
+        "serverError": "Serverul Wyzie a returnat HTTP {{status}}."
+      },
+      "clearButton": "Tasta de golire",
+      "testButton": "Testați cheia API"
+    },
+    "step3": {
+      "copied": "Copiat!",
+      "noticeLabel": "Observa:",
+      "title": "Instalați și aplicați",
+      "openFramezoo": "Deschideți Framezoo",
+      "openFramezooDisabledTooltip": "Necesită deschiderea de pe Framezoo Desktop când sunteți autentificat",
+      "copyManifest": "Copiați adresa URL a manifestului",
+      "notConnectedNotice": "Notă: nu sunteți conectat cu un bilet de cont Framezoo. Pentru a sincroniza direct cu „Open Framezoo”, deschideți această pagină din aplicația Framezoo Desktop când sunteți conectat. În caz contrar, copiați adresa URL a manifestului de mai jos pentru a o utiliza.",
+      "noticeText": "Cheia dvs. API este stocată în siguranță pe dispozitivul dvs. Este redirecționat numai pentru a căuta și a prelua subtitrări pentru filme și seriale. Îl puteți actualiza sau elimina oricând."
+    }
   }
 }

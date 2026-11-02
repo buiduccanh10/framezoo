@@ -21,6 +21,19 @@ export default defineConfig(({ mode }) => {
         plugins: [],
       },
     },
+    server: {
+      port: 5173,
+      proxy: {
+        "/addon": {
+          target: env.VITE_BACKEND_URL || "http://127.0.0.1:3000",
+          changeOrigin: true,
+        },
+        "/api": {
+          target: env.VITE_BACKEND_URL || "http://127.0.0.1:3000",
+          changeOrigin: true,
+        },
+      },
+    },
     test: {
       environment: "jsdom",
       server: {

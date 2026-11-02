@@ -213,5 +213,59 @@
     "momoLabel": "MoMo",
     "paypalLabel": "PayPal",
     "close": "Varbūt vēlāk"
+  },
+  "subtitlesConfigure": {
+    "hero": {
+      "description": "Iestatiet savu personīgo Wyzie API atslēgu, lai iegūtu ātrākus subtitrus un apietu koplietojamo kopienas tarifu ierobežojumus.",
+      "title": "Konfigurējiet Framezoo subtitrus"
+    },
+    "account": {
+      "configuringFor": "Konta konfigurēšana:",
+      "desktopLinked": "Saistīts ar darbvirsmu",
+      "verifying": "Notiek konta biļetes verifikācija no darbvirsmas lietotnes...",
+      "saveButton": "Saglabāt Framezoo kontā",
+      "saveFailed": "Saglabāt neizdevās.",
+      "saveNetworkError": "Tīkla kļūda, saglabājot kontā.",
+      "saving": "Notiek saglabāšana kontā...",
+      "saveSuccess": "Veiksmīgi saglabāts jūsu kontā! Darbvirsmas lietotne tagad izmantos šo atslēgu automātiski.",
+      "instantHint": "(Tūlītēja sinhronizācija ar darbvirsmas lietotni)"
+    },
+    "pageTitle": "Konfigurēt Framezoo subtitrus | Framezoo",
+    "step1": {
+      "description": "Wyzie Subtitles nodrošina milzīgu vairāku valodu subtitru katalogu. Jūs varat ģenerēt vai izpirkt savu personīgo API atslēgu viņu oficiālajā portālā:",
+      "step1": "Apmeklējiet iepriekš norādīto saiti, lai iegūtu vai izpirktu API atslēgu.",
+      "title": "Iegūstiet savu bezmaksas Wyzie API atslēgu",
+      "step3": "Atgriezieties šeit un ielīmējiet to tālāk norādītajā 2. darbībā.",
+      "openStore": "Atvērt Wyzie veikalu (izpirkt)",
+      "step2": "Kopējiet ģenerēto API atslēgas virkni."
+    },
+    "step2": {
+      "placeholder": "Ielīmējiet savu Wyzie API atslēgu šeit...",
+      "clearButton": "Notīrīt taustiņu",
+      "testButton": "Testa API atslēga",
+      "title": "Ievadiet Wyzie API atslēgu",
+      "hide": "Slēpt",
+      "show": "Rādīt",
+      "testing": "Notiek pārbaude...",
+      "messages": {
+        "invalid": "API atslēga nav derīga, vai tai ir beidzies derīguma termiņš.",
+        "rateLimit": "API atslēga ir pārsniegusi ātruma ierobežojumus.",
+        "valid": "API atslēga ir derīga un darbojas!",
+        "empty": "Pirms testēšanas, lūdzu, ievadiet API atslēgu.",
+        "serverError": "Wyzie serveris atgrieza HTTP {{status}}.",
+        "verifying": "Pārbauda ar Wyzie...",
+        "networkError": "Tīkla kļūda, veidojot savienojumu ar sub.wyzie.io. Lūdzu, pārbaudiet savienojumu."
+      }
+    },
+    "step3": {
+      "openFramezooDisabledTooltip": "Nepieciešama atvēršana no Framezoo Desktop, kad esat pieteicies",
+      "copyManifest": "Kopēt manifesta URL",
+      "openFramezoo": "Atveriet Framezoo",
+      "title": "Instalēt un lietot",
+      "notConnectedNotice": "Piezīme. Jūs neesat saistīts ar Framezoo konta biļeti. Lai sinhronizētu tieši ar 'Open Framezoo', atveriet šo lapu no Framezoo Desktop lietotnes, kad esat pieteicies. Pretējā gadījumā kopējiet tālāk norādīto manifesta URL, lai to izmantotu.",
+      "noticeLabel": "Paziņojums:",
+      "copied": "Kopēts!",
+      "noticeText": "Jūsu API atslēga tiek droši saglabāta jūsu ierīcē. Tas tiek pārsūtīts tikai, lai meklētu un izgūtu filmu un seriālu subtitrus. Jebkurā laikā varat to atjaunināt vai noņemt."
+    }
   }
 }

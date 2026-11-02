@@ -213,5 +213,59 @@
     "paypalImageAlt": "Codice QR per donazioni PayPal",
     "momoImageAlt": "Codice QR per le donazioni MoMo",
     "viewQr": "Visualizza il codice QR ingrandito"
+  },
+  "subtitlesConfigure": {
+    "account": {
+      "verifying": "Verifica del ticket dell'account dall'app desktop...",
+      "configuringFor": "Configurazione per l'account:",
+      "saving": "Salvataggio sull'account...",
+      "desktopLinked": "Desktop collegato",
+      "saveButton": "Salva sull'account Framezoo",
+      "saveFailed": "Salvataggio non riuscito.",
+      "instantHint": "(Si sincronizza istantaneamente con l'app desktop)",
+      "saveNetworkError": "Errore di rete durante il salvataggio nell'account.",
+      "saveSuccess": "Salvato con successo sul tuo account! L'app desktop ora utilizzerà questa chiave automaticamente."
+    },
+    "hero": {
+      "title": "Configura i sottotitoli Framezoo",
+      "description": "Configura la tua chiave API Wyzie personale per ottenere sottotitoli più veloci e aggirare i limiti di velocità della community condivisa."
+    },
+    "pageTitle": "Configura i sottotitoli Framezoo | Framezoo",
+    "step1": {
+      "title": "Ottieni la tua chiave API Wyzie gratuita",
+      "openStore": "Apri il negozio Wyzie (riscatta)",
+      "description": "Wyzie Subtitles fornisce un enorme catalogo di sottotitoli multilingue. Puoi generare o riscattare la tua chiave API personale sul loro portale ufficiale:",
+      "step2": "Copia la stringa della chiave API generata.",
+      "step3": "Torna qui e incollalo nel passaggio 2 di seguito.",
+      "step1": "Visita il link qui sopra per ottenere o riscattare una chiave API."
+    },
+    "step2": {
+      "show": "Spettacolo",
+      "hide": "Nascondere",
+      "placeholder": "Incolla qui la tua chiave API Wyzie...",
+      "title": "Inserisci la chiave API Wyzie",
+      "testButton": "Testare la chiave API",
+      "testing": "Verifica...",
+      "clearButton": "Tasto Cancella",
+      "messages": {
+        "empty": "Inserisci una chiave API prima del test.",
+        "rateLimit": "La chiave API ha superato i limiti di velocità.",
+        "valid": "La chiave API è valida e funzionante!",
+        "invalid": "La chiave API non è valida o è scaduta.",
+        "serverError": "Il server Wyzie ha restituito HTTP {{status}}.",
+        "verifying": "Verifica con Wyzie...",
+        "networkError": "Errore di rete durante la connessione a sub.wyzie.io. Per favore controlla la tua connessione."
+      }
+    },
+    "step3": {
+      "openFramezooDisabledTooltip": "Richiede l'apertura da Framezoo Desktop durante l'accesso",
+      "copied": "Copiato!",
+      "openFramezoo": "Apri Framezoo",
+      "title": "Installa e applica",
+      "noticeLabel": "Avviso:",
+      "notConnectedNotice": "Nota: non sei connesso a un ticket dell'account Framezoo. Per eseguire la sincronizzazione direttamente con \"Apri Framezoo\", apri questa pagina dall'app Framezoo Desktop dopo aver effettuato l'accesso. Altrimenti, copia l'URL manifest di seguito per utilizzarlo.",
+      "noticeText": "La tua chiave API è archiviata in modo sicuro sul tuo dispositivo. Viene inoltrato solo per cercare e recuperare i sottotitoli per film e serie. Puoi aggiornarlo o rimuoverlo in qualsiasi momento.",
+      "copyManifest": "Copia l'URL manifest"
+    }
   }
 }

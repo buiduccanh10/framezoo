@@ -213,5 +213,59 @@
     "paypalImageAlt": "Dárcovský QR kód PayPal",
     "momoLabel": "MoMo",
     "viewQr": "Zobrazit větší QR kód"
+  },
+  "subtitlesConfigure": {
+    "hero": {
+      "description": "Nastavte si svůj osobní klíč Wyzie API, abyste získali rychlejší titulky a obešli sdílené komunitní limity.",
+      "title": "Konfigurace titulků Framezoo"
+    },
+    "pageTitle": "Konfigurace titulků Framezoo | Framezoo",
+    "account": {
+      "verifying": "Ověřování lístku účtu z aplikace pro stolní počítače...",
+      "saving": "Ukládání na účet...",
+      "configuringFor": "Konfigurace pro účet:",
+      "desktopLinked": "Propojeno s počítačem",
+      "saveButton": "Uložit do účtu Framezoo",
+      "instantHint": "(Okamžitá synchronizace s aplikací pro stolní počítače)",
+      "saveFailed": "Uložení se nezdařilo.",
+      "saveSuccess": "Úspěšně uloženo do vašeho účtu! Desktopová aplikace nyní bude tento klíč používat automaticky.",
+      "saveNetworkError": "Chyba sítě při ukládání do účtu."
+    },
+    "step1": {
+      "title": "Získejte zdarma klíč Wyzie API",
+      "description": "Wyzie Subtitles poskytuje obrovský vícejazyčný katalog titulků. Svůj osobní klíč API si můžete vygenerovat nebo uplatnit na jejich oficiálním portálu:",
+      "openStore": "Otevřít obchod Wyzie (uplatnit)",
+      "step1": "Chcete-li získat nebo uplatnit klíč API, přejděte na výše uvedený odkaz.",
+      "step2": "Zkopírujte vygenerovaný řetězec klíče API.",
+      "step3": "Vraťte se sem a vložte jej do kroku 2 níže."
+    },
+    "step2": {
+      "title": "Zadejte klíč Wyzie API",
+      "placeholder": "Sem vložte klíč Wyzie API...",
+      "testButton": "Testovací klíč API",
+      "hide": "Skrýt",
+      "show": "Show",
+      "testing": "Ověřování...",
+      "clearButton": "Vymazat klíč",
+      "messages": {
+        "empty": "Před testováním zadejte klíč API.",
+        "verifying": "Ověřování pomocí Wyzie...",
+        "invalid": "Klíč API je neplatný nebo jeho platnost vypršela.",
+        "valid": "API klíč je platný a funkční!",
+        "rateLimit": "Klíč API překročil limity rychlosti.",
+        "networkError": "Chyba sítě při připojování k sub.wyzie.io. Zkontrolujte prosím své připojení.",
+        "serverError": "Server Wyzie vrátil HTTP {{status}}."
+      }
+    },
+    "step3": {
+      "copied": "Zkopírováno!",
+      "noticeLabel": "Oznámení:",
+      "title": "Nainstalovat a použít",
+      "copyManifest": "Kopírovat adresu URL manifestu",
+      "openFramezooDisabledTooltip": "Vyžaduje otevření z Framezoo Desktop při přihlášení",
+      "openFramezoo": "Otevřete Framezoo",
+      "notConnectedNotice": "Poznámka: Nejste spojeni s tiketem účtu Framezoo. Chcete-li synchronizovat přímo s 'Open Framezoo', otevřete tuto stránku z aplikace Framezoo Desktop, když jste přihlášeni. V opačném případě zkopírujte níže uvedenou adresu Manifest, abyste ji mohli použít.",
+      "noticeText": "Váš klíč API je bezpečně uložen ve vašem zařízení. Přeposílá se pouze za účelem vyhledávání a načítání titulků k filmům a seriálům. Můžete jej kdykoli aktualizovat nebo odebrat."
+    }
   }
 }

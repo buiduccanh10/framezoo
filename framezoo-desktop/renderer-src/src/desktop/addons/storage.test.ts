@@ -54,6 +54,9 @@ describe("addons storage", () => {
     expect(native).toBeDefined();
     expect(native?.isNative).toBe(true);
     expect(native?.enabled).toBe(true);
+    expect(native?.manifest.logo).toBeDefined();
+    expect(native?.manifest.logo).toMatch(/addon.*logo\.png/);
+    expect(native?.manifest.behaviorHints?.configurable).toBe(true);
   });
 
   it("prevents removal of the native subtitle addon", () => {
