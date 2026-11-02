@@ -1,6 +1,14 @@
 import { getQuery, getRequestHeader, setHeader } from 'h3';
 
-import { resolveSubtitleContext, searchAllSubtitles } from '~/utils/subtitles';
+import {
+  executeWithInFlightDeduplication,
+  getCachedSubtitles,
+  getSubtitleCacheKey,
+  getSubtitleTtl,
+  normalizeSubtitleDownloadUrls,
+  resolveSubtitleContext,
+  searchAllSubtitles,
+} from '~/utils/subtitles';
 
 export default defineEventHandler(async event => {
   const params = event.context.params as { type?: string; id?: string | string[] } | undefined;
@@ -17,6 +25,9 @@ export default defineEventHandler(async event => {
 
   const type = rawType === 'series' ? 'series' : 'movie';
   const idStr = Array.isArray(rawIdParam) ? rawIdParam.join('/') : rawIdParam;
+  const cleanId = decodeURIComponent(idStr)
+    .replace(/\.json$/, '')
+    .trim();
 
   const host =
     getRequestHeader(event, 'x-forwarded-host') ||
@@ -25,6 +36,32 @@ export default defineEventHandler(async event => {
   const proto = getRequestHeader(event, 'x-forwarded-proto') || 'http';
   const origin = `${proto}://${host}`;
   const subsourceDownloadBaseUrl = `${origin}/addon/subtitles/download/subsource`;
+
+  const query = getQuery(event);
+  const cacheControlHeader = getRequestHeader(event, 'cache-control') || '';
+  const pragmaHeader = getRequestHeader(event, 'pragma') || '';
+  const isForceRefresh =
+    query.reload !== undefined ||
+    query.force !== undefined ||
+    query.refresh !== undefined ||
+    cacheControlHeader.includes('no-cache') ||
+    pragmaHeader.includes('no-cache');
+
+  const cacheKey = getSubtitleCacheKey(type, cleanId);
+
+  // Serve from Redis cache if available and not a forced reload
+  if (!isForceRefresh) {
+    const cachedSubtitles = await getCachedSubtitles(cacheKey);
+    if (cachedSubtitles) {
+      setHeader(event, 'Content-Type', 'application/json');
+      setHeader(event, 'X-Cache', 'HIT');
+      setHeader(event, 'Cache-Control', 'public, max-age=300, stale-while-revalidate=3600');
+
+      return {
+        subtitles: normalizeSubtitleDownloadUrls(cachedSubtitles, origin),
+      };
+    }
+  }
 
   const config = useRuntimeConfig();
   const wyzieApiKey =
@@ -37,7 +74,6 @@ export default defineEventHandler(async event => {
       ''
     ).trim() || undefined;
 
-  const query = getQuery(event);
   const acceptLanguage = getRequestHeader(event, 'accept-language') || '';
   const preferredLanguages: string[] = [];
   const addPreferredLanguages = (raw: string) => {
@@ -59,23 +95,27 @@ export default defineEventHandler(async event => {
     addPreferredLanguages(acceptLanguage);
   }
 
-  const context = await resolveSubtitleContext(type, idStr);
+  const searchLanguages = Array.from(new Set(['vi', 'en', ...preferredLanguages].filter(Boolean)));
 
-  const subtitles = await searchAllSubtitles(context, {
-    wyzieApiKey,
-    subsourceApiKey,
-    subsourceDownloadBaseUrl,
-    preferredLanguages: Array.from(new Set(preferredLanguages.filter(Boolean))),
+  // Deduplicate in-flight upstream search requests for the same media key
+  const subtitles = await executeWithInFlightDeduplication(cacheKey, async () => {
+    const context = await resolveSubtitleContext(type, idStr);
+    return await searchAllSubtitles(context, {
+      wyzieApiKey,
+      subsourceApiKey,
+      subsourceDownloadBaseUrl,
+      preferredLanguages: searchLanguages,
+    });
   });
 
+  const ttl = getSubtitleTtl(type, subtitles.length);
+  await setCachedSubtitles(cacheKey, subtitles, ttl);
+
   setHeader(event, 'Content-Type', 'application/json');
-  // Subtitle availability can change between episode transitions. React Query
-  // owns the client-side cache; do not let browser/CDN cache hide a refresh.
-  setHeader(event, 'Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-  setHeader(event, 'Pragma', 'no-cache');
-  setHeader(event, 'Expires', '0');
+  setHeader(event, 'X-Cache', 'MISS');
+  setHeader(event, 'Cache-Control', 'public, max-age=300, stale-while-revalidate=3600');
 
   return {
-    subtitles,
+    subtitles: normalizeSubtitleDownloadUrls(subtitles, origin),
   };
 });
