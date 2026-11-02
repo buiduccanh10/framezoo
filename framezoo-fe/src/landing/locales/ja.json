@@ -213,5 +213,59 @@
     "scanHint": "銀行アプリでこの QR コードをスキャンします。",
     "viewQr": "QRコードを拡大して見る",
     "modalTitle": "Framezoo の構築にご協力ください"
+  },
+  "subtitlesConfigure": {
+    "account": {
+      "verifying": "デスクトップ アプリからアカウント チケットを確認しています...",
+      "configuringFor": "アカウントの設定:",
+      "saveFailed": "保存に失敗しました。",
+      "saveButton": "Framezoo アカウントに保存",
+      "saving": "アカウントに保存中...",
+      "desktopLinked": "デスクトップリンク",
+      "instantHint": "(デスクトップアプリに即座に同期します)",
+      "saveSuccess": "アカウントに正常に保存されました。デスクトップ アプリはこのキーを自動的に使用するようになります。",
+      "saveNetworkError": "アカウントに保存中にネットワーク エラーが発生しました。"
+    },
+    "pageTitle": "Framezoo の字幕を設定する |フレームズー",
+    "hero": {
+      "title": "Framezoo の字幕を構成する",
+      "description": "個人の Wyzie API キーを設定して、より高速な字幕を取得し、共有コミュニティのレート制限を回避します。"
+    },
+    "step1": {
+      "title": "無料の Wyzie API キーを取得します",
+      "openStore": "Wyzie ストアを開く (引き換え)",
+      "step1": "API キーを取得または引き換えするには、上のリンクにアクセスしてください。",
+      "description": "Wyzie Subtitles は、膨大な多言語字幕カタログを提供します。公式ポータルで個人用 API キーを生成または引き換えることができます。",
+      "step3": "ここに戻って、以下のステップ 2 に貼り付けます。",
+      "step2": "生成された API キー文字列をコピーします。"
+    },
+    "step2": {
+      "show": "見せる",
+      "title": "Wyzie API キーを入力してください",
+      "hide": "隠れる",
+      "clearButton": "クリアキー",
+      "messages": {
+        "valid": "API キーは有効で機能しています。",
+        "empty": "テストする前に API キーを入力してください。",
+        "verifying": "Wyzie で確認中...",
+        "invalid": "API キーが無効か期限切れです。",
+        "rateLimit": "API キーがレート制限を超えています。",
+        "serverError": "Wyzie サーバーは HTTP {{status}} を返しました。",
+        "networkError": "sub.wyzie.io への接続中にネットワーク エラーが発生しました。接続を確認してください。"
+      },
+      "testing": "確認中...",
+      "testButton": "APIキーをテストする",
+      "placeholder": "ここに Wyzie API キーを貼り付けます..."
+    },
+    "step3": {
+      "copyManifest": "マニフェスト URL をコピーする",
+      "copied": "コピーしました！",
+      "noticeLabel": "知らせ：",
+      "openFramezooDisabledTooltip": "ログイン中に Framezoo Desktop から開く必要があります",
+      "noticeText": "API キーはデバイスに安全に保存されます。映画やシリーズの字幕を検索および取得するためにのみ転送されます。いつでも更新または削除できます。",
+      "notConnectedNotice": "注: あなたは Framezoo アカウント チケットに接続されていません。 「Open Framezoo」と直接同期するには、ログイン中に Framezoo デスクトップ アプリからこのページを開きます。それ以外の場合は、以下のマニフェスト URL をコピーして使用します。",
+      "title": "インストールと適用",
+      "openFramezoo": "フレームズーを開く"
+    }
   }
 }

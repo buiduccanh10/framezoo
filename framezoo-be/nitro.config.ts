@@ -11,10 +11,9 @@ const createRedisStorage = (defaultHost: string) => ({
   url:
     process.env.REDIS_URL ||
     `redis://${process.env.REDIS_HOST || defaultHost}:${process.env.REDIS_PORT || '6379'}`,
-  connectTimeout: Number(process.env.REDIS_CONNECT_TIMEOUT_MS) || 250,
-  maxRetriesPerRequest: 1,
-  enableOfflineQueue: false,
-  retryStrategy: () => null,
+  connectTimeout: Number(process.env.REDIS_CONNECT_TIMEOUT_MS) || 2000,
+  maxRetriesPerRequest: 3,
+  enableOfflineQueue: true,
   lazyConnect: true,
 });
 

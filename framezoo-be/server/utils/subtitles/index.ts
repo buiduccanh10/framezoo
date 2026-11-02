@@ -9,6 +9,7 @@ import { fetchWyzieSubtitles } from './wyzie';
 
 export * from './types';
 export * from './languages';
+export * from './cache';
 
 const SOURCE_PRIORITY: Record<string, number> = {
   subsource: 0,

@@ -213,5 +213,59 @@
     "viewQr": "Ver código QR máis grande",
     "close": "Quizais máis tarde",
     "momoImageAlt": "Código QR de doazón MoMo"
+  },
+  "subtitlesConfigure": {
+    "hero": {
+      "title": "Configura os subtítulos de Framezoo",
+      "description": "Configura a túa clave de API Wyzie persoal para obter subtítulos máis rápidos e evitar os límites de tarifas da comunidade compartida."
+    },
+    "account": {
+      "verifying": "Verificando o ticket da conta desde a aplicación de escritorio...",
+      "saving": "Gardando na conta...",
+      "configuringFor": "Configuración da conta:",
+      "desktopLinked": "Escritorio vinculado",
+      "saveButton": "Gardar na conta de Framezoo",
+      "saveSuccess": "Gardouse correctamente na túa conta! Agora a aplicación de escritorio usará esta tecla automaticamente.",
+      "instantHint": "(Sincroniza coa aplicación de escritorio ao instante)",
+      "saveFailed": "Produciuse un erro ao gardar.",
+      "saveNetworkError": "Produciuse un erro na rede ao gardar na conta."
+    },
+    "pageTitle": "Configurar os subtítulos de Framezoo | Framezoo",
+    "step1": {
+      "title": "Obtén a túa clave API Wyzie gratuíta",
+      "description": "Wyzie Subtitles ofrece un enorme catálogo de subtítulos en varios idiomas. Podes xerar ou trocar a túa clave API persoal no seu portal oficial:",
+      "step1": "Visita a ligazón anterior para obter ou trocar unha clave API.",
+      "step3": "Volve aquí e pégao no paso 2 a continuación.",
+      "openStore": "Abrir Wyzie Store (Canxear)",
+      "step2": "Copia a cadea de clave API xerada."
+    },
+    "step2": {
+      "title": "Introduza a clave da API de Wyzie",
+      "placeholder": "Pega aquí a túa clave da API de Wyzie...",
+      "hide": "Ocultar",
+      "testing": "Verificando...",
+      "clearButton": "Tecla de borrado",
+      "testButton": "Proba a chave da API",
+      "show": "Mostrar",
+      "messages": {
+        "empty": "Introduce unha clave API antes de probar.",
+        "serverError": "O servidor Wyzie devolveu HTTP {{status}}.",
+        "valid": "A clave API é válida e funciona!",
+        "verifying": "Verificando con Wyzie...",
+        "networkError": "Erro de rede ao conectarse a sub.wyzie.io. Comproba a túa conexión.",
+        "rateLimit": "A clave API superou os límites de velocidade.",
+        "invalid": "A clave API non é válida ou caducou."
+      }
+    },
+    "step3": {
+      "openFramezoo": "Abre Framezoo",
+      "copied": "Copiado!",
+      "title": "Instalar e aplicar",
+      "openFramezooDisabledTooltip": "Require abrir desde Framezoo Desktop mentres está conectado",
+      "copyManifest": "Copiar o URL do manifesto",
+      "notConnectedNotice": "Nota: non estás conectado cun ticket de conta de Framezoo. Para sincronizar directamente con \"Abrir Framezoo\", abre esta páxina desde a aplicación de escritorio de Framezoo mentres estás conectado. Se non, copia o URL do manifesto a continuación para usalo.",
+      "noticeText": "A túa clave API almacénase de forma segura no teu dispositivo. Envíase só para buscar e recuperar subtítulos de películas e series. Podes actualizalo ou eliminalo en calquera momento.",
+      "noticeLabel": "Aviso:"
+    }
   }
 }

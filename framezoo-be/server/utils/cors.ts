@@ -70,6 +70,11 @@ export const resolveCorsOrigin = (event: H3EventCompat) => {
     return null;
   }
 
+  const path = event.path?.split('?')[0] || '';
+  if (path.startsWith('/addon/')) {
+    return requestOrigin;
+  }
+
   const normalizedRequestOrigin = normalizeOrigin(requestOrigin);
   const allowedOrigins = parseAllowedOrigins();
 

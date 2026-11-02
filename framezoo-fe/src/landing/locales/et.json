@@ -213,5 +213,59 @@
     "momoLabel": "MoMo",
     "momoImageAlt": "MoMo annetuse QR-kood",
     "paypalImageAlt": "PayPali annetuse QR-kood"
+  },
+  "subtitlesConfigure": {
+    "account": {
+      "verifying": "Kontopileti kinnitamine töölauarakendusest...",
+      "desktopLinked": "Töölaua lingitud",
+      "configuringFor": "Konto seadistamine:",
+      "saveButton": "Salvestage Framezoo kontole",
+      "saving": "Salvestamine kontole...",
+      "saveFailed": "Salvestamine ebaõnnestus.",
+      "saveSuccess": "Salvestamine õnnestus teie kontole! Töölauarakendus kasutab nüüd seda võtit automaatselt.",
+      "instantHint": "(Sünkroonitakse koheselt töölauarakendusega)",
+      "saveNetworkError": "Võrguviga kontole salvestamisel."
+    },
+    "hero": {
+      "title": "Framezoo subtiitrite seadistamine",
+      "description": "Seadistage oma isiklik Wyzie API võti, et saada kiiremaid subtiitreid ja mööda minna jagatud kogukonna määrade piirangutest."
+    },
+    "pageTitle": "Framezoo seadistamine Subtiitrid | Framezoo",
+    "step1": {
+      "description": "Wyzie Subtitles pakub tohutut mitmekeelset subtiitrite kataloogi. Saate luua või lunastada oma isikliku API-võtme nende ametlikus portaalis:",
+      "step1": "API-võtme hankimiseks või lunastamiseks külastage ülalolevat linki.",
+      "step3": "Naaske siia ja kleepige see allolevasse 2. sammu.",
+      "openStore": "Ava Wyzie pood (lunastage)",
+      "title": "Hankige oma tasuta Wyzie API võti",
+      "step2": "Kopeerige loodud API võtmestring."
+    },
+    "step2": {
+      "hide": "Peida",
+      "title": "Sisestage Wyzie API võti",
+      "testButton": "Testi API võtit",
+      "show": "Näita",
+      "testing": "Kinnitamine...",
+      "clearButton": "Kustuta klahv",
+      "messages": {
+        "invalid": "API võti on kehtetu või aegunud.",
+        "rateLimit": "API võti on ületanud kiiruspiirangud.",
+        "empty": "Enne testimist sisestage API võti.",
+        "valid": "API võti on kehtiv ja töötab!",
+        "verifying": "Wyzie'ga kinnitamine...",
+        "serverError": "Wyzie server tagastas HTTP {{status}}.",
+        "networkError": "Võrgutõrge saidiga sub.wyzie.io ühendamisel. Kontrollige ühendust."
+      },
+      "placeholder": "Kleepige oma Wyzie API võti siia..."
+    },
+    "step3": {
+      "openFramezoo": "Avage Framezoo",
+      "openFramezooDisabledTooltip": "Sisselogimisel tuleb avada Framezoo Desktopist",
+      "title": "Install & Apply",
+      "copyManifest": "Kopeeri manifesti URL",
+      "notConnectedNotice": "Märkus. Te ei ole Framezoo kontopiletiga ühendatud. Otse rakendusega „Ava Framezoo” sünkroonimiseks avage see leht oma Framezoo töölauarakendusest, kui olete sisse logitud. Vastasel juhul kopeerige selle kasutamiseks allolev manifesti URL.",
+      "copied": "Kopeeritud!",
+      "noticeLabel": "Märkus:",
+      "noticeText": "Teie API võti on teie seadmes turvaliselt salvestatud. See edastatakse ainult filmide ja seriaalide subtiitrite otsimiseks ja toomiseks. Saate seda igal ajal värskendada või eemaldada."
+    }
   }
 }

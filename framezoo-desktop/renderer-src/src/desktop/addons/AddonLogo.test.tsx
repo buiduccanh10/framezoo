@@ -2,13 +2,15 @@ import { act } from "react";
 import { type Root, createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+import { Icons } from "@/components/Icon";
+
+import { AddonLogo } from "./AddonLogo";
+
 vi.mock("@/components/utils/Image", () => ({
   LazyImage: (props: React.ImgHTMLAttributes<HTMLImageElement>) => (
     <img {...props} />
   ),
 }));
-
-import { AddonLogo } from "./AddonLogo";
 
 let root: Root;
 let container: HTMLDivElement;
@@ -33,6 +35,19 @@ describe("AddonLogo", () => {
 
     expect(
       container.querySelector('[aria-label="Missing addon addon icon"]'),
+    ).not.toBeNull();
+    expect(container.querySelector("svg")).not.toBeNull();
+  });
+
+  it("renders custom fallbackIcon when specified and logo is missing", async () => {
+    await act(async () => {
+      root.render(
+        <AddonLogo name="Subtitles addon" fallbackIcon={Icons.CAPTIONS} />,
+      );
+    });
+
+    expect(
+      container.querySelector('[aria-label="Subtitles addon addon icon"]'),
     ).not.toBeNull();
     expect(container.querySelector("svg")).not.toBeNull();
   });

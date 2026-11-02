@@ -213,5 +213,59 @@
     "momoImageAlt": "MoMo adomány QR-kód",
     "close": "Talán később",
     "viewQr": "A QR-kód megtekintése nagyobb méretben"
+  },
+  "subtitlesConfigure": {
+    "hero": {
+      "title": "Framezoo-feliratok konfigurálása",
+      "description": "Állítsa be személyes Wyzie API-kulcsát, hogy gyorsabb feliratokat kapjon, és megkerülje a megosztott közösségi díjkorlátokat."
+    },
+    "account": {
+      "verifying": "Fiókjegy ellenőrzése az asztali alkalmazásból...",
+      "instantHint": "(Azonnal szinkronizálódik az asztali alkalmazással)",
+      "saveSuccess": "Sikeresen mentve a fiókjába! Az asztali alkalmazás mostantól automatikusan használja ezt a kulcsot.",
+      "saving": "Mentés a fiókba...",
+      "configuringFor": "Fiók beállítása:",
+      "saveButton": "Mentés Framezoo fiókba",
+      "desktopLinked": "Asztali linkelve",
+      "saveFailed": "A mentés nem sikerült.",
+      "saveNetworkError": "Hálózati hiba a fiókba mentés közben."
+    },
+    "pageTitle": "Framezoo konfigurálása Feliratok | Framezoo",
+    "step1": {
+      "title": "Szerezze meg ingyenes Wyzie API-kulcsát",
+      "openStore": "Wyzie Store megnyitása (beváltás)",
+      "step2": "Másolja a generált API-kulcs karakterláncot.",
+      "description": "A Wyzie Subtitles hatalmas többnyelvű feliratkatalógust biztosít. Személyes API-kulcsát létrehozhatja vagy beválthatja a hivatalos portáljukon:",
+      "step1": "Látogassa meg a fenti linket API-kulcs beszerzéséhez vagy beváltásához.",
+      "step3": "Térjen vissza ide, és illessze be az alábbi 2. lépésbe."
+    },
+    "step2": {
+      "show": "Megmutat",
+      "hide": "Elrejt",
+      "placeholder": "Illessze be a Wyzie API-kulcsot ide...",
+      "testButton": "Teszt API-kulcs",
+      "messages": {
+        "verifying": "Ellenőrzés Wyzie-vel...",
+        "rateLimit": "Az API-kulcs túllépte a sebességkorlátokat.",
+        "valid": "Az API kulcs érvényes és működik!",
+        "empty": "A tesztelés előtt adjon meg egy API-kulcsot.",
+        "invalid": "Az API-kulcs érvénytelen vagy lejárt.",
+        "networkError": "Hálózati hiba a sub.wyzie.io oldalhoz való csatlakozáskor. Kérjük, ellenőrizze a kapcsolatot.",
+        "serverError": "A Wyzie szerver HTTP {{status}} értéket adott vissza."
+      },
+      "title": "Írja be a Wyzie API kulcsot",
+      "testing": "Ellenőrzés...",
+      "clearButton": "Törlés gomb"
+    },
+    "step3": {
+      "copied": "Másolva!",
+      "noticeLabel": "Értesítés:",
+      "noticeText": "API-kulcsát biztonságosan tárolja az eszközén. Csak filmek és sorozatok feliratainak keresésére és lekérésére továbbítják. Bármikor frissítheti vagy eltávolíthatja.",
+      "openFramezooDisabledTooltip": "Meg kell nyitni a Framezoo Desktopról, miközben be van jelentkezve",
+      "notConnectedNotice": "Megjegyzés: Ön nem kapcsolódik Framezoo-fiókjegyhez. A „Framezoo megnyitása” funkcióval való közvetlen szinkronizáláshoz nyissa meg ezt az oldalt a Framezoo Desktop alkalmazásból, miközben bejelentkezett. Ellenkező esetben másolja ki az alábbi Manifest URL-t a használatához.",
+      "openFramezoo": "Nyissa meg a Framezoo-t",
+      "copyManifest": "Manifest URL másolása",
+      "title": "Telepítés és alkalmazás"
+    }
   }
 }

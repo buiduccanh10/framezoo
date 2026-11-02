@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 import { Icon, Icons } from "@/components/Icon";
 import { LazyImage } from "@/components/utils/Image";
+import { resolvePublicUrl } from "@/utils/publicUrl";
 
 interface AddonLogoProps {
   name: string;
@@ -23,7 +24,9 @@ export function AddonLogo({
     setHasError(false);
   }, [logo]);
 
-  if (!logo || hasError) {
+  const resolvedLogo = resolvePublicUrl(logo) || logo;
+
+  if (!resolvedLogo || hasError) {
     return (
       <span
         className={classNames(
@@ -39,7 +42,7 @@ export function AddonLogo({
 
   return (
     <LazyImage
-      src={logo}
+      src={resolvedLogo}
       alt={`${name} addon icon`}
       className={classNames("shrink-0 rounded-lg object-contain", className)}
       showSkeleton={false}

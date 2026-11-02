@@ -261,6 +261,11 @@ jobs:
             echo "VITE_BACKEND_URL=$BACKEND_URL" >> "$GITHUB_ENV"
           fi
 
+          APP_DOMAIN=$(grep -Eo '^VITE_APP_DOMAIN=(.*)' .env | cut -d= -f2- | tr -d '"' | tr -d "'" || echo "")
+          if [ -n "$APP_DOMAIN" ]; then
+            echo "VITE_APP_DOMAIN=$APP_DOMAIN" >> "$GITHUB_ENV"
+          fi
+
           DEVTOOLS=$(grep -Eo '^VITE_ENABLE_DEVTOOLS_PROTECTION=(.*)' .env | cut -d= -f2- | tr -d '"' | tr -d "'" || echo "")
           if [ -n "$DEVTOOLS" ]; then
             echo "VITE_ENABLE_DEVTOOLS_PROTECTION=$DEVTOOLS" >> "$GITHUB_ENV"
@@ -403,6 +408,11 @@ jobs:
           BACKEND_URL=$(grep -Eo '^VITE_BACKEND_URL=(.*)' .env | cut -d= -f2- | tr -d '"' | tr -d "'" || echo "")
           if [ -n "$BACKEND_URL" ]; then
             echo "VITE_BACKEND_URL=$BACKEND_URL" >> "$GITHUB_ENV"
+          fi
+
+          APP_DOMAIN=$(grep -Eo '^VITE_APP_DOMAIN=(.*)' .env | cut -d= -f2- | tr -d '"' | tr -d "'" || echo "")
+          if [ -n "$APP_DOMAIN" ]; then
+            echo "VITE_APP_DOMAIN=$APP_DOMAIN" >> "$GITHUB_ENV"
           fi
 
           DEVTOOLS=$(grep -Eo '^VITE_ENABLE_DEVTOOLS_PROTECTION=(.*)' .env | cut -d= -f2- | tr -d '"' | tr -d "'" || echo "")

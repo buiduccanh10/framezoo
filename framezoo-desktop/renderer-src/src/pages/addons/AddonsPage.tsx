@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useCopyToClipboard } from "react-use";
 
+import { createHttpStatusError, withAuthRetry } from "@/backend/accounts/auth";
 import { AddonResourceBadges } from "@/components/addons/AddonResourceBadges";
 import { Icon, Icons } from "@/components/Icon";
 import { AddonManager } from "@/components/layout/AddonManager";
@@ -16,11 +17,18 @@ import {
   openExternalUrl,
 } from "@/desktop/addons/manifest";
 import {
+  NATIVE_SUBTITLE_ADDON_ID,
+  getActiveBackendUrl,
+} from "@/desktop/addons/storage";
+import {
   removeAddon,
   setAddonEnabled,
   useInstalledAddons,
 } from "@/desktop/addons/store";
+import type { InstalledAddon } from "@/desktop/addons/types";
 import { SubPageLayout } from "@/pages/layouts/SubPageLayout";
+import { conf } from "@/setup/config";
+import { useAuthStore } from "@/stores/auth";
 import { useToastStore } from "@/stores/interface/toast";
 
 export function AddonsPage() {
@@ -33,6 +41,78 @@ export function AddonsPage() {
   const handleShareAddon = (manifestUrl: string) => {
     copyToClipboard(manifestUrl);
     showToast(t("toasts.linkCopied"), "success");
+  };
+
+  const handleConfigureAddon = async (
+    addon: InstalledAddon,
+    defaultUrl: string,
+  ) => {
+    if (addon.isNative || addon.manifest.id === NATIVE_SUBTITLE_ADDON_ID) {
+      const account = useAuthStore.getState().account;
+      if (account) {
+        try {
+          const backend = getActiveBackendUrl();
+          const backendBase = backend ? backend.replace(/\/+$/, "") : "";
+          if (backendBase) {
+            const frontendOrigin = (() => {
+              const appDomain = (conf().APP_DOMAIN || "")
+                .trim()
+                .replace(/\/+$/, "");
+              if (appDomain && appDomain !== "https://framezoo.top") {
+                return appDomain;
+              }
+              if (
+                typeof window !== "undefined" &&
+                window.location.origin &&
+                window.location.origin.startsWith("http")
+              ) {
+                return window.location.origin;
+              }
+              return appDomain || "https://framezoo.top";
+            })();
+
+            const ticketData = await withAuthRetry(
+              backendBase,
+              account,
+              async (token) => {
+                const response = await fetch(
+                  `${backendBase}/addon/subtitles/api/ticket`,
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                      "X-Frontend-Origin": frontendOrigin,
+                      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                    },
+                    body: JSON.stringify({
+                      frontendOrigin,
+                    }),
+                  },
+                );
+                if (!response.ok) {
+                  throw createHttpStatusError(
+                    response.status,
+                    `Ticket request failed with status ${response.status}`,
+                  );
+                }
+                return response.json();
+              },
+            );
+
+            if (ticketData?.url) {
+              void openExternalUrl(ticketData.url);
+              return;
+            }
+          }
+        } catch (err) {
+          console.warn(
+            "[addons] Failed to request one-time config ticket:",
+            err,
+          );
+        }
+      }
+    }
+    void openExternalUrl(defaultUrl);
   };
 
   return (
@@ -109,6 +189,12 @@ export function AddonsPage() {
                     name={addon.manifest.name}
                     logo={addon.manifest.logo}
                     className="h-11 w-11 rounded-lg bg-black/20 p-1"
+                    fallbackIcon={
+                      addon.isNative ||
+                      addon.manifest.resources?.includes("subtitles")
+                        ? Icons.CAPTIONS
+                        : Icons.EXTENSION
+                    }
                   />
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
@@ -175,7 +261,9 @@ export function AddonsPage() {
                             ? "bg-amber-500/20 text-amber-300 hover:bg-amber-500/30"
                             : "text-dropdown-text hover:bg-green-500/20 hover:text-green-400",
                         )}
-                        onClick={() => void openExternalUrl(configureUrl)}
+                        onClick={() =>
+                          void handleConfigureAddon(addon, configureUrl)
+                        }
                         title={
                           isConfigRequired
                             ? t(

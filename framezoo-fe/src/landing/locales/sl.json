@@ -213,5 +213,59 @@
     "close": "Mogoče kasneje",
     "paypalImageAlt": "QR koda donacije PayPal",
     "viewQr": "Oglejte si povečano kodo QR"
+  },
+  "subtitlesConfigure": {
+    "hero": {
+      "description": "Nastavite svoj osebni ključ API-ja Wyzie, da dobite hitrejše podnapise in obidete skupne omejitve skupne stopnje.",
+      "title": "Konfigurirajte podnapise Framezoo"
+    },
+    "pageTitle": "Konfigurirajte podnapise Framezoo | Framezoo",
+    "account": {
+      "instantHint": "(Takoj se sinhronizira z namizno aplikacijo)",
+      "verifying": "Preverjanje vozovnice računa iz namizne aplikacije ...",
+      "saving": "Shranjevanje v račun ...",
+      "saveButton": "Shrani v račun Framezoo",
+      "configuringFor": "Konfiguracija za račun:",
+      "desktopLinked": "Povezano z namizjem",
+      "saveFailed": "Shranjevanje ni uspelo.",
+      "saveSuccess": "Uspešno shranjeno v vaš račun! Namizna aplikacija bo zdaj ta ključ uporabljala samodejno.",
+      "saveNetworkError": "Omrežna napaka med shranjevanjem v račun."
+    },
+    "step1": {
+      "openStore": "Odpri trgovino Wyzie (unovči)",
+      "title": "Pridobite brezplačni ključ API Wyzie",
+      "description": "Wyzie Subtitles ponuja ogromen katalog podnapisov v več jezikih. Svoj osebni ključ API lahko ustvarite ali unovčite na njihovem uradnem portalu:",
+      "step1": "Obiščite zgornjo povezavo, da pridobite ali unovčite ključ API.",
+      "step2": "Kopirajte ustvarjeni niz ključa API.",
+      "step3": "Vrnite se sem in ga prilepite v 2. korak spodaj."
+    },
+    "step2": {
+      "hide": "Skrij se",
+      "placeholder": "Sem prilepite ključ Wyzie API ...",
+      "title": "Vnesite ključ API Wyzie",
+      "show": "Prikaži",
+      "testButton": "Testni ključ API",
+      "messages": {
+        "verifying": "Preverjanje z Wyzie ...",
+        "empty": "Pred testiranjem vnesite ključ API.",
+        "valid": "API ključ je veljaven in deluje!",
+        "rateLimit": "Ključ API je presegel omejitve hitrosti.",
+        "invalid": "Ključ API je neveljaven ali je potekel.",
+        "serverError": "Strežnik Wyzie je vrnil HTTP {{status}}.",
+        "networkError": "Omrežna napaka pri povezovanju s sub.wyzie.io. Preverite svojo povezavo."
+      },
+      "testing": "Preverjanje ...",
+      "clearButton": "Tipka za brisanje"
+    },
+    "step3": {
+      "openFramezoo": "Odprite Framezoo",
+      "title": "Namesti in uporabi",
+      "notConnectedNotice": "Opomba: Niste povezani z vstopnico za račun Framezoo. Za neposredno sinhronizacijo z 'Open Framezoo' odprite to stran v namizni aplikaciji Framezoo, ko ste prijavljeni. V nasprotnem primeru kopirajte spodnji URL manifesta, da ga uporabite.",
+      "openFramezooDisabledTooltip": "Zahteva odpiranje iz namizja Framezoo, ko ste prijavljeni",
+      "copyManifest": "Kopiraj URL manifesta",
+      "noticeText": "Vaš API ključ je varno shranjen v vaši napravi. Posreduje se samo za iskanje in pridobivanje podnapisov za filme in serije. Kadar koli ga lahko posodobite ali odstranite.",
+      "copied": "Kopirano!",
+      "noticeLabel": "Obvestilo:"
+    }
   }
 }

@@ -213,5 +213,59 @@
     "momoImageAlt": "קוד QR לתרומת MoMo",
     "paypalImageAlt": "קוד QR לתרומת PayPal",
     "close": "אולי מאוחר יותר"
+  },
+  "subtitlesConfigure": {
+    "hero": {
+      "title": "הגדר כתוביות של Framezoo",
+      "description": "הגדר את מפתח Wyzie API האישי שלך כדי לקבל כתוביות מהירות יותר ולעקוף את מגבלות התעריפים המשותפות של הקהילה."
+    },
+    "account": {
+      "configuringFor": "הגדרת תצורה לחשבון:",
+      "verifying": "מאמת את כרטיס החשבון מאפליקציית שולחן העבודה...",
+      "desktopLinked": "שולחן עבודה מקושר",
+      "saveFailed": "השמירה נכשלה.",
+      "saving": "שומר בחשבון...",
+      "saveButton": "שמור בחשבון Framezoo",
+      "instantHint": "(מסנכרן לאפליקציית שולחן העבודה באופן מיידי)",
+      "saveSuccess": "נשמר בהצלחה בחשבון שלך! אפליקציית שולחן העבודה תשתמש כעת במפתח זה באופן אוטומטי.",
+      "saveNetworkError": "שגיאת רשת בעת שמירה בחשבון."
+    },
+    "pageTitle": "הגדר כתוביות של Framezoo | Framezoo",
+    "step1": {
+      "openStore": "פתח את חנות Wyzie (פדה)",
+      "title": "קבל את מפתח Wyzie API בחינם",
+      "step2": "העתק את מחרוזת מפתח ה-API שנוצרה.",
+      "step1": "בקר בקישור למעלה כדי לקבל או לממש מפתח API.",
+      "description": "Wyzie Subtitles מספק קטלוג כתוביות ענק רב שפות. אתה יכול ליצור או לממש את מפתח ה-API האישי שלך בפורטל הרשמי שלהם:",
+      "step3": "חזור לכאן והדבק אותו בשלב 2 למטה."
+    },
+    "step2": {
+      "show": "לְהַצִיג",
+      "hide": "לְהַסתִיר",
+      "placeholder": "הדבק את מפתח ה-API של Wyzie כאן...",
+      "title": "הזן את מפתח API של Wyzie",
+      "testing": "מאמת...",
+      "messages": {
+        "verifying": "מאמת עם Wyzie...",
+        "invalid": "מפתח API אינו חוקי או שפג תוקפו.",
+        "serverError": "שרת Wyzie החזיר HTTP {{status}}.",
+        "networkError": "שגיאת רשת בחיבור ל-sub.wyzie.io. אנא בדוק את החיבור שלך.",
+        "valid": "מפתח API תקף ועובד!",
+        "empty": "אנא הזן מפתח API לפני הבדיקה.",
+        "rateLimit": "מפתח API חרג ממגבלות התעריף."
+      },
+      "testButton": "בדוק מפתח API",
+      "clearButton": "מקש נקה"
+    },
+    "step3": {
+      "copied": "מוּעֲתָק!",
+      "noticeLabel": "הוֹדָעָה:",
+      "openFramezooDisabledTooltip": "דורש פתיחה מ-Framezoo Desktop בזמן כניסה",
+      "notConnectedNotice": "הערה: אינך מחובר לכרטיס חשבון Framezoo. כדי לסנכרן ישירות עם 'פתח את Framezoo', פתח את הדף הזה מאפליקציית Framezoo Desktop שלך בזמן שאתה מחובר. אחרת, העתק את כתובת ה- Manifest למטה כדי להשתמש בה.",
+      "title": "התקן והחל",
+      "openFramezoo": "פתח את Framezoo",
+      "copyManifest": "העתק כתובת אתר של מניפסט",
+      "noticeText": "מפתח ה-API שלך מאוחסן בבטחה במכשיר שלך. זה מועבר רק כדי לחפש ולאחזר כתוביות לסרטים וסדרות. אתה יכול לעדכן או להסיר אותו בכל עת."
+    }
   }
 }

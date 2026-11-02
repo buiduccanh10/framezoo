@@ -213,5 +213,59 @@
     "scanHint": "뱅킹 앱으로 이 QR 코드를 스캔하세요.",
     "viewQr": "QR코드 크게 보기",
     "close": "어쩌면 나중에"
+  },
+  "subtitlesConfigure": {
+    "hero": {
+      "description": "더 빠른 자막을 얻고 공유 커뮤니티 요금 제한을 우회하려면 개인 Wyzie API 키를 설정하세요.",
+      "title": "Framezoo 자막 구성"
+    },
+    "account": {
+      "verifying": "데스크톱 앱에서 계정 티켓을 확인하는 중...",
+      "configuringFor": "계정 구성:",
+      "desktopLinked": "데스크톱 연결됨",
+      "saveButton": "Framezoo 계정에 저장",
+      "saveNetworkError": "계정에 저장하는 동안 네트워크 오류가 발생했습니다.",
+      "saveSuccess": "귀하의 계정에 성공적으로 저장되었습니다! 이제 데스크탑 앱은 이 키를 자동으로 사용합니다.",
+      "instantHint": "(데스크톱 앱과 즉시 동기화)",
+      "saving": "계정에 저장 중...",
+      "saveFailed": "저장에 실패했습니다."
+    },
+    "pageTitle": "Framezoo 자막 구성 | 프레임주",
+    "step1": {
+      "title": "무료 Wyzie API 키 받기",
+      "step2": "생성된 API 키 문자열을 복사합니다.",
+      "description": "Wyzie Subtitles는 거대한 다국어 자막 카탈로그를 제공합니다. 공식 포털에서 개인 API 키를 생성하거나 사용할 수 있습니다.",
+      "step1": "API 키를 얻거나 사용하려면 위 링크를 방문하세요.",
+      "step3": "여기로 돌아와서 아래 2단계에 붙여넣으세요.",
+      "openStore": "Wyzie 스토어 오픈(사용)"
+    },
+    "step2": {
+      "show": "보여주다",
+      "hide": "숨다",
+      "placeholder": "여기에 Wyzie API 키를 붙여넣으세요...",
+      "title": "Wyzie API 키를 입력하세요",
+      "clearButton": "클리어 키",
+      "testing": "확인 중...",
+      "testButton": "테스트 API 키",
+      "messages": {
+        "verifying": "Wyzie로 확인하는 중...",
+        "invalid": "API 키가 유효하지 않거나 만료되었습니다.",
+        "empty": "테스트하기 전에 API 키를 입력하세요.",
+        "valid": "API 키가 유효하고 작동 중입니다!",
+        "serverError": "Wyzie 서버가 HTTP {{status}}을(를) 반환했습니다.",
+        "rateLimit": "API 키가 비율 제한을 초과했습니다.",
+        "networkError": "sub.wyzie.io에 연결하는 동안 네트워크 오류가 발생했습니다. 연결을 확인해주세요."
+      }
+    },
+    "step3": {
+      "title": "설치 및 적용",
+      "openFramezoo": "오픈 프레임주",
+      "openFramezooDisabledTooltip": "로그인한 동안 Framezoo Desktop에서 열어야 합니다.",
+      "copied": "복사되었습니다!",
+      "noticeLabel": "알아채다:",
+      "copyManifest": "매니페스트 URL 복사",
+      "noticeText": "귀하의 API 키는 귀하의 기기에 안전하게 저장됩니다. 영화 및 시리즈의 자막을 검색하고 검색하는 경우에만 전달됩니다. 언제든지 업데이트하거나 제거할 수 있습니다.",
+      "notConnectedNotice": "참고: Framezoo 계정 티켓과 연결되어 있지 않습니다. 'Open Framezoo'와 직접 동기화하려면 로그인한 상태에서 Framezoo Desktop 앱에서 이 페이지를 여세요. 그렇지 않은 경우 아래 매니페스트 URL을 복사하여 사용하세요."
+    }
   }
 }

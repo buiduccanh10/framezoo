@@ -1,6 +1,7 @@
 import { updateSettings } from "@/backend/accounts/settings";
 import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
+import { resolvePublicUrl } from "@/utils/publicUrl";
 import { queryClient } from "@/utils/queryClient";
 
 import type { InstalledAddon } from "./types";
@@ -15,12 +16,35 @@ export function getNativeSubtitlesAddon(): InstalledAddon {
     (config.BACKEND_URLS.length > 0 ? config.BACKEND_URLS[0] : "") ||
     "";
   const backendBase = rawBackendUrl ? rawBackendUrl.replace(/\/+$/, "") : "";
-  const manifestUrl = backendBase
-    ? `${backendBase}/addon/subtitles/manifest.json`
+  const isLocalBackend =
+    backendBase.includes("localhost") || backendBase.includes("127.0.0.1");
+  const appDomain = (config.APP_DOMAIN || "https://framezoo.top")
+    .trim()
+    .replace(/\/+$/, "");
+  // In production / non-local setups, route addon traffic via appDomain (framezoo.top/addon/...)
+  // to avoid exposing the direct backend API endpoint.
+  const base = isLocalBackend ? backendBase : appDomain || backendBase;
+  const manifestUrl = base
+    ? `${base}/addon/subtitles/manifest.json`
     : "/addon/subtitles/manifest.json";
-  const baseUrl = backendBase
-    ? `${backendBase}/addon/subtitles/`
-    : "/addon/subtitles/";
+  const baseUrl = base ? `${base}/addon/subtitles/` : "/addon/subtitles/";
+  const logoUrl =
+    resolvePublicUrl("/addon-subtitles-logo.png") ||
+    "https://framezoo.top/favicon-192.png";
+
+  const frontendOrigin = (() => {
+    if (appDomain && appDomain !== "https://framezoo.top") {
+      return appDomain;
+    }
+    if (
+      typeof window !== "undefined" &&
+      window.location.origin &&
+      window.location.origin.startsWith("http")
+    ) {
+      return window.location.origin;
+    }
+    return appDomain || "https://framezoo.top";
+  })();
 
   return {
     manifestUrl,
@@ -31,11 +55,14 @@ export function getNativeSubtitlesAddon(): InstalledAddon {
       name: "Framezoo Subtitles",
       description:
         "Native subtitle provider (Wyzie, OpenSubtitles, SubSource, Granite)",
+      logo: logoUrl,
       resources: ["subtitles"],
       types: ["movie", "series"],
       catalogs: [],
       behaviorHints: {
-        configurable: false,
+        configurable: true,
+        configurationRequired: false,
+        configurationUrl: `${frontendOrigin}/addon/subtitles/configure`,
       },
     },
     enabled: true,

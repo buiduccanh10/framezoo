@@ -213,5 +213,59 @@
     "momoImageAlt": "MoMo donation QR-kode",
     "viewQr": "Se QR-koden større",
     "paypalImageAlt": "PayPal donation QR-kode"
+  },
+  "subtitlesConfigure": {
+    "hero": {
+      "description": "Konfigurer din personlige Wyzie API-nøgle for at få hurtigere undertekster og omgå delte fællesskabshastighedsgrænser.",
+      "title": "Konfigurer Framezoo-undertekster"
+    },
+    "pageTitle": "Konfigurer Framezoo Undertekster | Framezoo",
+    "account": {
+      "desktopLinked": "Desktop linket",
+      "verifying": "Bekræfter kontobillet fra desktop-app...",
+      "saveButton": "Gem på Framezoo-konto",
+      "configuringFor": "Konfiguration for konto:",
+      "saving": "Gemmer på konto...",
+      "instantHint": "(Synkroniserer til Desktop App øjeblikkeligt)",
+      "saveSuccess": "Gemt på din konto! Desktop App vil nu bruge denne nøgle automatisk.",
+      "saveNetworkError": "Netværksfejl under lagring på konto.",
+      "saveFailed": "Gem mislykkedes."
+    },
+    "step1": {
+      "title": "Få din gratis Wyzie API-nøgle",
+      "step1": "Besøg linket ovenfor for at få eller indløse en API-nøgle.",
+      "description": "Wyzie Subtitles giver et enormt flersproget undertekstkatalog. Du kan generere eller indløse din personlige API-nøgle på deres officielle portal:",
+      "step3": "Vend tilbage hertil og indsæt det i trin 2 nedenfor.",
+      "step2": "Kopiér den genererede API-nøglestreng.",
+      "openStore": "Åbn Wyzie Store (indløs)"
+    },
+    "step2": {
+      "show": "Vise",
+      "hide": "Skjule",
+      "placeholder": "Indsæt din Wyzie API-nøgle her...",
+      "testing": "Bekræfter...",
+      "title": "Indtast Wyzie API Key",
+      "clearButton": "Ryd nøgle",
+      "testButton": "Test API-nøgle",
+      "messages": {
+        "valid": "API-nøgle er gyldig og virker!",
+        "empty": "Indtast venligst en API-nøgle før test.",
+        "serverError": "Wyzie-serveren returnerede HTTP {{status}}.",
+        "invalid": "API-nøglen er ugyldig eller udløbet.",
+        "rateLimit": "API-nøgle har overskredet hastighedsgrænserne.",
+        "verifying": "Bekræfter med Wyzie...",
+        "networkError": "Netværksfejl ved forbindelse til sub.wyzie.io. Tjek venligst din forbindelse."
+      }
+    },
+    "step3": {
+      "copied": "Kopieret!",
+      "noticeLabel": "Meddelelse:",
+      "openFramezoo": "Åbn Framezoo",
+      "title": "Installer og anvend",
+      "openFramezooDisabledTooltip": "Kræver åbning fra Framezoo Desktop, mens du er logget ind",
+      "copyManifest": "Kopiér Manifest URL",
+      "notConnectedNotice": "Bemærk: Du er ikke forbundet med en Framezoo-kontobillet. For at synkronisere direkte med 'Open Framezoo' skal du åbne denne side fra din Framezoo Desktop-app, mens du er logget ind. Ellers kopier Manifest-URL'en nedenfor for at bruge den.",
+      "noticeText": "Din API-nøgle er opbevaret sikkert på din enhed. Den videresendes kun for at søge og hente undertekster til film og serier. Du kan opdatere eller fjerne den når som helst."
+    }
   }
 }
