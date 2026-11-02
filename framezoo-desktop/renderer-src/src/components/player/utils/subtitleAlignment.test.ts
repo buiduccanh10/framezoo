@@ -3,7 +3,6 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const alignmentMocks = vi.hoisted(() => ({
   extractAudioWindow: vi.fn(),
   mwFetch: vi.fn(),
-  alignWindowsLocal: vi.fn(),
 }));
 
 vi.mock("./audioCapture", () => ({
@@ -12,14 +11,6 @@ vi.mock("./audioCapture", () => ({
 vi.mock("@/backend/helpers/fetch", () => ({
   mwFetch: alignmentMocks.mwFetch,
 }));
-vi.mock("@/sync/aligner", async () => {
-  const actual =
-    await vi.importActual<typeof import("@/sync/aligner")>("@/sync/aligner");
-  return {
-    ...actual,
-    alignWindowsLocal: alignmentMocks.alignWindowsLocal,
-  };
-});
 vi.mock("@/setup/config", () => ({
   conf: () => ({ BACKEND_URL: "http://backend" }),
 }));
@@ -51,19 +42,12 @@ describe("subtitle alignment client", () => {
     alignmentMocks.extractAudioWindow.mockResolvedValue(
       new Uint8Array([1, 2, 3]),
     );
-    alignmentMocks.alignWindowsLocal.mockResolvedValue({
-      aligned: true,
-      offsetMs: -2000,
-      confidence: 90,
-      speechIntervals: [{ startMs: 0, endMs: 1000 }],
-      reason: null,
-    });
     alignmentMocks.mwFetch.mockResolvedValue({
       results: { primary: baseResult },
     });
   });
 
-  it("aligns on-device without network calls when local VAD+FFT succeeds", async () => {
+  it("always sends captured windows to the backend alignment core", async () => {
     const result = await alignSubtitlesWithCurrentStream({
       sourceUrl: "https://example.test/video.m3u8",
       startAt: 0,
@@ -74,14 +58,10 @@ describe("subtitle alignment client", () => {
 
     expect(result.results.primary?.aligned).toBe(true);
     expect(result.results.primary?.offsetMs).toBe(-2000);
-    expect(alignmentMocks.mwFetch).not.toHaveBeenCalled();
+    expect(alignmentMocks.mwFetch).toHaveBeenCalledTimes(1);
   });
 
-  it("falls back to uploading every captured window when local inference fails", async () => {
-    alignmentMocks.alignWindowsLocal.mockRejectedValue(
-      new Error("local model unavailable"),
-    );
-
+  it("uploads every captured window to the backend", async () => {
     const result = await alignSubtitlesWithCurrentStream({
       sourceUrl: "https://example.test/video.m3u8",
       startAt: 0,
@@ -99,8 +79,6 @@ describe("subtitle alignment client", () => {
   });
 
   it("keeps full timeline evidence when a later playback position is synced", async () => {
-    alignmentMocks.alignWindowsLocal.mockRejectedValue(new Error("use server"));
-
     await alignSubtitlesWithCurrentStream({
       sourceUrl: "https://example.test/video.m3u8",
       startAt: 600,

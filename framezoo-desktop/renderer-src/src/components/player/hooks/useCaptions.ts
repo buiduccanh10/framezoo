@@ -416,7 +416,6 @@ export function useCaptions() {
           target,
           result,
           currentCaption,
-          inputVttData,
           baseVttData,
         } of applicableTargets) {
           if (!result || !currentCaption) continue;
@@ -506,12 +505,7 @@ export function useCaptions() {
         });
       }
     },
-    [
-      resetSubtitleSpecificSettings,
-      setCaption,
-      setSecondaryCaption,
-      setSubtitleSyncState,
-    ],
+    [setCaption, setSecondaryCaption, setSubtitleSyncState],
   );
 
   const captions = useMemo(

@@ -69,6 +69,7 @@ const DESKTOP_RELEASE_OWNER = "buiduccanh10";
 const DESKTOP_RELEASE_REPO = "framezoo-desktop-releases";
 const DESKTOP_APP_UPDATE_CHECK_INTERVAL_MS = 60 * 60 * 1000;
 const DESKTOP_SETTINGS_ROUTE = "/settings";
+const SECURE_STORE_KEYS = new Set(["saved_login", "auth_session"]);
 const EXTENSION_REQUEST_TIMEOUT_MS = 15_000;
 const DEFAULT_TORRENT_MAX_BYTES = 5 * 1024 * 1024 * 1024;
 const TORRENT_PROFILES = new Set<TorrentProfile>([
@@ -1619,7 +1620,10 @@ function getOrCreateMainWindow() {
 function readSecureStore() {
   try {
     const p = path.join(app.getPath("userData"), "secure_store.json");
-    return JSON.parse(fs.readFileSync(p, "utf8"));
+    const parsed = JSON.parse(fs.readFileSync(p, "utf8"));
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed)
+      ? parsed
+      : {};
   } catch {
     return {};
   }
@@ -1628,16 +1632,67 @@ function readSecureStore() {
 function writeSecureStore(data: any) {
   try {
     const p = path.join(app.getPath("userData"), "secure_store.json");
-    fs.writeFileSync(p, JSON.stringify(data), "utf8");
+    fs.writeFileSync(p, JSON.stringify(data), {
+      encoding: "utf8",
+      mode: 0o600,
+    });
+    try {
+      fs.chmodSync(p, 0o600);
+    } catch {
+      // Ignore platforms without chmod support.
+    }
   } catch (err) {
     console.error("Failed to write secure store", err);
+  }
+}
+
+function isTrustedRendererSender(
+  event: {
+    sender: Electron.WebContents;
+    senderFrame?: Electron.WebFrameMain | null;
+  },
+  options: { allowPip?: boolean } = {},
+) {
+  const isMainSender =
+    mainWindow &&
+    !mainWindow.isDestroyed() &&
+    event.sender === mainWindow.webContents;
+  const pipWindow = options.allowPip ? desktopPipController.getWindow() : null;
+  const isPipSender =
+    pipWindow &&
+    !pipWindow.isDestroyed() &&
+    event.sender === pipWindow.webContents;
+  return Boolean(
+    (isMainSender || isPipSender) &&
+    event.senderFrame &&
+    isAllowedRendererUrl(event.senderFrame.url),
+  );
+}
+
+function requireTrustedRendererSender(
+  event: {
+    sender: Electron.WebContents;
+    senderFrame?: Electron.WebFrameMain | null;
+  },
+  options: { allowPip?: boolean } = {},
+) {
+  if (!isTrustedRendererSender(event, options)) {
+    throw new Error("Unauthorized renderer IPC sender");
   }
 }
 
 function registerIpcHandlers() {
   ipcMain.handle(
     "desktop:secure-store-save",
-    async (_event, key: string, value: string) => {
+    async (event, key: string, value: string) => {
+      requireTrustedRendererSender(event);
+      if (
+        !SECURE_STORE_KEYS.has(key) ||
+        typeof value !== "string" ||
+        value.length > 256 * 1024
+      ) {
+        return false;
+      }
       if (safeStorage.isEncryptionAvailable()) {
         try {
           const encrypted = safeStorage.encryptString(value);
@@ -1653,7 +1708,9 @@ function registerIpcHandlers() {
     },
   );
 
-  ipcMain.handle("desktop:secure-store-get", async (_event, key: string) => {
+  ipcMain.handle("desktop:secure-store-get", async (event, key: string) => {
+    requireTrustedRendererSender(event);
+    if (!SECURE_STORE_KEYS.has(key)) return null;
     if (safeStorage.isEncryptionAvailable()) {
       const store = readSecureStore();
       const encryptedBase64 = store[key];
@@ -1670,25 +1727,32 @@ function registerIpcHandlers() {
     return null;
   });
 
-  ipcMain.handle("desktop:secure-store-remove", async (_event, key: string) => {
+  ipcMain.handle("desktop:secure-store-remove", async (event, key: string) => {
+    requireTrustedRendererSender(event);
+    if (!SECURE_STORE_KEYS.has(key)) return false;
     const store = readSecureStore();
     delete store[key];
     writeSecureStore(store);
+    return true;
   });
 
-  ipcMain.handle("desktop:app-update-get-state", async () => {
+  ipcMain.handle("desktop:app-update-get-state", async (event) => {
+    requireTrustedRendererSender(event);
     return desktopAppUpdater.getState();
   });
 
-  ipcMain.handle("desktop:app-update-check", async () => {
+  ipcMain.handle("desktop:app-update-check", async (event) => {
+    requireTrustedRendererSender(event);
     return desktopAppUpdater.checkForUpdate();
   });
 
-  ipcMain.handle("desktop:app-update-download", async () => {
+  ipcMain.handle("desktop:app-update-download", async (event) => {
+    requireTrustedRendererSender(event);
     return desktopAppUpdater.downloadUpdate();
   });
 
-  ipcMain.handle("desktop:app-update-install", async () => {
+  ipcMain.handle("desktop:app-update-install", async (event) => {
+    requireTrustedRendererSender(event);
     return desktopAppUpdater.installUpdate();
   });
 
@@ -1709,32 +1773,43 @@ function registerIpcHandlers() {
 
   ipcMain.handle(
     "desktop:addon-manifest",
-    async (_event, manifestUrl: string) => {
+    async (event, manifestUrl: string) => {
+      requireTrustedRendererSender(event);
+      if (typeof manifestUrl !== "string" || manifestUrl.length > 8192) {
+        throw new Error("Invalid addon manifest URL");
+      }
       return addonProtocolEngine.loadManifest(manifestUrl);
     },
   );
 
   ipcMain.handle(
     "desktop:addon-request",
-    async (_event, request: AddonProtocolRequest) => {
+    async (event, request: AddonProtocolRequest) => {
+      requireTrustedRendererSender(event);
+      if (!request || typeof request !== "object") {
+        throw new Error("Invalid addon request");
+      }
       return addonProtocolEngine.request(request);
     },
   );
 
-  ipcMain.handle("desktop:open-external", async (_event, url: string) => {
-    if (!/^https?:\/\//i.test(url)) return false;
+  ipcMain.handle("desktop:open-external", async (event, url: string) => {
+    requireTrustedRendererSender(event);
+    if (typeof url !== "string" || !/^https?:\/\//i.test(url)) return false;
     await shell.openExternal(url);
     return true;
   });
 
-  ipcMain.handle("desktop:show-settings-placeholder", async () => {
+  ipcMain.handle("desktop:show-settings-placeholder", async (event) => {
+    requireTrustedRendererSender(event);
     await showDesktopSettings();
     return true;
   });
 
   ipcMain.handle(
     "desktop:pip-open",
-    async (_event, nextState: any, nextWindowSize: any) => {
+    async (event, nextState: any, nextWindowSize: any) => {
+      requireTrustedRendererSender(event);
       return desktopPipController.open(
         nextState ?? null,
         nextWindowSize ?? null,
@@ -1746,11 +1821,13 @@ function registerIpcHandlers() {
     return desktopPipController.ready(event.sender);
   });
 
-  ipcMain.handle("desktop:pip-activate", async () => {
+  ipcMain.handle("desktop:pip-activate", async (event) => {
+    requireTrustedRendererSender(event);
     return desktopPipController.activate();
   });
 
-  ipcMain.handle("desktop:pip-update", async (_event, nextState: any) => {
+  ipcMain.handle("desktop:pip-update", async (event, nextState: any) => {
+    requireTrustedRendererSender(event, { allowPip: true });
     return desktopPipController.update(nextState ?? null);
   });
 
@@ -1762,7 +1839,8 @@ function registerIpcHandlers() {
     return desktopPipController.snap(event.sender);
   });
 
-  ipcMain.handle("desktop:pip-close", async () => {
+  ipcMain.handle("desktop:pip-close", async (event) => {
+    requireTrustedRendererSender(event, { allowPip: true });
     const didClose = desktopPipController.close();
     if (!didClose) {
       notifyMainWindowDesktopPipClosed();
@@ -1770,29 +1848,34 @@ function registerIpcHandlers() {
     return didClose;
   });
 
-  ipcMain.handle("desktop:pip-get-state", async () => {
+  ipcMain.handle("desktop:pip-get-state", async (event) => {
+    requireTrustedRendererSender(event, { allowPip: true });
     return desktopPipController.getState();
   });
 
-  ipcMain.handle("desktop:pip-action", async (_event, action: any) => {
+  ipcMain.handle("desktop:pip-action", async (event, action: any) => {
+    requireTrustedRendererSender(event, { allowPip: true });
     if (!mainWindow || mainWindow.isDestroyed()) return false;
     sendToMainWindow("desktop:pip-action", action);
     return true;
   });
 
-  ipcMain.handle("desktop:focus-main-window", async () => {
+  ipcMain.handle("desktop:focus-main-window", async (event) => {
+    requireTrustedRendererSender(event, { allowPip: true });
     if (!mainWindow || mainWindow.isDestroyed()) return false;
     focusMainWindow(mainWindow);
     return true;
   });
 
-  ipcMain.handle("desktop:toggle-fullscreen", async () => {
+  ipcMain.handle("desktop:toggle-fullscreen", async (event) => {
+    requireTrustedRendererSender(event);
     if (!mainWindow || mainWindow.isDestroyed()) return false;
     togglePlayerFullScreen();
     return true;
   });
 
-  ipcMain.handle("desktop:exit-player-fullscreen", async () => {
+  ipcMain.handle("desktop:exit-player-fullscreen", async (event) => {
+    requireTrustedRendererSender(event);
     if (!mainWindow || mainWindow.isDestroyed()) return false;
     exitPlayerFullScreen();
     return true;
@@ -1800,28 +1883,33 @@ function registerIpcHandlers() {
 
   ipcMain.handle(
     "desktop:set-fullscreen",
-    async (_event, fullscreen: boolean) => {
+    async (event, fullscreen: boolean) => {
+      requireTrustedRendererSender(event);
       if (!mainWindow || mainWindow.isDestroyed()) return false;
       setAppFullScreen(Boolean(fullscreen), "user");
       return true;
     },
   );
 
-  ipcMain.handle("desktop:exit-fullscreen", async () => {
+  ipcMain.handle("desktop:exit-fullscreen", async (event) => {
+    requireTrustedRendererSender(event);
     if (!mainWindow || mainWindow.isDestroyed()) return false;
     setAppFullScreen(false, "user");
     return true;
   });
 
-  ipcMain.handle("desktop:get-fullscreen-state", async () => {
+  ipcMain.handle("desktop:get-fullscreen-state", async (event) => {
+    requireTrustedRendererSender(event);
     return isAppFullScreen();
   });
 
-  ipcMain.handle("desktop:minimize-window", async () => {
+  ipcMain.handle("desktop:minimize-window", async (event) => {
+    requireTrustedRendererSender(event);
     return safeMinimizeWindow();
   });
 
-  ipcMain.handle("desktop:maximize-window", async () => {
+  ipcMain.handle("desktop:maximize-window", async (event) => {
+    requireTrustedRendererSender(event);
     if (!mainWindow || mainWindow.isDestroyed()) return false;
     if (process.platform === "win32") {
       if (mainWindow.isMaximized()) {
@@ -1890,7 +1978,8 @@ function registerIpcHandlers() {
     return true;
   });
 
-  ipcMain.handle("desktop:close-window", async () => {
+  ipcMain.handle("desktop:close-window", async (event) => {
+    requireTrustedRendererSender(event);
     if (!mainWindow || mainWindow.isDestroyed()) return false;
     mainWindow.close();
     return true;
@@ -1898,7 +1987,8 @@ function registerIpcHandlers() {
 
   ipcMain.handle(
     "desktop:resize-to-video",
-    async (_event, videoWidth: number, videoHeight: number) => {
+    async (event, videoWidth: number, videoHeight: number) => {
+      requireTrustedRendererSender(event);
       if (!mainWindow || mainWindow.isDestroyed()) return false;
       if (
         !Number.isFinite(videoWidth) ||
@@ -1946,7 +2036,8 @@ function registerIpcHandlers() {
     },
   );
 
-  ipcMain.handle("desktop:is-maximized", async () => {
+  ipcMain.handle("desktop:is-maximized", async (event) => {
+    requireTrustedRendererSender(event);
     if (!mainWindow || mainWindow.isDestroyed()) return false;
     return mainWindow.isMaximized();
   });
@@ -1955,7 +2046,8 @@ function registerIpcHandlers() {
 
   ipcMain.handle(
     "desktop:torrent-start",
-    async (_event, request: TorrentStartRequest) => {
+    async (event, request: TorrentStartRequest) => {
+      requireTrustedRendererSender(event);
       if (!request || typeof request.sourceId !== "string") {
         throw new Error("invalid torrent start request");
       }
@@ -1984,19 +2076,22 @@ function registerIpcHandlers() {
     },
   );
 
-  ipcMain.handle("desktop:torrent-stop", async (_event, sessionId: string) => {
+  ipcMain.handle("desktop:torrent-stop", async (event, sessionId: string) => {
+    requireTrustedRendererSender(event);
     await torrentManager.stop(sessionId);
     return true;
   });
 
   ipcMain.handle(
     "desktop:torrent-get-status",
-    async (_event, sessionId: string) => {
+    async (event, sessionId: string) => {
+      requireTrustedRendererSender(event);
       return torrentManager.getStatus(sessionId);
     },
   );
 
-  ipcMain.handle("desktop:torrent-get-storage-info", async () => {
+  ipcMain.handle("desktop:torrent-get-storage-info", async (event) => {
+    requireTrustedRendererSender(event);
     const torrentDir = getTorrentDataDir();
     let usedBytes = 0;
     try {
@@ -2039,7 +2134,8 @@ function registerIpcHandlers() {
 
   ipcMain.handle(
     "desktop:set-torrent-settings",
-    async (_event, input: unknown) => {
+    async (event, input: unknown) => {
+      requireTrustedRendererSender(event);
       if (!input || typeof input !== "object") return false;
       const next = input as Partial<TorrentSettings>;
       if (
@@ -2089,7 +2185,8 @@ function registerIpcHandlers() {
     },
   );
 
-  ipcMain.handle("desktop:torrent-select-cache-root", async () => {
+  ipcMain.handle("desktop:torrent-select-cache-root", async (event) => {
+    requireTrustedRendererSender(event);
     const result = mainWindow
       ? await dialog.showOpenDialog(mainWindow, {
           properties: ["openDirectory", "createDirectory"],
@@ -2100,7 +2197,8 @@ function registerIpcHandlers() {
     return result.canceled ? null : (result.filePaths[0] ?? null);
   });
 
-  ipcMain.handle("desktop:torrent-clear-storage", async () => {
+  ipcMain.handle("desktop:torrent-clear-storage", async (event) => {
+    requireTrustedRendererSender(event);
     // Restart the torrent engine first so it drops all in-memory libtorrent
     // handles. Otherwise, it will retain piece states for deleted files.
     await torrentManager.restartEngine();
@@ -2124,13 +2222,21 @@ function registerIpcHandlers() {
 
   // Warmup IPC: renderer can query the current warmup state or trigger a
   // manual re-warmup (e.g. after the user grants network permission).
-  ipcMain.handle("desktop:torrent-warmup-state", () => torrentWarmupState);
-  ipcMain.handle("desktop:torrent-warmup", async () => {
+  ipcMain.handle("desktop:torrent-warmup-state", (event) => {
+    requireTrustedRendererSender(event);
+    return torrentWarmupState;
+  });
+  ipcMain.handle("desktop:torrent-warmup", async (event) => {
+    requireTrustedRendererSender(event);
     await runTorrentWarmup();
     return torrentWarmupState;
   });
-  ipcMain.handle("desktop:native-warmup-state", () => getStartupWarmupState());
-  ipcMain.handle("desktop:native-warmup-wait", async () => {
+  ipcMain.handle("desktop:native-warmup-state", (event) => {
+    requireTrustedRendererSender(event);
+    return getStartupWarmupState();
+  });
+  ipcMain.handle("desktop:native-warmup-wait", async (event) => {
+    requireTrustedRendererSender(event);
     await runStartupNativeWarmup();
     return getStartupWarmupState();
   });

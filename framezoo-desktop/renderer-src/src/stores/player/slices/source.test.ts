@@ -4,7 +4,12 @@ import type { DisplayInterface } from "@/components/player/display/displayInterf
 import { queryClient } from "@/utils/queryClient";
 
 import { usePlayerStore } from "../store";
-import { playerStatus, type Caption, type CaptionListItem, type PlayerMeta } from "./source";
+import {
+  type Caption,
+  type CaptionListItem,
+  type PlayerMeta,
+  playerStatus,
+} from "./source";
 import type { SourceSliceSource } from "../utils/qualities";
 
 const subtitleMocks = vi.hoisted(() => ({

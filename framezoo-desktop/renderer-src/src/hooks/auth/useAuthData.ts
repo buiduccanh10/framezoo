@@ -31,10 +31,9 @@ import { useThemeStore } from "@/stores/theme";
 import { useWatchHistoryStore } from "@/stores/watchHistory";
 
 export function useAuthData() {
-  const loggedIn = !!useAuthStore((s) => s.account);
+  const loggedIn = useAuthStore((s) => s.authHydrated && !!s.account);
   const setAccount = useAuthStore((s) => s.setAccount);
   const removeAccount = useAuthStore((s) => s.removeAccount);
-  const setProxySet = useAuthStore((s) => s.setProxySet);
   const clearBookmarks = useBookmarkStore((s) => s.clear);
   const clearProgress = useProgressStore((s) => s.clear);
   const clearWatchHistory = useWatchHistoryStore((s) => s.clear);
@@ -45,8 +44,6 @@ export function useAuthData() {
     (s) => s.importSubtitleLanguage,
   );
   const setFebboxKey = usePreferencesStore((s) => s.setFebboxKey);
-  const setdebridToken = usePreferencesStore((s) => s.setdebridToken);
-  const setdebridService = usePreferencesStore((s) => s.setdebridService);
 
   const replaceBookmarks = useBookmarkStore((s) => s.replaceBookmarks);
   const replaceItems = useProgressStore((s) => s.replaceItems);
@@ -58,12 +55,6 @@ export function useAuthData() {
   );
 
   const setProxyTmdb = usePreferencesStore((s) => s.setProxyTmdb);
-  const setEnableDoubleClickToSeek = usePreferencesStore(
-    (s) => s.setEnableDoubleClickToSeek,
-  );
-  const setEnableAutoResumeOnPlaybackError = usePreferencesStore(
-    (s) => s.setEnableAutoResumeOnPlaybackError,
-  );
   const setEnableNumberKeySeeking = usePreferencesStore(
     (s) => s.setEnableNumberKeySeeking,
   );
@@ -175,16 +166,9 @@ export function useAuthData() {
       setAppLanguage,
       importSubtitleLanguage,
       setTheme,
-      setProxySet,
-
       setEnableAutoplay,
       setEnableSkipCredits,
       setProxyTmdb,
-      setFebboxKey,
-      setdebridToken,
-      setdebridService,
-      setEnableDoubleClickToSeek,
-      setEnableAutoResumeOnPlaybackError,
       setEnableNumberKeySeeking,
       setKeyboardShortcuts,
     ],

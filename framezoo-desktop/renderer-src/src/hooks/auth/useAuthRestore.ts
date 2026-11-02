@@ -8,6 +8,7 @@ const AUTH_CHECK_INTERVAL = 12 * 60 * 60 * 1000;
 
 export function useAuthRestore() {
   const { account } = useAuthStore();
+  const hydrateAuthSecrets = useAuthStore((s) => s.hydrateAuthSecrets);
   const { restore } = useAuth();
   const hasRestored = useRef(false);
 
@@ -16,11 +17,13 @@ export function useAuthRestore() {
   }, AUTH_CHECK_INTERVAL);
 
   const result = useAsync(async () => {
-    if (hasRestored.current || !account) return;
-    await restore(account).finally(() => {
+    await hydrateAuthSecrets();
+    const hydratedAccount = useAuthStore.getState().account;
+    if (hasRestored.current || !hydratedAccount) return;
+    await restore(hydratedAccount).finally(() => {
       hasRestored.current = true;
     });
-  }, []); // no deps because we don't want to it ever rerun after the first time
+  }, [hydrateAuthSecrets]);
 
   return result;
 }
