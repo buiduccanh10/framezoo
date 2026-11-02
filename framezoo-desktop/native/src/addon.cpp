@@ -1967,7 +1967,9 @@ napi_value load_player(napi_env env, napi_callback_info info) {
       set_mpv_property(
           player.get(),
           "framedrop",
-          is_torrent ? "no" : "vo"
+          // Drop stale video frames after a window is occluded or regains
+          // focus; audio remains the clock for torrent playback.
+          "vo"
       ) < 0
   ) {
     return throw_error(env, "libmpv frame drop configuration failed");
