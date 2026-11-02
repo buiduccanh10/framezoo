@@ -18,7 +18,10 @@ export default defineEventHandler(async event => {
   const type = rawType === 'series' ? 'series' : 'movie';
   const idStr = Array.isArray(rawIdParam) ? rawIdParam.join('/') : rawIdParam;
 
-  const host = getRequestHeader(event, 'host') || 'localhost:3000';
+  const host =
+    getRequestHeader(event, 'x-forwarded-host') ||
+    getRequestHeader(event, 'host') ||
+    'localhost:3000';
   const proto = getRequestHeader(event, 'x-forwarded-proto') || 'http';
   const origin = `${proto}://${host}`;
   const subsourceDownloadBaseUrl = `${origin}/addon/subtitles/download/subsource`;

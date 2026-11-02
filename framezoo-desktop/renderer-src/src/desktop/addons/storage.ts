@@ -15,12 +15,18 @@ export function getNativeSubtitlesAddon(): InstalledAddon {
     (config.BACKEND_URLS.length > 0 ? config.BACKEND_URLS[0] : "") ||
     "";
   const backendBase = rawBackendUrl ? rawBackendUrl.replace(/\/+$/, "") : "";
-  const manifestUrl = backendBase
-    ? `${backendBase}/addon/subtitles/manifest.json`
+  const isLocalBackend =
+    backendBase.includes("localhost") || backendBase.includes("127.0.0.1");
+  const appDomain = (config.APP_DOMAIN || "https://framezoo.top")
+    .trim()
+    .replace(/\/+$/, "");
+  // In production / non-local setups, route addon traffic via appDomain (framezoo.top/addon/...)
+  // to avoid exposing the direct backend API endpoint.
+  const base = isLocalBackend ? backendBase : appDomain || backendBase;
+  const manifestUrl = base
+    ? `${base}/addon/subtitles/manifest.json`
     : "/addon/subtitles/manifest.json";
-  const baseUrl = backendBase
-    ? `${backendBase}/addon/subtitles/`
-    : "/addon/subtitles/";
+  const baseUrl = base ? `${base}/addon/subtitles/` : "/addon/subtitles/";
 
   return {
     manifestUrl,

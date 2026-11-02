@@ -42,9 +42,12 @@ function getBackendOrigins(): string[] {
     typeof window !== "undefined" && window.location?.origin
       ? window.location.origin
       : "";
-  const urls = [config.BACKEND_URL, ...config.BACKEND_URLS, origin].filter(
-    (value): value is string => Boolean(value),
-  );
+  const urls = [
+    config.BACKEND_URL,
+    ...config.BACKEND_URLS,
+    config.APP_DOMAIN,
+    origin,
+  ].filter((value): value is string => Boolean(value));
 
   return Array.from(
     new Set(
