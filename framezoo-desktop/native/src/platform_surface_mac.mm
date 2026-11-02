@@ -392,9 +392,9 @@ NativeSurface* surface_create(
   surface->gl_layer.opaque = YES;
   surface->gl_layer.asynchronous = NO;
   surface->gl_layer.needsDisplayOnBoundsChange = YES;
-  surface->gl_layer.contentsFormat = float_pixel_format
-      ? kCAContentsFormatRGBA16Float
-      : kCAContentsFormatRGBA8Uint;
+  if (@available(macOS 10.12, *)) {
+    surface->gl_layer.contentsFormat = kCAContentsFormatRGBA8Uint;
+  }
   CGColorSpaceRef srgb = CGColorSpaceCreateWithName(kCGColorSpaceSRGB);
   if (srgb) {
     surface->gl_layer.colorspace = srgb;
@@ -465,9 +465,10 @@ void surface_request_paint(NativeSurface* surface) {
   [view retain];
   [gl_layer retain];
   dispatch_async(dispatch_get_main_queue(), ^{
-    paint_requested->store(false, std::memory_order_relaxed);
     if (view.surface && gl_layer.surface) {
       [gl_layer setNeedsDisplay];
+    } else {
+      paint_requested->store(false, std::memory_order_relaxed);
     }
     [gl_layer release];
     [view release];
@@ -661,6 +662,11 @@ void surface_set_hdr_mode(
     if (color_space) {
       gl_layer.colorspace = color_space;
       CGColorSpaceRelease(color_space);
+    }
+    if (@available(macOS 10.12, *)) {
+      gl_layer.contentsFormat = (enabled && surface->float_pixel_format)
+          ? kCAContentsFormatRGBA16Float
+          : kCAContentsFormatRGBA8Uint;
     }
     if (
         [gl_layer respondsToSelector:@selector(

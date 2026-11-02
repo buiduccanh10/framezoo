@@ -158,6 +158,18 @@ export function Container(props: PlayerProps) {
         <WatchPartyResetter />
         <AutoSkipSegments />
         <div className="relative h-screen overflow-hidden">
+          {status === "playing" && pipMode !== "desktop" && (
+            <div
+              aria-hidden="true"
+              className="pointer-events-none fixed inset-0 select-none"
+              style={{
+                opacity: 0.002,
+                backgroundColor: "rgba(0, 0, 0, 0.01)",
+                transform: "translateZ(0)",
+                willChange: "transform",
+              }}
+            />
+          )}
           <VideoClickTarget showingControls={props.showingControls} />
           <HeadUpdater />
           {props.children}

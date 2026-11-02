@@ -1961,8 +1961,20 @@ class TorrentRuntime:
         range_key = (start, end)
         first_required_piece = min(required_pieces) if required_pieces else None
         last_required_piece = max(required_pieces) if required_pieces else None
-        if getattr(self, "last_range_key", None) != range_key:
+        try:
+            all_ready = all(self.handle.have_piece(p) for p in required_pieces) if required_pieces else True
+        except RuntimeError:
+            all_ready = False
+
+        should_log_wait = (
+            not all_ready
+            or first_required_piece != getattr(self, "_last_wait_logged_piece", None)
+            or is_tail_probe
+            or is_sync
+        )
+        if should_log_wait and getattr(self, "last_range_key", None) != range_key:
             self.last_range_key = range_key
+            self._last_wait_logged_piece = first_required_piece
             total_done_bytes = None
             file_progress_bytes = None
             download_rate = None
@@ -2038,14 +2050,21 @@ class TorrentRuntime:
         if track_position:
             self.maybe_refocus(start)
         required_set = set(required_pieces)
-        self._schedule_pieces(
-            all_pieces,
-            required_set,
-            reason="range",
-            is_sync=is_sync,
-            sync_metadata=sync_metadata,
+        should_schedule = (
+            not all_ready
+            or first_required_piece != getattr(self, "_last_scheduled_piece", None)
+            or is_sync
         )
-        self._start_fast_block_fetch(start, end)
+        if should_schedule:
+            self._last_scheduled_piece = first_required_piece
+            self._schedule_pieces(
+                all_pieces,
+                required_set,
+                reason="range",
+                is_sync=is_sync,
+                sync_metadata=sync_metadata,
+            )
+            self._start_fast_block_fetch(start, end)
 
         blocked_waits = 0
         blocked_replan_count = 0
@@ -2327,8 +2346,6 @@ class TorrentRuntime:
                 sync_metadata=sync_metadata,
             ):
                 return None
-
-            self.flush_piece_cache()
 
             stream.seek(start)
             chunk = stream.read(expected_length)
