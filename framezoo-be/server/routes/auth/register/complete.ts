@@ -12,8 +12,8 @@ const completeSchema = z.object({
   }),
   namespace: z.string().min(1),
   device: z.string().max(500).min(1),
-  nickname: z.string().min(1).max(255),
-  email: z.string().email().max(255),
+  nickname: z.string().trim().min(1).max(255),
+  email: z.string().trim().email().max(255),
   profile: z.object({
     colorA: z.string(),
     colorB: z.string(),
@@ -32,12 +32,14 @@ export default defineEventHandler(async event => {
     });
   }
 
+  const input = result.data;
+
   const challenge = useChallenge();
   try {
     await challenge.verifyChallengeCode(
-      body.challenge.code,
-      body.publicKey,
-      body.challenge.signature,
+      input.challenge.code,
+      input.publicKey,
+      input.challenge.signature,
       'registration',
       'mnemonic'
     );
@@ -48,11 +50,21 @@ export default defineEventHandler(async event => {
     });
   }
 
-  const email = normalizeEmail(body.email);
+  const nickname = input.nickname;
+  const email = normalizeEmail(input.email);
 
-  const existingNickname = await prisma.users.findUnique({
-    where: { nickname: body.nickname },
-  });
+  // Both fields have unique B-tree indexes. Keep these as two indexed lookups
+  // instead of an OR/insensitive scan so the check remains O(log n) as users grow.
+  const [existingNickname, existingEmail] = await Promise.all([
+    prisma.users.findUnique({
+      where: { nickname },
+      select: { id: true },
+    }),
+    prisma.users.findUnique({
+      where: { email },
+      select: { id: true },
+    }),
+  ]);
 
   if (existingNickname) {
     throw createError({
@@ -60,15 +72,6 @@ export default defineEventHandler(async event => {
       message: 'Nickname is already taken',
     });
   }
-
-  const existingEmail = await prisma.users.findFirst({
-    where: {
-      email: {
-        equals: email,
-        mode: 'insensitive',
-      },
-    },
-  });
 
   if (existingEmail) {
     throw createError({
@@ -80,19 +83,32 @@ export default defineEventHandler(async event => {
   const userId = randomUUID();
   const now = new Date();
 
-  const user = await prisma.users.create({
-    data: {
-      id: userId,
-      namespace: body.namespace,
-      public_key: body.publicKey,
-      nickname: body.nickname,
-      email,
-      created_at: now,
-      last_logged_in: now,
-      permissions: [],
-      profile: body.profile,
-    } as any,
-  });
+  let user;
+  try {
+    user = await prisma.users.create({
+      data: {
+        id: userId,
+        namespace: input.namespace,
+        public_key: input.publicKey,
+        nickname,
+        email,
+        created_at: now,
+        last_logged_in: now,
+        permissions: [],
+        profile: input.profile,
+      } as any,
+    });
+  } catch (error) {
+    // The pre-check is only an early response. The unique indexes remain the
+    // authority when concurrent registrations race between check and insert.
+    if (isUniqueConstraintError(error)) {
+      throw createError({
+        statusCode: 409,
+        message: 'Nickname or email is already registered',
+      });
+    }
+    throw error;
+  }
 
   // Ensure default settings exist for new users (theme defaults to amber)
   await prisma.user_settings.upsert({
@@ -106,7 +122,7 @@ export default defineEventHandler(async event => {
 
   const auth = useAuth();
   const userAgent = getRequestHeader(event, 'user-agent');
-  const session = await auth.makeSession(user.id, body.device, userAgent);
+  const session = await auth.makeSession(user.id, input.device, userAgent);
   const { session: hydratedSession, tokens } = await auth.issueTokensForSession(session);
   auth.setAuthCookies(event, tokens);
 
@@ -132,3 +148,7 @@ export default defineEventHandler(async event => {
     oauth: auth.toOAuthTokenResponse(tokens),
   };
 });
+
+function isUniqueConstraintError(error: unknown): boolean {
+  return typeof error === 'object' && error !== null && 'code' in error && error.code === 'P2002';
+}
