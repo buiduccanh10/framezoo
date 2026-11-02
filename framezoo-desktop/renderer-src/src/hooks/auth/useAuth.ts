@@ -337,6 +337,7 @@ export function useAuth() {
   const restore = useCallback(
     async (account: AccountWithToken) => {
       if (!backendUrl) return;
+      if (typeof navigator !== "undefined" && !navigator.onLine) return;
       const { setAccount } = useAuthStore.getState();
 
       let activeAccount = account;
@@ -349,6 +350,9 @@ export function useAuth() {
         );
         activeAccount = useAuthStore.getState().account ?? activeAccount;
       } catch (err) {
+        if (typeof navigator !== "undefined" && !navigator.onLine) {
+          return;
+        }
         const anyError: any = err;
         const status =
           anyError?.response?.status ??
@@ -361,6 +365,9 @@ export function useAuth() {
             // cookie-only auth before surfacing an error to the loading screen.
             user = await getUser(backendUrl);
           } catch (cookieErr) {
+            if (typeof navigator !== "undefined" && !navigator.onLine) {
+              return;
+            }
             const cookieStatus =
               (cookieErr as any)?.response?.status ??
               (cookieErr as any)?.status ??
@@ -377,6 +384,10 @@ export function useAuth() {
           console.error(err);
           throw err;
         }
+      }
+
+      if (typeof navigator !== "undefined" && !navigator.onLine) {
+        return;
       }
 
       const [bookmarks, progress, watchHistory, settings, groupOrder] =
