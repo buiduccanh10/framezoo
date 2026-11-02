@@ -918,7 +918,7 @@ class TorrentRuntime:
             last_stream_start = getattr(self, "_last_stream_start", None) or 0
             if (
                 not startup_tail_pieces
-                or last_stream_start >= constants.STARTUP_HEAD_BYTES
+                or last_stream_start >= constants.STARTUP_PREFETCH_BYTES
                 or all(self._piece_have(piece) for piece in startup_tail_pieces)
             ):
                 return False
