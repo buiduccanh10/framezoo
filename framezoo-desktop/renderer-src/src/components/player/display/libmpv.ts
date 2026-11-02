@@ -818,6 +818,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       targetAudioTrack = resolveDefaultAudioTrack(
         audioTracks,
         currentNativeSelectedTrack,
+        usePlayerStore.getState().meta?.originalLanguage,
       );
       if (
         playerId &&

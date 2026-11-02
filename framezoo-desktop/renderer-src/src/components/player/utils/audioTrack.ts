@@ -54,11 +54,39 @@ export function findDefaultEnglishTrack<
   return nonCommentary ?? englishTracks[0];
 }
 
+export function findDefaultLanguageTrack<
+  T extends { language?: string; label?: string },
+>(tracks: T[], language?: string | null): T | undefined {
+  if (!language) return undefined;
+
+  const targetLanguage = canonicalizeLanguageCode(language);
+  if (targetLanguage === "unknown") return undefined;
+
+  const matchingTracks = tracks.filter((track) =>
+    [track.language, track.label].some(
+      (value) =>
+        typeof value === "string" &&
+        canonicalizeLanguageCode(value) === targetLanguage,
+    ),
+  );
+  if (matchingTracks.length === 0) return undefined;
+
+  return (
+    matchingTracks.find((track) => !isCommentaryTrack(track)) ??
+    matchingTracks[0]
+  );
+}
+
 export function resolveDefaultAudioTrack<T extends AudioTrack>(
   tracks: T[],
   currentTrack: T | null,
+  preferredLanguage?: string | null,
 ): T | null {
   if (tracks.length === 0) return null;
+
+  const preferredTrack = findDefaultLanguageTrack(tracks, preferredLanguage);
+  if (preferredTrack) return preferredTrack;
+
   if (currentTrack && isEnglishAudioTrack(currentTrack)) {
     return currentTrack;
   }
