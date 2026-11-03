@@ -3,6 +3,9 @@ import { useChallenge } from '~/utils/challenge';
 import { useAuth } from '~/utils/auth';
 import { randomUUID } from 'crypto';
 import { normalizeEmail } from '~/utils/accountIdentifier';
+import { verifyOtp } from '~/utils/emailOtp';
+import { sendEmail } from '~/utils/email';
+import { throwOtpHttpError } from '~/utils/otpHttp';
 
 const completeSchema = z.object({
   publicKey: z.string(),
@@ -19,6 +22,10 @@ const completeSchema = z.object({
     colorB: z.string(),
     icon: z.string(),
   }),
+  emailOtp: z.object({
+    challengeId: z.string().uuid(),
+    code: z.string().regex(/^\d{6}$/),
+  }),
 });
 
 export default defineEventHandler(async event => {
@@ -34,19 +41,32 @@ export default defineEventHandler(async event => {
 
   const input = result.data;
 
+  try {
+    await verifyOtp({
+      challengeId: input.emailOtp.challengeId,
+      code: input.emailOtp.code,
+      purpose: 'registration',
+      consume: true,
+      email: input.email,
+    });
+  } catch (error) {
+    throwOtpHttpError(error);
+  }
+
   const challenge = useChallenge();
   try {
-    await challenge.verifyChallengeCode(
+    const challengeArguments = [
       input.challenge.code,
       input.publicKey,
       input.challenge.signature,
       'registration',
-      'mnemonic'
-    );
-  } catch (err: any) {
+      'mnemonic',
+    ] as const;
+    await challenge.verifyChallengeCode(...challengeArguments);
+  } catch (err: unknown) {
     throw createError({
       statusCode: 400,
-      message: err.message || 'Invalid challenge',
+      message: err instanceof Error ? err.message : 'Invalid challenge',
     });
   }
 
@@ -85,18 +105,32 @@ export default defineEventHandler(async event => {
 
   let user;
   try {
-    user = await prisma.users.create({
-      data: {
-        id: userId,
-        namespace: input.namespace,
-        public_key: input.publicKey,
-        nickname,
-        email,
-        created_at: now,
-        last_logged_in: now,
-        permissions: [],
-        profile: input.profile,
-      } as any,
+    user = await prisma.$transaction(async tx => {
+      const createdUser = await tx.users.create({
+        data: {
+          id: userId,
+          namespace: input.namespace,
+          public_key: input.publicKey,
+          nickname,
+          email,
+          created_at: now,
+          last_logged_in: now,
+          email_verified_at: now,
+          permissions: [],
+          profile: input.profile,
+        },
+      });
+
+      await tx.user_settings.upsert({
+        where: { id: createdUser.id },
+        update: {},
+        create: {
+          id: createdUser.id,
+          application_theme: 'ember',
+        },
+      });
+
+      return createdUser;
     });
   } catch (error) {
     // The pre-check is only an early response. The unique indexes remain the
@@ -110,15 +144,15 @@ export default defineEventHandler(async event => {
     throw error;
   }
 
-  // Ensure default settings exist for new users (theme defaults to amber)
-  await prisma.user_settings.upsert({
-    where: { id: user.id },
-    update: {},
-    create: {
-      id: user.id,
-      application_theme: 'ember',
-    },
-  });
+  try {
+    await sendEmail({
+      to: email,
+      template: 'welcome',
+      nickname,
+    });
+  } catch (error) {
+    console.error('Failed to send registration welcome email:', error);
+  }
 
   const auth = useAuth();
   const userAgent = getRequestHeader(event, 'user-agent');
@@ -131,7 +165,7 @@ export default defineEventHandler(async event => {
       id: user.id,
       publicKey: user.public_key,
       namespace: user.namespace,
-      nickname: (user as any).nickname,
+      nickname: user.nickname,
       profile: user.profile,
       permissions: user.permissions,
       email: user.email,

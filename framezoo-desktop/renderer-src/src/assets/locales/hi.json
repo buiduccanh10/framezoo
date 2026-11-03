@@ -116,12 +116,41 @@
       "usePasskey": "पासकी का प्रयोग करें",
       "validationError": "ग़लत या अपूर्ण पासफ़्रेज़"
     },
+    "otp": {
+      "codeLabel": "सत्यापन कोड",
+      "continue": "जारी रखना",
+      "emailNewDescription": "अपने नए ईमेल पर भेजे गए कोड को दर्ज करें।",
+      "emailNewTitle": "अपने नए ईमेल की पुष्टि करें",
+      "emailOldDescription": "अपने वर्तमान ईमेल पर भेजे गए कोड को दर्ज करें।",
+      "emailOldTitle": "अपना वर्तमान ईमेल पता सत्यापित करें",
+      "expired": "सत्यापन कोड की समय सीमा समाप्त हो गई है",
+      "expiresIn": "कोड की समय सीमा {{time}} में समाप्त हो जाएगी",
+      "finish": "खत्म करना",
+      "forgotDescription": "सत्यापन कोड प्राप्त करने के लिए अपना खाता ईमेल दर्ज करें।",
+      "forgotLink": "अपना कूट शब्द भूल गए?",
+      "forgotTitle": "पासवर्ड भूल गए?",
+      "invalid": "अवैध सत्यापन संकेत",
+      "newPasswordDescription": "अपने खाते के लिए एक नया पासवर्ड चुनें।",
+      "newPasswordTitle": "नया पासवर्ड बनाएं",
+      "passwordChangeDescription": "अपने ईमेल पर भेजे गए कोड को दर्ज करें।",
+      "passwordChangeTitle": "पासवर्ड परिवर्तन की पुष्टि करें",
+      "registrationDescription": "अपना खाता बनाने की प्रक्रिया पूरी करने के लिए अपने ईमेल पर भेजा गया कोड दर्ज करें।",
+      "registrationTitle": "अपना ईमेल सत्यापित करें",
+      "requestFailed": "सत्यापन कोड भेजने में असमर्थ",
+      "resend": "पुन: कोड भेजे",
+      "resendFailed": "कोड को दोबारा भेजने में असमर्थ।",
+      "resendIn": "पुनः भेजने की सुविधा {{seconds}} में उपलब्ध है",
+      "resetDescription": "अपने ईमेल पर भेजे गए कोड को दर्ज करें।",
+      "resetTitle": "अपना पासवर्ड रीसेट करें",
+      "send": "कोड भेजें"
+    },
     "register": {
       "confirmPasswordLabel": "पासवर्ड की पुष्टि कीजिये",
       "confirmPasswordPlaceholder": "अपने पासवर्ड की पुष्टि करें",
       "emailInvalid": "एक मान्य ईमेल पता दर्ज करें",
       "emailLabel": "व्यक्तिगत ईमेल",
       "emailPlaceholder": "अपना व्यक्तिगत ईमेल दर्ज करें",
+      "emailTaken": "ईमेल पहले से ही पंजीकृत है",
       "information": {
         "color1": "प्रोफ़ाइल का पहला रंग",
         "color2": "प्रोफ़ाइल का दूसरा रंग",
@@ -141,7 +170,8 @@
       "passwordLabel": "पासवर्ड",
       "passwordMismatch": "सांकेतिक शब्द मेल नहीं खाते",
       "passwordPlaceholder": "एक पासवर्ड बनाएं (आपके पासफ़्रेज़ के रूप में उपयोग किया गया)",
-      "passwordWeak": "पासवर्ड अक्षरों और संख्याओं के साथ कम से कम 8 अक्षर का होना चाहिए"
+      "passwordWeak": "पासवर्ड अक्षरों और संख्याओं के साथ कम से कम 8 अक्षर का होना चाहिए",
+      "submit": "खाता बनाएं"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "संपादन करना",
         "editProfile": "संपादन करना",
+        "emailLabel": "ईमेल",
         "logoutButton": "लॉग आउट",
         "nicknameLabel": "उपनाम",
-        "nicknamePlaceholder": "अपना उपनाम दर्ज करें"
+        "nicknamePlaceholder": "अपना उपनाम दर्ज करें",
+        "noEmail": "कोई ईमेल लिंक नहीं है"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "प्रोफ़ाइल रंग दो",
         "title": "प्रोफाइल तस्वीर को संपादित करें",
         "userIcon": "आइकन"
+      },
+      "security": {
+        "currentEmailLabel": "वर्तमान ईमेल",
+        "emailDescription": "हम आपके वर्तमान और नए ईमेल पतों की पुष्टि करेंगे।",
+        "emailSame": "नया ईमेल आपके वर्तमान ईमेल से अलग होना चाहिए।",
+        "emailTitle": "बदले ई - मेल",
+        "newEmailLabel": "न्यू ईमेल पता",
+        "passwordDescription": "हम आपके खाते के ईमेल पते पर एक सत्यापन कोड भेजेंगे।",
+        "passwordTitle": "पासवर्ड बदलें",
+        "title": "खाता सुरक्षा"
       },
       "register": {
         "cta": "शुरू हो जाओ",
@@ -1451,9 +1494,15 @@
     "close": "बंद करना"
   },
   "toasts": {
+    "emailChangeSuccess": "ईमेल सफलतापूर्वक अपडेट हो गया!",
     "linkCopied": "लिंक क्लिपबोर्ड पर कॉपी किया गया!",
     "loginSuccess": "सफलतापूर्वक लॉग इन हो चुका है!",
     "logoutSuccess": "सफलतापूर्वक लॉग आउट हो गया!",
+    "otpResent": "सत्यापन कोड दोबारा भेज दिया गया है!",
+    "otpSent": "आपके ईमेल पर सत्यापन कोड भेजा गया है!",
+    "passwordChangeSuccess": "पासवर्ड सफलतापूर्वक बदला गया!",
+    "passwordResetError": "पासवर्ड रीसेट करने में विफल",
+    "passwordResetSuccess": "पासवर्ड सफलतापूर्वक रीसेट हो गया!",
     "registerSuccess": "सफलतापूर्वक पंजीकृत!"
   }
 }

@@ -116,12 +116,41 @@
       "usePasskey": "Brug adgangsnøgle",
       "validationError": "Forkert eller ukomplet adgangssætning /ᐠ. .ᐟ\\"
     },
+    "otp": {
+      "codeLabel": "Bekræftelseskode",
+      "continue": "Fortsætte",
+      "emailNewDescription": "Indtast den kode, der er sendt til din nye e-mail.",
+      "emailNewTitle": "Bekræft din nye e-mail",
+      "emailOldDescription": "Indtast den kode, der er sendt til din nuværende e-mail.",
+      "emailOldTitle": "Bekræft din nuværende e-mail",
+      "expired": "Bekræftelseskoden er udløbet",
+      "expiresIn": "Koden udløber om {{time}}",
+      "finish": "Slutte",
+      "forgotDescription": "Indtast din konto-e-mail for at modtage en bekræftelseskode.",
+      "forgotLink": "Glemt din adgangskode?",
+      "forgotTitle": "Glemt adgangskode?",
+      "invalid": "Ugyldig bekræftelseskode",
+      "newPasswordDescription": "Vælg en ny adgangskode til din konto.",
+      "newPasswordTitle": "Opret en ny adgangskode",
+      "passwordChangeDescription": "Indtast den kode, der er sendt til din e-mail.",
+      "passwordChangeTitle": "Bekræft ændring af adgangskode",
+      "registrationDescription": "Indtast den kode, der er sendt til din e-mail, for at afslutte oprettelsen af ​​din konto.",
+      "registrationTitle": "Bekræft din e-mail",
+      "requestFailed": "Kan ikke sende bekræftelseskode",
+      "resend": "Send kode igen",
+      "resendFailed": "Koden kunne ikke sendes igen",
+      "resendIn": "Genafsendelse tilgængelig om {{seconds}}s",
+      "resetDescription": "Indtast den kode, der er sendt til din e-mail.",
+      "resetTitle": "Nulstil din adgangskode",
+      "send": "Send kode"
+    },
     "register": {
       "confirmPasswordLabel": "Bekræft adgangskode",
       "confirmPasswordPlaceholder": "Bekræft din adgangskode",
       "emailInvalid": "Indtast en gyldig e-mailadresse",
       "emailLabel": "Personlig e-mail",
       "emailPlaceholder": "Indtast din personlige e-mail",
+      "emailTaken": "E-mailadressen er allerede registreret",
       "information": {
         "color1": "Profil farve 1",
         "color2": "Profil farve 2",
@@ -141,7 +170,8 @@
       "passwordLabel": "Adgangskode",
       "passwordMismatch": "Adgangskoder stemmer ikke overens",
       "passwordPlaceholder": "Opret en adgangskode (bruges som din adgangssætning)",
-      "passwordWeak": "Adgangskoden skal være på mindst 8 tegn med bogstaver og tal"
+      "passwordWeak": "Adgangskoden skal være på mindst 8 tegn med bogstaver og tal",
+      "submit": "Opret konto"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "Redigere",
         "editProfile": "Rediger",
+        "emailLabel": "E-mail",
         "logoutButton": "Log ud",
         "nicknameLabel": "Kaldenavn",
-        "nicknamePlaceholder": "Indtast dit kaldenavn"
+        "nicknamePlaceholder": "Indtast dit kaldenavn",
+        "noEmail": "Ingen e-mail tilknyttet"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "Profil farve 2",
         "title": "Rediger profilbillede",
         "userIcon": "Brugerikon"
+      },
+      "security": {
+        "currentEmailLabel": "Nuværende e-mail",
+        "emailDescription": "Vi vil verificere din nuværende og nye e-mailadresse.",
+        "emailSame": "Den nye e-mail skal være forskellig fra din nuværende e-mail",
+        "emailTitle": "Skift e-mail",
+        "newEmailLabel": "Ny e-mailadresse",
+        "passwordDescription": "Vi sender en bekræftelseskode til din kontos e-mailadresse.",
+        "passwordTitle": "Skift adgangskode",
+        "title": "Kontosikkerhed"
       },
       "register": {
         "cta": "Kom godt i gang",
@@ -1451,9 +1494,15 @@
     "close": "Tæt"
   },
   "toasts": {
+    "emailChangeSuccess": "E-mailen er blevet opdateret!",
     "linkCopied": "Linket er kopieret til udklipsholderen!",
     "loginSuccess": "Log ind med succes!",
     "logoutSuccess": "Logget ud med succes!",
+    "otpResent": "Bekræftelseskoden er sendt igen!",
+    "otpSent": "Bekræftelseskode sendt til din e-mail!",
+    "passwordChangeSuccess": "Adgangskoden er ændret!",
+    "passwordResetError": "Kunne ikke nulstille adgangskoden",
+    "passwordResetSuccess": "Nulstilling af adgangskode er gennemført!",
     "registerSuccess": "Registreret med succes!"
   }
 }

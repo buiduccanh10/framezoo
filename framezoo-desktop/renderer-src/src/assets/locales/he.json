@@ -116,12 +116,41 @@
       "usePasskey": "השתמש במפתח סיסמה",
       "validationError": "ביטוי סיסמה שגוי או לא שלם"
     },
+    "otp": {
+      "codeLabel": "קוד אימות",
+      "continue": "לְהַמשִׁיך",
+      "emailNewDescription": "הזן את הקוד שנשלח לכתובת האימייל החדשה שלך.",
+      "emailNewTitle": "אימות כתובת הדוא\"ל החדשה שלך",
+      "emailOldDescription": "הזן את הקוד שנשלח לכתובת האימייל הנוכחית שלך.",
+      "emailOldTitle": "אשר את כתובת האימייל הנוכחית שלך",
+      "expired": "קוד האימות פג תוקפו",
+      "expiresIn": "תוקף הקוד פג בעוד {{time}}",
+      "finish": "סִיוּם",
+      "forgotDescription": "הזן את כתובת הדוא\"ל של חשבונך כדי לקבל קוד אימות.",
+      "forgotLink": "שכחת את הסיסמה שלך?",
+      "forgotTitle": "שכחת סיסמה?",
+      "invalid": "קוד אימות לא תקין",
+      "newPasswordDescription": "בחר סיסמה חדשה לחשבונך.",
+      "newPasswordTitle": "צור סיסמה חדשה",
+      "passwordChangeDescription": "הזן את הקוד שנשלח למייל שלך.",
+      "passwordChangeTitle": "אישור שינוי סיסמה",
+      "registrationDescription": "הזן את הקוד שנשלח לכתובת הדוא\"ל שלך כדי לסיים את יצירת החשבון.",
+      "registrationTitle": "אימות כתובת הדוא\"ל שלך",
+      "requestFailed": "לא ניתן לשלוח קוד אימות",
+      "resend": "שלח שוב את הקוד",
+      "resendFailed": "לא ניתן לשלוח את הקוד שוב",
+      "resendIn": "שליחה חוזרת זמינה בעוד {{seconds}} שניות",
+      "resetDescription": "הזן את הקוד שנשלח למייל שלך.",
+      "resetTitle": "איפוס הסיסמה שלך",
+      "send": "שלח קוד"
+    },
     "register": {
       "confirmPasswordLabel": "אשר את הסיסמה",
       "confirmPasswordPlaceholder": "אשר את הסיסמה שלך",
       "emailInvalid": "הזן כתובת אימייל חוקית",
       "emailLabel": "מייל אישי",
       "emailPlaceholder": "הזן את המייל האישי שלך",
+      "emailTaken": "האימייל כבר רשום",
       "information": {
         "color1": "צבע פרופיל ראשון",
         "color2": "צבע פרופיל שני",
@@ -141,7 +170,8 @@
       "passwordLabel": "סִיסמָה",
       "passwordMismatch": "הסיסמאות אינן תואמות",
       "passwordPlaceholder": "צור סיסמה (המשמשת כביטוי הסיסמה שלך)",
-      "passwordWeak": "הסיסמה חייבת להיות לפחות 8 תווים עם אותיות ומספרים"
+      "passwordWeak": "הסיסמה חייבת להיות לפחות 8 תווים עם אותיות ומספרים",
+      "submit": "צור חשבון"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "לַעֲרוֹך",
         "editProfile": "ערוך",
+        "emailLabel": "אֶלֶקטרוֹנִי",
         "logoutButton": "התנתק",
         "nicknameLabel": "כינוי",
-        "nicknamePlaceholder": "הזן את הכינוי שלך"
+        "nicknamePlaceholder": "הזן את הכינוי שלך",
+        "noEmail": "אין אימייל מקושר"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "צבע פרופיל שני",
         "title": "ערוך תמונת פרופיל",
         "userIcon": "סמל משתמש"
+      },
+      "security": {
+        "currentEmailLabel": "כתובת דוא\"ל נוכחית",
+        "emailDescription": "נאמת את כתובות הדוא\"ל הנוכחיות והחדשות שלך.",
+        "emailSame": "האימייל החדש חייב להיות שונה מהאימייל הנוכחי שלך",
+        "emailTitle": "שנה אימייל",
+        "newEmailLabel": "כתובת דוא\"ל חדשה",
+        "passwordDescription": "נשלח קוד אימות לכתובת הדוא\"ל של חשבונך.",
+        "passwordTitle": "שינוי סיסמה",
+        "title": "אבטחת חשבון"
       },
       "register": {
         "cta": "התחל",
@@ -1451,9 +1494,15 @@
     "close": "לִסְגוֹר"
   },
   "toasts": {
+    "emailChangeSuccess": "האימייל עודכן בהצלחה!",
     "linkCopied": "הקישור הועתק ללוח!",
     "loginSuccess": "התחבר בהצלחה!",
     "logoutSuccess": "התנתק בהצלחה!",
+    "otpResent": "קוד האימות נשלח מחדש!",
+    "otpSent": "קוד אימות נשלח למייל שלך!",
+    "passwordChangeSuccess": "הסיסמה שונתה בהצלחה!",
+    "passwordResetError": "איפוס הסיסמה נכשל",
+    "passwordResetSuccess": "איפוס הסיסמה הצליח!",
     "registerSuccess": "נרשם בהצלחה!"
   }
 }

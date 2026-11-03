@@ -116,12 +116,41 @@
       "usePasskey": "Usar clave de acceso",
       "validationError": "Contraseña incorrecta o incompleta"
     },
+    "otp": {
+      "codeLabel": "Código de verificación",
+      "continue": "Continuar",
+      "emailNewDescription": "Introduce el código que te enviamos a tu nuevo correo electrónico.",
+      "emailNewTitle": "Verifica tu nuevo correo electrónico",
+      "emailOldDescription": "Introduce el código que te enviamos por correo electrónico.",
+      "emailOldTitle": "Confirma tu correo electrónico actual",
+      "expired": "El código de verificación ha caducado.",
+      "expiresIn": "El código caduca en {{time}}",
+      "finish": "Finalizar",
+      "forgotDescription": "Introduce el correo electrónico de tu cuenta para recibir un código de verificación.",
+      "forgotLink": "¿Olvidaste tu contraseña?",
+      "forgotTitle": "¿Has olvidado tu contraseña?",
+      "invalid": "Código de verificación no válido",
+      "newPasswordDescription": "Elige una nueva contraseña para tu cuenta.",
+      "newPasswordTitle": "Crear una nueva contraseña",
+      "passwordChangeDescription": "Introduce el código que te enviamos por correo electrónico.",
+      "passwordChangeTitle": "Confirmar cambio de contraseña",
+      "registrationDescription": "Introduce el código que te enviamos por correo electrónico para finalizar la creación de tu cuenta.",
+      "registrationTitle": "Verifica tu correo electrónico",
+      "requestFailed": "No se pudo enviar el código de verificación.",
+      "resend": "Reenviar código",
+      "resendFailed": "No se pudo reenviar el código.",
+      "resendIn": "Reenvío disponible en {{seconds}}s",
+      "resetDescription": "Introduce el código que te enviamos por correo electrónico.",
+      "resetTitle": "Restablecer su contraseña",
+      "send": "Enviar código"
+    },
     "register": {
       "confirmPasswordLabel": "confirmar Contraseña",
       "confirmPasswordPlaceholder": "Confirma tu contraseña",
       "emailInvalid": "Introduzca una dirección de correo electrónico válida",
       "emailLabel": "correo electrónico personal",
       "emailPlaceholder": "Introduce tu correo electrónico personal",
+      "emailTaken": "El correo electrónico ya está registrado.",
       "information": {
         "color1": "Color de perfil uno",
         "color2": "Color de perfil dos",
@@ -141,7 +170,8 @@
       "passwordLabel": "Contraseña",
       "passwordMismatch": "Las contraseñas no coinciden",
       "passwordPlaceholder": "Cree una contraseña (usada como su frase de contraseña)",
-      "passwordWeak": "La contraseña debe tener al menos 8 caracteres con letras y números."
+      "passwordWeak": "La contraseña debe tener al menos 8 caracteres con letras y números.",
+      "submit": "Crear una cuenta"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "Editar",
         "editProfile": "Editar",
+        "emailLabel": "Correo electrónico",
         "logoutButton": "Cerrar sesión",
         "nicknameLabel": "Apodo",
-        "nicknamePlaceholder": "Introduce tu apodo"
+        "nicknamePlaceholder": "Introduce tu apodo",
+        "noEmail": "No hay correo electrónico vinculado"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "Color de perfil dos",
         "title": "Editar imagen de perfil",
         "userIcon": "Icono de usuario"
+      },
+      "security": {
+        "currentEmailLabel": "Correo electrónico actual",
+        "emailDescription": "Verificaremos sus direcciones de correo electrónico actuales y nuevas.",
+        "emailSame": "El nuevo correo electrónico debe ser diferente de su correo electrónico actual.",
+        "emailTitle": "Cambiar correo electrónico",
+        "newEmailLabel": "Nueva dirección de correo electrónico",
+        "passwordDescription": "Le enviaremos un código de verificación al correo electrónico asociado a su cuenta.",
+        "passwordTitle": "Cambiar la contraseña",
+        "title": "Seguridad de la cuenta"
       },
       "register": {
         "cta": "Empezar",
@@ -1451,9 +1494,15 @@
     "close": "Cerca"
   },
   "toasts": {
+    "emailChangeSuccess": "¡Correo electrónico actualizado correctamente!",
     "linkCopied": "¡Enlace copiado al portapapeles!",
     "loginSuccess": "¡Inicié sesión exitosamente!",
     "logoutSuccess": "¡Cerró sesión exitosamente!",
+    "otpResent": "¡El código de verificación ha sido reenviado!",
+    "otpSent": "¡Código de verificación enviado a tu correo electrónico!",
+    "passwordChangeSuccess": "¡Contraseña cambiada correctamente!",
+    "passwordResetError": "No se pudo restablecer la contraseña.",
+    "passwordResetSuccess": "¡Contraseña restablecida con éxito!",
     "registerSuccess": "¡Registrado exitosamente!"
   }
 }

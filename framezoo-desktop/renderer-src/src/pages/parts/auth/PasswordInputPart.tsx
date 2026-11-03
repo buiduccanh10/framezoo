@@ -1,9 +1,9 @@
-import { type KeyboardEvent, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAsyncFn } from "react-use";
 
 import { createPasskey, isPasskeySupported } from "@/backend/accounts/crypto";
-import { checkNicknameExists } from "@/backend/accounts/user";
+import { checkEmailExists, checkNicknameExists } from "@/backend/accounts/user";
 import { Button } from "@/components/buttons/Button";
 import { Icon, Icons } from "@/components/Icon";
 import {
@@ -66,10 +66,14 @@ export function PasswordInputPart(props: PasswordInputPartProps) {
     }
   }, [props.forLogin, hasLoadedSaved]);
 
-  const [checkResult, checkNickname] = useAsyncFn(
-    async (name: string) => {
-      if (!backendUrl) return null;
-      return await checkNicknameExists(backendUrl, name);
+  const [checkResult, checkAccountDuplicates] = useAsyncFn(
+    async (name: string, emailValue: string) => {
+      if (!backendUrl) return { nicknameExists: false, emailExists: false };
+      const [nicknameExists, emailExists] = await Promise.all([
+        checkNicknameExists(backendUrl, name),
+        checkEmailExists(backendUrl, emailValue),
+      ]);
+      return { nicknameExists, emailExists };
     },
     [backendUrl],
   );
@@ -124,12 +128,14 @@ export function PasswordInputPart(props: PasswordInputPartProps) {
           return null;
         }
       } else {
-        // For registration, check if nickname is already taken
-        const exists = await checkNickname(trimmedNickname);
-        if (exists) {
-          setHasNicknameError(true);
-          setNicknameErrorText(
-            t("auth.register.nicknameTaken") ?? "Nickname is already taken",
+        const trimmedEmail = email.trim().toLowerCase();
+        if (
+          !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail) ||
+          trimmedEmail.length > 255
+        ) {
+          setHasEmailError(true);
+          setEmailErrorText(
+            t("auth.register.emailInvalid") ?? "Enter a valid email address",
           );
           return null;
         }
@@ -154,15 +160,24 @@ export function PasswordInputPart(props: PasswordInputPartProps) {
           }
         }
 
-        const trimmedEmail = email.trim().toLowerCase();
-        if (
-          !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail) ||
-          trimmedEmail.length > 255
-        ) {
+        // Check both nickname and email availability before advancing
+        const { nicknameExists, emailExists } = await checkAccountDuplicates(
+          trimmedNickname,
+          trimmedEmail,
+        );
+        if (nicknameExists) {
+          setHasNicknameError(true);
+          setNicknameErrorText(
+            t("auth.register.nicknameTaken") ?? "Nickname is already taken",
+          );
+        }
+        if (emailExists) {
           setHasEmailError(true);
           setEmailErrorText(
-            t("auth.register.emailInvalid") ?? "Enter a valid email address",
+            t("auth.register.emailTaken") ?? "Email is already registered",
           );
+        }
+        if (nicknameExists || emailExists) {
           return null;
         }
       }
@@ -177,7 +192,7 @@ export function PasswordInputPart(props: PasswordInputPartProps) {
       password,
       confirmPassword,
       props.forLogin,
-      checkNickname,
+      checkAccountDuplicates,
       validatePassword,
       t,
       email,

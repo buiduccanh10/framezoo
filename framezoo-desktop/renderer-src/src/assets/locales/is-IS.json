@@ -116,12 +116,41 @@
       "usePasskey": "Notaðu lykilorð",
       "validationError": "Vitlaust eða óklárað lykilorð"
     },
+    "otp": {
+      "codeLabel": "Staðfestingarkóði",
+      "continue": "Halda áfram",
+      "emailNewDescription": "Sláðu inn kóðann sem var sendur á nýja netfangið þitt.",
+      "emailNewTitle": "Staðfestu nýja netfangið þitt",
+      "emailOldDescription": "Sláðu inn kóðann sem sendur var á núverandi netfang þitt.",
+      "emailOldTitle": "Staðfestu núverandi netfang þitt",
+      "expired": "Staðfestingarkóði útrunninn",
+      "expiresIn": "Kóðinn rennur út eftir {{time}}",
+      "finish": "Ljúka",
+      "forgotDescription": "Sláðu inn netfangið þitt til að fá staðfestingarkóða.",
+      "forgotLink": "Gleymdirðu lykilorðinu þínu?",
+      "forgotTitle": "Gleymt lykilorð?",
+      "invalid": "Ógildur staðfestingarkóði",
+      "newPasswordDescription": "Veldu nýtt lykilorð fyrir reikninginn þinn.",
+      "newPasswordTitle": "Búa til nýtt lykilorð",
+      "passwordChangeDescription": "Sláðu inn kóðann sem sendur var á netfangið þitt.",
+      "passwordChangeTitle": "Staðfesta breytingu á lykilorði",
+      "registrationDescription": "Sláðu inn kóðann sem sendur var á netfangið þitt til að ljúka við að stofna aðganginn.",
+      "registrationTitle": "Staðfestu netfangið þitt",
+      "requestFailed": "Ekki tókst að senda staðfestingarkóða",
+      "resend": "Endursenda kóða",
+      "resendFailed": "Ekki tókst að senda kóðann aftur",
+      "resendIn": "Endursending möguleg eftir {{seconds}}s",
+      "resetDescription": "Sláðu inn kóðann sem sendur var á netfangið þitt.",
+      "resetTitle": "Endurstilla lykilorðið þitt",
+      "send": "Senda kóða"
+    },
     "register": {
       "confirmPasswordLabel": "Staðfestu lykilorð",
       "confirmPasswordPlaceholder": "Staðfestu lykilorðið þitt",
       "emailInvalid": "Sláðu inn gilt netfang",
       "emailLabel": "Persónulegur tölvupóstur",
       "emailPlaceholder": "Sláðu inn persónulega netfangið þitt",
+      "emailTaken": "Netfangið er þegar skráð",
       "information": {
         "color1": "Prófíl litur eitt",
         "color2": "Prófíl litur tvö",
@@ -141,7 +170,8 @@
       "passwordLabel": "Lykilorð",
       "passwordMismatch": "Lykilorð passa ekki saman",
       "passwordPlaceholder": "Búðu til lykilorð (notað sem lykilorðið þitt)",
-      "passwordWeak": "Lykilorð verður að vera að minnsta kosti 8 stafir með bókstöfum og tölustöfum"
+      "passwordWeak": "Lykilorð verður að vera að minnsta kosti 8 stafir með bókstöfum og tölustöfum",
+      "submit": "Stofna reikning"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "Breyta",
         "editProfile": "Breyta",
+        "emailLabel": "Tölvupóstur",
         "logoutButton": "Skrá út",
         "nicknameLabel": "Gælunafn",
-        "nicknamePlaceholder": "Sláðu inn gælunafnið þitt"
+        "nicknamePlaceholder": "Sláðu inn gælunafnið þitt",
+        "noEmail": "Ekkert netfang tengt"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "Reiknings litur tvö",
         "title": "Breyta mynd reiknings",
         "userIcon": "Notandatákn"
+      },
+      "security": {
+        "currentEmailLabel": "Núverandi netfang",
+        "emailDescription": "Við munum staðfesta núverandi og nýja netföngin þín.",
+        "emailSame": "Nýja netfangið verður að vera annað en núverandi netfang",
+        "emailTitle": "Breyta netfangi",
+        "newEmailLabel": "Nýtt netfang",
+        "passwordDescription": "Við munum senda staðfestingarkóða á netfangið þitt.",
+        "passwordTitle": "Breyta lykilorði",
+        "title": "Öryggi reiknings"
       },
       "register": {
         "cta": "Byrja",
@@ -1451,9 +1494,15 @@
     "close": "Loka"
   },
   "toasts": {
+    "emailChangeSuccess": "Netfangið var uppfært!",
     "linkCopied": "Tengill afritaður á klippiborð!",
     "loginSuccess": "Innskráning tókst!",
     "logoutSuccess": "Tókst að skrá þig út!",
+    "otpResent": "Staðfestingarkóði hefur verið sendur aftur!",
+    "otpSent": "Staðfestingarkóði sendur á netfangið þitt!",
+    "passwordChangeSuccess": "Lykilorði breytt!",
+    "passwordResetError": "Mistókst að endurstilla lykilorðið",
+    "passwordResetSuccess": "Lykilorðsendurstilling tókst!",
     "registerSuccess": "Skráðu þig með góðum árangri!"
   }
 }

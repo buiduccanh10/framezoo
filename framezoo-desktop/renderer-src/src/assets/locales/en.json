@@ -116,12 +116,41 @@
       "usePasskey": "Use passkey",
       "validationError": "Incorrect or incomplete password /ᐠ. .ᐟ\\"
     },
+    "otp": {
+      "codeLabel": "Verification code",
+      "continue": "Continue",
+      "emailNewDescription": "Enter the code sent to your new email.",
+      "emailNewTitle": "Verify your new email",
+      "emailOldDescription": "Enter the code sent to your current email.",
+      "emailOldTitle": "Confirm your current email",
+      "expired": "Verification code expired",
+      "expiresIn": "Code expires in {{time}}",
+      "finish": "Finish",
+      "forgotDescription": "Enter your account email to receive a verification code.",
+      "forgotLink": "Forgot your password?",
+      "forgotTitle": "Forgot password?",
+      "invalid": "Invalid verification code",
+      "newPasswordDescription": "Choose a new password for your account.",
+      "newPasswordTitle": "Create a new password",
+      "passwordChangeDescription": "Enter the code sent to your email.",
+      "passwordChangeTitle": "Confirm password change",
+      "registrationDescription": "Enter the code sent to your email to finish creating your account.",
+      "registrationTitle": "Verify your email",
+      "requestFailed": "Unable to send verification code",
+      "resend": "Resend code",
+      "resendFailed": "Unable to resend the code",
+      "resendIn": "Resend available in {{seconds}}s",
+      "resetDescription": "Enter the code sent to your email.",
+      "resetTitle": "Reset your password",
+      "send": "Send code"
+    },
     "register": {
       "confirmPasswordLabel": "Confirm Password",
       "confirmPasswordPlaceholder": "Confirm your password",
       "emailInvalid": "Enter a valid email address",
       "emailLabel": "Personal email",
       "emailPlaceholder": "Enter your personal email",
+      "emailTaken": "Email is already registered",
       "information": {
         "color1": "Profile color one",
         "color2": "Profile color two",
@@ -141,7 +170,8 @@
       "passwordLabel": "Password",
       "passwordMismatch": "Passwords do not match",
       "passwordPlaceholder": "Create a password (used as your passphrase)",
-      "passwordWeak": "Password must be at least 8 characters with letters and numbers"
+      "passwordWeak": "Password must be at least 8 characters with letters and numbers",
+      "submit": "Create account"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "Edit",
         "editProfile": "Edit",
+        "emailLabel": "Email",
         "logoutButton": "Log out",
         "nicknameLabel": "Nickname",
-        "nicknamePlaceholder": "Enter your nickname"
+        "nicknamePlaceholder": "Enter your nickname",
+        "noEmail": "No email linked"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "Profile color two",
         "title": "Edit profile picture",
         "userIcon": "User icon"
+      },
+      "security": {
+        "currentEmailLabel": "Current email",
+        "emailDescription": "We will verify your current and new email addresses.",
+        "emailSame": "New email must be different from your current email",
+        "emailTitle": "Change email",
+        "newEmailLabel": "New email address",
+        "passwordDescription": "We will send a verification code to your account email.",
+        "passwordTitle": "Change password",
+        "title": "Account security"
       },
       "register": {
         "cta": "Get started",
@@ -1451,9 +1494,15 @@
     "close": "Close"
   },
   "toasts": {
+    "emailChangeSuccess": "Email updated successfully!",
     "linkCopied": "Link copied to clipboard!",
     "loginSuccess": "Logged in successfully!",
     "logoutSuccess": "Logged out successfully!",
+    "otpResent": "Verification code has been resent!",
+    "otpSent": "Verification code sent to your email!",
+    "passwordChangeSuccess": "Password changed successfully!",
+    "passwordResetError": "Failed to reset password",
+    "passwordResetSuccess": "Password reset successfully!",
     "registerSuccess": "Registered successfully!"
   }
 }

@@ -116,12 +116,41 @@
       "usePasskey": "Använd lösenord",
       "validationError": "Felaktigt eller ofullständigt lösenord"
     },
+    "otp": {
+      "codeLabel": "Verifieringskod",
+      "continue": "Fortsätta",
+      "emailNewDescription": "Ange koden som skickades till din nya e-postadress.",
+      "emailNewTitle": "Verifiera din nya e-postadress",
+      "emailOldDescription": "Ange koden som skickades till din nuvarande e-postadress.",
+      "emailOldTitle": "Bekräfta din nuvarande e-postadress",
+      "expired": "Verifieringskoden har upphört att gälla",
+      "expiresIn": "Koden upphör att gälla om {{time}}",
+      "finish": "Avsluta",
+      "forgotDescription": "Ange din konto-e-postadress för att få en verifieringskod.",
+      "forgotLink": "Glömt ditt lösenord?",
+      "forgotTitle": "Glömt lösenordet?",
+      "invalid": "Ogiltig verifieringskod",
+      "newPasswordDescription": "Välj ett nytt lösenord för ditt konto.",
+      "newPasswordTitle": "Skapa ett nytt lösenord",
+      "passwordChangeDescription": "Ange koden som skickades till din e-postadress.",
+      "passwordChangeTitle": "Bekräfta lösenordsändringen",
+      "registrationDescription": "Ange koden som skickats till din e-postadress för att slutföra skapandet av ditt konto.",
+      "registrationTitle": "Verifiera din e-postadress",
+      "requestFailed": "Det gick inte att skicka verifieringskoden",
+      "resend": "Skicka om koden",
+      "resendFailed": "Det gick inte att skicka koden igen",
+      "resendIn": "Omsändning tillgänglig om {{seconds}}s",
+      "resetDescription": "Ange koden som skickades till din e-postadress.",
+      "resetTitle": "Återställ ditt lösenord",
+      "send": "Skicka kod"
+    },
     "register": {
       "confirmPasswordLabel": "Bekräfta lösenord",
       "confirmPasswordPlaceholder": "Bekräfta ditt lösenord",
       "emailInvalid": "Ange en giltig e-postadress",
       "emailLabel": "Personlig e-post",
       "emailPlaceholder": "Ange din personliga e-postadress",
+      "emailTaken": "E-postadressen är redan registrerad",
       "information": {
         "color1": "Profilfärg ett",
         "color2": "Profilfärg två",
@@ -141,7 +170,8 @@
       "passwordLabel": "Lösenord",
       "passwordMismatch": "Lösenord stämmer inte överens",
       "passwordPlaceholder": "Skapa ett lösenord (används som din lösenordsfras)",
-      "passwordWeak": "Lösenordet måste bestå av minst 8 tecken med bokstäver och siffror"
+      "passwordWeak": "Lösenordet måste bestå av minst 8 tecken med bokstäver och siffror",
+      "submit": "Skapa konto"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "Redigera",
         "editProfile": "Redigera",
+        "emailLabel": "E-post",
         "logoutButton": "Logga ut",
         "nicknameLabel": "Smeknamn",
-        "nicknamePlaceholder": "Ange ditt smeknamn"
+        "nicknamePlaceholder": "Ange ditt smeknamn",
+        "noEmail": "Ingen e-postadress länkad"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "Profilfärg två",
         "title": "Redigera profilbild",
         "userIcon": "Användarikon"
+      },
+      "security": {
+        "currentEmailLabel": "Nuvarande e-postadress",
+        "emailDescription": "Vi kommer att verifiera dina nuvarande och nya e-postadresser.",
+        "emailSame": "Den nya e-postadressen måste vara en annan än din nuvarande e-postadress",
+        "emailTitle": "Ändra e-postadress",
+        "newEmailLabel": "Ny e-postadress",
+        "passwordDescription": "Vi skickar en verifieringskod till din e-postadress för kontot.",
+        "passwordTitle": "Ändra lösenord",
+        "title": "Kontosäkerhet"
       },
       "register": {
         "cta": "Kom igång",
@@ -1451,9 +1494,15 @@
     "close": "Nära"
   },
   "toasts": {
+    "emailChangeSuccess": "E-postadressen har uppdaterats!",
     "linkCopied": "Länken har kopierats till urklipp!",
     "loginSuccess": "Inloggad framgångsrikt!",
     "logoutSuccess": "Loggade ut framgångsrikt!",
+    "otpResent": "Verifieringskoden har skickats om!",
+    "otpSent": "Verifieringskod skickad till din e-postadress!",
+    "passwordChangeSuccess": "Lösenordet har ändrats!",
+    "passwordResetError": "Misslyckades med att återställa lösenordet",
+    "passwordResetSuccess": "Lösenordsåterställningen har lyckats!",
     "registerSuccess": "Registrerad framgångsrikt!"
   }
 }

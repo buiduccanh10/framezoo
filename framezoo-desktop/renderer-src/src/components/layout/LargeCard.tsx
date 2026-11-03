@@ -4,6 +4,7 @@ export function LargeCard(props: {
   children: React.ReactNode;
   top?: React.ReactNode;
   compact?: boolean;
+  className?: string;
 }) {
   return (
     <div className="flex flex-col items-center">
@@ -14,8 +15,9 @@ export function LargeCard(props: {
       ) : null}
       <div
         className={classNames(
-          "w-full rounded-xl bg-largeCard-background/50 max-w-[600px] mx-auto",
+          "w-full rounded-2xl bg-largeCard-background border border-white/10 shadow-2xl max-w-[600px] mx-auto",
           props.compact ? "p-4 sm:p-6 md:p-8" : "p-[3rem]",
+          props.className,
         )}
       >
         {props.children}

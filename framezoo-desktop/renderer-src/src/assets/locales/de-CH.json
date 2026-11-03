@@ -116,12 +116,41 @@
       "usePasskey": "Verwenden Sie den Passkey",
       "validationError": "Falsches oder onvollständigi Passphrase"
     },
+    "otp": {
+      "codeLabel": "Bestätigungscode",
+      "continue": "Weitermachen",
+      "emailNewDescription": "Geben Sie den Code ein, der Ihnen per E-Mail zugesandt wurde.",
+      "emailNewTitle": "Bestätigen Sie Ihre neue E-Mail-Adresse.",
+      "emailOldDescription": "Geben Sie den Code ein, der an Ihre aktuelle E-Mail-Adresse gesendet wurde.",
+      "emailOldTitle": "Bestätigen Sie Ihre aktuelle E-Mail-Adresse.",
+      "expired": "Der Bestätigungscode ist abgelaufen.",
+      "expiresIn": "Der Code läuft in {{time}} ab.",
+      "finish": "Beenden",
+      "forgotDescription": "Geben Sie Ihre E-Mail-Adresse ein, um einen Bestätigungscode zu erhalten.",
+      "forgotLink": "Passwort vergessen?",
+      "forgotTitle": "Passwort vergessen?",
+      "invalid": "Ungültiger Bestätigungscode",
+      "newPasswordDescription": "Wählen Sie ein neues Passwort für Ihr Konto.",
+      "newPasswordTitle": "Neues Passwort erstellen",
+      "passwordChangeDescription": "Geben Sie den an Ihre E-Mail-Adresse gesendeten Code ein.",
+      "passwordChangeTitle": "Passwortänderung bestätigen",
+      "registrationDescription": "Geben Sie den an Ihre E-Mail-Adresse gesendeten Code ein, um die Erstellung Ihres Kontos abzuschließen.",
+      "registrationTitle": "Bestätigen Sie Ihre E-Mail-Adresse.",
+      "requestFailed": "Bestätigungscode konnte nicht gesendet werden",
+      "resend": "Code erneut senden",
+      "resendFailed": "Code konnte nicht erneut gesendet werden",
+      "resendIn": "Erneutes Senden verfügbar in {{seconds}}s",
+      "resetDescription": "Geben Sie den an Ihre E-Mail-Adresse gesendeten Code ein.",
+      "resetTitle": "Setzen Sie Ihr Passwort zurück",
+      "send": "Code senden"
+    },
     "register": {
       "confirmPasswordLabel": "Passwort bestätigen",
       "confirmPasswordPlaceholder": "Bestätigen Sie Ihr Passwort",
       "emailInvalid": "Geben Sie eine gültige E-Mail-Adresse ein",
       "emailLabel": "Persönliche E-Mail",
       "emailPlaceholder": "Geben Sie Ihre persönliche E-Mail-Adresse ein",
+      "emailTaken": "E-Mail ist bereits registriert",
       "information": {
         "color1": "Profilfarb 1",
         "color2": "Profilfarb 2",
@@ -141,7 +170,8 @@
       "passwordLabel": "Passwort",
       "passwordMismatch": "Passwörter stimmen nicht überein",
       "passwordPlaceholder": "Erstellen Sie ein Passwort (wird als Passphrase verwendet)",
-      "passwordWeak": "Das Passwort muss mindestens 8 Zeichen lang sein und Buchstaben und Zahlen enthalten"
+      "passwordWeak": "Das Passwort muss mindestens 8 Zeichen lang sein und Buchstaben und Zahlen enthalten",
+      "submit": "Benutzerkonto erstellen"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "Bearbeiten",
         "editProfile": "Bearbeite",
+        "emailLabel": "E-Mail",
         "logoutButton": "Abmälde",
         "nicknameLabel": "Spitzname",
-        "nicknamePlaceholder": "Geben Sie Ihren Spitznamen ein"
+        "nicknamePlaceholder": "Geben Sie Ihren Spitznamen ein",
+        "noEmail": "Keine E-Mail-Adresse verknüpft"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "Profilfarb 2",
         "title": "Profilbeld bearbeiten",
         "userIcon": "Symbol"
+      },
+      "security": {
+        "currentEmailLabel": "Aktuelle E-Mail-Adresse",
+        "emailDescription": "Wir werden Ihre aktuelle und Ihre neue E-Mail-Adresse überprüfen.",
+        "emailSame": "Ihre neue E-Mail-Adresse muss sich von Ihrer aktuellen E-Mail-Adresse unterscheiden.",
+        "emailTitle": "E-Mail-Adresse ändern",
+        "newEmailLabel": "Neue E-Mail-Adresse",
+        "passwordDescription": "Wir senden Ihnen einen Bestätigungscode an die E-Mail-Adresse Ihres Kontos.",
+        "passwordTitle": "Kennwort ändern",
+        "title": "Kontosicherheit"
       },
       "register": {
         "cta": "Los goht's",
@@ -1451,9 +1494,15 @@
     "close": "Schließen"
   },
   "toasts": {
+    "emailChangeSuccess": "E-Mail erfolgreich aktualisiert!",
     "linkCopied": "Link in die Zwischenablage kopiert!",
     "loginSuccess": "Erfolgreich angemeldet!",
     "logoutSuccess": "Erfolgreich abgemeldet!",
+    "otpResent": "Der Bestätigungscode wurde erneut gesendet!",
+    "otpSent": "Der Bestätigungscode wurde an Ihre E-Mail-Adresse gesendet!",
+    "passwordChangeSuccess": "Passwort erfolgreich geändert!",
+    "passwordResetError": "Passwort konnte nicht zurückgesetzt werden",
+    "passwordResetSuccess": "Passwort erfolgreich zurückgesetzt!",
     "registerSuccess": "Erfolgreich registriert!"
   }
 }

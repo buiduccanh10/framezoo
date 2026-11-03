@@ -116,12 +116,41 @@
       "usePasskey": "使用密钥",
       "validationError": "助记词不正确或不完整"
     },
+    "otp": {
+      "codeLabel": "验证码",
+      "continue": "继续",
+      "emailNewDescription": "请输入发送到您新邮箱的验证码。",
+      "emailNewTitle": "请验证您的新电子邮件",
+      "emailOldDescription": "请输入发送到您当前邮箱的验证码。",
+      "emailOldTitle": "请确认您当前的电子邮件地址。",
+      "expired": "验证码已过期",
+      "expiresIn": "代码将于{{time}}过期",
+      "finish": "结束",
+      "forgotDescription": "请输入您的账户邮箱以接收验证码。",
+      "forgotLink": "忘记密码了吗？",
+      "forgotTitle": "忘记密码？",
+      "invalid": "验证码无效",
+      "newPasswordDescription": "为您的账户选择一个新密码。",
+      "newPasswordTitle": "创建新密码",
+      "passwordChangeDescription": "请输入发送到您邮箱的验证码。",
+      "passwordChangeTitle": "确认密码更改",
+      "registrationDescription": "输入发送到您邮箱的验证码，完成账户创建。",
+      "registrationTitle": "请验证您的电子邮件",
+      "requestFailed": "无法发送验证码",
+      "resend": "重新发送代码",
+      "resendFailed": "无法重新发送验证码",
+      "resendIn": "{{seconds}}s 中提供重新发送功能",
+      "resetDescription": "请输入发送到您邮箱的验证码。",
+      "resetTitle": "重置密码",
+      "send": "发送代码"
+    },
     "register": {
       "confirmPasswordLabel": "确认密码",
       "confirmPasswordPlaceholder": "确认您的密码",
       "emailInvalid": "输入有效的电子邮件地址",
       "emailLabel": "个人邮箱",
       "emailPlaceholder": "输入您的个人电子邮件",
+      "emailTaken": "邮箱已注册",
       "information": {
         "color1": "头像配色 1",
         "color2": "头像配色 2",
@@ -141,7 +170,8 @@
       "passwordLabel": "密码",
       "passwordMismatch": "密码不匹配",
       "passwordPlaceholder": "创建密码（用作您的密码）",
-      "passwordWeak": "密码必须至少8位，包含字母和数字"
+      "passwordWeak": "密码必须至少8位，包含字母和数字",
+      "submit": "创建账户"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "编辑",
         "editProfile": "编辑",
+        "emailLabel": "电子邮件",
         "logoutButton": "登出",
         "nicknameLabel": "昵称",
-        "nicknamePlaceholder": "输入您的昵称"
+        "nicknamePlaceholder": "输入您的昵称",
+        "noEmail": "未关联电子邮件"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "个人资料颜色 2",
         "title": "编辑个人资料图像",
         "userIcon": "用户图标"
+      },
+      "security": {
+        "currentEmailLabel": "当前电子邮件",
+        "emailDescription": "我们将核实您当前和新的电子邮件地址。",
+        "emailSame": "新邮箱地址必须与您当前的邮箱地址不同。",
+        "emailTitle": "更改电子邮件",
+        "newEmailLabel": "新电子邮件地址",
+        "passwordDescription": "我们将向您的账户邮箱发送验证码。",
+        "passwordTitle": "更改密码",
+        "title": "账户安全"
       },
       "register": {
         "cta": "开始使用",
@@ -1451,9 +1494,15 @@
     "close": "关闭"
   },
   "toasts": {
+    "emailChangeSuccess": "邮箱已成功更新！",
     "linkCopied": "链接已复制到剪贴板！",
     "loginSuccess": "登录成功！",
     "logoutSuccess": "退出成功！",
+    "otpResent": "验证码已重新发送！",
+    "otpSent": "验证码已发送至您的邮箱！",
+    "passwordChangeSuccess": "密码已成功更改！",
+    "passwordResetError": "重置密码失败",
+    "passwordResetSuccess": "密码重置成功！",
     "registerSuccess": "注册成功！"
   }
 }

@@ -3,7 +3,12 @@ import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import { Trans, useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 
+import { resendOtp } from "@/backend/accounts/emailOtp";
 import { getBackendMeta } from "@/backend/accounts/meta";
+import {
+  OtpChallengeResponse,
+  requestRegistrationOtp,
+} from "@/backend/accounts/register";
 import { Button } from "@/components/buttons/Button";
 import { BackendSelector } from "@/components/form/BackendSelector";
 import {
@@ -17,6 +22,7 @@ import {
   AccountCreatePart,
   AccountProfile,
 } from "@/pages/parts/auth/AccountCreatePart";
+import { OtpVerificationPart } from "@/pages/parts/auth/OtpVerificationPart";
 import {
   PasswordInputData,
   PasswordInputPart,
@@ -24,6 +30,7 @@ import {
 import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
 import { useOverlayStack } from "@/stores/interface/overlayStack";
+import { useToastStore } from "@/stores/interface/toast";
 import { usePreviewThemeStore } from "@/stores/theme";
 
 function CaptchaProvider(props: {
@@ -43,6 +50,7 @@ export function RegisterPanel() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { register } = useAuth();
+  const showToast = useToastStore((s) => s.showToast);
   const setPreviewTheme = usePreviewThemeStore((s) => s.setPreviewTheme);
   const setBackendUrl = useAuthStore((s) => s.setBackendUrl);
   const currentBackendUrl = useAuthStore((s) => s.backendUrl);
@@ -65,7 +73,14 @@ export function RegisterPanel() {
   const [passwordData, setPasswordData] = useState<PasswordInputData | null>(
     null,
   );
-  const [, setAccountProfile] = useState<AccountProfile | null>(null);
+  const [accountProfile, setAccountProfile] = useState<AccountProfile | null>(
+    null,
+  );
+  const [registrationOtp, setRegistrationOtp] =
+    useState<OtpChallengeResponse | null>(null);
+  const [registrationError, setRegistrationError] = useState<string | null>(
+    null,
+  );
   const [siteKey, setSiteKey] = useState<string | null>(null);
   const [selectedBackendUrl, setSelectedBackendUrl] = useState<string | null>(
     currentBackendUrl ?? defaultBackend ?? null,
@@ -106,38 +121,53 @@ export function RegisterPanel() {
     setStep(2);
   };
 
-  const handleAccountNext = (data: AccountProfile) => {
+  const handleAccountNext = async (data: AccountProfile) => {
     setAccountProfile(data);
-    // Final step: register immediately after selecting profile
     if (!passwordData) return;
-    register({
+    setRegistrationError(null);
+    try {
+      const challenge = await requestRegistrationOtp(
+        selectedBackendUrl ?? currentBackendUrl ?? "",
+        passwordData.email ?? "",
+      );
+      setRegistrationOtp(challenge);
+      setStep(3);
+      showToast(
+        t("toasts.otpSent", "Verification code sent to your email!"),
+        "info",
+      );
+    } catch (error) {
+      const errMessage =
+        (error as any)?.data?.message ??
+        (error as any)?.response?._data?.message ??
+        (error as Error)?.message ??
+        t("auth.otp.requestFailed", "Unable to send verification code");
+      setRegistrationError(errMessage);
+      showToast(errMessage, "error");
+    }
+  };
+
+  const completeRegistration = async (challengeId: string, code: string) => {
+    if (!passwordData || !accountProfile) return;
+    await register({
       nickname: passwordData.nickname,
       password: passwordData.credentialId ? undefined : passwordData.password,
       credentialId: passwordData.credentialId,
       userData: {
         email: passwordData.email ?? "",
-        profile: data.profile,
+        profile: accountProfile.profile,
       },
-    })
-      .then(() => {
-        useOverlayStack.getState().hideModal("auth");
-        const state = location.state as
-          | {
-              from?: {
-                pathname: string;
-                search?: string;
-                hash?: string;
-              };
-            }
-          | undefined;
-        const destination = state?.from
-          ? `${state.from.pathname}${state.from.search || ""}${state.from.hash || ""}`
-          : "/discover";
-        navigate(destination, { replace: true });
-      })
-      .catch((err) => {
-        console.error("Registration failed:", err);
-      });
+      emailOtp: { challengeId, code },
+    });
+
+    useOverlayStack.getState().hideModal("auth");
+    const state = location.state as
+      | { from?: { pathname: string; search?: string; hash?: string } }
+      | undefined;
+    const destination = state?.from
+      ? `${state.from.pathname}${state.from.search || ""}${state.from.hash || ""}`
+      : "/discover";
+    navigate(destination, { replace: true });
   };
 
   const content = (
@@ -182,6 +212,32 @@ export function RegisterPanel() {
 
       {step === 2 ? (
         <AccountCreatePart compact onNext={handleAccountNext} />
+      ) : null}
+
+      {step === 3 && registrationOtp ? (
+        <OtpVerificationPart
+          title={t("auth.otp.registrationTitle", "Verify your email")}
+          description={t(
+            "auth.otp.registrationDescription",
+            "Enter the code sent to your email to finish creating your account.",
+          )}
+          challenge={registrationOtp}
+          onVerify={completeRegistration}
+          onResend={(challengeId) =>
+            resendOtp(
+              selectedBackendUrl ?? currentBackendUrl ?? "",
+              challengeId,
+            )
+          }
+          onBack={() => setStep(2)}
+          submitLabel={t("auth.register.submit", "Create account")}
+        />
+      ) : null}
+
+      {registrationError ? (
+        <p className="mt-3 text-center text-authentication-errorText">
+          {registrationError}
+        </p>
       ) : null}
 
       <p className="text-center mt-6 text-type-text">

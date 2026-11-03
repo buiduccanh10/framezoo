@@ -116,12 +116,41 @@
       "usePasskey": "পাসকি ব্যবহার করুন",
       "validationError": "ভুল বা অসম্পূর্ণ পাসফ্রেজ"
     },
+    "otp": {
+      "codeLabel": "যাচাইকরণ কোড",
+      "continue": "চালিয়ে যান",
+      "emailNewDescription": "আপনার নতুন ইমেইলে পাঠানো কোডটি প্রবেশ করান।",
+      "emailNewTitle": "আপনার নতুন ইমেল যাচাই করুন",
+      "emailOldDescription": "আপনার বর্তমান ইমেইলে পাঠানো কোডটি প্রবেশ করান।",
+      "emailOldTitle": "আপনার বর্তমান ইমেল নিশ্চিত করুন",
+      "expired": "যাচাইকরণ কোডের মেয়াদ শেষ হয়ে গেছে",
+      "expiresIn": "কোডটির মেয়াদ {{time}} তারিখে শেষ হবে।",
+      "finish": "শেষ",
+      "forgotDescription": "যাচাইকরণ কোড পেতে আপনার অ্যাকাউন্টের ইমেলটি প্রবেশ করান।",
+      "forgotLink": "আপনার পাসওয়ার্ড ভুলে গেছেন?",
+      "forgotTitle": "পাসওয়ার্ড ভুলে গেছেন?",
+      "invalid": "অবৈধ যাচাইকরণ কোড",
+      "newPasswordDescription": "আপনার অ্যাকাউন্টের জন্য একটি নতুন পাসওয়ার্ড বেছে নিন।",
+      "newPasswordTitle": "একটি নতুন পাসওয়ার্ড তৈরি করুন",
+      "passwordChangeDescription": "আপনার ইমেইলে পাঠানো কোডটি প্রবেশ করান।",
+      "passwordChangeTitle": "পাসওয়ার্ড পরিবর্তন নিশ্চিত করুন",
+      "registrationDescription": "আপনার অ্যাকাউন্ট তৈরি সম্পন্ন করতে ইমেইলে পাঠানো কোডটি প্রবেশ করান।",
+      "registrationTitle": "আপনার ইমেল যাচাই করুন",
+      "requestFailed": "যাচাইকরণ কোড পাঠানো সম্ভব হয়নি",
+      "resend": "কোড পুনরায় পাঠান",
+      "resendFailed": "কোডটি পুনরায় পাঠানো সম্ভব নয়।",
+      "resendIn": "{{seconds}}s-এ পুনরায় পাঠানো যাবে।",
+      "resetDescription": "আপনার ইমেইলে পাঠানো কোডটি প্রবেশ করান।",
+      "resetTitle": "আপনার পাসওয়ার্ড রিসেট করুন",
+      "send": "কোড পাঠান"
+    },
     "register": {
       "confirmPasswordLabel": "পাসওয়ার্ড নিশ্চিত করুন",
       "confirmPasswordPlaceholder": "আপনার পাসওয়ার্ড নিশ্চিত করুন",
       "emailInvalid": "একটি বৈধ ইমেল ঠিকানা লিখুন",
       "emailLabel": "ব্যক্তিগত ইমেইল",
       "emailPlaceholder": "আপনার ব্যক্তিগত ইমেল লিখুন",
+      "emailTaken": "ইমেল ইতিমধ্যে নিবন্ধিত আছে।",
       "information": {
         "color1": "প্রোফাইল রঙ এক",
         "color2": "প্রোফাইল রঙ দুই",
@@ -141,7 +170,8 @@
       "passwordLabel": "পাসওয়ার্ড",
       "passwordMismatch": "পাসওয়ার্ড মেলে না",
       "passwordPlaceholder": "একটি পাসওয়ার্ড তৈরি করুন (আপনার পাসফ্রেজ হিসাবে ব্যবহৃত)",
-      "passwordWeak": "অক্ষর এবং সংখ্যা সহ পাসওয়ার্ড কমপক্ষে 8 অক্ষরের হতে হবে"
+      "passwordWeak": "অক্ষর এবং সংখ্যা সহ পাসওয়ার্ড কমপক্ষে 8 অক্ষরের হতে হবে",
+      "submit": "অ্যাকাউন্ট তৈরি করুন"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "সম্পাদনা",
         "editProfile": "সম্পাদনা করুন",
+        "emailLabel": "ইমেল",
         "logoutButton": "লগ আউট করুন",
         "nicknameLabel": "ডাকনাম",
-        "nicknamePlaceholder": "আপনার ডাকনাম লিখুন"
+        "nicknamePlaceholder": "আপনার ডাকনাম লিখুন",
+        "noEmail": "কোন ইমেল লিঙ্ক নেই"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "প্রোফাইল রঙ দুই",
         "title": "প্রোফাইল ছবি সম্পাদনা করুন",
         "userIcon": "ব্যবহারকারী আইকন"
+      },
+      "security": {
+        "currentEmailLabel": "বর্তমান ইমেল",
+        "emailDescription": "আমরা আপনার বর্তমান ও নতুন ইমেল ঠিকানা যাচাই করব।",
+        "emailSame": "নতুন ইমেল অবশ্যই আপনার বর্তমান ইমেল থেকে ভিন্ন হতে হবে।",
+        "emailTitle": "ইমেল পরিবর্তন করুন",
+        "newEmailLabel": "নতুন ইমেল ঠিকানা",
+        "passwordDescription": "আমরা আপনার অ্যাকাউন্টের ইমেইলে একটি যাচাইকরণ কোড পাঠাবো।",
+        "passwordTitle": "পাসওয়ার্ড পরিবর্তন করুন",
+        "title": "অ্যাকাউন্টের নিরাপত্তা"
       },
       "register": {
         "cta": "শুরু করুন",
@@ -1451,9 +1494,15 @@
     "close": "বন্ধ করুন"
   },
   "toasts": {
+    "emailChangeSuccess": "ইমেল সফলভাবে আপডেট করা হয়েছে!",
     "linkCopied": "লিঙ্ক ক্লিপবোর্ডে অনুলিপি করা হয়েছে!",
     "loginSuccess": "সফলভাবে লগ ইন!",
     "logoutSuccess": "সফলভাবে লগ আউট!",
+    "otpResent": "যাচাইকরণ কোডটি পুনরায় পাঠানো হয়েছে!",
+    "otpSent": "আপনার ইমেইলে ভেরিফিকেশন কোড পাঠানো হয়েছে!",
+    "passwordChangeSuccess": "পাসওয়ার্ড সফলভাবে পরিবর্তন করা হয়েছে!",
+    "passwordResetError": "পাসওয়ার্ড রিসেট করতে ব্যর্থ হয়েছে",
+    "passwordResetSuccess": "পাসওয়ার্ড সফলভাবে রিসেট করা হয়েছে!",
     "registerSuccess": "সফলভাবে নিবন্ধিত!"
   }
 }

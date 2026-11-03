@@ -152,6 +152,7 @@ export function AccountSettings(props: {
   return (
     <>
       <AccountEditPart
+        account={account}
         deviceName={props.deviceName}
         setDeviceName={props.setDeviceName}
         nickname={props.nickname}

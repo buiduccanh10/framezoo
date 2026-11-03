@@ -116,12 +116,41 @@
       "usePasskey": "Utilitzeu la clau d'accés",
       "validationError": "Frase de contrasenya incorrecta o incompleta"
     },
+    "otp": {
+      "codeLabel": "Codi de verificació",
+      "continue": "Continua",
+      "emailNewDescription": "Introdueix el codi que t'hem enviat al teu correu electrònic nou.",
+      "emailNewTitle": "Verifica el teu correu electrònic nou",
+      "emailOldDescription": "Introdueix el codi que t'han enviat al teu correu electrònic actual.",
+      "emailOldTitle": "Confirma el teu correu electrònic actual",
+      "expired": "El codi de verificació ha caducat",
+      "expiresIn": "El codi caduca en {{time}}",
+      "finish": "Finalitzar",
+      "forgotDescription": "Introdueix el correu electrònic del teu compte per rebre un codi de verificació.",
+      "forgotLink": "Has oblidat la contrasenya?",
+      "forgotTitle": "Has oblidat la contrasenya?",
+      "invalid": "Codi de verificació no vàlid",
+      "newPasswordDescription": "Trieu una nova contrasenya per al vostre compte.",
+      "newPasswordTitle": "Crea una contrasenya nova",
+      "passwordChangeDescription": "Introdueix el codi que t'hem enviat al correu electrònic.",
+      "passwordChangeTitle": "Confirma el canvi de contrasenya",
+      "registrationDescription": "Introdueix el codi que t'hem enviat al correu electrònic per acabar de crear el teu compte.",
+      "registrationTitle": "Verifica el teu correu electrònic",
+      "requestFailed": "No s'ha pogut enviar el codi de verificació",
+      "resend": "Torna a enviar el codi",
+      "resendFailed": "No es pot tornar a enviar el codi",
+      "resendIn": "Reenviament disponible en {{seconds}}s",
+      "resetDescription": "Introdueix el codi que t'hem enviat al correu electrònic.",
+      "resetTitle": "Restableix la teva contrasenya",
+      "send": "Enviar codi"
+    },
     "register": {
       "confirmPasswordLabel": "Confirmeu la contrasenya",
       "confirmPasswordPlaceholder": "Confirmeu la vostra contrasenya",
       "emailInvalid": "Introduïu una adreça de correu electrònic vàlida",
       "emailLabel": "Correu electrònic personal",
       "emailPlaceholder": "Introduïu el vostre correu electrònic personal",
+      "emailTaken": "El correu electrònic ja està registrat",
       "information": {
         "color1": "Color de perfil 1",
         "color2": "Color de perfil 2",
@@ -141,7 +170,8 @@
       "passwordLabel": "Contrasenya",
       "passwordMismatch": "Les contrasenyes no coincideixen",
       "passwordPlaceholder": "Crea una contrasenya (utilitzada com a frase de contrasenya)",
-      "passwordWeak": "La contrasenya ha de tenir com a mínim 8 caràcters amb lletres i números"
+      "passwordWeak": "La contrasenya ha de tenir com a mínim 8 caràcters amb lletres i números",
+      "submit": "Crea un compte"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "Edita",
         "editProfile": "Edita",
+        "emailLabel": "Correu electrònic",
         "logoutButton": "Tanca la sessió",
         "nicknameLabel": "Pseudònim",
-        "nicknamePlaceholder": "Introduïu el vostre àlies"
+        "nicknamePlaceholder": "Introduïu el vostre àlies",
+        "noEmail": "No hi ha cap correu electrònic enllaçat"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "Color de perfil dos",
         "title": "Edita la foto de perfil",
         "userIcon": "Icona d'usuari"
+      },
+      "security": {
+        "currentEmailLabel": "Correu electrònic actual",
+        "emailDescription": "Verificarem les vostres adreces de correu electrònic actuals i noves.",
+        "emailSame": "El nou correu electrònic ha de ser diferent del correu electrònic actual",
+        "emailTitle": "Canvia el correu electrònic",
+        "newEmailLabel": "Nova adreça de correu electrònic",
+        "passwordDescription": "T'enviarem un codi de verificació al correu electrònic del teu compte.",
+        "passwordTitle": "Canvia la contrasenya",
+        "title": "Seguretat del compte"
       },
       "register": {
         "cta": "Comença",
@@ -1451,9 +1494,15 @@
     "close": "Tanca"
   },
   "toasts": {
+    "emailChangeSuccess": "Correu electrònic actualitzat correctament!",
     "linkCopied": "S'ha copiat l'enllaç al porta-retalls!",
     "loginSuccess": "S'ha iniciat sessió correctament!",
     "logoutSuccess": "S'ha tancat la sessió correctament!",
+    "otpResent": "El codi de verificació s'ha tornat a enviar!",
+    "otpSent": "Codi de verificació enviat al teu correu electrònic!",
+    "passwordChangeSuccess": "La contrasenya s'ha canviat correctament!",
+    "passwordResetError": "No s'ha pogut restablir la contrasenya",
+    "passwordResetSuccess": "La contrasenya s'ha restablert correctament!",
     "registerSuccess": "Registrat amb èxit!"
   }
 }

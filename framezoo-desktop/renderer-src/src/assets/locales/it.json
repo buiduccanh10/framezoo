@@ -116,12 +116,41 @@
       "usePasskey": "Usa la chiave di accesso",
       "validationError": "Frase d'accesso incompleta o sbagliata /ᐠ. .ᐟ\\"
     },
+    "otp": {
+      "codeLabel": "codice di verifica",
+      "continue": "Continuare",
+      "emailNewDescription": "Inserisci il codice che ti è stato inviato via email.",
+      "emailNewTitle": "Verifica la tua nuova email",
+      "emailOldDescription": "Inserisci il codice che ti è stato inviato via email.",
+      "emailOldTitle": "Conferma il tuo indirizzo email attuale",
+      "expired": "Il codice di verifica è scaduto",
+      "expiresIn": "Il codice scade tra {{time}}",
+      "finish": "Fine",
+      "forgotDescription": "Inserisci l'indirizzo email associato al tuo account per ricevere un codice di verifica.",
+      "forgotLink": "Hai dimenticato la password?",
+      "forgotTitle": "Ha dimenticato la password?",
+      "invalid": "Codice di verifica non valido",
+      "newPasswordDescription": "Scegli una nuova password per il tuo account.",
+      "newPasswordTitle": "Crea una nuova password",
+      "passwordChangeDescription": "Inserisci il codice che ti è stato inviato via email.",
+      "passwordChangeTitle": "Conferma la modifica della password",
+      "registrationDescription": "Inserisci il codice che ti è stato inviato via email per completare la creazione del tuo account.",
+      "registrationTitle": "Verifica la tua email",
+      "requestFailed": "Impossibile inviare il codice di verifica",
+      "resend": "Reinvia il codice",
+      "resendFailed": "Impossibile reinviare il codice",
+      "resendIn": "Reinvia disponibile in {{seconds}}s",
+      "resetDescription": "Inserisci il codice che ti è stato inviato via email.",
+      "resetTitle": "Reimposta la tua password",
+      "send": "Invia il codice"
+    },
     "register": {
       "confirmPasswordLabel": "Conferma password",
       "confirmPasswordPlaceholder": "Conferma la tua password",
       "emailInvalid": "Inserisci un indirizzo email valido",
       "emailLabel": "E-mail personale",
       "emailPlaceholder": "Inserisci la tua email personale",
+      "emailTaken": "L'indirizzo email è già registrato",
       "information": {
         "color1": "Colore profilo uno",
         "color2": "Colore profilo due",
@@ -141,7 +170,8 @@
       "passwordLabel": "Password",
       "passwordMismatch": "Le password non corrispondono",
       "passwordPlaceholder": "Crea una password (usata come passphrase)",
-      "passwordWeak": "La password deve contenere almeno 8 caratteri con lettere e numeri"
+      "passwordWeak": "La password deve contenere almeno 8 caratteri con lettere e numeri",
+      "submit": "Creare un account"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "Modificare",
         "editProfile": "Modifica",
+        "emailLabel": "E-mail",
         "logoutButton": "Esci",
         "nicknameLabel": "Soprannome",
-        "nicknamePlaceholder": "Inserisci il tuo soprannome"
+        "nicknamePlaceholder": "Inserisci il tuo soprannome",
+        "noEmail": "Nessun link e-mail"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "Colore profilo due",
         "title": "Modifica l'immagine profilo",
         "userIcon": "Icona utente"
+      },
+      "security": {
+        "currentEmailLabel": "Indirizzo email attuale",
+        "emailDescription": "Verificheremo il tuo indirizzo email attuale e quello nuovo.",
+        "emailSame": "Il nuovo indirizzo email deve essere diverso da quello attuale.",
+        "emailTitle": "Cambia email",
+        "newEmailLabel": "Nuovo indirizzo email",
+        "passwordDescription": "Ti invieremo un codice di verifica all'indirizzo email associato al tuo account.",
+        "passwordTitle": "Cambiare la password",
+        "title": "Sicurezza dell'account"
       },
       "register": {
         "cta": "Inizia",
@@ -1451,9 +1494,15 @@
     "close": "Vicino"
   },
   "toasts": {
+    "emailChangeSuccess": "Email aggiornata con successo!",
     "linkCopied": "Link copiato negli appunti!",
     "loginSuccess": "Accesso effettuato con successo!",
     "logoutSuccess": "Disconnesso con successo!",
+    "otpResent": "Il codice di verifica è stato inviato nuovamente!",
+    "otpSent": "Il codice di verifica è stato inviato alla tua email!",
+    "passwordChangeSuccess": "Password modificata con successo!",
+    "passwordResetError": "Impossibile reimpostare la password",
+    "passwordResetSuccess": "Password reimpostata con successo!",
     "registerSuccess": "Registrato con successo!"
   }
 }

@@ -16,9 +16,11 @@ import { MwLink } from "@/components/text/Link";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { useBookmarkStore } from "@/stores/bookmarks";
+import { useToastStore } from "@/stores/interface/toast";
 import { useProgressStore } from "@/stores/progress";
 
 import { type PasswordInputData, PasswordInputPart } from "./PasswordInputPart";
+import { PasswordRecoveryPart } from "./PasswordRecoveryPart";
 
 interface LoginFormPartProps {
   onLogin?: () => void;
@@ -31,9 +33,11 @@ export function LoginFormPart(props: LoginFormPartProps) {
   const bookmarkItems = useBookmarkStore((store) => store.bookmarks);
   const backendUrl = useBackendUrl();
   const { t } = useTranslation();
+  const showToast = useToastStore((s) => s.showToast);
 
   const [nicknameError, setNicknameError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [showRecovery, setShowRecovery] = useState(false);
 
   const getFriendlyLoginError = (error: unknown): string => {
     const anyErr = error as any;
@@ -141,13 +145,15 @@ export function LoginFormPart(props: LoginFormPartProps) {
           beMessage.toLowerCase().includes("signature") ||
           beMessage.toLowerCase().includes("credential")
         ) {
-          setPasswordError(
+          const invalidMsg =
             t("auth.login.invalidCredentials") ??
-              "Username or password is incorrect",
-          );
+            "Username or password is incorrect";
+          setPasswordError(invalidMsg);
+          showToast(invalidMsg, "error");
           return;
         }
 
+        showToast(getFriendlyLoginError(err), "error");
         throw err;
       }
 
@@ -180,6 +186,16 @@ export function LoginFormPart(props: LoginFormPartProps) {
   };
 
   const globalError = result.error || passkeyResult.error;
+
+  if (showRecovery && backendUrl) {
+    return (
+      <PasswordRecoveryPart
+        backendUrl={backendUrl}
+        onComplete={props.onLogin}
+        onBack={() => setShowRecovery(false)}
+      />
+    );
+  }
 
   return (
     <LargeCard compact top={<BrandPill backgroundClass="bg-[#161527]" />}>
@@ -224,6 +240,13 @@ export function LoginFormPart(props: LoginFormPartProps) {
             {getFriendlyLoginError(globalError)}
           </p>
         ) : null}
+        <button
+          type="button"
+          className="w-full text-sm text-type-link hover:underline"
+          onClick={() => setShowRecovery(true)}
+        >
+          {t("auth.otp.forgotLink", "Forgot your password?")}
+        </button>
       </div>
       <p className="text-center mt-4 sm:mt-6">
         <Trans i18nKey="auth.createAccount">

@@ -290,7 +290,7 @@ export async function checkNicknameExists(
 ): Promise<boolean> {
   try {
     const response = await ofetch<{ exists: boolean }>(
-      `/nickname/${nickname}/exists`,
+      `/nickname/${encodeURIComponent(nickname)}/exists`,
       {
         credentials: "include",
         baseURL: url,
@@ -299,5 +299,21 @@ export async function checkNicknameExists(
     return response.exists;
   } catch {
     return true; // If error, assume exists to be safe
+  }
+}
+
+export async function checkEmailExists(
+  url: string,
+  email: string,
+): Promise<boolean> {
+  try {
+    const response = await ofetch<{ exists: boolean }>("/auth/email/exists", {
+      credentials: "include",
+      query: { email },
+      baseURL: url,
+    });
+    return response.exists;
+  } catch {
+    return false;
   }
 }

@@ -116,12 +116,41 @@
       "usePasskey": "ਪਾਸਕੁੰਜੀ ਦੀ ਵਰਤੋਂ ਕਰੋ",
       "validationError": "ਗਲਤ ਜਾਂ ਅਧੂਰਾ ਗੁਪਤਕੋਡ"
     },
+    "otp": {
+      "codeLabel": "ਪੜਤਾਲ ਕੋਡ",
+      "continue": "ਜਾਰੀ ਰੱਖੋ",
+      "emailNewDescription": "ਆਪਣੀ ਨਵੀਂ ਈਮੇਲ 'ਤੇ ਭੇਜਿਆ ਗਿਆ ਕੋਡ ਦਰਜ ਕਰੋ।",
+      "emailNewTitle": "ਆਪਣੀ ਨਵੀਂ ਈਮੇਲ ਦੀ ਪੁਸ਼ਟੀ ਕਰੋ",
+      "emailOldDescription": "ਆਪਣੀ ਮੌਜੂਦਾ ਈਮੇਲ 'ਤੇ ਭੇਜਿਆ ਗਿਆ ਕੋਡ ਦਰਜ ਕਰੋ।",
+      "emailOldTitle": "ਆਪਣੀ ਮੌਜੂਦਾ ਈਮੇਲ ਦੀ ਪੁਸ਼ਟੀ ਕਰੋ",
+      "expired": "ਪੁਸ਼ਟੀਕਰਨ ਕੋਡ ਦੀ ਮਿਆਦ ਸਮਾਪਤ ਹੋ ਗਈ ਹੈ",
+      "expiresIn": "ਕੋਡ ਦੀ ਮਿਆਦ {{time}} ਵਿੱਚ ਸਮਾਪਤ ਹੋ ਜਾਵੇਗੀ।",
+      "finish": "ਸਮਾਪਤ ਕਰੋ",
+      "forgotDescription": "ਪੁਸ਼ਟੀਕਰਨ ਕੋਡ ਪ੍ਰਾਪਤ ਕਰਨ ਲਈ ਆਪਣਾ ਖਾਤਾ ਈਮੇਲ ਦਰਜ ਕਰੋ।",
+      "forgotLink": "ਆਪਣਾ ਪਾਸਵਰਡ ਭੁੱਲ ਗਏ?",
+      "forgotTitle": "ਪਾਸਵਰਡ ਭੁੱਲ ਗਏ?",
+      "invalid": "ਅਵੈਧ ਪੁਸ਼ਟੀਕਰਨ ਕੋਡ",
+      "newPasswordDescription": "ਆਪਣੇ ਖਾਤੇ ਲਈ ਇੱਕ ਨਵਾਂ ਪਾਸਵਰਡ ਚੁਣੋ।",
+      "newPasswordTitle": "ਇੱਕ ਨਵਾਂ ਪਾਸਵਰਡ ਬਣਾਓ",
+      "passwordChangeDescription": "ਆਪਣੀ ਈਮੇਲ 'ਤੇ ਭੇਜਿਆ ਗਿਆ ਕੋਡ ਦਰਜ ਕਰੋ।",
+      "passwordChangeTitle": "ਪਾਸਵਰਡ ਬਦਲਣ ਦੀ ਪੁਸ਼ਟੀ ਕਰੋ",
+      "registrationDescription": "ਆਪਣਾ ਖਾਤਾ ਬਣਾਉਣਾ ਪੂਰਾ ਕਰਨ ਲਈ ਆਪਣੀ ਈਮੇਲ 'ਤੇ ਭੇਜਿਆ ਗਿਆ ਕੋਡ ਦਰਜ ਕਰੋ।",
+      "registrationTitle": "ਆਪਣੀ ਈਮੇਲ ਦੀ ਪੁਸ਼ਟੀ ਕਰੋ",
+      "requestFailed": "ਪੁਸ਼ਟੀਕਰਨ ਕੋਡ ਭੇਜਿਆ ਨਹੀਂ ਜਾ ਸਕਿਆ",
+      "resend": "ਕੋਡ ਦੁਬਾਰਾ ਭੇਜੋ",
+      "resendFailed": "ਕੋਡ ਦੁਬਾਰਾ ਨਹੀਂ ਭੇਜਿਆ ਜਾ ਸਕਿਆ।",
+      "resendIn": "ਦੁਬਾਰਾ ਭੇਜਣਾ {{seconds}}s ਵਿੱਚ ਉਪਲਬਧ ਹੈ",
+      "resetDescription": "ਆਪਣੀ ਈਮੇਲ 'ਤੇ ਭੇਜਿਆ ਗਿਆ ਕੋਡ ਦਰਜ ਕਰੋ।",
+      "resetTitle": "ਆਪਣਾ ਪਾਸਵਰਡ ਰੀਸੈਟ ਕਰੋ",
+      "send": "ਕੋਡ ਭੇਜੋ"
+    },
     "register": {
       "confirmPasswordLabel": "ਪਾਸਵਰਡ ਪੱਕਾ ਕਰੋ",
       "confirmPasswordPlaceholder": "ਆਪਣੇ ਪਾਸਵਰਡ ਦੀ ਪੁਸ਼ਟੀ ਕਰੋ",
       "emailInvalid": "ਇੱਕ ਵੈਧ ਈਮੇਲ ਪਤਾ ਦਰਜ ਕਰੋ",
       "emailLabel": "ਨਿੱਜੀ ਈਮੇਲ",
       "emailPlaceholder": "ਆਪਣੀ ਨਿੱਜੀ ਈਮੇਲ ਦਰਜ ਕਰੋ",
+      "emailTaken": "ਈਮੇਲ ਪਹਿਲਾਂ ਹੀ ਰਜਿਸਟਰਡ ਹੈ।",
       "information": {
         "color1": "ਪਰੋਫਾਇਲ ਦਾ ਪੇਹਲਾ ਰੰਗ",
         "color2": "ਪ੍ਰੋਫਾਇਲ ਦਾ ਦੂਜਾ ਰੰਗ",
@@ -141,7 +170,8 @@
       "passwordLabel": "ਪਾਸਵਰਡ",
       "passwordMismatch": "ਪਾਸਵਰਡ ਮੇਲ ਨਹੀਂ ਖਾਂਦੇ",
       "passwordPlaceholder": "ਇੱਕ ਪਾਸਵਰਡ ਬਣਾਓ (ਤੁਹਾਡੇ ਗੁਪਤਕੋਡ ਵਜੋਂ ਵਰਤਿਆ ਜਾਂਦਾ ਹੈ)",
-      "passwordWeak": "ਪਾਸਵਰਡ ਅੱਖਰਾਂ ਅਤੇ ਸੰਖਿਆਵਾਂ ਦੇ ਨਾਲ ਘੱਟੋ-ਘੱਟ 8 ਅੱਖਰਾਂ ਦਾ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ"
+      "passwordWeak": "ਪਾਸਵਰਡ ਅੱਖਰਾਂ ਅਤੇ ਸੰਖਿਆਵਾਂ ਦੇ ਨਾਲ ਘੱਟੋ-ਘੱਟ 8 ਅੱਖਰਾਂ ਦਾ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ",
+      "submit": "ਖਾਤਾ ਬਣਾਉ"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "ਸੋਧੋ",
         "editProfile": "ਸੰਪਾਦਿਤ ਕਰੋ",
+        "emailLabel": "ਈਮੇਲ",
         "logoutButton": "ਲਾੱਗ ਆਊਟ",
         "nicknameLabel": "ਉਪਨਾਮ",
-        "nicknamePlaceholder": "ਆਪਣਾ ਉਪਨਾਮ ਦਰਜ ਕਰੋ"
+        "nicknamePlaceholder": "ਆਪਣਾ ਉਪਨਾਮ ਦਰਜ ਕਰੋ",
+        "noEmail": "ਕੋਈ ਈਮੇਲ ਲਿੰਕ ਨਹੀਂ ਹੈ"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "ਪ੍ਰੋਫਾਈਲ ਰੰਗ ਦੋ",
         "title": "ਪ੍ਰੋਫਾਈਲ ਤਸਵੀਰ ਦਾ ਸੰਪਾਦਨ ਕਰੋ",
         "userIcon": "ਉਪਭੋਗਤਾ ਪ੍ਰਤੀਕ"
+      },
+      "security": {
+        "currentEmailLabel": "ਮੌਜੂਦਾ ਈਮੇਲ",
+        "emailDescription": "ਅਸੀਂ ਤੁਹਾਡੇ ਮੌਜੂਦਾ ਅਤੇ ਨਵੇਂ ਈਮੇਲ ਪਤਿਆਂ ਦੀ ਪੁਸ਼ਟੀ ਕਰਾਂਗੇ।",
+        "emailSame": "ਨਵੀਂ ਈਮੇਲ ਤੁਹਾਡੇ ਮੌਜੂਦਾ ਈਮੇਲ ਤੋਂ ਵੱਖਰੀ ਹੋਣੀ ਚਾਹੀਦੀ ਹੈ।",
+        "emailTitle": "ਈਮੇਲ ਬਦਲੋ",
+        "newEmailLabel": "ਨਵਾਂ ਈਮੇਲ ਪਤਾ",
+        "passwordDescription": "ਅਸੀਂ ਤੁਹਾਡੇ ਖਾਤੇ ਦੀ ਈਮੇਲ 'ਤੇ ਇੱਕ ਪੁਸ਼ਟੀਕਰਨ ਕੋਡ ਭੇਜਾਂਗੇ।",
+        "passwordTitle": "ਪਾਸਵਰਡ ਬਦਲੋ",
+        "title": "ਖਾਤਾ ਸੁਰੱਖਿਆ"
       },
       "register": {
         "cta": "ਸ਼ੁਰੂ ਕਰੋ",
@@ -1451,9 +1494,15 @@
     "close": "ਬੰਦ ਕਰੋ"
   },
   "toasts": {
+    "emailChangeSuccess": "ਈਮੇਲ ਸਫਲਤਾਪੂਰਵਕ ਅੱਪਡੇਟ ਕੀਤੀ ਗਈ!",
     "linkCopied": "ਲਿੰਕ ਕਲਿੱਪਬੋਰਡ 'ਤੇ ਕਾਪੀ ਕੀਤਾ ਗਿਆ!",
     "loginSuccess": "ਸਫਲਤਾਪੂਰਵਕ ਲੌਗਇਨ ਕੀਤਾ ਗਿਆ!",
     "logoutSuccess": "ਸਫਲਤਾਪੂਰਵਕ ਲੌਗ ਆਊਟ ਕੀਤਾ ਗਿਆ!",
+    "otpResent": "ਪੁਸ਼ਟੀਕਰਨ ਕੋਡ ਦੁਬਾਰਾ ਭੇਜਿਆ ਗਿਆ ਹੈ!",
+    "otpSent": "ਪੁਸ਼ਟੀਕਰਨ ਕੋਡ ਤੁਹਾਡੀ ਈਮੇਲ 'ਤੇ ਭੇਜਿਆ ਗਿਆ!",
+    "passwordChangeSuccess": "ਪਾਸਵਰਡ ਸਫਲਤਾਪੂਰਵਕ ਬਦਲਿਆ ਗਿਆ!",
+    "passwordResetError": "ਪਾਸਵਰਡ ਰੀਸੈਟ ਕਰਨ ਵਿੱਚ ਅਸਫਲ",
+    "passwordResetSuccess": "ਪਾਸਵਰਡ ਰੀਸੈਟ ਸਫਲਤਾਪੂਰਵਕ ਹੋਇਆ!",
     "registerSuccess": "ਸਫਲਤਾਪੂਰਵਕ ਰਜਿਸਟਰ ਕੀਤਾ ਗਿਆ!"
   }
 }

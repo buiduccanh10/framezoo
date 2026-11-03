@@ -116,12 +116,41 @@
       "usePasskey": "Használjon jelszót",
       "validationError": "Érvénytelen vagy hiányos szósorozat"
     },
+    "otp": {
+      "codeLabel": "Ellenőrző kód",
+      "continue": "Folytatás",
+      "emailNewDescription": "Add meg az új e-mail címedre küldött kódot.",
+      "emailNewTitle": "Új e-mail cím ellenőrzése",
+      "emailOldDescription": "Add meg a jelenlegi e-mail címedre küldött kódot.",
+      "emailOldTitle": "Erősítse meg jelenlegi e-mail címét",
+      "expired": "Az ellenőrző kód lejárt",
+      "expiresIn": "A kód lejár {{time}} múlva",
+      "finish": "Befejezés",
+      "forgotDescription": "Add meg a fiókodhoz tartozó e-mail címet, hogy megkapd az ellenőrző kódot.",
+      "forgotLink": "Elfelejtette jelszavát?",
+      "forgotTitle": "Elfelejtett jelszó?",
+      "invalid": "Érvénytelen ellenőrző kód",
+      "newPasswordDescription": "Válasszon új jelszót a fiókjához.",
+      "newPasswordTitle": "Hozzon létre egy új jelszót",
+      "passwordChangeDescription": "Add meg az e-mail címedre küldött kódot.",
+      "passwordChangeTitle": "Jelszómódosítás megerősítése",
+      "registrationDescription": "Add meg az e-mail címedre küldött kódot a fiókod létrehozásának befejezéséhez.",
+      "registrationTitle": "E-mail cím ellenőrzése",
+      "requestFailed": "Nem sikerült elküldeni az ellenőrző kódot",
+      "resend": "Kód újraküldése",
+      "resendFailed": "Nem sikerült újraküldeni a kódot",
+      "resendIn": "Újraküldés {{seconds}}s múlva lehetséges",
+      "resetDescription": "Add meg az e-mail címedre küldött kódot.",
+      "resetTitle": "Jelszó visszaállítása",
+      "send": "Kód küldése"
+    },
     "register": {
       "confirmPasswordLabel": "Jelszó megerősítése",
       "confirmPasswordPlaceholder": "Erősítse meg jelszavát",
       "emailInvalid": "Adjon meg egy érvényes e-mail címet",
       "emailLabel": "Személyes e-mail",
       "emailPlaceholder": "Adja meg személyes e-mail címét",
+      "emailTaken": "Az e-mail már regisztrálva van",
       "information": {
         "color1": "Első profil szín",
         "color2": "Második profil szín",
@@ -141,7 +170,8 @@
       "passwordLabel": "Jelszó",
       "passwordMismatch": "A jelszavak nem egyeznek",
       "passwordPlaceholder": "Hozzon létre egy jelszót (jelszóként használva)",
-      "passwordWeak": "A jelszónak legalább 8 karakterből kell állnia betűkkel és számokkal"
+      "passwordWeak": "A jelszónak legalább 8 karakterből kell állnia betűkkel és számokkal",
+      "submit": "Fiók létrehozása"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "Szerkesztés",
         "editProfile": "Szerkesztés",
+        "emailLabel": "Email",
         "logoutButton": "Kijelentkezés",
         "nicknameLabel": "Becenév",
-        "nicknamePlaceholder": "Írja be a becenevét"
+        "nicknamePlaceholder": "Írja be a becenevét",
+        "noEmail": "Nincs csatolt e-mail cím"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "Második számű profil szín",
         "title": "Profilkép módosítása",
         "userIcon": "Felhasználói ikon"
+      },
+      "security": {
+        "currentEmailLabel": "Jelenlegi e-mail cím",
+        "emailDescription": "Ellenőrizni fogjuk a jelenlegi és az új e-mail címedet.",
+        "emailSame": "Az új e-mail címnek el kell térnie a jelenlegi e-mail címtől",
+        "emailTitle": "E-mail módosítása",
+        "newEmailLabel": "Új e-mail cím",
+        "passwordDescription": "Ellenőrző kódot küldünk a fiókodhoz tartozó e-mail címre.",
+        "passwordTitle": "Jelszó módosítása",
+        "title": "Fiókbiztonság"
       },
       "register": {
         "cta": "Első lépések",
@@ -1451,9 +1494,15 @@
     "close": "Közeli"
   },
   "toasts": {
+    "emailChangeSuccess": "E-mail cím sikeresen frissítve!",
     "linkCopied": "Link a vágólapra másolva!",
     "loginSuccess": "Sikeres bejelentkezés!",
     "logoutSuccess": "Sikeresen kijelentkezett!",
+    "otpResent": "Az ellenőrző kód újraküldve!",
+    "otpSent": "Ellenőrző kód elküldve az e-mail címedre!",
+    "passwordChangeSuccess": "Jelszó sikeresen megváltoztatva!",
+    "passwordResetError": "Nem sikerült visszaállítani a jelszót",
+    "passwordResetSuccess": "Jelszó visszaállítása sikeresen megtörtént!",
     "registerSuccess": "Sikeres regisztráció!"
   }
 }

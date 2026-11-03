@@ -116,12 +116,41 @@
       "usePasskey": "Gunakan kunci sandi",
       "validationError": "Kombinasi kata salah atau tidak lengkap"
     },
+    "otp": {
+      "codeLabel": "Kode verifikasi",
+      "continue": "Melanjutkan",
+      "emailNewDescription": "Masukkan kode yang dikirimkan ke email baru Anda.",
+      "emailNewTitle": "Verifikasi email baru Anda",
+      "emailOldDescription": "Masukkan kode yang dikirimkan ke email Anda saat ini.",
+      "emailOldTitle": "Konfirmasikan email Anda saat ini",
+      "expired": "Kode verifikasi telah kedaluwarsa.",
+      "expiresIn": "Kode kedaluwarsa di __PH__",
+      "finish": "Menyelesaikan",
+      "forgotDescription": "Masukkan email akun Anda untuk menerima kode verifikasi.",
+      "forgotLink": "Lupa kata sandi Anda?",
+      "forgotTitle": "Lupa kata sandi?",
+      "invalid": "Kode verifikasi tidak valid",
+      "newPasswordDescription": "Pilih kata sandi baru untuk akun Anda.",
+      "newPasswordTitle": "Buat kata sandi baru",
+      "passwordChangeDescription": "Masukkan kode yang dikirimkan ke email Anda.",
+      "passwordChangeTitle": "Konfirmasi perubahan kata sandi",
+      "registrationDescription": "Masukkan kode yang dikirim ke email Anda untuk menyelesaikan pembuatan akun Anda.",
+      "registrationTitle": "Verifikasi email Anda",
+      "requestFailed": "Tidak dapat mengirim kode verifikasi",
+      "resend": "Kirim ulang kode",
+      "resendFailed": "Tidak dapat mengirim ulang kode",
+      "resendIn": "Pengiriman ulang tersedia di __PH__0__s",
+      "resetDescription": "Masukkan kode yang dikirimkan ke email Anda.",
+      "resetTitle": "Atur ulang kata sandi Anda",
+      "send": "Kirim kode"
+    },
     "register": {
       "confirmPasswordLabel": "Konfirmasi Kata Sandi",
       "confirmPasswordPlaceholder": "Konfirmasikan kata sandi Anda",
       "emailInvalid": "Masukkan alamat email yang valid",
       "emailLabel": "Email pribadi",
       "emailPlaceholder": "Masukkan email pribadi Anda",
+      "emailTaken": "Email sudah terdaftar",
       "information": {
         "color1": "Warna profil pertama",
         "color2": "Warna profil kedua",
@@ -141,7 +170,8 @@
       "passwordLabel": "Kata sandi",
       "passwordMismatch": "Kata sandi tidak cocok",
       "passwordPlaceholder": "Buat kata sandi (digunakan sebagai frasa sandi Anda)",
-      "passwordWeak": "Kata sandi minimal harus 8 karakter dengan huruf dan angka"
+      "passwordWeak": "Kata sandi minimal harus 8 karakter dengan huruf dan angka",
+      "submit": "Buat akun"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "Edit",
         "editProfile": "Ubah",
+        "emailLabel": "E-mail",
         "logoutButton": "Keluar",
         "nicknameLabel": "Nama panggilan",
-        "nicknamePlaceholder": "Masukkan nama panggilan Anda"
+        "nicknamePlaceholder": "Masukkan nama panggilan Anda",
+        "noEmail": "Tidak ada tautan email."
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "Gradasi warna profil kedua",
         "title": "Ubah foto profil",
         "userIcon": "Ikon pengguna"
+      },
+      "security": {
+        "currentEmailLabel": "Email saat ini",
+        "emailDescription": "Kami akan memverifikasi alamat email Anda yang lama dan yang baru.",
+        "emailSame": "Alamat email baru harus berbeda dari alamat email Anda saat ini.",
+        "emailTitle": "Ubah email",
+        "newEmailLabel": "Alamat email baru",
+        "passwordDescription": "Kami akan mengirimkan kode verifikasi ke email akun Anda.",
+        "passwordTitle": "Ubah kata sandi",
+        "title": "Keamanan akun"
       },
       "register": {
         "cta": "Memulai",
@@ -1451,9 +1494,15 @@
     "close": "Menutup"
   },
   "toasts": {
+    "emailChangeSuccess": "Email berhasil diperbarui!",
     "linkCopied": "Tautan disalin ke papan klip!",
     "loginSuccess": "Berhasil masuk!",
     "logoutSuccess": "Berhasil keluar!",
+    "otpResent": "Kode verifikasi telah dikirim ulang!",
+    "otpSent": "Kode verifikasi telah dikirim ke email Anda!",
+    "passwordChangeSuccess": "Kata sandi berhasil diubah!",
+    "passwordResetError": "Gagal mengatur ulang kata sandi",
+    "passwordResetSuccess": "Kata sandi berhasil direset!",
     "registerSuccess": "Berhasil mendaftar!"
   }
 }

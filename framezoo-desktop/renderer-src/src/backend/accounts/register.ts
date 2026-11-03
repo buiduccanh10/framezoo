@@ -7,6 +7,24 @@ export interface ChallengeTokenResponse {
   challenge: string;
 }
 
+export interface OtpChallengeResponse {
+  challengeId: string;
+  expiresIn: number;
+  resendAfter: number;
+}
+
+export async function requestRegistrationOtp(
+  url: string,
+  email: string,
+): Promise<OtpChallengeResponse> {
+  return ofetch<OtpChallengeResponse>("/auth/register/otp/request", {
+    method: "POST",
+    credentials: "include",
+    body: { email },
+    baseURL: url,
+  });
+}
+
 export async function getRegisterChallengeToken(
   url: string,
   captchaToken?: string,
@@ -40,6 +58,10 @@ export interface RegisterInput {
     colorA: string;
     colorB: string;
     icon: string;
+  };
+  emailOtp?: {
+    challengeId: string;
+    code: string;
   };
 }
 
