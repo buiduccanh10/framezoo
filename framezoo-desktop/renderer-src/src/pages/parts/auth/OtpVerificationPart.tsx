@@ -10,6 +10,7 @@ import {
   LargeCardButtons,
   LargeCardText,
 } from "@/components/layout/LargeCard";
+import { useOtpCountdown } from "@/hooks/auth/useOtpCountdown";
 import { useToastStore } from "@/stores/interface/toast";
 
 export function OtpVerificationPart(props: {
@@ -25,27 +26,18 @@ export function OtpVerificationPart(props: {
   const showToast = useToastStore((s) => s.showToast);
   const [challengeId, setChallengeId] = useState(props.challenge.challengeId);
   const [code, setCode] = useState("");
-  const [expiresIn, setExpiresIn] = useState(props.challenge.expiresIn);
-  const [resendAfter, setResendAfter] = useState(0);
   const [error, setError] = useState<string | null>(null);
+
+  const countdown = useOtpCountdown(props.challenge.expiresIn, 0);
 
   useEffect(() => {
     setChallengeId(props.challenge.challengeId);
-    setExpiresIn(props.challenge.expiresIn);
-    setResendAfter(0);
+    countdown.reset(props.challenge.expiresIn, 0);
     setCode("");
   }, [props.challenge.challengeId, props.challenge.expiresIn]);
 
-  useEffect(() => {
-    const timer = window.setInterval(() => {
-      setExpiresIn((current) => Math.max(0, current - 1));
-      setResendAfter((current) => Math.max(0, current - 1));
-    }, 1000);
-    return () => window.clearInterval(timer);
-  }, []);
-
   const [verifyResult, verify] = useAsyncFn(async () => {
-    if (code.length !== 6 || expiresIn <= 0) return;
+    if (code.length !== 6 || countdown.isExpired) return;
     setError(null);
     try {
       await props.onVerify(challengeId, code);
@@ -58,15 +50,14 @@ export function OtpVerificationPart(props: {
       setError(errMessage);
       showToast(errMessage, "error");
     }
-  }, [challengeId, code, expiresIn, props, showToast, t]);
+  }, [challengeId, code, countdown.isExpired, props, showToast, t]);
 
   const [resendResult, resend] = useAsyncFn(async () => {
     setError(null);
     try {
       const next = await props.onResend(challengeId);
       setChallengeId(next.challengeId);
-      setExpiresIn(next.expiresIn);
-      setResendAfter(next.resendAfter > 0 ? next.resendAfter : 60);
+      countdown.reset(next.expiresIn, next.resendAfter);
       setCode("");
       showToast(
         t("toasts.otpResent", "Verification code has been resent!"),
@@ -81,7 +72,7 @@ export function OtpVerificationPart(props: {
       setError(errMessage);
       showToast(errMessage, "error");
     }
-  }, [challengeId, props, showToast, t]);
+  }, [challengeId, countdown, props, showToast, t]);
 
   return (
     <LargeCard compact>
@@ -94,7 +85,7 @@ export function OtpVerificationPart(props: {
         autoFocus
         label={t("auth.otp.codeLabel", "Verification code")}
         disabled={
-          verifyResult.loading || resendResult.loading || expiresIn <= 0
+          verifyResult.loading || resendResult.loading || countdown.isExpired
         }
       />
       <div
@@ -103,21 +94,19 @@ export function OtpVerificationPart(props: {
       >
         <p
           className={
-            expiresIn <= 0 ? "text-authentication-errorText" : undefined
+            countdown.isExpired ? "text-authentication-errorText" : undefined
           }
         >
-          {expiresIn > 0
+          {!countdown.isExpired
             ? t("auth.otp.expiresIn", "Code expires in {{time}}", {
-                time: `${Math.floor(expiresIn / 60)}:${String(
-                  expiresIn % 60,
-                ).padStart(2, "0")}`,
+                time: countdown.formattedTime,
               })
             : t("auth.otp.expired", "Verification code expired")}
         </p>
-        {resendAfter > 0 ? (
+        {!countdown.canResend ? (
           <p>
             {t("auth.otp.resendIn", "Resend available in {{seconds}}s", {
-              seconds: resendAfter,
+              seconds: countdown.resendAfter,
             })}
           </p>
         ) : (
@@ -147,7 +136,9 @@ export function OtpVerificationPart(props: {
         <Button
           theme="purple"
           loading={verifyResult.loading}
-          disabled={code.length !== 6 || expiresIn <= 0 || resendResult.loading}
+          disabled={
+            code.length !== 6 || countdown.isExpired || resendResult.loading
+          }
           onClick={verify}
         >
           {props.submitLabel ?? t("auth.otp.continue", "Continue")}

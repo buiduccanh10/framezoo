@@ -36,10 +36,14 @@ export function getNativeSubtitlesAddon(): InstalledAddon {
     if (appDomain && appDomain !== "https://framezoo.top") {
       return appDomain;
     }
+    if (isLocalBackend) {
+      return "http://localhost";
+    }
     if (
       typeof window !== "undefined" &&
       window.location.origin &&
-      window.location.origin.startsWith("http")
+      window.location.origin.startsWith("http") &&
+      !window.location.origin.includes(":5174")
     ) {
       return window.location.origin;
     }

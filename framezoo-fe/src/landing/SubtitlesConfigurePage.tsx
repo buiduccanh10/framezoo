@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import {
   type LandingLocale,
@@ -46,6 +46,7 @@ export function SubtitlesConfigurePage() {
   const [configureToken, setConfigureToken] = useState<string>("");
   const [isVerifyingTicket, setIsVerifyingTicket] = useState(false);
   const [isSavingRemote, setIsSavingRemote] = useState(false);
+  const hasVerifiedRef = useRef(false);
   const [saveRemoteStatus, setSaveRemoteStatus] = useState<
     "idle" | "success" | "error" | "warning"
   >("idle");
@@ -67,7 +68,8 @@ export function SubtitlesConfigurePage() {
     if (typeof window === "undefined") return;
     const urlParams = new URLSearchParams(window.location.search);
     const ticket = urlParams.get("ticket");
-    if (!ticket) return;
+    if (!ticket || hasVerifiedRef.current) return;
+    hasVerifiedRef.current = true;
 
     setIsVerifyingTicket(true);
     (async () => {
@@ -330,7 +332,6 @@ export function SubtitlesConfigurePage() {
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <span>👤</span>
               <span>
                 {t.account.configuringFor} <strong>{account.nickname}</strong>
               </span>

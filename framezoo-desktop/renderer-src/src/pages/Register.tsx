@@ -3,12 +3,7 @@ import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import { Trans, useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { resendOtp } from "@/backend/accounts/emailOtp";
 import { getBackendMeta } from "@/backend/accounts/meta";
-import {
-  OtpChallengeResponse,
-  requestRegistrationOtp,
-} from "@/backend/accounts/register";
 import { Button } from "@/components/buttons/Button";
 import { BackendSelector } from "@/components/form/BackendSelector";
 import {
@@ -18,6 +13,7 @@ import {
 } from "@/components/layout/LargeCard";
 import { MwLink } from "@/components/text/Link";
 import { useAuth } from "@/hooks/auth/useAuth";
+import { useRegistrationOtp } from "@/hooks/auth/useRegistrationOtp";
 import {
   AccountCreatePart,
   AccountProfile,
@@ -30,7 +26,6 @@ import {
 import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
 import { useOverlayStack } from "@/stores/interface/overlayStack";
-import { useToastStore } from "@/stores/interface/toast";
 import { usePreviewThemeStore } from "@/stores/theme";
 
 function CaptchaProvider(props: {
@@ -50,7 +45,6 @@ export function RegisterPanel() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { register } = useAuth();
-  const showToast = useToastStore((s) => s.showToast);
   const setPreviewTheme = usePreviewThemeStore((s) => s.setPreviewTheme);
   const setBackendUrl = useAuthStore((s) => s.setBackendUrl);
   const currentBackendUrl = useAuthStore((s) => s.backendUrl);
@@ -76,15 +70,18 @@ export function RegisterPanel() {
   const [accountProfile, setAccountProfile] = useState<AccountProfile | null>(
     null,
   );
-  const [registrationOtp, setRegistrationOtp] =
-    useState<OtpChallengeResponse | null>(null);
-  const [registrationError, setRegistrationError] = useState<string | null>(
-    null,
-  );
   const [siteKey, setSiteKey] = useState<string | null>(null);
   const [selectedBackendUrl, setSelectedBackendUrl] = useState<string | null>(
     currentBackendUrl ?? defaultBackend ?? null,
   );
+
+  const activeBackendUrl = selectedBackendUrl ?? currentBackendUrl ?? "";
+  const {
+    challenge: registrationOtp,
+    error: registrationError,
+    requestOtp: requestRegistrationOtp,
+    resendOtp,
+  } = useRegistrationOtp(activeBackendUrl);
 
   useEffect(() => {
     setPreviewTheme("ember");
@@ -124,26 +121,11 @@ export function RegisterPanel() {
   const handleAccountNext = async (data: AccountProfile) => {
     setAccountProfile(data);
     if (!passwordData) return;
-    setRegistrationError(null);
     try {
-      const challenge = await requestRegistrationOtp(
-        selectedBackendUrl ?? currentBackendUrl ?? "",
-        passwordData.email ?? "",
-      );
-      setRegistrationOtp(challenge);
+      await requestRegistrationOtp(passwordData.email ?? "");
       setStep(3);
-      showToast(
-        t("toasts.otpSent", "Verification code sent to your email!"),
-        "info",
-      );
-    } catch (error) {
-      const errMessage =
-        (error as any)?.data?.message ??
-        (error as any)?.response?._data?.message ??
-        (error as Error)?.message ??
-        t("auth.otp.requestFailed", "Unable to send verification code");
-      setRegistrationError(errMessage);
-      showToast(errMessage, "error");
+    } catch {
+      // Error handled in hook
     }
   };
 
@@ -223,12 +205,7 @@ export function RegisterPanel() {
           )}
           challenge={registrationOtp}
           onVerify={completeRegistration}
-          onResend={(challengeId) =>
-            resendOtp(
-              selectedBackendUrl ?? currentBackendUrl ?? "",
-              challengeId,
-            )
-          }
+          onResend={resendOtp}
           onBack={() => setStep(2)}
           submitLabel={t("auth.register.submit", "Create account")}
         />
