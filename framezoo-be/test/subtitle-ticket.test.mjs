@@ -22,25 +22,21 @@ test('verify route validates ticket, consumes it once, and issues 15-minute conf
   assert.match(verifyRoute, /storage\.removeItem\(ticketKey\)/); // Single-use consumption
   assert.match(verifyRoute, /subtitles:session:/);
   assert.match(verifyRoute, /ttl: 900/); // 15 minutes
-  assert.match(verifyRoute, /user:wyzie_key:/);
+  assert.match(verifyRoute, /getUserProviderCredential/);
   assert.match(verifyRoute, /configureToken/);
 });
 
-test('save route verifies session token and persists user wyzie key in redis', () => {
+test('save route verifies session token and persists user wyzie key in provider credentials', () => {
   const saveRoute = read('server/routes/addon/subtitles/api/save.post.ts');
 
   assert.match(saveRoute, /subtitles:session:/);
-  assert.match(saveRoute, /user:wyzie_key:/);
-  assert.match(saveRoute, /storage\.setItem\(`user:wyzie_key:/);
-  assert.match(saveRoute, /storage\.removeItem\(`user:wyzie_key:/);
+  assert.match(saveRoute, /setUserProviderCredential/);
 });
 
 test('subtitles search prioritizes query key over user custom key over server key', () => {
-  const subtitlesRoute = read(
-    'server/routes/addon/subtitles/subtitles/[type]/[...id].get.ts'
-  );
+  const subtitlesRoute = read('server/routes/addon/subtitles/subtitles/[type]/[...id].get.ts');
 
-  assert.match(subtitlesRoute, /user:wyzie_key:/);
+  assert.match(subtitlesRoute, /getUserProviderCredential/);
   assert.match(subtitlesRoute, /queryWyzieKey/);
   assert.match(subtitlesRoute, /userWyzieKey/);
   assert.match(subtitlesRoute, /serverWyzieApiKey/);

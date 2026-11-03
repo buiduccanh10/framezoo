@@ -132,6 +132,10 @@ export default defineEventHandler(async event => {
           })
           .catch(() => {});
 
+        await tx.user_provider_credentials.deleteMany({
+          where: { user_id: userId },
+        });
+
         await tx.sessions.deleteMany({
           where: { user: userId },
         });

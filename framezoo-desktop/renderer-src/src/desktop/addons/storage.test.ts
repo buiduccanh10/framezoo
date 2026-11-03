@@ -10,6 +10,7 @@ import {
   mergeAddonLists,
   removeAddon,
   resetAddonStorage,
+  setAddonsFromRemote,
   setAddonEnabled,
   syncAndMigrateAddons,
   upsertAddon,
@@ -67,6 +68,22 @@ describe("addons storage", () => {
     );
 
     expect(native).toBeDefined();
+  });
+
+  it("applies the account native subtitle preference when syncing", () => {
+    setAddonsFromRemote([], false);
+    expect(
+      getInstalledAddons().find(
+        (item) => item.manifest.id === NATIVE_SUBTITLE_ADDON_ID,
+      )?.enabled,
+    ).toBe(false);
+
+    setAddonsFromRemote([], true);
+    expect(
+      getInstalledAddons().find(
+        (item) => item.manifest.id === NATIVE_SUBTITLE_ADDON_ID,
+      )?.enabled,
+    ).toBe(true);
   });
 
   it("allows installing, enabling, and removing user addons", () => {

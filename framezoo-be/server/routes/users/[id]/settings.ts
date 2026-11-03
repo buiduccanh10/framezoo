@@ -21,6 +21,7 @@ const userSettingsSchema = z.object({
   enableSkipCredits: z.boolean().optional().default(false),
   proxyTmdb: z.boolean().optional().default(false),
   addons: z.array(z.any()).optional().default([]),
+  nativeSubtitlesEnabled: z.boolean().optional().default(true),
 });
 
 export default defineEventHandler(async event => {
@@ -63,6 +64,7 @@ export default defineEventHandler(async event => {
         enableSkipCredits: settings?.enable_skip_credits ?? false,
         proxyTmdb: settings?.proxy_tmdb ?? false,
         addons: (settings?.addons as any[]) || [],
+        nativeSubtitlesEnabled: settings?.native_subtitles_enabled ?? true,
       };
     } catch (error) {
       log.error('Failed to get user settings', {
@@ -95,6 +97,7 @@ export default defineEventHandler(async event => {
         enable_skip_credits: validatedBody.enableSkipCredits,
         proxy_tmdb: validatedBody.proxyTmdb,
         addons: validatedBody.addons || [],
+        native_subtitles_enabled: validatedBody.nativeSubtitlesEnabled,
       };
 
       const updateData: Partial<typeof createData> = {};
@@ -114,6 +117,8 @@ export default defineEventHandler(async event => {
         updateData.proxy_tmdb = createData.proxy_tmdb;
       if (Object.prototype.hasOwnProperty.call(body, 'addons'))
         updateData.addons = createData.addons;
+      if (Object.prototype.hasOwnProperty.call(body, 'nativeSubtitlesEnabled'))
+        updateData.native_subtitles_enabled = createData.native_subtitles_enabled;
 
       log.info('Preparing to upsert settings', {
         userId,
@@ -141,6 +146,7 @@ export default defineEventHandler(async event => {
         enableSkipCredits: settings.enable_skip_credits,
         proxyTmdb: settings.proxy_tmdb,
         addons: (settings.addons as any[]) || [],
+        nativeSubtitlesEnabled: settings.native_subtitles_enabled,
       };
     } catch (error) {
       log.error('Failed to update user settings', {

@@ -1,5 +1,7 @@
 import { readBody } from 'h3';
 
+import { setUserProviderCredential } from '~/utils/providerCredentials';
+
 export default defineEventHandler(async event => {
   const body = await readBody<{ configureToken?: string; apiKey?: string }>(event);
 
@@ -28,24 +30,13 @@ export default defineEventHandler(async event => {
   const userId = sessionData.userId;
   const rawApiKey = typeof body?.apiKey === 'string' ? body.apiKey.trim() : '';
 
-  if (rawApiKey) {
-    // Basic sanitization
-    const sanitizedKey = rawApiKey.replace(/[\r\n\t]/g, '').slice(0, 256);
-    await storage.setItem(`user:wyzie_key:${userId}`, sanitizedKey);
-
-    return {
-      success: true,
-      message: 'Wyzie API key saved successfully for your account.',
-      hasKey: true,
-    };
-  }
-
-  // If empty string or null, remove custom key (reverting to server default)
-  await storage.removeItem(`user:wyzie_key:${userId}`);
+  const hasKey = await setUserProviderCredential(userId, rawApiKey);
 
   return {
     success: true,
-    message: 'Wyzie API key removed. Your account will use the default server provider.',
-    hasKey: false,
+    message: hasKey
+      ? 'Wyzie API key saved successfully for your account.'
+      : 'Wyzie API key removed. Your account will use the default server provider.',
+    hasKey,
   };
 });
