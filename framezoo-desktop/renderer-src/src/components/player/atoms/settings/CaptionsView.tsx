@@ -111,7 +111,10 @@ function CaptionOptionRightSide(props: CaptionOptionProps) {
       <div className="flex items-center gap-1">
         {translateBtn(true)}
         {props.error ? (
-          <span className="flex items-center text-video-context-error">
+          <span
+            className="flex items-center text-video-context-error"
+            title={typeof props.error === "string" ? props.error : undefined}
+          >
             <Icon className="ml-2" icon={Icons.WARNING} />
           </span>
         ) : (
@@ -150,6 +153,45 @@ function CaptionOptionRightSide(props: CaptionOptionProps) {
   return translateBtn(false);
 }
 
+export function getSubtitleSourceBadgeClass(source?: string): string {
+  if (!source) return "bg-zinc-600";
+  const s = source.toLowerCase();
+
+  // 1. Well-known subtitle providers (fuzzy matching)
+  if (s.includes("wyzie")) return "bg-blue-600";
+  if (s.includes("subsource")) return "bg-cyan-600";
+  if (s.includes("opensub")) return "bg-orange-500";
+  if (s.includes("granite")) return "bg-emerald-600";
+  if (s.includes("subdl")) return "bg-amber-600";
+  if (s.includes("yts") || s.includes("yify")) return "bg-teal-600";
+  if (s.includes("podnapisi")) return "bg-purple-600";
+  if (s.includes("addic7ed") || s.includes("a4k")) return "bg-rose-600";
+  if (s.includes("vdrk")) return "bg-indigo-600";
+  if (s.includes("embedded")) return "bg-slate-600";
+
+  // 2. Deterministic palette for external / custom addons
+  const palette = [
+    "bg-indigo-600",
+    "bg-violet-600",
+    "bg-purple-600",
+    "bg-fuchsia-600",
+    "bg-pink-600",
+    "bg-rose-600",
+    "bg-sky-600",
+    "bg-teal-600",
+    "bg-emerald-600",
+    "bg-amber-600",
+  ];
+
+  let hash = 0;
+  for (let i = 0; i < s.length; i++) {
+    hash = (hash << 5) - hash + s.charCodeAt(i);
+    hash |= 0;
+  }
+  const index = Math.abs(hash) % palette.length;
+  return palette[index];
+}
+
 export function CaptionOption(props: CaptionOptionProps) {
   const [showTooltip, setShowTooltip] = useState(false);
   const tooltipTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -175,9 +217,14 @@ export function CaptionOption(props: CaptionOptionProps) {
     });
 
   const tooltipContent = useMemo(() => {
-    if (!props.subtitleUrl && !props.subtitleSource) return null;
+    if (!props.subtitleUrl && !props.subtitleSource && !props.error)
+      return null;
 
     const parts = [];
+
+    if (props.error) {
+      parts.push(`Error: ${props.error}`);
+    }
 
     if (props.subtitleSource) {
       parts.push(`Source: ${props.subtitleSource}`);
@@ -296,13 +343,8 @@ export function CaptionOption(props: CaptionOptionProps) {
               {subtitleSourceLabel && (
                 <span
                   className={classNames(
-                    "ml-2 px-2 py-0.5 mt-2 rounded text-white text-xs font-semibold overflow-hidden text-ellipsis whitespace-nowrap flex-shrink min-w-0",
-                    {
-                      "bg-blue-500": subtitleSource?.includes("wyzie"),
-                      "bg-orange-500": subtitleSource === "opensubs",
-                      "bg-cyan-500": subtitleSource === "subsource",
-                      "bg-green-500": subtitleSource === "granite",
-                    },
+                    "ml-2 px-2 py-0.5 mt-2 rounded text-white text-xs font-semibold overflow-hidden text-ellipsis whitespace-nowrap flex-shrink min-w-0 shadow-sm",
+                    getSubtitleSourceBadgeClass(subtitleSource),
                   )}
                 >
                   {subtitleSourceLabel}
@@ -1100,9 +1142,9 @@ export function CaptionsView({
                     defaultValue: "Auto sync",
                   })}
                 </span>
-                <span className="rounded-full bg-video-context-type-accent/20 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-video-context-type-accent">
+                <span className="shrink-0 whitespace-nowrap rounded-full bg-video-context-type-accent/20 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-video-context-type-accent">
                   {t("player.menus.subtitles.autoSyncBadge", {
-                    defaultValue: "Auto",
+                    defaultValue: "AI",
                   })}
                 </span>
               </span>
@@ -1113,11 +1155,8 @@ export function CaptionsView({
                 })}
               </span>
             </span>
-            <span className="flex flex-none items-center gap-1 text-xs font-semibold text-video-context-type-main transition-transform group-hover:translate-x-0.5">
-              {t("player.menus.subtitles.autoSyncAction", {
-                defaultValue: "Auto sync",
-              })}
-              <Icon icon={Icons.CHEVRON_RIGHT} className="text-base" />
+            <span className="flex flex-none items-center text-video-context-type-secondary transition-transform group-hover:translate-x-0.5 group-hover:text-video-context-type-main">
+              <Icon icon={Icons.CHEVRON_RIGHT} className="text-lg" />
             </span>
           </button>
         )}

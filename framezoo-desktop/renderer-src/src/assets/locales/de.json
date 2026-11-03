@@ -35,7 +35,10 @@
       "configRequiredBadge": "Konfiguration erforderlich",
       "configRequiredWarning": "Dieses Add-on ist nicht konfiguriert und kann möglicherweise keine Streams oder Untertitel laden.",
       "configureAddon": "Dieses Add-on konfigurieren",
+      "configureCustomKeyActive": "Ihr Schlüssel wurde konfiguriert (zum Ändern klicken).",
       "configureRequiredAction": "Dieses Add-on konfigurieren (erforderlich)",
+      "customKeyActiveDesc": "Verwendung Ihres persönlichen Wyzie-API-Schlüssels",
+      "customKeyConfiguredBadge": "Ihr Schlüssel wurde konfiguriert",
       "description": "Add-ons sind optional. Diese App bündelt, empfiehlt oder hostet kein Add-on.",
       "disabled": "Deaktiviert",
       "emptyInstalled": "Es sind noch keine Add-ons im System installiert.",
@@ -44,6 +47,8 @@
       "installedHeading": "Installierte Addons",
       "processing": "Verarbeitung...",
       "removeAddon": "Entfernen Sie dieses Add-on",
+      "subtitlesConfiguredError": "Die Konfiguration des API-Schlüssels für Untertitel ist fehlgeschlagen. Bitte versuchen Sie es erneut!",
+      "subtitlesConfiguredSuccess": "Untertitel-API-Schlüssel erfolgreich konfiguriert!",
       "title": "Addons-Manager"
     },
     "player": {
@@ -897,9 +902,9 @@
         "secondary": "Sekundär",
         "selectingSecondary": "Auswahl des sekundären Untertitels",
         "autoSyncTitle": "Automatische Synchronisierung",
-        "autoSyncDescription": "Untertitel automatisch an den gesprochenen Dialog anpassen",
-        "autoSyncAction": "Automatische Synchronisierung",
-        "autoSyncBadge": "Auto",
+        "autoSyncDescription": "Untertitel automatisch an gesprochene Dialoge anpassen",
+        "autoSyncAction": "Automatische Synchronisierung starten",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "Untertitel mit KI synchronisieren?",
         "syncSubtitleConfirmDescription": "Die Untertitel werden von der KI an das Video angepasst.",
         "syncSubtitleNoticeTitle": "Notiz",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "Übersetzen von {{language}}"
         },
+        "downloadFailed": "Untertitel konnten nicht geladen werden",
         "unknownLanguage": "Unbekannt",
         "useNativeSubtitles": "Native Videountertitel",
         "useNativeSubtitlesDescription": "Übertragen Sie Untertitel für natives Vollbild und PiP"
@@ -1194,17 +1200,19 @@
         "deviceNameLabel": "Gerätename",
         "failed": "Laden der Sitzungen fehlgeschlagen",
         "lastActive": "Zuletzt aktiv: {{date}}",
-        "loggedInAt": "Angemeldet unter: {{date}}",
+        "loggedInAt": "Angemeldet: {{date}}",
         "removeDevice": "Entfernen",
         "title": "Geräte",
         "thisDevice": "Dieses Gerät",
+        "activeNow": "Jetzt aktiv",
+        "sessionCount": "{{count}} Sitzungen",
         "types": {
           "desktop": "Desktop",
           "mobile": "Mobile",
           "tablet": "Tablette"
         },
         "unknownBrowser": "Unbekannter Browser",
-        "unknownDevice": "Unbekanntes Gerät, Fehler beim Entschlüsseln des Namens",
+        "unknownDevice": "Unbekanntes Gerät",
         "unknownOperatingSystem": "Unbekanntes Betriebssystem"
       },
       "profile": {

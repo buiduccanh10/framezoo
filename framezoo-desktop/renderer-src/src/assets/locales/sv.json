@@ -35,7 +35,10 @@
       "configRequiredBadge": "Kräver konfiguration",
       "configRequiredWarning": "Det här tillägget är inte konfigurerat och kan misslyckas med att ladda strömmar eller undertexter.",
       "configureAddon": "Konfigurera detta tillägg",
+      "configureCustomKeyActive": "Din nyckel har konfigurerats (klicka för att ändra)",
       "configureRequiredAction": "Konfigurera detta tillägg (Obligatoriskt)",
+      "customKeyActiveDesc": "Använda din personliga Wyzie API-nyckel",
+      "customKeyConfiguredBadge": "Din nyckel har konfigurerats",
       "description": "Tillägg är valfria. Denna app paketerar inte, rekommenderar eller är värd för något tillägg.",
       "disabled": "Inaktiverad",
       "emptyInstalled": "Inga tillägg installerade i systemet ännu.",
@@ -44,6 +47,8 @@
       "installedHeading": "Installerade tillägg",
       "processing": "Bearbetar...",
       "removeAddon": "Ta bort detta tillägg",
+      "subtitlesConfiguredError": "Misslyckades med att konfigurera API-nyckeln för undertexter. Försök igen!",
+      "subtitlesConfiguredSuccess": "API-nyckeln för undertexter har konfigurerats!",
       "title": "Tilläggshanterare"
     },
     "player": {
@@ -898,8 +903,8 @@
         "selectingSecondary": "Väljer sekundär undertext",
         "autoSyncTitle": "Automatisk synkronisering",
         "autoSyncDescription": "Matcha undertexter till talad dialog automatiskt",
-        "autoSyncAction": "Automatisk synkronisering",
-        "autoSyncBadge": "Bil",
+        "autoSyncAction": "Starta automatisk synkronisering",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "Synkronisera undertext med AI?",
         "syncSubtitleConfirmDescription": "Undertexter kommer att anpassas av AI för att matcha videon.",
         "syncSubtitleNoticeTitle": "Notera",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "Översätt från {{language}}"
         },
+        "downloadFailed": "Misslyckades med att ladda undertexten",
         "unknownLanguage": "Okänd",
         "useNativeSubtitles": "Använd videons inbyggda undertexter",
         "useNativeSubtitlesDescription": "Kan fixa undertexter vid casting och i PiP-läge"
@@ -1194,17 +1200,19 @@
         "deviceNameLabel": "Enhetens namn",
         "failed": "Misslyckades att ladda sessioner",
         "lastActive": "Senast aktiv: {{date}}",
-        "loggedInAt": "Inloggad på: {{date}}",
+        "loggedInAt": "Inloggad: {{date}}",
         "removeDevice": "Ta bort",
         "title": "Enheter",
         "thisDevice": "Den här enheten",
+        "activeNow": "Aktiv nu",
+        "sessionCount": "{{count}} sessioner",
         "types": {
           "desktop": "Skrivbord",
           "mobile": "Mobil",
           "tablet": "Tablett"
         },
         "unknownBrowser": "Okänd webbläsare",
-        "unknownDevice": "Okänd enhet, fel vid dekryptering av namn",
+        "unknownDevice": "Okänd enhet",
         "unknownOperatingSystem": "Okänt operativsystem"
       },
       "profile": {

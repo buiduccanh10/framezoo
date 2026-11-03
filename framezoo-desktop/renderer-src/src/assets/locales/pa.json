@@ -35,7 +35,10 @@
       "configRequiredBadge": "ਸੰਰਚਨਾ ਦੀ ਲੋੜ ਹੈ",
       "configRequiredWarning": "ਇਹ ਐਡਆਨ ਕੌਂਫਿਗਰ ਨਹੀਂ ਕੀਤਾ ਗਿਆ ਹੈ ਅਤੇ ਸਟ੍ਰੀਮਾਂ ਜਾਂ ਉਪਸਿਰਲੇਖਾਂ ਨੂੰ ਲੋਡ ਕਰਨ ਵਿੱਚ ਅਸਫਲ ਹੋ ਸਕਦਾ ਹੈ।",
       "configureAddon": "ਇਸ ਐਡਆਨ ਨੂੰ ਕੌਂਫਿਗਰ ਕਰੋ",
+      "configureCustomKeyActive": "ਤੁਹਾਡੀ ਕੁੰਜੀ ਸੰਰਚਿਤ ਕੀਤੀ ਗਈ ਹੈ (ਬਦਲਣ ਲਈ ਕਲਿੱਕ ਕਰੋ)",
       "configureRequiredAction": "ਇਸ ਐਡਆਨ ਨੂੰ ਕੌਂਫਿਗਰ ਕਰੋ (ਲੋੜੀਂਦਾ)",
+      "customKeyActiveDesc": "ਤੁਹਾਡੀ ਨਿੱਜੀ Wyzie API ਕੁੰਜੀ ਦੀ ਵਰਤੋਂ ਕਰਨਾ",
+      "customKeyConfiguredBadge": "ਤੁਹਾਡੀ ਕੁੰਜੀ ਸੰਰਚਿਤ ਕੀਤੀ ਗਈ ਹੈ।",
       "description": "ਐਡਆਨ ਵਿਕਲਪਿਕ ਹਨ। ਇਹ ਐਪ ਕਿਸੇ ਵੀ ਐਡਆਨ ਨੂੰ ਬੰਡਲ, ਸਿਫ਼ਾਰਿਸ਼ ਜਾਂ ਹੋਸਟ ਨਹੀਂ ਕਰਦਾ ਹੈ।",
       "disabled": "ਅਯੋਗ",
       "emptyInstalled": "ਸਿਸਟਮ ਵਿੱਚ ਅਜੇ ਤੱਕ ਕੋਈ ਐਡਆਨ ਸਥਾਪਤ ਨਹੀਂ ਕੀਤਾ ਗਿਆ ਹੈ।",
@@ -44,6 +47,8 @@
       "installedHeading": "ਇੰਸਟਾਲ ਕੀਤੇ ਐਡਆਨ",
       "processing": "ਪ੍ਰਕਿਰਿਆ ਕੀਤੀ ਜਾ ਰਹੀ ਹੈ...",
       "removeAddon": "ਇਸ ਐਡ-ਆਨ ਨੂੰ ਹਟਾਓ",
+      "subtitlesConfiguredError": "ਉਪਸਿਰਲੇਖ API ਕੁੰਜੀ ਨੂੰ ਕੌਂਫਿਗਰ ਕਰਨ ਵਿੱਚ ਅਸਫਲ। ਕਿਰਪਾ ਕਰਕੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ!",
+      "subtitlesConfiguredSuccess": "ਉਪਸਿਰਲੇਖ API ਕੁੰਜੀ ਸਫਲਤਾਪੂਰਵਕ ਸੰਰਚਿਤ ਕੀਤੀ ਗਈ!",
       "title": "ਐਡਆਨ ਮੈਨੇਜਰ"
     },
     "player": {
@@ -897,9 +902,9 @@
         "secondary": "ਸੈਕੰਡਰੀ",
         "selectingSecondary": "ਸੈਕੰਡਰੀ ਉਪਸਿਰਲੇਖ ਚੁਣਨਾ",
         "autoSyncTitle": "ਆਟੋ ਸਿੰਕ",
-        "autoSyncDescription": "ਬੋਲੇ ਗਏ ਸੰਵਾਦ ਨਾਲ ਉਪਸਿਰਲੇਖਾਂ ਦਾ ਆਪਣੇ ਆਪ ਮੇਲ ਕਰੋ",
-        "autoSyncAction": "ਆਟੋ ਸਿੰਕ",
-        "autoSyncBadge": "ਆਟੋ",
+        "autoSyncDescription": "ਉਪਸਿਰਲੇਖਾਂ ਨੂੰ ਆਪਣੇ ਆਪ ਬੋਲੇ ​​ਗਏ ਸੰਵਾਦ ਨਾਲ ਮਿਲਾਓ",
+        "autoSyncAction": "ਆਟੋ ਸਿੰਕ ਸ਼ੁਰੂ ਕਰੋ",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "ਕੀ ਉਪਸਿਰਲੇਖ ਨੂੰ AI ਨਾਲ ਸਿੰਕ ਕਰਨਾ ਹੈ?",
         "syncSubtitleConfirmDescription": "ਵੀਡੀਓ ਨਾਲ ਮੇਲ ਕਰਨ ਲਈ ਉਪਸਿਰਲੇਖਾਂ ਨੂੰ AI ਦੁਆਰਾ ਇਕਸਾਰ ਕੀਤਾ ਜਾਵੇਗਾ।",
         "syncSubtitleNoticeTitle": "ਨੋਟ",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "{{language}} ਤੋਂ ਅਨੁਵਾਦ ਕਰੋ"
         },
+        "downloadFailed": "ਉਪਸਿਰਲੇਖ ਲੋਡ ਕਰਨ ਵਿੱਚ ਅਸਫਲ",
         "unknownLanguage": "ਅਗਿਆਤ",
         "useNativeSubtitles": "ਮੂਲ ਵੀਡੀਓ ਉਪਸਿਰਲੇਖ",
         "useNativeSubtitlesDescription": "ਮੂਲ ਪੂਰੀ ਸਕਰੀਨ ਅਤੇ PiP ਲਈ ਉਪਸਿਰਲੇਖਾਂ ਨੂੰ ਪ੍ਰਸਾਰਿਤ ਕਰੋ"
@@ -1193,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "ਡਿਵਾਈਸ ਦਾ ਨਾਮ",
         "failed": "ਸੈਸ਼ਨਾਂ ਨੂੰ ਲੋਡ ਕਰਨਾ ਅਸਫਲ ਰਿਹਾ",
-        "lastActive": "ਪਿਛਲੀ ਵਾਰ ਕਿਰਿਆਸ਼ੀਲ: {{date}}",
-        "loggedInAt": "ਇਸ 'ਤੇ ਲੌਗ ਇਨ ਕੀਤਾ: {{date}}",
+        "lastActive": "ਆਖਰੀ ਕਿਰਿਆਸ਼ੀਲ: {{date}}",
+        "loggedInAt": "ਸਾਈਨ ਇਨ ਕੀਤਾ: {{date}}",
         "removeDevice": "ਹਟਾਓ",
         "title": "ਡਿਵਾਈਸਾਂ",
         "thisDevice": "ਇਹ ਡਿਵਾਈਸ",
+        "activeNow": "ਹੁਣ ਕਿਰਿਆਸ਼ੀਲ",
+        "sessionCount": "{{count}} ਸੈਸ਼ਨ",
         "types": {
           "desktop": "ਡੈਸਕਟਾਪ",
           "mobile": "ਮੋਬਾਈਲ",
           "tablet": "ਟੈਬਲੇਟ"
         },
         "unknownBrowser": "ਅਗਿਆਤ ਬ੍ਰਾਊਜ਼ਰ",
-        "unknownDevice": "ਅਗਿਆਤ ਡਿਵਾਈਸ, ਨਾਮ ਡੀਕ੍ਰਿਪਟ ਕਰਨ ਵਿੱਚ ਤਰੁੱਟੀ",
+        "unknownDevice": "ਅਗਿਆਤ ਡਿਵਾਈਸ",
         "unknownOperatingSystem": "ਅਗਿਆਤ ਓਪਰੇਟਿੰਗ ਸਿਸਟਮ"
       },
       "profile": {

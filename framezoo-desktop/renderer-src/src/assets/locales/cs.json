@@ -35,7 +35,10 @@
       "configRequiredBadge": "Vyžaduje konfiguraci",
       "configRequiredWarning": "Tento doplněk není nakonfigurován a může se stát, že se mu nepodaří načíst streamy nebo titulky.",
       "configureAddon": "Nakonfigurujte tento doplněk",
+      "configureCustomKeyActive": "Váš klíč byl nakonfigurován (kliknutím jej změníte)",
       "configureRequiredAction": "Nakonfigurujte tento doplněk (Povinné)",
+      "customKeyActiveDesc": "Použití vašeho osobního klíče Wyzie API",
+      "customKeyConfiguredBadge": "Váš klíč byl nakonfigurován",
       "description": "Doplňky jsou volitelné. Tato aplikace nesbaluje, nedoporučuje ani nehostuje žádný doplněk.",
       "disabled": "Zakázáno",
       "emptyInstalled": "V systému zatím nejsou nainstalovány žádné doplňky.",
@@ -44,6 +47,8 @@
       "installedHeading": "Nainstalované doplňky",
       "processing": "Zpracovává se...",
       "removeAddon": "Odeberte tento doplněk",
+      "subtitlesConfiguredError": "Nepodařilo se nakonfigurovat klíč API titulků. Zkuste to prosím znovu!",
+      "subtitlesConfiguredSuccess": "Klíč API titulků byl úspěšně nakonfigurován!",
       "title": "Správce doplňků"
     },
     "player": {
@@ -897,9 +902,9 @@
         "secondary": "Sekundární",
         "selectingSecondary": "Výběr sekundárních titulků",
         "autoSyncTitle": "Automatická synchronizace",
-        "autoSyncDescription": "Automaticky přizpůsobit titulky mluvenému dialogu",
-        "autoSyncAction": "Automatická synchronizace",
-        "autoSyncBadge": "Auto",
+        "autoSyncDescription": "Automaticky přiřazovat titulky k mluvenému dialogu",
+        "autoSyncAction": "Spustit automatickou synchronizaci",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "Synchronizovat titulky s AI?",
         "syncSubtitleConfirmDescription": "Titulky budou zarovnány AI tak, aby odpovídaly videu.",
         "syncSubtitleNoticeTitle": "Poznámka",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "Přeložit z {{language}}"
         },
+        "downloadFailed": "Nepodařilo se načíst titulky",
         "unknownLanguage": "Neznámé",
         "useNativeSubtitles": "Nativní video titulky",
         "useNativeSubtitlesDescription": "Vysílejte titulky pro nativní celou obrazovku a PiP"
@@ -1193,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "Název zařízení",
         "failed": "Načtení relací se nezdařilo",
-        "lastActive": "Poslední aktivní: {{date}}",
-        "loggedInAt": "Přihlášen na: {{date}}",
+        "lastActive": "Naposledy aktivní: {{date}}",
+        "loggedInAt": "Přihlášen(a): {{date}}",
         "removeDevice": "Odstranit",
         "title": "Zařízení",
         "thisDevice": "Toto zařízení",
+        "activeNow": "Nyní aktivní",
+        "sessionCount": "{{count}} sezení",
         "types": {
           "desktop": "Počítač",
           "mobile": "Mobilní",
           "tablet": "Tableta"
         },
         "unknownBrowser": "Neznámý prohlížeč",
-        "unknownDevice": "Neznámé zařízení, při dešifrování názvu došlo k chybě",
+        "unknownDevice": "Neznámé zařízení",
         "unknownOperatingSystem": "Neznámý operační systém"
       },
       "profile": {

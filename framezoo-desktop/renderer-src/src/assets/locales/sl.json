@@ -35,7 +35,10 @@
       "configRequiredBadge": "Zahteva konfiguracijo",
       "configRequiredWarning": "Ta dodatek ni konfiguriran in morda ne bo naložil pretočnih vsebin ali podnapisov.",
       "configureAddon": "Konfiguriraj ta dodatek",
+      "configureCustomKeyActive": "Vaš ključ je bil konfiguriran (kliknite za spremembo)",
       "configureRequiredAction": "Konfiguriraj ta dodatek (obvezno)",
+      "customKeyActiveDesc": "Uporaba vašega osebnega ključa Wyzie API",
+      "customKeyConfiguredBadge": "Vaš ključ je bil konfiguriran",
       "description": "Dodatki niso obvezni. Ta aplikacija ne združuje, priporoča ali gosti nobenega dodatka.",
       "disabled": "Onemogočen",
       "emptyInstalled": "V sistemu še ni nameščen noben dodatek.",
@@ -44,6 +47,8 @@
       "installedHeading": "Nameščeni dodatki",
       "processing": "Obdelava ...",
       "removeAddon": "Odstranite ta dodatek",
+      "subtitlesConfiguredError": "Konfiguracija ključa API-ja za podnapise ni uspela. Poskusite znova!",
+      "subtitlesConfiguredSuccess": "Ključ API-ja za podnapise je bil uspešno konfiguriran!",
       "title": "Upravitelj dodatkov"
     },
     "player": {
@@ -898,8 +903,8 @@
         "selectingSecondary": "Izbira sekundarnega podnapisa",
         "autoSyncTitle": "Samodejna sinhronizacija",
         "autoSyncDescription": "Samodejno ujemanje podnapisov z govorjenim dialogom",
-        "autoSyncAction": "Samodejna sinhronizacija",
-        "autoSyncBadge": "Samodejno",
+        "autoSyncAction": "Začni samodejno sinhronizacijo",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "Sinhronizirati podnapise z AI?",
         "syncSubtitleConfirmDescription": "Podnapise bo poravnal umetna inteligenca, da bodo ustrezali videoposnetku.",
         "syncSubtitleNoticeTitle": "Opomba",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "Prevedi iz {{language}}"
         },
+        "downloadFailed": "Nalaganje podnapisov ni uspelo",
         "unknownLanguage": "Neznano",
         "useNativeSubtitles": "Izvorni video podnapisi",
         "useNativeSubtitlesDescription": "Oddaja podnapisov za izvorni celozaslonski način in PiP"
@@ -1194,17 +1200,19 @@
         "deviceNameLabel": "Ime naprave",
         "failed": "Neuspešno nalaganje sej",
         "lastActive": "Nazadnje aktiven: {{date}}",
-        "loggedInAt": "Prijavljen na: {{date}}",
+        "loggedInAt": "Prijavljen: {{date}}",
         "removeDevice": "Odstrani",
         "title": "Naprave",
         "thisDevice": "Ta naprava",
+        "activeNow": "Aktivno zdaj",
+        "sessionCount": "{{count}} sej",
         "types": {
           "desktop": "Namizni računalnik",
           "mobile": "Mobilni telefon",
           "tablet": "Tablični računalnik"
         },
         "unknownBrowser": "Neznan brskalnik",
-        "unknownDevice": "Neznana naprava, napaka pri dešifriranju imena",
+        "unknownDevice": "Neznana naprava",
         "unknownOperatingSystem": "Neznan operacijski sistem"
       },
       "profile": {

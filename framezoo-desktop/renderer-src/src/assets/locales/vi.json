@@ -35,7 +35,10 @@
       "configRequiredBadge": "Chưa cấu hình",
       "configRequiredWarning": "Addon này chưa được cấu hình và có thể không tải được nội dung hoặc phụ đề.",
       "configureAddon": "Cấu hình addon này",
+      "configureCustomKeyActive": "Key của bạn đã được cấu hình (nhấn để đổi)",
       "configureRequiredAction": "Cấu hình addon này (Bắt buộc)",
+      "customKeyActiveDesc": "Đang sử dụng API key Wyzie riêng của tài khoản",
+      "customKeyConfiguredBadge": "Key của bạn đã được cấu hình",
       "description": "Addons là tùy chọn. Ứng dụng này không đóng gói, đề xuất hoặc lưu trữ bất kỳ tiện ích bổ sung nào.",
       "disabled": "Đã tắt",
       "emptyInstalled": "Chưa có Addon nào được cài đặt trong hệ thống.",
@@ -44,6 +47,8 @@
       "installedHeading": "Danh sách Addons đã cài đặt",
       "processing": "Đang xử lý...",
       "removeAddon": "Xóa addon này",
+      "subtitlesConfiguredError": "Cấu hình API key phụ đề thất bại. Vui lòng thử lại!",
+      "subtitlesConfiguredSuccess": "Cấu hình API key phụ đề thành công!",
       "title": "Quản lý Addons"
     },
     "player": {
@@ -897,9 +902,9 @@
         "secondary": "Phụ đề phụ",
         "selectingSecondary": "Đang chọn phụ đề phụ",
         "autoSyncTitle": "Tự động đồng bộ",
-        "autoSyncDescription": "Tự động khớp phụ đề với lời thoại.",
-        "autoSyncAction": "Tự động đồng bộ",
-        "autoSyncBadge": "Tự động",
+        "autoSyncDescription": "Khớp phụ đề với lời thoại trong phim.",
+        "autoSyncAction": "Bắt đầu đồng bộ",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "Đồng bộ phụ đề bằng AI?",
         "syncSubtitleConfirmDescription": "Phụ đề sẽ được căn chỉnh bởi AI cho khớp với video.",
         "syncSubtitleNoticeTitle": "Lưu ý",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "Dịch từ {{language}}"
         },
+        "downloadFailed": "Không thể tải phụ đề",
         "unknownLanguage": "Không rõ",
         "useNativeSubtitles": "Sử dụng phụ đề video gốc",
         "useNativeSubtitlesDescription": "Có thể sửa phụ đề khi phát và trong PiP"
@@ -1193,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "Tên thiết bị",
         "failed": "Tải các phiên thất bại",
-        "lastActive": "Hoạt động gần nhất: {{date}}",
-        "loggedInAt": "Đăng nhập lúc: {{date}}",
+        "lastActive": "Hoạt động: {{date}}",
+        "loggedInAt": "Đăng nhập: {{date}}",
         "removeDevice": "Xóa",
         "title": "Thiết bị",
         "thisDevice": "Thiết bị này",
+        "activeNow": "Đang hoạt động",
+        "sessionCount": "{{count}} phiên",
         "types": {
           "desktop": "Máy tính",
           "mobile": "Điện thoại",
           "tablet": "Máy tính bảng"
         },
         "unknownBrowser": "Trình duyệt không xác định",
-        "unknownDevice": "Thiết bị không xác định, lỗi giải mã tên",
+        "unknownDevice": "Thiết bị không xác định",
         "unknownOperatingSystem": "Hệ điều hành không xác định"
       },
       "profile": {

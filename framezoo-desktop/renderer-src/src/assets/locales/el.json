@@ -35,7 +35,10 @@
       "configRequiredBadge": "Απαιτείται διαμόρφωση",
       "configRequiredWarning": "Αυτό το πρόσθετο δεν έχει ρυθμιστεί και ενδέχεται να μην είναι δυνατή η φόρτωση ροών ή υποτίτλων.",
       "configureAddon": "Ρύθμιση παραμέτρων αυτού του πρόσθετου",
+      "configureCustomKeyActive": "Το κλειδί σας έχει διαμορφωθεί (κάντε κλικ για να το αλλάξετε)",
       "configureRequiredAction": "Ρύθμιση παραμέτρων αυτού του πρόσθετου (Απαιτείται)",
+      "customKeyActiveDesc": "Χρήση του προσωπικού σας κλειδιού Wyzie API",
+      "customKeyConfiguredBadge": "Το κλειδί σας έχει ρυθμιστεί",
       "description": "Τα πρόσθετα είναι προαιρετικά. Αυτή η εφαρμογή δεν ομαδοποιεί, συνιστά ή φιλοξενεί κανένα πρόσθετο.",
       "disabled": "Ανάπηρος",
       "emptyInstalled": "Δεν έχουν εγκατασταθεί ακόμη πρόσθετα στο σύστημα.",
@@ -44,6 +47,8 @@
       "installedHeading": "Εγκατεστημένα πρόσθετα",
       "processing": "Επεξεργασία...",
       "removeAddon": "Καταργήστε αυτό το πρόσθετο",
+      "subtitlesConfiguredError": "Αποτυχία ρύθμισης παραμέτρων του κλειδιού API υποτίτλων. Δοκιμάστε ξανά!",
+      "subtitlesConfiguredSuccess": "Το κλειδί API υποτίτλων διαμορφώθηκε με επιτυχία!",
       "title": "Διαχειριστής πρόσθετων"
     },
     "player": {
@@ -898,8 +903,8 @@
         "selectingSecondary": "Επιλογή δευτερεύοντος υπότιτλου",
         "autoSyncTitle": "Αυτόματος συγχρονισμός",
         "autoSyncDescription": "Αυτόματη αντιστοίχιση υπότιτλων με τον προφορικό διάλογο",
-        "autoSyncAction": "Αυτόματος συγχρονισμός",
-        "autoSyncBadge": "Αυτο",
+        "autoSyncAction": "Έναρξη αυτόματου συγχρονισμού",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "Συγχρονισμός υποτίτλων με AI;",
         "syncSubtitleConfirmDescription": "Οι υπότιτλοι θα ευθυγραμμιστούν με AI ώστε να ταιριάζουν με το βίντεο.",
         "syncSubtitleNoticeTitle": "Σημείωμα",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "Μετάφραση από {{language}}"
         },
+        "downloadFailed": "Αποτυχία φόρτωσης υπότιτλων",
         "unknownLanguage": "Άγνωστο",
         "useNativeSubtitles": "Εγγενείς υπότιτλοι βίντεο",
         "useNativeSubtitlesDescription": "Μετάδοση υπότιτλων για εγγενή πλήρη οθόνη και PiP"
@@ -1193,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "Όνομα συσκευής",
         "failed": "Αποτυχία φόρτωσης συνεδριών",
-        "lastActive": "Τελευταία ενεργή δραστηριότητα: {{date}}",
-        "loggedInAt": "Συνδεθήκατε στο: {{date}}",
+        "lastActive": "Τελευταία ενεργή: {{date}}",
+        "loggedInAt": "Συνδεδεμένος: {{date}}",
         "removeDevice": "Αφαίρεση",
         "title": "Συσκευές",
         "thisDevice": "Αυτή η συσκευή",
+        "activeNow": "Ενεργό τώρα",
+        "sessionCount": "{{count}} συνεδρίες",
         "types": {
           "desktop": "Επιφάνεια εργασίας",
           "mobile": "Κινητός",
           "tablet": "Δισκίο"
         },
         "unknownBrowser": "Άγνωστο πρόγραμμα περιήγησης",
-        "unknownDevice": "Άγνωστη συσκευή, σφάλμα αποκρυπτογράφησης ονόματος",
+        "unknownDevice": "Άγνωστη συσκευή",
         "unknownOperatingSystem": "Άγνωστο λειτουργικό σύστημα"
       },
       "profile": {

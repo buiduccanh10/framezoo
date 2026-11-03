@@ -805,14 +805,14 @@ export function useCaptions() {
   );
 
   const selectSecondaryCaptionById = useCallback(
-    async (captionId: string | null) => {
+    async (captionId: string | null): Promise<boolean> => {
       if (!captionId) {
         setSecondaryCaption(null);
-        return;
+        return true;
       }
 
       const caption = captions.find((v) => v.id === captionId);
-      if (!caption) return;
+      if (!caption) return false;
 
       const candidates = [
         caption,
@@ -868,7 +868,7 @@ export function useCaptions() {
           if (captionToSet.alignment) {
             useSubtitleStore.getState().setSecondaryDelay(0);
           }
-          return;
+          return true;
         } catch (error) {
           lastError = error;
         }
@@ -879,6 +879,7 @@ export function useCaptions() {
         source: caption.source,
         error: lastError,
       });
+      return false;
     },
     [
       captions,

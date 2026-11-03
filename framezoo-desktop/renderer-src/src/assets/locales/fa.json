@@ -35,7 +35,10 @@
       "configRequiredBadge": "نیاز به پیکربندی دارد",
       "configRequiredWarning": "این افزونه پیکربندی نشده است و ممکن است در بارگیری جریان‌ها یا زیرنویس‌ها با مشکل مواجه شود.",
       "configureAddon": "این افزونه را پیکربندی کنید",
+      "configureCustomKeyActive": "کلید شما پیکربندی شده است (برای تغییر کلیک کنید)",
       "configureRequiredAction": "پیکربندی این افزونه (الزامی)",
+      "customKeyActiveDesc": "استفاده از کلید API شخصی Wyzie شما",
+      "customKeyConfiguredBadge": "کلید شما پیکربندی شده است",
       "description": "افزونه ها اختیاری هستند. این برنامه هیچ افزونه ای را بسته، توصیه یا میزبانی نمی کند.",
       "disabled": "از کار افتاده است",
       "emptyInstalled": "هنوز هیچ افزونه ای در سیستم نصب نشده است.",
@@ -44,6 +47,8 @@
       "installedHeading": "افزونه های نصب شده",
       "processing": "در حال پردازش...",
       "removeAddon": "این افزونه را حذف کنید",
+      "subtitlesConfiguredError": "پیکربندی کلید API زیرنویس ناموفق بود. لطفاً دوباره امتحان کنید!",
+      "subtitlesConfiguredSuccess": "کلید API زیرنویس با موفقیت پیکربندی شد!",
       "title": "مدیر افزونه ها"
     },
     "player": {
@@ -898,8 +903,8 @@
         "selectingSecondary": "انتخاب زیرنویس ثانویه",
         "autoSyncTitle": "همگام‌سازی خودکار",
         "autoSyncDescription": "زیرنویس‌ها را به طور خودکار با دیالوگ‌های گفتاری مطابقت دهید",
-        "autoSyncAction": "همگام‌سازی خودکار",
-        "autoSyncBadge": "خودکار",
+        "autoSyncAction": "شروع همگام‌سازی خودکار",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "زیرنویس با هوش مصنوعی همگام شود؟",
         "syncSubtitleConfirmDescription": "زیرنویس ها با هوش مصنوعی تراز می شوند تا با ویدیو مطابقت داشته باشند.",
         "syncSubtitleNoticeTitle": "توجه داشته باشید",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "ترجمه از {{language}}"
         },
+        "downloadFailed": "زیرنویس بارگذاری نشد",
         "unknownLanguage": "ناشناخته",
         "useNativeSubtitles": "زیرنویس ویدیوهای بومی",
         "useNativeSubtitlesDescription": "پخش زیرنویس برای تمام صفحه بومی و PiP"
@@ -1194,17 +1200,19 @@
         "deviceNameLabel": "نام دستگاه",
         "failed": "دریافت نشست ها شکست خورد",
         "lastActive": "آخرین فعالیت: {{date}}",
-        "loggedInAt": "وارد شده در: {{date}}",
+        "loggedInAt": "وارد سیستم شد: {{date}}",
         "removeDevice": "حذف",
         "title": "دستگاه ها",
         "thisDevice": "این دستگاه",
+        "activeNow": "اکنون فعال است",
+        "sessionCount": "جلسات {{count}}",
         "types": {
           "desktop": "دسکتاپ",
           "mobile": "موبایل",
           "tablet": "قرص"
         },
         "unknownBrowser": "مرورگر ناشناخته",
-        "unknownDevice": "دستگاه ناشناس، خطا در رمزگشایی نام",
+        "unknownDevice": "دستگاه ناشناخته",
         "unknownOperatingSystem": "سیستم عامل ناشناخته"
       },
       "profile": {

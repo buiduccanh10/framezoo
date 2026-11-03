@@ -109,9 +109,9 @@ export function SyncSubtitleView({
                       defaultValue: "Auto sync",
                     })}
                   </p>
-                  <span className="rounded-full bg-video-context-type-accent/20 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-video-context-type-accent">
+                  <span className="shrink-0 whitespace-nowrap rounded-full bg-video-context-type-accent/20 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-video-context-type-accent">
                     {t("player.menus.subtitles.autoSyncBadge", {
-                      defaultValue: "Auto",
+                      defaultValue: "AI",
                     })}
                   </span>
                 </div>

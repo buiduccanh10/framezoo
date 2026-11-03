@@ -239,151 +239,155 @@ export function PasswordInputPart(props: PasswordInputPartProps) {
 
   const loading = props.submitLoading || checkResult.loading;
 
-  return (
-    <LargeCard compact={props.compact}>
+  const formContent = (
+    <form
+      className="space-y-4"
+      onSubmit={handleFormSubmit}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          if (loading || passkeyResult.loading) return;
+          void nextStep();
+        }
+      }}
+    >
+      <AuthInputBox
+        label={
+          props.forLogin
+            ? (t("auth.login.identifierLabel") ?? "Username or email")
+            : (t("auth.register.nicknameLabel") ?? "Choose a nickname")
+        }
+        value={nickname}
+        onChange={(value) => setNickname(value.replace(/\s/g, ""))}
+        name="username"
+        autoComplete="username"
+        placeholder={
+          props.forLogin
+            ? (t("auth.login.identifierPlaceholder") ??
+              "Enter your username or email")
+            : (t("auth.register.nicknamePlaceholder") ??
+              "Choose a unique nickname")
+        }
+      />
       {!props.forLogin && (
-        <LargeCardText
-          compact={props.compact}
-          title={t("auth.register.passwordInput.title") ?? undefined}
-        >
-          {t("auth.register.passwordInput.description") ?? undefined}
-        </LargeCardText>
-      )}
-      <form
-        className="space-y-4"
-        onSubmit={handleFormSubmit}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            if (loading || passkeyResult.loading) return;
-            void nextStep();
-          }
-        }}
-      >
         <AuthInputBox
-          label={
-            props.forLogin
-              ? (t("auth.login.identifierLabel") ?? "Username or email")
-              : (t("auth.register.nicknameLabel") ?? "Choose a nickname")
-          }
-          value={nickname}
-          onChange={(value) => setNickname(value.replace(/\s/g, ""))}
-          name="username"
-          autoComplete="username"
+          label={t("auth.register.emailLabel") ?? "Email address"}
+          value={email}
+          onChange={setEmail}
+          name="email"
+          autoComplete="email"
           placeholder={
-            props.forLogin
-              ? (t("auth.login.identifierPlaceholder") ??
-                "Enter your username or email")
-              : (t("auth.register.nicknamePlaceholder") ??
-                "Choose a unique nickname")
+            t("auth.register.emailPlaceholder") ?? "Enter your email address"
           }
         />
-        {!props.forLogin && (
-          <AuthInputBox
-            label={t("auth.register.emailLabel") ?? "Email address"}
-            value={email}
-            onChange={setEmail}
-            name="email"
-            autoComplete="email"
-            placeholder={
-              t("auth.register.emailPlaceholder") ?? "Enter your email address"
-            }
-          />
-        )}
+      )}
+      <AuthInputBox
+        label={
+          props.forLogin
+            ? (t("auth.login.passwordLabel") ?? "Password")
+            : (t("auth.register.passwordLabel") ?? "Password")
+        }
+        value={password}
+        onChange={setPassword}
+        name="password"
+        autoComplete={props.forLogin ? "current-password" : "new-password"}
+        placeholder={
+          props.forLogin
+            ? (t("auth.login.passwordPlaceholder") ?? "Enter your password")
+            : (t("auth.register.passwordPlaceholder") ?? "Create a password")
+        }
+        passwordToggleable
+      />
+      {!props.forLogin && (
         <AuthInputBox
-          label={
-            props.forLogin
-              ? (t("auth.login.passwordLabel") ?? "Password")
-              : (t("auth.register.passwordLabel") ?? "Password")
-          }
-          value={password}
-          onChange={setPassword}
-          name="password"
-          autoComplete={props.forLogin ? "current-password" : "new-password"}
+          label={t("auth.register.confirmPasswordLabel") ?? "Confirm Password"}
+          value={confirmPassword}
+          onChange={setConfirmPassword}
+          name="confirmPassword"
+          autoComplete="new-password"
           placeholder={
-            props.forLogin
-              ? (t("auth.login.passwordPlaceholder") ?? "Enter your password")
-              : (t("auth.register.passwordPlaceholder") ?? "Create a password")
+            t("auth.register.confirmPasswordPlaceholder") ??
+            "Confirm your password"
           }
           passwordToggleable
         />
-        {!props.forLogin && (
-          <AuthInputBox
-            label={
-              t("auth.register.confirmPasswordLabel") ?? "Confirm Password"
-            }
-            value={confirmPassword}
-            onChange={setConfirmPassword}
-            name="confirmPassword"
-            autoComplete="new-password"
-            placeholder={
-              t("auth.register.confirmPasswordPlaceholder") ??
-              "Confirm your password"
-            }
-            passwordToggleable
+      )}
+      {props.forLogin && (
+        <label className="flex items-center space-x-2 cursor-pointer mt-4">
+          <input
+            type="checkbox"
+            className="form-checkbox text-authentication-buttonBg rounded"
+            checked={rememberMe}
+            onChange={(e) => setRememberMe(e.target.checked)}
           />
-        )}
-        {props.forLogin && (
-          <label className="flex items-center space-x-2 cursor-pointer mt-4">
-            <input
-              type="checkbox"
-              className="form-checkbox text-authentication-buttonBg rounded"
-              checked={rememberMe}
-              onChange={(e) => setRememberMe(e.target.checked)}
-            />
-            <span className="text-white">
-              {t("auth.login.rememberMe") ?? "Remember my password"}
-            </span>
-          </label>
-        )}
-        {hasNicknameError || props.externalNicknameError ? (
-          <p className="text-authentication-errorText">
-            {props.externalNicknameError ?? nicknameErrorText}
-          </p>
-        ) : null}
-        {hasPasswordError || props.externalPasswordError ? (
-          <p className="text-authentication-errorText">
-            {props.externalPasswordError ?? passwordErrorText}
-          </p>
-        ) : null}
-        {!props.forLogin && hasEmailError ? (
-          <p className="text-authentication-errorText">{emailErrorText}</p>
-        ) : null}
-        {!props.forLogin && passkeyResult.error ? (
-          <p className="text-authentication-errorText">
-            {passkeyResult.error.message}
-          </p>
-        ) : null}
+          <span className="text-white">
+            {t("auth.login.rememberMe") ?? "Remember my password"}
+          </span>
+        </label>
+      )}
+      {hasNicknameError || props.externalNicknameError ? (
+        <p className="text-authentication-errorText">
+          {props.externalNicknameError ?? nicknameErrorText}
+        </p>
+      ) : null}
+      {hasPasswordError || props.externalPasswordError ? (
+        <p className="text-authentication-errorText">
+          {props.externalPasswordError ?? passwordErrorText}
+        </p>
+      ) : null}
+      {!props.forLogin && hasEmailError ? (
+        <p className="text-authentication-errorText">{emailErrorText}</p>
+      ) : null}
+      {!props.forLogin && passkeyResult.error ? (
+        <p className="text-authentication-errorText">
+          {passkeyResult.error.message}
+        </p>
+      ) : null}
 
-        <LargeCardButtons compact={props.compact}>
-          {!props.forLogin && isPasskeySupported() ? (
-            <Button
-              theme="secondary"
-              onClick={() => void handlePasskeyNext()}
-              loading={passkeyResult.loading}
-              disabled={loading || passkeyResult.loading}
-            >
-              <Icon icon={Icons.LOCK} className="mr-2" />
-              {t("auth.generate.usePasskeyInstead")}
-            </Button>
-          ) : null}
+      <LargeCardButtons compact={props.compact}>
+        {!props.forLogin && isPasskeySupported() ? (
           <Button
-            theme="purple"
-            type="submit"
-            onClick={(e) => {
-              e.preventDefault();
-              if (loading || passkeyResult.loading) return;
-              void nextStep();
-            }}
-            loading={loading}
+            theme="secondary"
+            onClick={() => void handlePasskeyNext()}
+            loading={passkeyResult.loading}
             disabled={loading || passkeyResult.loading}
           >
-            {props.forLogin
-              ? (t("auth.login.submit") ?? "Login")
-              : (t("auth.register.information.next") ?? "Next")}
+            <Icon icon={Icons.LOCK} className="mr-2" />
+            {t("auth.generate.usePasskeyInstead")}
           </Button>
-        </LargeCardButtons>
-      </form>
+        ) : null}
+        <Button
+          theme="purple"
+          type="submit"
+          onClick={(e) => {
+            e.preventDefault();
+            if (loading || passkeyResult.loading) return;
+            void nextStep();
+          }}
+          loading={loading}
+          disabled={loading || passkeyResult.loading}
+        >
+          {props.forLogin
+            ? (t("auth.login.submit") ?? "Login")
+            : (t("auth.register.information.next") ?? "Next")}
+        </Button>
+      </LargeCardButtons>
+    </form>
+  );
+
+  if (props.forLogin) {
+    return formContent;
+  }
+
+  return (
+    <LargeCard compact={props.compact}>
+      <LargeCardText
+        compact={props.compact}
+        title={t("auth.register.passwordInput.title") ?? undefined}
+      >
+        {t("auth.register.passwordInput.description") ?? undefined}
+      </LargeCardText>
+      {formContent}
     </LargeCard>
   );
 }

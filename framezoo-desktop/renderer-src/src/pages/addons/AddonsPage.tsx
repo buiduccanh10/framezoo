@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useCopyToClipboard } from "react-use";
 
-import { createHttpStatusError, withAuthRetry } from "@/backend/accounts/auth";
 import { AddonResourceBadges } from "@/components/addons/AddonResourceBadges";
 import { Icon, Icons } from "@/components/Icon";
 import { AddonManager } from "@/components/layout/AddonManager";
@@ -14,21 +13,16 @@ import {
   getAddonConfigureUrl,
   isAddonConfigurable,
   isAddonConfigurationRequired,
-  openExternalUrl,
 } from "@/desktop/addons/manifest";
-import {
-  NATIVE_SUBTITLE_ADDON_ID,
-  getActiveBackendUrl,
-} from "@/desktop/addons/storage";
+import { NATIVE_SUBTITLE_ADDON_ID } from "@/desktop/addons/storage";
 import {
   removeAddon,
   setAddonEnabled,
   useInstalledAddons,
 } from "@/desktop/addons/store";
 import type { InstalledAddon } from "@/desktop/addons/types";
+import { useNativeSubtitlesConfig } from "@/hooks/addons/useNativeSubtitlesConfig";
 import { SubPageLayout } from "@/pages/layouts/SubPageLayout";
-import { conf } from "@/setup/config";
-import { useAuthStore } from "@/stores/auth";
 import { useToastStore } from "@/stores/interface/toast";
 
 export function AddonsPage() {
@@ -37,6 +31,9 @@ export function AddonsPage() {
   const addons = useInstalledAddons();
   const [, copyToClipboard] = useCopyToClipboard();
   const showToast = useToastStore((state) => state.showToast);
+
+  const { hasNativeCustomKey, openNativeSubtitlesConfigure } =
+    useNativeSubtitlesConfig();
 
   const handleShareAddon = (manifestUrl: string) => {
     copyToClipboard(manifestUrl);
@@ -47,72 +44,7 @@ export function AddonsPage() {
     addon: InstalledAddon,
     defaultUrl: string,
   ) => {
-    if (addon.isNative || addon.manifest.id === NATIVE_SUBTITLE_ADDON_ID) {
-      const account = useAuthStore.getState().account;
-      if (account) {
-        try {
-          const backend = getActiveBackendUrl();
-          const backendBase = backend ? backend.replace(/\/+$/, "") : "";
-          if (backendBase) {
-            const frontendOrigin = (() => {
-              const appDomain = (conf().APP_DOMAIN || "")
-                .trim()
-                .replace(/\/+$/, "");
-              if (appDomain && appDomain !== "https://framezoo.top") {
-                return appDomain;
-              }
-              if (
-                typeof window !== "undefined" &&
-                window.location.origin &&
-                window.location.origin.startsWith("http")
-              ) {
-                return window.location.origin;
-              }
-              return appDomain || "https://framezoo.top";
-            })();
-
-            const ticketData = await withAuthRetry(
-              backendBase,
-              account,
-              async (token) => {
-                const response = await fetch(
-                  `${backendBase}/addon/subtitles/api/ticket`,
-                  {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                      "X-Frontend-Origin": frontendOrigin,
-                      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-                    },
-                    body: JSON.stringify({
-                      frontendOrigin,
-                    }),
-                  },
-                );
-                if (!response.ok) {
-                  throw createHttpStatusError(
-                    response.status,
-                    `Ticket request failed with status ${response.status}`,
-                  );
-                }
-                return response.json();
-              },
-            );
-
-            if (ticketData?.url) {
-              void openExternalUrl(ticketData.url);
-              return;
-            }
-          }
-        } catch (err) {
-          console.warn(
-            "[addons] Failed to request one-time config ticket:",
-            err,
-          );
-        }
-      }
-    }
-    void openExternalUrl(defaultUrl);
+    await openNativeSubtitlesConfigure(addon, defaultUrl);
   };
 
   return (
@@ -174,6 +106,10 @@ export function AddonsPage() {
                 addon.manifest,
               );
               const isConfigurable = isAddonConfigurable(addon.manifest);
+              const isNative =
+                addon.isNative ||
+                addon.manifest.id === NATIVE_SUBTITLE_ADDON_ID;
+              const hasConfiguredCustomKey = isNative && hasNativeCustomKey;
               const configureUrl = getAddonConfigureUrl(
                 addon.manifestUrl,
                 addon.baseUrl,
@@ -206,6 +142,14 @@ export function AddonsPage() {
                           v{addon.manifest.version}
                         </span>
                       ) : null}
+                      {hasConfiguredCustomKey ? (
+                        <span className="shrink-0 rounded bg-emerald-500/20 px-2 py-0.5 text-xs font-semibold text-emerald-300">
+                          {t(
+                            "addons.page.customKeyConfiguredBadge",
+                            "Key của bạn đã được cấu hình",
+                          )}
+                        </span>
+                      ) : null}
                       {isConfigRequired ? (
                         <span className="shrink-0 rounded bg-amber-500/20 px-2 py-0.5 text-xs font-semibold text-amber-300">
                           {t(
@@ -222,6 +166,20 @@ export function AddonsPage() {
                       resources={addon.manifest.resources}
                       className="mt-1"
                     />
+                    {hasConfiguredCustomKey ? (
+                      <p className="mt-1.5 flex items-center gap-1.5 text-xs font-medium text-emerald-400">
+                        <Icon
+                          icon={Icons.CHECKMARK}
+                          className="shrink-0 text-sm text-emerald-400"
+                        />
+                        <span>
+                          {t(
+                            "addons.page.customKeyActiveDesc",
+                            "Đang sử dụng API key Wyzie riêng của tài khoản",
+                          )}
+                        </span>
+                      </p>
+                    ) : null}
                     {isConfigRequired ? (
                       <p className="mt-1.5 flex items-center gap-1.5 text-xs font-medium text-amber-300/90">
                         <Icon
@@ -257,23 +215,30 @@ export function AddonsPage() {
                         type="button"
                         className={classNames(
                           "rounded-lg p-2 transition-colors",
-                          isConfigRequired
-                            ? "bg-amber-500/20 text-amber-300 hover:bg-amber-500/30"
-                            : "text-dropdown-text hover:bg-green-500/20 hover:text-green-400",
+                          hasConfiguredCustomKey
+                            ? "bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30"
+                            : isConfigRequired
+                              ? "bg-amber-500/20 text-amber-300 hover:bg-amber-500/30"
+                              : "text-dropdown-text hover:bg-green-500/20 hover:text-green-400",
                         )}
                         onClick={() =>
                           void handleConfigureAddon(addon, configureUrl)
                         }
                         title={
-                          isConfigRequired
+                          hasConfiguredCustomKey
                             ? t(
-                                "addons.page.configureRequiredAction",
-                                "Configure this addon (Required)",
+                                "addons.page.configureCustomKeyActive",
+                                "Key của bạn đã được cấu hình (nhấn để đổi)",
                               )
-                            : t(
-                                "addons.page.configureAddon",
-                                "Configure this addon",
-                              )
+                            : isConfigRequired
+                              ? t(
+                                  "addons.page.configureRequiredAction",
+                                  "Configure this addon (Required)",
+                                )
+                              : t(
+                                  "addons.page.configureAddon",
+                                  "Configure this addon",
+                                )
                         }
                       >
                         <Icon icon={Icons.SETTINGS} className="text-base" />

@@ -56,6 +56,7 @@ export interface NativeMediaNavigationAvailability {
 declare global {
   interface Window {
     electronAPI?: {
+      getDeviceName?: () => Promise<string>;
       secureStoreSave?: (key: string, value: string) => Promise<boolean>;
       secureStoreGet?: (key: string) => Promise<string | null>;
       secureStoreRemove?: (key: string) => Promise<void>;

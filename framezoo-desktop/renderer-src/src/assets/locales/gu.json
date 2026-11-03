@@ -35,7 +35,10 @@
       "configRequiredBadge": "ગોઠવણી જરૂરી છે",
       "configRequiredWarning": "આ એડઓન ગોઠવેલ નથી અને સ્ટ્રીમ્સ અથવા સબટાઈટલ લોડ કરવામાં નિષ્ફળ થઈ શકે છે.",
       "configureAddon": "આ એડઓન ગોઠવો",
+      "configureCustomKeyActive": "તમારી કી ગોઠવવામાં આવી છે (બદલવા માટે ક્લિક કરો)",
       "configureRequiredAction": "આ એડઓન ગોઠવો (જરૂરી)",
+      "customKeyActiveDesc": "તમારી વ્યક્તિગત Wyzie API કીનો ઉપયોગ કરીને",
+      "customKeyConfiguredBadge": "તમારી કી ગોઠવવામાં આવી છે.",
       "description": "એડઓન્સ વૈકલ્પિક છે. આ એપ્લિકેશન કોઈપણ એડનને બંડલ, ભલામણ અથવા હોસ્ટ કરતી નથી.",
       "disabled": "અક્ષમ",
       "emptyInstalled": "સિસ્ટમમાં હજી સુધી કોઈ એડઓન્સ ઇન્સ્ટોલ કરેલ નથી.",
@@ -44,6 +47,8 @@
       "installedHeading": "ઇન્સ્ટોલ કરેલ એડઓન્સ",
       "processing": "પ્રક્રિયા કરી રહ્યું છે...",
       "removeAddon": "આ એડન દૂર કરો",
+      "subtitlesConfiguredError": "સબટાઈટલ API કી ગોઠવવામાં નિષ્ફળ. કૃપા કરીને ફરી પ્રયાસ કરો!",
+      "subtitlesConfiguredSuccess": "સબટાઈટલ API કી સફળતાપૂર્વક ગોઠવાઈ!",
       "title": "એડઓન્સ મેનેજર"
     },
     "player": {
@@ -897,9 +902,9 @@
         "secondary": "માધ્યમિક",
         "selectingSecondary": "ગૌણ ઉપશીર્ષક પસંદ કરી રહ્યા છીએ",
         "autoSyncTitle": "સ્વતઃ સમન્વયન",
-        "autoSyncDescription": "બોલાયેલા સંવાદ સાથે સબટાઈટલ આપમેળે મેચ કરો",
-        "autoSyncAction": "સ્વતઃ સમન્વયન",
-        "autoSyncBadge": "ઓટો",
+        "autoSyncDescription": "આપમેળે બોલાયેલા સંવાદ સાથે ઉપશીર્ષકોનો મેળ કરો",
+        "autoSyncAction": "સ્વતઃ સમન્વયન શરૂ કરો",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "AI સાથે સબટાઈટલ સમન્વયિત કરીએ?",
         "syncSubtitleConfirmDescription": "સબટાઈટલ વિડિયો સાથે મેળ કરવા માટે AI દ્વારા સંરેખિત કરવામાં આવશે.",
         "syncSubtitleNoticeTitle": "નોંધ",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "{{language}} માંથી અનુવાદ કરો"
         },
+        "downloadFailed": "ઉપશીર્ષક લોડ કરવામાં નિષ્ફળ થયાં",
         "unknownLanguage": "અજ્ઞાત",
         "useNativeSubtitles": "મૂળ વિડિઓ સબટાઈટલ",
         "useNativeSubtitlesDescription": "મૂળ ફુલસ્ક્રીન અને PiP માટે સબટાઈટલ બ્રોડકાસ્ટ કરો"
@@ -1194,17 +1200,19 @@
         "deviceNameLabel": "ડિવાઇસ નામ",
         "failed": "સત્રો લોડ કરવામાં નિષ્ફળ",
         "lastActive": "છેલ્લે સક્રિય: {{date}}",
-        "loggedInAt": "અહીં લૉગ ઇન કર્યું: {{date}}",
+        "loggedInAt": "સાઇન ઇન: {{date}}",
         "removeDevice": "દૂર કરો",
         "title": "ઉપકરણો",
         "thisDevice": "આ ઉપકરણ",
+        "activeNow": "હમણાં સક્રિય",
+        "sessionCount": "{{count}} સત્રો",
         "types": {
           "desktop": "ડેસ્કટોપ",
           "mobile": "મોબાઇલ",
           "tablet": "ટેબ્લેટ"
         },
         "unknownBrowser": "અજાણ્યું બ્રાઉઝર",
-        "unknownDevice": "અજ્ઞાત ઉપકરણ, નામ ડિક્રિપ્ટ કરવામાં ભૂલ",
+        "unknownDevice": "અજાણ્યું ઉપકરણ",
         "unknownOperatingSystem": "અજાણી ઓપરેટિંગ સિસ્ટમ"
       },
       "profile": {

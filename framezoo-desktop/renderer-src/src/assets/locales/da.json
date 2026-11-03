@@ -35,7 +35,10 @@
       "configRequiredBadge": "Kræver konfiguration",
       "configRequiredWarning": "Denne tilføjelse er ikke konfigureret og kan muligvis ikke indlæse streams eller undertekster.",
       "configureAddon": "Konfigurer denne tilføjelse",
+      "configureCustomKeyActive": "Din nøgle er blevet konfigureret (klik for at ændre)",
       "configureRequiredAction": "Konfigurer denne tilføjelse (påkrævet)",
+      "customKeyActiveDesc": "Brug af din personlige Wyzie API-nøgle",
+      "customKeyConfiguredBadge": "Din nøgle er blevet konfigureret",
       "description": "Tilføjelser er valgfrie. Denne app samler, anbefaler eller hoster ikke nogen tilføjelse.",
       "disabled": "Handicappet",
       "emptyInstalled": "Ingen tilføjelser installeret i systemet endnu.",
@@ -44,6 +47,8 @@
       "installedHeading": "Installerede tilføjelser",
       "processing": "Forarbejdning...",
       "removeAddon": "Fjern denne tilføjelse",
+      "subtitlesConfiguredError": "Konfiguration af API-nøglen til undertekster mislykkedes. Prøv igen!",
+      "subtitlesConfiguredSuccess": "API-nøgle til undertekster er konfigureret!",
       "title": "Addons Manager"
     },
     "player": {
@@ -897,9 +902,9 @@
         "secondary": "Sekundær",
         "selectingSecondary": "Valg af sekundær undertekst",
         "autoSyncTitle": "Automatisk synkronisering",
-        "autoSyncDescription": "Match undertekster automatisk med den talte dialog",
-        "autoSyncAction": "Automatisk synkronisering",
-        "autoSyncBadge": "Bil",
+        "autoSyncDescription": "Match automatisk undertekster med talt dialog",
+        "autoSyncAction": "Start automatisk synkronisering",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "Synkronisere undertekster med AI?",
         "syncSubtitleConfirmDescription": "Undertekster vil blive justeret af AI, så de matcher videoen.",
         "syncSubtitleNoticeTitle": "Note",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "Oversæt fra {{language}}"
         },
+        "downloadFailed": "Kunne ikke indlæse undertekster",
         "unknownLanguage": "Ukendt",
         "useNativeSubtitles": "Indbyggede videoundertekster",
         "useNativeSubtitlesDescription": "Udsend undertekster til native fuldskærm og PiP"
@@ -1193,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "Navn på enhed",
         "failed": "Kunne ikke indlæse sessioner",
-        "lastActive": "Sidst aktive: {{date}}",
-        "loggedInAt": "Logget ind på: {{date}}",
+        "lastActive": "Sidst aktiv: {{date}}",
+        "loggedInAt": "Logget ind: {{date}}",
         "removeDevice": "Fjern",
         "title": "Enheder",
         "thisDevice": "Denne enhed",
+        "activeNow": "Aktiv nu",
+        "sessionCount": "{{count}} sessioner",
         "types": {
           "desktop": "Skrivebord",
           "mobile": "Mobil",
           "tablet": "Tablet"
         },
         "unknownBrowser": "Ukendt browser",
-        "unknownDevice": "Ukendt enhed, fejl ved dekryptering af navn",
+        "unknownDevice": "Ukendt enhed",
         "unknownOperatingSystem": "Ukendt operativsystem"
       },
       "profile": {

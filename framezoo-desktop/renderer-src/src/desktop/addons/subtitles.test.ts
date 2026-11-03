@@ -1,6 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
 
+import { getSubtitleSourceBadgeClass } from "@/components/player/atoms/settings/CaptionsView";
+
 import {
+  inferSubtitleFormat,
   loadAddonSubtitles,
   loadAllAddonSubtitles,
   normalizeAddonSubtitle,
@@ -80,10 +83,53 @@ describe("addon subtitles", () => {
       needsProxy: false,
       opensubtitles: true,
       display: "Vietnamese",
+      media: undefined,
       source: "wyzie",
       isHearingImpaired: true,
       encoding: "utf-8",
     });
+  });
+
+  it("extracts release title from id when label is missing (SubSource format)", () => {
+    const raw: StremioSubtitle = {
+      id: "Inception.2010.1080p.BluRay.DD+5.1.x264-playHD_1",
+      url: "https://subsource.strem.top/subtitle/tt1375666/10195707.srt",
+      lang: "vie",
+    };
+
+    const normalized = normalizeAddonSubtitle(addon, raw, 0);
+    expect(normalized?.display).toBe(
+      "Inception.2010.1080p.BluRay.DD+5.1.x264-playHD",
+    );
+    expect(normalized?.media).toBe(
+      "Inception.2010.1080p.BluRay.DD+5.1.x264-playHD",
+    );
+  });
+
+  it("extracts release title from id when label is generic language name", () => {
+    const raw: StremioSubtitle = {
+      id: "Game.of.Thrones.S01E01.Winter.Is.Coming.1080p.BluRay_9",
+      url: "https://subsource.strem.top/subtitle/tt0944947/1588233.srt",
+      lang: "vi",
+      label: "Tiếng Việt",
+    };
+
+    const normalized = normalizeAddonSubtitle(addon, raw, 0);
+    expect(normalized?.display).toBe(
+      "Game.of.Thrones.S01E01.Winter.Is.Coming.1080p.BluRay",
+    );
+  });
+
+  it("falls back to label when id is purely numeric", () => {
+    const raw: StremioSubtitle = {
+      id: "10195707",
+      url: "https://example.com/10195707.srt",
+      lang: "vie",
+      label: "Vietnamese",
+    };
+
+    const normalized = normalizeAddonSubtitle(addon, raw, 0);
+    expect(normalized?.display).toBe("Vietnamese");
   });
 
   it("loads subtitles across addons and reports onProgress", async () => {
@@ -115,6 +161,80 @@ describe("addon subtitles", () => {
       captions: [],
       completed: 0,
       total: 2,
+    });
+  });
+
+  describe("inferSubtitleFormat", () => {
+    it("respects explicit type", () => {
+      expect(inferSubtitleFormat("vtt")).toBe("vtt");
+      expect(inferSubtitleFormat(".srt")).toBe("srt");
+    });
+
+    it("infers from URL extension", () => {
+      expect(
+        inferSubtitleFormat(
+          undefined,
+          "https://subsource.strem.top/subtitle/tt1375666/10195707.srt",
+        ),
+      ).toBe("srt");
+      expect(
+        inferSubtitleFormat(
+          undefined,
+          "https://example.com/subs/vietnamese.vtt?token=123",
+        ),
+      ).toBe("vtt");
+    });
+
+    it("infers from query params or id", () => {
+      expect(
+        inferSubtitleFormat(
+          undefined,
+          "https://example.com/download?format=ass",
+        ),
+      ).toBe("ass");
+      expect(
+        inferSubtitleFormat(undefined, undefined, "movie.sub.vtt"),
+      ).toBe("vtt");
+    });
+
+    it("defaults to srt when format cannot be determined", () => {
+      expect(
+        inferSubtitleFormat(
+          undefined,
+          "https://example.com/download/12345",
+        ),
+      ).toBe("srt");
+    });
+  });
+
+  describe("getSubtitleSourceBadgeClass", () => {
+    it("assigns cyan to subsource", () => {
+      expect(getSubtitleSourceBadgeClass("subsource")).toBe("bg-cyan-600");
+      expect(getSubtitleSourceBadgeClass("SubSource Subtitles")).toBe(
+        "bg-cyan-600",
+      );
+    });
+
+    it("assigns blue to wyzie", () => {
+      expect(getSubtitleSourceBadgeClass("wyzie charlie")).toBe("bg-blue-600");
+    });
+
+    it("assigns orange to opensubs", () => {
+      expect(getSubtitleSourceBadgeClass("opensubs")).toBe("bg-orange-500");
+      expect(getSubtitleSourceBadgeClass("OpenSubtitles v3")).toBe(
+        "bg-orange-500",
+      );
+    });
+
+    it("assigns amber to subdl", () => {
+      expect(getSubtitleSourceBadgeClass("SubDL Subtitles")).toBe("bg-amber-600");
+    });
+
+    it("assigns stable deterministic palette color for custom/unknown addons", () => {
+      const color1 = getSubtitleSourceBadgeClass("Random Addon Subtitles");
+      const color2 = getSubtitleSourceBadgeClass("Random Addon Subtitles");
+      expect(color1).toBe(color2);
+      expect(color1).toMatch(/^bg-[a-z]+-600$/);
     });
   });
 });

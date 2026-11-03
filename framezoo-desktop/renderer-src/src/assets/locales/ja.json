@@ -35,7 +35,10 @@
       "configRequiredBadge": "設定が必要です",
       "configRequiredWarning": "このアドオンは設定が完了していないため、ストリームや字幕の読み込みに失敗する可能性があります。",
       "configureAddon": "このアドオンを設定する",
+      "configureCustomKeyActive": "キーが設定されました（クリックして変更）",
       "configureRequiredAction": "このアドオンを設定する（必須）",
+      "customKeyActiveDesc": "個人のWyzie APIキーを使用する",
+      "customKeyConfiguredBadge": "キーが設定されました",
       "description": "アドオンはオプションです。このアプリはアドオンをバンドルしたり、推奨したり、ホストしたりするものではありません。",
       "disabled": "無効",
       "emptyInstalled": "システムにはまだアドオンがインストールされていません。",
@@ -44,6 +47,8 @@
       "installedHeading": "インストールされているアドオン",
       "processing": "処理...",
       "removeAddon": "このアドオンを削除します",
+      "subtitlesConfiguredError": "字幕APIキーの設定に失敗しました。もう一度お試しください。",
+      "subtitlesConfiguredSuccess": "字幕APIキーの設定に成功しました！",
       "title": "アドオンマネージャー"
     },
     "player": {
@@ -897,9 +902,9 @@
         "secondary": "二次",
         "selectingSecondary": "副字幕の選択",
         "autoSyncTitle": "自動同期",
-        "autoSyncDescription": "音声に合わせて字幕を自動的に作成します",
-        "autoSyncAction": "自動同期",
-        "autoSyncBadge": "自動",
+        "autoSyncDescription": "字幕を音声セリフに自動的に一致させる",
+        "autoSyncAction": "自動同期を開始する",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "字幕をAIと同期させる？",
         "syncSubtitleConfirmDescription": "字幕はAIによって映像に合わせて調整されます。",
         "syncSubtitleNoticeTitle": "注記",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "{{language}} から翻訳"
         },
+        "downloadFailed": "字幕の読み込みに失敗しました",
         "unknownLanguage": "未知",
         "useNativeSubtitles": "ネイティブビデオ字幕",
         "useNativeSubtitlesDescription": "ネイティブフルスクリーンおよびPiPのブロードキャスト字幕"
@@ -1194,17 +1200,19 @@
         "deviceNameLabel": "デバイス名",
         "failed": "セッションのロードに失敗しました",
         "lastActive": "最終アクティブ: {{date}}",
-        "loggedInAt": "ログイン場所: {{date}}",
+        "loggedInAt": "ログイン済み: {{date}}",
         "removeDevice": "取り除く",
         "title": "デバイス",
         "thisDevice": "このデバイス",
+        "activeNow": "現在有効",
+        "sessionCount": "{{count}} セッション",
         "types": {
           "desktop": "デスクトップ",
           "mobile": "携帯",
           "tablet": "錠剤"
         },
         "unknownBrowser": "不明なブラウザ",
-        "unknownDevice": "不明なデバイス、名前の復号化エラー",
+        "unknownDevice": "不明なデバイス",
         "unknownOperatingSystem": "不明なオペレーティングシステム"
       },
       "profile": {

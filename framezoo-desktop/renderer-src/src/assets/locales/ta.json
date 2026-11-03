@@ -35,7 +35,10 @@
       "configRequiredBadge": "உள்ளமைவு தேவைப்படுகிறது",
       "configRequiredWarning": "இந்த துணை நிரல் உள்ளமைக்கப்படவில்லை, எனவே இது ஸ்ட்ரீம்கள் அல்லது வசனங்களை ஏற்றுவதில் தோல்வியடையக்கூடும்.",
       "configureAddon": "இந்த துணை நிரலை உள்ளமைக்கவும்",
+      "configureCustomKeyActive": "உங்கள் சாவி உள்ளமைக்கப்பட்டுள்ளது (மாற்றுவதற்குச் சொடுக்கவும்)",
       "configureRequiredAction": "இந்த துணை நிரலை உள்ளமைக்கவும் (தேவை)",
+      "customKeyActiveDesc": "உங்கள் தனிப்பட்ட Wyzie API விசையைப் பயன்படுத்துதல்",
+      "customKeyConfiguredBadge": "உங்கள் சாவி உள்ளமைக்கப்பட்டுள்ளது",
       "description": "துணை நிரல் விருப்பமானது. இந்த ஆப்ஸ் எந்த addonஐயும் தொகுக்கவோ, பரிந்துரைக்கவோ அல்லது ஹோஸ்ட் செய்யவோ இல்லை.",
       "disabled": "முடக்கப்பட்டது",
       "emptyInstalled": "கணினியில் இதுவரை துணை நிரல் எதுவும் நிறுவப்படவில்லை.",
@@ -44,6 +47,8 @@
       "installedHeading": "நிறுவப்பட்ட துணை நிரல்கள்",
       "processing": "செயலாக்குகிறது...",
       "removeAddon": "இந்த addon ஐ அகற்று",
+      "subtitlesConfiguredError": "வசன API விசையை உள்ளமைக்க முடியவில்லை. தயவுசெய்து மீண்டும் முயற்சிக்கவும்!",
+      "subtitlesConfiguredSuccess": "சப்டைட்டில் API சாவி வெற்றிகரமாக உள்ளமைக்கப்பட்டது!",
       "title": "Addons மேலாளர்"
     },
     "player": {
@@ -897,9 +902,9 @@
         "secondary": "இரண்டாம் நிலை",
         "selectingSecondary": "இரண்டாம் நிலை வசனத்தைத் தேர்ந்தெடுக்கிறது",
         "autoSyncTitle": "தானியங்கு ஒத்திசைவு",
-        "autoSyncDescription": "பேசப்படும் உரையாடலுக்கு ஏற்றவாறு வசன வரிகளைத் தானாகவே பொருத்துங்கள்.",
-        "autoSyncAction": "தானியங்கு ஒத்திசைவு",
-        "autoSyncBadge": "ஆட்டோ",
+        "autoSyncDescription": "பேசப்படும் உரையாடலுக்கு ஏற்றவாறு வசன வரிகளைத் தானாகவே பொருத்துங்கள்",
+        "autoSyncAction": "தானியங்கு ஒத்திசைவைத் தொடங்கு",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "AI உடன் வசனங்களை ஒத்திசைக்கவா?",
         "syncSubtitleConfirmDescription": "வீடியோவுடன் பொருந்த, வசனங்கள் AI ஆல் சீரமைக்கப்படும்.",
         "syncSubtitleNoticeTitle": "குறிப்பு",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "{{language}} இலிருந்து மொழிபெயர்க்கவும்"
         },
+        "downloadFailed": "வசனங்களை ஏற்ற முடியவில்லை",
         "unknownLanguage": "தெரியவில்லை",
         "useNativeSubtitles": "சொந்த வீடியோ வசன வரிகள்",
         "useNativeSubtitlesDescription": "சொந்த முழுத்திரை மற்றும் PiP க்கான வசனங்களை ஒளிபரப்பவும்"
@@ -1193,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "சாதனத்தின் பெயர்",
         "failed": "சாதனத்தின் தரவுகளை காண்பிக்க இயலவில்லை",
-        "lastActive": "கடைசியாக செயல்பட்டது: {{date}}",
+        "lastActive": "கடைசியாக இயங்கியது: {{date}}",
         "loggedInAt": "உள்நுழைந்தது: {{date}}",
         "removeDevice": "நீக்கு",
         "title": "சாதனங்கள்",
         "thisDevice": "இந்த சாதனம்",
+        "activeNow": "இப்போது செயலில் உள்ளது",
+        "sessionCount": "{{count}} அமர்வுகள்",
         "types": {
           "desktop": "டெஸ்க்டாப்",
           "mobile": "மொபைல்",
           "tablet": "டேப்லெட்"
         },
         "unknownBrowser": "அறியப்படாத உலாவி",
-        "unknownDevice": "தெரியாத சாதனம், பெயரை மறைகுறியாக்குவதில் பிழை",
+        "unknownDevice": "அறியப்படாத சாதனம்",
         "unknownOperatingSystem": "அறியப்படாத இயக்க முறைமை"
       },
       "profile": {

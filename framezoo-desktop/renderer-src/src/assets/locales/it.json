@@ -35,7 +35,10 @@
       "configRequiredBadge": "Richiede configurazione",
       "configRequiredWarning": "Questo componente aggiuntivo non è configurato e potrebbe non riuscire a caricare i flussi video o i sottotitoli.",
       "configureAddon": "Configura questo componente aggiuntivo",
+      "configureCustomKeyActive": "La tua chiave è stata configurata (clicca per modificare)",
       "configureRequiredAction": "Configura questo componente aggiuntivo (obbligatorio)",
+      "customKeyActiveDesc": "Utilizzando la tua chiave API personale Wyzie",
+      "customKeyConfiguredBadge": "La tua chiave è stata configurata",
       "description": "I componenti aggiuntivi sono facoltativi. Questa app non raggruppa, consiglia o ospita alcun componente aggiuntivo.",
       "disabled": "Disabilitato",
       "emptyInstalled": "Nessun componente aggiuntivo ancora installato nel sistema.",
@@ -44,6 +47,8 @@
       "installedHeading": "Componenti aggiuntivi installati",
       "processing": "Elaborazione...",
       "removeAddon": "Rimuovi questo componente aggiuntivo",
+      "subtitlesConfiguredError": "Impossibile configurare la chiave API dei sottotitoli. Riprova!",
+      "subtitlesConfiguredSuccess": "Chiave API per i sottotitoli configurata correttamente!",
       "title": "Gestore componenti aggiuntivi"
     },
     "player": {
@@ -897,9 +902,9 @@
         "secondary": "Secondario",
         "selectingSecondary": "Selezione del sottotitolo secondario",
         "autoSyncTitle": "Sincronizzazione automatica",
-        "autoSyncDescription": "Sincronizza automaticamente i sottotitoli con il dialogo parlato.",
-        "autoSyncAction": "Sincronizzazione automatica",
-        "autoSyncBadge": "Auto",
+        "autoSyncDescription": "Abbinamento automatico dei sottotitoli al dialogo parlato",
+        "autoSyncAction": "Avvia la sincronizzazione automatica",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "Sincronizzare i sottotitoli con l'intelligenza artificiale?",
         "syncSubtitleConfirmDescription": "I sottotitoli verranno allineati dall'intelligenza artificiale per corrispondere al video.",
         "syncSubtitleNoticeTitle": "Nota",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "Traduci da {{language}}"
         },
+        "downloadFailed": "Impossibile caricare i sottotitoli",
         "unknownLanguage": "Sconosciuto",
         "useNativeSubtitles": "Sottotitoli video nativi",
         "useNativeSubtitlesDescription": "Trasmetti sottotitoli per schermo intero nativo e PiP"
@@ -1193,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "Nome dispositivo",
         "failed": "Impossibile caricare sessioni",
-        "lastActive": "Ultimo attivo: {{date}}",
-        "loggedInAt": "Accesso effettuato a: {{date}}",
+        "lastActive": "Ultima attività: {{date}}",
+        "loggedInAt": "Accesso effettuato: {{date}}",
         "removeDevice": "Rimuovi",
         "title": "Dispositivi",
         "thisDevice": "Questo dispositivo",
+        "activeNow": "Tre attivi",
+        "sessionCount": "sessioni {{count}}",
         "types": {
           "desktop": "Desktop",
           "mobile": "Mobile",
           "tablet": "Tablet"
         },
         "unknownBrowser": "Browser sconosciuto",
-        "unknownDevice": "Dispositivo sconosciuto, errore durante la decrittografia del nome",
+        "unknownDevice": "Dispositivo sconosciuto",
         "unknownOperatingSystem": "Sistema operativo sconosciuto"
       },
       "profile": {

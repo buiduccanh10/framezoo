@@ -35,7 +35,10 @@
       "configRequiredBadge": "Wymaga konfiguracji",
       "configRequiredWarning": "Ten dodatek nie jest skonfigurowany, więc może nie załadować strumieni lub napisów.",
       "configureAddon": "Skonfiguruj ten dodatek",
+      "configureCustomKeyActive": "Twój klucz został skonfigurowany (kliknij, aby zmienić)",
       "configureRequiredAction": "Skonfiguruj ten dodatek (wymagane)",
+      "customKeyActiveDesc": "Korzystanie z osobistego klucza API Wyzie",
+      "customKeyConfiguredBadge": "Twój klucz został skonfigurowany",
       "description": "Dodatki są opcjonalne. Ta aplikacja nie łączy, nie poleca ani nie hostuje żadnych dodatków.",
       "disabled": "Wyłączony",
       "emptyInstalled": "W systemie nie zainstalowano jeszcze żadnych dodatków.",
@@ -44,6 +47,8 @@
       "installedHeading": "Zainstalowane dodatki",
       "processing": "Przetwarzanie...",
       "removeAddon": "Usuń ten dodatek",
+      "subtitlesConfiguredError": "Nie udało się skonfigurować klucza API napisów. Spróbuj ponownie!",
+      "subtitlesConfiguredSuccess": "Klucz API napisów został pomyślnie skonfigurowany!",
       "title": "Menedżer dodatków"
     },
     "player": {
@@ -897,9 +902,9 @@
         "secondary": "Wtórny",
         "selectingSecondary": "Wybieranie drugiego napisu",
         "autoSyncTitle": "Automatyczna synchronizacja",
-        "autoSyncDescription": "Dopasuj automatycznie napisy do dialogów mówionych",
-        "autoSyncAction": "Automatyczna synchronizacja",
-        "autoSyncBadge": "Automatyczny",
+        "autoSyncDescription": "Dopasuj napisy automatycznie do dialogów mówionych",
+        "autoSyncAction": "Rozpocznij automatyczną synchronizację",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "Zsynchronizować napisy z AI?",
         "syncSubtitleConfirmDescription": "Napisy zostaną dopasowane przez sztuczną inteligencję do filmu.",
         "syncSubtitleNoticeTitle": "Notatka",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "Tłumaczenie z {{language}}"
         },
+        "downloadFailed": "Nie udało się załadować napisów",
         "unknownLanguage": "Nieznany",
         "useNativeSubtitles": "Użyj natywnych napisów",
         "useNativeSubtitlesDescription": "Może naprawić napisy podczas przesyłania i w PiP"
@@ -1193,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "Nazwa urządzenia",
         "failed": "Nie udało się załadować sesji",
-        "lastActive": "Ostatni aktywny: {{date}}",
-        "loggedInAt": "Zalogowano się pod adresem: {{date}}",
+        "lastActive": "Ostatnia aktywność: {{date}}",
+        "loggedInAt": "Zalogowano: {{date}}",
         "removeDevice": "Usuń",
         "title": "Urządzenia",
         "thisDevice": "To urządzenie",
+        "activeNow": "Aktywne teraz",
+        "sessionCount": "{{count}} sesji",
         "types": {
           "desktop": "Pulpit",
           "mobile": "Przenośny",
           "tablet": "Tabletka"
         },
         "unknownBrowser": "Nieznana przeglądarka",
-        "unknownDevice": "Nieznane urządzenie, błąd podczas odszyfrowywania nazwy",
+        "unknownDevice": "Nieznane urządzenie",
         "unknownOperatingSystem": "Nieznany system operacyjny"
       },
       "profile": {

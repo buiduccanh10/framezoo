@@ -35,7 +35,10 @@
       "configRequiredBadge": "کنفیگریشن کی ضرورت ہے۔",
       "configRequiredWarning": "یہ ایڈون کنفیگر نہیں ہے اور اسٹریمز یا سب ٹائٹلز کو لوڈ کرنے میں ناکام ہو سکتا ہے۔",
       "configureAddon": "اس ایڈون کو کنفیگر کریں۔",
+      "configureCustomKeyActive": "آپ کی کلید ترتیب دی گئی ہے (تبدیل کرنے کے لیے کلک کریں)",
       "configureRequiredAction": "اس ایڈون کو کنفیگر کریں (ضروری)",
+      "customKeyActiveDesc": "اپنی ذاتی Wyzie API کلید استعمال کرنا",
+      "customKeyConfiguredBadge": "آپ کی کلید ترتیب دی گئی ہے۔",
       "description": "ایڈونز اختیاری ہیں۔ یہ ایپ کسی بھی ایڈون کو بنڈل، تجویز یا میزبانی نہیں کرتی ہے۔",
       "disabled": "معذور",
       "emptyInstalled": "سسٹم میں ابھی تک کوئی ایڈون انسٹال نہیں ہوا ہے۔",
@@ -44,6 +47,8 @@
       "installedHeading": "انسٹال کردہ ایڈونز",
       "processing": "پروسیسنگ...",
       "removeAddon": "اس ایڈون کو ہٹا دیں۔",
+      "subtitlesConfiguredError": "سب ٹائٹل API کلید کو کنفیگر کرنے میں ناکام۔ براہ کرم دوبارہ کوشش کریں!",
+      "subtitlesConfiguredSuccess": "سب ٹائٹل API کلید کامیابی کے ساتھ کنفیگر ہو گئی!",
       "title": "ایڈونس مینیجر"
     },
     "player": {
@@ -897,9 +902,9 @@
         "secondary": "ثانوی",
         "selectingSecondary": "ثانوی ذیلی عنوان کا انتخاب",
         "autoSyncTitle": "خودکار مطابقت پذیری",
-        "autoSyncDescription": "سب ٹائٹلز کو خود بخود بولے گئے ڈائیلاگ سے ملا دیں۔",
-        "autoSyncAction": "خودکار مطابقت پذیری",
-        "autoSyncBadge": "آٹو",
+        "autoSyncDescription": "سب ٹائٹلز کو خود بخود بولے گئے مکالمے سے ملا دیں۔",
+        "autoSyncAction": "خودکار مطابقت پذیری شروع کریں۔",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "سب ٹائٹل کو AI کے ساتھ سنک کریں؟",
         "syncSubtitleConfirmDescription": "سب ٹائٹلز کو ویڈیو سے مماثل کرنے کے لیے AI کے ذریعے منسلک کیا جائے گا۔",
         "syncSubtitleNoticeTitle": "نوٹ",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "{{language}} سے ترجمہ کریں"
         },
+        "downloadFailed": "سب ٹائٹل لوڈ کرنے میں ناکام",
         "unknownLanguage": "نامعلوم",
         "useNativeSubtitles": "مقامی ویڈیو سب ٹائٹلز",
         "useNativeSubtitlesDescription": "مقامی پوری اسکرین اور PiP کے لیے براڈکاسٹ سب ٹائٹلز"
@@ -1194,17 +1200,19 @@
         "deviceNameLabel": "ڈیوائس کا نام",
         "failed": "سیشنز لوڈ کرنے میں ناکام",
         "lastActive": "آخری فعال: {{date}}",
-        "loggedInAt": "لاگ ان ہوا: {{date}}",
+        "loggedInAt": "سائن ان ہوا: {{date}}",
         "removeDevice": "ہٹا دیں۔",
         "title": "آلات",
         "thisDevice": "یہ ڈیوائس",
+        "activeNow": "اب ایکٹو",
+        "sessionCount": "{{count}} سیشنز",
         "types": {
           "desktop": "ڈیسک ٹاپ",
           "mobile": "موبائل",
           "tablet": "گولی"
         },
         "unknownBrowser": "نامعلوم براؤزر",
-        "unknownDevice": "نامعلوم آلہ، نام کو ڈکرپٹ کرنے میں خرابی۔",
+        "unknownDevice": "نامعلوم آلہ",
         "unknownOperatingSystem": "نامعلوم آپریٹنگ سسٹم"
       },
       "profile": {

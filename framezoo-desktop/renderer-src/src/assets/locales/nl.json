@@ -35,7 +35,10 @@
       "configRequiredBadge": "Vereist configuratie",
       "configRequiredWarning": "Deze add-on is niet geconfigureerd en laadt mogelijk geen streams of ondertitels.",
       "configureAddon": "Configureer deze add-on",
+      "configureCustomKeyActive": "Uw sleutel is geconfigureerd (klik om te wijzigen)",
       "configureRequiredAction": "Configureer deze add-on (verplicht)",
+      "customKeyActiveDesc": "Gebruik uw persoonlijke Wyzie API-sleutel",
+      "customKeyConfiguredBadge": "Uw sleutel is geconfigureerd",
       "description": "Add-ons zijn optioneel. Deze app bundelt, beveelt of host geen enkele add-on.",
       "disabled": "Gehandicapt",
       "emptyInstalled": "Er zijn nog geen add-ons in het systeem geïnstalleerd.",
@@ -44,6 +47,8 @@
       "installedHeading": "Geïnstalleerde add-ons",
       "processing": "Verwerken...",
       "removeAddon": "Verwijder deze add-on",
+      "subtitlesConfiguredError": "Het configureren van de API-sleutel voor ondertiteling is mislukt. Probeer het opnieuw!",
+      "subtitlesConfiguredSuccess": "API-sleutel voor ondertiteling succesvol geconfigureerd!",
       "title": "Add-onsbeheerder"
     },
     "player": {
@@ -897,9 +902,9 @@
         "secondary": "Secundair",
         "selectingSecondary": "Secundaire ondertiteling selecteren",
         "autoSyncTitle": "Automatische synchronisatie",
-        "autoSyncDescription": "Ondertitels automatisch afstemmen op de gesproken dialoog",
-        "autoSyncAction": "Automatische synchronisatie",
-        "autoSyncBadge": "Auto",
+        "autoSyncDescription": "Ondertitels automatisch afstemmen op gesproken dialoog",
+        "autoSyncAction": "Start automatische synchronisatie",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "Ondertiteling synchroniseren met AI?",
         "syncSubtitleConfirmDescription": "Ondertitels worden door AI afgestemd op de video.",
         "syncSubtitleNoticeTitle": "Opmerking",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "Vertalen van {{language}}"
         },
+        "downloadFailed": "Ondertitels konden niet worden geladen.",
         "unknownLanguage": "Onbekend",
         "useNativeSubtitles": "Native video-ondertitels",
         "useNativeSubtitlesDescription": "Ondertiteling uitzenden voor native fullscreen en PiP"
@@ -1194,17 +1200,19 @@
         "deviceNameLabel": "Apparaatnaam",
         "failed": "Sessies niet geladen",
         "lastActive": "Laatst actief: {{date}}",
-        "loggedInAt": "Ingelogd op: {{date}}",
+        "loggedInAt": "Ingelogd: {{date}}",
         "removeDevice": "Verwijder",
         "title": "Apparaten",
         "thisDevice": "Dit apparaat",
+        "activeNow": "Nu actief",
+        "sessionCount": "{{count}} sessies",
         "types": {
           "desktop": "bureaublad",
           "mobile": "Mobiel",
           "tablet": "Tablet"
         },
         "unknownBrowser": "Onbekende browser",
-        "unknownDevice": "Onbekend apparaat, fout bij het decoderen van naam",
+        "unknownDevice": "Onbekend apparaat",
         "unknownOperatingSystem": "Onbekend besturingssysteem"
       },
       "profile": {

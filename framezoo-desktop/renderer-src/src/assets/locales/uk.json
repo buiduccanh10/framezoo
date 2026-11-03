@@ -35,7 +35,10 @@
       "configRequiredBadge": "Потрібна конфігурація",
       "configRequiredWarning": "Цей додаток не налаштовано та може не завантажувати потоки або субтитри.",
       "configureAddon": "Налаштувати це доповнення",
+      "configureCustomKeyActive": "Ваш ключ налаштовано (натисніть, щоб змінити)",
       "configureRequiredAction": "Налаштуйте це доповнення (обов&#39;язково)",
+      "customKeyActiveDesc": "Використання вашого особистого ключа Wyzie API",
+      "customKeyConfiguredBadge": "Ваш ключ налаштовано",
       "description": "Додатки необов’язкові. Ця програма не об’єднує, не рекомендує та не розміщує жодних додатків.",
       "disabled": "Вимкнено",
       "emptyInstalled": "У системі ще не встановлено жодних доповнень.",
@@ -44,6 +47,8 @@
       "installedHeading": "Встановлені аддони",
       "processing": "Обробка...",
       "removeAddon": "Видаліть цей аддон",
+      "subtitlesConfiguredError": "Не вдалося налаштувати ключ API субтитрів. Спробуйте ще раз!",
+      "subtitlesConfiguredSuccess": "Ключ API субтитрів успішно налаштовано!",
       "title": "Менеджер додатків"
     },
     "player": {
@@ -897,9 +902,9 @@
         "secondary": "Вторинний",
         "selectingSecondary": "Вибір вторинних субтитрів",
         "autoSyncTitle": "Автоматична синхронізація",
-        "autoSyncDescription": "Автоматично зіставляти субтитри з розмовним діалогом",
-        "autoSyncAction": "Автоматична синхронізація",
-        "autoSyncBadge": "Авто",
+        "autoSyncDescription": "Автоматичне зіставлення субтитрів з розмовними діалогами",
+        "autoSyncAction": "Розпочати автоматичну синхронізацію",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "Синхронізувати субтитри з AI?",
         "syncSubtitleConfirmDescription": "Субтитри будуть вирівняні ШІ відповідно до відео.",
         "syncSubtitleNoticeTitle": "Примітка",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "Перекласти з {{language}}"
         },
+        "downloadFailed": "Не вдалося завантажити субтитри",
         "unknownLanguage": "Невідомий",
         "useNativeSubtitles": "Власні субтитри відео",
         "useNativeSubtitlesDescription": "Трансляція субтитрів для рідного повноекранного режиму та PiP"
@@ -1194,17 +1200,19 @@
         "deviceNameLabel": "Назва пристрою",
         "failed": "Сталася помилка при завантаженні сесій",
         "lastActive": "Остання активність: {{date}}",
-        "loggedInAt": "Увійшли в систему: {{date}}",
+        "loggedInAt": "Увійшов: {{date}}",
         "removeDevice": "Видалити",
         "title": "Пристрої",
         "thisDevice": "Цей пристрій",
+        "activeNow": "Активний зараз",
+        "sessionCount": "{{count}} сеансів",
         "types": {
           "desktop": "Робочий стіл",
           "mobile": "Мобільний",
           "tablet": "Планшет"
         },
         "unknownBrowser": "Невідомий браузер",
-        "unknownDevice": "Невідомий пристрій, помилка розшифровки імені",
+        "unknownDevice": "Невідомий пристрій",
         "unknownOperatingSystem": "Невідома операційна система"
       },
       "profile": {

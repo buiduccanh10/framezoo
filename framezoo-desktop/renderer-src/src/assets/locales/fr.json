@@ -35,7 +35,10 @@
       "configRequiredBadge": "Configuration requise",
       "configRequiredWarning": "Ce module complémentaire n&#39;est pas configuré et peut ne pas charger les flux ou les sous-titres.",
       "configureAddon": "Configurer cette extension",
+      "configureCustomKeyActive": "Votre clé a été configurée (cliquez pour modifier)",
       "configureRequiredAction": "Configurer ce module complémentaire (obligatoire)",
+      "customKeyActiveDesc": "En utilisant votre clé API Wyzie personnelle",
+      "customKeyConfiguredBadge": "Votre clé a été configurée",
       "description": "Les modules complémentaires sont facultatifs. Cette application ne regroupe, ne recommande ni n'héberge aucun module complémentaire.",
       "disabled": "Désactivé",
       "emptyInstalled": "Aucun module complémentaire n'est encore installé dans le système.",
@@ -44,6 +47,8 @@
       "installedHeading": "Modules complémentaires installés",
       "processing": "Traitement...",
       "removeAddon": "Supprimer ce module complémentaire",
+      "subtitlesConfiguredError": "Impossible de configurer la clé API des sous-titres. Veuillez réessayer !",
+      "subtitlesConfiguredSuccess": "Clé API des sous-titres configurée avec succès !",
       "title": "Gestionnaire de modules complémentaires"
     },
     "player": {
@@ -897,9 +902,9 @@
         "secondary": "Secondaire",
         "selectingSecondary": "Sélection du sous-titre secondaire",
         "autoSyncTitle": "Synchronisation automatique",
-        "autoSyncDescription": "Les sous-titres s'accordent automatiquement avec les dialogues.",
-        "autoSyncAction": "Synchronisation automatique",
-        "autoSyncBadge": "Auto",
+        "autoSyncDescription": "Associer automatiquement les sous-titres aux dialogues.",
+        "autoSyncAction": "Démarrer la synchronisation automatique",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "Synchroniser les sous-titres avec l'IA ?",
         "syncSubtitleConfirmDescription": "Les sous-titres seront alignés par l'IA pour correspondre à la vidéo.",
         "syncSubtitleNoticeTitle": "Note",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "Traduire à partir de {{language}}"
         },
+        "downloadFailed": "Impossible de charger les sous-titres",
         "unknownLanguage": "Inconnu",
         "useNativeSubtitles": "Utiliser les sous-titres natifs de la vidéo",
         "useNativeSubtitlesDescription": "Diffusez des sous-titres en plein écran natif et PiP"
@@ -1193,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "Nom de l'appareil",
         "failed": "Échec du chargement des sessions",
-        "lastActive": "Dernière activité : {{date}}",
-        "loggedInAt": "Connecté à : {{date}}",
+        "lastActive": "Dernière activité : {{date}}",
+        "loggedInAt": "Connecté : {{date}}",
         "removeDevice": "Supprimer",
         "title": "Appareils",
         "thisDevice": "Cet appareil",
+        "activeNow": "Actif maintenant",
+        "sessionCount": "{{count}} sessions",
         "types": {
           "desktop": "Ordinateur de bureau",
           "mobile": "Mobile",
           "tablet": "Comprimé"
         },
         "unknownBrowser": "Navigateur inconnu",
-        "unknownDevice": "Appareil inconnu, erreur de déchiffrement du nom",
+        "unknownDevice": "Appareil inconnu",
         "unknownOperatingSystem": "Système d&#39;exploitation inconnu"
       },
       "profile": {

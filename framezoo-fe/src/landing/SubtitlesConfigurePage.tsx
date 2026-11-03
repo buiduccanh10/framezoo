@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import {
   type LandingLocale,
@@ -46,6 +46,7 @@ export function SubtitlesConfigurePage() {
   const [configureToken, setConfigureToken] = useState<string>("");
   const [isVerifyingTicket, setIsVerifyingTicket] = useState(false);
   const [isSavingRemote, setIsSavingRemote] = useState(false);
+  const hasVerifiedRef = useRef(false);
   const [saveRemoteStatus, setSaveRemoteStatus] = useState<
     "idle" | "success" | "error" | "warning"
   >("idle");
@@ -67,7 +68,8 @@ export function SubtitlesConfigurePage() {
     if (typeof window === "undefined") return;
     const urlParams = new URLSearchParams(window.location.search);
     const ticket = urlParams.get("ticket");
-    if (!ticket) return;
+    if (!ticket || hasVerifiedRef.current) return;
+    hasVerifiedRef.current = true;
 
     setIsVerifyingTicket(true);
     (async () => {
@@ -163,8 +165,10 @@ export function SubtitlesConfigurePage() {
     return `${base}?key=${encodeURIComponent(trimmed)}`;
   };
 
-  const getDesktopDeepLink = () => {
-    return "framezoo://addons";
+  const getDesktopDeepLink = (status?: "success" | "failed") => {
+    return status
+      ? `framezoo://addons?subtitles_configured=${status}`
+      : "framezoo://addons";
   };
 
   const handleOpenFramezoo = async () => {
@@ -177,6 +181,7 @@ export function SubtitlesConfigurePage() {
     setSaveRemoteStatus("idle");
     setSaveRemoteMessage("");
 
+    let isSuccess = false;
     try {
       const response = await fetch(getApiUrl("/addon/subtitles/api/save"), {
         method: "POST",
@@ -189,6 +194,7 @@ export function SubtitlesConfigurePage() {
 
       const data = await response.json();
       if (response.ok && data.success) {
+        isSuccess = true;
         setSaveRemoteStatus("success");
         setSaveRemoteMessage(`✓ ${t.account.saveSuccess}`);
       } else {
@@ -203,7 +209,7 @@ export function SubtitlesConfigurePage() {
     }
 
     // 2. Trigger desktop deep link to bring Framezoo to foreground
-    const deepLink = getDesktopDeepLink();
+    const deepLink = getDesktopDeepLink(isSuccess ? "success" : "failed");
     window.location.href = deepLink;
   };
 
@@ -326,7 +332,6 @@ export function SubtitlesConfigurePage() {
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <span>👤</span>
               <span>
                 {t.account.configuringFor} <strong>{account.nickname}</strong>
               </span>

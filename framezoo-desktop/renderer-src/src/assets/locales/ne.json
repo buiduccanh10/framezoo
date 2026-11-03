@@ -35,7 +35,10 @@
       "configRequiredBadge": "कन्फिगरेसन आवश्यक छ",
       "configRequiredWarning": "यो एडअन कन्फिगर गरिएको छैन र स्ट्रिम वा उपशीर्षकहरू लोड गर्न असफल हुन सक्छ।",
       "configureAddon": "यो एडअन कन्फिगर गर्नुहोस्",
+      "configureCustomKeyActive": "तपाईंको कुञ्जी कन्फिगर गरिएको छ (परिवर्तन गर्न क्लिक गर्नुहोस्)",
       "configureRequiredAction": "यो एडअन कन्फिगर गर्नुहोस् (आवश्यक)",
+      "customKeyActiveDesc": "तपाईंको व्यक्तिगत Wyzie API कुञ्जी प्रयोग गर्दै",
+      "customKeyConfiguredBadge": "तपाईंको कुञ्जी कन्फिगर गरिएको छ।",
       "description": "Addons वैकल्पिक छन्। यो एपले कुनै पनि एडअनलाई बन्डल, सिफारिस वा होस्ट गर्दैन।",
       "disabled": "असक्षम",
       "emptyInstalled": "प्रणालीमा अहिलेसम्म कुनै एडअन्स स्थापना गरिएको छैन।",
@@ -44,6 +47,8 @@
       "installedHeading": "स्थापित Addons",
       "processing": "प्रशोधन गर्दै...",
       "removeAddon": "यो addon हटाउनुहोस्",
+      "subtitlesConfiguredError": "उपशीर्षक API कुञ्जी कन्फिगर गर्न असफल भयो। कृपया फेरि प्रयास गर्नुहोस्!",
+      "subtitlesConfiguredSuccess": "उपशीर्षक API कुञ्जी सफलतापूर्वक कन्फिगर गरियो!",
       "title": "Addons प्रबन्धक"
     },
     "player": {
@@ -897,9 +902,9 @@
         "secondary": "माध्यमिक",
         "selectingSecondary": "माध्यमिक उपशीर्षक चयन गर्दै",
         "autoSyncTitle": "स्वतः सिङ्क",
-        "autoSyncDescription": "स्वचालित रूपमा बोलिएको संवादमा उपशीर्षकहरू मिलाउनुहोस्",
-        "autoSyncAction": "स्वतः सिङ्क",
-        "autoSyncBadge": "अटो",
+        "autoSyncDescription": "स्वचालित रूपमा बोली संवादमा उपशीर्षकहरू मिलाउनुहोस्",
+        "autoSyncAction": "स्वतः सिङ्क सुरु गर्नुहोस्",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "AI सँग उपशीर्षक सिंक गर्ने हो?",
         "syncSubtitleConfirmDescription": "भिडियोसँग मेल खाने उपशीर्षकहरू AI द्वारा पङ्क्तिबद्ध हुनेछन्।",
         "syncSubtitleNoticeTitle": "नोट",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "{{language}} बाट अनुवाद गर्नुहोस्"
         },
+        "downloadFailed": "उपशीर्षक लोड गर्न असफल भयो",
         "unknownLanguage": "अज्ञात",
         "useNativeSubtitles": "मूल भिडियो उपशीर्षकहरू",
         "useNativeSubtitlesDescription": "नेटिभ फुलस्क्रिन र PiP को लागि उपशीर्षकहरू प्रसारण गर्नुहोस्"
@@ -1194,17 +1200,19 @@
         "deviceNameLabel": "उपकरणको नाम",
         "failed": "सत्रहरू लोड गर्न असफल भयो",
         "lastActive": "पछिल्लो सक्रिय: {{date}}",
-        "loggedInAt": "लग इन: {{date}}",
+        "loggedInAt": "साइन इन गरिएको: {{date}}",
         "removeDevice": "हटाउनुहोस्",
         "title": "उपकरणहरु",
         "thisDevice": "यो उपकरण",
+        "activeNow": "अहिले सक्रिय छ",
+        "sessionCount": "{{count}} सत्रहरू",
         "types": {
           "desktop": "डेस्कटप",
           "mobile": "मोबाइल",
           "tablet": "ट्याब्लेट"
         },
         "unknownBrowser": "अज्ञात ब्राउजर",
-        "unknownDevice": "अज्ञात उपकरण, नाम डिक्रिप्ट गर्दा त्रुटि",
+        "unknownDevice": "अज्ञात यन्त्र",
         "unknownOperatingSystem": "अज्ञात अपरेटिङ सिस्टम"
       },
       "profile": {

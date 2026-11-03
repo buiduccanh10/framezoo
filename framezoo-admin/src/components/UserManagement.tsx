@@ -466,7 +466,7 @@ function Overview({
               <Copy size={12} />
             </button>
           </Info>
-          <Info label="Namespace">{detail.user.namespace || "movie-web"}</Info>
+          <Info label="Namespace">{detail.user.namespace || "—"}</Info>
           <Info label="Ngày tạo">{formatDateTime(detail.user.created_at)}</Info>
           <Info label="Lần cuối hoạt động">
             {formatDateTime(detail.user.last_logged_in)}

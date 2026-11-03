@@ -35,7 +35,10 @@
       "configRequiredBadge": "需要配置",
       "configRequiredWarning": "此插件尚未配置，可能無法載入視訊串流或字幕。",
       "configureAddon": "配置此插件",
+      "configureCustomKeyActive": "您的金鑰已配置（點擊變更）",
       "configureRequiredAction": "配置此外掛程式（必需）",
+      "customKeyActiveDesc": "使用您的個人 Wyzie API 金鑰",
+      "customKeyConfiguredBadge": "您的金鑰已配置完成",
       "description": "插件是可選的。此應用程式不捆綁、推薦或託管任何插件。",
       "disabled": "殘障人士",
       "emptyInstalled": "系統中尚未安裝任何插件。",
@@ -44,6 +47,8 @@
       "installedHeading": "已安裝的插件",
       "processing": "加工...",
       "removeAddon": "刪除這個插件",
+      "subtitlesConfiguredError": "字幕 API 金鑰配置失敗。請重試！",
+      "subtitlesConfiguredSuccess": "字幕API金鑰配置成功！",
       "title": "外掛程式管理器"
     },
     "player": {
@@ -898,8 +903,8 @@
         "selectingSecondary": "選擇輔助字幕",
         "autoSyncTitle": "自動同步",
         "autoSyncDescription": "自動將字幕與對話匹配",
-        "autoSyncAction": "自動同步",
-        "autoSyncBadge": "汽車",
+        "autoSyncAction": "啟動自動同步",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "與AI同步字幕？",
         "syncSubtitleConfirmDescription": "字幕將由人工智慧對齊以匹配影片。",
         "syncSubtitleNoticeTitle": "筆記",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "翻譯自 {{language}}"
         },
+        "downloadFailed": "字幕載入失敗",
         "unknownLanguage": "未知",
         "useNativeSubtitles": "原生影片字幕",
         "useNativeSubtitlesDescription": "本機全螢幕及畫中畫的廣播字幕"
@@ -1194,17 +1200,19 @@
         "deviceNameLabel": "設備名稱",
         "failed": "無法載入",
         "lastActive": "最後活躍時間：{{date}}",
-        "loggedInAt": "登入於：{{date}}",
+        "loggedInAt": "已登入：{{date}}",
         "removeDevice": "刪除",
         "title": "設備",
         "thisDevice": "這個設備",
+        "activeNow": "現在生效",
+        "sessionCount": "{{count}} 會話",
         "types": {
           "desktop": "桌面",
           "mobile": "移動的",
           "tablet": "藥片"
         },
         "unknownBrowser": "未知瀏覽器",
-        "unknownDevice": "未知設備，解密名稱時發生錯誤",
+        "unknownDevice": "未知設備",
         "unknownOperatingSystem": "未知作業系統"
       },
       "profile": {

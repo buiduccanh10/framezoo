@@ -35,7 +35,10 @@
       "configRequiredBadge": "Konfigurációt igényel",
       "configRequiredWarning": "Ez a kiegészítő nincs konfigurálva, és előfordulhat, hogy nem tölti be a streameket vagy a feliratokat.",
       "configureAddon": "Konfigurálja ezt a kiegészítőt",
+      "configureCustomKeyActive": "A kulcs konfigurálva lett (kattintson a módosításhoz)",
       "configureRequiredAction": "Konfigurálja ezt a kiegészítőt (Kötelező)",
+      "customKeyActiveDesc": "Személyes Wyzie API-kulcs használata",
+      "customKeyConfiguredBadge": "A kulcs konfigurálva lett",
       "description": "A kiegészítők nem kötelezőek. Ez az alkalmazás nem köt össze, ajánl vagy fogad semmilyen kiegészítőt.",
       "disabled": "Letiltva",
       "emptyInstalled": "A rendszerbe még nincs telepítve kiegészítő.",
@@ -44,6 +47,8 @@
       "installedHeading": "Telepített kiegészítők",
       "processing": "Feldolgozás...",
       "removeAddon": "Távolítsa el ezt a kiegészítőt",
+      "subtitlesConfiguredError": "Nem sikerült konfigurálni a felirat API-kulcsát. Próbáld újra!",
+      "subtitlesConfiguredSuccess": "Felirat API kulcs sikeresen konfigurálva!",
       "title": "Addons Manager"
     },
     "player": {
@@ -898,8 +903,8 @@
         "selectingSecondary": "Másodlagos felirat kiválasztása",
         "autoSyncTitle": "Automatikus szinkronizálás",
         "autoSyncDescription": "A feliratok automatikus illesztése a beszélt párbeszédekhez",
-        "autoSyncAction": "Automatikus szinkronizálás",
-        "autoSyncBadge": "Autó",
+        "autoSyncAction": "Automatikus szinkronizálás indítása",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "Szinkronizálja a feliratot az AI-val?",
         "syncSubtitleConfirmDescription": "A feliratokat mesterséges intelligencia igazítja a videóhoz.",
         "syncSubtitleNoticeTitle": "Jegyzet",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "Fordítás {{language}}"
         },
+        "downloadFailed": "Nem sikerült betölteni a feliratot",
         "unknownLanguage": "Ismeretlen",
         "useNativeSubtitles": "A videó eredeti feliratának használata",
         "useNativeSubtitlesDescription": "Megjavíthatja a feliratokat kasztolás és PiP közben"
@@ -1193,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "Eszköz neve",
         "failed": "Munkamenetek betöltése sikertelen",
-        "lastActive": "Utolsó aktív: {{date}}",
-        "loggedInAt": "Bejelentkezés: {{date}}",
+        "lastActive": "Utolsó aktivitás: {{date}}",
+        "loggedInAt": "Bejelentkezve: {{date}}",
         "removeDevice": "Eltávolítás",
         "title": "Eszközök",
         "thisDevice": "Ez az eszköz",
+        "activeNow": "Aktív most",
+        "sessionCount": "{{count}} munkamenet",
         "types": {
           "desktop": "Asztali",
           "mobile": "Mozgó",
           "tablet": "Tabletta"
         },
         "unknownBrowser": "Ismeretlen böngésző",
-        "unknownDevice": "Ismeretlen eszköz, hiba a név visszafejtésekor",
+        "unknownDevice": "Ismeretlen eszköz",
         "unknownOperatingSystem": "Ismeretlen operációs rendszer"
       },
       "profile": {

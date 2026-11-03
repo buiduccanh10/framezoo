@@ -55,6 +55,9 @@ contextBridge.exposeInMainWorld("__CONFIG__", runtimeConfig);
 contextBridge.exposeInMainWorld("__FRAMEZOO_DESKTOP__", true);
 
 contextBridge.exposeInMainWorld("electronAPI", {
+  getDeviceName(): Promise<string> {
+    return ipcRenderer.invoke("desktop:get-device-name");
+  },
   secureStoreSave(key: string, value: string) {
     return ipcRenderer.invoke("desktop:secure-store-save", key, value);
   },

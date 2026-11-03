@@ -35,7 +35,10 @@
       "configRequiredBadge": "구성 필요",
       "configRequiredWarning": "이 추가 기능은 구성되지 않았으며 스트림이나 자막을 불러오지 못할 수 있습니다.",
       "configureAddon": "이 추가 기능을 구성하세요",
+      "configureCustomKeyActive": "사용자 키가 설정되었습니다 (변경하려면 클릭하세요).",
       "configureRequiredAction": "이 추가 기능을 구성하십시오(필수).",
+      "customKeyActiveDesc": "개인 Wyzie API 키를 사용하여",
+      "customKeyConfiguredBadge": "키가 설정되었습니다.",
       "description": "애드온은 선택사항입니다. 이 앱은 애드온을 번들로 제공하거나 권장하거나 호스팅하지 않습니다.",
       "disabled": "장애가 있는",
       "emptyInstalled": "아직 시스템에 애드온이 설치되지 않았습니다.",
@@ -44,6 +47,8 @@
       "installedHeading": "설치된 애드온",
       "processing": "처리 중...",
       "removeAddon": "이 애드온 제거",
+      "subtitlesConfiguredError": "자막 API 키를 설정하는 데 실패했습니다. 다시 시도해 주세요!",
+      "subtitlesConfiguredSuccess": "자막 API 키가 성공적으로 설정되었습니다!",
       "title": "애드온 관리자"
     },
     "player": {
@@ -897,9 +902,9 @@
         "secondary": "반성",
         "selectingSecondary": "보조 자막 선택",
         "autoSyncTitle": "자동 동기화",
-        "autoSyncDescription": "음성 대화에 자막을 자동으로 맞춰줍니다.",
-        "autoSyncAction": "자동 동기화",
-        "autoSyncBadge": "자동",
+        "autoSyncDescription": "자막과 음성 대화를 자동으로 일치시킵니다.",
+        "autoSyncAction": "자동 동기화 시작",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "AI와 자막을 동기화하시겠습니까?",
         "syncSubtitleConfirmDescription": "자막은 AI가 영상에 맞게 정렬합니다.",
         "syncSubtitleNoticeTitle": "메모",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "{{language}}에서 번역"
         },
+        "downloadFailed": "자막을 불러오는 데 실패했습니다.",
         "unknownLanguage": "알수없음",
         "useNativeSubtitles": "네이티브 비디오 자막",
         "useNativeSubtitlesDescription": "기본 전체 화면 및 PiP용 방송 자막"
@@ -1193,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "기기명",
         "failed": "세션을 로드하지 못했습니다",
-        "lastActive": "마지막 활성: {{date}}",
-        "loggedInAt": "로그인한 위치: {{date}}",
+        "lastActive": "최근 활동: {{date}}",
+        "loggedInAt": "로그인 사용자: {{date}}",
         "removeDevice": "제거",
         "title": "기기",
         "thisDevice": "이 장치",
+        "activeNow": "지금 활성화됨",
+        "sessionCount": "{{count}} 세션",
         "types": {
           "desktop": "데스크톱",
           "mobile": "이동하는",
           "tablet": "태블릿"
         },
         "unknownBrowser": "알 수 없는 브라우저",
-        "unknownDevice": "알 수 없는 기기입니다. 이름을 해독하는 중 오류가 발생했습니다.",
+        "unknownDevice": "알 수 없는 장치",
         "unknownOperatingSystem": "알 수 없는 운영 체제"
       },
       "profile": {

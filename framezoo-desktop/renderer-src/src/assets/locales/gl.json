@@ -35,7 +35,10 @@
       "configRequiredBadge": "Require configuración",
       "configRequiredWarning": "Este complemento non está configurado e pode fallar ao cargar as transmisións ou os subtítulos.",
       "configureAddon": "Configurar este complemento",
+      "configureCustomKeyActive": "A túa clave foi configurada (fai clic para cambiala)",
       "configureRequiredAction": "Configurar este complemento (obrigatorio)",
+      "customKeyActiveDesc": "Usando a túa clave persoal da API de Wyzie",
+      "customKeyConfiguredBadge": "A túa chave foi configurada",
       "description": "Os complementos son opcionais. Esta aplicación non agrupa, recomenda nin aloxa ningún complemento.",
       "disabled": "Desactivado",
       "emptyInstalled": "Aínda non hai complementos instalados no sistema.",
@@ -44,6 +47,8 @@
       "installedHeading": "Complementos instalados",
       "processing": "Procesando...",
       "removeAddon": "Elimina este complemento",
+      "subtitlesConfiguredError": "Non se puido configurar a clave da API de subtítulos. Téntao de novo!",
+      "subtitlesConfiguredSuccess": "Configurouse a chave da API de subtítulos correctamente!",
       "title": "Xestor de complementos"
     },
     "player": {
@@ -897,9 +902,9 @@
         "secondary": "Secundaria",
         "selectingSecondary": "Selección de subtítulos secundarios",
         "autoSyncTitle": "Sincronización automática",
-        "autoSyncDescription": "Asociar os subtítulos cos diálogos falados automaticamente",
-        "autoSyncAction": "Sincronización automática",
-        "autoSyncBadge": "Automático",
+        "autoSyncDescription": "Asociar subtítulos cos diálogos falados automaticamente",
+        "autoSyncAction": "Iniciar sincronización automática",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "Queres sincronizar os subtítulos coa IA?",
         "syncSubtitleConfirmDescription": "AI aliñará os subtítulos para que coincidan co vídeo.",
         "syncSubtitleNoticeTitle": "Nota",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "Traducir de {{language}}"
         },
+        "downloadFailed": "Non se puideron cargar os subtítulos",
         "unknownLanguage": "Descoñecido",
         "useNativeSubtitles": "Subtítulos de vídeos nativos",
         "useNativeSubtitlesDescription": "Transmitir subtítulos para pantalla completa nativa e PiP"
@@ -1193,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "Nome do dispositivo",
         "failed": "Erro ao cargar sesións",
-        "lastActive": "Último activo: {{date}}",
-        "loggedInAt": "Inicia sesión en: {{date}}",
+        "lastActive": "Última actividade: {{date}}",
+        "loggedInAt": "Sesión iniciada: {{date}}",
         "removeDevice": "Quitar",
         "title": "Dispositivos",
         "thisDevice": "Este dispositivo",
+        "activeNow": "Activo agora",
+        "sessionCount": "sesións de {{count}}",
         "types": {
           "desktop": "Escritorio",
           "mobile": "Móbil",
           "tablet": "Tableta"
         },
         "unknownBrowser": "Navegador descoñecido",
-        "unknownDevice": "Dispositivo descoñecido, erro ao descifrar o nome",
+        "unknownDevice": "Dispositivo descoñecido",
         "unknownOperatingSystem": "Sistema operativo descoñecido"
       },
       "profile": {

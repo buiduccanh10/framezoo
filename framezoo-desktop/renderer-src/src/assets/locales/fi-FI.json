@@ -35,7 +35,10 @@
       "configRequiredBadge": "Vaatii konfiguroinnin",
       "configRequiredWarning": "Tätä lisäosaa ei ole määritetty, eikä se välttämättä lataa striimejä tai tekstityksiä.",
       "configureAddon": "Määritä tämä lisäosa",
+      "configureCustomKeyActive": "Avaimesi on määritetty (klikkaa muuttaaksesi)",
       "configureRequiredAction": "Määritä tämä lisäosa (pakollinen)",
+      "customKeyActiveDesc": "Henkilökohtaisen Wyzie API -avaimesi käyttäminen",
+      "customKeyConfiguredBadge": "Avaimesi on määritetty",
       "description": "Lisäosat ovat valinnaisia. Tämä sovellus ei niputa, suosittele tai isännöi mitään lisäosia.",
       "disabled": "Ei käytössä",
       "emptyInstalled": "Järjestelmään ei ole vielä asennettu lisäosia.",
@@ -44,6 +47,8 @@
       "installedHeading": "Asennetut lisäosat",
       "processing": "Käsitellään...",
       "removeAddon": "Poista tämä lisäosa",
+      "subtitlesConfiguredError": "Tekstitysten API-avaimen määrittäminen epäonnistui. Yritä uudelleen!",
+      "subtitlesConfiguredSuccess": "Subtitle API -avaimen konfigurointi onnistui!",
       "title": "Lisäosien hallinta"
     },
     "player": {
@@ -898,8 +903,8 @@
         "selectingSecondary": "Toissijaisen tekstityksen valinta",
         "autoSyncTitle": "Automaattinen synkronointi",
         "autoSyncDescription": "Sovita tekstitykset puhuttuun dialogiin automaattisesti",
-        "autoSyncAction": "Automaattinen synkronointi",
-        "autoSyncBadge": "Auto",
+        "autoSyncAction": "Aloita automaattinen synkronointi",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "Synkronoidaanko tekstitys tekoälyn kanssa?",
         "syncSubtitleConfirmDescription": "Tekoäly kohdistaa tekstitykset vastaamaan videota.",
         "syncSubtitleNoticeTitle": "Huomautus",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "Käännä kielestä {{language}}"
         },
+        "downloadFailed": "Tekstityksen lataaminen epäonnistui",
         "unknownLanguage": "Tuntematon",
         "useNativeSubtitles": "Alkuperäinen videotekstitys",
         "useNativeSubtitlesDescription": "Lähetä tekstitykset alkuperäiseen koko näytön ja kuvassa"
@@ -1194,17 +1200,19 @@
         "deviceNameLabel": "Laitteen nimi",
         "failed": "Istuntojen lataaminen epäonnistui",
         "lastActive": "Viimeksi aktiivinen: {{date}}",
-        "loggedInAt": "Kirjautunut sisään osoitteessa: {{date}}",
+        "loggedInAt": "Kirjautunut sisään: {{date}}",
         "removeDevice": "Poistaa",
         "title": "Laitteet",
         "thisDevice": "Tämä laite",
+        "activeNow": "Aktiivinen nyt",
+        "sessionCount": "{{count}} istuntoa",
         "types": {
           "desktop": "Työpöytä",
           "mobile": "Mobiili",
           "tablet": "Tabletti"
         },
         "unknownBrowser": "Tuntematon selain",
-        "unknownDevice": "Tuntematon laite, virhe nimen salauksen purkamisessa",
+        "unknownDevice": "Tuntematon laite",
         "unknownOperatingSystem": "Tuntematon käyttöjärjestelmä"
       },
       "profile": {

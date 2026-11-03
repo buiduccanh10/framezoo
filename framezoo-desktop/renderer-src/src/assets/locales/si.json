@@ -35,7 +35,10 @@
       "configRequiredBadge": "වින්‍යාසය අවශ්‍යයි",
       "configRequiredWarning": "මෙම ඇඩෝනය වින්‍යාස කර නොමැති අතර ප්‍රවාහ හෝ උපසිරැසි පූරණය කිරීමට අසමත් විය හැක.",
       "configureAddon": "මෙම ඇඩෝනය වින්‍යාස කරන්න",
+      "configureCustomKeyActive": "ඔබගේ යතුර වින්‍යාස කර ඇත (වෙනස් කිරීමට ක්ලික් කරන්න)",
       "configureRequiredAction": "මෙම ඇඩෝනය වින්‍යාස කරන්න (අවශ්‍යයි)",
+      "customKeyActiveDesc": "ඔබගේ පුද්ගලික Wyzie API යතුර භාවිතා කිරීම",
+      "customKeyConfiguredBadge": "ඔබගේ යතුර වින්‍යාස කර ඇත.",
       "description": "ඇඩෝන විකල්ප වේ. මෙම යෙදුම කිසිදු ඇඩෝනයක් බණ්ඩල් කිරීම, නිර්දේශ කිරීම හෝ සත්කාරකත්වය නොදක්වයි.",
       "disabled": "ආබාධිතයි",
       "emptyInstalled": "තවමත් පද්ධතිය තුළ ඇඩෝන ස්ථාපනය කර නොමැත.",
@@ -44,6 +47,8 @@
       "installedHeading": "ස්ථාපිත ඇඩෝන",
       "processing": "සකසමින්...",
       "removeAddon": "මෙම ඇඩෝනය ඉවත් කරන්න",
+      "subtitlesConfiguredError": "උපසිරැසි API යතුර වින්‍යාස කිරීමට අසමත් විය. කරුණාකර නැවත උත්සාහ කරන්න!",
+      "subtitlesConfiguredSuccess": "උපසිරැසි API යතුර සාර්ථකව වින්‍යාස කරන ලදී!",
       "title": "ඇඩෝන කළමනාකරු"
     },
     "player": {
@@ -897,9 +902,9 @@
         "secondary": "ද්විතියික",
         "selectingSecondary": "ද්විතියික උපසිරැසි තේරීම",
         "autoSyncTitle": "ස්වයංක්‍රීය සමමුහුර්තකරණය",
-        "autoSyncDescription": "කථා කරන සංවාදයට උපසිරැසි ස්වයංක්‍රීයව ගලපන්න",
-        "autoSyncAction": "ස්වයංක්‍රීය සමමුහුර්තකරණය",
-        "autoSyncBadge": "ස්වයංක්‍රීය",
+        "autoSyncDescription": "කථන සංවාදයට උපසිරැසි ස්වයංක්‍රීයව ගලපන්න",
+        "autoSyncAction": "ස්වයංක්‍රීය සමමුහුර්තකරණය ආරම්භ කරන්න",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "උපසිරැසි AI සමඟ සමමුහුර්ත කරන්නද?",
         "syncSubtitleConfirmDescription": "වීඩියෝවට ගැළපීමට AI මගින් උපසිරැසි පෙළගස්වනු ඇත.",
         "syncSubtitleNoticeTitle": "සටහන",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "{{language}} වෙතින් පරිවර්තනය කරන්න"
         },
+        "downloadFailed": "උපසිරැසිය පූරණය කිරීමට අසමත් විය.",
         "unknownLanguage": "නොදන්නා",
         "useNativeSubtitles": "ස්වදේශීය වීඩියෝ උපසිරැසි",
         "useNativeSubtitlesDescription": "ස්වදේශීය පූර්ණ තිරය සහ PiP සඳහා උපසිරැසි විකාශනය කරන්න"
@@ -1193,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "උපාංගයේ නම",
         "failed": "සැසි පූරණය කිරීමට අසමත් විය",
-        "lastActive": "අවසන් සක්‍රිය: {{date}}",
-        "loggedInAt": "පුරනය වී ඇත්තේ: {{date}}",
+        "lastActive": "අවසන් වරට සක්‍රිය වූයේ: {{date}}",
+        "loggedInAt": "පුරනය වී ඇත: {{date}}",
         "removeDevice": "ඉවත් කරන්න",
         "title": "උපාංග",
         "thisDevice": "මෙම උපාංගය",
+        "activeNow": "දැන් ක්‍රියාකාරීයි",
+        "sessionCount": "සැසි {{count}}",
         "types": {
           "desktop": "ඩෙස්ක්ටොප්",
           "mobile": "ජංගම",
           "tablet": "ටැබ්ලටය"
         },
         "unknownBrowser": "නොදන්නා බ්‍රව්සරයකි",
-        "unknownDevice": "නොදන්නා උපාංගය, නම විකේතනය කිරීමේ දෝෂයකි",
+        "unknownDevice": "නොදන්නා උපාංගයකි",
         "unknownOperatingSystem": "නොදන්නා මෙහෙයුම් පද්ධතිය"
       },
       "profile": {

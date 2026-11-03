@@ -35,7 +35,10 @@
       "configRequiredBadge": "Требуется настройка",
       "configRequiredWarning": "Данное дополнение не настроено и может не загружать потоки или субтитры.",
       "configureAddon": "Настройте это дополнение",
+      "configureCustomKeyActive": "Ваш ключ настроен (нажмите, чтобы изменить).",
       "configureRequiredAction": "Настройте это дополнение (обязательно)",
+      "customKeyActiveDesc": "Используя ваш личный ключ API Wyzie",
+      "customKeyConfiguredBadge": "Ваш ключ настроен.",
       "description": "Аддоны не являются обязательными. Это приложение не включает в себя, не рекомендует и не размещает какие-либо дополнения.",
       "disabled": "Неполноценный",
       "emptyInstalled": "В системе пока не установлено никаких дополнений.",
@@ -44,6 +47,8 @@
       "installedHeading": "Установленные дополнения",
       "processing": "Обработка...",
       "removeAddon": "Удалить это дополнение",
+      "subtitlesConfiguredError": "Не удалось настроить ключ API для субтитров. Пожалуйста, попробуйте еще раз!",
+      "subtitlesConfiguredSuccess": "Ключ API для субтитров успешно настроен!",
       "title": "Менеджер дополнений"
     },
     "player": {
@@ -898,8 +903,8 @@
         "selectingSecondary": "Выбор дополнительных субтитров",
         "autoSyncTitle": "Автоматическая синхронизация",
         "autoSyncDescription": "Автоматическое сопоставление субтитров с озвученным диалогом.",
-        "autoSyncAction": "Автоматическая синхронизация",
-        "autoSyncBadge": "Авто",
+        "autoSyncAction": "Запустить автоматическую синхронизацию",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "Синхронизировать субтитры с AI?",
         "syncSubtitleConfirmDescription": "Субтитры будут выровнены искусственным интеллектом в соответствии с видео.",
         "syncSubtitleNoticeTitle": "Примечание",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "Перевести с {{language}}"
         },
+        "downloadFailed": "Не удалось загрузить субтитры.",
         "unknownLanguage": "Неизвестный",
         "useNativeSubtitles": "Родные субтитры к видео",
         "useNativeSubtitlesDescription": "Трансляция субтитров для собственного полноэкранного режима и PiP"
@@ -1194,17 +1200,19 @@
         "deviceNameLabel": "Имя устройства",
         "failed": "Не удалось загрузить сеансы",
         "lastActive": "Последняя активность: {{date}}",
-        "loggedInAt": "Выполнен вход: {{date}}",
+        "loggedInAt": "Вошёл в систему: {{date}}",
         "removeDevice": "Удалить",
         "title": "Устройства",
         "thisDevice": "Это устройство",
+        "activeNow": "Активно сейчас",
+        "sessionCount": "{{count}} сессии",
         "types": {
           "desktop": "Рабочий стол",
           "mobile": "Мобильный",
           "tablet": "Планшет"
         },
         "unknownBrowser": "Неизвестный браузер",
-        "unknownDevice": "Неизвестное устройство, ошибка расшифровки имени",
+        "unknownDevice": "Неизвестное устройство",
         "unknownOperatingSystem": "Неизвестная операционная система"
       },
       "profile": {

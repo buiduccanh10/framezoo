@@ -35,7 +35,10 @@
       "configRequiredBadge": "Requereix configuració",
       "configRequiredWarning": "Aquest complement no està configurat i és possible que no pugui carregar els fluxos o els subtítols.",
       "configureAddon": "Configura aquest complement",
+      "configureCustomKeyActive": "La teva clau s'ha configurat (feu clic per canviar-la)",
       "configureRequiredAction": "Configura aquest complement (obligatori)",
+      "customKeyActiveDesc": "Utilitzant la teva clau API personal de Wyzie",
+      "customKeyConfiguredBadge": "La teva clau s'ha configurat",
       "description": "Els complements són opcionals. Aquesta aplicació no agrupa, recomana ni allotja cap complement.",
       "disabled": "Inhabilitat",
       "emptyInstalled": "Encara no hi ha cap complement instal·lat al sistema.",
@@ -44,6 +47,8 @@
       "installedHeading": "Complements instal·lats",
       "processing": "S'està processant...",
       "removeAddon": "Elimina aquest complement",
+      "subtitlesConfiguredError": "No s'ha pogut configurar la clau de l'API de subtítols. Torna-ho a provar!",
+      "subtitlesConfiguredSuccess": "Clau de l'API de subtítols configurada correctament!",
       "title": "Gestor de complements"
     },
     "player": {
@@ -897,9 +902,9 @@
         "secondary": "Secundària",
         "selectingSecondary": "Selecció de subtítols secundaris",
         "autoSyncTitle": "Sincronització automàtica",
-        "autoSyncDescription": "Fes coincidir els subtítols amb el diàleg parlat automàticament",
-        "autoSyncAction": "Sincronització automàtica",
-        "autoSyncBadge": "Automàtic",
+        "autoSyncDescription": "Relaciona els subtítols amb els diàlegs parlats automàticament",
+        "autoSyncAction": "Inicia la sincronització automàtica",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "Vols sincronitzar els subtítols amb IA?",
         "syncSubtitleConfirmDescription": "L'IA alinearà els subtítols perquè coincideixin amb el vídeo.",
         "syncSubtitleNoticeTitle": "Nota",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "Tradueix de {{language}}"
         },
+        "downloadFailed": "No s'han pogut carregar els subtítols",
         "unknownLanguage": "Desconeguda",
         "useNativeSubtitles": "Subtítols de vídeo nadius",
         "useNativeSubtitlesDescription": "Transmet subtítols per a pantalla completa nativa i PiP"
@@ -1193,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "Nom del dispositiu",
         "failed": "La càrrega de sessions ha fallat",
-        "lastActive": "Darrer actiu: {{date}}",
-        "loggedInAt": "Inicieu sessió a: {{date}}",
+        "lastActive": "Última activitat: {{date}}",
+        "loggedInAt": "Sessió iniciada: {{date}}",
         "removeDevice": "Elimina",
         "title": "Dispositiu",
         "thisDevice": "Aquest dispositiu",
+        "activeNow": "Actiu ara",
+        "sessionCount": "sessions de {{count}}",
         "types": {
           "desktop": "Escriptori",
           "mobile": "Mòbil",
           "tablet": "Tauleta"
         },
         "unknownBrowser": "Navegador desconegut",
-        "unknownDevice": "Dispositiu desconegut, error en desxifrar el nom",
+        "unknownDevice": "Dispositiu desconegut",
         "unknownOperatingSystem": "Sistema operatiu desconegut"
       },
       "profile": {

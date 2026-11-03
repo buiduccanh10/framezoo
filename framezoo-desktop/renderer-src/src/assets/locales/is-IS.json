@@ -35,7 +35,10 @@
       "configRequiredBadge": "Krefst stillingar",
       "configRequiredWarning": "Þessi viðbót er ekki stillt og gæti mistekist að hlaða strauma eða texta.",
       "configureAddon": "Stilla þessa viðbót",
+      "configureCustomKeyActive": "Lykillinn þinn hefur verið stilltur (smelltu til að breyta)",
       "configureRequiredAction": "Stilla þessa viðbót (Nauðsynlegt)",
+      "customKeyActiveDesc": "Að nota persónulegan Wyzie API lykilinn þinn",
+      "customKeyConfiguredBadge": "Lykillinn þinn hefur verið stilltur",
       "description": "Viðbætur eru valfrjálsar. Þetta app hefur ekki búnt, mælir með eða hýsir neina viðbót.",
       "disabled": "Öryrkjar",
       "emptyInstalled": "Engar viðbætur uppsettar í kerfinu ennþá.",
@@ -44,6 +47,8 @@
       "installedHeading": "Uppsett viðbót",
       "processing": "Vinnur...",
       "removeAddon": "Fjarlægðu þessa viðbót",
+      "subtitlesConfiguredError": "Mistókst að stilla lykil fyrir textaskil. Reyndu aftur!",
+      "subtitlesConfiguredSuccess": "Lykill fyrir undirtitlaforritaskil stilltur!",
       "title": "Viðbótarstjóri"
     },
     "player": {
@@ -898,8 +903,8 @@
         "selectingSecondary": "Að velja aukatexta",
         "autoSyncTitle": "Sjálfvirk samstilling",
         "autoSyncDescription": "Paraðu texta sjálfkrafa við talað samtal",
-        "autoSyncAction": "Sjálfvirk samstilling",
-        "autoSyncBadge": "Sjálfvirkt",
+        "autoSyncAction": "Hefja sjálfvirka samstillingu",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "Samstilla texti við gervigreind?",
         "syncSubtitleConfirmDescription": "Textar verða samræmdir af gervigreind til að passa við myndbandið.",
         "syncSubtitleNoticeTitle": "Athugið",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "Þýða úr {{language}}"
         },
+        "downloadFailed": "Mistókst að hlaða inn undirtitli",
         "unknownLanguage": "Óvitað",
         "useNativeSubtitles": "Innfæddur vídeótextar",
         "useNativeSubtitlesDescription": "Sendu út texta fyrir innfæddan fullskjá og PiP"
@@ -1193,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "Nafn tækis",
         "failed": "Mistókst að hlaða fundum",
-        "lastActive": "Síðast virk: {{date}}",
-        "loggedInAt": "Innskráður á: {{date}}",
+        "lastActive": "Síðast virkur: {{date}}",
+        "loggedInAt": "Innskráning: {{date}}",
         "removeDevice": "Eyða",
         "title": "Tæki",
         "thisDevice": "Þetta tæki",
+        "activeNow": "Virkur núna",
+        "sessionCount": "{{count}} lotur",
         "types": {
           "desktop": "Skjáborð",
           "mobile": "Farsími",
           "tablet": "Spjaldtölva"
         },
         "unknownBrowser": "Óþekktur vafri",
-        "unknownDevice": "Óþekkt tæki, villa við að afkóða nafn",
+        "unknownDevice": "Óþekkt tæki",
         "unknownOperatingSystem": "Óþekkt stýrikerfi"
       },
       "profile": {

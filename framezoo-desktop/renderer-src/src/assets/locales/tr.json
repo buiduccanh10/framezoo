@@ -35,7 +35,10 @@
       "configRequiredBadge": "Yapılandırma gerektirir",
       "configRequiredWarning": "Bu eklenti yapılandırılmamış ve yayınları veya altyazıları yüklemekte başarısız olabilir.",
       "configureAddon": "Bu eklentiyi yapılandırın",
+      "configureCustomKeyActive": "Anahtarınız yapılandırıldı (değiştirmek için tıklayın)",
       "configureRequiredAction": "Bu eklentiyi yapılandırın (Zorunlu)",
+      "customKeyActiveDesc": "Kişisel Wyzie API anahtarınızı kullanarak",
+      "customKeyConfiguredBadge": "Anahtarınız yapılandırıldı.",
       "description": "Eklentiler isteğe bağlıdır. Bu uygulama herhangi bir eklentiyi paketlemez, önermez veya barındırmaz.",
       "disabled": "Engelli",
       "emptyInstalled": "Sistemde henüz eklenti yüklü değil.",
@@ -44,6 +47,8 @@
       "installedHeading": "Yüklü Eklentiler",
       "processing": "İşleme...",
       "removeAddon": "Bu eklentiyi kaldır",
+      "subtitlesConfiguredError": "Altyazı API anahtarını yapılandırma başarısız oldu. Lütfen tekrar deneyin!",
+      "subtitlesConfiguredSuccess": "Altyazı API anahtarı başarıyla yapılandırıldı!",
       "title": "Eklenti Yöneticisi"
     },
     "player": {
@@ -897,9 +902,9 @@
         "secondary": "İkincil",
         "selectingSecondary": "İkincil altyazının seçilmesi",
         "autoSyncTitle": "Otomatik senkronizasyon",
-        "autoSyncDescription": "Altyazıları konuşulan diyalogla otomatik olarak eşleştirin.",
-        "autoSyncAction": "Otomatik senkronizasyon",
-        "autoSyncBadge": "Otomatik",
+        "autoSyncDescription": "Altyazıları konuşulan diyalogla otomatik olarak eşleştir.",
+        "autoSyncAction": "Otomatik senkronizasyonu başlat",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "Altyazı AI ile senkronize edilsin mi?",
         "syncSubtitleConfirmDescription": "Altyazılar yapay zeka tarafından videoyla eşleşecek şekilde hizalanacak.",
         "syncSubtitleNoticeTitle": "Not",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "{{language}} adresinden çevir"
         },
+        "downloadFailed": "Altyazı yüklenemedi.",
         "unknownLanguage": "Bilinmeyen",
         "useNativeSubtitles": "Yerel video altyazıları",
         "useNativeSubtitlesDescription": "Yerel tam ekran ve PiP için altyazıları yayınlayın"
@@ -1193,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "Cihaz adı",
         "failed": "Oturumlar yüklenemedi",
-        "lastActive": "Son aktif: {{date}}",
-        "loggedInAt": "Şu saatte giriş yapıldı: {{date}}",
+        "lastActive": "Son aktivite: {{date}}",
+        "loggedInAt": "Giriş yapıldı: {{date}}",
         "removeDevice": "Sil",
         "title": "Cihazlar",
         "thisDevice": "Bu cihaz",
+        "activeNow": "Şu anda aktif",
+        "sessionCount": "{{count}} oturumları",
         "types": {
           "desktop": "Masaüstü",
           "mobile": "Mobil",
           "tablet": "Tablet"
         },
         "unknownBrowser": "Bilinmeyen tarayıcı",
-        "unknownDevice": "Bilinmeyen cihaz, adın şifresi çözülürken hata oluştu",
+        "unknownDevice": "Bilinmeyen cihaz",
         "unknownOperatingSystem": "Bilinmeyen işletim sistemi"
       },
       "profile": {

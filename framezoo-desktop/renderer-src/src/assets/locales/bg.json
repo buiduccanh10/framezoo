@@ -35,7 +35,10 @@
       "configRequiredBadge": "Изисква конфигурация",
       "configRequiredWarning": "Тази добавка не е конфигурирана и може да не успее да зареди потоци или субтитри.",
       "configureAddon": "Конфигурирайте това допълнение",
+      "configureCustomKeyActive": "Вашият ключ е конфигуриран (щракнете, за да промените)",
       "configureRequiredAction": "Конфигурирайте това допълнение (Задължително)",
+      "customKeyActiveDesc": "Използване на вашия личен Wyzie API ключ",
+      "customKeyConfiguredBadge": "Вашият ключ е конфигуриран",
       "description": "Добавките не са задължителни. Това приложение не включва, препоръчва или хоства добавки.",
       "disabled": "Забранено",
       "emptyInstalled": "Все още няма инсталирани добавки в системата.",
@@ -44,6 +47,8 @@
       "installedHeading": "Инсталирани добавки",
       "processing": "Обработва се...",
       "removeAddon": "Премахнете тази добавка",
+      "subtitlesConfiguredError": "Конфигурирането на API ключа за субтитри не бе успешно. Моля, опитайте отново!",
+      "subtitlesConfiguredSuccess": "Ключът за API на субтитрите е конфигуриран успешно!",
       "title": "Мениджър на добавките"
     },
     "player": {
@@ -898,8 +903,8 @@
         "selectingSecondary": "Избиране на вторични субтитри",
         "autoSyncTitle": "Автоматична синхронизация",
         "autoSyncDescription": "Автоматично съпоставяне на субтитрите с говорения диалог",
-        "autoSyncAction": "Автоматична синхронизация",
-        "autoSyncBadge": "Автоматично",
+        "autoSyncAction": "Стартиране на автоматична синхронизация",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "Синхронизиране на субтитри с AI?",
         "syncSubtitleConfirmDescription": "Субтитрите ще бъдат подравнени от AI, за да съответстват на видеоклипа.",
         "syncSubtitleNoticeTitle": "Забележка",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "Превод от {{language}}"
         },
+        "downloadFailed": "Зареждането на субтитрите не бе успешно",
         "unknownLanguage": "неизвестен",
         "useNativeSubtitles": "Нативни видео субтитри",
         "useNativeSubtitlesDescription": "Излъчвайте субтитри за стандартен цял екран и PiP"
@@ -1194,17 +1200,19 @@
         "deviceNameLabel": "Име на устройството",
         "failed": "Неуспешно зареждане на сесии",
         "lastActive": "Последна активност: {{date}}",
-        "loggedInAt": "Влезли сте на: {{date}}",
+        "loggedInAt": "Влезли сте: {{date}}",
         "removeDevice": "Премахнете",
         "title": "устройства",
         "thisDevice": "Това устройство",
+        "activeNow": "Активен сега",
+        "sessionCount": "{{count}} сесии",
         "types": {
           "desktop": "Настолен компютър",
           "mobile": "Мобилен",
           "tablet": "Таблет"
         },
         "unknownBrowser": "Неизвестен браузър",
-        "unknownDevice": "Неизвестно устройство, грешка при дешифриране на името",
+        "unknownDevice": "Неизвестно устройство",
         "unknownOperatingSystem": "Неизвестна операционна система"
       },
       "profile": {

@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { IconPatch } from "@/components/buttons/IconPatch";
 import { Icon, Icons } from "@/components/Icon";
+import { LargeCardContext } from "@/components/layout/LargeCard";
 import { OverlayPortal } from "@/components/overlays/OverlayDisplay";
 
 export type AuthDialogMode = "login" | "register";
@@ -37,7 +38,7 @@ export function AuthDialog(props: {
       </Helmet>
       <div className="absolute inset-0 flex items-center justify-center p-2 pt-safe sm:p-4">
         <div
-          className="pointer-events-auto flex max-h-[calc(100dvh-1rem)] min-h-0 w-[95%] max-w-[680px] flex-col overflow-hidden rounded-3xl border border-white/10 bg-background-main p-3 shadow-2xl backdrop-blur-xl sm:p-5"
+          className="pointer-events-auto flex max-h-[calc(100dvh-1rem)] min-h-0 w-[95%] max-w-[560px] flex-col overflow-hidden rounded-3xl border border-white/10 bg-background-main p-3 shadow-2xl backdrop-blur-xl sm:p-5"
           role="dialog"
           aria-modal="true"
           aria-label={
@@ -70,7 +71,9 @@ export function AuthDialog(props: {
               key={props.mode}
               className="animate-[scaleIn_0.6s_ease-out_forwards]"
             >
-              {props.children}
+              <LargeCardContext.Provider value={{ embedded: true }}>
+                {props.children}
+              </LargeCardContext.Provider>
             </div>
           </div>
         </div>

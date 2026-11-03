@@ -35,7 +35,10 @@
       "configRequiredBadge": "តម្រូវឱ្យមានការកំណត់រចនាសម្ព័ន្ធ",
       "configRequiredWarning": "កម្មវិធីបន្ថែមនេះមិនត្រូវបានកំណត់រចនាសម្ព័ន្ធទេ ហើយអាចនឹងបរាជ័យក្នុងការផ្ទុកស្ទ្រីម ឬចំណងជើងរង។",
       "configureAddon": "កំណត់រចនាសម្ព័ន្ធ addon នេះ",
+      "configureCustomKeyActive": "សោរបស់អ្នកត្រូវបានកំណត់រចនាសម្ព័ន្ធហើយ (ចុចដើម្បីផ្លាស់ប្តូរ)",
       "configureRequiredAction": "កំណត់រចនាសម្ព័ន្ធកម្មវិធីបន្ថែមនេះ (តម្រូវឲ្យមាន)",
+      "customKeyActiveDesc": "ការប្រើប្រាស់សោ API Wyzie ផ្ទាល់ខ្លួនរបស់អ្នក",
+      "customKeyConfiguredBadge": "សោរបស់អ្នកត្រូវបានកំណត់រចនាសម្ព័ន្ធហើយ",
       "description": "Addons គឺស្រេចចិត្ត។ កម្មវិធីនេះមិនបាច់ ណែនាំ ឬបង្ហោះ addon ណាមួយទេ។",
       "disabled": "ពិការ",
       "emptyInstalled": "មិនទាន់មានកម្មវិធីបន្ថែមនៅក្នុងប្រព័ន្ធនៅឡើយទេ។",
@@ -44,6 +47,8 @@
       "installedHeading": "បានដំឡើង Addons",
       "processing": "កំពុងដំណើរការ...",
       "removeAddon": "យក addon នេះចេញ",
+      "subtitlesConfiguredError": "បរាជ័យក្នុងការកំណត់រចនាសម្ព័ន្ធសោ API ចំណងជើងរង។ សូមព្យាយាមម្តងទៀត!",
+      "subtitlesConfiguredSuccess": "សោ API ចំណងជើងរងត្រូវបានកំណត់រចនាសម្ព័ន្ធដោយជោគជ័យ!",
       "title": "អ្នកគ្រប់គ្រង Addons"
     },
     "player": {
@@ -898,8 +903,8 @@
         "selectingSecondary": "ការជ្រើសរើសចំណងជើងរងបន្ទាប់បន្សំ",
         "autoSyncTitle": "ធ្វើសមកាលកម្មដោយស្វ័យប្រវត្តិ",
         "autoSyncDescription": "ផ្គូផ្គងចំណងជើងរងទៅនឹងការសន្ទនាដែលបាននិយាយដោយស្វ័យប្រវត្តិ",
-        "autoSyncAction": "ធ្វើសមកាលកម្មដោយស្វ័យប្រវត្តិ",
-        "autoSyncBadge": "ស្វ័យប្រវត្តិ",
+        "autoSyncAction": "ចាប់ផ្តើមធ្វើសមកាលកម្មដោយស្វ័យប្រវត្តិ",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "ធ្វើសមកាលកម្មចំណងជើងរងជាមួយ AI?",
         "syncSubtitleConfirmDescription": "ចំណងជើងរងនឹងត្រូវបានតម្រឹមដោយ AI ដើម្បីផ្គូផ្គងវីដេអូ។",
         "syncSubtitleNoticeTitle": "កំណត់ចំណាំ",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "បកប្រែពី {{language}}"
         },
+        "downloadFailed": "បរាជ័យក្នុងការផ្ទុកចំណងជើងរង",
         "unknownLanguage": "មិនស្គាល់",
         "useNativeSubtitles": "ចំណងជើងរងវីដេអូដើម",
         "useNativeSubtitlesDescription": "ផ្សាយចំណងជើងរងសម្រាប់ពេញអេក្រង់ដើម និង PiP"
@@ -1194,17 +1200,19 @@
         "deviceNameLabel": "ឈ្មោះឧបករណ៍",
         "failed": "បានបរាជ័យក្នុងការផ្ទុកវគ្គ",
         "lastActive": "សកម្មចុងក្រោយ៖ {{date}}",
-        "loggedInAt": "បានចូលនៅ៖ {{date}}",
+        "loggedInAt": "បានចូល៖ {{date}}",
         "removeDevice": "ដកចេញ",
         "title": "ឧបករណ៍",
         "thisDevice": "ឧបករណ៍នេះ",
+        "activeNow": "សកម្មឥឡូវនេះ",
+        "sessionCount": "វគ្គ {{count}}",
         "types": {
           "desktop": "កុំព្យូទ័រលើតុ",
           "mobile": "ទូរស័ព្ទចល័ត",
           "tablet": "ថេប្លេត"
         },
         "unknownBrowser": "កម្មវិធីរុករកដែលមិនស្គាល់",
-        "unknownDevice": "ឧបករណ៍មិនស្គាល់ កំហុសក្នុងការឌិគ្រីបឈ្មោះ",
+        "unknownDevice": "ឧបករណ៍មិនស្គាល់",
         "unknownOperatingSystem": "ប្រព័ន្ធប្រតិបត្តិការដែលមិនស្គាល់"
       },
       "profile": {

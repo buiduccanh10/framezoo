@@ -56,7 +56,7 @@ export async function login(
   const response = await apiRequest<AuthResponse>(baseUrl, '/auth/login/complete', {
     method: 'POST',
     body: JSON.stringify({
-      namespace: 'movie-web',
+      namespace: 'mobile',
       identifier: input.identifier,
       publicKey: challenge.publicKey ?? encodePublicKey(keys.publicKey),
       challenge: {
@@ -91,7 +91,7 @@ export async function register(
   const response = await apiRequest<AuthResponse>(baseUrl, '/auth/register/complete', {
     method: 'POST',
     body: JSON.stringify({
-      namespace: 'movie-web',
+      namespace: 'mobile',
       nickname: input.nickname,
       email: input.email,
       profile: input.profile,

@@ -35,7 +35,10 @@
       "configRequiredBadge": "Requer configuração",
       "configRequiredWarning": "Este complemento não está configurado e pode não conseguir carregar fluxos ou legendas.",
       "configureAddon": "Configure este complemento.",
+      "configureCustomKeyActive": "Sua chave foi configurada (clique para alterar)",
       "configureRequiredAction": "Configure este complemento (Obrigatório)",
+      "customKeyActiveDesc": "Usando sua chave de API pessoal do Wyzie",
+      "customKeyConfiguredBadge": "Sua chave foi configurada.",
       "description": "Os complementos são opcionais. Este aplicativo não agrupa, recomenda ou hospeda nenhum complemento.",
       "disabled": "Desabilitado",
       "emptyInstalled": "Nenhum complemento instalado no sistema ainda.",
@@ -44,6 +47,8 @@
       "installedHeading": "Complementos instalados",
       "processing": "Processamento...",
       "removeAddon": "Remover este complemento",
+      "subtitlesConfiguredError": "Falha ao configurar a chave da API de legendas. Tente novamente!",
+      "subtitlesConfiguredSuccess": "Chave da API de legendas configurada com sucesso!",
       "title": "Gerenciador de complementos"
     },
     "player": {
@@ -897,9 +902,9 @@
         "secondary": "Secundário",
         "selectingSecondary": "Selecionando legenda secundária",
         "autoSyncTitle": "Sincronização automática",
-        "autoSyncDescription": "Sincronizar automaticamente as legendas com o diálogo falado",
-        "autoSyncAction": "Sincronização automática",
-        "autoSyncBadge": "Auto",
+        "autoSyncDescription": "Sincronizar legendas com diálogos falados automaticamente",
+        "autoSyncAction": "Iniciar sincronização automática",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "Sincronizar legenda com IA?",
         "syncSubtitleConfirmDescription": "As legendas serão alinhadas pela IA para corresponder ao vídeo.",
         "syncSubtitleNoticeTitle": "Observação",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "Traduzir de {{language}}"
         },
+        "downloadFailed": "Falha ao carregar a legenda",
         "unknownLanguage": "Desconhecido",
         "useNativeSubtitles": "Legendas de vídeo nativas",
         "useNativeSubtitlesDescription": "Transmita legendas para tela cheia nativa e PiP"
@@ -1193,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "Nome do dispositivo",
         "failed": "Falha ao carregar as sessões",
-        "lastActive": "Último ativo: {{date}}",
-        "loggedInAt": "Conectado em: {{date}}",
+        "lastActive": "Última atividade: {{date}}",
+        "loggedInAt": "Entrou em: {{date}}",
         "removeDevice": "Remover",
         "title": "Dispositivos",
         "thisDevice": "Este dispositivo",
+        "activeNow": "Ativo agora",
+        "sessionCount": "Sessões {{count}}",
         "types": {
           "desktop": "Área de trabalho",
           "mobile": "Móvel",
           "tablet": "Comprimido"
         },
         "unknownBrowser": "Navegador desconhecido",
-        "unknownDevice": "Dispositivo desconhecido, erro ao descriptografar o nome",
+        "unknownDevice": "Dispositivo desconhecido",
         "unknownOperatingSystem": "Sistema operacional desconhecido"
       },
       "profile": {

@@ -35,7 +35,10 @@
       "configRequiredBadge": "يتطلب تهيئة",
       "configRequiredWarning": "هذه الإضافة غير مهيأة وقد تفشل في تحميل البث المباشر أو الترجمة.",
       "configureAddon": "قم بتكوين هذه الإضافة",
+      "configureCustomKeyActive": "تم ضبط مفتاحك (انقر للتغيير)",
       "configureRequiredAction": "قم بتكوين هذه الإضافة (مطلوب)",
+      "customKeyActiveDesc": "باستخدام مفتاح Wyzie API الشخصي الخاص بك",
+      "customKeyConfiguredBadge": "تم إعداد مفتاحك",
       "description": "الإضافات اختيارية. لا يجمع هذا التطبيق أي ملحق أو يوصي به أو يستضيفه.",
       "disabled": "عاجز",
       "emptyInstalled": "لا توجد إضافات مثبتة في النظام حتى الآن.",
@@ -44,6 +47,8 @@
       "installedHeading": "الإضافات المثبتة",
       "processing": "يعالج...",
       "removeAddon": "إزالة هذا الملحق",
+      "subtitlesConfiguredError": "فشل إعداد مفتاح واجهة برمجة تطبيقات الترجمة. يرجى المحاولة مرة أخرى!",
+      "subtitlesConfiguredSuccess": "تم إعداد مفتاح واجهة برمجة تطبيقات الترجمة بنجاح!",
       "title": "مدير الإضافات"
     },
     "player": {
@@ -898,8 +903,8 @@
         "selectingSecondary": "اختيار العنوان الفرعي الثانوي",
         "autoSyncTitle": "المزامنة التلقائية",
         "autoSyncDescription": "مطابقة الترجمة مع الحوار المنطوق تلقائياً",
-        "autoSyncAction": "المزامنة التلقائية",
-        "autoSyncBadge": "آلي",
+        "autoSyncAction": "بدء المزامنة التلقائية",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "مزامنة الترجمة مع الذكاء الاصطناعي؟",
         "syncSubtitleConfirmDescription": "سيتم محاذاة الترجمات بواسطة الذكاء الاصطناعي لتتناسب مع الفيديو.",
         "syncSubtitleNoticeTitle": "ملحوظة",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "الترجمة من {{language}}"
         },
+        "downloadFailed": "فشل تحميل الترجمة",
         "unknownLanguage": "مجهول",
         "useNativeSubtitles": "استخدم ترجمة الفيديو الأصلية",
         "useNativeSubtitlesDescription": "ممكن يحل مشكلة الترجمات وقت البث وفي وضع PiP"
@@ -1194,17 +1200,19 @@
         "deviceNameLabel": "اسم الجهاز",
         "failed": "فشل تحميل الجلسات",
         "lastActive": "آخر نشاط: {{date}}",
-        "loggedInAt": "تم تسجيل الدخول في: {{date}}",
+        "loggedInAt": "تم تسجيل الدخول: {{date}}",
         "removeDevice": "إزالة",
         "title": "الأجهزة",
         "thisDevice": "هذا الجهاز",
+        "activeNow": "متاح الآن",
+        "sessionCount": "جلسات {{count}}",
         "types": {
           "desktop": "سطح المكتب",
           "mobile": "متحرك",
           "tablet": "جهاز لوحي"
         },
         "unknownBrowser": "متصفح غير معروف",
-        "unknownDevice": "جهاز غير معروف، خطأ في فك تشفير الاسم",
+        "unknownDevice": "جهاز غير معروف",
         "unknownOperatingSystem": "نظام تشغيل غير معروف"
       },
       "profile": {

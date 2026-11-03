@@ -35,7 +35,10 @@
       "configRequiredBadge": "Nepieciešama konfigurācija",
       "configRequiredWarning": "Šis papildinājums nav konfigurēts, un, iespējams, neizdosies ielādēt straumes vai subtitrus.",
       "configureAddon": "Konfigurējiet šo papildinājumu",
+      "configureCustomKeyActive": "Jūsu atslēga ir konfigurēta (noklikšķiniet, lai mainītu)",
       "configureRequiredAction": "Konfigurēt šo papildinājumu (obligāti)",
+      "customKeyActiveDesc": "Izmantojot savu personīgo Wyzie API atslēgu",
+      "customKeyConfiguredBadge": "Jūsu atslēga ir konfigurēta",
       "description": "Papildinājumi nav obligāti. Šī lietotne neapvieno, neiesaka vai mitina nevienu papildinājumu.",
       "disabled": "Atspējots",
       "emptyInstalled": "Sistēmā vēl nav instalēts neviens papildinājums.",
@@ -44,6 +47,8 @@
       "installedHeading": "Instalēti papildinājumi",
       "processing": "Notiek apstrāde...",
       "removeAddon": "Noņemiet šo papildinājumu",
+      "subtitlesConfiguredError": "Neizdevās konfigurēt subtitru API atslēgu. Lūdzu, mēģiniet vēlreiz!",
+      "subtitlesConfiguredSuccess": "Subtitru API atslēga veiksmīgi konfigurēta!",
       "title": "Papildinājumu pārvaldnieks"
     },
     "player": {
@@ -898,8 +903,8 @@
         "selectingSecondary": "Tiek atlasīti sekundārie subtitri",
         "autoSyncTitle": "Automātiska sinhronizācija",
         "autoSyncDescription": "Automātiski pielāgot subtitrus runātajam dialogam",
-        "autoSyncAction": "Automātiska sinhronizācija",
-        "autoSyncBadge": "Auto",
+        "autoSyncAction": "Sākt automātisko sinhronizāciju",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "Vai sinhronizēt subtitrus ar AI?",
         "syncSubtitleConfirmDescription": "Subtitri līdzinās AI, lai tie atbilstu videoklipam.",
         "syncSubtitleNoticeTitle": "Piezīme",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "Tulkot no {{language}}"
         },
+        "downloadFailed": "Neizdevās ielādēt subtitrus",
         "unknownLanguage": "Nezināms",
         "useNativeSubtitles": "Vietējie video subtitri",
         "useNativeSubtitlesDescription": "Apraidiet subtitrus vietējam pilnekrāna un attēla attēlam"
@@ -1193,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "Ierīces vārds",
         "failed": "Neizdevās ielādēt sesijas",
-        "lastActive": "Pēdējo reizi aktīva: {{date}}",
-        "loggedInAt": "Pieteicies: {{date}}",
+        "lastActive": "Pēdējo reizi aktīvs: {{date}}",
+        "loggedInAt": "Pierakstījies: {{date}}",
         "removeDevice": "Nonēmt",
         "title": "Ierīces",
         "thisDevice": "Šī ierīce",
+        "activeNow": "Aktīvs tagad",
+        "sessionCount": "{{count}} sesijas",
         "types": {
           "desktop": "Darbvirsma",
           "mobile": "Mobilais",
           "tablet": "Planšetdators"
         },
         "unknownBrowser": "Nezināma pārlūkprogramma",
-        "unknownDevice": "Nezināma ierīce, kļūda, atšifrējot nosaukumu",
+        "unknownDevice": "Nezināma ierīce",
         "unknownOperatingSystem": "Nezināma operētājsistēma"
       },
       "profile": {

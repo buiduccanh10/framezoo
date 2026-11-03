@@ -35,7 +35,10 @@
       "configRequiredBadge": "Membutuhkan Konfigurasi",
       "configRequiredWarning": "Addon ini belum dikonfigurasi dan mungkin gagal memuat aliran video atau subtitle.",
       "configureAddon": "Konfigurasikan add-on ini",
+      "configureCustomKeyActive": "Kunci Anda telah dikonfigurasi (klik untuk mengubah)",
       "configureRequiredAction": "Konfigurasikan add-on ini (Wajib)",
+      "customKeyActiveDesc": "Menggunakan kunci API Wyzie pribadi Anda",
+      "customKeyConfiguredBadge": "Kunci Anda telah dikonfigurasi",
       "description": "Add-on bersifat opsional. Aplikasi ini tidak memaketkan, merekomendasikan, atau menghosting add-on apa pun.",
       "disabled": "Dengan disabilitas",
       "emptyInstalled": "Belum ada tambahan yang terpasang di sistem.",
@@ -44,6 +47,8 @@
       "installedHeading": "Add-on yang diinstal",
       "processing": "Pengolahan...",
       "removeAddon": "Hapus tambahan ini",
+      "subtitlesConfiguredError": "Gagal mengkonfigurasi kunci API subtitle. Silakan coba lagi!",
+      "subtitlesConfiguredSuccess": "Kunci API subtitle berhasil dikonfigurasi!",
       "title": "Manajer Tambahan"
     },
     "player": {
@@ -897,9 +902,9 @@
         "secondary": "Sekunder",
         "selectingSecondary": "Memilih subtitle sekunder",
         "autoSyncTitle": "Sinkronisasi otomatis",
-        "autoSyncDescription": "Mencocokkan teks terjemahan dengan dialog yang diucapkan secara otomatis.",
-        "autoSyncAction": "Sinkronisasi otomatis",
-        "autoSyncBadge": "Mobil",
+        "autoSyncDescription": "Mencocokkan teks terjemahan dengan dialog lisan secara otomatis.",
+        "autoSyncAction": "Mulai sinkronisasi otomatis",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "Sinkronkan subtitle dengan AI?",
         "syncSubtitleConfirmDescription": "Subtitle akan diselaraskan oleh AI agar sesuai dengan video.",
         "syncSubtitleNoticeTitle": "Catatan",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "Terjemahkan dari {{language}}"
         },
+        "downloadFailed": "Teks terjemahan gagal dimuat",
         "unknownLanguage": "Tidak diketahui",
         "useNativeSubtitles": "Subtitle video asli",
         "useNativeSubtitlesDescription": "Siarkan subtitle untuk layar penuh asli dan PiP"
@@ -1193,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "Nama perangkat",
         "failed": "Gagal memuat sesi",
-        "lastActive": "Terakhir aktif: {{date}}",
-        "loggedInAt": "Masuk di: {{date}}",
+        "lastActive": "Terakhir aktif: __PH__",
+        "loggedInAt": "Masuk sebagai pengguna: __PH__",
         "removeDevice": "Hapus",
         "title": "Perangkat",
         "thisDevice": "Perangkat ini",
+        "activeNow": "Sedang aktif sekarang",
+        "sessionCount": "sesi __PH__0__",
         "types": {
           "desktop": "Desktop",
           "mobile": "Ponsel",
           "tablet": "Tablet"
         },
         "unknownBrowser": "Browser tidak dikenal",
-        "unknownDevice": "Perangkat tidak dikenal, kesalahan mendekripsi nama",
+        "unknownDevice": "Perangkat tidak dikenal",
         "unknownOperatingSystem": "Sistem operasi tidak dikenal"
       },
       "profile": {

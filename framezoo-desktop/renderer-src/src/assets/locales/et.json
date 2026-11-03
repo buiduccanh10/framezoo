@@ -35,7 +35,10 @@
       "configRequiredBadge": "Nõuab seadistamist",
       "configRequiredWarning": "See lisandmoodul pole konfigureeritud ja voogedastuste või subtiitrite laadimine võib ebaõnnestuda.",
       "configureAddon": "Selle lisandmooduli seadistamine",
+      "configureCustomKeyActive": "Teie võti on konfigureeritud (klõpsake muutmiseks)",
       "configureRequiredAction": "Lisandmooduli seadistamine (nõutav)",
+      "customKeyActiveDesc": "Isikliku Wyzie API-võtme kasutamine",
+      "customKeyConfiguredBadge": "Teie võti on konfigureeritud",
       "description": "Lisad on valikulised. See rakendus ei koonda, ei soovita ega hosti ühtegi lisandmoodulit.",
       "disabled": "Keelatud",
       "emptyInstalled": "Süsteemi pole veel installitud ühtegi lisandmoodulit.",
@@ -44,6 +47,8 @@
       "installedHeading": "Installitud lisad",
       "processing": "Töötlemine...",
       "removeAddon": "Eemalda see lisand",
+      "subtitlesConfiguredError": "Subtiitrite API-võtme seadistamine ebaõnnestus. Palun proovige uuesti!",
+      "subtitlesConfiguredSuccess": "Subtiitrite API võti edukalt konfigureeritud!",
       "title": "Lisade haldur"
     },
     "player": {
@@ -898,8 +903,8 @@
         "selectingSecondary": "Teisese subtiitrite valimine",
         "autoSyncTitle": "Automaatne sünkroonimine",
         "autoSyncDescription": "Subtiitrid sobitatakse automaatselt dialoogiga",
-        "autoSyncAction": "Automaatne sünkroonimine",
-        "autoSyncBadge": "Automaatne",
+        "autoSyncAction": "Alusta automaatset sünkroonimist",
+        "autoSyncBadge": "AI",
         "syncSubtitleConfirmTitle": "Kas sünkroonida subtiitrid tehisintellektiga?",
         "syncSubtitleConfirmDescription": "Subtiitrid joondab AI, et need vastaksid videole.",
         "syncSubtitleNoticeTitle": "Märkus",
@@ -942,6 +947,7 @@
         "translate": {
           "title": "Tõlgi keelest {{language}}"
         },
+        "downloadFailed": "Subtiitrite laadimine ebaõnnestus",
         "unknownLanguage": "Tundmatu",
         "useNativeSubtitles": "Omakeelsed video subtiitrid",
         "useNativeSubtitlesDescription": "Edastage subtiitreid täisekraanil ja pildis pildis"
@@ -1194,17 +1200,19 @@
         "deviceNameLabel": "Seadme nimi",
         "failed": "Seansside laadimine ebaõnnestus",
         "lastActive": "Viimati aktiivne: {{date}}",
-        "loggedInAt": "Sisse logitud aadressil: {{date}}",
+        "loggedInAt": "Sisse logitud: {{date}}",
         "removeDevice": "Eemalda",
         "title": "Seadmed",
         "thisDevice": "See seade",
+        "activeNow": "Aktiivne praegu",
+        "sessionCount": "{{count}} seanssi",
         "types": {
           "desktop": "Lauaarvuti",
           "mobile": "Mobiil",
           "tablet": "Tahvelarvuti"
         },
         "unknownBrowser": "Tundmatu brauser",
-        "unknownDevice": "Tundmatu seade, viga nime dekrüpteerimisel",
+        "unknownDevice": "Tundmatu seade",
         "unknownOperatingSystem": "Tundmatu operatsioonisüsteem"
       },
       "profile": {
