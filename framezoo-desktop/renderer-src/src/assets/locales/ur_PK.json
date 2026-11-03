@@ -942,6 +942,7 @@
         "translate": {
           "title": "{{language}} سے ترجمہ کریں"
         },
+        "downloadFailed": "سب ٹائٹل لوڈ کرنے میں ناکام",
         "unknownLanguage": "نامعلوم",
         "useNativeSubtitles": "مقامی ویڈیو سب ٹائٹلز",
         "useNativeSubtitlesDescription": "مقامی پوری اسکرین اور PiP کے لیے براڈکاسٹ سب ٹائٹلز"

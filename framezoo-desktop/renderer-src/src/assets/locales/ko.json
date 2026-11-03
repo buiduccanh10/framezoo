@@ -942,6 +942,7 @@
         "translate": {
           "title": "{{language}}에서 번역"
         },
+        "downloadFailed": "자막을 불러오는 데 실패했습니다.",
         "unknownLanguage": "알수없음",
         "useNativeSubtitles": "네이티브 비디오 자막",
         "useNativeSubtitlesDescription": "기본 전체 화면 및 PiP용 방송 자막"

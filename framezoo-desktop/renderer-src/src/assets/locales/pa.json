@@ -942,6 +942,7 @@
         "translate": {
           "title": "{{language}} ਤੋਂ ਅਨੁਵਾਦ ਕਰੋ"
         },
+        "downloadFailed": "ਉਪਸਿਰਲੇਖ ਲੋਡ ਕਰਨ ਵਿੱਚ ਅਸਫਲ",
         "unknownLanguage": "ਅਗਿਆਤ",
         "useNativeSubtitles": "ਮੂਲ ਵੀਡੀਓ ਉਪਸਿਰਲੇਖ",
         "useNativeSubtitlesDescription": "ਮੂਲ ਪੂਰੀ ਸਕਰੀਨ ਅਤੇ PiP ਲਈ ਉਪਸਿਰਲੇਖਾਂ ਨੂੰ ਪ੍ਰਸਾਰਿਤ ਕਰੋ"

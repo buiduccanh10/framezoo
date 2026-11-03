@@ -28,6 +28,137 @@ export interface AddonSubtitleProgressUpdate {
   addonName?: string;
 }
 
+const GENERIC_SUBTITLE_LABELS = new Set([
+  "vietnamese",
+  "tieng viet",
+  "tiếng việt",
+  "english",
+  "spanish",
+  "french",
+  "german",
+  "italian",
+  "portuguese",
+  "russian",
+  "chinese",
+  "japanese",
+  "korean",
+  "arabic",
+  "hindi",
+  "unknown",
+  "und",
+  "default",
+  "subtitles",
+  "subtitle",
+  "hearing impaired",
+  "sdh",
+  "forced",
+]);
+
+export function isGenericSubtitleLabel(
+  label: string | undefined,
+  language?: string,
+): boolean {
+  if (!label) return true;
+  const normalized = label.trim().toLowerCase().replace(/\s+/g, " ");
+  if (normalized.length === 0) return true;
+  if (GENERIC_SUBTITLE_LABELS.has(normalized)) return true;
+  if (language && normalized === language.trim().toLowerCase()) return true;
+  return false;
+}
+
+export function extractSubtitleReleaseTitle(
+  id?: string,
+  language?: string,
+): string | undefined {
+  if (!id) return undefined;
+  const trimmed = id.trim();
+  // Strip trailing addon index suffix (e.g. "_1", "_15", "-1")
+  const cleaned = trimmed.replace(/[_-]\d+$/, "").trim();
+
+  if (cleaned.length <= 2) return undefined;
+
+  // Check if it is a generic internal prefix (e.g. "sub-1", "subtitle_2", "track-3", "item-1")
+  if (
+    /^(sub|subs|subtitle|subtitles|track|item|caption|captions|id|idx)[-_]?\d*$/i.test(
+      cleaned,
+    )
+  ) {
+    return undefined;
+  }
+
+  // Purely numeric (e.g. "10195707" or "10195707.srt")
+  if (/^\d+(\.(srt|vtt|sub|ass))?$/i.test(cleaned)) return undefined;
+
+  // UUID or long hex hash (32+ chars)
+  if (
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+      cleaned,
+    ) ||
+    /^[0-9a-f]{32,}$/i.test(cleaned)
+  ) {
+    return undefined;
+  }
+
+  // IMDB id (e.g. "tt1375666" or "tt1375666:1:1")
+  if (/^tt\d+(:[0-9:]+)?$/i.test(cleaned)) return undefined;
+
+  // URL
+  if (/^https?:\/\//i.test(cleaned)) return undefined;
+
+  // Check if it's just a language code or generic label
+  if (isGenericSubtitleLabel(cleaned, language)) return undefined;
+
+  return cleaned;
+}
+
+export function extractAddonSubtitleLabel(
+  sub: StremioSubtitle,
+  language: string,
+): string | undefined {
+  const explicitLabel =
+    sub.label?.trim() ||
+    (sub as any).title?.trim() ||
+    (sub as any).name?.trim() ||
+    (sub as any).filename?.trim() ||
+    (sub as any).file?.trim();
+
+  // If label is present and not generic, use it
+  if (explicitLabel && !isGenericSubtitleLabel(explicitLabel, language)) {
+    return explicitLabel;
+  }
+
+  // Try extracting release name from sub.id
+  const idRelease = extractSubtitleReleaseTitle(sub.id, language);
+  if (idRelease) {
+    return idRelease;
+  }
+
+  // Try extracting filename from URL path if present
+  if (sub.url) {
+    try {
+      const pathname = new URL(sub.url).pathname;
+      const filename = pathname.split("/").pop();
+      if (filename) {
+        const decoded = decodeURIComponent(filename).replace(
+          /\.(srt|vtt|sub|ass)$/i,
+          "",
+        );
+        const urlRelease = extractSubtitleReleaseTitle(decoded, language);
+        if (urlRelease) return urlRelease;
+      }
+    } catch {
+      // ignore invalid URLs
+    }
+  }
+
+  // Fallback to explicit label if we had one
+  if (explicitLabel) {
+    return explicitLabel;
+  }
+
+  return undefined;
+}
+
 /**
  * Normalizes a raw StremioSubtitle from an addon into the internal
  * CaptionListItem format used by the player.
@@ -44,12 +175,14 @@ export function normalizeAddonSubtitle(
   if (!url) return null;
 
   const language = (sub.lang ?? sub.language ?? "unknown").trim();
-  const display = sub.label?.trim() || undefined;
+  const display = extractAddonSubtitleLabel(sub, language);
   const id = `addon:${addon.manifest.id}:${language}:${url}`;
   const isHearingImpaired = isHearingImpairedCaption({
     ...sub,
     display,
   });
+
+  const isDisplayGeneric = isGenericSubtitleLabel(display, language);
 
   return {
     id,
@@ -59,6 +192,7 @@ export function normalizeAddonSubtitle(
     needsProxy: false,
     opensubtitles: true,
     display: display ?? language,
+    media: display && !isDisplayGeneric ? display : undefined,
     source: sub.source || addon.manifest.name,
     isHearingImpaired,
     encoding: sub.encoding,

@@ -942,6 +942,7 @@
         "translate": {
           "title": "Превод от {{language}}"
         },
+        "downloadFailed": "Зареждането на субтитрите не бе успешно",
         "unknownLanguage": "неизвестен",
         "useNativeSubtitles": "Нативни видео субтитри",
         "useNativeSubtitlesDescription": "Излъчвайте субтитри за стандартен цял екран и PiP"

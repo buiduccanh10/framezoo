@@ -942,6 +942,7 @@
         "translate": {
           "title": "{{language}} から翻訳"
         },
+        "downloadFailed": "字幕の読み込みに失敗しました",
         "unknownLanguage": "未知",
         "useNativeSubtitles": "ネイティブビデオ字幕",
         "useNativeSubtitlesDescription": "ネイティブフルスクリーンおよびPiPのブロードキャスト字幕"

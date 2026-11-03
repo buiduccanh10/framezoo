@@ -80,10 +80,53 @@ describe("addon subtitles", () => {
       needsProxy: false,
       opensubtitles: true,
       display: "Vietnamese",
+      media: undefined,
       source: "wyzie",
       isHearingImpaired: true,
       encoding: "utf-8",
     });
+  });
+
+  it("extracts release title from id when label is missing (SubSource format)", () => {
+    const raw: StremioSubtitle = {
+      id: "Inception.2010.1080p.BluRay.DD+5.1.x264-playHD_1",
+      url: "https://subsource.strem.top/subtitle/tt1375666/10195707.srt",
+      lang: "vie",
+    };
+
+    const normalized = normalizeAddonSubtitle(addon, raw, 0);
+    expect(normalized?.display).toBe(
+      "Inception.2010.1080p.BluRay.DD+5.1.x264-playHD",
+    );
+    expect(normalized?.media).toBe(
+      "Inception.2010.1080p.BluRay.DD+5.1.x264-playHD",
+    );
+  });
+
+  it("extracts release title from id when label is generic language name", () => {
+    const raw: StremioSubtitle = {
+      id: "Game.of.Thrones.S01E01.Winter.Is.Coming.1080p.BluRay_9",
+      url: "https://subsource.strem.top/subtitle/tt0944947/1588233.srt",
+      lang: "vi",
+      label: "Tiếng Việt",
+    };
+
+    const normalized = normalizeAddonSubtitle(addon, raw, 0);
+    expect(normalized?.display).toBe(
+      "Game.of.Thrones.S01E01.Winter.Is.Coming.1080p.BluRay",
+    );
+  });
+
+  it("falls back to label when id is purely numeric", () => {
+    const raw: StremioSubtitle = {
+      id: "10195707",
+      url: "https://example.com/10195707.srt",
+      lang: "vie",
+      label: "Vietnamese",
+    };
+
+    const normalized = normalizeAddonSubtitle(addon, raw, 0);
+    expect(normalized?.display).toBe("Vietnamese");
   });
 
   it("loads subtitles across addons and reports onProgress", async () => {

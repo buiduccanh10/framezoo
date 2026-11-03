@@ -942,6 +942,7 @@
         "translate": {
           "title": "แปลจาก {{language}}"
         },
+        "downloadFailed": "ไม่สามารถโหลดคำบรรยายได้",
         "unknownLanguage": "ไม่ทราบ",
         "useNativeSubtitles": "คำบรรยายวิดีโอเนทิฟ",
         "useNativeSubtitlesDescription": "คำบรรยายออกอากาศสำหรับแบบเต็มหน้าจอดั้งเดิมและ PiP"

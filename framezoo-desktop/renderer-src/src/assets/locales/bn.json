@@ -942,6 +942,7 @@
         "translate": {
           "title": "{{language}} থেকে অনুবাদ করুন"
         },
+        "downloadFailed": "সাবটাইটেল লোড করতে ব্যর্থ হয়েছে",
         "unknownLanguage": "অজানা",
         "useNativeSubtitles": "নেটিভ ভিডিও সাবটাইটেল",
         "useNativeSubtitlesDescription": "নেটিভ পূর্ণস্ক্রীন এবং PiP এর জন্য সাবটাইটেল সম্প্রচার করুন"

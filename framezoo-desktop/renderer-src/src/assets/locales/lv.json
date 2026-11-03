@@ -942,6 +942,7 @@
         "translate": {
           "title": "Tulkot no {{language}}"
         },
+        "downloadFailed": "Neizdevās ielādēt subtitrus",
         "unknownLanguage": "Nezināms",
         "useNativeSubtitles": "Vietējie video subtitri",
         "useNativeSubtitlesDescription": "Apraidiet subtitrus vietējam pilnekrāna un attēla attēlam"

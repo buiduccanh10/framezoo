@@ -942,6 +942,7 @@
         "translate": {
           "title": "Tłumaczenie z {{language}}"
         },
+        "downloadFailed": "Nie udało się załadować napisów",
         "unknownLanguage": "Nieznany",
         "useNativeSubtitles": "Użyj natywnych napisów",
         "useNativeSubtitlesDescription": "Może naprawić napisy podczas przesyłania i w PiP"

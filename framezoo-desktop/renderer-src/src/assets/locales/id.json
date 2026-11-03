@@ -942,6 +942,7 @@
         "translate": {
           "title": "Terjemahkan dari {{language}}"
         },
+        "downloadFailed": "Teks terjemahan gagal dimuat",
         "unknownLanguage": "Tidak diketahui",
         "useNativeSubtitles": "Subtitle video asli",
         "useNativeSubtitlesDescription": "Siarkan subtitle untuk layar penuh asli dan PiP"

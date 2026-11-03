@@ -101,6 +101,9 @@ export function LanguageSubtitlesView({
   const [currentlyDownloading, setCurrentlyDownloading] = useState<
     string | null
   >(null);
+  const [captionErrors, setCaptionErrors] = useState<Record<string, string>>(
+    {},
+  );
   const [scrollTrigger, setScrollTrigger] = useState(0);
   const [isCyclingCaptions, setIsCyclingCaptions] = useState(false);
   const captionList = usePlayerStore((s) => s.captionList);
@@ -176,16 +179,41 @@ export function LanguageSubtitlesView({
   const [downloadReq, startDownload] = useAsyncFn(
     async (captionId: string) => {
       setCurrentlyDownloading(captionId);
+      setCaptionErrors((prev) => {
+        if (!prev[captionId]) return prev;
+        const next = { ...prev };
+        delete next[captionId];
+        return next;
+      });
       try {
-        if (selectionMode === "secondary") {
-          return await selectSecondaryCaptionById(captionId);
+        const success =
+          selectionMode === "secondary"
+            ? await selectSecondaryCaptionById(captionId)
+            : await selectCaptionById(captionId);
+        if (!success) {
+          setCaptionErrors((prev) => ({
+            ...prev,
+            [captionId]: t("player.menus.subtitles.downloadFailed", {
+              defaultValue: "Failed to load subtitle",
+            }),
+          }));
         }
-        return await selectCaptionById(captionId);
+        return success;
+      } catch (err: any) {
+        setCaptionErrors((prev) => ({
+          ...prev,
+          [captionId]:
+            err?.message ||
+            t("player.menus.subtitles.downloadFailed", {
+              defaultValue: "Failed to load subtitle",
+            }),
+        }));
+        return false;
       } finally {
         setCurrentlyDownloading(null);
       }
     },
-    [selectCaptionById, selectSecondaryCaptionById, selectionMode],
+    [selectCaptionById, selectSecondaryCaptionById, selectionMode, t],
   );
 
   const handleRandomSelect = async () => {
@@ -284,11 +312,7 @@ export function LanguageSubtitlesView({
             !currentTranslateTask.done &&
             !currentTranslateTask.error)
         }
-        error={
-          v.id === currentlyDownloading && downloadReq.error
-            ? downloadReq.error.toString()
-            : undefined
-        }
+        error={captionErrors[v.id]}
         onClick={() => !isTranslating && void handleCaptionSelect(v.id)}
         onTranslate={() => {
           onTranslateSubtitle?.(v);

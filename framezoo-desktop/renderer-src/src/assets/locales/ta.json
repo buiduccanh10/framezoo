@@ -942,6 +942,7 @@
         "translate": {
           "title": "{{language}} இலிருந்து மொழிபெயர்க்கவும்"
         },
+        "downloadFailed": "வசனங்களை ஏற்ற முடியவில்லை",
         "unknownLanguage": "தெரியவில்லை",
         "useNativeSubtitles": "சொந்த வீடியோ வசன வரிகள்",
         "useNativeSubtitlesDescription": "சொந்த முழுத்திரை மற்றும் PiP க்கான வசனங்களை ஒளிபரப்பவும்"

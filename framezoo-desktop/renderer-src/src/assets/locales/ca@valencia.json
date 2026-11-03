@@ -942,6 +942,7 @@
         "translate": {
           "title": "Tradueix de {{language}}"
         },
+        "downloadFailed": "No s'han pogut carregar els subtítols",
         "unknownLanguage": "Desconegut",
         "useNativeSubtitles": "Subtítols de vídeo nadius",
         "useNativeSubtitlesDescription": "Transmet subtítols per a pantalla completa nativa i PiP"

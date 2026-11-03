@@ -942,6 +942,7 @@
         "translate": {
           "title": "الترجمة من {{language}}"
         },
+        "downloadFailed": "فشل تحميل الترجمة",
         "unknownLanguage": "مجهول",
         "useNativeSubtitles": "استخدم ترجمة الفيديو الأصلية",
         "useNativeSubtitlesDescription": "ممكن يحل مشكلة الترجمات وقت البث وفي وضع PiP"

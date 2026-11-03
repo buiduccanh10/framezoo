@@ -942,6 +942,7 @@
         "translate": {
           "title": "Übersetzen von {{language}}"
         },
+        "downloadFailed": "Untertitel konnten nicht geladen werden",
         "unknownLanguage": "Onbekannt",
         "useNativeSubtitles": "Benotz nativi Video-Ontertetel",
         "useNativeSubtitlesDescription": "Cha d‘Ontertetel bi Casting ond im PiP behebe"

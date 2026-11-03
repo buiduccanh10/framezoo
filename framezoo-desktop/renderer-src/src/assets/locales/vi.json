@@ -942,6 +942,7 @@
         "translate": {
           "title": "Dịch từ {{language}}"
         },
+        "downloadFailed": "Không thể tải phụ đề",
         "unknownLanguage": "Không rõ",
         "useNativeSubtitles": "Sử dụng phụ đề video gốc",
         "useNativeSubtitlesDescription": "Có thể sửa phụ đề khi phát và trong PiP"

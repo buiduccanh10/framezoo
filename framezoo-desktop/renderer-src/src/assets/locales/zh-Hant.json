@@ -942,6 +942,7 @@
         "translate": {
           "title": "翻譯自 {{language}}"
         },
+        "downloadFailed": "字幕載入失敗",
         "unknownLanguage": "未知",
         "useNativeSubtitles": "原生影片字幕",
         "useNativeSubtitlesDescription": "本機全螢幕及畫中畫的廣播字幕"

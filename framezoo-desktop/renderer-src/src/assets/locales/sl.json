@@ -942,6 +942,7 @@
         "translate": {
           "title": "Prevedi iz {{language}}"
         },
+        "downloadFailed": "Nalaganje podnapisov ni uspelo",
         "unknownLanguage": "Neznano",
         "useNativeSubtitles": "Izvorni video podnapisi",
         "useNativeSubtitlesDescription": "Oddaja podnapisov za izvorni celozaslonski način in PiP"

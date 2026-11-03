@@ -942,6 +942,7 @@
         "translate": {
           "title": "បកប្រែពី {{language}}"
         },
+        "downloadFailed": "បរាជ័យក្នុងការផ្ទុកចំណងជើងរង",
         "unknownLanguage": "មិនស្គាល់",
         "useNativeSubtitles": "ចំណងជើងរងវីដេអូដើម",
         "useNativeSubtitlesDescription": "ផ្សាយចំណងជើងរងសម្រាប់ពេញអេក្រង់ដើម និង PiP"

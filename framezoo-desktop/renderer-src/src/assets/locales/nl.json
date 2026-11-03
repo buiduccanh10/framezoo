@@ -942,6 +942,7 @@
         "translate": {
           "title": "Vertalen van {{language}}"
         },
+        "downloadFailed": "Ondertitels konden niet worden geladen.",
         "unknownLanguage": "Onbekend",
         "useNativeSubtitles": "Native video-ondertitels",
         "useNativeSubtitlesDescription": "Ondertiteling uitzenden voor native fullscreen en PiP"

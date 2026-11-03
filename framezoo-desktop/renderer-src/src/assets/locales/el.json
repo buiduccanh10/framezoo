@@ -942,6 +942,7 @@
         "translate": {
           "title": "Μετάφραση από {{language}}"
         },
+        "downloadFailed": "Αποτυχία φόρτωσης υπότιτλων",
         "unknownLanguage": "Άγνωστο",
         "useNativeSubtitles": "Εγγενείς υπότιτλοι βίντεο",
         "useNativeSubtitlesDescription": "Μετάδοση υπότιτλων για εγγενή πλήρη οθόνη και PiP"

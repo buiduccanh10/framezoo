@@ -942,6 +942,7 @@
         "translate": {
           "title": "Översätt från {{language}}"
         },
+        "downloadFailed": "Misslyckades med att ladda undertexten",
         "unknownLanguage": "Okänd",
         "useNativeSubtitles": "Använd videons inbyggda undertexter",
         "useNativeSubtitlesDescription": "Kan fixa undertexter vid casting och i PiP-läge"

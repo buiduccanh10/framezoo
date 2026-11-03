@@ -942,6 +942,7 @@
         "translate": {
           "title": "Oversæt fra {{language}}"
         },
+        "downloadFailed": "Kunne ikke indlæse undertekster",
         "unknownLanguage": "Ukendt",
         "useNativeSubtitles": "Indbyggede videoundertekster",
         "useNativeSubtitlesDescription": "Udsend undertekster til native fuldskærm og PiP"

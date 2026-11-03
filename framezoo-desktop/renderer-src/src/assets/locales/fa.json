@@ -942,6 +942,7 @@
         "translate": {
           "title": "ترجمه از {{language}}"
         },
+        "downloadFailed": "زیرنویس بارگذاری نشد",
         "unknownLanguage": "ناشناخته",
         "useNativeSubtitles": "زیرنویس ویدیوهای بومی",
         "useNativeSubtitlesDescription": "پخش زیرنویس برای تمام صفحه بومی و PiP"

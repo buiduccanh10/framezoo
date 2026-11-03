@@ -942,6 +942,7 @@
         "translate": {
           "title": "{{language}} बाट अनुवाद गर्नुहोस्"
         },
+        "downloadFailed": "उपशीर्षक लोड गर्न असफल भयो",
         "unknownLanguage": "अज्ञात",
         "useNativeSubtitles": "मूल भिडियो उपशीर्षकहरू",
         "useNativeSubtitlesDescription": "नेटिभ फुलस्क्रिन र PiP को लागि उपशीर्षकहरू प्रसारण गर्नुहोस्"

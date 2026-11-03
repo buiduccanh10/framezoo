@@ -111,7 +111,10 @@ function CaptionOptionRightSide(props: CaptionOptionProps) {
       <div className="flex items-center gap-1">
         {translateBtn(true)}
         {props.error ? (
-          <span className="flex items-center text-video-context-error">
+          <span
+            className="flex items-center text-video-context-error"
+            title={typeof props.error === "string" ? props.error : undefined}
+          >
             <Icon className="ml-2" icon={Icons.WARNING} />
           </span>
         ) : (
@@ -175,9 +178,14 @@ export function CaptionOption(props: CaptionOptionProps) {
     });
 
   const tooltipContent = useMemo(() => {
-    if (!props.subtitleUrl && !props.subtitleSource) return null;
+    if (!props.subtitleUrl && !props.subtitleSource && !props.error)
+      return null;
 
     const parts = [];
+
+    if (props.error) {
+      parts.push(`Error: ${props.error}`);
+    }
 
     if (props.subtitleSource) {
       parts.push(`Source: ${props.subtitleSource}`);

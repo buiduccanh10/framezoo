@@ -942,6 +942,7 @@
         "translate": {
           "title": "Traducir de {{language}}"
         },
+        "downloadFailed": "No se pudo cargar el subtítulo",
         "unknownLanguage": "Desconocido",
         "useNativeSubtitles": "Usar subtitulos de video nativos",
         "useNativeSubtitlesDescription": "Transmitir subtítulos para pantalla completa nativa y PiP"

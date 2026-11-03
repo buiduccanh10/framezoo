@@ -942,6 +942,7 @@
         "translate": {
           "title": "{{language}} માંથી અનુવાદ કરો"
         },
+        "downloadFailed": "ઉપશીર્ષક લોડ કરવામાં નિષ્ફળ થયાં",
         "unknownLanguage": "અજ્ઞાત",
         "useNativeSubtitles": "મૂળ વિડિઓ સબટાઈટલ",
         "useNativeSubtitlesDescription": "મૂળ ફુલસ્ક્રીન અને PiP માટે સબટાઈટલ બ્રોડકાસ્ટ કરો"

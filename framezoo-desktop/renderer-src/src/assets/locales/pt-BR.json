@@ -942,6 +942,7 @@
         "translate": {
           "title": "Traduzir de {{language}}"
         },
+        "downloadFailed": "Falha ao carregar a legenda",
         "unknownLanguage": "Desconhecido",
         "useNativeSubtitles": "Legendas de vídeo nativas",
         "useNativeSubtitlesDescription": "Transmita legendas para tela cheia nativa e PiP"

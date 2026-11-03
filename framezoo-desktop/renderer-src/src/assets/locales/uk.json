@@ -942,6 +942,7 @@
         "translate": {
           "title": "Перекласти з {{language}}"
         },
+        "downloadFailed": "Не вдалося завантажити субтитри",
         "unknownLanguage": "Невідомий",
         "useNativeSubtitles": "Власні субтитри відео",
         "useNativeSubtitlesDescription": "Трансляція субтитрів для рідного повноекранного режиму та PiP"

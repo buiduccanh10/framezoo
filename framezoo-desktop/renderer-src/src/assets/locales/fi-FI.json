@@ -942,6 +942,7 @@
         "translate": {
           "title": "Käännä kielestä {{language}}"
         },
+        "downloadFailed": "Tekstityksen lataaminen epäonnistui",
         "unknownLanguage": "Tuntematon",
         "useNativeSubtitles": "Alkuperäinen videotekstitys",
         "useNativeSubtitlesDescription": "Lähetä tekstitykset alkuperäiseen koko näytön ja kuvassa"

@@ -942,6 +942,7 @@
         "translate": {
           "title": "Übersetzen von {{language}}"
         },
+        "downloadFailed": "Untertitel konnten nicht geladen werden",
         "unknownLanguage": "Unbekannt",
         "useNativeSubtitles": "Native Videountertitel",
         "useNativeSubtitlesDescription": "Übertragen Sie Untertitel für natives Vollbild und PiP"

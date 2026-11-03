@@ -942,6 +942,7 @@
         "translate": {
           "title": "Tõlgi keelest {{language}}"
         },
+        "downloadFailed": "Subtiitrite laadimine ebaõnnestus",
         "unknownLanguage": "Tundmatu",
         "useNativeSubtitles": "Omakeelsed video subtiitrid",
         "useNativeSubtitlesDescription": "Edastage subtiitreid täisekraanil ja pildis pildis"

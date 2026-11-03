@@ -942,6 +942,7 @@
         "translate": {
           "title": "Traduceți din {{language}}"
         },
+        "downloadFailed": "Subtitrarea nu a putut fi încărcată",
         "unknownLanguage": "Necunoscut",
         "useNativeSubtitles": "Subtitrări video native",
         "useNativeSubtitlesDescription": "Difuzați subtitrări pentru ecran complet nativ și PiP"

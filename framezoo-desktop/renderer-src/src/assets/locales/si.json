@@ -942,6 +942,7 @@
         "translate": {
           "title": "{{language}} වෙතින් පරිවර්තනය කරන්න"
         },
+        "downloadFailed": "උපසිරැසිය පූරණය කිරීමට අසමත් විය.",
         "unknownLanguage": "නොදන්නා",
         "useNativeSubtitles": "ස්වදේශීය වීඩියෝ උපසිරැසි",
         "useNativeSubtitlesDescription": "ස්වදේශීය පූර්ණ තිරය සහ PiP සඳහා උපසිරැසි විකාශනය කරන්න"

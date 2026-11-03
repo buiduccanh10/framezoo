@@ -942,6 +942,7 @@
         "translate": {
           "title": "Translate from {{language}}"
         },
+        "downloadFailed": "Failed to load subtitle",
         "unknownLanguage": "Unknown",
         "useNativeSubtitles": "Native video subtitles",
         "useNativeSubtitlesDescription": "Broadcast subtitles for native fullscreen and PiP"

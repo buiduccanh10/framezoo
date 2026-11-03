@@ -942,6 +942,7 @@
         "translate": {
           "title": "Přeložit z {{language}}"
         },
+        "downloadFailed": "Nepodařilo se načíst titulky",
         "unknownLanguage": "Neznámé",
         "useNativeSubtitles": "Nativní video titulky",
         "useNativeSubtitlesDescription": "Vysílejte titulky pro nativní celou obrazovku a PiP"

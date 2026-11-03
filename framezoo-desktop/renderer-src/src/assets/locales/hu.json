@@ -942,6 +942,7 @@
         "translate": {
           "title": "Fordítás {{language}}"
         },
+        "downloadFailed": "Nem sikerült betölteni a feliratot",
         "unknownLanguage": "Ismeretlen",
         "useNativeSubtitles": "A videó eredeti feliratának használata",
         "useNativeSubtitlesDescription": "Megjavíthatja a feliratokat kasztolás és PiP közben"

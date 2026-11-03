@@ -942,6 +942,7 @@
         "translate": {
           "title": "Þýða úr {{language}}"
         },
+        "downloadFailed": "Mistókst að hlaða inn undirtitli",
         "unknownLanguage": "Óvitað",
         "useNativeSubtitles": "Innfæddur vídeótextar",
         "useNativeSubtitlesDescription": "Sendu út texta fyrir innfæddan fullskjá og PiP"

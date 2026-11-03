@@ -942,6 +942,7 @@
         "translate": {
           "title": "תרגם מ-{{language}}"
         },
+        "downloadFailed": "טעינת הכתוביות נכשלה",
         "unknownLanguage": "לא ידוע",
         "useNativeSubtitles": "השתמש בכתוביות המקור של הווידאו",
         "useNativeSubtitlesDescription": "עשוי לתקן כתוביות בעת שידור למכשיר אחר ובמצב תמונה בתוך תמונה (PiP)"
