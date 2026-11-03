@@ -1199,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "Nome dispositivo",
         "failed": "Impossibile caricare sessioni",
-        "lastActive": "Ultimo attivo: {{date}}",
-        "loggedInAt": "Accesso effettuato a: {{date}}",
+        "lastActive": "Ultima attività: {{date}}",
+        "loggedInAt": "Accesso effettuato: {{date}}",
         "removeDevice": "Rimuovi",
         "title": "Dispositivi",
         "thisDevice": "Questo dispositivo",
+        "activeNow": "Tre attivi",
+        "sessionCount": "sessioni {{count}}",
         "types": {
           "desktop": "Desktop",
           "mobile": "Mobile",
           "tablet": "Tablet"
         },
         "unknownBrowser": "Browser sconosciuto",
-        "unknownDevice": "Dispositivo sconosciuto, errore durante la decrittografia del nome",
+        "unknownDevice": "Dispositivo sconosciuto",
         "unknownOperatingSystem": "Sistema operativo sconosciuto"
       },
       "profile": {

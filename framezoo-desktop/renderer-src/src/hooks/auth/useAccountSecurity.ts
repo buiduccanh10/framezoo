@@ -21,6 +21,7 @@ import {
 import { checkEmailExists } from "@/backend/accounts/user";
 import { AccountWithToken, useAuthStore } from "@/stores/auth";
 import { useToastStore } from "@/stores/interface/toast";
+import { getClientDeviceName } from "@/utils/deviceName";
 
 const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d\W_]{8,}$/;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -244,7 +245,8 @@ export function usePasswordChange(
     async (challengeId: string, code: string) => {
       if (!url) return;
       const keys = await keysFromMnemonic(password);
-      const device = await encryptData("Browser", keys.seed);
+      const clientDeviceName = await getClientDeviceName();
+      const device = await encryptData(clientDeviceName, keys.seed);
       const response = await completePasswordChange(
         url,
         account,

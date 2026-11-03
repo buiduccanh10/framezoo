@@ -1200,17 +1200,19 @@
         "deviceNameLabel": "Имя устройства",
         "failed": "Не удалось загрузить сеансы",
         "lastActive": "Последняя активность: {{date}}",
-        "loggedInAt": "Выполнен вход: {{date}}",
+        "loggedInAt": "Вошёл в систему: {{date}}",
         "removeDevice": "Удалить",
         "title": "Устройства",
         "thisDevice": "Это устройство",
+        "activeNow": "Активно сейчас",
+        "sessionCount": "{{count}} сессии",
         "types": {
           "desktop": "Рабочий стол",
           "mobile": "Мобильный",
           "tablet": "Планшет"
         },
         "unknownBrowser": "Неизвестный браузер",
-        "unknownDevice": "Неизвестное устройство, ошибка расшифровки имени",
+        "unknownDevice": "Неизвестное устройство",
         "unknownOperatingSystem": "Неизвестная операционная система"
       },
       "profile": {

@@ -1200,17 +1200,19 @@
         "deviceNameLabel": "ડિવાઇસ નામ",
         "failed": "સત્રો લોડ કરવામાં નિષ્ફળ",
         "lastActive": "છેલ્લે સક્રિય: {{date}}",
-        "loggedInAt": "અહીં લૉગ ઇન કર્યું: {{date}}",
+        "loggedInAt": "સાઇન ઇન: {{date}}",
         "removeDevice": "દૂર કરો",
         "title": "ઉપકરણો",
         "thisDevice": "આ ઉપકરણ",
+        "activeNow": "હમણાં સક્રિય",
+        "sessionCount": "{{count}} સત્રો",
         "types": {
           "desktop": "ડેસ્કટોપ",
           "mobile": "મોબાઇલ",
           "tablet": "ટેબ્લેટ"
         },
         "unknownBrowser": "અજાણ્યું બ્રાઉઝર",
-        "unknownDevice": "અજ્ઞાત ઉપકરણ, નામ ડિક્રિપ્ટ કરવામાં ભૂલ",
+        "unknownDevice": "અજાણ્યું ઉપકરણ",
         "unknownOperatingSystem": "અજાણી ઓપરેટિંગ સિસ્ટમ"
       },
       "profile": {

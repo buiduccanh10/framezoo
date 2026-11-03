@@ -1199,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "Nom del dispositiu",
         "failed": "No s'han pogut carregar les sessions",
-        "lastActive": "Darrer actiu: {{date}}",
-        "loggedInAt": "Inicieu sessió a: {{date}}",
+        "lastActive": "Última activitat: {{date}}",
+        "loggedInAt": "Sessió iniciada: {{date}}",
         "removeDevice": "Eliminar",
         "title": "Dispositius",
         "thisDevice": "Aquest dispositiu",
+        "activeNow": "Actiu ara",
+        "sessionCount": "sessions de {{count}}",
         "types": {
           "desktop": "Escriptori",
           "mobile": "Mòbil",
           "tablet": "Tauleta"
         },
         "unknownBrowser": "Navegador desconegut",
-        "unknownDevice": "Dispositiu desconegut, error en desxifrar el nom",
+        "unknownDevice": "Dispositiu desconegut",
         "unknownOperatingSystem": "Sistema operatiu desconegut"
       },
       "profile": {

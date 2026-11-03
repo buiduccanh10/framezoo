@@ -1199,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "Όνομα συσκευής",
         "failed": "Αποτυχία φόρτωσης συνεδριών",
-        "lastActive": "Τελευταία ενεργή δραστηριότητα: {{date}}",
-        "loggedInAt": "Συνδεθήκατε στο: {{date}}",
+        "lastActive": "Τελευταία ενεργή: {{date}}",
+        "loggedInAt": "Συνδεδεμένος: {{date}}",
         "removeDevice": "Αφαίρεση",
         "title": "Συσκευές",
         "thisDevice": "Αυτή η συσκευή",
+        "activeNow": "Ενεργό τώρα",
+        "sessionCount": "{{count}} συνεδρίες",
         "types": {
           "desktop": "Επιφάνεια εργασίας",
           "mobile": "Κινητός",
           "tablet": "Δισκίο"
         },
         "unknownBrowser": "Άγνωστο πρόγραμμα περιήγησης",
-        "unknownDevice": "Άγνωστη συσκευή, σφάλμα αποκρυπτογράφησης ονόματος",
+        "unknownDevice": "Άγνωστη συσκευή",
         "unknownOperatingSystem": "Άγνωστο λειτουργικό σύστημα"
       },
       "profile": {

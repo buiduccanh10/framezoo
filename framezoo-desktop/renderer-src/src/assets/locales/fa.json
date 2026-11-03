@@ -1200,17 +1200,19 @@
         "deviceNameLabel": "نام دستگاه",
         "failed": "دریافت نشست ها شکست خورد",
         "lastActive": "آخرین فعالیت: {{date}}",
-        "loggedInAt": "وارد شده در: {{date}}",
+        "loggedInAt": "وارد سیستم شد: {{date}}",
         "removeDevice": "حذف",
         "title": "دستگاه ها",
         "thisDevice": "این دستگاه",
+        "activeNow": "اکنون فعال است",
+        "sessionCount": "جلسات {{count}}",
         "types": {
           "desktop": "دسکتاپ",
           "mobile": "موبایل",
           "tablet": "قرص"
         },
         "unknownBrowser": "مرورگر ناشناخته",
-        "unknownDevice": "دستگاه ناشناس، خطا در رمزگشایی نام",
+        "unknownDevice": "دستگاه ناشناخته",
         "unknownOperatingSystem": "سیستم عامل ناشناخته"
       },
       "profile": {

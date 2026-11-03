@@ -1200,17 +1200,19 @@
         "deviceNameLabel": "اسم الجهاز",
         "failed": "فشل تحميل الجلسات",
         "lastActive": "آخر نشاط: {{date}}",
-        "loggedInAt": "تم تسجيل الدخول في: {{date}}",
+        "loggedInAt": "تم تسجيل الدخول: {{date}}",
         "removeDevice": "إزالة",
         "title": "الأجهزة",
         "thisDevice": "هذا الجهاز",
+        "activeNow": "متاح الآن",
+        "sessionCount": "جلسات {{count}}",
         "types": {
           "desktop": "سطح المكتب",
           "mobile": "متحرك",
           "tablet": "جهاز لوحي"
         },
         "unknownBrowser": "متصفح غير معروف",
-        "unknownDevice": "جهاز غير معروف، خطأ في فك تشفير الاسم",
+        "unknownDevice": "جهاز غير معروف",
         "unknownOperatingSystem": "نظام تشغيل غير معروف"
       },
       "profile": {

@@ -1200,17 +1200,19 @@
         "deviceNameLabel": "उपकरणको नाम",
         "failed": "सत्रहरू लोड गर्न असफल भयो",
         "lastActive": "पछिल्लो सक्रिय: {{date}}",
-        "loggedInAt": "लग इन: {{date}}",
+        "loggedInAt": "साइन इन गरिएको: {{date}}",
         "removeDevice": "हटाउनुहोस्",
         "title": "उपकरणहरु",
         "thisDevice": "यो उपकरण",
+        "activeNow": "अहिले सक्रिय छ",
+        "sessionCount": "{{count}} सत्रहरू",
         "types": {
           "desktop": "डेस्कटप",
           "mobile": "मोबाइल",
           "tablet": "ट्याब्लेट"
         },
         "unknownBrowser": "अज्ञात ब्राउजर",
-        "unknownDevice": "अज्ञात उपकरण, नाम डिक्रिप्ट गर्दा त्रुटि",
+        "unknownDevice": "अज्ञात यन्त्र",
         "unknownOperatingSystem": "अज्ञात अपरेटिङ सिस्टम"
       },
       "profile": {

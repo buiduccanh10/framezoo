@@ -1200,17 +1200,19 @@
         "deviceNameLabel": "Numele dispozitivului",
         "failed": "Eroare la încărcarea sesiunii",
         "lastActive": "Ultima activitate: {{date}}",
-        "loggedInAt": "Conectat la: {{date}}",
+        "loggedInAt": "Conectat: {{date}}",
         "removeDevice": "Șterge",
         "title": "Dispozitive",
         "thisDevice": "Acest dispozitiv",
+        "activeNow": "Activ acum",
+        "sessionCount": "{{count}} sesiuni",
         "types": {
           "desktop": "Desktop",
           "mobile": "Mobil",
           "tablet": "Comprimat"
         },
         "unknownBrowser": "Browser necunoscut",
-        "unknownDevice": "Dispozitiv necunoscut, eroare la decriptarea numelui",
+        "unknownDevice": "Dispozitiv necunoscut",
         "unknownOperatingSystem": "Sistem de operare necunoscut"
       },
       "profile": {

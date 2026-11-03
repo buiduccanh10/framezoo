@@ -1199,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "Navn på enhed",
         "failed": "Kunne ikke indlæse sessioner",
-        "lastActive": "Sidst aktive: {{date}}",
-        "loggedInAt": "Logget ind på: {{date}}",
+        "lastActive": "Sidst aktiv: {{date}}",
+        "loggedInAt": "Logget ind: {{date}}",
         "removeDevice": "Fjern",
         "title": "Enheder",
         "thisDevice": "Denne enhed",
+        "activeNow": "Aktiv nu",
+        "sessionCount": "{{count}} sessioner",
         "types": {
           "desktop": "Skrivebord",
           "mobile": "Mobil",
           "tablet": "Tablet"
         },
         "unknownBrowser": "Ukendt browser",
-        "unknownDevice": "Ukendt enhed, fejl ved dekryptering af navn",
+        "unknownDevice": "Ukendt enhed",
         "unknownOperatingSystem": "Ukendt operativsystem"
       },
       "profile": {

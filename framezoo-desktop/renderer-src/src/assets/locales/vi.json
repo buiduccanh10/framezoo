@@ -1199,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "Tên thiết bị",
         "failed": "Tải các phiên thất bại",
-        "lastActive": "Hoạt động gần nhất: {{date}}",
-        "loggedInAt": "Đăng nhập lúc: {{date}}",
+        "lastActive": "Hoạt động: {{date}}",
+        "loggedInAt": "Đăng nhập: {{date}}",
         "removeDevice": "Xóa",
         "title": "Thiết bị",
         "thisDevice": "Thiết bị này",
+        "activeNow": "Đang hoạt động",
+        "sessionCount": "{{count}} phiên",
         "types": {
           "desktop": "Máy tính",
           "mobile": "Điện thoại",
           "tablet": "Máy tính bảng"
         },
         "unknownBrowser": "Trình duyệt không xác định",
-        "unknownDevice": "Thiết bị không xác định, lỗi giải mã tên",
+        "unknownDevice": "Thiết bị không xác định",
         "unknownOperatingSystem": "Hệ điều hành không xác định"
       },
       "profile": {

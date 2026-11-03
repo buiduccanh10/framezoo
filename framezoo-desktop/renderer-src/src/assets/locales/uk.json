@@ -1200,17 +1200,19 @@
         "deviceNameLabel": "Назва пристрою",
         "failed": "Сталася помилка при завантаженні сесій",
         "lastActive": "Остання активність: {{date}}",
-        "loggedInAt": "Увійшли в систему: {{date}}",
+        "loggedInAt": "Увійшов: {{date}}",
         "removeDevice": "Видалити",
         "title": "Пристрої",
         "thisDevice": "Цей пристрій",
+        "activeNow": "Активний зараз",
+        "sessionCount": "{{count}} сеансів",
         "types": {
           "desktop": "Робочий стіл",
           "mobile": "Мобільний",
           "tablet": "Планшет"
         },
         "unknownBrowser": "Невідомий браузер",
-        "unknownDevice": "Невідомий пристрій, помилка розшифровки імені",
+        "unknownDevice": "Невідомий пристрій",
         "unknownOperatingSystem": "Невідома операційна система"
       },
       "profile": {

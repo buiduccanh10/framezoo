@@ -1199,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "Eszköz neve",
         "failed": "Munkamenetek betöltése sikertelen",
-        "lastActive": "Utolsó aktív: {{date}}",
-        "loggedInAt": "Bejelentkezés: {{date}}",
+        "lastActive": "Utolsó aktivitás: {{date}}",
+        "loggedInAt": "Bejelentkezve: {{date}}",
         "removeDevice": "Eltávolítás",
         "title": "Eszközök",
         "thisDevice": "Ez az eszköz",
+        "activeNow": "Aktív most",
+        "sessionCount": "{{count}} munkamenet",
         "types": {
           "desktop": "Asztali",
           "mobile": "Mozgó",
           "tablet": "Tabletta"
         },
         "unknownBrowser": "Ismeretlen böngésző",
-        "unknownDevice": "Ismeretlen eszköz, hiba a név visszafejtésekor",
+        "unknownDevice": "Ismeretlen eszköz",
         "unknownOperatingSystem": "Ismeretlen operációs rendszer"
       },
       "profile": {

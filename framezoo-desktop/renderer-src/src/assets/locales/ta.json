@@ -1199,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "சாதனத்தின் பெயர்",
         "failed": "சாதனத்தின் தரவுகளை காண்பிக்க இயலவில்லை",
-        "lastActive": "கடைசியாக செயல்பட்டது: {{date}}",
+        "lastActive": "கடைசியாக இயங்கியது: {{date}}",
         "loggedInAt": "உள்நுழைந்தது: {{date}}",
         "removeDevice": "நீக்கு",
         "title": "சாதனங்கள்",
         "thisDevice": "இந்த சாதனம்",
+        "activeNow": "இப்போது செயலில் உள்ளது",
+        "sessionCount": "{{count}} அமர்வுகள்",
         "types": {
           "desktop": "டெஸ்க்டாப்",
           "mobile": "மொபைல்",
           "tablet": "டேப்லெட்"
         },
         "unknownBrowser": "அறியப்படாத உலாவி",
-        "unknownDevice": "தெரியாத சாதனம், பெயரை மறைகுறியாக்குவதில் பிழை",
+        "unknownDevice": "அறியப்படாத சாதனம்",
         "unknownOperatingSystem": "அறியப்படாத இயக்க முறைமை"
       },
       "profile": {

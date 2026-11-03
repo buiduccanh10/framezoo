@@ -1200,17 +1200,19 @@
         "deviceNameLabel": "Apparaatnaam",
         "failed": "Sessies niet geladen",
         "lastActive": "Laatst actief: {{date}}",
-        "loggedInAt": "Ingelogd op: {{date}}",
+        "loggedInAt": "Ingelogd: {{date}}",
         "removeDevice": "Verwijder",
         "title": "Apparaten",
         "thisDevice": "Dit apparaat",
+        "activeNow": "Nu actief",
+        "sessionCount": "{{count}} sessies",
         "types": {
           "desktop": "bureaublad",
           "mobile": "Mobiel",
           "tablet": "Tablet"
         },
         "unknownBrowser": "Onbekende browser",
-        "unknownDevice": "Onbekend apparaat, fout bij het decoderen van naam",
+        "unknownDevice": "Onbekend apparaat",
         "unknownOperatingSystem": "Onbekend besturingssysteem"
       },
       "profile": {

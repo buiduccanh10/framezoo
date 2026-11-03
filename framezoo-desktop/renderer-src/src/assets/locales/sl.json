@@ -1200,17 +1200,19 @@
         "deviceNameLabel": "Ime naprave",
         "failed": "Neuspešno nalaganje sej",
         "lastActive": "Nazadnje aktiven: {{date}}",
-        "loggedInAt": "Prijavljen na: {{date}}",
+        "loggedInAt": "Prijavljen: {{date}}",
         "removeDevice": "Odstrani",
         "title": "Naprave",
         "thisDevice": "Ta naprava",
+        "activeNow": "Aktivno zdaj",
+        "sessionCount": "{{count}} sej",
         "types": {
           "desktop": "Namizni računalnik",
           "mobile": "Mobilni telefon",
           "tablet": "Tablični računalnik"
         },
         "unknownBrowser": "Neznan brskalnik",
-        "unknownDevice": "Neznana naprava, napaka pri dešifriranju imena",
+        "unknownDevice": "Neznana naprava",
         "unknownOperatingSystem": "Neznan operacijski sistem"
       },
       "profile": {

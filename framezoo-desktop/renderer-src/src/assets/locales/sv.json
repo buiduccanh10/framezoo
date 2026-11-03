@@ -1200,17 +1200,19 @@
         "deviceNameLabel": "Enhetens namn",
         "failed": "Misslyckades att ladda sessioner",
         "lastActive": "Senast aktiv: {{date}}",
-        "loggedInAt": "Inloggad på: {{date}}",
+        "loggedInAt": "Inloggad: {{date}}",
         "removeDevice": "Ta bort",
         "title": "Enheter",
         "thisDevice": "Den här enheten",
+        "activeNow": "Aktiv nu",
+        "sessionCount": "{{count}} sessioner",
         "types": {
           "desktop": "Skrivbord",
           "mobile": "Mobil",
           "tablet": "Tablett"
         },
         "unknownBrowser": "Okänd webbläsare",
-        "unknownDevice": "Okänd enhet, fel vid dekryptering av namn",
+        "unknownDevice": "Okänd enhet",
         "unknownOperatingSystem": "Okänt operativsystem"
       },
       "profile": {

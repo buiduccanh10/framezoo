@@ -1200,17 +1200,19 @@
         "deviceNameLabel": "設備名稱",
         "failed": "無法載入",
         "lastActive": "最後活躍時間：{{date}}",
-        "loggedInAt": "登入於：{{date}}",
+        "loggedInAt": "已登入：{{date}}",
         "removeDevice": "刪除",
         "title": "設備",
         "thisDevice": "這個設備",
+        "activeNow": "現在生效",
+        "sessionCount": "{{count}} 會話",
         "types": {
           "desktop": "桌面",
           "mobile": "移動的",
           "tablet": "藥片"
         },
         "unknownBrowser": "未知瀏覽器",
-        "unknownDevice": "未知設備，解密名稱時發生錯誤",
+        "unknownDevice": "未知設備",
         "unknownOperatingSystem": "未知作業系統"
       },
       "profile": {

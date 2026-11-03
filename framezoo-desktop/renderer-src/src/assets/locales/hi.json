@@ -1199,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "डिवाइस का नाम",
         "failed": "सत्र लोड करने में विफल",
-        "lastActive": "अंतिम सक्रिय: {{date}}",
-        "loggedInAt": "यहां लॉग इन किया गया: {{date}}",
+        "lastActive": "अंतिम सक्रिय तिथि: {{date}}",
+        "loggedInAt": "लॉग इन: {{date}}",
         "removeDevice": "निकालना",
         "title": "उपकरण",
         "thisDevice": "यह डिवाइस",
+        "activeNow": "अभी सक्रिय है",
+        "sessionCount": "{{count}} सत्र",
         "types": {
           "desktop": "डेस्कटॉप",
           "mobile": "गतिमान",
           "tablet": "टैबलेट"
         },
         "unknownBrowser": "अज्ञात ब्राउज़र",
-        "unknownDevice": "अज्ञात डिवाइस, नाम डिक्रिप्ट करने में त्रुटि",
+        "unknownDevice": "अज्ञात उपकरण",
         "unknownOperatingSystem": "अज्ञात ऑपरेटिंग सिस्टम"
       },
       "profile": {

@@ -1199,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "Nama perangkat",
         "failed": "Gagal memuat sesi",
-        "lastActive": "Terakhir aktif: {{date}}",
-        "loggedInAt": "Masuk di: {{date}}",
+        "lastActive": "Terakhir aktif: __PH__",
+        "loggedInAt": "Masuk sebagai pengguna: __PH__",
         "removeDevice": "Hapus",
         "title": "Perangkat",
         "thisDevice": "Perangkat ini",
+        "activeNow": "Sedang aktif sekarang",
+        "sessionCount": "sesi __PH__0__",
         "types": {
           "desktop": "Desktop",
           "mobile": "Ponsel",
           "tablet": "Tablet"
         },
         "unknownBrowser": "Browser tidak dikenal",
-        "unknownDevice": "Perangkat tidak dikenal, kesalahan mendekripsi nama",
+        "unknownDevice": "Perangkat tidak dikenal",
         "unknownOperatingSystem": "Sistem operasi tidak dikenal"
       },
       "profile": {

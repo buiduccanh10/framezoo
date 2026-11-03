@@ -1200,17 +1200,19 @@
         "deviceNameLabel": "Име на устройството",
         "failed": "Неуспешно зареждане на сесии",
         "lastActive": "Последна активност: {{date}}",
-        "loggedInAt": "Влезли сте на: {{date}}",
+        "loggedInAt": "Влезли сте: {{date}}",
         "removeDevice": "Премахнете",
         "title": "устройства",
         "thisDevice": "Това устройство",
+        "activeNow": "Активен сега",
+        "sessionCount": "{{count}} сесии",
         "types": {
           "desktop": "Настолен компютър",
           "mobile": "Мобилен",
           "tablet": "Таблет"
         },
         "unknownBrowser": "Неизвестен браузър",
-        "unknownDevice": "Неизвестно устройство, грешка при дешифриране на името",
+        "unknownDevice": "Неизвестно устройство",
         "unknownOperatingSystem": "Неизвестна операционна система"
       },
       "profile": {

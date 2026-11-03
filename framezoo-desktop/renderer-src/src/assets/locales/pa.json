@@ -1199,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "ਡਿਵਾਈਸ ਦਾ ਨਾਮ",
         "failed": "ਸੈਸ਼ਨਾਂ ਨੂੰ ਲੋਡ ਕਰਨਾ ਅਸਫਲ ਰਿਹਾ",
-        "lastActive": "ਪਿਛਲੀ ਵਾਰ ਕਿਰਿਆਸ਼ੀਲ: {{date}}",
-        "loggedInAt": "ਇਸ 'ਤੇ ਲੌਗ ਇਨ ਕੀਤਾ: {{date}}",
+        "lastActive": "ਆਖਰੀ ਕਿਰਿਆਸ਼ੀਲ: {{date}}",
+        "loggedInAt": "ਸਾਈਨ ਇਨ ਕੀਤਾ: {{date}}",
         "removeDevice": "ਹਟਾਓ",
         "title": "ਡਿਵਾਈਸਾਂ",
         "thisDevice": "ਇਹ ਡਿਵਾਈਸ",
+        "activeNow": "ਹੁਣ ਕਿਰਿਆਸ਼ੀਲ",
+        "sessionCount": "{{count}} ਸੈਸ਼ਨ",
         "types": {
           "desktop": "ਡੈਸਕਟਾਪ",
           "mobile": "ਮੋਬਾਈਲ",
           "tablet": "ਟੈਬਲੇਟ"
         },
         "unknownBrowser": "ਅਗਿਆਤ ਬ੍ਰਾਊਜ਼ਰ",
-        "unknownDevice": "ਅਗਿਆਤ ਡਿਵਾਈਸ, ਨਾਮ ਡੀਕ੍ਰਿਪਟ ਕਰਨ ਵਿੱਚ ਤਰੁੱਟੀ",
+        "unknownDevice": "ਅਗਿਆਤ ਡਿਵਾਈਸ",
         "unknownOperatingSystem": "ਅਗਿਆਤ ਓਪਰੇਟਿੰਗ ਸਿਸਟਮ"
       },
       "profile": {

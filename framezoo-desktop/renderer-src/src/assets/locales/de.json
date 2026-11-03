@@ -1200,17 +1200,19 @@
         "deviceNameLabel": "Gerätename",
         "failed": "Laden der Sitzungen fehlgeschlagen",
         "lastActive": "Zuletzt aktiv: {{date}}",
-        "loggedInAt": "Angemeldet unter: {{date}}",
+        "loggedInAt": "Angemeldet: {{date}}",
         "removeDevice": "Entfernen",
         "title": "Geräte",
         "thisDevice": "Dieses Gerät",
+        "activeNow": "Jetzt aktiv",
+        "sessionCount": "{{count}} Sitzungen",
         "types": {
           "desktop": "Desktop",
           "mobile": "Mobile",
           "tablet": "Tablette"
         },
         "unknownBrowser": "Unbekannter Browser",
-        "unknownDevice": "Unbekanntes Gerät, Fehler beim Entschlüsseln des Namens",
+        "unknownDevice": "Unbekanntes Gerät",
         "unknownOperatingSystem": "Unbekanntes Betriebssystem"
       },
       "profile": {

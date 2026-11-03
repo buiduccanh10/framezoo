@@ -18,6 +18,8 @@ import {
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { exec } from "node:child_process";
+import { promisify } from "node:util";
 import { setTimeout as delay } from "node:timers/promises";
 import { pathToFileURL } from "node:url";
 import { createDesktopAppUpdater } from "./desktopAppUpdater";
@@ -1681,7 +1683,42 @@ function requireTrustedRendererSender(
   }
 }
 
+const execAsync = promisify(exec);
+
+async function getSystemDeviceName(): Promise<string> {
+  if (process.platform === "darwin") {
+    try {
+      const { stdout } = await execAsync("scutil --get ComputerName", {
+        timeout: 2000,
+      });
+      const name = stdout.trim();
+      if (name) return name;
+    } catch {
+      // Fallback below
+    }
+  } else if (process.platform === "win32") {
+    const computerName = process.env.COMPUTERNAME;
+    if (computerName && computerName.trim()) {
+      return computerName.trim();
+    }
+  }
+
+  const host = os.hostname();
+  if (host && !/^(\d{1,3}\.){3}\d{1,3}$/.test(host)) {
+    return host;
+  }
+
+  if (process.platform === "darwin") return "Mac";
+  if (process.platform === "win32") return "Windows PC";
+  if (process.platform === "linux") return "Linux PC";
+  return "Desktop";
+}
+
 function registerIpcHandlers() {
+  ipcMain.handle("desktop:get-device-name", async (event) => {
+    requireTrustedRendererSender(event);
+    return await getSystemDeviceName();
+  });
   ipcMain.handle(
     "desktop:secure-store-save",
     async (event, key: string, value: string) => {

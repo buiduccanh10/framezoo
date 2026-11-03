@@ -19,6 +19,7 @@ import {
 import { useAuth } from "@/hooks/auth/useAuth";
 import { useAuthData } from "@/hooks/auth/useAuthData";
 import { useToastStore } from "@/stores/interface/toast";
+import { getClientDeviceName } from "@/utils/deviceName";
 
 export type PasswordRecoveryStep = "email" | "otp" | "password";
 
@@ -105,11 +106,12 @@ export function usePasswordRecovery(
 
     try {
       const keys = await keysFromMnemonic(password);
+      const clientDeviceName = await getClientDeviceName();
       const response = await completePasswordReset(
         backendUrl,
         actionToken,
         bytesToBase64Url(keys.publicKey),
-        await encryptData("Browser", keys.seed),
+        await encryptData(clientDeviceName, keys.seed),
       );
       const account = await saveAccount(
         response,

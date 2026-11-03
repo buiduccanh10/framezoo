@@ -1200,17 +1200,19 @@
         "deviceNameLabel": "Seadme nimi",
         "failed": "Seansside laadimine ebaõnnestus",
         "lastActive": "Viimati aktiivne: {{date}}",
-        "loggedInAt": "Sisse logitud aadressil: {{date}}",
+        "loggedInAt": "Sisse logitud: {{date}}",
         "removeDevice": "Eemalda",
         "title": "Seadmed",
         "thisDevice": "See seade",
+        "activeNow": "Aktiivne praegu",
+        "sessionCount": "{{count}} seanssi",
         "types": {
           "desktop": "Lauaarvuti",
           "mobile": "Mobiil",
           "tablet": "Tahvelarvuti"
         },
         "unknownBrowser": "Tundmatu brauser",
-        "unknownDevice": "Tundmatu seade, viga nime dekrüpteerimisel",
+        "unknownDevice": "Tundmatu seade",
         "unknownOperatingSystem": "Tundmatu operatsioonisüsteem"
       },
       "profile": {

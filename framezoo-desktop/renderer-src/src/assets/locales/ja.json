@@ -1200,17 +1200,19 @@
         "deviceNameLabel": "デバイス名",
         "failed": "セッションのロードに失敗しました",
         "lastActive": "最終アクティブ: {{date}}",
-        "loggedInAt": "ログイン場所: {{date}}",
+        "loggedInAt": "ログイン済み: {{date}}",
         "removeDevice": "取り除く",
         "title": "デバイス",
         "thisDevice": "このデバイス",
+        "activeNow": "現在有効",
+        "sessionCount": "{{count}} セッション",
         "types": {
           "desktop": "デスクトップ",
           "mobile": "携帯",
           "tablet": "錠剤"
         },
         "unknownBrowser": "不明なブラウザ",
-        "unknownDevice": "不明なデバイス、名前の復号化エラー",
+        "unknownDevice": "不明なデバイス",
         "unknownOperatingSystem": "不明なオペレーティングシステム"
       },
       "profile": {

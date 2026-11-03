@@ -1200,17 +1200,19 @@
         "deviceNameLabel": "Device name",
         "failed": "Failed to load sessions",
         "lastActive": "Last active: {{date}}",
-        "loggedInAt": "Logged in at: {{date}}",
+        "loggedInAt": "Signed in: {{date}}",
         "removeDevice": "Remove",
         "title": "Devices",
         "thisDevice": "This device",
+        "activeNow": "Active now",
+        "sessionCount": "{{count}} sessions",
         "types": {
           "desktop": "Desktop",
           "mobile": "Mobile",
           "tablet": "Tablet"
         },
         "unknownBrowser": "Unknown browser",
-        "unknownDevice": "Unknown device, error decrypting name",
+        "unknownDevice": "Unknown device",
         "unknownOperatingSystem": "Unknown operating system"
       },
       "profile": {

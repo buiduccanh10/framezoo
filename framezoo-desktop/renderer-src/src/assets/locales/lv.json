@@ -1199,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "Ierīces vārds",
         "failed": "Neizdevās ielādēt sesijas",
-        "lastActive": "Pēdējo reizi aktīva: {{date}}",
-        "loggedInAt": "Pieteicies: {{date}}",
+        "lastActive": "Pēdējo reizi aktīvs: {{date}}",
+        "loggedInAt": "Pierakstījies: {{date}}",
         "removeDevice": "Nonēmt",
         "title": "Ierīces",
         "thisDevice": "Šī ierīce",
+        "activeNow": "Aktīvs tagad",
+        "sessionCount": "{{count}} sesijas",
         "types": {
           "desktop": "Darbvirsma",
           "mobile": "Mobilais",
           "tablet": "Planšetdators"
         },
         "unknownBrowser": "Nezināma pārlūkprogramma",
-        "unknownDevice": "Nezināma ierīce, kļūda, atšifrējot nosaukumu",
+        "unknownDevice": "Nezināma ierīce",
         "unknownOperatingSystem": "Nezināma operētājsistēma"
       },
       "profile": {

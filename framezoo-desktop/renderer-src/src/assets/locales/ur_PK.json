@@ -1200,17 +1200,19 @@
         "deviceNameLabel": "ڈیوائس کا نام",
         "failed": "سیشنز لوڈ کرنے میں ناکام",
         "lastActive": "آخری فعال: {{date}}",
-        "loggedInAt": "لاگ ان ہوا: {{date}}",
+        "loggedInAt": "سائن ان ہوا: {{date}}",
         "removeDevice": "ہٹا دیں۔",
         "title": "آلات",
         "thisDevice": "یہ ڈیوائس",
+        "activeNow": "اب ایکٹو",
+        "sessionCount": "{{count}} سیشنز",
         "types": {
           "desktop": "ڈیسک ٹاپ",
           "mobile": "موبائل",
           "tablet": "گولی"
         },
         "unknownBrowser": "نامعلوم براؤزر",
-        "unknownDevice": "نامعلوم آلہ، نام کو ڈکرپٹ کرنے میں خرابی۔",
+        "unknownDevice": "نامعلوم آلہ",
         "unknownOperatingSystem": "نامعلوم آپریٹنگ سسٹم"
       },
       "profile": {

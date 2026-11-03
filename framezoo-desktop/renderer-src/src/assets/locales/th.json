@@ -1200,17 +1200,19 @@
         "deviceNameLabel": "ชื่ออุปกรณ์",
         "failed": "โหลดเซสชันไม่สำเร็จ",
         "lastActive": "ใช้งานครั้งล่าสุด: {{date}}",
-        "loggedInAt": "เข้าสู่ระบบที่: {{date}}",
+        "loggedInAt": "ลงชื่อเข้าใช้งาน: {{date}}",
         "removeDevice": "ลบ",
         "title": "อุปกรณ์",
         "thisDevice": "อุปกรณ์นี้",
+        "activeNow": "กำลังใช้งานอยู่",
+        "sessionCount": "เซสชัน {{count}}",
         "types": {
           "desktop": "เดสก์ท็อป",
           "mobile": "มือถือ",
           "tablet": "แท็บเล็ต"
         },
         "unknownBrowser": "เบราว์เซอร์ที่ไม่รู้จัก",
-        "unknownDevice": "อุปกรณ์ที่ไม่รู้จัก เกิดข้อผิดพลาดในการถอดรหัสชื่อ",
+        "unknownDevice": "อุปกรณ์ที่ไม่รู้จัก",
         "unknownOperatingSystem": "ระบบปฏิบัติการที่ไม่รู้จัก"
       },
       "profile": {

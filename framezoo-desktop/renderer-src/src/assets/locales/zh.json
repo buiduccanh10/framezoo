@@ -1200,17 +1200,19 @@
         "deviceNameLabel": "设备名称",
         "failed": "载入会话失败",
         "lastActive": "最后活跃时间：{{date}}",
-        "loggedInAt": "登录于：{{date}}",
+        "loggedInAt": "已登录：{{date}}",
         "removeDevice": "移除",
         "title": "设备",
         "thisDevice": "这个设备",
+        "activeNow": "现在生效",
+        "sessionCount": "{{count}} 会话",
         "types": {
           "desktop": "桌面",
           "mobile": "移动的",
           "tablet": "药片"
         },
         "unknownBrowser": "未知浏览器",
-        "unknownDevice": "未知设备，解密名称时出错",
+        "unknownDevice": "未知设备",
         "unknownOperatingSystem": "未知操作系统"
       },
       "profile": {

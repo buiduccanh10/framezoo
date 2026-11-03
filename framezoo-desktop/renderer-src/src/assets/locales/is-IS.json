@@ -1199,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "Nafn tækis",
         "failed": "Mistókst að hlaða fundum",
-        "lastActive": "Síðast virk: {{date}}",
-        "loggedInAt": "Innskráður á: {{date}}",
+        "lastActive": "Síðast virkur: {{date}}",
+        "loggedInAt": "Innskráning: {{date}}",
         "removeDevice": "Eyða",
         "title": "Tæki",
         "thisDevice": "Þetta tæki",
+        "activeNow": "Virkur núna",
+        "sessionCount": "{{count}} lotur",
         "types": {
           "desktop": "Skjáborð",
           "mobile": "Farsími",
           "tablet": "Spjaldtölva"
         },
         "unknownBrowser": "Óþekktur vafri",
-        "unknownDevice": "Óþekkt tæki, villa við að afkóða nafn",
+        "unknownDevice": "Óþekkt tæki",
         "unknownOperatingSystem": "Óþekkt stýrikerfi"
       },
       "profile": {

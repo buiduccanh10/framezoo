@@ -1199,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "Název zařízení",
         "failed": "Načtení relací se nezdařilo",
-        "lastActive": "Poslední aktivní: {{date}}",
-        "loggedInAt": "Přihlášen na: {{date}}",
+        "lastActive": "Naposledy aktivní: {{date}}",
+        "loggedInAt": "Přihlášen(a): {{date}}",
         "removeDevice": "Odstranit",
         "title": "Zařízení",
         "thisDevice": "Toto zařízení",
+        "activeNow": "Nyní aktivní",
+        "sessionCount": "{{count}} sezení",
         "types": {
           "desktop": "Počítač",
           "mobile": "Mobilní",
           "tablet": "Tableta"
         },
         "unknownBrowser": "Neznámý prohlížeč",
-        "unknownDevice": "Neznámé zařízení, při dešifrování názvu došlo k chybě",
+        "unknownDevice": "Neznámé zařízení",
         "unknownOperatingSystem": "Neznámý operační systém"
       },
       "profile": {

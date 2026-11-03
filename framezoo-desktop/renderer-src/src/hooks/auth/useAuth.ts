@@ -41,6 +41,7 @@ import { AccountWithToken, useAuthStore } from "@/stores/auth";
 import { BookmarkMediaItem } from "@/stores/bookmarks";
 import { useToastStore } from "@/stores/interface/toast";
 import { ProgressMediaItem } from "@/stores/progress";
+import { getClientDeviceName } from "@/utils/deviceName";
 
 export interface RegistrationData {
   recaptchaToken?: string;
@@ -107,6 +108,7 @@ export function useAuth() {
         const { challenge, publicKey: returnedPublicKey } = challengeResponse;
 
         const signature = await signChallenge(keys, challenge);
+        const clientDeviceName = await getClientDeviceName();
         const loginResult = await loginAccount(backendUrl, {
           identifier,
           publicKey: returnedPublicKey || publicKeyBase64Url,
@@ -114,7 +116,7 @@ export function useAuth() {
             code: challenge,
             signature,
           },
-          device: await encryptData("Browser", keys.seed),
+          device: await encryptData(clientDeviceName, keys.seed),
         });
 
         const user = await getUser(
@@ -155,13 +157,14 @@ export function useAuth() {
           publicKeyBase64Url,
         );
         const signature = await signChallenge(keys, challenge);
+        const clientDeviceName = await getClientDeviceName();
         const loginResult = await loginAccount(backendUrl, {
           publicKey: publicKeyBase64Url,
           challenge: {
             code: challenge,
             signature,
           },
-          device: await encryptData("Browser", keys.seed),
+          device: await encryptData(clientDeviceName, keys.seed),
         });
 
         const user = await getUser(
@@ -235,6 +238,7 @@ export function useAuth() {
           registerData.recaptchaToken,
         );
         const signature = await signChallenge(keys, challenge);
+        const clientDeviceName = await getClientDeviceName();
         const registerResult = await registerAccount(backendUrl, {
           challenge: {
             code: challenge,
@@ -243,7 +247,7 @@ export function useAuth() {
           publicKey: publicKeyBase64Url,
           nickname: nickname,
           email: registerData.userData.email,
-          device: await encryptData("Browser", keys.seed),
+          device: await encryptData(clientDeviceName, keys.seed),
           profile: registerData.userData.profile,
           ...(registerData.emailOtp ? { emailOtp: registerData.emailOtp } : {}),
         });
@@ -271,6 +275,7 @@ export function useAuth() {
           : await keysFromMnemonic(registerData.mnemonic!);
         const signature = await signChallenge(keys, challenge);
         publicKeyBase64Url = bytesToBase64Url(keys.publicKey);
+        const clientDeviceName = await getClientDeviceName();
         const registerResult = await registerAccount(backendUrl, {
           challenge: {
             code: challenge,
@@ -279,7 +284,7 @@ export function useAuth() {
           publicKey: publicKeyBase64Url,
           nickname: registerData.nickname ?? "",
           email: registerData.userData.email,
-          device: await encryptData("Browser", keys.seed),
+          device: await encryptData(clientDeviceName, keys.seed),
           profile: registerData.userData.profile,
           ...(registerData.emailOtp ? { emailOtp: registerData.emailOtp } : {}),
         });

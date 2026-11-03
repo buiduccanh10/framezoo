@@ -1199,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "기기명",
         "failed": "세션을 로드하지 못했습니다",
-        "lastActive": "마지막 활성: {{date}}",
-        "loggedInAt": "로그인한 위치: {{date}}",
+        "lastActive": "최근 활동: {{date}}",
+        "loggedInAt": "로그인 사용자: {{date}}",
         "removeDevice": "제거",
         "title": "기기",
         "thisDevice": "이 장치",
+        "activeNow": "지금 활성화됨",
+        "sessionCount": "{{count}} 세션",
         "types": {
           "desktop": "데스크톱",
           "mobile": "이동하는",
           "tablet": "태블릿"
         },
         "unknownBrowser": "알 수 없는 브라우저",
-        "unknownDevice": "알 수 없는 기기입니다. 이름을 해독하는 중 오류가 발생했습니다.",
+        "unknownDevice": "알 수 없는 장치",
         "unknownOperatingSystem": "알 수 없는 운영 체제"
       },
       "profile": {

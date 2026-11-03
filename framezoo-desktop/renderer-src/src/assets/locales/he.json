@@ -1200,17 +1200,19 @@
         "deviceNameLabel": "שם מכשיר",
         "failed": "טעינת ההפעלות נכשלה",
         "lastActive": "פעיל אחרון: {{date}}",
-        "loggedInAt": "מחובר ב: {{date}}",
+        "loggedInAt": "מחובר/ת: {{date}}",
         "removeDevice": "הסר",
         "title": "מכשירים",
         "thisDevice": "המכשיר הזה",
+        "activeNow": "פעיל כעת",
+        "sessionCount": "{{count}} מפגשים",
         "types": {
           "desktop": "שולחן עבודה",
           "mobile": "נייד",
           "tablet": "לוּחַ"
         },
         "unknownBrowser": "דפדפן לא ידוע",
-        "unknownDevice": "מכשיר לא ידוע, שגיאה בפענוח השם",
+        "unknownDevice": "מכשיר לא ידוע",
         "unknownOperatingSystem": "מערכת הפעלה לא ידועה"
       },
       "profile": {

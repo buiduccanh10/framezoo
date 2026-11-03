@@ -1200,17 +1200,19 @@
         "deviceNameLabel": "ឈ្មោះឧបករណ៍",
         "failed": "បានបរាជ័យក្នុងការផ្ទុកវគ្គ",
         "lastActive": "សកម្មចុងក្រោយ៖ {{date}}",
-        "loggedInAt": "បានចូលនៅ៖ {{date}}",
+        "loggedInAt": "បានចូល៖ {{date}}",
         "removeDevice": "ដកចេញ",
         "title": "ឧបករណ៍",
         "thisDevice": "ឧបករណ៍នេះ",
+        "activeNow": "សកម្មឥឡូវនេះ",
+        "sessionCount": "វគ្គ {{count}}",
         "types": {
           "desktop": "កុំព្យូទ័រលើតុ",
           "mobile": "ទូរស័ព្ទចល័ត",
           "tablet": "ថេប្លេត"
         },
         "unknownBrowser": "កម្មវិធីរុករកដែលមិនស្គាល់",
-        "unknownDevice": "ឧបករណ៍មិនស្គាល់ កំហុសក្នុងការឌិគ្រីបឈ្មោះ",
+        "unknownDevice": "ឧបករណ៍មិនស្គាល់",
         "unknownOperatingSystem": "ប្រព័ន្ធប្រតិបត្តិការដែលមិនស្គាល់"
       },
       "profile": {

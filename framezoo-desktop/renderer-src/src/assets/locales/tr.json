@@ -1199,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "Cihaz adı",
         "failed": "Oturumlar yüklenemedi",
-        "lastActive": "Son aktif: {{date}}",
-        "loggedInAt": "Şu saatte giriş yapıldı: {{date}}",
+        "lastActive": "Son aktivite: {{date}}",
+        "loggedInAt": "Giriş yapıldı: {{date}}",
         "removeDevice": "Sil",
         "title": "Cihazlar",
         "thisDevice": "Bu cihaz",
+        "activeNow": "Şu anda aktif",
+        "sessionCount": "{{count}} oturumları",
         "types": {
           "desktop": "Masaüstü",
           "mobile": "Mobil",
           "tablet": "Tablet"
         },
         "unknownBrowser": "Bilinmeyen tarayıcı",
-        "unknownDevice": "Bilinmeyen cihaz, adın şifresi çözülürken hata oluştu",
+        "unknownDevice": "Bilinmeyen cihaz",
         "unknownOperatingSystem": "Bilinmeyen işletim sistemi"
       },
       "profile": {

@@ -1200,17 +1200,19 @@
         "deviceNameLabel": "ডিভাইসের নাম",
         "failed": "সেশনগুলি লোড করতে ব্যর্থ হয়েছে৷",
         "lastActive": "সর্বশেষ সক্রিয়: {{date}}",
-        "loggedInAt": "লগ ইন করেছেন: {{date}}",
+        "loggedInAt": "সাইন ইন করা হয়েছে: {{date}}",
         "removeDevice": "সরান",
         "title": "ডিভাইস",
         "thisDevice": "এই ডিভাইসটি",
+        "activeNow": "এখন সক্রিয়",
+        "sessionCount": "{{count}} সেশন",
         "types": {
           "desktop": "ডেস্কটপ",
           "mobile": "মোবাইল",
           "tablet": "ট্যাবলেট"
         },
         "unknownBrowser": "অজানা ব্রাউজার",
-        "unknownDevice": "অজানা ডিভাইস, নাম ডিক্রিপ্ট করার সময় ত্রুটি",
+        "unknownDevice": "অজানা ডিভাইস",
         "unknownOperatingSystem": "অজানা অপারেটিং সিস্টেম"
       },
       "profile": {

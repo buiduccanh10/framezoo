@@ -1199,18 +1199,20 @@
       "devices": {
         "deviceNameLabel": "උපාංගයේ නම",
         "failed": "සැසි පූරණය කිරීමට අසමත් විය",
-        "lastActive": "අවසන් සක්‍රිය: {{date}}",
-        "loggedInAt": "පුරනය වී ඇත්තේ: {{date}}",
+        "lastActive": "අවසන් වරට සක්‍රිය වූයේ: {{date}}",
+        "loggedInAt": "පුරනය වී ඇත: {{date}}",
         "removeDevice": "ඉවත් කරන්න",
         "title": "උපාංග",
         "thisDevice": "මෙම උපාංගය",
+        "activeNow": "දැන් ක්‍රියාකාරීයි",
+        "sessionCount": "සැසි {{count}}",
         "types": {
           "desktop": "ඩෙස්ක්ටොප්",
           "mobile": "ජංගම",
           "tablet": "ටැබ්ලටය"
         },
         "unknownBrowser": "නොදන්නා බ්‍රව්සරයකි",
-        "unknownDevice": "නොදන්නා උපාංගය, නම විකේතනය කිරීමේ දෝෂයකි",
+        "unknownDevice": "නොදන්නා උපාංගයකි",
         "unknownOperatingSystem": "නොදන්නා මෙහෙයුම් පද්ධතිය"
       },
       "profile": {

@@ -13,6 +13,7 @@ import { PasswordInputData } from "@/pages/parts/auth/PasswordInputPart";
 import { useBookmarkStore } from "@/stores/bookmarks";
 import { useToastStore } from "@/stores/interface/toast";
 import { useProgressStore } from "@/stores/progress";
+import { getClientDeviceName } from "@/utils/deviceName";
 
 export function useLoginForm(onLogin?: () => void) {
   const { login, restore, importData } = useAuth();
@@ -75,11 +76,12 @@ export function useLoginForm(onLogin?: () => void) {
     const credentialId = assertion.id;
 
     let account: AsyncReturnType<typeof login>;
+    const deviceName = await getClientDeviceName();
     try {
       account = await login({
         credentialId,
         userData: {
-          device: "Browser",
+          device: deviceName,
         },
       });
     } catch (err) {
@@ -114,12 +116,13 @@ export function useLoginForm(onLogin?: () => void) {
       }
 
       let account: AsyncReturnType<typeof login>;
+      const deviceName = await getClientDeviceName();
       try {
         account = await login({
           identifier: data.nickname,
           password: data.password,
           userData: {
-            device: "Browser",
+            device: deviceName,
           },
         });
       } catch (err) {
