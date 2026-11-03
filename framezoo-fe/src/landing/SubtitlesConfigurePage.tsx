@@ -57,10 +57,10 @@ export function SubtitlesConfigurePage() {
 
   // Handle one-time ticket verification from Desktop App handoff
   const getApiUrl = (endpoint: string) => {
-    const raw = (import.meta.env.VITE_BACKEND_URL || "")
-      .trim()
-      .replace(/\/+$/, "");
-    return raw ? `${raw}${endpoint}` : endpoint;
+    // The public frontend proxies /addon/* to the backend in both Vite and prod.
+    // Keep ticket/session calls same-origin so a stale backend build URL cannot
+    // send the one-time ticket to a different host.
+    return endpoint;
   };
 
   useEffect(() => {
