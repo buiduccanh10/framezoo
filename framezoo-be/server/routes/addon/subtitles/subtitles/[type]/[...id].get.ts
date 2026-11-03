@@ -9,6 +9,7 @@ import {
   resolveSubtitleContext,
   searchAllSubtitles,
 } from '~/utils/subtitles';
+import { getUserProviderCredential } from '~/utils/providerCredentials';
 
 export default defineEventHandler(async event => {
   const params = event.context.params as { type?: string; id?: string | string[] } | undefined;
@@ -77,10 +78,9 @@ export default defineEventHandler(async event => {
     const authSession =
       event.context.session || (await useAuth().getOptionalCurrentSessionForEvent(event));
     if (authSession?.user) {
-      const storage = useStorage('cache');
-      const savedKey = await storage.getItem<string>(`user:wyzie_key:${authSession.user}`);
-      if (typeof savedKey === 'string' && savedKey.trim()) {
-        userWyzieKey = savedKey.trim();
+      const savedKey = await getUserProviderCredential(authSession.user);
+      if (savedKey) {
+        userWyzieKey = savedKey;
       }
     }
   } catch {

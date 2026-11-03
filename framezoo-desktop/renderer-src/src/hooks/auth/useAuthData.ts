@@ -156,7 +156,7 @@ export function useAuthData() {
       }
 
       if (settings.addons !== undefined) {
-        syncAndMigrateAddons(settings.addons);
+        syncAndMigrateAddons(settings.addons, settings.nativeSubtitlesEnabled);
       }
     },
     [

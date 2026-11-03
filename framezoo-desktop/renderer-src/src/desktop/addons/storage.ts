@@ -108,8 +108,13 @@ export function syncAddonsToBackend() {
   syncTimeout = setTimeout(async () => {
     try {
       const customAddons = getCustomAddons();
+      const nativeAddon = addons.find(
+        (item) =>
+          item.manifest.id === NATIVE_SUBTITLE_ADDON_ID || item.isNative,
+      );
       await updateSettings(backendUrl, account, {
         addons: customAddons,
+        nativeSubtitlesEnabled: nativeAddon?.enabled ?? true,
       });
     } catch (err) {
       console.error("[addons] Failed to sync addons to backend:", err);
@@ -149,14 +154,17 @@ export function mergeAddonLists(
   return Array.from(map.values());
 }
 
-function mergeWithNativeAddons(userAddons: InstalledAddon[]): InstalledAddon[] {
+function mergeWithNativeAddons(
+  userAddons: InstalledAddon[],
+  nativeSubtitlesEnabled?: boolean,
+): InstalledAddon[] {
   const nativeAddon = getNativeSubtitlesAddon();
   const existingNative = userAddons.find(
     (item) => item.manifest.id === NATIVE_SUBTITLE_ADDON_ID || item.isNative,
   );
 
   const enabled =
-    existingNative != null ? existingNative.enabled : nativeAddon.enabled;
+    nativeSubtitlesEnabled ?? existingNative?.enabled ?? nativeAddon.enabled;
   const currentNative: InstalledAddon = {
     ...nativeAddon,
     enabled,
@@ -252,12 +260,18 @@ export function setAddonEnabled(id: string, enabled: boolean) {
   publish(true);
 }
 
-export function setAddonsFromRemote(remoteAddons: InstalledAddon[]) {
-  addons = mergeWithNativeAddons(remoteAddons);
+export function setAddonsFromRemote(
+  remoteAddons: InstalledAddon[],
+  nativeSubtitlesEnabled?: boolean,
+) {
+  addons = mergeWithNativeAddons(remoteAddons, nativeSubtitlesEnabled);
   publish(false);
 }
 
-export async function syncAndMigrateAddons(serverAddons?: InstalledAddon[]) {
+export async function syncAndMigrateAddons(
+  serverAddons?: InstalledAddon[],
+  nativeSubtitlesEnabled?: boolean,
+) {
   const account = useAuthStore.getState().account;
   const backendUrl = getActiveBackendUrl();
 
@@ -268,7 +282,7 @@ export async function syncAndMigrateAddons(serverAddons?: InstalledAddon[]) {
 
   const merged = mergeAddonLists(localCustom, safeServerAddons);
 
-  setAddonsFromRemote(merged);
+  setAddonsFromRemote(merged, nativeSubtitlesEnabled);
 
   if (account && backendUrl) {
     const serverIds = new Set(
@@ -282,6 +296,7 @@ export async function syncAndMigrateAddons(serverAddons?: InstalledAddon[]) {
       try {
         await updateSettings(backendUrl, account, {
           addons: merged,
+          nativeSubtitlesEnabled: nativeSubtitlesEnabled ?? true,
         });
       } catch (err) {
         console.error(

@@ -491,7 +491,10 @@ export function SettingsPage() {
           setCustomThemeBaseline(useThemeStore.getState().customTheme);
         }
         if (settings.addons !== undefined) {
-          syncAndMigrateAddons(settings.addons);
+          syncAndMigrateAddons(
+            settings.addons,
+            settings.nativeSubtitlesEnabled,
+          );
         }
       }
     };

@@ -2,6 +2,7 @@ import { randomBytes } from 'node:crypto';
 import { getQuery } from 'h3';
 
 import { prisma } from '~/utils/prisma';
+import { getUserProviderCredential } from '~/utils/providerCredentials';
 
 export default defineEventHandler(async event => {
   const query = getQuery(event);
@@ -48,9 +49,9 @@ export default defineEventHandler(async event => {
   // Retrieve existing custom Wyzie key if already set
   let currentApiKey = '';
   try {
-    const savedKey = await storage.getItem<string>(`user:wyzie_key:${userId}`);
-    if (typeof savedKey === 'string' && savedKey.trim()) {
-      currentApiKey = savedKey.trim();
+    const savedKey = await getUserProviderCredential(userId);
+    if (savedKey) {
+      currentApiKey = savedKey;
     }
   } catch (err) {
     console.warn('[subtitles:verify] Key lookup failed:', err);

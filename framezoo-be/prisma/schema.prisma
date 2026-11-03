@@ -73,6 +73,19 @@ model user_settings {
   enable_skip_credits       Boolean  @default(false)
   proxy_tmdb                Boolean  @default(false)
   addons                    Json?    @default("[]")
+  native_subtitles_enabled  Boolean  @default(true)
+}
+
+model user_provider_credentials {
+  id                String   @id @default(uuid()) @db.Uuid
+  user_id           String
+  provider          String   @db.VarChar(64)
+  secret_ciphertext String   @db.Text
+  created_at        DateTime @default(now()) @db.Timestamptz(0)
+  updated_at        DateTime @updatedAt @db.Timestamptz(0)
+
+  @@unique([user_id, provider], map: "user_provider_credentials_user_id_provider_key")
+  @@index([user_id], map: "user_provider_credentials_user_id_idx")
 }
 
 model users {

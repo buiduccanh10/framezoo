@@ -23,6 +23,7 @@ export interface SettingsInput {
   keyboardShortcuts?: KeyboardShortcuts;
   customTheme?: CustomThemeSettings;
   addons?: InstalledAddon[];
+  nativeSubtitlesEnabled?: boolean;
 }
 
 export interface SettingsResponse {
@@ -37,6 +38,7 @@ export interface SettingsResponse {
   keyboardShortcuts?: KeyboardShortcuts;
   customTheme?: CustomThemeSettings;
   addons?: InstalledAddon[];
+  nativeSubtitlesEnabled?: boolean;
 }
 
 export function updateSettings(
