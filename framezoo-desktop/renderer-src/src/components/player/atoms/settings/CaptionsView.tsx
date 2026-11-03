@@ -153,6 +153,45 @@ function CaptionOptionRightSide(props: CaptionOptionProps) {
   return translateBtn(false);
 }
 
+export function getSubtitleSourceBadgeClass(source?: string): string {
+  if (!source) return "bg-zinc-600";
+  const s = source.toLowerCase();
+
+  // 1. Well-known subtitle providers (fuzzy matching)
+  if (s.includes("wyzie")) return "bg-blue-600";
+  if (s.includes("subsource")) return "bg-cyan-600";
+  if (s.includes("opensub")) return "bg-orange-500";
+  if (s.includes("granite")) return "bg-emerald-600";
+  if (s.includes("subdl")) return "bg-amber-600";
+  if (s.includes("yts") || s.includes("yify")) return "bg-teal-600";
+  if (s.includes("podnapisi")) return "bg-purple-600";
+  if (s.includes("addic7ed") || s.includes("a4k")) return "bg-rose-600";
+  if (s.includes("vdrk")) return "bg-indigo-600";
+  if (s.includes("embedded")) return "bg-slate-600";
+
+  // 2. Deterministic palette for external / custom addons
+  const palette = [
+    "bg-indigo-600",
+    "bg-violet-600",
+    "bg-purple-600",
+    "bg-fuchsia-600",
+    "bg-pink-600",
+    "bg-rose-600",
+    "bg-sky-600",
+    "bg-teal-600",
+    "bg-emerald-600",
+    "bg-amber-600",
+  ];
+
+  let hash = 0;
+  for (let i = 0; i < s.length; i++) {
+    hash = (hash << 5) - hash + s.charCodeAt(i);
+    hash |= 0;
+  }
+  const index = Math.abs(hash) % palette.length;
+  return palette[index];
+}
+
 export function CaptionOption(props: CaptionOptionProps) {
   const [showTooltip, setShowTooltip] = useState(false);
   const tooltipTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -304,13 +343,8 @@ export function CaptionOption(props: CaptionOptionProps) {
               {subtitleSourceLabel && (
                 <span
                   className={classNames(
-                    "ml-2 px-2 py-0.5 mt-2 rounded text-white text-xs font-semibold overflow-hidden text-ellipsis whitespace-nowrap flex-shrink min-w-0",
-                    {
-                      "bg-blue-500": subtitleSource?.includes("wyzie"),
-                      "bg-orange-500": subtitleSource === "opensubs",
-                      "bg-cyan-500": subtitleSource === "subsource",
-                      "bg-green-500": subtitleSource === "granite",
-                    },
+                    "ml-2 px-2 py-0.5 mt-2 rounded text-white text-xs font-semibold overflow-hidden text-ellipsis whitespace-nowrap flex-shrink min-w-0 shadow-sm",
+                    getSubtitleSourceBadgeClass(subtitleSource),
                   )}
                 >
                   {subtitleSourceLabel}

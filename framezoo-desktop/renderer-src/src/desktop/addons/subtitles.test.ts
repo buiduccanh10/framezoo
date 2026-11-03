@@ -1,6 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
 
+import { getSubtitleSourceBadgeClass } from "@/components/player/atoms/settings/CaptionsView";
+
 import {
+  inferSubtitleFormat,
   loadAddonSubtitles,
   loadAllAddonSubtitles,
   normalizeAddonSubtitle,
@@ -158,6 +161,80 @@ describe("addon subtitles", () => {
       captions: [],
       completed: 0,
       total: 2,
+    });
+  });
+
+  describe("inferSubtitleFormat", () => {
+    it("respects explicit type", () => {
+      expect(inferSubtitleFormat("vtt")).toBe("vtt");
+      expect(inferSubtitleFormat(".srt")).toBe("srt");
+    });
+
+    it("infers from URL extension", () => {
+      expect(
+        inferSubtitleFormat(
+          undefined,
+          "https://subsource.strem.top/subtitle/tt1375666/10195707.srt",
+        ),
+      ).toBe("srt");
+      expect(
+        inferSubtitleFormat(
+          undefined,
+          "https://example.com/subs/vietnamese.vtt?token=123",
+        ),
+      ).toBe("vtt");
+    });
+
+    it("infers from query params or id", () => {
+      expect(
+        inferSubtitleFormat(
+          undefined,
+          "https://example.com/download?format=ass",
+        ),
+      ).toBe("ass");
+      expect(
+        inferSubtitleFormat(undefined, undefined, "movie.sub.vtt"),
+      ).toBe("vtt");
+    });
+
+    it("defaults to srt when format cannot be determined", () => {
+      expect(
+        inferSubtitleFormat(
+          undefined,
+          "https://example.com/download/12345",
+        ),
+      ).toBe("srt");
+    });
+  });
+
+  describe("getSubtitleSourceBadgeClass", () => {
+    it("assigns cyan to subsource", () => {
+      expect(getSubtitleSourceBadgeClass("subsource")).toBe("bg-cyan-600");
+      expect(getSubtitleSourceBadgeClass("SubSource Subtitles")).toBe(
+        "bg-cyan-600",
+      );
+    });
+
+    it("assigns blue to wyzie", () => {
+      expect(getSubtitleSourceBadgeClass("wyzie charlie")).toBe("bg-blue-600");
+    });
+
+    it("assigns orange to opensubs", () => {
+      expect(getSubtitleSourceBadgeClass("opensubs")).toBe("bg-orange-500");
+      expect(getSubtitleSourceBadgeClass("OpenSubtitles v3")).toBe(
+        "bg-orange-500",
+      );
+    });
+
+    it("assigns amber to subdl", () => {
+      expect(getSubtitleSourceBadgeClass("SubDL Subtitles")).toBe("bg-amber-600");
+    });
+
+    it("assigns stable deterministic palette color for custom/unknown addons", () => {
+      const color1 = getSubtitleSourceBadgeClass("Random Addon Subtitles");
+      const color2 = getSubtitleSourceBadgeClass("Random Addon Subtitles");
+      expect(color1).toBe(color2);
+      expect(color1).toMatch(/^bg-[a-z]+-600$/);
     });
   });
 });

@@ -160,6 +160,59 @@ export function extractAddonSubtitleLabel(
 }
 
 /**
+ * Infers the subtitle format (e.g. "srt", "vtt", "ass") from subtitle properties,
+ * URL, ID, or label. Defaults to "srt" if unable to determine.
+ */
+export function inferSubtitleFormat(
+  type?: string,
+  url?: string,
+  id?: string | number,
+  label?: string,
+): string {
+  if (type && type.trim()) {
+    const cleanType = type.trim().toLowerCase().replace(/^\./, "");
+    if (cleanType) return cleanType;
+  }
+
+  const rawUrl = (url ?? "").trim();
+  if (rawUrl) {
+    try {
+      const parsed = new URL(rawUrl);
+      const match = parsed.pathname
+        .toLowerCase()
+        .match(/\.(srt|vtt|ass|ssa|sub|sbv|smi)(\.gz)?$/);
+      if (match) return match[1];
+
+      const queryType =
+        parsed.searchParams.get("format") ||
+        parsed.searchParams.get("type") ||
+        parsed.searchParams.get("ext");
+      if (
+        queryType &&
+        /^(srt|vtt|ass|ssa|sub|sbv|smi)$/i.test(queryType.trim())
+      ) {
+        return queryType.trim().toLowerCase();
+      }
+    } catch {
+      const match = rawUrl
+        .toLowerCase()
+        .match(/\.(srt|vtt|ass|ssa|sub|sbv|smi)(\.gz|\?|$)/);
+      if (match) return match[1];
+    }
+  }
+
+  const rawId = String(id ?? "").toLowerCase();
+  const idMatch = rawId.match(/\.(srt|vtt|ass|ssa|sub|sbv|smi)$/);
+  if (idMatch) return idMatch[1];
+
+  const rawLabel = String(label ?? "").toLowerCase();
+  const labelMatch = rawLabel.match(/\.(srt|vtt|ass|ssa|sub|sbv|smi)$/);
+  if (labelMatch) return labelMatch[1];
+
+  return "srt";
+}
+
+/**
  * Normalizes a raw StremioSubtitle from an addon into the internal
  * CaptionListItem format used by the player.
  *
@@ -183,12 +236,18 @@ export function normalizeAddonSubtitle(
   });
 
   const isDisplayGeneric = isGenericSubtitleLabel(display, language);
+  const format = inferSubtitleFormat(
+    sub.type,
+    url,
+    sub.id,
+    sub.label || (sub as any).title || display,
+  );
 
   return {
     id,
     language,
     url,
-    type: sub.type,
+    type: format,
     needsProxy: false,
     opensubtitles: true,
     display: display ?? language,

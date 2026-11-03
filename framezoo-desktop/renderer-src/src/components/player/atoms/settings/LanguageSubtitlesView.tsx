@@ -7,6 +7,7 @@ import { Icon, Icons } from "@/components/Icon";
 import { useCaptions } from "@/components/player/hooks/useCaptions";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { isHearingImpairedCaption } from "@/components/player/utils/captions";
+import { inferSubtitleFormat } from "@/desktop/addons/subtitles";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import {
   CaptionListItem,
@@ -331,7 +332,9 @@ export function LanguageSubtitlesView({
         flag
         translatable={selectionMode === "primary" && !isEmbeddedCaption(v)}
         subtitleUrl={v.url}
-        subtitleType={v.type}
+        subtitleType={
+          v.type || inferSubtitleFormat(v.type, v.url, v.id, displayTitle)
+        }
         subtitleSource={inferredSource}
         subtitleEncoding={v.encoding}
         isHearingImpaired={isHearingImpaired}
