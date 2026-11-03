@@ -101,6 +101,8 @@ services:
       RATE_LIMIT_FAIL_CLOSED: "true"
       FEEDBACK_CLAMAV_HOST: clamav
       FEEDBACK_CLAMAV_REQUIRED: "true"
+      APP_DOMAIN: https://framezoo.top
+      FRONTEND_ORIGIN: https://framezoo.top
       CORS_ALLOWED_ORIGINS: https://framezoo.top,app://renderer
       VIRTUAL_HOST: api.framezoo.top
       VIRTUAL_PORT: 3000
