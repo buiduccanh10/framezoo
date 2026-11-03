@@ -6,13 +6,21 @@
     "copy": "Meow"
   },
   "addons": {
+    "catalog": {
+      "badge": "Addons"
+    },
     "manager": {
       "add": "Add",
+      "addWithoutConfiguring": "Install anyway (may not work)",
       "adding": "Adding...",
       "ariaClose": "Close addon manager",
       "ariaManage": "Manage addons",
+      "configRequiredDesc": "This addon requires configuration (such as API keys or language settings) before it can return content. Please configure it in your browser, then copy and paste the generated manifest URL here.",
+      "configRequiredTitle": "Configuration Required",
+      "configureAction": "Configure",
       "errorFallback": "Unable to install this addon.",
       "manageListButton": "Manage addon list",
+      "openConfigurePage": "Open Configuration Page",
       "subtitle": "Optional. Add a manifest URL you choose. This app does not bundle, recommend, or host addons.",
       "title": "Desktop Addons"
     },
@@ -24,6 +32,10 @@
     },
     "page": {
       "addAddonButton": "Add Addon",
+      "configRequiredBadge": "Requires Configuration",
+      "configRequiredWarning": "This addon is not configured and may fail to load streams or subtitles.",
+      "configureAddon": "Configure this addon",
+      "configureRequiredAction": "Configure this addon (Required)",
       "description": "Addons are optional. This app does not bundle, recommend, or host any addon.",
       "disabled": "Disabled",
       "emptyInstalled": "No addons installed in the system yet.",
@@ -87,24 +99,58 @@
     "login": {
       "description": "Please enter your secret meow language passphrase to login to your account",
       "failedToReachServer": "Failed to reach server",
-      "nicknameLabel": "Nickname",
-      "nicknameNotFound": "Nickname not found",
-      "nicknamePlaceholder": "Enter your nickname",
-      "nicknameRequired": "Nickname is required",
+      "identifierLabel": "Username or email",
+      "identifierNotFound": "Username or email not found",
+      "identifierPlaceholder": "Enter your username or email",
+      "identifierRequired": "Username or email is required",
       "noBackendUrl": "No backend URL",
       "or": "or",
       "passwordIncorrect": "Password is incorrect",
+      "invalidCredentials": "Username or password is incorrect",
       "passwordLabel": "Password",
       "passwordPlaceholder": "Enter your password",
+      "rememberMe": "Remember me",
       "passwordRequired": "Password is required",
       "submit": "Bello! Login",
       "title": "Login to your account",
       "usePasskey": "Use passkey",
       "validationError": "Meow language not fluent or incomplete"
     },
+    "otp": {
+      "codeLabel": "Verification code",
+      "continue": "Continue",
+      "emailNewDescription": "Enter the code sent to your new email.",
+      "emailNewTitle": "Verify your new email",
+      "emailOldDescription": "Enter the code sent to your current email.",
+      "emailOldTitle": "Confirm your current email",
+      "expired": "Verification code expired",
+      "expiresIn": "Code expires in {{time}}",
+      "finish": "Finish",
+      "forgotDescription": "Enter your account email to receive a verification code.",
+      "forgotLink": "Forgot your password?",
+      "forgotTitle": "Forgot password?",
+      "invalid": "Invalid verification code",
+      "newPasswordDescription": "Choose a new password for your account.",
+      "newPasswordTitle": "Create a new password",
+      "passwordChangeDescription": "Enter the code sent to your email.",
+      "passwordChangeTitle": "Confirm password change",
+      "registrationDescription": "Enter the code sent to your email to finish creating your account.",
+      "registrationTitle": "Verify your email",
+      "requestFailed": "Unable to send verification code",
+      "resend": "Resend code",
+      "resendFailed": "Unable to resend the code",
+      "resendIn": "Resend available in {{seconds}}s",
+      "resetDescription": "Enter the code sent to your email.",
+      "resetTitle": "Reset your password",
+      "send": "Send code"
+    },
     "register": {
       "confirmPasswordLabel": "Confirm Password",
       "confirmPasswordPlaceholder": "Confirm your password",
+      "emailInvalid": "Enter a valid email address",
+      "emailLabel": "Personal email",
+      "emailPlaceholder": "Enter your personal email",
+      "emailTaken": "Email is already registered",
       "information": {
         "color1": "Profile color one",
         "color2": "Profile color two",
@@ -116,6 +162,7 @@
       "nicknameLabel": "Nickname",
       "nicknamePlaceholder": "Choose a unique nickname",
       "nicknameTaken": "Nickname is already taken",
+      "nicknameRequired": "Nickname is required",
       "passwordInput": {
         "description": "Choose a nickname and password. Your password works as a secure passphrase, so make sure you remember it!",
         "title": "Create your login"
@@ -123,7 +170,8 @@
       "passwordLabel": "Password",
       "passwordMismatch": "Passwords do not match",
       "passwordPlaceholder": "Create a password (used as your passphrase)",
-      "passwordWeak": "Password must be at least 8 characters with letters and numbers"
+      "passwordWeak": "Password must be at least 8 characters with letters and numbers",
+      "submit": "Create account"
     },
     "trust": {
       "failed": {
@@ -187,16 +235,22 @@
       "thisWeek": "This Week",
       "title": {
         "4kReleases": "4K Releases",
+        "addons": "Addons",
+        "editorPicks": "Editor's Picks",
         "editorPicksMovies": "Editor Picks Movies",
         "editorPicksShows": "Editor Picks Shows",
         "forYou": "For You",
+        "genres": "Genres",
         "inCinemas": "In Cinemas",
+        "latest": "Latest Releases",
         "latestReleases": "Latest Releases",
         "latestTVReleases": "Latest TV Shows",
         "movies": "{{category}} Movies",
         "moviesOn": "Movies on {{provider}}",
         "onTheAir": "On The Air",
         "popular": "Most Popular",
+        "providers": "Providers",
+        "recommendations": "Recommendations",
         "recommended": "Because You Watched: {{title}}",
         "top10": "Top 10",
         "topRated": "Top Rated",
@@ -281,6 +335,7 @@
       "shortcuts": {
         "barrelRoll": "Do a barrel roll! 🌀",
         "closeOverlay": "Close overlay/modal",
+        "holdShift": "Hold key then click Fullscreen button to fit or click to title movie to copy link with timeHold down the key and click the full-screen button to fit the frame, or click the video title to copy the link with the timestamp.",
         "decreaseVolume": "Decrease volume",
         "increaseVolume": "Increase volume",
         "jumpTo0": "Jump to 0% (beginning)",
@@ -432,15 +487,21 @@
     "titles": {
       "69": {
         "default": "Up for something spicy?",
-        "extra": ["Happy 69 day 😘!"]
+        "extra": [
+          "Happy 69 day 😘!"
+        ]
       },
       "420": {
         "default": "What would you like to watch this 4/20?",
-        "extra": ["Happy 4/20 🥳!"]
+        "extra": [
+          "Happy 4/20 🥳!"
+        ]
       },
       "day": {
         "default": "What would you like to meow this meow?",
-        "extra": ["Feeling meow? Jurassic meow meow meow meow perfect meow."]
+        "extra": [
+          "Feeling meow? Jurassic meow meow meow meow perfect meow."
+        ]
       },
       "halloween": {
         "default": "What spooky movie would you like to watch this Halloween?",
@@ -453,11 +514,15 @@
       },
       "morning": {
         "default": "What would you like to meow this meow?",
-        "extra": ["Meow! I hear Meow Sunrise is meow"]
+        "extra": [
+          "Meow! I hear Meow Sunrise is meow"
+        ]
       },
       "night": {
         "default": "What would you like to meow meow?",
-        "extra": ["Meow? I hear The Meow is meow."]
+        "extra": [
+          "Meow? I hear The Meow is meow."
+        ]
       }
     },
     "watchHistory": {
@@ -560,8 +625,10 @@
     }
   },
   "media": {
+    "cannotFetchImage": "Could not fetch an image for this media",
     "episodeDisplay": "S{{season}} - E{{episode}}",
     "episodeShort": "E",
+    "inCinema": "In Cinema",
     "seasonUnwatched": "Are you sure you want to mark the season as unwatched?",
     "seasonWatched": "Are you sure you want to mark the season as watched?",
     "types": {
@@ -647,7 +714,13 @@
         "restart": "Restart to update",
         "updating": "Updating..."
       },
-      "offline": "Check your meow connection"
+      "offline": "Check your meow connection",
+      "lowSpace": "Your device is running out of storage space. This may affect streaming and downloading."
+    },
+    "status": {
+      "offline": "Offline",
+      "lowSpace": "Low storage space",
+      "lowSpaceWithPercent": "Remaining storage: {{percent}}%"
     },
     "download": {
       "empty": "No downloads are configured yet.",
@@ -685,6 +758,7 @@
       "accountMenu": "Open account menu",
       "addons": "Addons",
       "desktop": "App Settings",
+      "feedback": "Feedback",
       "logout": "Meow out",
       "register": "Meow to meow",
       "settings": "Meow"
@@ -740,7 +814,17 @@
     },
     "menus": {
       "audio": {
-        "default": "Default"
+        "default": "Default",
+        "modeSection": "Audio Output Mode",
+        "tracksSection": "Audio Tracks",
+        "modes": {
+          "auto": "Surround Sound / Auto",
+          "autoDesc": "5.1/7.1, Dolby Atmos, Apple Spatial Audio, Windows Sonic",
+          "stereoDialogue": "Stereo (Dialogue Boost)",
+          "stereoDialogueDesc": "Enhanced voice clarity for laptop speakers or night listening",
+          "passthrough": "Passthrough (Bitstream)",
+          "passthroughDesc": "Direct digital stream for external Soundbars and AV Receivers"
+        }
       },
       "episodes": {
         "button": "Meow",
@@ -793,7 +877,13 @@
         "dualSub": "Dual Subtitles",
         "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
         "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
+        "dualSubSelectHint": "Choose a primary and secondary subtitle. Dual subtitles turn on automatically.",
+        "dualSubEnabled": "Dual subtitles enabled",
+        "dualSubPrimaryBadge": "Primary",
+        "dualSubSecondaryBadge": "Secondary",
+        "embedded": "Embedded",
         "empty": "There are no provided subtitles for this.",
+        "fetchFailed": "Failed to load subtitles, retry a few seconds.",
         "loadingExternal": "Loading external subtitles...",
         "loadingExternalProgress": "Loading external subtitles... ({{progress}}%)",
         "matchScoreLabel": "Match ~{{score}}%",
@@ -806,6 +896,27 @@
         "refreshing": "Refreshing...",
         "secondary": "Secondary",
         "selectingSecondary": "Selecting secondary subtitle",
+        "autoSyncTitle": "Auto sync",
+        "autoSyncDescription": "Match subtitles to the spoken dialogue automatically",
+        "autoSyncAction": "Auto sync",
+        "autoSyncBadge": "Auto",
+        "syncSubtitleConfirmTitle": "Sync subtitle with AI?",
+        "syncSubtitleConfirmDescription": "Subtitles will be aligned by AI to match the video.",
+        "syncSubtitleNoticeTitle": "Note",
+        "syncSubtitleNoticeDescription": "Subtitle sync may take some time depending on your download speed to retrieve enough audio samples for alignment.",
+        "syncSubtitleSupportedLanguages": "Supported audio languages",
+        "syncSubtitleSuccess": "Subtitle synced successfully",
+        "syncSubtitleServerFallback": "Local sync does not support this audio language; synced using server.",
+        "syncSubtitleFailed": "Could not sync subtitle",
+        "syncSubtitleFailedWithDetail": "Could not sync subtitle: {{detail}}",
+        "syncRateLimit": "Too many requests. Please wait a moment before syncing again.",
+        "syncServerBusy": "AI service is currently busy. Please retry in a few seconds.",
+        "syncSubtitleOpen": "Sync subtitle with AI",
+        "syncSubtitleAction": "Sync",
+        "syncSubtitlePreparing": "Preparing audio...",
+        "syncSubtitlePreparingAudio": "Preparing audio to sync...",
+        "syncSubtitleWorking": "Framezoo is syncing subtitles...",
+        "syncSubtitleApplying": "Applying subtitle sync...",
         "settings": {
           "backlink": "Custom meows",
           "delay": "Meow delay",
@@ -819,6 +930,15 @@
         },
         "title": "Meows",
         "transcriptChoice": "Transcript",
+        "searchPlaceholder": "Search subtitles or dialogue...",
+        "delayLabel": "Subtitle offset",
+        "seekMode": "Seek",
+        "syncMode": "Sync",
+        "syncOffset": "Offset: {{delay}}s",
+        "syncAction": "Sync",
+        "nowPlaying": "Now playing",
+        "syncDescription": "Click dialogue matching current video scene, or adjust offset:",
+        "resetDelay": "Reset",
         "translate": {
           "title": "Translate from {{language}}"
         },
@@ -993,9 +1113,33 @@
       "remaining": "{{timeLeft}} left • Finish at {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "File: {{fileName}}",
+      "infohash": "Infohash: {{infoHash}}",
+      "infohashLabel": "Info hash",
+      "network": "Torrent network",
+      "networkStatus": "Torrent network status",
+      "peers": "Peers: {{count}}",
+      "peersLabel": "Peers",
+      "progress": "Progress: {{progress}}%",
+      "completedLabel": "Completed",
+      "speed": "Speed: {{speed}}",
+      "speedLabel": "Speed",
+      "statistics": "Statistics",
+      "states": {
+        "buffering": "Buffering",
+        "downloading": "Downloading",
+        "error": "Error",
+        "ready": "Ready",
+        "starting": "Starting",
+        "stopped": "Stopped"
+      },
+      "unknown": "Unknown"
     }
   },
   "screens": {
+    "finishingSetup": "Finishing setup…",
     "loadingApp": "Loading app...",
     "loadingUser": "Loading user profile...",
     "loadingUserError": {
@@ -1017,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "Edit",
         "editProfile": "Meow",
+        "emailLabel": "Email",
         "logoutButton": "Meow out",
         "nicknameLabel": "Nickname",
-        "nicknamePlaceholder": "Enter your nickname"
+        "nicknamePlaceholder": "Enter your nickname",
+        "noEmail": "No email linked"
       },
       "actions": {
         "delete": {
@@ -1066,6 +1213,16 @@
         "secondColor": "Minion color meow",
         "title": "Edit meow meow",
         "userIcon": "Minion icon"
+      },
+      "security": {
+        "currentEmailLabel": "Current email",
+        "emailDescription": "We will verify your current and new email addresses.",
+        "emailSame": "New email must be different from your current email",
+        "emailTitle": "Change email",
+        "newEmailLabel": "New email address",
+        "passwordDescription": "We will send a verification code to your account email.",
+        "passwordTitle": "Change password",
+        "title": "Account security"
       },
       "register": {
         "cta": "Meow started",
@@ -1172,6 +1329,9 @@
       "doubleClickToSeek": "Double tap to seek",
       "doubleClickToSeekDescription": "Double tap on the left or right side of the player to seek 10 seconds forward or backward.",
       "doubleClickToSeekLabel": "Enable double tap to seek",
+      "homeSectionOrder": "Category order",
+      "homeSectionOrderDescription": "Drag and drop to reorder the categories displayed on your home and discover pages (including Addons).",
+      "resetHomeSectionOrder": "Reset to default order",
       "keyboardShortcuts": "Keyboard Shortcuts",
       "keyboardShortcutsDescription": "Customize the keyboard shortcuts for the application. Hold ` to show this help anytime",
       "keyboardShortcutsLabel": "Customize Keyboard Shortcuts",
@@ -1226,6 +1386,36 @@
       "title": "Meows",
       "verticalPositionLabel": "Vertical position"
     },
+    "torrent": {
+      "title": "Streaming",
+      "maxSizeLabel": "Cache size",
+      "maxSizeDescription": "Set the maximum disk space used for caching stream files. If the cache exceeds this limit, older stream files will be cleared.",
+      "cacheSizeBehaviorDescription": "Applies to new streams. Cache is pruned to this size when idle torrent handles expire (up to 5 minutes after stopping). Playback can exceed it; No caching removes data when the stream stops, but pieces still use disk while playing.",
+      "noCaching": "No caching",
+      "infinite": "Infinite",
+      "unlimited": "Unlimited",
+      "custom": "Custom...",
+      "customSizeLabel": "Custom cache size in GiB",
+      "customSizePlaceholder": "e.g. 15",
+      "defaultDrive": "Default",
+      "defaultDriveDescription": "New torrent data uses the app's default location. Existing and active streams stay where they are.",
+      "selectDrive": "Select folder...",
+      "selectDriveError": "Could not select cache folder.",
+      "cachingDriveLabel": "Caching drive",
+      "cachingDriveDescription": "New torrent data is stored in the Framezoo/torrents subfolder. Existing and active streams stay where they are.",
+      "torrentProfileLabel": "Torrent profile",
+      "profileDefault": "Default",
+      "profileSoft": "Soft",
+      "profileFast": "Fast",
+      "profileUltraFast": "Ultra Fast",
+      "torrentProfileDescription": "Controls read-ahead for new streams: Soft 0.5×, Default 1×, Fast 1.5×, Ultra Fast 2×. Higher profiles may use more bandwidth and temporary disk space.",
+      "currentSizeLabel": "Current cache size",
+      "currentSizeLoading": "Loading...",
+      "clearCache": "Clear cache",
+      "clearCacheSuccess": "Cache cleared",
+      "clearCacheError": "Failed to clear cache. Please try again.",
+      "spaceLeftOnDevice": "({{space}} space left on your device)"
+    },
     "unsaved": "Whaaat? You have unsaved meows"
   },
   "tmdb": {
@@ -1269,5 +1459,50 @@
     "watching": "Watching",
     "withCount": "With {{count}} others",
     "you": "You"
+  },
+  "feedback": {
+    "modalTitle": "Send Feedback",
+    "buttonLabel": "Feedback",
+    "subtitle": "Let us know about any issue or bug you encountered during your experience.",
+    "titleLabel": "1. Issue Title",
+    "titlePlaceholder": "e.g., Subtitle loading error, Stuttering playback...",
+    "descriptionLabel": "2. Issue Description",
+    "descriptionPlaceholder": "Describe the problem in detail, steps to reproduce, or suggestions...",
+    "submit": "Submit Feedback",
+    "attachmentsLabel": "Files",
+    "attachmentsHint": "Images/videos · 55 MB total maximum",
+    "attachmentsTooLarge": "The total file size must not exceed 55 MB.",
+    "cancel": "Cancel",
+    "close": "Close",
+    "successTitle": "Feedback Submitted!",
+    "successDesc": "Thank you for your feedback. Our team will review and address the issue as soon as possible.",
+    "errorRequired": "Please enter both title and description.",
+    "errorSubmit": "An error occurred while submitting feedback. Please try again later."
+  },
+  "donate": {
+    "button": "Support Framezoo",
+    "badge": "A note from Framezoo",
+    "modalTitle": "Help us keep building Framezoo",
+    "subtitle": "Every contribution helps us improve the player, expand to more platforms, and keep listening to your ideas.",
+    "note": "Thank you for caring about Framezoo and supporting the work behind it. Your contribution gives us more room to build a better experience for everyone.",
+    "scanHint": "Scan this QR code with your banking app.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "MoMo",
+    "paypalImageAlt": "PayPal donation QR code",
+    "momoImageAlt": "MoMo donation QR code",
+    "viewQr": "View {{label}} QR code larger",
+    "close": "Close"
+  },
+  "toasts": {
+    "emailChangeSuccess": "Email updated successfully!",
+    "linkCopied": "Link copied to clipboard!",
+    "loginSuccess": "Logged in successfully!",
+    "logoutSuccess": "Logged out successfully!",
+    "otpResent": "Verification code has been resent!",
+    "otpSent": "Verification code sent to your email!",
+    "passwordChangeSuccess": "Password changed successfully!",
+    "passwordResetError": "Failed to reset password",
+    "passwordResetSuccess": "Password reset successfully!",
+    "registerSuccess": "Registered successfully!"
   }
 }

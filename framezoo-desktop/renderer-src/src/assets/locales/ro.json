@@ -116,12 +116,41 @@
       "usePasskey": "Folosiți cheia de acces",
       "validationError": "Fraza de acces este incorectă sau incompletă"
     },
+    "otp": {
+      "codeLabel": "Cod de verificare",
+      "continue": "Continua",
+      "emailNewDescription": "Introdu codul trimis la noua ta adresă de e-mail.",
+      "emailNewTitle": "Verificați noua adresă de e-mail",
+      "emailOldDescription": "Introdu codul trimis la adresa ta de e-mail curentă.",
+      "emailOldTitle": "Confirmați adresa dvs. de e-mail actuală",
+      "expired": "Codul de verificare a expirat",
+      "expiresIn": "Codul expiră în {{time}}",
+      "finish": "Termina",
+      "forgotDescription": "Introdu adresa de e-mail a contului tău pentru a primi un cod de verificare.",
+      "forgotLink": "Ați uitat parola?",
+      "forgotTitle": "Aţi uitat parola?",
+      "invalid": "Cod de verificare nevalid",
+      "newPasswordDescription": "Alegeți o parolă nouă pentru contul dvs.",
+      "newPasswordTitle": "Creați o parolă nouă",
+      "passwordChangeDescription": "Introdu codul trimis pe adresa ta de e-mail.",
+      "passwordChangeTitle": "Confirmați schimbarea parolei",
+      "registrationDescription": "Introdu codul trimis pe adresa ta de e-mail pentru a finaliza crearea contului tău.",
+      "registrationTitle": "Verificați adresa dvs. de e-mail",
+      "requestFailed": "Nu se poate trimite codul de verificare",
+      "resend": "Retrimiteți codul",
+      "resendFailed": "Nu se poate retrimite codul",
+      "resendIn": "Retrimitere disponibilă în {{seconds}}s",
+      "resetDescription": "Introdu codul trimis pe adresa ta de e-mail.",
+      "resetTitle": "Resetați parola",
+      "send": "Trimiteți codul"
+    },
     "register": {
       "confirmPasswordLabel": "Confirmați parola",
       "confirmPasswordPlaceholder": "Confirmați-vă parola",
       "emailInvalid": "Introduceți o adresă de e-mail validă",
       "emailLabel": "E-mail personal",
       "emailPlaceholder": "Introduceți adresa dvs. de e-mail personală",
+      "emailTaken": "Adresa de e-mail este deja înregistrată",
       "information": {
         "color1": "Culoarea profilului unu",
         "color2": "Culoarea profilului doi",
@@ -141,7 +170,8 @@
       "passwordLabel": "Parolă",
       "passwordMismatch": "Parolele nu se potrivesc",
       "passwordPlaceholder": "Creați o parolă (folosită ca expresie de acces)",
-      "passwordWeak": "Parola trebuie să aibă cel puțin 8 caractere cu litere și cifre"
+      "passwordWeak": "Parola trebuie să aibă cel puțin 8 caractere cu litere și cifre",
+      "submit": "Creează cont"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "Edita",
         "editProfile": "Editează",
+        "emailLabel": "E-mail",
         "logoutButton": "Deconectați-vă",
         "nicknameLabel": "Pseudonim",
-        "nicknamePlaceholder": "Introduceți porecla"
+        "nicknamePlaceholder": "Introduceți porecla",
+        "noEmail": "Nicio adresă de e-mail conectată"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "Culoare profilului doi",
         "title": "Editează poza de profil",
         "userIcon": "Iconița utilizatorului"
+      },
+      "security": {
+        "currentEmailLabel": "Adresă de e-mail curentă",
+        "emailDescription": "Vom verifica adresele dumneavoastră de e-mail actuale și noi.",
+        "emailSame": "Noua adresă de e-mail trebuie să fie diferită de adresa actuală",
+        "emailTitle": "Schimbați adresa de e-mail",
+        "newEmailLabel": "Adresă de e-mail nouă",
+        "passwordDescription": "Vă vom trimite un cod de verificare la adresa de e-mail a contului dumneavoastră.",
+        "passwordTitle": "Schimbaţi parola",
+        "title": "Securitatea contului"
       },
       "register": {
         "cta": "Începeți",
@@ -1451,9 +1494,15 @@
     "close": "Aproape"
   },
   "toasts": {
+    "emailChangeSuccess": "Adresa de e-mail a fost actualizată cu succes!",
     "linkCopied": "Link copiat în clipboard!",
     "loginSuccess": "Autentificat cu succes!",
     "logoutSuccess": "Te-ai deconectat cu succes!",
+    "otpResent": "Codul de verificare a fost retrimis!",
+    "otpSent": "Codul de verificare a fost trimis pe adresa dvs. de e-mail!",
+    "passwordChangeSuccess": "Parola a fost schimbată cu succes!",
+    "passwordResetError": "Resetarea parolei a eșuat",
+    "passwordResetSuccess": "Parola a fost resetată cu succes!",
     "registerSuccess": "Inregistrat cu succes!"
   }
 }

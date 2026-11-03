@@ -116,12 +116,41 @@
       "usePasskey": "Käytä salasanaa",
       "validationError": "Väärä tai puutteellinen tunnuslause"
     },
+    "otp": {
+      "codeLabel": "Vahvistuskoodi",
+      "continue": "Jatkaa",
+      "emailNewDescription": "Syötä uuteen sähköpostiosoitteeseesi lähetetty koodi.",
+      "emailNewTitle": "Vahvista uusi sähköpostiosoitteesi",
+      "emailOldDescription": "Syötä nykyiseen sähköpostiosoitteeseesi lähetetty koodi.",
+      "emailOldTitle": "Vahvista nykyinen sähköpostiosoitteesi",
+      "expired": "Vahvistuskoodi vanhentunut",
+      "expiresIn": "Koodi vanhenee {{time}} kuluttua",
+      "finish": "Valmis",
+      "forgotDescription": "Syötä tilisi sähköpostiosoite saadaksesi vahvistuskoodin.",
+      "forgotLink": "Unohditko salasanasi?",
+      "forgotTitle": "Unohditko salasanasi?",
+      "invalid": "Virheellinen vahvistuskoodi",
+      "newPasswordDescription": "Valitse tilillesi uusi salasana.",
+      "newPasswordTitle": "Luo uusi salasana",
+      "passwordChangeDescription": "Syötä sähköpostiisi lähetetty koodi.",
+      "passwordChangeTitle": "Vahvista salasanan vaihto",
+      "registrationDescription": "Syötä sähköpostiisi lähetetty koodi tilisi luomisen loppuun saattamiseksi.",
+      "registrationTitle": "Vahvista sähköpostiosoitteesi",
+      "requestFailed": "Vahvistuskoodin lähettäminen epäonnistui",
+      "resend": "Lähetä koodi uudelleen",
+      "resendFailed": "Koodin uudelleenlähetys epäonnistui",
+      "resendIn": "Uudelleenlähetys mahdollinen {{seconds}}s kuluttua",
+      "resetDescription": "Syötä sähköpostiisi lähetetty koodi.",
+      "resetTitle": "Palauta salasanasi",
+      "send": "Lähetä koodi"
+    },
     "register": {
       "confirmPasswordLabel": "Vahvista salasana",
       "confirmPasswordPlaceholder": "Vahvista salasanasi",
       "emailInvalid": "Anna kelvollinen sähköpostiosoite",
       "emailLabel": "Henkilökohtainen sähköposti",
       "emailPlaceholder": "Kirjoita henkilökohtainen sähköpostiosoitteesi",
+      "emailTaken": "Sähköpostiosoite on jo rekisteröity",
       "information": {
         "color1": "Profiilin väri yksi",
         "color2": "Profiilin väri kaksi",
@@ -141,7 +170,8 @@
       "passwordLabel": "Salasana",
       "passwordMismatch": "Salasanat eivät täsmää",
       "passwordPlaceholder": "Luo salasana (käytetään tunnuslauseena)",
-      "passwordWeak": "Salasanassa on oltava vähintään 8 merkkiä kirjaimilla ja numeroilla"
+      "passwordWeak": "Salasanassa on oltava vähintään 8 merkkiä kirjaimilla ja numeroilla",
+      "submit": "Luo tili"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "Muokata",
         "editProfile": "Muokata",
+        "emailLabel": "Sähköposti",
         "logoutButton": "Kirjaudu ulos",
         "nicknameLabel": "Lempinimi",
-        "nicknamePlaceholder": "Kirjoita lempinimesi"
+        "nicknamePlaceholder": "Kirjoita lempinimesi",
+        "noEmail": "Ei linkitettyä sähköpostiosoitetta"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "Profiilin väri kaksi",
         "title": "Muokkaa profiilikuvaa",
         "userIcon": "Käyttäjäkuvake"
+      },
+      "security": {
+        "currentEmailLabel": "Nykyinen sähköpostiosoite",
+        "emailDescription": "Vahvistamme nykyisen ja uuden sähköpostiosoitteesi.",
+        "emailSame": "Uuden sähköpostiosoitteen on oltava eri kuin nykyinen sähköpostiosoitteesi",
+        "emailTitle": "Vaihda sähköpostiosoite",
+        "newEmailLabel": "Uusi sähköpostiosoite",
+        "passwordDescription": "Lähetämme vahvistuskoodin tilisi sähköpostiosoitteeseen.",
+        "passwordTitle": "Vaihda salasana",
+        "title": "Tilin turvallisuus"
       },
       "register": {
         "cta": "Aloita",
@@ -1451,9 +1494,15 @@
     "close": "Lähellä"
   },
   "toasts": {
+    "emailChangeSuccess": "Sähköpostiosoite päivitetty onnistuneesti!",
     "linkCopied": "Linkki kopioitu leikepöydälle!",
     "loginSuccess": "Sisäänkirjautuminen onnistui!",
     "logoutSuccess": "Uloskirjautuminen onnistui!",
+    "otpResent": "Vahvistuskoodi on lähetetty uudelleen!",
+    "otpSent": "Vahvistuskoodi lähetetty sähköpostiisi!",
+    "passwordChangeSuccess": "Salasana vaihdettu onnistuneesti!",
+    "passwordResetError": "Salasanan nollaaminen epäonnistui",
+    "passwordResetSuccess": "Salasanan nollaus onnistui!",
     "registerSuccess": "Rekisteröity onnistuneesti!"
   }
 }

@@ -116,12 +116,41 @@
       "usePasskey": "Sử dụng passkey",
       "validationError": "Mật khẩu không chính xác hoặc không đầy đủ"
     },
+    "otp": {
+      "codeLabel": "Mã xác minh",
+      "continue": "Tiếp tục",
+      "emailNewDescription": "Nhập mã đã được gửi đến địa chỉ email mới của bạn.",
+      "emailNewTitle": "Xác minh email mới",
+      "emailOldDescription": "Nhập mã đã được gửi đến địa chỉ email hiện tại của bạn.",
+      "emailOldTitle": "Xác nhận email hiện tại",
+      "expired": "Mã xác minh đã hết hạn",
+      "expiresIn": "Mã hết hạn sau {{time}}",
+      "finish": "Hoàn tất",
+      "forgotDescription": "Nhập email tài khoản của bạn để nhận mã xác minh.",
+      "forgotLink": "Quên mật khẩu?",
+      "forgotTitle": "Quên mật khẩu?",
+      "invalid": "Mã xác minh không hợp lệ",
+      "newPasswordDescription": "Chọn mật khẩu mới cho tài khoản của bạn.",
+      "newPasswordTitle": "Tạo mật khẩu mới",
+      "passwordChangeDescription": "Nhập mã đã được gửi đến email của bạn.",
+      "passwordChangeTitle": "Xác nhận đổi mật khẩu",
+      "registrationDescription": "Nhập mã đã gửi đến email của bạn để hoàn tất tạo tài khoản.",
+      "registrationTitle": "Xác minh email của bạn",
+      "requestFailed": "Không thể gửi mã xác minh",
+      "resend": "Gửi lại mã",
+      "resendFailed": "Không thể gửi lại mã xác minh",
+      "resendIn": "Có thể gửi lại sau {{seconds}}s",
+      "resetDescription": "Nhập mã đã được gửi đến email của bạn.",
+      "resetTitle": "Đặt lại mật khẩu",
+      "send": "Gửi mã"
+    },
     "register": {
       "confirmPasswordLabel": "Xác nhận mật khẩu",
       "confirmPasswordPlaceholder": "Nhập lại mật khẩu",
       "emailInvalid": "Nhập địa chỉ email hợp lệ",
       "emailLabel": "Email cá nhân",
       "emailPlaceholder": "Nhập email cá nhân của bạn",
+      "emailTaken": "Email đã được đăng ký",
       "information": {
         "color1": "Màu hồ sơ số một",
         "color2": "Màu hồ sơ số hai",
@@ -141,7 +170,8 @@
       "passwordLabel": "Mật khẩu",
       "passwordMismatch": "Mật khẩu nhập lại không khớp",
       "passwordPlaceholder": "Tạo mật khẩu (được dùng làm mật ngữ)",
-      "passwordWeak": "Mật khẩu phải có ít nhất 8 ký tự gồm cả chữ và số"
+      "passwordWeak": "Mật khẩu phải có ít nhất 8 ký tự gồm cả chữ và số",
+      "submit": "Tạo tài khoản"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "Chỉnh sửa",
         "editProfile": "Chỉnh sửa",
+        "emailLabel": "Email",
         "logoutButton": "Đăng xuất",
         "nicknameLabel": "Biệt danh",
-        "nicknamePlaceholder": "Nhập biệt danh của bạn"
+        "nicknamePlaceholder": "Nhập biệt danh của bạn",
+        "noEmail": "Chưa liên kết email"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "Màu hồ sơ thứ hai",
         "title": "Chỉnh sửa ảnh hồ sơ",
         "userIcon": "Biểu tượng người dùng"
+      },
+      "security": {
+        "currentEmailLabel": "Email hiện tại",
+        "emailDescription": "Chúng tôi sẽ xác minh địa chỉ email hiện tại và email mới của bạn.",
+        "emailSame": "Email mới phải khác với email hiện tại",
+        "emailTitle": "Đổi email",
+        "newEmailLabel": "Địa chỉ email mới",
+        "passwordDescription": "Chúng tôi sẽ gửi mã xác minh đến email tài khoản của bạn.",
+        "passwordTitle": "Đổi mật khẩu",
+        "title": "Bảo mật tài khoản"
       },
       "register": {
         "cta": "Bắt đầu",
@@ -1451,9 +1494,15 @@
     "close": "Đóng"
   },
   "toasts": {
+    "emailChangeSuccess": "Cập nhật email thành công!",
     "linkCopied": "Đã sao chép liên kết vào clipboard!",
     "loginSuccess": "Đăng nhập thành công!",
     "logoutSuccess": "Đăng xuất thành công!",
+    "otpResent": "Đã gửi lại mã xác minh!",
+    "otpSent": "Đã gửi mã xác minh đến email của bạn!",
+    "passwordChangeSuccess": "Đổi mật khẩu thành công!",
+    "passwordResetError": "Không thể đặt lại mật khẩu",
+    "passwordResetSuccess": "Đặt lại mật khẩu thành công!",
     "registerSuccess": "Đã đăng ký thành công!"
   }
 }

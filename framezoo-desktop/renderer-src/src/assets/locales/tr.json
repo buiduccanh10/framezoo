@@ -116,12 +116,41 @@
       "usePasskey": "Şifre anahtarını kullan",
       "validationError": "Yanlış veya eksik şifreleme anahtarı"
     },
+    "otp": {
+      "codeLabel": "Doğrulama kodu",
+      "continue": "Devam etmek",
+      "emailNewDescription": "Yeni e-posta adresinize gönderilen kodu girin.",
+      "emailNewTitle": "Yeni e-postanızı doğrulayın.",
+      "emailOldDescription": "Mevcut e-posta adresinize gönderilen kodu girin.",
+      "emailOldTitle": "Geçerli e-posta adresinizi onaylayın.",
+      "expired": "Doğrulama kodunun süresi doldu.",
+      "expiresIn": "Kodun geçerlilik süresi {{time}} tarihinde sona eriyor.",
+      "finish": "Sona ermek",
+      "forgotDescription": "Doğrulama kodunu almak için hesap e-postanızı girin.",
+      "forgotLink": "Şifrenizi mi unuttunuz?",
+      "forgotTitle": "Parolanızı mı unuttunuz?",
+      "invalid": "Geçersiz doğrulama kodu",
+      "newPasswordDescription": "Hesabınız için yeni bir şifre belirleyin.",
+      "newPasswordTitle": "Yeni bir şifre oluştur",
+      "passwordChangeDescription": "E-postanıza gönderilen kodu girin.",
+      "passwordChangeTitle": "Parola değişikliğini onaylayın",
+      "registrationDescription": "Hesabınızı oluşturmayı tamamlamak için e-postanıza gönderilen kodu girin.",
+      "registrationTitle": "E-postanızı doğrulayın.",
+      "requestFailed": "Doğrulama kodu gönderilemedi.",
+      "resend": "Kodu yeniden gönder",
+      "resendFailed": "Kodu yeniden göndermek mümkün değil.",
+      "resendIn": "Yeniden gönderme işlemi {{seconds}}s'de mümkün.",
+      "resetDescription": "E-postanıza gönderilen kodu girin.",
+      "resetTitle": "Parolanızı sıfırlayın",
+      "send": "Kodu gönder"
+    },
     "register": {
       "confirmPasswordLabel": "Şifreyi Onayla",
       "confirmPasswordPlaceholder": "Şifrenizi onaylayın",
       "emailInvalid": "Geçerli bir e-posta adresi girin",
       "emailLabel": "Kişisel e-posta",
       "emailPlaceholder": "Kişisel e-postanızı girin",
+      "emailTaken": "E-posta zaten kayıtlı.",
       "information": {
         "color1": "Birinci hesap rengi",
         "color2": "İkinci hesap rengi",
@@ -141,7 +170,8 @@
       "passwordLabel": "Şifre",
       "passwordMismatch": "Şifreler eşleşmiyor",
       "passwordPlaceholder": "Bir şifre oluşturun (parolanız olarak kullanılır)",
-      "passwordWeak": "Şifre harf ve rakamlardan oluşan en az 8 karakterden oluşmalıdır"
+      "passwordWeak": "Şifre harf ve rakamlardan oluşan en az 8 karakterden oluşmalıdır",
+      "submit": "Hesap oluşturmak"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "Düzenlemek",
         "editProfile": "Düzenle",
+        "emailLabel": "E-posta",
         "logoutButton": "Çıkış yap",
         "nicknameLabel": "Takma ad",
-        "nicknamePlaceholder": "Takma adınızı girin"
+        "nicknamePlaceholder": "Takma adınızı girin",
+        "noEmail": "E-posta bağlantısı yok."
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "İkinci profil rengi",
         "title": "Profil resmini düzenle",
         "userIcon": "Kullanıcı simgesi"
+      },
+      "security": {
+        "currentEmailLabel": "Mevcut e-posta",
+        "emailDescription": "Mevcut ve yeni e-posta adreslerinizi doğrulayacağız.",
+        "emailSame": "Yeni e-posta adresiniz mevcut e-posta adresinizden farklı olmalıdır.",
+        "emailTitle": "E-postayı değiştir",
+        "newEmailLabel": "Yeni e-posta adresi",
+        "passwordDescription": "Hesap e-postanıza bir doğrulama kodu göndereceğiz.",
+        "passwordTitle": "Şifre değiştir",
+        "title": "Hesap güvenliği"
       },
       "register": {
         "cta": "Hadi başlayalım",
@@ -1451,9 +1494,15 @@
     "close": "Kapalı"
   },
   "toasts": {
+    "emailChangeSuccess": "E-posta başarıyla güncellendi!",
     "linkCopied": "Bağlantı panoya kopyalandı!",
     "loginSuccess": "Başarıyla giriş yaptınız!",
     "logoutSuccess": "Başarıyla çıkış yapıldı!",
+    "otpResent": "Doğrulama kodu yeniden gönderildi!",
+    "otpSent": "Doğrulama kodu e-posta adresinize gönderildi!",
+    "passwordChangeSuccess": "Şifre başarıyla değiştirildi!",
+    "passwordResetError": "Parola sıfırlama başarısız oldu.",
+    "passwordResetSuccess": "Şifre sıfırlama işlemi başarıyla tamamlandı!",
     "registerSuccess": "Başarıyla kaydoldunuz!"
   }
 }

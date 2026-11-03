@@ -116,12 +116,41 @@
       "usePasskey": "Gebruik de toegangssleutel",
       "validationError": "Incorrecte of incompleet wachtwoord"
     },
+    "otp": {
+      "codeLabel": "Verificatiecode",
+      "continue": "Doorgaan",
+      "emailNewDescription": "Voer de code in die naar uw nieuwe e-mailadres is verzonden.",
+      "emailNewTitle": "Verifieer je nieuwe e-mailadres",
+      "emailOldDescription": "Voer de code in die naar uw huidige e-mailadres is verzonden.",
+      "emailOldTitle": "Bevestig je huidige e-mailadres",
+      "expired": "De verificatiecode is verlopen.",
+      "expiresIn": "Code verloopt in {{time}}",
+      "finish": "Finish",
+      "forgotDescription": "Voer het e-mailadres van uw account in om een ​​verificatiecode te ontvangen.",
+      "forgotLink": "Wachtwoord vergeten?",
+      "forgotTitle": "Wachtwoord vergeten?",
+      "invalid": "Ongeldige verificatiecode",
+      "newPasswordDescription": "Kies een nieuw wachtwoord voor je account.",
+      "newPasswordTitle": "Maak een nieuw wachtwoord aan",
+      "passwordChangeDescription": "Voer de code in die naar uw e-mailadres is verzonden.",
+      "passwordChangeTitle": "Bevestig de wachtwoordwijziging",
+      "registrationDescription": "Voer de code in die naar uw e-mailadres is verzonden om het aanmaken van uw account te voltooien.",
+      "registrationTitle": "Verifieer je e-mailadres",
+      "requestFailed": "Het lukt niet om de verificatiecode te verzenden.",
+      "resend": "Code opnieuw verzenden",
+      "resendFailed": "Het lukte niet om de code opnieuw te verzenden.",
+      "resendIn": "Opnieuw verzenden beschikbaar in {{seconds}}s",
+      "resetDescription": "Voer de code in die naar uw e-mailadres is verzonden.",
+      "resetTitle": "Stel uw wachtwoord opnieuw in",
+      "send": "Code verzenden"
+    },
     "register": {
       "confirmPasswordLabel": "Bevestig wachtwoord",
       "confirmPasswordPlaceholder": "Bevestig uw wachtwoord",
       "emailInvalid": "Voer een geldig e-mailadres in",
       "emailLabel": "Persoonlijke e-mail",
       "emailPlaceholder": "Voer uw persoonlijke e-mailadres in",
+      "emailTaken": "Het e-mailadres is al geregistreerd.",
       "information": {
         "color1": "Profielkleur 1",
         "color2": "Profielkleur 2",
@@ -141,7 +170,8 @@
       "passwordLabel": "Wachtwoord",
       "passwordMismatch": "Wachtwoorden komen niet overeen",
       "passwordPlaceholder": "Maak een wachtwoord aan (gebruikt als uw wachtwoordzin)",
-      "passwordWeak": "Het wachtwoord moet minimaal 8 tekens lang zijn, met letters en cijfers"
+      "passwordWeak": "Het wachtwoord moet minimaal 8 tekens lang zijn, met letters en cijfers",
+      "submit": "Account aanmaken"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "Bewerking",
         "editProfile": "Bewerken",
+        "emailLabel": "E-mail",
         "logoutButton": "Uitloggen",
         "nicknameLabel": "Bijnaam",
-        "nicknamePlaceholder": "Voer uw bijnaam in"
+        "nicknamePlaceholder": "Voer uw bijnaam in",
+        "noEmail": "Geen e-mailadres gekoppeld"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "Profielkleur 2",
         "title": "Profielfoto bewerken",
         "userIcon": "Gebruikerspictogram"
+      },
+      "security": {
+        "currentEmailLabel": "Huidig ​​e-mailadres",
+        "emailDescription": "We zullen uw huidige en nieuwe e-mailadressen verifiëren.",
+        "emailSame": "Het nieuwe e-mailadres moet verschillen van uw huidige e-mailadres.",
+        "emailTitle": "E-mailadres wijzigen",
+        "newEmailLabel": "Nieuw e-mailadres",
+        "passwordDescription": "We sturen een verificatiecode naar het e-mailadres dat bij uw account hoort.",
+        "passwordTitle": "Wachtwoord wijzigen",
+        "title": "Accountbeveiliging"
       },
       "register": {
         "cta": "Aan de slag",
@@ -1451,9 +1494,15 @@
     "close": "Dichtbij"
   },
   "toasts": {
+    "emailChangeSuccess": "E-mailadres succesvol bijgewerkt!",
     "linkCopied": "Link gekopieerd naar klembord!",
     "loginSuccess": "Succesvol ingelogd!",
     "logoutSuccess": "Succesvol uitgelogd!",
+    "otpResent": "De verificatiecode is opnieuw verzonden!",
+    "otpSent": "De verificatiecode is naar uw e-mailadres verzonden!",
+    "passwordChangeSuccess": "Wachtwoord succesvol gewijzigd!",
+    "passwordResetError": "Wachtwoord opnieuw instellen mislukt",
+    "passwordResetSuccess": "Wachtwoord succesvol gereset!",
     "registerSuccess": "Succesvol geregistreerd!"
   }
 }

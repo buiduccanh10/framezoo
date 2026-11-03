@@ -116,12 +116,41 @@
       "usePasskey": "استخدم مفتاح المرور",
       "validationError": "جملة المرور خاطئة أو ناقصة"
     },
+    "otp": {
+      "codeLabel": "رمز التحقق",
+      "continue": "يكمل",
+      "emailNewDescription": "أدخل الرمز المرسل إلى بريدك الإلكتروني الجديد.",
+      "emailNewTitle": "تحقق من بريدك الإلكتروني الجديد",
+      "emailOldDescription": "أدخل الرمز المرسل إلى بريدك الإلكتروني الحالي.",
+      "emailOldTitle": "أكد بريدك الإلكتروني الحالي",
+      "expired": "انتهت صلاحية رمز التحقق",
+      "expiresIn": "ينتهي صلاحية الرمز في {{time}}",
+      "finish": "ينهي",
+      "forgotDescription": "أدخل بريدك الإلكتروني المسجل في حسابك لتلقي رمز التحقق.",
+      "forgotLink": "نسيت كلمة السر؟",
+      "forgotTitle": "هل نسيت كلمة السر؟",
+      "invalid": "رمز التحقق غير صالح",
+      "newPasswordDescription": "اختر كلمة مرور جديدة لحسابك.",
+      "newPasswordTitle": "أنشئ كلمة مرور جديدة",
+      "passwordChangeDescription": "أدخل الرمز المرسل إلى بريدك الإلكتروني.",
+      "passwordChangeTitle": "تأكيد تغيير كلمة المرور",
+      "registrationDescription": "أدخل الرمز المرسل إلى بريدك الإلكتروني لإكمال إنشاء حسابك.",
+      "registrationTitle": "تحقق من بريدك الإلكتروني",
+      "requestFailed": "تعذر إرسال رمز التحقق",
+      "resend": "أعد إرسال الرمز",
+      "resendFailed": "تعذر إعادة إرسال الرمز",
+      "resendIn": "إعادة الإرسال متاحة في {{seconds}}s",
+      "resetDescription": "أدخل الرمز المرسل إلى بريدك الإلكتروني.",
+      "resetTitle": "أعد تعيين كلمة المرور الخاصة بك",
+      "send": "إرسال الرمز"
+    },
     "register": {
       "confirmPasswordLabel": "تأكيد كلمة المرور",
       "confirmPasswordPlaceholder": "قم بتأكيد كلمة المرور الخاصة بك",
       "emailInvalid": "أدخل عنوان بريد إلكتروني صالحًا",
       "emailLabel": "البريد الإلكتروني الشخصي",
       "emailPlaceholder": "أدخل بريدك الإلكتروني الشخصي",
+      "emailTaken": "البريد الإلكتروني مسجل بالفعل",
       "information": {
         "color1": "لون الملف الشخصي الأول",
         "color2": "لون الملف الشخصي الثاني",
@@ -141,7 +170,8 @@
       "passwordLabel": "كلمة المرور",
       "passwordMismatch": "كلمات المرور غير متطابقة",
       "passwordPlaceholder": "إنشاء كلمة مرور (تُستخدم كعبارة المرور الخاصة بك)",
-      "passwordWeak": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل مكونة من حروف وأرقام"
+      "passwordWeak": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل مكونة من حروف وأرقام",
+      "submit": "إنشاء حساب"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "يحرر",
         "editProfile": "تعديل",
+        "emailLabel": "بريد إلكتروني",
         "logoutButton": "تسجيل الخروج",
         "nicknameLabel": "كنية",
-        "nicknamePlaceholder": "أدخل لقبك"
+        "nicknamePlaceholder": "أدخل لقبك",
+        "noEmail": "لا يوجد بريد إلكتروني مرتبط"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "لون الملف الشخصي الثاني",
         "title": "تعديل صورة الملف الشخصي",
         "userIcon": "أيقونة المستخدم"
+      },
+      "security": {
+        "currentEmailLabel": "البريد الإلكتروني الحالي",
+        "emailDescription": "سنقوم بالتحقق من عناوين بريدك الإلكتروني الحالية والجديدة.",
+        "emailSame": "يجب أن يكون البريد الإلكتروني الجديد مختلفًا عن بريدك الإلكتروني الحالي",
+        "emailTitle": "تغيير البريد الإلكتروني",
+        "newEmailLabel": "عنوان بريد إلكتروني جديد",
+        "passwordDescription": "سنرسل رمز التحقق إلى بريدك الإلكتروني الخاص بالحساب.",
+        "passwordTitle": "تغيير كلمة المرور",
+        "title": "أمان الحساب"
       },
       "register": {
         "cta": "ابدأ",
@@ -1451,9 +1494,15 @@
     "close": "يغلق"
   },
   "toasts": {
+    "emailChangeSuccess": "تم تحديث البريد الإلكتروني بنجاح!",
     "linkCopied": "تم نسخ الرابط إلى الحافظة!",
     "loginSuccess": "تم تسجيل الدخول بنجاح!",
     "logoutSuccess": "تم تسجيل الخروج بنجاح!",
+    "otpResent": "تم إعادة إرسال رمز التحقق!",
+    "otpSent": "تم إرسال رمز التحقق إلى بريدك الإلكتروني!",
+    "passwordChangeSuccess": "تم تغيير كلمة المرور بنجاح!",
+    "passwordResetError": "فشل إعادة تعيين كلمة المرور",
+    "passwordResetSuccess": "تمت إعادة تعيين كلمة المرور بنجاح!",
     "registerSuccess": "تم التسجيل بنجاح!"
   }
 }

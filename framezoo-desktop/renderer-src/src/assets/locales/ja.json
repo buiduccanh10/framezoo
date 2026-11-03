@@ -116,12 +116,41 @@
       "usePasskey": "パスキーを使用する",
       "validationError": "パスワードが間違っています"
     },
+    "otp": {
+      "codeLabel": "検証コード",
+      "continue": "続く",
+      "emailNewDescription": "新しいメールアドレスに送信されたコードを入力してください。",
+      "emailNewTitle": "新しいメールアドレスを確認してください",
+      "emailOldDescription": "現在お使いのメールアドレスに送信されたコードを入力してください。",
+      "emailOldTitle": "現在お使いのメールアドレスをご確認ください。",
+      "expired": "認証コードの有効期限が切れました",
+      "expiresIn": "コードの有効期限は{{time}}です",
+      "finish": "仕上げる",
+      "forgotDescription": "確認コードを受け取るには、アカウントに登録されているメールアドレスを入力してください。",
+      "forgotLink": "パスワードをお忘れですか？",
+      "forgotTitle": "パスワードをお忘れですか？",
+      "invalid": "無効な認証コード",
+      "newPasswordDescription": "アカウントの新しいパスワードを設定してください。",
+      "newPasswordTitle": "新しいパスワードを作成する",
+      "passwordChangeDescription": "メールで送信されたコードを入力してください。",
+      "passwordChangeTitle": "パスワードの変更を確認してください",
+      "registrationDescription": "アカウント作成を完了するには、メールで送信されたコードを入力してください。",
+      "registrationTitle": "メールアドレスを確認してください",
+      "requestFailed": "認証コードを送信できませんでした",
+      "resend": "再送信コード",
+      "resendFailed": "コードを再送信できませんでした",
+      "resendIn": "再送信は{{seconds}}sで可能です",
+      "resetDescription": "メールで送信されたコードを入力してください。",
+      "resetTitle": "パスワードをリセット",
+      "send": "コードを送信"
+    },
     "register": {
       "confirmPasswordLabel": "パスワードを認証する",
       "confirmPasswordPlaceholder": "パスワードを確認してください",
       "emailInvalid": "有効なメールアドレスを入力してください",
       "emailLabel": "個人メール",
       "emailPlaceholder": "個人のメールアドレスを入力してください",
+      "emailTaken": "メールアドレスは既に登録済みです",
       "information": {
         "color1": "プロフィールカラー1",
         "color2": "プロフィールカラー2",
@@ -141,7 +170,8 @@
       "passwordLabel": "パスワード",
       "passwordMismatch": "パスワードが一致しません",
       "passwordPlaceholder": "パスワードを作成します (パスフレーズとして使用)",
-      "passwordWeak": "パスワードは文字と数字を含む 8 文字以上である必要があります"
+      "passwordWeak": "パスワードは文字と数字を含む 8 文字以上である必要があります",
+      "submit": "アカウントを作成する"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "編集",
         "editProfile": "編集",
+        "emailLabel": "メール",
         "logoutButton": "退室",
         "nicknameLabel": "ニックネーム",
-        "nicknamePlaceholder": "ニックネームを入力してください"
+        "nicknamePlaceholder": "ニックネームを入力してください",
+        "noEmail": "メールアドレスはリンクされていません"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "プロフィールカラー2",
         "title": "プロフィール写真を編集する",
         "userIcon": "ユーザーアイコン"
+      },
+      "security": {
+        "currentEmailLabel": "現在のメール",
+        "emailDescription": "お客様の現在および新しいメールアドレスを確認させていただきます。",
+        "emailSame": "新しいメールアドレスは、現在使用しているメールアドレスとは異なるものにする必要があります。",
+        "emailTitle": "メールアドレスを変更する",
+        "newEmailLabel": "新しいメールアドレス",
+        "passwordDescription": "お客様のアカウントに登録されているメールアドレスに確認コードをお送りします。",
+        "passwordTitle": "パスワードを変更する",
+        "title": "アカウントのセキュリティ"
       },
       "register": {
         "cta": "始めましょう",
@@ -1451,9 +1494,15 @@
     "close": "近い"
   },
   "toasts": {
+    "emailChangeSuccess": "メールの更新に成功しました！",
     "linkCopied": "リンクがクリップボードにコピーされました!",
     "loginSuccess": "ログインに成功しました！",
     "logoutSuccess": "正常にログアウトされました!",
+    "otpResent": "認証コードを再送しました！",
+    "otpSent": "確認コードがメールで送信されました！",
+    "passwordChangeSuccess": "パスワードが正常に変更されました！",
+    "passwordResetError": "パスワードのリセットに失敗しました",
+    "passwordResetSuccess": "パスワードのリセットに成功しました！",
     "registerSuccess": "無事に登録されました！"
   }
 }

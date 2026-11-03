@@ -116,12 +116,41 @@
       "usePasskey": "Kasutage pääsukoodi",
       "validationError": "Vale vōi mittetäielik paroolifraas"
     },
+    "otp": {
+      "codeLabel": "Kinnituskood",
+      "continue": "Jätka",
+      "emailNewDescription": "Sisestage oma uuele e-posti aadressile saadetud kood.",
+      "emailNewTitle": "Kinnitage oma uus e-posti aadress",
+      "emailOldDescription": "Sisestage kood, mis saadeti teie praegusele e-posti aadressile.",
+      "emailOldTitle": "Kinnitage oma praegune e-posti aadress",
+      "expired": "Kinnituskood on aegunud",
+      "expiresIn": "Kood aegub {{time}} pärast",
+      "finish": "Lõpeta",
+      "forgotDescription": "Kinnituskoodi saamiseks sisesta oma konto e-posti aadress.",
+      "forgotLink": "Unustasid parooli?",
+      "forgotTitle": "Unustasid parooli?",
+      "invalid": "Kehtetu kinnituskood",
+      "newPasswordDescription": "Valige oma kontole uus parool.",
+      "newPasswordTitle": "Loo uus parool",
+      "passwordChangeDescription": "Sisesta oma e-posti aadressile saadetud kood.",
+      "passwordChangeTitle": "Kinnita parooli muutmine",
+      "registrationDescription": "Konto loomise lõpetamiseks sisestage oma e-posti aadressile saadetud kood.",
+      "registrationTitle": "Kinnitage oma e-posti aadress",
+      "requestFailed": "Kinnituskoodi saatmine ebaõnnestus",
+      "resend": "Saada kood uuesti",
+      "resendFailed": "Koodi uuesti saatmine ebaõnnestus",
+      "resendIn": "Uuesti saatmine on võimalik {{seconds}}s pärast",
+      "resetDescription": "Sisesta oma e-posti aadressile saadetud kood.",
+      "resetTitle": "Lähtesta oma parool",
+      "send": "Saada kood"
+    },
     "register": {
       "confirmPasswordLabel": "Kinnitage parool",
       "confirmPasswordPlaceholder": "Kinnitage oma parool",
       "emailInvalid": "Sisestage kehtiv e-posti aadress",
       "emailLabel": "Isiklik email",
       "emailPlaceholder": "Sisestage oma isiklik e-posti aadress",
+      "emailTaken": "E-post on juba registreeritud",
       "information": {
         "color1": "Profiili värv üks",
         "color2": "Profiili värv kaks",
@@ -141,7 +170,8 @@
       "passwordLabel": "Parool",
       "passwordMismatch": "Paroolid ei ühti",
       "passwordPlaceholder": "Looge parool (kasutatakse paroolina)",
-      "passwordWeak": "Parool peab koosnema vähemalt 8 tähemärgist koos tähtede ja numbritega"
+      "passwordWeak": "Parool peab koosnema vähemalt 8 tähemärgist koos tähtede ja numbritega",
+      "submit": "Loo konto"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "Redigeeri",
         "editProfile": "Muuda",
+        "emailLabel": "E-post",
         "logoutButton": "Logi välja",
         "nicknameLabel": "Hüüdnimi",
-        "nicknamePlaceholder": "Sisestage oma hüüdnimi"
+        "nicknamePlaceholder": "Sisestage oma hüüdnimi",
+        "noEmail": "E-posti aadressi pole lingitud"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "Profiili värv kaks",
         "title": "Redigeeri profiilipilti",
         "userIcon": "Kasutaja ikoon"
+      },
+      "security": {
+        "currentEmailLabel": "Praegune e-posti aadress",
+        "emailDescription": "Kontrollime teie praegust ja uut e-posti aadressi.",
+        "emailSame": "Uus e-posti aadress peab erinema teie praegusest e-posti aadressist",
+        "emailTitle": "Muuda e-posti aadressi",
+        "newEmailLabel": "Uus e-posti aadress",
+        "passwordDescription": "Saadame kinnituskoodi teie konto e-posti aadressile.",
+        "passwordTitle": "Parooli muutmine",
+        "title": "Konto turvalisus"
       },
       "register": {
         "cta": "Alustama",
@@ -1451,9 +1494,15 @@
     "close": "Sule"
   },
   "toasts": {
+    "emailChangeSuccess": "Meiliaadressi uuendamine õnnestus!",
     "linkCopied": "Link on lõikelauale kopeeritud!",
     "loginSuccess": "Sisselogimine õnnestus!",
     "logoutSuccess": "Välja logiti edukalt!",
+    "otpResent": "Kinnituskood on uuesti saadetud!",
+    "otpSent": "Kinnituskood saadeti teie e-posti aadressile!",
+    "passwordChangeSuccess": "Parool on edukalt muudetud!",
+    "passwordResetError": "Parooli lähtestamine ebaõnnestus",
+    "passwordResetSuccess": "Parooli lähtestamine õnnestus!",
     "registerSuccess": "Registreerumine õnnestus!"
   }
 }

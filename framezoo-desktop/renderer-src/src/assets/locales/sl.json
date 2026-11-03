@@ -116,12 +116,41 @@
       "usePasskey": "Uporabi geslo",
       "validationError": "Nepravilna ali nepopolna varnostna fraza"
     },
+    "otp": {
+      "codeLabel": "Potrditvena koda",
+      "continue": "Nadaljuj",
+      "emailNewDescription": "Vnesite kodo, poslano na vaš novi e-poštni naslov.",
+      "emailNewTitle": "Potrdite svoj novi e-poštni naslov",
+      "emailOldDescription": "Vnesite kodo, poslano na vaš trenutni e-poštni naslov.",
+      "emailOldTitle": "Potrdite svoj trenutni e-poštni naslov",
+      "expired": "Koda za preverjanje je potekla",
+      "expiresIn": "Koda poteče čez {{time}}",
+      "finish": "Končaj",
+      "forgotDescription": "Vnesite e-poštni naslov svojega računa, da prejmete potrditveno kodo.",
+      "forgotLink": "Ste pozabili geslo?",
+      "forgotTitle": "Ste pozabili geslo?",
+      "invalid": "Neveljavna potrditvena koda",
+      "newPasswordDescription": "Izberite novo geslo za svoj račun.",
+      "newPasswordTitle": "Ustvari novo geslo",
+      "passwordChangeDescription": "Vnesite kodo, poslano na vaš e-poštni naslov.",
+      "passwordChangeTitle": "Potrdite spremembo gesla",
+      "registrationDescription": "Vnesite kodo, poslano na vaš e-poštni naslov, da dokončate ustvarjanje računa.",
+      "registrationTitle": "Potrdite svoj e-poštni naslov",
+      "requestFailed": "Potrditvene kode ni mogoče poslati",
+      "resend": "Ponovno pošlji kodo",
+      "resendFailed": "Kode ni mogoče ponovno poslati",
+      "resendIn": "Ponovno pošiljanje na voljo čez {{seconds}}s",
+      "resetDescription": "Vnesite kodo, poslano na vaš e-poštni naslov.",
+      "resetTitle": "Ponastavite geslo",
+      "send": "Pošlji kodo"
+    },
     "register": {
       "confirmPasswordLabel": "Potrdite geslo",
       "confirmPasswordPlaceholder": "Potrdite svoje geslo",
       "emailInvalid": "Vnesite veljaven e-poštni naslov",
       "emailLabel": "Osebni e-poštni naslov",
       "emailPlaceholder": "Vnesite svoj osebni e-mail",
+      "emailTaken": "E-pošta je že registrirana",
       "information": {
         "color1": "Barva prvega profila",
         "color2": "Barva drugega profila",
@@ -141,7 +170,8 @@
       "passwordLabel": "Geslo",
       "passwordMismatch": "Gesli se ne ujemata",
       "passwordPlaceholder": "Ustvarite geslo (uporablja se kot vaše geslo)",
-      "passwordWeak": "Geslo mora imeti vsaj 8 znakov s črkami in številkami"
+      "passwordWeak": "Geslo mora imeti vsaj 8 znakov s črkami in številkami",
+      "submit": "Ustvari račun"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "Uredi",
         "editProfile": "Uredi",
+        "emailLabel": "E-pošta",
         "logoutButton": "Odjava",
         "nicknameLabel": "Vzdevek",
-        "nicknamePlaceholder": "Vnesite svoj vzdevek"
+        "nicknamePlaceholder": "Vnesite svoj vzdevek",
+        "noEmail": "Ni povezanega e-poštnega naslova"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "Barva drugega profila",
         "title": "Urejanje slike profila",
         "userIcon": "Ikona uporabnika"
+      },
+      "security": {
+        "currentEmailLabel": "Trenutni e-poštni naslov",
+        "emailDescription": "Preverili bomo vaš trenutni in novi e-poštni naslov.",
+        "emailSame": "Novi e-poštni naslov se mora razlikovati od vašega trenutnega e-poštnega naslova",
+        "emailTitle": "Spremeni e-pošto",
+        "newEmailLabel": "Nov e-poštni naslov",
+        "passwordDescription": "Na vaš e-poštni naslov za račun vam bomo poslali potrditveno kodo.",
+        "passwordTitle": "Spremeni geslo",
+        "title": "Varnost računa"
       },
       "register": {
         "cta": "Začni",
@@ -1451,9 +1494,15 @@
     "close": "Zapri"
   },
   "toasts": {
+    "emailChangeSuccess": "E-pošta je bila uspešno posodobljena!",
     "linkCopied": "Povezava je kopirana v odložišče!",
     "loginSuccess": "Uspešno prijavljeni!",
     "logoutSuccess": "Uspešno odjavljen!",
+    "otpResent": "Potrditvena koda je bila ponovno poslana!",
+    "otpSent": "Potrditvena koda je bila poslana na vaš e-poštni naslov!",
+    "passwordChangeSuccess": "Geslo je bilo uspešno spremenjeno!",
+    "passwordResetError": "Ponastavitev gesla ni uspela",
+    "passwordResetSuccess": "Ponastavitev gesla je bila uspešna!",
     "registerSuccess": "Uspešno registriran!"
   }
 }

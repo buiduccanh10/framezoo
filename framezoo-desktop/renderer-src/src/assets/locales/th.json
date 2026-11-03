@@ -116,12 +116,41 @@
       "usePasskey": "ใช้รหัสผ่าน",
       "validationError": "รหัสผ่านไม่ถูกต้อง หรือ รหัสผ่านไม่สมบูรณ์"
     },
+    "otp": {
+      "codeLabel": "รหัสยืนยัน",
+      "continue": "ดำเนินการต่อ",
+      "emailNewDescription": "ป้อนรหัสที่ส่งไปยังอีเมลใหม่ของคุณ",
+      "emailNewTitle": "ยืนยันอีเมลใหม่ของคุณ",
+      "emailOldDescription": "ป้อนรหัสที่ส่งไปยังอีเมลปัจจุบันของคุณ",
+      "emailOldTitle": "ยืนยันอีเมลปัจจุบันของคุณ",
+      "expired": "รหัสยืนยันหมดอายุแล้ว",
+      "expiresIn": "รหัสจะหมดอายุใน {{time}}",
+      "finish": "เสร็จ",
+      "forgotDescription": "กรุณาป้อนอีเมลบัญชีของคุณเพื่อรับรหัสยืนยัน",
+      "forgotLink": "ลืมรหัสผ่านใช่ไหม?",
+      "forgotTitle": "ลืมรหัสผ่านใช่ไหม?",
+      "invalid": "รหัสยืนยันไม่ถูกต้อง",
+      "newPasswordDescription": "เลือกตั้งรหัสผ่านใหม่สำหรับบัญชีของคุณ",
+      "newPasswordTitle": "สร้างรหัสผ่านใหม่",
+      "passwordChangeDescription": "ป้อนรหัสที่ส่งไปยังอีเมลของคุณ",
+      "passwordChangeTitle": "ยืนยันการเปลี่ยนรหัสผ่าน",
+      "registrationDescription": "ป้อนรหัสที่ส่งไปยังอีเมลของคุณเพื่อสร้างบัญชีให้เสร็จสมบูรณ์",
+      "registrationTitle": "ยืนยันอีเมลของคุณ",
+      "requestFailed": "ไม่สามารถส่งรหัสยืนยันได้",
+      "resend": "ส่งรหัสอีกครั้ง",
+      "resendFailed": "ไม่สามารถส่งรหัสซ้ำได้",
+      "resendIn": "สามารถส่งซ้ำได้ใน {{seconds}}s",
+      "resetDescription": "ป้อนรหัสที่ส่งไปยังอีเมลของคุณ",
+      "resetTitle": "รีเซ็ตรหัสผ่านของคุณ",
+      "send": "ส่งรหัส"
+    },
     "register": {
       "confirmPasswordLabel": "ยืนยันรหัสผ่าน",
       "confirmPasswordPlaceholder": "ยืนยันรหัสผ่านของคุณ",
       "emailInvalid": "ป้อนที่อยู่อีเมลที่ถูกต้อง",
       "emailLabel": "อีเมลส่วนตัว",
       "emailPlaceholder": "กรอกอีเมลส่วนตัวของคุณ",
+      "emailTaken": "อีเมลนี้ลงทะเบียนเรียบร้อยแล้ว",
       "information": {
         "color1": "สีโปรไฟล์ 1",
         "color2": "สีโปรไฟล์ 2",
@@ -141,7 +170,8 @@
       "passwordLabel": "รหัสผ่าน",
       "passwordMismatch": "รหัสผ่านไม่ตรงกัน",
       "passwordPlaceholder": "สร้างรหัสผ่าน (ใช้เป็นข้อความรหัสผ่านของคุณ)",
-      "passwordWeak": "รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษรพร้อมตัวอักษรและตัวเลข"
+      "passwordWeak": "รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษรพร้อมตัวอักษรและตัวเลข",
+      "submit": "สร้างบัญชี"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "แก้ไข",
         "editProfile": "แก้ไข",
+        "emailLabel": "อีเมล",
         "logoutButton": "ออกจากระบบ",
         "nicknameLabel": "ชื่อเล่น",
-        "nicknamePlaceholder": "ป้อนชื่อเล่นของคุณ"
+        "nicknamePlaceholder": "ป้อนชื่อเล่นของคุณ",
+        "noEmail": "ไม่มีการเชื่อมโยงอีเมล"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "สีของโปรไฟล์ 2",
         "title": "แก้ไขรูปโปรไฟล์",
         "userIcon": "สัญลักษณ์ผู้ใช้"
+      },
+      "security": {
+        "currentEmailLabel": "อีเมลปัจจุบัน",
+        "emailDescription": "เราจะตรวจสอบความถูกต้องของที่อยู่อีเมลปัจจุบันและที่อยู่อีเมลใหม่ของคุณ",
+        "emailSame": "อีเมลใหม่ต้องแตกต่างจากอีเมลปัจจุบันของคุณ",
+        "emailTitle": "เปลี่ยนอีเมล",
+        "newEmailLabel": "ที่อยู่อีเมลใหม่",
+        "passwordDescription": "เราจะส่งรหัสยืนยันไปยังอีเมลบัญชีของคุณ",
+        "passwordTitle": "เปลี่ยนรหัสผ่าน",
+        "title": "ความปลอดภัยของบัญชี"
       },
       "register": {
         "cta": "เริ่มเลย",
@@ -1451,9 +1494,15 @@
     "close": "ปิด"
   },
   "toasts": {
+    "emailChangeSuccess": "อัปเดตอีเมลสำเร็จแล้ว!",
     "linkCopied": "คัดลอกลิงก์ไปยังคลิปบอร์ดแล้ว!",
     "loginSuccess": "เข้าสู่ระบบสำเร็จ!",
     "logoutSuccess": "ออกจากระบบเรียบร้อยแล้ว!",
+    "otpResent": "รหัสยืนยันถูกส่งซ้ำแล้ว!",
+    "otpSent": "รหัสยืนยันถูกส่งไปยังอีเมลของคุณแล้ว!",
+    "passwordChangeSuccess": "เปลี่ยนรหัสผ่านสำเร็จแล้ว!",
+    "passwordResetError": "ไม่สามารถรีเซ็ตรหัสผ่านได้",
+    "passwordResetSuccess": "รีเซ็ตรหัสผ่านสำเร็จแล้ว!",
     "registerSuccess": "ลงทะเบียนเรียบร้อยแล้ว!"
   }
 }

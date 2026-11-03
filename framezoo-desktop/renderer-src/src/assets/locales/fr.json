@@ -116,12 +116,41 @@
       "usePasskey": "Utiliser le mot de passe",
       "validationError": "Phrase d'accès incorrecte ou incomplète"
     },
+    "otp": {
+      "codeLabel": "Le code de vérification",
+      "continue": "Continuer",
+      "emailNewDescription": "Saisissez le code envoyé à votre nouvelle adresse e-mail.",
+      "emailNewTitle": "Vérifiez votre nouveau courriel",
+      "emailOldDescription": "Saisissez le code envoyé à votre adresse électronique actuelle.",
+      "emailOldTitle": "Veuillez confirmer votre adresse courriel actuelle.",
+      "expired": "Code de vérification expiré",
+      "expiresIn": "Le code expire dans {{time}}",
+      "finish": "Finition",
+      "forgotDescription": "Saisissez l'adresse e-mail de votre compte pour recevoir un code de vérification.",
+      "forgotLink": "Mot de passe oublié ?",
+      "forgotTitle": "Mot de passe oublié ?",
+      "invalid": "Code de vérification invalide",
+      "newPasswordDescription": "Choisissez un nouveau mot de passe pour votre compte.",
+      "newPasswordTitle": "Créer un nouveau mot de passe",
+      "passwordChangeDescription": "Saisissez le code qui vous a été envoyé par courriel.",
+      "passwordChangeTitle": "Confirmer le changement de mot de passe",
+      "registrationDescription": "Saisissez le code envoyé à votre adresse e-mail pour terminer la création de votre compte.",
+      "registrationTitle": "Vérifiez votre courriel",
+      "requestFailed": "Impossible d'envoyer le code de vérification",
+      "resend": "Renvoyer le code",
+      "resendFailed": "Impossible de renvoyer le code",
+      "resendIn": "Renvoi disponible dans {{seconds}}s",
+      "resetDescription": "Saisissez le code qui vous a été envoyé par courriel.",
+      "resetTitle": "Réinitialisez votre mot de passe",
+      "send": "Envoyer le code"
+    },
     "register": {
       "confirmPasswordLabel": "Confirmez le mot de passe",
       "confirmPasswordPlaceholder": "Confirmez votre mot de passe",
       "emailInvalid": "Entrez une adresse e-mail valide",
       "emailLabel": "E-mail personnel",
       "emailPlaceholder": "Entrez votre email personnel",
+      "emailTaken": "L'adresse e-mail est déjà enregistrée.",
       "information": {
         "color1": "Première couleur de profil",
         "color2": "Seconde couleur de profil",
@@ -141,7 +170,8 @@
       "passwordLabel": "Mot de passe",
       "passwordMismatch": "Les mots de passe ne correspondent pas",
       "passwordPlaceholder": "Créez un mot de passe (utilisé comme phrase secrète)",
-      "passwordWeak": "Le mot de passe doit contenir au moins 8 caractères avec des lettres et des chiffres"
+      "passwordWeak": "Le mot de passe doit contenir au moins 8 caractères avec des lettres et des chiffres",
+      "submit": "Créer un compte"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "Modifier",
         "editProfile": "Éditer",
+        "emailLabel": "E-mail",
         "logoutButton": "Se déconnecter",
         "nicknameLabel": "Surnom",
-        "nicknamePlaceholder": "Entrez votre pseudo"
+        "nicknamePlaceholder": "Entrez votre pseudo",
+        "noEmail": "Aucun courriel associé"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "Seconde couleur de profil",
         "title": "Modifier la photo de profil",
         "userIcon": "Icône de l'utilisateur"
+      },
+      "security": {
+        "currentEmailLabel": "Courriel actuel",
+        "emailDescription": "Nous vérifierons vos adresses e-mail actuelles et nouvelles.",
+        "emailSame": "Votre nouvelle adresse e-mail doit être différente de votre adresse e-mail actuelle.",
+        "emailTitle": "Changer d'adresse e-mail",
+        "newEmailLabel": "Nouvelle adresse e-mail",
+        "passwordDescription": "Nous enverrons un code de vérification à l'adresse e-mail associée à votre compte.",
+        "passwordTitle": "Changer le mot de passe",
+        "title": "Sécurité du compte"
       },
       "register": {
         "cta": "Commencer",
@@ -1451,9 +1494,15 @@
     "close": "Fermer"
   },
   "toasts": {
+    "emailChangeSuccess": "Adresse électronique mise à jour avec succès !",
     "linkCopied": "Lien copié dans le presse-papier !",
     "loginSuccess": "Connecté avec succès !",
     "logoutSuccess": "Déconnexion réussie !",
+    "otpResent": "Le code de vérification a été renvoyé !",
+    "otpSent": "Code de vérification envoyé à votre adresse e-mail !",
+    "passwordChangeSuccess": "Mot de passe modifié avec succès !",
+    "passwordResetError": "Échec de la réinitialisation du mot de passe",
+    "passwordResetSuccess": "Mot de passe réinitialisé avec succès !",
     "registerSuccess": "Inscrit avec succès !"
   }
 }

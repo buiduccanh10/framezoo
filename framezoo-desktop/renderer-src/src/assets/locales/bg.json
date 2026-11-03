@@ -116,12 +116,41 @@
       "usePasskey": "Използвайте парола",
       "validationError": "Некоректна или непълна паролна фраза"
     },
+    "otp": {
+      "codeLabel": "Код за потвърждение",
+      "continue": "Продължи",
+      "emailNewDescription": "Въведете кода, изпратен на новия ви имейл адрес.",
+      "emailNewTitle": "Потвърдете новия си имейл",
+      "emailOldDescription": "Въведете кода, изпратен на текущия ви имейл адрес.",
+      "emailOldTitle": "Потвърдете текущия си имейл",
+      "expired": "Кодът за потвърждение е изтекъл",
+      "expiresIn": "Кодът изтича след {{time}}",
+      "finish": "Завършек",
+      "forgotDescription": "Въведете имейл адреса на акаунта си, за да получите код за потвърждение.",
+      "forgotLink": "Забравена парола?",
+      "forgotTitle": "Забравена парола?",
+      "invalid": "Невалиден код за потвърждение",
+      "newPasswordDescription": "Изберете нова парола за вашия акаунт.",
+      "newPasswordTitle": "Създайте нова парола",
+      "passwordChangeDescription": "Въведете кода, изпратен на вашия имейл.",
+      "passwordChangeTitle": "Потвърдете промяната на паролата",
+      "registrationDescription": "Въведете кода, изпратен на имейла ви, за да завършите създаването на акаунта си.",
+      "registrationTitle": "Потвърдете имейла си",
+      "requestFailed": "Неуспешно изпращане на код за потвърждение",
+      "resend": "Изпрати кода отново",
+      "resendFailed": "Не може да се изпрати кодът отново",
+      "resendIn": "Повторно изпращане е възможно след {{seconds}} сек.",
+      "resetDescription": "Въведете кода, изпратен на вашия имейл.",
+      "resetTitle": "Нулирайте паролата си",
+      "send": "Изпрати код"
+    },
     "register": {
       "confirmPasswordLabel": "Потвърдете паролата",
       "confirmPasswordPlaceholder": "Потвърдете паролата си",
       "emailInvalid": "Въведете валиден имейл адрес",
       "emailLabel": "Личен имейл",
       "emailPlaceholder": "Въведете личния си имейл",
+      "emailTaken": "Имейлът вече е регистриран",
       "information": {
         "color1": "Профилен цвят едно",
         "color2": "Профилен цвят две",
@@ -141,7 +170,8 @@
       "passwordLabel": "Парола",
       "passwordMismatch": "Паролите не съвпадат",
       "passwordPlaceholder": "Създайте парола (използвана като ваша парола)",
-      "passwordWeak": "Паролата трябва да съдържа поне 8 знака с букви и цифри"
+      "passwordWeak": "Паролата трябва да съдържа поне 8 знака с букви и цифри",
+      "submit": "Създаване на акаунт"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "Редактиране",
         "editProfile": "Редактиране",
+        "emailLabel": "Имейл",
         "logoutButton": "Излезте",
         "nicknameLabel": "Псевдоним",
-        "nicknamePlaceholder": "Въведете псевдонима си"
+        "nicknamePlaceholder": "Въведете псевдонима си",
+        "noEmail": "Няма свързан имейл"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "Цвят на профила два",
         "title": "Редактиране на профилна снимка",
         "userIcon": "Икона на потребител"
+      },
+      "security": {
+        "currentEmailLabel": "Текущ имейл",
+        "emailDescription": "Ще потвърдим настоящия и новия ви имейл адрес.",
+        "emailSame": "Новият имейл трябва да е различен от текущия ви имейл",
+        "emailTitle": "Промяна на имейл адрес",
+        "newEmailLabel": "Нов имейл адрес",
+        "passwordDescription": "Ще изпратим код за потвърждение на имейл адреса на вашия акаунт.",
+        "passwordTitle": "Промяна на паролата",
+        "title": "Сигурност на акаунта"
       },
       "register": {
         "cta": "Започнете",
@@ -1451,9 +1494,15 @@
     "close": "Затвори"
   },
   "toasts": {
+    "emailChangeSuccess": "Имейлът е актуализиран успешно!",
     "linkCopied": "Връзката е копирана в клипборда!",
     "loginSuccess": "Влязохте успешно!",
     "logoutSuccess": "Излязохте успешно!",
+    "otpResent": "Кодът за потвърждение е изпратен отново!",
+    "otpSent": "Кодът за потвърждение е изпратен на вашия имейл!",
+    "passwordChangeSuccess": "Паролата е променена успешно!",
+    "passwordResetError": "Неуспешно нулиране на паролата",
+    "passwordResetSuccess": "Успешно възстановяване на паролата!",
     "registerSuccess": "Успешна регистрация!"
   }
 }

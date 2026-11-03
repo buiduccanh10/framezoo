@@ -29,7 +29,7 @@ export function ModalCard(props: { children?: ReactNode; className?: string }) {
         props.className,
       )}
     >
-      <div className="w-full bg-modal-background rounded-xl p-8">
+      <div className="w-full bg-modal-background rounded-xl p-8 border border-white/10 shadow-2xl">
         {props.children}
       </div>
     </div>
@@ -99,7 +99,7 @@ export function FancyModal(props: {
           <Flare.Base
             className={classNames(
               "group rounded-3xl bg-background-main transition-colors duration-300 focus:relative focus:z-10",
-              "w-full p-6 bg-mediaCard-hoverBackground/60 backdrop-filter backdrop-blur-lg shadow-lg",
+              "w-full p-6 bg-modal-background border border-white/10 shadow-2xl",
               props.size === "md" ? "max-w-md" : "max-w-2xl",
               props.size === "xl" ? "max-w-7xl" : "max-w-2xl",
             )}

@@ -116,12 +116,41 @@
       "usePasskey": "Použijte přístupový klíč",
       "validationError": "Nesprávná nebo neúplná přístupová fráze"
     },
+    "otp": {
+      "codeLabel": "Ověřovací kód",
+      "continue": "Pokračovat",
+      "emailNewDescription": "Zadejte kód zaslaný na váš nový e-mail.",
+      "emailNewTitle": "Ověřte svůj nový e-mail",
+      "emailOldDescription": "Zadejte kód zaslaný na váš aktuální e-mail.",
+      "emailOldTitle": "Potvrďte svůj aktuální e-mail",
+      "expired": "Platnost ověřovacího kódu vypršela.",
+      "expiresIn": "Platnost kódu vyprší za {{time}}",
+      "finish": "Dokončit",
+      "forgotDescription": "Zadejte e-mailovou adresu svého účtu a obdržíte ověřovací kód.",
+      "forgotLink": "Zapomněli jste heslo?",
+      "forgotTitle": "Zapomněli jste heslo?",
+      "invalid": "Neplatný ověřovací kód",
+      "newPasswordDescription": "Zvolte si nové heslo pro svůj účet.",
+      "newPasswordTitle": "Vytvořte si nové heslo",
+      "passwordChangeDescription": "Zadejte kód zaslaný na váš e-mail.",
+      "passwordChangeTitle": "Potvrdit změnu hesla",
+      "registrationDescription": "Zadejte kód zaslaný na váš e-mail pro dokončení vytváření účtu.",
+      "registrationTitle": "Ověřte svůj e-mail",
+      "requestFailed": "Nepodařilo se odeslat ověřovací kód",
+      "resend": "Znovu odeslat kód",
+      "resendFailed": "Nelze znovu odeslat kód",
+      "resendIn": "Znovu odeslat za {{seconds}} s",
+      "resetDescription": "Zadejte kód zaslaný na váš e-mail.",
+      "resetTitle": "Obnovte si heslo",
+      "send": "Odeslat kód"
+    },
     "register": {
       "confirmPasswordLabel": "Potvrďte heslo",
       "confirmPasswordPlaceholder": "Potvrďte své heslo",
       "emailInvalid": "Zadejte platnou e-mailovou adresu",
       "emailLabel": "Osobní email",
       "emailPlaceholder": "Zadejte svůj osobní e-mail",
+      "emailTaken": "E-mail je již zaregistrován",
       "information": {
         "color1": "První barva profilu",
         "color2": "Druhá barva profilu",
@@ -141,7 +170,8 @@
       "passwordLabel": "Heslo",
       "passwordMismatch": "Hesla se neshodují",
       "passwordPlaceholder": "Vytvořte heslo (používá se jako vaše přístupová fráze)",
-      "passwordWeak": "Heslo musí mít alespoň 8 znaků s písmeny a číslicemi"
+      "passwordWeak": "Heslo musí mít alespoň 8 znaků s písmeny a číslicemi",
+      "submit": "Vytvořit účet"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "Upravit",
         "editProfile": "Upravit",
+        "emailLabel": "E-mail",
         "logoutButton": "Odhlásit se",
         "nicknameLabel": "Přezdívka",
-        "nicknamePlaceholder": "Zadejte svou přezdívku"
+        "nicknamePlaceholder": "Zadejte svou přezdívku",
+        "noEmail": "Není propojen žádný e-mail"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "Druhá barva profilu",
         "title": "Upravit profilovou fotografii",
         "userIcon": "Ikona uživatele"
+      },
+      "security": {
+        "currentEmailLabel": "Aktuální e-mail",
+        "emailDescription": "Ověříme vaši aktuální i novou e-mailovou adresu.",
+        "emailSame": "Nový e-mail se musí lišit od vašeho aktuálního e-mailu",
+        "emailTitle": "Změnit e-mail",
+        "newEmailLabel": "Nová e-mailová adresa",
+        "passwordDescription": "Na e-mailovou adresu vašeho účtu vám zašleme ověřovací kód.",
+        "passwordTitle": "Změnit heslo",
+        "title": "Zabezpečení účtu"
       },
       "register": {
         "cta": "Začněte",
@@ -1451,9 +1494,15 @@
     "close": "Blízko"
   },
   "toasts": {
+    "emailChangeSuccess": "E-mail byl úspěšně aktualizován!",
     "linkCopied": "Odkaz zkopírován do schránky!",
     "loginSuccess": "Úspěšně přihlášen!",
     "logoutSuccess": "Úspěšně odhlášeno!",
+    "otpResent": "Ověřovací kód byl znovu odeslán!",
+    "otpSent": "Ověřovací kód byl odeslán na váš e-mail!",
+    "passwordChangeSuccess": "Heslo bylo úspěšně změněno!",
+    "passwordResetError": "Obnovení hesla se nezdařilo",
+    "passwordResetSuccess": "Úspěšné obnovení hesla!",
     "registerSuccess": "Úspěšně zaregistrováno!"
   }
 }

@@ -116,12 +116,41 @@
       "usePasskey": "પાસકીનો ઉપયોગ કરો",
       "validationError": "ખોટો અથવા અપૂર્ણ પાસફ્રેઝ"
     },
+    "otp": {
+      "codeLabel": "ચકાસણી કોડ",
+      "continue": "ચાલુ રાખો",
+      "emailNewDescription": "તમારા નવા ઇમેઇલ પર મોકલવામાં આવેલ કોડ દાખલ કરો.",
+      "emailNewTitle": "તમારા નવા ઇમેઇલની ચકાસણી કરો",
+      "emailOldDescription": "તમારા વર્તમાન ઇમેઇલ પર મોકલવામાં આવેલ કોડ દાખલ કરો.",
+      "emailOldTitle": "તમારા વર્તમાન ઇમેઇલની પુષ્ટિ કરો",
+      "expired": "ચકાસણી કોડની સમયસીમા સમાપ્ત થઈ ગઈ છે",
+      "expiresIn": "કોડ {{time}} માં સમાપ્ત થાય છે",
+      "finish": "સમાપ્ત",
+      "forgotDescription": "ચકાસણી કોડ મેળવવા માટે તમારા એકાઉન્ટ ઇમેઇલ દાખલ કરો.",
+      "forgotLink": "તમારો પાસવર્ડ ભૂલી ગયા છો?",
+      "forgotTitle": "પાસવર્ડ ભૂલી ગયા છો?",
+      "invalid": "અમાન્ય ચકાસણી કોડ",
+      "newPasswordDescription": "તમારા એકાઉન્ટ માટે નવો પાસવર્ડ પસંદ કરો.",
+      "newPasswordTitle": "નવો પાસવર્ડ બનાવો",
+      "passwordChangeDescription": "તમારા ઇમેઇલ પર મોકલેલ કોડ દાખલ કરો.",
+      "passwordChangeTitle": "પાસવર્ડ ફેરફારની પુષ્ટિ કરો",
+      "registrationDescription": "તમારું એકાઉન્ટ બનાવવાનું પૂર્ણ કરવા માટે તમારા ઇમેઇલ પર મોકલવામાં આવેલ કોડ દાખલ કરો.",
+      "registrationTitle": "તમારા ઇમેઇલની ચકાસણી કરો",
+      "requestFailed": "ચકાસણી કોડ મોકલી શકાતો નથી",
+      "resend": "કોડ ફરીથી મોકલો",
+      "resendFailed": "કોડ ફરીથી મોકલી શકાતો નથી",
+      "resendIn": "ફરીથી મોકલવા માટે {{seconds}} સેકન્ડમાં ઉપલબ્ધ છે",
+      "resetDescription": "તમારા ઇમેઇલ પર મોકલેલ કોડ દાખલ કરો.",
+      "resetTitle": "તમારો પાસવર્ડ રીસેટ કરો",
+      "send": "કોડ મોકલો"
+    },
     "register": {
       "confirmPasswordLabel": "પાસવર્ડની પુષ્ટિ કરો",
       "confirmPasswordPlaceholder": "તમારા પાસવર્ડની પુષ્ટિ કરો",
       "emailInvalid": "માન્ય ઇમેઇલ સરનામું દાખલ કરો",
       "emailLabel": "વ્યક્તિગત ઇમેઇલ",
       "emailPlaceholder": "તમારું અંગત ઈમેલ દાખલ કરો",
+      "emailTaken": "ઇમેઇલ પહેલેથી જ નોંધાયેલ છે.",
       "information": {
         "color1": "પ્રોફાઇલ રંગ એક",
         "color2": "પ્રોફાઇલ રંગ બે",
@@ -141,7 +170,8 @@
       "passwordLabel": "પાસવર્ડ",
       "passwordMismatch": "પાસવર્ડ મેળ ખાતા નથી",
       "passwordPlaceholder": "પાસવર્ડ બનાવો (તમારા પાસફ્રેઝ તરીકે વપરાય છે)",
-      "passwordWeak": "પાસવર્ડ અક્ષરો અને સંખ્યાઓ સાથે ઓછામાં ઓછો 8 અક્ષરનો હોવો જોઈએ"
+      "passwordWeak": "પાસવર્ડ અક્ષરો અને સંખ્યાઓ સાથે ઓછામાં ઓછો 8 અક્ષરનો હોવો જોઈએ",
+      "submit": "ખાતું બનાવો"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "ફેરફાર કરો",
         "editProfile": "સંપાદિત કરો",
+        "emailLabel": "ઇમેઇલ",
         "logoutButton": "લૉગ આઉટ",
         "nicknameLabel": "ઉપનામ",
-        "nicknamePlaceholder": "તમારું ઉપનામ દાખલ કરો"
+        "nicknamePlaceholder": "તમારું ઉપનામ દાખલ કરો",
+        "noEmail": "કોઈ ઇમેઇલ લિંક કરેલ નથી"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "પ્રોફાઇલ રંગ બે",
         "title": "પ્રોફાઇલ ચિત્ર સંપાદિત કરો",
         "userIcon": "વપરાશકર્તા ચિહ્ન"
+      },
+      "security": {
+        "currentEmailLabel": "હાલનો ઇમેઇલ",
+        "emailDescription": "અમે તમારા વર્તમાન અને નવા ઇમેઇલ સરનામાં ચકાસીશું.",
+        "emailSame": "નવું ઇમેઇલ તમારા વર્તમાન ઇમેઇલથી અલગ હોવું જોઈએ.",
+        "emailTitle": "ઇમેઇલ બદલો",
+        "newEmailLabel": "નવું ઇમેઇલ સરનામું",
+        "passwordDescription": "અમે તમારા એકાઉન્ટ ઇમેઇલ પર એક ચકાસણી કોડ મોકલીશું.",
+        "passwordTitle": "પાસવર્ડ બદલો",
+        "title": "એકાઉન્ટ સુરક્ષા"
       },
       "register": {
         "cta": "શરૂ કરો",
@@ -1451,9 +1494,15 @@
     "close": "બંધ કરો"
   },
   "toasts": {
+    "emailChangeSuccess": "ઇમેઇલ સફળતાપૂર્વક અપડેટ થયો!",
     "linkCopied": "લિંક ક્લિપબોર્ડ પર કૉપિ કરી!",
     "loginSuccess": "સફળતાપૂર્વક લૉગ ઇન થયા!",
     "logoutSuccess": "સફળતાપૂર્વક લૉગ આઉટ થયા!",
+    "otpResent": "ચકાસણી કોડ ફરીથી મોકલવામાં આવ્યો છે!",
+    "otpSent": "ચકાસણી કોડ તમારા ઇમેઇલ પર મોકલવામાં આવ્યો!",
+    "passwordChangeSuccess": "પાસવર્ડ સફળતાપૂર્વક બદલાયો!",
+    "passwordResetError": "પાસવર્ડ રીસેટ કરવામાં નિષ્ફળ",
+    "passwordResetSuccess": "પાસવર્ડ સફળતાપૂર્વક રીસેટ થયો!",
     "registerSuccess": "સફળતાપૂર્વક નોંધણી થઈ!"
   }
 }

@@ -116,12 +116,41 @@
       "usePasskey": "Usar chave de acesso",
       "validationError": "Frase-passe incorreta ou incompleta /ᐠ. .ᐟ\\"
     },
+    "otp": {
+      "codeLabel": "Código de verificação",
+      "continue": "Continuar",
+      "emailNewDescription": "Insira o código enviado para o seu novo e-mail.",
+      "emailNewTitle": "Verifique seu novo e-mail",
+      "emailOldDescription": "Insira o código enviado para o seu e-mail.",
+      "emailOldTitle": "Confirme seu e-mail atual.",
+      "expired": "Código de verificação expirou",
+      "expiresIn": "O código expira em {{time}}",
+      "finish": "Terminar",
+      "forgotDescription": "Insira o e-mail da sua conta para receber um código de verificação.",
+      "forgotLink": "Esqueceu sua senha?",
+      "forgotTitle": "Esqueceu sua senha?",
+      "invalid": "Código de verificação inválido",
+      "newPasswordDescription": "Escolha uma nova senha para sua conta.",
+      "newPasswordTitle": "Criar uma nova senha",
+      "passwordChangeDescription": "Insira o código enviado para o seu e-mail.",
+      "passwordChangeTitle": "Confirme a alteração de senha.",
+      "registrationDescription": "Insira o código enviado para o seu e-mail para concluir a criação da sua conta.",
+      "registrationTitle": "Verifique seu e-mail",
+      "requestFailed": "Não foi possível enviar o código de verificação.",
+      "resend": "Reenviar código",
+      "resendFailed": "Não foi possível reenviar o código.",
+      "resendIn": "Reenvio disponível em {{seconds}}s",
+      "resetDescription": "Insira o código enviado para o seu e-mail.",
+      "resetTitle": "Redefina sua senha",
+      "send": "Enviar código"
+    },
     "register": {
       "confirmPasswordLabel": "Confirme sua senha",
       "confirmPasswordPlaceholder": "Confirme sua senha",
       "emailInvalid": "Insira um endereço de e-mail válido",
       "emailLabel": "E-mail pessoal",
       "emailPlaceholder": "Digite seu e-mail pessoal",
+      "emailTaken": "O e-mail já está cadastrado.",
       "information": {
         "color1": "Cor de perfil um",
         "color2": "Cor de perfil dois",
@@ -141,7 +170,8 @@
       "passwordLabel": "Senha",
       "passwordMismatch": "As senhas não coincidem",
       "passwordPlaceholder": "Crie uma senha (usada como sua senha)",
-      "passwordWeak": "A senha deve ter pelo menos 8 caracteres com letras e números"
+      "passwordWeak": "A senha deve ter pelo menos 8 caracteres com letras e números",
+      "submit": "Criar uma conta"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "Editar",
         "editProfile": "Editar",
+        "emailLabel": "E-mail",
         "logoutButton": "Terminar sessão",
         "nicknameLabel": "Apelido",
-        "nicknamePlaceholder": "Digite seu apelido"
+        "nicknamePlaceholder": "Digite seu apelido",
+        "noEmail": "Nenhum e-mail vinculado"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "Cor do perfil dois",
         "title": "Editar imagem de perfil",
         "userIcon": "Ícone de utilizador"
+      },
+      "security": {
+        "currentEmailLabel": "E-mail atual",
+        "emailDescription": "Verificaremos seus endereços de e-mail atuais e novos.",
+        "emailSame": "O novo endereço de e-mail deve ser diferente do seu endereço de e-mail atual.",
+        "emailTitle": "Alterar e-mail",
+        "newEmailLabel": "Novo endereço de e-mail",
+        "passwordDescription": "Enviaremos um código de verificação para o e-mail cadastrado em sua conta.",
+        "passwordTitle": "Alterar a senha",
+        "title": "Segurança da conta"
       },
       "register": {
         "cta": "Começar",
@@ -1451,9 +1494,15 @@
     "close": "Fechar"
   },
   "toasts": {
+    "emailChangeSuccess": "E-mail atualizado com sucesso!",
     "linkCopied": "Link copiado para a área de transferência!",
     "loginSuccess": "Logado com sucesso!",
     "logoutSuccess": "Desconectado com sucesso!",
+    "otpResent": "O código de verificação foi reenviado!",
+    "otpSent": "Código de verificação enviado para o seu e-mail!",
+    "passwordChangeSuccess": "Senha alterada com sucesso!",
+    "passwordResetError": "Falha ao redefinir a senha",
+    "passwordResetSuccess": "Senha redefinida com sucesso!",
     "registerSuccess": "Registrado com sucesso!"
   }
 }

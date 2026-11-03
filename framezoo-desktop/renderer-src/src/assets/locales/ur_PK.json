@@ -116,12 +116,41 @@
       "usePasskey": "پاسکی استعمال کریں۔",
       "validationError": "Incorrect or incomplete passphrase /ᐠ. .ᐟ\\"
     },
+    "otp": {
+      "codeLabel": "تصدیقی کوڈ",
+      "continue": "جاری رکھیں",
+      "emailNewDescription": "اپنے نئے ای میل پر بھیجا گیا کوڈ درج کریں۔",
+      "emailNewTitle": "اپنے نئے ای میل کی تصدیق کریں۔",
+      "emailOldDescription": "اپنے موجودہ ای میل پر بھیجا گیا کوڈ درج کریں۔",
+      "emailOldTitle": "اپنے موجودہ ای میل کی تصدیق کریں۔",
+      "expired": "توثیقی کوڈ کی میعاد ختم ہو گئی۔",
+      "expiresIn": "کوڈ کی میعاد {{time}} میں ختم ہوگی",
+      "finish": "ختم کرنا",
+      "forgotDescription": "تصدیقی کوڈ حاصل کرنے کے لیے اپنے اکاؤنٹ کا ای میل درج کریں۔",
+      "forgotLink": "اپنا پاس ورڈ بھول گئے؟",
+      "forgotTitle": "پاس ورڈ بھول گئے؟",
+      "invalid": "غلط توثیقی کوڈ",
+      "newPasswordDescription": "اپنے اکاؤنٹ کے لیے ایک نیا پاس ورڈ منتخب کریں۔",
+      "newPasswordTitle": "نیا پاس ورڈ بنائیں",
+      "passwordChangeDescription": "اپنے ای میل پر بھیجا گیا کوڈ درج کریں۔",
+      "passwordChangeTitle": "پاس ورڈ کی تبدیلی کی تصدیق کریں۔",
+      "registrationDescription": "اپنا اکاؤنٹ بنانا مکمل کرنے کے لیے اپنے ای میل پر بھیجا گیا کوڈ درج کریں۔",
+      "registrationTitle": "اپنے ای میل کی تصدیق کریں۔",
+      "requestFailed": "تصدیقی کوڈ بھیجنے سے قاصر",
+      "resend": "کوڈ دوبارہ بھیجیں۔",
+      "resendFailed": "کوڈ دوبارہ بھیجنے سے قاصر",
+      "resendIn": "دوبارہ بھیجیں {{seconds}} میں دستیاب ہے۔",
+      "resetDescription": "اپنے ای میل پر بھیجا گیا کوڈ درج کریں۔",
+      "resetTitle": "اپنا پاس ورڈ دوبارہ ترتیب دیں۔",
+      "send": "کوڈ بھیجیں۔"
+    },
     "register": {
       "confirmPasswordLabel": "پاس ورڈ کی تصدیق کریں۔",
       "confirmPasswordPlaceholder": "اپنے پاس ورڈ کی تصدیق کریں۔",
       "emailInvalid": "ایک درست ای میل ایڈریس درج کریں۔",
       "emailLabel": "ذاتی ای میل",
       "emailPlaceholder": "اپنا ذاتی ای میل درج کریں۔",
+      "emailTaken": "ای میل پہلے ہی رجسٹرڈ ہے۔",
       "information": {
         "color1": "پروفائل کا رنگ ایک",
         "color2": "پروفائل کا رنگ دو",
@@ -141,7 +170,8 @@
       "passwordLabel": "پاس ورڈ",
       "passwordMismatch": "پاس ورڈز مماثل نہیں ہیں۔",
       "passwordPlaceholder": "ایک پاس ورڈ بنائیں (آپ کے پاس فریز کے طور پر استعمال کیا جاتا ہے)",
-      "passwordWeak": "پاس ورڈ کم از کم 8 حروف کا ہونا چاہیے جس میں حروف اور نمبر ہوں۔"
+      "passwordWeak": "پاس ورڈ کم از کم 8 حروف کا ہونا چاہیے جس میں حروف اور نمبر ہوں۔",
+      "submit": "اکاؤنٹ بنائیں"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "ترمیم کریں۔",
         "editProfile": "ترمیم کریں۔",
+        "emailLabel": "ای میل",
         "logoutButton": "لاگ آؤٹ کریں۔",
         "nicknameLabel": "عرفی نام",
-        "nicknamePlaceholder": "اپنا عرفی نام درج کریں۔"
+        "nicknamePlaceholder": "اپنا عرفی نام درج کریں۔",
+        "noEmail": "کوئی ای میل لنک نہیں ہے۔"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "پروفائل کا رنگ دو",
         "title": "پروفائل تصویر میں ترمیم کریں۔",
         "userIcon": "صارف کا آئیکن"
+      },
+      "security": {
+        "currentEmailLabel": "موجودہ ای میل",
+        "emailDescription": "ہم آپ کے موجودہ اور نئے ای میل پتوں کی تصدیق کریں گے۔",
+        "emailSame": "نئی ای میل آپ کی موجودہ ای میل سے مختلف ہونی چاہیے۔",
+        "emailTitle": "ای میل تبدیل کریں۔",
+        "newEmailLabel": "نیا ای میل پتہ",
+        "passwordDescription": "ہم آپ کے اکاؤنٹ ای میل پر ایک تصدیقی کوڈ بھیجیں گے۔",
+        "passwordTitle": "پاس ورڈ تبدیل کریں۔",
+        "title": "اکاؤنٹ سیکیورٹی"
       },
       "register": {
         "cta": "شروع کرو",
@@ -1451,9 +1494,15 @@
     "close": "بند"
   },
   "toasts": {
+    "emailChangeSuccess": "ای میل کامیابی کے ساتھ اپ ڈیٹ ہو گئی!",
     "linkCopied": "لنک کلپ بورڈ پر کاپی ہو گیا!",
     "loginSuccess": "کامیابی سے لاگ ان ہو گیا!",
     "logoutSuccess": "کامیابی سے لاگ آؤٹ ہو گیا!",
+    "otpResent": "توثیقی کوڈ دوبارہ بھیج دیا گیا ہے!",
+    "otpSent": "توثیقی کوڈ آپ کے ای میل پر بھیجا گیا!",
+    "passwordChangeSuccess": "پاس ورڈ کامیابی سے تبدیل ہو گیا!",
+    "passwordResetError": "پاس ورڈ دوبارہ ترتیب دینے میں ناکام",
+    "passwordResetSuccess": "پاس ورڈ کامیابی سے دوبارہ ترتیب دیا!",
     "registerSuccess": "کامیابی کے ساتھ رجسٹر ہو گیا!"
   }
 }

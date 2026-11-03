@@ -116,12 +116,41 @@
       "usePasskey": "Usa a clave de acceso",
       "validationError": "Contraseña incorrecta ou incompleta"
     },
+    "otp": {
+      "codeLabel": "Código de verificación",
+      "continue": "Continuar",
+      "emailNewDescription": "Introduce o código que che enviamos ao teu novo correo electrónico.",
+      "emailNewTitle": "Verifica o teu novo correo electrónico",
+      "emailOldDescription": "Introduce o código que che enviamos ao teu correo electrónico actual.",
+      "emailOldTitle": "Confirma o teu correo electrónico actual",
+      "expired": "Código de verificación caducado",
+      "expiresIn": "O código caduca en {{time}}",
+      "finish": "Rematar",
+      "forgotDescription": "Introduce o correo electrónico da túa conta para recibir un código de verificación.",
+      "forgotLink": "Esqueciches o teu contrasinal?",
+      "forgotTitle": "Esqueciches o contrasinal?",
+      "invalid": "Código de verificación non válido",
+      "newPasswordDescription": "Escolle un novo contrasinal para a túa conta.",
+      "newPasswordTitle": "Crear un novo contrasinal",
+      "passwordChangeDescription": "Introduce o código que che enviamos ao teu correo electrónico.",
+      "passwordChangeTitle": "Confirmar o cambio de contrasinal",
+      "registrationDescription": "Introduce o código que che enviamos ao teu correo electrónico para rematar de crear a túa conta.",
+      "registrationTitle": "Verifica o teu correo electrónico",
+      "requestFailed": "Non se pode enviar o código de verificación",
+      "resend": "Reenviar código",
+      "resendFailed": "Non se pode reenviar o código",
+      "resendIn": "Reenvío dispoñible en {{seconds}}s",
+      "resetDescription": "Introduce o código que che enviamos ao teu correo electrónico.",
+      "resetTitle": "Restablecer o teu contrasinal",
+      "send": "Enviar código"
+    },
     "register": {
       "confirmPasswordLabel": "Confirme o contrasinal",
       "confirmPasswordPlaceholder": "Confirma o teu contrasinal",
       "emailInvalid": "Introduce un enderezo de correo electrónico válido",
       "emailLabel": "Correo electrónico persoal",
       "emailPlaceholder": "Introduce o teu correo electrónico persoal",
+      "emailTaken": "O correo electrónico xa está rexistrado",
       "information": {
         "color1": "Cór de perfil un",
         "color2": "Cór de perfil dous",
@@ -141,7 +170,8 @@
       "passwordLabel": "Contrasinal",
       "passwordMismatch": "Os contrasinais non coinciden",
       "passwordPlaceholder": "Crea un contrasinal (usado como frase de acceso)",
-      "passwordWeak": "O contrasinal debe ter polo menos 8 caracteres con letras e números"
+      "passwordWeak": "O contrasinal debe ter polo menos 8 caracteres con letras e números",
+      "submit": "Crear conta"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "Editar",
         "editProfile": "Editar",
+        "emailLabel": "Correo electrónico",
         "logoutButton": "Pechar sesión",
         "nicknameLabel": "Alcume",
-        "nicknamePlaceholder": "Introduce o teu alcume"
+        "nicknamePlaceholder": "Introduce o teu alcume",
+        "noEmail": "Sen correo electrónico vinculado"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "Cór de perfil dous",
         "title": "Editar foto de perfil",
         "userIcon": "Icono de usuario"
+      },
+      "security": {
+        "currentEmailLabel": "Correo electrónico actual",
+        "emailDescription": "Verificaremos os teus enderezos de correo electrónico actuais e novos.",
+        "emailSame": "O novo correo electrónico debe ser diferente do teu correo electrónico actual",
+        "emailTitle": "Cambiar correo electrónico",
+        "newEmailLabel": "Novo enderezo de correo electrónico",
+        "passwordDescription": "Enviarémosche un código de verificación ao correo electrónico da túa conta.",
+        "passwordTitle": "Cambiar contrasinal",
+        "title": "Seguridade da conta"
       },
       "register": {
         "cta": "Empezar",
@@ -1451,9 +1494,15 @@
     "close": "Pechar"
   },
   "toasts": {
+    "emailChangeSuccess": "Correo electrónico actualizado correctamente!",
     "linkCopied": "A ligazón copiouse no portapapeis!",
     "loginSuccess": "Inicia sesión con éxito!",
     "logoutSuccess": "Pecheuse con éxito!",
+    "otpResent": "Volveuse enviar o código de verificación!",
+    "otpSent": "Código de verificación enviado ao teu correo electrónico!",
+    "passwordChangeSuccess": "Contrasinal cambiado correctamente!",
+    "passwordResetError": "Non se puido restablecer o contrasinal",
+    "passwordResetSuccess": "Restablecemento do contrasinal realizado correctamente!",
     "registerSuccess": "Rexistrado con éxito!"
   }
 }

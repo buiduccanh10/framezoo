@@ -56,6 +56,10 @@ export interface RegistrationData {
       icon: string;
     };
   };
+  emailOtp?: {
+    challengeId: string;
+    code: string;
+  };
 }
 
 export interface LoginData {
@@ -241,6 +245,7 @@ export function useAuth() {
           email: registerData.userData.email,
           device: await encryptData("Browser", keys.seed),
           profile: registerData.userData.profile,
+          ...(registerData.emailOtp ? { emailOtp: registerData.emailOtp } : {}),
         });
 
         const result = userDataLogin(
@@ -276,6 +281,7 @@ export function useAuth() {
           email: registerData.userData.email,
           device: await encryptData("Browser", keys.seed),
           profile: registerData.userData.profile,
+          ...(registerData.emailOtp ? { emailOtp: registerData.emailOtp } : {}),
         });
 
         // Store credential mapping if we have a credential ID
@@ -402,6 +408,7 @@ export function useAuth() {
       setAccount({
         ...activeAccount,
         nickname: user.user.nickname,
+        email: user.user.email ?? activeAccount.email,
         profile: user.user.profile,
       });
 

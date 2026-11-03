@@ -116,12 +116,41 @@
       "usePasskey": "使用金鑰",
       "validationError": "密碼短語不正確或不完整"
     },
+    "otp": {
+      "codeLabel": "驗證碼",
+      "continue": "繼續",
+      "emailNewDescription": "請輸入發送到您新信箱的驗證碼。",
+      "emailNewTitle": "請驗證您的新電子郵件",
+      "emailOldDescription": "請輸入發送到您目前信箱的驗證碼。",
+      "emailOldTitle": "請確認您目前的電子郵件地址。",
+      "expired": "驗證碼已過期",
+      "expiresIn": "代碼將於{{time}}過期",
+      "finish": "結束",
+      "forgotDescription": "請輸入您的帳戶信箱以接收驗證碼。",
+      "forgotLink": "忘記密碼了嗎？",
+      "forgotTitle": "忘記密碼？",
+      "invalid": "驗證碼無效",
+      "newPasswordDescription": "為您的帳戶選擇一個新密碼。",
+      "newPasswordTitle": "建立新密碼",
+      "passwordChangeDescription": "請輸入發送到您信箱的驗證碼。",
+      "passwordChangeTitle": "確認密碼更改",
+      "registrationDescription": "輸入發送到您信箱的驗證碼，完成帳戶建立。",
+      "registrationTitle": "請驗證您的電子郵件",
+      "requestFailed": "無法發送驗證碼",
+      "resend": "重新發送程式碼",
+      "resendFailed": "無法重新發送驗證碼",
+      "resendIn": "{{seconds}}s 中提供重新傳送功能",
+      "resetDescription": "請輸入發送到您信箱的驗證碼。",
+      "resetTitle": "重設密碼",
+      "send": "傳送代碼"
+    },
     "register": {
       "confirmPasswordLabel": "確認密碼",
       "confirmPasswordPlaceholder": "確認您的密碼",
       "emailInvalid": "輸入有效的電子郵件地址",
       "emailLabel": "個人信箱",
       "emailPlaceholder": "輸入您的個人電子郵件",
+      "emailTaken": "信箱已註冊",
       "information": {
         "color1": "頭像配色一",
         "color2": "輪廓顏色二",
@@ -141,7 +170,8 @@
       "passwordLabel": "密碼",
       "passwordMismatch": "密碼不匹配",
       "passwordPlaceholder": "建立密碼（用作您的密碼）",
-      "passwordWeak": "密碼必須至少8位，包含字母和數字"
+      "passwordWeak": "密碼必須至少8位，包含字母和數字",
+      "submit": "建立帳戶"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "編輯",
         "editProfile": "編輯",
+        "emailLabel": "電子郵件",
         "logoutButton": "登出",
         "nicknameLabel": "暱稱",
-        "nicknamePlaceholder": "輸入您的暱稱"
+        "nicknamePlaceholder": "輸入您的暱稱",
+        "noEmail": "未關聯電子郵件"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "頭像配色二",
         "title": "編輯個人資料圖片",
         "userIcon": "用戶圖示"
+      },
+      "security": {
+        "currentEmailLabel": "目前電子郵件",
+        "emailDescription": "我們將核實您目前和新的電子郵件地址。",
+        "emailSame": "新郵箱地址必須與您目前的郵箱地址不同。",
+        "emailTitle": "更改電子郵件",
+        "newEmailLabel": "新電子郵件地址",
+        "passwordDescription": "我們將向您的帳戶信箱發送驗證碼。",
+        "passwordTitle": "更改密碼",
+        "title": "帳戶安全"
       },
       "register": {
         "cta": "開始使用",
@@ -1451,9 +1494,15 @@
     "close": "關閉"
   },
   "toasts": {
+    "emailChangeSuccess": "郵箱已成功更新！",
     "linkCopied": "連結已複製到剪貼簿！",
     "loginSuccess": "登入成功！",
     "logoutSuccess": "退出成功！",
+    "otpResent": "驗證碼已重新發送！",
+    "otpSent": "驗證碼已寄至您的信箱！",
+    "passwordChangeSuccess": "密碼已成功更改！",
+    "passwordResetError": "重置密碼失敗",
+    "passwordResetSuccess": "密碼重置成功！",
     "registerSuccess": "註冊成功！"
   }
 }

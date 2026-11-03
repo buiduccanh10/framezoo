@@ -116,12 +116,41 @@
       "usePasskey": "از کلید عبور استفاده کنید",
       "validationError": "عبارت عبور امنیتی نادرست یا ناقص است"
     },
+    "otp": {
+      "codeLabel": "کد تأیید",
+      "continue": "ادامه",
+      "emailNewDescription": "کدی که به ایمیل جدیدتان ارسال شده را وارد کنید.",
+      "emailNewTitle": "ایمیل جدید خود را تأیید کنید",
+      "emailOldDescription": "کدی که به ایمیل فعلی شما ارسال شده است را وارد کنید.",
+      "emailOldTitle": "ایمیل فعلی خود را تایید کنید",
+      "expired": "کد تایید منقضی شده است",
+      "expiresIn": "کد در {{time}} منقضی می‌شود",
+      "finish": "پایان",
+      "forgotDescription": "برای دریافت کد تایید، ایمیل حساب کاربری خود را وارد کنید.",
+      "forgotLink": "رمز عبور خود را فراموش کرده‌اید؟",
+      "forgotTitle": "رمز عبور را فراموش کرده‌اید؟",
+      "invalid": "کد تایید نامعتبر است",
+      "newPasswordDescription": "یک رمز عبور جدید برای حساب کاربری خود انتخاب کنید.",
+      "newPasswordTitle": "ایجاد رمز عبور جدید",
+      "passwordChangeDescription": "کدی که به ایمیلتان ارسال شده را وارد کنید.",
+      "passwordChangeTitle": "تایید تغییر رمز عبور",
+      "registrationDescription": "کدی که به ایمیل شما ارسال شده را وارد کنید تا ساخت حساب کاربری شما تکمیل شود.",
+      "registrationTitle": "ایمیل خود را تأیید کنید",
+      "requestFailed": "ارسال کد تایید مقدور نیست",
+      "resend": "ارسال مجدد کد",
+      "resendFailed": "ارسال مجدد کد مقدور نیست",
+      "resendIn": "ارسال مجدد در {{seconds}}s موجود است",
+      "resetDescription": "کدی که به ایمیلتان ارسال شده را وارد کنید.",
+      "resetTitle": "رمز عبور خود را بازنشانی کنید",
+      "send": "ارسال کد"
+    },
     "register": {
       "confirmPasswordLabel": "رمز عبور را تایید کنید",
       "confirmPasswordPlaceholder": "رمز عبور خود را تایید کنید",
       "emailInvalid": "یک آدرس ایمیل معتبر وارد کنید",
       "emailLabel": "ایمیل شخصی",
       "emailPlaceholder": "ایمیل شخصی خود را وارد کنید",
+      "emailTaken": "ایمیل قبلاً ثبت شده است",
       "information": {
         "color1": "رنگ پروفایل اول",
         "color2": "رنگ پروفایل دوم",
@@ -141,7 +170,8 @@
       "passwordLabel": "رمز عبور",
       "passwordMismatch": "گذرواژه ها مطابقت ندارند",
       "passwordPlaceholder": "ایجاد یک رمز عبور (به عنوان رمز عبور شما استفاده می شود)",
-      "passwordWeak": "رمز عبور باید حداقل 8 کاراکتر با حروف و اعداد باشد"
+      "passwordWeak": "رمز عبور باید حداقل 8 کاراکتر با حروف و اعداد باشد",
+      "submit": "ایجاد حساب کاربری"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "ویرایش",
         "editProfile": "ویرایش",
+        "emailLabel": "ایمیل",
         "logoutButton": "خروج",
         "nicknameLabel": "نام مستعار",
-        "nicknamePlaceholder": "نام مستعار خود را وارد کنید"
+        "nicknamePlaceholder": "نام مستعار خود را وارد کنید",
+        "noEmail": "ایمیلی لینک نشده است"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "رنگ پروفایل دوم",
         "title": "ویرایش عکس نمایه",
         "userIcon": "نماد کاربری"
+      },
+      "security": {
+        "currentEmailLabel": "ایمیل فعلی",
+        "emailDescription": "ما آدرس‌های ایمیل فعلی و جدید شما را تأیید خواهیم کرد.",
+        "emailSame": "ایمیل جدید باید با ایمیل فعلی شما متفاوت باشد.",
+        "emailTitle": "تغییر ایمیل",
+        "newEmailLabel": "آدرس ایمیل جدید",
+        "passwordDescription": "ما یک کد تأیید به ایمیل حساب شما ارسال خواهیم کرد.",
+        "passwordTitle": "تغییر رمز عبور",
+        "title": "امنیت حساب"
       },
       "register": {
         "cta": "شروع کنید",
@@ -1451,9 +1494,15 @@
     "close": "بستن"
   },
   "toasts": {
+    "emailChangeSuccess": "ایمیل با موفقیت به‌روزرسانی شد!",
     "linkCopied": "پیوند در کلیپ بورد کپی شد!",
     "loginSuccess": "با موفقیت وارد سیستم شدید!",
     "logoutSuccess": "با موفقیت از سیستم خارج شد!",
+    "otpResent": "کد تایید دوباره ارسال شد!",
+    "otpSent": "کد تایید به ایمیل شما ارسال شد!",
+    "passwordChangeSuccess": "رمز عبور با موفقیت تغییر کرد!",
+    "passwordResetError": "رمز عبور بازیابی نشد",
+    "passwordResetSuccess": "رمز عبور با موفقیت بازیابی شد!",
     "registerSuccess": "با موفقیت ثبت شد!"
   }
 }

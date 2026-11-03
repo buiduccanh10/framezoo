@@ -116,12 +116,41 @@
       "usePasskey": "Izmantojiet piekļuves atslēgu",
       "validationError": "Nepareizs vai nepabeigts paroles frāze"
     },
+    "otp": {
+      "codeLabel": "Verifikācijas kods",
+      "continue": "Turpināt",
+      "emailNewDescription": "Ievadiet kodu, kas nosūtīts uz jūsu jauno e-pasta adresi.",
+      "emailNewTitle": "Verificējiet savu jauno e-pasta adresi",
+      "emailOldDescription": "Ievadiet kodu, kas nosūtīts uz jūsu pašreizējo e-pasta adresi.",
+      "emailOldTitle": "Apstipriniet savu pašreizējo e-pasta adresi",
+      "expired": "Verifikācijas koda derīguma termiņš ir beidzies.",
+      "expiresIn": "Kods beidzas pēc {{time}}",
+      "finish": "Pabeigt",
+      "forgotDescription": "Ievadiet sava konta e-pasta adresi, lai saņemtu verifikācijas kodu.",
+      "forgotLink": "Aizmirsāt paroli?",
+      "forgotTitle": "Aizmirsu paroli?",
+      "invalid": "Nederīgs verifikācijas kods",
+      "newPasswordDescription": "Izvēlieties jaunu paroli savam kontam.",
+      "newPasswordTitle": "Izveidojiet jaunu paroli",
+      "passwordChangeDescription": "Ievadiet kodu, kas nosūtīts uz jūsu e-pastu.",
+      "passwordChangeTitle": "Apstiprināt paroles maiņu",
+      "registrationDescription": "Ievadiet kodu, kas nosūtīts uz jūsu e-pastu, lai pabeigtu konta izveidi.",
+      "registrationTitle": "Verificējiet savu e-pastu",
+      "requestFailed": "Nevar nosūtīt verifikācijas kodu",
+      "resend": "Nosūtīt kodu atkārtoti",
+      "resendFailed": "Nevar atkārtoti nosūtīt kodu",
+      "resendIn": "Atkārtota nosūtīšana pieejama pēc {{seconds}}s",
+      "resetDescription": "Ievadiet kodu, kas nosūtīts uz jūsu e-pastu.",
+      "resetTitle": "Atiestatiet paroli",
+      "send": "Sūtīt kodu"
+    },
     "register": {
       "confirmPasswordLabel": "Apstipriniet paroli",
       "confirmPasswordPlaceholder": "Apstipriniet savu paroli",
       "emailInvalid": "Ievadiet derīgu e-pasta adresi",
       "emailLabel": "Personīgais e-pasts",
       "emailPlaceholder": "Ievadiet savu personīgo e-pastu",
+      "emailTaken": "E-pasts jau ir reģistrēts",
       "information": {
         "color1": "Profila krāsa viens",
         "color2": "Profila krāsa divi",
@@ -141,7 +170,8 @@
       "passwordLabel": "Parole",
       "passwordMismatch": "Paroles nesakrīt",
       "passwordPlaceholder": "Izveidojiet paroli (izmantojiet kā ieejas frāzi)",
-      "passwordWeak": "Parolei jābūt vismaz 8 rakstzīmēm ar burtiem un cipariem"
+      "passwordWeak": "Parolei jābūt vismaz 8 rakstzīmēm ar burtiem un cipariem",
+      "submit": "Izveidot kontu"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "Rediģēt",
         "editProfile": "Reģistrēt",
+        "emailLabel": "E-pasts",
         "logoutButton": "Iziet",
         "nicknameLabel": "Segvārds",
-        "nicknamePlaceholder": "Ievadiet savu segvārdu"
+        "nicknamePlaceholder": "Ievadiet savu segvārdu",
+        "noEmail": "Nav saistīta e-pasta adrese"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "Profila krāsa divi",
         "title": "Mainīt profila bildi",
         "userIcon": "Konta ikona"
+      },
+      "security": {
+        "currentEmailLabel": "Pašreizējā e-pasta adrese",
+        "emailDescription": "Mēs pārbaudīsim jūsu pašreizējo un jauno e-pasta adresi.",
+        "emailSame": "Jaunajai e-pasta adresei ir jāatšķiras no jūsu pašreizējās e-pasta adreses",
+        "emailTitle": "Mainīt e-pasta adresi",
+        "newEmailLabel": "Jauna e-pasta adrese",
+        "passwordDescription": "Mēs nosūtīsim verifikācijas kodu uz jūsu konta e-pasta adresi.",
+        "passwordTitle": "Mainīt paroli",
+        "title": "Konta drošība"
       },
       "register": {
         "cta": "Sākt",
@@ -1451,9 +1494,15 @@
     "close": "Aizvērt"
   },
   "toasts": {
+    "emailChangeSuccess": "E-pasts veiksmīgi atjaunināts!",
     "linkCopied": "Saite ir kopēta starpliktuvē!",
     "loginSuccess": "Veiksmīgi pieteicies!",
     "logoutSuccess": "Veiksmīgi atteicies!",
+    "otpResent": "Verifikācijas kods ir nosūtīts atkārtoti!",
+    "otpSent": "Verifikācijas kods nosūtīts uz jūsu e-pastu!",
+    "passwordChangeSuccess": "Parole veiksmīgi nomainīta!",
+    "passwordResetError": "Neizdevās atiestatīt paroli",
+    "passwordResetSuccess": "Parole veiksmīgi atiestatīta!",
     "registerSuccess": "Veiksmīgi reģistrēts!"
   }
 }

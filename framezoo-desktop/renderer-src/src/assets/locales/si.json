@@ -116,12 +116,41 @@
       "usePasskey": "මුරපදය භාවිතා කරන්න",
       "validationError": "Incorrect or incomplete passphrase /ᐠ. .ᐟ\\"
     },
+    "otp": {
+      "codeLabel": "සත්‍යාපන කේතය",
+      "continue": "ඉදිරියට යන්න",
+      "emailNewDescription": "ඔබගේ නව විද්‍යුත් තැපෑලට යවන ලද කේතය ඇතුළත් කරන්න.",
+      "emailNewTitle": "ඔබගේ නව විද්‍යුත් තැපෑල සත්‍යාපනය කරන්න",
+      "emailOldDescription": "ඔබගේ වත්මන් විද්‍යුත් තැපෑලට යවන ලද කේතය ඇතුළත් කරන්න.",
+      "emailOldTitle": "ඔබගේ වත්මන් විද්‍යුත් තැපෑල තහවුරු කරන්න",
+      "expired": "සත්‍යාපන කේතය කල් ඉකුත් විය",
+      "expiresIn": "කේතය {{time}} කින් කල් ඉකුත් වේ.",
+      "finish": "අවසන් කරන්න",
+      "forgotDescription": "සත්‍යාපන කේතයක් ලබා ගැනීමට ඔබගේ ගිණුම් විද්‍යුත් තැපෑල ඇතුළත් කරන්න.",
+      "forgotLink": "මුරපදය අමතක වුනාද?",
+      "forgotTitle": "මුරපදය අමතක වුණා ද?",
+      "invalid": "වලංගු නොවන සත්‍යාපන කේතයකි",
+      "newPasswordDescription": "ඔබගේ ගිණුම සඳහා නව මුරපදයක් තෝරන්න.",
+      "newPasswordTitle": "නව මුරපදයක් සාදන්න",
+      "passwordChangeDescription": "ඔබගේ විද්‍යුත් තැපෑලට යවන ලද කේතය ඇතුළත් කරන්න.",
+      "passwordChangeTitle": "මුරපදය වෙනස් කිරීම තහවුරු කරන්න",
+      "registrationDescription": "ඔබගේ ගිණුම නිර්මාණය කිරීම අවසන් කිරීමට ඔබගේ විද්‍යුත් තැපෑලට යවන ලද කේතය ඇතුළත් කරන්න.",
+      "registrationTitle": "ඔබගේ විද්‍යුත් තැපෑල සත්‍යාපනය කරන්න",
+      "requestFailed": "සත්‍යාපන කේතය යැවීමට නොහැකිය.",
+      "resend": "කේතය නැවත යවන්න",
+      "resendFailed": "කේතය නැවත යැවිය නොහැක.",
+      "resendIn": "නැවත යැවීමට තත්පර {{seconds}}ක් ඉතිරිව ඇත.",
+      "resetDescription": "ඔබගේ විද්‍යුත් තැපෑලට යවන ලද කේතය ඇතුළත් කරන්න.",
+      "resetTitle": "ඔබගේ මුරපදය නැවත සකසන්න",
+      "send": "කේතය යවන්න"
+    },
     "register": {
       "confirmPasswordLabel": "මුරපදය තහවුරු කරන්න",
       "confirmPasswordPlaceholder": "ඔබගේ මුරපදය තහවුරු කරන්න",
       "emailInvalid": "වලංගු විද්‍යුත් තැපැල් ලිපිනයක් ඇතුළත් කරන්න",
       "emailLabel": "පුද්ගලික ඊමේල්",
       "emailPlaceholder": "ඔබගේ පුද්ගලික විද්‍යුත් තැපෑල ඇතුලත් කරන්න",
+      "emailTaken": "විද්‍යුත් තැපෑල දැනටමත් ලියාපදිංචි කර ඇත.",
       "information": {
         "color1": "පැතිකඩ වර්ණය එක",
         "color2": "පැතිකඩ වර්ණ දෙක",
@@ -141,7 +170,8 @@
       "passwordLabel": "මුරපදය",
       "passwordMismatch": "මුරපද නොගැලපේ",
       "passwordPlaceholder": "මුරපදයක් සාදන්න (ඔබේ මුර-වැකිකඩ ලෙස භාවිතා කරයි)",
-      "passwordWeak": "මුරපදය අකුරු සහ අංක සහිත අවම වශයෙන් අක්ෂර 8 ක් විය යුතුය"
+      "passwordWeak": "මුරපදය අකුරු සහ අංක සහිත අවම වශයෙන් අක්ෂර 8 ක් විය යුතුය",
+      "submit": "ගිණුම තනන්න"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "සංස්කරණය කරන්න",
         "editProfile": "සංස්කරණය කරන්න",
+        "emailLabel": "විද්යුත් තැපෑල",
         "logoutButton": "ලොග් අවුට් වෙන්න",
         "nicknameLabel": "අන්වර්ථ නාමය",
-        "nicknamePlaceholder": "ඔබගේ අන්වර්ථ නාමය ඇතුලත් කරන්න"
+        "nicknamePlaceholder": "ඔබගේ අන්වර්ථ නාමය ඇතුලත් කරන්න",
+        "noEmail": "විද්‍යුත් තැපෑලක් සම්බන්ධ කර නැත"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "පැතිකඩ වර්ණ දෙක",
         "title": "පැතිකඩ පින්තූරය සංස්කරණය කරන්න",
         "userIcon": "පරිශීලක නිරූපකය"
+      },
+      "security": {
+        "currentEmailLabel": "වත්මන් විද්‍යුත් තැපෑල",
+        "emailDescription": "අපි ඔබගේ වත්මන් සහ නව විද්‍යුත් තැපැල් ලිපින සත්‍යාපනය කරන්නෙමු.",
+        "emailSame": "නව විද්‍යුත් තැපෑල ඔබගේ වත්මන් විද්‍යුත් තැපෑලට වඩා වෙනස් විය යුතුය.",
+        "emailTitle": "ඊමේල් ලිපිනය වෙනස් කරන්න",
+        "newEmailLabel": "නව ඊමේල් ලිපිනය",
+        "passwordDescription": "අපි ඔබගේ ගිණුම් විද්‍යුත් තැපෑලට සත්‍යාපන කේතයක් එවන්නෙමු.",
+        "passwordTitle": "මුරපදය වෙනස් කරන්න",
+        "title": "ගිණුම් ආරක්ෂාව"
       },
       "register": {
         "cta": "පටන් ගන්න",
@@ -1451,9 +1494,15 @@
     "close": "වසන්න"
   },
   "toasts": {
+    "emailChangeSuccess": "විද්‍යුත් තැපෑල සාර්ථකව යාවත්කාලීන කරන ලදී!",
     "linkCopied": "සබැඳිය පසුරු පුවරුවට පිටපත් කරන ලදී!",
     "loginSuccess": "සාර්ථකව ලොග් විය!",
     "logoutSuccess": "සාර්ථකව ලොග් අවුට් විය!",
+    "otpResent": "සත්‍යාපන කේතය නැවත යවා ඇත!",
+    "otpSent": "සත්‍යාපන කේතය ඔබගේ විද්‍යුත් තැපෑලට යවා ඇත!",
+    "passwordChangeSuccess": "මුරපදය සාර්ථකව වෙනස් කරන ලදී!",
+    "passwordResetError": "මුරපදය යළි පිහිටුවීම අසාර්ථක විය.",
+    "passwordResetSuccess": "මුරපදය සාර්ථකව යළි පිහිටුවන ලදී!",
     "registerSuccess": "සාර්ථකව ලියාපදිංචි විය!"
   }
 }

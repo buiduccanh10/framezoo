@@ -98,7 +98,31 @@ model users {
   profile        Json
   ratings        Json      @default("[]")
   nickname       String    @unique @db.VarChar(255)
-  email          String?   @unique @db.VarChar(255)
+  email             String?   @unique @db.VarChar(255)
+  email_verified_at DateTime? @db.Timestamptz(0)
+}
+
+model email_otp_challenges {
+  id                String    @id @default(uuid()) @db.Uuid
+  purpose           String    @db.VarChar(64)
+  user_id           String?
+  email             String    @db.VarChar(255)
+  payload           Json?
+  code_hash         String    @db.VarChar(128)
+  expires_at        DateTime  @db.Timestamptz(0)
+  attempts          Int       @default(0)
+  max_attempts      Int       @default(5)
+  last_sent_at      DateTime? @db.Timestamptz(0)
+  verified_at       DateTime? @db.Timestamptz(0)
+  consumed_at       DateTime? @db.Timestamptz(0)
+  action_token_hash String?   @db.VarChar(128)
+  action_expires_at DateTime? @db.Timestamptz(0)
+  created_at        DateTime  @default(now()) @db.Timestamptz(0)
+  request_ip        String?   @db.VarChar(255)
+
+  @@index([email, purpose, created_at])
+  @@index([user_id, purpose, created_at])
+  @@index([action_token_hash])
 }
 
 model watch_history {

@@ -116,12 +116,41 @@
       "usePasskey": "Użyj hasła",
       "validationError": "Nieprawidłowa lub niedokończona fraza /ᐠ. .ᐟ\\"
     },
+    "otp": {
+      "codeLabel": "Kod weryfikacyjny",
+      "continue": "Kontynuować",
+      "emailNewDescription": "Wprowadź kod wysłany na Twój nowy adres e-mail.",
+      "emailNewTitle": "Zweryfikuj swój nowy adres e-mail",
+      "emailOldDescription": "Wprowadź kod wysłany na Twój aktualny adres e-mail.",
+      "emailOldTitle": "Potwierdź swój obecny adres e-mail",
+      "expired": "Kod weryfikacyjny wygasł",
+      "expiresIn": "Kod wygasa za {{time}}",
+      "finish": "Skończyć",
+      "forgotDescription": "Podaj adres e-mail swojego konta, aby otrzymać kod weryfikacyjny.",
+      "forgotLink": "Zapomniałeś hasła?",
+      "forgotTitle": "Zapomniałeś hasła?",
+      "invalid": "Nieprawidłowy kod weryfikacyjny",
+      "newPasswordDescription": "Wybierz nowe hasło do swojego konta.",
+      "newPasswordTitle": "Utwórz nowe hasło",
+      "passwordChangeDescription": "Wprowadź kod wysłany na Twój adres e-mail.",
+      "passwordChangeTitle": "Potwierdź zmianę hasła",
+      "registrationDescription": "Wprowadź kod wysłany na Twój adres e-mail, aby dokończyć tworzenie konta.",
+      "registrationTitle": "Zweryfikuj swój adres e-mail",
+      "requestFailed": "Nie można wysłać kodu weryfikacyjnego",
+      "resend": "Wyślij ponownie kod",
+      "resendFailed": "Nie można ponownie wysłać kodu",
+      "resendIn": "Możliwość ponownego wysłania za {{seconds}}s",
+      "resetDescription": "Wprowadź kod wysłany na Twój adres e-mail.",
+      "resetTitle": "Zresetuj swoje hasło",
+      "send": "Wyślij kod"
+    },
     "register": {
       "confirmPasswordLabel": "Potwierdź hasło",
       "confirmPasswordPlaceholder": "Potwierdź swoje hasło",
       "emailInvalid": "Wpisz prawidłowy adres e-mail",
       "emailLabel": "Osobisty e-mail",
       "emailPlaceholder": "Wpisz swój osobisty adres e-mail",
+      "emailTaken": "Adres e-mail jest już zarejestrowany",
       "information": {
         "color1": "Kolor profilu jeden",
         "color2": "Kolor profilu dwa",
@@ -141,7 +170,8 @@
       "passwordLabel": "Hasło",
       "passwordMismatch": "Hasła nie pasują",
       "passwordPlaceholder": "Utwórz hasło (używane jako hasło)",
-      "passwordWeak": "Hasło musi składać się z co najmniej 8 znaków zawierających litery i cyfry"
+      "passwordWeak": "Hasło musi składać się z co najmniej 8 znaków zawierających litery i cyfry",
+      "submit": "Utwórz konto"
     },
     "trust": {
       "failed": {
@@ -1131,10 +1161,13 @@
   "settings": {
     "account": {
       "accountDetails": {
+        "editEmail": "Redagować",
         "editProfile": "Edytuj",
+        "emailLabel": "E-mail",
         "logoutButton": "Wyloguj się",
         "nicknameLabel": "Przydomek",
-        "nicknamePlaceholder": "Wpisz swój pseudonim"
+        "nicknamePlaceholder": "Wpisz swój pseudonim",
+        "noEmail": "Brak powiązanego adresu e-mail"
       },
       "actions": {
         "delete": {
@@ -1180,6 +1213,16 @@
         "secondColor": "Kolor profilu dwa",
         "title": "Edytuj zdjęcie profilowe",
         "userIcon": "Ikona użytkownika"
+      },
+      "security": {
+        "currentEmailLabel": "Aktualny e-mail",
+        "emailDescription": "Zweryfikujemy Twój aktualny i nowy adres e-mail.",
+        "emailSame": "Nowy adres e-mail musi różnić się od bieżącego adresu e-mail",
+        "emailTitle": "Zmień adres e-mail",
+        "newEmailLabel": "Nowy adres e-mail",
+        "passwordDescription": "Wyślemy kod weryfikacyjny na adres e-mail powiązany z Twoim kontem.",
+        "passwordTitle": "Zmień hasło",
+        "title": "Bezpieczeństwo konta"
       },
       "register": {
         "cta": "Rozpocznij",
@@ -1451,9 +1494,15 @@
     "close": "Zamknąć"
   },
   "toasts": {
+    "emailChangeSuccess": "Adres e-mail został pomyślnie zaktualizowany!",
     "linkCopied": "Link skopiowany do schowka!",
     "loginSuccess": "Zalogowano się pomyślnie!",
     "logoutSuccess": "Wylogowano się pomyślnie!",
+    "otpResent": "Kod weryfikacyjny został wysłany ponownie!",
+    "otpSent": "Kod weryfikacyjny został wysłany na Twój adres e-mail!",
+    "passwordChangeSuccess": "Hasło zostało pomyślnie zmienione!",
+    "passwordResetError": "Nie udało się zresetować hasła",
+    "passwordResetSuccess": "Hasło zostało pomyślnie zresetowane!",
     "registerSuccess": "Zarejestrowano się pomyślnie!"
   }
 }
