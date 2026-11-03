@@ -53,11 +53,17 @@ async function getAllAccounts() {
     }
     const text = await response.text();
 
-    const regex = /mw_user_count{namespace="movie-web"} (\d+)/;
-    const match = text.match(regex);
+    const regex = /mw_user_count(?:_default)?\{namespace="[^"]+"\}\s+(\d+)/g;
+    let total = 0;
+    let match = regex.exec(text);
 
-    if (match) {
-      return match[1];
+    while (match !== null) {
+      total += parseInt(match[1], 10);
+      match = regex.exec(text);
+    }
+
+    if (total > 0) {
+      return total.toString();
     }
     return "0";
   } catch {

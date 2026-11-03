@@ -44,7 +44,7 @@ export async function loginAccount(
     method: "POST",
     credentials: "include",
     body: {
-      namespace: "movie-web",
+      namespace: "desktop",
       ...data,
     },
     baseURL: url,

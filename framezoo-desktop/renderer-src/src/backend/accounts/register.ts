@@ -73,7 +73,7 @@ export async function registerAccount(
     method: "POST",
     credentials: "include",
     body: {
-      namespace: "movie-web",
+      namespace: "desktop",
       ...data,
     },
     baseURL: url,
