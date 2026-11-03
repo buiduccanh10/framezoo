@@ -198,7 +198,7 @@ export function LoginFormPart(props: LoginFormPartProps) {
   }
 
   return (
-    <LargeCard compact top={<BrandPill backgroundClass="bg-[#161527]" />}>
+    <LargeCard compact top={<BrandPill />}>
       <LargeCardText compact title={t("auth.login.title")}>
         {t("auth.login.description")}
       </LargeCardText>
@@ -215,10 +215,10 @@ export function LoginFormPart(props: LoginFormPartProps) {
           <div className="relative mb-4">
             <div className="relative my-4">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-authentication-border/50" />
+                <div className="w-full border-t border-white/10" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-authentication-bg text-authentication-text">
+                <span className="px-2 bg-background-main text-type-secondary">
                   {t("auth.login.or")}
                 </span>
               </div>

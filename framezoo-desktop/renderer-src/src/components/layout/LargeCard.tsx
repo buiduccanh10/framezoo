@@ -1,22 +1,46 @@
 import classNames from "classnames";
+import { createContext, useContext } from "react";
+
+export interface LargeCardContextValue {
+  embedded?: boolean;
+}
+
+export const LargeCardContext = createContext<LargeCardContextValue>({
+  embedded: false,
+});
 
 export function LargeCard(props: {
   children: React.ReactNode;
   top?: React.ReactNode;
   compact?: boolean;
   className?: string;
+  embedded?: boolean;
 }) {
+  const context = useContext(LargeCardContext);
+  const isEmbedded = props.embedded ?? context.embedded ?? false;
+
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center w-full">
       {props.top ? (
-        <div className="inline-block transform translate-y-1/2">
+        <div
+          className={
+            isEmbedded
+              ? "mb-4 flex justify-center"
+              : "inline-block transform translate-y-1/2"
+          }
+        >
           {props.top}
         </div>
       ) : null}
       <div
         className={classNames(
-          "w-full rounded-2xl bg-largeCard-background border border-white/10 shadow-2xl max-w-[600px] mx-auto",
-          props.compact ? "p-4 sm:p-6 md:p-8" : "p-[3rem]",
+          "w-full mx-auto",
+          isEmbedded
+            ? "border-0 bg-transparent shadow-none p-0 sm:p-1 max-w-[500px]"
+            : classNames(
+                "rounded-2xl bg-largeCard-background border border-white/10 shadow-2xl max-w-[600px]",
+                props.compact ? "p-4 sm:p-6 md:p-8" : "p-[3rem]",
+              ),
           props.className,
         )}
       >
