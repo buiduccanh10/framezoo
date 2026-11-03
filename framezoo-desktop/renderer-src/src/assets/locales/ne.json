@@ -35,7 +35,10 @@
       "configRequiredBadge": "कन्फिगरेसन आवश्यक छ",
       "configRequiredWarning": "यो एडअन कन्फिगर गरिएको छैन र स्ट्रिम वा उपशीर्षकहरू लोड गर्न असफल हुन सक्छ।",
       "configureAddon": "यो एडअन कन्फिगर गर्नुहोस्",
+      "configureCustomKeyActive": "तपाईंको कुञ्जी कन्फिगर गरिएको छ (परिवर्तन गर्न क्लिक गर्नुहोस्)",
       "configureRequiredAction": "यो एडअन कन्फिगर गर्नुहोस् (आवश्यक)",
+      "customKeyActiveDesc": "तपाईंको व्यक्तिगत Wyzie API कुञ्जी प्रयोग गर्दै",
+      "customKeyConfiguredBadge": "तपाईंको कुञ्जी कन्फिगर गरिएको छ।",
       "description": "Addons वैकल्पिक छन्। यो एपले कुनै पनि एडअनलाई बन्डल, सिफारिस वा होस्ट गर्दैन।",
       "disabled": "असक्षम",
       "emptyInstalled": "प्रणालीमा अहिलेसम्म कुनै एडअन्स स्थापना गरिएको छैन।",
@@ -44,6 +47,8 @@
       "installedHeading": "स्थापित Addons",
       "processing": "प्रशोधन गर्दै...",
       "removeAddon": "यो addon हटाउनुहोस्",
+      "subtitlesConfiguredError": "उपशीर्षक API कुञ्जी कन्फिगर गर्न असफल भयो। कृपया फेरि प्रयास गर्नुहोस्!",
+      "subtitlesConfiguredSuccess": "उपशीर्षक API कुञ्जी सफलतापूर्वक कन्फिगर गरियो!",
       "title": "Addons प्रबन्धक"
     },
     "player": {

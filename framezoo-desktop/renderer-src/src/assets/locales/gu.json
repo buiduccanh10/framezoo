@@ -35,7 +35,10 @@
       "configRequiredBadge": "ગોઠવણી જરૂરી છે",
       "configRequiredWarning": "આ એડઓન ગોઠવેલ નથી અને સ્ટ્રીમ્સ અથવા સબટાઈટલ લોડ કરવામાં નિષ્ફળ થઈ શકે છે.",
       "configureAddon": "આ એડઓન ગોઠવો",
+      "configureCustomKeyActive": "તમારી કી ગોઠવવામાં આવી છે (બદલવા માટે ક્લિક કરો)",
       "configureRequiredAction": "આ એડઓન ગોઠવો (જરૂરી)",
+      "customKeyActiveDesc": "તમારી વ્યક્તિગત Wyzie API કીનો ઉપયોગ કરીને",
+      "customKeyConfiguredBadge": "તમારી કી ગોઠવવામાં આવી છે.",
       "description": "એડઓન્સ વૈકલ્પિક છે. આ એપ્લિકેશન કોઈપણ એડનને બંડલ, ભલામણ અથવા હોસ્ટ કરતી નથી.",
       "disabled": "અક્ષમ",
       "emptyInstalled": "સિસ્ટમમાં હજી સુધી કોઈ એડઓન્સ ઇન્સ્ટોલ કરેલ નથી.",
@@ -44,6 +47,8 @@
       "installedHeading": "ઇન્સ્ટોલ કરેલ એડઓન્સ",
       "processing": "પ્રક્રિયા કરી રહ્યું છે...",
       "removeAddon": "આ એડન દૂર કરો",
+      "subtitlesConfiguredError": "સબટાઈટલ API કી ગોઠવવામાં નિષ્ફળ. કૃપા કરીને ફરી પ્રયાસ કરો!",
+      "subtitlesConfiguredSuccess": "સબટાઈટલ API કી સફળતાપૂર્વક ગોઠવાઈ!",
       "title": "એડઓન્સ મેનેજર"
     },
     "player": {

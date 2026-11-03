@@ -35,7 +35,10 @@
       "configRequiredBadge": "Membutuhkan Konfigurasi",
       "configRequiredWarning": "Addon ini belum dikonfigurasi dan mungkin gagal memuat aliran video atau subtitle.",
       "configureAddon": "Konfigurasikan add-on ini",
+      "configureCustomKeyActive": "Kunci Anda telah dikonfigurasi (klik untuk mengubah)",
       "configureRequiredAction": "Konfigurasikan add-on ini (Wajib)",
+      "customKeyActiveDesc": "Menggunakan kunci API Wyzie pribadi Anda",
+      "customKeyConfiguredBadge": "Kunci Anda telah dikonfigurasi",
       "description": "Add-on bersifat opsional. Aplikasi ini tidak memaketkan, merekomendasikan, atau menghosting add-on apa pun.",
       "disabled": "Dengan disabilitas",
       "emptyInstalled": "Belum ada tambahan yang terpasang di sistem.",
@@ -44,6 +47,8 @@
       "installedHeading": "Add-on yang diinstal",
       "processing": "Pengolahan...",
       "removeAddon": "Hapus tambahan ini",
+      "subtitlesConfiguredError": "Gagal mengkonfigurasi kunci API subtitle. Silakan coba lagi!",
+      "subtitlesConfiguredSuccess": "Kunci API subtitle berhasil dikonfigurasi!",
       "title": "Manajer Tambahan"
     },
     "player": {

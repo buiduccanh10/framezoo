@@ -35,7 +35,10 @@
       "configRequiredBadge": "需要配置",
       "configRequiredWarning": "此插件尚未配置，可能无法加载视频流或字幕。",
       "configureAddon": "配置此插件",
+      "configureCustomKeyActive": "您的密钥已配置（点击更改）",
       "configureRequiredAction": "配置此插件（必需）",
+      "customKeyActiveDesc": "使用您的个人 Wyzie API 密钥",
+      "customKeyConfiguredBadge": "您的密钥已配置完成",
       "description": "插件是可选的。此应用程序不捆绑、推荐或托管任何插件。",
       "disabled": "残疾人",
       "emptyInstalled": "系统中尚未安装任何插件。",
@@ -44,6 +47,8 @@
       "installedHeading": "已安装的插件",
       "processing": "加工...",
       "removeAddon": "删除这个插件",
+      "subtitlesConfiguredError": "字幕 API 密钥配置失败。请重试！",
+      "subtitlesConfiguredSuccess": "字幕API密钥配置成功！",
       "title": "插件管理器"
     },
     "player": {

@@ -35,7 +35,10 @@
       "configRequiredBadge": "Konfigurációt igényel",
       "configRequiredWarning": "Ez a kiegészítő nincs konfigurálva, és előfordulhat, hogy nem tölti be a streameket vagy a feliratokat.",
       "configureAddon": "Konfigurálja ezt a kiegészítőt",
+      "configureCustomKeyActive": "A kulcs konfigurálva lett (kattintson a módosításhoz)",
       "configureRequiredAction": "Konfigurálja ezt a kiegészítőt (Kötelező)",
+      "customKeyActiveDesc": "Személyes Wyzie API-kulcs használata",
+      "customKeyConfiguredBadge": "A kulcs konfigurálva lett",
       "description": "A kiegészítők nem kötelezőek. Ez az alkalmazás nem köt össze, ajánl vagy fogad semmilyen kiegészítőt.",
       "disabled": "Letiltva",
       "emptyInstalled": "A rendszerbe még nincs telepítve kiegészítő.",
@@ -44,6 +47,8 @@
       "installedHeading": "Telepített kiegészítők",
       "processing": "Feldolgozás...",
       "removeAddon": "Távolítsa el ezt a kiegészítőt",
+      "subtitlesConfiguredError": "Nem sikerült konfigurálni a felirat API-kulcsát. Próbáld újra!",
+      "subtitlesConfiguredSuccess": "Felirat API kulcs sikeresen konfigurálva!",
       "title": "Addons Manager"
     },
     "player": {

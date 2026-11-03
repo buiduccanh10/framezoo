@@ -35,7 +35,10 @@
       "configRequiredBadge": "ต้องตั้งค่า",
       "configRequiredWarning": "ส่วนเสริมนี้ยังไม่ได้ตั้งค่า และอาจไม่สามารถโหลดสตรีมหรือคำบรรยายได้",
       "configureAddon": "ตั้งค่าส่วนเสริมนี้",
+      "configureCustomKeyActive": "รหัสของคุณได้รับการตั้งค่าเรียบร้อยแล้ว (คลิกเพื่อเปลี่ยน)",
       "configureRequiredAction": "ตั้งค่าส่วนเสริมนี้ (จำเป็น)",
+      "customKeyActiveDesc": "ใช้คีย์ API ส่วนตัวของ Wyzie ของคุณ",
+      "customKeyConfiguredBadge": "รหัสของคุณได้รับการตั้งค่าเรียบร้อยแล้ว",
       "description": "ส่วนเสริมเป็นทางเลือก แอปนี้ไม่ได้รวมกลุ่ม แนะนำ หรือโฮสต์ส่วนเสริมใดๆ",
       "disabled": "พิการ",
       "emptyInstalled": "ยังไม่มีการติดตั้งส่วนเสริมในระบบ",
@@ -44,6 +47,8 @@
       "installedHeading": "ส่วนเสริมที่ติดตั้งแล้ว",
       "processing": "กำลังประมวลผล...",
       "removeAddon": "ลบส่วนเสริมนี้",
+      "subtitlesConfiguredError": "ไม่สามารถกำหนดค่าคีย์ API สำหรับคำบรรยายได้ โปรดลองอีกครั้ง!",
+      "subtitlesConfiguredSuccess": "ตั้งค่าคีย์ API สำหรับคำบรรยายสำเร็จแล้ว!",
       "title": "ผู้จัดการส่วนเสริม"
     },
     "player": {

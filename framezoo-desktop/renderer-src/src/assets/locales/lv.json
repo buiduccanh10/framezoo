@@ -35,7 +35,10 @@
       "configRequiredBadge": "Nepieciešama konfigurācija",
       "configRequiredWarning": "Šis papildinājums nav konfigurēts, un, iespējams, neizdosies ielādēt straumes vai subtitrus.",
       "configureAddon": "Konfigurējiet šo papildinājumu",
+      "configureCustomKeyActive": "Jūsu atslēga ir konfigurēta (noklikšķiniet, lai mainītu)",
       "configureRequiredAction": "Konfigurēt šo papildinājumu (obligāti)",
+      "customKeyActiveDesc": "Izmantojot savu personīgo Wyzie API atslēgu",
+      "customKeyConfiguredBadge": "Jūsu atslēga ir konfigurēta",
       "description": "Papildinājumi nav obligāti. Šī lietotne neapvieno, neiesaka vai mitina nevienu papildinājumu.",
       "disabled": "Atspējots",
       "emptyInstalled": "Sistēmā vēl nav instalēts neviens papildinājums.",
@@ -44,6 +47,8 @@
       "installedHeading": "Instalēti papildinājumi",
       "processing": "Notiek apstrāde...",
       "removeAddon": "Noņemiet šo papildinājumu",
+      "subtitlesConfiguredError": "Neizdevās konfigurēt subtitru API atslēgu. Lūdzu, mēģiniet vēlreiz!",
+      "subtitlesConfiguredSuccess": "Subtitru API atslēga veiksmīgi konfigurēta!",
       "title": "Papildinājumu pārvaldnieks"
     },
     "player": {

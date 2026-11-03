@@ -35,7 +35,10 @@
       "configRequiredBadge": "कॉन्फ़िगरेशन आवश्यक है",
       "configRequiredWarning": "यह ऐडऑन कॉन्फ़िगर नहीं किया गया है और हो सकता है कि स्ट्रीम या सबटाइटल लोड करने में विफल हो जाए।",
       "configureAddon": "इस ऐडऑन को कॉन्फ़िगर करें",
+      "configureCustomKeyActive": "आपकी कुंजी कॉन्फ़िगर कर दी गई है (बदलने के लिए क्लिक करें)",
       "configureRequiredAction": "इस ऐडऑन को कॉन्फ़िगर करें (अनिवार्य)",
+      "customKeyActiveDesc": "अपनी व्यक्तिगत Wyzie API कुंजी का उपयोग करना",
+      "customKeyConfiguredBadge": "आपकी कुंजी कॉन्फ़िगर कर दी गई है।",
       "description": "ऐडऑन वैकल्पिक हैं. यह ऐप किसी भी ऐडऑन को बंडल, अनुशंसित या होस्ट नहीं करता है।",
       "disabled": "अक्षम",
       "emptyInstalled": "सिस्टम में अभी तक कोई ऐडऑन स्थापित नहीं है.",
@@ -44,6 +47,8 @@
       "installedHeading": "स्थापित ऐडऑन",
       "processing": "प्रसंस्करण...",
       "removeAddon": "इस ऐडऑन को हटा दें",
+      "subtitlesConfiguredError": "सबटाइटल एपीआई कुंजी को कॉन्फ़िगर करने में विफलता। कृपया पुनः प्रयास करें!",
+      "subtitlesConfiguredSuccess": "सबटाइटल एपीआई कुंजी सफलतापूर्वक कॉन्फ़िगर हो गई!",
       "title": "ऐडऑन मैनेजर"
     },
     "player": {

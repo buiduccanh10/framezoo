@@ -35,7 +35,10 @@
       "configRequiredBadge": "Nõuab seadistamist",
       "configRequiredWarning": "See lisandmoodul pole konfigureeritud ja voogedastuste või subtiitrite laadimine võib ebaõnnestuda.",
       "configureAddon": "Selle lisandmooduli seadistamine",
+      "configureCustomKeyActive": "Teie võti on konfigureeritud (klõpsake muutmiseks)",
       "configureRequiredAction": "Lisandmooduli seadistamine (nõutav)",
+      "customKeyActiveDesc": "Isikliku Wyzie API-võtme kasutamine",
+      "customKeyConfiguredBadge": "Teie võti on konfigureeritud",
       "description": "Lisad on valikulised. See rakendus ei koonda, ei soovita ega hosti ühtegi lisandmoodulit.",
       "disabled": "Keelatud",
       "emptyInstalled": "Süsteemi pole veel installitud ühtegi lisandmoodulit.",
@@ -44,6 +47,8 @@
       "installedHeading": "Installitud lisad",
       "processing": "Töötlemine...",
       "removeAddon": "Eemalda see lisand",
+      "subtitlesConfiguredError": "Subtiitrite API-võtme seadistamine ebaõnnestus. Palun proovige uuesti!",
+      "subtitlesConfiguredSuccess": "Subtiitrite API võti edukalt konfigureeritud!",
       "title": "Lisade haldur"
     },
     "player": {

@@ -35,7 +35,10 @@
       "configRequiredBadge": "Configuration requise",
       "configRequiredWarning": "Ce module complémentaire n&#39;est pas configuré et peut ne pas charger les flux ou les sous-titres.",
       "configureAddon": "Configurer cette extension",
+      "configureCustomKeyActive": "Votre clé a été configurée (cliquez pour modifier)",
       "configureRequiredAction": "Configurer ce module complémentaire (obligatoire)",
+      "customKeyActiveDesc": "En utilisant votre clé API Wyzie personnelle",
+      "customKeyConfiguredBadge": "Votre clé a été configurée",
       "description": "Les modules complémentaires sont facultatifs. Cette application ne regroupe, ne recommande ni n'héberge aucun module complémentaire.",
       "disabled": "Désactivé",
       "emptyInstalled": "Aucun module complémentaire n'est encore installé dans le système.",
@@ -44,6 +47,8 @@
       "installedHeading": "Modules complémentaires installés",
       "processing": "Traitement...",
       "removeAddon": "Supprimer ce module complémentaire",
+      "subtitlesConfiguredError": "Impossible de configurer la clé API des sous-titres. Veuillez réessayer !",
+      "subtitlesConfiguredSuccess": "Clé API des sous-titres configurée avec succès !",
       "title": "Gestionnaire de modules complémentaires"
     },
     "player": {

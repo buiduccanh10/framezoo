@@ -35,7 +35,10 @@
       "configRequiredBadge": "Kräver konfiguration",
       "configRequiredWarning": "Det här tillägget är inte konfigurerat och kan misslyckas med att ladda strömmar eller undertexter.",
       "configureAddon": "Konfigurera detta tillägg",
+      "configureCustomKeyActive": "Din nyckel har konfigurerats (klicka för att ändra)",
       "configureRequiredAction": "Konfigurera detta tillägg (Obligatoriskt)",
+      "customKeyActiveDesc": "Använda din personliga Wyzie API-nyckel",
+      "customKeyConfiguredBadge": "Din nyckel har konfigurerats",
       "description": "Tillägg är valfria. Denna app paketerar inte, rekommenderar eller är värd för något tillägg.",
       "disabled": "Inaktiverad",
       "emptyInstalled": "Inga tillägg installerade i systemet ännu.",
@@ -44,6 +47,8 @@
       "installedHeading": "Installerade tillägg",
       "processing": "Bearbetar...",
       "removeAddon": "Ta bort detta tillägg",
+      "subtitlesConfiguredError": "Misslyckades med att konfigurera API-nyckeln för undertexter. Försök igen!",
+      "subtitlesConfiguredSuccess": "API-nyckeln för undertexter har konfigurerats!",
       "title": "Tilläggshanterare"
     },
     "player": {

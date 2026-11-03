@@ -35,7 +35,10 @@
       "configRequiredBadge": "Necesită configurare",
       "configRequiredWarning": "Acest addon nu este configurat și este posibil să nu poată încărca fluxuri sau subtitrări.",
       "configureAddon": "Configurați acest addon",
+      "configureCustomKeyActive": "Cheia dvs. a fost configurată (faceți clic pentru a modifica)",
       "configureRequiredAction": "Configurați acest addon (obligatoriu)",
+      "customKeyActiveDesc": "Folosirea cheii API Wyzie personale",
+      "customKeyConfiguredBadge": "Cheia dvs. a fost configurată",
       "description": "Suplimentele sunt opționale. Această aplicație nu include, nu recomandă sau găzduiește niciun supliment.",
       "disabled": "Dezactivat",
       "emptyInstalled": "Nu există încă suplimente instalate în sistem.",
@@ -44,6 +47,8 @@
       "installedHeading": "Suplimente instalate",
       "processing": "Prelucrare...",
       "removeAddon": "Eliminați acest supliment",
+      "subtitlesConfiguredError": "Nu s-a putut configura cheia API pentru subtitrări. Vă rugăm să încercați din nou!",
+      "subtitlesConfiguredSuccess": "Cheia API pentru subtitrări a fost configurată cu succes!",
       "title": "Manager de suplimente"
     },
     "player": {

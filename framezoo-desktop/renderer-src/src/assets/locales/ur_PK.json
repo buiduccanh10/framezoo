@@ -35,7 +35,10 @@
       "configRequiredBadge": "کنفیگریشن کی ضرورت ہے۔",
       "configRequiredWarning": "یہ ایڈون کنفیگر نہیں ہے اور اسٹریمز یا سب ٹائٹلز کو لوڈ کرنے میں ناکام ہو سکتا ہے۔",
       "configureAddon": "اس ایڈون کو کنفیگر کریں۔",
+      "configureCustomKeyActive": "آپ کی کلید ترتیب دی گئی ہے (تبدیل کرنے کے لیے کلک کریں)",
       "configureRequiredAction": "اس ایڈون کو کنفیگر کریں (ضروری)",
+      "customKeyActiveDesc": "اپنی ذاتی Wyzie API کلید استعمال کرنا",
+      "customKeyConfiguredBadge": "آپ کی کلید ترتیب دی گئی ہے۔",
       "description": "ایڈونز اختیاری ہیں۔ یہ ایپ کسی بھی ایڈون کو بنڈل، تجویز یا میزبانی نہیں کرتی ہے۔",
       "disabled": "معذور",
       "emptyInstalled": "سسٹم میں ابھی تک کوئی ایڈون انسٹال نہیں ہوا ہے۔",
@@ -44,6 +47,8 @@
       "installedHeading": "انسٹال کردہ ایڈونز",
       "processing": "پروسیسنگ...",
       "removeAddon": "اس ایڈون کو ہٹا دیں۔",
+      "subtitlesConfiguredError": "سب ٹائٹل API کلید کو کنفیگر کرنے میں ناکام۔ براہ کرم دوبارہ کوشش کریں!",
+      "subtitlesConfiguredSuccess": "سب ٹائٹل API کلید کامیابی کے ساتھ کنفیگر ہو گئی!",
       "title": "ایڈونس مینیجر"
     },
     "player": {

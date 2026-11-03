@@ -35,7 +35,10 @@
       "configRequiredBadge": "Kræver konfiguration",
       "configRequiredWarning": "Denne tilføjelse er ikke konfigureret og kan muligvis ikke indlæse streams eller undertekster.",
       "configureAddon": "Konfigurer denne tilføjelse",
+      "configureCustomKeyActive": "Din nøgle er blevet konfigureret (klik for at ændre)",
       "configureRequiredAction": "Konfigurer denne tilføjelse (påkrævet)",
+      "customKeyActiveDesc": "Brug af din personlige Wyzie API-nøgle",
+      "customKeyConfiguredBadge": "Din nøgle er blevet konfigureret",
       "description": "Tilføjelser er valgfrie. Denne app samler, anbefaler eller hoster ikke nogen tilføjelse.",
       "disabled": "Handicappet",
       "emptyInstalled": "Ingen tilføjelser installeret i systemet endnu.",
@@ -44,6 +47,8 @@
       "installedHeading": "Installerede tilføjelser",
       "processing": "Forarbejdning...",
       "removeAddon": "Fjern denne tilføjelse",
+      "subtitlesConfiguredError": "Konfiguration af API-nøglen til undertekster mislykkedes. Prøv igen!",
+      "subtitlesConfiguredSuccess": "API-nøgle til undertekster er konfigureret!",
       "title": "Addons Manager"
     },
     "player": {

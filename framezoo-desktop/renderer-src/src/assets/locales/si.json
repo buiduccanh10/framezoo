@@ -35,7 +35,10 @@
       "configRequiredBadge": "වින්‍යාසය අවශ්‍යයි",
       "configRequiredWarning": "මෙම ඇඩෝනය වින්‍යාස කර නොමැති අතර ප්‍රවාහ හෝ උපසිරැසි පූරණය කිරීමට අසමත් විය හැක.",
       "configureAddon": "මෙම ඇඩෝනය වින්‍යාස කරන්න",
+      "configureCustomKeyActive": "ඔබගේ යතුර වින්‍යාස කර ඇත (වෙනස් කිරීමට ක්ලික් කරන්න)",
       "configureRequiredAction": "මෙම ඇඩෝනය වින්‍යාස කරන්න (අවශ්‍යයි)",
+      "customKeyActiveDesc": "ඔබගේ පුද්ගලික Wyzie API යතුර භාවිතා කිරීම",
+      "customKeyConfiguredBadge": "ඔබගේ යතුර වින්‍යාස කර ඇත.",
       "description": "ඇඩෝන විකල්ප වේ. මෙම යෙදුම කිසිදු ඇඩෝනයක් බණ්ඩල් කිරීම, නිර්දේශ කිරීම හෝ සත්කාරකත්වය නොදක්වයි.",
       "disabled": "ආබාධිතයි",
       "emptyInstalled": "තවමත් පද්ධතිය තුළ ඇඩෝන ස්ථාපනය කර නොමැත.",
@@ -44,6 +47,8 @@
       "installedHeading": "ස්ථාපිත ඇඩෝන",
       "processing": "සකසමින්...",
       "removeAddon": "මෙම ඇඩෝනය ඉවත් කරන්න",
+      "subtitlesConfiguredError": "උපසිරැසි API යතුර වින්‍යාස කිරීමට අසමත් විය. කරුණාකර නැවත උත්සාහ කරන්න!",
+      "subtitlesConfiguredSuccess": "උපසිරැසි API යතුර සාර්ථකව වින්‍යාස කරන ලදී!",
       "title": "ඇඩෝන කළමනාකරු"
     },
     "player": {

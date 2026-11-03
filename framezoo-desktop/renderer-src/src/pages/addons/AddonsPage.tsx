@@ -1,6 +1,7 @@
 import classNames from "classnames";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useCopyToClipboard } from "react-use";
 
 import { createHttpStatusError, withAuthRetry } from "@/backend/accounts/auth";
@@ -34,9 +35,72 @@ import { useToastStore } from "@/stores/interface/toast";
 export function AddonsPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const addons = useInstalledAddons();
   const [, copyToClipboard] = useCopyToClipboard();
   const showToast = useToastStore((state) => state.showToast);
+  const account = useAuthStore((s) => s.account);
+
+  const [hasNativeCustomKey, setHasNativeCustomKey] = useState<boolean>(false);
+
+  const checkNativeStatus = useCallback(async () => {
+    if (!account) {
+      setHasNativeCustomKey(false);
+      return;
+    }
+    const backend = getActiveBackendUrl();
+    const backendBase = backend ? backend.replace(/\/+$/, "") : "";
+    if (!backendBase) return;
+
+    try {
+      const data = await withAuthRetry(backendBase, account, async (token) => {
+        const response = await fetch(
+          `${backendBase}/addon/subtitles/api/status`,
+          {
+            headers: token ? { Authorization: `Bearer ${token}` } : {},
+          },
+        );
+        if (!response.ok) return { hasCustomKey: false };
+        return response.json();
+      });
+      setHasNativeCustomKey(Boolean(data?.hasCustomKey));
+    } catch {
+      // Ignore network errors
+    }
+  }, [account]);
+
+  useEffect(() => {
+    void checkNativeStatus();
+  }, [checkNativeStatus]);
+
+  // Handle toast notification when returning from web setup
+  useEffect(() => {
+    const status = searchParams.get("subtitles_configured");
+    if (!status) return;
+
+    if (status === "success") {
+      showToast(
+        t(
+          "addons.page.subtitlesConfiguredSuccess",
+          "Cấu hình API key phụ đề thành công!",
+        ),
+        "success",
+      );
+      void checkNativeStatus();
+    } else if (status === "failed" || status === "error") {
+      showToast(
+        t(
+          "addons.page.subtitlesConfiguredError",
+          "Cấu hình API key phụ đề thất bại. Vui lòng thử lại!",
+        ),
+        "error",
+      );
+    }
+
+    const newParams = new URLSearchParams(searchParams);
+    newParams.delete("subtitles_configured");
+    setSearchParams(newParams, { replace: true });
+  }, [searchParams, setSearchParams, showToast, t, checkNativeStatus]);
 
   const handleShareAddon = (manifestUrl: string) => {
     copyToClipboard(manifestUrl);
@@ -48,8 +112,8 @@ export function AddonsPage() {
     defaultUrl: string,
   ) => {
     if (addon.isNative || addon.manifest.id === NATIVE_SUBTITLE_ADDON_ID) {
-      const account = useAuthStore.getState().account;
-      if (account) {
+      const activeAccount = account ?? useAuthStore.getState().account;
+      if (activeAccount) {
         try {
           const backend = getActiveBackendUrl();
           const backendBase = backend ? backend.replace(/\/+$/, "") : "";
@@ -73,7 +137,7 @@ export function AddonsPage() {
 
             const ticketData = await withAuthRetry(
               backendBase,
-              account,
+              activeAccount,
               async (token) => {
                 const response = await fetch(
                   `${backendBase}/addon/subtitles/api/ticket`,
@@ -174,6 +238,10 @@ export function AddonsPage() {
                 addon.manifest,
               );
               const isConfigurable = isAddonConfigurable(addon.manifest);
+              const isNative =
+                addon.isNative ||
+                addon.manifest.id === NATIVE_SUBTITLE_ADDON_ID;
+              const hasConfiguredCustomKey = isNative && hasNativeCustomKey;
               const configureUrl = getAddonConfigureUrl(
                 addon.manifestUrl,
                 addon.baseUrl,
@@ -206,6 +274,14 @@ export function AddonsPage() {
                           v{addon.manifest.version}
                         </span>
                       ) : null}
+                      {hasConfiguredCustomKey ? (
+                        <span className="shrink-0 rounded bg-emerald-500/20 px-2 py-0.5 text-xs font-semibold text-emerald-300">
+                          {t(
+                            "addons.page.customKeyConfiguredBadge",
+                            "Key của bạn đã được cấu hình",
+                          )}
+                        </span>
+                      ) : null}
                       {isConfigRequired ? (
                         <span className="shrink-0 rounded bg-amber-500/20 px-2 py-0.5 text-xs font-semibold text-amber-300">
                           {t(
@@ -222,6 +298,20 @@ export function AddonsPage() {
                       resources={addon.manifest.resources}
                       className="mt-1"
                     />
+                    {hasConfiguredCustomKey ? (
+                      <p className="mt-1.5 flex items-center gap-1.5 text-xs font-medium text-emerald-400">
+                        <Icon
+                          icon={Icons.CHECKMARK}
+                          className="shrink-0 text-sm text-emerald-400"
+                        />
+                        <span>
+                          {t(
+                            "addons.page.customKeyActiveDesc",
+                            "Đang sử dụng API key Wyzie riêng của tài khoản",
+                          )}
+                        </span>
+                      </p>
+                    ) : null}
                     {isConfigRequired ? (
                       <p className="mt-1.5 flex items-center gap-1.5 text-xs font-medium text-amber-300/90">
                         <Icon
@@ -257,23 +347,30 @@ export function AddonsPage() {
                         type="button"
                         className={classNames(
                           "rounded-lg p-2 transition-colors",
-                          isConfigRequired
-                            ? "bg-amber-500/20 text-amber-300 hover:bg-amber-500/30"
-                            : "text-dropdown-text hover:bg-green-500/20 hover:text-green-400",
+                          hasConfiguredCustomKey
+                            ? "bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30"
+                            : isConfigRequired
+                              ? "bg-amber-500/20 text-amber-300 hover:bg-amber-500/30"
+                              : "text-dropdown-text hover:bg-green-500/20 hover:text-green-400",
                         )}
                         onClick={() =>
                           void handleConfigureAddon(addon, configureUrl)
                         }
                         title={
-                          isConfigRequired
+                          hasConfiguredCustomKey
                             ? t(
-                                "addons.page.configureRequiredAction",
-                                "Configure this addon (Required)",
+                                "addons.page.configureCustomKeyActive",
+                                "Key của bạn đã được cấu hình (nhấn để đổi)",
                               )
-                            : t(
-                                "addons.page.configureAddon",
-                                "Configure this addon",
-                              )
+                            : isConfigRequired
+                              ? t(
+                                  "addons.page.configureRequiredAction",
+                                  "Configure this addon (Required)",
+                                )
+                              : t(
+                                  "addons.page.configureAddon",
+                                  "Configure this addon",
+                                )
                         }
                       >
                         <Icon icon={Icons.SETTINGS} className="text-base" />

@@ -35,7 +35,10 @@
       "configRequiredBadge": "Requer configuração",
       "configRequiredWarning": "Este complemento não está configurado e pode não conseguir carregar fluxos ou legendas.",
       "configureAddon": "Configure este complemento.",
+      "configureCustomKeyActive": "Sua chave foi configurada (clique para alterar)",
       "configureRequiredAction": "Configure este complemento (Obrigatório)",
+      "customKeyActiveDesc": "Usando sua chave de API pessoal do Wyzie",
+      "customKeyConfiguredBadge": "Sua chave foi configurada.",
       "description": "Os complementos são opcionais. Este aplicativo não agrupa, recomenda ou hospeda nenhum complemento.",
       "disabled": "Desabilitado",
       "emptyInstalled": "Nenhum complemento instalado no sistema ainda.",
@@ -44,6 +47,8 @@
       "installedHeading": "Complementos instalados",
       "processing": "Processamento...",
       "removeAddon": "Remover este complemento",
+      "subtitlesConfiguredError": "Falha ao configurar a chave da API de legendas. Tente novamente!",
+      "subtitlesConfiguredSuccess": "Chave da API de legendas configurada com sucesso!",
       "title": "Gerenciador de complementos"
     },
     "player": {

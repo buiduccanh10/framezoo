@@ -35,7 +35,10 @@
       "configRequiredBadge": "需要配置",
       "configRequiredWarning": "此插件尚未配置，可能無法載入視訊串流或字幕。",
       "configureAddon": "配置此插件",
+      "configureCustomKeyActive": "您的金鑰已配置（點擊變更）",
       "configureRequiredAction": "配置此外掛程式（必需）",
+      "customKeyActiveDesc": "使用您的個人 Wyzie API 金鑰",
+      "customKeyConfiguredBadge": "您的金鑰已配置完成",
       "description": "插件是可選的。此應用程式不捆綁、推薦或託管任何插件。",
       "disabled": "殘障人士",
       "emptyInstalled": "系統中尚未安裝任何插件。",
@@ -44,6 +47,8 @@
       "installedHeading": "已安裝的插件",
       "processing": "加工...",
       "removeAddon": "刪除這個插件",
+      "subtitlesConfiguredError": "字幕 API 金鑰配置失敗。請重試！",
+      "subtitlesConfiguredSuccess": "字幕API金鑰配置成功！",
       "title": "外掛程式管理器"
     },
     "player": {

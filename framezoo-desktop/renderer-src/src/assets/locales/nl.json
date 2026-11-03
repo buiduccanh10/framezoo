@@ -35,7 +35,10 @@
       "configRequiredBadge": "Vereist configuratie",
       "configRequiredWarning": "Deze add-on is niet geconfigureerd en laadt mogelijk geen streams of ondertitels.",
       "configureAddon": "Configureer deze add-on",
+      "configureCustomKeyActive": "Uw sleutel is geconfigureerd (klik om te wijzigen)",
       "configureRequiredAction": "Configureer deze add-on (verplicht)",
+      "customKeyActiveDesc": "Gebruik uw persoonlijke Wyzie API-sleutel",
+      "customKeyConfiguredBadge": "Uw sleutel is geconfigureerd",
       "description": "Add-ons zijn optioneel. Deze app bundelt, beveelt of host geen enkele add-on.",
       "disabled": "Gehandicapt",
       "emptyInstalled": "Er zijn nog geen add-ons in het systeem geïnstalleerd.",
@@ -44,6 +47,8 @@
       "installedHeading": "Geïnstalleerde add-ons",
       "processing": "Verwerken...",
       "removeAddon": "Verwijder deze add-on",
+      "subtitlesConfiguredError": "Het configureren van de API-sleutel voor ondertiteling is mislukt. Probeer het opnieuw!",
+      "subtitlesConfiguredSuccess": "API-sleutel voor ondertiteling succesvol geconfigureerd!",
       "title": "Add-onsbeheerder"
     },
     "player": {

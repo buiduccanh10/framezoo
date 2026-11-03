@@ -35,7 +35,10 @@
       "configRequiredBadge": "Zahteva konfiguracijo",
       "configRequiredWarning": "Ta dodatek ni konfiguriran in morda ne bo naložil pretočnih vsebin ali podnapisov.",
       "configureAddon": "Konfiguriraj ta dodatek",
+      "configureCustomKeyActive": "Vaš ključ je bil konfiguriran (kliknite za spremembo)",
       "configureRequiredAction": "Konfiguriraj ta dodatek (obvezno)",
+      "customKeyActiveDesc": "Uporaba vašega osebnega ključa Wyzie API",
+      "customKeyConfiguredBadge": "Vaš ključ je bil konfiguriran",
       "description": "Dodatki niso obvezni. Ta aplikacija ne združuje, priporoča ali gosti nobenega dodatka.",
       "disabled": "Onemogočen",
       "emptyInstalled": "V sistemu še ni nameščen noben dodatek.",
@@ -44,6 +47,8 @@
       "installedHeading": "Nameščeni dodatki",
       "processing": "Obdelava ...",
       "removeAddon": "Odstranite ta dodatek",
+      "subtitlesConfiguredError": "Konfiguracija ključa API-ja za podnapise ni uspela. Poskusite znova!",
+      "subtitlesConfiguredSuccess": "Ključ API-ja za podnapise je bil uspešno konfiguriran!",
       "title": "Upravitelj dodatkov"
     },
     "player": {

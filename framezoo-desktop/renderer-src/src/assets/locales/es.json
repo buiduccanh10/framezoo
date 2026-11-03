@@ -35,7 +35,10 @@
       "configRequiredBadge": "Requiere configuración",
       "configRequiredWarning": "Este complemento no está configurado y puede que no cargue las transmisiones o los subtítulos.",
       "configureAddon": "Configura este complemento",
+      "configureCustomKeyActive": "Tu clave ha sido configurada (haz clic para cambiarla).",
       "configureRequiredAction": "Configura este complemento (obligatorio)",
+      "customKeyActiveDesc": "Utilizando tu clave API personal de Wyzie",
+      "customKeyConfiguredBadge": "Su clave ha sido configurada",
       "description": "Los complementos son opcionales. Esta aplicación no incluye, recomienda ni aloja ningún complemento.",
       "disabled": "Desactivado",
       "emptyInstalled": "Aún no hay complementos instalados en el sistema.",
@@ -44,6 +47,8 @@
       "installedHeading": "Complementos instalados",
       "processing": "Tratamiento...",
       "removeAddon": "Eliminar este complemento",
+      "subtitlesConfiguredError": "No se pudo configurar la clave API de subtítulos. ¡Inténtelo de nuevo!",
+      "subtitlesConfiguredSuccess": "¡Clave API de subtítulos configurada correctamente!",
       "title": "Administrador de complementos"
     },
     "player": {

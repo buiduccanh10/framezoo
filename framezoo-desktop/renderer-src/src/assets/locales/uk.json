@@ -35,7 +35,10 @@
       "configRequiredBadge": "Потрібна конфігурація",
       "configRequiredWarning": "Цей додаток не налаштовано та може не завантажувати потоки або субтитри.",
       "configureAddon": "Налаштувати це доповнення",
+      "configureCustomKeyActive": "Ваш ключ налаштовано (натисніть, щоб змінити)",
       "configureRequiredAction": "Налаштуйте це доповнення (обов&#39;язково)",
+      "customKeyActiveDesc": "Використання вашого особистого ключа Wyzie API",
+      "customKeyConfiguredBadge": "Ваш ключ налаштовано",
       "description": "Додатки необов’язкові. Ця програма не об’єднує, не рекомендує та не розміщує жодних додатків.",
       "disabled": "Вимкнено",
       "emptyInstalled": "У системі ще не встановлено жодних доповнень.",
@@ -44,6 +47,8 @@
       "installedHeading": "Встановлені аддони",
       "processing": "Обробка...",
       "removeAddon": "Видаліть цей аддон",
+      "subtitlesConfiguredError": "Не вдалося налаштувати ключ API субтитрів. Спробуйте ще раз!",
+      "subtitlesConfiguredSuccess": "Ключ API субтитрів успішно налаштовано!",
       "title": "Менеджер додатків"
     },
     "player": {

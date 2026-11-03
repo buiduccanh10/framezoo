@@ -35,7 +35,10 @@
       "configRequiredBadge": "Chưa cấu hình",
       "configRequiredWarning": "Addon này chưa được cấu hình và có thể không tải được nội dung hoặc phụ đề.",
       "configureAddon": "Cấu hình addon này",
+      "configureCustomKeyActive": "Key của bạn đã được cấu hình (nhấn để đổi)",
       "configureRequiredAction": "Cấu hình addon này (Bắt buộc)",
+      "customKeyActiveDesc": "Đang sử dụng API key Wyzie riêng của tài khoản",
+      "customKeyConfiguredBadge": "Key của bạn đã được cấu hình",
       "description": "Addons là tùy chọn. Ứng dụng này không đóng gói, đề xuất hoặc lưu trữ bất kỳ tiện ích bổ sung nào.",
       "disabled": "Đã tắt",
       "emptyInstalled": "Chưa có Addon nào được cài đặt trong hệ thống.",
@@ -44,6 +47,8 @@
       "installedHeading": "Danh sách Addons đã cài đặt",
       "processing": "Đang xử lý...",
       "removeAddon": "Xóa addon này",
+      "subtitlesConfiguredError": "Cấu hình API key phụ đề thất bại. Vui lòng thử lại!",
+      "subtitlesConfiguredSuccess": "Cấu hình API key phụ đề thành công!",
       "title": "Quản lý Addons"
     },
     "player": {

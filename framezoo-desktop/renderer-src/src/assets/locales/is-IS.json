@@ -35,7 +35,10 @@
       "configRequiredBadge": "Krefst stillingar",
       "configRequiredWarning": "Þessi viðbót er ekki stillt og gæti mistekist að hlaða strauma eða texta.",
       "configureAddon": "Stilla þessa viðbót",
+      "configureCustomKeyActive": "Lykillinn þinn hefur verið stilltur (smelltu til að breyta)",
       "configureRequiredAction": "Stilla þessa viðbót (Nauðsynlegt)",
+      "customKeyActiveDesc": "Að nota persónulegan Wyzie API lykilinn þinn",
+      "customKeyConfiguredBadge": "Lykillinn þinn hefur verið stilltur",
       "description": "Viðbætur eru valfrjálsar. Þetta app hefur ekki búnt, mælir með eða hýsir neina viðbót.",
       "disabled": "Öryrkjar",
       "emptyInstalled": "Engar viðbætur uppsettar í kerfinu ennþá.",
@@ -44,6 +47,8 @@
       "installedHeading": "Uppsett viðbót",
       "processing": "Vinnur...",
       "removeAddon": "Fjarlægðu þessa viðbót",
+      "subtitlesConfiguredError": "Mistókst að stilla lykil fyrir textaskil. Reyndu aftur!",
+      "subtitlesConfiguredSuccess": "Lykill fyrir undirtitlaforritaskil stilltur!",
       "title": "Viðbótarstjóri"
     },
     "player": {

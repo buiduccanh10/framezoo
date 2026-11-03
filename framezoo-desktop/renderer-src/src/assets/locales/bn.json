@@ -35,7 +35,10 @@
       "configRequiredBadge": "কনফিগারেশন প্রয়োজন",
       "configRequiredWarning": "এই অ্যাডঅনটি কনফিগার করা নেই এবং এটি স্ট্রিম বা সাবটাইটেল লোড করতে ব্যর্থ হতে পারে।",
       "configureAddon": "এই অ্যাডঅনটি কনফিগার করুন",
+      "configureCustomKeyActive": "আপনার কী কনফিগার করা হয়েছে (পরিবর্তন করতে ক্লিক করুন)",
       "configureRequiredAction": "এই অ্যাডঅনটি কনফিগার করুন (আবশ্যক)",
+      "customKeyActiveDesc": "আপনার ব্যক্তিগত Wyzie API কী ব্যবহার করে",
+      "customKeyConfiguredBadge": "আপনার কী কনফিগার করা হয়েছে।",
       "description": "Addons ঐচ্ছিক. এই অ্যাপটি কোনো অ্যাডঅন বান্ডিল, সুপারিশ বা হোস্ট করে না।",
       "disabled": "অক্ষম",
       "emptyInstalled": "সিস্টেমে এখনো কোনো অ্যাডঅন ইনস্টল করা হয়নি।",
@@ -44,6 +47,8 @@
       "installedHeading": "ইনস্টল করা Addons",
       "processing": "প্রক্রিয়া করা হচ্ছে...",
       "removeAddon": "এই অ্যাডনটি সরান",
+      "subtitlesConfiguredError": "সাবটাইটেল এপিআই কী কনফিগার করা সম্ভব হয়নি। অনুগ্রহ করে আবার চেষ্টা করুন!",
+      "subtitlesConfiguredSuccess": "সাবটাইটেল এপিআই কী সফলভাবে কনফিগার করা হয়েছে!",
       "title": "অ্যাডঅন ম্যানেজার"
     },
     "player": {

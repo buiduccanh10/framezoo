@@ -35,7 +35,10 @@
       "configRequiredBadge": "ਸੰਰਚਨਾ ਦੀ ਲੋੜ ਹੈ",
       "configRequiredWarning": "ਇਹ ਐਡਆਨ ਕੌਂਫਿਗਰ ਨਹੀਂ ਕੀਤਾ ਗਿਆ ਹੈ ਅਤੇ ਸਟ੍ਰੀਮਾਂ ਜਾਂ ਉਪਸਿਰਲੇਖਾਂ ਨੂੰ ਲੋਡ ਕਰਨ ਵਿੱਚ ਅਸਫਲ ਹੋ ਸਕਦਾ ਹੈ।",
       "configureAddon": "ਇਸ ਐਡਆਨ ਨੂੰ ਕੌਂਫਿਗਰ ਕਰੋ",
+      "configureCustomKeyActive": "ਤੁਹਾਡੀ ਕੁੰਜੀ ਸੰਰਚਿਤ ਕੀਤੀ ਗਈ ਹੈ (ਬਦਲਣ ਲਈ ਕਲਿੱਕ ਕਰੋ)",
       "configureRequiredAction": "ਇਸ ਐਡਆਨ ਨੂੰ ਕੌਂਫਿਗਰ ਕਰੋ (ਲੋੜੀਂਦਾ)",
+      "customKeyActiveDesc": "ਤੁਹਾਡੀ ਨਿੱਜੀ Wyzie API ਕੁੰਜੀ ਦੀ ਵਰਤੋਂ ਕਰਨਾ",
+      "customKeyConfiguredBadge": "ਤੁਹਾਡੀ ਕੁੰਜੀ ਸੰਰਚਿਤ ਕੀਤੀ ਗਈ ਹੈ।",
       "description": "ਐਡਆਨ ਵਿਕਲਪਿਕ ਹਨ। ਇਹ ਐਪ ਕਿਸੇ ਵੀ ਐਡਆਨ ਨੂੰ ਬੰਡਲ, ਸਿਫ਼ਾਰਿਸ਼ ਜਾਂ ਹੋਸਟ ਨਹੀਂ ਕਰਦਾ ਹੈ।",
       "disabled": "ਅਯੋਗ",
       "emptyInstalled": "ਸਿਸਟਮ ਵਿੱਚ ਅਜੇ ਤੱਕ ਕੋਈ ਐਡਆਨ ਸਥਾਪਤ ਨਹੀਂ ਕੀਤਾ ਗਿਆ ਹੈ।",
@@ -44,6 +47,8 @@
       "installedHeading": "ਇੰਸਟਾਲ ਕੀਤੇ ਐਡਆਨ",
       "processing": "ਪ੍ਰਕਿਰਿਆ ਕੀਤੀ ਜਾ ਰਹੀ ਹੈ...",
       "removeAddon": "ਇਸ ਐਡ-ਆਨ ਨੂੰ ਹਟਾਓ",
+      "subtitlesConfiguredError": "ਉਪਸਿਰਲੇਖ API ਕੁੰਜੀ ਨੂੰ ਕੌਂਫਿਗਰ ਕਰਨ ਵਿੱਚ ਅਸਫਲ। ਕਿਰਪਾ ਕਰਕੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ!",
+      "subtitlesConfiguredSuccess": "ਉਪਸਿਰਲੇਖ API ਕੁੰਜੀ ਸਫਲਤਾਪੂਰਵਕ ਸੰਰਚਿਤ ਕੀਤੀ ਗਈ!",
       "title": "ਐਡਆਨ ਮੈਨੇਜਰ"
     },
     "player": {

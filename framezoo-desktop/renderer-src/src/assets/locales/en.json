@@ -35,7 +35,10 @@
       "configRequiredBadge": "Requires Configuration",
       "configRequiredWarning": "This addon is not configured and may fail to load streams or subtitles.",
       "configureAddon": "Configure this addon",
+      "configureCustomKeyActive": "Your key has been configured (click to change)",
       "configureRequiredAction": "Configure this addon (Required)",
+      "customKeyActiveDesc": "Using your personal Wyzie API key",
+      "customKeyConfiguredBadge": "Your key has been configured",
       "description": "Addons are optional. This app does not bundle, recommend, or host any addon.",
       "disabled": "Disabled",
       "emptyInstalled": "No addons installed in the system yet.",
@@ -44,6 +47,8 @@
       "installedHeading": "Installed Addons",
       "processing": "Processing...",
       "removeAddon": "Remove this addon",
+      "subtitlesConfiguredError": "Failed to configure subtitle API key. Please try again!",
+      "subtitlesConfiguredSuccess": "Subtitle API key configured successfully!",
       "title": "Addons Manager"
     },
     "player": {

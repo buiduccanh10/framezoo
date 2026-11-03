@@ -35,7 +35,10 @@
       "configRequiredBadge": "Yapılandırma gerektirir",
       "configRequiredWarning": "Bu eklenti yapılandırılmamış ve yayınları veya altyazıları yüklemekte başarısız olabilir.",
       "configureAddon": "Bu eklentiyi yapılandırın",
+      "configureCustomKeyActive": "Anahtarınız yapılandırıldı (değiştirmek için tıklayın)",
       "configureRequiredAction": "Bu eklentiyi yapılandırın (Zorunlu)",
+      "customKeyActiveDesc": "Kişisel Wyzie API anahtarınızı kullanarak",
+      "customKeyConfiguredBadge": "Anahtarınız yapılandırıldı.",
       "description": "Eklentiler isteğe bağlıdır. Bu uygulama herhangi bir eklentiyi paketlemez, önermez veya barındırmaz.",
       "disabled": "Engelli",
       "emptyInstalled": "Sistemde henüz eklenti yüklü değil.",
@@ -44,6 +47,8 @@
       "installedHeading": "Yüklü Eklentiler",
       "processing": "İşleme...",
       "removeAddon": "Bu eklentiyi kaldır",
+      "subtitlesConfiguredError": "Altyazı API anahtarını yapılandırma başarısız oldu. Lütfen tekrar deneyin!",
+      "subtitlesConfiguredSuccess": "Altyazı API anahtarı başarıyla yapılandırıldı!",
       "title": "Eklenti Yöneticisi"
     },
     "player": {

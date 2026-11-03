@@ -35,7 +35,10 @@
       "configRequiredBadge": "Vyžaduje konfiguraci",
       "configRequiredWarning": "Tento doplněk není nakonfigurován a může se stát, že se mu nepodaří načíst streamy nebo titulky.",
       "configureAddon": "Nakonfigurujte tento doplněk",
+      "configureCustomKeyActive": "Váš klíč byl nakonfigurován (kliknutím jej změníte)",
       "configureRequiredAction": "Nakonfigurujte tento doplněk (Povinné)",
+      "customKeyActiveDesc": "Použití vašeho osobního klíče Wyzie API",
+      "customKeyConfiguredBadge": "Váš klíč byl nakonfigurován",
       "description": "Doplňky jsou volitelné. Tato aplikace nesbaluje, nedoporučuje ani nehostuje žádný doplněk.",
       "disabled": "Zakázáno",
       "emptyInstalled": "V systému zatím nejsou nainstalovány žádné doplňky.",
@@ -44,6 +47,8 @@
       "installedHeading": "Nainstalované doplňky",
       "processing": "Zpracovává se...",
       "removeAddon": "Odeberte tento doplněk",
+      "subtitlesConfiguredError": "Nepodařilo se nakonfigurovat klíč API titulků. Zkuste to prosím znovu!",
+      "subtitlesConfiguredSuccess": "Klíč API titulků byl úspěšně nakonfigurován!",
       "title": "Správce doplňků"
     },
     "player": {

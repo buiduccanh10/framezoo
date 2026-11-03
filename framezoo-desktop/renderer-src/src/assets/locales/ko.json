@@ -35,7 +35,10 @@
       "configRequiredBadge": "구성 필요",
       "configRequiredWarning": "이 추가 기능은 구성되지 않았으며 스트림이나 자막을 불러오지 못할 수 있습니다.",
       "configureAddon": "이 추가 기능을 구성하세요",
+      "configureCustomKeyActive": "사용자 키가 설정되었습니다 (변경하려면 클릭하세요).",
       "configureRequiredAction": "이 추가 기능을 구성하십시오(필수).",
+      "customKeyActiveDesc": "개인 Wyzie API 키를 사용하여",
+      "customKeyConfiguredBadge": "키가 설정되었습니다.",
       "description": "애드온은 선택사항입니다. 이 앱은 애드온을 번들로 제공하거나 권장하거나 호스팅하지 않습니다.",
       "disabled": "장애가 있는",
       "emptyInstalled": "아직 시스템에 애드온이 설치되지 않았습니다.",
@@ -44,6 +47,8 @@
       "installedHeading": "설치된 애드온",
       "processing": "처리 중...",
       "removeAddon": "이 애드온 제거",
+      "subtitlesConfiguredError": "자막 API 키를 설정하는 데 실패했습니다. 다시 시도해 주세요!",
+      "subtitlesConfiguredSuccess": "자막 API 키가 성공적으로 설정되었습니다!",
       "title": "애드온 관리자"
     },
     "player": {

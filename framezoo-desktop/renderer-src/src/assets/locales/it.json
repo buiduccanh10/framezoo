@@ -35,7 +35,10 @@
       "configRequiredBadge": "Richiede configurazione",
       "configRequiredWarning": "Questo componente aggiuntivo non è configurato e potrebbe non riuscire a caricare i flussi video o i sottotitoli.",
       "configureAddon": "Configura questo componente aggiuntivo",
+      "configureCustomKeyActive": "La tua chiave è stata configurata (clicca per modificare)",
       "configureRequiredAction": "Configura questo componente aggiuntivo (obbligatorio)",
+      "customKeyActiveDesc": "Utilizzando la tua chiave API personale Wyzie",
+      "customKeyConfiguredBadge": "La tua chiave è stata configurata",
       "description": "I componenti aggiuntivi sono facoltativi. Questa app non raggruppa, consiglia o ospita alcun componente aggiuntivo.",
       "disabled": "Disabilitato",
       "emptyInstalled": "Nessun componente aggiuntivo ancora installato nel sistema.",
@@ -44,6 +47,8 @@
       "installedHeading": "Componenti aggiuntivi installati",
       "processing": "Elaborazione...",
       "removeAddon": "Rimuovi questo componente aggiuntivo",
+      "subtitlesConfiguredError": "Impossibile configurare la chiave API dei sottotitoli. Riprova!",
+      "subtitlesConfiguredSuccess": "Chiave API per i sottotitoli configurata correttamente!",
       "title": "Gestore componenti aggiuntivi"
     },
     "player": {

@@ -35,7 +35,10 @@
       "configRequiredBadge": "يتطلب تهيئة",
       "configRequiredWarning": "هذه الإضافة غير مهيأة وقد تفشل في تحميل البث المباشر أو الترجمة.",
       "configureAddon": "قم بتكوين هذه الإضافة",
+      "configureCustomKeyActive": "تم ضبط مفتاحك (انقر للتغيير)",
       "configureRequiredAction": "قم بتكوين هذه الإضافة (مطلوب)",
+      "customKeyActiveDesc": "باستخدام مفتاح Wyzie API الشخصي الخاص بك",
+      "customKeyConfiguredBadge": "تم إعداد مفتاحك",
       "description": "الإضافات اختيارية. لا يجمع هذا التطبيق أي ملحق أو يوصي به أو يستضيفه.",
       "disabled": "عاجز",
       "emptyInstalled": "لا توجد إضافات مثبتة في النظام حتى الآن.",
@@ -44,6 +47,8 @@
       "installedHeading": "الإضافات المثبتة",
       "processing": "يعالج...",
       "removeAddon": "إزالة هذا الملحق",
+      "subtitlesConfiguredError": "فشل إعداد مفتاح واجهة برمجة تطبيقات الترجمة. يرجى المحاولة مرة أخرى!",
+      "subtitlesConfiguredSuccess": "تم إعداد مفتاح واجهة برمجة تطبيقات الترجمة بنجاح!",
       "title": "مدير الإضافات"
     },
     "player": {

@@ -33,6 +33,14 @@ test('save route verifies session token and persists user wyzie key in provider 
   assert.match(saveRoute, /setUserProviderCredential/);
 });
 
+test('status route checks user provider credential without throwing on unauthenticated session', () => {
+  const statusRoute = read('server/routes/addon/subtitles/api/status.get.ts');
+
+  assert.match(statusRoute, /getUserProviderCredential/);
+  assert.match(statusRoute, /configured:/);
+  assert.match(statusRoute, /hasCustomKey:/);
+});
+
 test('subtitles search prioritizes query key over user custom key over server key', () => {
   const subtitlesRoute = read('server/routes/addon/subtitles/subtitles/[type]/[...id].get.ts');
 

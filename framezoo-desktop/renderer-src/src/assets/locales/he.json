@@ -35,7 +35,10 @@
       "configRequiredBadge": "דורש תצורה",
       "configRequiredWarning": "תוסף זה אינו מוגדר וייתכן שלא יוכל לטעון שידורים או כתוביות.",
       "configureAddon": "הגדר את התוסף הזה",
+      "configureCustomKeyActive": "המפתח שלך הוגדר (לחץ כדי לשנות)",
       "configureRequiredAction": "הגדר תוסף זה (נדרש)",
+      "customKeyActiveDesc": "שימוש במפתח ה-API האישי שלך ב-Wyzie",
+      "customKeyConfiguredBadge": "המפתח שלך הוגדר",
       "description": "תוספות הן אופציונליות. אפליקציה זו אינה מאגדת, ממליצה או מארחת תוסף כלשהו.",
       "disabled": "נָכֶה",
       "emptyInstalled": "עדיין לא הותקנו תוספות במערכת.",
@@ -44,6 +47,8 @@
       "installedHeading": "תוספים מותקנים",
       "processing": "מעבד...",
       "removeAddon": "הסר את התוסף הזה",
+      "subtitlesConfiguredError": "נכשל בהגדרת מפתח ה-API של כתוביות. אנא נסה שוב!",
+      "subtitlesConfiguredSuccess": "מפתח ה-API של כתוביות הוגדר בהצלחה!",
       "title": "מנהל תוספות"
     },
     "player": {

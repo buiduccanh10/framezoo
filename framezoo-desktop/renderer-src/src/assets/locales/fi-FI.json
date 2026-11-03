@@ -35,7 +35,10 @@
       "configRequiredBadge": "Vaatii konfiguroinnin",
       "configRequiredWarning": "Tätä lisäosaa ei ole määritetty, eikä se välttämättä lataa striimejä tai tekstityksiä.",
       "configureAddon": "Määritä tämä lisäosa",
+      "configureCustomKeyActive": "Avaimesi on määritetty (klikkaa muuttaaksesi)",
       "configureRequiredAction": "Määritä tämä lisäosa (pakollinen)",
+      "customKeyActiveDesc": "Henkilökohtaisen Wyzie API -avaimesi käyttäminen",
+      "customKeyConfiguredBadge": "Avaimesi on määritetty",
       "description": "Lisäosat ovat valinnaisia. Tämä sovellus ei niputa, suosittele tai isännöi mitään lisäosia.",
       "disabled": "Ei käytössä",
       "emptyInstalled": "Järjestelmään ei ole vielä asennettu lisäosia.",
@@ -44,6 +47,8 @@
       "installedHeading": "Asennetut lisäosat",
       "processing": "Käsitellään...",
       "removeAddon": "Poista tämä lisäosa",
+      "subtitlesConfiguredError": "Tekstitysten API-avaimen määrittäminen epäonnistui. Yritä uudelleen!",
+      "subtitlesConfiguredSuccess": "Subtitle API -avaimen konfigurointi onnistui!",
       "title": "Lisäosien hallinta"
     },
     "player": {

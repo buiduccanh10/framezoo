@@ -35,7 +35,10 @@
       "configRequiredBadge": "Wymaga konfiguracji",
       "configRequiredWarning": "Ten dodatek nie jest skonfigurowany, więc może nie załadować strumieni lub napisów.",
       "configureAddon": "Skonfiguruj ten dodatek",
+      "configureCustomKeyActive": "Twój klucz został skonfigurowany (kliknij, aby zmienić)",
       "configureRequiredAction": "Skonfiguruj ten dodatek (wymagane)",
+      "customKeyActiveDesc": "Korzystanie z osobistego klucza API Wyzie",
+      "customKeyConfiguredBadge": "Twój klucz został skonfigurowany",
       "description": "Dodatki są opcjonalne. Ta aplikacja nie łączy, nie poleca ani nie hostuje żadnych dodatków.",
       "disabled": "Wyłączony",
       "emptyInstalled": "W systemie nie zainstalowano jeszcze żadnych dodatków.",
@@ -44,6 +47,8 @@
       "installedHeading": "Zainstalowane dodatki",
       "processing": "Przetwarzanie...",
       "removeAddon": "Usuń ten dodatek",
+      "subtitlesConfiguredError": "Nie udało się skonfigurować klucza API napisów. Spróbuj ponownie!",
+      "subtitlesConfiguredSuccess": "Klucz API napisów został pomyślnie skonfigurowany!",
       "title": "Menedżer dodatków"
     },
     "player": {

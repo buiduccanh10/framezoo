@@ -163,8 +163,10 @@ export function SubtitlesConfigurePage() {
     return `${base}?key=${encodeURIComponent(trimmed)}`;
   };
 
-  const getDesktopDeepLink = () => {
-    return "framezoo://addons";
+  const getDesktopDeepLink = (status?: "success" | "failed") => {
+    return status
+      ? `framezoo://addons?subtitles_configured=${status}`
+      : "framezoo://addons";
   };
 
   const handleOpenFramezoo = async () => {
@@ -177,6 +179,7 @@ export function SubtitlesConfigurePage() {
     setSaveRemoteStatus("idle");
     setSaveRemoteMessage("");
 
+    let isSuccess = false;
     try {
       const response = await fetch(getApiUrl("/addon/subtitles/api/save"), {
         method: "POST",
@@ -189,6 +192,7 @@ export function SubtitlesConfigurePage() {
 
       const data = await response.json();
       if (response.ok && data.success) {
+        isSuccess = true;
         setSaveRemoteStatus("success");
         setSaveRemoteMessage(`✓ ${t.account.saveSuccess}`);
       } else {
@@ -203,7 +207,7 @@ export function SubtitlesConfigurePage() {
     }
 
     // 2. Trigger desktop deep link to bring Framezoo to foreground
-    const deepLink = getDesktopDeepLink();
+    const deepLink = getDesktopDeepLink(isSuccess ? "success" : "failed");
     window.location.href = deepLink;
   };
 
