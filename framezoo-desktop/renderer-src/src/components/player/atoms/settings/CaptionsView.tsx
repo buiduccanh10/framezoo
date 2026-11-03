@@ -1108,9 +1108,9 @@ export function CaptionsView({
                     defaultValue: "Auto sync",
                   })}
                 </span>
-                <span className="rounded-full bg-video-context-type-accent/20 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-video-context-type-accent">
+                <span className="shrink-0 whitespace-nowrap rounded-full bg-video-context-type-accent/20 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-video-context-type-accent">
                   {t("player.menus.subtitles.autoSyncBadge", {
-                    defaultValue: "Auto",
+                    defaultValue: "AI",
                   })}
                 </span>
               </span>
@@ -1121,11 +1121,8 @@ export function CaptionsView({
                 })}
               </span>
             </span>
-            <span className="flex flex-none items-center gap-1 text-xs font-semibold text-video-context-type-main transition-transform group-hover:translate-x-0.5">
-              {t("player.menus.subtitles.autoSyncAction", {
-                defaultValue: "Auto sync",
-              })}
-              <Icon icon={Icons.CHEVRON_RIGHT} className="text-base" />
+            <span className="flex flex-none items-center text-video-context-type-secondary transition-transform group-hover:translate-x-0.5 group-hover:text-video-context-type-main">
+              <Icon icon={Icons.CHEVRON_RIGHT} className="text-lg" />
             </span>
           </button>
         )}

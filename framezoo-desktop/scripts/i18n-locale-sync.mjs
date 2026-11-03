@@ -46,6 +46,7 @@ const PROTECTED_TRANSLATIONS = new Map([
   ["addons.platforms.stremio", "Stremio"],
   ["global.name", "Framezoo"],
   ["global.pages.pagetitle", "{{title}} - Framezoo"],
+  ["player.menus.subtitles.autoSyncBadge", "AI"],
 ]);
 const PROTECTED_KEYS = new Set(PROTECTED_TRANSLATIONS.keys());
 
@@ -320,6 +321,7 @@ async function main() {
       if (PROTECTED_KEYS.has(k)) continue;
 
       if (forceTranslate) {
+        if (locale === "vi" && getByPath(rawLocale, k) !== undefined) continue;
         if (!shouldTranslate(enVal)) continue;
         candidates.push([k, enVal]);
         continue;
