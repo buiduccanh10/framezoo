@@ -51,4 +51,12 @@ export const appLanguageOptions = langCodes.map((lang) => {
   return langObj;
 });
 
+if (typeof window !== "undefined") {
+  const currentCode = initialLocale?.code ?? initialLang;
+  window.electronAPI?.setLocale?.(currentCode);
+  i18n.on("languageChanged", (lng) => {
+    window.electronAPI?.setLocale?.(lng);
+  });
+}
+
 export default i18n;

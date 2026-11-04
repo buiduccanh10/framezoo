@@ -719,7 +719,14 @@
         "download": "Lejupielādēt atjauninājumu",
         "later": "Vēlāk",
         "restart": "Restartējiet, lai atjauninātu",
-        "updating": "Notiek atjaunināšana..."
+        "updating": "Notiek atjaunināšana...",
+        "newerVersionAvailableTitle": "Pieejama jaunāka versija",
+        "newerVersionAvailable": "Ir pieejama jaunāka versija (v{{version}}). Lūdzu, vēlreiz noklikšķiniet uz “Lejupielādēt atjauninājumu”, lai to lejupielādētu.",
+        "upToDateTitle": "Framezoo ir atjaunināts",
+        "upToDate": "Jūs jau izmantojat jaunāko datora versiju (v{{version}}).",
+        "updateFailedTitle": "Darbvirsmas atjaunināšana neizdevās",
+        "downloadFailed": "Nevar lejupielādēt jaunāko darbvirsmas atjauninājumu.",
+        "checkFailed": "Pašlaik nevar pārbaudīt darbvirsmas atjauninājumus."
       },
       "offline": "Nevar izveidot savienojumu ar serveri. Lūdzu, mēģiniet vēlreiz pēc dažām sekundēm.",
       "lowSpace": "Jūsu ierīcē trūkst vietas krātuvē. Tas var ietekmēt straumēšanu un lejupielādi."
@@ -1513,6 +1520,8 @@
     "passwordChangeSuccess": "Parole veiksmīgi nomainīta!",
     "passwordResetError": "Neizdevās atiestatīt paroli",
     "passwordResetSuccess": "Parole veiksmīgi atiestatīta!",
-    "registerSuccess": "Veiksmīgi reģistrēts!"
+    "registerSuccess": "Veiksmīgi reģistrēts!",
+    "newerVersionDownloading": "Ir pieejama jaunāka versija (v{{version}}). Notiek jaunākās versijas lejupielāde...",
+    "newerVersionAvailable": "Ir pieejama jaunāka versija (v{{version}}). Noklikšķiniet, lai lejupielādētu."
   }
 }

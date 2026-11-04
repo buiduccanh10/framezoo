@@ -719,7 +719,14 @@
         "download": "Unduh pembaruan",
         "later": "Nanti",
         "restart": "Mulai ulang untuk memperbarui",
-        "updating": "Memperbarui..."
+        "updating": "Memperbarui...",
+        "newerVersionAvailableTitle": "Versi yang lebih baru tersedia",
+        "newerVersionAvailable": "Versi yang lebih baru (v{{version}}) tersedia. Silakan klik Unduh Pembaruan lagi untuk mengunduhnya.",
+        "upToDateTitle": "Framezoo sudah terbaru",
+        "upToDate": "Anda sudah menggunakan versi desktop terbaru (v{{version}}).",
+        "updateFailedTitle": "Pembaruan desktop gagal.",
+        "downloadFailed": "Tidak dapat mengunduh pembaruan desktop terbaru.",
+        "checkFailed": "Saat ini tidak dapat memeriksa pembaruan desktop."
       },
       "offline": "Tidak dapat terhubung ke server. Silakan coba lagi dalam beberapa detik.",
       "lowSpace": "Ruang penyimpanan perangkat Anda hampir habis. Hal ini dapat memengaruhi proses streaming dan pengunduhan."
@@ -1513,6 +1520,8 @@
     "passwordChangeSuccess": "Kata sandi berhasil diubah!",
     "passwordResetError": "Gagal mengatur ulang kata sandi",
     "passwordResetSuccess": "Kata sandi berhasil direset!",
-    "registerSuccess": "Berhasil mendaftar!"
+    "registerSuccess": "Berhasil mendaftar!",
+    "newerVersionDownloading": "Versi yang lebih baru (v__PH__0__) tersedia. Mengunduh versi terbaru...",
+    "newerVersionAvailable": "Versi yang lebih baru (v__PH__0__) tersedia. Klik untuk mengunduh."
   }
 }

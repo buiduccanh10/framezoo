@@ -719,7 +719,14 @@
         "download": "تنزيل التحديث",
         "later": "لاحقاً",
         "restart": "أعد التشغيل للتحديث",
-        "updating": "جارٍ التحديث..."
+        "updating": "جارٍ التحديث...",
+        "newerVersionAvailableTitle": "يتوفر إصدار أحدث",
+        "newerVersionAvailable": "يتوفر إصدار أحدث (v{{version}}). يرجى النقر على \"تنزيل التحديث\" مرة أخرى لتنزيله.",
+        "upToDateTitle": "Framezoo محدّث",
+        "upToDate": "أنت تستخدم بالفعل أحدث إصدار من إصدار سطح المكتب (v{{version}}).",
+        "updateFailedTitle": "فشلت تحديثات سطح المكتب",
+        "downloadFailed": "تعذر تنزيل آخر تحديث لسطح المكتب.",
+        "checkFailed": "لا يمكن التحقق من وجود تحديثات لسطح المكتب في الوقت الحالي."
       },
       "offline": "تعذر الاتصال بالخادم. يرجى المحاولة مرة أخرى خلال بضع ثوانٍ.",
       "lowSpace": "مساحة التخزين على جهازك على وشك النفاد. قد يؤثر ذلك على البث المباشر والتنزيل."
@@ -1513,6 +1520,8 @@
     "passwordChangeSuccess": "تم تغيير كلمة المرور بنجاح!",
     "passwordResetError": "فشل إعادة تعيين كلمة المرور",
     "passwordResetSuccess": "تمت إعادة تعيين كلمة المرور بنجاح!",
-    "registerSuccess": "تم التسجيل بنجاح!"
+    "registerSuccess": "تم التسجيل بنجاح!",
+    "newerVersionDownloading": "يتوفر إصدار أحدث (v{{version}}). جارٍ تنزيل أحدث إصدار...",
+    "newerVersionAvailable": "يتوفر إصدار أحدث (v{{version}}). انقر للتنزيل."
   }
 }

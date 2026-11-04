@@ -719,7 +719,14 @@
         "download": "Télécharger la mise à jour",
         "later": "Plus tard",
         "restart": "Redémarrer pour mettre à jour",
-        "updating": "Mise à jour..."
+        "updating": "Mise à jour...",
+        "newerVersionAvailableTitle": "Une version plus récente est disponible.",
+        "newerVersionAvailable": "Une version plus récente (v{{version}}) est disponible. Veuillez cliquer à nouveau sur « Télécharger la mise à jour » pour la télécharger.",
+        "upToDateTitle": "Framezoo est à jour",
+        "upToDate": "Vous utilisez déjà la dernière version de bureau (v{{version}}).",
+        "updateFailedTitle": "La mise à jour du bureau a échoué",
+        "downloadFailed": "Impossible de télécharger la dernière mise à jour du logiciel de bureau.",
+        "checkFailed": "Impossible de vérifier les mises à jour de bureau pour le moment."
       },
       "offline": "Impossible de se connecter au serveur. Veuillez réessayer dans quelques secondes.",
       "lowSpace": "Votre appareil manque d&#39;espace de stockage. Cela peut affecter la lecture en continu et le téléchargement."
@@ -1513,6 +1520,8 @@
     "passwordChangeSuccess": "Mot de passe modifié avec succès !",
     "passwordResetError": "Échec de la réinitialisation du mot de passe",
     "passwordResetSuccess": "Mot de passe réinitialisé avec succès !",
-    "registerSuccess": "Inscrit avec succès !"
+    "registerSuccess": "Inscrit avec succès !",
+    "newerVersionDownloading": "Une version plus récente (v{{version}}) est disponible. Téléchargement de la dernière version…",
+    "newerVersionAvailable": "Une version plus récente (v{{version}}) est disponible. Cliquez pour télécharger."
   }
 }

@@ -147,6 +147,7 @@ export function Navigation(props: NavigationProps) {
                       { WebkitAppRegion: "no-drag" } as React.CSSProperties
                     }
                   >
+                    <DonateFloatingButton />
                     <LinksDropdown>
                       {loggedIn ? <UserAvatar withName /> : <NoUserAvatar />}
                     </LinksDropdown>
@@ -183,10 +184,6 @@ export function Navigation(props: NavigationProps) {
           </div>
         </div>
       </div>
-
-      {location.pathname !== "/login" && location.pathname !== "/register" ? (
-        <DonateFloatingButton />
-      ) : null}
     </>
   );
 }

@@ -719,7 +719,14 @@
         "download": "Frissítés letöltése",
         "later": "Később",
         "restart": "Indítsa újra a frissítéshez",
-        "updating": "Frissítés..."
+        "updating": "Frissítés...",
+        "newerVersionAvailableTitle": "Újabb verzió elérhető",
+        "newerVersionAvailable": "Elérhető egy újabb verzió (v{{version}}). Kérjük, kattintson ismét a Frissítés letöltése gombra a letöltéshez.",
+        "upToDateTitle": "Framezoo naprakész",
+        "upToDate": "Már a legújabb asztali verziót használod (v{{version}}).",
+        "updateFailedTitle": "Asztali frissítés sikertelen",
+        "downloadFailed": "Nem sikerült letölteni a legújabb asztali frissítést.",
+        "checkFailed": "Jelenleg nem lehet asztali frissítéseket keresni."
       },
       "offline": "Nem sikerült csatlakozni a szerverhez. Próbáld újra néhány másodperc múlva.",
       "lowSpace": "Fogyóban van a tárhelyed az eszközödön. Ez befolyásolhatja a streamelést és a letöltést."
@@ -1513,6 +1520,8 @@
     "passwordChangeSuccess": "Jelszó sikeresen megváltoztatva!",
     "passwordResetError": "Nem sikerült visszaállítani a jelszót",
     "passwordResetSuccess": "Jelszó visszaállítása sikeresen megtörtént!",
-    "registerSuccess": "Sikeres regisztráció!"
+    "registerSuccess": "Sikeres regisztráció!",
+    "newerVersionDownloading": "Elérhető egy újabb verzió (v{{version}}). A legújabb verzió letöltése...",
+    "newerVersionAvailable": "Elérhető egy újabb verzió (v{{version}}). Kattintson ide a letöltéshez."
   }
 }

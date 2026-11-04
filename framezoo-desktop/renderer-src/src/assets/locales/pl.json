@@ -719,7 +719,14 @@
         "download": "Pobierz aktualizację",
         "later": "Później",
         "restart": "Uruchom ponownie, aby zaktualizować",
-        "updating": "Aktualizowanie..."
+        "updating": "Aktualizowanie...",
+        "newerVersionAvailableTitle": "Dostępna nowsza wersja",
+        "newerVersionAvailable": "Dostępna jest nowsza wersja (v{{version}}). Kliknij ponownie „Pobierz aktualizację”, aby ją pobrać.",
+        "upToDateTitle": "Framezoo jest aktualny",
+        "upToDate": "Używasz już najnowszej wersji na komputery stacjonarne (v{{version}}).",
+        "updateFailedTitle": "Aktualizacja pulpitu nie powiodła się",
+        "downloadFailed": "Nie można pobrać najnowszej aktualizacji pulpitu.",
+        "checkFailed": "W tej chwili nie można sprawdzić dostępności aktualizacji na pulpicie."
       },
       "offline": "Nie można połączyć się z serwerem. Spróbuj ponownie za kilka sekund.",
       "lowSpace": "Na Twoim urządzeniu kończy się miejsce. Może to mieć wpływ na strumieniowanie i pobieranie."
@@ -1513,6 +1520,8 @@
     "passwordChangeSuccess": "Hasło zostało pomyślnie zmienione!",
     "passwordResetError": "Nie udało się zresetować hasła",
     "passwordResetSuccess": "Hasło zostało pomyślnie zresetowane!",
-    "registerSuccess": "Zarejestrowano się pomyślnie!"
+    "registerSuccess": "Zarejestrowano się pomyślnie!",
+    "newerVersionDownloading": "Dostępna jest nowsza wersja (v{{version}}). Pobieranie najnowszej wersji...",
+    "newerVersionAvailable": "Dostępna jest nowsza wersja (v{{version}}). Kliknij, aby pobrać."
   }
 }

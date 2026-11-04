@@ -1,3 +1,4 @@
+import path from "node:path";
 import { defineConfig } from "tsup";
 
 export default defineConfig({
@@ -16,6 +17,11 @@ export default defineConfig({
   outExtension() {
     return {
       js: ".cjs",
+    };
+  },
+  esbuildOptions(options) {
+    options.alias = {
+      "@": path.resolve(__dirname, "renderer-src/src"),
     };
   },
   define: {

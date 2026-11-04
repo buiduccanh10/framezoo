@@ -719,7 +719,14 @@
         "download": "Stáhnout aktualizaci",
         "later": "Později",
         "restart": "Pro aktualizaci restartujte",
-        "updating": "Aktualizace..."
+        "updating": "Aktualizace...",
+        "newerVersionAvailableTitle": "K dispozici je novější verze",
+        "newerVersionAvailable": "Je k dispozici novější verze (v{{version}}). Pro její stažení prosím znovu klikněte na tlačítko Stáhnout aktualizaci.",
+        "upToDateTitle": "Framezoo je aktuální",
+        "upToDate": "Již používáte nejnovější verzi pro stolní počítače (v{{version}}).",
+        "updateFailedTitle": "Aktualizace počítače se nezdařila",
+        "downloadFailed": "Nelze stáhnout nejnovější aktualizaci pro počítač.",
+        "checkFailed": "Momentálně se nepodařilo zkontrolovat aktualizace pro plochu."
       },
       "offline": "Nelze se připojit k serveru. Zkuste to prosím znovu za několik sekund.",
       "lowSpace": "Vašemu zařízení dochází úložný prostor. To může ovlivnit streamování a stahování."
@@ -1513,6 +1520,8 @@
     "passwordChangeSuccess": "Heslo bylo úspěšně změněno!",
     "passwordResetError": "Obnovení hesla se nezdařilo",
     "passwordResetSuccess": "Úspěšné obnovení hesla!",
-    "registerSuccess": "Úspěšně zaregistrováno!"
+    "registerSuccess": "Úspěšně zaregistrováno!",
+    "newerVersionDownloading": "Je k dispozici novější verze (v{{version}}). Stahování nejnovější verze...",
+    "newerVersionAvailable": "Je k dispozici novější verze (v{{version}}). Kliknutím ji stáhnete."
   }
 }
