@@ -142,6 +142,7 @@ async function captureCurrentStreamAudio(options: {
   sourceUrl: string;
   startAt: number;
   duration: number;
+  audioTrackId?: string;
   headers?: unknown;
   signal?: AbortSignal;
   windowIndex?: number;
@@ -150,6 +151,7 @@ async function captureCurrentStreamAudio(options: {
     url: options.sourceUrl,
     startAt: options.startAt,
     duration: options.duration,
+    audioTrackId: options.audioTrackId,
     headers: normalizeHeaders(options.headers),
     signal: options.signal,
     windowIndex: options.windowIndex,
@@ -269,6 +271,7 @@ export async function alignSubtitlesWithCurrentStream(options: {
   sourceUrl: string;
   startAt: number;
   language: string;
+  audioTrackId?: string;
   subtitles: Array<{
     track: SubtitleAlignmentTrack;
     vttData: string;
@@ -308,26 +311,42 @@ export async function alignSubtitlesWithCurrentStream(options: {
   let nextCaptureIndex = options.isTorrent ? 1 : 0;
   const processWindow = async (index: number) => {
     const plan = windowPlan[index]!;
-    const audio = await captureCurrentStreamAudio({
-      ...options,
-      startAt: plan.startAt,
-      duration: windowDuration,
-      windowIndex: index,
-      signal: captureAbortController.signal,
-    });
-    capturedAudio[index] = audio;
-    completedCaptures += 1;
-    if (index === 0) {
-      logSyncTelemetry("first_audio_window_ready", {
+    try {
+      const audio = await captureCurrentStreamAudio({
+        ...options,
+        startAt: plan.startAt,
+        duration: windowDuration,
+        windowIndex: index,
+        signal: captureAbortController.signal,
+      });
+      capturedAudio[index] = audio;
+      if (index === 0) {
+        logSyncTelemetry("first_audio_window_ready", {
+          windowIndex: index,
+          startAt: plan.startAt,
+          duration: windowDuration,
+        });
+      }
+    } catch (error) {
+      if (
+        captureAbortController.signal.aborted ||
+        (error instanceof DOMException && error.name === "AbortError")
+      ) {
+        throw error;
+      }
+      logSyncTelemetry("audio_window_failed", {
         windowIndex: index,
         startAt: plan.startAt,
         duration: windowDuration,
+        error: error instanceof Error ? error.message : String(error),
       });
+    } finally {
+      completedCaptures += 1;
+      options.onProgress?.(
+        (completedCaptures / windowPlan.length) * 0.4,
+        "capturing",
+      );
     }
-    options.onProgress?.(
-      (completedCaptures / windowPlan.length) * 0.4,
-      "capturing",
-    );
   };
   const captureWorker = async () => {
     try {
@@ -348,7 +367,7 @@ export async function alignSubtitlesWithCurrentStream(options: {
       Array.from(
         {
           length: Math.min(
-            SUBTITLE_ALIGNMENT_CAPTURE_CONCURRENCY,
+            options.isTorrent ? 1 : SUBTITLE_ALIGNMENT_CAPTURE_CONCURRENCY,
             Math.max(0, windowPlan.length - 1),
           ),
         },
@@ -356,7 +375,8 @@ export async function alignSubtitlesWithCurrentStream(options: {
       ),
     );
     logSyncTelemetry("all_audio_windows_ready", {
-      windowCount: windowPlan.length,
+      windowCount: capturedAudio.filter(Boolean).length,
+      plannedWindowCount: windowPlan.length,
       windowDuration,
     });
   } finally {
@@ -431,6 +451,7 @@ export async function alignSubtitleWithCurrentStream(options: {
   sourceUrl: string;
   startAt: number;
   language: string;
+  audioTrackId?: string;
   vttData: string;
   headers?: unknown;
   signal?: AbortSignal;
@@ -442,6 +463,7 @@ export async function alignSubtitleWithCurrentStream(options: {
     sourceUrl: options.sourceUrl,
     startAt: options.startAt,
     language: options.language,
+    audioTrackId: options.audioTrackId,
     subtitles: [{ track: "primary", vttData: options.vttData }],
     headers: options.headers,
     signal: options.signal,

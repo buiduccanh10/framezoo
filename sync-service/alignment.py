@@ -1544,10 +1544,24 @@ def select_alignment_consensus(
         and score_margin >= 10
     )
 
-    # Fallback: if we only have 1 window agreeing, but its confidence is very high
-    # and it clearly beats any dissenting windows (or there are no dissenting windows)
+    # Fallback: one window is sufficient when independent speech anchors provide
+    # enough coverage; sparse or single-anchor evidence still needs consensus.
     if not has_consensus and len(best_cluster["candidates"]) == 1:
-        if best_cluster["averageConfidence"] >= 85 and score_margin >= 20:
+        single_result = best_cluster["candidates"][0]["result"]
+        single_anchor_count = int(single_result.get("speechAnchorCount", 0))
+        single_anchor_coverage = float(
+            single_result.get("speechAnchorCoverage", 0.0)
+        )
+        strong_single_window = (
+            single_anchor_count >= 3
+            and single_anchor_coverage >= MIN_SPEECH_ANCHOR_COVERAGE
+            and best_cluster["averageConfidence"] >= MIN_ALIGNMENT_CONFIDENCE
+        ) or (
+            single_anchor_count >= 2
+            and single_anchor_coverage >= MIN_SPEECH_ANCHOR_COVERAGE_2_ANCHORS
+            and best_cluster["averageConfidence"] >= 70
+        )
+        if strong_single_window and score_margin >= 20:
             has_consensus = True
 
     if not has_consensus:

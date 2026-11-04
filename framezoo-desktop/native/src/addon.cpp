@@ -1021,6 +1021,7 @@ struct AudioExtractionRequest {
   std::string url;
   std::string output_path;
   std::string headers;
+  std::string audio_track_id;
   std::string request_id;
   std::shared_ptr<std::atomic<bool>> cancelled =
       std::make_shared<std::atomic<bool>>(false);
@@ -1171,6 +1172,13 @@ void run_audio_extraction(AudioExtractionRequest* request) {
     return;
   }
 
+  if (!request->audio_track_id.empty() &&
+      !set_option("aid", request->audio_track_id.c_str())) {
+    request->error = "libmpv audio track selection failed";
+    cleanup();
+    return;
+  }
+
   if (api.initialize(handle) < 0) {
     request->error = "mpv_initialize failed for audio extraction";
     cleanup();
@@ -1277,6 +1285,7 @@ napi_value extract_audio(napi_env env, napi_callback_info info) {
     return throw_error(env, "invalid audio extraction request");
   }
   request->headers = get_headers(env, argv[0]);
+  get_string(env, argv[0], "audioTrackId", &request->audio_track_id);
   get_string(env, argv[0], "requestId", &request->request_id);
   request->start_at = std::max(0.0, request->start_at);
   request->duration = std::min(60.0, std::max(1.0, request->duration));

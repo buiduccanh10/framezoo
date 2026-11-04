@@ -161,6 +161,31 @@ describe("subtitle alignment client", () => {
     expect(starts).toHaveLength(6);
   });
 
+  it("keeps usable torrent windows when one seek fails", async () => {
+    alignmentMocks.extractAudioWindow.mockImplementation(async (request) => {
+      if (request.windowIndex === 2) {
+        throw new Error("range unavailable");
+      }
+      return new Uint8Array([1, 2, 3]);
+    });
+
+    await alignSubtitlesWithCurrentStream({
+      sourceUrl: "http://127.0.0.1/torrent/file.mp4",
+      startAt: 600,
+      language: "en",
+      subtitles: [{ track: "primary", vttData: "WEBVTT" }],
+      videoDuration: 3600,
+      isTorrent: true,
+    });
+
+    const request = alignmentMocks.mwFetch.mock.calls[0][1];
+    expect(
+      [...(request.body as FormData).entries()].filter(
+        ([name]) => name === "audio",
+      ),
+    ).toHaveLength(4);
+  });
+
   it("reports monotonic progress and completes audio preparation before moving to subtitle sync", async () => {
     const progressEvents: Array<{
       progress: number;

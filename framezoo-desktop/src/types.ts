@@ -149,6 +149,7 @@ export interface LibMpvAudioRequest {
   headers?: Record<string, string>;
   requestId?: string;
   client?: "sync" | "player";
+  audioTrackId?: string;
   syncWindowIndex?: number;
   syncStartAt?: number;
   syncDuration?: number;

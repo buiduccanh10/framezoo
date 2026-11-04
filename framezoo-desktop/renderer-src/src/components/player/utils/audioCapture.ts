@@ -5,6 +5,7 @@ type LibMpvAudioRequest = {
   headers?: Record<string, string>;
   requestId?: string;
   client?: "sync" | "player";
+  audioTrackId?: string;
   syncWindowIndex?: number;
   syncStartAt?: number;
   syncDuration?: number;
@@ -26,6 +27,7 @@ export async function extractAudioWindow(options: {
   startAt: number;
   duration: number;
   windowIndex?: number;
+  audioTrackId?: string;
   headers?: Record<string, string>;
   signal?: AbortSignal;
 }): Promise<Uint8Array> {
@@ -49,6 +51,7 @@ export async function extractAudioWindow(options: {
       headers: options.headers,
       requestId,
       client: "sync",
+      audioTrackId: options.audioTrackId,
       syncWindowIndex: options.windowIndex,
       syncStartAt: Math.max(0, options.startAt),
       syncDuration: Math.min(60, Math.max(1, options.duration)),
