@@ -23,6 +23,7 @@ import { promisify } from "node:util";
 import { setTimeout as delay } from "node:timers/promises";
 import { pathToFileURL } from "node:url";
 import { createDesktopAppUpdater } from "./desktopAppUpdater";
+import { type DesktopI18nKey, setDesktopLocale, tDesktop } from "./desktopI18n";
 import { createDesktopPipController } from "./desktopPip";
 import { AddonProtocolEngine } from "./addons/engine";
 import type { AddonProtocolRequest } from "./addons/types";
@@ -787,20 +788,49 @@ async function showDesktopSettings() {
   await navigateMainWindowToRoute(DESKTOP_SETTINGS_ROUTE);
 }
 
-async function showDesktopMessageBox(options: {
-  type: "info" | "error";
-  title: string;
-  message: string;
-  detail?: string;
-}) {
+interface ShowDesktopMessageBoxOptions {
+  type: "info" | "error" | "warning" | "question";
+  title?: string | null;
+  titleKey?: DesktopI18nKey;
+  titleParams?: Record<string, string | number>;
+  message?: string | null;
+  messageKey?: DesktopI18nKey;
+  messageParams?: Record<string, string | number>;
+  detail?: string | null;
+  detailKey?: DesktopI18nKey;
+  detailParams?: Record<string, string | number>;
+}
+
+async function showDesktopMessageBox(options: ShowDesktopMessageBoxOptions) {
+  const fallbackTitle = options.title ?? undefined;
+  const fallbackMessage = options.message ?? undefined;
+  const fallbackDetail = options.detail ?? undefined;
+
+  const title = options.titleKey
+    ? tDesktop(options.titleKey, options.titleParams, fallbackTitle)
+    : (fallbackTitle ?? APP_NAME);
+  const message = options.messageKey
+    ? tDesktop(options.messageKey, options.messageParams, fallbackMessage)
+    : (fallbackMessage ?? "");
+  const detail = options.detailKey
+    ? tDesktop(options.detailKey, options.detailParams, fallbackDetail)
+    : fallbackDetail;
+
+  const boxOptions = {
+    type: options.type,
+    title,
+    message,
+    detail: detail ?? undefined,
+  };
+
   const parentWindow =
     mainWindow && !mainWindow.isDestroyed() ? mainWindow : undefined;
   if (parentWindow) {
-    await dialog.showMessageBox(parentWindow, options);
+    await dialog.showMessageBox(parentWindow, boxOptions);
     return;
   }
 
-  await dialog.showMessageBox(options);
+  await dialog.showMessageBox(boxOptions);
 }
 
 const desktopAppUpdater = createDesktopAppUpdater({
@@ -905,12 +935,36 @@ async function handleDesktopAppUpdateMenuAction() {
 
     if (!didStartDownload) {
       const nextState = desktopAppUpdater.getState();
+      if (nextState.versionBump && nextState.status === "available") {
+        await showDesktopMessageBox({
+          type: "info",
+          titleKey: "update.newerVersionAvailableTitle",
+          title: "Newer version available",
+          messageKey: "update.newerVersionAvailableMessage",
+          messageParams: { version: nextState.versionBump.to },
+          message: `A newer version (v${nextState.versionBump.to}) is available. Please click Download Update again to download it.`,
+        });
+        return;
+      }
+      if (nextState.status === "idle") {
+        await showDesktopMessageBox({
+          type: "info",
+          titleKey: "update.upToDateTitle",
+          title: "Framezoo is up to date",
+          messageKey: "update.upToDateMessage",
+          messageParams: { version: app.getVersion() },
+          message: `You are already on the latest desktop version (v${app.getVersion()}).`,
+        });
+        return;
+      }
       await showDesktopMessageBox({
         type: "error",
+        titleKey: "update.updateFailedTitle",
         title: "Desktop update failed",
-        message:
-          nextState.errorMessage ??
-          "Unable to download the latest desktop update.",
+        message: nextState.errorMessage,
+        messageKey: nextState.errorMessage
+          ? undefined
+          : "update.downloadFailedMessage",
       });
     }
     return;
@@ -931,17 +985,22 @@ async function handleDesktopAppUpdateMenuAction() {
   if (nextState.status === "error") {
     await showDesktopMessageBox({
       type: "error",
+      titleKey: "update.updateFailedTitle",
       title: "Desktop update failed",
-      message:
-        nextState.errorMessage ??
-        "Unable to check for desktop updates right now.",
+      message: nextState.errorMessage,
+      messageKey: nextState.errorMessage
+        ? undefined
+        : "update.checkFailedMessage",
     });
     return;
   }
 
   await showDesktopMessageBox({
     type: "info",
+    titleKey: "update.upToDateTitle",
     title: "Framezoo is up to date",
+    messageKey: "update.upToDateMessage",
+    messageParams: { version: app.getVersion() },
     message: `You are already on the latest desktop version (v${app.getVersion()}).`,
   });
 }
@@ -1783,14 +1842,24 @@ function registerIpcHandlers() {
     return desktopAppUpdater.checkForUpdate();
   });
 
-  ipcMain.handle("desktop:app-update-download", async (event) => {
-    requireTrustedRendererSender(event);
-    return desktopAppUpdater.downloadUpdate();
-  });
+  ipcMain.handle(
+    "desktop:app-update-download",
+    async (event, opts?: { autoDownloadNewerVersion?: boolean }) => {
+      requireTrustedRendererSender(event);
+      return desktopAppUpdater.downloadUpdate(opts);
+    },
+  );
 
   ipcMain.handle("desktop:app-update-install", async (event) => {
     requireTrustedRendererSender(event);
     return desktopAppUpdater.installUpdate();
+  });
+
+  ipcMain.on("desktop:set-locale", (event, locale: string) => {
+    requireTrustedRendererSender(event);
+    if (typeof locale === "string" && locale.trim()) {
+      setDesktopLocale(locale);
+    }
   });
 
   ipcMain.handle(

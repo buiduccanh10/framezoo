@@ -719,7 +719,14 @@
         "download": "下载更新",
         "later": "之后",
         "restart": "重启即可更新",
-        "updating": "更新中..."
+        "updating": "更新中...",
+        "newerVersionAvailableTitle": "有新版本可用",
+        "newerVersionAvailable": "有新版本 (v{{version}}) 可用。请再次点击“下载更新”按钮进行下载。",
+        "upToDateTitle": "Framezoo 已更新",
+        "upToDate": "您目前使用的是最新桌面版本（v{{version}}）。",
+        "updateFailedTitle": "桌面更新失败",
+        "downloadFailed": "无法下载最新的桌面更新。",
+        "checkFailed": "目前无法检查桌面更新。"
       },
       "offline": "无法连接到服务器。请稍后再试。",
       "lowSpace": "您的设备存储空间不足。这可能会影响流媒体播放和下载。"
@@ -1513,6 +1520,8 @@
     "passwordChangeSuccess": "密码已成功更改！",
     "passwordResetError": "重置密码失败",
     "passwordResetSuccess": "密码重置成功！",
-    "registerSuccess": "注册成功！"
+    "registerSuccess": "注册成功！",
+    "newerVersionDownloading": "有更新的版本 (v{{version}}) 可用。正在下载最新版本……",
+    "newerVersionAvailable": "已有更新版本（v{{version}}）可供下载。点击下载。"
   }
 }

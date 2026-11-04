@@ -73,11 +73,14 @@ contextBridge.exposeInMainWorld("electronAPI", {
   checkForAppUpdate() {
     return ipcRenderer.invoke("desktop:app-update-check");
   },
-  downloadAppUpdate() {
-    return ipcRenderer.invoke("desktop:app-update-download");
+  downloadAppUpdate(opts?: { autoDownloadNewerVersion?: boolean }) {
+    return ipcRenderer.invoke("desktop:app-update-download", opts);
   },
   installAppUpdate() {
     return ipcRenderer.invoke("desktop:app-update-install");
+  },
+  setLocale(locale: string) {
+    ipcRenderer.send("desktop:set-locale", locale);
   },
   sendExtensionMessage(name: string, payload?: unknown) {
     return ipcRenderer.invoke("desktop:extension-message", name, payload);

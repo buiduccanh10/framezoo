@@ -85,12 +85,13 @@ export function useAppUpdateIndicator() {
     isDesktopApp &&
     (updateStatus === "available" ||
       updateStatus === "downloading" ||
-      updateStatus === "downloaded");
+      updateStatus === "downloaded" ||
+      (updateStatus === "checking" && Boolean(updateVersion)));
 
   const updateButtonIcon =
     updateStatus === "downloaded"
       ? Icons.RELOAD
-      : updateStatus === "downloading"
+      : updateStatus === "downloading" || updateStatus === "checking"
         ? Icons.PROGRESS_SPINNER
         : Icons.DOWNLOAD;
 
@@ -101,9 +102,11 @@ export function useAppUpdateIndicator() {
         ? updateProgressPercent != null
           ? `${t("navigation.banner.appUpdate.updating")} ${Math.round(updateProgressPercent)}%`
           : `${t("navigation.banner.appUpdate.updating")}...`
-        : updateVersion
-          ? `v${updateVersion}`
-          : t("navigation.banner.appUpdate.download");
+        : updateStatus === "checking"
+          ? `${t("navigation.banner.appUpdate.updating")}...`
+          : updateVersion
+            ? `v${updateVersion}`
+            : t("navigation.banner.appUpdate.download");
 
   return {
     hasVisibleUpdate,
@@ -154,7 +157,11 @@ export function StatusIndicators(props: {
         <button
           type="button"
           onClick={() => void requestAppUpdate()}
-          disabled={isUpdatingApp || visibleUpdateStatus === "downloading"}
+          disabled={
+            isUpdatingApp ||
+            visibleUpdateStatus === "downloading" ||
+            visibleUpdateStatus === "checking"
+          }
           className={classNames(
             "flex h-10 shrink-0 items-center gap-1.5 rounded-full border-2 border-transparent bg-pill-background/50 px-3 text-white backdrop-blur-lg transition-[background-color,transform] hover:bg-pill-backgroundHover hover:scale-105 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60",
             props.itemClassName,

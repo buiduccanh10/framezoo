@@ -7,12 +7,18 @@ export interface DesktopAppUpdateState {
   updateVersion: string | null;
   progressPercent: number | null;
   errorMessage: string | null;
+  versionBump?: {
+    from: string;
+    to: string;
+  } | null;
 }
 
 export interface DesktopUpdateElectronApi {
   getAppUpdateState(): Promise<DesktopAppUpdateState>;
   checkForAppUpdate(): Promise<boolean>;
-  downloadAppUpdate(): Promise<boolean>;
+  downloadAppUpdate(opts?: {
+    autoDownloadNewerVersion?: boolean;
+  }): Promise<boolean>;
   installAppUpdate(): Promise<boolean>;
   onAppUpdateState(
     listener: (state: DesktopAppUpdateState) => void,
@@ -62,8 +68,11 @@ declare global {
       secureStoreRemove?: (key: string) => Promise<void>;
       getAppUpdateState?: () => Promise<DesktopAppUpdateState>;
       checkForAppUpdate?: () => Promise<boolean>;
-      downloadAppUpdate?: () => Promise<boolean>;
+      downloadAppUpdate?: (opts?: {
+        autoDownloadNewerVersion?: boolean;
+      }) => Promise<boolean>;
       installAppUpdate?: () => Promise<boolean>;
+      setLocale?: (locale: string) => void;
       onAppUpdateState?: (
         listener: (state: DesktopAppUpdateState) => void,
       ) => () => void;

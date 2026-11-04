@@ -1,7 +1,10 @@
+import i18n from "i18next";
+
 import type { DesktopAppUpdateState } from "@/desktop/electron";
 import { getDesktopUpdateElectronApi } from "@/desktop/electron";
 import { APP_VERSION } from "@/setup/constants";
 import { useAppUpdateStore } from "@/stores/appUpdate";
+import { useToastStore } from "@/stores/interface/toast";
 
 let hasInitializedDesktopAppUpdate = false;
 
@@ -11,6 +14,20 @@ function isDesktopAppRuntime() {
 
 function applyDesktopUpdateState(state: DesktopAppUpdateState) {
   const store = useAppUpdateStore.getState();
+
+  if (state.versionBump) {
+    const isAutoDownloading = state.status === "downloading";
+    const toastMsg = isAutoDownloading
+      ? i18n.t("toasts.newerVersionDownloading", {
+          version: state.versionBump.to,
+          defaultValue: `A newer version (v${state.versionBump.to}) is available. Downloading latest version...`,
+        })
+      : i18n.t("toasts.newerVersionAvailable", {
+          version: state.versionBump.to,
+          defaultValue: `A newer version (v${state.versionBump.to}) is available. Click to download.`,
+        });
+    useToastStore.getState().showToast(toastMsg, "info");
+  }
 
   switch (state.status) {
     case "idle":
@@ -65,7 +82,9 @@ export async function checkForAppUpdate() {
   return electronApi.checkForAppUpdate();
 }
 
-export async function requestAppUpdate() {
+export async function requestAppUpdate(opts?: {
+  autoDownloadNewerVersion?: boolean;
+}) {
   if (!isDesktopAppRuntime()) return;
 
   const electronApi = getDesktopUpdateElectronApi();
@@ -85,7 +104,7 @@ export async function requestAppUpdate() {
   }
 
   useAppUpdateStore.getState().setUpdateProgress(0);
-  await electronApi.downloadAppUpdate();
+  await electronApi.downloadAppUpdate(opts);
 }
 
 initializeDesktopAppUpdate();

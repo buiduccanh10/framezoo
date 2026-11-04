@@ -114,13 +114,13 @@ export const useAppUpdateStore = create<AppUpdateState>((set, get) => ({
   markChecking: () => {
     clearReminderTimer();
     writeUpdateReminder(null);
-    set({
-      hasUpdate: false,
+    set((state) => ({
+      hasUpdate: Boolean(state.updateVersion),
       isUpdating: true,
       status: "checking",
       progressPercent: null,
       errorMessage: null,
-    });
+    }));
   },
   markUpdateAvailable: (payload) => {
     clearReminderTimer();

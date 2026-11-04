@@ -719,7 +719,14 @@
         "download": "Download update",
         "later": "Later",
         "restart": "Restart to update",
-        "updating": "Updating"
+        "updating": "Updating",
+        "newerVersionAvailableTitle": "Newer version available",
+        "newerVersionAvailable": "A newer version (v{{version}}) is available. Please click Download Update again to download it.",
+        "upToDateTitle": "Framezoo is up to date",
+        "upToDate": "You are already on the latest desktop version (v{{version}}).",
+        "updateFailedTitle": "Desktop update failed",
+        "downloadFailed": "Unable to download the latest desktop update.",
+        "checkFailed": "Unable to check for desktop updates right now."
       },
       "offline": "Unable to connect to the server. Please retry in a few seconds.",
       "lowSpace": "Your device is running out of storage space. This may affect streaming and downloading."
@@ -1513,6 +1520,8 @@
     "passwordChangeSuccess": "Password changed successfully!",
     "passwordResetError": "Failed to reset password",
     "passwordResetSuccess": "Password reset successfully!",
-    "registerSuccess": "Registered successfully!"
+    "registerSuccess": "Registered successfully!",
+    "newerVersionDownloading": "A newer version (v{{version}}) is available. Downloading latest version...",
+    "newerVersionAvailable": "A newer version (v{{version}}) is available. Click to download."
   }
 }

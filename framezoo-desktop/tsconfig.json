@@ -6,8 +6,12 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "resolveJsonModule": true,
     "types": ["node", "electron"],
-    "noEmit": true
+    "noEmit": true,
+    "paths": {
+      "@/*": ["./renderer-src/src/*"]
+    }
   },
   "include": ["src/**/*.ts", "tsup.config.ts"]
 }

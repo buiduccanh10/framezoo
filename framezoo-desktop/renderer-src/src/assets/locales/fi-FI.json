@@ -719,7 +719,14 @@
         "download": "Lataa päivitys",
         "later": "Myöhemmin",
         "restart": "Käynnistä uudelleen päivittääksesi",
-        "updating": "Päivitetään..."
+        "updating": "Päivitetään...",
+        "newerVersionAvailableTitle": "Uudempi versio saatavilla",
+        "newerVersionAvailable": "Uudempi versio (v{{version}}) on saatavilla. Lataa se napsauttamalla Lataa päivitys uudelleen.",
+        "upToDateTitle": "Framezoo on ajan tasalla",
+        "upToDate": "Käytät jo uusinta työpöytäversiota (v{{version}}).",
+        "updateFailedTitle": "Työpöytäversion päivitys epäonnistui",
+        "downloadFailed": "Uusimman työpöytäpäivityksen lataaminen epäonnistui.",
+        "checkFailed": "Työpöytäpäivitysten tarkistaminen ei onnistu juuri nyt."
       },
       "offline": "Palvelimeen ei saada yhteyttä. Yritä uudelleen muutaman sekunnin kuluttua.",
       "lowSpace": "Laitteesi tallennustila on loppumassa. Tämä voi vaikuttaa suoratoistoon ja lataukseen."
@@ -1513,6 +1520,8 @@
     "passwordChangeSuccess": "Salasana vaihdettu onnistuneesti!",
     "passwordResetError": "Salasanan nollaaminen epäonnistui",
     "passwordResetSuccess": "Salasanan nollaus onnistui!",
-    "registerSuccess": "Rekisteröity onnistuneesti!"
+    "registerSuccess": "Rekisteröity onnistuneesti!",
+    "newerVersionDownloading": "Uudempi versio (v{{version}}) on saatavilla. Ladataan uusinta versiota...",
+    "newerVersionAvailable": "Uudempi versio (v{{version}}) on saatavilla. Klikkaa ladataksesi."
   }
 }

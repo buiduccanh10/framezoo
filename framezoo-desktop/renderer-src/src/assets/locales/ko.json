@@ -719,7 +719,14 @@
         "download": "업데이트 다운로드",
         "later": "나중에",
         "restart": "업데이트하려면 다시 시작하세요.",
-        "updating": "업데이트 중..."
+        "updating": "업데이트 중...",
+        "newerVersionAvailableTitle": "새로운 버전이 있습니다",
+        "newerVersionAvailable": "새로운 버전(v{{version}})이 있습니다. 다운로드하려면 '업데이트 다운로드'를 다시 클릭하십시오.",
+        "upToDateTitle": "Framezoo이 최신 버전입니다.",
+        "upToDate": "이미 최신 데스크톱 버전(v{{version}})을 사용 중입니다.",
+        "updateFailedTitle": "데스크톱 업데이트 실패",
+        "downloadFailed": "최신 데스크톱 업데이트를 다운로드할 수 없습니다.",
+        "checkFailed": "지금은 데스크톱 업데이트를 확인할 수 없습니다."
       },
       "offline": "서버에 연결할 수 없습니다. 잠시 후 다시 시도해 주세요.",
       "lowSpace": "기기의 저장 공간이 부족합니다. 이로 인해 스트리밍 및 다운로드에 문제가 발생할 수 있습니다."
@@ -1513,6 +1520,8 @@
     "passwordChangeSuccess": "비밀번호가 성공적으로 변경되었습니다!",
     "passwordResetError": "비밀번호 재설정에 실패했습니다",
     "passwordResetSuccess": "비밀번호 재설정에 성공했습니다!",
-    "registerSuccess": "성공적으로 등록되었습니다!"
+    "registerSuccess": "성공적으로 등록되었습니다!",
+    "newerVersionDownloading": "새로운 버전(v{{version}})이 있습니다. 최신 버전을 다운로드하는 중...",
+    "newerVersionAvailable": "새 버전(v{{version}})이 있습니다. 클릭하여 다운로드하세요."
   }
 }

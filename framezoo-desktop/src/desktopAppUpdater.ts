@@ -19,6 +19,7 @@ const INITIAL_DESKTOP_APP_UPDATE_STATE: DesktopAppUpdateState = {
   updateVersion: null,
   progressPercent: null,
   errorMessage: null,
+  versionBump: null,
 };
 
 async function downloadHttpsFile(
@@ -120,12 +121,18 @@ export function createDesktopAppUpdater(
   let updateInterval: NodeJS.Timeout | null = null;
   let state: DesktopAppUpdateState = { ...INITIAL_DESKTOP_APP_UPDATE_STATE };
 
+  let isCheckingBeforeDownload = false;
+
   function getFeedUrl() {
     return `https://github.com/${options.releaseOwner}/${options.releaseRepo}/releases/latest/download/`;
   }
 
   function isSupported() {
     return process.platform === "darwin" || process.platform === "win32";
+  }
+
+  function getState(): DesktopAppUpdateState {
+    return { ...state };
   }
 
   function setState(nextState: Partial<DesktopAppUpdateState>) {
@@ -138,6 +145,8 @@ export function createDesktopAppUpdater(
 
   async function checkForUpdate() {
     if (!app.isPackaged || !isSupported()) return false;
+    if (state.status === "downloading" || state.status === "downloaded")
+      return true;
 
     setState({
       status: "checking",
@@ -147,10 +156,11 @@ export function createDesktopAppUpdater(
 
     try {
       await autoUpdater.checkForUpdates();
+      const currentStatus = getState().status;
       return (
-        state.status === "available" ||
-        state.status === "downloading" ||
-        state.status === "downloaded"
+        currentStatus === "available" ||
+        currentStatus === "downloading" ||
+        currentStatus === "downloaded"
       );
     } catch (error) {
       setState({
@@ -163,16 +173,85 @@ export function createDesktopAppUpdater(
     }
   }
 
-  async function downloadUpdate() {
+  async function downloadUpdate(downloadOpts?: {
+    autoDownloadNewerVersion?: boolean;
+  }) {
     if (!app.isPackaged || !isSupported()) return false;
+    if (state.status === "downloading" || state.status === "downloaded")
+      return true;
 
+    const initialVersion = state.updateVersion;
+    const autoDownload =
+      downloadOpts?.autoDownloadNewerVersion ??
+      options.autoDownloadNewerVersion ??
+      true;
+
+    // Show downloading (with null progress = spinner / "Updating...") while checking and starting
     setState({
       status: "downloading",
-      progressPercent: 0,
+      progressPercent: null,
       errorMessage: null,
+      versionBump: null,
     });
 
     try {
+      isCheckingBeforeDownload = true;
+      try {
+        await autoUpdater.checkForUpdates();
+      } finally {
+        isCheckingBeforeDownload = false;
+      }
+
+      if (state.status === "idle") {
+        return false;
+      }
+
+      const latestVersion = state.updateVersion;
+      if (!latestVersion) {
+        throw new Error("No update version available");
+      }
+
+      const hasNewerVersion = Boolean(
+        initialVersion && latestVersion !== initialVersion,
+      );
+
+      if (hasNewerVersion) {
+        const versionBump = {
+          from: initialVersion!,
+          to: latestVersion,
+        };
+
+        if (!autoDownload) {
+          // Stop and let the user review and click to download the new version
+          setState({
+            status: "available",
+            updateToken: latestVersion,
+            updateVersion: latestVersion,
+            progressPercent: null,
+            errorMessage: null,
+            versionBump,
+          });
+          return false;
+        }
+
+        // Default: seamlessly notify and continue downloading the latest version
+        setState({
+          status: "downloading",
+          updateToken: latestVersion,
+          updateVersion: latestVersion,
+          progressPercent: 0,
+          errorMessage: null,
+          versionBump,
+        });
+      } else {
+        setState({
+          status: "downloading",
+          progressPercent: 0,
+          errorMessage: null,
+          versionBump: null,
+        });
+      }
+
       if (process.platform === "darwin") {
         const version = state.updateVersion;
         if (!version) throw new Error("No update version available");
@@ -215,6 +294,7 @@ export function createDesktopAppUpdater(
           updateVersion: version,
           progressPercent: 100,
           errorMessage: null,
+          versionBump: null,
         });
         return true;
       }
@@ -238,7 +318,7 @@ export function createDesktopAppUpdater(
           .catch(() => {});
       }
       setState({
-        status: "available",
+        status: state.updateToken ? "available" : "error",
         progressPercent: null,
         errorMessage:
           error instanceof Error ? error.message : "Failed to download update",
@@ -379,6 +459,7 @@ echo "Update finished successfully at $(date)"
     });
 
     autoUpdater.on("checking-for-update", () => {
+      if (isCheckingBeforeDownload) return;
       setState({
         status: "checking",
         progressPercent: null,
@@ -387,12 +468,24 @@ echo "Update finished successfully at $(date)"
     });
 
     autoUpdater.on("update-available", (info: any) => {
+      const nextVersion = info?.version ?? app.getVersion();
+      if (isCheckingBeforeDownload) {
+        state = {
+          ...state,
+          updateToken: nextVersion,
+          updateVersion: nextVersion,
+          errorMessage: null,
+        };
+        return;
+      }
+
       setState({
         status: "available",
-        updateToken: info?.version ?? app.getVersion(),
-        updateVersion: info?.version ?? app.getVersion(),
+        updateToken: nextVersion,
+        updateVersion: nextVersion,
         progressPercent: null,
         errorMessage: null,
+        versionBump: null,
       });
     });
 
@@ -403,6 +496,7 @@ echo "Update finished successfully at $(date)"
         updateVersion: null,
         progressPercent: null,
         errorMessage: null,
+        versionBump: null,
       });
     });
 
@@ -422,10 +516,12 @@ echo "Update finished successfully at $(date)"
         updateVersion: info?.version ?? state.updateVersion,
         progressPercent: 100,
         errorMessage: null,
+        versionBump: null,
       });
     });
 
     autoUpdater.on("error", (error) => {
+      if (isCheckingBeforeDownload) return;
       setState({
         status:
           state.updateToken && state.status !== "idle" ? "available" : "error",
@@ -453,9 +549,7 @@ echo "Update finished successfully at $(date)"
     checkForUpdate,
     dispose,
     downloadUpdate,
-    getState() {
-      return { ...state };
-    },
+    getState,
     initialize,
     installUpdate,
   };

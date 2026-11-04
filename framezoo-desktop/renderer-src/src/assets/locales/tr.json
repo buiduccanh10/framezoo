@@ -719,7 +719,14 @@
         "download": "Güncellemeyi indir",
         "later": "Daha sonra",
         "restart": "Güncellemek için yeniden başlatın",
-        "updating": "Güncelleniyor..."
+        "updating": "Güncelleniyor...",
+        "newerVersionAvailableTitle": "Daha yeni sürüm mevcut.",
+        "newerVersionAvailable": "Daha yeni bir sürüm (v{{version}}) mevcuttur. İndirmek için lütfen tekrar \"Güncellemeyi İndir\"e tıklayın.",
+        "upToDateTitle": "Framezoo güncel",
+        "upToDate": "Zaten en son masaüstü sürümünü (v{{version}}) kullanıyorsunuz.",
+        "updateFailedTitle": "Masaüstü güncellemesi başarısız oldu.",
+        "downloadFailed": "En son masaüstü güncellemesini indiremedim.",
+        "checkFailed": "Şu anda masaüstü güncellemelerini kontrol edemiyorum."
       },
       "offline": "Sunucuya bağlanılamadı. Lütfen birkaç saniye sonra tekrar deneyin.",
       "lowSpace": "Cihazınızın depolama alanı azalıyor. Bu durum yayın akışını ve indirme işlemlerini etkileyebilir."
@@ -1513,6 +1520,8 @@
     "passwordChangeSuccess": "Şifre başarıyla değiştirildi!",
     "passwordResetError": "Parola sıfırlama başarısız oldu.",
     "passwordResetSuccess": "Şifre sıfırlama işlemi başarıyla tamamlandı!",
-    "registerSuccess": "Başarıyla kaydoldunuz!"
+    "registerSuccess": "Başarıyla kaydoldunuz!",
+    "newerVersionDownloading": "Daha yeni bir sürüm (v{{version}}) mevcut. En son sürüm indiriliyor...",
+    "newerVersionAvailable": "Daha yeni bir sürüm (v{{version}}) mevcuttur. İndirmek için tıklayın."
   }
 }

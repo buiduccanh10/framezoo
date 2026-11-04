@@ -103,6 +103,10 @@ export type DesktopAppUpdateState = {
   updateVersion: string | null;
   progressPercent: number | null;
   errorMessage: string | null;
+  versionBump?: {
+    from: string;
+    to: string;
+  } | null;
 };
 
 export type CreateDesktopAppUpdaterOptions = {
@@ -112,6 +116,7 @@ export type CreateDesktopAppUpdaterOptions = {
   onStateChange?: (state: DesktopAppUpdateState) => void;
   releaseOwner: string;
   releaseRepo: string;
+  autoDownloadNewerVersion?: boolean;
 };
 
 export type DesktopPipState = Record<string, unknown> | null;

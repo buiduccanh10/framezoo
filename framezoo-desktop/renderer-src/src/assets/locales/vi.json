@@ -719,7 +719,14 @@
         "download": "Tải xuống bản cập nhật",
         "later": "Để sau",
         "restart": "Khởi động lại để cập nhật",
-        "updating": "Đang cập nhật"
+        "updating": "Đang cập nhật",
+        "newerVersionAvailableTitle": "Đã có bản cập nhật mới hơn",
+        "newerVersionAvailable": "Đã có phiên bản mới hơn (v{{version}}). Vui lòng bấm Tải bản cập nhật lần nữa để tải về.",
+        "upToDateTitle": "Framezoo đã là bản mới nhất",
+        "upToDate": "Bạn đang sử dụng phiên bản mới nhất (v{{version}}).",
+        "updateFailedTitle": "Cập nhật ứng dụng thất bại",
+        "downloadFailed": "Không thể tải về bản cập nhật mới nhất.",
+        "checkFailed": "Hiện không thể kiểm tra bản cập nhật mới."
       },
       "offline": "Không thể kết nối với máy chủ. Vui lòng thử lại sau vài giây.",
       "lowSpace": "Thiết bị của bạn sắp hết dung lượng lưu trữ. Điều này có thể ảnh hưởng đến việc phát trực tuyến và tải xuống."
@@ -1513,6 +1520,8 @@
     "passwordChangeSuccess": "Đổi mật khẩu thành công!",
     "passwordResetError": "Không thể đặt lại mật khẩu",
     "passwordResetSuccess": "Đặt lại mật khẩu thành công!",
-    "registerSuccess": "Đã đăng ký thành công!"
+    "registerSuccess": "Đã đăng ký thành công!",
+    "newerVersionDownloading": "Đã có phiên bản mới hơn (v{{version}}). Đang tải bản mới nhất...",
+    "newerVersionAvailable": "Đã có phiên bản mới hơn (v{{version}}). Bấm để tải bản mới nhất."
   }
 }

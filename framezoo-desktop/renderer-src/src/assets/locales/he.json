@@ -719,7 +719,14 @@
         "download": "הורד עדכון",
         "later": "מְאוּחָר יוֹתֵר",
         "restart": "הפעל מחדש כדי לעדכן",
-        "updating": "עִדכּוּן..."
+        "updating": "עִדכּוּן...",
+        "newerVersionAvailableTitle": "גרסה חדשה יותר זמינה",
+        "newerVersionAvailable": "גרסה חדשה יותר (v{{version}}) זמינה. אנא לחץ שוב על הורד עדכון כדי להוריד אותה.",
+        "upToDateTitle": "Framezoo מעודכן",
+        "upToDate": "אתה כבר משתמש בגרסת שולחן העבודה העדכנית ביותר (v{{version}}).",
+        "updateFailedTitle": "עדכון שולחן העבודה נכשל",
+        "downloadFailed": "לא ניתן להוריד את העדכון האחרון למחשב שולחני.",
+        "checkFailed": "לא ניתן לבדוק אם יש עדכונים לשולחן העבודה כרגע."
       },
       "offline": "לא ניתן להתחבר לשרת. אנא נסה שוב בעוד מספר שניות.",
       "lowSpace": "שטח האחסון במכשיר שלך עומד להיגמר. הדבר עלול להשפיע על הסטרימינג וההורדה."
@@ -1513,6 +1520,8 @@
     "passwordChangeSuccess": "הסיסמה שונתה בהצלחה!",
     "passwordResetError": "איפוס הסיסמה נכשל",
     "passwordResetSuccess": "איפוס הסיסמה הצליח!",
-    "registerSuccess": "נרשם בהצלחה!"
+    "registerSuccess": "נרשם בהצלחה!",
+    "newerVersionDownloading": "גרסה חדשה יותר (v{{version}}) זמינה. מוריד את הגרסה האחרונה...",
+    "newerVersionAvailable": "גרסה חדשה יותר (v{{version}}) זמינה. לחץ להורדה."
   }
 }

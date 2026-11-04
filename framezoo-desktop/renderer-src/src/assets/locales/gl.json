@@ -719,7 +719,14 @@
         "download": "Descargar actualización",
         "later": "Máis tarde",
         "restart": "Reinicia para actualizar",
-        "updating": "Actualizando..."
+        "updating": "Actualizando...",
+        "newerVersionAvailableTitle": "Versión máis recente dispoñible",
+        "newerVersionAvailable": "Hai dispoñible unha versión máis recente (v{{version}}). Fai clic de novo en Descargar actualización para descargala.",
+        "upToDateTitle": "Framezoo está actualizado",
+        "upToDate": "Xa estás na última versión de escritorio (v{{version}}).",
+        "updateFailedTitle": "Fallou a actualización do escritorio",
+        "downloadFailed": "Non se pode descargar a última actualización de escritorio.",
+        "checkFailed": "Non se poden comprobar se hai actualizacións de escritorio neste momento."
       },
       "offline": "Non se pode conectar co servidor. Téntao de novo nuns segundos.",
       "lowSpace": "O teu dispositivo está a quedar sen espazo de almacenamento. Isto pode afectar á transmisión e ás descargas."
@@ -1513,6 +1520,8 @@
     "passwordChangeSuccess": "Contrasinal cambiado correctamente!",
     "passwordResetError": "Non se puido restablecer o contrasinal",
     "passwordResetSuccess": "Restablecemento do contrasinal realizado correctamente!",
-    "registerSuccess": "Rexistrado con éxito!"
+    "registerSuccess": "Rexistrado con éxito!",
+    "newerVersionDownloading": "Hai dispoñible unha versión máis recente (v{{version}}). Descargando a última versión...",
+    "newerVersionAvailable": "Hai dispoñible unha versión máis recente (v{{version}}). Fai clic para descargala."
   }
 }
