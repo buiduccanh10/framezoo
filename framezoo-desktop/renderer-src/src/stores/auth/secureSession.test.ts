@@ -50,4 +50,30 @@ describe("secure auth session", () => {
       expect.stringContaining('"token":"access"'),
     );
   });
+
+  it("does not overwrite existing secrets when saving an account with empty seed", async () => {
+    secureStoreGet.mockResolvedValue(
+      JSON.stringify({
+        userId: "user-1",
+        sessionId: "session-1",
+        token: "access-token",
+        refreshToken: "refresh-token",
+        seed: "existing-seed",
+      }),
+    );
+    secureStoreSave.mockResolvedValue(true);
+
+    await saveAuthSecrets({
+      userId: "user-1",
+      sessionId: "session-1",
+      token: undefined,
+      refreshToken: undefined,
+      seed: "",
+    });
+
+    expect(secureStoreSave).toHaveBeenCalledWith(
+      "auth_session",
+      expect.stringContaining('"seed":"existing-seed"'),
+    );
+  });
 });

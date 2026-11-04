@@ -26,14 +26,30 @@ export async function saveAuthSecrets(
   const api = secureStore();
   if (!api?.secureStoreSave) return false;
 
+  let { token, refreshToken, seed } = account;
+
+  // Preserve stored secrets if an unhydrated account state is saved
+  if (!seed || !token) {
+    const existing = await loadAuthSecrets().catch(() => null);
+    if (
+      existing &&
+      existing.userId === account.userId &&
+      existing.sessionId === account.sessionId
+    ) {
+      token = token || existing.token;
+      refreshToken = refreshToken || existing.refreshToken;
+      seed = seed || existing.seed;
+    }
+  }
+
   return api.secureStoreSave(
     AUTH_SESSION_KEY,
     JSON.stringify({
       userId: account.userId,
       sessionId: account.sessionId,
-      token: account.token,
-      refreshToken: account.refreshToken,
-      seed: account.seed,
+      token,
+      refreshToken,
+      seed,
     }),
   );
 }

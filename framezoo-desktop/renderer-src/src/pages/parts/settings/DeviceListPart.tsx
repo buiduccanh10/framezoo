@@ -293,7 +293,7 @@ export function DeviceListPart(props: {
   const account = useAuthStore((s) => s.account);
   const updateDeviceName = useAuthStore((s) => s.updateDeviceName);
   const seed = account?.seed;
-  const sessions = props.sessions;
+  const { onChange, sessions } = props;
   const currentSessionId = account?.sessionId;
   const url = useBackendUrl();
   const hasHealedDeviceRef = useRef(false);
@@ -323,25 +323,30 @@ export function DeviceListPart(props: {
             );
             await updateSession(url, account, { deviceName: encrypted });
             updateDeviceName(encrypted);
-            props.onChange?.();
+            onChange?.();
           } catch (err) {
             console.warn("Failed to update current device session name:", err);
           }
         }
       });
     }
-  }, [account, url, props.onChange, updateDeviceName]);
+  }, [account, url, onChange, updateDeviceName]);
 
   const getDeviceInfo = useCallback(
-    (session: SessionResponse, deviceSeed: string) => {
+    (session: SessionResponse, deviceSeed?: string) => {
       let decryptedName: string | null = null;
-      try {
-        decryptedName = decryptData(session.device, base64ToBuffer(deviceSeed));
-      } catch (error) {
-        console.warn(
-          `Failed to decrypt device name for session ${session.id}:`,
-          error,
-        );
+      if (deviceSeed) {
+        try {
+          decryptedName = decryptData(
+            session.device,
+            base64ToBuffer(deviceSeed),
+          );
+        } catch (error) {
+          console.warn(
+            `Failed to decrypt device name for session ${session.id}:`,
+            error,
+          );
+        }
       }
 
       const metadata = getDeviceMetadata(session.userAgent);
@@ -365,7 +370,6 @@ export function DeviceListPart(props: {
   );
 
   const deviceListSorted = useMemo(() => {
-    if (!seed) return [];
     const groups = new Map<
       string,
       {
@@ -383,14 +387,14 @@ export function DeviceListPart(props: {
     sessions.forEach((session) => {
       const deviceInfo = getDeviceInfo(session, seed);
       const isCurrent = session.id === currentSessionId;
-      // Key grouping: Keep current device session clearly designated.
-      // Other sessions are grouped by device identity so multiple
-      // logins from the same device merge into one card instead of flooding identical cards.
+      // ponytail: without a seed, show each session's user agent; restore names after Keychain access returns.
       const key = isCurrent
         ? `current_${session.id}`
-        : deviceInfo.hasCustomName
-          ? deviceInfo.name
-          : `${deviceInfo.operatingSystem}__${deviceInfo.baseBrowser}__${deviceInfo.type}`;
+        : !seed
+          ? `session_${session.id}`
+          : deviceInfo.hasCustomName
+            ? deviceInfo.name
+            : `${deviceInfo.operatingSystem}__${deviceInfo.baseBrowser}__${deviceInfo.type}`;
       const existing = groups.get(key);
 
       if (existing) {
@@ -430,8 +434,6 @@ export function DeviceListPart(props: {
     });
     return list;
   }, [seed, sessions, currentSessionId, getDeviceInfo]);
-
-  if (!seed) return null;
 
   return (
     <div>
