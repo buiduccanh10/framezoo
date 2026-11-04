@@ -77,6 +77,6 @@ export default defineEventHandler(async event => {
       };
     });
   } catch (error) {
-    throwOtpHttpError(error);
+    throwOtpHttpError(error, event);
   }
 });

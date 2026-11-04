@@ -24,7 +24,7 @@ export default defineEventHandler(async event => {
       purpose: 'password_reset',
     });
   } catch (error) {
-    throwOtpHttpError(error);
+    throwOtpHttpError(error, event);
   }
 
   const userId = getChallengeUserId(challenge);

@@ -30,6 +30,17 @@ services:
     volumes:
       - redis-data:/data
 
+  redis-queue:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes", "--appendfsync", "everysec", "--maxmemory-policy", "noeviction"]
+    ports:
+      - "6380:6379"
+    networks:
+      - framezoo-network
+    volumes:
+      - redis-queue-data:/data
+
   clamav:
     image: clamav/clamav:1.4.6@sha256:6ba4e78b29853b2fc7e3c111389596e2cad5ec4ed5f0fd2cb663d29ab6b0e6a3
     platform: linux/amd64
@@ -98,6 +109,7 @@ services:
       CAPTCHA_CLIENT_KEY: ${CAPTCHA_CLIENT_KEY}
       NODE_ENV: ${NODE_ENV:-production}
       REDIS_URL: redis://redis:6379
+      REDIS_QUEUE_URL: redis://redis-queue:6379
       SYNC_SERVICE_URL: http://sync-service:8000
       SYNC_TIMEOUT_MS: ${SYNC_TIMEOUT_MS:-300000}
       WYZIE_API_KEY: ${WYZIE_API_KEY:-}
@@ -115,10 +127,33 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
+      redis-queue:
+        condition: service_started
       clamav:
         condition: service_healthy
       sync-service:
         condition: service_healthy
+    networks:
+      - framezoo-network
+
+  framezoo-mail-worker:
+    build:
+      context: .
+      dockerfile: framezoo-be/Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: ${DATABASE_URL_DOCKER:?database URL required}
+      NODE_ENV: ${NODE_ENV:-production}
+      REDIS_QUEUE_URL: redis://redis-queue:6379
+      EMAIL_WORKER_CONCURRENCY: ${EMAIL_WORKER_CONCURRENCY:-5}
+    command: ["sh", "-c", "pnpm --filter framezoo-be exec prisma migrate deploy && pnpm --filter framezoo-be worker:email"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis-queue:
+        condition: service_started
     networks:
       - framezoo-network
 
@@ -182,3 +217,4 @@ volumes:
   redis-data:
   feedback-storage:
   clamav-db:
+  redis-queue-data:

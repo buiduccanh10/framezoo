@@ -22,6 +22,6 @@ export default defineEventHandler(async event => {
 
     return { actionToken: verified.actionToken };
   } catch (error) {
-    throwOtpHttpError(error);
+    throwOtpHttpError(error, event);
   }
 });

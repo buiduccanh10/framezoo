@@ -2,7 +2,6 @@ import { z } from 'zod';
 import { normalizeEmail } from '~/utils/accountIdentifier';
 import { prisma } from '~/utils/prisma';
 import { createOtpChallenge } from '~/utils/emailOtp';
-import { sendEmail } from '~/utils/email';
 import { throwOtpHttpError } from '~/utils/otpHttp';
 
 const schema = z.object({
@@ -32,9 +31,9 @@ export default defineEventHandler(async event => {
       purpose: 'registration',
       email,
       event,
-      send: code => sendEmail({ to: email, template: 'registration-otp', code }),
+      template: 'registration-otp',
     });
   } catch (error) {
-    throwOtpHttpError(error);
+    throwOtpHttpError(error, event);
   }
 });

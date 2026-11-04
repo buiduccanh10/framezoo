@@ -1,7 +1,6 @@
 import { prisma } from '~/utils/prisma';
 import { useAuth } from '~/utils/auth';
 import { createOtpChallenge } from '~/utils/emailOtp';
-import { sendEmail } from '~/utils/email';
 import { throwOtpHttpError } from '~/utils/otpHttp';
 
 export default defineEventHandler(async event => {
@@ -19,9 +18,9 @@ export default defineEventHandler(async event => {
       email,
       userId: user.id,
       event,
-      send: code => sendEmail({ to: email, template: 'password-change-otp', code }),
+      template: 'password-change-otp',
     });
   } catch (error) {
-    throwOtpHttpError(error);
+    throwOtpHttpError(error, event);
   }
 });

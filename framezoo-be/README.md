@@ -82,6 +82,24 @@ cp .env.example .env
 > [!NOTE]
 > for postgres you may want to use a service like [Neon](https://neon.tech) or host your own with docker, to do that just look it up
 
+## OTP email queue
+
+OTP requests are committed to PostgreSQL first, then dispatched through BullMQ on `REDIS_QUEUE_URL`. The API and worker run as separate processes. Configure `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `MAIL_FROM`, and `CRYPTO_SECRET` (or `EMAIL_OUTBOX_SECRET`).
+
+For the production Compose stack:
+
+```sh
+docker compose -f docker-compose.prod.yml up -d --build framezoo-be framezoo-mail-worker redis-queue
+```
+
+The worker retries transient mail failures and places exhausted jobs in `email-otp-dlq`. The outbox dispatcher runs every minute to recover jobs when Redis is temporarily unavailable.
+
+For local Compose development, use the same worker with the dev Redis queue:
+
+```sh
+docker compose up -d --build redis-queue framezoo-be framezoo-mail-worker
+```
+
 ## Contributing
 We love contributors, it helps the community so much, if you are interested in contributing here are some steps:
 

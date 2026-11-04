@@ -9,6 +9,7 @@
     "dev": "nitro dev",
     "prepare": "nitro prepare && prisma generate && nitro prepare",
     "preview": "node .output/server/index.mjs",
+    "worker:email": "tsx server/email-worker.ts",
     "lint": "eslint server --quiet"
   },
   "devDependencies": {
@@ -23,6 +24,7 @@
     "nitropack": "^2.13.5",
     "prettier": "^3.9.9",
     "prisma": "7.10.0",
+    "tsx": "^4.23.15",
     "typescript": "6.0.3"
   },
   "dependencies": {
@@ -31,6 +33,7 @@
     "@supabase/supabase-js": "^2.117.2",
     "@types/nodemailer": "^8.0.2",
     "bcryptjs": "^3.0.3",
+    "bullmq": "^5.81.5",
     "cheerio": "^1.2.0",
     "dotenv": "^18.0.4",
     "ioredis": "^6.0.0",

@@ -23,11 +23,13 @@ export interface ResetPasswordResponse {
 }
 
 export async function requestPasswordReset(url: string, email: string) {
+  const idempotencyKey = crypto.randomUUID();
   return ofetch<OtpChallengeResponse & { message: string }>(
     "/auth/password/reset/request",
     {
       method: "POST",
       credentials: "include",
+      headers: { "Idempotency-Key": idempotencyKey },
       body: { email },
       baseURL: url,
     },
@@ -65,11 +67,12 @@ export async function requestPasswordChange(
   url: string,
   account: AccountWithToken,
 ) {
+  const idempotencyKey = crypto.randomUUID();
   return withAuthRetry(url, account, (token) =>
     ofetch<OtpChallengeResponse>("/auth/password/change/request", {
       method: "POST",
       credentials: "include",
-      headers: getAuthHeaders(token),
+      headers: { ...getAuthHeaders(token), "Idempotency-Key": idempotencyKey },
       baseURL: url,
     }),
   );
@@ -102,11 +105,12 @@ export async function requestEmailChange(
   account: AccountWithToken,
   newEmail: string,
 ) {
+  const idempotencyKey = crypto.randomUUID();
   return withAuthRetry(url, account, (token) =>
     ofetch<OtpChallengeResponse>("/auth/email/change/request", {
       method: "POST",
       credentials: "include",
-      headers: getAuthHeaders(token),
+      headers: { ...getAuthHeaders(token), "Idempotency-Key": idempotencyKey },
       body: { newEmail },
       baseURL: url,
     }),
@@ -151,6 +155,7 @@ export async function resendOtp(url: string, challengeId: string) {
   return ofetch<OtpChallengeResponse>("/auth/otp/resend", {
     method: "POST",
     credentials: "include",
+    headers: { "Idempotency-Key": crypto.randomUUID() },
     body: { challengeId },
     baseURL: url,
   });

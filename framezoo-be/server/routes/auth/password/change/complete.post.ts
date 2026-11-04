@@ -31,7 +31,7 @@ export default defineEventHandler(async event => {
       userId: session.user,
     });
   } catch (error) {
-    throwOtpHttpError(error);
+    throwOtpHttpError(error, event);
   }
 
   await prisma.$transaction(async tx => {

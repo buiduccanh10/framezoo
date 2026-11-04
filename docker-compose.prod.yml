@@ -26,6 +26,15 @@ services:
     volumes:
       - redis-data:/data
 
+  redis-queue:
+    image: redis:7-alpine@sha256:858f009f9709ce576febc734aa78b8f6d624b82571f9ddb6bda4377c833b349
+    restart: always
+    command: ["redis-server", "--appendonly", "yes", "--appendfsync", "everysec", "--maxmemory-policy", "noeviction"]
+    networks:
+      - framezoo-prod-network
+    volumes:
+      - redis-queue-data:/data
+
   clamav:
     image: clamav/clamav:1.4.6@sha256:6ba4e78b29853b2fc7e3c111389596e2cad5ec4ed5f0fd2cb663d29ab6b0e6a3
     platform: linux/amd64
@@ -92,6 +101,7 @@ services:
       CAPTCHA_CLIENT_KEY: ${CAPTCHA_CLIENT_KEY}
       NODE_ENV: ${NODE_ENV:-production}
       REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+      REDIS_QUEUE_URL: ${REDIS_QUEUE_URL:-redis://redis-queue:6379}
       SYNC_SERVICE_URL: http://sync-service:8000
       SYNC_TIMEOUT_MS: ${SYNC_TIMEOUT_MS:-300000}
       WYZIE_API_KEY: ${WYZIE_API_KEY:-}
@@ -118,6 +128,8 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
+      redis-queue:
+        condition: service_started
       clamav:
         condition: service_healthy
       sync-service:
@@ -127,6 +139,37 @@ services:
     networks:
       - framezoo-prod-network
       - betakiot_proxy_network
+
+  framezoo-mail-worker:
+    build:
+      context: .
+      dockerfile: framezoo-be/Dockerfile
+    restart: always
+    env_file:
+      - ${ENV_FILE_PATH:-.env}
+    environment:
+      DATABASE_URL: ${DATABASE_URL_DOCKER}
+      NODE_ENV: ${NODE_ENV:-production}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+      REDIS_QUEUE_URL: ${REDIS_QUEUE_URL:-redis://redis-queue:6379}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASS: ${SMTP_PASS}
+      MAIL_FROM: ${MAIL_FROM:-}
+      OTP_SECRET: ${OTP_SECRET:-}
+      CRYPTO_SECRET: ${CRYPTO_SECRET}
+      EMAIL_WORKER_CONCURRENCY: ${EMAIL_WORKER_CONCURRENCY:-5}
+    command: ["sh", "-c", "pnpm --filter framezoo-be exec prisma migrate deploy && pnpm --filter framezoo-be worker:email"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      redis-queue:
+        condition: service_started
+    networks:
+      - framezoo-prod-network
 
   framezoo-fe:
     build:
@@ -196,6 +239,8 @@ volumes:
   redis-data:
     external: ${EXTERNAL_LEGACY_VOLUMES:-false}
     name: framezoo_backend_redis-data
+  redis-queue-data:
+    name: framezoo_backend_redis-queue-data
   clamav-db:
     name: framezoo_backend_clamav-db
   feedback-storage:

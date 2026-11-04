@@ -26,7 +26,7 @@ export default defineNitroConfig({
   },
   scheduledTasks: {
     // Sync progress every minute
-    '* * * * *': ['jobs:sync-progress'],
+    '* * * * *': ['jobs:sync-progress', 'jobs:dispatch-email-outbox'],
     // Daily cron jobs (midnight)
     '0 0 * * *': ['jobs:clear-metrics:daily'],
     // Weekly cron jobs (Sunday midnight)

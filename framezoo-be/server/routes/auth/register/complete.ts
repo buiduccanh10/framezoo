@@ -50,7 +50,7 @@ export default defineEventHandler(async event => {
       email: input.email,
     });
   } catch (error) {
-    throwOtpHttpError(error);
+    throwOtpHttpError(error, event);
   }
 
   const challenge = useChallenge();
