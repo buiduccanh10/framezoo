@@ -34,7 +34,7 @@ export default defineNitroConfig({
     // Monthly cron jobs (1st of month at midnight)
     '0 0 1 * *': ['jobs:clear-metrics:monthly'],
     // Daily backup at 3 AM
-    '0 3 * * *': ['backup:daily'],
+    '0 3 * * *': ['backup:daily', 'jobs:cleanup-email'],
   },
   storage: {
     cache: createRedisStorage('redis'),

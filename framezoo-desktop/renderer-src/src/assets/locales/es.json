@@ -176,7 +176,9 @@
       "passwordMismatch": "Las contraseñas no coinciden",
       "passwordPlaceholder": "Cree una contraseña (usada como su frase de contraseña)",
       "passwordWeak": "La contraseña debe tener al menos 8 caracteres con letras y números.",
-      "submit": "Crear una cuenta"
+      "privacyPolicy": "política de privacidad",
+      "submit": "Crear una cuenta",
+      "legalConsent": "He leído y acepto los <terms>Términos de servicio</terms> y la <privacy>Política de privacidad</privacy>."
     },
     "trust": {
       "failed": {
@@ -302,7 +304,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Descargo de responsabilidad",
-      "disclaimerText": "Framezoo es un reproductor multimedia neutral. No aloja, almacena, distribuye ni controla archivos multimedia ni complementos de terceros. Explora metadatos detallados de películas, sincronización ilimitada de subtítulos y subtítulos de múltiples fuentes, manteniendo el control del contenido al que accedes."
+      "disclaimerText": "Framezoo no gestiona fuentes de transmisión de vídeo. Sus servidores pueden retransmitir subtítulos del proveedor y procesar temporalmente el audio y los subtítulos para su sincronización cuando usted selecciona esa función. Usted controla el contenido que reproduce."
     },
     "links": {
       "fluxer": "fluxor",
@@ -1179,9 +1181,9 @@
         "delete": {
           "button": "Eliminar cuenta",
           "confirmButton": "Eliminar cuenta",
-          "confirmDescription": "¿Estás seguro de que quieres eliminar tu cuenta? ¡Todos tus datos se perderán!",
+          "confirmDescription": "Esta acción es irreversible. Tu cuenta y los datos sincronizados se eliminarán del servidor. Los informes enviados se guardan por separado; solicita su eliminación a través de la sección de Comentarios.",
           "confirmTitle": "¿Estás seguro?",
-          "text": "Esta acción es irreversible. Todos los datos se eliminarán y no se podrán recuperar.",
+          "text": "Elimine su cuenta y los datos sincronizados del servidor. Los informes enviados se conservan por separado.",
           "title": "Eliminar cuenta"
         },
         "logoutAllDevices": {

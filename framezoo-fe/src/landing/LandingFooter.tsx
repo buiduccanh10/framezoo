@@ -18,7 +18,7 @@ export function LandingFooter({ copy }: LandingFooterProps) {
       <div className="landing-footer-container">
         <div className="landing-footer-grid">
           <div className="landing-footer-brand">
-            <a className="landing-brand" href="/" aria-label="Framezoo home">
+            <a className="landing-brand" href="/" aria-label={nav.homeAria}>
               <img
                 src="/framezoo-logo.svg"
                 width="138"

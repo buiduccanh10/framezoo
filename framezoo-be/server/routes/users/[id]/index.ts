@@ -115,9 +115,34 @@ export default defineEventHandler(async event => {
     try {
       log.info('Deleting user account', { userId });
 
-      // Delete related records first
       await prisma.$transaction(async tx => {
-        // Delete user bookmarks
+        const user = await tx.users.findUnique({
+          where: { id: userId },
+          select: { email: true },
+        });
+        if (!user) {
+          throw createError({ statusCode: 404, message: 'User not found' });
+        }
+
+        const otpWhere = {
+          OR: [{ user_id: userId }, ...(user.email ? [{ email: user.email }] : [])],
+        };
+        const challenges = await tx.email_otp_challenges.findMany({
+          where: otpWhere,
+          select: { id: true },
+        });
+        if (challenges.length) {
+          await tx.email_outbox.deleteMany({
+            where: { challenge_id: { in: challenges.map(challenge => challenge.id) } },
+          });
+        }
+        await tx.email_otp_challenges.deleteMany({ where: otpWhere });
+        if (user.email) {
+          await tx.otp_idempotency_keys.deleteMany({
+            where: { scope: { contains: `:${user.email}:` } },
+          });
+        }
+
         await tx.bookmarks.deleteMany({
           where: { user_id: userId },
         });
@@ -125,19 +150,22 @@ export default defineEventHandler(async event => {
         await tx.progress_items.deleteMany({
           where: { user_id: userId },
         });
-
-        await tx.user_settings
-          .delete({
-            where: { id: userId },
-          })
-          .catch(() => {});
-
+        await tx.watch_history.deleteMany({ where: { user_id: userId } });
+        await tx.user_group_order.deleteMany({ where: { user_id: userId } });
+        await tx.user_settings.deleteMany({ where: { id: userId } });
         await tx.user_provider_credentials.deleteMany({
           where: { user_id: userId },
         });
 
         await tx.sessions.deleteMany({
           where: { user: userId },
+        });
+
+        // Reports can contain evidence needed for support or copyright claims.
+        // Remove the account link; users can request report deletion separately.
+        await tx.feedbacks.updateMany({
+          where: { user_id: userId },
+          data: { user_id: null },
         });
 
         await tx.users.delete({
@@ -149,6 +177,9 @@ export default defineEventHandler(async event => {
 
       return { success: true, message: 'User account deleted successfully' };
     } catch (error) {
+      if (error && typeof error === 'object' && 'statusCode' in error && error.statusCode === 404) {
+        throw error;
+      }
       log.error('Failed to delete user account', {
         userId,
         error: error instanceof Error ? error.message : String(error),

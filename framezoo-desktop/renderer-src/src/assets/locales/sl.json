@@ -176,7 +176,9 @@
       "passwordMismatch": "Gesli se ne ujemata",
       "passwordPlaceholder": "Ustvarite geslo (uporablja se kot vaše geslo)",
       "passwordWeak": "Geslo mora imeti vsaj 8 znakov s črkami in številkami",
-      "submit": "Ustvari račun"
+      "privacyPolicy": "Pravilnik o zasebnosti",
+      "submit": "Ustvari račun",
+      "legalConsent": "Prebral/a sem in se strinjam s <terms>Pogoji storitve</terms> in <privacy>Pravilnikom o zasebnosti</privacy>."
     },
     "trust": {
       "failed": {
@@ -302,7 +304,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Opozorilo",
-      "disclaimerText": "Framezoo je nevtralna programska oprema za predvajalnik medijev. Ne gosti, shranjuje, distribuira ali nadzoruje medijskih datotek ali dodatkov tretjih oseb. Raziščite bogate metapodatke filmov, neomejeno sinhronizacijo podnapisov v pretočnih predvajalnikih in podnapise iz več virov, hkrati pa ohranite nadzor nad vsebino, do katere dostopate."
+      "disclaimerText": "Framezoo ne upravlja virov video toka. Njegovi strežniki lahko posredujejo podnapise ponudnika in začasno obdelujejo zvok in podnapise za sinhronizacijo, ko izberete to funkcijo. Vsebino, ki jo predvajate, nadzorujete sami."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -1179,9 +1181,9 @@
         "delete": {
           "button": "Izbriši profil",
           "confirmButton": "Izbriši profil",
-          "confirmDescription": "Ste prepričani, da želite izbrisati svoj račun? Vsi vaši podatki bodo izgubljeni!",
+          "confirmDescription": "Tega ni mogoče razveljaviti. Vaš račun in sinhronizirani podatki bodo izbrisani s strežnika. Poslana poročila se hranijo ločeno; njihov izbris lahko zahtevate prek povratnih informacij.",
           "confirmTitle": "Ali ste prepričani?",
-          "text": "Ta ukaz je nereverzibilen. Vsi podatki bodo izbrisani in nobenih podatkov ne bo mogoče obnoviti.",
+          "text": "Izbrišite svoj račun in sinhronizirane podatke s strežnika. Poslana poročila se hranijo ločeno.",
           "title": "Izbriši profil"
         },
         "logoutAllDevices": {

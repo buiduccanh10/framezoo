@@ -176,7 +176,9 @@
       "passwordMismatch": "Lösenord stämmer inte överens",
       "passwordPlaceholder": "Skapa ett lösenord (används som din lösenordsfras)",
       "passwordWeak": "Lösenordet måste bestå av minst 8 tecken med bokstäver och siffror",
-      "submit": "Skapa konto"
+      "privacyPolicy": "Integritetspolicy",
+      "submit": "Skapa konto",
+      "legalConsent": "Jag har läst och godkänner <terms>Användarvillkoren</terms> och <privacy>Integritetspolicyn</privacy>."
     },
     "trust": {
       "failed": {
@@ -302,7 +304,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Friskriver sig från ansvar",
-      "disclaimerText": "Framezoo är en neutral mediaspelare. Den varken lagrar, distribuerar eller kontrollerar mediefiler eller tredjepartstillägg. Utforska omfattande filmmetadata, obegränsad synkronisering av undertexter och undertexter från flera källor samtidigt som du behåller kontrollen över innehållet du får åtkomst till."
+      "disclaimerText": "Framezoo hanterar inte videoströmningskällor. Dess servrar kan vidarebefordra leverantörens undertexter och tillfälligt bearbeta ljud och undertexter för synkronisering när du väljer den funktionen. Du styr vilket innehåll du spelar upp."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -1179,9 +1181,9 @@
         "delete": {
           "button": "Ta bort konto",
           "confirmButton": "Ta bort konto",
-          "confirmDescription": "Är du säker på att du vill ta bort ditt konto? All din data kommer att gå förlorad!",
+          "confirmDescription": "Detta kan inte ångras. Ditt konto och din synkroniserade data kommer att raderas från servern. Inskickade rapporter sparas separat; begär radering via Feedback.",
           "confirmTitle": "Är du säker?",
-          "text": "Denna åtgärd är oåterkallelig. All data kommer att raderas och kan inte återställas.",
+          "text": "Ta bort ditt konto och synkroniserade data från servern. Inskickade rapporter sparas separat.",
           "title": "Ta bort konto"
         },
         "logoutAllDevices": {

@@ -176,7 +176,9 @@
       "passwordMismatch": "Paroles nesakrīt",
       "passwordPlaceholder": "Izveidojiet paroli (izmantojiet kā ieejas frāzi)",
       "passwordWeak": "Parolei jābūt vismaz 8 rakstzīmēm ar burtiem un cipariem",
-      "submit": "Izveidot kontu"
+      "privacyPolicy": "Privātuma politika",
+      "submit": "Izveidot kontu",
+      "legalConsent": "Esmu izlasījis(-usi) un piekrītu <terms>Pakalpojumu sniegšanas noteikumiem</terms> un <privacy>Privātuma politikai</privacy>."
     },
     "trust": {
       "failed": {
@@ -302,7 +304,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Atruna",
-      "disclaimerText": "Framezoo ir neitrāla multivides atskaņotāja programmatūra. Tā nemitina, neuzglabā, neizplata un nekontrolē multivides failus vai trešo pušu pievienojumprogrammas. Izpētiet bagātīgus filmu metadatus, neierobežotu subtitru straumēšanas sinhronizāciju un subtitrus no vairākiem avotiem, vienlaikus saglabājot kontroli pār saturu, kuram piekļūstat."
+      "disclaimerText": "Framezoo nepārvalda video straumēšanas avotus. Tā serveri var pārsūtīt pakalpojumu sniedzēju subtitrus un īslaicīgi apstrādāt audio un subtitrus sinhronizācijai, kad izvēlaties šo funkciju. Jūs kontrolējat saturu, ko atskaņojat."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -1179,9 +1181,9 @@
         "delete": {
           "button": "Dzēst kontu",
           "confirmButton": "Dzēst kontu",
-          "confirmDescription": "Vai tiešām vēlaties dzēst savu kontu? Visi jūsu dati tiks zaudēti!",
+          "confirmDescription": "Šo darbību nevar atsaukt. Jūsu konts un sinhronizētie dati tiks dzēsti no servera. Iesniegtie ziņojumi tiek glabāti atsevišķi; pieprasiet to dzēšanu, izmantojot Atsauksmes.",
           "confirmTitle": "Vai tu esi pārliecināts?",
-          "text": "Šī darbība ir neatgriezeniska. Visi dati tiks dzēsti, un neko nevarēs atgūt.",
+          "text": "Izdzēsiet savu kontu un sinhronizētos datus no servera. Iesniegtās atskaites tiek saglabātas atsevišķi.",
           "title": "Dzēst kontu"
         },
         "logoutAllDevices": {

@@ -176,7 +176,9 @@
       "passwordMismatch": "Salasanat eivät täsmää",
       "passwordPlaceholder": "Luo salasana (käytetään tunnuslauseena)",
       "passwordWeak": "Salasanassa on oltava vähintään 8 merkkiä kirjaimilla ja numeroilla",
-      "submit": "Luo tili"
+      "privacyPolicy": "Tietosuojakäytäntö",
+      "submit": "Luo tili",
+      "legalConsent": "Olen lukenut ja hyväksyn <terms>Käyttöehdot</terms> ja <privacy>Tietosuojakäytännön</privacy>."
     },
     "trust": {
       "failed": {
@@ -302,7 +304,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Vastuuvapauslauseke",
-      "disclaimerText": "Framezoo on neutraali mediasoitinohjelmisto. Se ei isännöi, tallenna, jaa tai hallinnoi mediatiedostoja tai kolmansien osapuolten lisäosia. Tutustu monipuoliseen elokuvien metadataan, rajoittamattomaan tekstitysten synkronointiin ja tekstityksiin useista lähteistä säilyttäen samalla hallinnan käyttämästäsi sisällöstä."
+      "disclaimerText": "Framezoo ei hallinnoi videoiden suoratoistolähteitä. Sen palvelimet saattavat välittää palveluntarjoajien tekstityksiä ja käsitellä ääntä ja tekstityksiä tilapäisesti synkronointia varten, kun valitset kyseisen ominaisuuden. Sinä hallitset toistettavaa sisältöä."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -1179,9 +1181,9 @@
         "delete": {
           "button": "Poista tili",
           "confirmButton": "Poista tili",
-          "confirmDescription": "Haluatko varmasti poistaa tilisi? Kaikki tietosi menetetään!",
+          "confirmDescription": "Tätä ei voi perua. Tilisi ja synkronoidut tiedot poistetaan palvelimelta. Lähetetyt raportit säilytetään erikseen; pyydä niiden poistamista palautteen kautta.",
           "confirmTitle": "Oletko varma?",
-          "text": "Tämä toimenpide on peruuttamaton. Kaikki tiedot poistetaan, eikä mitään voida palauttaa.",
+          "text": "Poista tilisi ja synkronoidut tiedot palvelimelta. Lähetetyt raportit säilytetään erikseen.",
           "title": "Poista tili"
         },
         "logoutAllDevices": {

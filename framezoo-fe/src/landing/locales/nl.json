@@ -6,7 +6,10 @@
     "language": "Taal",
     "addonGuide": "Add-on-gids",
     "home": "Thuis",
-    "installGuide": "Installatiehandleiding"
+    "installGuide": "Installatiehandleiding",
+    "homeAria": "Framezoo-homepage",
+    "primaryAria": "Hoofdnavigatie",
+    "backToTop": "Terug naar boven"
   },
   "hero": {
     "eyebrow": "FRAMEZOO-BUREAUBLAD / 01",
@@ -75,7 +78,9 @@
     ],
     "advancedTitle": "Node-helper nodig?",
     "advancedLink": "Open geavanceerde SDK-referentie",
-    "advancedDescription": "De Stremio Addon SDK is optioneel. Gebruik het als u routerings- en serialisatiehulpmiddelen nodig heeft; het is niet vereist door het protocol."
+    "advancedDescription": "De Stremio Addon SDK is optioneel. Gebruik het als u routerings- en serialisatiehulpmiddelen nodig heeft; het is niet vereist door het protocol.",
+    "copy": "Kopiëren",
+    "copied": "Gekopieerd"
   },
   "deepLink": {
     "opening": "Framezoo openen...",
@@ -140,7 +145,9 @@
     "winMoreInfo": "Meer informatie",
     "winQuickSolution": "Klik op Meer info → Toch uitvoeren",
     "winClickHere": "(Klik hier)",
-    "winDialogDesc": "Microsoft Defender SmartScreen verhinderde dat een onbekende app startte. Als u deze app gebruikt, kan uw pc gevaar lopen."
+    "winDialogDesc": "Microsoft Defender SmartScreen verhinderde dat een onbekende app startte. Als u deze app gebruikt, kan uw pc gevaar lopen.",
+    "osSelectionAria": "Selectie van het besturingssysteem",
+    "applicationsFolderAria": "Applicatiemap"
   },
   "downloadConfirm": {
     "macTitle": "Installatiehandleiding voor macOS",
@@ -266,6 +273,177 @@
       "noticeText": "Uw API-sleutel wordt veilig opgeslagen op uw apparaat. Het wordt alleen doorgestuurd om ondertitels voor films en series te zoeken en op te halen. Je kunt het op elk gewenst moment bijwerken of verwijderen.",
       "openFramezooDisabledTooltip": "Vereist openen vanuit Framezoo Desktop terwijl u bent ingelogd",
       "notConnectedNotice": "Let op: U bent niet verbonden met een Framezoo-accountticket. Om rechtstreeks te synchroniseren met 'Open Framezoo', opent u deze pagina vanuit uw Framezoo Desktop-app terwijl u bent ingelogd. Kopieer anders de onderstaande Manifest-URL om deze te gebruiken."
+    }
+  },
+  "legal": {
+    "eyebrow": "JURIDISCHE INFORMATIE &amp; NALEVING 2026",
+    "pageTitle": "Voorwaarden, privacy- en juridisch beleid",
+    "pageSubtitle": "Gebruiksvoorwaarden en informatie over gegevensverwerking voor de Framezoo desktopapplicatie.",
+    "reportCtaTitle": "Wilt u een auteursrechtmelding indienen of een juridische vraag stellen?",
+    "reportCtaDesc": "Bent u de houder van auteursrechten of heeft u een verzoek met betrekking tot persoonsgegevens? Dien uw gegevens dan in via ons officiële feedbackkanaal. Wij beoordelen uw verzoek binnen 24 tot 72 werkuren.",
+    "reportCtaButton": "Rapport-/feedbackformulier openen",
+    "tabs": {
+      "terms": {
+        "title": "Gebruiksvoorwaarden",
+        "updatedAt": "Bijgewerkt: 4 november 2026",
+        "summary": "Lees deze voorwaarden en het privacybeleid voordat u een account aanmaakt of de Framezoo desktopapplicatie gebruikt.",
+        "sections": [
+          {
+            "title": "Aard van neutrale mediaspelersoftware",
+            "paragraphs": [
+              "Framezoo is een onafhankelijke desktopmediaspelerapplicatie die functioneert als een neutraal technisch hulpmiddel, vergelijkbaar met standaard videospelers of webbrowsers.",
+              "Framezoo biedt geen filmbibliotheek aan en beheert geen videostreamingbronnen. Framezoo-servers kunnen ondertitels van providers doorgeven en audioclips en ondertitels tijdelijk verwerken wanneer u synchronisatie gebruikt."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Verantwoordelijkheden van de gebruiker en wettelijke naleving",
+            "paragraphs": [
+              "Gebruikers zijn zelf verantwoordelijk voor het configureren van de applicatie, het installeren van add-ons van derden en het ervoor zorgen dat alle geraadpleegde streams of media voldoen aan de geldende wetgeving."
+            ],
+            "bullets": [
+              "Houd u aan de toepasselijke wetgeving inzake intellectuele eigendom, de Wet op de Cyberbeveiliging, Decreet 147/2024/ND-CP in Vietnam en de regelgeving in uw lokale rechtsgebied.",
+              "Gebruik de software niet om illegale inhoud te bekijken, te verspreiden of te promoten.",
+              "Controleer de betrouwbaarheid en wettigheid van elke add-on van een externe community voordat u de manifest-URL installeert."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Softwarelicentie en beperkingen",
+            "paragraphs": [
+              "Framezoo verleent u een persoonlijke, niet-exclusieve, niet-overdraagbare en niet-commerciële licentie om de officiële desktopversies te installeren en te gebruiken op macOS en Windows.",
+              "Het is niet toegestaan ​​om gewijzigde binaire bestanden die malware bevatten te herverspreiden, een valse indruk te wekken van een band met Framezoo, of misbruik te maken van de projectinfrastructuur."
+            ],
+            "badge": "03"
+          },
+          {
+            "title": "Aansprakelijkheidsbeperking (zoals het is)",
+            "paragraphs": [
+              "De software wordt geleverd &quot;zoals deze is&quot; en &quot;zoals deze beschikbaar is&quot;, zonder enige garantie. Framezoo is niet aansprakelijk voor de beschikbaarheid, nauwkeurigheid of wettigheid van externe streams of metadata die door externe partijen worden aangeleverd."
+            ],
+            "badge": "04"
+          }
+        ]
+      },
+      "privacy": {
+        "title": "Privacy- en persoonsgegevensbeschermingsbeleid",
+        "updatedAt": "Bijgewerkt: 4 november 2026 · Wet 91/2025/QH15 &amp; Besluit 356/2025/ND-CP",
+        "summary": "Dit beleid beschrijft de gegevensverwerking in de Framezoo desktopapplicatie en op officiële Framezoo-servers.",
+        "sections": [
+          {
+            "title": "Gegevens op uw apparaat en onze servers",
+            "paragraphs": [
+              "De applicatie slaat bepaalde instellingen, cache en afspeelgegevens op uw apparaat op. Als u een account aanmaakt, slaat de server ook uw e-mailadres, gebruikersnaam, profiel, openbare sleutel, sessie-/apparaatgegevens, gesynchroniseerde bladwijzers, voortgang, kijkgeschiedenis, instellingen en add-ons op, evenals versleutelde sleutels van ondertitelproviders als u deze verstrekt."
+            ],
+            "bullets": [
+              "E-mailadressen, verificatiecodes en aanvraaggegevens ondersteunen de registratie, het inloggen en de accountbeveiliging.",
+              "Rapporten, bugbeschrijvingen en bijlagen komen op onze server terecht wanneer u het feedbackformulier indient.",
+              "De website slaat uw taalkeuze op in het geheugen van uw browser."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Doelstellingen en externe diensten",
+            "paragraphs": [
+              "We verwerken gegevens om accounts te beheren, apparaten te synchroniseren, ondersteuning te bieden, de service te beschermen en de door u gekozen functies te leveren. We verkopen geen persoonsgegevens aan advertentienetwerken."
+            ],
+            "bullets": [
+              "De verificatiemail wordt naar onze e-mailprovider gestuurd; databasebackups kunnen op Supabase worden opgeslagen als back-up is geconfigureerd.",
+              "Sommige serviceproviders of add-on servers verwerken mogelijk gegevens buiten Vietnam; de serverlocatie is afhankelijk van de gekozen service en de configuratie van het besturingssysteem.",
+              "Tijdens de registratie kan Google reCAPTCHA worden gebruikt; de ondertiteltekst wordt naar Google Translate verzonden wanneer u voor vertaling kiest.",
+              "Zoeken en downloaden van ondertitels, synchronisatie van audio en ondertitels, en community-add-ons kunnen verzoeken versturen via Framezoo-servers en de relevante externe services. Add-ons van derden hanteren hun eigen beleid."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Bewaren en verwijderen",
+            "paragraphs": [
+              "Account- en synchronisatiegegevens blijven behouden zolang uw account actief is. U kunt het account verwijderen via de instellingen; de server verwijdert dan accountgegevens, bladwijzers, voortgang, kijkgeschiedenis, instellingen en sessies. Oude databaseback-ups kunnen gegevens bewaren tot de rotatie; de ​​standaardconfiguratie bewaart 7 recente back-ups wanneer een back-up wordt uitgevoerd."
+            ],
+            "bullets": [
+              "Verificatiecodes verlopen na 10 minuten; verlopen verificatiegegevens worden na 7 dagen verwijderd. Gegevens over verzonden of mislukte e-mails worden na 7 dagen verwijderd.",
+              "Feedback en bijlagen worden apart bewaard voor ondersteunings- of auteursrechtverzoeken totdat ze op verzoek of door het ondersteuningsteam worden verwijderd. Bij het verwijderen van een account wordt de accountkoppeling verwijderd, maar rapporten worden niet automatisch verwijderd. U kunt een aparte verwijdering aanvragen via het feedbackformulier."
+            ],
+            "badge": "03"
+          },
+          {
+            "title": "Uw rechten en contactgegevens",
+            "paragraphs": [
+              "U kunt via het feedbackformulier op onze website inzage, correctie, verwijdering of beperking van uw gegevens aanvragen, uw toestemming intrekken (indien de verwerking op toestemming is gebaseerd) en een klacht indienen. Vermeld hierbij uw account-e-mailadres zodat we uw verzoek kunnen verifiëren."
+            ],
+            "badge": "04"
+          }
+        ]
+      },
+      "copyright": {
+        "title": "Auteursrecht, DMCA &amp; Disclaimer inzake inhoud",
+        "updatedAt": "Bijgewerkt: 4 november 2026",
+        "summary": "Officiële disclaimer en procedure voor kennisgeving en verwijdering van intellectueel eigendom voor Framezoo.",
+        "sections": [
+          {
+            "title": "Safe Harbor-regeling voor software tussenpersonen",
+            "paragraphs": [
+              "Framezoo beheert geen filmbibliotheek of videostreamingbron. De applicatie heeft toegang tot door gebruikers gekozen bronnen; onze servers kunnen ondertitels van providers doorgeven en audio en ondertitels tijdelijk verwerken voor de gevraagde synchronisatie.",
+              "Elke auteursrechtvermelding wordt getoetst aan de inhoud en onze feitelijke rol; deze voorwaarden leiden niet automatisch tot een vrijstelling van aansprakelijkheid."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Metadata en toeschrijving van afbeeldingen",
+            "paragraphs": [
+              "Metadata van films en series (titels, releasedatums, synopsis, beoordelingen en promotiemateriaal) die worden weergegeven voor informatieve doeleinden, zijn afkomstig uit openbare filmdatabases (zoals TMDB, IMDb en TVDB).",
+              "Alle handelsmerken, filmtitels en afbeeldingen blijven eigendom van de respectievelijke auteursrechthebbenden."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Kennisgevings- en verwijderingsprocedure",
+            "paragraphs": [
+              "Framezoo respecteert intellectuele eigendomsrechten. Als u de eigenaar bent van auteursrechten of een gemachtigde vertegenwoordiger en van mening bent dat materiaal op framezoo.top inbreuk maakt op uw rechten, kunt u een melding indienen via ons rapport-/feedbackkanaal, met vermelding van:"
+            ],
+            "bullets": [
+              "Identificatie van de auteursrechthebbende of diens gemachtigde vertegenwoordiger.",
+              "Bewijs van eigendom van het auteursrechtelijk beschermde werk.",
+              "De exacte URL of beschrijving van het betreffende materiaal, zodat we het binnen 24-72 werkuren kunnen bekijken en beantwoorden."
+            ],
+            "badge": "03"
+          }
+        ]
+      },
+      "addon-policy": {
+        "title": "Addonbeleid en communityrichtlijnen",
+        "updatedAt": "Voor add-on-ontwikkelaars en eindgebruikers",
+        "summary": "Veiligheids- en nalevingsnormen voor het open HTTP/JSON-add-on-ecosysteem op Framezoo.",
+        "sections": [
+          {
+            "title": "Onafhankelijke add-on-architectuur",
+            "paragraphs": [
+              "Framezoo ondersteunt een open HTTP/JSON-add-onprotocol. Onafhankelijke ontwikkelaars kunnen hun eigen manifest- en resource-endpoints hosten zonder de kernspeler aan te passen.",
+              "Community-add-ons worden beheerd door derden. Framezoo beheert ook een geïntegreerde ondertitelingsservice op eigen servers, zoals beschreven in het privacybeleid."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Verboden gedrag en inhoud",
+            "paragraphs": [
+              "In overeenstemming met de regelgeving inzake cyberbeveiliging en intellectueel eigendom, mogen ontwikkelaars en gebruikers het Framezoo-protocol of de merknaam niet gebruiken om:"
+            ],
+            "bullets": [
+              "Verspreid geen illegale inhoud, haatzaaiende uitingen, geweld of materiaal met kinderuitbuiting.",
+              "Verspreid malware, spyware, phishinglinks of ongeautoriseerde scripts voor het verzamelen van gegevens.",
+              "Het zich voordoen als officiële Framezoo-uitgaven of gebruikers misleiden met frauduleuze betalingsmethoden."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Aanbevelingen voor gebruikersveiligheid",
+            "paragraphs": [
+              "Installeer alleen add-onmanifesten van bronnen die u vertrouwt. U kunt de gedeclareerde add-onbronnen inspecteren en elke geïnstalleerde add-on op elk gewenst moment verwijderen binnen de Framezoo-app."
+            ],
+            "badge": "03"
+          }
+        ]
+      }
     }
   }
 }

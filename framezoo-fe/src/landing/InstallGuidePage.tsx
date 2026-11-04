@@ -75,7 +75,11 @@ export function InstallGuidePage() {
       <LandingParticles />
 
       <header className="landing-nav">
-        <a className="landing-brand" href="/" aria-label="Framezoo home">
+        <a
+          className="landing-brand"
+          href="/"
+          aria-label={activeCopy.nav.homeAria}
+        >
           <img
             src="/framezoo-logo.svg"
             width="138"
@@ -83,7 +87,10 @@ export function InstallGuidePage() {
             alt="Framezoo"
           />
         </a>
-        <nav className="landing-nav-links" aria-label="Navigation">
+        <nav
+          className="landing-nav-links"
+          aria-label={activeCopy.nav.primaryAria}
+        >
           <a href="/">{guide.backHome}</a>
           <a href="/#download">{guide.downloadApp}</a>
           <LandingLanguageSelector
@@ -96,14 +103,16 @@ export function InstallGuidePage() {
 
       <main className="install-guide-main">
         <div className="install-guide-header">
-          <span className="landing-eyebrow">{guide.eyebrow ?? "Documentation"}</span>
+          <span className="landing-eyebrow">
+            {guide.eyebrow ?? "Documentation"}
+          </span>
           <h1 className="install-guide-title">{guide.title}</h1>
           <p className="install-guide-subtitle">{guide.subtitle}</p>
 
           <div
             className="install-guide-tabs"
             role="tablist"
-            aria-label="Operating System Selection"
+            aria-label={guide.osSelectionAria}
           >
             <button
               type="button"
@@ -162,7 +171,7 @@ export function InstallGuidePage() {
                       height="58"
                       viewBox="0 0 64 64"
                       fill="none"
-                      aria-label="Applications Folder"
+                      aria-label={guide.applicationsFolderAria}
                     >
                       <path
                         d="M6 18C6 14.6863 8.68629 12 12 12H24.5858C26.1771 12 27.7033 12.6321 28.8284 13.7574L32 16.9289C33.1251 18.0542 34.6513 18.6863 36.2426 18.6863H52C55.3137 18.6863 58 21.3726 58 24.6863V48C58 51.3137 55.3137 54 52 54H12C8.68629 54 6 51.3137 6 48V18Z"
@@ -173,11 +182,25 @@ export function InstallGuidePage() {
                         fill="url(#folderGradFront)"
                       />
                       <defs>
-                        <linearGradient id="folderGradBack" x1="6" y1="12" x2="58" y2="54" gradientUnits="userSpaceOnUse">
+                        <linearGradient
+                          id="folderGradBack"
+                          x1="6"
+                          y1="12"
+                          x2="58"
+                          y2="54"
+                          gradientUnits="userSpaceOnUse"
+                        >
                           <stop stopColor="#5AC8FA" />
                           <stop offset="1" stopColor="#007AFF" />
                         </linearGradient>
-                        <linearGradient id="folderGradFront" x1="4" y1="20" x2="60" y2="54" gradientUnits="userSpaceOnUse">
+                        <linearGradient
+                          id="folderGradFront"
+                          x1="4"
+                          y1="20"
+                          x2="60"
+                          y2="54"
+                          gradientUnits="userSpaceOnUse"
+                        >
                           <stop stopColor="#64D2FF" />
                           <stop offset="1" stopColor="#0A84FF" />
                         </linearGradient>
@@ -198,12 +221,8 @@ export function InstallGuidePage() {
                 </div>
               </div>
               <div className="install-guide-dialog-box">
-                <div className="dialog-box-title">
-                  {guide.macDialogTitle}
-                </div>
-                <div className="dialog-box-desc">
-                  {guide.macDialogDesc}
-                </div>
+                <div className="dialog-box-title">{guide.macDialogTitle}</div>
+                <div className="dialog-box-desc">{guide.macDialogDesc}</div>
               </div>
             </div>
 
@@ -262,12 +281,8 @@ export function InstallGuidePage() {
                 </div>
               </div>
               <div className="install-guide-dialog-box win-smartscreen-box">
-                <div className="smartscreen-banner">
-                  {guide.winDialogTitle}
-                </div>
-                <div className="smartscreen-text">
-                  {guide.winDialogDesc}
-                </div>
+                <div className="smartscreen-banner">{guide.winDialogTitle}</div>
+                <div className="smartscreen-text">{guide.winDialogDesc}</div>
                 <div className="smartscreen-actions">
                   <span className="smartscreen-link">
                     <u>{guide.winMoreInfo}</u> {guide.winClickHere}

@@ -6,7 +6,10 @@
     "language": "Språk",
     "addonGuide": "Addon guide",
     "home": "Hem",
-    "installGuide": "Installationsguide"
+    "installGuide": "Installationsguide",
+    "homeAria": "Framezoo-hem",
+    "primaryAria": "Primär navigering",
+    "backToTop": "Tillbaka till toppen"
   },
   "hero": {
     "eyebrow": "FRAMEZOO DESKTOP / 01",
@@ -75,7 +78,9 @@
     "runTitle": "Kör, testa, installera",
     "advancedTitle": "Behöver du en nodhjälpare?",
     "advancedLink": "Öppna avancerad SDK-referens",
-    "advancedDescription": "Stremio Addon SDK är valfritt. Använd den om du vill ha routing- och serialiseringshjälpare; det krävs inte av protokollet."
+    "advancedDescription": "Stremio Addon SDK är valfritt. Använd den om du vill ha routing- och serialiseringshjälpare; det krävs inte av protokollet.",
+    "copy": "Kopiera",
+    "copied": "Kopierad"
   },
   "deepLink": {
     "opening": "Öppnar Framezoo...",
@@ -140,7 +145,9 @@
     "winMoreInfo": "Mer info",
     "winDialogTitle": "Windows skyddade din dator",
     "winQuickSolution": "Klicka på Mer info → Kör ändå",
-    "macTerminalTip": "💡 Säkerhetskopieringsmetod via terminal:"
+    "macTerminalTip": "💡 Säkerhetskopieringsmetod via terminal:",
+    "osSelectionAria": "Val av operativsystem",
+    "applicationsFolderAria": "Programmappen"
   },
   "downloadConfirm": {
     "macTitle": "Installationsguide för macOS",
@@ -266,6 +273,177 @@
       "copied": "Kopierade!",
       "copyManifest": "Kopiera Manifest URL",
       "notConnectedNotice": "Obs: Du är inte ansluten till en Framezoo-kontobiljett. För att synkronisera direkt med 'Open Framezoo', öppna den här sidan från din Framezoo Desktop-app medan du är inloggad. Annars kopierar du Manifest-URL-adressen nedan för att använda den."
+    }
+  },
+  "legal": {
+    "eyebrow": "JURIDISK OCH EFTERLEVNAD 2026",
+    "pageTitle": "Villkor, sekretesspolicy och juridiska policyer",
+    "pageSubtitle": "Användarvillkor och information om databehandling för Framezoo-skrivbordsapplikationen.",
+    "reportCtaTitle": "Behöver du skicka in ett upphovsrättsmeddelande eller en juridisk förfrågan?",
+    "reportCtaDesc": "Om du är upphovsrättsinnehavare eller har en begäran om personuppgifter, vänligen skicka in dina uppgifter via vår officiella feedbackkanal för granskning inom 24–72 arbetstimmar.",
+    "reportCtaButton": "Öppna rapport-/feedbackformulär",
+    "tabs": {
+      "terms": {
+        "title": "Användarvillkor",
+        "updatedAt": "Uppdaterad: 4 november 2026",
+        "summary": "Läs dessa villkor och sekretesspolicyn innan du skapar ett konto eller använder Framezoo-skrivbordsapplikationen.",
+        "sections": [
+          {
+            "title": "Naturen hos neutral mediaspelare",
+            "paragraphs": [
+              "Framezoo är en oberoende mediaspelare för skrivbordet som fungerar som ett neutralt tekniskt verktyg, liknande vanliga videospelare eller webbläsare.",
+              "Framezoo tillhandahåller inte ett filmbibliotek eller hanterar videoströmningskällor. Framezoo-servrar kan vidarebefordra undertexter från leverantörer och tillfälligt bearbeta ljudklipp och undertexter när du använder synkronisering."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Användaransvar och juridisk efterlevnad",
+            "paragraphs": [
+              "Användare är ensamma ansvariga för att konfigurera applikationen, installera tillägg från tredje part och säkerställa att alla strömmar eller media som används följer gällande lagar."
+            ],
+            "bullets": [
+              "Följ gällande lagar om immateriella rättigheter, lagen om cybersäkerhet, dekret 147/2024/ND-CP i Vietnam och bestämmelser i din lokala jurisdiktion.",
+              "Använd inte programvaran för att komma åt, distribuera eller marknadsföra olagligt innehåll.",
+              "Verifiera pålitligheten och lagligheten hos alla tredjepartstillägg för communitys innan du installerar dess manifest-URL."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Programvarulicens och begränsningar",
+            "paragraphs": [
+              "Framezoo ger dig en personlig, icke-exklusiv, icke-överförbar, icke-kommersiell licens att installera och använda de officiella skrivbordsversionerna på macOS och Windows.",
+              "Du får inte vidaredistribuera modifierade binärfiler som innehåller skadlig kod, felaktigt framställa din anknytning till Framezoo eller missbruka projektets infrastruktur."
+            ],
+            "badge": "03"
+          },
+          {
+            "title": "Ansvarsbegränsning (i befintligt skick)",
+            "paragraphs": [
+              "Programvaran tillhandahålls i befintligt skick och &quot;i befintligt skick&quot; utan några garantier av något slag. Framezoo ansvarar inte för tillgängligheten, noggrannheten eller lagligheten av externa strömmar eller metadata som tillhandahålls av tredjepartstjänster."
+            ],
+            "badge": "04"
+          }
+        ]
+      },
+      "privacy": {
+        "title": "Integritets- och dataskyddspolicy",
+        "updatedAt": "Uppdaterad: 4 november 2026 · Lag 91/2025/QH15 och dekret 356/2025/ND-CP",
+        "summary": "Denna policy beskriver databehandling i Framezoo-skrivbordsapplikationen och på officiella Framezoo-servrar.",
+        "sections": [
+          {
+            "title": "Data på din enhet och våra servrar",
+            "paragraphs": [
+              "Applikationen lagrar viss inställnings-, cache- och uppspelningsdata på din enhet. Om du skapar ett konto lagrar servern även din e-postadress, ditt smeknamn, din profil, din offentliga nyckel, dina sessions-/enhetsuppgifter, dina synkroniserade bokmärken, dina framsteg, din visningshistorik, dina inställningar och dina tillägg, plus dina krypterade nycklar till undertextleverantörer om du anger dem."
+            ],
+            "bullets": [
+              "E-postadress, verifieringskoder och förfrågningsuppgifter stöder registrering, inloggning och kontosäkerhet.",
+              "Rapporter, felbeskrivningar och bilagor når vår server när du skickar in feedbackformuläret.",
+              "Webbplatsen lagrar ditt språkval i webbläsarens lagring."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Syfte och externa tjänster",
+            "paragraphs": [
+              "Vi behandlar data för att hantera konton, synkronisera enheter, tillhandahålla support, skydda tjänsten och leverera funktioner du väljer. Vi säljer inte personuppgifter till annonsnätverk."
+            ],
+            "bullets": [
+              "Verifieringsmejlet går till vår e-postleverantör; säkerhetskopior av databasen kan lagras på Supabase när säkerhetskopiering är konfigurerad.",
+              "Vissa tjänsteleverantörer eller tilläggsservrar kan behandla data utanför Vietnam; serverplatsen beror på vilken tjänst du väljer och operativsystemkonfigurationen.",
+              "Google reCAPTCHA kan användas under registreringen; undertexten skickas till Google Translate när du väljer översättning.",
+              "Sökningar och nedladdningar av undertexter, synkronisering av ljud/undertexter och community-tillägg kan skicka förfrågningar via Framezoo-servrar och relevanta externa tjänster. Tillägg från tredje part har sina egna policyer."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Lagring och radering",
+            "paragraphs": [
+              "Konto- och synkroniseringsdata sparas medan ditt konto är aktivt. Du kan ta bort kontot i Inställningar; servern tar då bort kontoposter, bokmärken, framsteg, visningshistorik, inställningar och sessioner. Gamla säkerhetskopior av databasen kan behålla data tills rotation; standardkonfigurationen behåller 7 senaste säkerhetskopior när säkerhetskopiering körs."
+            ],
+            "bullets": [
+              "Verifieringskoder upphör att gälla efter 10 minuter; utgångna utmaningsposter tas bort efter 7 dagar. Poster för skickade eller misslyckade e-postmeddelanden tas bort efter 7 dagar.",
+              "Feedback och bilagor sparas separat för support- eller upphovsrättsförfrågningar tills de tas bort på begäran eller av supportteamet. Borttagning av konto tar bort kontolänken men raderar inte automatiskt rapporter. Du kan begära separat borttagning via feedbackformuläret."
+            ],
+            "badge": "03"
+          },
+          {
+            "title": "Dina rättigheter och kontaktuppgifter",
+            "paragraphs": [
+              "Du kan begära åtkomst till, korrigering, radering eller begränsning av dina uppgifter, återkalla samtycke där behandlingen förutsätter samtycke och skicka in ett klagomål via feedbackformuläret på vår webbplats. Vänligen ange din e-postadress så att vi kan verifiera begäran."
+            ],
+            "badge": "04"
+          }
+        ]
+      },
+      "copyright": {
+        "title": "Upphovsrätt, DMCA och innehållsfriskrivning",
+        "updatedAt": "Uppdaterad: 4 november 2026",
+        "summary": "Officiell ansvarsfriskrivning gällande innehåll och procedur för meddelande om immateriella rättigheter samt borttagning för Framezoo.",
+        "sections": [
+          {
+            "title": "Safe Harbor för mellanhandsprogramvara",
+            "paragraphs": [
+              "Framezoo driver inte ett filmbibliotek eller en videoströmkälla. Applikationen kan komma åt källor som valts av användare; våra servrar kan vidarebefordra leverantörers undertexter och tillfälligt bearbeta ljud och undertexter för begärd synkronisering.",
+              "Varje upphovsrättsmeddelande granskas mot innehållet och vår faktiska roll; dessa villkor skapar inte ett automatiskt undantag från ansvar."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Metadata och konstverkstillskrivning",
+            "paragraphs": [
+              "Metadata för filmer och serier (titlar, utgivningsdatum, sammanfattningar, betyg och reklamaffischer) som visas för informationssökning kommer från offentliga filmdatabaser (som TMDB, IMDb och TVDB).",
+              "Alla varumärken, filmtitlar och konstverk förblir respektive upphovsrättsinnehavares egendom."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Meddelande- och borttagningsförfarande",
+            "paragraphs": [
+              "Framezoo respekterar immateriella rättigheter. Om du är upphovsrättsinnehavare eller auktoriserad representant och anser att något material på framezoo.top gör intrång i dina rättigheter, vänligen skicka in ett meddelande via vår rapport-/feedbackkanal inklusive:"
+            ],
+            "bullets": [
+              "Identifiering av upphovsrättsinnehavaren eller auktoriserad representant.",
+              "Bevis på äganderätt till det upphovsrättsskyddade verket.",
+              "Den exakta webbadressen eller beskrivningen av materialet i fråga så att vi kan granska och åtgärda det inom 24–72 arbetstimmar."
+            ],
+            "badge": "03"
+          }
+        ]
+      },
+      "addon-policy": {
+        "title": "Tilläggspolicy och communityriktlinjer",
+        "updatedAt": "För tilläggsutvecklare och slutanvändare",
+        "summary": "Säkerhets- och efterlevnadsstandarder för det öppna HTTP/JSON-tilläggsekosystemet på Framezoo.",
+        "sections": [
+          {
+            "title": "Oberoende tilläggsarkitektur",
+            "paragraphs": [
+              "Framezoo stöder ett öppet HTTP/JSON-tilläggsprotokoll. Oberoende utvecklare kan vara värd för sina egna manifest- och resursslutpunkter utan att modifiera kärnspelaren.",
+              "Community-tillägg drivs av tredje part. Framezoo driver även en integrerad undertextningstjänst på sina egna servrar, vilket beskrivs i integritetspolicyn."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Förbjudet beteende och innehåll",
+            "paragraphs": [
+              "I enlighet med bestämmelser om cybersäkerhet och immateriella rättigheter får utvecklare och användare inte använda Framezoo-protokollet eller varumärket för att:"
+            ],
+            "bullets": [
+              "Distribuera olagligt innehåll, hatpropaganda, våld eller material som visar utnyttjande av barn.",
+              "Sprid skadlig kod, spionprogram, nätfiskelänkar eller obehöriga skript för datainnsamling.",
+              "Utge sig för att vara officiella Framezoo-utgåvor eller lura användare med bedrägliga betalningssystem."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Rekommendationer för användarsäkerhet",
+            "paragraphs": [
+              "Installera endast tilläggsmanifest från källor du litar på. Du kan granska deklarerade tilläggsresurser och ta bort alla installerade tillägg när som helst i Framezoo-appen."
+            ],
+            "badge": "03"
+          }
+        ]
+      }
     }
   }
 }

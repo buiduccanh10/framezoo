@@ -6,7 +6,10 @@
     "language": "Keel",
     "addonGuide": "Lisade juhend",
     "home": "Kodu",
-    "installGuide": "Paigaldusjuhend"
+    "installGuide": "Paigaldusjuhend",
+    "homeAria": "Framezoo kodu",
+    "primaryAria": "Peamine navigeerimine",
+    "backToTop": "Tagasi üles"
   },
   "hero": {
     "eyebrow": "FRAMEZOO LAUAARV / 01",
@@ -75,7 +78,9 @@
     ],
     "advancedDescription": "Stremio Addoni SDK on valikuline. Kasutage seda, kui soovite marsruutimise ja serialiseerimise abilisi; seda protokoll ei nõua.",
     "advancedTitle": "Kas vajate Node'i abilist?",
-    "advancedLink": "Avage täiustatud SDK viide"
+    "advancedLink": "Avage täiustatud SDK viide",
+    "copy": "Kopeeri",
+    "copied": "Kopeeritud"
   },
   "deepLink": {
     "retry": "Proovige töölauarakendus uuesti avada",
@@ -140,7 +145,9 @@
     "winDialogDesc": "Microsoft Defender SmartScreen takistas tundmatu rakenduse käivitamist. Selle rakenduse käivitamine võib teie arvuti ohtu seada.",
     "winMoreInfo": "Rohkem infot",
     "winClickHere": "(Kliki siia)",
-    "winQuickSolution": "Klõpsake valikul Rohkem teavet → Käivita ikkagi"
+    "winQuickSolution": "Klõpsake valikul Rohkem teavet → Käivita ikkagi",
+    "osSelectionAria": "Operatsioonisüsteemi valik",
+    "applicationsFolderAria": "Rakenduste kaust"
   },
   "downloadConfirm": {
     "macTitle": "MacOS-i installijuhend",
@@ -267,5 +274,176 @@
       "noticeLabel": "Märkus:",
       "noticeText": "Teie API võti on teie seadmes turvaliselt salvestatud. See edastatakse ainult filmide ja seriaalide subtiitrite otsimiseks ja toomiseks. Saate seda igal ajal värskendada või eemaldada."
     }
+  },
+  "legal": {
+    "pageSubtitle": "Framezoo töölauarakenduse kasutustingimused ja andmetöötlusteave.",
+    "reportCtaTitle": "Kas peate esitama autoriõiguse teatise või juriidilise päringu?",
+    "tabs": {
+      "terms": {
+        "title": "Kasutustingimused",
+        "updatedAt": "Värskendatud: 4. november 2026",
+        "sections": [
+          {
+            "title": "Neutraalse meediapleieri tarkvara olemus",
+            "paragraphs": [
+              "Framezoo on iseseisev lauaarvuti meediumipleieri rakendus, mis toimib neutraalse tehnilise tööriistana sarnaselt tavalistele videopleieritele või veebibrauseritele.",
+              "Framezoo ei paku filmiteeki ega kasuta videovoo allikaid. Framezoo serverid võivad sünkroonimise kasutamisel edastada teenusepakkujate subtiitreid ning ajutiselt töödelda heliklippe ja subtiitreid."
+            ],
+            "badge": "01"
+          },
+          {
+            "paragraphs": [
+              "Kasutajad vastutavad ainuisikuliselt rakenduse konfigureerimise, kolmandate osapoolte lisandmoodulite installimise ja selle eest, et kõik juurdepääsetavad vood või meediumid vastaksid kehtivatele seadustele."
+            ],
+            "title": "Kasutaja kohustused ja õiguslik vastavus",
+            "bullets": [
+              "Järgige kohaldatavaid intellektuaalomandi seadusi, küberturvalisuse seadust, Vietnami dekreeti 147/2024/ND-CP ja oma kohaliku jurisdiktsiooni eeskirju.",
+              "Ärge kasutage tarkvara ebaseaduslikule sisule juurdepääsuks, selle levitamiseks ega reklaamimiseks.",
+              "Kontrollige enne selle manifesti URL-i installimist mis tahes kolmanda osapoole kogukonna lisandmooduli usaldusväärsust ja seaduslikkust."
+            ],
+            "badge": "02"
+          },
+          {
+            "paragraphs": [
+              "Framezoo annab teile isikliku, mitteeksklusiivse, mitteülekantava mitteärilise litsentsi ametlike töölauaversioonide installimiseks ja kasutamiseks MacOS-i ja Windowsi jaoks.",
+              "Te ei tohi pahavara sisaldavaid modifitseeritud binaarfaile edasi levitada, seotust Framezooga valesti esitada ega projekti infrastruktuuri kuritarvitada."
+            ],
+            "title": "Tarkvara litsents ja piirangud",
+            "badge": "03"
+          },
+          {
+            "title": "Vastutuse piirang (NAGU ON)",
+            "paragraphs": [
+              "Tarkvara pakutakse \"NAGU ON\" ja \"NAGU SAADAVAL\" põhimõttel ilma igasuguste garantiideta. Framezoo ei vastuta kolmandate osapoolte teenuste pakutavate väliste voogude või metaandmete kättesaadavuse, täpsuse ega seaduslikkuse eest."
+            ],
+            "badge": "04"
+          }
+        ],
+        "summary": "Enne konto loomist või Framezoo töölauarakenduse kasutamist lugege need tingimused ja privaatsuspoliitika läbi."
+      },
+      "privacy": {
+        "updatedAt": "Värskendatud: 4. november 2026 · Seadus 91/2025/QH15 ja dekreet 356/2025/ND-CP",
+        "summary": "See reegel kirjeldab andmetöötlust Framezoo töölauarakenduses ja ametlikes Framezoo serverites.",
+        "title": "Privaatsus ja isikuandmete kaitse eeskirjad",
+        "sections": [
+          {
+            "title": "Andmed teie seadmes ja meie serverites",
+            "paragraphs": [
+              "Rakendus salvestab mõned seaded, vahemälu ja taasesituse andmed teie seadmesse. Kui loote konto, salvestab server ka teie e-posti aadressi, hüüdnime, profiili, avaliku võtme, seansi/seadme üksikasjad, sünkroonitud järjehoidjad, edenemise, vaatamiste ajaloo, seaded ja lisandmoodulid ning krüptitud subtiitrite pakkuja võtmed, kui need esitate."
+            ],
+            "bullets": [
+              "Meilid, kinnituskoodid ja päringu üksikasjad toetavad registreerimist, sisselogimist ja konto turvalisust.",
+              "Aruanded, vigade kirjeldused ja manused jõuavad meie serverisse, kui saadate tagasisidevormi.",
+              "Veebisait salvestab teie keelevaliku brauseri salvestusruumi."
+            ],
+            "badge": "01"
+          },
+          {
+            "paragraphs": [
+              "Töötleme andmeid kontode käitamiseks, seadmete sünkroonimiseks, toe pakkumiseks, teenuse kaitsmiseks ja teie valitud funktsioonide pakkumiseks. Me ei müü isikuandmeid reklaamivõrgustikele."
+            ],
+            "title": "Eesmärgid ja välisteenused",
+            "bullets": [
+              "Kinnitusmeil saadetakse meie meiliteenuse pakkujale; andmebaasi varukoopiaid võidakse Supabase'is salvestada, kui varundamine on konfigureeritud.",
+              "Mõned teenusepakkujad või lisaserverid võivad töödelda andmeid väljaspool Vietnami; serveri asukoht sõltub teie valitud teenusest ja töökonfiguratsioonist.",
+              "Registreerimisel võib kasutada Google reCAPTCHA-d; tõlke valimisel läheb subtiitrite tekst Google'i tõlkesse.",
+              "Subtiitrite otsingud ja allalaadimised, heli/subtiitrite sünkroonimine ja kogukonna lisandmoodulid võivad saata päringuid Framezoo serverite ja asjakohaste välisteenuste kaudu. Kolmandate osapoolte lisandmoodulitel on oma eeskirjad."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Säilitamine ja kustutamine",
+            "bullets": [
+              "Kinnituskoodid aeguvad 10 minuti pärast; aegunud väljakutse kirjed eemaldatakse 7 päeva pärast. Saadetud või ebaõnnestunud kirjad eemaldatakse 7 päeva pärast.",
+              "Tagasiside ja manuseid hoitakse eraldi tugi- või autoriõiguste taotluste jaoks, kuni need taotluse korral või tugimeeskonna poolt eemaldatakse. Konto kustutamine eemaldab konto lingi, kuid ei kustuta aruandeid automaatselt. Eraldi kustutamist saate taotleda tagasiside vormi kaudu."
+            ],
+            "paragraphs": [
+              "Konto ja sünkroonimisandmed jäävad alles, kuni teie konto on aktiivne. Konto saate kustutada menüüs Seaded; seejärel eemaldab server kontokirjed, järjehoidjad, edenemise, vaatamiste ajaloo, seaded ja seansid. Vanad andmebaasi varukoopiad võivad andmeid säilitada kuni pööramiseni; vaikekonfiguratsioon säilitab varundamise ajal 7 hiljutist varukoopiat."
+            ],
+            "badge": "03"
+          },
+          {
+            "title": "Teie õigused ja kontakt",
+            "paragraphs": [
+              "Võite taotleda oma andmetele juurdepääsu, nende parandamist, kustutamist või piiramist, nõusoleku tagasi võtta, kui töötlemine põhineb nõusolekul, ja esitada kaebuse meie veebisaidil oleva tagasiside vormi kaudu. Esitage oma konto e-posti aadress, et saaksime taotlust kinnitada."
+            ],
+            "badge": "04"
+          }
+        ]
+      },
+      "copyright": {
+        "updatedAt": "Värskendatud: 4. november 2026",
+        "title": "Autoriõigus, DMCA ja sisu lahtiütlus",
+        "sections": [
+          {
+            "title": "Vahendajatarkvara Safe Harbor",
+            "paragraphs": [
+              "Framezoo ei kasuta filmiteeki ega videovoo allikat. Rakendus pääseb juurde kasutajate valitud allikatele; meie serverid võivad taotletud sünkroonimiseks edastada pakkuja subtiitreid ning ajutiselt töödelda heli ja subtiitreid.",
+              "Iga autoriõiguse teatis vaadatakse läbi sisu ja meie tegeliku rolli suhtes; need tingimused ei loo automaatset vastutusest vabastamist."
+            ],
+            "badge": "01"
+          },
+          {
+            "paragraphs": [
+              "Informatiivse avastamise eesmärgil kuvatavad filmide ja sarjade metaandmed (pealkirjad, väljalaskekuupäevad, kokkuvõtted, hinnangud ja reklaamplakatid) pärinevad avalikest filmide andmebaasidest (nt TMDB, IMDb ja TVDB).",
+              "Kõik kaubamärgid, filmide pealkirjad ja kunstiteosed jäävad nende vastavate autoriõiguste omanike omandisse."
+            ],
+            "title": "Metaandmete ja kunstiteose omistamine",
+            "badge": "02"
+          },
+          {
+            "title": "Teavitamise ja eemaldamise protseduur",
+            "paragraphs": [
+              "Framezoo austab intellektuaalomandi õigusi. Kui olete autoriõiguste omanik või volitatud esindaja ja arvate, et mis tahes saidil framezoo.top materjal rikub teie õigusi, saatke teade meie aruande-/tagasisidekanali kaudu, sealhulgas:"
+            ],
+            "bullets": [
+              "Autoriõiguse omaniku või volitatud esindaja identifitseerimine.",
+              "Autoriõigustega kaitstud teose omandiõigust tõendav dokument.",
+              "Kõnealuse materjali täpne URL või kirjeldus, et saaksime selle üle vaadata ja lahendada 24–72 töötunni jooksul."
+            ],
+            "badge": "03"
+          }
+        ],
+        "summary": "Framezoo ametlik sisu lahtiütlus ja intellektuaalomandi teatamise ja eemaldamise protseduur."
+      },
+      "addon-policy": {
+        "summary": "Ohutus- ja vastavusstandardid Framezoo avatud HTTP/JSON lisandmooduli ökosüsteemi jaoks.",
+        "title": "Addoni eeskirjad ja kogukonna juhised",
+        "updatedAt": "Addoni arendajatele ja lõppkasutajatele",
+        "sections": [
+          {
+            "paragraphs": [
+              "Framezoo toetab avatud HTTP/JSON lisaprotokolli. Sõltumatud arendajad saavad hostida oma manifesti ja ressursi lõpp-punkte ilma põhipleierit muutmata.",
+              "Kogukonna lisandmooduleid haldavad kolmandad osapooled. Framezoo kasutab ka integreeritud subtiitrite teenust oma serverites, nagu on kirjeldatud privaatsuspoliitikas."
+            ],
+            "title": "Sõltumatu Addoni arhitektuur",
+            "badge": "01"
+          },
+          {
+            "paragraphs": [
+              "Vastavalt küberturvalisuse ja intellektuaalomandi eeskirjadele ei tohi arendajad ja kasutajad kasutada Framezoo protokolli ega brändingut selleks, et:"
+            ],
+            "bullets": [
+              "Levitage ebaseaduslikku sisu, viha õhutamist, vägivalda või laste ärakasutamist käsitlevat materjali.",
+              "Levitage pahavara, nuhkvara, andmepüügilinke või volitamata andmete kogumise skripte.",
+              "Esinege Framezoo ametlike väljaannetena või petke kasutajaid petturlike makseskeemidega."
+            ],
+            "title": "Keelatud käitumine ja sisu",
+            "badge": "02"
+          },
+          {
+            "title": "Kasutajate ohutuse soovitused",
+            "paragraphs": [
+              "Installige lisandmooduli manifestid ainult usaldusväärsetest allikatest. Saate Framezoo rakenduses igal ajal kontrollida deklareeritud lisandmoodulite ressursse ja eemaldada kõik installitud lisandmoodulid."
+            ],
+            "badge": "03"
+          }
+        ]
+      }
+    },
+    "eyebrow": "ÕIGUS JA VASTAVUS 2026",
+    "reportCtaDesc": "Kui olete autoriõiguste omanik või teil on isikuandmete taotlus, esitage oma andmed meie ametliku tagasisidekanali kaudu ülevaatamiseks 24–72 töötunni jooksul.",
+    "reportCtaButton": "Avage aruande / tagasiside vorm",
+    "pageTitle": "Tingimused, privaatsus ja õiguspoliitika"
   }
 }

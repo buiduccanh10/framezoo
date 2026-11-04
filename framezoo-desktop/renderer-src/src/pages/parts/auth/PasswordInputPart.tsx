@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import { useAsyncFn } from "react-use";
 
 import { createPasskey, isPasskeySupported } from "@/backend/accounts/crypto";
@@ -46,6 +46,7 @@ export function PasswordInputPart(props: PasswordInputPartProps) {
   const backendUrl = useBackendUrl();
 
   const [rememberMe, setRememberMe] = useState(false);
+  const [acceptedLegal, setAcceptedLegal] = useState(false);
   const [hasLoadedSaved, setHasLoadedSaved] = useState(false);
 
   useEffect(() => {
@@ -200,6 +201,7 @@ export function PasswordInputPart(props: PasswordInputPartProps) {
   );
 
   const nextStep = useCallback(async () => {
+    if (!props.forLogin && !acceptedLegal) return;
     const accountFields = await validateAccountFields();
     if (!accountFields) return;
 
@@ -209,10 +211,10 @@ export function PasswordInputPart(props: PasswordInputPartProps) {
       password,
       rememberMe,
     });
-  }, [password, props, validateAccountFields, rememberMe]);
+  }, [acceptedLegal, password, props, validateAccountFields, rememberMe]);
 
   const handlePasskeyNext = useCallback(async () => {
-    if (props.forLogin) return;
+    if (props.forLogin || !acceptedLegal) return;
 
     const accountFields = await validateAccountFields({ skipPassword: true });
     if (!accountFields) return;
@@ -226,7 +228,7 @@ export function PasswordInputPart(props: PasswordInputPartProps) {
       password: "",
       credentialId,
     });
-  }, [createPasskeyForAccount, props, validateAccountFields]);
+  }, [acceptedLegal, createPasskeyForAccount, props, validateAccountFields]);
 
   const handleFormSubmit = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
@@ -238,6 +240,7 @@ export function PasswordInputPart(props: PasswordInputPartProps) {
   );
 
   const loading = props.submitLoading || checkResult.loading;
+  const registrationBlocked = !props.forLogin && !acceptedLegal;
 
   const formContent = (
     <form
@@ -246,7 +249,7 @@ export function PasswordInputPart(props: PasswordInputPartProps) {
       onKeyDown={(e) => {
         if (e.key === "Enter") {
           e.preventDefault();
-          if (loading || passkeyResult.loading) return;
+          if (loading || passkeyResult.loading || registrationBlocked) return;
           void nextStep();
         }
       }}
@@ -270,16 +273,50 @@ export function PasswordInputPart(props: PasswordInputPartProps) {
         }
       />
       {!props.forLogin && (
-        <AuthInputBox
-          label={t("auth.register.emailLabel") ?? "Email address"}
-          value={email}
-          onChange={setEmail}
-          name="email"
-          autoComplete="email"
-          placeholder={
-            t("auth.register.emailPlaceholder") ?? "Enter your email address"
-          }
-        />
+        <>
+          <AuthInputBox
+            label={t("auth.register.emailLabel") ?? "Email address"}
+            value={email}
+            onChange={setEmail}
+            name="email"
+            autoComplete="email"
+            placeholder={
+              t("auth.register.emailPlaceholder") ?? "Enter your email address"
+            }
+          />
+          <label className="flex items-start gap-2 text-sm text-type-text cursor-pointer">
+            <input
+              type="checkbox"
+              className="form-checkbox mt-1 shrink-0 rounded text-authentication-buttonBg"
+              checked={acceptedLegal}
+              onChange={(event) => setAcceptedLegal(event.target.checked)}
+              required
+            />
+            <span>
+              <Trans
+                i18nKey="auth.register.legalConsent"
+                components={{
+                  terms: (
+                    <a
+                      href="https://framezoo.top/legal/terms"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-type-link underline hover:text-type-linkHover"
+                    />
+                  ),
+                  privacy: (
+                    <a
+                      href="https://framezoo.top/legal/privacy"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-type-link underline hover:text-type-linkHover"
+                    />
+                  ),
+                }}
+              />
+            </span>
+          </label>
+        </>
       )}
       <AuthInputBox
         label={
@@ -350,7 +387,7 @@ export function PasswordInputPart(props: PasswordInputPartProps) {
             theme="secondary"
             onClick={() => void handlePasskeyNext()}
             loading={passkeyResult.loading}
-            disabled={loading || passkeyResult.loading}
+            disabled={loading || passkeyResult.loading || registrationBlocked}
           >
             <Icon icon={Icons.LOCK} className="mr-2" />
             {t("auth.generate.usePasskeyInstead")}
@@ -361,11 +398,11 @@ export function PasswordInputPart(props: PasswordInputPartProps) {
           type="submit"
           onClick={(e) => {
             e.preventDefault();
-            if (loading || passkeyResult.loading) return;
+            if (loading || passkeyResult.loading || registrationBlocked) return;
             void nextStep();
           }}
           loading={loading}
-          disabled={loading || passkeyResult.loading}
+          disabled={loading || passkeyResult.loading || registrationBlocked}
         >
           {props.forLogin
             ? (t("auth.login.submit") ?? "Login")

@@ -176,7 +176,9 @@
       "passwordMismatch": "密碼不匹配",
       "passwordPlaceholder": "建立密碼（用作您的密碼）",
       "passwordWeak": "密碼必須至少8位，包含字母和數字",
-      "submit": "建立帳戶"
+      "privacyPolicy": "隱私權政策",
+      "submit": "建立帳戶",
+      "legalConsent": "我已閱讀並同意<terms>服務條款</terms>和<privacy>隱私權政策</privacy>。"
     },
     "trust": {
       "failed": {
@@ -302,7 +304,7 @@
   "footer": {
     "legal": {
       "disclaimer": "免責聲明",
-      "disclaimerText": "Framezoo 是一款中立的媒體播放器軟體。它不託管、儲存、分發或控制媒體檔案或第三方插件。您可以探索豐富的電影元資料、無限的字幕同步以及來自多個來源的字幕，同時完全掌控您造訪的內容。"
+      "disclaimerText": "Framezoo 不營運視訊串流來源。其伺服器可能會轉發字幕提供者的字幕，並在您選擇該功能時臨時處理音訊和字幕以實現同步。您可以控制自己播放的內容。"
     },
     "links": {
       "fluxer": "助焊劑",
@@ -1179,9 +1181,9 @@
         "delete": {
           "button": "刪除帳戶",
           "confirmButton": "刪除帳戶",
-          "confirmDescription": "您確定要刪除您的帳戶嗎？所有數據都將丟失！",
+          "confirmDescription": "此操作無法撤銷。您的帳戶和同步資料將從伺服器中刪除。已提交的報告將單獨保留；請透過「回饋」請求刪除。",
           "confirmTitle": "您確定嗎？",
-          "text": "此操作不可逆轉。所有數據將被刪除，且無法恢復。",
+          "text": "刪除您的帳戶和伺服器上的同步資料。已提交的報告將單獨保留。",
           "title": "刪除帳戶"
         },
         "logoutAllDevices": {

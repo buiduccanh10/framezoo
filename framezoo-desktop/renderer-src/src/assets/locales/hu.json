@@ -176,7 +176,9 @@
       "passwordMismatch": "A jelszavak nem egyeznek",
       "passwordPlaceholder": "Hozzon létre egy jelszót (jelszóként használva)",
       "passwordWeak": "A jelszónak legalább 8 karakterből kell állnia betűkkel és számokkal",
-      "submit": "Fiók létrehozása"
+      "privacyPolicy": "Adatvédelmi irányelvek",
+      "submit": "Fiók létrehozása",
+      "legalConsent": "Elolvastam és elfogadom a <terms>Szolgáltatási feltételeket</terms> és az <privacy>Adatvédelmi irányelveket</privacy>."
     },
     "trust": {
       "failed": {
@@ -302,7 +304,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Figyelmeztetés",
-      "disclaimerText": "A Framezoo egy semleges médialejátszó szoftver. Nem tárol, nem terjeszt és nem kezel médiafájlokat vagy harmadik féltől származó kiegészítőket. Fedezze fel a gazdag film metaadatokat, a korlátlan felirat-szinkronizációt és a feliratokat több forrásból, miközben megtartja az Ön által elért tartalom feletti irányítást."
+      "disclaimerText": "A Framezoo nem kezel videostream forrásokat. Előfordulhat, hogy a szerverei feliratokat továbbítanak, és ideiglenesen feldolgozzák a hangot és a feliratokat a szinkronizáláshoz, amikor ezt a funkciót választja. Ön szabályozza a lejátszott tartalmat."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -1179,9 +1181,9 @@
         "delete": {
           "button": "Fiók törlése",
           "confirmButton": "Fiók törlése",
-          "confirmDescription": "Biztosan le akarod törölni a fiókodat? Az ÖSSZES adatod el fog veszni!",
+          "confirmDescription": "Ez nem vonható vissza. Fiókja és szinkronizált adatai törlődnek a szerverről. A beküldött jelentéseket külön tároljuk; kérheti törlésüket a Visszajelzés oldalon.",
           "confirmTitle": "Biztos vagy benne?",
-          "text": "Ez az folyamat visszafordíthatatlan. Minden adat elvész, és örökre, úgy is marad, semmi sem visszaállítható.",
+          "text": "Töröld a fiókodat és a szinkronizált adatokat a szerverről. A beküldött jelentéseket külön tároljuk.",
           "title": "Fiók törlése"
         },
         "logoutAllDevices": {

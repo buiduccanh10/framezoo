@@ -6,7 +6,10 @@
     "language": "Limbă",
     "addonGuide": "Ghid de suplimente",
     "home": "Acasă",
-    "installGuide": "Ghid de instalare"
+    "installGuide": "Ghid de instalare",
+    "homeAria": "Framezoo acasă",
+    "primaryAria": "Navigare principală",
+    "backToTop": "Înapoi sus"
   },
   "hero": {
     "eyebrow": "FRAMEZOO DESKTOP / 01",
@@ -75,7 +78,9 @@
     "runTitle": "Rulați, testați, instalați",
     "advancedTitle": "Ai nevoie de un ajutor Node?",
     "advancedLink": "Deschideți referința SDK avansată",
-    "advancedDescription": "Stremio Addon SDK este opțional. Folosiți-l dacă doriți ajutoare pentru rutare și serializare; nu este cerut de protocol."
+    "advancedDescription": "Stremio Addon SDK este opțional. Folosiți-l dacă doriți ajutoare pentru rutare și serializare; nu este cerut de protocol.",
+    "copy": "Copie",
+    "copied": "Copiat"
   },
   "deepLink": {
     "opening": "Se deschide Framezoo...",
@@ -140,7 +145,9 @@
     "winClickHere": "(Click aici)",
     "winDialogTitle": "Windows v-a protejat computerul",
     "winDialogDesc": "Microsoft Defender SmartScreen a împiedicat pornirea unei aplicații nerecunoscute. Rularea acestei aplicații poate pune computerul în pericol.",
-    "winQuickSolution": "Faceți clic pe Mai multe informații → Run oricum"
+    "winQuickSolution": "Faceți clic pe Mai multe informații → Run oricum",
+    "osSelectionAria": "Selectarea sistemului de operare",
+    "applicationsFolderAria": "Dosarul Aplicații"
   },
   "downloadConfirm": {
     "winTitle": "Ghid de instalare pentru Windows",
@@ -266,6 +273,177 @@
       "copyManifest": "Copiați adresa URL a manifestului",
       "notConnectedNotice": "Notă: nu sunteți conectat cu un bilet de cont Framezoo. Pentru a sincroniza direct cu „Open Framezoo”, deschideți această pagină din aplicația Framezoo Desktop când sunteți conectat. În caz contrar, copiați adresa URL a manifestului de mai jos pentru a o utiliza.",
       "noticeText": "Cheia dvs. API este stocată în siguranță pe dispozitivul dvs. Este redirecționat numai pentru a căuta și a prelua subtitrări pentru filme și seriale. Îl puteți actualiza sau elimina oricând."
+    }
+  },
+  "legal": {
+    "eyebrow": "JURIDIC ȘI CONFORMITATE 2026",
+    "pageTitle": "Termeni, confidențialitate și politici legale",
+    "pageSubtitle": "Termeni de utilizare și informații privind prelucrarea datelor pentru aplicația desktop Framezoo.",
+    "reportCtaTitle": "Trebuie să trimiteți o notificare privind drepturile de autor sau o solicitare de informații juridice?",
+    "reportCtaDesc": "Dacă sunteți deținător de drepturi de autor sau aveți o solicitare de date cu caracter personal, vă rugăm să trimiteți datele dvs. prin canalul nostru oficial de feedback pentru examinare în termen de 24-72 de ore lucrătoare.",
+    "reportCtaButton": "Deschideți raportul / formularul de feedback",
+    "tabs": {
+      "terms": {
+        "title": "Termeni și condiții",
+        "updatedAt": "Actualizat: 4 noiembrie 2026",
+        "summary": "Vă rugăm să citiți acești termeni și politica de confidențialitate înainte de a crea un cont sau de a utiliza aplicația desktop Framezoo.",
+        "sections": [
+          {
+            "title": "Natura software-ului de player media neutru",
+            "paragraphs": [
+              "Framezoo este o aplicație independentă de player media pentru desktop care funcționează ca un instrument tehnic neutru, similar playerelor video standard sau browserelor web.",
+              "Framezoo nu oferă o bibliotecă de filme și nu operează surse de flux video. Serverele Framezoo pot transmite subtitrări de la furnizori și pot procesa temporar clipuri audio și subtitrări atunci când utilizați sincronizarea."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Responsabilitățile utilizatorului și conformitatea legală",
+            "paragraphs": [
+              "Utilizatorii sunt singurii responsabili pentru configurarea aplicației, instalarea de extensii terțe și asigurarea faptului că orice fluxuri sau conținut media accesat respectă legile aplicabile."
+            ],
+            "bullets": [
+              "Respectați legile aplicabile privind proprietatea intelectuală, Legea privind securitatea cibernetică, Decretul 147/2024/ND-CP din Vietnam și reglementările din jurisdicția dumneavoastră locală.",
+              "Nu utilizați software-ul pentru a accesa, distribui sau promova conținut ilegal.",
+              "Verificați fiabilitatea și legalitatea oricărui addon al unei comunități terțe înainte de a instala adresa URL manifest a acestuia."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Licență și restricții software",
+            "paragraphs": [
+              "Framezoo vă acordă o licență personală, neexclusivă, netransferabilă și necomercială pentru a instala și utiliza versiunile oficiale pentru desktop pe macOS și Windows.",
+              "Nu aveți dreptul să redistribuiți fișiere binare modificate care conțin programe malware, să denaturați afilierea cu Framezoo sau să abuzați de infrastructura proiectului."
+            ],
+            "badge": "03"
+          },
+          {
+            "title": "Limitarea răspunderii (AȘA CUM ESTE)",
+            "paragraphs": [
+              "Software-ul este furnizat „CA ATARE” și „AȘA CUM ESTE DISPONIBIL”, fără niciun fel de garanții. Framezoo nu este răspunzător pentru disponibilitatea, acuratețea sau legalitatea fluxurilor externe sau a metadatelor furnizate de servicii terțe."
+            ],
+            "badge": "04"
+          }
+        ]
+      },
+      "privacy": {
+        "title": "Politica de confidențialitate și protecție a datelor cu caracter personal",
+        "updatedAt": "Actualizat: 4 noiembrie 2026 · Legea 91/2025/QH15 și Decretul 356/2025/ND-CP",
+        "summary": "Această politică descrie prelucrarea datelor în aplicația desktop Framezoo și pe serverele oficiale Framezoo.",
+        "sections": [
+          {
+            "title": "Datele de pe dispozitivul dvs. și de pe serverele noastre",
+            "paragraphs": [
+              "Aplicația stochează anumite setări, memorie cache și date de redare pe dispozitivul dvs. Dacă vă creați un cont, serverul stochează și adresa de e-mail, porecla, profilul, cheia publică, detaliile sesiunii/dispozitivului, marcajele sincronizate, progresul, istoricul vizionărilor, setările și suplimentele, plus chei criptate ale furnizorului de subtitrări, dacă le furnizați."
+            ],
+            "bullets": [
+              "E-mailul, codurile de verificare și detaliile solicitării ajută la înregistrare, conectare și securitatea contului.",
+              "Rapoartele, descrierile erorilor și atașamentele ajung pe serverul nostru atunci când trimiteți formularul de feedback.",
+              "Site-ul web stochează limba aleasă de dvs. în memoria browserului."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Scopuri și servicii externe",
+            "paragraphs": [
+              "Prelucrăm date pentru a administra conturi, a sincroniza dispozitive, a oferi asistență, a proteja serviciul și a livra funcțiile pe care le alegeți. Nu vindem date cu caracter personal rețelelor de publicitate."
+            ],
+            "bullets": [
+              "E-mailul de verificare ajunge la furnizorul nostru de e-mail; copiile de rezervă ale bazei de date pot fi stocate pe Supabase atunci când este configurată copia de rezervă.",
+              "Este posibil ca unii furnizori de servicii sau servere suplimentare să proceseze date în afara Vietnamului; locația serverului depinde de serviciul ales și de configurația de operare.",
+              "Google reCAPTCHA poate fi utilizat în timpul înregistrării; textul subtitrării merge la Google Translate atunci când alegeți traducerea.",
+              "Căutările și descărcările de subtitrări, sincronizarea audio/subtitrări și suplimentele comunității pot trimite solicitări prin serverele Framezoo și serviciile externe relevante. Suplimentele terțe au propriile politici."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Păstrare și ștergere",
+            "paragraphs": [
+              "Datele contului și cele sincronizate rămân în timp ce contul este activ. Puteți șterge contul din Setări; serverul elimină apoi înregistrările contului, marcajele, progresul, istoricul vizionărilor, setările și sesiunile. Copiile de rezervă vechi ale bazei de date pot păstra datele până la rotire; configurația implicită păstrează 7 copii de rezervă recente atunci când rulează backup-ul."
+            ],
+            "bullets": [
+              "Codurile de verificare expiră după 10 minute; înregistrările de verificare expirate sunt eliminate după 7 zile. Înregistrările de e-mail trimise sau nereușite sunt eliminate după 7 zile.",
+              "Feedback-ul și atașamentele sunt păstrate separat pentru solicitări de asistență sau drepturi de autor până când sunt eliminate la cerere sau de către echipa de asistență. Ștergerea contului elimină linkul contului, dar nu șterge automat rapoartele. Puteți solicita ștergerea separată prin intermediul formularului de feedback."
+            ],
+            "badge": "03"
+          },
+          {
+            "title": "Drepturile dumneavoastră și datele de contact",
+            "paragraphs": [
+              "Puteți solicita accesul, corectarea, ștergerea sau restricționarea datelor dvs., puteți retrage consimțământul în cazul în care prelucrarea se bazează pe consimțământ și puteți depune o reclamație prin intermediul formularului de feedback de pe site-ul nostru web. Vă rugăm să furnizați adresa de e-mail a contului dvs. pentru a putea verifica solicitarea."
+            ],
+            "badge": "04"
+          }
+        ]
+      },
+      "copyright": {
+        "title": "Drepturi de autor, DMCA și declinare a responsabilității privind conținutul",
+        "updatedAt": "Actualizat: 4 noiembrie 2026",
+        "summary": "Declinarea oficială a responsabilității privind conținutul și procedura de notificare și eliminare a proprietății intelectuale pentru Framezoo.",
+        "sections": [
+          {
+            "title": "Harbor sigur pentru software intermediar",
+            "paragraphs": [
+              "Framezoo nu operează o bibliotecă de filme sau o sursă de flux video. Aplicația poate accesa sursele alese de utilizatori; serverele noastre pot transmite subtitrări de la furnizori și pot procesa temporar audio și subtitrări pentru sincronizarea solicitată.",
+              "Fiecare notificare privind drepturile de autor este analizată în raport cu conținutul și rolul nostru real; acești termeni nu creează o exonerare automată de răspundere."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Metadate și atribuirea operelor de artă",
+            "paragraphs": [
+              "Metadatele filmelor și serialelor (titluri, date de lansare, sinopsele, ratingurile și posterele promoționale) afișate în scop informativ provin din baze de date publice de filme (cum ar fi TMDB, IMDb și TVDB).",
+              "Toate mărcile comerciale, titlurile filmelor și lucrările de artă rămân proprietatea deținătorilor respectivi ai drepturilor de autor."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Procedura de notificare și eliminare",
+            "paragraphs": [
+              "Framezoo respectă drepturile de proprietate intelectuală. Dacă sunteți deținătorul drepturilor de autor sau un agent autorizat și considerați că orice material de pe framezoo.top vă încalcă drepturile, vă rugăm să trimiteți o notificare prin intermediul canalului nostru de Raportare / Feedback, inclusiv:"
+            ],
+            "bullets": [
+              "Identificarea titularului drepturilor de autor sau a reprezentantului autorizat.",
+              "Dovada dreptului de proprietate asupra operei protejate prin drepturi de autor.",
+              "URL-ul exact sau descrierea materialului în cauză, astfel încât să îl putem examina și rezolva în termen de 24-72 de ore lucrătoare."
+            ],
+            "badge": "03"
+          }
+        ]
+      },
+      "addon-policy": {
+        "title": "Politica privind suplimentele și regulile comunității",
+        "updatedAt": "Pentru dezvoltatori de suplimente și utilizatori finali",
+        "summary": "Standarde de siguranță și conformitate pentru ecosistemul deschis de extensii HTTP/JSON de pe Framezoo.",
+        "sections": [
+          {
+            "title": "Arhitectură independentă de addon-uri",
+            "paragraphs": [
+              "Framezoo acceptă un protocol deschis de extensii HTTP/JSON. Dezvoltatorii independenți își pot găzdui propriile manifesturi și puncte finale de resurse fără a modifica playerul principal.",
+              "Suplimentele comunitare sunt operate de terți. Framezoo operează, de asemenea, un serviciu integrat de subtitrări pe propriile servere, așa cum este descris în politica de confidențialitate."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Conduită și conținut interzise",
+            "paragraphs": [
+              "În conformitate cu reglementările privind securitatea cibernetică și proprietatea intelectuală, dezvoltatorii și utilizatorii nu trebuie să utilizeze protocolul sau brandingul Framezoo pentru:"
+            ],
+            "bullets": [
+              "Distribuiți conținut ilegal, discurs instigator la ură, materiale care conțin violență sau exploatare a copiilor.",
+              "Răspândiți programe malware, spyware, linkuri de phishing sau scripturi de colectare neautorizată a datelor.",
+              "Dă-te drept versiuni oficiale ale Framezoo sau înșeală utilizatorii cu scheme de plată frauduloase."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Recomandări privind siguranța utilizatorilor",
+            "paragraphs": [
+              "Instalați manifestele de suplimente doar din surse în care aveți încredere. Puteți inspecta resursele declarate ale suplimentelor și elimina orice supliment instalat în orice moment din aplicația Framezoo."
+            ],
+            "badge": "03"
+          }
+        ]
+      }
     }
   }
 }

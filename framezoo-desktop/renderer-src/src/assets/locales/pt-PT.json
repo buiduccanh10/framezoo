@@ -176,7 +176,9 @@
       "passwordMismatch": "As senhas não coincidem",
       "passwordPlaceholder": "Crie uma senha (usada como sua senha)",
       "passwordWeak": "A senha deve ter pelo menos 8 caracteres com letras e números",
-      "submit": "Criar uma conta"
+      "privacyPolicy": "política de Privacidade",
+      "submit": "Criar uma conta",
+      "legalConsent": "Li e concordo com os <terms>Termos de Serviço</terms> e <privacy>Política de Privacidade</privacy>."
     },
     "trust": {
       "failed": {
@@ -302,7 +304,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Aviso legal",
-      "disclaimerText": "Framezoo é um software reprodutor de mídia neutro. Ele não hospeda, armazena, distribui ou controla arquivos de mídia ou complementos de terceiros. Explore metadados de filmes completos, sincronização ilimitada de legendas em streaming e legendas de múltiplas fontes, mantendo o controle do conteúdo que você acessa."
+      "disclaimerText": "A Framezoo não opera fontes de streaming de vídeo. Seus servidores podem retransmitir legendas do provedor e processar temporariamente áudio e legendas para sincronização quando você seleciona esse recurso. Você controla o conteúdo que reproduz."
     },
     "links": {
       "fluxer": "Fluxador",
@@ -1179,9 +1181,9 @@
         "delete": {
           "button": "Eliminar conta",
           "confirmButton": "Eliminar conta",
-          "confirmDescription": "Tem a certeza de que deseja eliminar a sua conta? Todos os seus dados serão perdidos!",
+          "confirmDescription": "Esta ação é irreversível. Sua conta e os dados sincronizados serão excluídos do servidor. Os relatórios enviados são armazenados separadamente; solicite a exclusão deles através do formulário de feedback.",
           "confirmTitle": "Tem a certeza?",
-          "text": "Esta ação é irreversível. Todos os dados serão eliminados e nada poderá ser recuperado.",
+          "text": "Exclua sua conta e os dados sincronizados do servidor. Os relatórios enviados são mantidos separadamente.",
           "title": "Eliminar conta"
         },
         "logoutAllDevices": {

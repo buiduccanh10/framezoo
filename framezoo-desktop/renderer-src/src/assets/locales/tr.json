@@ -176,7 +176,9 @@
       "passwordMismatch": "Şifreler eşleşmiyor",
       "passwordPlaceholder": "Bir şifre oluşturun (parolanız olarak kullanılır)",
       "passwordWeak": "Şifre harf ve rakamlardan oluşan en az 8 karakterden oluşmalıdır",
-      "submit": "Hesap oluşturmak"
+      "privacyPolicy": "Gizlilik Politikası",
+      "submit": "Hesap oluşturmak",
+      "legalConsent": "<terms>Hizmet Şartları</terms> ve <privacy>Gizlilik Politikası</privacy>'nı okudum ve kabul ediyorum."
     },
     "trust": {
       "failed": {
@@ -302,7 +304,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Sorumluluk Reddi",
-      "disclaimerText": "Framezoo tarafsız bir medya oynatıcı yazılımıdır. Medya dosyalarını veya üçüncü taraf eklentilerini barındırmaz, depolamaz, dağıtmaz veya kontrol etmez. Zengin film meta verilerini, sınırsız akış altyazı senkronizasyonunu ve birden fazla kaynaktan altyazıları keşfederken, eriştiğiniz içeriğin kontrolünü elinizde tutun."
+      "disclaimerText": "Framezoo video akış kaynaklarını işletmez. Sunucuları, bu özelliği seçtiğinizde sağlayıcı altyazılarını iletebilir ve senkronizasyon için ses ve altyazıları geçici olarak işleyebilir. Oynattığınız içeriği siz kontrol edersiniz."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -1179,9 +1181,9 @@
         "delete": {
           "button": "Hesabı sil",
           "confirmButton": "Hesabı sil",
-          "confirmDescription": "Hesabınızı silmek istediğinize emin misiniz? Tüm verileriniz kaybedilecek!",
+          "confirmDescription": "Bu işlem geri alınamaz. Hesabınız ve senkronize edilmiş verileriniz sunucudan silinecektir. Gönderilen raporlar ayrı olarak saklanır; silinmelerini Geri Bildirim yoluyla talep edebilirsiniz.",
           "confirmTitle": "Emin misiniz?",
-          "text": "Bu işlem geri alınamaz. Tüm veriler silinir ve hiçbir şey kurtarılamaz.",
+          "text": "Hesabınızı ve sunucudan senkronize edilmiş verilerinizi silin. Gönderilen raporlar ayrı olarak saklanacaktır.",
           "title": "Hesabı sil"
         },
         "logoutAllDevices": {

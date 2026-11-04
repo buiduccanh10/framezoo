@@ -176,7 +176,9 @@
       "passwordMismatch": "Adgangskoder stemmer ikke overens",
       "passwordPlaceholder": "Opret en adgangskode (bruges som din adgangssætning)",
       "passwordWeak": "Adgangskoden skal være på mindst 8 tegn med bogstaver og tal",
-      "submit": "Opret konto"
+      "privacyPolicy": "Privatlivspolitik",
+      "submit": "Opret konto",
+      "legalConsent": "Jeg har læst og accepterer <terms>Servicevilkårene</terms> og <privacy>Privatlivspolitikken</privacy>."
     },
     "trust": {
       "failed": {
@@ -302,7 +304,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Ansvarsfraskrivelse ",
-      "disclaimerText": "Framezoo er en neutral medieafspillersoftware. Den hverken hoster, gemmer, distribuerer eller kontrollerer mediefiler eller tredjepartsudvidelser. Udforsk omfattende filmmetadata, ubegrænset synkronisering af undertekster og undertekster fra flere kilder, mens du beholder kontrollen over det indhold, du tilgår."
+      "disclaimerText": "Framezoo bruger ikke videostreamingkilder. Dens servere kan videresende udbyderundertekster og midlertidigt behandle lyd og undertekster til synkronisering, når du vælger denne funktion. Du styrer det indhold, du afspiller."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -1179,9 +1181,9 @@
         "delete": {
           "button": "Slet profil",
           "confirmButton": "Bekræft sletning",
-          "confirmDescription": "Er du sikker på, at du vil slette din profil? Alle dine data vil gå tabt! ",
+          "confirmDescription": "Dette kan ikke fortrydes. Din konto og dine synkroniserede data vil blive slettet fra serveren. Indsendte rapporter opbevares separat; anmod om sletning via Feedback.",
           "confirmTitle": "Er du sikker?",
-          "text": "Denne handling er permanent. Alle data slettes, og intet kan gendannes.",
+          "text": "Slet din konto og synkroniserede data fra serveren. Indsendte rapporter opbevares separat.",
           "title": "Slet profil"
         },
         "logoutAllDevices": {

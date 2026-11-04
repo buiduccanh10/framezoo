@@ -176,7 +176,9 @@
       "passwordMismatch": "Passwords do not match",
       "passwordPlaceholder": "Create a password (used as your passphrase)",
       "passwordWeak": "Password must be at least 8 characters with letters and numbers",
-      "submit": "Create account"
+      "privacyPolicy": "Privacy Policy",
+      "submit": "Create account",
+      "legalConsent": "I have read and agree to the <terms>Terms of Service</terms> and <privacy>Privacy Policy</privacy>."
     },
     "trust": {
       "failed": {
@@ -302,7 +304,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Disclaimer ",
-      "disclaimerText": "Framezoo is a neutral media player software. It does not host, store, distribute, or control media files or third-party addons. Explore rich movie metadata, unlimited stream subtitle sync, and subtitles from multiple sources while keeping control of the content you access."
+      "disclaimerText": "Framezoo does not operate video stream sources. Its servers may relay provider subtitles and temporarily process audio and subtitles for sync when you choose that feature. You control the content you play."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -1179,9 +1181,9 @@
         "delete": {
           "button": "Delete account",
           "confirmButton": "Delete account",
-          "confirmDescription": "Are you sure you want to delete your account? All your data will be lost! ",
+          "confirmDescription": "This cannot be undone. Your account and synced data will be deleted from the server. Submitted reports are kept separately; request their deletion through Feedback.",
           "confirmTitle": "Are you sure?",
-          "text": "This action is irreversible. All data will be deleted and nothing can be recovered.",
+          "text": "Delete your account and synced data from the server. Submitted reports are retained separately.",
           "title": "Delete account"
         },
         "logoutAllDevices": {

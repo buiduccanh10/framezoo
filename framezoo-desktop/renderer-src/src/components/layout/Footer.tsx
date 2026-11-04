@@ -20,6 +20,14 @@ export function Footer() {
             {t("footer.legal.disclaimer")}
           </h3> */}
           <p className="mt-3">{t("footer.legal.disclaimerText")}</p>
+          <a
+            href="https://framezoo.top/legal/privacy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 inline-block text-type-link underline hover:text-type-linkHover"
+          >
+            {t("auth.register.privacyPolicy")}
+          </a>
         </div>
       </WideContainer>
     </footer>

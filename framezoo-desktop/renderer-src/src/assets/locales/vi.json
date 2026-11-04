@@ -176,7 +176,9 @@
       "passwordMismatch": "Mật khẩu nhập lại không khớp",
       "passwordPlaceholder": "Tạo mật khẩu (được dùng làm mật ngữ)",
       "passwordWeak": "Mật khẩu phải có ít nhất 8 ký tự gồm cả chữ và số",
-      "submit": "Tạo tài khoản"
+      "privacyPolicy": "Chính sách bảo mật",
+      "submit": "Tạo tài khoản",
+      "legalConsent": "Tôi đã đọc và đồng ý với <terms>Điều khoản sử dụng</terms> và <privacy>Chính sách bảo mật</privacy>."
     },
     "trust": {
       "failed": {
@@ -302,7 +304,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Tuyên bố miễn trừ trách nhiệm",
-      "disclaimerText": "Framezoo là phần mềm trình phát đa phương tiện trung lập. Nó không lưu trữ, phân phối hoặc kiểm soát các tệp đa phương tiện hoặc tiện ích bổ sung của bên thứ ba. Khám phá siêu dữ liệu phim phong phú, đồng bộ phụ đề trực tuyến không giới hạn và phụ đề từ nhiều nguồn khác nhau trong khi vẫn giữ quyền kiểm soát nội dung bạn truy cập."
+      "disclaimerText": "Framezoo không vận hành nguồn phát video. Máy chủ có thể chuyển tiếp phụ đề từ nhà cung cấp và xử lý tạm thời âm thanh, phụ đề để đồng bộ khi bạn chọn tính năng này. Bạn kiểm soát nội dung mình phát."
     },
     "links": {
       "fluxer": "thông lượng",
@@ -1179,9 +1181,9 @@
         "delete": {
           "button": "Xóa tài khoản",
           "confirmButton": "Xóa tài khoản",
-          "confirmDescription": "Bạn có chắc chắn muốn xóa tài khoản của mình không? Tất cả dữ liệu của bạn sẽ bị mất! ",
+          "confirmDescription": "Không thể hoàn tác. Tài khoản và dữ liệu đồng bộ sẽ bị xóa khỏi máy chủ. Phản hồi đã gửi được lưu riêng; hãy yêu cầu xóa qua biểu mẫu Phản hồi.",
           "confirmTitle": "Bạn có chắc chắn không?",
-          "text": "Hành động này không thể hoàn tác. Tất cả dữ liệu sẽ bị xóa và không thể khôi phục.",
+          "text": "Xóa tài khoản và dữ liệu đồng bộ khỏi máy chủ. Phản hồi đã gửi được lưu riêng.",
           "title": "Xóa tài khoản"
         },
         "logoutAllDevices": {

@@ -229,9 +229,9 @@ export async function editUser(
 export async function deleteUser(
   url: string,
   account: AccountWithToken,
-): Promise<UserResponse> {
+): Promise<{ success: boolean; message: string }> {
   return withAuthRetry(url, account, (token) =>
-    ofetch<UserResponse>(`/users/${account.userId}`, {
+    ofetch<{ success: boolean; message: string }>(`/users/${account.userId}`, {
       method: "DELETE",
       credentials: "include",
       headers: getAuthHeaders(token),

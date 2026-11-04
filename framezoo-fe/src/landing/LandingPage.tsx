@@ -120,7 +120,7 @@ export function LandingPage() {
         <a
           className="landing-brand"
           href="#top"
-          aria-label="Framezoo home"
+          aria-label={activeCopy.nav.homeAria}
           onClick={handleLandingHashClick}
         >
           <img
@@ -130,7 +130,10 @@ export function LandingPage() {
             alt="Framezoo"
           />
         </a>
-        <nav className="landing-nav-links" aria-label="Primary navigation">
+        <nav
+          className="landing-nav-links"
+          aria-label={activeCopy.nav.primaryAria}
+        >
           <a
             href="/"
             data-scroll-target="#top"
@@ -209,7 +212,7 @@ export function LandingPage() {
       <button
         className={`landing-back-to-top${showBackToTop ? " is-visible" : ""}`}
         type="button"
-        aria-label="Back to top"
+        aria-label={activeCopy.nav.backToTop}
         aria-hidden={!showBackToTop}
         tabIndex={showBackToTop ? 0 : -1}
         onClick={() => navigateToLandingHash("#top")}

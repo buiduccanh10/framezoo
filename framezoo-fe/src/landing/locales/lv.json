@@ -6,7 +6,10 @@
     "language": "Valoda",
     "addonGuide": "Papildinājuma ceļvedis",
     "home": "Sākums",
-    "installGuide": "Uzstādīšanas rokasgrāmata"
+    "installGuide": "Uzstādīšanas rokasgrāmata",
+    "homeAria": "Framezoo mājas",
+    "primaryAria": "Galvenā navigācija",
+    "backToTop": "Atpakaļ uz augšu"
   },
   "hero": {
     "eyebrow": "FRAMEZOO DESKTOP / 01",
@@ -75,7 +78,9 @@
     ],
     "advancedTitle": "Nepieciešams mezgla palīgs?",
     "advancedLink": "Atveriet papildu SDK atsauci",
-    "advancedDescription": "Stremio Addon SDK nav obligāts. Izmantojiet to, ja vēlaties maršrutēšanas un serializācijas palīgus; to neprasa protokols."
+    "advancedDescription": "Stremio Addon SDK nav obligāts. Izmantojiet to, ja vēlaties maršrutēšanas un serializācijas palīgus; to neprasa protokols.",
+    "copy": "Kopēt",
+    "copied": "Nokopēts"
   },
   "deepLink": {
     "openingDescription": "Jūsu pārlūkprogramma mēģina atvērt Framezoo Desktop lietotni. Ja tiek parādīta uzvedne, lūdzu, atlasiet <1>Open Framezoo</1>.",
@@ -140,7 +145,9 @@
     "winMoreInfo": "Vairāk informācijas",
     "winClickHere": "(Noklikšķiniet šeit)",
     "winQuickSolution": "Noklikšķiniet uz Papildinformācija → Palaist tik un tā",
-    "winDialogDesc": "Microsoft Defender SmartScreen neļāva startēt neatpazītai lietotnei. Šīs lietotnes palaišana var apdraudēt jūsu datoru."
+    "winDialogDesc": "Microsoft Defender SmartScreen neļāva startēt neatpazītai lietotnei. Šīs lietotnes palaišana var apdraudēt jūsu datoru.",
+    "osSelectionAria": "Operētājsistēmas izvēle",
+    "applicationsFolderAria": "Lietojumprogrammu mape"
   },
   "downloadConfirm": {
     "macTitle": "MacOS instalēšanas rokasgrāmata",
@@ -266,6 +273,177 @@
       "noticeLabel": "Paziņojums:",
       "copied": "Kopēts!",
       "noticeText": "Jūsu API atslēga tiek droši saglabāta jūsu ierīcē. Tas tiek pārsūtīts tikai, lai meklētu un izgūtu filmu un seriālu subtitrus. Jebkurā laikā varat to atjaunināt vai noņemt."
+    }
+  },
+  "legal": {
+    "eyebrow": "JURIDISKĀ UN ATBILSTĪBA 2026",
+    "pageTitle": "Noteikumi, privātuma un juridiskā politika",
+    "pageSubtitle": "Framezoo darbvirsmas lietojumprogrammas lietošanas noteikumi un datu apstrādes informācija.",
+    "reportCtaTitle": "Vai nepieciešams iesniegt autortiesību paziņojumu vai juridisku pieprasījumu?",
+    "reportCtaDesc": "Ja esat autortiesību īpašnieks vai jums ir pieprasījums par personas datiem, lūdzu, iesniedziet savu informāciju, izmantojot mūsu oficiālo atsauksmju kanālu, lai mēs to pārskatītu 24–72 darba stundu laikā.",
+    "reportCtaButton": "Atvērt ziņojuma/atsauksmju veidlapu",
+    "tabs": {
+      "terms": {
+        "title": "Pakalpojumu sniegšanas noteikumi",
+        "updatedAt": "Atjaunināts: 2026. gada 4. novembrī",
+        "summary": "Pirms konta izveides vai Framezoo darbvirsmas lietojumprogrammas izmantošanas, lūdzu, izlasiet šos noteikumus un privātuma politiku.",
+        "sections": [
+          {
+            "title": "Neitrālas multivides atskaņotāja programmatūras būtība",
+            "paragraphs": [
+              "Framezoo ir neatkarīga darbvirsmas multivides atskaņotāja lietojumprogramma, kas darbojas kā neitrāls tehnisks rīks, līdzīgi kā standarta video atskaņotāji vai tīmekļa pārlūkprogrammas.",
+              "Framezoo nenodrošina filmu bibliotēku un nepārvalda video straumes avotus. Framezoo serveri var pārsūtīt subtitrus no pakalpojumu sniedzējiem un īslaicīgi apstrādāt audioklipus un subtitrus, kad izmantojat sinhronizāciju."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Lietotāja pienākumi un atbilstība juridiskajām prasībām",
+            "paragraphs": [
+              "Lietotāji ir pilnībā atbildīgi par lietojumprogrammas konfigurēšanu, trešo pušu pievienojumprogrammu instalēšanu un to, ka visas piekļūtās straumes vai multivide atbilst piemērojamajiem likumiem."
+            ],
+            "bullets": [
+              "Ievērojiet piemērojamos intelektuālā īpašuma likumus, Kiberdrošības likumu, Vjetnamas dekrētu 147/2024/ND-CP un vietējās jurisdikcijas noteikumus.",
+              "Neizmantojiet programmatūru, lai piekļūtu, izplatītu vai reklamētu nelikumīgu saturu.",
+              "Pirms jebkura trešās puses kopienas papildinājuma manifesta URL instalēšanas pārbaudiet tā uzticamību un likumību."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Programmatūras licence un ierobežojumi",
+            "paragraphs": [
+              "Framezoo piešķir jums personisku, neekskluzīvu, nenododamu, nekomerciālu licenci oficiālo darbvirsmas versiju instalēšanai un lietošanai macOS un Windows operētājsistēmās.",
+              "Jūs nedrīkstat izplatīt modificētus bināros failus, kas satur ļaunprogrammatūru, nepareizi norādīt saistību ar Framezoo vai ļaunprātīgi izmantot projekta infrastruktūru."
+            ],
+            "badge": "03"
+          },
+          {
+            "title": "Atbildības ierobežojums (KĀ IR)",
+            "paragraphs": [
+              "Programmatūra tiek nodrošināta “KĀ IR” un “KĀ PIEEJAMA” bez jebkāda veida garantijām. Framezoo neatbild par trešo pušu pakalpojumu sniegto ārējo straumju vai metadatu pieejamību, precizitāti vai likumību."
+            ],
+            "badge": "04"
+          }
+        ]
+      },
+      "privacy": {
+        "title": "Privātuma un personas datu aizsardzības politika",
+        "updatedAt": "Atjaunināts: 2026. gada 4. novembris · Likums 91/2025/QH15 un Dekrēts 356/2025/ND-CP",
+        "summary": "Šī politika apraksta datu apstrādi Framezoo darbvirsmas lietojumprogrammā un oficiālajos Framezoo serveros.",
+        "sections": [
+          {
+            "title": "Dati jūsu ierīcē un mūsu serveros",
+            "paragraphs": [
+              "Lietotne jūsu ierīcē saglabā dažus iestatījumus, kešatmiņu un atskaņošanas datus. Ja izveidojat kontu, serveris saglabā arī jūsu e-pastu, segvārdu, profilu, publisko atslēgu, sesijas/ierīces informāciju, sinhronizētās grāmatzīmes, progresu, skatīšanās vēsturi, iestatījumus un papildinājumus, kā arī šifrētas subtitru nodrošinātāja atslēgas, ja tās sniedzat."
+            ],
+            "bullets": [
+              "E-pasts, verifikācijas kodi un pieprasījuma informācija atbalsta reģistrāciju, pieteikšanos un konta drošību.",
+              "Ziņojumi, kļūdu apraksti un pielikumi nonāk mūsu serverī, kad iesniedzat atsauksmju veidlapu.",
+              "Tīmekļa vietne saglabā jūsu valodas izvēli pārlūkprogrammas atmiņā."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Mērķi un ārējie pakalpojumi",
+            "paragraphs": [
+              "Mēs apstrādājam datus, lai pārvaldītu kontus, sinhronizētu ierīces, sniegtu atbalstu, aizsargātu pakalpojumu un nodrošinātu jūsu izvēlētās funkcijas. Mēs nepārdodam personas datus reklāmas tīkliem."
+            ],
+            "bullets": [
+              "Verifikācijas e-pasts tiek nosūtīts mūsu pasta pakalpojumu sniedzējam; datubāzes dublējumkopijas var tikt saglabātas Supabase, ja dublēšana ir konfigurēta.",
+              "Daži pakalpojumu sniedzēji vai pievienojumprogrammu serveri var apstrādāt datus ārpus Vjetnamas; servera atrašanās vieta ir atkarīga no jūsu izvēlētā pakalpojuma un darbības konfigurācijas.",
+              "Reģistrācijas laikā var izmantot Google reCAPTCHA; izvēloties tulkojumu, subtitru teksts tiek nosūtīts uz Google Translate.",
+              "Subtitru meklēšana un lejupielāde, audio/subtitru sinhronizācija un kopienas papildinājumi var sūtīt pieprasījumus, izmantojot Framezoo serverus un attiecīgos ārējos pakalpojumus. Trešo pušu papildinājumiem ir savas politikas."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Saglabāšana un dzēšana",
+            "paragraphs": [
+              "Konta un sinhronizācijas dati tiek saglabāti, kamēr jūsu konts ir aktīvs. Kontu var dzēst iestatījumos; pēc tam serveris noņem konta ierakstus, grāmatzīmes, progresu, skatīšanās vēsturi, iestatījumus un sesijas. Vecās datubāzes dublējumos dati var tikt saglabāti līdz rotācijai; noklusējuma konfigurācija saglabā 7 nesenās dublējumus, kad darbojas dublēšana."
+            ],
+            "bullets": [
+              "Verifikācijas kodu derīguma termiņš beidzas pēc 10 minūtēm; derīguma termiņa beigušies pārbaudes ieraksti tiek noņemti pēc 7 dienām. Nosūtīto vai neveiksmīgo e-pasta ziņojumu ieraksti tiek noņemti pēc 7 dienām.",
+              "Atsauksmes un pielikumi tiek glabāti atsevišķi atbalsta vai autortiesību pieprasījumiem, līdz tie tiek noņemti pēc pieprasījuma vai atbalsta komandas. Konta dzēšana noņem konta saiti, bet automātiski neizdzēš pārskatus. Varat pieprasīt atsevišķu dzēšanu, izmantojot atsauksmju veidlapu."
+            ],
+            "badge": "03"
+          },
+          {
+            "title": "Jūsu tiesības un kontaktinformācija",
+            "paragraphs": [
+              "Jūs varat pieprasīt piekļuvi saviem datiem, to labošanu, dzēšanu vai ierobežošanu, atsaukt piekrišanu, ja apstrāde balstās uz piekrišanu, un iesniegt sūdzību, izmantojot atsauksmju veidlapu mūsu tīmekļa vietnē. Lūdzu, norādiet sava konta e-pasta adresi, lai mēs varētu pārbaudīt pieprasījumu."
+            ],
+            "badge": "04"
+          }
+        ]
+      },
+      "copyright": {
+        "title": "Autortiesību, DMCA un satura atruna",
+        "updatedAt": "Atjaunināts: 2026. gada 4. novembrī",
+        "summary": "Oficiālā satura atruna un intelektuālā īpašuma paziņojumu un noņemšanas procedūra pakalpojumam Framezoo.",
+        "sections": [
+          {
+            "title": "Starpniecības programmatūras drošā osta",
+            "paragraphs": [
+              "Framezoo nepārvalda filmu bibliotēku vai video straumes avotu. Lietojumprogramma var piekļūt lietotāju izvēlētiem avotiem; mūsu serveri var pārsūtīt pakalpojumu sniedzēju subtitrus un īslaicīgi apstrādāt audio un subtitrus pieprasītajai sinhronizācijai.",
+              "Katrs autortiesību paziņojums tiek pārskatīts, ņemot vērā saturu un mūsu faktisko lomu; šie noteikumi nerada automātisku atbrīvojumu no atbildības."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Metadati un mākslas darbu attiecināšana",
+            "paragraphs": [
+              "Filmu un seriālu metadati (nosaukumi, izlaišanas datumi, anotācijas, vērtējumi un reklāmas plakāti), kas tiek rādīti informatīvai atrašanai, ir iegūti no publiskām filmu datubāzēm (piemēram, TMDB, IMDb un TVDB).",
+              "Visas preču zīmes, filmu nosaukumi un mākslas darbi paliek to attiecīgo autortiesību īpašnieku īpašumā."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Paziņošanas un noņemšanas procedūra",
+            "paragraphs": [
+              "Framezoo ievēro intelektuālā īpašuma tiesības. Ja esat autortiesību īpašnieks vai pilnvarots pārstāvis un uzskatāt, ka kāds materiāls vietnē framezoo.top pārkāpj jūsu tiesības, lūdzu, iesniedziet paziņojumu, izmantojot mūsu ziņošanas/atsauksmju kanālu, tostarp:"
+            ],
+            "bullets": [
+              "Autortiesību īpašnieka vai pilnvarotā pārstāvja identifikācija.",
+              "Autortiesību aizsargātā darba īpašumtiesību apliecinājums.",
+              "Precīzs attiecīgā materiāla URL vai apraksts, lai mēs varētu to pārskatīt un risināt 24–72 darba stundu laikā."
+            ],
+            "badge": "03"
+          }
+        ]
+      },
+      "addon-policy": {
+        "title": "Papildinājumu politika un kopienas vadlīnijas",
+        "updatedAt": "Papildinājumu izstrādātājiem un lietotājiem",
+        "summary": "Drošības un atbilstības standarti atvērtajai HTTP/JSON papildinājumu ekosistēmai platformā Framezoo.",
+        "sections": [
+          {
+            "title": "Neatkarīga papildinājumu arhitektūra",
+            "paragraphs": [
+              "Framezoo atbalsta atvērtu HTTP/JSON pievienojumprogrammu protokolu. Neatkarīgi izstrādātāji var mitināt savus manifesta un resursu galapunktus, nemainot galveno atskaņotāju.",
+              "Kopienas papildinājumus pārvalda trešās puses. Framezoo savos serveros pārvalda arī integrētu subtitru pakalpojumu, kā aprakstīts privātuma politikā."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Aizliegta rīcība un saturs",
+            "paragraphs": [
+              "Saskaņā ar kiberdrošības un intelektuālā īpašuma noteikumiem izstrādātāji un lietotāji nedrīkst izmantot Framezoo protokolu vai zīmolu, lai:"
+            ],
+            "bullets": [
+              "Izplatīt nelikumīgu saturu, naida runu, vardarbību vai bērnu izmantošanas materiālus.",
+              "Izplatīt ļaunprogrammatūru, spiegprogrammatūru, pikšķerēšanas saites vai neatļautus datu ieguves skriptus.",
+              "Uzdoties par oficiālām Framezoo laidām vai maldināt lietotājus ar krāpnieciskām maksājumu shēmām."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Lietotāja drošības ieteikumi",
+            "paragraphs": [
+              "Instalējiet papildinājumu manifestus tikai no uzticamiem avotiem. Framezoo lietotnē varat jebkurā laikā pārbaudīt deklarētos papildinājumu resursus un noņemt jebkuru instalēto papildinājumu."
+            ],
+            "badge": "03"
+          }
+        ]
+      }
     }
   }
 }

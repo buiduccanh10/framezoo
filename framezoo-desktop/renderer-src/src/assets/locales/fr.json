@@ -176,7 +176,9 @@
       "passwordMismatch": "Les mots de passe ne correspondent pas",
       "passwordPlaceholder": "Créez un mot de passe (utilisé comme phrase secrète)",
       "passwordWeak": "Le mot de passe doit contenir au moins 8 caractères avec des lettres et des chiffres",
-      "submit": "Créer un compte"
+      "privacyPolicy": "politique de confidentialité",
+      "submit": "Créer un compte",
+      "legalConsent": "J'ai lu et j'accepte les <terms>Conditions d'utilisation</terms> et <privacy>Politique de confidentialité</privacy>."
     },
     "trust": {
       "failed": {
@@ -302,7 +304,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Avertissement",
-      "disclaimerText": "Framezoo est un logiciel de lecture multimédia neutre. Il n&#39;héberge, ne stocke, ne distribue ni ne contrôle les fichiers multimédias ou les extensions tierces. Accédez à des métadonnées de films enrichies, à la synchronisation illimitée des sous-titres et aux sous-titres provenant de sources multiples, tout en gardant le contrôle du contenu auquel vous accédez."
+      "disclaimerText": "Framezoo ne traite pas les flux vidéo. Ses serveurs peuvent relayer les sous-titres du fournisseur et traiter temporairement l'audio et les sous-titres pour la synchronisation lorsque vous activez cette fonction. Vous contrôlez le contenu que vous regardez."
     },
     "links": {
       "fluxer": "Fluxeur",
@@ -1179,9 +1181,9 @@
         "delete": {
           "button": "Supprimer le compte",
           "confirmButton": "Supprimer le compte",
-          "confirmDescription": "Êtes-vous sûr de vouloir supprimer votre compte ? Toutes vos données seront perdues !",
+          "confirmDescription": "Cette action est irréversible. Votre compte et vos données synchronisées seront supprimés du serveur. Les rapports soumis sont conservés séparément ; vous pouvez demander leur suppression via la section « Commentaires ».",
           "confirmTitle": "Êtes-vous sûr ?",
-          "text": "Cette action est irréversible. Toutes les données seront supprimées et rien ne pourra être récupéré.",
+          "text": "Supprimez votre compte et les données synchronisées du serveur. Les rapports soumis sont conservés séparément.",
           "title": "Supprimer le compte"
         },
         "logoutAllDevices": {

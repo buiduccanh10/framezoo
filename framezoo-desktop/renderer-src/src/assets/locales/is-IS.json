@@ -176,7 +176,9 @@
       "passwordMismatch": "Lykilorð passa ekki saman",
       "passwordPlaceholder": "Búðu til lykilorð (notað sem lykilorðið þitt)",
       "passwordWeak": "Lykilorð verður að vera að minnsta kosti 8 stafir með bókstöfum og tölustöfum",
-      "submit": "Stofna reikning"
+      "privacyPolicy": "Persónuverndarstefna",
+      "submit": "Stofna reikning",
+      "legalConsent": "Ég hef lesið og samþykki <terms>Þjónustuskilmála</terms> og <privacy>Persónuverndarstefnu</privacy>."
     },
     "trust": {
       "failed": {
@@ -302,7 +304,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Fyrirvari",
-      "disclaimerText": "Framezoo er hlutlaus hugbúnaður fyrir margmiðlunarspilun. Hann hýsir ekki, geymir, dreifir eða stjórnar margmiðlunarskrám eða viðbótum frá þriðja aðila. Skoðaðu fjölbreytt lýsigögn kvikmynda, ótakmarkaða samstillingu texta og texta frá mörgum aðilum og haltu stjórn á efninu sem þú nálgast."
+      "disclaimerText": "Framezoo notar ekki myndstrauma. Þjónar þess kunna að senda texta frá veitendum og vinna tímabundið úr hljóði og textum til samstillingar þegar þú velur þann eiginleika. Þú stjórnar því hvaða efni þú spilar."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -1179,9 +1181,9 @@
         "delete": {
           "button": "Eyða reikning",
           "confirmButton": "Eyða reikning",
-          "confirmDescription": "Ertu viss um að þú villt eyða aðganginum þínum? Öll gögnin þín verða eydd!",
+          "confirmDescription": "Þetta er ekki hægt að afturkalla. Reikningnum þínum og samstilltum gögnum verður eytt af netþjóninum. Innsendum skýrslum er haldið sérstaklega; óskaðu eftir eyðingu þeirra í gegnum ábendingar.",
           "confirmTitle": "Ertu viss?",
-          "text": "Það er ekki hægt að taka þetta til baka. Öll gögn munu verða eydd og ekkert getur verið tekið til baka.",
+          "text": "Eyða reikningnum þínum og samstilltum gögnum af netþjóninum. Innsendum skýrslum er haldið sérstaklega.",
           "title": "Eyða reikningi"
         },
         "logoutAllDevices": {

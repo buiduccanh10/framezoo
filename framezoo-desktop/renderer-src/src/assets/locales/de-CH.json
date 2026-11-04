@@ -176,7 +176,9 @@
       "passwordMismatch": "Passwörter stimmen nicht überein",
       "passwordPlaceholder": "Erstellen Sie ein Passwort (wird als Passphrase verwendet)",
       "passwordWeak": "Das Passwort muss mindestens 8 Zeichen lang sein und Buchstaben und Zahlen enthalten",
-      "submit": "Benutzerkonto erstellen"
+      "privacyPolicy": "Datenschutzrichtlinie",
+      "submit": "Benutzerkonto erstellen",
+      "legalConsent": "Ich habe die Nutzungsbedingungen (<terms>Terms of Service</terms>) und die Datenschutzrichtlinie (<privacy>Privacy Policy</privacy>) gelesen und stimme ihnen zu."
     },
     "trust": {
       "failed": {
@@ -302,7 +304,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Hewis",
-      "disclaimerText": "Framezoo ist eine neutrale Mediaplayer-Software. Sie hostet, speichert, verteilt oder kontrolliert weder Mediendateien noch Add-ons von Drittanbietern. Entdecken Sie umfangreiche Filmmetadaten, unbegrenzte Untertitelsynchronisierung und Untertitel aus verschiedenen Quellen und behalten Sie dabei die Kontrolle über die abgerufenen Inhalte."
+      "disclaimerText": "Framezoo betreibt keine Videostream-Quellen. Die Server können Untertitel von Anbietern weiterleiten und Audio und Untertitel vorübergehend zur Synchronisierung verarbeiten, wenn Sie diese Funktion auswählen. Sie bestimmen, welche Inhalte Sie abspielen."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -1179,9 +1181,9 @@
         "delete": {
           "button": "Account lösche",
           "confirmButton": "Account lösche",
-          "confirmDescription": "Welsch der Account wörklech lösche? All dini Date göi verlore! ",
+          "confirmDescription": "Dies kann nicht rückgängig gemacht werden. Ihr Konto und die synchronisierten Daten werden vom Server gelöscht. Eingereichte Berichte werden separat gespeichert; beantragen Sie deren Löschung über die Feedback-Funktion.",
           "confirmTitle": "Besch secher?",
-          "text": "Die Aktion cha net röckgängig gmacht wärde. Alli date werne glöscht ond chöne net wederhergstellt werde.",
+          "text": "Löschen Sie Ihr Konto und die synchronisierten Daten vom Server. Eingereichte Berichte werden separat aufbewahrt.",
           "title": "Account lösche"
         },
         "logoutAllDevices": {

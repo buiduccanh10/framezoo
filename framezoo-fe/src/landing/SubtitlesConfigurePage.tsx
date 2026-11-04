@@ -230,7 +230,7 @@ export function SubtitlesConfigurePage() {
       <LandingParticles />
 
       <header className="landing-nav">
-        <a className="landing-brand" href="/" aria-label="Framezoo home">
+        <a className="landing-brand" href="/" aria-label={copy.nav.homeAria}>
           <img
             src="/framezoo-logo.svg"
             width="138"
@@ -238,7 +238,7 @@ export function SubtitlesConfigurePage() {
             alt="Framezoo"
           />
         </a>
-        <nav className="landing-nav-links" aria-label="Primary navigation">
+        <nav className="landing-nav-links" aria-label={copy.nav.primaryAria}>
           <a href="/">{copy.nav.home}</a>
           <a href="/experience">{copy.nav.features}</a>
           <a href="/ecosystem">{copy.nav.addons}</a>

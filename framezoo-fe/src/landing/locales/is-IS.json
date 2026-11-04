@@ -6,7 +6,10 @@
     "language": "Tungumál",
     "addonGuide": "Addon leiðarvísir",
     "home": "Heim",
-    "installGuide": "Uppsetningarleiðbeiningar"
+    "installGuide": "Uppsetningarleiðbeiningar",
+    "homeAria": "Heimili Framezoo",
+    "primaryAria": "Aðalflakk",
+    "backToTop": "Til baka efst"
   },
   "hero": {
     "eyebrow": "FRAMEZOO SKJÁLFTRÖF / 01",
@@ -75,7 +78,9 @@
     ],
     "advancedTitle": "Vantar þig Node-hjálp?",
     "advancedLink": "Opna háþróaða SDK tilvísun",
-    "advancedDescription": "Stremio Addon SDK er valfrjálst. Notaðu það ef þú vilt leiðar- og raðgreiningarhjálpar; það er ekki krafist í bókuninni."
+    "advancedDescription": "Stremio Addon SDK er valfrjálst. Notaðu það ef þú vilt leiðar- og raðgreiningarhjálpar; það er ekki krafist í bókuninni.",
+    "copy": "Afrita",
+    "copied": "Afritað"
   },
   "deepLink": {
     "opening": "Opnar Framezoo...",
@@ -140,7 +145,9 @@
     "winClickHere": "(Smelltu hér)",
     "winMoreInfo": "Frekari upplýsingar",
     "winQuickSolution": "Smelltu á Meira upplýsingar → Hlaupa samt",
-    "winDialogDesc": "Microsoft Defender SmartScreen kom í veg fyrir að óþekkt forrit gæti ræst. Að keyra þetta forrit gæti sett tölvuna þína í hættu."
+    "winDialogDesc": "Microsoft Defender SmartScreen kom í veg fyrir að óþekkt forrit gæti ræst. Að keyra þetta forrit gæti sett tölvuna þína í hættu.",
+    "osSelectionAria": "Val á stýrikerfi",
+    "applicationsFolderAria": "Forritamappa"
   },
   "downloadConfirm": {
     "macTitle": "Uppsetningarleiðbeiningar fyrir macOS",
@@ -267,5 +274,176 @@
       "copied": "Afritað!",
       "copyManifest": "Afritaðu vefslóð yfirlýsingarinnar"
     }
+  },
+  "legal": {
+    "reportCtaTitle": "Þarftu að senda inn höfundarréttartilkynningu eða lögfræðilega fyrirspurn?",
+    "pageSubtitle": "Notkunarskilmálar og gagnavinnsluupplýsingar fyrir Framezoo skjáborðsforritið.",
+    "tabs": {
+      "terms": {
+        "title": "Þjónustuskilmálar",
+        "updatedAt": "Uppfært: 4. nóvember 2026",
+        "summary": "Vinsamlegast lestu þessa skilmála og persónuverndarstefnuna áður en þú stofnar reikning eða notar Framezoo skjáborðsforritið.",
+        "sections": [
+          {
+            "title": "Eðli hlutlauss fjölmiðlaspilarahugbúnaðar",
+            "paragraphs": [
+              "Framezoo er sjálfstætt tölvuspilaraforrit sem starfar sem hlutlaust tæknitól, svipað og venjulegir myndbandsspilarar eða vefvafrar.",
+              "Framezoo býður ekki upp á kvikmyndasafn eða rekur vídeóstraumgjafa. Framezoo netþjónar kunna að senda texta frá veitendum og vinna tímabundið úr hljóðbútum og texta þegar þú notar samstillingu."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Ábyrgð notenda og lagalegt samræmi",
+            "paragraphs": [
+              "Notendur eru einir ábyrgir fyrir því að stilla forritið, setja upp viðbætur frá þriðja aðila og tryggja að allir straumar eða miðlar sem aðgangur er að séu í samræmi við gildandi lög."
+            ],
+            "bullets": [
+              "Fylgdu viðeigandi lögum um hugverkarétt, lög um netöryggi, tilskipun 147/2024/ND-CP í Víetnam og reglugerðir í þínu lögsagnarumdæmi.",
+              "Ekki nota hugbúnaðinn til að fá aðgang að, dreifa eða kynna ólöglegt efni.",
+              "Staðfestu áreiðanleika og lögmæti hvers kyns samfélagsaukningar frá þriðja aðila áður en þú setur upp vefslóð hennar."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Hugbúnaðarleyfi og takmarkanir",
+            "paragraphs": [
+              "Framezoo veitir þér persónulegt, einkarekið, óframseljanlegt, ekki viðskiptalegt leyfi til að setja upp og nota opinberu skrifborðsbyggingarnar á macOS og Windows.",
+              "Þú mátt ekki endurdreifa breyttum tvíþættum sem innihalda spilliforrit, gefa rangar upplýsingar um tengsl við Framezoo eða misnota innviði verkefna."
+            ],
+            "badge": "03"
+          },
+          {
+            "title": "Takmörkun ábyrgðar (AS-IS)",
+            "paragraphs": [
+              "Hugbúnaðurinn er útvegaður á „Eins og er“ og „Eins og hann er fáanlegur“ án ábyrgðar af neinu tagi. Framezoo er ekki ábyrgt fyrir framboði, nákvæmni eða lögmæti ytri strauma eða lýsigagna sem þjónusta þriðja aðila veitir."
+            ],
+            "badge": "04"
+          }
+        ]
+      },
+      "privacy": {
+        "title": "Persónuverndarstefna og persónuverndarstefna",
+        "updatedAt": "Uppfært: 4. nóvember 2026 · Lög 91/2025/QH15 og tilskipun 356/2025/ND-CP",
+        "summary": "Þessi stefna lýsir gagnavinnslu í Framezoo skjáborðsforritinu og á opinberum Framezoo netþjónum.",
+        "sections": [
+          {
+            "bullets": [
+              "Tölvupóstur, staðfestingarkóðar og beiðni um upplýsingar styðja skráningu, innskráningu og reikningsöryggi.",
+              "Skýrslur, villulýsingar og viðhengi berast þjóninum okkar þegar þú sendir inn athugasemdaeyðublaðið.",
+              "Vefsíðan geymir tungumálaval þitt í vafrageymslu."
+            ],
+            "title": "Gögn á tækinu þínu og netþjónum okkar",
+            "paragraphs": [
+              "Forritið geymir nokkrar stillingar, skyndiminni og spilunargögn í tækinu þínu. Ef þú býrð til reikning geymir þjónninn líka tölvupóstinn þinn, gælunafn, prófíl, opinberan lykil, upplýsingar um lotu/tæki, samstillt bókamerki, framvindu, áhorfsferil, stillingar og viðbætur, auk dulkóðaðra textaveitulykla ef þú gefur upp þau."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Tilgangur og ytri þjónusta",
+            "paragraphs": [
+              "Við vinnum úr gögnum til að keyra reikninga, samstilla tæki, veita stuðning, vernda þjónustuna og afhenda eiginleika sem þú velur. Við seljum ekki persónuupplýsingar til auglýsingakerfa."
+            ],
+            "bullets": [
+              "Staðfestingartölvupóstur fer til póstveitunnar okkar; Hægt er að geyma afrit af gagnagrunni á Supabase þegar öryggisafrit er stillt.",
+              "Sumir þjónustuaðilar eða viðbótarþjónar kunna að vinna úr gögnum utan Víetnam; staðsetning miðlara fer eftir þjónustunni sem þú velur og rekstrarstillingu.",
+              "Google reCAPTCHA gæti verið notað við skráningu; texti fer í Google Translate þegar þú velur þýðingu.",
+              "Textaleit og niðurhal, hljóð-/textasamstilling og samfélagsaukningar geta sent beiðnir í gegnum Framezoo netþjóna og viðkomandi ytri þjónustu. Viðbætur frá þriðja aðila hafa sínar eigin reglur."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Varðveisla og eyðing",
+            "bullets": [
+              "Staðfestingarkóðar renna út eftir 10 mínútur; útrunnar áskorunarskrár eru fjarlægðar eftir 7 daga. Senda eða misheppnuðu póstfærslur eru fjarlægðar eftir 7 daga.",
+              "Athugasemdir og viðhengi eru geymd aðskilin vegna stuðnings- eða höfundarréttarbeiðna þar til þau eru fjarlægð samkvæmt beiðni eða af þjónustudeild. Eyðing reiknings fjarlægir reikningstengilinn en eyðir ekki skýrslum sjálfkrafa. Þú getur beðið um aðskilda eyðingu í gegnum athugasemdaformið."
+            ],
+            "paragraphs": [
+              "Reiknings- og samstillingargögn haldast á meðan reikningurinn þinn er virkur. Þú getur eytt reikningnum í Stillingar; þjónninn fjarlægir síðan reikningsskrár, bókamerki, framvindu, áhorfsferil, stillingar og lotur. Gömul afrit af gagnagrunni kunna að geyma gögn þar til þeim er snúið; sjálfgefna stillingin heldur 7 nýlegum afritum þegar öryggisafrit er í gangi."
+            ],
+            "badge": "03"
+          },
+          {
+            "title": "Réttindi þín og samband",
+            "paragraphs": [
+              "Þú getur beðið um aðgang, leiðréttingu, eyðingu eða takmörkun á gögnum þínum, afturkallað samþykki þar sem vinnsla byggist á samþykki og sent inn kvörtun í gegnum athugasemdaformið á vefsíðu okkar. Vinsamlegast gefðu upp netfang reikningsins svo við getum staðfest beiðnina."
+            ],
+            "badge": "04"
+          }
+        ]
+      },
+      "copyright": {
+        "updatedAt": "Uppfært: 4. nóvember 2026",
+        "summary": "Opinber fyrirvari um efni og aðferð til að tilkynna og fjarlægja hugverkarétt fyrir Framezoo.",
+        "title": "Höfundarréttur, DMCA og fyrirvari um efni",
+        "sections": [
+          {
+            "paragraphs": [
+              "Framezoo rekur ekki kvikmyndasafn eða myndstraumsgjafa. Forritið getur fengið aðgang að heimildum sem notendur velja; Netþjónar okkar kunna að miðla texta veitenda og vinna tímabundið úr hljóði og texta fyrir umbeðna samstillingu.",
+              "Hver höfundarréttartilkynning er skoðuð með hliðsjón af innihaldi og raunverulegu hlutverki okkar; skilmálar þessir skapa ekki sjálfvirka undanþágu frá ábyrgð."
+            ],
+            "title": "Milligönguhugbúnaður Safe Harbor",
+            "badge": "01"
+          },
+          {
+            "paragraphs": [
+              "Lýsigögn kvikmynda og þáttaraða (titlar, útgáfudagar, samantektir, einkunnir og kynningarplaköt) sem sýnd eru til upplýsingauppgötvunar eru fengin úr opinberum kvikmyndagagnagrunnum (eins og TMDB, IMDb og TVDB).",
+              "Öll vörumerki, kvikmyndatitlar og listaverk eru áfram eign viðkomandi höfundarréttareigenda."
+            ],
+            "title": "Lýsigögn og listaverk",
+            "badge": "02"
+          },
+          {
+            "bullets": [
+              "Auðkenni höfundarréttareiganda eða viðurkennds fulltrúa.",
+              "Sönnun á eignarhaldi á höfundarréttarvarða verkinu.",
+              "Nákvæm slóð eða lýsing á viðkomandi efni svo við getum skoðað og tekið á því innan 24–72 vinnutíma."
+            ],
+            "title": "Tilkynninga- og fjarlægingaraðferð",
+            "paragraphs": [
+              "Framezoo virðir hugverkaréttindi. Ef þú ert höfundarréttareigandi eða viðurkenndur umboðsmaður og telur að eitthvað efni á framezoo.top brjóti í bága við réttindi þín, vinsamlegast sendu tilkynningu í gegnum Report / Feedback rásina okkar, þar á meðal:"
+            ],
+            "badge": "03"
+          }
+        ]
+      },
+      "addon-policy": {
+        "updatedAt": "Fyrir forritara og endanotendur viðbóta",
+        "sections": [
+          {
+            "paragraphs": [
+              "Framezoo styður opna HTTP/JSON viðbótarsamskiptareglur. Óháðir þróunaraðilar geta hýst eigin upplýsingaskrá og tilfangaendapunkta án þess að breyta kjarnaspilaranum.",
+              "Samfélagsviðbætur eru reknar af þriðja aðila. Framezoo rekur einnig samþætta textaþjónustu á eigin netþjónum eins og lýst er í persónuverndarstefnunni."
+            ],
+            "title": "Óháður Addon arkitektúr",
+            "badge": "01"
+          },
+          {
+            "bullets": [
+              "Dreifa ólöglegu efni, hatursorðræðu, ofbeldi eða efni til að misnota börn.",
+              "Dreifðu spilliforritum, njósnahugbúnaði, vefveiðatenglum eða óviðkomandi gagnaöflunarforskriftum.",
+              "Gerðu eftir þér að vera opinberar útgáfur Framezoo eða blekkja notendur með sviksamlegum greiðslukerfum."
+            ],
+            "paragraphs": [
+              "Í samræmi við reglur um netöryggi og hugverkarétt, mega verktaki og notendur ekki nota Framezoo siðareglur eða vörumerki til að:"
+            ],
+            "title": "Bönnuð hegðun og efni",
+            "badge": "02"
+          },
+          {
+            "title": "Ráðleggingar um öryggi notenda",
+            "paragraphs": [
+              "Settu aðeins upp viðbótarlýsingu frá heimildum sem þú treystir. Þú getur skoðað yfirlýst viðbótartilföng og fjarlægt hvaða uppsett viðbót hvenær sem er innan Framezoo appsins."
+            ],
+            "badge": "03"
+          }
+        ],
+        "summary": "Öryggis- og samræmisstaðlar fyrir opna HTTP/JSON viðbót vistkerfisins á Framezoo.",
+        "title": "Viðbótarstefna og samfélagsleiðbeiningar"
+      }
+    },
+    "eyebrow": "LÖGUR OG FYRIRVARNI 2026",
+    "reportCtaDesc": "Ef þú ert handhafi höfundarréttar eða hefur beiðni um persónuupplýsingar, vinsamlegast sendu upplýsingar þínar í gegnum opinbera endurgjöf okkar til skoðunar innan 24–72 vinnutíma.",
+    "pageTitle": "Skilmálar, persónuverndar- og lagareglur",
+    "reportCtaButton": "Opnaðu skýrslu / athugasemdareyðublað"
   }
 }

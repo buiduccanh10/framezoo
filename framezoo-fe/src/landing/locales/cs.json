@@ -6,7 +6,10 @@
     "language": "Jazyk",
     "addonGuide": "Průvodce addony",
     "home": "Domov",
-    "installGuide": "Průvodce instalací"
+    "installGuide": "Průvodce instalací",
+    "homeAria": "Domovská stránka Framezoo",
+    "primaryAria": "Primární navigace",
+    "backToTop": "Zpět nahoru"
   },
   "hero": {
     "eyebrow": "DESKTOP FRAMEZOO / 01",
@@ -75,7 +78,9 @@
       "Vložte adresu URL manifestu do Framezoo Desktop > Addons."
     ],
     "advancedDescription": "Sada Stremio Addon SDK je volitelná. Použijte jej, pokud chcete pomocníky pro směrování a serializaci; protokol to nevyžaduje.",
-    "advancedLink": "Otevřete pokročilou referenci SDK"
+    "advancedLink": "Otevřete pokročilou referenci SDK",
+    "copy": "Kopie",
+    "copied": "Zkopírováno"
   },
   "deepLink": {
     "openingDescription": "Váš prohlížeč se pokouší otevřít aplikaci Framezoo Desktop. Pokud se zobrazí výzva, vyberte <1>Otevřít Framezoo</1>.",
@@ -140,7 +145,9 @@
     "winQuickSolution": "Klikněte na Další informace → Přesto spustit",
     "winDialogDesc": "Microsoft Defender SmartScreen zabránil spuštění neznámé aplikace. Spuštění této aplikace může ohrozit váš počítač.",
     "winMoreInfo": "Více informací",
-    "winClickHere": "(klikněte zde)"
+    "winClickHere": "(klikněte zde)",
+    "osSelectionAria": "Výběr operačního systému",
+    "applicationsFolderAria": "Složka Aplikace"
   },
   "downloadConfirm": {
     "macNotice": "Upozornění Gatekeepera: Pokud macOS hlásí „poškozenou“ nebo neověřenou aplikaci, přejděte na Aplikace -> Klikněte pravým tlačítkem na Framezoo -> Vyberte Otevřít -> Přesto otevřít.",
@@ -267,5 +274,176 @@
       "notConnectedNotice": "Poznámka: Nejste spojeni s tiketem účtu Framezoo. Chcete-li synchronizovat přímo s 'Open Framezoo', otevřete tuto stránku z aplikace Framezoo Desktop, když jste přihlášeni. V opačném případě zkopírujte níže uvedenou adresu Manifest, abyste ji mohli použít.",
       "noticeText": "Váš klíč API je bezpečně uložen ve vašem zařízení. Přeposílá se pouze za účelem vyhledávání a načítání titulků k filmům a seriálům. Můžete jej kdykoli aktualizovat nebo odebrat."
     }
+  },
+  "legal": {
+    "pageTitle": "Podmínky, ochrana osobních údajů a právní zásady",
+    "eyebrow": "PRÁVNÍ PŘEDPISY A DODRŽOVÁNÍ 2026",
+    "tabs": {
+      "terms": {
+        "title": "Podmínky služby",
+        "sections": [
+          {
+            "paragraphs": [
+              "Framezoo je nezávislá aplikace pro stolní přehrávač médií fungující jako neutrální technický nástroj, podobný standardním přehrávačům videa nebo webovým prohlížečům.",
+              "Framezoo neposkytuje filmovou knihovnu ani neprovozuje zdroje video streamu. Servery Framezoo mohou přenášet titulky od poskytovatelů a dočasně zpracovávat zvukové klipy a titulky, když používáte synchronizaci."
+            ],
+            "title": "Povaha softwaru neutrálního přehrávače médií",
+            "badge": "01"
+          },
+          {
+            "paragraphs": [
+              "Uživatelé jsou výhradně zodpovědní za konfiguraci aplikace, instalaci doplňků třetích stran a zajištění toho, aby všechny streamy nebo média, ke kterým se přistupuje, odpovídaly platným zákonům."
+            ],
+            "bullets": [
+              "Dodržujte platné zákony o duševním vlastnictví, zákon o kybernetické bezpečnosti, vyhlášku 147/2024/ND-CP ve Vietnamu a předpisy ve vaší místní jurisdikci.",
+              "Nepoužívejte software k přístupu, distribuci nebo propagaci nezákonného obsahu.",
+              "Před instalací adresy URL manifestu ověřte důvěryhodnost a zákonnost jakéhokoli doplňku komunity třetí strany."
+            ],
+            "title": "Odpovědnost uživatele a dodržování právních předpisů",
+            "badge": "02"
+          },
+          {
+            "title": "Softwarová licence a omezení",
+            "paragraphs": [
+              "Framezoo vám uděluje osobní, nevýhradní, nepřenosnou, nekomerční licenci k instalaci a používání oficiálních desktopových buildů na macOS a Windows.",
+              "Nesmíte redistribuovat upravené binární soubory obsahující malware, nepravdivě uvádět vztah s Framezoo nebo zneužívat infrastrukturu projektu."
+            ],
+            "badge": "03"
+          },
+          {
+            "title": "Omezení odpovědnosti (AS-IS)",
+            "paragraphs": [
+              "Software je poskytován „TAK, JAK JE“ a „JAK JE K DISPOZICI“, bez jakýchkoli záruk. Framezoo nenese odpovědnost za dostupnost, přesnost nebo zákonnost externích streamů nebo metadat poskytovaných službami třetích stran."
+            ],
+            "badge": "04"
+          }
+        ],
+        "updatedAt": "Aktualizováno: 4. listopadu 2026",
+        "summary": "Před vytvořením účtu nebo použitím desktopové aplikace Framezoo si přečtěte tyto podmínky a zásady ochrany osobních údajů."
+      },
+      "privacy": {
+        "title": "Zásady ochrany soukromí a osobních údajů",
+        "sections": [
+          {
+            "bullets": [
+              "E-mail, ověřovací kódy a podrobnosti požadavků podporují registraci, přihlášení a zabezpečení účtu.",
+              "Zprávy, popisy chyb a přílohy se dostanou na náš server, když odešlete formulář zpětné vazby.",
+              "Webová stránka ukládá vaši volbu jazyka do úložiště prohlížeče."
+            ],
+            "title": "Data na vašem zařízení a našich serverech",
+            "paragraphs": [
+              "Aplikace ukládá některá nastavení, mezipaměť a data přehrávání do vašeho zařízení. Pokud si vytvoříte účet, server také uloží váš e-mail, přezdívku, profil, veřejný klíč, podrobnosti o relaci/zařízení, synchronizované záložky, průběh, historii sledování, nastavení a doplňky plus šifrované klíče poskytovatele titulků, pokud je poskytnete."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Účely a externí služby",
+            "paragraphs": [
+              "Zpracováváme data, abychom mohli provozovat účty, synchronizovat zařízení, poskytovat podporu, chránit službu a poskytovat funkce, které si vyberete. Osobní údaje neprodáváme reklamním sítím."
+            ],
+            "bullets": [
+              "Ověřovací e-mail přijde našemu poskytovateli pošty; zálohy databáze mohou být uloženy na Supabase, když je zálohování nakonfigurováno.",
+              "Někteří poskytovatelé služeb nebo doplňkové servery mohou zpracovávat data mimo Vietnam; umístění serveru závisí na zvolené službě a provozní konfiguraci.",
+              "Během registrace lze použít službu Google reCAPTCHA; Když zvolíte překlad, text titulků přejde do Překladače Google.",
+              "Vyhledávání a stahování titulků, synchronizace zvuku/titulků a komunitní doplňky mohou odesílat požadavky prostřednictvím serverů Framezoo a příslušných externích služeb. Doplňky třetích stran mají své vlastní zásady."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Uchování a vymazání",
+            "bullets": [
+              "Platnost ověřovacích kódů vyprší po 10 minutách; záznamy o výzvě s vypršenou platností jsou odstraněny po 7 dnech. Záznamy odeslané nebo neúspěšné pošty jsou odstraněny po 7 dnech.",
+              "Zpětná vazba a přílohy jsou uchovávány odděleně pro účely podpory nebo žádostí o autorská práva, dokud je na požádání nebo tým podpory neodstraní. Smazáním účtu se odstraní propojení účtu, ale automaticky se neodstraní přehledy. O samostatné smazání můžete požádat prostřednictvím formuláře zpětné vazby."
+            ],
+            "paragraphs": [
+              "Data účtu a synchronizace zůstávají, dokud je váš účet aktivní. Účet můžete smazat v Nastavení; server poté odstraní záznamy účtu, záložky, průběh, historii sledování, nastavení a relace. Staré zálohy databáze mohou uchovávat data až do rotace; výchozí konfigurace uchovává 7 posledních záloh, když je zálohování spuštěno."
+            ],
+            "badge": "03"
+          },
+          {
+            "title": "Vaše práva a kontakt",
+            "paragraphs": [
+              "Můžete požádat o přístup, opravu, vymazání nebo omezení svých údajů, odvolat souhlas, pokud zpracování závisí na souhlasu, a podat stížnost prostřednictvím formuláře zpětné vazby na našem webu. Uveďte prosím e-mail svého účtu, abychom mohli žádost ověřit."
+            ],
+            "badge": "04"
+          }
+        ],
+        "summary": "Tato zásada popisuje zpracování dat v desktopové aplikaci Framezoo a na oficiálních serverech Framezoo.",
+        "updatedAt": "Aktualizováno: 4. listopadu 2026 · Zákon 91/2025/QH15 a vyhláška 356/2025/ND-CP"
+      },
+      "copyright": {
+        "updatedAt": "Aktualizováno: 4. listopadu 2026",
+        "sections": [
+          {
+            "title": "Zprostředkující software Safe Harbor",
+            "paragraphs": [
+              "Framezoo neprovozuje filmovou knihovnu ani zdroj video streamu. Aplikace může přistupovat ke zdrojům vybraným uživateli; naše servery mohou předávat titulky poskytovatele a dočasně zpracovávat zvuk a titulky pro požadovanou synchronizaci.",
+              "Každé oznámení o autorských právech je posuzováno s ohledem na obsah a naši skutečnou roli; tyto podmínky nevytvářejí automatickou výjimku z odpovědnosti."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Metadata a přiřazení uměleckého díla",
+            "paragraphs": [
+              "Metadata filmů a seriálů (názvy, data vydání, synopse, hodnocení a propagační plakáty) zobrazovaná pro informační účely pocházejí z veřejných filmových databází (jako jsou TMDB, IMDb a TVDB).",
+              "Všechny ochranné známky, názvy filmů a umělecká díla zůstávají majetkem příslušných vlastníků autorských práv."
+            ],
+            "badge": "02"
+          },
+          {
+            "bullets": [
+              "Identifikace vlastníka autorských práv nebo oprávněného zástupce.",
+              "Doklad o vlastnictví díla chráněného autorským právem.",
+              "Přesná adresa URL nebo popis příslušného materiálu, abychom jej mohli zkontrolovat a vyřešit během 24–72 pracovních hodin."
+            ],
+            "title": "Oznámení a postup odstranění",
+            "paragraphs": [
+              "Framezoo respektuje práva duševního vlastnictví. Pokud jste vlastníkem autorských práv nebo oprávněným zástupcem a domníváte se, že jakýkoli materiál na webu framezoo.top porušuje vaše práva, odešlete oznámení prostřednictvím našeho kanálu Zpráva / Zpětná vazba včetně:"
+            ],
+            "badge": "03"
+          }
+        ],
+        "title": "Copyright, DMCA a vyloučení odpovědnosti za obsah",
+        "summary": "Oficiální prohlášení o vyloučení odpovědnosti za obsah a postup oznámení a zastavení šíření pro Framezoo."
+      },
+      "addon-policy": {
+        "title": "Zásady doplňků a pokyny pro komunitu",
+        "updatedAt": "Pro vývojáře doplňků a koncové uživatele",
+        "sections": [
+          {
+            "title": "Nezávislá architektura doplňků",
+            "paragraphs": [
+              "Framezoo podporuje otevřený protokol doplňku HTTP/JSON. Nezávislí vývojáři mohou hostovat vlastní manifest a koncové body zdrojů, aniž by museli upravovat základního hráče.",
+              "Komunitní doplňky provozují třetí strany. Framezoo také provozuje integrovanou službu titulků na svých vlastních serverech, jak je popsáno v zásadách ochrany osobních údajů."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Zakázané chování a obsah",
+            "bullets": [
+              "Šířit nezákonný obsah, projevy nenávisti, násilí nebo materiály vykořisťující děti.",
+              "Šířit malware, spyware, phishingové odkazy nebo neautorizované skripty pro sběr dat.",
+              "Vydávat se za oficiální vydání Framezoo nebo klamat uživatele podvodnými platebními schématy."
+            ],
+            "paragraphs": [
+              "V souladu s předpisy o kybernetické bezpečnosti a duševním vlastnictví nesmějí vývojáři a uživatelé používat protokol nebo značku Framezoo k:"
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Bezpečnostní doporučení pro uživatele",
+            "paragraphs": [
+              "Instalujte pouze manifesty doplňků ze zdrojů, kterým důvěřujete. V aplikaci Framezoo můžete kdykoli zkontrolovat deklarované zdroje doplňků a odstranit jakýkoli nainstalovaný doplněk."
+            ],
+            "badge": "03"
+          }
+        ],
+        "summary": "Bezpečnostní normy a standardy shody pro otevřený ekosystém doplňků HTTP/JSON na Framezoo."
+      }
+    },
+    "pageSubtitle": "Podmínky použití a informace o zpracování dat pro desktopovou aplikaci Framezoo.",
+    "reportCtaTitle": "Potřebujete odeslat oznámení o autorských právech nebo právní dotaz?",
+    "reportCtaButton": "Otevřete formulář pro zprávu / zpětnou vazbu",
+    "reportCtaDesc": "Pokud jste držitelem autorských práv nebo máte žádost o osobní údaje, odešlete své údaje prostřednictvím našeho oficiálního kanálu zpětné vazby ke kontrole do 24–72 pracovních hodin."
   }
 }

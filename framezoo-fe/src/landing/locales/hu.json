@@ -6,7 +6,10 @@
     "language": "Nyelv",
     "addonGuide": "Addon útmutató",
     "home": "Otthon",
-    "installGuide": "Telepítési útmutató"
+    "installGuide": "Telepítési útmutató",
+    "homeAria": "Framezoo otthon",
+    "primaryAria": "Elsődleges navigáció",
+    "backToTop": "Vissza a tetejére"
   },
   "hero": {
     "eyebrow": "FRAMEZOO DESKTOP / 01",
@@ -75,7 +78,9 @@
     "runTitle": "Futtassa, tesztelje, telepítse",
     "advancedLink": "Nyissa meg a speciális SDK-referenciát",
     "advancedDescription": "A Stremio Addon SDK opcionális. Használja, ha útválasztási és szerializációs segítőket szeretne; a protokoll nem írja elő.",
-    "advancedTitle": "Node segítőre van szüksége?"
+    "advancedTitle": "Node segítőre van szüksége?",
+    "copy": "Másolat",
+    "copied": "Másolva"
   },
   "deepLink": {
     "opening": "Framezoo megnyitása...",
@@ -140,7 +145,9 @@
     "winMoreInfo": "További információ",
     "winClickHere": "(Kattintson ide)",
     "winQuickSolution": "Kattintson a További információ → Futtatás mindenképpen elemre",
-    "winDialogDesc": "A Microsoft Defender SmartScreen megakadályozta, hogy egy ismeretlen alkalmazás elinduljon. Az alkalmazás futtatása veszélybe sodorhatja számítógépét."
+    "winDialogDesc": "A Microsoft Defender SmartScreen megakadályozta, hogy egy ismeretlen alkalmazás elinduljon. Az alkalmazás futtatása veszélybe sodorhatja számítógépét.",
+    "osSelectionAria": "Operációs rendszer kiválasztása",
+    "applicationsFolderAria": "Alkalmazások mappa"
   },
   "downloadConfirm": {
     "macTitle": "Telepítési útmutató macOS-hez",
@@ -267,5 +274,176 @@
       "copyManifest": "Manifest URL másolása",
       "title": "Telepítés és alkalmazás"
     }
+  },
+  "legal": {
+    "reportCtaDesc": "Ha Ön szerzői jog tulajdonosa, vagy személyes adatokra vonatkozó kérelmet szeretne benyújtani, kérjük, küldje el adatait hivatalos visszajelzési csatornánkon keresztül felülvizsgálatra 24–72 munkaórán belül.",
+    "tabs": {
+      "terms": {
+        "title": "Szolgáltatási feltételek",
+        "updatedAt": "Frissítve: 2026. november 4",
+        "sections": [
+          {
+            "paragraphs": [
+              "A Framezoo egy független asztali médialejátszó alkalmazás, amely semleges technikai eszközként működik, hasonlóan a szabványos videolejátszókhoz vagy webböngészőkhöz.",
+              "A Framezoo nem biztosít filmtárat, és nem működtet videofolyam-forrásokat. A Framezoo-szerverek közvetíthetik a szolgáltatók feliratait, és ideiglenesen feldolgozhatják a hangfelvételeket és a feliratokat, amikor Ön szinkronizálást használ."
+            ],
+            "title": "A semleges médialejátszó szoftver természete",
+            "badge": "01"
+          },
+          {
+            "title": "Felhasználói kötelezettségek és jogi megfelelés",
+            "bullets": [
+              "Tartsa be a vonatkozó szellemi tulajdonra vonatkozó törvényeket, a kiberbiztonságról szóló törvényt, a vietnami 147/2024/ND-CP rendeletet, valamint a helyi joghatóság szabályozását.",
+              "Ne használja a szoftvert jogellenes tartalom elérésére, terjesztésére vagy reklámozására.",
+              "Ellenőrizze a harmadik féltől származó közösségi bővítmények megbízhatóságát és jogszerűségét, mielőtt telepítené a manifeszt URL-címét."
+            ],
+            "paragraphs": [
+              "Kizárólag a felhasználók felelősek az alkalmazás konfigurálásáért, a harmadik féltől származó kiegészítők telepítéséért, valamint annak biztosításáért, hogy az elért adatfolyamok és médiatartalom megfeleljen a vonatkozó jogszabályoknak."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Szoftverlicencek és korlátozások",
+            "paragraphs": [
+              "A Framezoo személyes, nem kizárólagos, nem átruházható, nem kereskedelmi licencet biztosít Önnek a hivatalos asztali építmények macOS és Windows rendszeren történő telepítéséhez és használatához.",
+              "Nem terjeszthet tovább rosszindulatú programokat tartalmazó módosított bináris fájlokat, nem tüntethet fel hamisan a Framezoo-val való kapcsolatát, és nem élhet vissza a projekt infrastruktúrájával."
+            ],
+            "badge": "03"
+          },
+          {
+            "paragraphs": [
+              "A szoftvert „AS-IS” és „AHOGY ELÉRHETŐ” alapon biztosítjuk, mindenféle garancia nélkül. A Framezoo nem vállal felelősséget a harmadik féltől származó szolgáltatások által biztosított külső adatfolyamok vagy metaadatok elérhetőségéért, pontosságáért vagy jogszerűségéért."
+            ],
+            "title": "Felelősségkorlátozás (AS-IS)",
+            "badge": "04"
+          }
+        ],
+        "summary": "Kérjük, fiók létrehozása vagy a Framezoo asztali alkalmazás használata előtt olvassa el ezeket a feltételeket és az adatvédelmi szabályzatot."
+      },
+      "privacy": {
+        "title": "Adatvédelmi és személyes adatok védelmére vonatkozó szabályzat",
+        "sections": [
+          {
+            "title": "Adatok az Ön készülékén és a szervereinken",
+            "paragraphs": [
+              "Az alkalmazás néhány beállítást, gyorsítótárat és lejátszási adatokat tárol az eszközén. Ha létrehoz egy fiókot, a szerver tárolja az Ön e-mail címét, becenevét, profilját, nyilvános kulcsát, munkamenet/eszköz adatait, szinkronizált könyvjelzőket, előrehaladást, megtekintési előzményeket, beállításokat és kiegészítőket, valamint a titkosított feliratszolgáltató kulcsait, ha megadja őket."
+            ],
+            "bullets": [
+              "Az e-mail, az ellenőrző kódok és a kérés részletei támogatják a regisztrációt, a bejelentkezést és a fiók biztonságát.",
+              "A jelentések, hibaleírások és mellékletek a visszajelzési űrlap elküldésekor jutnak el szerverünkhöz.",
+              "A webhely a választott nyelvet a böngésző tárhelyén tárolja."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Célok és külső szolgáltatások",
+            "bullets": [
+              "Az ellenőrző e-mail postaszolgáltatónkhoz érkezik; Az adatbázis biztonsági mentései a Supabase-en tárolhatók, ha a biztonsági mentés be van állítva.",
+              "Egyes szolgáltatók vagy kiegészítő szerverek Vietnamon kívül dolgozhatnak fel adatokat; a szerver helye a választott szolgáltatástól és a működési konfigurációtól függ.",
+              "A regisztráció során a Google reCAPTCHA használható; a felirat szövege a Google Fordítóhoz kerül, amikor kiválasztja a fordítást.",
+              "A feliratok keresése és letöltése, a hang-/feliratok szinkronizálása és a közösségi kiegészítők kéréseket küldhetnek a Framezoo szerverein és a megfelelő külső szolgáltatásokon keresztül. A harmadik féltől származó kiegészítőknek saját szabályzatuk van."
+            ],
+            "paragraphs": [
+              "Adatokat dolgozunk fel fiókok futtatásához, eszközök szinkronizálásához, támogatás nyújtásához, a szolgáltatás védelméhez és az Ön által választott funkciók biztosításához. Személyes adatokat nem adunk el hirdetési hálózatoknak."
+            ],
+            "badge": "02"
+          },
+          {
+            "paragraphs": [
+              "A fiók- és szinkronizálási adatok megmaradnak, amíg a fiók aktív. A fiókot a Beállításokban törölheti; a szerver ezután eltávolítja a fiókrekordokat, a könyvjelzőket, az előrehaladást, a megtekintési előzményeket, a beállításokat és a munkameneteket. A régi adatbázis-mentések megőrizhetik az adatokat a forgatásig; az alapértelmezett konfiguráció 7 legutóbbi biztonsági mentést tart meg, amikor a biztonsági mentés fut."
+            ],
+            "bullets": [
+              "Az ellenőrző kódok 10 perc múlva lejárnak; A lejárt kihívást jelentő rekordokat 7 nap elteltével eltávolítjuk. Az elküldött vagy sikertelen leveleket 7 nap elteltével eltávolítjuk.",
+              "A visszajelzéseket és a mellékleteket külön tároljuk támogatási vagy szerzői jogi kérelmek céljából, amíg kérésre vagy a támogatási csapat el nem távolítja azokat. A fióktörlés eltávolítja a fióklinket, de nem törli automatikusan a jelentéseket. Külön kérheti a törlést a Visszajelzés űrlapon keresztül."
+            ],
+            "title": "Megtartás és törlés",
+            "badge": "03"
+          },
+          {
+            "title": "Az Ön jogai és kapcsolattartása",
+            "paragraphs": [
+              "Kérheti adataihoz való hozzáférést, azok helyesbítését, törlését vagy korlátozását, visszavonhatja hozzájárulását, ha az adatkezelés hozzájáruláson alapul, és panaszt nyújthat be a weboldalunkon található Visszajelzés űrlapon keresztül. Kérjük, adja meg fiókjának e-mail-címét, hogy ellenőrizni tudjuk a kérést."
+            ],
+            "badge": "04"
+          }
+        ],
+        "updatedAt": "Frissítve: 2026. november 4. · 91/2025/QH15 törvény és 356/2025/ND-CP rendelet",
+        "summary": "Ez a házirend a Framezoo asztali alkalmazásban és a hivatalos Framezoo szervereken végzett adatfeldolgozást írja le."
+      },
+      "copyright": {
+        "updatedAt": "Frissítve: 2026. november 4",
+        "title": "Szerzői jogi, DMCA és tartalomra vonatkozó felelősség kizárása",
+        "summary": "A Framezoo hivatalos tartalmi felelősségkizárása és a szellemi tulajdonra vonatkozó értesítési és eltávolítási eljárás.",
+        "sections": [
+          {
+            "paragraphs": [
+              "A Framezoo nem üzemeltet filmtárat vagy videofolyam-forrást. Az alkalmazás hozzáférhet a felhasználók által kiválasztott forrásokhoz; szervereink közvetíthetik a szolgáltatói feliratokat, és ideiglenesen feldolgozhatják a hangot és a feliratokat a kért szinkronizáláshoz.",
+              "Minden szerzői jogi megjegyzést megvizsgálunk a tartalom és a tényleges szerepünk alapján; ezek a feltételek nem hoznak létre automatikus felelősségmentességet."
+            ],
+            "title": "Közvetítő szoftver Safe Harbor",
+            "badge": "01"
+          },
+          {
+            "paragraphs": [
+              "A tájékoztató jellegű felfedezés céljából megjelenített filmek és sorozatok metaadatai (címek, megjelenési dátumok, szinopszisok, értékelések és promóciós plakátok) nyilvános filmadatbázisokból (például TMDB, IMDb és TVDB) származnak.",
+              "Minden védjegy, filmcím és műalkotás a megfelelő szerzői jogtulajdonosok tulajdona marad."
+            ],
+            "title": "Metaadatok és műalkotások hozzárendelése",
+            "badge": "02"
+          },
+          {
+            "title": "Értesítési és eltávolítási eljárás",
+            "bullets": [
+              "A szerzői jog tulajdonosának vagy meghatalmazott képviselőjének azonosítása.",
+              "A szerzői jog által védett mű tulajdonjogának igazolása.",
+              "A szóban forgó anyag pontos URL-je vagy leírása, hogy 24–72 munkaórán belül áttekinthessük és kezelhessük."
+            ],
+            "paragraphs": [
+              "A Framezoo tiszteletben tartja a szellemi tulajdonjogokat. Ha Ön szerzői jog tulajdonosa vagy meghatalmazott ügynöke, és úgy gondolja, hogy a framezoo.top webhelyen található bármely anyag sérti az Ön jogait, kérjük, küldjön értesítést Jelentés/Visszajelzés csatornánkon keresztül, beleértve:"
+            ],
+            "badge": "03"
+          }
+        ]
+      },
+      "addon-policy": {
+        "title": "Az Addon irányelvei és közösségi irányelvei",
+        "summary": "Biztonsági és megfelelőségi szabványok a Framezoo nyílt HTTP/JSON-kiegészítő ökoszisztémájához.",
+        "sections": [
+          {
+            "paragraphs": [
+              "A Framezoo támogatja a nyílt HTTP/JSON addon protokollt. A független fejlesztők az alaplejátszó módosítása nélkül tárolhatják saját jegyzékeiket és erőforrás-végpontjaikat.",
+              "A közösségi kiegészítőket harmadik felek üzemeltetik. A Framezoo integrált feliratszolgáltatást is működtet saját szerverein, az adatvédelmi szabályzatban leírtak szerint."
+            ],
+            "title": "Független Addon architektúra",
+            "badge": "01"
+          },
+          {
+            "paragraphs": [
+              "A kiberbiztonsági és szellemi tulajdonra vonatkozó előírásoknak megfelelően a fejlesztők és a felhasználók nem használhatják a Framezoo protokollt vagy márkajelzést a következőkre:"
+            ],
+            "title": "Tiltott magatartás és tartalom",
+            "bullets": [
+              "Jogellenes tartalmat, gyűlöletbeszédet, erőszakot vagy gyermekek kizsákmányolását tartalmazó anyagokat terjeszteni.",
+              "Rosszindulatú programok, kémprogramok, adathalász linkek vagy jogosulatlan adatgyűjtő szkriptek terjesztése.",
+              "A Framezoo hivatalos kiadásainak megszemélyesítése vagy a felhasználók megtévesztése csalárd fizetési rendszerekkel."
+            ],
+            "badge": "02"
+          },
+          {
+            "paragraphs": [
+              "Csak megbízható forrásból telepítsen kiegészítő jegyzékeket. A Framezoo alkalmazásban bármikor megtekintheti a deklarált kiegészítő erőforrásokat, és eltávolíthatja a telepített kiegészítőket."
+            ],
+            "title": "Felhasználói biztonsági ajánlások",
+            "badge": "03"
+          }
+        ],
+        "updatedAt": "Addon fejlesztőknek és végfelhasználóknak"
+      }
+    },
+    "pageTitle": "Feltételek, adatvédelmi és jogi szabályzat",
+    "reportCtaTitle": "Szerzői jogi értesítést vagy jogi vizsgálatot kell benyújtania?",
+    "pageSubtitle": "A Framezoo asztali alkalmazás használati feltételei és adatfeldolgozási információk.",
+    "eyebrow": "JOGI ÉS MEGFELELŐSÉG 2026",
+    "reportCtaButton": "Nyissa meg a jelentési / visszajelzési űrlapot"
   }
 }

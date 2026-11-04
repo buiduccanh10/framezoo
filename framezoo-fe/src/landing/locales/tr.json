@@ -6,7 +6,10 @@
     "language": "Dil",
     "addonGuide": "Eklenti kılavuzu",
     "home": "Ev",
-    "installGuide": "Kurulum Kılavuzu"
+    "installGuide": "Kurulum Kılavuzu",
+    "homeAria": "Framezoo evi",
+    "primaryAria": "Birincil navigasyon",
+    "backToTop": "Sayfanın başına dön"
   },
   "hero": {
     "eyebrow": "FRAMEZOO MASAÜSTÜ / 01",
@@ -75,7 +78,9 @@
       "Bildiri URL'sini Framezoo Masaüstü > Eklentiler'e yapıştırın."
     ],
     "advancedLink": "Gelişmiş SDK referansını aç",
-    "advancedDescription": "Stremio Addon SDK'sı isteğe bağlıdır. Yönlendirme ve serileştirme yardımcıları istiyorsanız bunu kullanın; protokol gereği buna gerek yoktur."
+    "advancedDescription": "Stremio Addon SDK'sı isteğe bağlıdır. Yönlendirme ve serileştirme yardımcıları istiyorsanız bunu kullanın; protokol gereği buna gerek yoktur.",
+    "copy": "Kopyala",
+    "copied": "Kopyalandı"
   },
   "deepLink": {
     "download": "Framezoo'yu indirin",
@@ -140,7 +145,9 @@
     "macDialogTitle": "\"Framezoo\" hasarlı ve açılamıyor.",
     "winQuickSolution": "Daha fazla bilgi → Yine de çalıştır'a tıklayın",
     "winDialogDesc": "Microsoft Defender SmartScreen, tanınmayan bir uygulamanın başlatılmasını engelledi. Bu uygulamayı çalıştırmak bilgisayarınızı riske atabilir.",
-    "winMoreInfo": "Daha fazla bilgi"
+    "winMoreInfo": "Daha fazla bilgi",
+    "osSelectionAria": "İşletim sistemi seçimi",
+    "applicationsFolderAria": "Uygulamalar klasörü"
   },
   "downloadConfirm": {
     "macTitle": "MacOS Kurulum Kılavuzu",
@@ -266,6 +273,177 @@
       "noticeText": "API Anahtarınız cihazınızda güvenle saklanır. Yalnızca film ve dizilerin altyazılarını aramak ve almak için iletilir. İstediğiniz zaman güncelleyebilir veya kaldırabilirsiniz.",
       "openFramezooDisabledTooltip": "Oturum açtığınızda Framezoo Masaüstünden açılması gerekir",
       "notConnectedNotice": "Not: Framezoo hesap biletiyle bağlı değilsiniz. Doğrudan 'Framezoo'yu Aç' ile senkronizasyon yapmak için, oturum açmışken bu sayfayı Framezoo Masaüstü uygulamanızdan açın. Aksi takdirde, kullanmak için aşağıdaki Manifest URL'sini kopyalayın."
+    }
+  },
+  "legal": {
+    "eyebrow": "YASAL VE UYUM 2026",
+    "pageTitle": "Şartlar, Gizlilik ve Yasal Politikalar",
+    "pageSubtitle": "Framezoo masaüstü uygulamasına ilişkin kullanım şartları ve veri işleme bilgileri.",
+    "reportCtaTitle": "Telif hakkı bildirimi veya hukuki soruşturma mı göndermeniz gerekiyor?",
+    "reportCtaDesc": "Telif hakkı sahibiyseniz veya kişisel veri talebiniz varsa, lütfen bilgilerinizi 24-72 iş saati içinde incelenmek üzere resmi geri bildirim kanalımız aracılığıyla iletin.",
+    "reportCtaButton": "Açık Rapor / Geri Bildirim Formu",
+    "tabs": {
+      "terms": {
+        "title": "Hizmet Şartları",
+        "updatedAt": "Güncellendi: 4 Kasım 2026",
+        "summary": "Lütfen hesap oluşturmadan veya Framezoo masaüstü uygulamasını kullanmadan önce bu şartları ve gizlilik politikasını okuyun.",
+        "sections": [
+          {
+            "title": "Tarafsız Medya Oynatıcı Yazılımının Doğası",
+            "paragraphs": [
+              "Framezoo, standart video oynatıcılar veya web tarayıcılarına benzer şekilde, tarafsız bir teknik araç olarak çalışan bağımsız bir masaüstü medya oynatıcı uygulamasıdır.",
+              "Framezoo film kütüphanesi sağlamaz veya video akış kaynaklarını işletmez. Senkronizasyon kullandığınızda Framezoo sunucuları sağlayıcılardan altyazıları iletebilir ve ses kliplerini ve altyazıları geçici olarak işleyebilir."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Kullanıcı Sorumlulukları ve Yasal Uyumluluk",
+            "paragraphs": [
+              "Kullanıcılar, uygulamayı yapılandırmaktan, üçüncü taraf eklentilerini yüklemekten ve erişilen tüm yayınların veya medyanın geçerli yasalara uygun olduğundan emin olmaktan tamamen sorumludur."
+            ],
+            "bullets": [
+              "Yürürlükteki fikri mülkiyet yasalarına, Siber Güvenlik Yasasına, Vietnam&#39;daki 147/2024/ND-CP sayılı Kararnameye ve yerel yargı yetki alanınızdaki düzenlemelere uyun.",
+              "Yazılımı yasa dışı içeriklere erişmek, bunları dağıtmak veya tanıtmak için kullanmayın.",
+              "Herhangi bir üçüncü taraf topluluk eklentisini yüklemeden önce, manifest URL&#39;sinin güvenilirliğini ve yasallığını doğrulayın."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Yazılım Lisansı ve Kısıtlamaları",
+            "paragraphs": [
+              "Framezoo size, macOS ve Windows işletim sistemlerinde resmi masaüstü sürümlerini yüklemek ve kullanmak için kişisel, münhasır olmayan, devredilemez ve ticari olmayan bir lisans vermektedir.",
+              "Kötü amaçlı yazılım içeren değiştirilmiş ikili dosyaları yeniden dağıtamazsınız, Framezoo ile olan bağlantınızı yanlış tanıtamazsınız veya proje altyapısını kötüye kullanamazsınız."
+            ],
+            "badge": "03"
+          },
+          {
+            "title": "Sorumluluk Sınırlaması (Olduğu Gibi)",
+            "paragraphs": [
+              "Yazılım, herhangi bir garanti verilmeksizin &quot;olduğu gibi&quot; ve &quot;mevcut olduğu şekilde&quot; sağlanmaktadır. Framezoo, üçüncü taraf hizmetler tarafından sağlanan harici akışların veya meta verilerin kullanılabilirliği, doğruluğu veya yasallığı konusunda sorumlu değildir."
+            ],
+            "badge": "04"
+          }
+        ]
+      },
+      "privacy": {
+        "title": "Gizlilik ve Kişisel Veri Koruma Politikası",
+        "updatedAt": "Güncellendi: 4 Kasım 2026 · 91/2025/QH15 sayılı Kanun ve 356/2025/ND-CP sayılı Kararname",
+        "summary": "Bu politika, Framezoo masaüstü uygulamasında ve resmi Framezoo sunucularında veri işleme süreçlerini açıklamaktadır.",
+        "sections": [
+          {
+            "title": "Cihazınızdaki ve sunucularımızdaki veriler",
+            "paragraphs": [
+              "Uygulama, bazı ayarları, önbelleği ve oynatma verilerini cihazınızda saklar. Bir hesap oluşturursanız, sunucu ayrıca e-postanızı, takma adınızı, profilinizi, genel anahtarınızı, oturum/cihaz ayrıntılarınızı, senkronize edilmiş yer işaretlerinizi, ilerlemenizi, izleme geçmişinizi, ayarlarınızı ve eklentilerinizi, ayrıca sağladığınız takdirde şifrelenmiş altyazı sağlayıcı anahtarlarını da saklar."
+            ],
+            "bullets": [
+              "E-posta, doğrulama kodları ve talep detayları kayıt, oturum açma ve hesap güvenliğini destekler.",
+              "Geri bildirim formunu gönderdiğinizde raporlar, hata açıklamaları ve ekler sunucumuza ulaşır.",
+              "Web sitesi dil seçiminizi tarayıcınızın depolama alanına kaydeder."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Amaçlar ve dış hizmetler",
+            "paragraphs": [
+              "Hesapları yönetmek, cihazları senkronize etmek, destek sağlamak, hizmeti korumak ve seçtiğiniz özellikleri sunmak için verileri işliyoruz. Kişisel verilerinizi reklam ağlarına satmıyoruz."
+            ],
+            "bullets": [
+              "Doğrulama e-postası posta sağlayıcımıza gönderilir; yedekleme yapılandırıldığında veritabanı yedekleri Supabase&#39;te saklanabilir.",
+              "Bazı servis sağlayıcılar veya ek sunucular verileri Vietnam dışında işleyebilir; sunucu konumu, seçtiğiniz hizmete ve işletim yapılandırmasına bağlıdır.",
+              "Kayıt sırasında Google reCAPTCHA kullanılabilir; çeviri seçeneğini tercih ettiğinizde altyazı metni Google Translate&#39;e gönderilir.",
+              "Altyazı aramaları ve indirmeleri, ses/altyazı senkronizasyonu ve topluluk eklentileri, Framezoo sunucuları ve ilgili harici hizmetler aracılığıyla istek gönderebilir. Üçüncü taraf eklentilerin kendi politikaları vardır."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Saklama ve silme",
+            "paragraphs": [
+              "Hesabınız aktif olduğu sürece hesap ve senkronizasyon verileri saklanır. Hesabı Ayarlar&#39;dan silebilirsiniz; sunucu daha sonra hesap kayıtlarını, yer işaretlerini, ilerleme durumunu, izleme geçmişini, ayarları ve oturumları siler. Eski veritabanı yedekleri, veritabanı döndürülene kadar verileri saklayabilir; varsayılan yapılandırma, yedekleme çalışırken son 7 yedeği saklar."
+            ],
+            "bullets": [
+              "Doğrulama kodları 10 dakika sonra geçerliliğini yitirir; süresi dolmuş doğrulama kayıtları 7 gün sonra silinir. Gönderilen veya başarısız olan posta kayıtları 7 gün sonra silinir.",
+              "Geri bildirimler ve ekler, destek veya telif hakkı talepleri için ayrı olarak saklanır ve talep üzerine veya destek ekibi tarafından silinene kadar orada kalır. Hesap silme işlemi hesap bağlantısını kaldırır ancak raporları otomatik olarak silmez. Ayrı silme talebinizi Geri Bildirim formu aracılığıyla yapabilirsiniz."
+            ],
+            "badge": "03"
+          },
+          {
+            "title": "Haklarınız ve iletişim bilgileriniz",
+            "paragraphs": [
+              "Verilerinize erişim, düzeltme, silme veya kısıtlama talebinde bulunabilir, işlemenin rızaya dayalı olduğu durumlarda rızanızı geri çekebilir ve web sitemizdeki Geri Bildirim formu aracılığıyla şikayette bulunabilirsiniz. Talebinizi doğrulayabilmemiz için lütfen hesap e-postanızı belirtin."
+            ],
+            "badge": "04"
+          }
+        ]
+      },
+      "copyright": {
+        "title": "Telif Hakkı, DMCA ve İçerik Feragatnamesi",
+        "updatedAt": "Güncellendi: 4 Kasım 2026",
+        "summary": "Framezoo için resmi içerik uyarısı ve fikri mülkiyet bildirimi ve kaldırma prosedürü.",
+        "sections": [
+          {
+            "title": "Aracı Yazılım Güvenli Limanı",
+            "paragraphs": [
+              "Framezoo bir film kütüphanesi veya video akış kaynağı işletmemektedir. Uygulama, kullanıcılar tarafından seçilen kaynaklara erişebilir; sunucularımız sağlayıcı altyazılarını iletebilir ve istenen senkronizasyon için ses ve altyazıları geçici olarak işleyebilir.",
+              "Her telif hakkı bildirimi, içeriğe ve gerçek rolümüze göre incelenir; bu şartlar otomatik olarak sorumluluktan muafiyet sağlamaz."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Meta Veriler ve Sanat Eseri Atıfı",
+            "paragraphs": [
+              "Bilgi edinme amacıyla görüntülenen film ve dizi meta verileri (başlıklar, yayın tarihleri, özetler, derecelendirmeler ve tanıtım afişleri), halka açık film veritabanlarından (TMDB, IMDb ve TVDB gibi) alınmaktadır.",
+              "Tüm ticari markalar, film başlıkları ve görseller, ilgili telif hakkı sahiplerinin mülkiyetindedir."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Bildirim ve Kaldırma Prosedürü",
+            "paragraphs": [
+              "Framezoo fikri mülkiyet haklarına saygı duyar. Eğer telif hakkı sahibi veya yetkili temsilcisiyseniz ve framezoo.top adresindeki herhangi bir materyalin haklarınızı ihlal ettiğine inanıyorsanız, lütfen Rapor / Geri Bildirim kanalımız aracılığıyla aşağıdaki bilgileri içeren bir bildirim gönderin:"
+            ],
+            "bullets": [
+              "Telif hakkı sahibinin veya yetkili temsilcisinin kimliği.",
+              "Telif hakkıyla korunan eserin sahipliğinin kanıtı.",
+              "Söz konusu materyalin tam URL&#39;sini veya açıklamasını bize iletin, böylece 24-72 iş saati içinde inceleyip çözüm üretebilelim."
+            ],
+            "badge": "03"
+          }
+        ]
+      },
+      "addon-policy": {
+        "title": "Eklenti Politikası ve Topluluk Kuralları",
+        "updatedAt": "Eklenti Geliştiricileri ve Son Kullanıcılar İçin",
+        "summary": "Framezoo&#39;daki açık HTTP/JSON eklenti ekosistemi için güvenlik ve uyumluluk standartları.",
+        "sections": [
+          {
+            "title": "Bağımsız Eklenti Mimarisi",
+            "paragraphs": [
+              "Framezoo, açık bir HTTP/JSON eklenti protokolünü destekler. Bağımsız geliştiriciler, temel oynatıcıyı değiştirmeden kendi manifest dosyalarını ve kaynak uç noktalarını barındırabilirler.",
+              "Topluluk eklentileri üçüncü taraflarca işletilmektedir. Framezoo ayrıca, gizlilik politikasında açıklandığı gibi, kendi sunucularında entegre bir altyazı hizmeti de sunmaktadır."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Yasaklanmış Davranışlar ve İçerik",
+            "paragraphs": [
+              "Siber güvenlik ve fikri mülkiyet düzenlemelerine uygun olarak, geliştiriciler ve kullanıcılar Framezoo protokolünü veya markasını aşağıdaki amaçlarla kullanmamalıdır:"
+            ],
+            "bullets": [
+              "Yasadışı içerik, nefret söylemi, şiddet veya çocuk istismarı materyali dağıtmak.",
+              "Kötü amaçlı yazılımları, casus yazılımları, kimlik avı bağlantılarını veya yetkisiz veri toplama komut dosyalarını yaymak.",
+              "Resmi Framezoo yayınlarını taklit etmek veya kullanıcıları sahte ödeme planlarıyla aldatmak."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Kullanıcı Güvenliği Önerileri",
+            "paragraphs": [
+              "Yalnızca güvendiğiniz kaynaklardan gelen eklenti bildirimlerini yükleyin. Framezoo uygulaması içinden eklenti kaynaklarını inceleyebilir ve istediğiniz zaman yüklü eklentileri kaldırabilirsiniz."
+            ],
+            "badge": "03"
+          }
+        ]
+      }
     }
   }
 }
