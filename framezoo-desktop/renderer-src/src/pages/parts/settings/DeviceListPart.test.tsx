@@ -1,12 +1,14 @@
 /**
  * @vitest-environment jsdom
  */
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import React, { act } from "react";
 import { createRoot } from "react-dom/client";
-import { Device, DeviceListPart } from "./DeviceListPart";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+import { bytesToBase64, encryptData } from "@/backend/accounts/crypto";
 import { useAuthStore } from "@/stores/auth";
-import { encryptData, base64ToBuffer, bytesToBase64 } from "@/backend/accounts/crypto";
+
+import { Device, DeviceListPart } from "./DeviceListPart";
 
 vi.mock("react-router-dom", () => ({
   useNavigate: () => vi.fn(),
@@ -65,7 +67,9 @@ describe("Device Component", () => {
 
     expect(container?.textContent).toContain("Cảnh’s MacBook Air");
     expect(container?.textContent).toContain("Framezoo Desktop · macOS");
-    expect(container?.textContent).toContain("settings.account.devices.thisDevice");
+    expect(container?.textContent).toContain(
+      "settings.account.devices.thisDevice",
+    );
     // Ensure no remove button for current device
     expect(container?.querySelector(".logout-button")).toBeNull();
   });
@@ -176,5 +180,42 @@ describe("DeviceListPart Grouping", () => {
     expect(container?.textContent).toContain("Cảnh’s MacBook Air");
     expect(container?.textContent).toContain("Old Windows Laptop");
     expect(container?.textContent).toContain("2 sessions");
+  });
+
+  it("shows sessions when the encrypted device-name seed cannot be restored", async () => {
+    useAuthStore.setState((state) => ({
+      account: state.account ? { ...state.account, seed: "" } : null,
+    }));
+
+    await act(async () => {
+      root!.render(
+        <DeviceListPart
+          sessions={[
+            {
+              id: "sess-current",
+              userId: "user-1",
+              device: "encrypted",
+              userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X) Chrome/120.0",
+              createdAt: "2026-11-01T10:00:00Z",
+              accessedAt: "2026-11-03T10:00:00Z",
+            },
+            {
+              id: "sess-other",
+              userId: "user-1",
+              device: "encrypted",
+              userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X) Chrome/120.0",
+              createdAt: "2026-11-02T10:00:00Z",
+              accessedAt: "2026-11-03T10:00:00Z",
+            },
+          ]}
+        />,
+      );
+    });
+
+    expect(container?.textContent).toContain("Chrome 120.0 · macOS");
+    expect(container?.textContent).toContain(
+      "settings.account.devices.thisDevice",
+    );
+    expect(container?.querySelectorAll(".logout-button")).toHaveLength(1);
   });
 });
