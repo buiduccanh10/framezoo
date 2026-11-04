@@ -42,7 +42,17 @@ const subtitleExample = `GET /subtitles/movie/tt0133093.json
   ]
 }`;
 
-function GuideCode({ value, label }: { value: string; label: string }) {
+function GuideCode({
+  value,
+  label,
+  copyLabel,
+  copiedLabel,
+}: {
+  value: string;
+  label: string;
+  copyLabel: string;
+  copiedLabel: string;
+}) {
   const [copied, setCopied] = useState(false);
 
   const copy = async () => {
@@ -60,7 +70,7 @@ function GuideCode({ value, label }: { value: string; label: string }) {
       <div className="landing-guide-code-bar">
         <span>{label}</span>
         <button type="button" onClick={() => void copy()}>
-          {copied ? "Copied" : "Copy"}
+          {copied ? copiedLabel : copyLabel}
         </button>
       </div>
       <pre>
@@ -87,7 +97,12 @@ export function AddonGuideSection({ copy }: AddonGuideSectionProps) {
         <div className="landing-guide-intro">
           <h3>{copy.manifestTitle}</h3>
           <p>{copy.manifestDescription}</p>
-          <GuideCode value={manifestExample} label="manifest.json" />
+          <GuideCode
+            value={manifestExample}
+            label="manifest.json"
+            copyLabel={copy.copy}
+            copiedLabel={copy.copied}
+          />
         </div>
 
         <div className="landing-guide-resource-panel">
@@ -125,8 +140,18 @@ export function AddonGuideSection({ copy }: AddonGuideSectionProps) {
           </div>
         </div>
         <div className="landing-guide-example-codes">
-          <GuideCode value={streamExample} label="/stream" />
-          <GuideCode value={subtitleExample} label="/subtitles" />
+          <GuideCode
+            value={streamExample}
+            label="/stream"
+            copyLabel={copy.copy}
+            copiedLabel={copy.copied}
+          />
+          <GuideCode
+            value={subtitleExample}
+            label="/subtitles"
+            copyLabel={copy.copy}
+            copiedLabel={copy.copied}
+          />
         </div>
       </div>
     </section>

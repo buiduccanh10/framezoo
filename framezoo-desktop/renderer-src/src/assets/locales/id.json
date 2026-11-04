@@ -176,7 +176,9 @@
       "passwordMismatch": "Kata sandi tidak cocok",
       "passwordPlaceholder": "Buat kata sandi (digunakan sebagai frasa sandi Anda)",
       "passwordWeak": "Kata sandi minimal harus 8 karakter dengan huruf dan angka",
-      "submit": "Buat akun"
+      "privacyPolicy": "Kebijakan Privasi",
+      "submit": "Buat akun",
+      "legalConsent": "Saya telah membaca dan menyetujui <terms>Ketentuan Layanan</terms> dan <privacy>Kebijakan Privasi</privacy>."
     },
     "trust": {
       "failed": {
@@ -302,7 +304,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Sanggahan",
-      "disclaimerText": "Framezoo adalah perangkat lunak pemutar media netral. Perangkat lunak ini tidak menghosting, menyimpan, mendistribusikan, atau mengontrol file media atau add-on pihak ketiga. Jelajahi metadata film yang kaya, sinkronisasi subtitle streaming tanpa batas, dan subtitle dari berbagai sumber sambil tetap memegang kendali atas konten yang Anda akses."
+      "disclaimerText": "Framezoo tidak mengoperasikan sumber streaming video. Servernya dapat meneruskan subtitle penyedia dan memproses audio serta subtitle untuk sementara agar sinkron saat Anda memilih fitur tersebut. Anda mengontrol konten yang Anda putar."
     },
     "links": {
       "fluxer": "fluks",
@@ -1179,9 +1181,9 @@
         "delete": {
           "button": "Hapus akun",
           "confirmButton": "Hapus akun",
-          "confirmDescription": "Apakah anda yakin ingin menghapus akun anda? Seluruh data anda akan hilang!",
+          "confirmDescription": "Tindakan ini tidak dapat dibatalkan. Akun Anda dan data yang disinkronkan akan dihapus dari server. Laporan yang telah dikirimkan disimpan secara terpisah; mintalah penghapusannya melalui Umpan Balik.",
           "confirmTitle": "Apakah anda yakin?",
-          "text": "Tindakan ini tidak dapat dibatalkan. Seluruh data akan dihapus dan tidak dapat dipulihkan.",
+          "text": "Hapus akun Anda dan data yang disinkronkan dari server. Laporan yang telah dikirimkan akan disimpan secara terpisah.",
           "title": "Hapus akun"
         },
         "logoutAllDevices": {

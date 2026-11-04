@@ -176,7 +176,9 @@
       "passwordMismatch": "Hasła nie pasują",
       "passwordPlaceholder": "Utwórz hasło (używane jako hasło)",
       "passwordWeak": "Hasło musi składać się z co najmniej 8 znaków zawierających litery i cyfry",
-      "submit": "Utwórz konto"
+      "privacyPolicy": "Polityka prywatności",
+      "submit": "Utwórz konto",
+      "legalConsent": "Przeczytałem(-am) i akceptuję <terms>Warunki korzystania z usługi</terms> oraz <privacy>Politykę prywatności</privacy>."
     },
     "trust": {
       "failed": {
@@ -302,7 +304,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Zastrzeżenie ",
-      "disclaimerText": "Framezoo to neutralny odtwarzacz multimediów. Nie hostuje, nie przechowuje, nie dystrybuuje ani nie kontroluje plików multimedialnych ani dodatków firm trzecich. Korzystaj z bogatych metadanych filmów, nieograniczonej synchronizacji napisów strumieniowych oraz napisów z wielu źródeł, zachowując jednocześnie kontrolę nad treściami, do których uzyskujesz dostęp."
+      "disclaimerText": "Framezoo nie obsługuje strumieniowych źródeł wideo. Jego serwery mogą przekazywać napisy od dostawcy i tymczasowo przetwarzać dźwięk i napisy w celu synchronizacji, gdy wybierzesz tę funkcję. Masz kontrolę nad odtwarzaną zawartością."
     },
     "links": {
       "fluxer": "Flukser",
@@ -1179,9 +1181,9 @@
         "delete": {
           "button": "Usuń konto",
           "confirmButton": "Usuń konto",
-          "confirmDescription": "Na pewno chcesz usunąć swoje konto? Wszystkie twoje dane zostaną stracone! ",
+          "confirmDescription": "Tej czynności nie można cofnąć. Twoje konto i zsynchronizowane dane zostaną usunięte z serwera. Przesłane raporty są przechowywane osobno; poproś o ich usunięcie za pośrednictwem Feedback.",
           "confirmTitle": "Jesteś pewny?",
-          "text": "Działanie to jest nieodwracalne. Wszystkie dane zostaną usunięte i nie będzie można ich odzyskać.",
+          "text": "Usuń swoje konto i zsynchronizowane dane z serwera. Przesłane raporty są przechowywane osobno.",
           "title": "Usuń konto"
         },
         "logoutAllDevices": {

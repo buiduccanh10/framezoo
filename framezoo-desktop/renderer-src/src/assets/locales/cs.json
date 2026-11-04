@@ -176,7 +176,9 @@
       "passwordMismatch": "Hesla se neshodují",
       "passwordPlaceholder": "Vytvořte heslo (používá se jako vaše přístupová fráze)",
       "passwordWeak": "Heslo musí mít alespoň 8 znaků s písmeny a číslicemi",
-      "submit": "Vytvořit účet"
+      "privacyPolicy": "Zásady ochrany osobních údajů",
+      "submit": "Vytvořit účet",
+      "legalConsent": "Přečetl(a) jsem si a souhlasím s <terms>Podmínkami služby</terms> a <privacy>Zásadami ochrany osobních údajů</privacy>."
     },
     "trust": {
       "failed": {
@@ -302,7 +304,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Zřeknutí odpovědnosti",
-      "disclaimerText": "Framezoo je neutrální software pro přehrávání médií. Nehostuje, neukládá, nedistribuuje ani nekontroluje mediální soubory ani doplňky třetích stran. Prozkoumejte bohatá metadata filmů, neomezenou synchronizaci titulků a titulky z více zdrojů a zároveň si zachovejte kontrolu nad obsahem, ke kterému přistupujete."
+      "disclaimerText": "Framezoo neprovozuje zdroje video streamu. Jeho servery mohou přenášet titulky poskytovatelů a dočasně zpracovávat zvuk a titulky pro synchronizaci, pokud si tuto funkci vyberete. Obsah, který přehráváte, máte pod kontrolou."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -1179,9 +1181,9 @@
         "delete": {
           "button": "Smazat účet",
           "confirmButton": "Potvrdit smazání",
-          "confirmDescription": "Jste si jisti, že chcete smazat váš účet? Všechna data budou ztracena!",
+          "confirmDescription": "Tuto akci nelze vrátit zpět. Váš účet a synchronizovaná data budou ze serveru smazány. Odeslané zprávy jsou uchovávány odděleně; o jejich smazání můžete požádat prostřednictvím zpětné vazby.",
           "confirmTitle": "Potvrdit smazání",
-          "text": "Tato akce je nevratná. Všechna data budou smazána a nic nebude možné obnovit.",
+          "text": "Smažte svůj účet a synchronizovaná data ze serveru. Odeslané přehledy jsou uchovávány odděleně.",
           "title": "Smazat účet"
         },
         "logoutAllDevices": {

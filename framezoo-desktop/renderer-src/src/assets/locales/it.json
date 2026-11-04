@@ -176,7 +176,9 @@
       "passwordMismatch": "Le password non corrispondono",
       "passwordPlaceholder": "Crea una password (usata come passphrase)",
       "passwordWeak": "La password deve contenere almeno 8 caratteri con lettere e numeri",
-      "submit": "Creare un account"
+      "privacyPolicy": "politica sulla riservatezza",
+      "submit": "Creare un account",
+      "legalConsent": "Ho letto e accetto i <terms>Termini di servizio</terms> e l'<privacy>Informativa sulla privacy</privacy>."
     },
     "trust": {
       "failed": {
@@ -302,7 +304,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Disclaimer",
-      "disclaimerText": "Framezoo è un software di riproduzione multimediale neutrale. Non ospita, archivia, distribuisce o controlla file multimediali o componenti aggiuntivi di terze parti. Esplora metadati cinematografici dettagliati, sincronizza i sottotitoli in streaming illimitati e accedi ai sottotitoli da diverse fonti, mantenendo sempre il controllo sui contenuti a cui accedi."
+      "disclaimerText": "Framezoo non gestisce sorgenti di streaming video. I suoi server possono inoltrare i sottotitoli del fornitore ed elaborare temporaneamente audio e sottotitoli per la sincronizzazione quando si sceglie questa funzione. Il contenuto riprodotto è sotto il tuo controllo."
     },
     "links": {
       "fluxer": "Flussante",
@@ -1179,9 +1181,9 @@
         "delete": {
           "button": "Elimina l'account",
           "confirmButton": "Elimina l'account",
-          "confirmDescription": "Sei sicuro di voler eliminare il tuo account? Tutti i tuoi dati andranno persi! ",
+          "confirmDescription": "Questa operazione è irreversibile. Il tuo account e i dati sincronizzati verranno eliminati dal server. Le segnalazioni inviate vengono conservate separatamente; puoi richiederne la cancellazione tramite la sezione Feedback.",
           "confirmTitle": "Sei sicuro?",
-          "text": "Questa azione è irreversibile. Tutti i dati verranno cancellati e nulla potrà essere recuperato.",
+          "text": "Elimina il tuo account e i dati sincronizzati dal server. I report inviati vengono conservati separatamente.",
           "title": "Elimina l'account"
         },
         "logoutAllDevices": {

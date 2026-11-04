@@ -176,7 +176,9 @@
       "passwordMismatch": "Les contrasenyes no coincideixen",
       "passwordPlaceholder": "Crea una contrasenya (utilitzada com a frase de contrasenya)",
       "passwordWeak": "La contrasenya ha de tenir com a mínim 8 caràcters amb lletres i números",
-      "submit": "Crea un compte"
+      "privacyPolicy": "Política de privacitat",
+      "submit": "Crea un compte",
+      "legalConsent": "He llegit i accepto les <terms>Condicions del servei</terms> i la <privacy>Política de privadesa</privacy>."
     },
     "trust": {
       "failed": {
@@ -302,7 +304,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Exempció de responsabilitat",
-      "disclaimerText": "Framezoo és un programari de reproductor multimèdia neutral. No allotja, emmagatzema, distribueix ni controla fitxers multimèdia ni complements de tercers. Explora metadades de pel·lícules enriquides, sincronització il·limitada de subtítols en streaming i subtítols de diverses fonts, mantenint alhora el control del contingut al qual accedeixes."
+      "disclaimerText": "Framezoo no gestiona fonts de transmissió de vídeo. Els seus servidors poden retransmetre subtítols del proveïdor i processar temporalment l'àudio i els subtítols per a la sincronització quan trieu aquesta funció. Vós controleu el contingut que reproduïu."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -1179,9 +1181,9 @@
         "delete": {
           "button": "Suprimeix el compte",
           "confirmButton": "Suprimeix el compte",
-          "confirmDescription": "Esteu segur que voleu suprimir el vostre compte? Totes les teves dades es perdran!",
+          "confirmDescription": "Això no es pot desfer. El vostre compte i les dades sincronitzades s'eliminaran del servidor. Els informes enviats es guarden per separat; sol·liciteu-ne l'eliminació a través de Comentaris.",
           "confirmTitle": "N'estàs segur?",
-          "text": "Aquesta acció és irreversible. Totes les dades s'eliminaran i no es podrà recuperar res.",
+          "text": "Suprimeix el teu compte i les dades sincronitzades del servidor. Els informes enviats es conserven per separat.",
           "title": "Suprimeix el compte"
         },
         "logoutAllDevices": {

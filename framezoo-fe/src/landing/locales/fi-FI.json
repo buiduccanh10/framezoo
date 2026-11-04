@@ -6,7 +6,10 @@
     "language": "Kieli",
     "addonGuide": "Lisäyksen opas",
     "home": "Kotiin",
-    "installGuide": "Asennusopas"
+    "installGuide": "Asennusopas",
+    "homeAria": "Framezoon koti",
+    "primaryAria": "Ensisijainen navigointi",
+    "backToTop": "Takaisin alkuun"
   },
   "hero": {
     "eyebrow": "FRAMEZOO DESKTOP / 01",
@@ -75,7 +78,9 @@
       "Liitä luettelon URL-osoite kohtaan Framezoo Desktop > Lisäosat."
     ],
     "advancedLink": "Avaa edistynyt SDK-viite",
-    "advancedDescription": "Stremio Addon SDK on valinnainen. Käytä sitä, jos haluat reitityksen ja serialisoinnin avustajia; sitä ei vaadita protokollassa."
+    "advancedDescription": "Stremio Addon SDK on valinnainen. Käytä sitä, jos haluat reitityksen ja serialisoinnin avustajia; sitä ei vaadita protokollassa.",
+    "copy": "Kopioida",
+    "copied": "Kopioitu"
   },
   "deepLink": {
     "opening": "Avataan Framezoo...",
@@ -140,7 +145,9 @@
     "winQuickSolution": "Napsauta Lisätietoja → Suorita silti",
     "winMoreInfo": "Lisätietoja",
     "winClickHere": "(Napsauta tästä)",
-    "winDialogDesc": "Microsoft Defender SmartScreen esti tunnistamattoman sovelluksen käynnistymisen. Tämän sovelluksen käyttäminen saattaa vaarantaa tietokoneesi."
+    "winDialogDesc": "Microsoft Defender SmartScreen esti tunnistamattoman sovelluksen käynnistymisen. Tämän sovelluksen käyttäminen saattaa vaarantaa tietokoneesi.",
+    "osSelectionAria": "Käyttöjärjestelmän valinta",
+    "applicationsFolderAria": "Sovellukset-kansio"
   },
   "downloadConfirm": {
     "macTitle": "Asennusopas macOS:lle",
@@ -267,5 +274,176 @@
       "noticeText": "API-avaimesi on tallennettu turvallisesti laitteellesi. Se välitetään vain elokuvien ja sarjojen tekstitysten etsimiseen ja hakemiseen. Voit päivittää tai poistaa sen milloin tahansa.",
       "notConnectedNotice": "Huomautus: Sinua ei ole yhdistetty Framezoo-tilin lippuun. Jos haluat synkronoida suoraan Open Framezoo -sovelluksen kanssa, avaa tämä sivu Framezoo Desktop -sovelluksesta ollessasi kirjautuneena sisään. Muussa tapauksessa kopioi alla oleva manifestin URL-osoite käyttääksesi sitä."
     }
+  },
+  "legal": {
+    "pageTitle": "Ehdot, tietosuoja ja lakikäytännöt",
+    "pageSubtitle": "Framezoo-työpöytäsovelluksen käyttöehdot ja tietojenkäsittelytiedot.",
+    "reportCtaTitle": "Haluatko lähettää tekijänoikeusilmoituksen tai oikeudellisen kyselyn?",
+    "tabs": {
+      "terms": {
+        "title": "Palveluehdot",
+        "sections": [
+          {
+            "title": "Neutraalin mediasoitinohjelmiston luonne",
+            "paragraphs": [
+              "Framezoo on itsenäinen työpöydän mediasoitinsovellus, joka toimii neutraalina teknisenä työkaluna, joka muistuttaa tavallisia videosoittimia tai verkkoselaimia.",
+              "Framezoo ei tarjoa elokuvakirjastoa tai käytä videovirtalähteitä. Framezoo-palvelimet voivat välittää tekstityksiä palveluntarjoajilta ja väliaikaisesti käsitellä äänileikkeitä ja tekstityksiä, kun käytät synkronointia."
+            ],
+            "badge": "01"
+          },
+          {
+            "bullets": [
+              "Noudata sovellettavia immateriaalioikeuksia koskevia lakeja, kyberturvallisuuslakia, Vietnamin asetusta 147/2024/ND-CP ja paikallisen lainkäyttöalueen säädöksiä.",
+              "Älä käytä ohjelmistoa laittoman sisällön käyttämiseen, jakeluun tai mainostamiseen.",
+              "Varmista minkä tahansa kolmannen osapuolen yhteisölisäosan luotettavuus ja laillisuus ennen sen luettelon URL-osoitteen asentamista."
+            ],
+            "title": "Käyttäjien velvollisuudet ja lainmukaisuus",
+            "paragraphs": [
+              "Käyttäjät ovat yksin vastuussa sovelluksen määrittämisestä, kolmannen osapuolen lisäosien asentamisesta ja sen varmistamisesta, että kaikki käytettävät streamit tai media ovat sovellettavien lakien mukaisia."
+            ],
+            "badge": "02"
+          },
+          {
+            "paragraphs": [
+              "Framezoo myöntää sinulle henkilökohtaisen, ei-yksinomaisen, ei-siirrettävän, ei-kaupallisen lisenssin asentaa ja käyttää virallisia työpöytäversioita macOS- ja Windows-käyttöjärjestelmissä.",
+              "Et saa jakaa uudelleen muokattuja binaaritiedostoja, jotka sisältävät haittaohjelmia, antaa vääriä tietoja yhteydestä Framezooon tai väärinkäyttää projektin infrastruktuuria."
+            ],
+            "title": "Ohjelmiston lisenssit ja rajoitukset",
+            "badge": "03"
+          },
+          {
+            "paragraphs": [
+              "Ohjelmisto toimitetaan \"SELLAISENAAN\" ja \"SAATAVILLA\" ilman minkäänlaisia ​​takuita. Framezoo ei ole vastuussa kolmannen osapuolen palveluiden tarjoamien ulkoisten streamien tai metatietojen saatavuudesta, tarkkuudesta tai laillisuudesta."
+            ],
+            "title": "Vastuunrajoitus (sellaisenaan)",
+            "badge": "04"
+          }
+        ],
+        "summary": "Lue nämä ehdot ja tietosuojakäytäntö ennen kuin luot tilin tai käytät Framezoo-työpöytäsovellusta.",
+        "updatedAt": "Päivitetty: 4.11.2026"
+      },
+      "privacy": {
+        "title": "Yksityisyys ja henkilötietojen suojakäytäntö",
+        "sections": [
+          {
+            "title": "Tiedot laitteestasi ja palvelimiltamme",
+            "bullets": [
+              "Sähköposti, vahvistuskoodit ja pyyntötiedot tukevat rekisteröintiä, sisäänkirjautumista ja tilin suojausta.",
+              "Raportit, virhekuvaukset ja liitteet saapuvat palvelimellemme, kun lähetät palautelomakkeen.",
+              "Sivusto tallentaa valitsemasi kielen selaimen tallennustilaan."
+            ],
+            "paragraphs": [
+              "Sovellus tallentaa joitain asetuksia, välimuistia ja toistotietoja laitteellesi. Jos luot tilin, palvelin tallentaa myös sähköpostisi, lempinimesi, profiilisi, julkisen avaimesi, istunnon/laitteen tiedot, synkronoidut kirjanmerkit, edistymisesi, katseluhistoriasi, asetukset ja lisäosat sekä salatut tekstityksen tarjoajan avaimet, jos annat ne."
+            ],
+            "badge": "01"
+          },
+          {
+            "bullets": [
+              "Vahvistussähköposti lähetetään sähköpostintarjoajallemme. tietokannan varmuuskopiot voidaan tallentaa Supabaseen, kun varmuuskopiointi on määritetty.",
+              "Jotkut palveluntarjoajat tai lisäpalvelimet voivat käsitellä tietoja Vietnamin ulkopuolella; palvelimen sijainti riippuu valitsemastasi palvelusta ja käyttökokoonpanosta.",
+              "Googlen reCAPTCHAa voidaan käyttää rekisteröinnin aikana; tekstitys siirtyy Google-kääntäjään, kun valitset käännöksen.",
+              "Tekstityshaut ja -lataukset, äänen/tekstityksen synkronointi ja yhteisön lisäosat voivat lähettää pyyntöjä Framezoo-palvelimien ja asiaankuuluvien ulkoisten palveluiden kautta. Kolmannen osapuolen lisäosilla on omat käytäntönsä."
+            ],
+            "paragraphs": [
+              "Käsittelemme tietoja tilien suorittamiseksi, laitteiden synkronoimiseksi, tuen tarjoamiseksi, palvelun suojaamiseksi ja valitsemiesi ominaisuuksien toimittamiseksi. Emme myy henkilötietoja mainosverkostoille."
+            ],
+            "title": "Käyttötarkoitukset ja ulkopuoliset palvelut",
+            "badge": "02"
+          },
+          {
+            "title": "Säilytys ja poistaminen",
+            "bullets": [
+              "Vahvistuskoodit vanhenevat 10 minuutin kuluttua. vanhentuneet altistustietueet poistetaan 7 päivän kuluttua. Lähetetyt tai epäonnistuneet viestit poistetaan 7 päivän kuluttua.",
+              "Palaute ja liitteet säilytetään erikseen tuki- tai tekijänoikeuspyyntöjä varten, kunnes ne poistetaan pyynnöstä tai tukitiimin toimesta. Tilin poistaminen poistaa tililinkin, mutta ei automaattisesti poista raportteja. Voit pyytää erillistä poistamista Palaute-lomakkeen kautta."
+            ],
+            "paragraphs": [
+              "Tili- ja synkronointitiedot säilyvät, kun tilisi on aktiivinen. Voit poistaa tilin asetuksista; palvelin poistaa sitten tilitietueet, kirjanmerkit, edistymisen, katseluhistorian, asetukset ja istunnot. Vanhat tietokannan varmuuskopiot voivat säilyttää tiedot kiertoon asti; oletuskokoonpano säilyttää 7 viimeisintä varmuuskopiota, kun varmuuskopiointi on käynnissä."
+            ],
+            "badge": "03"
+          },
+          {
+            "paragraphs": [
+              "Voit pyytää pääsyä tietoihisi, oikaisua, poistamista tai rajoittamista, peruuttaa suostumuksesi, jos käsittely perustuu suostumukseen, ja lähettää valituksen verkkosivuillamme olevan Palautelomakkeen kautta. Anna tilisi sähköpostiosoite, jotta voimme vahvistaa pyynnön."
+            ],
+            "title": "Oikeutesi ja yhteystietosi",
+            "badge": "04"
+          }
+        ],
+        "updatedAt": "Päivitetty: 4. marraskuuta 2026 · Laki 91/2025/QH15 ja asetus 356/2025/ND-CP",
+        "summary": "Tämä käytäntö kuvaa tietojen käsittelyä Framezoo-työpöytäsovelluksessa ja virallisilla Framezoo-palvelimilla."
+      },
+      "copyright": {
+        "updatedAt": "Päivitetty: 4.11.2026",
+        "summary": "Virallinen sisällön vastuuvapauslauseke ja immateriaalioikeuksien ilmoitus- ja poistomenettely Framezoolle.",
+        "title": "Tekijänoikeus, DMCA ja sisällön vastuuvapauslauseke",
+        "sections": [
+          {
+            "paragraphs": [
+              "Framezoo ei käytä elokuvakirjastoa tai videovirtalähdettä. Sovellus voi käyttää käyttäjien valitsemia lähteitä; palvelimemme voivat välittää palveluntarjoajan tekstityksiä ja väliaikaisesti käsitellä ääntä ja tekstityksiä pyydettyä synkronointia varten.",
+              "Jokainen tekijänoikeusilmoitus tarkistetaan sisällön ja todellisen roolimme perusteella. nämä ehdot eivät luo automaattista vastuuvapautta."
+            ],
+            "title": "Välittäjäohjelmisto Safe Harbor",
+            "badge": "01"
+          },
+          {
+            "paragraphs": [
+              "Elokuvien ja sarjojen metatiedot (nimikkeet, julkaisupäivät, synopsit, luokitukset ja mainosjulisteet), jotka näytetään tiedoksi, ovat peräisin julkisista elokuvatietokannoista (kuten TMDB, IMDb ja TVDB).",
+              "Kaikki tavaramerkit, elokuvien nimet ja taideteokset ovat vastaavien tekijänoikeuksien omistajiensa omaisuutta."
+            ],
+            "title": "Metatietojen ja kuvien nimeäminen",
+            "badge": "02"
+          },
+          {
+            "bullets": [
+              "Tekijänoikeuden omistajan tai valtuutetun edustajan tunniste.",
+              "Todiste tekijänoikeudella suojatun teoksen omistajuudesta.",
+              "Kyseisen materiaalin tarkka URL-osoite tai kuvaus, jotta voimme tarkistaa sen ja käsitellä sitä 24–72 arkitunnin kuluessa."
+            ],
+            "title": "Ilmoitus- ja poistomenettely",
+            "paragraphs": [
+              "Framezoo kunnioittaa immateriaalioikeuksia. Jos olet tekijänoikeuksien omistaja tai valtuutettu edustaja ja uskot, että jokin framezoo.top-sivustolla oleva materiaali loukkaa oikeuksiasi, lähetä ilmoitus raportti-/palautekanavamme kautta, mukaan lukien:"
+            ],
+            "badge": "03"
+          }
+        ]
+      },
+      "addon-policy": {
+        "updatedAt": "Addon-kehittäjille ja loppukäyttäjille",
+        "title": "Addonin käytäntö ja yhteisön säännöt",
+        "summary": "Turvallisuus- ja vaatimustenmukaisuusstandardit avoimelle HTTP/JSON-lisäekosysteemille Framezoossa.",
+        "sections": [
+          {
+            "paragraphs": [
+              "Framezoo tukee avointa HTTP/JSON-lisäprotokollaa. Riippumattomat kehittäjät voivat isännöidä omia luettelo- ja resurssipäätepisteitään muuttamatta ydinsoitinta.",
+              "Yhteisön lisäosia ylläpitävät kolmannet osapuolet. Framezoo käyttää myös integroitua tekstityspalvelua omilla palvelimillaan tietosuojakäytännössä kuvatulla tavalla."
+            ],
+            "title": "Itsenäinen Addon-arkkitehtuuri",
+            "badge": "01"
+          },
+          {
+            "bullets": [
+              "Levitä laitonta sisältöä, vihapuhetta, väkivaltaa tai lasten hyväksikäyttöä koskevaa materiaalia.",
+              "Levitä haittaohjelmia, vakoiluohjelmia, phishing-linkkejä tai luvattomia tiedonkeruuohjelmia.",
+              "Esitä virallisia Framezoo-julkaisuja tai huijaa käyttäjiä vilpillisillä maksujärjestelmillä."
+            ],
+            "paragraphs": [
+              "Kyberturvallisuutta ja immateriaalioikeuksia koskevien säädösten mukaisesti kehittäjät ja käyttäjät eivät saa käyttää Framezoo-protokollaa tai brändäystä seuraaviin tarkoituksiin:"
+            ],
+            "title": "Kielletty toiminta ja sisältö",
+            "badge": "02"
+          },
+          {
+            "title": "Käyttäjien turvallisuutta koskevat suositukset",
+            "paragraphs": [
+              "Asenna lisäosien luettelot vain luotettavista lähteistä. Voit tarkistaa ilmoitetut lisäosien resurssit ja poistaa asennetut lisäosat milloin tahansa Framezoo-sovelluksessa."
+            ],
+            "badge": "03"
+          }
+        ]
+      }
+    },
+    "eyebrow": "LAKI JA NOUDATTAMINEN 2026",
+    "reportCtaButton": "Avaa ilmoitus/palautelomake",
+    "reportCtaDesc": "Jos olet tekijänoikeuksien haltija tai sinulla on henkilötietopyyntö, lähetä tietosi virallisen palautekanavamme kautta tarkistettavaksi 24–72 arkipäivän kuluessa."
   }
 }

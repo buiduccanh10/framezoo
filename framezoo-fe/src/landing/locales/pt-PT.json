@@ -6,7 +6,10 @@
     "language": "Linguagem",
     "addonGuide": "Guia de complementos",
     "home": "Lar",
-    "installGuide": "Guia de instalação"
+    "installGuide": "Guia de instalação",
+    "homeAria": "Página inicial do Framezoo",
+    "primaryAria": "Navegação principal",
+    "backToTop": "Voltar ao topo"
   },
   "hero": {
     "eyebrow": "DESKTOP FRAMEZOO / 01",
@@ -75,7 +78,9 @@
     ],
     "advancedTitle": "Precisa de um ajudante do Node?",
     "advancedLink": "Abra a referência avançada do SDK",
-    "advancedDescription": "O Stremio Addon SDK é opcional. Use-o se desejar auxiliares de roteamento e serialização; não é exigido pelo protocolo."
+    "advancedDescription": "O Stremio Addon SDK é opcional. Use-o se desejar auxiliares de roteamento e serialização; não é exigido pelo protocolo.",
+    "copy": "Cópia",
+    "copied": "Copiado"
   },
   "deepLink": {
     "opening": "Abrindo o Framezoo...",
@@ -140,7 +145,9 @@
     "macDialogDesc": "A Apple não pode verificar se há software malicioso. Isso acontece quando um aplicativo é baixado fora da Mac App Store sem um certificado comercial anual.",
     "winMoreInfo": "Mais informações",
     "winClickHere": "(Clique aqui)",
-    "winQuickSolution": "Clique em Mais informações → Executar mesmo assim"
+    "winQuickSolution": "Clique em Mais informações → Executar mesmo assim",
+    "osSelectionAria": "Seleção do sistema operacional",
+    "applicationsFolderAria": "Pasta de aplicativos"
   },
   "downloadConfirm": {
     "macTitle": "Guia de instalação para macOS",
@@ -266,6 +273,177 @@
       "noticeLabel": "Perceber:",
       "copyManifest": "Copiar URL do manifesto",
       "noticeText": "Sua chave API é armazenada com segurança em seu dispositivo. Ele é encaminhado apenas para buscar e recuperar legendas de filmes e séries. Você pode atualizá-lo ou removê-lo a qualquer momento."
+    }
+  },
+  "legal": {
+    "eyebrow": "ASPECTOS LEGAIS E DE CONFORMIDADE 2026",
+    "pageTitle": "Termos, Política de Privacidade e Políticas Legais",
+    "pageSubtitle": "Termos de uso e informações sobre o processamento de dados para o aplicativo Framezoo para desktop.",
+    "reportCtaTitle": "Precisa enviar uma notificação de direitos autorais ou uma consulta jurídica?",
+    "reportCtaDesc": "Se você é detentor de direitos autorais ou tem uma solicitação relacionada a dados pessoais, envie suas informações por meio do nosso canal oficial de feedback para análise dentro de 24 a 72 horas úteis.",
+    "reportCtaButton": "Abrir formulário de relatório/feedback",
+    "tabs": {
+      "terms": {
+        "title": "Termos de Serviço",
+        "updatedAt": "Atualizado em: 4 de novembro de 2026",
+        "summary": "Leia estes termos e a política de privacidade antes de criar uma conta ou usar o aplicativo Framezoo para desktop.",
+        "sections": [
+          {
+            "title": "Natureza do software reprodutor de mídia neutro",
+            "paragraphs": [
+              "O Framezoo é um aplicativo reprodutor de mídia independente para desktop que funciona como uma ferramenta técnica neutra, semelhante a reprodutores de vídeo ou navegadores da web padrão.",
+              "O Framezoo não fornece uma biblioteca de filmes nem opera fontes de streaming de vídeo. Os servidores do Framezoo podem retransmitir legendas de provedores e processar temporariamente clipes de áudio e legendas quando você usa a sincronização."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Responsabilidades do Usuário e Conformidade Legal",
+            "paragraphs": [
+              "Os usuários são os únicos responsáveis ​​por configurar o aplicativo, instalar complementos de terceiros e garantir que quaisquer transmissões ou mídias acessadas estejam em conformidade com as leis aplicáveis."
+            ],
+            "bullets": [
+              "Respeite as leis de propriedade intelectual aplicáveis, a Lei de Segurança Cibernética, o Decreto 147/2024/ND-CP do Vietnã e as regulamentações da sua jurisdição local.",
+              "Não utilize o software para acessar, distribuir ou promover conteúdo ilegal.",
+              "Verifique a confiabilidade e a legalidade de qualquer extensão de terceiros da comunidade antes de instalar seu URL de manifesto."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Licença e restrições do software",
+            "paragraphs": [
+              "A Framezoo concede a você uma licença pessoal, não exclusiva, intransferível e não comercial para instalar e usar as versões oficiais para desktop no macOS e no Windows.",
+              "É proibido redistribuir binários modificados que contenham malware, deturpar sua afiliação com o Framezoo ou abusar da infraestrutura do projeto."
+            ],
+            "badge": "03"
+          },
+          {
+            "title": "Limitação de responsabilidade (como está)",
+            "paragraphs": [
+              "O software é fornecido &quot;NO ESTADO EM QUE SE ENCONTRA&quot; e &quot;CONFORME DISPONÍVEL&quot;, sem garantias de qualquer tipo. A Framezoo não se responsabiliza pela disponibilidade, precisão ou legalidade de fluxos externos ou metadados fornecidos por serviços de terceiros."
+            ],
+            "badge": "04"
+          }
+        ]
+      },
+      "privacy": {
+        "title": "Política de Privacidade e Proteção de Dados Pessoais",
+        "updatedAt": "Atualizado em: 4 de novembro de 2026 · Lei 91/2025/QH15 e Decreto 356/2025/ND-CP",
+        "summary": "Esta política descreve o processamento de dados no aplicativo Framezoo para desktop e nos servidores oficiais do Framezoo.",
+        "sections": [
+          {
+            "title": "Dados no seu dispositivo e nos nossos servidores",
+            "paragraphs": [
+              "O aplicativo armazena algumas configurações, cache e dados de reprodução no seu dispositivo. Se você criar uma conta, o servidor também armazenará seu e-mail, apelido, perfil, chave pública, detalhes da sessão/dispositivo, favoritos sincronizados, progresso, histórico de visualização, configurações e complementos, além de chaves criptografadas do provedor de legendas, caso você as forneça."
+            ],
+            "bullets": [
+              "E-mails, códigos de verificação e detalhes da solicitação auxiliam no registro, login e segurança da conta.",
+              "Ao submeter o formulário de feedback, os relatórios, descrições de erros e anexos chegam ao nosso servidor.",
+              "O site armazena sua escolha de idioma no armazenamento do navegador."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Finalidades e serviços externos",
+            "paragraphs": [
+              "Processamos dados para gerenciar contas, sincronizar dispositivos, fornecer suporte, proteger o serviço e disponibilizar os recursos que você escolher. Não vendemos dados pessoais para redes de publicidade."
+            ],
+            "bullets": [
+              "O e-mail de verificação é enviado ao nosso provedor de e-mail; os backups do banco de dados podem ser armazenados no Supabase quando o backup estiver configurado.",
+              "Alguns provedores de serviços ou servidores adicionais podem processar dados fora do Vietnã; a localização do servidor depende do serviço escolhido e da configuração operacional.",
+              "O Google reCAPTCHA pode ser usado durante o cadastro; o texto das legendas é traduzido pelo Google Tradutor quando você escolhe a opção de tradução.",
+              "A busca e o download de legendas, a sincronização de áudio/legenda e os complementos da comunidade podem enviar solicitações através dos servidores do Framezoo e dos serviços externos relevantes. Complementos de terceiros têm suas próprias políticas."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Retenção e exclusão",
+            "paragraphs": [
+              "Os dados da conta e de sincronização permanecem enquanto sua conta estiver ativa. Você pode excluir a conta em Configurações; o servidor removerá os registros da conta, favoritos, progresso, histórico de visualização, configurações e sessões. Os backups antigos do banco de dados podem reter dados até a rotação; a configuração padrão mantém os 7 backups mais recentes quando o backup está em execução."
+            ],
+            "bullets": [
+              "Os códigos de verificação expiram após 10 minutos; os registros de desafios expirados são removidos após 7 dias. Os registros de e-mails enviados ou com falha na entrega são removidos após 7 dias.",
+              "O feedback e os anexos são mantidos separadamente para solicitações de suporte ou de direitos autorais até que sejam removidos mediante solicitação ou pela equipe de suporte. A exclusão da conta remove o vínculo com a conta, mas não exclui automaticamente os relatórios. Você pode solicitar a exclusão separadamente por meio do formulário de feedback."
+            ],
+            "badge": "03"
+          },
+          {
+            "title": "Seus direitos e contato",
+            "paragraphs": [
+              "Você pode solicitar acesso, correção, exclusão ou restrição dos seus dados, revogar o consentimento quando o processamento depender dele e enviar uma reclamação através do formulário de feedback em nosso site. Por favor, informe o e-mail da sua conta para que possamos verificar a solicitação."
+            ],
+            "badge": "04"
+          }
+        ]
+      },
+      "copyright": {
+        "title": "Direitos autorais, DMCA e isenção de responsabilidade de conteúdo",
+        "updatedAt": "Atualizado em: 4 de novembro de 2026",
+        "summary": "Aviso legal oficial sobre conteúdo e procedimento de notificação e remoção de conteúdo relacionado à propriedade intelectual para o Framezoo.",
+        "sections": [
+          {
+            "title": "Porto Seguro para Software Intermediário",
+            "paragraphs": [
+              "O Framezoo não opera uma biblioteca de filmes nem uma fonte de streaming de vídeo. O aplicativo pode acessar fontes escolhidas pelos usuários; nossos servidores podem retransmitir legendas fornecidas pelo usuário e processar temporariamente áudio e legendas para a sincronização solicitada.",
+              "Cada aviso de direitos autorais é analisado em relação ao conteúdo e ao nosso papel real; estes termos não criam uma isenção automática de responsabilidade."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Metadados e atribuição de obras de arte",
+            "paragraphs": [
+              "Os metadados de filmes e séries (títulos, datas de lançamento, sinopses, classificações e pôsteres promocionais) exibidos para fins de busca de informações são provenientes de bancos de dados públicos de filmes (como TMDB, IMDb e TVDB).",
+              "Todas as marcas registradas, títulos de filmes e ilustrações permanecem propriedade de seus respectivos detentores de direitos autorais."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Procedimento de Notificação e Remoção",
+            "paragraphs": [
+              "A Framezoo respeita os direitos de propriedade intelectual. Se você é o proprietário dos direitos autorais ou um agente autorizado e acredita que algum material em framezoo.top infringe seus direitos, envie uma notificação através do nosso canal de Denúncia/Feedback, incluindo:"
+            ],
+            "bullets": [
+              "Identificação do titular dos direitos autorais ou de seu representante autorizado.",
+              "Comprovante de titularidade da obra protegida por direitos autorais.",
+              "A URL exata ou a descrição do material em questão para que possamos analisá-lo e respondê-lo dentro de 24 a 72 horas úteis."
+            ],
+            "badge": "03"
+          }
+        ]
+      },
+      "addon-policy": {
+        "title": "Política de Addons e Diretrizes da Comunidade",
+        "updatedAt": "Para desenvolvedores de complementos e usuários finais",
+        "summary": "Padrões de segurança e conformidade para o ecossistema aberto de complementos HTTP/JSON no Framezoo.",
+        "sections": [
+          {
+            "title": "Arquitetura de complementos independentes",
+            "paragraphs": [
+              "O Framezoo suporta um protocolo de complementos HTTP/JSON aberto. Desenvolvedores independentes podem hospedar seus próprios manifestos e endpoints de recursos sem modificar o player principal.",
+              "Os complementos da comunidade são operados por terceiros. O Framezoo também opera um serviço integrado de legendas em seus próprios servidores, conforme descrito na política de privacidade."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Conduta e conteúdo proibidos",
+            "paragraphs": [
+              "Em conformidade com as normas de cibersegurança e propriedade intelectual, os desenvolvedores e usuários não devem usar o protocolo ou a marca Framezoo para:"
+            ],
+            "bullets": [
+              "Distribuir conteúdo ilegal, discurso de ódio, violência ou material de exploração infantil.",
+              "Disseminar malware, spyware, links de phishing ou scripts não autorizados de coleta de dados.",
+              "Fingir ser um comunicador oficial da Framezoo ou enganar usuários com esquemas de pagamento fraudulentos."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Recomendações de segurança para o usuário",
+            "paragraphs": [
+              "Instale apenas manifestos de complementos de fontes confiáveis. Você pode inspecionar os recursos declarados dos complementos e remover qualquer complemento instalado a qualquer momento dentro do aplicativo Framezoo."
+            ],
+            "badge": "03"
+          }
+        ]
+      }
     }
   }
 }

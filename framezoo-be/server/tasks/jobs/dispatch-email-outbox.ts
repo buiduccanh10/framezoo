@@ -9,17 +9,6 @@ export default defineTask({
   async run() {
     const now = new Date();
     const staleBefore = new Date(now.getTime() - 10 * 60_000);
-    const retentionCutoff = new Date(now.getTime() - 7 * 24 * 60 * 60_000);
-
-    await prisma.otp_idempotency_keys.deleteMany({
-      where: { expires_at: { lt: now } },
-    });
-    await prisma.email_outbox.deleteMany({
-      where: {
-        status: { in: ['sent', 'failed'] },
-        created_at: { lt: retentionCutoff },
-      },
-    });
 
     await prisma.email_outbox.updateMany({
       where: { status: 'processing', locked_at: { lt: staleBefore } },

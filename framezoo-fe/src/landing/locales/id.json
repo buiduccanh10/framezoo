@@ -6,7 +6,10 @@
     "language": "Bahasa",
     "addonGuide": "Panduan tambahan",
     "home": "Rumah",
-    "installGuide": "Panduan Instalasi"
+    "installGuide": "Panduan Instalasi",
+    "homeAria": "Beranda Framezoo",
+    "primaryAria": "Navigasi utama",
+    "backToTop": "Kembali ke atas"
   },
   "hero": {
     "eyebrow": "DESKTOP FRAMEZOO / 01",
@@ -75,7 +78,9 @@
     "runTitle": "Jalankan, uji, instal",
     "advancedLink": "Buka referensi SDK tingkat lanjut",
     "advancedDescription": "Stremio Addon SDK bersifat opsional. Gunakan jika Anda menginginkan bantuan perutean dan serialisasi; itu tidak diwajibkan oleh protokol.",
-    "advancedTitle": "Butuh pembantu Node?"
+    "advancedTitle": "Butuh pembantu Node?",
+    "copy": "Menyalin",
+    "copied": "Disalin"
   },
   "deepLink": {
     "opening": "Membuka BingkaiKebun Binatang...",
@@ -140,7 +145,9 @@
     "macDialogTitle": "\"Framezoo\" rusak dan tidak dapat dibuka.",
     "macDialogDesc": "Apple tidak dapat memeriksa perangkat lunak berbahaya di dalamnya. Hal ini terjadi ketika aplikasi diunduh di luar Mac App Store tanpa sertifikat komersial tahunan.",
     "winQuickSolution": "Klik Info lebih lanjut → Jalankan saja",
-    "winDialogDesc": "Microsoft Defender SmartScreen mencegah aplikasi yang tidak dikenal untuk memulai. Menjalankan aplikasi ini mungkin membahayakan PC Anda."
+    "winDialogDesc": "Microsoft Defender SmartScreen mencegah aplikasi yang tidak dikenal untuk memulai. Menjalankan aplikasi ini mungkin membahayakan PC Anda.",
+    "osSelectionAria": "Pemilihan sistem operasi",
+    "applicationsFolderAria": "Folder aplikasi"
   },
   "downloadConfirm": {
     "macNotice": "Pemberitahuan Penjaga Gerbang: Jika macOS melaporkan aplikasi 'rusak' atau tidak terverifikasi, buka Aplikasi -> Klik kanan Framezoo -> Pilih Buka -> Tetap Buka.",
@@ -267,5 +274,176 @@
       "openFramezoo": "Buka Framezoo",
       "noticeText": "Kunci API Anda disimpan dengan aman di perangkat Anda. Itu diteruskan hanya untuk mencari dan mengambil subtitle untuk film dan serial. Anda dapat memperbarui atau menghapusnya kapan saja."
     }
+  },
+  "legal": {
+    "pageTitle": "Syarat, Privasi & Kebijakan Hukum",
+    "tabs": {
+      "terms": {
+        "title": "Ketentuan Layanan",
+        "updatedAt": "Diperbarui: 4 November 2026",
+        "sections": [
+          {
+            "title": "Sifat Perangkat Lunak Pemutar Media Netral",
+            "paragraphs": [
+              "Framezoo adalah aplikasi pemutar media desktop independen yang beroperasi sebagai alat teknis netral, mirip dengan pemutar video standar atau browser web.",
+              "Framezoo tidak menyediakan perpustakaan film atau mengoperasikan sumber streaming video. Server Framezoo dapat menyampaikan subtitle dari penyedia dan memproses klip audio dan subtitle untuk sementara saat Anda menggunakan sinkronisasi."
+            ],
+            "badge": "01"
+          },
+          {
+            "bullets": [
+              "Patuhi undang-undang kekayaan intelektual yang berlaku, Undang-Undang tentang Keamanan Siber, Keputusan 147/2024/ND-CP di Vietnam, dan peraturan di yurisdiksi lokal Anda.",
+              "Jangan gunakan perangkat lunak untuk mengakses, mendistribusikan, atau mempromosikan konten yang melanggar hukum.",
+              "Verifikasi kredibilitas dan legalitas add-on komunitas pihak ketiga mana pun sebelum memasang URL manifesnya."
+            ],
+            "title": "Tanggung Jawab Pengguna & Kepatuhan Hukum",
+            "paragraphs": [
+              "Pengguna sepenuhnya bertanggung jawab untuk mengonfigurasi aplikasi, memasang add-on pihak ketiga, dan memastikan bahwa aliran atau media apa pun yang diakses mematuhi hukum yang berlaku."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Lisensi & Pembatasan Perangkat Lunak",
+            "paragraphs": [
+              "Framezoo memberi Anda lisensi pribadi, non-eksklusif, tidak dapat dipindahtangankan, dan non-komersial untuk menginstal dan menggunakan desktop resmi yang dibuat di macOS dan Windows.",
+              "Anda tidak boleh mendistribusikan ulang binari yang dimodifikasi yang berisi malware, salah menggambarkan afiliasi dengan Framezoo, atau menyalahgunakan infrastruktur proyek."
+            ],
+            "badge": "03"
+          },
+          {
+            "title": "Batasan Tanggung Jawab (APA ADANYA)",
+            "paragraphs": [
+              "Perangkat lunak ini disediakan berdasarkan \"APA ADANYA\" dan \"SEBAGAIMANA TERSEDIA\" tanpa jaminan apa pun. Framezoo tidak bertanggung jawab atas ketersediaan, keakuratan, atau legalitas aliran eksternal atau metadata yang disediakan oleh layanan pihak ketiga."
+            ],
+            "badge": "04"
+          }
+        ],
+        "summary": "Harap baca ketentuan ini dan kebijakan privasi sebelum membuat akun atau menggunakan aplikasi desktop Framezoo."
+      },
+      "privacy": {
+        "updatedAt": "Diperbarui: 4 November 2026 · UU 91/2025/QH15 & SK 356/2025/ND-CP",
+        "summary": "Kebijakan ini menjelaskan pemrosesan data di aplikasi desktop Framezoo dan di server resmi Framezoo.",
+        "sections": [
+          {
+            "paragraphs": [
+              "Aplikasi ini menyimpan beberapa pengaturan, cache, dan data pemutaran pada perangkat Anda. Jika Anda membuat akun, server juga menyimpan email, nama panggilan, profil, kunci publik, detail sesi/perangkat, bookmark yang disinkronkan, kemajuan, riwayat tontonan, pengaturan, dan tambahan, ditambah kunci penyedia subtitle terenkripsi jika Anda memberikannya."
+            ],
+            "bullets": [
+              "Email, kode verifikasi, dan detail permintaan mendukung pendaftaran, masuk, dan keamanan akun.",
+              "Laporan, deskripsi bug, dan lampiran sampai ke server kami saat Anda mengirimkan formulir Masukan.",
+              "Situs web menyimpan pilihan bahasa Anda di penyimpanan browser."
+            ],
+            "title": "Data di perangkat Anda dan server kami",
+            "badge": "01"
+          },
+          {
+            "title": "Tujuan dan layanan eksternal",
+            "bullets": [
+              "Email verifikasi masuk ke penyedia email kami; cadangan basis data dapat disimpan di Supabase ketika cadangan dikonfigurasi.",
+              "Beberapa penyedia layanan atau server tambahan mungkin memproses data di luar Vietnam; lokasi server tergantung pada layanan yang Anda pilih dan konfigurasi operasi.",
+              "Google reCAPTCHA dapat digunakan saat pendaftaran; teks subtitle masuk ke Google Terjemahan saat Anda memilih terjemahan.",
+              "Pencarian dan pengunduhan subtitle, sinkronisasi audio/subtitle, dan add-on komunitas dapat mengirimkan permintaan melalui server Framezoo dan layanan eksternal yang relevan. Add-on pihak ketiga memiliki kebijakannya sendiri."
+            ],
+            "paragraphs": [
+              "Kami memproses data untuk menjalankan akun, menyinkronkan perangkat, memberikan dukungan, melindungi layanan, dan memberikan fitur yang Anda pilih. Kami tidak menjual data pribadi ke jaringan periklanan."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Retensi dan penghapusan",
+            "bullets": [
+              "Kode verifikasi kedaluwarsa setelah 10 menit; catatan tantangan yang kedaluwarsa akan dihapus setelah 7 hari. Catatan email yang terkirim atau gagal akan dihapus setelah 7 hari.",
+              "Masukan dan lampiran disimpan secara terpisah untuk permintaan dukungan atau hak cipta hingga dihapus berdasarkan permintaan atau oleh tim dukungan. Penghapusan akun akan menghapus tautan akun namun tidak menghapus laporan secara otomatis. Anda dapat meminta penghapusan terpisah melalui formulir Masukan."
+            ],
+            "paragraphs": [
+              "Data akun dan sinkronisasi tetap ada selama akun Anda aktif. Anda dapat menghapus akun di Pengaturan; server kemudian menghapus catatan akun, bookmark, kemajuan, riwayat tontonan, pengaturan, dan sesi. Cadangan basis data lama mungkin menyimpan data hingga rotasi; konfigurasi default menyimpan 7 cadangan terbaru saat cadangan sedang berjalan."
+            ],
+            "badge": "03"
+          },
+          {
+            "title": "Hak dan kontak Anda",
+            "paragraphs": [
+              "Anda dapat meminta akses, koreksi, penghapusan, atau pembatasan data Anda, menarik persetujuan jika pemrosesan bergantung pada persetujuan, dan mengajukan keluhan melalui formulir Masukan di situs web kami. Harap berikan email akun Anda sehingga kami dapat memverifikasi permintaan tersebut."
+            ],
+            "badge": "04"
+          }
+        ],
+        "title": "Kebijakan Privasi & Perlindungan Data Pribadi"
+      },
+      "copyright": {
+        "title": "Hak Cipta, DMCA & Penafian Konten",
+        "updatedAt": "Diperbarui: 4 November 2026",
+        "sections": [
+          {
+            "title": "Safe Harbor Perangkat Lunak Perantara",
+            "paragraphs": [
+              "Framezoo tidak mengoperasikan perpustakaan film atau sumber streaming video. Aplikasi dapat mengakses sumber yang dipilih oleh pengguna; server kami mungkin menyampaikan subtitle penyedia dan memproses audio dan subtitle untuk sementara untuk sinkronisasi yang diminta.",
+              "Setiap pemberitahuan hak cipta ditinjau berdasarkan konten dan peran kami yang sebenarnya; ketentuan ini tidak menciptakan pengecualian tanggung jawab otomatis."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Atribusi Metadata & Karya Seni",
+            "paragraphs": [
+              "Metadata film dan serial (judul, tanggal rilis, sinopsis, rating, dan poster promosi) yang ditampilkan untuk penemuan informasi bersumber dari database film publik (seperti TMDB, IMDb, dan TVDB).",
+              "Semua merek dagang, judul film, dan karya seni tetap menjadi milik pemilik hak cipta masing-masing."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Prosedur Pemberitahuan & Penghapusan",
+            "bullets": [
+              "Identifikasi pemilik hak cipta atau perwakilan resmi.",
+              "Bukti kepemilikan atas karya berhak cipta.",
+              "URL atau deskripsi yang tepat dari materi yang dipermasalahkan sehingga kami dapat meninjau dan menanganinya dalam waktu 24–72 jam kerja."
+            ],
+            "paragraphs": [
+              "Framezoo menghormati hak kekayaan intelektual. Jika Anda adalah pemilik hak cipta atau agen resmi dan yakin materi apa pun di framezoo.top melanggar hak Anda, silakan kirimkan pemberitahuan melalui saluran Laporan / Masukan kami termasuk:"
+            ],
+            "badge": "03"
+          }
+        ],
+        "summary": "Penafian konten resmi dan prosedur pemberitahuan dan penghapusan kekayaan intelektual untuk Framezoo."
+      },
+      "addon-policy": {
+        "title": "Kebijakan Addon & Pedoman Komunitas",
+        "sections": [
+          {
+            "title": "Arsitektur Addon Independen",
+            "paragraphs": [
+              "Framezoo mendukung protokol tambahan HTTP/JSON terbuka. Pengembang independen dapat menghosting manifes dan titik akhir sumber daya mereka sendiri tanpa mengubah pemain inti.",
+              "Add-on komunitas dioperasikan oleh pihak ketiga. Framezoo juga mengoperasikan layanan subtitle terintegrasi di servernya sendiri, seperti yang dijelaskan dalam kebijakan privasi."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Perilaku & Konten yang Dilarang",
+            "bullets": [
+              "Menyebarkan konten yang melanggar hukum, perkataan yang mendorong kebencian, kekerasan, atau materi eksploitasi anak.",
+              "Menyebarkan malware, spyware, tautan phishing, atau skrip pengambilan data tanpa izin.",
+              "Meniru identitas rilis resmi Framezoo atau menipu pengguna dengan skema pembayaran palsu."
+            ],
+            "paragraphs": [
+              "Sesuai dengan peraturan keamanan siber dan kekayaan intelektual, pengembang dan pengguna tidak boleh menggunakan protokol atau merek Framezoo untuk:"
+            ],
+            "badge": "02"
+          },
+          {
+            "paragraphs": [
+              "Hanya instal manifes addon dari sumber yang Anda percayai. Anda dapat memeriksa sumber daya addon yang dinyatakan dan menghapus addon apa pun yang terpasang kapan saja dalam aplikasi Framezoo."
+            ],
+            "title": "Rekomendasi Keamanan Pengguna",
+            "badge": "03"
+          }
+        ],
+        "updatedAt": "Untuk Pengembang Addon & Pengguna Akhir",
+        "summary": "Standar keamanan dan kepatuhan untuk ekosistem add-on HTTP/JSON terbuka di Framezoo."
+      }
+    },
+    "eyebrow": "HUKUM & KEPATUHAN 2026",
+    "pageSubtitle": "Ketentuan penggunaan dan informasi pemrosesan data untuk aplikasi desktop Framezoo.",
+    "reportCtaTitle": "Perlu mengirimkan pemberitahuan hak cipta atau pertanyaan hukum?",
+    "reportCtaButton": "Buka Formulir Laporan / Masukan",
+    "reportCtaDesc": "Jika Anda adalah pemegang hak cipta atau memiliki permintaan data pribadi, kirimkan detail Anda melalui saluran masukan resmi kami untuk ditinjau dalam waktu 24–72 jam kerja."
   }
 }

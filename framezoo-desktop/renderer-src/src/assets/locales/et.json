@@ -176,7 +176,9 @@
       "passwordMismatch": "Paroolid ei ühti",
       "passwordPlaceholder": "Looge parool (kasutatakse paroolina)",
       "passwordWeak": "Parool peab koosnema vähemalt 8 tähemärgist koos tähtede ja numbritega",
-      "submit": "Loo konto"
+      "privacyPolicy": "Privaatsuspoliitika",
+      "submit": "Loo konto",
+      "legalConsent": "Olen lugenud ja nõustun <terms>teenuse tingimuste</terms> ja <privacy>privaatsuspoliitikaga</privacy>."
     },
     "trust": {
       "failed": {
@@ -302,7 +304,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Lahtiütlemine",
-      "disclaimerText": "Framezoo on neutraalne meediapleieri tarkvara. See ei majuta, salvesta, levita ega halda meediafaile ega kolmandate osapoolte lisandmooduleid. Avastage rikkalikke filmide metaandmeid, piiramatut subtiitrite sünkroonimist ja subtiitreid mitmest allikast, säilitades samal ajal kontrolli oma sisu üle."
+      "disclaimerText": "Framezoo ei halda videovooge. Selle serverid võivad edastada pakkuja subtiitreid ning ajutiselt töödelda heli ja subtiitreid sünkroonimiseks, kui te selle funktsiooni valite. Teie kontrollite esitatavat sisu."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -1179,9 +1181,9 @@
         "delete": {
           "button": "Kustuta konto",
           "confirmButton": "Kustuta konto",
-          "confirmDescription": "Kas olete kindel, et soovite oma konto kustutada? Kõik teie andmed lähevad kaotsi!",
+          "confirmDescription": "Seda ei saa tagasi võtta. Teie konto ja sünkroonitud andmed kustutatakse serverist. Esitatud aruandeid hoitakse eraldi; taotlege nende kustutamist tagasiside kaudu.",
           "confirmTitle": "Oled sa kindel?",
-          "text": "See toiming on pöördumatu. Kõik andmed kustutatakse ja midagi ei saa taastada.",
+          "text": "Kustuta oma konto ja sünkroonitud andmed serverist. Esitatud aruanded säilitatakse eraldi.",
           "title": "Kustuta konto"
         },
         "logoutAllDevices": {

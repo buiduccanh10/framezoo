@@ -176,7 +176,9 @@
       "passwordMismatch": "Wachtwoorden komen niet overeen",
       "passwordPlaceholder": "Maak een wachtwoord aan (gebruikt als uw wachtwoordzin)",
       "passwordWeak": "Het wachtwoord moet minimaal 8 tekens lang zijn, met letters en cijfers",
-      "submit": "Account aanmaken"
+      "privacyPolicy": "Privacybeleid",
+      "submit": "Account aanmaken",
+      "legalConsent": "Ik heb de <terms>Servicevoorwaarden</terms> en het <privacy>Privacybeleid</privacy> gelezen en ga hiermee akkoord."
     },
     "trust": {
       "failed": {
@@ -302,7 +304,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Disclaimer",
-      "disclaimerText": "Framezoo is neutrale mediaspelersoftware. Het host, bewaart, distribueert of beheert geen mediabestanden of add-ons van derden. Ontdek uitgebreide filmmetadata, onbeperkte synchronisatie van ondertitels en ondertitels uit meerdere bronnen, terwijl u de controle behoudt over de inhoud waartoe u toegang hebt."
+      "disclaimerText": "Framezoo beheert geen videostreambronnen. De servers kunnen ondertitels van providers doorgeven en audio en ondertitels tijdelijk synchroniseren wanneer u die functie inschakelt. U bepaalt zelf welke inhoud u afspeelt."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -1179,9 +1181,9 @@
         "delete": {
           "button": "Account verwijderen",
           "confirmButton": "Account verwijderen",
-          "confirmDescription": "Weet je zeker dat je je account wilt verwijderen? Al je gegevens zullen verloren gaan!",
+          "confirmDescription": "Dit kan niet ongedaan gemaakt worden. Uw account en gesynchroniseerde gegevens worden van de server verwijderd. Ingezonden rapporten worden apart bewaard; verzoek om verwijdering via Feedback.",
           "confirmTitle": "Weet je het zeker?",
-          "text": "Deze actie is onomkeerbaar. Alle gegevens worden verwijderd en er kan niets worden hersteld.",
+          "text": "Verwijder uw account en gesynchroniseerde gegevens van de server. Ingezonden rapporten worden apart bewaard.",
           "title": "Account verwijderen"
         },
         "logoutAllDevices": {

@@ -6,7 +6,10 @@
     "language": "Sprog",
     "addonGuide": "Addon guide",
     "home": "Hjem",
-    "installGuide": "Installationsvejledning"
+    "installGuide": "Installationsvejledning",
+    "homeAria": "Framezoo-hjemmeside",
+    "primaryAria": "Primær navigation",
+    "backToTop": "Tilbage til toppen"
   },
   "hero": {
     "eyebrow": "FRAMEZOO DESKTOP / 01",
@@ -75,7 +78,9 @@
     ],
     "advancedDescription": "Stremio Addon SDK er valgfrit. Brug det, hvis du vil have routing- og serialiseringshjælpere; det er ikke påkrævet af protokollen.",
     "advancedTitle": "Har du brug for en node-hjælper?",
-    "advancedLink": "Åbn avanceret SDK-reference"
+    "advancedLink": "Åbn avanceret SDK-reference",
+    "copy": "Kopi",
+    "copied": "Kopieret"
   },
   "deepLink": {
     "download": "Hent Framezoo",
@@ -140,7 +145,9 @@
     "winDialogDesc": "Microsoft Defender SmartScreen forhindrede en ikke-genkendt app i at starte. At køre denne app kan bringe din pc i fare.",
     "winQuickSolution": "Klik på Mere info → Kør alligevel",
     "winClickHere": "(Klik her)",
-    "winMoreInfo": "Mere info"
+    "winMoreInfo": "Mere info",
+    "osSelectionAria": "Valg af operativsystem",
+    "applicationsFolderAria": "Programmappen"
   },
   "downloadConfirm": {
     "winTitle": "Installationsvejledning til Windows",
@@ -267,5 +274,176 @@
       "notConnectedNotice": "Bemærk: Du er ikke forbundet med en Framezoo-kontobillet. For at synkronisere direkte med 'Open Framezoo' skal du åbne denne side fra din Framezoo Desktop-app, mens du er logget ind. Ellers kopier Manifest-URL'en nedenfor for at bruge den.",
       "noticeText": "Din API-nøgle er opbevaret sikkert på din enhed. Den videresendes kun for at søge og hente undertekster til film og serier. Du kan opdatere eller fjerne den når som helst."
     }
+  },
+  "legal": {
+    "eyebrow": "JURIDISK OG OVERHOLDELSE 2026",
+    "pageSubtitle": "Vilkår for brug og databehandlingsoplysninger for Framezoo desktop-applikationen.",
+    "reportCtaTitle": "Har du brug for at indsende en ophavsretsmeddelelse eller juridisk forespørgsel?",
+    "tabs": {
+      "terms": {
+        "title": "Servicevilkår",
+        "sections": [
+          {
+            "title": "Naturen af ​​neutral medieafspillersoftware",
+            "paragraphs": [
+              "Framezoo er en uafhængig desktop medieafspillerapplikation, der fungerer som et neutralt teknisk værktøj, der ligner standard videoafspillere eller webbrowsere.",
+              "Framezoo leverer ikke et filmbibliotek eller driver videostreamkilder. Framezoo-servere kan videresende undertekster fra udbydere og midlertidigt behandle lydklip og undertekster, når du bruger synkronisering."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Brugeransvar og juridisk overholdelse",
+            "bullets": [
+              "Overhold gældende love om intellektuel ejendom, loven om cybersikkerhed, dekret 147/2024/ND-CP i Vietnam og regler i din lokale jurisdiktion.",
+              "Brug ikke softwaren til at få adgang til, distribuere eller promovere ulovligt indhold.",
+              "Bekræft troværdigheden og lovligheden af ​​enhver tredjeparts community-tilføjelse, før du installerer dens manifest-URL."
+            ],
+            "paragraphs": [
+              "Brugere er alene ansvarlige for at konfigurere applikationen, installere tredjeparts-tilføjelser og sikre, at alle streams eller medier, der er adgang til, overholder gældende love."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Softwarelicens og begrænsninger",
+            "paragraphs": [
+              "Framezoo giver dig en personlig, ikke-eksklusiv, ikke-overdragelig, ikke-kommerciel licens til at installere og bruge de officielle desktop-builds på macOS og Windows.",
+              "Du må ikke videredistribuere modificerede binære filer, der indeholder malware, misrepræsentation af tilknytning til Framezoo eller misbruge projektinfrastruktur."
+            ],
+            "badge": "03"
+          },
+          {
+            "paragraphs": [
+              "Softwaren leveres på \"SOM DEN ER\" og \"SOM TILGÆNGELIG\" uden nogen form for garantier. Framezoo er ikke ansvarlig for tilgængeligheden, nøjagtigheden eller lovligheden af ​​eksterne streams eller metadata leveret af tredjepartstjenester."
+            ],
+            "title": "Ansvarsbegrænsning (AS-IS)",
+            "badge": "04"
+          }
+        ],
+        "updatedAt": "Opdateret: 4. november 2026",
+        "summary": "Læs venligst disse vilkår og privatlivspolitikken, før du opretter en konto eller bruger Framezoo desktop-applikationen."
+      },
+      "privacy": {
+        "updatedAt": "Opdateret: 4. november 2026 · Lov 91/2025/QH15 & Dekret 356/2025/ND-CP",
+        "title": "Privatlivs- og persondatabeskyttelsespolitik",
+        "summary": "Denne politik beskriver databehandling i Framezoo desktop-applikationen og på officielle Framezoo-servere.",
+        "sections": [
+          {
+            "bullets": [
+              "E-mail, bekræftelseskoder og anmodningsdetaljer understøtter registrering, login og kontosikkerhed.",
+              "Rapporter, fejlbeskrivelser og vedhæftede filer når vores server, når du indsender feedbackformularen.",
+              "Hjemmesiden gemmer dit sprogvalg i browserlageret."
+            ],
+            "paragraphs": [
+              "Applikationen gemmer nogle indstillinger, cache og afspilningsdata på din enhed. Hvis du opretter en konto, gemmer serveren også din e-mail, kaldenavn, profil, offentlige nøgle, session/enhedsdetaljer, synkroniserede bogmærker, fremskridt, afspilningshistorik, indstillinger og tilføjelser, plus krypterede undertekstudbydernøgler, hvis du giver dem."
+            ],
+            "title": "Data på din enhed og vores servere",
+            "badge": "01"
+          },
+          {
+            "bullets": [
+              "Bekræftelsesmail sendes til vores mailudbyder; database backups kan gemmes på Supabase, når backup er konfigureret.",
+              "Nogle tjenesteudbydere eller tilføjelsesservere kan behandle data uden for Vietnam; serverplacering afhænger af den tjeneste, du vælger, og driftskonfigurationen.",
+              "Google reCAPTCHA kan bruges under registreringen; underteksttekst går til Google Oversæt, når du vælger oversættelse.",
+              "Undertekstsøgninger og downloads, synkronisering af lyd/undertekster og fællesskabstilføjelser kan sende anmodninger gennem Framezoo-servere og de relevante eksterne tjenester. Tredjeparts tilføjelser har deres egne politikker."
+            ],
+            "paragraphs": [
+              "Vi behandler data for at køre konti, synkronisere enheder, yde support, beskytte tjenesten og levere funktioner, du vælger. Vi sælger ikke personlige data til annoncenetværk."
+            ],
+            "title": "Formål og eksterne tjenester",
+            "badge": "02"
+          },
+          {
+            "title": "Fastholdelse og sletning",
+            "paragraphs": [
+              "Konto- og synkroniseringsdata forbliver, mens din konto er aktiv. Du kan slette kontoen i Indstillinger; serveren fjerner derefter kontoregistreringer, bogmærker, fremskridt, afspilningshistorik, indstillinger og sessioner. Gamle database backups kan beholde data indtil rotation; standardkonfigurationen beholder 7 seneste sikkerhedskopier, når backup kører."
+            ],
+            "bullets": [
+              "Bekræftelseskoder udløber efter 10 minutter; udløbne udfordringsregistre fjernes efter 7 dage. Sendte eller mislykkede postposter fjernes efter 7 dage.",
+              "Feedback og vedhæftede filer opbevares separat for support- eller copyright-anmodninger, indtil de fjernes efter anmodning eller af supportteamet. Sletning af konto fjerner kontolinket, men sletter ikke automatisk rapporter. Du kan anmode om separat sletning via feedbackformularen."
+            ],
+            "badge": "03"
+          },
+          {
+            "title": "Dine rettigheder og kontakt",
+            "paragraphs": [
+              "Du kan anmode om adgang, rettelse, sletning eller begrænsning af dine data, trække samtykke tilbage, hvor behandlingen er afhængig af samtykke, og indsende en klage via feedbackformularen på vores hjemmeside. Angiv venligst din konto-e-mail, så vi kan bekræfte anmodningen."
+            ],
+            "badge": "04"
+          }
+        ]
+      },
+      "copyright": {
+        "updatedAt": "Opdateret: 4. november 2026",
+        "title": "Copyright, DMCA og indholdsansvarsfraskrivelse",
+        "summary": "Officiel ansvarsfraskrivelse for indhold og procedure for meddelelse om og fjernelse af intellektuel ejendom for Framezoo.",
+        "sections": [
+          {
+            "paragraphs": [
+              "Framezoo driver ikke et filmbibliotek eller en videostreamkilde. Applikationen kan få adgang til kilder valgt af brugere; vores servere kan videresende udbyderens undertekster og midlertidigt behandle lyd og undertekster til anmodet synkronisering.",
+              "Hver ophavsretsmeddelelse gennemgås i forhold til indholdet og vores faktiske rolle; disse vilkår skaber ikke en automatisk ansvarsfritagelse."
+            ],
+            "title": "Formidlende Software Safe Harbor",
+            "badge": "01"
+          },
+          {
+            "title": "Metadata og tilskrivning af kunstværker",
+            "paragraphs": [
+              "Film- og seriemetadata (titler, udgivelsesdatoer, synopser, vurderinger og reklameplakater), der vises til informationssøgning, er hentet fra offentlige filmdatabaser (såsom TMDB, IMDb og TVDB).",
+              "Alle varemærker, filmtitler og kunstværker forbliver deres respektive copyright-ejeres ejendom."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Meddelelses- og fjernelsesprocedure",
+            "bullets": [
+              "Identifikation af ejeren af ​​ophavsretten eller den autoriserede repræsentant.",
+              "Bevis for ejerskab af det ophavsretligt beskyttede værk.",
+              "Den nøjagtige URL eller beskrivelse af det pågældende materiale, så vi kan gennemgå og behandle det inden for 24-72 arbejdstimer."
+            ],
+            "paragraphs": [
+              "Framezoo respekterer intellektuelle ejendomsrettigheder. Hvis du er ophavsretsejer eller autoriseret agent og mener, at noget materiale på framezoo.top krænker dine rettigheder, bedes du indsende en meddelelse via vores rapport-/feedback-kanal, herunder:"
+            ],
+            "badge": "03"
+          }
+        ]
+      },
+      "addon-policy": {
+        "updatedAt": "Til tilføjelsesudviklere og slutbrugere",
+        "sections": [
+          {
+            "title": "Uafhængig Addon-arkitektur",
+            "paragraphs": [
+              "Framezoo understøtter en åben HTTP/JSON-tilføjelsesprotokol. Uafhængige udviklere kan hoste deres egne manifest- og ressourceslutpunkter uden at ændre kernespilleren.",
+              "Fællesskabstilføjelser drives af tredjeparter. Framezoo driver også en integreret underteksttjeneste på sine egne servere, som beskrevet i fortrolighedspolitikken."
+            ],
+            "badge": "01"
+          },
+          {
+            "paragraphs": [
+              "I overensstemmelse med reglerne for cybersikkerhed og intellektuel ejendomsret må udviklere og brugere ikke bruge Framezoo-protokollen eller branding til at:"
+            ],
+            "bullets": [
+              "Distribuer ulovligt indhold, hadefulde ytringer, vold eller materiale om udnyttelse af børn.",
+              "Spred malware, spyware, phishing-links eller uautoriserede dataindsamlingsscripts.",
+              "Efterligne officielle Framezoo-udgivelser eller bedrag brugere med svigagtige betalingsordninger."
+            ],
+            "title": "Forbudt adfærd og indhold",
+            "badge": "02"
+          },
+          {
+            "paragraphs": [
+              "Installer kun tilføjelsesmanifester fra kilder, du har tillid til. Du kan til enhver tid inspicere erklærede tilføjelsesressourcer og fjerne enhver installeret tilføjelse i Framezoo-appen."
+            ],
+            "title": "Brugersikkerhedsanbefalinger",
+            "badge": "03"
+          }
+        ],
+        "summary": "Sikkerheds- og overholdelsesstandarder for det åbne HTTP/JSON addon-økosystem på Framezoo.",
+        "title": "Tilføjelsespolitik og retningslinjer for fællesskabet"
+      }
+    },
+    "pageTitle": "Vilkår, privatliv og juridiske politikker",
+    "reportCtaButton": "Åbn rapport-/feedbackformular",
+    "reportCtaDesc": "Hvis du er indehaver af ophavsretten eller har en anmodning om personlige data, bedes du indsende dine oplysninger via vores officielle feedbackkanal til gennemgang inden for 24-72 arbejdstimer."
   }
 }

@@ -10,7 +10,10 @@
     "addonGuide": "Build an addon",
     "installGuide": "Installation Guide",
     "download": "Download",
-    "language": "Language"
+    "language": "Language",
+    "homeAria": "Framezoo home",
+    "primaryAria": "Primary navigation",
+    "backToTop": "Back to top"
   },
   "hero": {
     "title": "Stream fast,",
@@ -75,7 +78,9 @@
     ],
     "advancedTitle": "Want a helper?",
     "advancedDescription": "The Stremio Addon SDK is optional. Use it for routing and serialization helpers; the protocol does not require it.",
-    "advancedLink": "Open advanced SDK reference"
+    "advancedLink": "Open advanced SDK reference",
+    "copy": "Copy",
+    "copied": "Copied"
   },
   "download": {
     "eyebrow": "DOWNLOAD FRAMEZOO",
@@ -166,7 +171,9 @@
         "Click \"Run anyway\" to proceed with installing Framezoo."
       ],
       "note": "This warning appears because the new release has not yet accumulated Microsoft EV Code Signing reputation. The binary is 100% safe."
-    }
+    },
+    "osSelectionAria": "Operating system selection",
+    "applicationsFolderAria": "Applications folder"
   },
   "downloadConfirm": {
     "macTitle": "Installation Guide for macOS",
@@ -269,6 +276,177 @@
       "copied": "Copied!",
       "noticeLabel": "Notice:",
       "noticeText": "Your API Key is stored safely on your device. It is forwarded only to search and retrieve subtitles for movies and series. You can update or remove it anytime."
+    }
+  },
+  "legal": {
+    "eyebrow": "LEGAL & COMPLIANCE 2026",
+    "pageTitle": "Terms, Privacy & Legal Policies",
+    "pageSubtitle": "Terms of use and data processing information for the Framezoo desktop application.",
+    "reportCtaTitle": "Need to submit a copyright notice or legal inquiry?",
+    "reportCtaDesc": "If you are a copyright holder or have a personal data request, please submit your details through our official feedback channel for review within 24–72 business hours.",
+    "reportCtaButton": "Open Report / Feedback Form",
+    "tabs": {
+      "terms": {
+        "title": "Terms of Service",
+        "updatedAt": "Updated: 4 November 2026",
+        "summary": "Please read these terms and the privacy policy before creating an account or using the Framezoo desktop application.",
+        "sections": [
+          {
+            "badge": "01",
+            "title": "Nature of Neutral Media Player Software",
+            "paragraphs": [
+              "Framezoo is an independent desktop media player application operating as a neutral technical tool, similar to standard video players or web browsers.",
+              "Framezoo does not provide a movie library or operate video stream sources. Framezoo servers may relay subtitles from providers and temporarily process audio clips and subtitles when you use synchronization."
+            ]
+          },
+          {
+            "badge": "02",
+            "title": "User Responsibilities & Legal Compliance",
+            "paragraphs": [
+              "Users are solely responsible for configuring the application, installing third-party addons, and ensuring that any streams or media accessed comply with applicable laws."
+            ],
+            "bullets": [
+              "Comply with applicable intellectual property laws, the Law on Cybersecurity, Decree 147/2024/ND-CP in Vietnam, and regulations in your local jurisdiction.",
+              "Do not use the software to access, distribute, or promote unlawful content.",
+              "Verify the trustworthiness and legality of any third-party community addon before installing its manifest URL."
+            ]
+          },
+          {
+            "badge": "03",
+            "title": "Software License & Restrictions",
+            "paragraphs": [
+              "Framezoo grants you a personal, non-exclusive, non-transferable, non-commercial license to install and use the official desktop builds on macOS and Windows.",
+              "You may not redistribute modified binaries containing malware, misrepresent affiliation with Framezoo, or abuse project infrastructure."
+            ]
+          },
+          {
+            "badge": "04",
+            "title": "Limitation of Liability (AS-IS)",
+            "paragraphs": [
+              "The software is provided on an \"AS-IS\" and \"AS-AVAILABLE\" basis without warranties of any kind. Framezoo is not liable for the availability, accuracy, or legality of external streams or metadata provided by third-party services."
+            ]
+          }
+        ]
+      },
+      "privacy": {
+        "title": "Privacy & Personal Data Protection Policy",
+        "updatedAt": "Updated: 4 November 2026 · Law 91/2025/QH15 & Decree 356/2025/ND-CP",
+        "summary": "This policy describes data processing in the Framezoo desktop application and on official Framezoo servers.",
+        "sections": [
+          {
+            "badge": "01",
+            "title": "Data on your device and our servers",
+            "paragraphs": [
+              "The application stores some settings, cache, and playback data on your device. If you create an account, the server also stores your email, nickname, profile, public key, session/device details, synchronized bookmarks, progress, watch history, settings, and addons, plus encrypted subtitle provider keys if you provide them."
+            ],
+            "bullets": [
+              "Email, verification codes, and request details support registration, sign-in, and account security.",
+              "Reports, bug descriptions, and attachments reach our server when you submit the Feedback form.",
+              "The website stores your language choice in browser storage."
+            ]
+          },
+          {
+            "badge": "02",
+            "title": "Purposes and external services",
+            "paragraphs": [
+              "We process data to run accounts, sync devices, provide support, protect the service, and deliver features you choose. We do not sell personal data to advertising networks."
+            ],
+            "bullets": [
+              "Verification email goes to our mail provider; database backups may be stored on Supabase when backup is configured.",
+              "Some service providers or addon servers may process data outside Vietnam; server location depends on the service you choose and the operating configuration.",
+              "Google reCAPTCHA may be used during registration; subtitle text goes to Google Translate when you choose translation.",
+              "Subtitle searches and downloads, audio/subtitle synchronization, and community addons may send requests through Framezoo servers and the relevant external services. Third-party addons have their own policies."
+            ]
+          },
+          {
+            "badge": "03",
+            "title": "Retention and deletion",
+            "paragraphs": [
+              "Account and sync data stay while your account is active. You can delete the account in Settings; the server then removes account records, bookmarks, progress, watch history, settings, and sessions. Old database backups may retain data until rotation; the default configuration keeps 7 recent backups when backup is running."
+            ],
+            "bullets": [
+              "Verification codes expire after 10 minutes; expired challenge records are removed after 7 days. Sent or failed mail records are removed after 7 days.",
+              "Feedback and attachments are kept separately for support or copyright requests until they are removed on request or by the support team. Account deletion removes the account link but does not automatically delete reports. You can request separate deletion through the Feedback form."
+            ]
+          },
+          {
+            "badge": "04",
+            "title": "Your rights and contact",
+            "paragraphs": [
+              "You may request access, correction, deletion, or restriction of your data, withdraw consent where processing relies on consent, and submit a complaint through the Feedback form on our website. Please provide your account email so we can verify the request."
+            ]
+          }
+        ]
+      },
+      "copyright": {
+        "title": "Copyright, DMCA & Content Disclaimer",
+        "updatedAt": "Updated: 4 November 2026",
+        "summary": "Official content disclaimer and intellectual property notice-and-takedown procedure for Framezoo.",
+        "sections": [
+          {
+            "badge": "01",
+            "title": "Intermediary Software Safe Harbor",
+            "paragraphs": [
+              "Framezoo does not operate a movie library or video stream source. The application can access sources chosen by users; our servers may relay provider subtitles and temporarily process audio and subtitles for requested synchronization.",
+              "Each copyright notice is reviewed against the content and our actual role; these terms do not create an automatic liability exemption."
+            ]
+          },
+          {
+            "badge": "02",
+            "title": "Metadata & Artwork Attribution",
+            "paragraphs": [
+              "Movie and series metadata (titles, release dates, synopses, ratings, and promotional posters) displayed for informational discovery are sourced from public movie databases (such as TMDB, IMDb, and TVDB).",
+              "All trademarks, movie titles, and artwork remain the property of their respective copyright owners."
+            ]
+          },
+          {
+            "badge": "03",
+            "title": "Notice & Takedown Procedure",
+            "paragraphs": [
+              "Framezoo respects intellectual property rights. If you are a copyright owner or authorized agent and believe any material on framezoo.top infringes your rights, please submit a notice via our Report / Feedback channel including:"
+            ],
+            "bullets": [
+              "Identification of the copyright owner or authorized representative.",
+              "Proof of ownership of the copyrighted work.",
+              "The exact URL or description of the material in question so we can review and address it within 24–72 business hours."
+            ]
+          }
+        ]
+      },
+      "addon-policy": {
+        "title": "Addon Policy & Community Guidelines",
+        "updatedAt": "For Addon Developers & End Users",
+        "summary": "Safety and compliance standards for the open HTTP/JSON addon ecosystem on Framezoo.",
+        "sections": [
+          {
+            "badge": "01",
+            "title": "Independent Addon Architecture",
+            "paragraphs": [
+              "Framezoo supports an open HTTP/JSON addon protocol. Independent developers can host their own manifest and resource endpoints without modifying the core player.",
+              "Community addons are operated by third parties. Framezoo also operates an integrated subtitle service on its own servers, as described in the privacy policy."
+            ]
+          },
+          {
+            "badge": "02",
+            "title": "Prohibited Conduct & Content",
+            "paragraphs": [
+              "In compliance with cybersecurity and intellectual property regulations, developers and users must not use the Framezoo protocol or branding to:"
+            ],
+            "bullets": [
+              "Distribute unlawful content, hate speech, violence, or child exploitation material.",
+              "Spread malware, spyware, phishing links, or unauthorized data harvesting scripts.",
+              "Impersonate official Framezoo releases or deceive users with fraudulent payment schemes."
+            ]
+          },
+          {
+            "badge": "03",
+            "title": "User Safety Recommendations",
+            "paragraphs": [
+              "Only install addon manifests from sources you trust. You can inspect declared addon resources and remove any installed addon at any time within the Framezoo app."
+            ]
+          }
+        ]
+      }
     }
   }
 }

@@ -6,7 +6,10 @@
     "language": "Idioma",
     "addonGuide": "Guía de complementos",
     "home": "Hogar",
-    "installGuide": "Guía de instalación"
+    "installGuide": "Guía de instalación",
+    "homeAria": "Inicio de Framezoo",
+    "primaryAria": "Navegación principal",
+    "backToTop": "Volver arriba"
   },
   "hero": {
     "eyebrow": "ESCRITORIO FRAMEZOO / 01",
@@ -75,7 +78,9 @@
     "runTitle": "Ejecutar, probar, instalar",
     "advancedDescription": "El SDK del complemento Stremio es opcional. Úselo si desea ayudas de enrutamiento y serialización; no es requerido por el protocolo.",
     "advancedTitle": "¿Necesitas un ayudante de nodo?",
-    "advancedLink": "Abrir referencia avanzada de SDK"
+    "advancedLink": "Abrir referencia avanzada de SDK",
+    "copy": "Copiar",
+    "copied": "Copiado"
   },
   "deepLink": {
     "backHome": "Volver a la página de inicio",
@@ -140,7 +145,9 @@
     "winMoreInfo": "Más información",
     "winClickHere": "(Haga clic aquí)",
     "winDialogDesc": "Microsoft Defender SmartScreen impidió que se iniciara una aplicación no reconocida. La ejecución de esta aplicación puede poner en riesgo su PC.",
-    "winQuickSolution": "Haga clic en Más información → Ejecutar de todos modos"
+    "winQuickSolution": "Haga clic en Más información → Ejecutar de todos modos",
+    "osSelectionAria": "Selección del sistema operativo",
+    "applicationsFolderAria": "Carpeta de aplicaciones"
   },
   "downloadConfirm": {
     "macNotice": "Aviso de Gatekeeper: si macOS informa que una aplicación está \"dañada\" o no verificada, vaya a Aplicaciones -> Haga clic con el botón derecho en Framezoo -> Seleccione Abrir -> Abrir de todos modos.",
@@ -267,5 +274,176 @@
       "notConnectedNotice": "Nota: No está conectado con un ticket de cuenta de Framezoo. Para sincronizar directamente con 'Open Framezoo', abra esta página desde su aplicación de escritorio Framezoo mientras está conectado. De lo contrario, copie la URL del manifiesto a continuación para usarla.",
       "noticeText": "Su clave API se almacena de forma segura en su dispositivo. Se reenvía únicamente para buscar y recuperar subtítulos de películas y series. Puedes actualizarlo o eliminarlo en cualquier momento."
     }
+  },
+  "legal": {
+    "eyebrow": "LEGAL Y CUMPLIMIENTO 2026",
+    "tabs": {
+      "terms": {
+        "title": "Términos de servicio",
+        "sections": [
+          {
+            "title": "Naturaleza del software de reproducción multimedia neutral",
+            "paragraphs": [
+              "Framezoo es una aplicación de reproductor multimedia de escritorio independiente que funciona como una herramienta técnica neutral, similar a los reproductores de vídeo o navegadores web estándar.",
+              "Framezoo no proporciona una biblioteca de películas ni opera fuentes de transmisión de video. Los servidores de Framezoo pueden transmitir subtítulos de proveedores y procesar temporalmente clips de audio y subtítulos cuando utiliza la sincronización."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Responsabilidades del usuario y cumplimiento legal",
+            "paragraphs": [
+              "Los usuarios son los únicos responsables de configurar la aplicación, instalar complementos de terceros y garantizar que cualquier transmisión o medio al que se acceda cumpla con las leyes aplicables."
+            ],
+            "bullets": [
+              "Cumpla con las leyes de propiedad intelectual aplicables, la Ley de Ciberseguridad, el Decreto 147/2024/ND-CP en Vietnam y las regulaciones de su jurisdicción local.",
+              "No utilice el software para acceder, distribuir o promover contenido ilegal.",
+              "Verifique la confiabilidad y legalidad de cualquier complemento comunitario de terceros antes de instalar su URL de manifiesto."
+            ],
+            "badge": "02"
+          },
+          {
+            "paragraphs": [
+              "Framezoo le otorga una licencia personal, no exclusiva, intransferible y no comercial para instalar y utilizar las versiones de escritorio oficiales en macOS y Windows.",
+              "No puede redistribuir archivos binarios modificados que contengan malware, tergiversar su afiliación con Framezoo ni abusar de la infraestructura del proyecto."
+            ],
+            "title": "Licencia de software y restricciones",
+            "badge": "03"
+          },
+          {
+            "title": "Limitación de responsabilidad (TAL CUAL)",
+            "paragraphs": [
+              "El software se proporciona \"TAL CUAL\" y \"SEGÚN DISPONIBILIDAD\" sin garantías de ningún tipo. Framezoo no es responsable de la disponibilidad, precisión o legalidad de transmisiones externas o metadatos proporcionados por servicios de terceros."
+            ],
+            "badge": "04"
+          }
+        ],
+        "summary": "Lea estos términos y la política de privacidad antes de crear una cuenta o utilizar la aplicación de escritorio Framezoo.",
+        "updatedAt": "Actualizado: 4 de noviembre de 2026"
+      },
+      "privacy": {
+        "sections": [
+          {
+            "title": "Datos en su dispositivo y nuestros servidores",
+            "bullets": [
+              "El correo electrónico, los códigos de verificación y los detalles de la solicitud respaldan el registro, el inicio de sesión y la seguridad de la cuenta.",
+              "Los informes, descripciones de errores y archivos adjuntos llegan a nuestro servidor cuando envía el formulario de comentarios.",
+              "El sitio web almacena su elección de idioma en el almacenamiento del navegador."
+            ],
+            "paragraphs": [
+              "La aplicación almacena algunas configuraciones, caché y datos de reproducción en su dispositivo. Si crea una cuenta, el servidor también almacena su correo electrónico, apodo, perfil, clave pública, detalles de sesión/dispositivo, marcadores sincronizados, progreso, historial de reproducciones, configuraciones y complementos, además de claves cifradas del proveedor de subtítulos si las proporciona."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Finalidades y servicios externos",
+            "bullets": [
+              "El correo electrónico de verificación va a nuestro proveedor de correo; Las copias de seguridad de la base de datos se pueden almacenar en Supabase cuando se configura la copia de seguridad.",
+              "Algunos proveedores de servicios o servidores complementarios pueden procesar datos fuera de Vietnam; La ubicación del servidor depende del servicio que elija y de la configuración operativa.",
+              "Se puede utilizar Google reCAPTCHA durante el registro; El texto de los subtítulos va al Traductor de Google cuando eliges la traducción.",
+              "Las búsquedas y descargas de subtítulos, la sincronización de audio/subtítulos y los complementos comunitarios pueden enviar solicitudes a través de los servidores de Framezoo y los servicios externos relevantes. Los complementos de terceros tienen sus propias políticas."
+            ],
+            "paragraphs": [
+              "Procesamos datos para ejecutar cuentas, sincronizar dispositivos, brindar soporte, proteger el servicio y brindarle las funciones que usted elija. No vendemos datos personales a redes publicitarias."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Retención y eliminación",
+            "bullets": [
+              "Los códigos de verificación caducan después de 10 minutos; Los registros de desafío vencidos se eliminan después de 7 días. Los registros de correo enviado o fallido se eliminan después de 7 días.",
+              "Los comentarios y los archivos adjuntos se guardan por separado para solicitudes de soporte o derechos de autor hasta que sean eliminados a pedido o por parte del equipo de soporte. La eliminación de la cuenta elimina el vínculo de la cuenta pero no elimina automáticamente los informes. Puede solicitar una eliminación por separado a través del formulario de comentarios."
+            ],
+            "paragraphs": [
+              "Los datos de cuenta y sincronización permanecen mientras su cuenta esté activa. Puedes eliminar la cuenta en Configuración; Luego, el servidor elimina los registros de la cuenta, los marcadores, el progreso, el historial de visualización, la configuración y las sesiones. Las copias de seguridad de bases de datos antiguas pueden retener datos hasta su rotación; la configuración predeterminada mantiene 7 copias de seguridad recientes cuando se ejecuta la copia de seguridad."
+            ],
+            "badge": "03"
+          },
+          {
+            "title": "Tus derechos y contacto",
+            "paragraphs": [
+              "Puede solicitar acceso, corrección, eliminación o restricción de sus datos, retirar el consentimiento cuando el procesamiento dependa del consentimiento y presentar una queja a través del formulario de Comentarios en nuestro sitio web. Proporcione el correo electrónico de su cuenta para que podamos verificar la solicitud."
+            ],
+            "badge": "04"
+          }
+        ],
+        "summary": "Esta política describe el procesamiento de datos en la aplicación de escritorio Framezoo y en los servidores oficiales de Framezoo.",
+        "title": "Política de Privacidad y Protección de Datos Personales",
+        "updatedAt": "Actualizado: 4 de noviembre de 2026 · Ley 91/2025/QH15 y Decreto 356/2025/ND-CP"
+      },
+      "copyright": {
+        "updatedAt": "Actualizado: 4 de noviembre de 2026",
+        "title": "Derechos de autor, DMCA y descargo de responsabilidad de contenido",
+        "sections": [
+          {
+            "title": "Puerto seguro de software intermediario",
+            "paragraphs": [
+              "Framezoo no opera una biblioteca de películas ni una fuente de transmisión de video. La aplicación puede acceder a fuentes elegidas por los usuarios; Nuestros servidores pueden transmitir subtítulos de proveedores y procesar temporalmente audio y subtítulos para la sincronización solicitada.",
+              "Cada aviso de derechos de autor se revisa en relación con el contenido y nuestra función real; Estos términos no crean una exención automática de responsabilidad."
+            ],
+            "badge": "01"
+          },
+          {
+            "paragraphs": [
+              "Los metadatos de películas y series (títulos, fechas de estreno, sinopsis, clasificaciones y carteles promocionales) que se muestran para el descubrimiento informativo provienen de bases de datos públicas de películas (como TMDB, IMDb y TVDB).",
+              "Todas las marcas comerciales, títulos de películas y obras de arte siguen siendo propiedad de sus respectivos propietarios de derechos de autor."
+            ],
+            "title": "Atribución de metadatos y obras de arte",
+            "badge": "02"
+          },
+          {
+            "title": "Procedimiento de notificación y eliminación",
+            "bullets": [
+              "Identificación del propietario de los derechos de autor o representante autorizado.",
+              "Prueba de propiedad de la obra protegida por derechos de autor.",
+              "La URL exacta o la descripción del material en cuestión para que podamos revisarlo y abordarlo dentro de 24 a 72 horas hábiles."
+            ],
+            "paragraphs": [
+              "Framezoo respeta los derechos de propiedad intelectual. Si es propietario de derechos de autor o agente autorizado y cree que algún material en framezoo.top infringe sus derechos, envíe un aviso a través de nuestro canal de Informes/Comentarios que incluya:"
+            ],
+            "badge": "03"
+          }
+        ],
+        "summary": "Descargo de responsabilidad de contenido oficial y procedimiento de notificación y eliminación de propiedad intelectual para Framezoo."
+      },
+      "addon-policy": {
+        "updatedAt": "Para desarrolladores de complementos y usuarios finales",
+        "title": "Política de complementos y pautas de la comunidad",
+        "sections": [
+          {
+            "paragraphs": [
+              "Framezoo admite un protocolo complementario HTTP/JSON abierto. Los desarrolladores independientes pueden alojar sus propios puntos finales de manifiesto y recursos sin modificar el reproductor principal.",
+              "Los complementos comunitarios son operados por terceros. Framezoo también opera un servicio de subtítulos integrado en sus propios servidores, como se describe en la política de privacidad."
+            ],
+            "title": "Arquitectura de complemento independiente",
+            "badge": "01"
+          },
+          {
+            "paragraphs": [
+              "En cumplimiento de las normas de ciberseguridad y propiedad intelectual, los desarrolladores y usuarios no deben utilizar el protocolo ni la marca de Framezoo para:"
+            ],
+            "bullets": [
+              "Distribuir contenido ilegal, incitación al odio, violencia o material de explotación infantil.",
+              "Difunda malware, spyware, enlaces de phishing o scripts de recopilación de datos no autorizados.",
+              "Suplantar lanzamientos oficiales de Framezoo o engañar a los usuarios con esquemas de pago fraudulentos."
+            ],
+            "title": "Conducta y contenido prohibidos",
+            "badge": "02"
+          },
+          {
+            "paragraphs": [
+              "Instale únicamente manifiestos de complementos de fuentes en las que confíe. Puede inspeccionar los recursos de complementos declarados y eliminar cualquier complemento instalado en cualquier momento dentro de la aplicación Framezoo."
+            ],
+            "title": "Recomendaciones de seguridad para el usuario",
+            "badge": "03"
+          }
+        ],
+        "summary": "Estándares de seguridad y cumplimiento para el ecosistema de complementos HTTP/JSON abierto en Framezoo."
+      }
+    },
+    "pageTitle": "Términos, privacidad y políticas legales",
+    "reportCtaButton": "Abrir informe/formulario de comentarios",
+    "reportCtaDesc": "Si es titular de derechos de autor o tiene una solicitud de datos personales, envíe sus datos a través de nuestro canal oficial de comentarios para su revisión dentro de las 24 a 72 horas hábiles.",
+    "reportCtaTitle": "¿Necesita enviar un aviso de derechos de autor o una consulta legal?",
+    "pageSubtitle": "Términos de uso e información sobre procesamiento de datos para la aplicación de escritorio Framezoo."
   }
 }

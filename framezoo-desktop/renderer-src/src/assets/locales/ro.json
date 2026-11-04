@@ -176,7 +176,9 @@
       "passwordMismatch": "Parolele nu se potrivesc",
       "passwordPlaceholder": "Creați o parolă (folosită ca expresie de acces)",
       "passwordWeak": "Parola trebuie să aibă cel puțin 8 caractere cu litere și cifre",
-      "submit": "Creează cont"
+      "privacyPolicy": "Politica de confidențialitate",
+      "submit": "Creează cont",
+      "legalConsent": "Am citit și sunt de acord cu <terms>Termenii și condițiile</terms> și <privacy>Politica de confidențialitate</privacy>."
     },
     "trust": {
       "failed": {
@@ -302,7 +304,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Declinare a răspunderii",
-      "disclaimerText": "Framezoo este un software neutru pentru playere media. Nu găzduiește, stochează, distribuie și controlează fișiere media sau suplimente terțe. Explorează metadate bogate pentru filme, sincronizare nelimitată a subtitrărilor în flux și subtitrări din mai multe surse, păstrând în același timp controlul asupra conținutului pe care îl accesezi."
+      "disclaimerText": "Framezoo nu operează surse de flux video. Serverele sale pot transmite subtitrări de la furnizor și pot procesa temporar sunetul și subtitrările pentru sincronizare atunci când alegeți funcția respectivă. Dvs. controlați conținutul pe care îl redați."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -1179,9 +1181,9 @@
         "delete": {
           "button": "Șterge contul",
           "confirmButton": "Șterge contul",
-          "confirmDescription": "Ești sigur că vrei să ștergi contul tău? Toate datele tale vor dispărea!",
+          "confirmDescription": "Această acțiune nu poate fi anulată. Contul dvs. și datele sincronizate vor fi șterse de pe server. Rapoartele trimise sunt păstrate separat; solicitați ștergerea lor prin intermediul secțiunii Feedback.",
           "confirmTitle": "Ești sigur?",
-          "text": "Acțiunea asta este ireversibilă. Toate datele tale vor dispărea și nimic nu va putea fi recuperat.",
+          "text": "Ștergeți contul și datele sincronizate de pe server. Rapoartele trimise sunt păstrate separat.",
           "title": "Șterge contul"
         },
         "logoutAllDevices": {

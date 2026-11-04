@@ -10,7 +10,10 @@
     "download": "Tải xuống",
     "language": "Ngôn ngữ",
     "addonGuide": "Tạo addon",
-    "installGuide": "Hướng dẫn cài đặt"
+    "installGuide": "Hướng dẫn cài đặt",
+    "homeAria": "Trang chủ Framezoo",
+    "primaryAria": "Điều hướng chính",
+    "backToTop": "Lên đầu trang"
   },
   "hero": {
     "title": "Stream tốc độ cao,",
@@ -109,7 +112,9 @@
     ],
     "advancedDescription": "Stremio Addon SDK là tùy chọn không bắt buộc. Bạn có thể dùng SDK để hỗ trợ định tuyến và đóng gói dữ liệu nhanh hơn.",
     "advancedTitle": "Cần bộ công cụ hỗ trợ?",
-    "advancedLink": "Xem tài liệu tham khảo SDK nâng cao"
+    "advancedLink": "Xem tài liệu tham khảo SDK nâng cao",
+    "copy": "Sao chép",
+    "copied": "Đã sao chép"
   },
   "deepLink": {
     "opening": "Đang mở Framezoo...",
@@ -166,7 +171,9 @@
         "Click \"Run anyway\" để hoàn tất quá trình cài đặt Framezoo."
       ],
       "note": "Cảnh báo này xuất hiện do ứng dụng mới được phát hành và chưa tích lũy chứng chỉ số Microsoft EV Code Signing. Ứng dụng an toàn 100%."
-    }
+    },
+    "osSelectionAria": "Chọn hệ điều hành",
+    "applicationsFolderAria": "Thư mục Ứng dụng"
   },
   "downloadConfirm": {
     "macTitle": "Hướng dẫn cài đặt trên macOS",
@@ -269,6 +276,177 @@
       "copied": "Đã sao chép!",
       "noticeLabel": "Lưu ý:",
       "noticeText": "API Key được lưu trên trình duyệt của bạn. Khi sử dụng Framezoo Desktop hoặc Stremio, key này sẽ được chuyển tiếp an toàn để tìm kiếm phụ đề. Bạn có thể thay đổi hoặc xóa bất kỳ lúc nào."
+    }
+  },
+  "legal": {
+    "eyebrow": "PHÁP LÝ & TUÂN THỦ 2026",
+    "pageTitle": "Điều khoản, Bảo mật & Chính sách Pháp lý",
+    "pageSubtitle": "Điều khoản sử dụng và thông tin xử lý dữ liệu của ứng dụng Framezoo trên máy tính.",
+    "reportCtaTitle": "Cần gửi thông báo bản quyền hoặc phản hồi pháp lý?",
+    "reportCtaDesc": "Nếu bạn là chủ sở hữu quyền tác giả hoặc cần yêu cầu hỗ trợ liên quan đến dữ liệu cá nhân, vui lòng gửi thông tin qua biểu mẫu chính thức để đội ngũ xử lý trong 24–72 giờ làm việc.",
+    "reportCtaButton": "Mở biểu mẫu Báo cáo / Phản hồi",
+    "tabs": {
+      "terms": {
+        "title": "Điều khoản sử dụng (Terms of Service)",
+        "updatedAt": "Cập nhật: 04/11/2026",
+        "summary": "Vui lòng đọc điều khoản và chính sách bảo mật trước khi tạo tài khoản hoặc sử dụng ứng dụng Framezoo trên máy tính.",
+        "sections": [
+          {
+            "badge": "01",
+            "title": "Bản chất phần mềm trình phát trung gian kỹ thuật",
+            "paragraphs": [
+              "Framezoo là ứng dụng trình phát đa phương tiện trên máy tính (Desktop Media Player) hoạt động với vai trò công cụ kỹ thuật trung lập, tương tự các trình phát video tiêu chuẩn hoặc trình duyệt web.",
+              "Framezoo không cung cấp kho lưu trữ phim hay vận hành nguồn phát video. Máy chủ Framezoo có thể chuyển tiếp tệp phụ đề từ nhà cung cấp và xử lý tạm thời các đoạn âm thanh, phụ đề khi bạn dùng tính năng đồng bộ."
+            ]
+          },
+          {
+            "badge": "02",
+            "title": "Trách nhiệm của người dùng theo pháp luật Việt Nam",
+            "paragraphs": [
+              "Người dùng tự chịu trách nhiệm hoàn toàn trước pháp luật khi cấu hình, cài đặt các tiện ích mở rộng (Addons) hoặc truy cập các đường dẫn luồng phát từ bên thứ ba thông qua ứng dụng."
+            ],
+            "bullets": [
+              "Tuân thủ Luật Sở hữu trí tuệ Việt Nam (sửa đổi), Luật An ninh mạng và Nghị định 147/2024/NĐ-CP về quản lý, cung cấp và sử dụng dịch vụ Internet và thông tin trên mạng.",
+              "Không sử dụng phần mềm để truy cập, lưu trữ hoặc chia sẻ các nội dung bị cấm theo quy định của pháp luật Việt Nam và pháp luật tại quốc gia sở tại.",
+              "Tự kiểm tra tính hợp pháp và độ an toàn của các Addon cộng đồng trước khi thêm vào ứng dụng."
+            ]
+          },
+          {
+            "badge": "03",
+            "title": "Quyền cấp phép & Giới hạn sử dụng",
+            "paragraphs": [
+              "Framezoo cấp cho bạn quyền sử dụng cá nhân, không độc quyền, không chuyển nhượng và phi thương mại đối với bản cài đặt hợp lệ của phần mềm trên macOS và Windows.",
+              "Nghiêm cấm các hành vi dịch ngược trái phép nhằm mục đích cài cắm mã độc, giả mạo thương hiệu Framezoo để trục lợi hoặc gây gián đoạn hạ tầng kỹ thuật của dự án."
+            ]
+          },
+          {
+            "badge": "04",
+            "title": "Giới hạn trách nhiệm pháp lý (AS-IS)",
+            "paragraphs": [
+              "Phần mềm được cung cấp trên cơ sở \"Nguyên trạng\" (AS-IS). Đội ngũ phát triển Framezoo không đưa ra bất kỳ bảo đảm nào về tính liên tục, độ chính xác hoặc tính khả dụng của các nguồn dữ liệu bên thứ ba được kết nối qua giao thức mở."
+            ]
+          }
+        ]
+      },
+      "privacy": {
+        "title": "Chính sách bảo mật & Bảo vệ dữ liệu cá nhân",
+        "updatedAt": "Cập nhật: 04/11/2026 · Luật 91/2025/QH15 & NĐ 356/2025/NĐ-CP",
+        "summary": "Chính sách này mô tả dữ liệu được xử lý khi bạn dùng ứng dụng Framezoo trên máy tính và máy chủ Framezoo chính thức.",
+        "sections": [
+          {
+            "badge": "01",
+            "title": "Dữ liệu trên thiết bị và máy chủ",
+            "paragraphs": [
+              "Ứng dụng lưu một phần cài đặt, bộ nhớ đệm và dữ liệu phát trên thiết bị. Khi bạn tạo tài khoản, máy chủ còn lưu email, tên hiển thị, hồ sơ, khóa công khai, thông tin phiên/thiết bị, dữ liệu đồng bộ như dấu trang, tiến độ xem, lịch sử xem, cài đặt và Addon, cùng khóa nhà cung cấp phụ đề được mã hóa nếu bạn nhập khóa."
+            ],
+            "bullets": [
+              "Email, mã xác minh và thông tin kỹ thuật của yêu cầu được dùng để đăng ký, đăng nhập và bảo vệ tài khoản.",
+              "Phản hồi, mô tả lỗi và tệp đính kèm được gửi tới máy chủ khi bạn chủ động gửi biểu mẫu.",
+              "Tùy chọn ngôn ngữ trên website được lưu trong bộ nhớ trình duyệt."
+            ]
+          },
+          {
+            "badge": "02",
+            "title": "Mục đích và dịch vụ bên thứ ba",
+            "paragraphs": [
+              "Chúng tôi xử lý dữ liệu để vận hành tài khoản, đồng bộ giữa thiết bị, hỗ trợ người dùng, bảo vệ dịch vụ và cung cấp tính năng bạn chọn. Chúng tôi không bán dữ liệu cá nhân cho mạng quảng cáo."
+            ],
+            "bullets": [
+              "Email xác minh được chuyển tới nhà cung cấp dịch vụ gửi thư; bản sao lưu cơ sở dữ liệu có thể được lưu trên Supabase khi dịch vụ sao lưu được cấu hình.",
+              "Một số nhà cung cấp dịch vụ hoặc máy chủ Addon có thể xử lý dữ liệu bên ngoài Việt Nam; vị trí máy chủ tùy thuộc dịch vụ bạn chọn và cấu hình vận hành.",
+              "Google reCAPTCHA có thể được dùng ở màn hình đăng ký; nội dung phụ đề được gửi tới Google Translate khi bạn chọn dịch.",
+              "Khi bạn tìm hoặc tải phụ đề, dùng đồng bộ âm thanh/phụ đề, hay bật Addon cộng đồng, dữ liệu yêu cầu có thể đi qua máy chủ Framezoo và dịch vụ bên ngoài tương ứng. Addon của bên thứ ba có chính sách riêng."
+            ]
+          },
+          {
+            "badge": "03",
+            "title": "Thời gian lưu và xóa dữ liệu",
+            "paragraphs": [
+              "Dữ liệu tài khoản và đồng bộ được lưu khi tài khoản hoạt động. Bạn có thể xóa tài khoản trong Cài đặt; các bản ghi tài khoản, dấu trang, tiến độ, lịch sử xem, cài đặt và phiên đăng nhập trên máy chủ sẽ bị xóa. Bản sao lưu cũ có thể còn dữ liệu đến khi được luân chuyển; cấu hình mặc định giữ 7 bản sao lưu gần nhất khi sao lưu hoạt động."
+            ],
+            "bullets": [
+              "Mã xác minh hết hiệu lực sau 10 phút; bản ghi xác minh đã hết hạn được dọn sau 7 ngày. Bản ghi thư đã gửi hoặc gửi lỗi được dọn sau 7 ngày.",
+              "Phản hồi và tệp đính kèm được lưu riêng để xử lý hỗ trợ hoặc yêu cầu bản quyền cho đến khi được xóa theo yêu cầu hoặc do bộ phận hỗ trợ xóa. Xóa tài khoản sẽ gỡ liên kết tài khoản, nhưng không tự xóa phản hồi. Bạn có thể yêu cầu xóa phản hồi riêng qua biểu mẫu Phản hồi."
+            ]
+          },
+          {
+            "badge": "04",
+            "title": "Quyền của bạn và liên hệ",
+            "paragraphs": [
+              "Bạn có thể yêu cầu xem, chỉnh sửa, xóa hoặc hạn chế xử lý dữ liệu, rút lại đồng ý nếu hoạt động xử lý dựa trên đồng ý, và gửi khiếu nại qua biểu mẫu Phản hồi trên website. Vui lòng cung cấp email tài khoản để chúng tôi xác minh yêu cầu."
+            ]
+          }
+        ]
+      },
+      "copyright": {
+        "title": "Bản quyền, DMCA & Miễn trừ trách nhiệm nội dung",
+        "updatedAt": "Cập nhật: 04/11/2026",
+        "summary": "Tuyên bố miễn trừ trách nhiệm nội dung và quy trình tiếp nhận thông báo liên quan đến quyền sở hữu trí tuệ.",
+        "sections": [
+          {
+            "badge": "01",
+            "title": "Miễn trừ trách nhiệm đối với công cụ phần mềm trung gian",
+            "paragraphs": [
+              "Framezoo không vận hành kho phim hoặc nguồn phát video. Ứng dụng có thể truy xuất nguồn do người dùng chọn; máy chủ có thể chuyển tiếp phụ đề từ nhà cung cấp và xử lý tạm thời âm thanh/phụ đề để đồng bộ theo yêu cầu của người dùng.",
+              "Mỗi yêu cầu bản quyền sẽ được xem xét theo nội dung và vai trò thực tế của dịch vụ; điều khoản này không tự tạo quyền miễn trừ trách nhiệm."
+            ]
+          },
+          {
+            "badge": "02",
+            "title": "Nguồn thông tin Metadata & Hình ảnh minh họa",
+            "paragraphs": [
+              "Các thông tin tra cứu về phim (tên phim, năm phát hành, tóm tắt nội dung, điểm số, poster minh họa) hiển thị trên giao diện được trích xuất tự động từ các cơ sở dữ liệu điện ảnh mở (như TMDB, IMDb, TVDB) theo phạm vi sử dụng hợp lý nhằm mục đích thông tin và danh mục.",
+              "Nhãn hiệu, tên phim và hình ảnh đại diện thuộc quyền sở hữu của các nhà sản xuất và chủ sở hữu bản quyền tương ứng."
+            ]
+          },
+          {
+            "badge": "03",
+            "title": "Quy trình Thông báo & Gỡ bỏ (Notice & Takedown)",
+            "paragraphs": [
+              "Framezoo tôn trọng quyền tác giả và quyền liên quan của các tổ chức, cá nhân. Nếu bạn là chủ sở hữu quyền hợp pháp và nhận thấy bất kỳ nội dung hiển thị trên website framezoo.top xâm phạm quyền sở hữu trí tuệ của mình, vui lòng gửi yêu cầu kèm theo:"
+            ],
+            "bullets": [
+              "Thông tin định danh chủ sở hữu bản quyền hoặc đại diện được ủy quyền hợp pháp.",
+              "Bằng chứng xác nhận quyền sở hữu hợp pháp đối với tác phẩm liên quan.",
+              "Đường dẫn URL cụ thể hoặc mô tả chi tiết thành phần cần kiểm tra/gỡ bỏ."
+            ]
+          }
+        ]
+      },
+      "addon-policy": {
+        "title": "Chính sách Addon & Nguyên tắc Cộng đồng",
+        "updatedAt": "Áp dụng cho Nhà phát triển Addon & Người dùng",
+        "summary": "Quy tắc an toàn và tuân thủ pháp luật dành cho hệ sinh thái giao thức Addon mở trên Framezoo.",
+        "sections": [
+          {
+            "badge": "01",
+            "title": "Cơ chế giao thức Addon độc lập",
+            "paragraphs": [
+              "Hệ thống Addon của Framezoo sử dụng giao thức HTTP/JSON mở (tương thích chuẩn manifest cộng đồng). Bất kỳ nhà phát triển độc lập nào cũng có thể tự vận hành dịch vụ HTTP riêng mà không cần can thiệp vào mã nguồn của Framezoo.",
+              "Addon cộng đồng do bên thứ ba tự vận hành. Framezoo cũng vận hành dịch vụ phụ đề tích hợp trên máy chủ của mình; phạm vi xử lý được nêu trong chính sách bảo mật."
+            ]
+          },
+          {
+            "badge": "02",
+            "title": "Các hành vi bị nghiêm cấm (Tuân thủ Luật An ninh mạng)",
+            "paragraphs": [
+              "Nghiêm cấm các nhà phát triển và người dùng sử dụng giao thức Addon hoặc thương hiệu Framezoo vào các mục đích vi phạm Điều 8 Luật An ninh mạng Việt Nam và Nghị định 147/2024/NĐ-CP, bao gồm:"
+            ],
+            "bullets": [
+              "Phát tán nội dung vi phạm pháp luật Việt Nam, tuyên truyền chống phá, kích động bạo lực, đồi trụy hoặc xâm hại trẻ em.",
+              "Phát tán mã độc (malware, ransomware, spyware), thực hiện tấn công mạng hoặc đánh cắp dữ liệu người dùng.",
+              "Mạo danh đội ngũ phát triển chính thức của Framezoo hoặc lừa đảo thu phí trái phép từ người dùng."
+            ]
+          },
+          {
+            "badge": "03",
+            "title": "Khuyến nghị an toàn cho người dùng",
+            "paragraphs": [
+              "Người dùng chỉ nên cài đặt Addon từ các nhà phát triển uy tín mà mình tin tưởng. Bạn có thể xem chi tiết quyền hạn (`resources`) của từng Addon và gỡ bỏ bất kỳ lúc nào trong phần quản lý Addons của ứng dụng."
+            ]
+          }
+        ]
+      }
     }
   }
 }

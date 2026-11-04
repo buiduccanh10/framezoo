@@ -176,7 +176,9 @@
       "passwordMismatch": "Os contrasinais non coinciden",
       "passwordPlaceholder": "Crea un contrasinal (usado como frase de acceso)",
       "passwordWeak": "O contrasinal debe ter polo menos 8 caracteres con letras e números",
-      "submit": "Crear conta"
+      "privacyPolicy": "Política de privacidade",
+      "submit": "Crear conta",
+      "legalConsent": "Lin e acepto as <terms>Condicións de servizo</terms> e a <privacy>Política de privacidade</privacy>."
     },
     "trust": {
       "failed": {
@@ -302,7 +304,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Descargo de responsabilidade",
-      "disclaimerText": "Framezoo é un software de reprodutor multimedia neutral. Non aloxa, almacena, distribúe nin controla ficheiros multimedia nin complementos de terceiros. Explora metadatos enriquecidos de películas, sincronización ilimitada de subtítulos en streaming e subtítulos de múltiples fontes, mantendo o control do contido ao que accedes."
+      "disclaimerText": "Framezoo non opera fontes de transmisión de vídeo. Os seus servidores poden retransmitir subtítulos do provedor e procesar temporalmente o audio e os subtítulos para a sincronización cando escolla esa función. Vostede controla o contido que reproduce."
     },
     "links": {
       "fluxer": "Fluxador",
@@ -1179,9 +1181,9 @@
         "delete": {
           "button": "Eliminar conta",
           "confirmButton": "Eliminar conta",
-          "confirmDescription": "Estás seguro/a de que queres eliminar a túa conta? Todos os datos serán eliminados!",
+          "confirmDescription": "Isto non se pode desfacer. A túa conta e os datos sincronizados eliminaranse do servidor. Os informes enviados gárdanse por separado; solicita a súa eliminación a través de Comentarios.",
           "confirmTitle": "Estás seguro/a?",
-          "text": "Esta acción é irreversible. Todos os datos serán eliminados e nada poderá ser recuperado.",
+          "text": "Elimina a túa conta e os datos sincronizados do servidor. Os informes enviados consérvanse por separado.",
           "title": "Eliminar conta"
         },
         "logoutAllDevices": {

@@ -6,7 +6,10 @@
     "language": "Jezik",
     "addonGuide": "Vodnik po dodatkih",
     "home": "domov",
-    "installGuide": "Navodila za namestitev"
+    "installGuide": "Navodila za namestitev",
+    "homeAria": "Domov Framezoo",
+    "primaryAria": "Primarna navigacija",
+    "backToTop": "Nazaj na vrh"
   },
   "hero": {
     "eyebrow": "FRAMEZOO DESKTOP / 01",
@@ -75,7 +78,9 @@
     ],
     "advancedTitle": "Potrebujete pomočnika Node?",
     "advancedDescription": "Stremio Addon SDK ni obvezen. Uporabite ga, če želite pomočnike za usmerjanje in serializacijo; protokol ga ne zahteva.",
-    "advancedLink": "Odpri napredno referenco SDK"
+    "advancedLink": "Odpri napredno referenco SDK",
+    "copy": "Kopiraj",
+    "copied": "Kopirano"
   },
   "deepLink": {
     "opening": "Odpiranje Framezoo ...",
@@ -140,7 +145,9 @@
     "winClickHere": "(kliknite tukaj)",
     "winMoreInfo": "Več informacij",
     "winDialogDesc": "Microsoft Defender SmartScreen je preprečil zagon neprepoznane aplikacije. Zagon te aplikacije lahko ogrozi vaš računalnik.",
-    "winQuickSolution": "Kliknite Več informacij → Vseeno zaženi"
+    "winQuickSolution": "Kliknite Več informacij → Vseeno zaženi",
+    "osSelectionAria": "Izbira operacijskega sistema",
+    "applicationsFolderAria": "Mapa z aplikacijami"
   },
   "downloadConfirm": {
     "macTitle": "Navodila za namestitev za macOS",
@@ -266,6 +273,177 @@
       "noticeText": "Vaš API ključ je varno shranjen v vaši napravi. Posreduje se samo za iskanje in pridobivanje podnapisov za filme in serije. Kadar koli ga lahko posodobite ali odstranite.",
       "copied": "Kopirano!",
       "noticeLabel": "Obvestilo:"
+    }
+  },
+  "legal": {
+    "eyebrow": "PRAVNO IN SKLADNO 2026",
+    "pageTitle": "Pogoji, zasebnost in pravne politike",
+    "pageSubtitle": "Pogoji uporabe in informacije o obdelavi podatkov za namizno aplikacijo Framezoo.",
+    "reportCtaTitle": "Ali morate poslati obvestilo o avtorskih pravicah ali pravno poizvedbo?",
+    "reportCtaDesc": "Če ste imetnik avtorskih pravic ali imate zahtevo za osebne podatke, prosimo, da svoje podatke pošljete prek našega uradnega kanala za povratne informacije v pregled v 24–72 delovnih urah.",
+    "reportCtaButton": "Odpri obrazec za poročilo/povratne informacije",
+    "tabs": {
+      "terms": {
+        "title": "Pogoji storitve",
+        "updatedAt": "Posodobljeno: 4. november 2026",
+        "summary": "Preden ustvarite račun ali uporabite namizno aplikacijo Framezoo, preberite te pogoje in pravilnik o zasebnosti.",
+        "sections": [
+          {
+            "title": "Narava programske opreme za nevtralne predvajalnike medijev",
+            "paragraphs": [
+              "Framezoo je neodvisna namizna aplikacija za predvajanje medijev, ki deluje kot nevtralno tehnično orodje, podobno standardnim video predvajalnikom ali spletnim brskalnikom.",
+              "Framezoo ne ponuja knjižnice filmov in ne upravlja virov video toka. Strežniki Framezoo lahko posredujejo podnapise ponudnikov in začasno obdelujejo zvočne posnetke in podnapise, ko uporabljate sinhronizacijo."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Odgovornosti uporabnikov in skladnost z zakonodajo",
+            "paragraphs": [
+              "Uporabniki so izključno odgovorni za konfiguracijo aplikacije, namestitev dodatkov tretjih oseb in zagotavljanje, da so vsi dostopni tokovi ali mediji skladni z veljavno zakonodajo."
+            ],
+            "bullets": [
+              "Upoštevajte veljavne zakone o intelektualni lastnini, zakon o kibernetski varnosti, vietnamski odlok 147/2024/ND-CP in predpise v vaši lokalni pristojnosti.",
+              "Programske opreme ne uporabljajte za dostop do nezakonitih vsebin, njihovo distribucijo ali promocijo.",
+              "Pred namestitvijo URL-ja manifesta preverite zanesljivost in zakonitost katerega koli dodatka skupnosti tretjih oseb."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Licenca in omejitve programske opreme",
+            "paragraphs": [
+              "Framezoo vam podeljuje osebno, neizključno, neprenosljivo in nekomercialno licenco za namestitev in uporabo uradnih različic namiznih računalnikov v sistemih macOS in Windows.",
+              "Ne smete distribuirati spremenjenih binarnih datotek, ki vsebujejo zlonamerno programsko opremo, napačno predstavljati povezave s Framezoo ali zlorabljati projektne infrastrukture."
+            ],
+            "badge": "03"
+          },
+          {
+            "title": "Omejitev odgovornosti (kot je)",
+            "paragraphs": [
+              "Programska oprema je na voljo »KAKRŠNA JE« in »KOT JE NA VOLJO« brez kakršnih koli jamstev. Framezoo ne odgovarja za razpoložljivost, točnost ali zakonitost zunanjih tokov ali metapodatkov, ki jih zagotavljajo storitve tretjih oseb."
+            ],
+            "badge": "04"
+          }
+        ]
+      },
+      "privacy": {
+        "title": "Politika zasebnosti in varstva osebnih podatkov",
+        "updatedAt": "Posodobljeno: 4. november 2026 · Zakon 91/2025/QH15 in Odlok 356/2025/ND-CP",
+        "summary": "Ta politika opisuje obdelavo podatkov v namizni aplikaciji Framezoo in na uradnih strežnikih Framezoo.",
+        "sections": [
+          {
+            "title": "Podatki na vaši napravi in ​​naših strežnikih",
+            "paragraphs": [
+              "Aplikacija shrani nekatere nastavitve, predpomnilnik in podatke o predvajanju v vaši napravi. Če ustvarite račun, strežnik shrani tudi vaš e-poštni naslov, vzdevek, profil, javni ključ, podrobnosti o seji/napravi, sinhronizirane zaznamke, napredek, zgodovino ogledov, nastavitve in dodatke ter šifrirane ključe ponudnika podnapisov, če jih posredujete."
+            ],
+            "bullets": [
+              "E-pošta, potrditvene kode in podrobnosti zahteve podpirajo registracijo, prijavo in varnost računa.",
+              "Poročila, opisi napak in priloge prispejo na naš strežnik, ko oddate obrazec za povratne informacije.",
+              "Spletno mesto shrani vašo izbiro jezika v pomnilnik brskalnika."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Nameni in zunanje storitve",
+            "paragraphs": [
+              "Podatke obdelujemo za upravljanje računov, sinhronizacijo naprav, zagotavljanje podpore, zaščito storitve in zagotavljanje funkcij, ki jih izberete. Osebnih podatkov ne prodajamo oglaševalskim omrežjem."
+            ],
+            "bullets": [
+              "Potrditveno e-poštno sporočilo se pošlje našemu ponudniku e-pošte; varnostne kopije baze podatkov se lahko shranijo v Supabase, ko je varnostno kopiranje konfigurirano.",
+              "Nekateri ponudniki storitev ali dodatni strežniki lahko obdelujejo podatke zunaj Vietnama; lokacija strežnika je odvisna od izbrane storitve in konfiguracije delovanja.",
+              "Med registracijo lahko uporabite Google reCAPTCHA; ko izberete prevajanje, se besedilo podnapisov prenese v Google Prevajalnik.",
+              "Iskanje in prenos podnapisov, sinhronizacija zvoka/podnapisov in dodatki skupnosti lahko pošiljajo zahteve prek strežnikov Framezoo in ustreznih zunanjih storitev. Dodatki drugih ponudnikov imajo svoje pravilnike."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Hramba in izbris",
+            "paragraphs": [
+              "Podatki o računu in sinhronizaciji ostanejo shranjeni, dokler je vaš račun aktiven. Račun lahko izbrišete v nastavitvah; strežnik nato odstrani zapise računa, zaznamke, napredek, zgodovino ogledov, nastavitve in seje. Stare varnostne kopije baze podatkov lahko hranijo podatke do rotacije; privzeta konfiguracija hrani 7 nedavnih varnostnih kopij, ko se izvaja varnostno kopiranje."
+            ],
+            "bullets": [
+              "Kode za preverjanje potečejo po 10 minutah; zapisi o potečenih izzivih se odstranijo po 7 dneh. Zapisi o poslani ali neuspešni pošti se odstranijo po 7 dneh.",
+              "Povratne informacije in priloge se hranijo ločeno za potrebe podpore ali zahtev glede avtorskih pravic, dokler jih ekipa za podporo ne odstrani na zahtevo ali jih ne odstrani. Z brisanjem računa se odstrani povezava do računa, vendar poročila ne izbrišejo samodejno. Ločeno brisanje lahko zahtevate prek obrazca za povratne informacije."
+            ],
+            "badge": "03"
+          },
+          {
+            "title": "Vaše pravice in stik",
+            "paragraphs": [
+              "Zahtevate lahko dostop do svojih podatkov, njihov popravek, izbris ali omejitev, prekličete soglasje, kadar obdelava zahteva soglasje, in vložite pritožbo prek obrazca za povratne informacije na naši spletni strani. Prosimo, navedite svoj e-poštni naslov, da lahko preverimo zahtevo."
+            ],
+            "badge": "04"
+          }
+        ]
+      },
+      "copyright": {
+        "title": "Avtorske pravice, DMCA in omejitev odgovornosti za vsebino",
+        "updatedAt": "Posodobljeno: 4. november 2026",
+        "summary": "Uradna izjava o omejitvi odgovornosti za vsebino in postopek obveščanja o intelektualni lastnini ter odstranitve vsebine za Framezoo.",
+        "sections": [
+          {
+            "title": "Varni pristan posredniške programske opreme",
+            "paragraphs": [
+              "Framezoo ne upravlja knjižnice filmov ali vira video toka. Aplikacija lahko dostopa do virov, ki jih izberejo uporabniki; naši strežniki lahko posredujejo podnapise ponudnikov in začasno obdelujejo zvok in podnapise za zahtevano sinhronizacijo.",
+              "Vsako obvestilo o avtorskih pravicah se pregleda glede na vsebino in našo dejansko vlogo; ti pogoji ne ustvarjajo samodejne izjeme od odgovornosti."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Pripis metapodatkov in umetniškega dela",
+            "paragraphs": [
+              "Metapodatki filmov in serij (naslovi, datumi izida, sinopsisi, ocene in promocijski plakati), prikazani za informativno iskanje, izvirajo iz javnih filmskih baz podatkov (kot so TMDB, IMDb in TVDB).",
+              "Vse blagovne znamke, naslovi filmov in umetniška dela ostanejo last njihovih lastnikov avtorskih pravic."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Postopek obveščanja in odstranitve",
+            "paragraphs": [
+              "Framezoo spoštuje pravice intelektualne lastnine. Če ste lastnik avtorskih pravic ali pooblaščeni zastopnik in menite, da katero koli gradivo na framezoo.top krši vaše pravice, prosimo, da prek našega kanala za prijavo/povratne informacije oddate obvestilo, ki vključuje:"
+            ],
+            "bullets": [
+              "Identifikacija imetnika avtorskih pravic ali pooblaščenega zastopnika.",
+              "Dokazilo o lastništvu avtorsko zaščitenega dela.",
+              "Natančen URL ali opis zadevnega gradiva, da ga lahko pregledamo in obravnavamo v 24–72 delovnih urah."
+            ],
+            "badge": "03"
+          }
+        ]
+      },
+      "addon-policy": {
+        "title": "Pravilnik o dodatkih in smernice skupnosti",
+        "updatedAt": "Za razvijalce dodatkov in končne uporabnike",
+        "summary": "Standardi varnosti in skladnosti za odprt ekosistem dodatkov HTTP/JSON na Framezoo.",
+        "sections": [
+          {
+            "title": "Neodvisna arhitektura dodatkov",
+            "paragraphs": [
+              "Framezoo podpira odprt protokol za dodatke HTTP/JSON. Neodvisni razvijalci lahko gostijo lastne manifeste in končne točke virov, ne da bi spreminjali osrednji predvajalnik.",
+              "Dodatke skupnosti upravljajo tretje osebe. Framezoo upravlja tudi integrirano storitev podnapisov na svojih strežnikih, kot je opisano v pravilniku o zasebnosti."
+            ],
+            "badge": "01"
+          },
+          {
+            "title": "Prepovedano ravnanje in vsebina",
+            "paragraphs": [
+              "V skladu s predpisi o kibernetski varnosti in intelektualni lastnini razvijalci in uporabniki ne smejo uporabljati protokola ali blagovne znamke Framezoo za:"
+            ],
+            "bullets": [
+              "Distribuirati nezakonite vsebine, sovražni govor, nasilje ali gradivo, ki izkorišča otroke.",
+              "Širite zlonamerno programsko opremo, vohunsko programsko opremo, lažne povezave ali nepooblaščene skripte za zbiranje podatkov.",
+              "Izdajati se za uradne izdaje Framezoo ali zavajati uporabnike z goljufivimi plačilnimi shemami."
+            ],
+            "badge": "02"
+          },
+          {
+            "title": "Priporočila za varnost uporabnikov",
+            "paragraphs": [
+              "Namestite manifeste dodatkov samo iz virov, ki jim zaupate. V aplikaciji Framezoo lahko kadar koli pregledate deklarirane vire dodatkov in odstranite vse nameščene dodatke."
+            ],
+            "badge": "03"
+          }
+        ]
+      }
     }
   }
 }

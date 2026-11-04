@@ -64,7 +64,11 @@ export function LandingCategoryPage({ category }: LandingCategoryPageProps) {
       <LandingParticles />
 
       <header className="landing-nav">
-        <a className="landing-brand" href="/" aria-label="Framezoo home">
+        <a
+          className="landing-brand"
+          href="/"
+          aria-label={activeCopy.nav.homeAria}
+        >
           <img
             src="/framezoo-logo.svg"
             width="138"
@@ -72,7 +76,10 @@ export function LandingCategoryPage({ category }: LandingCategoryPageProps) {
             alt="Framezoo"
           />
         </a>
-        <nav className="landing-nav-links" aria-label="Primary navigation">
+        <nav
+          className="landing-nav-links"
+          aria-label={activeCopy.nav.primaryAria}
+        >
           <a href="/">{activeCopy.nav.home}</a>
           <a
             href="/experience"
