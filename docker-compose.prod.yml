@@ -19,7 +19,7 @@ services:
       - framezoo-prod-network
 
   redis:
-    image: redis:7-alpine@sha256:858f009f9709ce576febc734aa78b8f6d624b82571f9ddb6bda4377c833b3499
+    image: redis:7-alpine
     restart: always
     networks:
       - framezoo-prod-network
@@ -27,7 +27,7 @@ services:
       - redis-data:/data
 
   redis-queue:
-    image: redis:7-alpine@sha256:858f009f9709ce576febc734aa78b8f6d624b82571f9ddb6bda4377c833b349
+    image: redis:7-alpine
     restart: always
     command: ["redis-server", "--appendonly", "yes", "--appendfsync", "everysec", "--maxmemory-policy", "noeviction"]
     networks:
