@@ -187,20 +187,6 @@ jobs:
               exit 1
             fi
 
-            existing_assets="$(
-              gh release view "$TAG" \
-                --repo "$RELEASE_REPOSITORY" \
-                --json assets \
-                -q '.assets[].name'
-            )"
-            while IFS= read -r asset_name; do
-              if [ -n "$asset_name" ]; then
-                gh release delete-asset "$TAG" \
-                  --repo "$RELEASE_REPOSITORY" \
-                  --yes \
-                  "$asset_name"
-              fi
-            done <<< "$existing_assets"
           else
             gh release create "$TAG" \
               --repo "$RELEASE_REPOSITORY" \
@@ -292,24 +278,11 @@ jobs:
           if [ -z "$APPLE_APP_SPECIFIC_PASSWORD" ]; then unset APPLE_APP_SPECIFIC_PASSWORD; fi
           if [ -z "$APPLE_TEAM_ID" ]; then unset APPLE_TEAM_ID; fi
           ${{ matrix.command }}
-      - name: Stage desktop artifacts in draft GitHub Release
+      - name: Prepare macOS release assets
         shell: bash
-        env:
-          GH_TOKEN: ${{ secrets.DESKTOP_RELEASE_TOKEN }}
-          RELEASE_REPOSITORY: buiduccanh10/framezoo-desktop-releases
-          RELEASE_TAG: ${{ needs.prepare.outputs.release_tag }}
         run: |
           set -euo pipefail
           shopt -s nullglob
-
-          if [ -z "${GH_TOKEN:-}" ]; then
-            echo "DESKTOP_RELEASE_TOKEN secret is empty."
-            exit 1
-          fi
-          if [ -z "${RELEASE_TAG:-}" ]; then
-            echo "Draft release tag is empty."
-            exit 1
-          fi
 
           staging_dir="desktop-release-staging/${{ matrix.variant }}"
           rm -rf "$staging_dir"
@@ -334,10 +307,14 @@ jobs:
             cp "${matches[0]}" "$staging_dir/"
           done
 
-          gh release upload "$RELEASE_TAG" \
-            --repo "$RELEASE_REPOSITORY" \
-            --clobber \
-            "$staging_dir"/*
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: desktop-release-${{ matrix.variant }}
+          path: desktop-release-staging/${{ matrix.variant }}/
+          compression-level: 0
+          # ponytail: retry window is 7 days; extend retention if releases wait longer.
+          retention-days: 7
+          overwrite: true
 
   build-windows:
     name: Build Windows (${{ matrix.variant }})
@@ -513,24 +490,11 @@ jobs:
             --runtime-dir "$RUNTIME_DIR" \
             --expect-arch "$EXPECT_ARCH"
           echo "::endgroup::"
-      - name: Stage desktop artifacts in draft GitHub Release
+      - name: Prepare Windows release assets
         shell: bash
-        env:
-          GH_TOKEN: ${{ secrets.DESKTOP_RELEASE_TOKEN }}
-          RELEASE_REPOSITORY: buiduccanh10/framezoo-desktop-releases
-          RELEASE_TAG: ${{ needs.prepare.outputs.release_tag }}
         run: |
           set -euo pipefail
           shopt -s nullglob
-
-          if [ -z "${GH_TOKEN:-}" ]; then
-            echo "DESKTOP_RELEASE_TOKEN secret is empty."
-            exit 1
-          fi
-          if [ -z "${RELEASE_TAG:-}" ]; then
-            echo "Draft release tag is empty."
-            exit 1
-          fi
 
           staging_dir="desktop-release-staging/${{ matrix.variant }}"
           rm -rf "$staging_dir"
@@ -555,10 +519,13 @@ jobs:
             cp "${matches[0]}" "$staging_dir/"
           done
 
-          gh release upload "$RELEASE_TAG" \
-            --repo "$RELEASE_REPOSITORY" \
-            --clobber \
-            "$staging_dir"/*
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: desktop-release-${{ matrix.variant }}
+          path: desktop-release-staging/${{ matrix.variant }}/
+          compression-level: 0
+          retention-days: 7
+          overwrite: true
 
   publish:
     name: Publish
@@ -579,29 +546,15 @@ jobs:
           node-version: 22
       - name: Install release tooling
         run: pnpm install --frozen-lockfile --ignore-scripts
-      - name: Download staged assets from draft GitHub Release
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          pattern: desktop-release-*
+          path: desktop-raw
+          merge-multiple: true
+      - name: Prepare staged release assets
         shell: bash
-        env:
-          GH_TOKEN: ${{ secrets.DESKTOP_RELEASE_TOKEN }}
-          RELEASE_REPOSITORY: buiduccanh10/framezoo-desktop-releases
-          RELEASE_TAG: ${{ needs.prepare.outputs.release_tag }}
         run: |
           set -euo pipefail
-
-          if [ -z "${GH_TOKEN:-}" ]; then
-            echo "DESKTOP_RELEASE_TOKEN secret is empty."
-            exit 1
-          fi
-          if [ -z "${RELEASE_TAG:-}" ]; then
-            echo "Draft release tag is empty."
-            exit 1
-          fi
-
-          rm -rf desktop-raw desktop-artifacts
-          mkdir -p desktop-raw
-          gh release download "$RELEASE_TAG" \
-            --repo "$RELEASE_REPOSITORY" \
-            --dir desktop-raw
           node scripts/prepare-desktop-github-release-input.js \
             --input-dir desktop-raw \
             --output-dir desktop-artifacts
