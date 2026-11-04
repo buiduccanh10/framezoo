@@ -125,6 +125,40 @@ model email_otp_challenges {
   @@index([action_token_hash])
 }
 
+model email_outbox {
+  id                  String    @id @default(uuid()) @db.Uuid
+  challenge_id        String?   @db.Uuid
+  dedupe_key          String    @unique @db.VarChar(255)
+  payload_ciphertext  String    @db.Text
+  status              String    @default("pending") @db.VarChar(32)
+  attempts            Int       @default(0)
+  available_at        DateTime  @default(now()) @db.Timestamptz(0)
+  locked_at           DateTime? @db.Timestamptz(0)
+  sent_at             DateTime? @db.Timestamptz(0)
+  provider_message_id String?   @db.VarChar(512)
+  last_error          String?   @db.Text
+  created_at          DateTime  @default(now()) @db.Timestamptz(0)
+  updated_at          DateTime  @updatedAt @db.Timestamptz(0)
+
+  @@index([status, available_at])
+  @@index([challenge_id])
+}
+
+model otp_idempotency_keys {
+  id             String    @id @default(uuid()) @db.Uuid
+  scope          String    @db.VarChar(512)
+  key            String    @db.VarChar(128)
+  request_hash   String    @db.VarChar(128)
+  status         String    @default("processing") @db.VarChar(32)
+  response_json  Json?
+  expires_at     DateTime  @db.Timestamptz(0)
+  created_at     DateTime  @default(now()) @db.Timestamptz(0)
+  updated_at     DateTime  @updatedAt @db.Timestamptz(0)
+
+  @@unique([scope, key])
+  @@index([expires_at])
+}
+
 model watch_history {
   id             String   @id @db.Uuid
   user_id        String   @db.VarChar(255)

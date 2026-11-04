@@ -1,13 +1,17 @@
 import { z } from 'zod';
 import { resendOtpChallenge, type OtpPurpose } from '~/utils/emailOtp';
-import { sendEmail } from '~/utils/email';
 import { throwOtpHttpError } from '~/utils/otpHttp';
 
 const schema = z.object({
   challengeId: z.string().uuid(),
 });
 
-type EmailTemplate = Parameters<typeof sendEmail>[0]['template'];
+type EmailTemplate =
+  | 'registration-otp'
+  | 'password-reset-otp'
+  | 'password-change-otp'
+  | 'email-change-old-otp'
+  | 'email-change-new-otp';
 
 const templateForPurpose = (purpose: OtpPurpose): EmailTemplate => {
   switch (purpose) {
@@ -34,10 +38,9 @@ export default defineEventHandler(async event => {
     return await resendOtpChallenge({
       challengeId: result.data.challengeId,
       event,
-      send: (purpose, email, code) =>
-        sendEmail({ to: email, template: templateForPurpose(purpose), code }),
+      templateForPurpose,
     });
   } catch (error) {
-    throwOtpHttpError(error);
+    throwOtpHttpError(error, event);
   }
 });

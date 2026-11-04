@@ -3,12 +3,17 @@ import type { H3Event } from 'h3';
 import type { Prisma } from '../../generated/prisma/client';
 import { prisma } from './prisma';
 import { normalizeEmail } from './accountIdentifier';
+import type { EmailTemplate } from './email';
+import { encryptEmailPayload } from './emailOutbox';
+import { enqueueEmailOutbox } from './emailQueue';
+import { enforceOtpRateLimit } from './otpRateLimit';
+import { scopedLogger } from './logger';
 
 export const OTP_EXPIRY_MS = 10 * 60 * 1000;
 export const OTP_RESEND_COOLDOWN_MS = 60 * 1000;
 export const OTP_MAX_ATTEMPTS = 5;
-const OTP_IP_WINDOW_MS = 15 * 60 * 1000;
-const OTP_IP_MAX_REQUESTS = 10;
+const IDEMPOTENCY_TTL_MS = 24 * 60 * 60 * 1000;
+const log = scopedLogger('email-otp');
 type OtpDb = Pick<typeof prisma, 'email_otp_challenges'>;
 type OtpChallengeRecord = NonNullable<
   Awaited<ReturnType<typeof prisma.email_otp_challenges.findUnique>>
@@ -35,6 +40,10 @@ const _OTP_ERROR_CODES = {
   locked: true,
   consumed: true,
   smtp: true,
+  idempotency_invalid: true,
+  idempotency_conflict: true,
+  idempotency_in_progress: true,
+  rate_limit_unavailable: true,
 } as const;
 type OtpErrorCode = keyof typeof _OTP_ERROR_CODES;
 
@@ -43,10 +52,12 @@ export type OtpPurpose =
 
 export class OtpError extends Error {
   public readonly code: OtpErrorCode;
+  public readonly retryAfterSeconds?: number;
 
-  constructor(message: string, code: OtpErrorCode) {
+  constructor(message: string, code: OtpErrorCode, retryAfterSeconds?: number) {
     super(message);
     this.code = code;
+    this.retryAfterSeconds = retryAfterSeconds;
     this.name = 'OtpError';
   }
 }
@@ -68,10 +79,35 @@ const constantTimeEqual = (left: string, right: string): boolean => {
   return leftBuffer.length === rightBuffer.length && timingSafeEqual(leftBuffer, rightBuffer);
 };
 
-const getRequestIp = (event: H3Event): string =>
+export const getRequestIp = (event: H3Event): string =>
   getRequestIP(event, {
     xForwardedFor: String(process.env.TRUST_PROXY).toLowerCase() === 'true',
   }) || '127.0.0.1';
+
+const getIdempotencyKey = (event?: H3Event): string | undefined => {
+  const key = event ? getHeader(event, 'idempotency-key')?.trim() : undefined;
+  if (!key) return undefined;
+  if (key.length > 128 || !/^[\x21-\x7e]+$/.test(key)) {
+    throw new OtpError('Invalid Idempotency-Key', 'idempotency_invalid');
+  }
+  return key;
+};
+
+const isUniqueConstraintError = (error: unknown): boolean =>
+  Boolean(error && typeof error === 'object' && (error as { code?: string }).code === 'P2002');
+
+const parseStoredResponse = (value: unknown): OtpChallengeResponse | null => {
+  if (!value || typeof value !== 'object') return null;
+  const response = value as Partial<OtpChallengeResponse>;
+  if (
+    typeof response.challengeId !== 'string' ||
+    typeof response.expiresIn !== 'number' ||
+    typeof response.resendAfter !== 'number'
+  ) {
+    return null;
+  }
+  return response as OtpChallengeResponse;
+};
 
 export async function createOtpChallenge(options: {
   purpose: OtpPurpose;
@@ -80,76 +116,188 @@ export async function createOtpChallenge(options: {
   payload?: Prisma.InputJsonObject;
   event?: H3Event;
   isResend?: boolean;
-  send: (code: string) => Promise<void>;
+  template: EmailTemplate;
 }): Promise<OtpChallengeResponse> {
   const email = normalizeEmail(options.email);
-  const now = new Date();
   const requestIp = options.event ? getRequestIp(options.event) : undefined;
-  const latest = await prisma.email_otp_challenges.findFirst({
-    where: {
-      email,
-      purpose: options.purpose,
-      consumed_at: null,
-      expires_at: { gt: now },
-    },
-    orderBy: { created_at: 'desc' },
-  });
-
-  if (
-    latest?.last_sent_at &&
-    now.getTime() - latest.last_sent_at.getTime() < OTP_RESEND_COOLDOWN_MS
-  ) {
-    throw new OtpError('Please wait before requesting another code', 'cooldown');
-  }
-
-  if (requestIp) {
-    const ipRequestCount = await prisma.email_otp_challenges.count({
-      where: {
+  const idempotencyKey = getIdempotencyKey(options.event);
+  const idempotencyScope = `${options.purpose}:${email}:${options.userId || 'anonymous'}`;
+  const requestHash = createHash('sha256')
+    .update(
+      JSON.stringify({
         purpose: options.purpose,
-        request_ip: requestIp,
-        created_at: { gt: new Date(now.getTime() - OTP_IP_WINDOW_MS) },
-      },
+        email,
+        userId: options.userId || null,
+        payload: options.payload || null,
+        isResend: Boolean(options.isResend),
+        template: options.template,
+      })
+    )
+    .digest('hex');
+
+  if (idempotencyKey) {
+    const existing = await prisma.otp_idempotency_keys.findUnique({
+      where: { scope_key: { scope: idempotencyScope, key: idempotencyKey } },
     });
-    if (ipRequestCount >= OTP_IP_MAX_REQUESTS) {
-      throw new OtpError('Too many verification requests', 'locked');
+    if (existing && existing.expires_at > new Date()) {
+      if (existing.request_hash !== requestHash) {
+        throw new OtpError(
+          'Idempotency-Key was reused with a different request',
+          'idempotency_conflict'
+        );
+      }
+      const response = parseStoredResponse(existing.response_json);
+      if (response) {
+        if (options.event) setResponseStatus(options.event, 202);
+        return response;
+      }
+      throw new OtpError('The request is still being processed', 'idempotency_in_progress');
     }
   }
 
-  await prisma.email_otp_challenges.updateMany({
-    where: { email, purpose: options.purpose, consumed_at: null },
-    data: { consumed_at: now },
-  });
-
-  const code = randomInt(0, 1_000_000).toString().padStart(6, '0');
-  const challenge = await prisma.email_otp_challenges.create({
-    data: {
-      purpose: options.purpose,
-      email,
-      user_id: options.userId,
-      payload: options.payload,
-      code_hash: hashCode(options.purpose, email, code),
-      expires_at: new Date(now.getTime() + OTP_EXPIRY_MS),
-      max_attempts: OTP_MAX_ATTEMPTS,
-      last_sent_at: options.isResend ? now : null,
-      request_ip: requestIp,
-    },
-  });
-
   try {
-    await options.send(code);
-  } catch {
-    await prisma.email_otp_challenges.update({
-      where: { id: challenge.id },
-      data: { consumed_at: new Date() },
+    const rateLimit = await enforceOtpRateLimit({
+      email,
+      purpose: options.purpose,
+      ip: requestIp,
+      userId: options.userId,
     });
-    throw new OtpError('Unable to send verification email', 'smtp');
+    if (!rateLimit.allowed) {
+      throw new OtpError('Too many verification requests', 'locked', rateLimit.retryAfterSeconds);
+    }
+  } catch (error) {
+    if (error instanceof OtpError) throw error;
+    if (error instanceof Error && error.message === 'OTP_RATE_LIMIT_UNAVAILABLE') {
+      throw new OtpError('OTP rate limiting is temporarily unavailable', 'rate_limit_unavailable');
+    }
+    throw error;
   }
 
-  return {
-    challengeId: challenge.id,
-    expiresIn: Math.floor(OTP_EXPIRY_MS / 1000),
-    resendAfter: options.isResend ? Math.floor(OTP_RESEND_COOLDOWN_MS / 1000) : 0,
-  };
+  let response: OtpChallengeResponse;
+  let outboxId: string;
+
+  try {
+    ({ response, outboxId } = await prisma.$transaction(async tx => {
+      const lockKey = `otp:${idempotencyScope}`;
+      await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${lockKey}))`;
+      const now = new Date();
+
+      if (idempotencyKey) {
+        await tx.otp_idempotency_keys.deleteMany({
+          where: {
+            scope: idempotencyScope,
+            key: idempotencyKey,
+            expires_at: { lte: now },
+          },
+        });
+        await tx.otp_idempotency_keys.create({
+          data: {
+            scope: idempotencyScope,
+            key: idempotencyKey,
+            request_hash: requestHash,
+            expires_at: new Date(now.getTime() + IDEMPOTENCY_TTL_MS),
+          },
+        });
+      }
+
+      const latest = await tx.email_otp_challenges.findFirst({
+        where: {
+          email,
+          purpose: options.purpose,
+          consumed_at: null,
+          expires_at: { gt: now },
+        },
+        orderBy: { created_at: 'desc' },
+      });
+
+      if (
+        latest?.last_sent_at &&
+        now.getTime() - latest.last_sent_at.getTime() < OTP_RESEND_COOLDOWN_MS
+      ) {
+        throw new OtpError(
+          'Please wait before requesting another code',
+          'cooldown',
+          Math.max(
+            1,
+            Math.ceil(
+              (OTP_RESEND_COOLDOWN_MS - (now.getTime() - latest.last_sent_at.getTime())) / 1000
+            )
+          )
+        );
+      }
+
+      await tx.email_otp_challenges.updateMany({
+        where: { email, purpose: options.purpose, consumed_at: null },
+        data: { consumed_at: now },
+      });
+
+      const code = randomInt(0, 1_000_000).toString().padStart(6, '0');
+      const challenge = await tx.email_otp_challenges.create({
+        data: {
+          purpose: options.purpose,
+          email,
+          user_id: options.userId,
+          payload: options.payload,
+          code_hash: hashCode(options.purpose, email, code),
+          expires_at: new Date(now.getTime() + OTP_EXPIRY_MS),
+          max_attempts: OTP_MAX_ATTEMPTS,
+          last_sent_at: now,
+          request_ip: requestIp,
+        },
+      });
+
+      const outbox = await tx.email_outbox.create({
+        data: {
+          challenge_id: challenge.id,
+          dedupe_key: `otp:${challenge.id}`,
+          payload_ciphertext: encryptEmailPayload({
+            to: email,
+            template: options.template,
+            code,
+          }),
+        },
+      });
+
+      response = {
+        challengeId: challenge.id,
+        expiresIn: Math.floor(OTP_EXPIRY_MS / 1000),
+        resendAfter: Math.floor(OTP_RESEND_COOLDOWN_MS / 1000),
+      };
+      if (idempotencyKey) {
+        await tx.otp_idempotency_keys.update({
+          where: { scope_key: { scope: idempotencyScope, key: idempotencyKey } },
+          data: { status: 'completed', response_json: response },
+        });
+      }
+
+      return { response, outboxId: outbox.id };
+    }));
+  } catch (error) {
+    if (idempotencyKey && isUniqueConstraintError(error)) {
+      const existing = await prisma.otp_idempotency_keys.findUnique({
+        where: { scope_key: { scope: idempotencyScope, key: idempotencyKey } },
+      });
+      const existingResponse = parseStoredResponse(existing?.response_json);
+      if (existing && existing.request_hash === requestHash && existingResponse) {
+        if (options.event) setResponseStatus(options.event, 202);
+        return existingResponse;
+      }
+    }
+    throw error;
+  }
+
+  try {
+    await enqueueEmailOutbox(outboxId);
+  } catch (error) {
+    log.warn('Email outbox remains pending after queue enqueue failure', {
+      evt: 'email_outbox_enqueue_failed',
+      outboxId,
+      error: error instanceof Error ? error.message : String(error),
+    });
+  }
+
+  if (options.event) setResponseStatus(options.event, 202);
+  return response;
 }
 
 export async function verifyOtp(options: {
@@ -254,7 +402,7 @@ export async function verifyOtp(options: {
 export async function resendOtpChallenge(options: {
   challengeId: string;
   event?: H3Event;
-  send: (purpose: OtpPurpose, email: string, code: string) => Promise<void>;
+  templateForPurpose: (purpose: OtpPurpose) => EmailTemplate;
 }): Promise<OtpChallengeResponse> {
   const challenge = await prisma.email_otp_challenges.findUnique({
     where: { id: options.challengeId },
@@ -270,7 +418,7 @@ export async function resendOtpChallenge(options: {
     payload: challenge.payload as Prisma.InputJsonObject | undefined,
     event: options.event,
     isResend: true,
-    send: code => options.send(challenge.purpose as OtpPurpose, challenge.email, code),
+    template: options.templateForPurpose(challenge.purpose as OtpPurpose),
   });
 }
 

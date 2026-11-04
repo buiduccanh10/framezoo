@@ -2,7 +2,6 @@ import { z } from 'zod';
 import { normalizeEmail } from '~/utils/accountIdentifier';
 import { prisma } from '~/utils/prisma';
 import { createOtpChallenge } from '~/utils/emailOtp';
-import { sendEmail } from '~/utils/email';
 import { throwOtpHttpError } from '~/utils/otpHttp';
 
 const schema = z.object({
@@ -31,7 +30,7 @@ export default defineEventHandler(async event => {
       email,
       userId: user.id,
       event,
-      send: code => sendEmail({ to: email, template: 'password-reset-otp', code }),
+      template: 'password-reset-otp',
     });
 
     return {
@@ -39,6 +38,6 @@ export default defineEventHandler(async event => {
       ...challenge,
     };
   } catch (error) {
-    throwOtpHttpError(error);
+    throwOtpHttpError(error, event);
   }
 });

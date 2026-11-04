@@ -2,7 +2,6 @@ import { z } from 'zod';
 import { prisma } from '~/utils/prisma';
 import { useAuth } from '~/utils/auth';
 import { verifyOtp, createOtpChallenge } from '~/utils/emailOtp';
-import { sendEmail } from '~/utils/email';
 import { throwOtpHttpError } from '~/utils/otpHttp';
 
 const schema = z.object({
@@ -29,7 +28,7 @@ export default defineEventHandler(async event => {
       userId: session.user,
     });
   } catch (error) {
-    throwOtpHttpError(error);
+    throwOtpHttpError(error, event);
   }
 
   const oldPayload = verified.challenge.payload;
@@ -51,13 +50,13 @@ export default defineEventHandler(async event => {
       userId: session.user,
       payload: { oldChallengeId: verified.challenge.id },
       event,
-      send: code => sendEmail({ to: newEmail, template: 'email-change-new-otp', code }),
+      template: 'email-change-new-otp',
     });
 
     return {
       ...next,
     };
   } catch (error) {
-    throwOtpHttpError(error);
+    throwOtpHttpError(error, event);
   }
 });

@@ -20,6 +20,7 @@ export async function requestRegistrationOtp(
   return ofetch<OtpChallengeResponse>("/auth/register/otp/request", {
     method: "POST",
     credentials: "include",
+    headers: { "Idempotency-Key": crypto.randomUUID() },
     body: { email },
     baseURL: url,
   });

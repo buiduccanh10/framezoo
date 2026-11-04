@@ -342,6 +342,7 @@ export function useCaptions() {
             pausedState.currentAudioTrack?.language,
             pausedState.meta?.originalLanguage,
           ),
+          audioTrackId: pausedState.currentAudioTrack?.id,
           subtitles: targets.map(({ track, caption }) => ({
             track,
             vttData: getSubtitleAlignmentInputVtt(caption),

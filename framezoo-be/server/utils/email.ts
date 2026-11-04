@@ -1,6 +1,6 @@
 import nodemailer, { type Transporter } from 'nodemailer';
 
-type EmailTemplate =
+export type EmailTemplate =
   | 'registration-otp'
   | 'password-reset-otp'
   | 'password-change-otp'
@@ -56,6 +56,12 @@ const getTransporter = (): EmailTransporter => {
     port,
     secure: port === 465,
     auth: { user, pass },
+    pool: true,
+    maxConnections: Number(process.env.SMTP_MAX_CONNECTIONS || 5),
+    maxMessages: Number(process.env.SMTP_MAX_MESSAGES || 100),
+    connectionTimeout: Number(process.env.SMTP_CONNECTION_TIMEOUT_MS || 10_000),
+    greetingTimeout: Number(process.env.SMTP_GREETING_TIMEOUT_MS || 10_000),
+    socketTimeout: Number(process.env.SMTP_SOCKET_TIMEOUT_MS || 30_000),
   });
 
   return transporter;
@@ -170,26 +176,20 @@ const renderEmail = (template: EmailTemplateContent): { html: string; text: stri
   return { html, text };
 };
 
-export async function sendEmail(options: EmailOptions): Promise<void> {
+export async function sendEmail(options: EmailOptions): Promise<{ messageId?: string }> {
   const from = process.env.MAIL_FROM || process.env.SMTP_USER;
   if (!from) throw new Error('MAIL_FROM or SMTP_USER is not configured');
 
   const template = getTemplate(options.template, options.code, options.nickname);
   const rendered = renderEmail(template);
 
-  const headers = options.code
-    ? {
-        'X-OTP': options.code.trim(),
-        'X-Verification-Code': options.code.trim(),
-      }
-    : undefined;
-
-  await getTransporter().sendMail({
+  const result = await getTransporter().sendMail({
     from,
     to: options.to,
     subject: template.subject,
     text: rendered.text,
     html: rendered.html,
-    headers,
   });
+
+  return { messageId: result.messageId };
 }

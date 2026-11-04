@@ -50,6 +50,23 @@ class AlignmentAlgorithmTests(unittest.TestCase):
         self.assertEqual(result["offsetMs"], -2_150)
         self.assertEqual(result["confidence"], 75)
 
+    def test_accepts_one_window_with_multiple_speech_anchors(self):
+        result = select_alignment_consensus(
+            [
+                {
+                    "startAt": 0,
+                    "result": {
+                        **self.make_aligned_result(-2_000, 66),
+                        "speechAnchorCount": 3,
+                        "speechAnchorCoverage": 0.23,
+                    },
+                },
+            ]
+        )
+
+        self.assertTrue(result["aligned"])
+        self.assertEqual(result["offsetMs"], -2_000)
+
     def test_builds_piecewise_result_on_server(self):
         result = select_alignment_consensus(
             [

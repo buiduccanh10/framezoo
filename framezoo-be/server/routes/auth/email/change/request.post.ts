@@ -3,7 +3,6 @@ import { normalizeEmail } from '~/utils/accountIdentifier';
 import { prisma } from '~/utils/prisma';
 import { useAuth } from '~/utils/auth';
 import { createOtpChallenge } from '~/utils/emailOtp';
-import { sendEmail } from '~/utils/email';
 import { throwOtpHttpError } from '~/utils/otpHttp';
 
 const schema = z.object({
@@ -39,9 +38,9 @@ export default defineEventHandler(async event => {
       userId: user.id,
       payload: { newEmail },
       event,
-      send: code => sendEmail({ to: currentEmail, template: 'email-change-old-otp', code }),
+      template: 'email-change-old-otp',
     });
   } catch (error) {
-    throwOtpHttpError(error);
+    throwOtpHttpError(error, event);
   }
 });
