@@ -41,7 +41,7 @@ export function NavActionsCollapsible() {
     }
     timeoutRef.current = setTimeout(() => {
       setIsExpanded(false);
-    }, 200);
+    }, 500);
   };
 
   // Clean up timer on unmount
@@ -94,12 +94,12 @@ export function NavActionsCollapsible() {
           </div>
         </button>
 
-        {/* The 4 buttons emerging/sliding out horizontally from the menu button. */}
+        {/* The buttons emerging/sliding out horizontally from the menu button. */}
         <div
           className={classNames(
             "flex items-center gap-1.5 py-2 -my-2 transition-all duration-300 ease-in-out origin-left sm:gap-2",
             isExpanded
-              ? "max-w-[360px] opacity-100 pointer-events-auto translate-x-0 px-2 sm:px-2.5 overflow-visible"
+              ? "max-w-[500px] opacity-100 pointer-events-auto translate-x-0 px-2 sm:px-2.5 overflow-visible"
               : "max-w-0 opacity-0 pointer-events-none -translate-x-3 px-0 overflow-hidden",
           )}
         >
@@ -120,7 +120,7 @@ export function NavActionsCollapsible() {
               <Link
                 to="/browse"
                 onClick={() => window.scrollTo(0, 0)}
-                className="shrink-0 text-lg text-white tabbable rounded-full backdrop-blur-lg flex items-center justify-center overflow-visible"
+                className="shrink-0 text-xl text-white tabbable rounded-full backdrop-blur-lg flex items-center justify-center overflow-visible"
                 title="Tìm kiếm"
               >
                 <IconPatch icon={Icons.SEARCH} clickable downsized navigation />
@@ -142,7 +142,63 @@ export function NavActionsCollapsible() {
             )}
           </div>
 
-          {/* 2. Watch Party Button */}
+          {/* 2. Bookmarks Button */}
+          <div
+            className="shrink-0 flex items-center justify-center overflow-visible"
+            title={t("home.bookmarks.sectionTitle")}
+          >
+            <Link
+              to="/marked"
+              onClick={() => window.scrollTo(0, 0)}
+              className="shrink-0 text-xl text-white tabbable rounded-full backdrop-blur-lg flex items-center justify-center overflow-visible"
+              title={t("home.bookmarks.sectionTitle")}
+              aria-label={t("home.bookmarks.sectionTitle")}
+            >
+              <IconPatch
+                icon={
+                  location.pathname === "/marked" ||
+                  location.pathname === "/bookmarks"
+                    ? Icons.BOOKMARK
+                    : Icons.BOOKMARK_OUTLINE
+                }
+                clickable
+                downsized
+                navigation
+                active={
+                  location.pathname === "/marked" ||
+                  location.pathname === "/bookmarks"
+                }
+              />
+            </Link>
+          </div>
+
+          {/* 3. Watch History Button */}
+          <div
+            className="shrink-0 flex items-center justify-center overflow-visible"
+            title={t("home.watchHistory.sectionTitle")}
+          >
+            <Link
+              to="/watch-history"
+              onClick={() => window.scrollTo(0, 0)}
+              className="shrink-0 text-xl text-white tabbable rounded-full backdrop-blur-lg flex items-center justify-center overflow-visible"
+              title={t("home.watchHistory.sectionTitle")}
+              aria-label={t("home.watchHistory.sectionTitle")}
+            >
+              <IconPatch
+                icon={
+                  location.pathname === "/watch-history"
+                    ? Icons.CLOCK
+                    : Icons.CLOCK_OUTLINE
+                }
+                clickable
+                downsized
+                navigation
+                active={location.pathname === "/watch-history"}
+              />
+            </Link>
+          </div>
+
+          {/* 4. Watch Party Button */}
           <div
             className="shrink-0 flex items-center justify-center overflow-visible"
             title="Xem cùng bạn bè"

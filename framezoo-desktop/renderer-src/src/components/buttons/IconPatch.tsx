@@ -5,7 +5,8 @@ export interface IconPatchProps {
   onClick?: () => void;
   clickable?: boolean;
   className?: string;
-  icon: Icons;
+  icon?: Icons;
+  children?: React.ReactNode;
   transparent?: boolean;
   downsized?: boolean;
   navigation?: boolean;
@@ -32,7 +33,11 @@ export function IconPatch(props: IconPatchProps) {
       <div
         className={`flex items-center justify-center rounded-full border-2 border-transparent transition-[background-color,color,transform,border-color] duration-75 ${backgroundClasses} ${clickableClasses} ${activeClasses} ${sizeClasses}`}
       >
-        <Icon icon={props.icon} />
+        {props.children ? (
+          props.children
+        ) : props.icon ? (
+          <Icon icon={props.icon} />
+        ) : null}
       </div>
     </div>
   );

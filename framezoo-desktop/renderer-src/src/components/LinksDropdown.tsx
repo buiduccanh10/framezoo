@@ -222,7 +222,10 @@ export function WatchPartyJoinDialog({
         >
           <div className="mb-4 flex items-center justify-between">
             <div className="flex items-center gap-2.5 text-white">
-              <Icon icon={Icons.WATCH_PARTY} className="text-xl text-buttons-purple" />
+              <Icon
+                icon={Icons.WATCH_PARTY}
+                className="text-xl text-buttons-purple"
+              />
               <h3 className="text-base font-semibold">
                 {t("player.menus.watchparty.watchpartyItem")}
               </h3>
@@ -254,7 +257,9 @@ export function WatchPartyJoinDialog({
               disabled={isLoading}
             />
 
-            {error && <p className="text-xs font-medium text-red-400">{error}</p>}
+            {error && (
+              <p className="text-xs font-medium text-red-400">{error}</p>
+            )}
 
             <div className="flex justify-end gap-2.5 pt-1">
               <button
@@ -414,13 +419,13 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
           <Divider />
           <DropdownLink
             onClick={() => handleProtectedRoute("/watch-history")}
-            icon={Icons.CLOCK}
+            icon={Icons.CLOCK_OUTLINE}
           >
             {t("home.watchHistory.sectionTitle")}
           </DropdownLink>
           <DropdownLink
             onClick={() => handleProtectedRoute("/marked")}
-            icon={Icons.BOOKMARK}
+            icon={Icons.BOOKMARK_OUTLINE}
           >
             {t("home.bookmarks.sectionTitle")}
           </DropdownLink>

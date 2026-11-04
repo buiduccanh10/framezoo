@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 
+import { IconPatch } from "@/components/buttons/IconPatch";
 import { useModal } from "@/components/overlays/Modal";
 
 export function DonateFloatingButton() {
@@ -9,18 +10,21 @@ export function DonateFloatingButton() {
   return (
     <button
       type="button"
-      className="fixed bottom-[calc(1.25rem+env(safe-area-inset-bottom))] right-[calc(1.25rem+env(safe-area-inset-right))] z-[600] shrink-0 rounded-full tabbable transition-all duration-200 ease-out hover:scale-105 hover:brightness-110 active:scale-95 motion-reduce:transition-none"
+      className="shrink-0 text-xl text-white tabbable rounded-full backdrop-blur-lg cursor-pointer flex items-center justify-center overflow-visible"
       onClick={modal.show}
       aria-label={t("donate.button", "Support Framezoo")}
       title={t("donate.modalTitle", "Help us keep building Framezoo")}
-      style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
     >
-      <img
-        className="block h-[30px] w-[150px]"
-        src="/donate/buy-me-a-coffee.webp"
-        alt=""
-        aria-hidden="true"
-      />
+      <IconPatch clickable downsized navigation>
+        <img
+          src="/donate/donate-gif.gif"
+          alt=""
+          className="h-7 w-7 object-contain pointer-events-none select-none"
+          aria-hidden="true"
+        />
+      </IconPatch>
     </button>
   );
 }
+
+export const DonateButton = DonateFloatingButton;
