@@ -21,8 +21,20 @@ class SecureStore(context: Context) {
         set(value) { prefs.edit().putString("backend", value.trimEnd('/')).apply() }
 
     var theme: String
-        get() = prefs.getString("theme", "Ember") ?: "Ember"
+        get() = prefs.getString("theme", "ember") ?: "ember"
         set(value) { prefs.edit().putString("theme", value).apply() }
+
+    var customPrimary: String
+        get() = prefs.getString("customPrimary", "classic") ?: "classic"
+        set(value) { prefs.edit().putString("customPrimary", value).apply() }
+
+    var customSecondary: String
+        get() = prefs.getString("customSecondary", "classic") ?: "classic"
+        set(value) { prefs.edit().putString("customSecondary", value).apply() }
+
+    var customTertiary: String
+        get() = prefs.getString("customTertiary", "classic") ?: "classic"
+        set(value) { prefs.edit().putString("customTertiary", value).apply() }
 
     var userId: String?
         get() = prefs.getString("user", null)

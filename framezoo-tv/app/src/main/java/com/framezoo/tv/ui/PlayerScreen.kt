@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.background
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -20,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.platform.LocalContext
@@ -39,6 +41,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 internal fun PlayerScreen(player: PlayerController, item: Media, episode: Episode?, stream: Stream, subtitles: List<Subtitle>, backend: Backend, resume: Double, onStopped: (Double) -> Unit, onExit: () -> Unit) {
+    val colors = LocalFrameZooColors.current
     val activity = LocalContext.current as ComponentActivity
     var position by remember { mutableStateOf(0.0) }
     var duration by remember { mutableStateOf(0.0) }
@@ -77,10 +80,13 @@ internal fun PlayerScreen(player: PlayerController, item: Media, episode: Episod
         }
     }) {
         AndroidView(factory = { context -> SurfaceView(context).apply { player.bind(this) } }, modifier = Modifier.fillMaxSize())
-        Column(Modifier.align(Alignment.BottomStart).fillMaxWidth().padding(24.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Text(item.title + (episode?.let { " · S${it.season}E${it.number}" } ?: ""), fontSize = 23.sp, fontWeight = FontWeight.Bold)
-            Text("${position.toInt()}s / ${duration.toInt()}s")
-            if (error.isNotBlank()) Text(error, color = Color.Red)
+        Column(Modifier.align(Alignment.BottomStart).fillMaxWidth()
+            .background(Brush.verticalGradient(listOf(Color.Transparent, colors["video.context.background"].copy(alpha = 0.94f))))
+            .padding(24.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Text(item.title + (episode?.let { " · S${it.season}E${it.number}" } ?: ""),
+                color = colors["type.emphasis"], fontSize = 23.sp, fontWeight = FontWeight.Bold)
+            Text("${position.toInt()}s / ${duration.toInt()}s", color = colors["video.context.type.main"])
+            if (error.isNotBlank()) Text(error, color = colors["type.danger"])
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 TvButton("⏪ 10s") { player.command("seek", "-10", "relative") }
                 TvButton("Phát / Tạm dừng") { player.command("cycle", "pause") }

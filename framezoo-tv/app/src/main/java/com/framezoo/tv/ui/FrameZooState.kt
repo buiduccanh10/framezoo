@@ -24,7 +24,10 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
     val player = PlayerController(context)
 
     var page by mutableStateOf("discover")
-    var theme by mutableStateOf(store.theme)
+    var theme by mutableStateOf(store.theme.lowercase().let { if (it in themeNames) it else "default" })
+    var customPrimary by mutableStateOf(store.customPrimary)
+    var customSecondary by mutableStateOf(store.customSecondary)
+    var customTertiary by mutableStateOf(store.customTertiary)
     var busy by mutableStateOf(false)
     var error by mutableStateOf("")
     var discover by mutableStateOf<List<Media>>(emptyList())
@@ -93,6 +96,14 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
     fun removeAddon(addon: Addon) = runTask { addons.remove(addon.manifestUrl); installed = addons.list(); addonCatalog = addons.catalog() }
     fun saveBackend() { store.backendUrl = backendUrl }
     fun updateTheme(name: String) { theme = name; store.theme = name }
+    fun updateCustomPart(part: String, name: String) {
+        require(name in themeNames && name != "custom")
+        when (part) {
+            "primary" -> { customPrimary = name; store.customPrimary = name }
+            "secondary" -> { customSecondary = name; store.customSecondary = name }
+            "tertiary" -> { customTertiary = name; store.customTertiary = name }
+        }
+    }
     fun login() = runTask {
         backend.login(loginName, loginPassword)
         installed = addons.list(); library = backend.library(); page = "discover"; loginPassword = ""

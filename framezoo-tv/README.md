@@ -16,6 +16,15 @@ Android TV riêng; Kotlin, Compose, libtorrent RAM storage, libmpv. Không dùng
 
 Compose dùng state holder và callback; Kotlin không có `hooks` như React. Tách thêm file theo từng màn khi mỗi màn có trạng thái hoặc luồng độc lập.
 
+UI TV dùng 23 theme preset và theme tùy chỉnh của desktop. Token và tên theme tiếng Việt trong `app/src/main/assets` được tạo từ `framezoo-desktop/renderer-src/themes` và locale desktop. Sau khi đổi theme desktop, chạy từ gốc monorepo:
+
+```sh
+node --import tsx framezoo-tv/scripts/sync-themes.mjs
+node --import tsx framezoo-tv/scripts/sync-themes.mjs --check
+```
+
+Font Lato nằm trong `app/src/main/res/font`; giấy phép OFL ở `app/src/main/assets/licenses/Lato-OFL.txt`.
+
 ## Build
 
 Yêu cầu Android SDK 36, Build Tools 36, NDK 27.1.12297006, JDK 17–21, CMake, Ninja, Meson, pkg-config, GNU sed/coreutils và wget. Trên macOS: `brew install meson ninja pkgconf wget gnu-sed coreutils`.
