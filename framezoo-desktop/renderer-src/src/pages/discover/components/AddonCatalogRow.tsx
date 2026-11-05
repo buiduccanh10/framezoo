@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 
 import { getMediaFromExternalId } from "@/backend/metadata/tmdb";
 import { Icon, Icons } from "@/components/Icon";
+import { MediaCardSkeleton } from "@/components/media/MediaCard";
 import { getReleaseQualityVariantFromLabel } from "@/components/media/ReleaseQualityBadge";
 import { WatchedMediaCard } from "@/components/media/WatchedMediaCard";
 import { Flare } from "@/components/utils/Flare";
@@ -71,14 +72,22 @@ function MoreCard({ link }: { link: string }) {
 
 function CatalogRowSkeleton() {
   return (
-    <div className="flex gap-4 overflow-hidden px-4 md:px-8 py-4">
-      {Array.from({ length: 7 }).map((_, i) => (
-        <div
-          key={i}
-          className="w-[10rem] md:w-[11.5rem] flex-shrink-0 rounded-xl bg-mediaCard-hoverBackground/30 animate-pulse"
-          style={{ height: "17rem" }}
-        />
-      ))}
+    <div aria-busy="true">
+      <div className="ml-4 md:ml-8 lg:ml-[100px] mt-2 animate-pulse">
+        <div className="h-7 w-48 rounded bg-mediaCard-hoverBackground" />
+        <div className="mt-2 h-4 w-20 rounded bg-mediaCard-hoverBackground" />
+      </div>
+      <div className="grid grid-flow-col auto-cols-max gap-4 overflow-hidden md:pl-8 md:pr-8">
+        <div className="lg:w-12" />
+        {Array.from({ length: 7 }, (_, i) => (
+          <div
+            key={i}
+            className="relative mt-4 rounded-xl p-2 w-[10rem] md:w-[11.5rem]"
+          >
+            <MediaCardSkeleton />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -111,7 +120,7 @@ export function AddonCatalogRow({
     });
 
   const [items, setItems] = useState<AddonCatalogEntry[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!hasIntersected) return;
@@ -121,7 +130,7 @@ export function AddonCatalogRow({
     let retryDelay = 3000;
 
     const fetchCatalogs = async () => {
-      setIsLoading((prev) => (items.length === 0 ? true : prev));
+      setIsLoading(true);
 
       try {
         const result = await loadAllAddonCatalogs(addons, type, catalogId, {
@@ -134,6 +143,7 @@ export function AddonCatalogRow({
         if (result.items.length > 0) {
           setItems(result.items);
         }
+        setIsLoading(result.items.length === 0 && result.errors.length > 0);
 
         // If there were any errors or some addons timed out, retry in background without showing errors to user
         if (result.errors.length > 0) {
@@ -153,16 +163,13 @@ export function AddonCatalogRow({
       } catch (err) {
         console.warn("[desktop-addon] catalog fetch failed, retrying...", err);
         if (!cancelled) {
+          setIsLoading(true);
           retryTimer = setTimeout(() => {
             if (!cancelled) {
               retryDelay = Math.min(retryDelay * 1.5, 15000);
               fetchCatalogs();
             }
           }, retryDelay);
-        }
-      } finally {
-        if (!cancelled) {
-          setIsLoading(false);
         }
       }
     };
@@ -188,7 +195,11 @@ export function AddonCatalogRow({
 
   // Render placeholder if not intersected yet to trigger observer
   if (!hasIntersected) {
-    return <div ref={intersectionRef} className="h-[20rem]" />;
+    return (
+      <div ref={intersectionRef}>
+        <CatalogRowSkeleton />
+      </div>
+    );
   }
 
   // Group items by addon
