@@ -389,11 +389,13 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
       </button>
       <Transition animation="slide-down" show={open}>
         <div className="absolute top-full right-0 z-10 mt-3 w-64 rounded-xl bg-dropdown-altBackground">
-          {deviceName && bufferSeed ? (
+          {account ? (
             <DropdownLink className="text-white" href="/settings">
               <UserAvatar />
               {(() => {
                 if (nickname?.trim()) return nickname;
+                if (!deviceName || !bufferSeed)
+                  return t("settings.account.devices.unknownDevice");
                 try {
                   return decryptData(deviceName, bufferSeed);
                 } catch (error) {
@@ -457,7 +459,7 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
           <DropdownLink href="/settings" icon={Icons.SETTINGS}>
             {t("navigation.menu.settings")}
           </DropdownLink>
-          {deviceName ? (
+          {account ? (
             <DropdownLink
               className="!text-type-danger opacity-75 hover:opacity-100"
               icon={Icons.LOGOUT}
