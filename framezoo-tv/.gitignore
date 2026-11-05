@@ -1,0 +1,14 @@
+.gradle/
+.idea/
+.kotlin/
+.cxx/
+.externalNativeBuild/
+*.iml
+*.jks
+*.keystore
+keystore.properties
+signing.properties
+local.properties
+**/build/
+app/src/main/jniLibs/
+native/.work/
