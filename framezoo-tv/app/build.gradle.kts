@@ -1,4 +1,6 @@
 import java.net.URI
+import java.util.Properties
+import java.io.StringReader
 
 plugins {
     id("com.android.application")
@@ -17,9 +19,14 @@ android {
         versionCode = 1
         versionName = "0.1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        val backendUrl = providers.environmentVariable("FRAMEZOO_TV_BACKEND_URL")
-            .orElse(providers.gradleProperty("framezooBackendUrl"))
-            .orElse("https://api.framezoo.top").get().trimEnd('/')
+        val backendUrlFromFile = providers.fileContents(rootProject.layout.projectDirectory.file(".env")).asText.orNull?.let { contents ->
+            Properties().apply { load(StringReader(contents)) }.getProperty("FRAMEZOO_TV_BACKEND_URL")
+                ?.trim()?.removeSurrounding("\"")?.removeSurrounding("'")?.takeIf { it.isNotBlank() }
+        }
+        val backendUrl = (providers.environmentVariable("FRAMEZOO_TV_BACKEND_URL").orNull
+            ?: providers.gradleProperty("framezooBackendUrl").orNull
+            ?: backendUrlFromFile
+            ?: "https://api.framezoo.top").trimEnd('/')
         val backendUri = URI(backendUrl)
         require(backendUri.scheme in listOf("https", "http") && !backendUri.host.isNullOrBlank() &&
             backendUri.userInfo == null && backendUri.query == null && backendUri.fragment == null) {
@@ -44,10 +51,13 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.10.1")
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.foundation:foundation")
+    implementation("androidx.compose.animation:animation")
     implementation("androidx.compose.material3:material3")
+    implementation("androidx.tv:tv-material:1.0.1")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.1")
     implementation("io.coil-kt:coil-compose:2.7.0")
+    implementation("io.coil-kt:coil-svg:2.7.0")
     implementation("org.bouncycastle:bcprov-jdk18on:1.81")
     debugImplementation("androidx.compose.ui:ui-tooling")
     testImplementation("junit:junit:4.13.2")

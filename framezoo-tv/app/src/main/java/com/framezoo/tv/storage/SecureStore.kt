@@ -30,6 +30,14 @@ class SecureStore(context: Context) {
             prefs.edit().putString("backend", url).apply()
         }
 
+    var trailerEnabled: Boolean
+        get() = prefs.getBoolean("trailerEnabled", true)
+        set(value) { prefs.edit().putBoolean("trailerEnabled", value).apply() }
+
+    var trailerMuted: Boolean
+        get() = prefs.getBoolean("trailerMuted", true)
+        set(value) { prefs.edit().putBoolean("trailerMuted", value).apply() }
+
     var theme: String
         get() = prefs.getString("theme", "ember") ?: "ember"
         set(value) { prefs.edit().putString("theme", value).apply() }

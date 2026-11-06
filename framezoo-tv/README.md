@@ -1,6 +1,6 @@
 # FrameZoo TV
 
-Android TV riêng; Kotlin, Compose, libtorrent RAM storage, libmpv. Không dùng `framezoo-mobile` hay player giả.
+Android TV riêng; Kotlin, Compose, Material 3 for TV, libtorrent RAM storage, libmpv. Material 3 thông thường vẫn dùng cho trường nhập và menu thả xuống. Không dùng `framezoo-mobile` hay player giả.
 
 ## Cấu trúc
 
@@ -23,7 +23,21 @@ node --import tsx framezoo-tv/scripts/sync-themes.mjs
 node --import tsx framezoo-tv/scripts/sync-themes.mjs --check
 ```
 
-Font Lato nằm trong `app/src/main/res/font`; giấy phép OFL ở `app/src/main/assets/licenses/Lato-OFL.txt`.
+Font Lato nằm trong `app/src/main/res/font`; giấy phép OFL ở `app/src/main/assets/licenses/Lato-OFL.txt`. Logo và ảnh chờ lấy từ desktop; các vector Android được tạo từ `renderer-src/src/components/Icon.tsx`, giữ thông tin giấy phép trong từng file. Khi desktop đổi icon, chạy:
+
+```sh
+python3 framezoo-tv/scripts/sync-icons.py
+python3 framezoo-tv/scripts/sync-icons.py --check
+```
+
+Danh sách nhà cung cấp, lựa chọn biên tập và biểu tượng đánh giá cũng đồng bộ từ desktop:
+
+```sh
+python3 framezoo-tv/scripts/sync-discover.py
+python3 framezoo-tv/scripts/sync-ratings.py
+python3 framezoo-tv/scripts/sync-discover.py --check
+python3 framezoo-tv/scripts/sync-ratings.py --check
+```
 
 ## Build
 
@@ -36,14 +50,20 @@ cd framezoo-tv
 
 Mở thư mục `framezoo-tv` trong Android Studio. Gradle tự chạy `native/build-native.sh` khi thiếu native artifacts, tạo `.so` trong `app/src/main/jniLibs`; lần đầu cần thời gian để biên dịch. APK release chỉ `arm64-v8a`. Emulator x86_64: `./gradlew assembleDebug -PtvAbi=x86_64`.
 
-Backend mặc định `https://api.framezoo.top`. Đặt URL khi build bằng biến môi trường hoặc Gradle property:
+Backend mặc định `https://api.framezoo.top`. Sao chép `.env.example` thành `.env` trong thư mục `framezoo-tv`, rồi sửa URL:
+
+```env
+FRAMEZOO_TV_BACKEND_URL=http://10.0.2.2:3000
+```
+
+Có thể ghi đè khi build bằng biến môi trường hoặc Gradle property:
 
 ```sh
 FRAMEZOO_TV_BACKEND_URL=https://api.example.com ./gradlew assembleDebug
 ./gradlew assembleDebug -PframezooBackendUrl=https://api.example.com
 ```
 
-Biến môi trường được ưu tiên hơn Gradle property. Cài đặt trong ứng dụng ghi đè URL khi build; đổi backend sẽ đăng xuất và tải lại Discover. Bản release yêu cầu HTTPS; bản debug hỗ trợ HTTP, ví dụ `http://10.0.2.2:3000` để emulator kết nối máy chạy backend. URL build là cấu hình mặc định, không chứa bí mật.
+Thứ tự ưu tiên: biến môi trường, Gradle property, `.env`, URL mặc định. Cài đặt trong ứng dụng ghi đè URL khi build; đổi backend sẽ đăng xuất và tải lại Discover. Bản release yêu cầu HTTPS; bản debug hỗ trợ HTTP, ví dụ `http://10.0.2.2:3000` để emulator kết nối máy chạy backend. URL build là cấu hình mặc định, không chứa bí mật.
 
  Addon manifest do người dùng tự cài. Torrent chỉ giữ tối đa 128 MiB piece trong RAM; dừng phát giải phóng dữ liệu. Phát 4K/HDR cần kiểm trên TV thật và codec/display tương ứng.
 

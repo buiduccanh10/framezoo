@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -38,6 +40,8 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import android.view.KeyEvent
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -48,9 +52,10 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.shape.RoundedCornerShape
 import com.framezoo.tv.MainActivity
 import coil.compose.AsyncImage
+import kotlinx.coroutines.launch
 
 @Composable
-private fun tvFieldColors(): TextFieldColors {
+internal fun tvFieldColors(): TextFieldColors {
     val colors = LocalFrameZooColors.current
     return OutlinedTextFieldDefaults.colors(
         focusedTextColor = colors["search.text"], unfocusedTextColor = colors["search.text"],
@@ -66,6 +71,11 @@ internal fun FrameZooApp() {
     val context = LocalContext.current
     val activity = context as MainActivity
     var focusedTextAction by remember { mutableStateOf<FocusRequester?>(null) }
+    val discoverAction = remember { FocusRequester() }
+    val discoverListState = rememberLazyListState()
+    val allListsState = rememberLazyListState()
+    val moreGridState = rememberLazyGridState()
+    val searchGridState = rememberLazyGridState()
     val searchAction = remember { FocusRequester() }
     val addonAction = remember { FocusRequester() }
     val backendAction = remember { FocusRequester() }
@@ -82,7 +92,11 @@ internal fun FrameZooApp() {
     }
     val scope = rememberCoroutineScope()
     val state = remember(context) { FrameZooState(context, scope) }
+    var renderedMoreGeneration by remember { mutableStateOf(0) }
     LaunchedEffect(state) { state.initialize() }
+    LaunchedEffect(state.moreGeneration) {
+        if (renderedMoreGeneration != state.moreGeneration) { moreGridState.scrollToItem(0); renderedMoreGeneration = state.moreGeneration }
+    }
     BackHandler(state.page != "discover") { state.back() }
 
     with(state) {
@@ -90,51 +104,26 @@ internal fun FrameZooApp() {
             val colors = LocalFrameZooColors.current
             Surface(color = MaterialTheme.colorScheme.background, contentColor = MaterialTheme.colorScheme.onBackground) {
                 Box(Modifier.fillMaxSize()) {
-                Column(Modifier.fillMaxSize().then(if (page == "discover" || page == "player") Modifier else Modifier.padding(horizontal = 48.dp, vertical = 32.dp))) {
-                    if (page != "player" && page != "discover") {
+                Column(Modifier.fillMaxSize().then(if (page in listOf("discover", "details", "player", "trailer")) Modifier else Modifier.padding(horizontal = 48.dp, vertical = 32.dp))) {
+                    if (page !in listOf("player", "discover", "details", "trailer")) {
                         DiscoverHeader(state)
                         Spacer(Modifier.height(28.dp))
                     }
-                    if (busy) CircularProgressIndicator(Modifier.size(26.dp))
-                    if (error.isNotBlank()) Text(error, color = colors["type.danger"], modifier = Modifier.padding(vertical = 10.dp))
+                    if (busy && page != "details") CircularProgressIndicator(Modifier.size(26.dp))
+                    if (error.isNotBlank() && page != "details") Text(error, color = colors["type.danger"], modifier = Modifier.padding(vertical = 10.dp))
                     when (page) {
-                        "discover" -> DiscoverScreen(state)
-                        "search" -> Column(verticalArrangement = Arrangement.spacedBy(18.dp)) {
-                            Text("Tìm kiếm", style = MaterialTheme.typography.headlineLarge)
-                            OutlinedTextField(query, { query = it }, label = { Text("Tên phim hoặc series") }, singleLine = true,
-                                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                                keyboardActions = KeyboardActions(onSearch = { searchAction.requestFocus(); search() }),
-                                colors = tvFieldColors(), shape = RoundedCornerShape(28.dp),
-                                modifier = Modifier.fillMaxWidth(0.6f).then(downTo(searchAction)))
-                            TvButton("Tìm", modifier = Modifier.focusRequester(searchAction), primary = true) { search() }
-                            MediaGrid("Kết quả", results, ::openDetails)
-                        }
-                        "details" -> selected?.let { item ->
-                            LazyColumn(verticalArrangement = Arrangement.spacedBy(18.dp)) {
-                                item { Row(horizontalArrangement = Arrangement.spacedBy(28.dp)) {
-                                    AsyncImage(item.poster, item.title, Modifier.width(220.dp).height(330.dp))
-                                    Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
-                                        Text(item.title, fontSize = 40.sp, fontWeight = FontWeight.Black, color = colors["type.emphasis"])
-                                        Text("${item.year} · ${if (item.type == "show") "Series" else "Phim"}", color = colors["type.secondary"])
-                                        Text(item.description, maxLines = 5, overflow = TextOverflow.Ellipsis, color = colors["type.text"])
-                                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                                            if (item.type == "movie") TvButton("Chọn nguồn", primary = true) { loadSources(item, null) }
-                                            TvButton("Lưu vào thư viện") { bookmark(item) }
-                                        }
-                                    }
-                                } }
-                                if (item.type == "show") {
-                                    item { Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) { seasons.forEach { season ->
-                                        TvButton("Mùa $season") { chooseSeason(item, season) }
-                                    } } }
-                                    items(episodes) { ep -> TvButton("Tập ${ep.number}: ${ep.title}") { loadSources(item, ep) } }
-                                }
-                            }
-                        }
-                        "sources" -> Column(verticalArrangement = Arrangement.spacedBy(15.dp)) {
-                            Text("Nguồn phát · ${selected?.title.orEmpty()}", style = MaterialTheme.typography.headlineLarge)
-                            if (sources.isEmpty()) Text("Không có nguồn. Cài addon hỗ trợ stream trong mục Addon.")
-                            sources.forEach { source -> TvButton(source.name + if (source.infoHash != null || source.url.startsWith("magnet:")) " · Torrent" else " · HTTP") {
+                        "discover" -> DiscoverScreen(state, discoverAction, discoverListState)
+                        "discover-more" -> DiscoverMoreScreen(state, moreGridState)
+                        "discover-lists" -> DiscoverListsScreen(state, allListsState)
+                        "search" -> SearchScreen(state, searchGridState, searchAction, downTo(searchAction))
+                        "details" -> selected?.let { item -> DetailsScreen(state, item) }
+                        "trailer" -> TrailerScreen(state)
+                        "feedback" -> FeedbackScreen(state)
+                        "sources" -> LazyColumn(verticalArrangement = Arrangement.spacedBy(15.dp), contentPadding = androidx.compose.foundation.layout.PaddingValues(bottom = 30.dp)) {
+                            item { Text("Nguồn phát · ${selected?.title.orEmpty()}", style = MaterialTheme.typography.headlineLarge) }
+                            item { TvButton("Quay lại", icon = com.framezoo.tv.R.drawable.desktop_chevron_left) { back() } }
+                            if (sources.isEmpty()) item { Text("Không có nguồn. Cài addon hỗ trợ stream trong mục Addon.") }
+                            items(sources) { source -> TvButton(source.name + if (source.infoHash != null || source.url.startsWith("magnet:")) " · Torrent" else " · HTTP") {
                                 chooseSource(source)
                             } }
                         }
@@ -143,7 +132,9 @@ internal fun FrameZooApp() {
                             PlayerScreen(player, item, episode, stream, subtitles, backend, resume(item, episode),
                                 onStopped = { pos -> stopped(item, episode, pos) }) { page = "sources" }
                         } }
-                        "library" -> MediaGrid("Thư viện và tiếp tục xem", library.map { it.media }.distinctBy { it.id }, ::openDetails)
+                        "library" -> MediaGrid("Thư viện", bookmarks.distinctBy { it.id }, ::openDetails, bookmarks = bookmarks.map { it.id }.toSet(), onBookmark = ::bookmark, qualityLoader = backend::releaseQuality)
+                        "history" -> MediaGrid("Lịch sử xem", history.map { it.media }.distinctBy { "${it.type}:${it.id}" }, ::openDetails,
+                            history.filter { it.duration > 0 }.associate { it.media.id to (it.position / it.duration).toFloat().coerceIn(0f, 1f) })
                         "addons" -> Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                             Text("Addon", style = MaterialTheme.typography.headlineLarge)
                             OutlinedTextField(addonUrl, { addonUrl = it }, label = { Text("URL manifest") }, singleLine = true,
@@ -209,7 +200,15 @@ internal fun FrameZooApp() {
                         }
                     }
                 }
-                if (page == "discover") DiscoverHeader(state, Modifier.align(Alignment.TopCenter).padding(horizontal = 24.dp, vertical = 20.dp))
+                if (page == "discover") DiscoverHeader(state, Modifier.align(Alignment.TopCenter).padding(horizontal = 24.dp, vertical = 20.dp)
+                    .onPreviewKeyEvent { event ->
+                        if (event.nativeKeyEvent.action == KeyEvent.ACTION_DOWN && event.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_DPAD_UP &&
+                            (discoverListState.firstVisibleItemIndex > 0 || discoverListState.firstVisibleItemScrollOffset > 0)) {
+                            scope.launch { discoverListState.animateScrollToItem(0) }
+                            true
+                        } else false
+                    }
+                    .then(if (discover.isNotEmpty() && discoverListState.firstVisibleItemIndex == 0) Modifier.focusProperties { down = discoverAction } else Modifier))
                 }
             }
         }

@@ -3,10 +3,14 @@ package com.framezoo.tv.ui
 import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
 import com.framezoo.tv.api.Addons
 import com.framezoo.tv.api.Backend
 import com.framezoo.tv.model.Addon
+import com.framezoo.tv.model.BookmarkDetails
+import com.framezoo.tv.model.AddonCatalog
+import com.framezoo.tv.model.CuratedList
 import com.framezoo.tv.model.DiscoverFilter
 import com.framezoo.tv.model.DiscoverOption
 import com.framezoo.tv.model.Episode
@@ -22,12 +26,20 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.CancellationException
+import org.json.JSONObject
 
 internal class FrameZooState(context: Context, private val scope: CoroutineScope) {
     val store = SecureStore(context)
     val backend = Backend(store)
     private val addons = Addons(context, backend, store)
     val player = PlayerController(context)
+
+    var trailerEnabled by mutableStateOf(store.trailerEnabled)
+        private set
+    var trailerMuted by mutableStateOf(store.trailerMuted)
+        private set
+    fun toggleTrailer() { trailerEnabled = !trailerEnabled; store.trailerEnabled = trailerEnabled }
+    fun toggleTrailerAudio() { trailerMuted = !trailerMuted; store.trailerMuted = trailerMuted }
 
     var page by mutableStateOf("discover")
     var theme by mutableStateOf(store.theme.lowercase().let { if (it in themeNames) it else "default" })
@@ -41,12 +53,92 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
     var genres by mutableStateOf<List<DiscoverOption>>(emptyList())
     var countries by mutableStateOf<List<DiscoverOption>>(emptyList())
     var sections by mutableStateOf<Map<String, List<Media>>>(emptyMap())
+    private val discoverData = JSONObject(context.assets.open("discover.json").bufferedReader().use { it.readText() })
+    private fun options(key: String): List<DiscoverOption> = discoverData.getJSONArray(key).let { data ->
+        (0 until data.length()).map { data.getJSONObject(it).let { item -> DiscoverOption(item.getString("id"), item.getString("name")) } }
+    }
+    fun providersFor(category: String): List<DiscoverOption> = when (category) {
+        "movie" -> options("MOVIE_PROVIDERS")
+        "tv" -> options("TV_PROVIDERS")
+        else -> (options("MOVIE_PROVIDERS") + options("TV_PROVIDERS")).distinctBy { it.id }
+    }
+    val providers: List<DiscoverOption> get() = providersFor(filter.category)
+    private val editorPicks = listOf("MOVIES_DATA", "TV_SHOWS_DATA").flatMap { key ->
+        discoverData.getJSONArray(key).let { data -> (0 until data.length()).map { data.getJSONObject(it).let { item -> item.getString("id") to item.getString("type") } } }
+    }.shuffled()
+    var recommendationSource by mutableStateOf("")
+    val recommendationSources: List<Media> get() = progress.map { it.media }
+        .filter { it.id.isNotEmpty() && it.id.all(Char::isDigit) && it.type == if (filter.category == "tv") "show" else "movie" }
+        .distinctBy { "${it.type}:${it.id}" }
+    val hasPersonalSources: Boolean get() = (history.map { it.media } + progress.map { it.media } + bookmarks).any {
+        it.id.isNotEmpty() && it.id.all(Char::isDigit) && it.type == if (filter.category == "tv") "show" else "movie"
+    }
+    var provider by mutableStateOf("8")
+    var carouselGenre by mutableStateOf("")
     var discoverLoading by mutableStateOf(false)
     var discoverError by mutableStateOf("")
     private var discoverJob: Job? = null
-    var addonCatalog by mutableStateOf<List<Media>>(emptyList())
+    private val rowJobs = mutableMapOf<String, Job>()
+    private var discoverGeneration = 0
+    private val rowGeneration = mutableMapOf<String, Int>()
+    var rowErrors by mutableStateOf<Map<String, String>>(emptyMap())
+    var rowLoading by mutableStateOf<Set<String>>(emptySet())
+    var addonCatalog by mutableStateOf<List<AddonCatalog>>(emptyList())
+    var allLists by mutableStateOf<Map<String, List<Media>>>(emptyMap())
+    var allListsLoading by mutableStateOf(false)
+    var allListsError by mutableStateOf("")
+    var curatedLists by mutableStateOf<List<CuratedList>>(emptyList())
+    var curatedItems by mutableStateOf<Map<String, List<Media>>>(emptyMap())
+    var curatedErrors by mutableStateOf<Set<String>>(emptySet())
+    private val curatedJobs = mutableMapOf<String, Job>()
+    private var allListsJob: Job? = null
+    private var moreReturnPage = "discover"
+    var moreFilter by mutableStateOf(DiscoverFilter())
+        private set
+    var moreProvider by mutableStateOf("8")
+        private set
+    var moreGenre by mutableStateOf("")
+        private set
+    var moreRecommendation by mutableStateOf("")
+        private set
+    private var moreAddon: AddonCatalog? = null
+    var focusReturnSection by mutableStateOf<String?>(null)
+    var moreTitle by mutableStateOf("")
+    var moreSection by mutableStateOf("")
+    var moreItems by mutableStateOf<List<Media>>(emptyList())
+    var morePage by mutableStateOf(1)
+    var moreGeneration by mutableIntStateOf(0)
+    var focusReturnMediaId by mutableStateOf<String?>(null)
+    var moreHasNext by mutableStateOf(false)
+    var moreLoading by mutableStateOf(false)
+    var moreError by mutableStateOf("")
+    private var moreJob: Job? = null
+    private var detailsReturnPage = "discover"
+    private data class DetailsSnapshot(val media: Media, val seasons: List<Int>, val episodes: List<Episode>, val addonEpisodes: List<Episode>, val selectedSeason: Int?)
+    private val detailsStack = mutableListOf<DetailsSnapshot>()
+    private var seasonJob: Job? = null
+    var selectedSeason by mutableStateOf<Int?>(null)
+    var episodesLoading by mutableStateOf(false)
+    var trailerKey by mutableStateOf("")
+    var trailerTitle by mutableStateOf("")
+    private var loginReturnPage = "discover"
+    private var feedbackReturnPage = "discover"
     var results by mutableStateOf<List<Media>>(emptyList())
+    var searchCountry by mutableStateOf("")
+    var searchYear by mutableStateOf("")
+    var searchGenre by mutableStateOf("")
+    var searchLoading by mutableStateOf(false)
+    var searchError by mutableStateOf("")
+    var searchedQuery by mutableStateOf("")
+    private var searchJob: Job? = null
+    private var searchGeneration = 0
     var library by mutableStateOf<List<LibraryItem>>(emptyList())
+    var history by mutableStateOf<List<LibraryItem>>(emptyList())
+    var progress by mutableStateOf<List<LibraryItem>>(emptyList())
+    var bookmarks by mutableStateOf<List<Media>>(emptyList())
+    var bookmarkDetails by mutableStateOf<List<BookmarkDetails>>(emptyList())
+    var bookmarkGroups by mutableStateOf<List<String>>(emptyList())
+    private val savingBookmarks = mutableSetOf<String>()
     var installed by mutableStateOf<List<Addon>>(emptyList())
     var selected by mutableStateOf<Media?>(null)
     var seasons by mutableStateOf<List<Int>>(emptyList())
@@ -68,39 +160,189 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         refreshDiscover()
         installed = addons.list()
         addonCatalog = addons.catalog()
-        if (store.userId != null) runCatching { library = backend.library() }
+        if (store.userId != null) {
+            try { refreshUserData(); if (library.isNotEmpty()) refreshDiscover() }
+            catch (e: CancellationException) { throw e } catch (_: Exception) { }
+        }
     }
 
     fun refreshDiscover() {
+        val generation = ++discoverGeneration
         discoverJob?.cancel()
+        rowJobs.values.forEach { it.cancel() }; rowJobs.clear(); rowErrors = emptyMap(); rowLoading = emptySet()
         val selectedFilter = filter
+        val selectedProvider = provider
         discoverJob = scope.launch {
             discoverLoading = true; discoverError = ""
             try {
                 if (genres.isEmpty() || countries.isEmpty()) {
                     val options = backend.discoverOptions(); genres = options.first; countries = options.second
                 }
-                sections = coroutineScope {
-                    listOf("trending", "popular", "netflix", "top").associateWith { section ->
-                        async { backend.discoverSection(selectedFilter, section) }
-                    }.mapValues { it.value.await() }
+                val genre = carouselGenre.ifBlank { genres.firstOrNull()?.id.orEmpty() }
+                if (carouselGenre.isBlank()) carouselGenre = genre
+                val keys = if (selectedFilter.category.startsWith("genre:")) listOf("genre") else buildList {
+                    add("trending"); if (selectedFilter.category == "all") add("popular")
+                    addAll(listOf("provider", "top", "editor", "latest"))
+                    if (selectedFilter.category in listOf("movie", "tv")) {
+                        if (hasPersonalSources) add("personal")
+                        if (recommendationSources.isNotEmpty()) add("recommendations")
+                    }
+                    add("genre")
                 }
+                if (recommendationSources.none { it.id == recommendationSource }) recommendationSource = recommendationSources.firstOrNull()?.id.orEmpty()
+                sections = emptyMap()
+                coroutineScope { keys.map { section ->
+                    val rowVersion = rowGeneration[section] ?: 0
+                    async {
+                    fun current() = discoverGeneration == generation && (rowGeneration[section] ?: 0) == rowVersion
+                    val items = try {
+                        discoverRow(section, selectedFilter, selectedProvider, genre)
+                    } catch (e: CancellationException) { throw e } catch (e: Exception) {
+                        if (current()) rowErrors = rowErrors + (section to (e.message ?: "Không tải được nội dung")); emptyList()
+                    }
+                    if (current() && filter == selectedFilter && (section != "provider" || provider == selectedProvider) && (section != "genre" || carouselGenre == genre)) {
+                        sections = sections + (section to items)
+                    }
+                } }.forEach { it.await() } }
+                if (sections.values.all { it.isEmpty() }) discoverError = "Không tải được nội dung"
             } catch (e: CancellationException) { throw e }
             catch (e: Exception) { sections = emptyMap(); discoverError = e.message ?: "Không tải được nội dung" }
-            finally { if (filter == selectedFilter) discoverLoading = false }
+            finally { if (discoverGeneration == generation) discoverLoading = false }
         }
     }
-    fun updateFilter(value: DiscoverFilter) { if (filter != value) { filter = value; refreshDiscover() } }
+    fun updateFilter(value: DiscoverFilter) { if (filter != value) { filter = value; if (providers.none { it.id == provider }) provider = providers.firstOrNull()?.id ?: "8"; refreshDiscover() } }
+    private suspend fun discoverRow(section: String, selectedFilter: DiscoverFilter, selectedProvider: String, genre: String, selectedRecommendation: String = recommendationSource): List<Media> {
+        if (section == "editor") return backend.editorPicks(selectedFilter, editorPicks)
+        if (section == "personal" || section == "recommendations") {
+            val type = if (selectedFilter.category == "tv") "show" else "movie"
+            val chosen = if (section == "personal") personalSources(type, history, progress, bookmarks)
+                else recommendationSources.filter { it.id == selectedRecommendation }.take(1)
+            val existing = (history.map { it.media } + progress.map { it.media } + bookmarks).map { it.id }.toSet()
+            return coroutineScope { chosen.map { source -> async {
+                try { backend.recommendations(source).take(if (section == "personal") 10 else 20) }
+                catch (e: CancellationException) { throw e } catch (_: Exception) { emptyList() }
+            } }.map { it.await() }.flatten() }
+                .filter { it.id !in existing && (selectedFilter.year.isEmpty() || it.year == selectedFilter.year) &&
+                    (selectedFilter.country.isEmpty() || selectedFilter.country in it.originCountries) }
+                .distinctBy { it.id }
+        }
+        return backend.discoverSection(selectedFilter, section, selectedProvider, if (section == "genre") genre else "")
+    }
+    fun selectRecommendation(id: String) { if (recommendationSource != id) { recommendationSource = id; refreshRow("recommendations") } }
+    fun selectProvider(id: String) { if (provider != id) { provider = id; refreshRow("provider") } }
+    fun selectGenre(id: String) { if (carouselGenre != id) { carouselGenre = id; refreshRow("genre") } }
+    fun refreshRow(section: String) {
+        rowJobs.remove(section)?.cancel()
+        val generation = discoverGeneration
+        val rowVersion = (rowGeneration[section] ?: 0) + 1
+        rowGeneration[section] = rowVersion
+        fun current() = discoverGeneration == generation && rowGeneration[section] == rowVersion
+        val selectedFilter = filter; val selectedProvider = provider; val selectedGenre = carouselGenre
+        rowJobs[section] = scope.launch {
+            rowLoading = rowLoading + section; rowErrors = rowErrors - section
+            try {
+                val items = discoverRow(section, selectedFilter, selectedProvider, selectedGenre)
+                if (current()) sections = sections + (section to items)
+            } catch (e: CancellationException) { throw e } catch (e: Exception) {
+                if (current()) rowErrors = rowErrors + (section to (e.message ?: "Không tải được nội dung"))
+            } finally {
+                if (current()) rowLoading = rowLoading - section
+            }
+        }
+    }
+    fun openAllLists() {
+        page = "discover-lists"; allListsJob?.cancel(); allLists = emptyMap(); allListsError = ""
+        curatedJobs.values.forEach { it.cancel() }; curatedJobs.clear(); curatedLists = emptyList(); curatedItems = emptyMap(); curatedErrors = emptySet()
+        allListsJob = scope.launch {
+            allListsLoading = true
+            try {
+                coroutineScope {
+                  val curated = async { try { backend.curatedLists() } catch (e: CancellationException) { throw e } catch (_: Exception) { emptyList() } }
+                  listOf("latest", "latest4k", "popular", "trending").map { key -> async {
+                    val items = try { backend.discoverSection(DiscoverFilter(category = "movie"), key) }
+                        catch (e: CancellationException) { throw e } catch (_: Exception) { emptyList() }
+                    allLists = allLists + (key to items)
+                  } }.forEach { it.await() }
+                  curatedLists = curated.await()
+                }
+                if (allLists.values.all { it.isEmpty() }) allListsError = "Không tải được danh sách"
+            } finally { allListsLoading = false }
+        }
+    }
+    fun loadCurated(list: CuratedList) {
+        if (curatedJobs[list.slug]?.isActive == true || list.slug in curatedItems) return
+        curatedErrors = curatedErrors - list.slug
+        curatedJobs[list.slug] = scope.launch {
+            try { curatedItems = curatedItems + (list.slug to backend.movieDetails(list.ids)) }
+            catch (e: CancellationException) { throw e } catch (_: Exception) { curatedErrors = curatedErrors + list.slug }
+        }
+    }
+    fun openMore(section: String, title: String, items: List<Media>, addon: AddonCatalog? = null) {
+        moreReturnPage = if (page == "discover-lists") page else "discover"
+        moreFilter = if (moreReturnPage == "discover-lists") DiscoverFilter(category = "movie") else filter
+        moreProvider = provider; moreGenre = carouselGenre; moreRecommendation = recommendationSource
+        moreJob?.cancel(); moreSection = section; moreTitle = title; moreItems = items; moreAddon = addon; moreGeneration++; focusReturnMediaId = null
+        morePage = 1; moreHasNext = when (section) {
+            addon?.key -> items.size >= 20
+            "personal", "recommendations", "latest4k" -> false
+            "editor" -> items.isNotEmpty() && editorPicks.count { filter.category == "all" || it.second == if (filter.category == "tv") "show" else "movie" } > 20
+            else -> !section.startsWith("curated:") && items.isNotEmpty()
+        }
+        moreError = ""; moreLoading = false; page = "discover-more"
+    }
+    fun loadMore() {
+        if (moreLoading || !moreHasNext) return
+        val target = moreSection; val nextPage = morePage + 1; val generation = moreGeneration
+        moreLoading = true; moreError = ""
+        moreJob = scope.launch {
+            try {
+                val addon = moreAddon
+                val (next, hasNext) = if (addon != null) addons.catalogPage(addon.manifestUrl, addon.type, addon.id, (nextPage - 1) * 50).let { it to (it.size >= 20) }
+                    else if (target == "editor") backend.editorPicks(moreFilter, editorPicks, nextPage) to (nextPage * 20 < editorPicks.count { moreFilter.category == "all" || it.second == if (moreFilter.category == "tv") "show" else "movie" })
+                    else backend.discoverSectionPage(moreFilter, target, moreProvider, if (target == "genre") moreGenre else "", nextPage)
+                if (generation != moreGeneration) return@launch
+                val existingIds = moreItems.map { "${it.type}:${it.id}" }.toSet()
+                val previousCount = moreItems.size
+                moreItems = (moreItems + next).distinctBy { "${it.type}:${it.id}" }
+                val focusItem = next.firstOrNull { "${it.type}:${it.id}" !in existingIds } ?: moreItems.lastOrNull()
+                if (page == "discover-more" && focusItem != null) focusReturnMediaId = "${focusItem.type}:${focusItem.id}:${focusItem.addonManifest}"
+                morePage = nextPage; moreHasNext = hasNext && (addon == null || moreItems.size > previousCount)
+            } catch (e: CancellationException) { throw e } catch (e: Exception) { moreError = e.message ?: "Không tải được nội dung" }
+            finally { if (generation == moreGeneration) moreLoading = false }
+        }
+    }
+    fun updateMoreFilter(value: DiscoverFilter = moreFilter, selectedProvider: String = moreProvider, selectedGenre: String = moreGenre, selectedRecommendation: String = moreRecommendation, force: Boolean = false) {
+        if (!force && moreFilter == value && moreProvider == selectedProvider && moreGenre == selectedGenre && moreRecommendation == selectedRecommendation) return
+        moreJob?.cancel(); moreGeneration++; moreFilter = value; moreProvider = selectedProvider; moreGenre = selectedGenre; moreRecommendation = selectedRecommendation
+        morePage = 1; moreItems = emptyList(); moreError = ""; moreHasNext = false
+        val section = moreSection
+        val generation = moreGeneration
+        moreLoading = true
+        moreJob = scope.launch {
+            try {
+                val (items, hasNext) = if (section == "editor") backend.editorPicks(value, editorPicks) to (editorPicks.count { value.category == "all" || it.second == if (value.category == "tv") "show" else "movie" } > 20)
+                    else if (section in listOf("personal", "recommendations")) discoverRow(section, value, selectedProvider, selectedGenre, selectedRecommendation) to false
+                    else backend.discoverSectionPage(value, section, selectedProvider, if (section == "genre") selectedGenre else "")
+                if (generation != moreGeneration) return@launch
+                moreItems = items
+                moreHasNext = hasNext
+            } catch (e: CancellationException) { throw e } catch (e: Exception) { moreError = e.message ?: "Không tải được nội dung" }
+            finally { if (generation == moreGeneration) moreLoading = false }
+        }
+    }
 
     fun runTask(block: suspend () -> Unit) {
         scope.launch {
             busy = true; error = ""
-            try { block() } catch (e: Exception) { error = e.message ?: "Lỗi không rõ" }
+            try { block() } catch (e: CancellationException) { throw e } catch (e: Exception) { error = e.message ?: "Lỗi không rõ" }
             finally { busy = false }
         }
     }
 
     fun openDetails(item: Media) = runTask {
+        val fromPage = page
+        val previous = selected?.let { DetailsSnapshot(it, seasons, episodes, addonEpisodes, selectedSeason) }
+        seasonJob?.cancel()
         if (item.addonManifest != null) {
             val (detail, videos) = addons.details(item)
             selected = detail; addonEpisodes = videos; seasons = videos.map { it.season }.distinct(); episodes = emptyList()
@@ -108,8 +350,29 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
             val (detail, seasonList) = backend.details(item)
             selected = detail; seasons = seasonList; episodes = emptyList(); addonEpisodes = emptyList()
         }
+        if (fromPage == "details" && previous != null) detailsStack.add(previous)
+        else { detailsReturnPage = fromPage; detailsStack.clear() }
+        selectedSeason = null
         episode = null; page = "details"
     }
+
+    fun playFeatured(item: Media) = runTask {
+        if (page != "details") { detailsReturnPage = page; detailsStack.clear() }
+        val (detail, seasonList) = backend.details(item)
+        selected = detail; seasons = seasonList; episodes = emptyList(); addonEpisodes = emptyList()
+        val saved = progress.firstOrNull { it.media.id == item.id && it.media.type == item.type && it.position > 0 }
+        val target = if (item.type == "show") {
+            val season = saved?.season ?: seasonList.firstOrNull()
+            season?.let { number -> backend.episodes(item.id, number).let { eps ->
+                saved?.episode?.let { ep -> eps.firstOrNull { it.number == ep } } ?: eps.firstOrNull()
+            } }
+        } else null
+        episode = target
+        if (item.type == "show" && target == null) page = "details" else {
+            sources = addons.streams(detail, target); subtitles = addons.subtitles(detail, target); page = "sources"
+        }
+    }
+    fun playRandom(item: Media) = playFeatured(item)
 
     fun loadSources(item: Media, target: Episode?) = runTask {
         selected = item; episode = target
@@ -118,14 +381,127 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         page = "sources"
     }
 
-    fun openLibrary() = runTask { library = backend.library(); page = "library" }
-    fun openAddons() = runTask { installed = addons.list(); page = "addons" }
-    fun search() = runTask { results = backend.search(query) }
-    fun bookmark(item: Media) = runTask { backend.bookmark(item) }
-    fun chooseSeason(item: Media, season: Int) {
-        if (item.addonManifest != null) episodes = addonEpisodes.filter { it.season == season }
-        else runTask { episodes = backend.episodes(item.id, season) }
+    private suspend fun refreshUserData() = coroutineScope {
+        val saved = async { backend.bookmarkDetails() }
+        val groups = async { backend.bookmarkGroups() }
+        val watched = async { backend.watchHistory() }
+        val ongoing = async { backend.watchProgress() }
+        bookmarkDetails = saved.await(); bookmarks = bookmarkDetails.map { it.media }; bookmarkGroups = (groups.await() + bookmarkDetails.flatMap { it.groups }).distinct(); history = watched.await(); progress = ongoing.await()
+        library = (bookmarks.map { LibraryItem(it) } + history + progress)
+            .associateBy { "${it.media.id}:${it.season ?: -1}:${it.episode ?: -1}" }.values.toList()
     }
+    fun openLibrary() { if (store.userId == null) openLogin() else runTask { refreshUserData(); page = "library" } }
+    fun openHistory() {
+        if (store.userId == null) { openLogin(); return }
+        runTask { history = backend.watchHistory(); page = "history" }
+    }
+    fun openAddons() = runTask { installed = addons.list(); page = "addons" }
+    fun search() {
+        val term = query.trim()
+        searchJob?.cancel(); val generation = ++searchGeneration
+        searchedQuery = term; searchGenre = ""; searchError = ""; results = emptyList()
+        if (term.isEmpty()) { results = emptyList(); searchLoading = false; return }
+        searchLoading = true
+        searchJob = scope.launch {
+            try {
+                val initial = backend.search(term)
+                if (generation != searchGeneration) return@launch
+                results = initial; searchLoading = false
+                val enriched = backend.enrichSearch(initial)
+                if (generation == searchGeneration) results = enriched
+            }
+            catch (e: CancellationException) { throw e }
+            catch (e: Exception) { searchError = e.message ?: "Không tìm kiếm được" }
+            finally { if (searchGeneration == generation) searchLoading = false }
+        }
+    }
+    fun bookmark(item: Media) {
+        if (store.userId == null) {
+            if (page in listOf("discover-more", "search")) focusReturnMediaId = "${item.type}:${item.id}:${item.addonManifest}"
+            if (page == "discover") focusReturnSection = sections.entries.firstOrNull { (_, items) -> items.any { it.id == item.id && it.type == item.type } }?.key
+                ?: addonCatalog.firstOrNull { group -> group.items.any { it.id == item.id && it.type == item.type } }?.key
+            openLogin(); return
+        }
+        if (!savingBookmarks.add(item.id)) return
+        runTask {
+            try {
+                val remove = bookmarks.any { it.id == item.id }
+                backend.bookmark(item, remove)
+                bookmarks = if (remove) bookmarks.filterNot { it.id == item.id } else bookmarks + item
+                refreshUserData()
+                if (filter.category in listOf("movie", "tv")) refreshDiscover()
+            } finally { savingBookmarks.remove(item.id) }
+        }
+    }
+    fun updateBookmarkGroups(item: Media, groups: List<String>) {
+        if (store.userId == null) { openLogin(); return }
+        if (!savingBookmarks.add(item.id)) return
+        runTask {
+            try {
+                val existing = backend.bookmarkDetails().firstOrNull { it.media.id == item.id }
+                backend.saveBookmarkDetails(item, groups.distinct(), existing?.favoriteEpisodes.orEmpty())
+                refreshUserData()
+            } finally { savingBookmarks.remove(item.id) }
+        }
+    }
+    fun bookmarkCollection(items: List<Media>, group: String) {
+        if (busy) return
+        if (store.userId == null) { openLogin(); return }
+        runTask {
+            val existing = backend.bookmarkDetails().associateBy { it.media.id }
+            items.filter { it.id.isNotBlank() && it.id.all(Char::isDigit) && it.year.isNotBlank() }.forEach { item ->
+                val bookmark = existing[item.id]
+                backend.saveBookmarkDetails(item, (bookmark?.groups.orEmpty() + group).distinct(), bookmark?.favoriteEpisodes.orEmpty())
+            }
+            refreshUserData()
+        }
+    }
+    fun toggleFavoriteEpisode(item: Media, episode: Episode) {
+        if (store.userId == null) { openLogin(); return }
+        if (!savingBookmarks.add(item.id)) return
+        runTask {
+            try {
+                val existing = backend.bookmarkDetails().firstOrNull { it.media.id == item.id }
+                val favorites = existing?.favoriteEpisodes.orEmpty()
+                val next = if (episode.id in favorites) favorites - episode.id else favorites + episode.id
+                backend.saveBookmarkDetails(item, existing?.groups.orEmpty(), next)
+                refreshUserData()
+            } finally { savingBookmarks.remove(item.id) }
+        }
+    }
+    fun markEpisodeWatched(item: Media, episode: Episode, watched: Boolean) {
+        if (store.userId == null) { openLogin(); return }
+        runTask {
+            val existing = (progress + history).firstOrNull { it.media.id == item.id && it.season == episode.season && it.episode == episode.number }
+            backend.markEpisodeWatched(item, episode, watched, existing); refreshUserData()
+        }
+    }
+    fun markSeasonWatched(item: Media, targets: List<Episode>, watched: Boolean) {
+        if (busy) return
+        if (store.userId == null) { openLogin(); return }
+        runTask {
+            targets.forEach { episode ->
+                val existing = (progress + history).firstOrNull { it.media.id == item.id && it.season == episode.season && it.episode == episode.number }
+                backend.markEpisodeWatched(item, episode, watched, existing)
+            }
+            refreshUserData()
+        }
+    }
+    fun markMovieWatched(item: Media, watched: Boolean) {
+        if (store.userId == null) { openLogin(); return }
+        runTask { backend.markMovieWatched(item, watched); refreshUserData() }
+    }
+    fun chooseSeason(item: Media, season: Int) {
+        seasonJob?.cancel(); selectedSeason = season; episodes = emptyList()
+        episodesLoading = item.addonManifest == null
+        if (item.addonManifest != null) episodes = addonEpisodes.filter { it.season == season }
+        else seasonJob = scope.launch {
+            try { episodes = backend.episodes(item.id, season) }
+            catch (e: CancellationException) { throw e } catch (e: Exception) { error = e.message ?: "Không tải được tập phim" }
+            finally { if (selectedSeason == season) episodesLoading = false }
+        }
+    }
+    fun openTrailer(key: String, title: String) { trailerKey = key; trailerTitle = title; page = "trailer" }
     fun chooseSource(source: Stream) { playing = source; page = "player" }
     fun installAddon() = runTask { addons.install(addonUrl); installed = addons.list(); addonCatalog = addons.catalog(); addonUrl = "" }
     fun removeAddon(addon: Addon) = runTask { addons.remove(addon.manifestUrl); installed = addons.list(); addonCatalog = addons.catalog() }
@@ -134,7 +510,7 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         store.backendUrl = backendUrl
         backendUrl = store.backendUrl
         if (previous != backendUrl) {
-            discoverJob?.cancel(); library = emptyList(); discover = emptyList(); sections = emptyMap(); genres = emptyList(); countries = emptyList()
+            discoverJob?.cancel(); library = emptyList(); history = emptyList(); progress = emptyList(); bookmarks = emptyList(); bookmarkDetails = emptyList(); bookmarkGroups = emptyList(); discover = emptyList(); sections = emptyMap(); genres = emptyList(); countries = emptyList()
             initialize()
         }
     }
@@ -147,13 +523,15 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
             "tertiary" -> { customTertiary = name; store.customTertiary = name }
         }
     }
+    fun openLogin() { if (page != "login") { loginReturnPage = page; page = "login" } }
+    fun openFeedback() { if (page != "feedback") { feedbackReturnPage = page; page = "feedback" } }
     fun login() = runTask {
         backend.login(loginName, loginPassword)
-        installed = addons.list(); library = backend.library(); page = "discover"; loginPassword = ""
+        installed = addons.list(); refreshUserData(); page = loginReturnPage; loginPassword = ""; refreshDiscover()
     }
-    fun logout() { store.clearSession(); library = emptyList(); page = "discover" }
+    fun logout() { store.clearSession(); library = emptyList(); history = emptyList(); progress = emptyList(); bookmarks = emptyList(); bookmarkDetails = emptyList(); bookmarkGroups = emptyList(); page = "discover"; refreshDiscover() }
     fun resume(item: Media, target: Episode?): Double {
-        val saved = library.firstOrNull { it.media.id == item.id && it.season == target?.season && it.episode == target?.number }?.position ?: 0.0
+        val saved = progress.firstOrNull { it.media.id == item.id && it.season == target?.season && it.episode == target?.number }?.position ?: 0.0
         return recentResume?.takeIf { it.first == item.id && it.second == target }?.third ?: saved
     }
     fun stopped(item: Media, target: Episode?, position: Double) { recentResume = Triple(item.id, target, position) }
@@ -161,6 +539,26 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         page = when (page) {
             "player" -> "sources"
             "sources" -> "details"
+            "trailer" -> "details"
+            "details" -> {
+                seasonJob?.cancel()
+                val previous = detailsStack.removeLastOrNull()
+                if (previous != null) {
+                    selected = previous.media; seasons = previous.seasons; episodes = previous.episodes; addonEpisodes = previous.addonEpisodes
+                    selectedSeason = previous.selectedSeason
+                    "details"
+                } else {
+                    if (detailsReturnPage in listOf("discover-more", "search")) focusReturnMediaId = selected?.let { "${it.type}:${it.id}:${it.addonManifest}" }
+                    if (detailsReturnPage == "discover") focusReturnSection = sections.entries.firstOrNull { entry ->
+                        entry.value.any { it.id == selected?.id && it.type == selected?.type }
+                    }?.key ?: addonCatalog.firstOrNull { it.manifestUrl == selected?.addonManifest && it.type == if (selected?.type == "show") "series" else "movie" }?.key
+                    detailsReturnPage
+                }
+            }
+            "discover-more" -> { moreJob?.cancel(); focusReturnSection = moreSection; moreReturnPage }
+            "discover-lists" -> { allListsJob?.cancel(); curatedJobs.values.forEach { it.cancel() }; "discover" }
+            "login" -> loginReturnPage
+            "feedback" -> feedbackReturnPage
             else -> "discover"
         }
     }

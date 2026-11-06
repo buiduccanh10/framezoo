@@ -16,4 +16,14 @@ class DiscoverPathTest {
         val tv = discoverPath(DiscoverFilter(year = "2023"), "netflix", "tv")
         assertTrue(tv.contains("first_air_date_year=2023") && tv.contains("with_watch_providers=8") && tv.contains("watch_region=VN"))
     }
+
+    @Test fun supportsDesktopRowsAndPagination() {
+        val provider = discoverPath(DiscoverFilter(category = "tv", year = "2022", country = "VN"), "provider", "tv", provider = "350", page = 2)
+        assertTrue(provider.contains("with_watch_providers=350") && provider.contains("watch_region=US"))
+        assertTrue(provider.contains("page=2") && provider.contains("first_air_date_year=2022"))
+        val genre = discoverPath(DiscoverFilter(), "genre", "movie", genre = "28")
+        assertTrue(genre.contains("/discover/movie?") && genre.contains("with_genres=28"))
+        val latest = discoverPath(DiscoverFilter(year = "2024"), "latest", "tv")
+        assertTrue(latest.contains("sort_by=first_air_date.desc"))
+    }
 }

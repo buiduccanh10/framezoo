@@ -104,34 +104,40 @@ class Addons(context: Context, private val backend: Backend, private val store: 
     private fun mediaId(item: Media, episode: Episode?) = (item.imdbId?.takeIf { it.isNotBlank() } ?: "tmdb:${item.id}") +
         if (episode != null) ":${episode.season}:${episode.number}" else ""
 
-    suspend fun catalog(): List<Media> {
-        val result = linkedMapOf<String, Media>()
+    suspend fun catalog(): List<AddonCatalog> {
+        val result = mutableListOf<AddonCatalog>()
         val installed = local()
         for (i in 0 until installed.length()) {
             val row = installed.optJSONObject(i) ?: continue
             if (!row.optBoolean("enabled", true)) continue
             val manifestUrl = row.optString("manifestUrl")
-            val catalogs = row.optJSONObject("manifest")?.optJSONArray("catalogs") ?: JSONArray()
-            for (j in 0 until catalogs.length()) try {
-                val catalog = catalogs.optJSONObject(j) ?: continue
-                val type = catalog.optString("type")
-                val id = catalog.optString("id")
-                if (type.isBlank() || id.isBlank()) continue
-                val root = URI(manifestUrl).resolve(".")
-                val metas = json(root.resolve("catalog/${encode(type)}/${encode(id)}.json").toString()).optJSONArray("metas") ?: JSONArray()
-                for (k in 0 until metas.length()) {
-                    val meta = metas.optJSONObject(k) ?: continue
-                    val mediaId = meta.optString("id")
-                    if (mediaId.isBlank()) continue
-                    val mediaType = if (type == "series") "show" else "movie"
-                    result["$type:$mediaId"] = Media(mediaId, mediaType, meta.optString("name", "Untitled"),
-                        meta.optString("poster").ifBlank { null }, meta.optString("background").ifBlank { null },
-                        meta.optString("description"), meta.optString("releaseInfo").take(4),
-                        mediaId.takeIf { it.startsWith("tt") }, manifestUrl)
-                }
-            } catch (_: Exception) { }
+            val manifest = row.optJSONObject("manifest") ?: continue
+            val addon = parse(row)
+            if ("catalog" !in addon.resources) continue
+            val catalogs = manifest.optJSONArray("catalogs") ?: JSONArray()
+            for (type in listOf("movie", "series")) try {
+                val catalog = (0 until catalogs.length()).mapNotNull { catalogs.optJSONObject(it) }
+                    .firstOrNull { it.optString("type") == type }
+                if (catalog == null && catalogs.length() > 0) continue
+                val id = catalog?.optString("id")?.ifBlank { "top" } ?: "top"
+                val entries = catalogPage(manifestUrl, type, id, 0)
+                if (entries.isNotEmpty()) result += AddonCatalog(manifestUrl, addon.name, type, id, entries)
+            } catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (_: Exception) { }
         }
-        return result.values.toList()
+        return result
+    }
+
+    suspend fun catalogPage(manifestUrl: String, type: String, id: String, skip: Int): List<Media> {
+        require(type in setOf("movie", "series") && id.isNotBlank() && skip >= 0)
+        val root = URI(manifestUrl).resolve(".")
+        val metas = json(root.resolve(addonCatalogPath(type, id, skip)).toString()).optJSONArray("metas") ?: JSONArray()
+        return (0 until metas.length()).mapNotNull { metas.optJSONObject(it) }.mapNotNull { meta ->
+            val mediaId = meta.optString("id").takeIf { it.isNotBlank() } ?: return@mapNotNull null
+            Media(mediaId, if (type == "series") "show" else "movie", meta.optString("name", "Untitled"),
+                meta.optString("poster").ifBlank { null }, meta.optString("background").ifBlank { null },
+                meta.optString("description"), meta.optString("releaseInfo").take(4),
+                mediaId.takeIf { it.startsWith("tt") }, manifestUrl, releaseQuality = releaseQualityLabel(meta.optString("releaseInfo")))
+        }.distinctBy { it.id }
     }
 
     suspend fun details(item: Media): Pair<Media, List<Episode>> {
@@ -188,4 +194,10 @@ class Addons(context: Context, private val backend: Backend, private val store: 
         } catch (_: Exception) { }
         return result
     }
+}
+
+internal fun addonCatalogPath(type: String, id: String, skip: Int): String {
+    require(type in setOf("movie", "series") && id.isNotBlank() && skip >= 0)
+    val encoded = URLEncoder.encode(id, "UTF-8").replace("+", "%20")
+    return "catalog/$type/$encoded" + if (skip == 0) ".json" else "/skip=$skip.json"
 }

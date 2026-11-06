@@ -1,0 +1,406 @@
+{
+  "MOVIES_DATA": [
+    {
+      "id": 9342,
+      "type": "movie"
+    },
+    {
+      "id": 293,
+      "type": "movie"
+    },
+    {
+      "id": 370172,
+      "type": "movie"
+    },
+    {
+      "id": 661374,
+      "type": "movie"
+    },
+    {
+      "id": 207,
+      "type": "movie"
+    },
+    {
+      "id": 378785,
+      "type": "movie"
+    },
+    {
+      "id": 335984,
+      "type": "movie"
+    },
+    {
+      "id": 13353,
+      "type": "movie"
+    },
+    {
+      "id": 27205,
+      "type": "movie"
+    },
+    {
+      "id": 106646,
+      "type": "movie"
+    },
+    {
+      "id": 334533,
+      "type": "movie"
+    },
+    {
+      "id": 693134,
+      "type": "movie"
+    },
+    {
+      "id": 765245,
+      "type": "movie"
+    },
+    {
+      "id": 264660,
+      "type": "movie"
+    },
+    {
+      "id": 92591,
+      "type": "movie"
+    },
+    {
+      "id": 976893,
+      "type": "movie"
+    },
+    {
+      "id": 13187,
+      "type": "movie"
+    },
+    {
+      "id": 11527,
+      "type": "movie"
+    },
+    {
+      "id": 120,
+      "type": "movie"
+    },
+    {
+      "id": 157336,
+      "type": "movie"
+    },
+    {
+      "id": 762,
+      "type": "movie"
+    },
+    {
+      "id": 666243,
+      "type": "movie"
+    },
+    {
+      "id": 545611,
+      "type": "movie"
+    },
+    {
+      "id": 329,
+      "type": "movie"
+    },
+    {
+      "id": 330459,
+      "type": "movie"
+    },
+    {
+      "id": 279,
+      "type": "movie"
+    },
+    {
+      "id": 823219,
+      "type": "movie"
+    },
+    {
+      "id": 22,
+      "type": "movie"
+    },
+    {
+      "id": 18971,
+      "type": "movie"
+    },
+    {
+      "id": 26388,
+      "type": "movie"
+    },
+    {
+      "id": 152601,
+      "type": "movie"
+    },
+    {
+      "id": 11886,
+      "type": "movie"
+    },
+    {
+      "id": 1362,
+      "type": "movie"
+    },
+    {
+      "id": 578,
+      "type": "movie"
+    },
+    {
+      "id": 78,
+      "type": "movie"
+    },
+    {
+      "id": 348,
+      "type": "movie"
+    },
+    {
+      "id": 198184,
+      "type": "movie"
+    },
+    {
+      "id": 405774,
+      "type": "movie"
+    },
+    {
+      "id": 333339,
+      "type": "movie"
+    },
+    {
+      "id": 16859,
+      "type": "movie"
+    },
+    {
+      "id": 1268,
+      "type": "movie"
+    },
+    {
+      "id": 85,
+      "type": "movie"
+    },
+    {
+      "id": 530915,
+      "type": "movie"
+    }
+  ],
+  "TV_SHOWS_DATA": [
+    {
+      "id": 456,
+      "type": "show"
+    },
+    {
+      "id": 73021,
+      "type": "show"
+    },
+    {
+      "id": 1434,
+      "type": "show"
+    },
+    {
+      "id": 1695,
+      "type": "show"
+    },
+    {
+      "id": 1408,
+      "type": "show"
+    },
+    {
+      "id": 93740,
+      "type": "show"
+    },
+    {
+      "id": 60625,
+      "type": "show"
+    },
+    {
+      "id": 1396,
+      "type": "show"
+    },
+    {
+      "id": 44217,
+      "type": "show"
+    },
+    {
+      "id": 90228,
+      "type": "show"
+    },
+    {
+      "id": 13916,
+      "type": "show"
+    },
+    {
+      "id": 71912,
+      "type": "show"
+    },
+    {
+      "id": 61222,
+      "type": "show"
+    },
+    {
+      "id": 93405,
+      "type": "show"
+    },
+    {
+      "id": 87108,
+      "type": "show"
+    },
+    {
+      "id": 105248,
+      "type": "show"
+    },
+    {
+      "id": 82738,
+      "type": "show"
+    },
+    {
+      "id": 615,
+      "type": "show"
+    },
+    {
+      "id": 4625,
+      "type": "show"
+    },
+    {
+      "id": 513,
+      "type": "show"
+    },
+    {
+      "id": 110948,
+      "type": "show"
+    },
+    {
+      "id": 110492,
+      "type": "show"
+    },
+    {
+      "id": 125988,
+      "type": "show"
+    },
+    {
+      "id": 87917,
+      "type": "show"
+    },
+    {
+      "id": 42009,
+      "type": "show"
+    },
+    {
+      "id": 86831,
+      "type": "show"
+    },
+    {
+      "id": 261579,
+      "type": "show"
+    },
+    {
+      "id": 66573,
+      "type": "show"
+    }
+  ],
+  "MOVIE_PROVIDERS": [
+    {
+      "name": "Netflix",
+      "id": "8"
+    },
+    {
+      "name": "Apple TV+",
+      "id": "2"
+    },
+    {
+      "name": "Amazon Prime Video",
+      "id": "10"
+    },
+    {
+      "name": "Hulu",
+      "id": "15"
+    },
+    {
+      "name": "Disney Plus",
+      "id": "337"
+    },
+    {
+      "name": "Max",
+      "id": "1899"
+    },
+    {
+      "name": "Paramount Plus",
+      "id": "531"
+    },
+    {
+      "name": "Shudder",
+      "id": "99"
+    },
+    {
+      "name": "Crunchyroll",
+      "id": "283"
+    },
+    {
+      "name": "fuboTV",
+      "id": "257"
+    },
+    {
+      "name": "AMC+",
+      "id": "526"
+    },
+    {
+      "name": "Starz",
+      "id": "43"
+    },
+    {
+      "name": "Lifetime",
+      "id": "157"
+    },
+    {
+      "name": "National Geographic",
+      "id": "1964"
+    }
+  ],
+  "TV_PROVIDERS": [
+    {
+      "name": "Netflix",
+      "id": "8"
+    },
+    {
+      "name": "Apple TV+",
+      "id": "350"
+    },
+    {
+      "name": "Amazon Prime Video",
+      "id": "10"
+    },
+    {
+      "name": "Paramount Plus",
+      "id": "531"
+    },
+    {
+      "name": "Hulu",
+      "id": "15"
+    },
+    {
+      "name": "Max",
+      "id": "1899"
+    },
+    {
+      "name": "Adult Swim",
+      "id": "318"
+    },
+    {
+      "name": "Disney Plus",
+      "id": "337"
+    },
+    {
+      "name": "Crunchyroll",
+      "id": "283"
+    },
+    {
+      "name": "fuboTV",
+      "id": "257"
+    },
+    {
+      "name": "Shudder",
+      "id": "99"
+    },
+    {
+      "name": "Discovery +",
+      "id": "520"
+    },
+    {
+      "name": "National Geographic",
+      "id": "1964"
+    },
+    {
+      "name": "Fox",
+      "id": "328"
+    }
+  ]
+}

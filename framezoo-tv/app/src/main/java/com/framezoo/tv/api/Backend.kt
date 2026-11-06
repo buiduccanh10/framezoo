@@ -4,18 +4,33 @@ import com.framezoo.tv.BuildConfig
 import com.framezoo.tv.auth.Auth
 import com.framezoo.tv.model.*
 import com.framezoo.tv.storage.SecureStore
+import android.content.ContentResolver
+import android.net.Uri
+import android.provider.OpenableColumns
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import org.json.JSONArray
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
+import java.net.URI
 import java.net.URLEncoder
 import java.time.Instant
 
 class Backend(private val store: SecureStore) {
+    private val qualityCache = java.util.concurrent.ConcurrentHashMap<String, String>()
+    private val qualityRequests = Semaphore(6)
     private fun encode(value: String) = URLEncoder.encode(value, "UTF-8")
+    private fun secureUrl(value: String?): String? = value?.takeIf {
+        try { val uri = URI(it); uri.scheme == "https" && !uri.host.isNullOrBlank() && uri.userInfo == null } catch (_: Exception) { false }
+    }
     private fun image(path: String?, size: String = "w500") = path?.takeIf { it.isNotBlank() }?.let {
         if (it.startsWith("http")) it else "https://image.tmdb.org/t/p/$size$it"
     }
@@ -86,13 +101,29 @@ class Backend(private val store: SecureStore) {
             description = raw.optString("overview"),
             year = raw.optString("release_date", raw.optString("first_air_date")).take(4),
             imdbId = raw.optJSONObject("external_ids")?.optString("imdb_id")?.ifBlank { null },
-            rating = raw.optDouble("vote_average", 0.0), popularity = raw.optDouble("popularity", 0.0),
+            rating = raw.optDouble("vote_average", 0.0), popularity = raw.optDouble("popularity", 0.0), voteCount = raw.optInt("vote_count", 0),
+            originCountries = raw.optJSONArray("origin_country")?.let { a -> (0 until a.length()).map(a::optString) }
+                ?: raw.optJSONArray("production_countries")?.let { a -> (0 until a.length()).mapNotNull { a.optJSONObject(it)?.optString("iso_3166_1") } } ?: emptyList(),
+            releaseDate = raw.optString("release_date", raw.optString("first_air_date")), runtime = raw.optInt("runtime", 0),
+            language = raw.optString("original_language"),
+            genres = raw.optJSONArray("genres")?.let { a -> (0 until a.length()).mapNotNull { a.optJSONObject(it)?.optString("name") }.filter { it.isNotBlank() } } ?: emptyList(),
+            genreIds = raw.optJSONArray("genre_ids")?.let { a -> (0 until a.length()).map(a::optString) }
+                ?: raw.optJSONArray("genres")?.let { a -> (0 until a.length()).mapNotNull { a.optJSONObject(it)?.optString("id") } } ?: emptyList(),
+            collectionId = raw.optJSONObject("belongs_to_collection")?.optString("id")?.ifBlank { null },
+            collectionName = raw.optJSONObject("belongs_to_collection")?.optString("name")?.ifBlank { null },
+            certification = (if (type == "movie") raw.optJSONObject("release_dates")?.optJSONArray("results") else raw.optJSONObject("content_ratings")?.optJSONArray("results"))?.let { regions ->
+                (0 until regions.length()).mapNotNull(regions::optJSONObject).firstOrNull { it.optString("iso_3166_1") == "US" }?.let { region ->
+                    if (type == "movie") region.optJSONArray("release_dates")?.optJSONObject(0)?.optString("certification") else region.optString("rating")
+                }
+            }.orEmpty(),
         )
     }
 
     private fun mediaList(raw: Any, type: String? = null): List<Media> {
         val items = (raw as JSONObject).optJSONArray("results") ?: JSONArray()
-        return (0 until items.length()).mapNotNull { i -> items.optJSONObject(i)?.let { media(it, type) } }.filter { it.id.isNotBlank() }
+        return (0 until items.length()).mapNotNull { i -> items.optJSONObject(i)?.takeIf {
+            type != null || it.optString("media_type", "movie") in setOf("movie", "tv")
+        }?.let { media(it, type) } }.filter { it.id.isNotBlank() }
     }
 
     suspend fun discover(): List<Media> = mediaList(request("/api/tmdb/trending/all/day?language=vi-VN"))
@@ -110,12 +141,93 @@ class Backend(private val store: SecureStore) {
         }.filter { it.id.isNotBlank() }.sortedBy { it.name }
     }
 
-    suspend fun discoverSection(filter: DiscoverFilter, section: String): List<Media> {
-        val kinds = when (filter.category) { "movie" -> listOf("movie"); "tv" -> listOf("tv"); else -> listOf("movie", "tv") }
-        val result = kinds.flatMap { kind ->
-            mediaList(request(discoverPath(filter, section, kind)), if (kind == "tv") "show" else "movie")
+    suspend fun discoverSection(filter: DiscoverFilter, section: String, provider: String = "8", genre: String = "", page: Int = 1): List<Media> =
+        discoverSectionPage(filter, section, provider, genre, page).first
+
+    suspend fun discoverSectionPage(filter: DiscoverFilter, section: String, provider: String = "8", genre: String = "", page: Int = 1): Pair<List<Media>, Boolean> {
+        if (section == "latest4k") {
+            val ids = try {
+                val raw = request("/discover/enrichment/feed?kind=latest4k") as JSONObject
+                val values = raw.optJSONArray("movie_tmdb_ids") ?: JSONArray()
+                (0 until values.length()).map { values.optString(it) }.filter { it.isNotBlank() }
+            } catch (e: CancellationException) { throw e } catch (_: Exception) { emptyList() }
+            if (ids.isNotEmpty()) return movieDetails(ids.take(50)) to false
+            return discoverSectionPage(filter, "top", provider, genre, page)
         }
-        return result.sortedByDescending { it.popularity }.take(20)
+        val kinds = when (filter.category) { "movie" -> listOf("movie"); "tv" -> listOf("tv"); else -> listOf("movie", "tv") }
+        val pages = coroutineScope { kinds.map { kind -> async {
+            val raw = request(discoverPath(filter, section, kind, provider, genre, page)) as JSONObject
+            mediaList(raw, if (kind == "tv") "show" else "movie") to (page < raw.optInt("total_pages", page))
+        } }.awaitAll() }
+        val result = pages.flatMap { it.first }
+        val filtered = if (section == "trending") result.filter {
+            (filter.year.isEmpty() || it.year == filter.year) && (filter.country.isEmpty() || filter.country in it.originCountries)
+        } else result
+        return (if (section == "latest") filtered.sortedByDescending { it.year } else filtered.sortedByDescending { it.popularity }) to pages.any { it.second }
+    }
+    suspend fun curatedLists(): List<CuratedList> {
+        val rows = request("/discover/enrichment/curated") as JSONArray
+        return (0 until rows.length()).mapNotNull { rows.optJSONObject(it) }.mapNotNull { row ->
+            val slug = row.optString("listSlug").takeIf { it.isNotBlank() } ?: return@mapNotNull null
+            val ids = row.optJSONArray("tmdbIds") ?: JSONArray()
+            CuratedList(slug, row.optString("listName", slug), (0 until minOf(ids.length(), 50)).map { ids.optString(it) }.filter { it.isNotBlank() && it.all(Char::isDigit) })
+        }
+    }
+    suspend fun movieDetails(ids: List<String>): List<Media> = coroutineScope {
+        val limit = Semaphore(6)
+        ids.map { id -> async { limit.withPermit {
+            try { media(request("/api/tmdb/movie/${encode(id)}?language=vi-VN") as JSONObject, "movie") }
+            catch (e: CancellationException) { throw e } catch (_: Exception) { null }
+        } } }.awaitAll().filterNotNull()
+    }
+    suspend fun editorPicks(filter: DiscoverFilter, picks: List<Pair<String, String>>, page: Int = 1): List<Media> = coroutineScope {
+        val kinds = when (filter.category) { "movie" -> setOf("movie"); "tv" -> setOf("show"); else -> setOf("movie", "show") }
+        val limit = Semaphore(6)
+        picks.filter { it.second in kinds }.drop((page - 1) * 20).take(20).map { (id, type) -> async {
+          limit.withPermit { try {
+                val kind = if (type == "show") "tv" else "movie"
+                val raw = request("/api/tmdb/$kind/${encode(id)}?language=vi-VN") as JSONObject
+                val countries = raw.optJSONArray("origin_country")
+                val matchesCountry = filter.country.isEmpty() || (countries != null && (0 until countries.length()).any { countries.optString(it) == filter.country }) ||
+                    (raw.optJSONArray("production_countries")?.let { a -> (0 until a.length()).any { a.optJSONObject(it)?.optString("iso_3166_1") == filter.country } } == true)
+                val item = media(raw, type)
+                item.takeIf { matchesCountry && (filter.year.isEmpty() || it.year == filter.year) }
+            } catch (e: CancellationException) { throw e } catch (_: Exception) { null } }
+        } }.awaitAll().filterNotNull()
+    }
+    suspend fun recommendations(item: Media): List<Media> {
+        val kind = if (item.type == "show") "tv" else "movie"
+        return mediaList(request("/api/tmdb/$kind/${encode(item.id)}/recommendations?language=vi-VN"), item.type)
+    }
+    suspend fun releaseQuality(item: Media): String? {
+        if (item.type != "movie" || item.id.isBlank() || !item.id.all(Char::isDigit)) return item.releaseQuality
+        qualityCache[item.id]?.let { return it.ifEmpty { null } }
+        return qualityRequests.withPermit {
+            qualityCache[item.id]?.let { return@withPermit it.ifEmpty { null } }
+            val raw = request("/api/tmdb/movie/${encode(item.id)}?append_to_response=release_dates&language=vi-VN") as JSONObject
+            val regions = raw.optJSONObject("release_dates")?.optJSONArray("results") ?: JSONArray()
+            val dates = (0 until regions.length()).flatMap { index ->
+                val region = regions.optJSONObject(index) ?: return@flatMap emptyList()
+                val releases = region.optJSONArray("release_dates") ?: JSONArray()
+                (0 until releases.length()).mapNotNull { i ->
+                    val entry = releases.optJSONObject(i) ?: return@mapNotNull null
+                    runCatching { ReleaseDate(region.optString("iso_3166_1"), entry.optInt("type"), Instant.parse(entry.getString("release_date"))) }.getOrNull()
+                }
+            }
+            releaseQuality(dates).also { qualityCache[item.id] = it.orEmpty() }
+        }
+    }
+    suspend fun trailer(item: Media): String? {
+        val kind = if (item.type == "show") "tv" else "movie"
+        for (language in listOf("vi-VN", "en-US")) {
+            val raw = request("/api/tmdb/$kind/${encode(item.id)}/videos?language=$language") as JSONObject
+            val videos = raw.optJSONArray("results") ?: JSONArray()
+            val candidates = (0 until videos.length()).mapNotNull { videos.optJSONObject(it) }
+                .filter { it.optString("site") == "YouTube" && it.optString("key").matches(Regex("[A-Za-z0-9_-]{11}")) }
+                .sortedWith(compareByDescending<JSONObject> { it.optString("type") == "Trailer" }.thenByDescending { it.optBoolean("official") })
+            candidates.firstOrNull()?.let { return it.getString("key") }
+        }
+        return null
     }
     suspend fun logo(item: Media): String? {
         val kind = if (item.type == "show") "tv" else "movie"
@@ -125,25 +237,137 @@ class Backend(private val store: SecureStore) {
             .sortedBy { when (it.optString("iso_639_1")) { "vi" -> 0; "en" -> 1; else -> 2 } }
             .firstOrNull()?.optString("file_path")?.let { image(it, "w500") }
     }
-    suspend fun search(query: String): List<Media> = mediaList(request("/api/tmdb/search/multi?query=${encode(query)}"))
+    suspend fun featuredRatings(item: Media): FeaturedRatings = coroutineScope {
+        val kind = if (item.type == "show") "tv" else "movie"
+        val raw = request("/api/tmdb/$kind/${encode(item.id)}?append_to_response=images,external_ids&include_image_language=vi,en,null&language=vi-VN") as JSONObject
+        val logos = raw.optJSONObject("images")?.optJSONArray("logos") ?: JSONArray()
+        val logo = (0 until logos.length()).mapNotNull { logos.optJSONObject(it) }
+            .sortedBy { when (it.optString("iso_639_1")) { "vi" -> 0; "en" -> 1; else -> 2 } }
+            .firstOrNull()?.optString("file_path")?.let { image(it, "w500") }
+        val imdbId = raw.optJSONObject("external_ids")?.optString("imdb_id").orEmpty()
+        suspend fun optional(path: String): JSONObject? = try { request(path) as? JSONObject }
+            catch (e: CancellationException) { throw e } catch (_: Exception) { null }
+        val imdb = async { if (imdbId.isNotBlank()) optional("/imdb/title?imdbId=${encode(imdbId)}&language=vi-VN") else null }
+        val rt = async { optional("/rt/search?title=${encode(item.title)}${item.year.toIntOrNull()?.let { "&year=$it" }.orEmpty()}") }
+        val imdbData = imdb.await(); val rtData = rt.await()
+        FeaturedRatings(logo, imdbData?.optDouble("imdb_rating")?.takeIf { it.isFinite() },
+            imdbData?.optLong("votes")?.takeIf { it > 0 }, rtData?.optString("tomatoIcon"),
+            rtData?.optInt("tomatoScore", -1)?.takeIf { it >= 0 }, rtData?.optString("popcornIcon"),
+            rtData?.optInt("popcornScore", -1)?.takeIf { it >= 0 },
+            rtData?.optString("url")?.ifBlank { null }, rtData?.optString("popcornUrl")?.ifBlank { null },
+            secureUrl(imdbData?.optString("trailer_url")),
+            secureUrl(imdbData?.optString("trailer_thumbnail")))
+    }
+    suspend fun provider(item: Media): String? {
+        val raw = request("/discover/enrichment/network?tmdbId=${encode(item.id)}&type=${encode(item.type)}") as JSONObject
+        return raw.optJSONArray("platforms")?.optString(0)?.takeIf { it.isNotBlank() }
+    }
+    suspend fun search(query: String): List<Media> {
+        val match = Regex("(?i)^tmdb:(\\d+)(?::(movie|tv))?$").matchEntire(query)
+        if (match != null) {
+            val kind = match.groupValues[2].lowercase().ifEmpty { "movie" }
+            return listOf(media(request("/api/tmdb/$kind/${match.groupValues[1]}?language=vi-VN") as JSONObject, if (kind == "tv") "show" else "movie"))
+        }
+        return mediaList(request("/api/tmdb/search/multi?query=${encode(query)}&language=vi-VN"))
+    }
+    suspend fun enrichSearch(items: List<Media>): List<Media> = coroutineScope {
+        val limit = Semaphore(6)
+        items.map { item -> async { limit.withPermit {
+            try {
+                val kind = if (item.type == "show") "tv" else "movie"
+                media(request("/api/tmdb/$kind/${encode(item.id)}?language=vi-VN") as JSONObject, item.type)
+            } catch (e: CancellationException) { throw e } catch (_: Exception) { item }
+        } } }.awaitAll()
+    }
     suspend fun details(item: Media): Pair<Media, List<Int>> {
         val kind = if (item.type == "show") "tv" else "movie"
-        val raw = request("/api/tmdb/$kind/${encode(item.id)}?append_to_response=external_ids") as JSONObject
+        val raw = request("/api/tmdb/$kind/${encode(item.id)}?language=vi-VN&append_to_response=external_ids,${if (item.type == "show") "content_ratings" else "release_dates"}") as JSONObject
         val seasons = raw.optJSONArray("seasons") ?: JSONArray()
         return media(raw, item.type) to (0 until seasons.length()).mapNotNull { seasons.optJSONObject(it)?.optInt("season_number") }.filter { it > 0 }
+    }
+    suspend fun similar(item: Media): List<Media> {
+        val kind = if (item.type == "show") "tv" else "movie"
+        return mediaList(request("/api/tmdb/$kind/${encode(item.id)}/similar?language=vi-VN"), item.type).take(12)
+    }
+    suspend fun collection(id: String): MediaCollection {
+        val raw = request("/api/tmdb/collection/${encode(id)}?language=vi-VN") as JSONObject
+        val parts = raw.optJSONArray("parts") ?: JSONArray()
+        return MediaCollection(raw.optString("overview"), (0 until parts.length()).mapNotNull { parts.optJSONObject(it) }.map { media(it, "movie") }.sortedBy { it.releaseDate })
+    }
+    suspend fun cast(item: Media): List<CastMember> {
+        val kind = if (item.type == "show") "tv" else "movie"
+        val raw = request("/api/tmdb/$kind/${encode(item.id)}/credits?language=vi-VN") as JSONObject
+        val cast = raw.optJSONArray("cast") ?: JSONArray()
+        val crew = raw.optJSONArray("crew") ?: JSONArray()
+        val director = (0 until crew.length()).mapNotNull { crew.optJSONObject(it) }.firstOrNull { it.optString("job") == "Director" }
+        return (listOfNotNull(director) + (0 until cast.length()).mapNotNull { cast.optJSONObject(it) }.filter { it.optString("profile_path").isNotBlank() }.take(20)).map {
+            CastMember(it.optString("id"), it.optString("name"), if (it === director) "Đạo diễn" else it.optString("character"), image(it.optString("profile_path")))
+        }
+    }
+    suspend fun trailers(item: Media): List<Trailer> {
+        val kind = if (item.type == "show") "tv" else "movie"
+        val raw = request("/api/tmdb/$kind/${encode(item.id)}/videos?language=en-US") as JSONObject
+        val rows = raw.optJSONArray("results") ?: JSONArray()
+        return (0 until rows.length()).mapNotNull { rows.optJSONObject(it) }.filter {
+            it.optString("site") == "YouTube" && it.optString("type") == "Trailer" && it.optString("key").matches(Regex("[A-Za-z0-9_-]{11}"))
+        }.map { Trailer(it.getString("key"), it.optString("name", "Trailer")) }.take(6)
     }
     suspend fun episodes(id: String, season: Int): List<Episode> {
         val raw = request("/api/tmdb/tv/${encode(id)}/season/$season") as JSONObject
         val episodes = raw.optJSONArray("episodes") ?: JSONArray()
         return (0 until episodes.length()).mapNotNull { episodes.optJSONObject(it) }.map {
-            Episode(season, it.optInt("episode_number"), it.optString("name", "Tập ${it.optInt("episode_number")}"), image(it.optString("still_path"), "w500"))
+            Episode(season, it.optInt("episode_number"), it.optString("name", "Tập ${it.optInt("episode_number")}"), image(it.optString("still_path"), "w500"), it.optString("id"), it.optString("overview"), it.optString("air_date"), raw.optString("id"))
         }
     }
 
     private fun libraryMedia(item: JSONObject): Media {
         val meta = item.optJSONObject("meta") ?: JSONObject()
-        return Media(item.optString("tmdbId"), meta.optString("type", "movie"), meta.optString("title", "Untitled"), image(meta.optString("poster")))
+        return Media(item.optString("tmdbId"), meta.optString("type", "movie"), meta.optString("title", "Untitled"), image(meta.optString("poster")), year = meta.optInt("year", 0).takeIf { it > 0 }?.toString().orEmpty())
     }
+    private suspend fun libraryItems(path: String): List<LibraryItem> {
+        val id = store.userId ?: return emptyList()
+        val rows = request("/users/${encode(id)}/$path", auth = true) as JSONArray
+        return (0 until rows.length()).mapNotNull { rows.optJSONObject(it) }.map { row ->
+            LibraryItem(libraryMedia(row), row.optDouble("watched", 0.0), row.optDouble("duration", 0.0),
+                row.optJSONObject("season")?.optInt("number", -1)?.takeIf { it >= 0 },
+                row.optJSONObject("episode")?.optInt("number", -1)?.takeIf { it >= 0 }, row.optString("watchedAt"),
+                row.optJSONObject("season")?.optString("id").orEmpty().takeUnless { it == "null" }.orEmpty(),
+                row.optJSONObject("episode")?.optString("id").orEmpty().takeUnless { it == "null" }.orEmpty())
+        }
+    }
+    suspend fun bookmarkDetails(): List<BookmarkDetails> {
+        val id = store.userId ?: return emptyList()
+        val rows = request("/users/${encode(id)}/bookmarks", auth = true) as JSONArray
+        fun values(row: JSONObject, name: String): List<String> = row.optJSONArray(name)?.let { a -> (0 until a.length()).map(a::optString).filter(String::isNotBlank) } ?: emptyList()
+        return (0 until rows.length()).mapNotNull(rows::optJSONObject).map { BookmarkDetails(libraryMedia(it), values(it, "group"), values(it, "favoriteEpisodes")) }
+    }
+    suspend fun bookmarks(): List<Media> = bookmarkDetails().map { it.media }
+    suspend fun bookmarkGroups(): List<String> {
+        val id = store.userId ?: return emptyList()
+        val data = request("/users/${encode(id)}/group-order", auth = true) as JSONObject
+        val groups = data.optJSONArray("groupOrder") ?: return emptyList()
+        return (0 until groups.length()).map(groups::optString).filter(String::isNotBlank)
+    }
+    suspend fun saveBookmarkDetails(item: Media, groups: List<String>, favorites: List<String>) {
+        val id = requireNotNull(store.userId) { "Đăng nhập để lưu phim" }
+        request("/users/${encode(id)}/bookmarks/${encode(item.id)}", "POST", JSONObject().put("tmdbId", item.id).put("meta", meta(item))
+            .put("group", JSONArray(groups)).put("favoriteEpisodes", JSONArray(favorites)), auth = true)
+    }
+    suspend fun markEpisodeWatched(item: Media, episode: Episode, watched: Boolean, existing: LibraryItem?) {
+        val id = requireNotNull(store.userId) { "Đăng nhập để đánh dấu tập phim" }
+        require(episode.id.isNotBlank() && episode.seasonId.isNotBlank()) { "Thiếu thông tin tập phim" }
+        val body = JSONObject().put("tmdbId", item.id).put("meta", meta(item)).put("duration", 60).put("watched", if (watched) 60 else 0)
+            .put("seasonId", existing?.seasonId?.ifBlank { episode.seasonId } ?: episode.seasonId).put("episodeId", existing?.episodeId?.ifBlank { episode.id } ?: episode.id).put("seasonNumber", episode.season).put("episodeNumber", episode.number)
+        request("/users/${encode(id)}/progress/${encode(item.id)}", "PUT", body, auth = true)
+        request("/users/${encode(id)}/watch-history/${encode(item.id)}", "PUT", JSONObject(body.toString()).put("watchedAt", Instant.now().toString()).put("completed", watched), auth = true)
+    }
+    suspend fun markMovieWatched(item: Media, watched: Boolean) {
+        val id = requireNotNull(store.userId) { "Đăng nhập để đánh dấu phim" }
+        val body = JSONObject().put("tmdbId", item.id).put("meta", meta(item)).put("duration", 60).put("watched", if (watched) 60 else 0)
+        request("/users/${encode(id)}/progress/${encode(item.id)}", "PUT", body, auth = true)
+        request("/users/${encode(id)}/watch-history/${encode(item.id)}", "PUT", JSONObject(body.toString()).put("watchedAt", Instant.now().toString()).put("completed", watched), auth = true)
+    }
+    suspend fun watchProgress(): List<LibraryItem> = libraryItems("progress")
     suspend fun library(): List<LibraryItem> {
         val id = store.userId ?: return emptyList()
         val bookmarks = request("/users/${encode(id)}/bookmarks", auth = true) as JSONArray
@@ -161,10 +385,12 @@ class Backend(private val store: SecureStore) {
         return result.values.toList()
     }
 
-    suspend fun bookmark(item: Media) {
-        val id = store.userId ?: return
-        request("/users/${encode(id)}/bookmarks/${encode(item.id)}", "POST", JSONObject()
-            .put("tmdbId", item.id).put("meta", meta(item)), auth = true)
+    suspend fun watchHistory(): List<LibraryItem> = libraryItems("watch-history").sortedByDescending { it.watchedAt }
+
+    suspend fun bookmark(item: Media, remove: Boolean = false) {
+        val id = requireNotNull(store.userId) { "Đăng nhập để lưu phim" }
+        request("/users/${encode(id)}/bookmarks/${encode(item.id)}", if (remove) "DELETE" else "POST",
+            if (remove) null else JSONObject().put("tmdbId", item.id).put("meta", meta(item)), auth = true)
     }
 
     private fun meta(item: Media) = JSONObject().put("title", item.title).put("type", item.type)
@@ -186,26 +412,74 @@ class Backend(private val store: SecureStore) {
         val id = store.userId ?: return JSONObject()
         return request("/users/${encode(id)}/settings", auth = true) as JSONObject
     }
+    suspend fun feedback(title: String, description: String, attachments: List<Uri>, resolver: ContentResolver) = withContext(Dispatchers.IO) {
+        val subject = title.trim(); val message = description.trim()
+        require(subject.isNotBlank() && subject.length <= 255 && message.isNotBlank()) { "Nhập tiêu đề tối đa 255 ký tự và nội dung phản hồi" }
+        require(attachments.all { it.scheme == "content" }) { "File đính kèm không hợp lệ" }
+        val token = store.accessToken ?: (request("/api/auth/guest", "POST", JSONObject()) as JSONObject).optString("access_token").ifBlank { null }
+        val boundary = "framezoo-${java.util.UUID.randomUUID()}"
+        val connection = (URL(store.backendUrl.trimEnd('/') + "/api/feedback").openConnection() as HttpURLConnection).apply {
+            requestMethod = "POST"; connectTimeout = 15_000; readTimeout = 60_000; doOutput = true
+            setChunkedStreamingMode(8192); setRequestProperty("Content-Type", "multipart/form-data; boundary=$boundary")
+            token?.let { setRequestProperty("Authorization", "Bearer $it") }
+        }
+        try {
+            connection.outputStream.use { out ->
+                fun write(value: String) = out.write(value.toByteArray(Charsets.UTF_8))
+                fun field(name: String, value: String) { write("--$boundary\r\nContent-Disposition: form-data; name=\"$name\"\r\n\r\n$value\r\n") }
+                field("title", subject); field("description", message)
+                var total = 0L
+                attachments.forEachIndexed { index, uri ->
+                    val type = resolver.getType(uri).orEmpty()
+                    require(type.matches(Regex("(?i)(image|video)/[a-z0-9.+-]+"))) { "Chỉ hỗ trợ ảnh và video" }
+                    val name = resolver.query(uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)?.use { cursor ->
+                        if (cursor.moveToFirst()) cursor.getString(0) else null
+                    }.orEmpty().replace(Regex("[^A-Za-z0-9._-]"), "_").take(120).ifBlank { "attachment-$index" }
+                    write("--$boundary\r\nContent-Disposition: form-data; name=\"files\"; filename=\"$name\"\r\nContent-Type: $type\r\n\r\n")
+                    val input = requireNotNull(resolver.openInputStream(uri)) { "Không mở được file đính kèm" }
+                    input.use {
+                        val buffer = ByteArray(8192)
+                        while (true) {
+                            val count = it.read(buffer); if (count < 0) break
+                            total += count; require(total <= 55L * 1024 * 1024) { "Tổng dung lượng file không được vượt quá 55 MB" }
+                            out.write(buffer, 0, count)
+                        }
+                    }
+                    write("\r\n")
+                }
+                write("--$boundary--\r\n")
+            }
+            if (connection.responseCode !in 200..299) {
+                val body = connection.errorStream?.bufferedReader()?.use { it.readText() }.orEmpty()
+                throw IllegalStateException(runCatching { JSONObject(body).optString("message") }.getOrDefault("").ifBlank { "Gửi phản hồi thất bại (HTTP ${connection.responseCode})" })
+            }
+        } finally { connection.disconnect() }
+    }
     suspend fun updateSettings(value: JSONObject) {
         val id = store.userId ?: return
         request("/users/${encode(id)}/settings", "PUT", value, auth = true)
     }
 }
 
-internal fun discoverPath(filter: DiscoverFilter, section: String, kind: String): String {
-    if (section == "trending") return "/api/tmdb/trending/$kind/${filter.window}?language=vi-VN"
+internal fun discoverPath(filter: DiscoverFilter, section: String, kind: String, provider: String = "8", genre: String = "", page: Int = 1): String {
+    require(page > 0)
     val params = mutableListOf("language=vi-VN")
     fun encode(value: String) = URLEncoder.encode(value, "UTF-8")
+    if (page > 1) params += "page=$page"
+    if (section == "trending") return "/api/tmdb/trending/$kind/${filter.window}?${params.joinToString("&")}"
     if (filter.country.isNotEmpty()) params += "with_origin_country=${encode(filter.country)}"
     if (filter.year.isNotEmpty()) params += "${if (kind == "movie") "primary_release_year" else "first_air_date_year"}=${encode(filter.year)}"
-    if (filter.category.startsWith("genre:")) params += "with_genres=${encode(filter.category.substringAfter(':'))}"
-    if (section == "netflix") { params += "with_watch_providers=8"; params += "watch_region=VN" }
-    val filtered = filter.country.isNotEmpty() || filter.year.isNotEmpty() || filter.category.startsWith("genre:")
+    val selectedGenre = filter.category.takeIf { it.startsWith("genre:") }?.substringAfter(':') ?: genre
+    if (selectedGenre.isNotEmpty()) params += "with_genres=${encode(selectedGenre)}"
+    if (section == "netflix" || section == "provider") { params += "with_watch_providers=${encode(provider)}"; params += if (section == "netflix") "watch_region=VN" else "watch_region=US" }
+    val filtered = filter.country.isNotEmpty() || filter.year.isNotEmpty() || selectedGenre.isNotEmpty()
     val path = when {
-        section == "netflix" || filtered -> "/discover/$kind"
+        section == "provider" || section == "netflix" || filtered -> "/discover/$kind"
         section == "top" -> "/$kind/top_rated"
+        section == "latest" -> if (kind == "movie") "/movie/now_playing" else "/tv/on_the_air"
         else -> "/$kind/popular"
     }
     if (filtered && section == "top") params += "sort_by=vote_average.desc&vote_count.gte=100"
+    if (filtered && section == "latest") params += if (kind == "movie") "sort_by=primary_release_date.desc" else "sort_by=first_air_date.desc"
     return "/api/tmdb$path?${params.joinToString("&")}"
 }

@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.lifecycleScope
+import com.framezoo.tv.R
 import com.framezoo.tv.api.Backend
 import com.framezoo.tv.model.Episode
 import com.framezoo.tv.model.Media
@@ -88,9 +89,9 @@ internal fun PlayerScreen(player: PlayerController, item: Media, episode: Episod
             Text("${position.toInt()}s / ${duration.toInt()}s", color = colors["video.context.type.main"])
             if (error.isNotBlank()) Text(error, color = colors["type.danger"])
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                TvButton("⏪ 10s") { player.command("seek", "-10", "relative") }
+                TvButton("Tua lại", icon = R.drawable.desktop_skip_backward) { player.command("seek", "-10", "relative") }
                 TvButton("Phát / Tạm dừng") { player.command("cycle", "pause") }
-                TvButton("10s ⏩") { player.command("seek", "10", "relative") }
+                TvButton("Tua tới", icon = R.drawable.desktop_skip_forward) { player.command("seek", "10", "relative") }
                 TvButton("Audio") { player.command("cycle", "audio") }
                 TvButton("Phụ đề") { player.command("cycle", "sub") }
                 TvButton("Thoát") { onExit() }

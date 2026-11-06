@@ -10,9 +10,14 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.tv.material3.MaterialTheme as TvMaterialTheme
+import androidx.tv.material3.Typography as TvTypography
+import androidx.tv.material3.darkColorScheme as tvDarkColorScheme
 import com.framezoo.tv.R
 import org.json.JSONObject
 
@@ -42,6 +47,14 @@ private val typography = Typography().let { base ->
         labelSmall = base.labelSmall.copy(fontFamily = lato),
     )
 }
+
+private val tvTypography = TvTypography(
+    displayLarge = typography.displayLarge, displayMedium = typography.displayMedium, displaySmall = typography.displaySmall,
+    headlineLarge = typography.headlineLarge, headlineMedium = typography.headlineMedium, headlineSmall = typography.headlineSmall,
+    titleLarge = typography.titleLarge, titleMedium = typography.titleMedium, titleSmall = typography.titleSmall,
+    bodyLarge = typography.bodyLarge, bodyMedium = typography.bodyMedium, bodySmall = typography.bodySmall,
+    labelLarge = typography.labelLarge, labelMedium = typography.labelMedium, labelSmall = typography.labelSmall,
+)
 
 @Composable
 internal fun FrameZooTheme(theme: String, primary: String, secondary: String, tertiary: String, content: @Composable () -> Unit) {
@@ -84,8 +97,19 @@ internal fun FrameZooTheme(theme: String, primary: String, secondary: String, te
         outline = colors["utils.divider"],
         error = colors["type.danger"],
     )
-    CompositionLocalProvider(LocalFrameZooColors provides colors, LocalFrameZooPalettes provides allPalettes,
+    val tvScheme = tvDarkColorScheme(
+        primary = colors["type.logo"], onPrimary = colors["buttons.primaryText"],
+        background = colors["background.main"], onBackground = colors["type.emphasis"],
+        surface = colors["settings.card.background"], onSurface = colors["type.emphasis"],
+        surfaceVariant = colors["search.background"], onSurfaceVariant = colors["type.text"],
+        border = colors["utils.divider"], error = colors["type.danger"],
+    )
+    val density = LocalDensity.current
+    CompositionLocalProvider(LocalDensity provides Density(density.density * 0.85f, density.fontScale),
+        LocalFrameZooColors provides colors, LocalFrameZooPalettes provides allPalettes,
         LocalFrameZooThemeLabels provides labels) {
-        MaterialTheme(colorScheme = scheme, typography = typography, content = content)
+        MaterialTheme(colorScheme = scheme, typography = typography) {
+            TvMaterialTheme(colorScheme = tvScheme, typography = tvTypography, content = content)
+        }
     }
 }
