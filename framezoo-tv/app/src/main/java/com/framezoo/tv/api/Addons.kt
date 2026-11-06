@@ -87,6 +87,19 @@ class Addons(context: Context, private val backend: Backend, private val store: 
         save(next)
     }
 
+    suspend fun toggleEnabled(manifestUrl: String) {
+        val next = local()
+        for (i in 0 until next.length()) {
+            val item = next.optJSONObject(i) ?: continue
+            if (item.optString("manifestUrl") == manifestUrl) {
+                val current = item.optBoolean("enabled", true)
+                item.put("enabled", !current)
+                break
+            }
+        }
+        save(next)
+    }
+
     private suspend fun save(next: JSONArray) {
         prefs.edit().putString("installed", next.toString()).apply()
         if (store.userId != null) {

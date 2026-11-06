@@ -9,6 +9,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
@@ -30,7 +31,22 @@ internal fun FeedbackScreen(state: FrameZooState) {
     var error by remember { mutableStateOf("") }
     val picker = rememberLauncherForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { attachments = it }
     LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp), contentPadding = PaddingValues(bottom = 32.dp)) {
-        item { Text(t("feedback.modalTitle"), color = colors["type.emphasis"], fontSize = 30.sp) }
+        item {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(t("feedback.modalTitle"), color = colors["type.emphasis"], fontSize = 30.sp)
+                TvButton(
+                    label = t("discover.page.back"),
+                    icon = com.framezoo.tv.R.drawable.desktop_chevron_left,
+                    navigation = true
+                ) {
+                    state.back()
+                }
+            }
+        }
         if (submitted) item { Text("${t("feedback.successTitle")}\n${t("feedback.successDesc")}", color = colors["type.emphasis"]) }
         else {
             item { OutlinedTextField(title, { title = it.take(255) }, label = { Text(t("feedback.titleLabel")) }, singleLine = true,

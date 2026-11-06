@@ -58,6 +58,22 @@ class SecureStore(context: Context) {
         get() = prefs.getString("customTertiary", "classic") ?: "classic"
         set(value) { prefs.edit().putString("customTertiary", value).apply() }
 
+    var subtitleFontSize: Int
+        get() = prefs.getInt("subFontSize", 100)
+        set(value) { prefs.edit().putInt("subFontSize", value).apply() }
+
+    var subtitleColor: String
+        get() = prefs.getString("subColor", "#FFFFFF") ?: "#FFFFFF"
+        set(value) { prefs.edit().putString("subColor", value).apply() }
+
+    var subtitleBackgroundOpacity: Int
+        get() = prefs.getInt("subBgOpacity", 50)
+        set(value) { prefs.edit().putInt("subBgOpacity", value).apply() }
+
+    var torrentCacheSize: String
+        get() = prefs.getString("torrentCacheSize", "5gb") ?: "5gb"
+        set(value) { prefs.edit().putString("torrentCacheSize", value).apply() }
+
     var userId: String?
         get() = prefs.getString("user", null)
         set(value) { prefs.edit().putString("user", value).apply() }

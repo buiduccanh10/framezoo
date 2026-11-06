@@ -389,6 +389,11 @@ class Backend(private val store: SecureStore) {
 
     suspend fun watchHistory(): List<LibraryItem> = libraryItems("watch-history").sortedByDescending { it.watchedAt }
 
+    suspend fun removeHistory(tmdbId: String) {
+        val id = store.userId ?: return
+        request("/users/${encode(id)}/watch-history/${encode(tmdbId)}", "DELETE", null, auth = true)
+    }
+
     suspend fun bookmark(item: Media, remove: Boolean = false) {
         val id = requireNotNull(store.userId) { "Đăng nhập để lưu phim" }
         request("/users/${encode(id)}/bookmarks/${encode(item.id)}", if (remove) "DELETE" else "POST",

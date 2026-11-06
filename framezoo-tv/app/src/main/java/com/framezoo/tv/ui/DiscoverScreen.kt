@@ -1,5 +1,6 @@
 package com.framezoo.tv.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColorAsState
@@ -78,10 +79,8 @@ private data class QuickActionItem(val icon: Int, val label: String, val destina
 @Composable
 internal fun DiscoverHeader(state: FrameZooState, modifier: Modifier = Modifier) {
     val colors = LocalFrameZooColors.current
-    val scope = rememberCoroutineScope()
     var expanded by remember { mutableStateOf(false) }
     var accountExpanded by remember { mutableStateOf(false) }
-    var collapseJob by remember { mutableStateOf<Job?>(null) }
     val logoFocusRequester = remember { FocusRequester() }
     val menuFocusRequester = remember { FocusRequester() }
     val searchFocusRequester = remember { FocusRequester() }
@@ -92,41 +91,43 @@ internal fun DiscoverHeader(state: FrameZooState, modifier: Modifier = Modifier)
     val settingsFocusRequester = remember { FocusRequester() }
     val accountFocusRequester = remember { FocusRequester() }
 
-    Row(modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-        Row(
-            modifier = Modifier
-                .clip(RoundedCornerShape(50))
-                .background(colors["pill.background"].copy(alpha = 0.95f))
-                .padding(horizontal = 6.dp, vertical = 5.dp)
-                .onFocusChanged { focusState ->
-                    if (focusState.hasFocus) {
-                        collapseJob?.cancel()
-                        expanded = true
-                    } else {
-                        collapseJob?.cancel()
-                        collapseJob = scope.launch {
-                            delay(120)
-                            expanded = false
-                        }
-                    }
-                },
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(6.dp)
-        ) {
-            val brandShape = RoundedCornerShape(50)
-            TvSurface(
-                onClick = { state.page = "discover" },
-                shape = TvSurfaceDefaults.shape(brandShape),
-                modifier = Modifier
-                    .focusRequester(logoFocusRequester)
-                    .focusProperties { right = menuFocusRequester },
-                colors = TvSurfaceDefaults.colors(containerColor = Color.Transparent, focusedContainerColor = colors["pill.activeBackground"]),
-                scale = TvSurfaceDefaults.scale(focusedScale = 1f),
-                border = TvSurfaceDefaults.border(focusedBorder = TvBorder(BorderStroke(2.dp, colors["type.logo"]), shape = brandShape))
-            ) {
-                Image(painterResource(R.drawable.framezoo_brand), "FrameZoo", Modifier.padding(horizontal = 10.dp, vertical = 4.dp).width(128.dp).height(36.dp))
-            }
+    BackHandler(enabled = expanded) {
+        expanded = false
+        try { menuFocusRequester.requestFocus() } catch (_: Exception) {}
+    }
 
+    Row(modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+        val brandShape = RoundedCornerShape(50)
+        TvSurface(
+            onClick = { state.page = "discover" },
+            shape = TvSurfaceDefaults.shape(brandShape),
+            modifier = Modifier
+                .height(42.dp)
+                .focusRequester(logoFocusRequester)
+                .focusProperties { right = menuFocusRequester },
+            colors = TvSurfaceDefaults.colors(
+                containerColor = colors["pill.background"].copy(alpha = 0.85f),
+                focusedContainerColor = colors["pill.activeBackground"]
+            ),
+            scale = TvSurfaceDefaults.scale(focusedScale = 1f),
+            border = TvSurfaceDefaults.border(focusedBorder = TvBorder(BorderStroke(2.dp, colors["type.logo"]), shape = brandShape))
+        ) {
+            Image(
+                painterResource(R.drawable.framezoo_brand),
+                "FrameZoo",
+                Modifier.padding(horizontal = 14.dp, vertical = 7.dp).height(28.dp).width(97.dp)
+            )
+        }
+
+        Spacer(Modifier.width(10.dp))
+
+        Row(
+            modifier = Modifier.onFocusChanged { focusState ->
+                expanded = focusState.hasFocus
+            },
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
             val menuRotation by animateFloatAsState(if (expanded) 90f else 0f, tween(300), label = "menu rotation")
             HeaderButton(
                 icon = R.drawable.desktop_menu,
@@ -135,12 +136,6 @@ internal fun DiscoverHeader(state: FrameZooState, modifier: Modifier = Modifier)
                 rotation = menuRotation,
                 modifier = Modifier
                     .focusRequester(menuFocusRequester)
-                    .onFocusChanged {
-                        if (it.isFocused || it.hasFocus) {
-                            collapseJob?.cancel()
-                            expanded = true
-                        }
-                    }
                     .focusProperties {
                         left = logoFocusRequester
                         right = if (expanded) searchFocusRequester else accountFocusRequester
@@ -154,10 +149,10 @@ internal fun DiscoverHeader(state: FrameZooState, modifier: Modifier = Modifier)
 
             AnimatedVisibility(
                 visible = expanded,
-                enter = fadeIn(tween(200)),
-                exit = fadeOut(tween(150))
+                enter = fadeIn(tween(200)) + expandHorizontally(tween(250)),
+                exit = fadeOut(tween(150)) + shrinkHorizontally(tween(200))
             ) {
-                Row(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                     val quickActions = listOf(
                         QuickActionItem(R.drawable.desktop_search, t("home.search.sectionTitle"), "search", searchFocusRequester),
                         QuickActionItem(R.drawable.desktop_bookmark, t("home.bookmarks.sectionTitle"), "library", bookmarksFocusRequester),
@@ -169,12 +164,6 @@ internal fun DiscoverHeader(state: FrameZooState, modifier: Modifier = Modifier)
                     quickActions.forEachIndexed { index, item ->
                         val itemModifier = Modifier
                             .focusRequester(item.requester)
-                            .onFocusChanged {
-                                if (it.isFocused || it.hasFocus) {
-                                    collapseJob?.cancel()
-                                    expanded = true
-                                }
-                            }
                             .focusProperties {
                                 left = if (index == 0) menuFocusRequester else quickActions[index - 1].requester
                                 right = if (index == quickActions.lastIndex) accountFocusRequester else quickActions[index + 1].requester
@@ -236,13 +225,13 @@ internal fun HeaderButton(
     var focused by remember { mutableStateOf(false) }
     val shape = RoundedCornerShape(50)
     val background by animateColorAsState(if (selected || focused) colors["pill.activeBackground"] else colors["pill.background"], tween(300), label = "header background")
-    TvIconButton(onClick = onClick, modifier = Modifier.size(46.dp).then(modifier).onFocusChanged { focused = it.isFocused }
+    TvIconButton(onClick = onClick, modifier = Modifier.size(42.dp).then(modifier).onFocusChanged { focused = it.isFocused }
         .semantics { contentDescription = label }, shape = TvIconButtonDefaults.shape(shape),
         colors = TvIconButtonDefaults.colors(containerColor = background, focusedContainerColor = background),
         scale = TvIconButtonDefaults.scale(focusedScale = 1f),
         border = TvIconButtonDefaults.border(focusedBorder = TvBorder(BorderStroke(2.dp, colors["type.logo"]), shape = shape))) {
-        Icon(painterResource(icon), contentDescription = null, modifier = Modifier.size(20.dp).rotate(rotation),
-            tint = if (selected) colors["type.logo"] else colors["type.emphasis"])
+        Icon(painterResource(icon), contentDescription = null, modifier = Modifier.size(19.dp).rotate(rotation),
+            tint = if (selected || focused) colors["type.logo"] else colors["type.emphasis"])
     }
 }
 
@@ -259,7 +248,7 @@ internal fun DiscoverScreen(state: FrameZooState, discoverAction: FocusRequester
     val titleGenres = t("discover.carousel.title.genres")
     val titleTrending = t("discover.carousel.title.trending")
     val titlePopular = t("discover.carousel.title.popular")
-    val titleProvider = t("discover.filters.providers")
+    val titleProvider = t("discover.carousel.title.providers")
     val titleTopRated = t("discover.carousel.title.topRated")
     val titleEditorPicks = t("discover.carousel.title.editorPicks")
     val titleNewReleases = t("discover.carousel.title.latestReleases")
@@ -281,6 +270,9 @@ internal fun DiscoverScreen(state: FrameZooState, discoverAction: FocusRequester
             val watching = state.progress.filter { it.duration > 0 && it.position > 0 }
             if (watching.isNotEmpty()) item { Box(Modifier.padding(horizontal = 38.dp)) {
                 MediaGrid(t("settings.appearance.sections.watching"), watching.map { it.media }, state::openDetails, watching.associate { it.media.id to (it.position / it.duration).toFloat().coerceIn(0f, 1f) }, state.bookmarks.map { it.id }.toSet(), state::bookmark, state.backend::releaseQuality)
+            } }
+            if (state.bookmarks.isNotEmpty()) item { Box(Modifier.padding(horizontal = 38.dp)) {
+                MediaGrid(t("home.bookmarks.sectionTitle"), state.bookmarks.distinctBy { it.id }, state::openDetails, state.progress.filter { it.duration > 0 }.associate { it.media.id to (it.position / it.duration).toFloat().coerceIn(0f, 1f) }, state.bookmarks.map { it.id }.toSet(), state::bookmark, state.backend::releaseQuality)
             } }
             item { Column(Modifier.padding(horizontal = 38.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
                 val categoryFocus = remember { FocusRequester() }
@@ -380,7 +372,7 @@ private fun DiscoverCarousel(state: FrameZooState, key: String, title: String, m
     Column(Modifier.padding(horizontal = 38.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             Text(title, color = colors["type.emphasis"], fontSize = 27.sp, fontWeight = FontWeight.Bold)
-            if (addon != null) Text("Addons", color = colors["type.secondary"], fontSize = 13.sp,
+            if (addon != null) Text(t("addons.catalog.badge"), color = colors["type.secondary"], fontSize = 13.sp,
                 modifier = Modifier.clip(RoundedCornerShape(4.dp)).background(colors["pill.background"]).padding(horizontal = 8.dp, vertical = 3.dp))
             if (key == "trending") {
                 TvButton(t("discover.carousel.today"), selected = state.filter.window == "day", navigation = true) { state.updateFilter(state.filter.copy(window = "day")) }
@@ -512,7 +504,7 @@ internal fun DiscoverMoreScreen(state: FrameZooState, gridState: LazyGridState) 
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                         FilterMenu(t("discover.filters.country"), state.moreFilter.country, state.countries) { state.updateMoreFilter(value = state.moreFilter.copy(country = it)) }
                         FilterMenu(t("home.bookmarks.edit.yearLabel"), state.moreFilter.year, (Year.now().value downTo 1900).map { DiscoverOption(it.toString(), it.toString()) }) { state.updateMoreFilter(value = state.moreFilter.copy(year = it)) }
-                        if (state.moreSection == "provider") FilterMenu(t("discover.filters.providers"), state.moreProvider, state.providersFor(state.moreFilter.category), allowAll = false) { state.updateMoreFilter(selectedProvider = it) }
+                        if (state.moreSection == "provider") FilterMenu(t("discover.carousel.title.providers"), state.moreProvider, state.providersFor(state.moreFilter.category), allowAll = false) { state.updateMoreFilter(selectedProvider = it) }
                         if (state.moreSection == "genre" && !state.moreFilter.category.startsWith("genre:")) FilterMenu(t("discover.carousel.title.genres"), state.moreGenre, state.genres, allowAll = false) { state.updateMoreFilter(selectedGenre = it) }
                         if (state.moreSection == "trending") {
                             TvButton(t("discover.carousel.today"), selected = state.moreFilter.window == "day", navigation = true) { state.updateMoreFilter(value = state.moreFilter.copy(window = "day")) }

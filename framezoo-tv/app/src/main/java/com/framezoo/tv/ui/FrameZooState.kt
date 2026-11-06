@@ -393,10 +393,13 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         library = (bookmarks.map { LibraryItem(it) } + history + progress)
             .associateBy { "${it.media.id}:${it.season ?: -1}:${it.episode ?: -1}" }.values.toList()
     }
-    fun openLibrary() { if (store.userId == null) openLogin() else runTask { refreshUserData(); page = "library" } }
-    fun openHistory() {
-        if (store.userId == null) { openLogin(); return }
-        runTask { history = backend.watchHistory(); page = "history" }
+    fun openLibrary() = runTask {
+        if (store.userId != null) refreshUserData()
+        page = "library"
+    }
+    fun openHistory() = runTask {
+        if (store.userId != null) history = backend.watchHistory()
+        page = "history"
     }
     fun openAddons() = runTask { installed = addons.list(); page = "addons" }
     fun search() {
@@ -505,6 +508,76 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         }
     }
     fun openTrailer(key: String, title: String) { trailerKey = key; trailerTitle = title; page = "trailer" }
+    var subtitleFontSize by mutableIntStateOf(store.subtitleFontSize)
+        private set
+    var subtitleColor by mutableStateOf(store.subtitleColor)
+        private set
+    var subtitleBackgroundOpacity by mutableIntStateOf(store.subtitleBackgroundOpacity)
+        private set
+    var torrentCacheSize by mutableStateOf(store.torrentCacheSize)
+        private set
+
+    fun updateSubtitleFontSize(size: Int) {
+        subtitleFontSize = size
+        store.subtitleFontSize = size
+        player.command("set", "sub-font-size", (55 * size / 100).toString())
+    }
+
+    fun updateSubtitleColor(color: String) {
+        subtitleColor = color
+        store.subtitleColor = color
+        player.command("set", "sub-color", color)
+    }
+
+    fun updateSubtitleBackgroundOpacity(opacity: Int) {
+        subtitleBackgroundOpacity = opacity
+        store.subtitleBackgroundOpacity = opacity
+        val alpha = (opacity * 255 / 100).toString()
+        player.command("set", "sub-back-color", "0/0/0/$alpha")
+    }
+
+    fun updateTorrentCacheSize(size: String) {
+        torrentCacheSize = size
+        store.torrentCacheSize = size
+    }
+
+    fun removeBookmark(item: Media) {
+        if (store.userId == null) return
+        if (!savingBookmarks.add(item.id)) return
+        runTask {
+            try {
+                backend.bookmark(item, remove = true)
+                bookmarks = bookmarks.filterNot { it.id == item.id }
+                refreshUserData()
+                if (filter.category in listOf("movie", "tv")) refreshDiscover()
+            } finally { savingBookmarks.remove(item.id) }
+        }
+    }
+
+    fun removeHistory(item: Media) {
+        if (store.userId == null) return
+        runTask {
+            backend.removeHistory(item.id)
+            history = history.filterNot { it.media.id == item.id }
+        }
+    }
+
+    fun clearHistory() {
+        if (store.userId == null) return
+        runTask {
+            history.map { it.media.id }.distinct().forEach { id ->
+                runCatching { backend.removeHistory(id) }
+            }
+            history = emptyList()
+        }
+    }
+
+    fun toggleAddon(addon: Addon) = runTask {
+        addons.toggleEnabled(addon.manifestUrl)
+        installed = addons.list()
+        addonCatalog = addons.catalog()
+    }
+
     fun chooseSource(source: Stream) { playing = source; page = "player" }
     fun installAddon() = runTask { addons.install(addonUrl); installed = addons.list(); addonCatalog = addons.catalog(); addonUrl = "" }
     fun removeAddon(addon: Addon) = runTask { addons.remove(addon.manifestUrl); installed = addons.list(); addonCatalog = addons.catalog() }

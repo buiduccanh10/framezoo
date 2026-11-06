@@ -236,9 +236,9 @@ internal fun DetailsScreen(state: FrameZooState, item: Media) {
                                     HeaderButton(if (watched) R.drawable.desktop_eye_slash else R.drawable.desktop_eye, if (watched) t("player.menus.episodes.markAsUnwatched") else t("player.menus.episodes.markAsWatched"), watched) { state.markMovieWatched(item, !watched) }
                                 }
                             }
-                            cast.firstOrNull { it.role == "Director" || it.role == "Đạo diễn" }?.let { Text("${t("details.director")} ${it.name}", color = colors["type.secondary"], fontSize = 13.sp) }
+                            cast.firstOrNull { it.role == "Director" || it.role == "Đạo diễn" }?.let { Text(it.name, color = colors["type.secondary"], fontSize = 13.sp) }
                             val actors = cast.filter { it.role != "Director" && it.role != "Đạo diễn" }.take(6).joinToString(", ") { it.name }
-                            if (actors.isNotBlank()) Text("${t("details.cast")} $actors", color = colors["type.secondary"], fontSize = 13.sp)
+                            if (actors.isNotBlank()) Text(actors, color = colors["type.secondary"], fontSize = 13.sp)
                         }
                         Column(Modifier.weight(1f).clip(RoundedCornerShape(8.dp)).background(colors["background.secondary"].copy(alpha = .5f)).padding(16.dp), verticalArrangement = Arrangement.spacedBy(9.dp)) {
                             if (item.runtime > 0) {
@@ -300,7 +300,7 @@ internal fun DetailsScreen(state: FrameZooState, item: Media) {
                             Column(Modifier.fillMaxWidth().padding(5.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(5.dp)) {
                                 AsyncImage(person.image, person.name, Modifier.size(100.dp).clip(CircleShape), contentScale = ContentScale.Crop)
                                 Text(person.name, color = colors["type.emphasis"], maxLines = 1, overflow = TextOverflow.Ellipsis, fontSize = 14.sp)
-                                Text(if (person.role == "Director" || person.role == "Đạo diễn") t("details.director") else person.role, color = colors["type.secondary"], maxLines = 1, overflow = TextOverflow.Ellipsis, fontSize = 12.sp)
+                                Text(person.role, color = colors["type.secondary"], maxLines = 1, overflow = TextOverflow.Ellipsis, fontSize = 12.sp)
                             }
                         }
                     }
@@ -309,7 +309,7 @@ internal fun DetailsScreen(state: FrameZooState, item: Media) {
             val allTrailers = trailers + listOfNotNull(ratings.trailerUrl?.let { Trailer(it, "IMDb Trailer", true, ratings.trailerThumbnail) })
             if (allTrailers.isNotEmpty()) item {
                 Column(Modifier.padding(start = 26.dp, top = 28.dp, end = 26.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text("Trailer", color = colors["type.emphasis"], fontSize = 21.sp, fontWeight = FontWeight.SemiBold)
+                    Text(t("details.trailers"), color = colors["type.emphasis"], fontSize = 21.sp, fontWeight = FontWeight.SemiBold)
                     LazyRow(horizontalArrangement = Arrangement.spacedBy(14.dp), contentPadding = PaddingValues(vertical = 5.dp)) { items(allTrailers, key = { it.key }) { trailer ->
                         DetailsCard({ selectedTrailer = trailer }, Modifier.width(300.dp)) {
                             Box(Modifier.fillMaxWidth().height(164.dp)) {
@@ -366,8 +366,8 @@ internal fun DetailsScreen(state: FrameZooState, item: Media) {
                     }
                 }
             }
-            OutlinedTextField(newGroup, { newGroup = it }, singleLine = true, label = { Text(t("home.bookmarks.groups.add")) }, colors = tvFieldColors())
-            TvButton(t("home.bookmarks.groups.add")) { newGroup.trim().takeIf { it.isNotEmpty() }?.let { selectedGroups = (selectedGroups + it).distinct(); newGroup = "" } }
+            OutlinedTextField(newGroup, { newGroup = it }, singleLine = true, label = { Text(t("home.bookmarks.groups.dropdown.placeholderButton")) }, colors = tvFieldColors())
+            TvButton(t("home.bookmarks.groups.dropdown.placeholderButton")) { newGroup.trim().takeIf { it.isNotEmpty() }?.let { selectedGroups = (selectedGroups + it).distinct(); newGroup = "" } }
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 TvButton(t("settings.save"), accent = true) { groupsOpen = false; state.updateBookmarkGroups(item, selectedGroups) }
                 TvButton(t("actions.cancel")) { groupsOpen = false }
@@ -491,7 +491,7 @@ private fun DetailsTrailerPlayer(key: String, title: String, onClose: () -> Unit
         }
         Row(Modifier.align(Alignment.BottomStart).padding(20.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             TvButton(t("overlays.close"), modifier = Modifier.focusRequester(focus), icon = R.drawable.desktop_close) { onClose() }
-            TvButton(if (paused) t("details.resume") else t("player.pause")) { paused = !paused }
+            TvButton(if (paused) t("details.play") else t("global.keyboardShortcuts.shortcuts.playPauseAlt"), icon = if (paused) R.drawable.desktop_play else R.drawable.desktop_pause) { paused = !paused }
             TvButton(if (muted) "Unmute" else "Mute", icon = if (muted) R.drawable.desktop_volume_x else R.drawable.desktop_volume) { muted = !muted }
             if (status == "error" && !isImdb) TvButton(t("details.trailers")) {
                 try { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=$key"))) }

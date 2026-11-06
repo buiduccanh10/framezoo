@@ -132,6 +132,8 @@ class PlayerController(private val context: Context) {
     fun position(): Double = synchronized(lock) { if (handle == 0L) 0.0 else NativePlayer.propertyDouble(handle, "time-pos") }
     fun duration(): Double = synchronized(lock) { if (handle == 0L) 0.0 else NativePlayer.propertyDouble(handle, "duration") }
     fun paused(): Boolean = synchronized(lock) { handle != 0L && NativePlayer.propertyString(handle, "pause") == "yes" }
+    fun propertyString(name: String): String? = synchronized(lock) { if (handle == 0L) null else NativePlayer.propertyString(handle, name) }
+    fun propertyDouble(name: String): Double = synchronized(lock) { if (handle == 0L) 0.0 else NativePlayer.propertyDouble(handle, name) }
     fun stop() {
         val old = synchronized(lock) {
             generation++
