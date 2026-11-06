@@ -1515,6 +1515,7 @@
     "linkCopied": "Lien copié dans le presse-papier !",
     "loginSuccess": "Connecté avec succès !",
     "logoutSuccess": "Déconnexion réussie !",
+    "sessionExpired": "Votre session a pris fin ou vous avez été déconnecté(e) sur un autre appareil. Vous naviguez désormais en tant qu'invité(e).",
     "otpResent": "Le code de vérification a été renvoyé !",
     "otpSent": "Code de vérification envoyé à votre adresse e-mail !",
     "passwordChangeSuccess": "Mot de passe modifié avec succès !",

@@ -1515,6 +1515,7 @@
     "linkCopied": "Länken har kopierats till urklipp!",
     "loginSuccess": "Inloggad framgångsrikt!",
     "logoutSuccess": "Loggade ut framgångsrikt!",
+    "sessionExpired": "Din session har avslutats eller du har loggats ut på en annan enhet. Du surfar nu som gäst.",
     "otpResent": "Verifieringskoden har skickats om!",
     "otpSent": "Verifieringskod skickad till din e-postadress!",
     "passwordChangeSuccess": "Lösenordet har ändrats!",

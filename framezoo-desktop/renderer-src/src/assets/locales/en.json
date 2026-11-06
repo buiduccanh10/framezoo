@@ -1515,6 +1515,7 @@
     "linkCopied": "Link copied to clipboard!",
     "loginSuccess": "Logged in successfully!",
     "logoutSuccess": "Logged out successfully!",
+    "sessionExpired": "Your session has ended or was signed out on another device. You're now browsing as a guest.",
     "otpResent": "Verification code has been resent!",
     "otpSent": "Verification code sent to your email!",
     "passwordChangeSuccess": "Password changed successfully!",

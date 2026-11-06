@@ -1515,6 +1515,7 @@
     "linkCopied": "Bağlantı panoya kopyalandı!",
     "loginSuccess": "Başarıyla giriş yaptınız!",
     "logoutSuccess": "Başarıyla çıkış yapıldı!",
+    "sessionExpired": "Oturumunuz sona erdi veya başka bir cihazdan çıkış yapıldı. Artık misafir olarak geziniyorsunuz.",
     "otpResent": "Doğrulama kodu yeniden gönderildi!",
     "otpSent": "Doğrulama kodu e-posta adresinize gönderildi!",
     "passwordChangeSuccess": "Şifre başarıyla değiştirildi!",

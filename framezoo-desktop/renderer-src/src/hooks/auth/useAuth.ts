@@ -3,6 +3,7 @@ import { useCallback } from "react";
 
 import {
   SessionResponse,
+  getErrorStatus,
   isAuthErrorStatus,
   normalizeAccessToken,
   withAuthRetry,
@@ -38,6 +39,7 @@ import {
 import { useAuthData } from "@/hooks/auth/useAuthData";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { AccountWithToken, useAuthStore } from "@/stores/auth";
+import { useBannerStore } from "@/stores/banner";
 import { BookmarkMediaItem } from "@/stores/bookmarks";
 import { useToastStore } from "@/stores/interface/toast";
 import { ProgressMediaItem } from "@/stores/progress";
@@ -206,6 +208,17 @@ export function useAuth() {
     showToast(t("toasts.logoutSuccess"), "success");
   }, [userDataLogout, backendUrl, currentAccount, showToast]);
 
+  const expireSession = useCallback(
+    async (account: AccountWithToken) => {
+      if (useAuthStore.getState().account?.sessionId !== account.sessionId)
+        return;
+      await userDataLogout();
+      useBannerStore.getState().updateOnline(true);
+      showToast(t("toasts.sessionExpired"), "warning");
+    },
+    [userDataLogout, showToast],
+  );
+
   const disconnectFromBackend = useCallback(async () => {
     if (!currentAccount || !backendUrl) return;
     try {
@@ -364,11 +377,7 @@ export function useAuth() {
         if (typeof navigator !== "undefined" && !navigator.onLine) {
           return;
         }
-        const anyError: any = err;
-        const status =
-          anyError?.response?.status ??
-          anyError?.status ??
-          anyError?.statusCode;
+        const status = getErrorStatus(err);
 
         if (isAuthErrorStatus(status)) {
           try {
@@ -379,11 +388,12 @@ export function useAuth() {
             if (typeof navigator !== "undefined" && !navigator.onLine) {
               return;
             }
-            const cookieStatus =
-              (cookieErr as any)?.response?.status ??
-              (cookieErr as any)?.status ??
-              (cookieErr as any)?.statusCode;
+            const cookieStatus = getErrorStatus(cookieErr);
 
+            if (cookieStatus === 401) {
+              await expireSession(account);
+              return;
+            }
             if (isAuthErrorStatus(cookieStatus)) {
               throw cookieErr;
             }
@@ -401,33 +411,40 @@ export function useAuth() {
         return;
       }
 
-      const [bookmarks, progress, watchHistory, settings, groupOrder] =
-        await Promise.all([
-          getBookmarks(backendUrl, activeAccount),
-          getProgress(backendUrl, activeAccount),
-          getWatchHistory(backendUrl, activeAccount),
-          getSettings(backendUrl, activeAccount),
-          getGroupOrder(backendUrl, activeAccount),
-        ]);
+      try {
+        const [bookmarks, progress, watchHistory, settings, groupOrder] =
+          await Promise.all([
+            getBookmarks(backendUrl, activeAccount),
+            getProgress(backendUrl, activeAccount),
+            getWatchHistory(backendUrl, activeAccount),
+            getSettings(backendUrl, activeAccount),
+            getGroupOrder(backendUrl, activeAccount),
+          ]);
 
-      setAccount({
-        ...activeAccount,
-        nickname: user.user.nickname,
-        email: user.user.email ?? activeAccount.email,
-        profile: user.user.profile,
-      });
+        if (useAuthStore.getState().account?.sessionId !== account.sessionId)
+          return;
+        setAccount({
+          ...activeAccount,
+          nickname: user.user.nickname,
+          email: user.user.email ?? activeAccount.email,
+          profile: user.user.profile,
+        });
 
-      syncData(
-        user.user,
-        user.session,
-        progress,
-        bookmarks,
-        watchHistory,
-        settings,
-        groupOrder,
-      );
+        syncData(
+          user.user,
+          user.session,
+          progress,
+          bookmarks,
+          watchHistory,
+          settings,
+          groupOrder,
+        );
+      } catch (err) {
+        if (getErrorStatus(err) !== 401) throw err;
+        await expireSession(account);
+      }
     },
-    [backendUrl, syncData],
+    [backendUrl, syncData, expireSession],
   );
   return {
     loggedIn,
@@ -437,6 +454,7 @@ export function useAuth() {
     disconnectFromBackend,
     register,
     restore,
+    expireSession,
     importData,
   };
 }

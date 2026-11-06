@@ -1515,6 +1515,7 @@
     "linkCopied": "S'ha copiat l'enllaç al porta-retalls!",
     "loginSuccess": "S'ha iniciat sessió correctament!",
     "logoutSuccess": "S'ha tancat la sessió correctament!",
+    "sessionExpired": "La teva sessió ha finalitzat o s'ha tancat la sessió en un altre dispositiu. Ara estàs navegant com a convidat.",
     "otpResent": "El codi de verificació s'ha tornat a enviar!",
     "otpSent": "Codi de verificació enviat al teu correu electrònic!",
     "passwordChangeSuccess": "La contrasenya s'ha canviat correctament!",

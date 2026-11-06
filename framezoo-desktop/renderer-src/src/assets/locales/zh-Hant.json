@@ -1515,6 +1515,7 @@
     "linkCopied": "連結已複製到剪貼簿！",
     "loginSuccess": "登入成功！",
     "logoutSuccess": "退出成功！",
+    "sessionExpired": "您的會話已結束或已在其他裝置上登出。您現在以訪客身分瀏覽。",
     "otpResent": "驗證碼已重新發送！",
     "otpSent": "驗證碼已寄至您的信箱！",
     "passwordChangeSuccess": "密碼已成功更改！",

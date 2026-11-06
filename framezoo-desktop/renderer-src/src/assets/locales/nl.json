@@ -1515,6 +1515,7 @@
     "linkCopied": "Link gekopieerd naar klembord!",
     "loginSuccess": "Succesvol ingelogd!",
     "logoutSuccess": "Succesvol uitgelogd!",
+    "sessionExpired": "Je sessie is beëindigd of je bent uitgelogd op een ander apparaat. Je surft nu als gast.",
     "otpResent": "De verificatiecode is opnieuw verzonden!",
     "otpSent": "De verificatiecode is naar uw e-mailadres verzonden!",
     "passwordChangeSuccess": "Wachtwoord succesvol gewijzigd!",

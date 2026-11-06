@@ -1515,6 +1515,7 @@
     "linkCopied": "Povezava je kopirana v odložišče!",
     "loginSuccess": "Uspešno prijavljeni!",
     "logoutSuccess": "Uspešno odjavljen!",
+    "sessionExpired": "Vaša seja se je končala ali pa ste bili odjavljeni v drugi napravi. Zdaj brskate kot gost.",
     "otpResent": "Potrditvena koda je bila ponovno poslana!",
     "otpSent": "Potrditvena koda je bila poslana na vaš e-poštni naslov!",
     "passwordChangeSuccess": "Geslo je bilo uspešno spremenjeno!",

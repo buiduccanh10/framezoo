@@ -1515,6 +1515,7 @@
     "linkCopied": "Odkaz zkopírován do schránky!",
     "loginSuccess": "Úspěšně přihlášen!",
     "logoutSuccess": "Úspěšně odhlášeno!",
+    "sessionExpired": "Vaše relace skončila nebo jste byli odhlášeni na jiném zařízení. Nyní prohlížíte jako host.",
     "otpResent": "Ověřovací kód byl znovu odeslán!",
     "otpSent": "Ověřovací kód byl odeslán na váš e-mail!",
     "passwordChangeSuccess": "Heslo bylo úspěšně změněno!",

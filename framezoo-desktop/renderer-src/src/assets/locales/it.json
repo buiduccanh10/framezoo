@@ -1515,6 +1515,7 @@
     "linkCopied": "Link copiato negli appunti!",
     "loginSuccess": "Accesso effettuato con successo!",
     "logoutSuccess": "Disconnesso con successo!",
+    "sessionExpired": "La tua sessione è terminata oppure sei stato disconnesso da un altro dispositivo. Ora stai navigando come ospite.",
     "otpResent": "Il codice di verifica è stato inviato nuovamente!",
     "otpSent": "Il codice di verifica è stato inviato alla tua email!",
     "passwordChangeSuccess": "Password modificata con successo!",

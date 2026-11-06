@@ -1515,6 +1515,7 @@
     "linkCopied": "Link a vágólapra másolva!",
     "loginSuccess": "Sikeres bejelentkezés!",
     "logoutSuccess": "Sikeresen kijelentkezett!",
+    "sessionExpired": "A munkameneted véget ért, vagy kijelentkeztettek egy másik eszközön. Most vendégként böngészel.",
     "otpResent": "Az ellenőrző kód újraküldve!",
     "otpSent": "Ellenőrző kód elküldve az e-mail címedre!",
     "passwordChangeSuccess": "Jelszó sikeresen megváltoztatva!",

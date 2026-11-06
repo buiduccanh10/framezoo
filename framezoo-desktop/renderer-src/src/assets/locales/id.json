@@ -1515,6 +1515,7 @@
     "linkCopied": "Tautan disalin ke papan klip!",
     "loginSuccess": "Berhasil masuk!",
     "logoutSuccess": "Berhasil keluar!",
+    "sessionExpired": "Sesi Anda telah berakhir atau Anda telah keluar dari akun di perangkat lain. Anda sekarang mengakses situs sebagai tamu.",
     "otpResent": "Kode verifikasi telah dikirim ulang!",
     "otpSent": "Kode verifikasi telah dikirim ke email Anda!",
     "passwordChangeSuccess": "Kata sandi berhasil diubah!",

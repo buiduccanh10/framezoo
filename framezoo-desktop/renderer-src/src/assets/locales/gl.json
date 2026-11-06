@@ -1515,6 +1515,7 @@
     "linkCopied": "A ligazón copiouse no portapapeis!",
     "loginSuccess": "Inicia sesión con éxito!",
     "logoutSuccess": "Pecheuse con éxito!",
+    "sessionExpired": "A túa sesión rematou ou pechaches sesión noutro dispositivo. Agora estás navegando como convidado.",
     "otpResent": "Volveuse enviar o código de verificación!",
     "otpSent": "Código de verificación enviado ao teu correo electrónico!",
     "passwordChangeSuccess": "Contrasinal cambiado correctamente!",
