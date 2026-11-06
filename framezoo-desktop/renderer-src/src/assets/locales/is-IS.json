@@ -1515,6 +1515,7 @@
     "linkCopied": "Tengill afritaður á klippiborð!",
     "loginSuccess": "Innskráning tókst!",
     "logoutSuccess": "Tókst að skrá þig út!",
+    "sessionExpired": "Lotu þinni er lokið eða þú varst skráð(ur) út á öðru tæki. Þú ert nú að vafra sem gestur.",
     "otpResent": "Staðfestingarkóði hefur verið sendur aftur!",
     "otpSent": "Staðfestingarkóði sendur á netfangið þitt!",
     "passwordChangeSuccess": "Lykilorði breytt!",

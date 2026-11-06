@@ -1515,6 +1515,7 @@
     "linkCopied": "Link copiat în clipboard!",
     "loginSuccess": "Autentificat cu succes!",
     "logoutSuccess": "Te-ai deconectat cu succes!",
+    "sessionExpired": "Sesiunea s-a încheiat sau ați fost deconectat(ă) pe un alt dispozitiv. Acum navigați ca invitat.",
     "otpResent": "Codul de verificare a fost retrimis!",
     "otpSent": "Codul de verificare a fost trimis pe adresa dvs. de e-mail!",
     "passwordChangeSuccess": "Parola a fost schimbată cu succes!",

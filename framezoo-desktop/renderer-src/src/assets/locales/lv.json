@@ -1515,6 +1515,7 @@
     "linkCopied": "Saite ir kopēta starpliktuvē!",
     "loginSuccess": "Veiksmīgi pieteicies!",
     "logoutSuccess": "Veiksmīgi atteicies!",
+    "sessionExpired": "Jūsu sesija ir beigusies vai no tās tika izrakstīts citā ierīcē. Tagad jūs pārlūkojat kā viesis.",
     "otpResent": "Verifikācijas kods ir nosūtīts atkārtoti!",
     "otpSent": "Verifikācijas kods nosūtīts uz jūsu e-pastu!",
     "passwordChangeSuccess": "Parole veiksmīgi nomainīta!",

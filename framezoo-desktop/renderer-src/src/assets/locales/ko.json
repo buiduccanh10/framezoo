@@ -1515,6 +1515,7 @@
     "linkCopied": "링크가 클립보드에 복사되었습니다!",
     "loginSuccess": "성공적으로 로그인되었습니다!",
     "logoutSuccess": "성공적으로 로그아웃되었습니다!",
+    "sessionExpired": "다른 기기에서 세션이 종료되었거나 로그아웃되었습니다. 현재 게스트로 탐색 중입니다.",
     "otpResent": "인증 코드가 다시 전송되었습니다!",
     "otpSent": "인증 코드가 이메일로 발송되었습니다!",
     "passwordChangeSuccess": "비밀번호가 성공적으로 변경되었습니다!",

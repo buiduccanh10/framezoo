@@ -1515,6 +1515,7 @@
     "linkCopied": "Linket er kopieret til udklipsholderen!",
     "loginSuccess": "Log ind med succes!",
     "logoutSuccess": "Logget ud med succes!",
+    "sessionExpired": "Din session er afsluttet eller blev logget ud på en anden enhed. Du bruger nu browseren som gæst.",
     "otpResent": "Bekræftelseskoden er sendt igen!",
     "otpSent": "Bekræftelseskode sendt til din e-mail!",
     "passwordChangeSuccess": "Adgangskoden er ændret!",

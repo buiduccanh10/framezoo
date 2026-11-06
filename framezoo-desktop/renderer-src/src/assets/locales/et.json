@@ -1515,6 +1515,7 @@
     "linkCopied": "Link on lõikelauale kopeeritud!",
     "loginSuccess": "Sisselogimine õnnestus!",
     "logoutSuccess": "Välja logiti edukalt!",
+    "sessionExpired": "Teie seanss on lõppenud või logiti teid teises seadmes välja. Nüüd sirvite külalisena.",
     "otpResent": "Kinnituskood on uuesti saadetud!",
     "otpSent": "Kinnituskood saadeti teie e-posti aadressile!",
     "passwordChangeSuccess": "Parool on edukalt muudetud!",

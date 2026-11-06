@@ -1515,6 +1515,7 @@
     "linkCopied": "Linkki kopioitu leikepöydälle!",
     "loginSuccess": "Sisäänkirjautuminen onnistui!",
     "logoutSuccess": "Uloskirjautuminen onnistui!",
+    "sessionExpired": "Istuntosi on päättynyt tai sinulta kirjauduttiin ulos toisella laitteella. Selaat nyt vieraana.",
     "otpResent": "Vahvistuskoodi on lähetetty uudelleen!",
     "otpSent": "Vahvistuskoodi lähetetty sähköpostiisi!",
     "passwordChangeSuccess": "Salasana vaihdettu onnistuneesti!",

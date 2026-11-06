@@ -1515,6 +1515,7 @@
     "linkCopied": "Đã sao chép liên kết vào clipboard!",
     "loginSuccess": "Đăng nhập thành công!",
     "logoutSuccess": "Đăng xuất thành công!",
+    "sessionExpired": "Phiên đăng nhập đã kết thúc hoặc bị đăng xuất từ thiết bị khác. Bạn đang sử dụng chế độ khách.",
     "otpResent": "Đã gửi lại mã xác minh!",
     "otpSent": "Đã gửi mã xác minh đến email của bạn!",
     "passwordChangeSuccess": "Đổi mật khẩu thành công!",

@@ -75,7 +75,7 @@ export function createHttpStatusError(status: number, statusText?: string) {
   return error;
 }
 
-function getErrorStatus(error: unknown): number | undefined {
+export function getErrorStatus(error: unknown): number | undefined {
   const anyError = error as any;
   return anyError?.status ?? anyError?.statusCode ?? anyError?.response?.status;
 }

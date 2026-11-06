@@ -1515,6 +1515,7 @@
     "linkCopied": "Link skopiowany do schowka!",
     "loginSuccess": "Zalogowano się pomyślnie!",
     "logoutSuccess": "Wylogowano się pomyślnie!",
+    "sessionExpired": "Twoja sesja się zakończyła lub nastąpiło wylogowanie na innym urządzeniu. Przeglądasz teraz stronę jako gość.",
     "otpResent": "Kod weryfikacyjny został wysłany ponownie!",
     "otpSent": "Kod weryfikacyjny został wysłany na Twój adres e-mail!",
     "passwordChangeSuccess": "Hasło zostało pomyślnie zmienione!",

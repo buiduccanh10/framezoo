@@ -1515,6 +1515,7 @@
     "linkCopied": "Link copiado para a área de transferência!",
     "loginSuccess": "Logado com sucesso!",
     "logoutSuccess": "Desconectado com sucesso!",
+    "sessionExpired": "Sua sessão foi encerrada ou você foi desconectado em outro dispositivo. Agora você está navegando como visitante.",
     "otpResent": "O código de verificação foi reenviado!",
     "otpSent": "Código de verificação enviado para o seu e-mail!",
     "passwordChangeSuccess": "Senha alterada com sucesso!",

@@ -3,8 +3,10 @@ import { useEffect, useRef } from "react";
 import {
   createHttpStatusError,
   getAuthHeaders,
+  getErrorStatus,
   withAuthRetry,
 } from "@/backend/accounts/auth";
+import { useAuth } from "@/hooks/auth/useAuth";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { useIsDesktopApp } from "@/hooks/useIsDesktopApp";
 import { useAuthStore } from "@/stores/auth";
@@ -13,11 +15,12 @@ import { resolvePublicUrl } from "@/utils/publicUrl";
 
 const PING_INTERVAL_MS = 5000;
 const PUBLIC_ONLINE_SKIP_TICKS = 10; // 50s
-const AUTH_ONLINE_SKIP_TICKS = 36; // 3m
+const AUTH_ONLINE_SKIP_TICKS = 12; // 1m
 const MAX_CONSECUTIVE_FAILURES = 3;
 
 export function useOnlineListener() {
   const updateOnline = useBannerStore((s) => s.updateOnline);
+  const { expireSession } = useAuth();
   const account = useAuthStore((s) => s.account);
   const backendUrl = useBackendUrl();
   const isDesktopApp = useIsDesktopApp();
@@ -119,6 +122,10 @@ export function useOnlineListener() {
         })
         .catch((err) => {
           if (err.name === "AbortError") return;
+          if (account && getErrorStatus(err) === 401) {
+            void expireSession(account);
+            return;
+          }
           failureCountRef.current += 1;
           if (failureCountRef.current >= MAX_CONSECUTIVE_FAILURES) {
             isOnlineRef.current = false;
@@ -133,5 +140,5 @@ export function useOnlineListener() {
       window.removeEventListener("offline", handleOffline);
       window.removeEventListener("online", handleOnline);
     };
-  }, [account, backendUrl, isDesktopApp, updateOnline]);
+  }, [account, backendUrl, expireSession, isDesktopApp, updateOnline]);
 }

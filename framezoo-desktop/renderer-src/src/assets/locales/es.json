@@ -1515,6 +1515,7 @@
     "linkCopied": "¡Enlace copiado al portapapeles!",
     "loginSuccess": "¡Inicié sesión exitosamente!",
     "logoutSuccess": "¡Cerró sesión exitosamente!",
+    "sessionExpired": "Tu sesión ha finalizado o se ha cerrado sesión en otro dispositivo. Ahora navegas como invitado.",
     "otpResent": "¡El código de verificación ha sido reenviado!",
     "otpSent": "¡Código de verificación enviado a tu correo electrónico!",
     "passwordChangeSuccess": "¡Contraseña cambiada correctamente!",

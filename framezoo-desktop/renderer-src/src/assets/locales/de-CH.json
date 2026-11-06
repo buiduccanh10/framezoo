@@ -1515,6 +1515,7 @@
     "linkCopied": "Link in die Zwischenablage kopiert!",
     "loginSuccess": "Erfolgreich angemeldet!",
     "logoutSuccess": "Erfolgreich abgemeldet!",
+    "sessionExpired": "Ihre Sitzung ist beendet oder Sie wurden auf einem anderen Gerät abgemeldet. Sie surfen nun als Gast.",
     "otpResent": "Der Bestätigungscode wurde erneut gesendet!",
     "otpSent": "Der Bestätigungscode wurde an Ihre E-Mail-Adresse gesendet!",
     "passwordChangeSuccess": "Passwort erfolgreich geändert!",
