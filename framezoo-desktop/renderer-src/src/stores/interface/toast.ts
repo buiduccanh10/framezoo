@@ -1,8 +1,14 @@
 import { create } from "zustand";
 
 interface ToastState {
-  toast: { message: string; type?: "success" | "error" | "info" } | null;
-  showToast: (message: string, type?: "success" | "error" | "info") => void;
+  toast: {
+    message: string;
+    type?: "success" | "error" | "info" | "warning";
+  } | null;
+  showToast: (
+    message: string,
+    type?: "success" | "error" | "info" | "warning",
+  ) => void;
   hideToast: () => void;
 }
 

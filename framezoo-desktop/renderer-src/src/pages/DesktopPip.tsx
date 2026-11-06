@@ -107,6 +107,7 @@ function getPipPlaybackResetKey(state: DesktopPipState): string {
     state.source?.url ?? "",
     state.episode?.season ?? "",
     state.episode?.episode ?? "",
+    state.seekGeneration,
   ].join(":");
 }
 
@@ -332,11 +333,16 @@ function PipProgress(props: {
   onScrubChange(scrubbing: boolean): void;
 }) {
   const time = usePipVisualClock();
+  const [dragTime, setDragTime] = useState<number | null>(null);
+  const scrubbingRef = useRef(false);
 
   const hours = durationExceedsHour(props.state.duration);
   const current = Math.max(
     0,
-    Math.min(time, props.state.duration || Number.POSITIVE_INFINITY),
+    Math.min(
+      dragTime ?? time,
+      props.state.duration || Number.POSITIVE_INFINITY,
+    ),
   );
   const remaining = Math.max(props.state.duration - current, 0);
 
@@ -350,10 +356,22 @@ function PipProgress(props: {
       onPointerEnter={() => props.onHoverChange(true)}
       onPointerLeave={() => props.onHoverChange(false)}
       onPointerDown={() => {
-        if (!props.disabled) props.onScrubChange(true);
+        if (!props.disabled) {
+          scrubbingRef.current = true;
+          setDragTime(time);
+          props.onScrubChange(true);
+        }
       }}
-      onPointerUp={() => props.onScrubChange(false)}
-      onPointerCancel={() => props.onScrubChange(false)}
+      onPointerUp={() => {
+        scrubbingRef.current = false;
+        setDragTime(null);
+        props.onScrubChange(false);
+      }}
+      onPointerCancel={() => {
+        scrubbingRef.current = false;
+        setDragTime(null);
+        props.onScrubChange(false);
+      }}
     >
       <div className="bg-transparent py-2.5 shadow-2xl backdrop-blur-xl">
         <div className="grid grid-cols-[auto_1fr_auto] items-center gap-2.5">
@@ -367,9 +385,11 @@ function PipProgress(props: {
             step={0.1}
             value={props.state.duration > 0 ? current : 0}
             disabled={props.disabled}
-            onChange={(event) =>
-              props.onSeek(Number(event.currentTarget.value))
-            }
+            onChange={(event) => {
+              const nextTime = Number(event.currentTarget.value);
+              if (scrubbingRef.current) setDragTime(nextTime);
+              props.onSeek(nextTime);
+            }}
             className={`h-1 w-full appearance-none rounded-full bg-white/18 accent-white ${
               props.disabled
                 ? "cursor-not-allowed opacity-50"
@@ -652,7 +672,6 @@ export default function DesktopPipPage() {
         Math.min(time, pipState.duration || Number.POSITIVE_INFINITY),
       );
       sendAction({ type: "seekTo", time: nextTime });
-      setPipState((state) => (state ? { ...state, time: nextTime } : state));
     },
     [pipState, sendAction],
   );

@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import type { DesktopPipAction } from "@/desktop/pip";
+import type { DesktopPipAction, DesktopPipState } from "@/desktop/pip";
 import { usePlayerStore } from "@/stores/player/store";
 
 import { makeLibMpvDisplayInterface } from "./libmpv";
@@ -1978,6 +1978,16 @@ describe("libmpv display", () => {
   it("keeps skip-segment seeks inside the PiP window", async () => {
     const commands: string[] = [];
     const reparents: string[] = [];
+    const pipUpdates: DesktopPipState[] = [];
+    let eventListener:
+      | ((event: {
+          playerId: string;
+          generation: number;
+          type: string;
+          name?: string;
+          data?: unknown;
+        }) => void)
+      | undefined;
     let pipActionListener:
       ((action: DesktopPipAction) => Promise<void> | void) | undefined;
 
@@ -2000,7 +2010,10 @@ describe("libmpv display", () => {
         commands.push(command.type);
         return Promise.resolve(true);
       }),
-      onLibMpvEvent: vi.fn().mockReturnValue(() => undefined),
+      onLibMpvEvent: vi.fn((listener) => {
+        eventListener = listener;
+        return () => undefined;
+      }),
       onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
       openDesktopPipWindow: vi.fn().mockResolvedValue(true),
       activateDesktopPipWindow: vi.fn().mockResolvedValue(true),
@@ -2017,11 +2030,18 @@ describe("libmpv display", () => {
         },
       ),
       onDesktopPipClosed: vi.fn().mockReturnValue(() => undefined),
-      updateDesktopPipWindow: vi.fn(),
+      updateDesktopPipWindow: vi.fn((state: DesktopPipState) => {
+        pipUpdates.push(state);
+      }),
     };
 
     const display = makeLibMpvDisplayInterface();
     display.processContainerElement(makeElement());
+    display.on("time", (time) => {
+      usePlayerStore.setState((state) => ({
+        progress: { ...state.progress, time },
+      }));
+    });
     display.load({
       source: {
         type: "hls",
@@ -2033,13 +2053,31 @@ describe("libmpv display", () => {
     });
 
     await new Promise((resolve) => setTimeout(resolve, 0));
+    eventListener?.({
+      playerId: "player-1",
+      generation: 1,
+      type: "property",
+      name: "time-pos",
+      data: 10,
+    });
     display.togglePictureInPicture();
     await new Promise((resolve) => setTimeout(resolve, 0));
 
     await pipActionListener?.({ type: "skipSegment", time: 24 });
+    display.setCaption(null);
 
     expect(reparents).toEqual(["pip"]);
     expect(commands).toContain("seek");
+    expect(pipUpdates.at(-1)).toMatchObject({ time: 10, seekGeneration: 0 });
+
+    eventListener?.({
+      playerId: "player-1",
+      generation: 1,
+      type: "property",
+      name: "time-pos",
+      data: 24,
+    });
+    expect(pipUpdates.at(-1)).toMatchObject({ time: 24, seekGeneration: 1 });
 
     display.destroy();
     usePlayerStore.setState({
