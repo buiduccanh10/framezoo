@@ -28,32 +28,29 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.framezoo.tv.R
 import com.framezoo.tv.model.DiscoverOption
+import com.framezoo.tv.model.Media
+import com.framezoo.tv.ui.features.search.SearchAction
+import com.framezoo.tv.ui.features.search.SearchUiState
 import java.time.Year
-import kotlinx.coroutines.delay
 
 @Composable
 internal fun SearchScreen(
-    state: FrameZooState,
+    uiState: SearchUiState,
+    onAction: (SearchAction) -> Unit,
+    onOpenMedia: (Media) -> Unit,
+    isBookmarked: (String) -> Boolean = { false },
+    onToggleBookmark: (Media) -> Unit = {},
+    qualityLoader: (suspend (Media) -> String?)? = null,
+    onNavigateDiscover: () -> Unit = {},
+    onBack: () -> Unit,
     gridState: LazyGridState,
     searchAction: FocusRequester,
-    inputModifier: Modifier
+    inputModifier: Modifier = Modifier
 ) {
     val colors = LocalFrameZooColors.current
-    val genreIds = state.results.flatMap { it.genreIds }.toSet()
-    val genres = state.genres.filter { it.id in genreIds }
-
-    LaunchedEffect(state.query) {
-        delay(300)
-        if (state.query.trim() != state.searchedQuery) state.search()
-    }
-
-    val filtered = filterSearchResults(state.results, state.searchCountry, state.searchYear, state.searchGenre)
-
-    LaunchedEffect(state.focusReturnMediaId) {
-        val key = state.focusReturnMediaId ?: return@LaunchedEffect
-        val index = filtered.indexOfFirst { "${it.type}:${it.id}:${it.addonManifest}" == key }
-        if (index >= 0) gridState.scrollToItem(index + 1) else state.focusReturnMediaId = null
-    }
+    val genreIds = uiState.results.flatMap { it.genreIds }.toSet()
+    val genres = uiState.genres.filter { it.id in genreIds }
+    val filtered = uiState.filteredResults
 
     LazyVerticalGrid(
         columns = GridCells.Adaptive(174.dp),
@@ -79,7 +76,7 @@ internal fun SearchScreen(
                         icon = R.drawable.desktop_chevron_left,
                         navigation = true
                     ) {
-                        state.back()
+                        onBack()
                     }
                 }
 
@@ -89,14 +86,14 @@ internal fun SearchScreen(
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     OutlinedTextField(
-                        value = state.query,
-                        onValueChange = { state.query = it },
+                        value = uiState.query,
+                        onValueChange = { onAction(SearchAction.QueryChanged(it)) },
                         label = { Text(t("home.search.placeholder.default")) },
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                         keyboardActions = KeyboardActions(onSearch = {
                             searchAction.requestFocus()
-                            state.search()
+                            onAction(SearchAction.ExecuteSearch)
                         }),
                         colors = tvFieldColors(),
                         shape = RoundedCornerShape(28.dp),
@@ -111,26 +108,32 @@ internal fun SearchScreen(
                         modifier = Modifier.focusRequester(searchAction),
                         primary = true
                     ) {
-                        state.search()
+                        onAction(SearchAction.ExecuteSearch)
                     }
                 }
 
-                // Filter Menus: Country, Year, Genre
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    FilterMenu(t("discover.filters.country"), state.searchCountry, state.countries) {
-                        state.searchCountry = it
+                // Filter row matching desktop FilterDropdowns
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    if (uiState.countries.isNotEmpty()) {
+                        FilterMenu(t("discover.filters.country"), uiState.selectedCountry, uiState.countries) {
+                            onAction(SearchAction.CountryChanged(it))
+                        }
                     }
-                    FilterMenu(t("home.bookmarks.edit.yearLabel"), state.searchYear, (Year.now().value downTo 1900).map { DiscoverOption(it.toString(), it.toString()) }) {
-                        state.searchYear = it
+                    FilterMenu(t("home.bookmarks.edit.yearLabel"), uiState.selectedYear, (Year.now().value downTo 1900).map { DiscoverOption(it.toString(), it.toString()) }) {
+                        onAction(SearchAction.YearChanged(it))
                     }
                     if (genres.isNotEmpty()) {
-                        FilterMenu(t("discover.carousel.title.genres"), state.searchGenre, genres) {
-                            state.searchGenre = it
+                        FilterMenu(t("discover.carousel.title.genres"), uiState.selectedGenre, genres) {
+                            onAction(SearchAction.GenreChanged(it))
                         }
                     }
                 }
 
-                if (state.query.isNotBlank()) {
+                if (uiState.query.isNotBlank()) {
                     Text(
                         text = t("home.search.sectionTitle"),
                         style = MaterialTheme.typography.headlineSmall,
@@ -138,7 +141,7 @@ internal fun SearchScreen(
                     )
                 }
 
-                if (state.searchLoading) {
+                if (uiState.isLoading) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -152,17 +155,17 @@ internal fun SearchScreen(
                     }
                 }
 
-                if (state.searchError.isNotBlank()) {
+                if (!uiState.errorMessage.isNullOrBlank()) {
                     Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
-                        Text(state.searchError, color = colors["type.danger"])
-                        TvButton(t("notFound.reloadButton")) { state.search() }
+                        Text(uiState.errorMessage, color = colors["type.danger"])
+                        TvButton(t("notFound.reloadButton")) { onAction(SearchAction.ExecuteSearch) }
                     }
                 }
             }
         }
 
         // Skeleton loading items
-        if (state.searchLoading && filtered.isEmpty()) {
+        if (uiState.isLoading && filtered.isEmpty()) {
             items(12) {
                 Box(
                     modifier = Modifier
@@ -174,27 +177,18 @@ internal fun SearchScreen(
             }
         } else {
             items(filtered, key = { "${it.type}:${it.id}:${it.addonManifest}" }) { item ->
-                val key = "${item.type}:${item.id}:${item.addonManifest}"
-                val focus = remember { FocusRequester() }
-                LaunchedEffect(state.focusReturnMediaId) {
-                    if (state.focusReturnMediaId == key) {
-                        focus.requestFocus()
-                        state.focusReturnMediaId = null
-                    }
-                }
                 TvMediaCard(
                     item = item,
-                    onOpen = state::openDetails,
-                    bookmarked = state.bookmarks.any { it.id == item.id },
-                    onBookmark = state::bookmark,
-                    qualityLoader = state.backend::releaseQuality,
-                    modifier = Modifier.focusRequester(focus)
+                    onOpen = { onOpenMedia(item) },
+                    bookmarked = isBookmarked(item.id),
+                    onBookmark = { onToggleBookmark(item) },
+                    qualityLoader = qualityLoader
                 )
             }
         }
 
         // Search Suffix matching Desktop SearchSuffix in SearchListPart.tsx
-        if (!state.searchLoading && state.query.isNotBlank()) {
+        if (!uiState.isLoading && uiState.query.isNotBlank()) {
             item(span = { GridItemSpan(maxLineSpan) }) {
                 Column(
                     modifier = Modifier
@@ -213,9 +207,9 @@ internal fun SearchScreen(
                             label = t("home.search.discoverMore"),
                             navigation = true
                         ) {
-                            state.page = "discover"
+                            onNavigateDiscover()
                         }
-                    } else if (state.searchError.isBlank()) {
+                    } else if (uiState.errorMessage.isNullOrBlank()) {
                         Icon(
                             painter = painterResource(R.drawable.desktop_eye_slash),
                             contentDescription = null,
@@ -232,4 +226,59 @@ internal fun SearchScreen(
             }
         }
     }
+}
+
+@Composable
+internal fun SearchScreen(
+    state: FrameZooState,
+    gridState: LazyGridState,
+    searchAction: FocusRequester,
+    inputModifier: Modifier
+) {
+    val genreIds = state.results.flatMap { it.genreIds }.toSet()
+    val genres = state.genres.filter { it.id in genreIds }
+    val filtered = filterSearchResults(state.results, state.searchCountry, state.searchYear, state.searchGenre)
+
+    LaunchedEffect(state.query) {
+        kotlinx.coroutines.delay(300)
+        if (state.query.trim() != state.searchedQuery) state.search()
+    }
+
+    SearchScreen(
+        uiState = SearchUiState(
+            query = state.query,
+            results = state.results,
+            filteredResults = filtered,
+            selectedCountry = state.searchCountry,
+            selectedYear = state.searchYear,
+            selectedGenre = state.searchGenre,
+            genres = genres,
+            countries = state.countries,
+            isLoading = state.searchLoading,
+            errorMessage = state.searchError.ifBlank { null }
+        ),
+        onAction = { action ->
+            when (action) {
+                is SearchAction.QueryChanged -> state.query = action.value
+                is SearchAction.CountryChanged -> state.searchCountry = action.value
+                is SearchAction.YearChanged -> state.searchYear = action.value
+                is SearchAction.GenreChanged -> state.searchGenre = action.value
+                is SearchAction.ClearFilters -> {
+                    state.searchCountry = ""
+                    state.searchYear = ""
+                    state.searchGenre = ""
+                }
+                is SearchAction.ExecuteSearch -> state.search()
+            }
+        },
+        onOpenMedia = { state.openDetails(it) },
+        isBookmarked = { id -> state.bookmarks.any { it.id == id } },
+        onToggleBookmark = { state.bookmark(it) },
+        qualityLoader = state.backend::releaseQuality,
+        onNavigateDiscover = { state.page = "discover" },
+        onBack = { state.back() },
+        gridState = gridState,
+        searchAction = searchAction,
+        inputModifier = inputModifier
+    )
 }

@@ -11,7 +11,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,18 +28,25 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.framezoo.tv.R
 import com.framezoo.tv.model.LibraryItem
+import com.framezoo.tv.model.Media
+import com.framezoo.tv.ui.features.history.WatchHistoryAction
+import com.framezoo.tv.ui.features.history.WatchHistoryUiState
 
 @Composable
-internal fun WatchHistoryScreen(state: FrameZooState) {
+internal fun WatchHistoryScreen(
+    uiState: WatchHistoryUiState,
+    onAction: (WatchHistoryAction) -> Unit,
+    onOpenMedia: (Media) -> Unit,
+    qualityLoader: (suspend (Media) -> String?)? = null,
+    onBack: () -> Unit
+) {
     val colors = LocalFrameZooColors.current
     val gridState = rememberLazyGridState()
-    var editing by remember { mutableStateOf(false) }
     val backRequester = remember { FocusRequester() }
     val editRequester = remember { FocusRequester() }
 
-    // Group items by base media (for shows, pick most recently watched)
-    val historyItems = remember(state.history) {
-        state.history.distinctBy { "${it.media.type}:${it.media.id}" }
+    val historyItems = remember(uiState.history) {
+        uiState.history.distinctBy { "${it.media.type}:${it.media.id}" }
     }
 
     if (historyItems.isEmpty()) {
@@ -63,7 +74,7 @@ internal fun WatchHistoryScreen(state: FrameZooState) {
                 accent = true,
                 icon = R.drawable.desktop_chevron_left
             ) {
-                state.back()
+                onBack()
             }
         }
         return
@@ -90,22 +101,21 @@ internal fun WatchHistoryScreen(state: FrameZooState) {
                         color = colors["type.emphasis"]
                     )
                     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        if (editing) {
+                        if (uiState.isEditing) {
                             TvButton(
                                 label = t("settings.torrent.clearCache"),
                                 icon = R.drawable.desktop_close
                             ) {
-                                state.clearHistory()
-                                editing = false
+                                onAction(WatchHistoryAction.ClearAll)
                             }
                         }
                         TvButton(
-                            label = if (editing) t("home.mediaList.stopEditing") else t("lists.actions.edit"),
-                            icon = if (editing) R.drawable.desktop_checkmark else R.drawable.desktop_edit,
-                            primary = editing,
+                            label = if (uiState.isEditing) t("home.mediaList.stopEditing") else t("lists.actions.edit"),
+                            icon = if (uiState.isEditing) R.drawable.desktop_checkmark else R.drawable.desktop_edit,
+                            primary = uiState.isEditing,
                             modifier = Modifier.focusRequester(editRequester)
                         ) {
-                            editing = !editing
+                            onAction(WatchHistoryAction.ToggleEditMode)
                         }
                     }
                 }
@@ -120,7 +130,7 @@ internal fun WatchHistoryScreen(state: FrameZooState) {
                         navigation = true,
                         modifier = Modifier.focusRequester(backRequester)
                     ) {
-                        state.back()
+                        onBack()
                     }
                 }
 
@@ -151,9 +161,12 @@ internal fun WatchHistoryScreen(state: FrameZooState) {
             Box(contentAlignment = Alignment.TopEnd) {
                 TvMediaCard(
                     item = item.media,
-                    onOpen = { if (!editing) state.openDetails(item.media) else state.removeHistory(item.media) },
+                    onOpen = {
+                        if (!uiState.isEditing) onOpenMedia(item.media)
+                        else onAction(WatchHistoryAction.DeleteItem(item))
+                    },
                     progress = progress,
-                    qualityLoader = state.backend::releaseQuality
+                    qualityLoader = qualityLoader
                 )
                 if (item.season != null && item.episode != null) {
                     Box(
@@ -172,7 +185,7 @@ internal fun WatchHistoryScreen(state: FrameZooState) {
                         )
                     }
                 }
-                if (editing) {
+                if (uiState.isEditing) {
                     Box(
                         modifier = Modifier
                             .padding(8.dp)
@@ -202,4 +215,30 @@ internal fun WatchHistoryScreen(state: FrameZooState) {
             }
         }
     }
+}
+
+@Composable
+internal fun WatchHistoryScreen(state: FrameZooState) {
+    var editing by remember { mutableStateOf(false) }
+    WatchHistoryScreen(
+        uiState = WatchHistoryUiState(
+            history = state.history,
+            progress = state.progress,
+            isEditing = editing
+        ),
+        onAction = { action ->
+            when (action) {
+                is WatchHistoryAction.ToggleEditMode -> editing = !editing
+                is WatchHistoryAction.DeleteItem -> state.removeHistory(action.item.media)
+                is WatchHistoryAction.ClearAll -> {
+                    state.clearHistory()
+                    editing = false
+                }
+                is WatchHistoryAction.Refresh -> {}
+            }
+        },
+        onOpenMedia = { state.openDetails(it) },
+        qualityLoader = state.backend::releaseQuality,
+        onBack = { state.back() }
+    )
 }

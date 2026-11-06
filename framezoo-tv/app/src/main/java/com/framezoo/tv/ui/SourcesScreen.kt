@@ -26,17 +26,25 @@ import androidx.tv.material3.Border as TvBorder
 import androidx.tv.material3.Card as TvCard
 import androidx.tv.material3.CardDefaults as TvCardDefaults
 import com.framezoo.tv.R
+import com.framezoo.tv.model.Episode
+import com.framezoo.tv.model.Media
 import com.framezoo.tv.model.Stream
 
 @Composable
-internal fun SourcesScreen(state: FrameZooState) {
+internal fun SourcesScreen(
+    media: Media?,
+    episode: Episode?,
+    sources: List<Stream>,
+    onChooseSource: (Stream) -> Unit,
+    onBack: () -> Unit
+) {
     val colors = LocalFrameZooColors.current
     val backRequester = remember { FocusRequester() }
     var selectedQuality by remember { mutableStateOf("all") }
 
-    val filteredSources = remember(state.sources, selectedQuality) {
-        if (selectedQuality == "all") state.sources
-        else state.sources.filter { stream ->
+    val filteredSources = remember(sources, selectedQuality) {
+        if (selectedQuality == "all") sources
+        else sources.filter { stream ->
             val lower = stream.name.lowercase()
             when (selectedQuality) {
                 "4k" -> lower.contains("4k") || lower.contains("2160")
@@ -64,7 +72,7 @@ internal fun SourcesScreen(state: FrameZooState) {
         item {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(
-                    text = "${state.selected?.title.orEmpty()}${state.episode?.let { " · S${it.season}E${it.number}" } ?: ""} · ${t("addons.player.sources")}",
+                    text = "${media?.title.orEmpty()}${episode?.let { " · S${it.season}E${it.number}" } ?: ""} · ${t("addons.player.sources")}",
                     style = MaterialTheme.typography.headlineLarge,
                     color = colors["type.emphasis"]
                 )
@@ -75,7 +83,7 @@ internal fun SourcesScreen(state: FrameZooState) {
                         navigation = true,
                         modifier = Modifier.focusRequester(backRequester)
                     ) {
-                        state.back()
+                        onBack()
                     }
                 }
             }
@@ -108,7 +116,7 @@ internal fun SourcesScreen(state: FrameZooState) {
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = if (state.sources.isEmpty()) t("addons.player.emptyExplanation") else t("addons.player.noStreams"),
+                        text = if (sources.isEmpty()) t("addons.player.emptyExplanation") else t("addons.player.noStreams"),
                         color = colors["type.secondary"],
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Medium
@@ -120,7 +128,7 @@ internal fun SourcesScreen(state: FrameZooState) {
                 val isTorrent = source.infoHash != null || source.url.startsWith("magnet:")
                 val shape = RoundedCornerShape(12.dp)
                 TvCard(
-                    onClick = { state.chooseSource(source) },
+                    onClick = { onChooseSource(source) },
                     shape = TvCardDefaults.shape(shape),
                     colors = TvCardDefaults.colors(
                         containerColor = colors["background.secondary"].copy(alpha = 0.5f),
@@ -189,4 +197,15 @@ internal fun SourcesScreen(state: FrameZooState) {
             }
         }
     }
+}
+
+@Composable
+internal fun SourcesScreen(state: FrameZooState) {
+    SourcesScreen(
+        media = state.selected,
+        episode = state.episode,
+        sources = state.sources,
+        onChooseSource = { state.chooseSource(it) },
+        onBack = { state.back() }
+    )
 }

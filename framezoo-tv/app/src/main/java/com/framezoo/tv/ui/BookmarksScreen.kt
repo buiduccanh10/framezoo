@@ -1,9 +1,7 @@
 package com.framezoo.tv.ui
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -13,28 +11,40 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.framezoo.tv.R
 import com.framezoo.tv.model.Media
+import com.framezoo.tv.ui.features.bookmarks.BookmarksAction
+import com.framezoo.tv.ui.features.bookmarks.BookmarksUiState
 
 @Composable
-internal fun BookmarksScreen(state: FrameZooState) {
+internal fun BookmarksScreen(
+    uiState: BookmarksUiState,
+    onAction: (BookmarksAction) -> Unit,
+    onOpenMedia: (Media) -> Unit,
+    qualityLoader: (suspend (Media) -> String?)? = null,
+    onBack: () -> Unit
+) {
     val colors = LocalFrameZooColors.current
     val gridState = rememberLazyGridState()
-    var editing by remember { mutableStateOf(false) }
     val backRequester = remember { FocusRequester() }
     val editRequester = remember { FocusRequester() }
 
-    val bookmarks = state.bookmarks.distinctBy { it.id }
+    val bookmarks = uiState.filteredBookmarks.distinctBy { it.id }
 
     if (bookmarks.isEmpty()) {
         Column(
@@ -61,7 +71,7 @@ internal fun BookmarksScreen(state: FrameZooState) {
                 accent = true,
                 icon = R.drawable.desktop_chevron_left
             ) {
-                state.back()
+                onBack()
             }
         }
         return
@@ -89,12 +99,12 @@ internal fun BookmarksScreen(state: FrameZooState) {
                     )
                     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         TvButton(
-                            label = if (editing) t("home.mediaList.stopEditing") else t("lists.actions.edit"),
-                            icon = if (editing) R.drawable.desktop_checkmark else R.drawable.desktop_edit,
-                            primary = editing,
+                            label = if (uiState.isEditing) t("home.mediaList.stopEditing") else t("lists.actions.edit"),
+                            icon = if (uiState.isEditing) R.drawable.desktop_checkmark else R.drawable.desktop_edit,
+                            primary = uiState.isEditing,
                             modifier = Modifier.focusRequester(editRequester)
                         ) {
-                            editing = !editing
+                            onAction(BookmarksAction.ToggleEditMode)
                         }
                     }
                 }
@@ -109,7 +119,7 @@ internal fun BookmarksScreen(state: FrameZooState) {
                         navigation = true,
                         modifier = Modifier.focusRequester(backRequester)
                     ) {
-                        state.back()
+                        onBack()
                     }
                 }
 
@@ -121,12 +131,15 @@ internal fun BookmarksScreen(state: FrameZooState) {
             Box(contentAlignment = Alignment.TopEnd) {
                 TvMediaCard(
                     item = item,
-                    onOpen = { if (!editing) state.openDetails(item) else state.removeBookmark(item) },
+                    onOpen = {
+                        if (!uiState.isEditing) onOpenMedia(item)
+                        else onAction(BookmarksAction.DeleteBookmark(item))
+                    },
                     bookmarked = true,
-                    onBookmark = if (editing) null else { { state.bookmark(it) } },
-                    qualityLoader = state.backend::releaseQuality
+                    onBookmark = if (uiState.isEditing) null else { { onAction(BookmarksAction.DeleteBookmark(it)) } },
+                    qualityLoader = qualityLoader
                 )
-                if (editing) {
+                if (uiState.isEditing) {
                     Box(
                         modifier = Modifier
                             .padding(8.dp)
@@ -141,12 +154,12 @@ internal fun BookmarksScreen(state: FrameZooState) {
                             Icon(
                                 painter = painterResource(R.drawable.desktop_close),
                                 contentDescription = null,
-                                tint = androidx.compose.ui.graphics.Color.White,
+                                tint = Color.White,
                                 modifier = Modifier.size(12.dp)
                             )
                             Text(
                                 text = t("lists.actions.delete"),
-                                color = androidx.compose.ui.graphics.Color.White,
+                                color = Color.White,
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.Bold
                             )
@@ -156,4 +169,28 @@ internal fun BookmarksScreen(state: FrameZooState) {
             }
         }
     }
+}
+
+@Composable
+internal fun BookmarksScreen(state: FrameZooState) {
+    var editing by remember { mutableStateOf(false) }
+    BookmarksScreen(
+        uiState = BookmarksUiState(
+            bookmarks = state.bookmarks,
+            bookmarkDetails = state.bookmarkDetails,
+            bookmarkGroups = state.bookmarkGroups,
+            isEditing = editing
+        ),
+        onAction = { action ->
+            when (action) {
+                is BookmarksAction.ToggleEditMode -> editing = !editing
+                is BookmarksAction.DeleteBookmark -> state.removeBookmark(action.media)
+                is BookmarksAction.SelectGroup -> {}
+                is BookmarksAction.Refresh -> {}
+            }
+        },
+        onOpenMedia = { state.openDetails(it) },
+        qualityLoader = state.backend::releaseQuality,
+        onBack = { state.back() }
+    )
 }

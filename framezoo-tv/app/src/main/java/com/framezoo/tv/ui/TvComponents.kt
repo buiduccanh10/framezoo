@@ -71,6 +71,7 @@ internal fun TvButton(
     primary: Boolean = false,
     navigation: Boolean = false,
     accent: Boolean = false,
+    loading: Boolean = false,
     icon: Int? = null,
     trailingIcon: Int? = null,
     onClick: () -> Unit,
@@ -105,7 +106,15 @@ internal fun TvButton(
         contentPadding = PaddingValues(horizontal = if (navigation) 14.dp else 22.dp, vertical = 12.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            icon?.let { Icon(painterResource(it), contentDescription = null, modifier = Modifier.width(18.dp).height(18.dp), tint = foreground) }
+            if (loading) {
+                androidx.compose.material3.CircularProgressIndicator(
+                    color = foreground,
+                    modifier = Modifier.size(16.dp),
+                    strokeWidth = 2.dp
+                )
+            } else {
+                icon?.let { Icon(painterResource(it), contentDescription = null, modifier = Modifier.width(18.dp).height(18.dp), tint = foreground) }
+            }
             Text(label, color = foreground, fontSize = 16.sp, fontWeight = if (navigation) FontWeight.Medium else FontWeight.Bold,
                 maxLines = 1, softWrap = false, overflow = TextOverflow.Ellipsis)
             trailingIcon?.let { Icon(painterResource(it), contentDescription = null, modifier = Modifier.width(16.dp).height(16.dp), tint = foreground) }

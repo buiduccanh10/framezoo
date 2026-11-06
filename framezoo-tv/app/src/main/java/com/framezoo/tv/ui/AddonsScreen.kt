@@ -29,6 +29,8 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.framezoo.tv.R
 import com.framezoo.tv.model.Addon
+import com.framezoo.tv.ui.features.addons.AddonsAction
+import com.framezoo.tv.ui.features.addons.AddonsUiState
 
 @Composable
 private fun AddonBadge(label: String, color: Color) {
@@ -49,7 +51,11 @@ private fun AddonBadge(label: String, color: Color) {
 }
 
 @Composable
-internal fun AddonsScreen(state: FrameZooState) {
+internal fun AddonsScreen(
+    uiState: AddonsUiState,
+    onAction: (AddonsAction) -> Unit,
+    onBack: () -> Unit
+) {
     val colors = LocalFrameZooColors.current
     val backRequester = remember { FocusRequester() }
     val addAddonRequester = remember { FocusRequester() }
@@ -94,7 +100,7 @@ internal fun AddonsScreen(state: FrameZooState) {
                     navigation = true,
                     modifier = Modifier.focusRequester(backRequester)
                 ) {
-                    state.back()
+                    onBack()
                 }
             }
         }
@@ -120,7 +126,7 @@ internal fun AddonsScreen(state: FrameZooState) {
             }
         }
 
-        if (state.installed.isEmpty()) {
+        if (uiState.installed.isEmpty()) {
             item {
                 Box(
                     modifier = Modifier
@@ -130,58 +136,51 @@ internal fun AddonsScreen(state: FrameZooState) {
                             BorderStroke(1.dp, colors["authentication.border"]),
                             RoundedCornerShape(16.dp)
                         )
-                        .background(colors["background.secondary"].copy(alpha = 0.35f))
+                        .background(colors["background.secondary"].copy(alpha = 0.5f))
                         .padding(32.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = t("addons.page.emptyInstalled"),
-                        color = colors["type.secondary"],
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Medium
-                    )
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.desktop_extension),
+                            contentDescription = null,
+                            tint = colors["type.secondary"],
+                            modifier = Modifier.size(48.dp)
+                        )
+                        Text(
+                            text = t("addons.player.emptyExplanation"),
+                            color = colors["type.secondary"],
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
                 }
             }
         } else {
-            items(state.installed, key = { it.manifestUrl }) { addon ->
+            items(uiState.installed, key = { it.manifestUrl }) { addon ->
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(14.dp))
-                        .border(
-                            BorderStroke(1.dp, colors["authentication.border"]),
-                            RoundedCornerShape(14.dp)
-                        )
-                        .background(colors["background.secondary"].copy(alpha = 0.5f))
-                        .padding(16.dp)
+                        .background(colors["background.secondary"].copy(alpha = 0.6f))
+                        .border(BorderStroke(1.dp, colors["settings.card.border"].copy(alpha = 0.5f)), RoundedCornerShape(14.dp))
+                        .padding(horizontal = 20.dp, vertical = 16.dp)
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Box(
-                            modifier = Modifier
-                                .size(48.dp)
-                                .clip(RoundedCornerShape(10.dp))
-                                .background(colors["pill.background"]),
-                            contentAlignment = Alignment.Center
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(6.dp),
+                            modifier = Modifier.weight(1f).padding(end = 16.dp)
                         ) {
-                            Icon(
-                                painter = painterResource(
-                                    if (addon.resources.contains("subtitles")) R.drawable.desktop_captions
-                                    else R.drawable.desktop_extension
-                                ),
-                                contentDescription = null,
-                                tint = colors["type.logo"],
-                                modifier = Modifier.size(24.dp)
-                            )
-                        }
-
-                        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                horizontalArrangement = Arrangement.spacedBy(10.dp)
                             ) {
                                 Text(
                                     text = addon.name,
@@ -212,14 +211,14 @@ internal fun AddonsScreen(state: FrameZooState) {
                                 label = if (addon.enabled) t("addons.page.enabled") else t("addons.page.disabled"),
                                 primary = addon.enabled
                             ) {
-                                state.toggleAddon(addon)
+                                onAction(AddonsAction.ToggleAddon(addon.manifestUrl))
                             }
 
                             TvButton(
                                 label = t("addons.page.removeAddon"),
                                 icon = R.drawable.desktop_close
                             ) {
-                                state.removeAddon(addon)
+                                onAction(AddonsAction.RemoveAddon(addon.manifestUrl))
                             }
                         }
                     }
@@ -259,8 +258,8 @@ internal fun AddonsScreen(state: FrameZooState) {
                             fontSize = 13.sp
                         )
                         OutlinedTextField(
-                            value = state.addonUrl,
-                            onValueChange = { state.addonUrl = it },
+                            value = uiState.addonUrl,
+                            onValueChange = { onAction(AddonsAction.UrlChanged(it)) },
                             placeholder = { Text("https://addon.example.com/manifest.json") },
                             singleLine = true,
                             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
@@ -269,6 +268,9 @@ internal fun AddonsScreen(state: FrameZooState) {
                             shape = RoundedCornerShape(12.dp),
                             modifier = Modifier.fillMaxWidth()
                         )
+                        if (!uiState.errorMessage.isNullOrBlank()) {
+                            Text(uiState.errorMessage, color = colors["type.danger"], fontSize = 13.sp)
+                        }
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.End
@@ -282,9 +284,10 @@ internal fun AddonsScreen(state: FrameZooState) {
                             TvButton(
                                 label = t("addons.manager.add"),
                                 accent = true,
+                                loading = uiState.isLoading,
                                 modifier = Modifier.focusRequester(modalAddRequester)
                             ) {
-                                state.installAddon()
+                                onAction(AddonsAction.InstallAddon)
                                 showAddDialog = false
                             }
                         }
@@ -293,4 +296,27 @@ internal fun AddonsScreen(state: FrameZooState) {
             }
         }
     }
+}
+
+@Composable
+internal fun AddonsScreen(state: FrameZooState) {
+    AddonsScreen(
+        uiState = AddonsUiState(
+            installed = state.installed,
+            addonUrl = state.addonUrl,
+            isLoading = state.busy,
+            errorMessage = state.error.ifBlank { null }
+        ),
+        onAction = { action ->
+            when (action) {
+                is AddonsAction.UrlChanged -> state.addonUrl = action.value
+                is AddonsAction.InstallAddon -> state.installAddon()
+                is AddonsAction.RemoveAddon -> state.installed.firstOrNull { it.manifestUrl == action.id }?.let { state.removeAddon(it) }
+                is AddonsAction.ToggleAddon -> state.installed.firstOrNull { it.manifestUrl == action.id }?.let { state.toggleAddon(it) }
+                is AddonsAction.ClearError -> state.error = ""
+                is AddonsAction.Refresh -> {}
+            }
+        },
+        onBack = { state.back() }
+    )
 }
