@@ -11,6 +11,8 @@ data class Media(
     val year: String = "",
     val imdbId: String? = null,
     val addonManifest: String? = null,
+    val rating: Double = 0.0,
+    val popularity: Double = 0.0,
 )
 
 data class Episode(val season: Int, val number: Int, val title: String, val still: String? = null)
@@ -32,3 +34,6 @@ fun mapPiece(byteOffset: Long, pieceLength: Int): Int {
     require(byteOffset >= 0 && pieceLength > 0)
     return (byteOffset / pieceLength).toInt()
 }
+
+data class DiscoverOption(val id: String, val name: String)
+data class DiscoverFilter(val category: String = "all", val country: String = "", val year: String = "", val window: String = "day")

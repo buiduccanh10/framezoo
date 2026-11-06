@@ -45,6 +45,7 @@ internal fun TvButton(
     modifier: Modifier = Modifier,
     primary: Boolean = false,
     navigation: Boolean = false,
+    accent: Boolean = false,
     onClick: () -> Unit,
 ) {
     val colors = LocalFrameZooColors.current
@@ -54,12 +55,14 @@ internal fun TvButton(
     val background = when {
         navigation && active -> colors["pill.activeBackground"]
         navigation -> colors["pill.background"]
+        accent -> colors["buttons.purple"]
         primary -> colors["buttons.primary"]
         else -> colors["buttons.secondary"]
     }
     val foreground = when {
         navigation && active -> colors["type.logo"]
         navigation -> colors["type.text"]
+        accent -> Color.White
         primary -> colors["buttons.primaryText"]
         else -> colors["type.emphasis"]
     }
@@ -79,10 +82,10 @@ internal fun TvButton(
 }
 
 @Composable
-internal fun MediaGrid(title: String, items: List<Media>, onOpen: (Media) -> Unit) {
+internal fun MediaGrid(title: String, items: List<Media>, onOpen: (Media) -> Unit, progress: Map<String, Float> = emptyMap()) {
     val colors = LocalFrameZooColors.current
     Column(verticalArrangement = Arrangement.spacedBy(18.dp)) {
-        Text(title, fontSize = 27.sp, fontWeight = FontWeight.Bold, color = colors["type.emphasis"])
+        if (title.isNotBlank()) Text(title, fontSize = 27.sp, fontWeight = FontWeight.Bold, color = colors["type.emphasis"])
         if (items.isEmpty()) Text("Chưa có nội dung", color = colors["type.secondary"])
         LazyRow(horizontalArrangement = Arrangement.spacedBy(18.dp)) {
             items(items) { item ->
@@ -101,6 +104,11 @@ internal fun MediaGrid(title: String, items: List<Media>, onOpen: (Media) -> Uni
                         Text("FRAMEZOO", color = colors["type.logo"], fontSize = 13.sp, fontWeight = FontWeight.Black)
                         if (!item.poster.isNullOrBlank()) AsyncImage(item.poster, item.title, Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
                     }
+                    progress[item.id]?.let { value ->
+                        Box(Modifier.fillMaxWidth().height(3.dp).background(colors["utils.divider"])) {
+                            Box(Modifier.fillMaxWidth(value).height(3.dp).background(colors["type.logo"]))
+                        }
+                    }
                     Spacer(Modifier.height(12.dp))
                     Text(item.title, maxLines = 2, minLines = 2, overflow = TextOverflow.Ellipsis,
                         color = colors["type.emphasis"], fontWeight = FontWeight.Bold, fontSize = 16.sp)
@@ -109,30 +117,6 @@ internal fun MediaGrid(title: String, items: List<Media>, onOpen: (Media) -> Uni
                         color = colors["type.secondary"], fontSize = 13.sp)
                 }
             }
-        }
-    }
-}
-
-@Composable
-internal fun DiscoverHero(item: Media, onOpen: (Media) -> Unit) {
-    val colors = LocalFrameZooColors.current
-    Box(Modifier.fillMaxWidth().height(350.dp).clip(RoundedCornerShape(20.dp))
-        .background(colors["background.secondary"])) {
-        if (!item.backdrop.isNullOrBlank()) {
-            AsyncImage(item.backdrop, item.title, Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
-        }
-        Box(Modifier.fillMaxSize().background(Brush.horizontalGradient(listOf(
-            colors["background.main"], colors["background.main"].copy(alpha = 0.84f), Color.Transparent,
-        ))))
-        Column(Modifier.align(Alignment.CenterStart).fillMaxWidth(0.55f).padding(32.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp)) {
-            Text(item.title, color = colors["type.emphasis"], fontSize = 40.sp,
-                fontWeight = FontWeight.Black, maxLines = 2, overflow = TextOverflow.Ellipsis)
-            Text("${if (item.type == "show") "Series" else "Phim"}${item.year.takeIf { it.isNotBlank() }?.let { " · $it" } ?: ""}",
-                color = colors["type.text"], fontSize = 17.sp)
-            if (item.description.isNotBlank()) Text(item.description, color = colors["type.text"],
-                maxLines = 3, overflow = TextOverflow.Ellipsis, fontSize = 17.sp)
-            TvButton("Xem chi tiết", primary = true) { onOpen(item) }
         }
     }
 }

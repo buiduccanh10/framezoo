@@ -7,6 +7,8 @@ import androidx.compose.runtime.setValue
 import com.framezoo.tv.api.Addons
 import com.framezoo.tv.api.Backend
 import com.framezoo.tv.model.Addon
+import com.framezoo.tv.model.DiscoverFilter
+import com.framezoo.tv.model.DiscoverOption
 import com.framezoo.tv.model.Episode
 import com.framezoo.tv.model.LibraryItem
 import com.framezoo.tv.model.Media
@@ -16,6 +18,10 @@ import com.framezoo.tv.player.PlayerController
 import com.framezoo.tv.storage.SecureStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.CancellationException
 
 internal class FrameZooState(context: Context, private val scope: CoroutineScope) {
     val store = SecureStore(context)
@@ -31,6 +37,13 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
     var busy by mutableStateOf(false)
     var error by mutableStateOf("")
     var discover by mutableStateOf<List<Media>>(emptyList())
+    var filter by mutableStateOf(DiscoverFilter())
+    var genres by mutableStateOf<List<DiscoverOption>>(emptyList())
+    var countries by mutableStateOf<List<DiscoverOption>>(emptyList())
+    var sections by mutableStateOf<Map<String, List<Media>>>(emptyMap())
+    var discoverLoading by mutableStateOf(false)
+    var discoverError by mutableStateOf("")
+    private var discoverJob: Job? = null
     var addonCatalog by mutableStateOf<List<Media>>(emptyList())
     var results by mutableStateOf<List<Media>>(emptyList())
     var library by mutableStateOf<List<LibraryItem>>(emptyList())
@@ -52,10 +65,32 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
 
     suspend fun initialize() {
         try { discover = backend.discover() } catch (e: Exception) { error = e.message ?: "Không tải được Discover" }
+        refreshDiscover()
         installed = addons.list()
         addonCatalog = addons.catalog()
         if (store.userId != null) runCatching { library = backend.library() }
     }
+
+    fun refreshDiscover() {
+        discoverJob?.cancel()
+        val selectedFilter = filter
+        discoverJob = scope.launch {
+            discoverLoading = true; discoverError = ""
+            try {
+                if (genres.isEmpty() || countries.isEmpty()) {
+                    val options = backend.discoverOptions(); genres = options.first; countries = options.second
+                }
+                sections = coroutineScope {
+                    listOf("trending", "popular", "netflix", "top").associateWith { section ->
+                        async { backend.discoverSection(selectedFilter, section) }
+                    }.mapValues { it.value.await() }
+                }
+            } catch (e: CancellationException) { throw e }
+            catch (e: Exception) { sections = emptyMap(); discoverError = e.message ?: "Không tải được nội dung" }
+            finally { if (filter == selectedFilter) discoverLoading = false }
+        }
+    }
+    fun updateFilter(value: DiscoverFilter) { if (filter != value) { filter = value; refreshDiscover() } }
 
     fun runTask(block: suspend () -> Unit) {
         scope.launch {
@@ -94,7 +129,15 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
     fun chooseSource(source: Stream) { playing = source; page = "player" }
     fun installAddon() = runTask { addons.install(addonUrl); installed = addons.list(); addonCatalog = addons.catalog(); addonUrl = "" }
     fun removeAddon(addon: Addon) = runTask { addons.remove(addon.manifestUrl); installed = addons.list(); addonCatalog = addons.catalog() }
-    fun saveBackend() { store.backendUrl = backendUrl }
+    fun saveBackend() = runTask {
+        val previous = store.backendUrl
+        store.backendUrl = backendUrl
+        backendUrl = store.backendUrl
+        if (previous != backendUrl) {
+            discoverJob?.cancel(); library = emptyList(); discover = emptyList(); sections = emptyMap(); genres = emptyList(); countries = emptyList()
+            initialize()
+        }
+    }
     fun updateTheme(name: String) { theme = name; store.theme = name }
     fun updateCustomPart(part: String, name: String) {
         require(name in themeNames && name != "custom")
@@ -108,7 +151,7 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         backend.login(loginName, loginPassword)
         installed = addons.list(); library = backend.library(); page = "discover"; loginPassword = ""
     }
-    fun logout() { store.clearSession(); page = "discover" }
+    fun logout() { store.clearSession(); library = emptyList(); page = "discover" }
     fun resume(item: Media, target: Episode?): Double {
         val saved = library.firstOrNull { it.media.id == item.id && it.season == target?.season && it.episode == target?.number }?.position ?: 0.0
         return recentResume?.takeIf { it.first == item.id && it.second == target }?.third ?: saved

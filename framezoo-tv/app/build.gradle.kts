@@ -1,3 +1,5 @@
+import java.net.URI
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -15,7 +17,15 @@ android {
         versionCode = 1
         versionName = "0.1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "BACKEND_URL", "\"https://api.framezoo.top\"")
+        val backendUrl = providers.environmentVariable("FRAMEZOO_TV_BACKEND_URL")
+            .orElse(providers.gradleProperty("framezooBackendUrl"))
+            .orElse("https://api.framezoo.top").get().trimEnd('/')
+        val backendUri = URI(backendUrl)
+        require(backendUri.scheme in listOf("https", "http") && !backendUri.host.isNullOrBlank() &&
+            backendUri.userInfo == null && backendUri.query == null && backendUri.fragment == null) {
+            "FRAMEZOO_TV_BACKEND_URL phải là URL HTTP(S) hợp lệ"
+        }
+        buildConfigField("String", "BACKEND_URL", "\"${backendUrl.replace("\\", "\\\\").replace("\"", "\\\"")}\"")
         externalNativeBuild { cmake { cppFlags += "-std=c++17" } }
     }
     buildTypes {
