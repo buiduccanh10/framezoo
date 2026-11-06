@@ -36,6 +36,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import android.view.KeyEvent
@@ -66,6 +67,7 @@ import com.framezoo.tv.model.AddonCatalog
 import com.framezoo.tv.model.Media
 import com.framezoo.tv.model.FeaturedRatings
 import com.framezoo.tv.model.LibraryItem
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.Year
@@ -73,32 +75,115 @@ import java.time.Year
 @Composable
 internal fun DiscoverHeader(state: FrameZooState, modifier: Modifier = Modifier) {
     val colors = LocalFrameZooColors.current
+    val scope = rememberCoroutineScope()
     var expanded by remember { mutableStateOf(false) }
     var accountExpanded by remember { mutableStateOf(false) }
+    var collapseJob by remember { mutableStateOf<Job?>(null) }
+    val logoFocusRequester = remember { FocusRequester() }
+    val menuFocusRequester = remember { FocusRequester() }
+    val searchFocusRequester = remember { FocusRequester() }
+    val settingsFocusRequester = remember { FocusRequester() }
+    val accountFocusRequester = remember { FocusRequester() }
+
     Row(modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         val brandShape = RoundedCornerShape(50)
         TvSurface(onClick = { state.page = "discover" }, shape = TvSurfaceDefaults.shape(brandShape),
+            modifier = Modifier.focusRequester(logoFocusRequester).focusProperties { right = menuFocusRequester },
             colors = TvSurfaceDefaults.colors(containerColor = colors["pill.background"], focusedContainerColor = colors["pill.background"]),
             scale = TvSurfaceDefaults.scale(focusedScale = 1f),
             border = TvSurfaceDefaults.border(focusedBorder = TvBorder(BorderStroke(2.dp, colors["type.logo"]), shape = brandShape))) {
             Image(painterResource(R.drawable.framezoo_brand), "FrameZoo", Modifier.padding(horizontal = 10.dp, vertical = 4.dp).width(138.dp).height(40.dp))
         }
         val menuRotation by animateFloatAsState(if (expanded) 90f else 0f, tween(300), label = "menu rotation")
-        HeaderButton(R.drawable.desktop_menu, "Menu", expanded, rotation = menuRotation) { expanded = !expanded }
-        AnimatedVisibility(visible = expanded, enter = expandHorizontally(animationSpec = tween(300)) + fadeIn(tween(300)),
-            exit = shrinkHorizontally(animationSpec = tween(300)) + fadeOut(tween(200))) {
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                listOf(Triple(R.drawable.desktop_search, "Tìm kiếm", "search"), Triple(R.drawable.desktop_bookmark, "Thư viện", "library"),
-                    Triple(R.drawable.desktop_clock, "Lịch sử xem", "history"), Triple(R.drawable.desktop_extension, "Addon", "addons"), Triple(R.drawable.desktop_feedback, "Phản hồi", "feedback"), Triple(R.drawable.desktop_settings, "Cài đặt", "settings")).forEach { (icon, label, destination) ->
-                    HeaderButton(icon, label, state.page == destination) {
-                        when (destination) { "library" -> state.openLibrary(); "history" -> state.openHistory(); "addons" -> state.openAddons(); "feedback" -> state.openFeedback(); else -> state.page = destination }
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.onFocusChanged { focusState ->
+                if (focusState.hasFocus) {
+                    collapseJob?.cancel()
+                    expanded = true
+                } else {
+                    collapseJob?.cancel()
+                    collapseJob = scope.launch {
+                        delay(80)
+                        expanded = false
+                    }
+                }
+            }
+        ) {
+            HeaderButton(
+                icon = R.drawable.desktop_menu,
+                label = "Menu",
+                selected = expanded,
+                rotation = menuRotation,
+                modifier = Modifier
+                    .focusRequester(menuFocusRequester)
+                    .focusProperties {
+                        left = logoFocusRequester
+                        if (expanded) right = searchFocusRequester
+                    }
+            ) {
+                if (!expanded) {
+                    expanded = true
+                } else {
+                    try { searchFocusRequester.requestFocus() } catch (_: Exception) {}
+                }
+            }
+            AnimatedVisibility(
+                visible = expanded,
+                enter = expandHorizontally(animationSpec = tween(300)) + fadeIn(tween(300)),
+                exit = shrinkHorizontally(animationSpec = tween(300)) + fadeOut(tween(200))
+            ) {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                    val quickActions = listOf(
+                        Triple(R.drawable.desktop_search, "Tìm kiếm", "search"),
+                        Triple(R.drawable.desktop_bookmark, "Thư viện", "library"),
+                        Triple(R.drawable.desktop_clock, "Lịch sử xem", "history"),
+                        Triple(R.drawable.desktop_extension, "Addon", "addons"),
+                        Triple(R.drawable.desktop_feedback, "Phản hồi", "feedback"),
+                        Triple(R.drawable.desktop_settings, "Cài đặt", "settings")
+                    )
+                    quickActions.forEachIndexed { index, (icon, label, destination) ->
+                        val itemModifier = when (index) {
+                            0 -> Modifier
+                                .focusRequester(searchFocusRequester)
+                                .focusProperties { left = menuFocusRequester }
+                            quickActions.lastIndex -> Modifier
+                                .focusRequester(settingsFocusRequester)
+                                .focusProperties { right = accountFocusRequester }
+                            else -> Modifier
+                        }
+                        HeaderButton(
+                            icon = icon,
+                            label = label,
+                            selected = state.page == destination,
+                            modifier = itemModifier
+                        ) {
+                            expanded = false
+                            when (destination) {
+                                "library" -> state.openLibrary()
+                                "history" -> state.openHistory()
+                                "addons" -> state.openAddons()
+                                "feedback" -> state.openFeedback()
+                                else -> state.page = destination
+                            }
+                        }
                     }
                 }
             }
         }
         Spacer(Modifier.weight(1f))
         Box {
-            TvButton(if (state.store.userId == null) "Đăng nhập" else "Tài khoản", selected = state.page == "login", navigation = true) { accountExpanded = true }
+            TvButton(
+                if (state.store.userId == null) "Đăng nhập" else "Tài khoản",
+                selected = state.page == "login",
+                navigation = true,
+                modifier = Modifier
+                    .focusRequester(accountFocusRequester)
+                    .focusProperties {
+                        left = if (expanded) settingsFocusRequester else menuFocusRequester
+                    }
+            ) { accountExpanded = true }
             DropdownMenu(accountExpanded, { accountExpanded = false }, Modifier.background(colors["pill.background"])) {
                 TvButton(if (state.store.userId == null) "Đăng nhập" else "Tài khoản", navigation = true, modifier = Modifier.fillMaxWidth()) { accountExpanded = false; state.openLogin() }
                 TvButton("Lịch sử xem", navigation = true, modifier = Modifier.fillMaxWidth()) { accountExpanded = false; state.openHistory() }
@@ -113,12 +198,19 @@ internal fun DiscoverHeader(state: FrameZooState, modifier: Modifier = Modifier)
 }
 
 @Composable
-internal fun HeaderButton(icon: Int, label: String, selected: Boolean, rotation: Float = 0f, onClick: () -> Unit) {
+internal fun HeaderButton(
+    icon: Int,
+    label: String,
+    selected: Boolean,
+    rotation: Float = 0f,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
     val colors = LocalFrameZooColors.current
     var focused by remember { mutableStateOf(false) }
     val shape = RoundedCornerShape(50)
     val background by animateColorAsState(if (selected || focused) colors["pill.activeBackground"] else colors["pill.background"], tween(300), label = "header background")
-    TvIconButton(onClick = onClick, modifier = Modifier.size(46.dp).onFocusChanged { focused = it.isFocused }
+    TvIconButton(onClick = onClick, modifier = Modifier.size(46.dp).then(modifier).onFocusChanged { focused = it.isFocused }
         .semantics { contentDescription = label }, shape = TvIconButtonDefaults.shape(shape),
         colors = TvIconButtonDefaults.colors(containerColor = background, focusedContainerColor = background),
         scale = TvIconButtonDefaults.scale(focusedScale = 1f),
