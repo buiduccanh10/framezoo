@@ -60,7 +60,6 @@ function createPipState(
     status: playerStatus.PLAYING,
     sourceLoading: false,
     time: 10,
-    seekGeneration: 0,
     duration: 120,
     paused: false,
     isPlaying: true,
@@ -201,32 +200,36 @@ describe("Desktop PiP playback clocks", () => {
     expect(clocks.at(-1)?.subtitle).toBeCloseTo(11.85, 6);
   });
 
-  it("keeps adjacent cues stable on a late IPC sample, then follows a real backward seek", async () => {
-    const clocks: Array<{ visual: number; subtitle: number }> = [];
-    const state = createPipState({
-      time: 10.8,
-      caption: {
-        language: "en",
-        vttData:
-          "WEBVTT\n\n00:00:09.000 --> 00:00:10.000\nold cue\n\n00:00:10.000 --> 00:00:12.000\nnew cue",
-      },
-    });
+  it.each([10.1, 11.6])(
+    "keeps the current cue when IPC time %s arrives before the next frame",
+    async (ipcTime) => {
+      const clocks: Array<{ visual: number; subtitle: number }> = [];
+      const onClock = (clock: { visual: number; subtitle: number }) => {
+        clocks.push(clock);
+      };
+      const state = createPipState({
+        caption: {
+          language: "en",
+          vttData:
+            "WEBVTT\n\n00:00:09.000 --> 00:00:11.000\nold cue\n\n00:00:11.000 --> 00:00:13.000\nnew cue",
+        },
+      });
 
-    await renderPip(state, 1, (clock) => clocks.push(clock));
-    expect(container.textContent).toContain("new cue");
+      await renderPip(state, 1, onClock);
+      now = 2_600;
+      await renderPip(state, 2, onClock);
+      expect(clocks.at(-1)).toEqual({ visual: 11.6, subtitle: 11.6 });
+      expect(container.textContent).toContain("new cue");
 
-    await renderPip({ ...state, time: 9.2 }, 1, (clock) => clocks.push(clock));
-    expect(clocks.at(-1)).toEqual({ visual: 10.8, subtitle: 10.8 });
-    expect(container.textContent).toContain("new cue");
-    expect(container.textContent).not.toContain("old cue");
+      await renderPip({ ...state, time: ipcTime }, 3, onClock);
+      expect(clocks.at(-1)).toEqual({ visual: 11.6, subtitle: 11.6 });
+      expect(container.textContent).toContain("new cue");
+      expect(container.textContent).not.toContain("old cue");
 
-    await renderPip({ ...state, time: 9.2, seekGeneration: 1 }, 1, (clock) =>
-      clocks.push(clock),
-    );
-    expect(clocks.at(-1)).toEqual({ visual: 9.2, subtitle: 9.2 });
-    expect(container.textContent).toContain("old cue");
-    expect(container.textContent).not.toContain("new cue");
-  });
+      await runAnimationFrame(2_850);
+      expect(clocks.at(-1)?.subtitle).toBeCloseTo(11.85, 6);
+    },
+  );
 
   it("does not freeze the PiP clock or captions for generic loading", async () => {
     const clocks: Array<{ visual: number; subtitle: number }> = [];

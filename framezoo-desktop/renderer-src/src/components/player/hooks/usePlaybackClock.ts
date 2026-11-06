@@ -123,7 +123,6 @@ export function shouldSnapPlaybackClock(
   const forwardDiscontinuity =
     authoritativeTime - currentTime > SEEK_DISCONTINUITY_FORWARD_THRESHOLD;
   const backwardDiscontinuity =
-    !input.preserveMonotonicTime &&
     state.authoritativeTime !== undefined &&
     state.authoritativeTime - authoritativeTime >
       SEEK_DISCONTINUITY_BACKWARD_THRESHOLD;

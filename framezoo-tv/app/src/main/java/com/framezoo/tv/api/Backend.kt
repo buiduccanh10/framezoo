@@ -86,15 +86,45 @@ class Backend(private val store: SecureStore) {
             description = raw.optString("overview"),
             year = raw.optString("release_date", raw.optString("first_air_date")).take(4),
             imdbId = raw.optJSONObject("external_ids")?.optString("imdb_id")?.ifBlank { null },
+            rating = raw.optDouble("vote_average", 0.0), popularity = raw.optDouble("popularity", 0.0),
         )
     }
 
-    private fun mediaList(raw: Any): List<Media> {
+    private fun mediaList(raw: Any, type: String? = null): List<Media> {
         val items = (raw as JSONObject).optJSONArray("results") ?: JSONArray()
-        return (0 until items.length()).mapNotNull { i -> items.optJSONObject(i)?.let { media(it) } }.filter { it.id.isNotBlank() }
+        return (0 until items.length()).mapNotNull { i -> items.optJSONObject(i)?.let { media(it, type) } }.filter { it.id.isNotBlank() }
     }
 
-    suspend fun discover(): List<Media> = mediaList(request("/api/tmdb/trending/all/day"))
+    suspend fun discover(): List<Media> = mediaList(request("/api/tmdb/trending/all/day?language=vi-VN"))
+
+    suspend fun discoverOptions(): Pair<List<DiscoverOption>, List<DiscoverOption>> {
+        val genres = listOf("movie", "tv").flatMap { kind ->
+            val array = (request("/api/tmdb/genre/$kind/list?language=vi-VN") as JSONObject).optJSONArray("genres") ?: JSONArray()
+            (0 until array.length()).mapNotNull { array.optJSONObject(it) }.map { DiscoverOption(it.optString("id"), when (it.optInt("id")) { 10759 -> "Hành động & Phiêu lưu"; 10765 -> "Khoa học Viễn tưởng & Giả tưởng"; else -> it.optString("name") }) }
+        }.distinctBy { it.id }.sortedBy { it.name }
+        val countries = request("/api/tmdb/configuration/countries?language=vi-VN") as JSONArray
+        val locale = java.util.Locale.forLanguageTag("vi-VN")
+        return genres to (0 until countries.length()).mapNotNull { countries.optJSONObject(it) }.map {
+            val code = it.optString("iso_3166_1")
+            DiscoverOption(code, java.util.Locale("", code).getDisplayCountry(locale).ifBlank { it.optString("english_name") })
+        }.filter { it.id.isNotBlank() }.sortedBy { it.name }
+    }
+
+    suspend fun discoverSection(filter: DiscoverFilter, section: String): List<Media> {
+        val kinds = when (filter.category) { "movie" -> listOf("movie"); "tv" -> listOf("tv"); else -> listOf("movie", "tv") }
+        val result = kinds.flatMap { kind ->
+            mediaList(request(discoverPath(filter, section, kind)), if (kind == "tv") "show" else "movie")
+        }
+        return result.sortedByDescending { it.popularity }.take(20)
+    }
+    suspend fun logo(item: Media): String? {
+        val kind = if (item.type == "show") "tv" else "movie"
+        val raw = request("/api/tmdb/$kind/${encode(item.id)}?append_to_response=images&include_image_language=vi,en,null&language=vi-VN") as JSONObject
+        val logos = raw.optJSONObject("images")?.optJSONArray("logos") ?: return null
+        return (0 until logos.length()).mapNotNull { logos.optJSONObject(it) }
+            .sortedBy { when (it.optString("iso_639_1")) { "vi" -> 0; "en" -> 1; else -> 2 } }
+            .firstOrNull()?.optString("file_path")?.let { image(it, "w500") }
+    }
     suspend fun search(query: String): List<Media> = mediaList(request("/api/tmdb/search/multi?query=${encode(query)}"))
     suspend fun details(item: Media): Pair<Media, List<Int>> {
         val kind = if (item.type == "show") "tv" else "movie"
@@ -160,4 +190,22 @@ class Backend(private val store: SecureStore) {
         val id = store.userId ?: return
         request("/users/${encode(id)}/settings", "PUT", value, auth = true)
     }
+}
+
+internal fun discoverPath(filter: DiscoverFilter, section: String, kind: String): String {
+    if (section == "trending") return "/api/tmdb/trending/$kind/${filter.window}?language=vi-VN"
+    val params = mutableListOf("language=vi-VN")
+    fun encode(value: String) = URLEncoder.encode(value, "UTF-8")
+    if (filter.country.isNotEmpty()) params += "with_origin_country=${encode(filter.country)}"
+    if (filter.year.isNotEmpty()) params += "${if (kind == "movie") "primary_release_year" else "first_air_date_year"}=${encode(filter.year)}"
+    if (filter.category.startsWith("genre:")) params += "with_genres=${encode(filter.category.substringAfter(':'))}"
+    if (section == "netflix") { params += "with_watch_providers=8"; params += "watch_region=VN" }
+    val filtered = filter.country.isNotEmpty() || filter.year.isNotEmpty() || filter.category.startsWith("genre:")
+    val path = when {
+        section == "netflix" || filtered -> "/discover/$kind"
+        section == "top" -> "/$kind/top_rated"
+        else -> "/$kind/popular"
+    }
+    if (filtered && section == "top") params += "sort_by=vote_average.desc&vote_count.gte=100"
+    return "/api/tmdb$path?${params.joinToString("&")}"
 }

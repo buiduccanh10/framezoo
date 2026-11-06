@@ -311,24 +311,6 @@ describe("playback clock", () => {
     expect(state.time).toBe(5);
   });
 
-  it("does not snap backward when a delayed external sample crosses a cue", () => {
-    const input = {
-      time: 10.8,
-      duration: 120,
-      playbackRate: 1,
-      isActive: true,
-      resetKey: "source-a",
-      preserveMonotonicTime: true,
-    };
-    const state = createPlaybackClockState(input, 1_000);
-    const reconciled = reconcilePlaybackClockState(
-      state,
-      { ...input, time: 9.2 },
-      1_100,
-    );
-    expect(reconciled.time).toBe(10.9);
-  });
-
   it("freezes during buffering and resumes from the latest sample", async () => {
     const times: number[] = [];
     const onTime = (time: number) => times.push(time);

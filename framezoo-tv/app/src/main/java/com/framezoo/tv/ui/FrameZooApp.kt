@@ -2,6 +2,7 @@ package com.framezoo.tv.ui
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -88,32 +89,16 @@ internal fun FrameZooApp() {
         FrameZooTheme(theme, customPrimary, customSecondary, customTertiary) {
             val colors = LocalFrameZooColors.current
             Surface(color = MaterialTheme.colorScheme.background, contentColor = MaterialTheme.colorScheme.onBackground) {
-                Column(Modifier.fillMaxSize().padding(horizontal = 48.dp, vertical = 32.dp)) {
-                    if (page != "player") {
-                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-                            Text("FRAMEZOO", fontSize = 25.sp, fontWeight = FontWeight.Black, color = colors["type.logo"])
-                            listOf("discover" to "Khám phá", "search" to "Tìm kiếm", "library" to "Thư viện", "addons" to "Addon", "settings" to "Cài đặt").forEach { (destination, label) ->
-                                TvButton(label, selected = page == destination, navigation = true) {
-                                    when (destination) {
-                                        "library" -> openLibrary()
-                                        "addons" -> openAddons()
-                                        else -> page = destination
-                                    }
-                                }
-                            }
-                            Spacer(Modifier.weight(1f))
-                            TvButton(if (store.userId == null) "Đăng nhập" else "Tài khoản", selected = page == "login", navigation = true) { page = "login" }
-                        }
+                Box(Modifier.fillMaxSize()) {
+                Column(Modifier.fillMaxSize().then(if (page == "discover" || page == "player") Modifier else Modifier.padding(horizontal = 48.dp, vertical = 32.dp))) {
+                    if (page != "player" && page != "discover") {
+                        DiscoverHeader(state)
                         Spacer(Modifier.height(28.dp))
                     }
                     if (busy) CircularProgressIndicator(Modifier.size(26.dp))
                     if (error.isNotBlank()) Text(error, color = colors["type.danger"], modifier = Modifier.padding(vertical = 10.dp))
                     when (page) {
-                        "discover" -> LazyColumn(verticalArrangement = Arrangement.spacedBy(25.dp)) {
-                            discover.firstOrNull()?.let { item { DiscoverHero(it, ::openDetails) } }
-                            item { MediaGrid("Đang thịnh hành", discover, ::openDetails) }
-                            if (addonCatalog.isNotEmpty()) item { MediaGrid("Từ addon", addonCatalog, ::openDetails) }
-                        }
+                        "discover" -> DiscoverScreen(state)
                         "search" -> Column(verticalArrangement = Arrangement.spacedBy(18.dp)) {
                             Text("Tìm kiếm", style = MaterialTheme.typography.headlineLarge)
                             OutlinedTextField(query, { query = it }, label = { Text("Tên phim hoặc series") }, singleLine = true,
@@ -223,6 +208,8 @@ internal fun FrameZooApp() {
                             }
                         }
                     }
+                }
+                if (page == "discover") DiscoverHeader(state, Modifier.align(Alignment.TopCenter).padding(horizontal = 24.dp, vertical = 20.dp))
                 }
             }
         }

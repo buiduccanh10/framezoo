@@ -62,7 +62,6 @@ const noDragRegionStyle = { ["WebkitAppRegion" as any]: "no-drag" };
 const CONTROL_AUTOHIDE_MS = 2200;
 type PipClockSnapshot = {
   time: number;
-  authoritativeTime: number;
   timestamp: number;
   duration: number;
   playbackRate: number;
@@ -107,7 +106,6 @@ function getPipPlaybackResetKey(state: DesktopPipState): string {
     state.source?.url ?? "",
     state.episode?.season ?? "",
     state.episode?.episode ?? "",
-    state.seekGeneration,
   ].join(":");
 }
 
@@ -140,10 +138,10 @@ export function PipPlaybackClockProvider(props: {
     ...sharedOptions,
     tickIntervalMs: VISUAL_PLAYBACK_CLOCK_TICK_MS,
   });
+  // Keep the timestamp paired with visualTime when IPC updates between frames.
   const snapshot = useMemo(
     () => ({
       time: visualTime,
-      authoritativeTime: props.state.time,
       timestamp: performance.now(),
       duration: props.state.duration,
       playbackRate: props.state.playbackRate,
@@ -154,7 +152,6 @@ export function PipPlaybackClockProvider(props: {
       props.state.duration,
       props.state.isPlaybackStalled,
       props.state.playbackRate,
-      props.state.time,
       visualTime,
     ],
   );
@@ -333,16 +330,11 @@ function PipProgress(props: {
   onScrubChange(scrubbing: boolean): void;
 }) {
   const time = usePipVisualClock();
-  const [dragTime, setDragTime] = useState<number | null>(null);
-  const scrubbingRef = useRef(false);
 
   const hours = durationExceedsHour(props.state.duration);
   const current = Math.max(
     0,
-    Math.min(
-      dragTime ?? time,
-      props.state.duration || Number.POSITIVE_INFINITY,
-    ),
+    Math.min(time, props.state.duration || Number.POSITIVE_INFINITY),
   );
   const remaining = Math.max(props.state.duration - current, 0);
 
@@ -356,22 +348,10 @@ function PipProgress(props: {
       onPointerEnter={() => props.onHoverChange(true)}
       onPointerLeave={() => props.onHoverChange(false)}
       onPointerDown={() => {
-        if (!props.disabled) {
-          scrubbingRef.current = true;
-          setDragTime(time);
-          props.onScrubChange(true);
-        }
+        if (!props.disabled) props.onScrubChange(true);
       }}
-      onPointerUp={() => {
-        scrubbingRef.current = false;
-        setDragTime(null);
-        props.onScrubChange(false);
-      }}
-      onPointerCancel={() => {
-        scrubbingRef.current = false;
-        setDragTime(null);
-        props.onScrubChange(false);
-      }}
+      onPointerUp={() => props.onScrubChange(false)}
+      onPointerCancel={() => props.onScrubChange(false)}
     >
       <div className="bg-transparent py-2.5 shadow-2xl backdrop-blur-xl">
         <div className="grid grid-cols-[auto_1fr_auto] items-center gap-2.5">
@@ -385,11 +365,9 @@ function PipProgress(props: {
             step={0.1}
             value={props.state.duration > 0 ? current : 0}
             disabled={props.disabled}
-            onChange={(event) => {
-              const nextTime = Number(event.currentTarget.value);
-              if (scrubbingRef.current) setDragTime(nextTime);
-              props.onSeek(nextTime);
-            }}
+            onChange={(event) =>
+              props.onSeek(Number(event.currentTarget.value))
+            }
             className={`h-1 w-full appearance-none rounded-full bg-white/18 accent-white ${
               props.disabled
                 ? "cursor-not-allowed opacity-50"
@@ -672,6 +650,7 @@ export default function DesktopPipPage() {
         Math.min(time, pipState.duration || Number.POSITIVE_INFINITY),
       );
       sendAction({ type: "seekTo", time: nextTime });
+      setPipState((state) => (state ? { ...state, time: nextTime } : state));
     },
     [pipState, sendAction],
   );

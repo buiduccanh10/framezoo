@@ -7,6 +7,7 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Base64
 import java.security.KeyStore
+import java.net.URI
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
@@ -18,7 +19,16 @@ class SecureStore(context: Context) {
 
     var backendUrl: String
         get() = prefs.getString("backend", BuildConfig.BACKEND_URL) ?: BuildConfig.BACKEND_URL
-        set(value) { prefs.edit().putString("backend", value.trimEnd('/')).apply() }
+        set(value) {
+            val url = value.trim().trimEnd('/')
+            val uri = try { URI(url) } catch (_: Exception) { throw IllegalArgumentException("Backend URL không hợp lệ") }
+            require((uri.scheme == "https" || (BuildConfig.DEBUG && uri.scheme == "http")) &&
+                !uri.host.isNullOrBlank() && uri.userInfo == null && uri.query == null && uri.fragment == null) {
+                "Backend URL phải là HTTP(S) hợp lệ; bản release yêu cầu HTTPS"
+            }
+            if (backendUrl != url) clearSession()
+            prefs.edit().putString("backend", url).apply()
+        }
 
     var theme: String
         get() = prefs.getString("theme", "ember") ?: "ember"
