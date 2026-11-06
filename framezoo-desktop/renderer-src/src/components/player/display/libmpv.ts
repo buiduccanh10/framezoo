@@ -254,7 +254,6 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
   let generation = 0;
   let duration = 0;
   let time = 0;
-  let seekGeneration = 0;
   let bufferedTime = 0;
   let volume = 1;
   let playbackRate = 1;
@@ -853,9 +852,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       // do not backtrack the player's published position.
       return;
     }
-    if (isSeekSettled) seekGeneration += 1;
     publishTimePosition(position);
-    if (isSeekSettled) syncPipState(true);
   }
 
   function isCacheStallActive() {
@@ -1234,10 +1231,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       ...pipBaseState,
       canControl: !watchPartyState.enabled || watchPartyState.isHost,
       source,
-      // Use the same published position as the main player. A pending seek
-      // changes the local target before the decoded frame reaches it.
-      time: playerState.progress.time,
-      seekGeneration,
+      time,
       duration,
       paused,
       playbackRate,
