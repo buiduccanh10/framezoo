@@ -28,7 +28,7 @@ internal class FrameZooColors(private val values: Map<String, Color>) {
 
 internal val LocalFrameZooColors = compositionLocalOf<FrameZooColors> { error("FrameZooTheme chưa được khởi tạo") }
 internal val LocalFrameZooPalettes = compositionLocalOf<Map<String, FrameZooColors>> { error("FrameZooTheme chưa được khởi tạo") }
-internal val LocalFrameZooThemeLabels = compositionLocalOf<Map<String, String>> { error("FrameZooTheme chưa được khởi tạo") }
+internal val LocalFrameZooThemeLabels = compositionLocalOf<Map<String, String>> { emptyMap() }
 
 private val lato = FontFamily(
     Font(R.font.lato_regular, FontWeight.Normal),
@@ -73,9 +73,13 @@ internal fun FrameZooTheme(theme: String, primary: String, secondary: String, te
             (0 until names.length()).map(names::getString)
         }
     }
-    val labels = remember(context) {
-        val json = JSONObject(context.assets.open("theme-labels.json").bufferedReader().use { it.readText() })
-        json.keys().asSequence().associateWith(json::getString)
+    val i18n = runCatching { LocalI18n.current }.getOrNull()
+    val labels = remember(palettes, i18n?.language) {
+        (palettes.keys + "custom").associateWith { name ->
+            val key = "settings.appearance.themes.$name"
+            val translated = i18n?.t(key)
+            if (translated != null && translated != key) translated else name.replaceFirstChar { it.uppercase() }
+        }
     }
     val custom = remember(palettes, parts, primary, secondary, tertiary) {
         palettes.getValue("default")

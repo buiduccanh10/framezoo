@@ -10,28 +10,41 @@ def key(name, hold=False):
     subprocess.run(adb + ["shell", "input", "keyevent"] + (["--longpress"] if hold else []) + ["KEYCODE_DPAD_" + name], check=True)
 
 def focused():
-    subprocess.run(adb + ["shell", "uiautomator", "dump", "/sdcard/framezoo-nav-check.xml"], check=True, stdout=subprocess.DEVNULL)
-    root = ET.fromstring(subprocess.check_output(adb + ["shell", "cat", "/sdcard/framezoo-nav-check.xml"]))
-    for node in root.iter("node"):
-        if node.get("focused") == "true" and node.get("class") != "android.webkit.WebView":
-            return " ".join((child.get("text", "") + " " + child.get("content-desc", "")).strip() for child in node.iter("node")).strip()
+    for _ in range(10):
+        try:
+            res = subprocess.run(adb + ["shell", "uiautomator", "dump", "/sdcard/framezoo-nav-check.xml"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            if res.returncode == 0:
+                raw = subprocess.check_output(adb + ["shell", "cat", "/sdcard/framezoo-nav-check.xml"])
+                if raw.strip().startswith(b"<?xml"):
+                    root = ET.fromstring(raw)
+                    for node in root.iter("node"):
+                        if node.get("focused") == "true" and node.get("class") != "android.webkit.WebView":
+                            val = " ".join((child.get("text", "") + " " + child.get("content-desc", "")).strip() for child in node.iter("node")).strip()
+                            if val:
+                                return val
+        except Exception:
+            pass
+        import time; time.sleep(0.5)
     raise AssertionError("Không tìm thấy focus")
+
+def has_any(text, *candidates):
+    return any(c.lower() in text.lower() for c in candidates)
 
 assert "FrameZoo" in focused(), "Đưa focus về logo ở đầu Discover trước khi chạy"
 key("DOWN"); key("DOWN")
-assert "Tất cả" in focused()
+assert has_any(focused(), "Tất cả", "All")
 key("RIGHT")
-assert "Phim truyền hình" in focused()
+assert has_any(focused(), "Phim truyền hình", "Series", "TV Shows")
 key("RIGHT", hold=True)
-assert "Quốc gia" in focused()
+assert has_any(focused(), "Quốc gia", "Country")
 key("LEFT", hold=True)
-assert "Phim truyền hình" in focused()
+assert has_any(focused(), "Phim truyền hình", "Series", "TV Shows")
 key("RIGHT", hold=True)
-assert "Quốc gia" in focused()
+assert has_any(focused(), "Quốc gia", "Country")
 key("RIGHT", hold=True)
-assert "Năm" in focused()
+assert has_any(focused(), "Năm", "Year")
 key("LEFT", hold=True)
-assert "Quốc gia" in focused()
+assert has_any(focused(), "Quốc gia", "Country")
 key("LEFT", hold=True)
-assert "Phim truyền hình" in focused()
+assert has_any(focused(), "Phim truyền hình", "Series", "TV Shows")
 print("Discover D-pad: PASS")

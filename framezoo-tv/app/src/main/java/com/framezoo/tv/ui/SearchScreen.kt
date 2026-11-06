@@ -18,6 +18,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import com.framezoo.tv.R
 import com.framezoo.tv.model.DiscoverOption
 import java.time.Year
 import kotlinx.coroutines.delay
@@ -41,24 +42,24 @@ internal fun SearchScreen(state: FrameZooState, gridState: LazyGridState, search
         verticalArrangement = Arrangement.spacedBy(18.dp), contentPadding = PaddingValues(start = 4.dp, end = 4.dp, top = 6.dp, bottom = 48.dp)) {
         item(span = { GridItemSpan(maxLineSpan) }) {
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                Text("Tìm kiếm", style = MaterialTheme.typography.headlineLarge)
-                OutlinedTextField(state.query, { state.query = it }, label = { Text("Tên phim hoặc series") }, singleLine = true,
+                Text(t("global.pages.search"), style = MaterialTheme.typography.headlineLarge)
+                OutlinedTextField(state.query, { state.query = it }, label = { Text(t("home.search.placeholder.default")) }, singleLine = true,
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                     keyboardActions = KeyboardActions(onSearch = { searchAction.requestFocus(); state.search() }),
                     colors = tvFieldColors(), shape = RoundedCornerShape(28.dp), modifier = Modifier.fillMaxWidth(.6f).then(inputModifier))
-                TvButton("Tìm", modifier = Modifier.focusRequester(searchAction), primary = true) { state.search() }
+                TvButton(t("home.search.sectionTitle"), icon = R.drawable.desktop_search, modifier = Modifier.focusRequester(searchAction), primary = true) { state.search() }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    FilterMenu("Quốc gia", state.searchCountry, state.countries) { state.searchCountry = it }
-                    FilterMenu("Năm", state.searchYear, (Year.now().value downTo 1900).map { DiscoverOption(it.toString(), it.toString()) }) { state.searchYear = it }
-                    if (genres.isNotEmpty()) FilterMenu("Thể loại", state.searchGenre, genres) { state.searchGenre = it }
+                    FilterMenu(t("discover.filters.country"), state.searchCountry, state.countries) { state.searchCountry = it }
+                    FilterMenu(t("home.bookmarks.edit.yearLabel"), state.searchYear, (Year.now().value downTo 1900).map { DiscoverOption(it.toString(), it.toString()) }) { state.searchYear = it }
+                    if (genres.isNotEmpty()) FilterMenu(t("discover.carousel.title.genres"), state.searchGenre, genres) { state.searchGenre = it }
                 }
-                Text("Kết quả", style = MaterialTheme.typography.headlineSmall)
+                Text(t("home.search.sectionTitle"), style = MaterialTheme.typography.headlineSmall)
                 when {
-                    state.searchLoading -> Text("Đang tìm kiếm...", color = colors["type.secondary"])
+                    state.searchLoading -> Text(t("home.search.loading"), color = colors["type.secondary"])
                     state.searchError.isNotBlank() -> Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        Text(state.searchError, color = colors["type.danger"]); TvButton("Thử lại") { state.search() }
+                        Text(state.searchError, color = colors["type.danger"]); TvButton(t("notFound.reloadButton")) { state.search() }
                     }
-                    filtered.isEmpty() -> Text("Chưa có nội dung", color = colors["type.secondary"])
+                    filtered.isEmpty() -> Text(t("home.search.noResults"), color = colors["type.secondary"])
                 }
             }
         }

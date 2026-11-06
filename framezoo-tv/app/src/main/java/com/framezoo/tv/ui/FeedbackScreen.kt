@@ -30,28 +30,28 @@ internal fun FeedbackScreen(state: FrameZooState) {
     var error by remember { mutableStateOf("") }
     val picker = rememberLauncherForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { attachments = it }
     LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp), contentPadding = PaddingValues(bottom = 32.dp)) {
-        item { Text("Gửi phản hồi", color = colors["type.emphasis"], fontSize = 30.sp) }
-        if (submitted) item { Text("Đã gửi phản hồi thành công", color = colors["type.emphasis"]) }
+        item { Text(t("feedback.modalTitle"), color = colors["type.emphasis"], fontSize = 30.sp) }
+        if (submitted) item { Text("${t("feedback.successTitle")}\n${t("feedback.successDesc")}", color = colors["type.emphasis"]) }
         else {
-            item { OutlinedTextField(title, { title = it.take(255) }, label = { Text("Tiêu đề vấn đề") }, singleLine = true,
+            item { OutlinedTextField(title, { title = it.take(255) }, label = { Text(t("feedback.titleLabel")) }, singleLine = true,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next), colors = tvFieldColors(), modifier = Modifier.fillMaxWidth(.7f)) }
-            item { OutlinedTextField(description, { description = it }, label = { Text("Mô tả vấn đề") }, minLines = 3,
+            item { OutlinedTextField(description, { description = it }, label = { Text(t("feedback.descriptionLabel")) }, minLines = 3,
                 colors = tvFieldColors(), modifier = Modifier.fillMaxWidth(.7f)) }
             item { Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                TvButton("Chọn ảnh hoặc video") { picker.launch(arrayOf("image/*", "video/*")) }
-                if (attachments.isNotEmpty()) TvButton("Xóa ${attachments.size} file") { attachments = emptyList() }
+                TvButton(t("feedback.attachmentsLabel")) { picker.launch(arrayOf("image/*", "video/*")) }
+                if (attachments.isNotEmpty()) TvButton("${t("actions.cancel")} (${attachments.size})") { attachments = emptyList() }
             } }
-            item { Text("Ảnh/video · tổng tối đa 55 MB", color = colors["type.secondary"]) }
+            item { Text(t("feedback.attachmentsHint"), color = colors["type.secondary"]) }
             if (error.isNotBlank()) item { Text(error, color = colors["type.danger"]) }
-            item { TvButton(if (pending) "Đang gửi..." else "Gửi phản hồi", primary = true) {
+            item { TvButton(t("feedback.submit"), primary = true) {
                 if (!pending) scope.launch {
                     pending = true; error = ""
                     try { state.backend.feedback(title, description, attachments, context.contentResolver); submitted = true }
-                    catch (e: CancellationException) { throw e } catch (e: Exception) { error = e.message ?: "Gửi phản hồi thất bại" }
+                    catch (e: CancellationException) { throw e } catch (e: Exception) { error = e.message ?: state.i18n.t("feedback.errorSubmit") }
                     finally { pending = false }
                 }
             } }
         }
-        item { TvButton("Quay lại") { state.back() } }
+        item { TvButton(t("feedback.close")) { state.back() } }
     }
 }

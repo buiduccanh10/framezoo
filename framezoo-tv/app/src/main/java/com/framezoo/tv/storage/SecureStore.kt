@@ -42,6 +42,10 @@ class SecureStore(context: Context) {
         get() = prefs.getString("theme", "ember") ?: "ember"
         set(value) { prefs.edit().putString("theme", value).apply() }
 
+    var language: String
+        get() = prefs.getString("language", if (java.util.Locale.getDefault().language == "vi") "vi" else "en") ?: "vi"
+        set(value) { prefs.edit().putString("language", value).apply() }
+
     var customPrimary: String
         get() = prefs.getString("customPrimary", "classic") ?: "classic"
         set(value) { prefs.edit().putString("customPrimary", value).apply() }

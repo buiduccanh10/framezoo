@@ -61,6 +61,7 @@ dependencies {
     implementation("org.bouncycastle:bcprov-jdk18on:1.81")
     debugImplementation("androidx.compose.ui:ui-tooling")
     testImplementation("junit:junit:4.13.2")
+    testImplementation("org.json:json:20240303")
 }
 
 fun nativeBuild(abi: String) = tasks.register<Exec>("buildNative${abi.replace("-", "_")}") {

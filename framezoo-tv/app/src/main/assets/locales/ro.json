@@ -1,0 +1,1528 @@
+{
+  "actions": {
+    "cancel": "Anula",
+    "confirm": "Confirma",
+    "copied": "Copiat",
+    "copy": "Copiați"
+  },
+  "addons": {
+    "catalog": {
+      "badge": "Suplimente"
+    },
+    "manager": {
+      "add": "Adăuga",
+      "addWithoutConfiguring": "Instalați oricum (s-ar putea să nu funcționeze)",
+      "adding": "Se adaugă...",
+      "ariaClose": "Închideți addon manager",
+      "ariaManage": "Gestionați suplimente",
+      "configRequiredDesc": "Acest addon necesită configurare (cum ar fi chei API sau setări de limbă) înainte de a putea returna conținut. Configurați-l în browser, apoi copiați și lipiți adresa URL a manifestului generat aici.",
+      "configRequiredTitle": "Configurație necesară",
+      "configureAction": "Configurați",
+      "errorFallback": "Imposibil de instalat acest addon.",
+      "manageListButton": "Gestionați lista de suplimente",
+      "openConfigurePage": "Deschideți pagina de configurare",
+      "subtitle": "Nu vă recomandăm să adăugați suplimente neoficiale sau ilegale.",
+      "title": "Suplimente pentru desktop"
+    },
+    "platforms": {
+      "framezoo": "Framezoo",
+      "stremio": "Stremio",
+      "supportLabel": "Platforme acceptate pentru suplimente:",
+      "supported": "Platforme acceptate: Framezoo și Stremio"
+    },
+    "page": {
+      "addAddonButton": "Adăugați Addon",
+      "configRequiredBadge": "Necesită configurare",
+      "configRequiredWarning": "Acest addon nu este configurat și este posibil să nu poată încărca fluxuri sau subtitrări.",
+      "configureAddon": "Configurați acest addon",
+      "configureCustomKeyActive": "Cheia dvs. a fost configurată (faceți clic pentru a modifica)",
+      "configureRequiredAction": "Configurați acest addon (obligatoriu)",
+      "customKeyActiveDesc": "Folosirea cheii API Wyzie personale",
+      "customKeyConfiguredBadge": "Cheia dvs. a fost configurată",
+      "description": "Suplimentele sunt opționale. Această aplicație nu include, nu recomandă sau găzduiește niciun supliment.",
+      "disabled": "Dezactivat",
+      "emptyInstalled": "Nu există încă suplimente instalate în sistem.",
+      "enabled": "Activat",
+      "installError": "Imposibil de instalat acest addon.",
+      "installedHeading": "Suplimente instalate",
+      "processing": "Prelucrare...",
+      "removeAddon": "Eliminați acest supliment",
+      "subtitlesConfiguredError": "Nu s-a putut configura cheia API pentru subtitrări. Vă rugăm să încercați din nou!",
+      "subtitlesConfiguredSuccess": "Cheia API pentru subtitrări a fost configurată cu succes!",
+      "title": "Manager de suplimente"
+    },
+    "player": {
+      "chooseAddon": "Alegeți un supliment",
+      "emptyExplanation": "Nu este instalat sau activat niciun supliment. Adăugați o adresă URL manifest pe care o alegeți în Addons.",
+      "emptyTitle": "Nu sunt disponibile suplimente de flux",
+      "loadingStreams": "Se încarcă fluxurile...",
+      "manageAddonsButton": "Gestionați lista de suplimente",
+      "noAddonStreams": "Acest supliment nu a returnat niciun flux.",
+      "noStreams": "Niciun flux",
+      "noTorrentStreams": "Nu au fost returnate fluxuri de torrent pentru acest supliment.",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "Toate Calitățile",
+        "other": "Alte"
+      },
+      "sources": "Surse",
+      "streamCount": "{{count}} flux",
+      "streamCount_plural": "{{count}} fluxuri",
+      "title": "Suplimente desktop",
+      "unableToLoad": "Nu se pot încărca fluxurile",
+      "viewStreams": "Vizualizați fluxurile"
+    }
+  },
+  "auth": {
+    "backendSelection": {
+      "active": "Activ",
+      "confirm": "Confirma",
+      "customBackend": "Backend personalizat",
+      "customBackendPlaceholder": "https://",
+      "description": "Alegeți la ce server backend să vă conectați",
+      "title": "Selectați Account Server"
+    },
+    "createAccount": "Nu aveți încă un cont? <0>Creați un cont.</0>",
+    "generate": {
+      "custom": "Personalizat",
+      "customPassphraseLabel": "Expresie de acces personalizată",
+      "customPassphrasePlaceholder": "Introduceți expresia de acces personalizată",
+      "description": "Fraza de acces acționează ca nume de utilizator și parolă. Asigurați-vă că îl păstrați în siguranță, deoarece va trebui să îl introduceți pentru a vă conecta la contul dvs",
+      "invalidPassphraseCharacters": "Caractere nevalide ale frazei de acces. Sunt permise numai literele în limba engleză, numerele 1-10 și simbolurile normale.",
+      "next": "Mi-am salvat fraza de acces",
+      "passphraseFrameLabel": "Frază de acces",
+      "passphraseTooShort": "Fraza de acces trebuie să aibă cel puțin 8 caractere.",
+      "title": "Fraza dvs. de acces",
+      "useCustomPassphrase": "Utilizați o expresie de acces personalizată",
+      "usePasskeyInstead": "Folosiți cheia de acces"
+    },
+    "hasAccount": "ai deja un cont? <0>Autentificați-vă aici.</0>",
+    "login": {
+      "description": "Introduceți numele de utilizator sau adresa de e-mail și parola pentru a vă conecta la contul dvs",
+      "failedToReachServer": "Nu s-a putut ajunge la server",
+      "identifierLabel": "Nume de utilizator sau e-mail",
+      "identifierNotFound": "Numele de utilizator sau e-mailul nu a fost găsit",
+      "identifierPlaceholder": "Introduceți numele de utilizator sau adresa de e-mail",
+      "identifierRequired": "Numele de utilizator sau e-mailul este necesar",
+      "noBackendUrl": "Nicio adresă URL de backend",
+      "or": "or",
+      "passwordIncorrect": "Parola este incorectă",
+      "invalidCredentials": "Numele de utilizator sau parola sunt incorecte",
+      "passwordLabel": "Parolă",
+      "passwordPlaceholder": "Introduceți parola",
+      "rememberMe": "Reține parola mea",
+      "passwordRequired": "Este necesară parola",
+      "submit": "Conectează te",
+      "title": "conecteaza-te la contul tau",
+      "usePasskey": "Folosiți cheia de acces",
+      "validationError": "Fraza de acces este incorectă sau incompletă"
+    },
+    "otp": {
+      "codeLabel": "Cod de verificare",
+      "continue": "Continua",
+      "emailNewDescription": "Introdu codul trimis la noua ta adresă de e-mail.",
+      "emailNewTitle": "Verificați noua adresă de e-mail",
+      "emailOldDescription": "Introdu codul trimis la adresa ta de e-mail curentă.",
+      "emailOldTitle": "Confirmați adresa dvs. de e-mail actuală",
+      "expired": "Codul de verificare a expirat",
+      "expiresIn": "Codul expiră în {{time}}",
+      "finish": "Termina",
+      "forgotDescription": "Introdu adresa de e-mail a contului tău pentru a primi un cod de verificare.",
+      "forgotLink": "Ați uitat parola?",
+      "forgotTitle": "Aţi uitat parola?",
+      "invalid": "Cod de verificare nevalid",
+      "newPasswordDescription": "Alegeți o parolă nouă pentru contul dvs.",
+      "newPasswordTitle": "Creați o parolă nouă",
+      "passwordChangeDescription": "Introdu codul trimis pe adresa ta de e-mail.",
+      "passwordChangeTitle": "Confirmați schimbarea parolei",
+      "registrationDescription": "Introdu codul trimis pe adresa ta de e-mail pentru a finaliza crearea contului tău.",
+      "registrationTitle": "Verificați adresa dvs. de e-mail",
+      "requestFailed": "Nu se poate trimite codul de verificare",
+      "resend": "Retrimiteți codul",
+      "resendFailed": "Nu se poate retrimite codul",
+      "resendIn": "Retrimitere disponibilă în {{seconds}}s",
+      "resetDescription": "Introdu codul trimis pe adresa ta de e-mail.",
+      "resetTitle": "Resetați parola",
+      "send": "Trimiteți codul"
+    },
+    "register": {
+      "confirmPasswordLabel": "Confirmați parola",
+      "confirmPasswordPlaceholder": "Confirmați-vă parola",
+      "emailInvalid": "Introduceți o adresă de e-mail validă",
+      "emailLabel": "E-mail personal",
+      "emailPlaceholder": "Introduceți adresa dvs. de e-mail personală",
+      "emailTaken": "Adresa de e-mail este deja înregistrată",
+      "information": {
+        "color1": "Culoarea profilului unu",
+        "color2": "Culoarea profilului doi",
+        "header": "Introduceți un nume pentru dispozitivul dvs. și alegeți culorile și o pictogramă de utilizator la alegerea dvs",
+        "icon": "Pictograma utilizatorului",
+        "next": "Următorul",
+        "title": "Informații despre cont"
+      },
+      "nicknameLabel": "Pseudonim",
+      "nicknamePlaceholder": "Alegeți o poreclă unică",
+      "nicknameTaken": "Porecla este deja luată",
+      "nicknameRequired": "Este necesar un pseudonim",
+      "passwordInput": {
+        "description": "Alegeți o poreclă, un e-mail personal și o parolă. Parola dvs. funcționează ca o expresie de acces sigură, așa că asigurați-vă că o amintiți!",
+        "title": "Creați-vă autentificarea"
+      },
+      "passwordLabel": "Parolă",
+      "passwordMismatch": "Parolele nu se potrivesc",
+      "passwordPlaceholder": "Creați o parolă (folosită ca expresie de acces)",
+      "passwordWeak": "Parola trebuie să aibă cel puțin 8 caractere cu litere și cifre",
+      "privacyPolicy": "Politica de confidențialitate",
+      "submit": "Creează cont",
+      "legalConsent": "Am citit și sunt de acord cu <terms>Termenii și condițiile</terms> și <privacy>Politica de confidențialitate</privacy>."
+    },
+    "trust": {
+      "failed": {
+        "text": "L-ai configurat corect?",
+        "title": "Nu s-a putut ajunge la server"
+      },
+      "host": "Vă conectați la <0>{{hostname}}</0> - vă rugăm să confirmați că aveți încredere înainte de a vă crea un cont",
+      "no": "Întoarce-te",
+      "noHost": "Serverul nu a fost configurat, deci nu vă puteți crea un cont",
+      "noHostTitle": "Serverul nu este configurat!",
+      "title": "Ai încredere în acest server?",
+      "yes": "Am încredere în acest server"
+    },
+    "verify": {
+      "description": "Introduceți expresia de acces de mai devreme pentru a confirma că ați salvat-o și pentru a vă crea contul",
+      "invalidData": "Datele nu sunt valide",
+      "noMatch": "Fraza de acces nu se potrivește",
+      "recaptchaFailed": "Validarea ReCaptcha a eșuat",
+      "register": "Creează cont",
+      "title": "Confirmați-vă fraza de acces"
+    }
+  },
+  "details": {
+    "addToList": "Adaugă la listă",
+    "airs": "Aeruri",
+    "collection": {
+      "bookmarkAll": "Marcați toate",
+      "movie": "Film",
+      "movies": "Filme",
+      "rating": "Evaluare",
+      "releaseDate": "Data de lansare",
+      "sortBy": "Filtrează după"
+    },
+    "endsAt": "Se încheie la {{time}}",
+    "episode": "Episod",
+    "episodeNumber": "Episodul {{number}}",
+    "episodeReleaseDate": "Data lansării: {{date}}",
+    "episodeReleaseDateUnknown": "Data lansării: necunoscută",
+    "episodes": "Episoade",
+    "imdb": "Vizualizați pe IMDb",
+    "language": "Limbă:",
+    "play": "Redă",
+    "rating": "Evaluare:",
+    "releaseDate": "Data de lansare:",
+    "resume": "Reia",
+    "runtime": "Timp de rulare:",
+    "season": "Sezon",
+    "specialSeason": "Sezon special",
+    "seasons": "Sezon/e",
+    "similar": "Similar",
+    "tmdb": "Vizualizați pe TMDB",
+    "trailers": "Remorci",
+    "watched": "Vizionat {{watched}} din {{total}} ({{percentage}}%)"
+  },
+  "discover": {
+    "allLists": "Toate listele de filme",
+    "carousel": {
+      "change": "Schimba",
+      "more": "Vezi mai multe",
+      "today": "Astăzi",
+      "thisWeek": "În această săptămână",
+      "title": {
+        "4kReleases": "Lansări 4K",
+        "addons": "Suplimente",
+        "editorPicks": "Alegerile editorului",
+        "editorPicksMovies": "Editorul alege filme",
+        "editorPicksShows": "Editorul alege emisiunile",
+        "forYou": "Pentru dumneavoastră",
+        "genres": "Genuri",
+        "inCinemas": "În Cinematografe",
+        "latest": "Ultimele lansări",
+        "latestReleases": "Ultimele lansări",
+        "latestTVReleases": "Cele mai recente emisiuni TV",
+        "movies": "{{category}} Filme",
+        "moviesOn": "Filme pe {{provider}}",
+        "onTheAir": "Pe Aer",
+        "popular": "Cele mai populare",
+        "providers": "Furnizori",
+        "recommendations": "Recomandări",
+        "recommended": "Pentru că ați vizionat: {{title}}",
+        "top10": "Top 10",
+        "topRated": "Cel mai bine evaluat",
+        "trending": "În tendințe acum",
+        "tvshows": "{{category}} Emisiuni",
+        "tvshowsOn": "Se afișează pe {{provider}}"
+      }
+    },
+    "featured": {
+      "moreInfo": "Mai multe informații",
+      "playNow": "Joacă acum"
+    },
+    "filters": {
+      "country": "Ţară"
+    },
+    "page": {
+      "back": "Întoarce-te",
+      "loading": "Încărcare...",
+      "loadMore": "Încărcați mai multe",
+      "title": "Descoperiți Filme și TV"
+    },
+    "scrollToTop": "Înapoi sus",
+    "tabs": {
+      "all": "Toate",
+      "movies": "Filme",
+      "top10": "Top 10",
+      "tvshows": "Emisiuni TV"
+    },
+    "viewLists": "Vezi toate listele de filme"
+  },
+  "downtimeNotice": {
+    "badge": "Probleme",
+    "goHome": "Du-te acasă",
+    "message": "Framezoo se confruntă din nou cu probleme cu unii furnizori, dacă nu puteți găsi sau reda o emisiune, vă rugăm să schimbați sursa. Așteptați-vă că această eroare va persista pe parcursul perioadelor de mai jos.",
+    "title": "Probleme cu furnizorii"
+  },
+  "errors": {
+    "badge": "S-a spart",
+    "details": "Detalii despre eroare",
+    "reloadPage": "Reîncărcați pagina",
+    "showError": "Afișați detalii despre eroare",
+    "title": "Am intampinat o eroare!"
+  },
+  "footer": {
+    "legal": {
+      "disclaimer": "Declinare a răspunderii",
+      "disclaimerText": "Framezoo nu operează surse de flux video. Serverele sale pot transmite subtitrări de la furnizor și pot procesa temporar sunetul și subtitrările pentru sincronizare atunci când alegeți funcția respectivă. Dvs. controlați conținutul pe care îl redați."
+    },
+    "links": {
+      "fluxer": "Fluxer",
+      "funding": "Ajută-ne",
+      "github": "GitHub"
+    },
+    "tagline": "Streaming de mare viteză și fluid, cu metadate bogate pentru filme, sincronizare nelimitată a subtitrărilor și subtitrări din mai multe surse."
+  },
+  "global": {
+    "keyboardShortcuts": {
+      "cancel": "Anula",
+      "clickToEdit": "Faceți clic pe o insignă pentru a o edita",
+      "conditions": {
+        "showsOnly": "Doar emisiuni"
+      },
+      "conflict": "conflict",
+      "conflicts": "conflicte",
+      "detected": "detectat",
+      "editInSettings": "Editați comenzile de la tastatură din setări",
+      "groups": {
+        "audioVideo": "Audio și video",
+        "interface": "Interfață",
+        "jumpToPosition": "Salt la Poziție",
+        "subtitlesAccessibility": "Subtitrări și accesibilitate",
+        "videoPlayback": "Redare video"
+      },
+      "none": "Nici unul",
+      "numberKeySeeking": "Căutarea progresului cheie numerică",
+      "numberKeySeekingDescription": "Utilizați tastele numerice 0-9 pentru a căuta anumite poziții din videoclip. 0 merge la început, 1-8 sare la 10%-80% și 9 merge la 90%.",
+      "pressKey": "Apăsați o tastă...",
+      "resetAllToDefault": "Resetați toate la valorile implicite",
+      "resetToDefault": "Resetați la valoarea implicită",
+      "save": "Salva",
+      "saveChanges": "Salvați modificările",
+      "shortcuts": {
+        "barrelRoll": "Fă o rostogolire! 🌀",
+        "closeOverlay": "Închideți suprapunerea/modalul",
+        "holdShift": "Țineți apăsată tasta, apoi faceți clic pe butonul Ecran complet pentru a încadra sau faceți clic pentru a titra filmul pentru a copia linkul cu marcaj temporal. Țineți apăsată tasta și faceți clic pe butonul Ecran complet pentru a încadra cadrul sau faceți clic pe titlul videoclipului pentru a copia linkul cu marcaj temporal.",
+        "decreaseVolume": "Scade volumul",
+        "increaseVolume": "Măriți volumul",
+        "jumpTo0": "Salt la 0% (început)",
+        "jumpTo9": "Treci la 90%",
+        "mute": "Dezactivați/dezactivați sunetul",
+        "nextEpisode": "Următorul episod",
+        "playPause": "Redare/pauză (sau țineți apăsat pentru viteza de 2x când este activat)",
+        "playPauseAlt": "Redare/pauză",
+        "previousEpisode": "Episodul anterior",
+        "randomCaption": "Selectați legendă aleatorie din ultima limbă folosită",
+        "skipBackward1": "Sari înapoi 1 secundă",
+        "skipBackward10": "Sari înapoi cu 10 secunde",
+        "skipBackward5": "Sari înapoi 5 secunde",
+        "skipForward1": "Sari înainte cu 1 secundă",
+        "skipForward10": "Sari înainte cu 10 secunde",
+        "skipForward5": "Sari înainte cu 5 secunde",
+        "syncSubtitlesEarlier": "Sincronizați subtitrările mai devreme (-0,5 s)",
+        "syncSubtitlesLater": "Sincronizați subtitrările mai târziu (+0,5 s)",
+        "previousSubtitleCue": "Tac de subtitrare anterior",
+        "nextSubtitleCue": "Următorul indiciu de subtitrare",
+        "toggleCaptions": "Comutați subtitrările",
+        "toggleFullscreen": "Comutați ecranul complet",
+        "toggleNativeSubtitles": "Comutați subtitrările native"
+      },
+      "subtitle": "Țineți apăsat ` pentru a afișa acest ajutor oricând",
+      "title": "Comenzi rapide de la tastatură"
+    },
+    "name": "Framezoo",
+    "pages": {
+      "discover": "Descoperă",
+      "login": "Log in",
+      "migration": "Migrare cont",
+      "pagetitle": "{{title}} - Framezoo",
+      "register": "Inregistreaza-te",
+      "settings": "Setări"
+    }
+  },
+  "home": {
+    "bookmarks": {
+      "edit": {
+        "cancel": "Anula",
+        "description": "Editați detaliile pentru acest marcaj",
+        "groupsLabel": "Grupuri",
+        "save": "Salva",
+        "title": "Editați marcajul",
+        "titleLabel": "Titlu",
+        "titlePlaceholder": "Introduceți un titlu pentru marcajul dvs",
+        "yearLabel": "An",
+        "yearPlaceholder": "Introduceți un an pentru marcajul dvs"
+      },
+      "groups": {
+        "dropdown": {
+          "empty": "Încă nu există grupuri",
+          "namePlaceholder": "Numele grupului",
+          "placeholderButton": "Adăugați la grup",
+          "removeAll": "Eliminați toate",
+          "removeFromGroup": "Eliminați din grup"
+        },
+        "editGroup": {
+          "affectsBookmarks": "Acest lucru va afecta {{count}} marcaj(e)",
+          "cancel": "Anula",
+          "description": "Editați numele și pictograma grupului dvs. de marcaje",
+          "nameLabel": "Numele grupului",
+          "namePlaceholder": "Introduceți un nume pentru grupul dvs",
+          "save": "Salva",
+          "title": "Editați grupul"
+        },
+        "reorder": {
+          "button": "Reordonați",
+          "cancel": "Anula",
+          "description": "Trageți și plasați pentru a reordona grupurile de marcaje",
+          "done": "Făcut",
+          "save": "Salva",
+          "title": "Editați comanda de grup"
+        }
+      },
+      "sectionTitle": "Marcaje",
+      "showAll": "Arată tot",
+      "sorting": {
+        "options": {
+          "date": "Implicit (data adăugată)",
+          "titleAsc": "Titlul A-Z",
+          "titleDesc": "Titlul Z-A",
+          "yearAsc": "Data lansării Cel mai vechi-Cel mai nou",
+          "yearDesc": "Data lansării Cel mai nou-Cel mai vechi"
+        }
+      }
+    },
+    "continueWatching": {
+      "sectionTitle": "Continuați vizionarea",
+      "sorting": {
+        "options": {
+          "date": "Implicit (data adăugată)",
+          "titleAsc": "Titlul A-Z",
+          "titleDesc": "Titlul Z-A",
+          "yearAsc": "Data lansării Cel mai vechi-Cel mai nou",
+          "yearDesc": "Data lansării Cel mai nou-Cel mai vechi"
+        }
+      }
+    },
+    "mediaList": {
+      "stopEditing": "Opriți editarea"
+    },
+    "search": {
+      "allResults": "Asta e tot ce avem!",
+      "discover": "Descoperă",
+      "discoverMore": "Descoperă mai multe",
+      "genreFilterAll": "Toate genurile",
+      "empty": {
+        "default": "Bine ai venit, găsește conținut de vizionat aici!",
+        "extra": [
+          "Nu-i nimic aici :(",
+          "E așa de gol...",
+          "Atât de gol...",
+          "Salut noule utilizator :3"
+        ]
+      },
+      "failed": "Găsire media eșuată, încearcă din nou!",
+      "loading": "Se încarcă...",
+      "noResults": "Nu am putut găsi nimic!",
+      "placeholder": {
+        "default": "La ce dorești să te uiți?",
+        "extra": [
+          "Ce vrei să explorezi?",
+          "Ce e pe lista dvs. de urmărire?",
+          "Care e filmul tău preferat?",
+          "Care e serialul tău preferat?",
+          "Ce ai vrea să vizionezi azi?",
+          "Cum a fost ziua de azi?",
+          "Vina mea că site-ul nu funcționează niciodată...",
+          "Nu-i așa că Framezoo e cel mai tare?",
+          ">ᴗ<"
+        ]
+      },
+      "sectionTitle": "Rezultate de căutare"
+    },
+    "support": {
+      "complete": "complet",
+      "description": "Framezoo este rulat cu pierdere și avem nevoie de ajutor pentru a-l menține fără reclame! Dacă vă place să utilizați Framezoo, vă rugăm să luați în considerare donarea pentru a ne ajuta să ne acoperim costurile.",
+      "donate": "Dona",
+      "explanation": "Dacă nu utilizați extensia sau nu aveți configurat FED API, poate fi mai greu să găsiți conținut! Vrem să remediem acest lucru, dar este mult mai greu să oferim conținut fără servere scumpe. Așa că, dacă vă place să utilizați Framezoo, vă rugăm să luați în considerare donarea pentru a ne ajuta să ne acoperim costurile în creștere.",
+      "explanation2": "Dacă doriți mai multe informații, vă rugăm să vă alăturați",
+      "fluxer": "Fluxer",
+      "label": "Finanțarea proiectului: ${{current}} / ${{goal}}",
+      "moreInfo": "Mai multe informații",
+      "thankYou": "Vă mulțumim pentru susținere!",
+      "title": "Framezoo are nevoie de ajutorul tău!"
+    },
+    "titles": {
+      "69": {
+        "default": "Gata de ceva picant?",
+        "extra": [
+          "69 de zile fericite 😘!"
+        ]
+      },
+      "420": {
+        "default": "Ce ai vrea să vizionezi pe data asta de 20/4?",
+        "extra": [
+          "Un 20/4 fericit 🥳!"
+        ]
+      },
+      "day": {
+        "default": "La ce vrei să te uiți după-amiaza asta?",
+        "extra": [
+          "Te simți aventuros? Jurassic Park ar putea fi o alegere perfectă."
+        ]
+      },
+      "halloween": {
+        "default": "Ce film înfricoșător ți-ar plăcea să vezi în acest Halloween?",
+        "extra": [
+          "Halloween fericit! 🎃👻",
+          "Boo! 👻",
+          "Truc sau tratare! 🍬",
+          "Este Marele Dovleac, Charlie Brown!"
+        ]
+      },
+      "morning": {
+        "default": "La ce dorești să te in uiți dimineață aceasta?",
+        "extra": [
+          "Aud că Before Sunrise este bun"
+        ]
+      },
+      "night": {
+        "default": "La ce dorești să te uiți în astă seară?",
+        "extra": [
+          "Obosit? Aud că The Exorcist is good."
+        ]
+      }
+    },
+    "watchHistory": {
+      "recentlyWatched": "Vizionat recent",
+      "sectionTitle": "Vizionați Istoria"
+    }
+  },
+  "lists": {
+    "actions": {
+      "copyShareLink": "Copiați linkul de distribuire",
+      "create": "Creați o listă",
+      "delete": "Şterge",
+      "edit": "Edita",
+      "editItems": "Editați articole",
+      "open": "Deschide",
+      "save": "Salvați modificările",
+      "saveMembership": "Salvați modificările"
+    },
+    "delete": {
+      "confirm": "Ștergeți „{{name}}”? Acest lucru nu poate fi anulat."
+    },
+    "empty": {
+      "description": "Creați prima dvs. listă pentru a începe să grupați titlurile.",
+      "title": "Nu există liste încă"
+    },
+    "errors": {
+      "load": "Nu s-au încărcat listele dvs."
+    },
+    "form": {
+      "createDescription": "Începeți o nouă listă pentru favorite, revizionări sau orice altceva pe care doriți să le partajați.",
+      "createTitle": "Creați o listă",
+      "description": "Descriere",
+      "descriptionHelp": "Notă opțională pentru a vă ajuta să vă amintiți ce aparține acestei liste.",
+      "descriptionPlaceholder": "Pentru ce este această listă?",
+      "editDescription": "Actualizați numele, descrierea sau vizibilitatea pentru această listă.",
+      "editTitle": "Editați lista",
+      "errors": {
+        "nameRequired": "Numele listei este obligatoriu",
+        "submitFailed": "Nu s-a putut salva lista."
+      },
+      "name": "Numele listei",
+      "namePlaceholder": "Sci-Fi de weekend",
+      "public": "Lista publică",
+      "publicHelp": "Oricine are linkul poate vizualiza această listă."
+    },
+    "items": {
+      "empty": "Această listă este goală.",
+      "emptyHelp": "Adăugați titluri din orice film sau card de emisiune cu Adăugare la listă, apoi reveniți aici pentru a gestiona gama."
+    },
+    "meta": {
+      "itemCount": "{{count}} articol",
+      "itemCount_plural": "{{count}} articole",
+      "updatedAt": "Actualizat {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "Anula",
+        "create": "Creați o listă",
+        "save": "Salvați modificările"
+      },
+      "description": "Alegeți ce liste trebuie să includă {{title}}.",
+      "empty": {
+        "description": "Creați o listă pentru a salva acest titlu.",
+        "title": "Nu există liste încă"
+      },
+      "errors": {
+        "create": "Nu s-a putut crea lista.",
+        "save": "Nu s-a putut actualiza calitatea de membru al listei."
+      },
+      "title": "Adaugă la listă"
+    },
+    "page": {
+      "description": "Alegeți favoritele, nopțile tematice și urmăriți alegerile următoare pe care le puteți păstra private sau le puteți partaja printr-un link.",
+      "editingHint": "Faceți clic pe butonul de închidere de pe un card pentru a-l elimina din această listă.",
+      "eyebrow": "Colecții",
+      "itemsEyebrow": "Titluri din această listă",
+      "itemsHint": "Selectați o listă din stânga pentru a o răsfoi, apoi utilizați modul de editare când doriți să o curățați.",
+      "publicCountPlural": "{{count}} liste publice",
+      "publicCountSingular": "1 listă publică",
+      "searchEmptyDescription": "Încercați alt nume sau ștergeți căutarea.",
+      "searchEmptyTitle": "Nu există liste care se potrivesc",
+      "searchPlaceholder": "Căutați liste",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "Actualizat recent",
+      "summaryPlural": "{{count}} liste",
+      "summarySingular": "1 lista",
+      "title": "Liste"
+    },
+    "public": {
+      "descriptionFallback": "O colecție comună organizată în Framezoo.",
+      "notFoundDescription": "Acest link de distribuire lipsește sau nu mai este disponibil.",
+      "notFoundTitle": "Lista nu a fost găsită",
+      "pageTitle": "Listă comună",
+      "privateDescription": "Proprietarul nu a distribuit această listă în mod public.",
+      "privateTitle": "Această listă este privată"
+    },
+    "visibility": {
+      "private": "Privat",
+      "public": "Public"
+    }
+  },
+  "media": {
+    "cannotFetchImage": "Nu s-a putut prelua o imagine pentru acest suport media",
+    "episodeDisplay": "S{{season}} E{{episode}}",
+    "episodeShort": "E",
+    "inCinema": "În Cinema",
+    "seasonUnwatched": "Sigur vrei să marchezi sezonul ca nevizionat?",
+    "seasonWatched": "Sigur vrei să marchezi sezonul ca vizionat?",
+    "types": {
+      "movie": "Film",
+      "show": "Spectacol"
+    },
+    "unreleased": "Nelansate"
+  },
+  "migration": {
+    "back": "Întoarce-te",
+    "download": {
+      "button": {
+        "download": "Descărcați date",
+        "home": "Du-te acasă"
+      },
+      "description": "Aceasta vă va descărca datele pe dispozitiv. Apoi îl puteți încărca pe noul server sau îl puteți păstra în siguranță.",
+      "status": {
+        "error": "Nu s-au putut descărca datele dvs. 😿",
+        "success": "Datele dvs. au fost descărcate cu succes! 🎉"
+      },
+      "title": "Descărcați date"
+    },
+    "loginRequired": "Trebuie să fii autentificat pentru a-ți migra datele! Vă rugăm să reveniți și să vă autentificați pentru a continua.",
+    "preview": {
+      "downloadDescription": "Descărcarea include:",
+      "items": {
+        "bookmarks": "Media marcate",
+        "progress": "Urmărește progresul",
+        "settings": "Setări și preferințe"
+      },
+      "uploadDescription": "Date de încărcat:"
+    },
+    "start": {
+      "explainer": "This will download your data to your device. You can then upload it to the new server or just keep it for safekeeping. Upload your previously exported data file to restore your bookmarks and progress on this account.",
+      "options": {
+        "download": {
+          "action": "Descărcați date",
+          "description": "Aceasta vă va descărca datele pe dispozitiv. Apoi îl puteți încărca pe noul server sau îl puteți păstra în siguranță.",
+          "quality": "Mai tehnic",
+          "title": "Descărcați date"
+        },
+        "or": "or",
+        "upload": {
+          "action": "Încărcați date",
+          "description": "Încărcați fișierul de date exportat anterior pentru a vă restabili marcajele și pentru a progresa în acest cont.",
+          "quality": "Restaurați din backup",
+          "title": "Încărcați date"
+        }
+      },
+      "title": "Migrați-vă datele"
+    },
+    "upload": {
+      "button": {
+        "home": "Continuați spre casă",
+        "import": "Importă date",
+        "processing": "Prelucrare...",
+        "saveLocal": "Salvați local"
+      },
+      "description": "Încărcați fișierul de date exportat anterior pentru a vă restabili marcajele și pentru a progresa în acest cont.",
+      "exportedOn": "Exportat pe",
+      "file": {
+        "change": "Schimbați fișierul",
+        "description": "Selectați fișierul pe care doriți să îl încărcați",
+        "select": "Selectați fișierul"
+      },
+      "previewTitle": "Previzualizare:",
+      "status": {
+        "error": "Nu s-au încărcat datele dvs. 😿",
+        "processing": "Prelucrarea datelor...",
+        "success": "Datele dvs. au fost încărcate cu succes! 🎉",
+        "successLocal": "Datele dvs. au fost salvate local! 🎉"
+      },
+      "title": "Încărcați date"
+    }
+  },
+  "navigation": {
+    "banner": {
+      "appUpdate": {
+        "action": "Actualizați acum",
+        "available": "O nouă versiune a aplicației este gata.",
+        "download": "Descărcați actualizarea",
+        "later": "Mai târziu",
+        "restart": "Reporniți pentru a actualiza",
+        "updating": "Se actualizează...",
+        "newerVersionAvailableTitle": "Versiune mai nouă disponibilă",
+        "newerVersionAvailable": "O versiune mai nouă (v{{version}}) este disponibilă. Vă rugăm să faceți clic din nou pe Descărcați actualizarea pentru a o descărca.",
+        "upToDateTitle": "Framezoo este actualizat",
+        "upToDate": "Te afli deja pe cea mai recentă versiune pentru desktop (v{{version}}).",
+        "updateFailedTitle": "Actualizarea desktopului a eșuat",
+        "downloadFailed": "Nu se poate descărca cea mai recentă actualizare pentru desktop.",
+        "checkFailed": "Nu se pot verifica actualizările pentru desktop în acest moment."
+      },
+      "offline": "Nu se poate conecta la server. Vă rugăm să încercați din nou în câteva secunde.",
+      "lowSpace": "Dispozitivul tău rămâne fără spațiu de stocare. Acest lucru poate afecta redarea în flux și descărcarea."
+    },
+    "status": {
+      "offline": "Offline",
+      "lowSpace": "Spațiu de stocare redus",
+      "lowSpaceWithPercent": "Spațiu de stocare rămas: {{percent}}%"
+    },
+    "download": {
+      "empty": "Nu sunt încă configurate descărcări.",
+      "failed": "Opțiunile de descărcare nu au putut fi încărcate.",
+      "label": "Descărcați aplicația",
+      "options": {
+        "mac-arm64": {
+          "description": "Cel mai bun pentru Mac-urile din seria M",
+          "label": "macOS Apple Silicon"
+        },
+        "mac-universal": {
+          "description": "Funcționează atât pe Apple Silicon, cât și pe Mac-uri Intel",
+          "label": "macOS Universal"
+        },
+        "mac-x64": {
+          "description": "Cel mai bun pentru Mac-uri Intel",
+          "label": "macOS Intel"
+        },
+        "win-arm64": {
+          "description": "Cel mai bun pentru computerele Snapdragon/ARM Windows",
+          "label": "Windows ARM64"
+        },
+        "win-x64": {
+          "description": "Cel mai bun pentru computerele Windows pe 64 de biți",
+          "label": "Windows x64"
+        }
+      },
+      "unavailable": "Nu este configurată nicio adresă URL de backend."
+    },
+    "install": {
+      "genericGuide": "Browserul dvs. nu acceptă o solicitare automată de instalare PWA.\nPuteți instala în continuare utilizând meniul browserului (de exemplu: „Instalați aplicația”, „Creați o comandă rapidă” sau „Adăugați la Dock/Ecranul de pornire”).",
+      "iosSafariGuide": "Pentru a instala Framezoo ca aplicație:\n\n1. Atingeți butonul Partajare (pătrat cu o săgeată).\n2. Alegeți „Adăugați la ecranul de pornire”.\n3. Atingeți Adăugați."
+    },
+    "menu": {
+      "accountMenu": "Deschide meniul cont",
+      "addons": "Suplimente",
+      "desktop": "Setările aplicației",
+      "feedback": "Feedback",
+      "logout": "Deconectați-vă",
+      "register": "Sincronizare în Cloud",
+      "settings": "Setări"
+    }
+  },
+  "notFound": {
+    "badge": "Nu a fost găsit",
+    "goHome": "Înapoi acasă",
+    "message": "Ne-am uitat peste tot: sub pubele, în dulap, În spatele proxy-ului dar din păcate nu am găsit pagina pe care dumneavoastră o căutați.",
+    "reloadButton": "Încearcă din nou",
+    "title": "N-am putut găsi pagina"
+  },
+  "onboarding": {
+    "defaultConfirm": {
+      "cancel": "Anulare"
+    }
+  },
+  "overlays": {
+    "close": "Închide"
+  },
+  "player": {
+    "back": {
+      "default": "Înapoi acasă",
+      "short": "Înapoi"
+    },
+    "casting": {
+      "device": "dispozitiv",
+      "to": "Se proiectează pe {{device}} 📺"
+    },
+    "loadingOverlayMessages": {
+      "1": "Se descarcă mai mult RAM...",
+      "2": "Transformarea cofeinei în conținut...",
+      "3": "Învăț hamsterul să alerge mai repede...",
+      "4": "Convingem electronii să se miște mai repede...",
+      "5": "Aproape acolo... a spus fiecare bară de încărcare vreodată...",
+      "6": "Găsirea telecomenzii... așteptați, problemă greșită...",
+      "7": "Numărând înapoi de la infinit...",
+      "8": "Simulând viitorul...",
+      "9": "Vizionez videoclipuri cu pisici...",
+      "10": "Distrasă de GIF-urile pisicilor...",
+      "11": "Vă rugăm să așteptați până când stagiarul își umple cafeaua...",
+      "12": "Se verifică dacă este conectat...",
+      "13": "Opresc și pornesc din nou...",
+      "14": "Nu vă panicați...",
+      "15": "Vine iarna...",
+      "16": "Conectarea la Skynet...",
+      "17": "Toate browserele dvs. ne aparțin...",
+      "18": "Caut un impuls infinit de improbabilitate...",
+      "19": "Descoperind noi moduri de a te face să aștepți...",
+      "20": "Timpul tău este foarte important pentru noi. Vă rugăm să așteptați în timp ce vă ignorăm...",
+      "21": "Încă mai rapid decât Windows Update...",
+      "22": "De ce nu iei un sandviș?"
+    },
+    "menus": {
+      "audio": {
+        "default": "Implicit",
+        "modeSection": "Mod de ieșire audio",
+        "tracksSection": "Piste audio",
+        "modes": {
+          "auto": "Sunet surround / Automat",
+          "autoDesc": "5.1/7.1, Dolby Atmos, Apple Spatial Audio, Windows Sonic",
+          "stereoDialogue": "Stereo (amplificare dialog)",
+          "stereoDialogueDesc": "Claritate vocală îmbunătățită pentru difuzoarele laptopului sau ascultarea pe timp de noapte",
+          "passthrough": "Transmisie (Bitstream)",
+          "passthroughDesc": "Flux digital direct pentru soundbar-uri externe și receivere AV"
+        }
+      },
+      "episodes": {
+        "button": "Episoade",
+        "emptyState": "Nu sunt episoade in sezonul acesta, reveniți mai târziu!",
+        "episodeBadge": "E{{episode}}",
+        "favorites": "Favorite",
+        "loadingError": "Eroare la încărcarea sezonul",
+        "loadingList": "Se încarcă...",
+        "loadingTitle": "Se încarcă...",
+        "markAsFavorite": "Marcați ca favorit",
+        "markAsUnwatched": "Marcați ca nevizionat",
+        "markAsWatched": "Marcați ca urmărit",
+        "noFavorites": "Încă nu există episoade preferate. Episoade cu stea pentru a le adăuga la favorite!",
+        "showLess": "Arată mai puțin",
+        "showMore": "Arată mai multe",
+        "specials": "Speciale"
+      },
+      "playback": {
+        "disabled": "(Dezactivat în petrecerea de vizionare)",
+        "speedBoosted": "2x",
+        "speedLabel": "Viteză de redare",
+        "speedUnboosted": "{{speed}}x",
+        "title": "Setările de redare"
+      },
+      "quality": {
+        "auto": "Auto",
+        "automaticLabel": "Calitate automată",
+        "hint": "Puteți încerca <0>Schimbarea sursei</0> pentru a primi opțiuni de calitate diferită.",
+        "iosNoQuality": "Din cauza limitărilor definite de Apple, selecția calității nu este disponibilă pe iOS pentru această sursă. Puteți încerca să <0>treceți la altă sursă</0> pentru a obține diferite opțiuni de calitate.",
+        "title": "Calitate"
+      },
+      "settings": {
+        "audioItem": "Audio",
+        "enableSubtitles": "Activează subtitlurile",
+        "playbackItem": "Setări de redare",
+        "qualityItem": "Calitate",
+        "sourceItem": "Surse video",
+        "subtitleItem": "Setările subtitlului"
+      },
+      "subtitles": {
+        "autoSelectChoice": "Selectare automată",
+        "autoSelectDifferentChoice": "Atingeți din nou pentru a selecta automat diferite subtitrări",
+        "clearSecondary": "Ștergeți subtitrarea secundară",
+        "customChoice": "Selectați subtitlul din filă",
+        "customizeLabel": "Costumizează",
+        "delayEarly": "Am văzut legenda",
+        "delayLate": "S-a auzit audio",
+        "doubleClickToCopy": "Faceți dublu clic pentru a copia datele subtitrarilor",
+        "dropSubtitleFile": "Aruncă fișierul de subtitrare aici! >_<",
+        "dualSub": "Subtitrări duble",
+        "dualSubDesc": "Selectați același format (SRT, VTT...) și furnizor (OpenSubs...) pentru cea mai bună sincronizare",
+        "dualSubHint": "Selectați o limbă pentru subtitrarea secundară (afișată deasupra principalului)",
+        "dualSubSelectHint": "Alegeți un subtitrare principal și unul secundar. Subtitrările duale se activează automat.",
+        "dualSubEnabled": "Subtitrări duale activate",
+        "dualSubPrimaryBadge": "Primar",
+        "dualSubSecondaryBadge": "Secundar",
+        "embedded": "Încorporat",
+        "empty": "Nu există subtitrări furnizate pentru aceasta.",
+        "fetchFailed": "Subtitrările nu s-au putut încărca, încercați din nou peste câteva secunde.",
+        "loadingExternal": "Se încarcă subtitrări externe...",
+        "loadingExternalProgress": "Se încarcă subtitrări externe... ({{progress}}%)",
+        "matchScoreLabel": "Potrivire ~{{score}}%",
+        "notFound": "Niciuna dintre opțiunile disponibile nu corespunde interogării dvs",
+        "offChoice": "Oprit",
+        "pasteChoice": "Lipiți datele subtitrarilor",
+        "previewLabel": "Previzualizare subtitrare:",
+        "primary": "Primar",
+        "refresh": "Actualizează subtitrări externe",
+        "refreshing": "Înviorare...",
+        "secondary": "Secundar",
+        "selectingSecondary": "Selectarea subtitrarii secundare",
+        "autoSyncTitle": "Sincronizare automată",
+        "autoSyncDescription": "Potriviți automat subtitrările cu dialogul rostit",
+        "autoSyncAction": "Porniți sincronizarea automată",
+        "autoSyncBadge": "AI",
+        "syncSubtitleConfirmTitle": "Sincronizați subtitrarea cu AI?",
+        "syncSubtitleConfirmDescription": "Subtitrările vor fi aliniate de AI pentru a se potrivi cu videoclipul.",
+        "syncSubtitleNoticeTitle": "Nota",
+        "syncSubtitleNoticeDescription": "Sincronizarea subtitrărilor poate dura ceva timp, în funcție de viteza de descărcare, pentru a recupera suficiente mostre audio pentru aliniere.",
+        "syncSubtitleSupportedLanguages": "Limbi audio acceptate",
+        "syncSubtitleSuccess": "Subtitrarea a fost sincronizată cu succes",
+        "syncSubtitleServerFallback": "Sincronizarea locală nu acceptă această limbă audio; sincronizat folosind serverul.",
+        "syncSubtitleFailed": "Subtitrarea nu a putut fi sincronizată",
+        "syncSubtitleFailedWithDetail": "Nu s-a putut sincroniza subtitrarea: {{detail}}",
+        "syncRateLimit": "Prea multe cereri. Vă rugăm să așteptați un moment înainte de a sincroniza din nou.",
+        "syncServerBusy": "Serviciul AI este ocupat în prezent. Vă rugăm să reîncercați în câteva secunde.",
+        "syncSubtitleOpen": "Sincronizați subtitrarea cu AI",
+        "syncSubtitleAction": "Sincronizare",
+        "syncSubtitlePreparing": "Se pregătește sunetul...",
+        "syncSubtitlePreparingAudio": "Se pregătește sunetul pentru sincronizare...",
+        "syncSubtitleWorking": "Framezoo sincronizează subtitrările...",
+        "syncSubtitleApplying": "Se aplică sincronizarea subtitrarilor...",
+        "settings": {
+          "backlink": "Subtitluri personalizate",
+          "delay": "Intârziera subtitlurilor",
+          "fixCapitals": "Fixați capitalizația",
+          "autoSync": "Sincronizare automată a subtitrărilor",
+          "syncingProgress": "Se sincronizează... ({{progress}}%) (acest proces poate dura 2-3 minute)",
+          "syncApplied": "Sincronizarea automată a fost aplicată.",
+          "timeline": "Cronologia subtitrarilor",
+          "timelineHint": "Alegeți un semnal de subtitrare pentru a-l sincroniza cu ora video curentă.",
+          "timelineEmpty": "Nu există indicii de subtitrare disponibile."
+        },
+        "title": "Subtitluri",
+        "transcriptChoice": "Transcriere",
+        "searchPlaceholder": "Caută subtitrări sau dialog...",
+        "delayLabel": "Compensare subtitrare",
+        "seekMode": "Caută",
+        "syncMode": "Sincronizare",
+        "syncOffset": "Offset: {{delay}}s",
+        "syncAction": "Sincronizare",
+        "nowPlaying": "Acum se joacă",
+        "syncDescription": "Faceți clic pe dialog care se potrivește cu scena video curentă sau ajustați offset:",
+        "resetDelay": "Resetați",
+        "translate": {
+          "title": "Traduceți din {{language}}"
+        },
+        "downloadFailed": "Subtitrarea nu a putut fi încărcată",
+        "unknownLanguage": "Necunoscut",
+        "useNativeSubtitles": "Subtitrări video native",
+        "useNativeSubtitlesDescription": "Difuzați subtitrări pentru ecran complet nativ și PiP"
+      },
+      "watchparty": {
+        "watchpartyItem": "Urmăriți petrecerea"
+      }
+    },
+    "metadata": {
+      "extensionPermission": {
+        "badge": "Permisune pierdută",
+        "button": "Folosește extensia",
+        "text": "Tu ai extensia, dar noi avem nevoie de permisiune ca să începem să folosim extensia.",
+        "title": "Configurează extensia"
+      },
+      "failed": {
+        "badge": "Eșuat",
+        "homeButton": "Du-te acasă :)",
+        "text": "Nu s-au putut încărca metadatele media din TMDB. Vă rugăm să verificați dacă TMDB este oprit sau blocat pe conexiunea ta. la internet.",
+        "title": "Nu s-au încărcat metadatele"
+      },
+      "legal": {
+        "badge": "Șters",
+        "text": "Această medie nu mai este valabilă din vina copyright-ului.",
+        "title": "Media a fost ștearsă"
+      },
+      "notFound": {
+        "badge": "Nu a fost găsit",
+        "homeButton": "Înapoi acasă :)",
+        "text": "Nu am putut găsi media pe care ați cerut-o. Poate este ștearsă sau ați manipulat adresa URL.",
+        "title": "Nu am putut găsi acel media."
+      }
+    },
+    "nextEpisode": {
+      "next": "Episodul următor",
+      "nextSeason": "Sezonul viitor",
+      "replay": "Reluare"
+    },
+    "playbackError": {
+      "autoResumeText": "A apărut o eroare la încercarea de a reda media 😖. Se încearcă automat celelalte surse...",
+      "badge": "Eroare la redare",
+      "copyDebugInfo": "Copiați informațiile de depanare",
+      "debugInfo": "Verificați consola pentru mai multe detalii.",
+      "errors": {
+        "errorAborted": "Preluarea media a fost întreruptă la cererea utilizatorului.",
+        "errorDecode": "În ciuda faptului că anterior a fost determinată a fi utilizabilă, a apărut o eroare în timpul încercării de a decoda resursa media, rezultând o eroare.",
+        "errorGenericMedia": "Eroare media cumva sa întâmplat.",
+        "errorNetwork": "A apărut o eroare de rețea care a împiedicat preluarea cu succes a suportului media, în ciuda faptului că fusese disponibil anterior.",
+        "errorNotSupported": "Obiectul media sau furnizorul media nu este acceptat."
+      },
+      "homeButton": "Du-te acasă :)",
+      "resumeButton": "Încercați următoarele surse",
+      "text": "A apărut o eroare la încercarea de a reda media. Vă rugăm să încercați din nou.",
+      "title": "O eroare la redarea videoului!"
+    },
+    "resume": {
+      "description": "Acest episod este vizionat în {{percentage}}%",
+      "restart": "Repornire",
+      "resume": "Relua",
+      "title": "Continuați să vizionați?"
+    },
+    "segment": {
+      "credits": "Credite",
+      "intro": "Introducere",
+      "recap": "Recapitulare"
+    },
+    "skipTime": {
+      "confidence": "încredere",
+      "connectApiKeyMessage": "Pentru a trimite segmente noi, introduceți cheia API TheIntroDB în setările de conexiuni",
+      "credits": "Omite credite",
+      "endOfVideo": "Sfârşit",
+      "endsAt": "Se încheie la {{time}}",
+      "submissionUnavailableMessage": "Trimiterea segmentelor nu este disponibilă pe acest server.",
+      "feedback": {
+        "modal": {
+          "cancel": "Anula",
+          "description": "Contribuiți la TheIntroDB trimițând marcaje temporale precise ale segmentului. Toate trimiterile sunt acceptate de comunitate înainte de a fi publicate.",
+          "endTimeLabel": "Sfârșit(e)",
+          "error": {
+            "endTime": "Este necesară ora de încheiere",
+            "mediaInfo": "Informațiile media nu sunt disponibile",
+            "segment": "Niciun segment selectat",
+            "startTime": "Este necesară ora de începere",
+            "submission": "Eroare la trimiterea marcajelor de timp",
+            "tidbKey": "Cheia TIDB API nu este setată"
+          },
+          "guide": {
+            "credits": {
+              "durationDesc": "Minim 5 secunde dacă este furnizat capăt. Se poate extinde până la sfârșitul media.",
+              "endDesc": "Opțional - lăsați gol dacă creditele se execută până la sfârșitul fișierului.",
+              "excludeDesc": "Excludeți scenele de la mijlocul creditelor sau post-credite; doar rolul principal de credit.",
+              "startDesc": "Obligatoriu - când încep creditele de închidere (de exemplu, când apare primul text de credit).",
+              "whenToTitle": "Ghid de marcaje temporale a creditelor:"
+            },
+            "durationDesc": "Min 5s dacă este furnizat sfârșitul",
+            "durationLabel": "Durată:",
+            "endDesc": "Opțional - gol dacă se extinde până la sfârșit",
+            "endLabel": "Sfârşit:",
+            "excludeDesc": "Scene post-credite",
+            "excludeLabel": "Exclude:",
+            "intro": {
+              "durationDesc": "Majoritatea intrărilor durează 30-90 de secunde. Minim 5 secunde dacă sunt setate atât începutul cât și sfârșitul.",
+              "endDesc": "Obligatoriu - când se termină introducerea (de obicei când începe cartea de titlu sau episodul principal).",
+              "excludeDesc": "Nu includeți deschideri reci sau scene pre-intro; doar secvența principală a titlurilor.",
+              "startDesc": "Opțional - lăsați gol dacă introducerea începe la începutul episodului.",
+              "whenToTitle": "Ghid de introducere a marcajelor de timp:"
+            },
+            "preview": {
+              "durationDesc": "Previzualizarea variază în lungime. Minim 5s.",
+              "endDesc": "Opțional - lăsați necompletat dacă previzualizarea se termină la sfârșitul conținutului media.",
+              "excludeDesc": "Previzualizarea durează de obicei 15-90 de secunde la sfârșitul episodului, previzualizarea episodului următor.",
+              "startDesc": "Necesar - când începe previzualizarea (de exemplu, când apare textul previzualizării).",
+              "whenToTitle": "Previzualizează ghidul de marcaje temporale:"
+            },
+            "recap": {
+              "durationDesc": "Recapitulare variază în lungime. Minim 5 secunde dacă sunt setate atât începutul cât și sfârșitul.",
+              "endDesc": "Obligatoriu - când se termină recapitularea și începe noul conținut.",
+              "excludeDesc": "Doar segmentul „activ anterior” sau recapitulare; nu includeți introducerea sau scenele noi.",
+              "startDesc": "Opțional - lăsați gol dacă recapitularea începe la începutul episodului.",
+              "whenToTitle": "Recapitulare ghid de marcaje temporale:"
+            },
+            "startDesc": "Necesar - când creditele încep să ruleze",
+            "startLabel": "Început:"
+          },
+          "placeholders": {
+            "end": {
+              "credits": "3:30 sau 210 (lasați gol pentru sfârșitul conținutului media)",
+              "intro": "3:30 sau 210 (obligatoriu)",
+              "preview": "3:30 sau 210 (lasați gol pentru sfârșitul conținutului media)",
+              "recap": "3:30 sau 210 (obligatoriu)"
+            },
+            "start": {
+              "credits": "2:30 sau 150 (obligatoriu)",
+              "intro": "2:30 sau 150 (lasați gol pentru început la început)",
+              "preview": "2:30 sau 150 (obligatoriu)",
+              "recap": "2:30 sau 150 (lasați gol pentru început la început)"
+            }
+          },
+          "segmentType": "Tip de segment",
+          "startTimeLabel": "Început(e)",
+          "submit": "Trimiteți",
+          "submitting": "Se trimite...",
+          "success": {
+            "title": "Trimitere reușită! Mulţumesc!"
+          },
+          "title": "Trimiteți marcajele de timp la TheIntroDB",
+          "types": {
+            "credits": "Credite",
+            "intro": "Introducere",
+            "preview": "Previzualizare",
+            "recap": "Recapitulare"
+          },
+          "whenToDesc": "Introduceți marcajele de timp în secunde (de exemplu, 150), formatul mm:ss (de exemplu, 2:30) sau formatul hh:mm:ss (de exemplu, 1:42:20). Vom converti automat formatul pentru dvs.",
+          "whenToTitle": "Ghid de marcaje temporale:"
+        },
+        "title": "A fost corect acest salt?"
+      },
+      "intro": "Omite introducerea",
+      "noSegments": "Nu sunt disponibile segmente de ignorare",
+      "recap": "Omite rezumatul",
+      "skipSegments": "Omite segmente",
+      "startsAt": "Începe la {{time}}",
+      "submissions": "{{count}} trimiteri",
+      "submitSegment": "Trimiteți segmentul",
+      "timeUnknown": "Timp necunoscut"
+    },
+    "time": {
+      "regular": "{{timeWatched}} / {{duration}}",
+      "remaining": "{{timeLeft}} rămas • Se termină la{{timeFinished, datetime}}",
+      "shortRegular": "{{timeWatched}}",
+      "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "Fișier: {{fileName}}",
+      "infohash": "Infohash: {{infoHash}}",
+      "infohashLabel": "Informații hash",
+      "network": "Rețea torrent",
+      "networkStatus": "Starea rețelei torrent",
+      "peers": "Semeni: {{count}}",
+      "peersLabel": "Colegi",
+      "progress": "Progres: {{progress}}%",
+      "completedLabel": "Finalizat",
+      "speed": "Viteză: {{speed}}",
+      "speedLabel": "Viteză",
+      "statistics": "Statistici",
+      "states": {
+        "buffering": "Buffering",
+        "downloading": "Descărcarea",
+        "error": "Eroare",
+        "ready": "Gata",
+        "starting": "Pornire",
+        "stopped": "oprit"
+      },
+      "unknown": "Necunoscut"
+    }
+  },
+  "screens": {
+    "finishingSetup": "Se termină configurarea...",
+    "loadingApp": "Se încarcă aplicația...",
+    "loadingUser": "Se încarcă profilul utilizatorului...",
+    "loadingUserError": {
+      "disconectCancel": "Anula",
+      "disconnectConfirm": "Confirma",
+      "disconnectMessage": "Deconectați-vă de la serverul de cont, păstrând cele mai recente date locale. Modificările și conținutul vizionat nu se vor sincroniza până când nu sunteți conectat din nou.",
+      "disconnectTitle": "Deconectați-vă de la backend?",
+      "logout": "Deconectare",
+      "reload": "Reîncărcați",
+      "reset": "Resetare servere personalizate",
+      "text": "Nu s-a încărcat profilul dvs. de utilizator. Vă rugăm să încercați să reîncărcați pagina.",
+      "textWithReset": "Nu s-a putut încărca profilul dvs. de utilizator utilizând serverul personalizat curent. Încercați să resetați serverul personalizat și apoi reîncărcați."
+    },
+    "migration": {
+      "failed": "Eroare la migrarea datelor voastre.",
+      "inProgress": "Vă rugăm să așteptați, migrăm datele dvs. Acest lucru nu ar trebui să dureze mult."
+    }
+  },
+  "settings": {
+    "account": {
+      "accountDetails": {
+        "editEmail": "Edita",
+        "editProfile": "Editează",
+        "emailLabel": "E-mail",
+        "logoutButton": "Deconectați-vă",
+        "nicknameLabel": "Pseudonim",
+        "nicknamePlaceholder": "Introduceți porecla",
+        "noEmail": "Nicio adresă de e-mail conectată"
+      },
+      "actions": {
+        "delete": {
+          "button": "Șterge contul",
+          "confirmButton": "Șterge contul",
+          "confirmDescription": "Această acțiune nu poate fi anulată. Contul dvs. și datele sincronizate vor fi șterse de pe server. Rapoartele trimise sunt păstrate separat; solicitați ștergerea lor prin intermediul secțiunii Feedback.",
+          "confirmTitle": "Ești sigur?",
+          "text": "Ștergeți contul și datele sincronizate de pe server. Rapoartele trimise sunt păstrate separat.",
+          "title": "Șterge contul"
+        },
+        "logoutAllDevices": {
+          "button": "Ieși din toate dispozitivele",
+          "text": "Aceasta te va deconecta de pe toate dispozitivele asociate contului tău.",
+          "title": "Încheie toate sesiunele"
+        },
+        "migration": {
+          "button": "Migrați contul",
+          "text": "Migrați-vă contul pe un nou server sau descărcați datele.",
+          "title": "Migrarea contului"
+        },
+        "title": "Acțiuni"
+      },
+      "devices": {
+        "deviceNameLabel": "Numele dispozitivului",
+        "failed": "Eroare la încărcarea sesiunii",
+        "lastActive": "Ultima activitate: {{date}}",
+        "loggedInAt": "Conectat: {{date}}",
+        "removeDevice": "Șterge",
+        "title": "Dispozitive",
+        "thisDevice": "Acest dispozitiv",
+        "activeNow": "Activ acum",
+        "sessionCount": "{{count}} sesiuni",
+        "types": {
+          "desktop": "Desktop",
+          "mobile": "Mobil",
+          "tablet": "Comprimat"
+        },
+        "unknownBrowser": "Browser necunoscut",
+        "unknownDevice": "Dispozitiv necunoscut",
+        "unknownOperatingSystem": "Sistem de operare necunoscut"
+      },
+      "profile": {
+        "finish": "Termină editarea",
+        "firstColor": "Culoarea profilului unu",
+        "secondColor": "Culoare profilului doi",
+        "title": "Editează poza de profil",
+        "userIcon": "Iconița utilizatorului"
+      },
+      "security": {
+        "currentEmailLabel": "Adresă de e-mail curentă",
+        "emailDescription": "Vom verifica adresele dumneavoastră de e-mail actuale și noi.",
+        "emailSame": "Noua adresă de e-mail trebuie să fie diferită de adresa actuală",
+        "emailTitle": "Schimbați adresa de e-mail",
+        "newEmailLabel": "Adresă de e-mail nouă",
+        "passwordDescription": "Vă vom trimite un cod de verificare la adresa de e-mail a contului dumneavoastră.",
+        "passwordTitle": "Schimbaţi parola",
+        "title": "Securitatea contului"
+      },
+      "register": {
+        "cta": "Începeți",
+        "text": "Partajați progresul vizionării între dispozitive și păstrați-le sincronizate.",
+        "title": "Sincronizare în Cloud"
+      },
+      "title": "Cont"
+    },
+    "all": {
+      "title": "Toate setările"
+    },
+    "appearance": {
+      "activeTheme": "Activ",
+      "customParts": {
+        "primary": "Primar",
+        "secondary": "Secundar",
+        "tertiary": "Terţiar"
+      },
+      "options": {
+        "carouselView": "Vedere carusel",
+        "carouselViewDescription": "Afișați secțiunile vizionate în prezent și marcați ca carusele în loc de grilă. Dezactivat implicit.",
+        "carouselViewLabel": "Vedere carusel",
+        "discover": "Secțiunea Descoperiți",
+        "discoverDescription": "Afișați secțiunea Descoperiți pe pagina de pornire de sub conținutul media marcat. Activat implicit.",
+        "discoverLabel": "Secțiunea Descoperiți",
+        "featured": "Media prezentate",
+        "featuredDescription": "Afișați un carusel de filme și emisiuni prezentate în partea de sus a paginii dvs. de pornire! Dezactivat implicit.",
+        "featuredLabel": "Media prezentate",
+        "forceCompactEpisodeView": "Forțați vizualizarea episodului compactă",
+        "forceCompactEpisodeViewDescription": "Forțați caruselul episodului din player să folosească vizualizarea verticală compactă „clasică”. Dezactivat implicit.",
+        "forceCompactEpisodeViewLabel": "Episoade compacte",
+        "homeSectionOrder": "Comanda secțiunii de acasă",
+        "homeSectionOrderDescription": "Trageți și plasați pentru a reordona secțiunile de vizionare și marcaje de pe pagina dvs. de pornire. Comanda de grup poate fi editată de pe pagina principală.",
+        "homeSectionOrderGroups": "Reordonați grupurile de marcaje",
+        "logos": "Logo-uri imagine",
+        "logosDescription": "Afișați sigle de imagine în loc de titluri de text în secțiunea modal și prezentată de detalii. Activat implicit.",
+        "logosLabel": "Logo-uri imagine",
+        "logosNotice": "De cele mai multe ori, siglele sunt doar în limba engleză. Alte limbi ar putea dori să dezactiveze acest lucru!",
+        "minimalCards": "Carduri minime",
+        "minimalCardsDescription": "Ascundeți conținutul text (titlu, tip, an) pe cardurile media, arătând doar imaginea afișului.",
+        "minimalCardsLabel": "Carduri minime",
+        "modal": "Detalii modal",
+        "modalDescription": "Afișați detaliile modal atunci când faceți clic pe un card media în loc să mergeți la pagina de vizionare. Este necesar un proxy sau o extensie pentru remorcă. Dezactivat implicit.",
+        "modalLabel": "Detalii modal",
+        "pauseOverlay": "Întrerupeți suprapunerea",
+        "pauseOverlayDescription": "Afișați un titlu/sigla și o descriere suprapusă atunci când playerul este întrerupt și inactiv.",
+        "pauseOverlayLabel": "Întrerupeți suprapunerea"
+      },
+      "sections": {
+        "bookmarks": "Marcaje",
+        "watching": "Vizionare în prezent"
+      },
+      "themes": {
+        "acid": "Acid",
+        "autumn": "Toamnă",
+        "blue": "Albastru",
+        "christmas": "Crăciun",
+        "classic": "Clasic",
+        "cobalt": "Cobalt",
+        "custom": "Personalizat",
+        "default": "Implicit",
+        "ember": "Ember",
+        "forest": "Pădure",
+        "frost": "Îngheţ",
+        "grape": "Strugurii",
+        "gray": "Gri",
+        "green": "Verde",
+        "hulk": "Hulk",
+        "mocha": "Moca",
+        "noir": "Noir",
+        "pink": "Roz",
+        "popsicle": "Popsicle",
+        "red": "Roșu",
+        "spark": "Scânteie",
+        "spiderman": "Omul Păianjen",
+        "teal": "Albastru verziu",
+        "wolverine": "Wolverine"
+      },
+      "title": "Aparență"
+    },
+    "connections": {
+      "server": {
+        "changeWarning": "Schimbarea serverului backend vă va deconecta. Continua?",
+        "changeWarningTitle": "Schimbați serverul de backend",
+        "error": "Eroare la conectarea la backend",
+        "notice": "Contul dvs. NU se sincronizează între backend-uri, așa că amintiți-vă pe care îl utilizați!"
+      },
+      "tidb": {
+        "description": "Contribuiți la TheIntroDB lăsând feedback cu privire la segmentele de introducere, recapitulare și credite. <0>Aflați mai multe.</0>",
+        "tokenLabel": "Cheia API"
+      },
+      "title": "Conexiuni"
+    },
+    "preferences": {
+      "autoplay": "Redare automată",
+      "autoplayDescription": "Redați automat următorul episod dintr-o serie după ce ajungeți la final.",
+      "autoplayLabel": "Redare automată",
+      "autoResumeOnPlaybackError": "Reluare automată la eroare de redare",
+      "autoResumeOnPlaybackErrorDescription": "Continuați automat căutarea altor surse atunci când sursa curentă eșuează în timpul redării. Dacă este dezactivată, veți vedea un ecran de eroare cu o opțiune de reluare manuală.",
+      "autoResumeOnPlaybackErrorLabel": "Reluare automată la eroare de redare",
+      "autoSkipSegments": "Omitere automată a segmentelor",
+      "autoSkipSegmentsDescription": "Când este activată, săriți automat introducerea, recapitularea și previzualizarea segmentelor în timp ce vizionați.",
+      "autoSkipSegmentsLabel": "Omite automat segmente",
+      "doubleClickToSeek": "Atingeți de două ori pentru a căuta",
+      "doubleClickToSeekDescription": "Atingeți de două ori partea stângă sau dreaptă a playerului pentru a căuta 10 secunde înainte sau înapoi.",
+      "doubleClickToSeekLabel": "Activați atingerea de două ori pentru a căuta",
+      "homeSectionOrder": "Ordinea categoriilor",
+      "homeSectionOrderDescription": "Trageți și plasați pentru a reordona categoriile afișate pe paginile principală și Descoperiți (inclusiv Add-ons).",
+      "resetHomeSectionOrder": "Resetare la ordinea implicită",
+      "keyboardShortcuts": "Comenzi rapide de la tastatură",
+      "keyboardShortcutsDescription": "Personalizați comenzile rapide de la tastatură pentru aplicație. Țineți apăsat ` pentru a afișa acest ajutor oricând",
+      "keyboardShortcutsLabel": "Personalizați comenzile rapide de la tastatură",
+      "language": "Limba aplicației",
+      "languageDescription": "Limba aplicată întregii aplicații.",
+      "lowPerformanceMode": "Performanță scăzută/mod lățime de bandă",
+      "lowPerformanceModeDescription": "Optimizează aplicația pentru conexiuni și dispozitive mai lente prin dezactivarea funcțiilor cu lățime de bandă mare. Acest mod reduce utilizarea datelor și îmbunătățește performanța, păstrând în același timp intactă funcționalitatea de bază de căutare și ceas.",
+      "lowPerformanceModeLabel": "Mod de performanță scăzută",
+      "showLess": "Arată mai puțin",
+      "showMore": "Arată mai multe",
+      "skipCredits": "Omite creditele de sfârșit",
+      "skipCreditsDescription": "Când este activat, redați automat următorul episod la 99% de finalizare pentru a sări peste creditele de final. Când este dezactivat, așteptați până când episodul este complet finalizat.",
+      "skipCreditsLabel": "Omite creditele finale",
+      "thumbnail": "Generați pictograme",
+      "thumbnailDescription": "De cele mai multe ori videoclipurile nu au pictograme. Puteți activa această setare pentru a le genera din mers, dar vă pot încetini videoclipul.",
+      "thumbnailLabel": "Generați pictograme",
+      "title": "Preferințe"
+    },
+    "reset": "Resetare",
+    "save": "Salvează",
+    "search": {
+      "placeholder": "Setări de căutare..."
+    },
+    "sidebar": {
+      "info": {
+        "appVersion": "Versiune",
+        "notLoggedIn": "Nu sunteți autentificat",
+        "checkForUpdates": "Verificați actualizările",
+        "upToDate": "În prezent sunteți la cea mai recentă versiune"
+      }
+    },
+    "subtitles": {
+      "backgroundBlurEnabledDescription": "Dezactivarea estomparii fundalului subtitrărilor poate remedia unele probleme de pâlpâire",
+      "backgroundBlurEnabledLabel": "Încețoșare de fundal",
+      "backgroundBlurLabel": "Blurarea fundalului",
+      "backgroundLabel": "Opacitatea fundalului",
+      "BorderThicknessLabel": "Grosimea chenarului",
+      "colorLabel": "Culoare",
+      "high": "Ridicat",
+      "low": "Implicit",
+      "previewQuote": "nu trebuie să mă tem. Frica este ucigașul minții.",
+      "textBoldLabel": "Text îngroșat",
+      "textSizeLabel": "Dimensiunea textului",
+      "textStyle": {
+        "Border": "Frontieră",
+        "default": "Implicit",
+        "depressed": "Deprimat",
+        "dropShadow": "Drop Shadow",
+        "raised": "Ridicat",
+        "title": "Stilul textului"
+      },
+      "title": "Subtitluri",
+      "verticalPositionLabel": "Poziție verticală"
+    },
+    "torrent": {
+      "title": "Streaming",
+      "maxSizeLabel": "Dimensiunea maximă a memoriei cache",
+      "maxSizeDescription": "Setați spațiul maxim pe disc utilizat pentru stocarea în cache a fișierelor flux. Dacă memoria cache depășește această limită, fișierele de flux mai vechi vor fi șterse.",
+      "cacheSizeBehaviorDescription": "Se aplică fluxurilor noi. Memoria cache este redusă la această dimensiune atunci când expiră datele torrentului inactiv (până la 5 minute după oprire). Redarea poate depăși această dimensiune; Fără memorare în cache, datele sunt eliminate atunci când fluxul se oprește, dar componentele încă ocupă disc în timpul redării.",
+      "noCaching": "Fără memorare în cache",
+      "infinite": "Infinit",
+      "unlimited": "Nelimitat",
+      "custom": "Personalizat...",
+      "customSizeLabel": "Dimensiune personalizată a memoriei cache în GiB",
+      "customSizePlaceholder": "e.g. 15",
+      "defaultDrive": "Implicit",
+      "defaultDriveDescription": "Noile date torrent folosesc locația implicită a aplicației. Fluxurile existente și cele active rămân acolo unde se află.",
+      "selectDrive": "Selectați folderul...",
+      "selectDriveError": "Nu s-a putut selecta folderul din cache.",
+      "cachingDriveLabel": "Unitate de memorare în cache",
+      "cachingDriveDescription": "Datele torrent noi sunt stocate în subfolderul Framezoo/torrents. Fluxurile existente și cele active rămân acolo unde sunt.",
+      "torrentProfileLabel": "Profil Torrent",
+      "profileDefault": "Implicit",
+      "profileSoft": "Moale",
+      "profileFast": "Rapid",
+      "profileUltraFast": "Ultra rapid",
+      "torrentProfileDescription": "Controale pentru citirea anticipată a fluxurilor noi: Soft 0,5×, Default 1×, Rapid 1,5×, Ultra Rapid 2×. Profilurile superioare pot utiliza mai multă lățime de bandă și spațiu temporar pe disc.",
+      "currentSizeLabel": "Dimensiunea actuală a memoriei cache",
+      "currentSizeLoading": "Încărcare...",
+      "clearCache": "Goliți memoria cache",
+      "clearCacheSuccess": "Cache-ul a fost golit",
+      "clearCacheError": "Nu s-a șters memoria cache. Vă rugăm să încercați din nou.",
+      "spaceLeftOnDevice": "({{space}} spațiu rămas pe dispozitiv)"
+    },
+    "unsaved": "Aveți modificări nesalvate"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "Acțiune și aventură",
+      "10765": "Sci-Fi & Fantasy"
+    }
+  },
+  "watchParty": {
+    "aheadOfHost": "Înaintea gazdei cu {{seconds}} secunde",
+    "alone": "Singur",
+    "behindHost": "În spatele gazdei cu {{seconds}} secunde",
+    "cancel": "Anula",
+    "connectedAsGuest": "Conectat pentru a urmări petrecerea ca invitat",
+    "contentMismatch": "Nu se poate participa la grupul de vizionare: conținutul nu se potrivește cu conținutul gazdei.",
+    "copyCode": "Faceți clic pentru a copia",
+    "emptyRoom": "Nimeni nu este încă în această cameră",
+    "enterCodeOrLink": "Introduceți un link comun pentru petrecerea de vizionare sau un cod de cameră",
+    "episodeMismatch": "Nu se poate participa la petrecerea de vizionare: vizionați un episod diferit de cel al gazdei.",
+    "guestFallback": "Oaspete",
+    "hosting": "Gazduire",
+    "hostParty": "Găzduiește o petrecere de vizionare",
+    "invalidRoom": "Nu se poate conecta la această cameră",
+    "isGuest": "Watching as a guest on <0>{{backendName}}</0>",
+    "isHost": "Hosting on <0>{{backendName}}</0>",
+    "join": "Alăturați-vă",
+    "joinParty": "Alăturați-vă unei petreceri de vizionare",
+    "leaveWatchParty": "Părăsiți Watch Party",
+    "linkCopied": "Copiat!",
+    "noHost": "Nicio gazdă în această petrecere de vizionare",
+    "save": "Salva",
+    "shareCode": "Partajați acest cod prietenilor (faceți clic pentru a copia linkul)",
+    "showStatusOverlay": "Afișați suprapunerea de stare",
+    "status": {
+      "inSync": "În sincronizare",
+      "outOfSync": "Desincronizat"
+    },
+    "syncing": "Se sincronizează...",
+    "validating": "Se validează petrecerea ceasului...",
+    "viewers": "Spectatori ({{count}})",
+    "watching": "Privind",
+    "withCount": "Cu alți {{count}}",
+    "you": "Tu"
+  },
+  "feedback": {
+    "modalTitle": "Trimite feedback",
+    "buttonLabel": "Feedback",
+    "subtitle": "Spuneți-ne despre orice problemă sau eroare pe care ați întâmpinat-o în timpul experienței dumneavoastră.",
+    "titleLabel": "1. Titlul problemei",
+    "titlePlaceholder": "de exemplu, eroare la încărcarea subtitrării, redare sacadată...",
+    "descriptionLabel": "2. Descrierea problemei",
+    "descriptionPlaceholder": "Descrieți problema în detaliu, pașii pentru reproducere sau sugestii...",
+    "submit": "Trimiteți feedback",
+    "attachmentsLabel": "Fișiere",
+    "attachmentsHint": "Imagini/videoclipuri · 55 MB maxim total",
+    "attachmentsTooLarge": "Dimensiunea totală a fișierului nu trebuie să depășească 55 MB.",
+    "cancel": "Anula",
+    "close": "Aproape",
+    "successTitle": "Feedback trimis!",
+    "successDesc": "Vă mulțumim pentru feedback. Echipa noastră va analiza și va rezolva problema cât mai curând posibil.",
+    "errorRequired": "Vă rugăm să introduceți atât titlul, cât și descrierea.",
+    "errorSubmit": "A apărut o eroare la trimiterea feedback-ului. Vă rugăm să încercați din nou mai târziu."
+  },
+  "donate": {
+    "button": "Suport Framezoo",
+    "badge": "O notă de la Framezoo",
+    "modalTitle": "Ajută-ne să continuăm să construim Framezoo",
+    "subtitle": "Fiecare contribuție ne ajută să îmbunătățim playerul, să ne extindem pe mai multe platforme și să fim atenți la ideile voastre.",
+    "note": "Îți mulțumim că îți pasă de Framezoo și că susții munca din spatele acesteia. Contribuția ta ne oferă mai mult spațiu pentru a construi o experiență mai bună pentru toată lumea.",
+    "scanHint": "Scanează acest cod QR cu aplicația ta bancară.",
+    "paypalLabel": "PayPal",
+    "momoLabel": "Mamă",
+    "paypalImageAlt": "Cod QR pentru donații PayPal",
+    "momoImageAlt": "Cod QR pentru donații MoMo",
+    "viewQr": "Vizualizați codul QR {{label}} mai mare",
+    "close": "Aproape"
+  },
+  "toasts": {
+    "emailChangeSuccess": "Adresa de e-mail a fost actualizată cu succes!",
+    "linkCopied": "Link copiat în clipboard!",
+    "loginSuccess": "Autentificat cu succes!",
+    "logoutSuccess": "Te-ai deconectat cu succes!",
+    "sessionExpired": "Sesiunea s-a încheiat sau ați fost deconectat(ă) pe un alt dispozitiv. Acum navigați ca invitat.",
+    "otpResent": "Codul de verificare a fost retrimis!",
+    "otpSent": "Codul de verificare a fost trimis pe adresa dvs. de e-mail!",
+    "passwordChangeSuccess": "Parola a fost schimbată cu succes!",
+    "passwordResetError": "Resetarea parolei a eșuat",
+    "passwordResetSuccess": "Parola a fost resetată cu succes!",
+    "registerSuccess": "Inregistrat cu succes!",
+    "newerVersionDownloading": "O versiune mai nouă (v{{version}}) este disponibilă. Se descarcă cea mai recentă versiune...",
+    "newerVersionAvailable": "O versiune mai nouă (v{{version}}) este disponibilă. Faceți clic pentru a descărca."
+  }
+}

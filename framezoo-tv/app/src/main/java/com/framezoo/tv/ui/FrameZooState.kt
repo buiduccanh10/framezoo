@@ -30,9 +30,12 @@ import org.json.JSONObject
 
 internal class FrameZooState(context: Context, private val scope: CoroutineScope) {
     val store = SecureStore(context)
+    val i18n = I18n(context, store.language)
     val backend = Backend(store)
     private val addons = Addons(context, backend, store)
     val player = PlayerController(context)
+
+    fun setLanguage(lang: String) { store.language = lang; i18n.setLanguage(lang) }
 
     var trailerEnabled by mutableStateOf(store.trailerEnabled)
         private set
@@ -156,7 +159,7 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
     var backendUrl by mutableStateOf(store.backendUrl)
 
     suspend fun initialize() {
-        try { discover = backend.discover() } catch (e: Exception) { error = e.message ?: "Không tải được Discover" }
+        try { discover = backend.discover() } catch (e: Exception) { error = e.message ?: i18n.t("auth.login.failedToReachServer") }
         refreshDiscover()
         installed = addons.list()
         addonCatalog = addons.catalog()
@@ -198,15 +201,15 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
                     val items = try {
                         discoverRow(section, selectedFilter, selectedProvider, genre)
                     } catch (e: CancellationException) { throw e } catch (e: Exception) {
-                        if (current()) rowErrors = rowErrors + (section to (e.message ?: "Không tải được nội dung")); emptyList()
+                        if (current()) rowErrors = rowErrors + (section to (e.message ?: i18n.t("auth.login.failedToReachServer"))); emptyList()
                     }
                     if (current() && filter == selectedFilter && (section != "provider" || provider == selectedProvider) && (section != "genre" || carouselGenre == genre)) {
                         sections = sections + (section to items)
                     }
                 } }.forEach { it.await() } }
-                if (sections.values.all { it.isEmpty() }) discoverError = "Không tải được nội dung"
+                if (sections.values.all { it.isEmpty() }) discoverError = i18n.t("auth.login.failedToReachServer")
             } catch (e: CancellationException) { throw e }
-            catch (e: Exception) { sections = emptyMap(); discoverError = e.message ?: "Không tải được nội dung" }
+            catch (e: Exception) { sections = emptyMap(); discoverError = e.message ?: i18n.t("auth.login.failedToReachServer") }
             finally { if (discoverGeneration == generation) discoverLoading = false }
         }
     }
@@ -244,7 +247,7 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
                 val items = discoverRow(section, selectedFilter, selectedProvider, selectedGenre)
                 if (current()) sections = sections + (section to items)
             } catch (e: CancellationException) { throw e } catch (e: Exception) {
-                if (current()) rowErrors = rowErrors + (section to (e.message ?: "Không tải được nội dung"))
+                if (current()) rowErrors = rowErrors + (section to (e.message ?: i18n.t("auth.login.failedToReachServer")))
             } finally {
                 if (current()) rowLoading = rowLoading - section
             }
@@ -265,7 +268,7 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
                   } }.forEach { it.await() }
                   curatedLists = curated.await()
                 }
-                if (allLists.values.all { it.isEmpty() }) allListsError = "Không tải được danh sách"
+                if (allLists.values.all { it.isEmpty() }) allListsError = i18n.t("auth.login.failedToReachServer")
             } finally { allListsLoading = false }
         }
     }
@@ -307,7 +310,7 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
                 val focusItem = next.firstOrNull { "${it.type}:${it.id}" !in existingIds } ?: moreItems.lastOrNull()
                 if (page == "discover-more" && focusItem != null) focusReturnMediaId = "${focusItem.type}:${focusItem.id}:${focusItem.addonManifest}"
                 morePage = nextPage; moreHasNext = hasNext && (addon == null || moreItems.size > previousCount)
-            } catch (e: CancellationException) { throw e } catch (e: Exception) { moreError = e.message ?: "Không tải được nội dung" }
+            } catch (e: CancellationException) { throw e } catch (e: Exception) { moreError = e.message ?: i18n.t("auth.login.failedToReachServer") }
             finally { if (generation == moreGeneration) moreLoading = false }
         }
     }
@@ -326,7 +329,7 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
                 if (generation != moreGeneration) return@launch
                 moreItems = items
                 moreHasNext = hasNext
-            } catch (e: CancellationException) { throw e } catch (e: Exception) { moreError = e.message ?: "Không tải được nội dung" }
+            } catch (e: CancellationException) { throw e } catch (e: Exception) { moreError = e.message ?: i18n.t("auth.login.failedToReachServer") }
             finally { if (generation == moreGeneration) moreLoading = false }
         }
     }
@@ -334,7 +337,7 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
     fun runTask(block: suspend () -> Unit) {
         scope.launch {
             busy = true; error = ""
-            try { block() } catch (e: CancellationException) { throw e } catch (e: Exception) { error = e.message ?: "Lỗi không rõ" }
+            try { block() } catch (e: CancellationException) { throw e } catch (e: Exception) { error = e.message ?: i18n.t("auth.login.failedToReachServer") }
             finally { busy = false }
         }
     }
@@ -411,7 +414,7 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
                 if (generation == searchGeneration) results = enriched
             }
             catch (e: CancellationException) { throw e }
-            catch (e: Exception) { searchError = e.message ?: "Không tìm kiếm được" }
+            catch (e: Exception) { searchError = e.message ?: i18n.t("auth.login.failedToReachServer") }
             finally { if (searchGeneration == generation) searchLoading = false }
         }
     }
@@ -497,7 +500,7 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         if (item.addonManifest != null) episodes = addonEpisodes.filter { it.season == season }
         else seasonJob = scope.launch {
             try { episodes = backend.episodes(item.id, season) }
-            catch (e: CancellationException) { throw e } catch (e: Exception) { error = e.message ?: "Không tải được tập phim" }
+            catch (e: CancellationException) { throw e } catch (e: Exception) { error = e.message ?: i18n.t("auth.login.failedToReachServer") }
             finally { if (selectedSeason == season) episodesLoading = false }
         }
     }

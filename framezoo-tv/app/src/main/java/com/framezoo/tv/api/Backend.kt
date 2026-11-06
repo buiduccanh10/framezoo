@@ -131,7 +131,7 @@ class Backend(private val store: SecureStore) {
     suspend fun discoverOptions(): Pair<List<DiscoverOption>, List<DiscoverOption>> {
         val genres = listOf("movie", "tv").flatMap { kind ->
             val array = (request("/api/tmdb/genre/$kind/list?language=vi-VN") as JSONObject).optJSONArray("genres") ?: JSONArray()
-            (0 until array.length()).mapNotNull { array.optJSONObject(it) }.map { DiscoverOption(it.optString("id"), when (it.optInt("id")) { 10759 -> "Hành động & Phiêu lưu"; 10765 -> "Khoa học Viễn tưởng & Giả tưởng"; else -> it.optString("name") }) }
+            (0 until array.length()).mapNotNull { array.optJSONObject(it) }.map { DiscoverOption(it.optString("id"), when (it.optInt("id")) { 10759 -> if (store.language == "vi") "Hành động & Phiêu lưu" else it.optString("name"); 10765 -> if (store.language == "vi") "Khoa học Viễn tưởng & Giả tưởng" else it.optString("name"); else -> it.optString("name") }) }
         }.distinctBy { it.id }.sortedBy { it.name }
         val countries = request("/api/tmdb/configuration/countries?language=vi-VN") as JSONArray
         val locale = java.util.Locale.forLanguageTag("vi-VN")
@@ -301,7 +301,7 @@ class Backend(private val store: SecureStore) {
         val crew = raw.optJSONArray("crew") ?: JSONArray()
         val director = (0 until crew.length()).mapNotNull { crew.optJSONObject(it) }.firstOrNull { it.optString("job") == "Director" }
         return (listOfNotNull(director) + (0 until cast.length()).mapNotNull { cast.optJSONObject(it) }.filter { it.optString("profile_path").isNotBlank() }.take(20)).map {
-            CastMember(it.optString("id"), it.optString("name"), if (it === director) "Đạo diễn" else it.optString("character"), image(it.optString("profile_path")))
+            CastMember(it.optString("id"), it.optString("name"), if (it === director) "Director" else it.optString("character"), image(it.optString("profile_path")))
         }
     }
     suspend fun trailers(item: Media): List<Trailer> {
@@ -316,7 +316,9 @@ class Backend(private val store: SecureStore) {
         val raw = request("/api/tmdb/tv/${encode(id)}/season/$season") as JSONObject
         val episodes = raw.optJSONArray("episodes") ?: JSONArray()
         return (0 until episodes.length()).mapNotNull { episodes.optJSONObject(it) }.map {
-            Episode(season, it.optInt("episode_number"), it.optString("name", "Tập ${it.optInt("episode_number")}"), image(it.optString("still_path"), "w500"), it.optString("id"), it.optString("overview"), it.optString("air_date"), raw.optString("id"))
+            val epNum = it.optInt("episode_number")
+            val epName = it.optString("name").ifBlank { "Episode $epNum" }
+            Episode(season, epNum, epName, image(it.optString("still_path"), "w500"), it.optString("id"), it.optString("overview"), it.optString("air_date"), raw.optString("id"))
         }
     }
 

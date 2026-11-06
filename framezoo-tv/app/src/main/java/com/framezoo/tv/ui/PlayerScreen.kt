@@ -47,8 +47,9 @@ internal fun PlayerScreen(player: PlayerController, item: Media, episode: Episod
     var position by remember { mutableStateOf(0.0) }
     var duration by remember { mutableStateOf(0.0) }
     var error by remember { mutableStateOf("") }
+    val defaultSourceError = t("player.playbackError.title")
     LaunchedEffect(stream) {
-        try { player.play(stream, subtitles) } catch (e: Exception) { error = e.message ?: "Không phát được nguồn" }
+        try { player.play(stream, subtitles) } catch (e: Exception) { error = e.message ?: defaultSourceError }
     }
     LaunchedEffect(stream, resume) {
         if (resume > 20) {
@@ -89,12 +90,12 @@ internal fun PlayerScreen(player: PlayerController, item: Media, episode: Episod
             Text("${position.toInt()}s / ${duration.toInt()}s", color = colors["video.context.type.main"])
             if (error.isNotBlank()) Text(error, color = colors["type.danger"])
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                TvButton("Tua lại", icon = R.drawable.desktop_skip_backward) { player.command("seek", "-10", "relative") }
-                TvButton("Phát / Tạm dừng") { player.command("cycle", "pause") }
-                TvButton("Tua tới", icon = R.drawable.desktop_skip_forward) { player.command("seek", "10", "relative") }
+                TvButton("10s", icon = R.drawable.desktop_skip_backward) { player.command("seek", "-10", "relative") }
+                TvButton(t("player.playbackControls")) { player.command("cycle", "pause") }
+                TvButton("10s", icon = R.drawable.desktop_skip_forward) { player.command("seek", "10", "relative") }
                 TvButton("Audio") { player.command("cycle", "audio") }
-                TvButton("Phụ đề") { player.command("cycle", "sub") }
-                TvButton("Thoát") { onExit() }
+                TvButton(t("player.menus.subtitles.title")) { player.command("cycle", "sub") }
+                TvButton(t("player.back.short")) { onExit() }
             }
         }
     }

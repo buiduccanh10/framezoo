@@ -1,0 +1,1528 @@
+{
+  "actions": {
+    "cancel": "取消",
+    "confirm": "確認",
+    "copied": "已複製",
+    "copy": "複製"
+  },
+  "addons": {
+    "catalog": {
+      "badge": "外掛"
+    },
+    "manager": {
+      "add": "添加",
+      "addWithoutConfiguring": "照常安裝（可能無法正常運作）",
+      "adding": "新增...",
+      "ariaClose": "關閉外掛程式管理器",
+      "ariaManage": "管理插件",
+      "configRequiredDesc": "此外掛程式需要配置（例如 API 金鑰或語言設定）才能傳回內容。請在瀏覽器中進行配置，然後將產生的清單 URL 複製並貼上到此處。",
+      "configRequiredTitle": "需要配置",
+      "configureAction": "配置",
+      "errorFallback": "無法安裝此外掛程式。",
+      "manageListButton": "管理外掛程式列表",
+      "openConfigurePage": "開啟配置頁面",
+      "subtitle": "我們不建議添加任何非官方或非法的附加元件。",
+      "title": "桌面插件"
+    },
+    "platforms": {
+      "framezoo": "Framezoo",
+      "stremio": "Stremio",
+      "supportLabel": "插件支援的平台：",
+      "supported": "支援的平台：Framezoo 和 Stremio"
+    },
+    "page": {
+      "addAddonButton": "新增插件",
+      "configRequiredBadge": "需要配置",
+      "configRequiredWarning": "此插件尚未配置，可能無法載入視訊串流或字幕。",
+      "configureAddon": "配置此插件",
+      "configureCustomKeyActive": "您的金鑰已配置（點擊變更）",
+      "configureRequiredAction": "配置此外掛程式（必需）",
+      "customKeyActiveDesc": "使用您的個人 Wyzie API 金鑰",
+      "customKeyConfiguredBadge": "您的金鑰已配置完成",
+      "description": "插件是可選的。此應用程式不捆綁、推薦或託管任何插件。",
+      "disabled": "殘障人士",
+      "emptyInstalled": "系統中尚未安裝任何插件。",
+      "enabled": "啟用",
+      "installError": "無法安裝此外掛程式。",
+      "installedHeading": "已安裝的插件",
+      "processing": "加工...",
+      "removeAddon": "刪除這個插件",
+      "subtitlesConfiguredError": "字幕 API 金鑰配置失敗。請重試！",
+      "subtitlesConfiguredSuccess": "字幕API金鑰配置成功！",
+      "title": "外掛程式管理器"
+    },
+    "player": {
+      "chooseAddon": "選擇一個插件",
+      "emptyExplanation": "未安裝或啟用任何插件。新增您在 Addons 中選擇的清單 URL。",
+      "emptyTitle": "沒有可用的串流插件",
+      "loadingStreams": "正在加載流...",
+      "manageAddonsButton": "管理外掛程式列表",
+      "noAddonStreams": "此插件沒有返回任何串流。",
+      "noStreams": "沒有直播串流",
+      "noTorrentStreams": "此插件沒有傳回種子流。",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "所有品質",
+        "other": "其他"
+      },
+      "sources": "來源",
+      "streamCount": "{{count}} 流",
+      "streamCount_plural": "{{count}} 流",
+      "title": "桌面插件",
+      "unableToLoad": "無法載入串流",
+      "viewStreams": "查看串流"
+    }
+  },
+  "auth": {
+    "backendSelection": {
+      "active": "積極的",
+      "confirm": "確認",
+      "customBackend": "自訂後端",
+      "customBackendPlaceholder": "https://",
+      "description": "選擇要連接的後端伺服器",
+      "title": "選擇帳戶伺服器"
+    },
+    "createAccount": "還沒有帳戶？ <0>建立一個</0>",
+    "generate": {
+      "custom": "風俗",
+      "customPassphraseLabel": "自訂密碼",
+      "customPassphrasePlaceholder": "輸入您的自訂密碼",
+      "description": "您的密碼短語相當於使用者名稱與密碼。由於您需要輸入它來登入帳戶，請確保將其存放到安全位置",
+      "invalidPassphraseCharacters": "密碼字元無效。只允許使用英文字母、數字 1-10 和普通符號。",
+      "next": "我已經儲存密碼短語",
+      "passphraseFrameLabel": "密碼短語",
+      "passphraseTooShort": "密碼短語的長度必須至少為 8 個字元。",
+      "title": "您的密碼短語",
+      "useCustomPassphrase": "使用自訂密碼",
+      "usePasskeyInstead": "使用密鑰代替"
+    },
+    "hasAccount": "已經擁有帳戶？ <0>點此登入。 </0>",
+    "login": {
+      "description": "輸入您的使用者名稱或電子郵件和密碼以登入您的帳戶",
+      "failedToReachServer": "無法到達伺服器",
+      "identifierLabel": "使用者名稱或電子郵件",
+      "identifierNotFound": "找不到使用者名稱或電子郵件",
+      "identifierPlaceholder": "輸入您的使用者名稱或電子郵件",
+      "identifierRequired": "需要使用者名稱或電子郵件",
+      "noBackendUrl": "無後端網址",
+      "or": "or",
+      "passwordIncorrect": "密碼不正確",
+      "invalidCredentials": "使用者名稱或密碼錯誤",
+      "passwordLabel": "密碼",
+      "passwordPlaceholder": "輸入您的密碼",
+      "rememberMe": "記住我的密碼",
+      "passwordRequired": "需要密碼",
+      "submit": "登入",
+      "title": "登入您的帳戶",
+      "usePasskey": "使用金鑰",
+      "validationError": "密碼短語不正確或不完整"
+    },
+    "otp": {
+      "codeLabel": "驗證碼",
+      "continue": "繼續",
+      "emailNewDescription": "請輸入發送到您新信箱的驗證碼。",
+      "emailNewTitle": "請驗證您的新電子郵件",
+      "emailOldDescription": "請輸入發送到您目前信箱的驗證碼。",
+      "emailOldTitle": "請確認您目前的電子郵件地址。",
+      "expired": "驗證碼已過期",
+      "expiresIn": "代碼將於{{time}}過期",
+      "finish": "結束",
+      "forgotDescription": "請輸入您的帳戶信箱以接收驗證碼。",
+      "forgotLink": "忘記密碼了嗎？",
+      "forgotTitle": "忘記密碼？",
+      "invalid": "驗證碼無效",
+      "newPasswordDescription": "為您的帳戶選擇一個新密碼。",
+      "newPasswordTitle": "建立新密碼",
+      "passwordChangeDescription": "請輸入發送到您信箱的驗證碼。",
+      "passwordChangeTitle": "確認密碼更改",
+      "registrationDescription": "輸入發送到您信箱的驗證碼，完成帳戶建立。",
+      "registrationTitle": "請驗證您的電子郵件",
+      "requestFailed": "無法發送驗證碼",
+      "resend": "重新發送程式碼",
+      "resendFailed": "無法重新發送驗證碼",
+      "resendIn": "{{seconds}}s 中提供重新傳送功能",
+      "resetDescription": "請輸入發送到您信箱的驗證碼。",
+      "resetTitle": "重設密碼",
+      "send": "傳送代碼"
+    },
+    "register": {
+      "confirmPasswordLabel": "確認密碼",
+      "confirmPasswordPlaceholder": "確認您的密碼",
+      "emailInvalid": "輸入有效的電子郵件地址",
+      "emailLabel": "個人信箱",
+      "emailPlaceholder": "輸入您的個人電子郵件",
+      "emailTaken": "信箱已註冊",
+      "information": {
+        "color1": "頭像配色一",
+        "color2": "輪廓顏色二",
+        "header": "為您的裝置輸入名稱，並選取一組代表色和一個使用者圖示",
+        "icon": "使用者圖示",
+        "next": "下一步",
+        "title": "帳號資訊"
+      },
+      "nicknameLabel": "暱稱",
+      "nicknamePlaceholder": "選擇一個獨特的暱稱",
+      "nicknameTaken": "暱稱已被佔用",
+      "nicknameRequired": "暱稱為必填項",
+      "passwordInput": {
+        "description": "選擇暱稱、個人電子郵件和密碼。您的密碼是安全密碼，因此請務必記住它！",
+        "title": "建立您的登入名"
+      },
+      "passwordLabel": "密碼",
+      "passwordMismatch": "密碼不匹配",
+      "passwordPlaceholder": "建立密碼（用作您的密碼）",
+      "passwordWeak": "密碼必須至少8位，包含字母和數字",
+      "privacyPolicy": "隱私權政策",
+      "submit": "建立帳戶",
+      "legalConsent": "我已閱讀並同意<terms>服務條款</terms>和<privacy>隱私權政策</privacy>。"
+    },
+    "trust": {
+      "failed": {
+        "text": "您的配置是否正確？",
+        "title": "無法連接伺服器"
+      },
+      "host": "您正在連線到 <0>{{hostname}}</0> - 在建立帳戶之前，請確保您信任它",
+      "no": "返回",
+      "noHost": "因為沒有配置伺服器，所以你不能夠創建帳戶",
+      "noHostTitle": "没有配置伺服器!",
+      "title": "您是否信任這個伺服器？",
+      "yes": "我信任這個伺服器"
+    },
+    "verify": {
+      "description": "請輸入早前的密碼短語，以確認您已經保存它，並建立您的帳戶",
+      "invalidData": "資料無效",
+      "noMatch": "密碼短語不匹配",
+      "recaptchaFailed": "ReCaptcha 驗證失敗",
+      "register": "創建帳戶",
+      "title": "確認您的密碼短語"
+    }
+  },
+  "details": {
+    "addToList": "添加到列表",
+    "airs": "空氣",
+    "collection": {
+      "bookmarkAll": "全部加書籤",
+      "movie": "電影",
+      "movies": "電影",
+      "rating": "等級",
+      "releaseDate": "發布日期",
+      "sortBy": "排序方式"
+    },
+    "endsAt": "結束於 {{time}}",
+    "episode": "插曲",
+    "episodeNumber": "第 {{number}} 集",
+    "episodeReleaseDate": "發布日期：{{date}}",
+    "episodeReleaseDateUnknown": "發布日期： 未知",
+    "episodes": "劇集數",
+    "imdb": "在 IMDb 上查看",
+    "language": "語言：",
+    "play": "玩",
+    "rating": "等級：",
+    "releaseDate": "發布日期：",
+    "resume": "恢復",
+    "runtime": "運行時間：",
+    "season": "季節",
+    "specialSeason": "特別季節",
+    "seasons": "季節",
+    "similar": "相似的",
+    "tmdb": "在 TMDB 上查看",
+    "trailers": "拖車",
+    "watched": "觀看了 {{watched}} 個，共 {{total}} 個 ({{percentage}}%)"
+  },
+  "discover": {
+    "allLists": "所有電影列表",
+    "carousel": {
+      "change": "改變",
+      "more": "看更多",
+      "today": "今天",
+      "thisWeek": "本星期",
+      "title": {
+        "4kReleases": "4K 發布",
+        "addons": "外掛",
+        "editorPicks": "編輯精選",
+        "editorPicksMovies": "編輯精選電影",
+        "editorPicksShows": "編輯精選節目",
+        "forYou": "為你",
+        "genres": "類型",
+        "inCinemas": "在電影院",
+        "latest": "最新發布",
+        "latestReleases": "最新發布",
+        "latestTVReleases": "最新電視節目",
+        "movies": "{{category}} 電影",
+        "moviesOn": "{{provider}} 上的電影",
+        "onTheAir": "直播中",
+        "popular": "最受歡迎",
+        "providers": "提供者",
+        "recommendations": "建議",
+        "recommended": "因為您觀看了：{{title}}",
+        "top10": "前10名",
+        "topRated": "最受好評",
+        "trending": "現在流行",
+        "tvshows": "{{category}} 演出",
+        "tvshowsOn": "演出於 {{provider}}"
+      }
+    },
+    "featured": {
+      "moreInfo": "更多資訊",
+      "playNow": "立即播放"
+    },
+    "filters": {
+      "country": "國家"
+    },
+    "page": {
+      "back": "回去",
+      "loading": "載入中...",
+      "loadMore": "加載更多",
+      "title": "探索電影和電視"
+    },
+    "scrollToTop": "回到頂部",
+    "tabs": {
+      "all": "全部",
+      "movies": "電影",
+      "top10": "前10名",
+      "tvshows": "電視節目"
+    },
+    "viewLists": "查看所有電影列表"
+  },
+  "downtimeNotice": {
+    "badge": "問題",
+    "goHome": "回家吧",
+    "message": "Framezoo 再次遇到一些提供者的問題，如果您無法找到或播放節目，請更改來源。預計此錯誤將在以下時間內持續存在。",
+    "title": "提供者問題"
+  },
+  "errors": {
+    "badge": "它壞了",
+    "details": "錯誤詳情",
+    "reloadPage": "重新加載頁面",
+    "showError": "顯示錯誤詳情",
+    "title": "我們遇到了一個錯誤！"
+  },
+  "footer": {
+    "legal": {
+      "disclaimer": "免責聲明",
+      "disclaimerText": "Framezoo 不營運視訊串流來源。其伺服器可能會轉發字幕提供者的字幕，並在您選擇該功能時臨時處理音訊和字幕以實現同步。您可以控制自己播放的內容。"
+    },
+    "links": {
+      "fluxer": "助焊劑",
+      "funding": "支持我們",
+      "github": "GitHub"
+    },
+    "tagline": "高速流暢的串流播放，豐富的電影元數據，無限的串流字幕同步，以及來自多個來源的字幕。"
+  },
+  "global": {
+    "keyboardShortcuts": {
+      "cancel": "取消",
+      "clickToEdit": "點擊關鍵徽章進行編輯",
+      "conditions": {
+        "showsOnly": "僅顯示"
+      },
+      "conflict": "衝突",
+      "conflicts": "衝突",
+      "detected": "檢測到",
+      "editInSettings": "從設定中編輯鍵盤命令",
+      "groups": {
+        "audioVideo": "音訊和視訊",
+        "interface": "介面",
+        "jumpToPosition": "跳到位置",
+        "subtitlesAccessibility": "字幕和輔助功能",
+        "videoPlayback": "影片播放"
+      },
+      "none": "沒有任何",
+      "numberKeySeeking": "尋求關鍵進展數",
+      "numberKeySeekingDescription": "使用數字鍵 0-9 尋找影片中的特定位置。 0 開始，1-8 跳到 10%-80%，9 跳到 90%。",
+      "pressKey": "按一個鍵...",
+      "resetAllToDefault": "全部重設為預設值",
+      "resetToDefault": "重設為預設值",
+      "save": "節省",
+      "saveChanges": "儲存變更",
+      "shortcuts": {
+        "barrelRoll": "做飛行特技表演！ 🌀",
+        "closeOverlay": "關閉疊加/模態",
+        "holdShift": "按住按鍵並按一下全螢幕按鈕以適應畫面，或按一下影片標題以複製帶有時間戳記的連結。",
+        "decreaseVolume": "減小音量",
+        "increaseVolume": "增加音量",
+        "jumpTo0": "跳至0%（開始）",
+        "jumpTo9": "跳至 90%",
+        "mute": "靜音/取消靜音",
+        "nextEpisode": "下一集",
+        "playPause": "播放/暫停（或啟用時按住以 2 倍速度）",
+        "playPauseAlt": "播放/暫停",
+        "previousEpisode": "上一集",
+        "randomCaption": "從上次使用的語言中選擇隨機標題",
+        "skipBackward1": "向後跳 1 秒",
+        "skipBackward10": "快退 10 秒",
+        "skipBackward5": "向後跳 5 秒",
+        "skipForward1": "快轉 1 秒",
+        "skipForward10": "快轉 10 秒",
+        "skipForward5": "快轉 5 秒",
+        "syncSubtitlesEarlier": "提前同步字幕（-0.5s）",
+        "syncSubtitlesLater": "稍後同步字幕（+0.5 秒）",
+        "previousSubtitleCue": "上一個字幕提示",
+        "nextSubtitleCue": "下一個字幕提示",
+        "toggleCaptions": "切換字幕",
+        "toggleFullscreen": "切換全螢幕",
+        "toggleNativeSubtitles": "切換原生字幕"
+      },
+      "subtitle": "按住 ` 隨時顯示此協助",
+      "title": "鍵盤快速鍵"
+    },
+    "name": "Framezoo",
+    "pages": {
+      "discover": "發現",
+      "login": "登入",
+      "migration": "遷移帳戶",
+      "pagetitle": "{{title}} - Framezoo",
+      "register": "註冊",
+      "settings": "設定"
+    }
+  },
+  "home": {
+    "bookmarks": {
+      "edit": {
+        "cancel": "取消",
+        "description": "編輯此書籤的詳細信息",
+        "groupsLabel": "團體",
+        "save": "節省",
+        "title": "編輯書籤",
+        "titleLabel": "標題",
+        "titlePlaceholder": "輸入書籤的標題",
+        "yearLabel": "年",
+        "yearPlaceholder": "輸入書籤的年份"
+      },
+      "groups": {
+        "dropdown": {
+          "empty": "還沒有群組",
+          "namePlaceholder": "團體名稱",
+          "placeholderButton": "新增到群組",
+          "removeAll": "全部刪除",
+          "removeFromGroup": "從群組中刪除"
+        },
+        "editGroup": {
+          "affectsBookmarks": "這將影響 {{count}} 書籤",
+          "cancel": "取消",
+          "description": "編輯書籤組的名稱和圖標",
+          "nameLabel": "團體名稱",
+          "namePlaceholder": "輸入您的群組的名稱",
+          "save": "節省",
+          "title": "編輯群組"
+        },
+        "reorder": {
+          "button": "重新排序",
+          "cancel": "取消",
+          "description": "拖放以重新排序書籤組",
+          "done": "完畢",
+          "save": "節省",
+          "title": "編輯群組訂單"
+        }
+      },
+      "sectionTitle": "書籤",
+      "showAll": "顯示全部",
+      "sorting": {
+        "options": {
+          "date": "預設（新增日期）",
+          "titleAsc": "標題 A-Z",
+          "titleDesc": "標題 Z-A",
+          "yearAsc": "發布日期 最舊-最新",
+          "yearDesc": "發布日期 最新-最舊"
+        }
+      }
+    },
+    "continueWatching": {
+      "sectionTitle": "繼續觀看",
+      "sorting": {
+        "options": {
+          "date": "預設（新增日期）",
+          "titleAsc": "標題 A-Z",
+          "titleDesc": "標題 Z-A",
+          "yearAsc": "發布日期 最舊-最新",
+          "yearDesc": "發布日期 最新-最舊"
+        }
+      }
+    },
+    "mediaList": {
+      "stopEditing": "停止編輯"
+    },
+    "search": {
+      "allResults": "以上是我們能找到的所有結果!",
+      "discover": "發現",
+      "discoverMore": "發現更多",
+      "genreFilterAll": "所有流派",
+      "empty": {
+        "default": "歡迎您，尋找媒體觀看！",
+        "extra": [
+          "這裡什麼都沒有:(",
+          "好空…",
+          "如此空虛。",
+          "新用戶您好：3"
+        ]
+      },
+      "failed": "未能找到媒體，請重試！",
+      "loading": "載入中...",
+      "noResults": "我们找不到任何结果！",
+      "placeholder": {
+        "default": "您想看什麼？",
+        "extra": [
+          "你想探索什麼?",
+          "你的觀看清單有甚麼電影/電視劇?",
+          "你最喜愛的電影是甚麽?",
+          "你最喜愛的電視劇是甚麽?",
+          "您今天的關注清單上有什麼？",
+          "你今天過得怎麼樣？",
+          "我的壞處是網站永遠無法運作...",
+          "Framezoo 不是最好的嗎？",
+          ">ᴗ<"
+        ]
+      },
+      "sectionTitle": "搜索結果"
+    },
+    "support": {
+      "complete": "完全的",
+      "description": "Framezoo 處於虧損狀態，我們需要幫助以保持無廣告！如果您喜歡使用 Framezoo，請考慮捐贈以幫助我們支付費用。",
+      "donate": "捐",
+      "explanation": "如果您不使用該擴充功能或未設定 FED API，則可能會更難找到內容！我們希望解決這個問題，但如果沒有昂貴的伺服器，提供內容會困難得多。因此，如果您喜歡使用 Framezoo，請考慮捐款來幫助我們支付不斷增長的成本。",
+      "explanation2": "如果您想了解更多信息，請加入我們",
+      "fluxer": "助焊劑",
+      "label": "專案經費：${{current}} / ${{goal}}",
+      "moreInfo": "更多資訊",
+      "thankYou": "感謝您的支持！",
+      "title": "Framezoo 需要您的幫助！"
+    },
+    "titles": {
+      "69": {
+        "default": "想吃點辣的嗎？",
+        "extra": [
+          "69 天快樂😘！"
+        ]
+      },
+      "420": {
+        "default": "4/20 你想看什麼？",
+        "extra": [
+          "4/20 快樂！"
+        ]
+      },
+      "day": {
+        "default": "您今天下午想看什麼？",
+        "extra": [
+          "想要來場冒險嗎？《侏羅紀公園》可能是完美選擇。"
+        ]
+      },
+      "halloween": {
+        "default": "今年萬聖節想看什麼恐怖電影？",
+        "extra": [
+          "萬聖節快樂！ 🎃👻",
+          "噓！ 👻",
+          "不給糖就搗蛋！ 🍬",
+          "這是偉大的南瓜，查理布朗！"
+        ]
+      },
+      "morning": {
+        "default": "您今天早上想看什麼？",
+        "extra": [
+          "我聽說《情留半天》不錯"
+        ]
+      },
+      "night": {
+        "default": "您今晚想看什麼？",
+        "extra": [
+          "你疲倦嗎？我聽說《驅魔人》不錯。"
+        ]
+      }
+    },
+    "watchHistory": {
+      "recentlyWatched": "最近觀看",
+      "sectionTitle": "觀看歷史"
+    }
+  },
+  "lists": {
+    "actions": {
+      "copyShareLink": "複製分享連結",
+      "create": "創建列表",
+      "delete": "刪除",
+      "edit": "編輯",
+      "editItems": "編輯項目",
+      "open": "打開",
+      "save": "儲存變更",
+      "saveMembership": "儲存變更"
+    },
+    "delete": {
+      "confirm": "刪除“{{name}}”？此操作無法撤銷。"
+    },
+    "empty": {
+      "description": "建立您的第一個清單以開始對標題進行分組。",
+      "title": "還沒有列表"
+    },
+    "errors": {
+      "load": "無法載入您的清單。"
+    },
+    "form": {
+      "createDescription": "為最喜歡的、重看的或任何您想分享的其他內容建立一個新清單。",
+      "createTitle": "創建列表",
+      "description": "描述",
+      "descriptionHelp": "可選註釋可協助您記住此清單中的內容。",
+      "descriptionPlaceholder": "這份清單有什麼用？",
+      "editDescription": "更新此清單的名稱、描述或可見性。",
+      "editTitle": "編輯列表",
+      "errors": {
+        "nameRequired": "名單名稱為必填項",
+        "submitFailed": "保存清單失敗。"
+      },
+      "name": "名單名稱",
+      "namePlaceholder": "週末科幻",
+      "public": "公開名單",
+      "publicHelp": "知道該連結的任何人都可以查看此列表。"
+    },
+    "items": {
+      "empty": "該列表是空的。",
+      "emptyHelp": "使用“添加到列表”添加任何電影或放映卡的標題，然後返回此處管理陣容。"
+    },
+    "meta": {
+      "itemCount": "{{count}} 項目",
+      "itemCount_plural": "{{count}} 項",
+      "updatedAt": "已更新 {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "取消",
+        "create": "創建列表",
+        "save": "儲存變更"
+      },
+      "description": "選擇哪些清單應包含 {{title}}。",
+      "empty": {
+        "description": "建立一個清單來保存該標題。",
+        "title": "還沒有列表"
+      },
+      "errors": {
+        "create": "建立清單失敗。",
+        "save": "無法更新清單成員資格。"
+      },
+      "title": "添加到列表"
+    },
+    "page": {
+      "description": "策劃您最喜歡的節目、主題之夜和下一個觀看精選，您可以將其保密或透過連結分享。",
+      "editingHint": "單擊卡片上的關閉按鈕可將其從此清單中刪除。",
+      "eyebrow": "收藏",
+      "itemsEyebrow": "此清單中的標題",
+      "itemsHint": "選擇左側的清單進行瀏覽，然後在需要清理時使用編輯模式。",
+      "publicCountPlural": "{{count}} 公共列表",
+      "publicCountSingular": "1 公開名單",
+      "searchEmptyDescription": "嘗試其他名稱或清除搜尋。",
+      "searchEmptyTitle": "沒有符合的列表",
+      "searchPlaceholder": "搜尋列表",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "最近更新",
+      "summaryPlural": "{{count}} 列表",
+      "summarySingular": "1 列表",
+      "title": "清單"
+    },
+    "public": {
+      "descriptionFallback": "Framezoo 中策劃的共享合集。",
+      "notFoundDescription": "此共享連結遺失或不再可用。",
+      "notFoundTitle": "未找到列表",
+      "pageTitle": "共享清單",
+      "privateDescription": "所有者尚未公開分享此清單。",
+      "privateTitle": "該清單是私人的"
+    },
+    "visibility": {
+      "private": "私人的",
+      "public": "民眾"
+    }
+  },
+  "media": {
+    "cannotFetchImage": "無法取得此媒體的圖像",
+    "episodeDisplay": "S{{season}} E{{episode}}",
+    "episodeShort": "E",
+    "inCinema": "在電影院",
+    "seasonUnwatched": "您確定要將本季標記為未觀看嗎？",
+    "seasonWatched": "您確定要將該季標記為已觀看嗎？",
+    "types": {
+      "movie": "電影",
+      "show": "節目"
+    },
+    "unreleased": "尚未上映"
+  },
+  "migration": {
+    "back": "回去",
+    "download": {
+      "button": {
+        "download": "下載數據",
+        "home": "回家吧"
+      },
+      "description": "這會將您的資料下載到您的裝置。然後，您可以將其上傳到新伺服器或僅妥善保管。",
+      "status": {
+        "error": "下載您的資料失敗。 😿",
+        "success": "您的資料已成功下載！ 🎉"
+      },
+      "title": "下載數據"
+    },
+    "loginRequired": "您必須登入才能遷移資料！請返回並登入以繼續。",
+    "preview": {
+      "downloadDescription": "下載內容包括：",
+      "items": {
+        "bookmarks": "已加書籤的媒體",
+        "progress": "觀看進度",
+        "settings": "設定和首選項"
+      },
+      "uploadDescription": "待上傳數據："
+    },
+    "start": {
+      "explainer": "This will download your data to your device. You can then upload it to the new server or just keep it for safekeeping. Upload your previously exported data file to restore your bookmarks and progress on this account.",
+      "options": {
+        "download": {
+          "action": "下載數據",
+          "description": "這會將您的資料下載到您的裝置。然後，您可以將其上傳到新伺服器或僅妥善保管。",
+          "quality": "更多技術性",
+          "title": "下載數據"
+        },
+        "or": "or",
+        "upload": {
+          "action": "上傳數據",
+          "description": "上傳您先前匯出的資料檔案以恢復您在此帳戶上的書籤和進度。",
+          "quality": "從備份中恢復",
+          "title": "上傳數據"
+        }
+      },
+      "title": "遷移您的數據"
+    },
+    "upload": {
+      "button": {
+        "home": "繼續回家",
+        "import": "導入數據",
+        "processing": "加工...",
+        "saveLocal": "保存在本地"
+      },
+      "description": "上傳您先前匯出的資料檔案以恢復您在此帳戶上的書籤和進度。",
+      "exportedOn": "導出於",
+      "file": {
+        "change": "更改文件",
+        "description": "選擇您要上傳的文件",
+        "select": "選擇文件"
+      },
+      "previewTitle": "預覽：",
+      "status": {
+        "error": "無法上傳您的數據。 😿",
+        "processing": "處理數據...",
+        "success": "您的資料已成功上傳！ 🎉",
+        "successLocal": "您的資料已保存在本地！ 🎉"
+      },
+      "title": "上傳數據"
+    }
+  },
+  "navigation": {
+    "banner": {
+      "appUpdate": {
+        "action": "立即更新",
+        "available": "新的應用程式版本已準備就緒。",
+        "download": "下載更新",
+        "later": "之後",
+        "restart": "重啟即可更新",
+        "updating": "更新中...",
+        "newerVersionAvailableTitle": "有新版本可用",
+        "newerVersionAvailable": "有新版本 (v{{version}}) 可用。請再次點選「下載更新」按鈕進行下載。",
+        "upToDateTitle": "Framezoo 已更新",
+        "upToDate": "您目前使用的是最新桌面版本（v{{version}}）。",
+        "updateFailedTitle": "桌面更新失敗",
+        "downloadFailed": "無法下載最新的桌面更新。",
+        "checkFailed": "目前無法檢查桌面更新。"
+      },
+      "offline": "無法連接到伺服器。請稍後再試。",
+      "lowSpace": "您的設備儲存空間不足。這可能會影響串流媒體播放和下載。"
+    },
+    "status": {
+      "offline": "離線",
+      "lowSpace": "低儲物空間",
+      "lowSpaceWithPercent": "剩餘儲存空間：{{percent}}%"
+    },
+    "download": {
+      "empty": "尚未配置下載。",
+      "failed": "無法載入下載選項。",
+      "label": "下載應用程式",
+      "options": {
+        "mac-arm64": {
+          "description": "最適合 M 系列 Mac",
+          "label": "macOS 蘋果晶片"
+        },
+        "mac-universal": {
+          "description": "適用於 Apple Silicon 和 Intel Mac",
+          "label": "macOS 通用"
+        },
+        "mac-x64": {
+          "description": "最適合英特爾 Mac 電腦",
+          "label": "macOS 英特爾"
+        },
+        "win-arm64": {
+          "description": "最適合 Snapdragon/ARM Windows PC",
+          "label": "視窗ARM64"
+        },
+        "win-x64": {
+          "description": "最適合 64 位元 Windows PC",
+          "label": "Windows x64"
+        }
+      },
+      "unavailable": "未配置後端 URL。"
+    },
+    "install": {
+      "genericGuide": "您的瀏覽器不支援自動 PWA 安裝提示。\n您仍然可以使用瀏覽器選單進行安裝（例如：「安裝應用程式」、「建立捷徑」或「新增至 Dock/主畫面」）。",
+      "iosSafariGuide": "要將 Framezoo 安裝為應用程式：\n\n1. 點選共享按鈕（有箭頭的方塊）。\n2. 選擇「新增至主畫面」。\n3. 點選新增。"
+    },
+    "menu": {
+      "accountMenu": "開設帳戶菜單",
+      "addons": "外掛",
+      "desktop": "應用程式設定",
+      "feedback": "回饋",
+      "logout": "登出",
+      "register": "同步到雲端",
+      "settings": "設定"
+    }
+  },
+  "notFound": {
+    "badge": "未找到",
+    "goHome": "返回首頁",
+    "message": "我們到處尋找：在垃圾桶下面，在壁櫥裡，在代理伺服器後面，但最終找不到您要找的頁面。",
+    "reloadButton": "再試一次",
+    "title": "找不到該頁面"
+  },
+  "onboarding": {
+    "defaultConfirm": {
+      "cancel": "取消"
+    }
+  },
+  "overlays": {
+    "close": "關閉"
+  },
+  "player": {
+    "back": {
+      "default": "返回首頁",
+      "short": "後退"
+    },
+    "casting": {
+      "device": "裝置",
+      "to": "投射到 {{device}} 📺"
+    },
+    "loadingOverlayMessages": {
+      "1": "下載更多 RAM...",
+      "2": "將咖啡因轉化為內容...",
+      "3": "教倉鼠跑得更快...",
+      "4": "說服電子移動得更快.....",
+      "5": "幾乎就在那裡…每個加載欄都說…",
+      "6": "找到遙控器...等等，錯誤問題...",
+      "7": "從無窮大倒數...",
+      "8": "模擬未來...",
+      "9": "看貓影片...",
+      "10": "被貓 GIF 分散了注意力...",
+      "11": "請稍候，實習生正在為他添咖啡…",
+      "12": "檢查是否已插入...",
+      "13": "將其關閉並再次打開...",
+      "14": "請勿恐慌...",
+      "15": "冬天來了...",
+      "16": "正在登入天網...",
+      "17": "您所有的瀏覽器都屬於我們...",
+      "18": "尋找無限不可能的驅動器...",
+      "19": "發現讓您等待的新方法...",
+      "20": "您的時間對我們非常重要。請稍等，我們將忽略您...",
+      "21": "仍然比 Windows 更新快...",
+      "22": "為什麼不吃個三明治呢？"
+    },
+    "menus": {
+      "audio": {
+        "default": "預設",
+        "modeSection": "音訊輸出模式",
+        "tracksSection": "音訊軌道",
+        "modes": {
+          "auto": "環繞聲/自動",
+          "autoDesc": "5.1/7.1聲道、杜比全景聲、Apple Spatial Audio、Windows Sonic",
+          "stereoDialogue": "立體聲（對話增強）",
+          "stereoDialogueDesc": "增強筆記型電腦揚聲器或夜間聆聽時的語音清晰度",
+          "passthrough": "直通（比特流）",
+          "passthroughDesc": "外置條形音箱和AV接收器的直接數位流"
+        }
+      },
+      "episodes": {
+        "button": "集數",
+        "emptyState": "該季暫無集數，請稍後再來！",
+        "episodeBadge": "E{{episode}}",
+        "favorites": "收藏夾",
+        "loadingError": "加載集數時出錯",
+        "loadingList": "載入中...",
+        "loadingTitle": "載入中...",
+        "markAsFavorite": "標記為最愛",
+        "markAsUnwatched": "標記為未觀看",
+        "markAsWatched": "標記為已觀看",
+        "noFavorites": "還沒有最喜歡的劇集。為劇集加註星標，將其添加到您的最愛！",
+        "showLess": "顯示較少",
+        "showMore": "顯示更多",
+        "specials": "特價商品"
+      },
+      "playback": {
+        "disabled": "（在觀看派對中停用）",
+        "speedBoosted": "2x",
+        "speedLabel": "播放速度",
+        "speedUnboosted": "{{speed}}x",
+        "title": "播放設置"
+      },
+      "quality": {
+        "auto": "汽車",
+        "automaticLabel": "自動品質",
+        "hint": "您可以嘗試<0>切換源</0>以獲得不同的質量選項。",
+        "iosNoQuality": "由於 Apple 的限制，此來源的品質選擇在 iOS 上不可用。您可以嘗試<0>切換到另一個來源</0>以獲得不同的質量選項。",
+        "title": "品質"
+      },
+      "settings": {
+        "audioItem": "音頻",
+        "enableSubtitles": "啟用字幕",
+        "playbackItem": "播放設定",
+        "qualityItem": "品質",
+        "sourceItem": "影片來源",
+        "subtitleItem": "字幕設定"
+      },
+      "subtitles": {
+        "autoSelectChoice": "自動選擇",
+        "autoSelectDifferentChoice": "再次點擊即可自動選擇不同的字幕",
+        "clearSecondary": "清除輔助字幕",
+        "customChoice": "把字幕檔案拖入或上傳",
+        "customizeLabel": "自訂",
+        "delayEarly": "看到標題",
+        "delayLate": "聽到音訊",
+        "doubleClickToCopy": "雙擊複製字幕數據",
+        "dropSubtitleFile": "將字幕檔案拖曳到這裡",
+        "dualSub": "雙字幕",
+        "dualSubDesc": "選擇相同的格式（SRT、VTT...）和提供者（OpenSubs...）以獲得最佳同步",
+        "dualSubHint": "選擇輔助字幕的語言（顯示在主要字幕上方）",
+        "dualSubSelectHint": "選擇主字幕和輔助字幕。雙字幕將自動開啟。",
+        "dualSubEnabled": "已啟用雙字幕",
+        "dualSubPrimaryBadge": "基本的",
+        "dualSubSecondaryBadge": "次要",
+        "embedded": "嵌入式",
+        "empty": "沒有為此提供字幕。",
+        "fetchFailed": "字幕載入失敗，請稍後重試。",
+        "loadingExternal": "正在載入外部字幕...",
+        "loadingExternalProgress": "正在載入外部字幕... ({{progress}}%)",
+        "matchScoreLabel": "匹配 ~{{score}}%",
+        "notFound": "沒有可用的選項符合您的查詢",
+        "offChoice": "關閉",
+        "pasteChoice": "貼上字幕數據",
+        "previewLabel": "字幕預覽：",
+        "primary": "基本的",
+        "refresh": "刷新外部字幕",
+        "refreshing": "清爽...",
+        "secondary": "中學",
+        "selectingSecondary": "選擇輔助字幕",
+        "autoSyncTitle": "自動同步",
+        "autoSyncDescription": "自動將字幕與對話匹配",
+        "autoSyncAction": "啟動自動同步",
+        "autoSyncBadge": "AI",
+        "syncSubtitleConfirmTitle": "與AI同步字幕？",
+        "syncSubtitleConfirmDescription": "字幕將由人工智慧對齊以匹配影片。",
+        "syncSubtitleNoticeTitle": "筆記",
+        "syncSubtitleNoticeDescription": "字幕同步可能需要一些時間，具體取決於您的下載速度，以便獲取足夠的音訊樣本進行對齊。",
+        "syncSubtitleSupportedLanguages": "支援的音訊語言",
+        "syncSubtitleSuccess": "字幕同步成功",
+        "syncSubtitleServerFallback": "本機同步不支援該音訊語言；使用伺服器同步。",
+        "syncSubtitleFailed": "無法同步字幕",
+        "syncSubtitleFailedWithDetail": "無法同步字幕：{{detail}}",
+        "syncRateLimit": "請求太多。請稍等片刻，然後再次同步。",
+        "syncServerBusy": "AI服務目前正忙。請幾秒鐘後重試。",
+        "syncSubtitleOpen": "與AI同步字幕",
+        "syncSubtitleAction": "同步",
+        "syncSubtitlePreparing": "正在準備音訊...",
+        "syncSubtitlePreparingAudio": "正在準備音訊同步...",
+        "syncSubtitleWorking": "Framezoo 正在同步字幕...",
+        "syncSubtitleApplying": "正在套用字幕同步...",
+        "settings": {
+          "backlink": "自訂字幕",
+          "delay": "字幕延遲",
+          "fixCapitals": "修復大小寫",
+          "autoSync": "自動同步字幕",
+          "syncingProgress": "正在同步... ({{progress}}%)（此過程可能需要 2-3 分鐘）",
+          "syncApplied": "已應用自動同步。",
+          "timeline": "字幕時間軸",
+          "timelineHint": "選擇一個字幕提示以將其與當前視訊時間同步。",
+          "timelineEmpty": "沒有可用的字幕提示。"
+        },
+        "title": "字幕",
+        "transcriptChoice": "成績單",
+        "searchPlaceholder": "搜尋字幕或對話...",
+        "delayLabel": "字幕偏移量",
+        "seekMode": "尋找",
+        "syncMode": "同步",
+        "syncOffset": "偏移量：{{delay}}s",
+        "syncAction": "同步",
+        "nowPlaying": "正在播放",
+        "syncDescription": "按一下與目前影片場景相符的對話，或調整偏移：",
+        "resetDelay": "重置",
+        "translate": {
+          "title": "翻譯自 {{language}}"
+        },
+        "downloadFailed": "字幕載入失敗",
+        "unknownLanguage": "未知",
+        "useNativeSubtitles": "原生影片字幕",
+        "useNativeSubtitlesDescription": "本機全螢幕及畫中畫的廣播字幕"
+      },
+      "watchparty": {
+        "watchpartyItem": "觀看派對"
+      }
+    },
+    "metadata": {
+      "extensionPermission": {
+        "badge": "缺少權限",
+        "button": "使用瀏覽器擴充功能",
+        "text": "您已安裝瀏覽器擴展功能，但我們需要您的許可才能啟用它。",
+        "title": "配置瀏覽器擴充功能"
+      },
+      "failed": {
+        "badge": "失敗",
+        "homeButton": "返回首頁",
+        "text": "無法從 TMDB 載入媒體的元資料。請檢查 TMDB 是否斷線或在您的網路連線中被封鎖。",
+        "title": "載入元資料失敗"
+      },
+      "legal": {
+        "badge": "已移除",
+        "text": "由於收到刪除通知或版權聲明，此媒體不再可用。",
+        "title": "媒體已被移除"
+      },
+      "notFound": {
+        "badge": "未找到",
+        "homeButton": "返回首頁",
+        "text": "我們無法找到您請求的媒體。它可能已被刪除，或者您修改了 URL。",
+        "title": "無法找到媒體。"
+      }
+    },
+    "nextEpisode": {
+      "next": "下一集",
+      "nextSeason": "下個賽季",
+      "replay": "重播"
+    },
+    "playbackError": {
+      "autoResumeText": "嘗試播放媒體時出錯 😖。自動嘗試其他來源...",
+      "badge": "播放錯誤",
+      "copyDebugInfo": "複製偵錯資訊",
+      "debugInfo": "檢查控制台以了解更多詳細資訊。",
+      "errors": {
+        "errorAborted": "媒體的提取因使用者的請求而中止。",
+        "errorDecode": "儘管之前已確定可用，但在嘗試解碼媒體資源時發生錯誤，從而導致錯誤。",
+        "errorGenericMedia": "發生未知的媒體錯誤。",
+        "errorNetwork": "發生了某種網路錯誤，導致無法成功提取媒體，儘管以前可用。",
+        "errorNotSupported": "不支援媒體或媒體提供者物件。"
+      },
+      "homeButton": "返回首頁",
+      "resumeButton": "嘗試下一個來源",
+      "text": "嘗試播放媒體時出錯。請再試一次。",
+      "title": "無法播放視頻！"
+    },
+    "resume": {
+      "description": "本集觀看人數為 {{percentage}}%",
+      "restart": "重新啟動",
+      "resume": "恢復",
+      "title": "繼續觀看嗎？"
+    },
+    "segment": {
+      "credits": "製作人員",
+      "intro": "簡介",
+      "recap": "回顧"
+    },
+    "skipTime": {
+      "confidence": "信心",
+      "connectApiKeyMessage": "若要提交新分段，請在連線設定中輸入您的 TheIntroDB API 金鑰",
+      "credits": "跳過製作人員名單",
+      "endOfVideo": "結尾",
+      "endsAt": "結束於 {{time}}",
+      "submissionUnavailableMessage": "分段提交在此伺服器上不可用。",
+      "feedback": {
+        "modal": {
+          "cancel": "取消",
+          "description": "透過提交準確的分段時間戳為 TheIntroDB 做出貢獻。所有提交的內容在發布之前都會被社群接受。",
+          "endTimeLabel": "結束",
+          "error": {
+            "endTime": "結束時間為必填項",
+            "mediaInfo": "媒體資訊不可用",
+            "segment": "未選擇段",
+            "startTime": "需要開始時間",
+            "submission": "提交時間戳時出錯",
+            "tidbKey": "未設定 TIDB API 金鑰"
+          },
+          "guide": {
+            "credits": {
+              "durationDesc": "如果提供結束，則至少 5 秒。可以延伸到媒體末尾。",
+              "endDesc": "可選 - 如果製作人員名單已到文件末尾，則留空。",
+              "excludeDesc": "排除片尾字幕或片尾字幕場景；僅主要學分。",
+              "startDesc": "必要 - 當片尾字幕開始時（例如，當第一個字幕文字出現時）。",
+              "whenToTitle": "製作人員時間戳指南："
+            },
+            "durationDesc": "如果提供結束，則至少 5 秒",
+            "durationLabel": "期間：",
+            "endDesc": "可選 - 如果延伸到末端則為空",
+            "endLabel": "結尾：",
+            "excludeDesc": "片尾彩蛋場景",
+            "excludeLabel": "排除：",
+            "intro": {
+              "durationDesc": "大多數介紹的時長為 30-90 秒。如果同時設定了開始和結束，則最少 5 秒。",
+              "endDesc": "必需 - 當介紹結束時（通常當標題卡或主要劇集開始時）。",
+              "excludeDesc": "不包括冷開場或開場前的場景；只有主標題序列。",
+              "startDesc": "可選 - 如果介紹從劇集開頭開始，則留空。",
+              "whenToTitle": "時間戳指南簡介："
+            },
+            "preview": {
+              "durationDesc": "預覽的長度各不相同。最少 5 秒。",
+              "endDesc": "可選 - 如果預覽在媒體末尾結束，則留空。",
+              "excludeDesc": "預覽通常是在劇集結束時 15-90 秒預覽下一集。",
+              "startDesc": "必需 - 當預覽開始時（例如，當預覽文字出現時）。",
+              "whenToTitle": "預覽時間戳指南："
+            },
+            "recap": {
+              "durationDesc": "回顧的長度各不相同。如果同時設定了開始和結束，則最少 5 秒。",
+              "endDesc": "必需 - 當回顧結束且新內容開始時。",
+              "excludeDesc": "僅“先前”或回顧部分；不包括介紹或新場景。",
+              "startDesc": "可選 - 如果重述從劇集開頭開始，則留空。",
+              "whenToTitle": "回顧時間戳指南："
+            },
+            "startDesc": "必需 - 當積分開始滾動時",
+            "startLabel": "開始："
+          },
+          "placeholders": {
+            "end": {
+              "credits": "3:30 或 210（媒體結束時留空）",
+              "intro": "3:30 或 210（必填）",
+              "preview": "3:30 或 210（媒體結束時留空）",
+              "recap": "3:30 或 210（必填）"
+            },
+            "start": {
+              "credits": "2:30 或 150（必填）",
+              "intro": "2:30或150（開始時留空）",
+              "preview": "2:30 或 150（必填）",
+              "recap": "2:30或150（開始時留空）"
+            }
+          },
+          "segmentType": "段類型",
+          "startTimeLabel": "開始",
+          "submit": "提交",
+          "submitting": "正在提交...",
+          "success": {
+            "title": "提交成功！謝謝！"
+          },
+          "title": "向 TheIntroDB 提交時間戳",
+          "types": {
+            "credits": "製作人員",
+            "intro": "簡介",
+            "preview": "預覽",
+            "recap": "回顧"
+          },
+          "whenToDesc": "輸入以秒為單位的時間戳記（例如 150）、mm:ss 格式（例如 2:30）或 hh:mm:ss 格式（例如 1:42:20）。我們會自動為您轉換格式。",
+          "whenToTitle": "時間戳指南："
+        },
+        "title": "這跳過正確嗎？"
+      },
+      "intro": "跳過介紹",
+      "noSegments": "沒有可用的跳過段",
+      "recap": "跳過回顧",
+      "skipSegments": "跳過片段",
+      "startsAt": "開始於 {{time}}",
+      "submissions": "{{count}} 提交內容",
+      "submitSegment": "提交片段",
+      "timeUnknown": "時間未知"
+    },
+    "time": {
+      "regular": "{{timeWatched}} / {{duration}}",
+      "remaining": "剩餘{{timeLeft}} • 在{{timeFinished, datetime}}完結",
+      "shortRegular": "{{timeWatched}}",
+      "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "文件：{{fileName}}",
+      "infohash": "資訊哈希：{{infoHash}}",
+      "infohashLabel": "資訊哈希",
+      "network": "激流網路",
+      "networkStatus": "洪流網路狀態",
+      "peers": "同行：{{count}}",
+      "peersLabel": "同齡人",
+      "progress": "進度：{{progress}}%",
+      "completedLabel": "完全的",
+      "speed": "速度：{{speed}}",
+      "speedLabel": "速度",
+      "statistics": "統計數據",
+      "states": {
+        "buffering": "緩衝",
+        "downloading": "正在下載",
+        "error": "錯誤",
+        "ready": "準備好",
+        "starting": "開始",
+        "stopped": "已停止"
+      },
+      "unknown": "未知"
+    }
+  },
+  "screens": {
+    "finishingSetup": "正在完成設定...",
+    "loadingApp": "正在載入應用程式...",
+    "loadingUser": "正在載入用戶個人資料...",
+    "loadingUserError": {
+      "disconectCancel": "取消",
+      "disconnectConfirm": "確認",
+      "disconnectMessage": "中斷與帳戶伺服器的連接，維護最新的本地資料。在您再次登入之前，變更和觀看的內容不會同步。",
+      "disconnectTitle": "與後端斷開連接？",
+      "logout": "登出",
+      "reload": "重新載入",
+      "reset": "重置您的自定義伺服器",
+      "text": "無法載入您的用戶個人資料。請嘗試重新載入頁面。",
+      "textWithReset": "無法使用目前自訂伺服器載入您的使用者設定檔。嘗試重置自訂伺服器，然後重新載入。"
+    },
+    "migration": {
+      "failed": "資料遷移失敗。",
+      "inProgress": "請稍等，我們正在遷移您的數據。這不應該需要太久。"
+    }
+  },
+  "settings": {
+    "account": {
+      "accountDetails": {
+        "editEmail": "編輯",
+        "editProfile": "編輯",
+        "emailLabel": "電子郵件",
+        "logoutButton": "登出",
+        "nicknameLabel": "暱稱",
+        "nicknamePlaceholder": "輸入您的暱稱",
+        "noEmail": "未關聯電子郵件"
+      },
+      "actions": {
+        "delete": {
+          "button": "刪除帳戶",
+          "confirmButton": "刪除帳戶",
+          "confirmDescription": "此操作無法撤銷。您的帳戶和同步資料將從伺服器中刪除。已提交的報告將單獨保留；請透過「回饋」請求刪除。",
+          "confirmTitle": "您確定嗎？",
+          "text": "刪除您的帳戶和伺服器上的同步資料。已提交的報告將單獨保留。",
+          "title": "刪除帳戶"
+        },
+        "logoutAllDevices": {
+          "button": "登出所有裝置",
+          "text": "這將會登出所有與您的帳戶連結的裝置。",
+          "title": "結束所有會話"
+        },
+        "migration": {
+          "button": "遷移帳戶",
+          "text": "將您的帳戶遷移到新伺服器或下載您的資料。",
+          "title": "帳戶遷移"
+        },
+        "title": "操作"
+      },
+      "devices": {
+        "deviceNameLabel": "設備名稱",
+        "failed": "無法載入",
+        "lastActive": "最後活躍時間：{{date}}",
+        "loggedInAt": "已登入：{{date}}",
+        "removeDevice": "刪除",
+        "title": "設備",
+        "thisDevice": "這個設備",
+        "activeNow": "現在生效",
+        "sessionCount": "{{count}} 會話",
+        "types": {
+          "desktop": "桌面",
+          "mobile": "移動的",
+          "tablet": "藥片"
+        },
+        "unknownBrowser": "未知瀏覽器",
+        "unknownDevice": "未知設備",
+        "unknownOperatingSystem": "未知作業系統"
+      },
+      "profile": {
+        "finish": "完成編輯",
+        "firstColor": "頭像配色一",
+        "secondColor": "頭像配色二",
+        "title": "編輯個人資料圖片",
+        "userIcon": "用戶圖示"
+      },
+      "security": {
+        "currentEmailLabel": "目前電子郵件",
+        "emailDescription": "我們將核實您目前和新的電子郵件地址。",
+        "emailSame": "新郵箱地址必須與您目前的郵箱地址不同。",
+        "emailTitle": "更改電子郵件",
+        "newEmailLabel": "新電子郵件地址",
+        "passwordDescription": "我們將向您的帳戶信箱發送驗證碼。",
+        "passwordTitle": "更改密碼",
+        "title": "帳戶安全"
+      },
+      "register": {
+        "cta": "開始使用",
+        "text": "在設備之間共用並持續同步您的觀看進度。",
+        "title": "同步到雲端"
+      },
+      "title": "帳戶"
+    },
+    "all": {
+      "title": "所有設定"
+    },
+    "appearance": {
+      "activeTheme": "使用中",
+      "customParts": {
+        "primary": "基本的",
+        "secondary": "中學",
+        "tertiary": "第三"
+      },
+      "options": {
+        "carouselView": "輪播視圖",
+        "carouselViewDescription": "將您目前觀看的部分和書籤部分顯示為輪播而不是網格。預設禁用。",
+        "carouselViewLabel": "輪播視圖",
+        "discover": "發現部分",
+        "discoverDescription": "在主頁上您已加入書籤的媒體下方顯示「發現」部分。預設啟用。",
+        "discoverLabel": "發現部分",
+        "featured": "特色媒體",
+        "featuredDescription": "在主頁頂部顯示精選電影和節目的輪播！預設禁用。",
+        "featuredLabel": "特色媒體",
+        "forceCompactEpisodeView": "強制緊湊劇集視圖",
+        "forceCompactEpisodeViewDescription": "強製播放器中的劇集輪播使用「經典」緊湊垂直視圖。預設禁用。",
+        "forceCompactEpisodeViewLabel": "情節緊湊",
+        "homeSectionOrder": "首頁部分訂單",
+        "homeSectionOrderDescription": "拖放以重新排序主頁上的觀看和書籤部分。可以從主頁編輯團體訂單。",
+        "homeSectionOrderGroups": "重新排序書籤組",
+        "logos": "圖像標誌",
+        "logosDescription": "在詳細資訊模式和特色部分中顯示圖像徽標而不是文字標題。預設啟用。",
+        "logosLabel": "圖像標誌",
+        "logosNotice": "大多數時候，徽標只有英文。其他語言可能想要停用此功能！",
+        "minimalCards": "最少的卡片",
+        "minimalCardsDescription": "隱藏媒體卡上的文字內容（標題、類型、年份），僅顯示海報圖片。",
+        "minimalCardsLabel": "最少的卡片",
+        "modal": "細節模態",
+        "modalDescription": "當您單擊媒體卡而不是轉到觀看頁面時，顯示詳細資訊模式。預告片需要代理或擴展。預設禁用。",
+        "modalLabel": "細節模態",
+        "pauseOverlay": "暫停疊加",
+        "pauseOverlayDescription": "當播放器暫停和閒置時顯示標題/徽標和描述疊加層。",
+        "pauseOverlayLabel": "暫停疊加"
+      },
+      "sections": {
+        "bookmarks": "書籤",
+        "watching": "目前正在觀看"
+      },
+      "themes": {
+        "acid": "酸",
+        "autumn": "秋天",
+        "blue": "藍色",
+        "christmas": "聖誕節",
+        "classic": "經典的",
+        "cobalt": "鈷",
+        "custom": "風俗",
+        "default": "預設",
+        "ember": "餘燼",
+        "forest": "森林",
+        "frost": "霜",
+        "grape": "葡萄",
+        "gray": "灰色",
+        "green": "綠色的",
+        "hulk": "浩克",
+        "mocha": "摩卡",
+        "noir": "黑色",
+        "pink": "粉紅色的",
+        "popsicle": "冰棒",
+        "red": "紅色",
+        "spark": "火花",
+        "spiderman": "蜘蛛人",
+        "teal": "青色",
+        "wolverine": "金鋼狼"
+      },
+      "title": "外觀"
+    },
+    "connections": {
+      "server": {
+        "changeWarning": "更改後端伺服器將使您退出。繼續？",
+        "changeWarningTitle": "更改後端伺服器",
+        "error": "連接後端時出錯",
+        "notice": "您的帳戶不會在後端之間同步，因此請記住您使用的是哪一個！"
+      },
+      "tidb": {
+        "description": "透過留下有關介紹、回顧和製作人員名單的回饋來為 TheIntroDB 做出貢獻。 <0>了解更多.</0>",
+        "tokenLabel": "API金鑰"
+      },
+      "title": "連接"
+    },
+    "preferences": {
+      "autoplay": "自動播放",
+      "autoplayDescription": "到達結尾後自動播放系列中的下一集。使用者可以使用瀏覽器擴充功能、自訂代理程式或預設設定（如果主機允許）啟用。",
+      "autoplayLabel": "自動播放",
+      "autoResumeOnPlaybackError": "播放錯誤時自動恢復",
+      "autoResumeOnPlaybackErrorDescription": "播放過程中目前來源失敗時自動繼續搜尋其他來源。如果停用，您將看到一個帶有手動恢復選項的錯誤畫面。",
+      "autoResumeOnPlaybackErrorLabel": "播放錯誤時自動恢復",
+      "autoSkipSegments": "自動跳過片段",
+      "autoSkipSegmentsDescription": "啟用後，在觀看時自動跳過介紹、回顧和預覽片段。",
+      "autoSkipSegmentsLabel": "自動跳過片段",
+      "doubleClickToSeek": "按兩下進行搜尋",
+      "doubleClickToSeekDescription": "雙擊播放器的左側或右側可向前或向後搜尋 10 秒。",
+      "doubleClickToSeekLabel": "啟用雙擊搜尋",
+      "homeSectionOrder": "類別排序",
+      "homeSectionOrderDescription": "拖放即可重新排列首頁和發現頁面（包括外掛程式）上顯示的類別。",
+      "resetHomeSectionOrder": "重設為預設順序",
+      "keyboardShortcuts": "鍵盤快速鍵",
+      "keyboardShortcutsDescription": "自訂應用程式的鍵盤快速鍵。按住 ` 隨時顯示此協助",
+      "keyboardShortcutsLabel": "自訂鍵盤快速鍵",
+      "language": "應用程式語言",
+      "languageDescription": "語言已應用於整個應用程式。",
+      "lowPerformanceMode": "低性能/頻寬模式",
+      "lowPerformanceModeDescription": "透過停用佔用大量頻寬的功能，優化應用程式以應對較慢的連接和裝置。此模式可減少資料使用量並提高效能，同時保持核心搜尋和觀看功能完整。",
+      "lowPerformanceModeLabel": "低性能模式",
+      "showLess": "顯示較少",
+      "showMore": "顯示更多",
+      "skipCredits": "跳過結尾製作人員名單",
+      "skipCreditsDescription": "啟用後，在完成 99% 時自動播放下一集以跳過片尾字幕。停用後，請等待劇集完全完成。",
+      "skipCreditsLabel": "跳過片尾字幕",
+      "thumbnail": "生成縮圖",
+      "thumbnailDescription": "大多數時候，視頻沒有縮圖。您可以啟用此設置以即時生成它們，但它們會使您的視頻變慢。",
+      "thumbnailLabel": "生成縮圖",
+      "title": "偏好設定"
+    },
+    "reset": "重置",
+    "save": "保存",
+    "search": {
+      "placeholder": "搜尋設定..."
+    },
+    "sidebar": {
+      "info": {
+        "appVersion": "版本",
+        "notLoggedIn": "您尚未登錄",
+        "checkForUpdates": "檢查更新",
+        "upToDate": "您目前使用的是最新版本"
+      }
+    },
+    "subtitles": {
+      "backgroundBlurEnabledDescription": "禁用字幕背景模糊可能會解決一些閃爍問題",
+      "backgroundBlurEnabledLabel": "背景模糊",
+      "backgroundBlurLabel": "背景模糊",
+      "backgroundLabel": "背景不透明度",
+      "BorderThicknessLabel": "邊框厚度",
+      "colorLabel": "顏色",
+      "high": "高的",
+      "low": "預設",
+      "previewQuote": "我絕不能害怕。 恐懼會扼殺思維能力。",
+      "textBoldLabel": "粗體文字",
+      "textSizeLabel": "字體大小",
+      "textStyle": {
+        "Border": "邊界",
+        "default": "預設",
+        "depressed": "鬱悶",
+        "dropShadow": "投影",
+        "raised": "凸起",
+        "title": "文字樣式"
+      },
+      "title": "字幕",
+      "verticalPositionLabel": "垂直位置"
+    },
+    "torrent": {
+      "title": "串流媒體",
+      "maxSizeLabel": "最大快取大小",
+      "maxSizeDescription": "設定用於快取流檔案的最大磁碟空間。如果快取超過此限制，較舊的流檔案將被清除。",
+      "cacheSizeBehaviorDescription": "適用於新建立的串流。當空閒的種子句柄過期時（停止播放後最多 5 分鐘），快取將被修剪至此大小。播放過程中快取可能會超過此大小；不快取會在串流停止時刪除數據，但播放過程中部分資料仍會佔用磁碟空間。",
+      "noCaching": "不緩存",
+      "infinite": "無限",
+      "unlimited": "無限",
+      "custom": "風俗...",
+      "customSizeLabel": "自訂快取大小（單位：GiB）",
+      "customSizePlaceholder": "e.g. 15",
+      "defaultDrive": "預設",
+      "defaultDriveDescription": "新的種子資料將使用應用程式的預設位置。現有和正在進行的流將保留在原位置。",
+      "selectDrive": "選擇資料夾...",
+      "selectDriveError": "無法選擇快取資料夾。",
+      "cachingDriveLabel": "快取驅動器",
+      "cachingDriveDescription": "新的種子資料儲存在 Framezoo/torrents 子資料夾中。現有和活躍的種子流保持在原位置。",
+      "torrentProfileLabel": "種子設定檔",
+      "profileDefault": "預設",
+      "profileSoft": "柔軟的",
+      "profileFast": "快速地",
+      "profileUltraFast": "超快",
+      "torrentProfileDescription": "控制新串流的預讀速度：軟 0.5 倍，預設 1 倍，快速 1.5 倍，超快速 2 倍。更高的設定可能會佔用更多頻寬和臨時磁碟空間。",
+      "currentSizeLabel": "目前快取大小",
+      "currentSizeLoading": "載入中...",
+      "clearCache": "清除快取",
+      "clearCacheSuccess": "快取已清除",
+      "clearCacheError": "清除快取失敗。請再試一次。",
+      "spaceLeftOnDevice": "（裝置上剩餘的{{space}}空間）"
+    },
+    "unsaved": "您有未儲存的變更"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "動作與冒險",
+      "10765": "科幻與奇幻"
+    }
+  },
+  "watchParty": {
+    "aheadOfHost": "領先主持人 {{seconds}} 秒",
+    "alone": "獨自的",
+    "behindHost": "落後主機 {{seconds}} 秒",
+    "cancel": "取消",
+    "connectedAsGuest": "已連線以訪客身分觀看派對",
+    "contentMismatch": "無法加入觀看派對：內容與主持人的內容不符。",
+    "copyCode": "點選複製",
+    "emptyRoom": "這個房間裡還沒有人",
+    "enterCodeOrLink": "輸入分享觀看派對連結或房間代碼",
+    "episodeMismatch": "無法加入觀看派對：您正在觀看與主持人不同的劇集。",
+    "guestFallback": "客人",
+    "hosting": "託管",
+    "hostParty": "舉辦觀看派對",
+    "invalidRoom": "無法連接到該房間",
+    "isGuest": "Watching as a guest on <0>{{backendName}}</0>",
+    "isHost": "Hosting on <0>{{backendName}}</0>",
+    "join": "加入",
+    "joinParty": "參加觀看派對",
+    "leaveWatchParty": "離開觀看派對",
+    "linkCopied": "複製了！",
+    "noHost": "本次觀看派對沒有主持人",
+    "save": "節省",
+    "shareCode": "與朋友分享此程式碼（點擊複製連結）",
+    "showStatusOverlay": "顯示狀態疊加",
+    "status": {
+      "inSync": "同步",
+      "outOfSync": "不同步"
+    },
+    "syncing": "正在同步...",
+    "validating": "正在驗證觀看派對...",
+    "viewers": "觀看者 ({{count}})",
+    "watching": "觀看",
+    "withCount": "與其他 {{count}} 人",
+    "you": "你"
+  },
+  "feedback": {
+    "modalTitle": "傳送回饋",
+    "buttonLabel": "回饋",
+    "subtitle": "如果您在使用過程中遇到任何問題或漏洞，請告知我們。",
+    "titleLabel": "1. 問題標題",
+    "titlePlaceholder": "例如：字幕載入錯誤、播放卡頓…",
+    "descriptionLabel": "2. 問題描述",
+    "descriptionPlaceholder": "請詳細描述問題、重現步驟或提出建議…",
+    "submit": "提交回饋",
+    "attachmentsLabel": "文件",
+    "attachmentsHint": "圖片/影片 · 總大小最大 55 MB",
+    "attachmentsTooLarge": "檔案總大小不得超過 55 MB。",
+    "cancel": "取消",
+    "close": "關閉",
+    "successTitle": "反饋已提交！",
+    "successDesc": "感謝您的回饋。我們的團隊將盡快審核並解決問題。",
+    "errorRequired": "請同時輸入標題和描述。",
+    "errorSubmit": "提交回饋時出錯，請稍後再試。"
+  },
+  "donate": {
+    "button": "支援 Framezoo",
+    "badge": "來自Framezoo的留言",
+    "modalTitle": "請幫助我們繼續打造Framezoo",
+    "subtitle": "您的每項貢獻都能幫助我們改進遊戲，擴展到更多平台，並讓我們繼續傾聽您的想法。",
+    "note": "感謝您關注Framezoo並支持我們所做的工作。您的貢獻讓我們有更多空間為所有人打造更好的體驗。",
+    "scanHint": "使用您的銀行應用程式掃描此二維碼。",
+    "paypalLabel": "PayPal",
+    "momoLabel": "媽媽",
+    "paypalImageAlt": "PayPal捐款二維碼",
+    "momoImageAlt": "MoMo捐贈二維碼",
+    "viewQr": "查看{{label}}二維碼（放大）",
+    "close": "關閉"
+  },
+  "toasts": {
+    "emailChangeSuccess": "郵箱已成功更新！",
+    "linkCopied": "連結已複製到剪貼簿！",
+    "loginSuccess": "登入成功！",
+    "logoutSuccess": "退出成功！",
+    "sessionExpired": "您的會話已結束或已在其他裝置上登出。您現在以訪客身分瀏覽。",
+    "otpResent": "驗證碼已重新發送！",
+    "otpSent": "驗證碼已寄至您的信箱！",
+    "passwordChangeSuccess": "密碼已成功更改！",
+    "passwordResetError": "重置密碼失敗",
+    "passwordResetSuccess": "密碼重置成功！",
+    "registerSuccess": "註冊成功！",
+    "newerVersionDownloading": "有更新的版本 (v{{version}}) 可用。正在下載最新版本…",
+    "newerVersionAvailable": "已有更新版本（v{{version}}）可供下載。點擊下載。"
+  }
+}

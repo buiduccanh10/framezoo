@@ -27,6 +27,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -100,115 +101,133 @@ internal fun FrameZooApp() {
     BackHandler(state.page != "discover") { state.back() }
 
     with(state) {
-        FrameZooTheme(theme, customPrimary, customSecondary, customTertiary) {
-            val colors = LocalFrameZooColors.current
-            Surface(color = MaterialTheme.colorScheme.background, contentColor = MaterialTheme.colorScheme.onBackground) {
-                Box(Modifier.fillMaxSize()) {
-                Column(Modifier.fillMaxSize().then(if (page in listOf("discover", "details", "player", "trailer")) Modifier else Modifier.padding(horizontal = 48.dp, vertical = 32.dp))) {
-                    if (page !in listOf("player", "discover", "details", "trailer")) {
-                        DiscoverHeader(state)
-                        Spacer(Modifier.height(28.dp))
-                    }
-                    if (busy && page != "details") CircularProgressIndicator(Modifier.size(26.dp))
-                    if (error.isNotBlank() && page != "details") Text(error, color = colors["type.danger"], modifier = Modifier.padding(vertical = 10.dp))
-                    when (page) {
-                        "discover" -> DiscoverScreen(state, discoverAction, discoverListState)
-                        "discover-more" -> DiscoverMoreScreen(state, moreGridState)
-                        "discover-lists" -> DiscoverListsScreen(state, allListsState)
-                        "search" -> SearchScreen(state, searchGridState, searchAction, downTo(searchAction))
-                        "details" -> selected?.let { item -> DetailsScreen(state, item) }
-                        "trailer" -> TrailerScreen(state)
-                        "feedback" -> FeedbackScreen(state)
-                        "sources" -> LazyColumn(verticalArrangement = Arrangement.spacedBy(15.dp), contentPadding = androidx.compose.foundation.layout.PaddingValues(bottom = 30.dp)) {
-                            item { Text("Nguồn phát · ${selected?.title.orEmpty()}", style = MaterialTheme.typography.headlineLarge) }
-                            item { TvButton("Quay lại", icon = com.framezoo.tv.R.drawable.desktop_chevron_left) { back() } }
-                            if (sources.isEmpty()) item { Text("Không có nguồn. Cài addon hỗ trợ stream trong mục Addon.") }
-                            items(sources) { source -> TvButton(source.name + if (source.infoHash != null || source.url.startsWith("magnet:")) " · Torrent" else " · HTTP") {
-                                chooseSource(source)
-                            } }
+        CompositionLocalProvider(LocalI18n provides i18n) {
+            FrameZooTheme(theme, customPrimary, customSecondary, customTertiary) {
+                val colors = LocalFrameZooColors.current
+                Surface(color = MaterialTheme.colorScheme.background, contentColor = MaterialTheme.colorScheme.onBackground) {
+                    Box(Modifier.fillMaxSize()) {
+                    Column(Modifier.fillMaxSize().then(if (page in listOf("discover", "details", "player", "trailer")) Modifier else Modifier.padding(horizontal = 48.dp, vertical = 32.dp))) {
+                        if (page !in listOf("player", "discover", "details", "trailer")) {
+                            DiscoverHeader(state)
+                            Spacer(Modifier.height(28.dp))
                         }
-                        "player" -> selected?.let { item -> playing?.let { stream ->
+                        if (busy && page != "details") CircularProgressIndicator(Modifier.size(26.dp))
+                        if (error.isNotBlank() && page != "details") Text(error, color = colors["type.danger"], modifier = Modifier.padding(vertical = 10.dp))
+                        when (page) {
+                            "discover" -> DiscoverScreen(state, discoverAction, discoverListState)
+                            "discover-more" -> DiscoverMoreScreen(state, moreGridState)
+                            "discover-lists" -> DiscoverListsScreen(state, allListsState)
+                            "search" -> SearchScreen(state, searchGridState, searchAction, downTo(searchAction))
+                            "details" -> selected?.let { item -> DetailsScreen(state, item) }
+                            "trailer" -> TrailerScreen(state)
+                            "feedback" -> FeedbackScreen(state)
+                            "sources" -> LazyColumn(verticalArrangement = Arrangement.spacedBy(15.dp), contentPadding = androidx.compose.foundation.layout.PaddingValues(bottom = 30.dp)) {
+                                item { Text("${selected?.title.orEmpty()} · ${t("addons.desktopAddons.sources")}", style = MaterialTheme.typography.headlineLarge) }
+                                item { TvButton(t("discover.page.back"), icon = com.framezoo.tv.R.drawable.desktop_chevron_left) { back() } }
+                                if (sources.isEmpty()) item { Text(t("addons.player.emptyExplanation")) }
+                                items(sources) { source -> TvButton(source.name + if (source.infoHash != null || source.url.startsWith("magnet:")) " · Torrent" else " · HTTP") {
+                                    chooseSource(source)
+                                } }
+                            }
+                            "player" -> selected?.let { item -> playing?.let { stream ->
 
-                            PlayerScreen(player, item, episode, stream, subtitles, backend, resume(item, episode),
-                                onStopped = { pos -> stopped(item, episode, pos) }) { page = "sources" }
-                        } }
-                        "library" -> MediaGrid("Thư viện", bookmarks.distinctBy { it.id }, ::openDetails, bookmarks = bookmarks.map { it.id }.toSet(), onBookmark = ::bookmark, qualityLoader = backend::releaseQuality)
-                        "history" -> MediaGrid("Lịch sử xem", history.map { it.media }.distinctBy { "${it.type}:${it.id}" }, ::openDetails,
-                            history.filter { it.duration > 0 }.associate { it.media.id to (it.position / it.duration).toFloat().coerceIn(0f, 1f) })
-                        "addons" -> Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                            Text("Addon", style = MaterialTheme.typography.headlineLarge)
-                            OutlinedTextField(addonUrl, { addonUrl = it }, label = { Text("URL manifest") }, singleLine = true,
-                                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                                keyboardActions = KeyboardActions(onDone = { addonAction.requestFocus() }),
-                                colors = tvFieldColors(), shape = RoundedCornerShape(12.dp),
-                                modifier = Modifier.fillMaxWidth(0.7f).then(downTo(addonAction)))
-                            TvButton("Cài addon", modifier = Modifier.focusRequester(addonAction), primary = true) { installAddon() }
-                            installed.forEach { addon -> Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(18.dp)) {
-                                Text("${addon.name} · ${addon.resources.joinToString()}", modifier = Modifier.weight(1f))
-                                TvButton("Gỡ") { removeAddon(addon) }
+                                PlayerScreen(player, item, episode, stream, subtitles, backend, resume(item, episode),
+                                    onStopped = { pos -> stopped(item, episode, pos) }) { page = "sources" }
                             } }
-                        }
-                        "settings" -> LazyColumn(verticalArrangement = Arrangement.spacedBy(18.dp)) {
-                            item { Text("Cài đặt", style = MaterialTheme.typography.headlineLarge) }
-                            item { OutlinedTextField(backendUrl, { backendUrl = it }, label = { Text("Backend URL") }, singleLine = true,
-                                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                                keyboardActions = KeyboardActions(onDone = { backendAction.requestFocus() }),
-                                colors = tvFieldColors(), shape = RoundedCornerShape(12.dp),
-                                modifier = Modifier.fillMaxWidth(0.7f).then(downTo(backendAction))) }
-                            item { TvButton("Lưu backend", modifier = Modifier.focusRequester(backendAction), primary = true) { saveBackend() } }
-                            item { Text("Giao diện", fontSize = 27.sp, fontWeight = FontWeight.Bold) }
-                            items(themeNames.chunked(5)) { names ->
-                                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                                    names.forEach { name -> TvThemePreview(name, selected = theme.equals(name, true)) { updateTheme(name) } }
-                                }
-                            }
-                            if (theme == "custom") {
-                                listOf(
-                                    Triple("primary", "Màu nhấn", customPrimary),
-                                    Triple("secondary", "Chữ và điều khiển", customSecondary),
-                                    Triple("tertiary", "Màu nền", customTertiary),
-                                ).forEach { (part, label, value) ->
-                                    item { Text(label, fontSize = 21.sp, fontWeight = FontWeight.Bold) }
-                                    item { LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                                        items(themeNames.filter { it != "custom" }) { name ->
-                                            TvThemePreview(name, selected = value == name) { updateCustomPart(part, name) }
-                                        }
-                                    } }
-                                }
-                            }
-                            item { Text("Bộ đệm torrent: RAM tối đa 128 MiB; dừng phát sẽ giải phóng.", color = colors["type.secondary"]) }
-                        }
-                        "login" -> Column(verticalArrangement = Arrangement.spacedBy(18.dp)) {
-                            Text(if (store.userId == null) "Đăng nhập" else "Tài khoản", style = MaterialTheme.typography.headlineLarge)
-                            if (store.userId != null) {
-                                Text("Đã đăng nhập: ${store.userId}")
-                                TvButton("Đăng xuất") { logout() }
-                            } else {
-                                OutlinedTextField(loginName, { loginName = it }, label = { Text("Tên đăng nhập hoặc email") }, singleLine = true,
-                                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-                                    keyboardActions = KeyboardActions(onNext = { passwordField.requestFocus() }),
-                                    colors = tvFieldColors(), shape = RoundedCornerShape(12.dp),
-                                    modifier = Modifier.fillMaxWidth(0.6f).then(downTo(passwordField)))
-                                OutlinedTextField(loginPassword, { loginPassword = it }, label = { Text("Mật khẩu") },
-                                    singleLine = true, visualTransformation = PasswordVisualTransformation(),
+                            "library" -> MediaGrid(t("home.bookmarks.sectionTitle"), bookmarks.distinctBy { it.id }, ::openDetails, bookmarks = bookmarks.map { it.id }.toSet(), onBookmark = ::bookmark, qualityLoader = backend::releaseQuality)
+                            "history" -> MediaGrid(t("home.watchHistory.sectionTitle"), history.map { it.media }.distinctBy { "${it.type}:${it.id}" }, ::openDetails,
+                                history.filter { it.duration > 0 }.associate { it.media.id to (it.position / it.duration).toFloat().coerceIn(0f, 1f) })
+                            "addons" -> Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                                Text(t("navigation.menu.addons"), style = MaterialTheme.typography.headlineLarge)
+                                OutlinedTextField(addonUrl, { addonUrl = it }, label = { Text("Manifest URL") }, singleLine = true,
                                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                                    keyboardActions = KeyboardActions(onDone = { loginAction.requestFocus() }),
+                                    keyboardActions = KeyboardActions(onDone = { addonAction.requestFocus() }),
                                     colors = tvFieldColors(), shape = RoundedCornerShape(12.dp),
-                                    modifier = Modifier.fillMaxWidth(0.6f).focusRequester(passwordField).then(downTo(loginAction)))
-                                TvButton("Đăng nhập", modifier = Modifier.focusRequester(loginAction), primary = true) { login() }
+                                    modifier = Modifier.fillMaxWidth(0.7f).then(downTo(addonAction)))
+                                TvButton(t("addons.page.addAddonButton"), modifier = Modifier.focusRequester(addonAction), primary = true) { installAddon() }
+                                installed.forEach { addon -> Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(18.dp)) {
+                                    Text("${addon.name} · ${addon.resources.joinToString()}", modifier = Modifier.weight(1f))
+                                    TvButton(t("addons.page.removeAddon")) { removeAddon(addon) }
+                                } }
+                            }
+                            "settings" -> {
+                                val customPrimaryLabel = t("settings.appearance.customParts.primary")
+                                val customSecondaryLabel = t("settings.appearance.customParts.secondary")
+                                val customTertiaryLabel = t("settings.appearance.customParts.tertiary")
+                                LazyColumn(verticalArrangement = Arrangement.spacedBy(18.dp)) {
+                                    item { Text(t("navigation.menu.settings"), style = MaterialTheme.typography.headlineLarge) }
+                                    item { OutlinedTextField(backendUrl, { backendUrl = it }, label = { Text("Server URL") }, singleLine = true,
+                                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                                        keyboardActions = KeyboardActions(onDone = { backendAction.requestFocus() }),
+                                        colors = tvFieldColors(), shape = RoundedCornerShape(12.dp),
+                                        modifier = Modifier.fillMaxWidth(0.7f).then(downTo(backendAction))) }
+                                    item { TvButton(t("settings.save"), modifier = Modifier.focusRequester(backendAction), primary = true) { saveBackend() } }
+                                    item { Text(t("settings.appearance.title"), fontSize = 27.sp, fontWeight = FontWeight.Bold) }
+                                    items(themeNames.chunked(5)) { names ->
+                                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                                            names.forEach { name -> TvThemePreview(name, selected = theme.equals(name, true)) { updateTheme(name) } }
+                                        }
+                                    }
+                                    if (theme == "custom") {
+                                        listOf(
+                                            Triple("primary", customPrimaryLabel, customPrimary),
+                                            Triple("secondary", customSecondaryLabel, customSecondary),
+                                            Triple("tertiary", customTertiaryLabel, customTertiary),
+                                        ).forEach { (part, label, value) ->
+                                            item { Text(label, fontSize = 21.sp, fontWeight = FontWeight.Bold) }
+                                            item { LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                                                items(themeNames.filter { it != "custom" }) { name ->
+                                                    TvThemePreview(name, selected = value == name) { updateCustomPart(part, name) }
+                                                }
+                                            } }
+                                        }
+                                    }
+                                    item { Text(t("settings.preferences.language"), fontSize = 27.sp, fontWeight = FontWeight.Bold) }
+                                    item {
+                                        LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                                            val topLangs = listOf("vi" to "Tiếng Việt", "en" to "English", "fr" to "Français", "es" to "Español", "de" to "Deutsch", "ja" to "日本語", "ko" to "한국어", "zh" to "中文")
+                                            items(topLangs) { (code, name) ->
+                                                TvButton(name, selected = i18n.language == code, navigation = true) {
+                                                    setLanguage(code)
+                                                }
+                                            }
+                                        }
+                                    }
+                                    item { Text(t("settings.torrent.cacheSizeBehaviorDescription"), color = colors["type.secondary"]) }
+                                }
+                            }
+                            "login" -> Column(verticalArrangement = Arrangement.spacedBy(18.dp)) {
+                                Text(if (store.userId == null) t("auth.login.submit") else t("settings.account.title"), style = MaterialTheme.typography.headlineLarge)
+                                if (store.userId != null) {
+                                    Text(store.userId ?: "")
+                                    TvButton(t("navigation.menu.logout")) { logout() }
+                                } else {
+                                    OutlinedTextField(loginName, { loginName = it }, label = { Text(t("auth.login.identifierLabel")) }, singleLine = true,
+                                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                                        keyboardActions = KeyboardActions(onNext = { passwordField.requestFocus() }),
+                                        colors = tvFieldColors(), shape = RoundedCornerShape(12.dp),
+                                        modifier = Modifier.fillMaxWidth(0.6f).then(downTo(passwordField)))
+                                    OutlinedTextField(loginPassword, { loginPassword = it }, label = { Text(t("auth.login.passwordLabel")) },
+                                        singleLine = true, visualTransformation = PasswordVisualTransformation(),
+                                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                                        keyboardActions = KeyboardActions(onDone = { loginAction.requestFocus() }),
+                                        colors = tvFieldColors(), shape = RoundedCornerShape(12.dp),
+                                        modifier = Modifier.fillMaxWidth(0.6f).focusRequester(passwordField).then(downTo(loginAction)))
+                                    TvButton(t("auth.login.submit"), modifier = Modifier.focusRequester(loginAction), primary = true) { login() }
+                                }
                             }
                         }
                     }
-                }
-                if (page == "discover") DiscoverHeader(state, Modifier.align(Alignment.TopCenter).padding(horizontal = 24.dp, vertical = 20.dp)
-                    .onPreviewKeyEvent { event ->
-                        if (event.nativeKeyEvent.action == KeyEvent.ACTION_DOWN && event.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_DPAD_UP &&
-                            (discoverListState.firstVisibleItemIndex > 0 || discoverListState.firstVisibleItemScrollOffset > 0)) {
-                            scope.launch { discoverListState.animateScrollToItem(0) }
-                            true
-                        } else false
+                    if (page == "discover") DiscoverHeader(state, Modifier.align(Alignment.TopCenter).padding(horizontal = 24.dp, vertical = 20.dp)
+                        .onPreviewKeyEvent { event ->
+                            if (event.nativeKeyEvent.action == KeyEvent.ACTION_DOWN && event.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_DPAD_UP &&
+                                (discoverListState.firstVisibleItemIndex > 0 || discoverListState.firstVisibleItemScrollOffset > 0)) {
+                                scope.launch { discoverListState.animateScrollToItem(0) }
+                                true
+                            } else false
+                        }
+                        .then(if (discover.isNotEmpty() && discoverListState.firstVisibleItemIndex == 0) Modifier.focusProperties { down = discoverAction } else Modifier))
                     }
-                    .then(if (discover.isNotEmpty() && discoverListState.firstVisibleItemIndex == 0) Modifier.focusProperties { down = discoverAction } else Modifier))
                 }
             }
         }

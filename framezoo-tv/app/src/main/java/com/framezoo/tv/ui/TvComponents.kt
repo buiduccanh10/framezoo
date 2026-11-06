@@ -119,7 +119,7 @@ internal fun MediaGrid(title: String, items: List<Media>, onOpen: (Media) -> Uni
     val colors = LocalFrameZooColors.current
     Column(verticalArrangement = Arrangement.spacedBy(18.dp)) {
         if (title.isNotBlank()) Text(title, fontSize = 27.sp, fontWeight = FontWeight.Bold, color = colors["type.emphasis"])
-        if (items.isEmpty()) Text("Chưa có nội dung", color = colors["type.secondary"])
+        if (items.isEmpty()) Text(t("home.search.empty.default"), color = colors["type.secondary"])
         LazyRow(horizontalArrangement = Arrangement.spacedBy(18.dp), contentPadding = PaddingValues(horizontal = 4.dp, vertical = 6.dp)) {
             items(items) { item ->
                 TvMediaCard(item, onOpen, progress[item.id], item.id in bookmarks, onBookmark, qualityLoader)
@@ -176,22 +176,23 @@ internal fun TvMediaCard(item: Media, onOpen: (Media) -> Unit, progress: Float? 
         Text(item.title, maxLines = 2, minLines = 2, overflow = TextOverflow.Ellipsis,
             color = colors["type.emphasis"], fontWeight = FontWeight.Bold, fontSize = 16.sp)
         Spacer(Modifier.height(4.dp))
-        Text("${if (item.type == "show") "Series" else "Phim"}${item.year.takeIf { it.isNotBlank() }?.let { " · $it" } ?: ""}",
+        Text("${if (item.type == "show") t("media.types.show") else t("media.types.movie")}${item.year.takeIf { it.isNotBlank() }?.let { " · $it" } ?: ""}",
             color = colors["type.secondary"], fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
       }
     }
     if (showCinemaBadge(item.type, quality)) {
-        Text("Đang chiếu", modifier = Modifier.zIndex(1f).align(Alignment.TopEnd).padding(12.dp)
+        Text(t("media.inCinema"), modifier = Modifier.zIndex(1f).align(Alignment.TopEnd).padding(12.dp)
             .clip(RoundedCornerShape(6.dp)).background(Color.DarkGray.copy(alpha = .8f)).padding(horizontal = 8.dp, vertical = 5.dp),
             color = Color(0xffffd54f), fontSize = 11.sp, fontWeight = FontWeight.SemiBold)
     }
-    if (hasBookmarkAction && onBookmark != null) {
+    if (hasBookmarkAction) {
         val buttonShape = RoundedCornerShape(50)
+        val bookmarkDescription = t("home.bookmarks.sectionTitle")
         TvIconButton(onClick = { onBookmark(item) }, modifier = Modifier.zIndex(1f).align(Alignment.TopStart).padding(8.dp).size(42.dp)
             .alpha(if (active) 1f else 0f)
             .focusRequester(bookmarkFocus).onFocusChanged { bookmarkFocused = it.isFocused }
             .focusProperties { down = cardFocus; canFocus = focused || bookmarkFocused }
-            .semantics { contentDescription = if (bookmarked) "Bỏ lưu ${item.title}" else "Lưu ${item.title}" },
+            .semantics { contentDescription = bookmarkDescription },
             shape = TvIconButtonDefaults.shape(buttonShape),
             colors = TvIconButtonDefaults.colors(containerColor = colors["pill.background"].copy(alpha = .75f), focusedContainerColor = colors["pill.background"].copy(alpha = .9f)),
             scale = TvIconButtonDefaults.scale(focusedScale = 1f),
