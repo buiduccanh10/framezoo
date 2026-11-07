@@ -138,7 +138,7 @@ internal fun SourcesScreen(
                         containerColor = colors["background.secondary"].copy(alpha = 0.5f),
                         focusedContainerColor = colors["pill.activeBackground"]
                     ),
-                    scale = TvCardDefaults.scale(focusedScale = 1.01f),
+                    scale = TvCardDefaults.scale(focusedScale = 1.03f),
                     border = TvCardDefaults.border(
                         focusedBorder = TvBorder(BorderStroke(2.dp, colors["type.logo"]), shape = shape)
                     ),

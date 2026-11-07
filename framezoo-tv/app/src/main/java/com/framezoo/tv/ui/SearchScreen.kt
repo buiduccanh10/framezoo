@@ -188,6 +188,8 @@ internal fun TvSearchBar(
                         containerColor = colors["pill.background"].copy(alpha = 0.6f),
                         focusedContainerColor = colors["type.logo"]
                     ),
+                    scale = TvIconButtonDefaults.scale(focusedScale = 1.08f),
+                    border = TvIconButtonDefaults.border(focusedBorder = TvBorder(BorderStroke(2.dp, Color.White), shape = CircleShape)),
                     shape = TvIconButtonDefaults.shape(CircleShape)
                 ) {
                     Icon(
@@ -270,6 +272,8 @@ internal fun DropdownFilterPill(
     var expanded by remember { mutableStateOf(false) }
     val selectedName = options.firstOrNull { it.id == selectedId }?.name
     val displayText = if (selectedId.isNotBlank() && selectedName != null) "$label: $selectedName" else label
+    val isSelected = selectedId.isNotBlank()
+    val focusBorderColor = if (isSelected) Color.White else colors["type.logo"]
 
     Box(modifier) {
         TvSurface(
@@ -281,7 +285,7 @@ internal fun DropdownFilterPill(
             ),
             scale = TvSurfaceDefaults.scale(focusedScale = 1.05f),
             border = TvSurfaceDefaults.border(
-                focusedBorder = TvBorder(BorderStroke(2.dp, colors["type.logo"]), shape = RoundedCornerShape(50))
+                focusedBorder = TvBorder(BorderStroke(2.dp, focusBorderColor), shape = RoundedCornerShape(50))
             ),
             modifier = Modifier.height(36.dp)
         ) {
@@ -574,7 +578,7 @@ internal fun SearchScreen(
                                 ),
                                 scale = TvSurfaceDefaults.scale(focusedScale = 1.08f),
                                 border = TvSurfaceDefaults.border(
-                                    focusedBorder = TvBorder(BorderStroke(2.dp, colors["type.logo"]), shape = editShape)
+                                    focusedBorder = TvBorder(BorderStroke(2.dp, if (uiState.editingWatching) Color.White else colors["type.logo"]), shape = editShape)
                                 ),
                                 modifier = Modifier
                                     .size(36.dp)

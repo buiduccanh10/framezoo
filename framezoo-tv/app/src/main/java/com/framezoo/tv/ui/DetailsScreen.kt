@@ -26,7 +26,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.focus.FocusRequester
+import kotlinx.coroutines.launch
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.onFocusChanged
@@ -73,7 +77,7 @@ private fun DetailsCard(onClick: () -> Unit, modifier: Modifier = Modifier, cont
     val shape = RoundedCornerShape(8.dp)
     TvCard(onClick = onClick, modifier = modifier, shape = TvCardDefaults.shape(shape),
         colors = TvCardDefaults.colors(containerColor = Color.Transparent, focusedContainerColor = colors["mediaCard.hoverBackground"]),
-        scale = TvCardDefaults.scale(focusedScale = 1.02f),
+        scale = TvCardDefaults.scale(focusedScale = 1.04f),
         border = TvCardDefaults.border(focusedBorder = TvBorder(BorderStroke(2.dp, colors["type.logo"]), shape = shape))) { content() }
 }
 
@@ -86,6 +90,7 @@ internal fun DetailsScreen(state: FrameZooState, item: Media) {
     val colors = LocalFrameZooColors.current
     val i18n = LocalI18n.current
     val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
     val firstAction = remember(item.id, item.type) { FocusRequester() }
     val seasonFocus = remember(item.id, item.type) { FocusRequester() }
     val closeFocus = remember(item.id, item.type) { FocusRequester() }
@@ -455,9 +460,33 @@ internal fun DetailsScreen(state: FrameZooState, item: Media) {
                 selected = false,
                 modifier = Modifier
                     .focusRequester(closeFocus)
-                    .focusProperties {
-                        down = if (trailers.isNotEmpty()) trailerFocus else firstAction
-                        left = firstAction
+                    .onKeyEvent { event ->
+                        if (event.type == KeyEventType.KeyDown) {
+                            when (event.nativeKeyEvent.keyCode) {
+                                android.view.KeyEvent.KEYCODE_DPAD_DOWN -> {
+                                    val target = if (trailers.isNotEmpty() && listState.firstVisibleItemIndex == 0) trailerFocus else firstAction
+                                    val success = runCatching { target.requestFocus() }.isSuccess
+                                    if (!success) {
+                                        coroutineScope.launch {
+                                            listState.scrollToItem(0)
+                                            firstAction.requestFocus()
+                                        }
+                                    }
+                                    true
+                                }
+                                android.view.KeyEvent.KEYCODE_DPAD_LEFT -> {
+                                    val success = runCatching { firstAction.requestFocus() }.isSuccess
+                                    if (!success) {
+                                        coroutineScope.launch {
+                                            listState.scrollToItem(0)
+                                            firstAction.requestFocus()
+                                        }
+                                    }
+                                    true
+                                }
+                                else -> false
+                            }
+                        } else false
                     }
             ) { state.back() }
         }
@@ -535,9 +564,9 @@ internal fun DetailsScreen(state: FrameZooState, item: Media) {
                                 focusedContainerColor = colors["pill.activeBackground"]
                             ),
                             border = TvCardDefaults.border(
-                                focusedBorder = TvBorder(BorderStroke(2.dp, colors["type.logo"]), shape = RoundedCornerShape(10.dp))
+                                focusedBorder = TvBorder(BorderStroke(2.dp, if (isChecked) Color.White else colors["type.logo"]), shape = RoundedCornerShape(10.dp))
                             ),
-                            scale = TvCardDefaults.scale(focusedScale = 1.02f),
+                            scale = TvCardDefaults.scale(focusedScale = 1.04f),
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Row(
@@ -761,22 +790,27 @@ private fun DetailsEpisodeCard(
       if (hasToolbar) Row(Modifier.align(Alignment.TopEnd).padding(7.dp).onFocusChanged { actionFocused = it.hasFocus }.alpha(if (active || actionFocused) 1f else 0f)) {
           val shape = CircleShape
           val buttonColors = TvIconButtonDefaults.colors(containerColor = Color.Black.copy(alpha = .65f), focusedContainerColor = colors["pill.activeBackground"])
-          val border = TvIconButtonDefaults.border(focusedBorder = TvBorder(BorderStroke(2.dp, colors["type.logo"]), shape = shape))
           if (episode.overview.isNotBlank()) TvIconButton(onClick = onOverview, modifier = Modifier.size(36.dp).focusRequester(favoriteFocus)
               .focusProperties { up = seasonFocus; down = cardFocus; canFocus = active || actionFocused }
-              .semantics { contentDescription = i18n.t("player.menus.episodes.showMore") }, shape = TvIconButtonDefaults.shape(shape), colors = buttonColors, border = border, scale = TvIconButtonDefaults.scale(focusedScale = 1f)) {
+              .semantics { contentDescription = i18n.t("player.menus.episodes.showMore") }, shape = TvIconButtonDefaults.shape(shape), colors = buttonColors,
+              border = TvIconButtonDefaults.border(focusedBorder = TvBorder(BorderStroke(2.dp, colors["type.logo"]), shape = shape)),
+              scale = TvIconButtonDefaults.scale(focusedScale = 1.08f)) {
               Icon(painterResource(R.drawable.desktop_chevron_down), null, Modifier.size(17.dp), tint = Color.White)
           }
           if (hasActions) TvIconButton(onClick = onFavorite, modifier = Modifier.size(36.dp).then(if (episode.overview.isBlank()) Modifier.focusRequester(favoriteFocus) else Modifier)
               .focusProperties { up = seasonFocus; down = cardFocus; canFocus = active || actionFocused }
               .semantics { contentDescription = i18n.t("player.menus.episodes.markAsFavorite") },
-              shape = TvIconButtonDefaults.shape(shape), colors = buttonColors, border = border, scale = TvIconButtonDefaults.scale(focusedScale = 1f)) {
+              shape = TvIconButtonDefaults.shape(shape), colors = buttonColors,
+              border = TvIconButtonDefaults.border(focusedBorder = TvBorder(BorderStroke(2.dp, if (favorite) Color.White else colors["type.logo"]), shape = shape)),
+              scale = TvIconButtonDefaults.scale(focusedScale = 1.08f)) {
               Icon(painterResource(if (favorite) R.drawable.desktop_bookmark_filled else R.drawable.desktop_bookmark), null, Modifier.size(15.dp), tint = Color.White)
           }
           if (hasActions) TvIconButton(onClick = onWatched, modifier = Modifier.size(36.dp)
               .focusProperties { up = seasonFocus; down = cardFocus; canFocus = active || actionFocused }
               .semantics { contentDescription = if (watched) i18n.t("player.menus.episodes.markAsUnwatched") else i18n.t("player.menus.episodes.markAsWatched") },
-              shape = TvIconButtonDefaults.shape(shape), colors = buttonColors, border = border, scale = TvIconButtonDefaults.scale(focusedScale = 1f)) {
+              shape = TvIconButtonDefaults.shape(shape), colors = buttonColors,
+              border = TvIconButtonDefaults.border(focusedBorder = TvBorder(BorderStroke(2.dp, if (watched) Color.White else colors["type.logo"]), shape = shape)),
+              scale = TvIconButtonDefaults.scale(focusedScale = 1.08f)) {
               Icon(painterResource(if (watched) R.drawable.desktop_eye_slash else R.drawable.desktop_eye), null, Modifier.size(17.dp), tint = if (watched) colors["type.logo"] else Color.White)
           }
       }

@@ -100,15 +100,29 @@ internal fun TvButton(
         primary -> colors["buttons.primaryText"]
         else -> colors["type.emphasis"]
     }
+    val isRedBackground = accent || primary
+    val isHighContrast = isRedBackground || selected || (navigation && active)
+    val focusBorderColor = if (isHighContrast) Color.White else colors["type.logo"]
+    val focusScale = when {
+        accent || primary -> 1.05f
+        navigation -> 1.04f
+        else -> 1.05f
+    }
     val animatedBackground by animateColorAsState(background, tween(300), label = "button background")
     MaterialTvButton(
         onClick = onClick,
         modifier = modifier.onFocusChanged { focused = it.isFocused },
         shape = TvButtonDefaults.shape(shape),
-        colors = TvButtonDefaults.colors(containerColor = animatedBackground, contentColor = foreground,
-            focusedContainerColor = animatedBackground, focusedContentColor = foreground),
-        scale = TvButtonDefaults.scale(focusedScale = 1f),
-        border = TvButtonDefaults.border(focusedBorder = TvBorder(BorderStroke(2.dp, colors["type.logo"]), shape = shape)),
+        colors = TvButtonDefaults.colors(
+            containerColor = animatedBackground,
+            contentColor = foreground,
+            focusedContainerColor = if (accent) colors["buttons.purpleHover"] ?: animatedBackground
+                                   else if (primary) colors["buttons.primaryHover"] ?: animatedBackground
+                                   else animatedBackground,
+            focusedContentColor = foreground
+        ),
+        scale = TvButtonDefaults.scale(focusedScale = focusScale),
+        border = TvButtonDefaults.border(focusedBorder = TvBorder(BorderStroke(2.dp, focusBorderColor), shape = shape)),
         contentPadding = PaddingValues(horizontal = if (navigation) 14.dp else 22.dp, vertical = 12.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -358,6 +372,7 @@ internal fun TvMediaCard(
     if (hasBookmarkAction) {
         val buttonShape = RoundedCornerShape(50)
         val bookmarkDescription = t("home.bookmarks.sectionTitle")
+        val focusBorderColor = if (bookmarked) Color.White else colors["type.logo"]
         TvIconButton(onClick = { onBookmark(item) }, modifier = Modifier.zIndex(1f).align(Alignment.TopStart).padding(8.dp).size(42.dp)
             .alpha(if (active) 1f else 0f)
             .focusRequester(bookmarkFocus).onFocusChanged { bookmarkFocused = it.isFocused }
@@ -365,8 +380,8 @@ internal fun TvMediaCard(
             .semantics { contentDescription = bookmarkDescription },
             shape = TvIconButtonDefaults.shape(buttonShape),
             colors = TvIconButtonDefaults.colors(containerColor = colors["pill.background"].copy(alpha = .75f), focusedContainerColor = colors["pill.background"].copy(alpha = .9f)),
-            scale = TvIconButtonDefaults.scale(focusedScale = 1f),
-            border = TvIconButtonDefaults.border(focusedBorder = TvBorder(BorderStroke(2.dp, colors["type.logo"]), shape = buttonShape))) {
+            scale = TvIconButtonDefaults.scale(focusedScale = 1.08f),
+            border = TvIconButtonDefaults.border(focusedBorder = TvBorder(BorderStroke(2.dp, focusBorderColor), shape = buttonShape))) {
             Icon(painterResource(if (bookmarked) R.drawable.desktop_bookmark_filled else R.drawable.desktop_bookmark), contentDescription = null,
                 modifier = Modifier.size(14.dp), tint = colors["type.emphasis"].copy(alpha = if (bookmarkFocused) 1f else .75f))
         }
@@ -387,11 +402,12 @@ internal fun TvThemePreview(name: String, selected: Boolean, onClick: () -> Unit
     val shape = RoundedCornerShape(10.dp)
     val selectedBorder = TvBorder(BorderStroke(if (selected) 2.dp else 1.dp,
         if (selected) current["type.logo"] else current["utils.divider"]), shape = shape)
+    val focusBorderColor = if (selected) Color.White else current["type.logo"]
     TvCard(onClick = onClick, modifier = Modifier.width(174.dp), shape = TvCardDefaults.shape(shape),
         colors = TvCardDefaults.colors(containerColor = preview["background.main"], focusedContainerColor = preview["background.main"]),
-        scale = TvCardDefaults.scale(focusedScale = 1f),
+        scale = TvCardDefaults.scale(focusedScale = 1.05f),
         border = TvCardDefaults.border(border = selectedBorder,
-            focusedBorder = TvBorder(BorderStroke(2.dp, current["type.logo"]), shape = shape))) {
+            focusedBorder = TvBorder(BorderStroke(2.dp, focusBorderColor), shape = shape))) {
       Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Row(horizontalArrangement = Arrangement.spacedBy(7.dp)) {
             Box(Modifier.width(23.dp).height(23.dp).clip(RoundedCornerShape(50)).background(preview["themePreview.primary"]))

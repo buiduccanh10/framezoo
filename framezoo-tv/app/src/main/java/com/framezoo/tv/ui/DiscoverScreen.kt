@@ -112,7 +112,7 @@ internal fun DiscoverHeader(state: FrameZooState, modifier: Modifier = Modifier)
                 containerColor = colors["pill.background"].copy(alpha = 0.85f),
                 focusedContainerColor = colors["pill.activeBackground"]
             ),
-            scale = TvSurfaceDefaults.scale(focusedScale = 1f),
+            scale = TvSurfaceDefaults.scale(focusedScale = 1.05f),
             border = TvSurfaceDefaults.border(focusedBorder = TvBorder(BorderStroke(2.dp, colors["type.logo"]), shape = brandShape))
         ) {
             Image(
@@ -228,11 +228,12 @@ internal fun HeaderButton(
     var focused by remember { mutableStateOf(false) }
     val shape = RoundedCornerShape(50)
     val background by animateColorAsState(if (selected || focused) colors["pill.activeBackground"] else colors["pill.background"], tween(300), label = "header background")
+    val focusBorderColor = if (selected) Color.White else colors["type.logo"]
     TvIconButton(onClick = onClick, modifier = Modifier.size(42.dp).then(modifier).onFocusChanged { focused = it.isFocused }
         .semantics { contentDescription = label }, shape = TvIconButtonDefaults.shape(shape),
         colors = TvIconButtonDefaults.colors(containerColor = background, focusedContainerColor = background),
-        scale = TvIconButtonDefaults.scale(focusedScale = 1f),
-        border = TvIconButtonDefaults.border(focusedBorder = TvBorder(BorderStroke(2.dp, colors["type.logo"]), shape = shape))) {
+        scale = TvIconButtonDefaults.scale(focusedScale = 1.08f),
+        border = TvIconButtonDefaults.border(focusedBorder = TvBorder(BorderStroke(2.dp, focusBorderColor), shape = shape))) {
         Icon(painterResource(icon), contentDescription = null, modifier = Modifier.size(19.dp).rotate(rotation),
             tint = if (selected || focused) colors["type.logo"] else colors["type.emphasis"])
     }
@@ -662,6 +663,7 @@ private fun CategoryTab(label: String, selected: Boolean, modifier: Modifier = M
     val colors = LocalFrameZooColors.current
     val shape = RoundedCornerShape(50)
     var focused by remember { mutableStateOf(false) }
+    val focusBorderColor = if (selected) Color.White else colors["type.logo"]
     TvSurface(
         onClick = onClick,
         modifier = modifier.height(36.dp).onFocusChanged { focused = it.isFocused },
@@ -670,10 +672,10 @@ private fun CategoryTab(label: String, selected: Boolean, modifier: Modifier = M
             containerColor = Color.Transparent,
             focusedContainerColor = if (focused) Color.White.copy(alpha = 0.08f) else Color.Transparent
         ),
-        scale = TvSurfaceDefaults.scale(focusedScale = 1.0f),
+        scale = TvSurfaceDefaults.scale(focusedScale = 1.05f),
         border = TvSurfaceDefaults.border(
             border = TvBorder.None,
-            focusedBorder = TvBorder(BorderStroke(2.dp, if (selected) colors["type.logo"] else Color.White.copy(alpha = 0.6f)), shape = shape)
+            focusedBorder = TvBorder(BorderStroke(2.dp, focusBorderColor), shape = shape)
         )
     ) {
         Box(
@@ -697,6 +699,7 @@ private fun GenreChip(label: String, selected: Boolean, modifier: Modifier = Mod
     val colors = LocalFrameZooColors.current
     val shape = RoundedCornerShape(50)
     var focused by remember { mutableStateOf(false) }
+    val focusBorderColor = if (selected) Color.White else colors["type.logo"]
     TvSurface(
         onClick = onClick,
         modifier = modifier.height(36.dp).onFocusChanged { focused = it.isFocused },
@@ -705,10 +708,10 @@ private fun GenreChip(label: String, selected: Boolean, modifier: Modifier = Mod
             containerColor = colors["mediaCard.hoverBackground"],
             focusedContainerColor = colors["pill.activeBackground"]
         ),
-        scale = TvSurfaceDefaults.scale(focusedScale = 1.0f),
+        scale = TvSurfaceDefaults.scale(focusedScale = 1.05f),
         border = TvSurfaceDefaults.border(
             border = TvBorder.None,
-            focusedBorder = TvBorder(BorderStroke(2.dp, if (selected) colors["type.logo"] else Color.White), shape = shape)
+            focusedBorder = TvBorder(BorderStroke(2.dp, focusBorderColor), shape = shape)
         )
     ) {
         Box(
@@ -735,6 +738,8 @@ internal fun FilterMenu(label: String, selected: String, options: List<DiscoverO
     var focused by remember { mutableStateOf(false) }
     val selectedName = options.firstOrNull { it.id == selected }?.name
     val displayText = if (selected.isNotBlank() && selectedName != null) "$label: $selectedName" else label
+    val isSelected = selected.isNotBlank()
+    val focusBorderColor = if (isSelected) Color.White else colors["type.logo"]
 
     Box(modifier) {
         TvSurface(
@@ -744,10 +749,10 @@ internal fun FilterMenu(label: String, selected: String, options: List<DiscoverO
                 containerColor = colors["mediaCard.hoverBackground"],
                 focusedContainerColor = colors["pill.activeBackground"]
             ),
-            scale = TvSurfaceDefaults.scale(focusedScale = 1.0f),
+            scale = TvSurfaceDefaults.scale(focusedScale = 1.05f),
             border = TvSurfaceDefaults.border(
                 border = TvBorder.None,
-                focusedBorder = TvBorder(BorderStroke(2.dp, Color.White), shape = RoundedCornerShape(50))
+                focusedBorder = TvBorder(BorderStroke(2.dp, focusBorderColor), shape = RoundedCornerShape(50))
             ),
             modifier = Modifier.height(36.dp).onFocusChanged { focused = it.isFocused }
         ) {
