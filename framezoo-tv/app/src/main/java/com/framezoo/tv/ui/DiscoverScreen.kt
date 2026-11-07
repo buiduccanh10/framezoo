@@ -25,6 +25,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items as gridItems
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
@@ -49,10 +50,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import coil.ImageLoader
 import coil.decode.SvgDecoder
 import androidx.compose.ui.platform.LocalContext
@@ -200,13 +203,13 @@ internal fun DiscoverHeader(state: FrameZooState, modifier: Modifier = Modifier)
                     }
             ) { accountExpanded = true }
             DropdownMenu(accountExpanded, { accountExpanded = false }, Modifier.background(colors["pill.background"])) {
-                TvButton(if (state.store.userId == null) t("auth.login.submit") else t("settings.account.title"), navigation = true, modifier = Modifier.fillMaxWidth()) { accountExpanded = false; state.openLogin() }
-                TvButton(t("home.watchHistory.sectionTitle"), navigation = true, modifier = Modifier.fillMaxWidth()) { accountExpanded = false; state.openHistory() }
-                TvButton(t("home.bookmarks.sectionTitle"), navigation = true, modifier = Modifier.fillMaxWidth()) { accountExpanded = false; state.openLibrary() }
-                TvButton(t("navigation.menu.addons"), navigation = true, modifier = Modifier.fillMaxWidth()) { accountExpanded = false; state.openAddons() }
-                TvButton(t("navigation.menu.feedback"), navigation = true, modifier = Modifier.fillMaxWidth()) { accountExpanded = false; state.openFeedback() }
-                TvButton(t("navigation.menu.settings"), navigation = true, modifier = Modifier.fillMaxWidth()) { accountExpanded = false; state.page = "settings" }
-                if (state.store.userId != null) TvButton(t("navigation.menu.logout"), navigation = true, modifier = Modifier.fillMaxWidth()) { accountExpanded = false; state.logout() }
+                TvButton(if (state.store.userId == null) t("auth.login.submit") else t("settings.account.title"), navigation = true, modifier = Modifier.fillMaxWidth().padding(horizontal = 6.dp, vertical = 2.dp)) { accountExpanded = false; state.openLogin() }
+                TvButton(t("home.watchHistory.sectionTitle"), navigation = true, modifier = Modifier.fillMaxWidth().padding(horizontal = 6.dp, vertical = 2.dp)) { accountExpanded = false; state.openHistory() }
+                TvButton(t("home.bookmarks.sectionTitle"), navigation = true, modifier = Modifier.fillMaxWidth().padding(horizontal = 6.dp, vertical = 2.dp)) { accountExpanded = false; state.openLibrary() }
+                TvButton(t("navigation.menu.addons"), navigation = true, modifier = Modifier.fillMaxWidth().padding(horizontal = 6.dp, vertical = 2.dp)) { accountExpanded = false; state.openAddons() }
+                TvButton(t("navigation.menu.feedback"), navigation = true, modifier = Modifier.fillMaxWidth().padding(horizontal = 6.dp, vertical = 2.dp)) { accountExpanded = false; state.openFeedback() }
+                TvButton(t("navigation.menu.settings"), navigation = true, modifier = Modifier.fillMaxWidth().padding(horizontal = 6.dp, vertical = 2.dp)) { accountExpanded = false; state.page = "settings" }
+                if (state.store.userId != null) TvButton(t("navigation.menu.logout"), navigation = true, modifier = Modifier.fillMaxWidth().padding(horizontal = 6.dp, vertical = 2.dp)) { accountExpanded = false; state.logout() }
             }
         }
     }
@@ -239,6 +242,7 @@ internal fun HeaderButton(
 internal fun DiscoverScreen(state: FrameZooState, discoverAction: FocusRequester, listState: LazyListState) {
     val colors = LocalFrameZooColors.current
     val scope = rememberCoroutineScope()
+    val categoryFocus = remember { FocusRequester() }
     val tabAll = t("discover.tabs.all")
     val tabSeries = t("discover.tabs.tvshows")
     val tabMovie = t("discover.tabs.movies")
@@ -259,23 +263,106 @@ internal fun DiscoverScreen(state: FrameZooState, discoverAction: FocusRequester
         val heroHeight = maxHeight - 16.dp
         LazyColumn(Modifier.fillMaxSize(), state = listState, verticalArrangement = Arrangement.spacedBy(26.dp), contentPadding = PaddingValues(bottom = 48.dp)) {
             item {
-                if (state.discover.isNotEmpty()) FeaturedCarousel(state, state.discover.take(15), heroHeight, discoverAction,
+                if (state.discover.isNotEmpty()) FeaturedCarousel(state, state.discover.take(15), heroHeight, discoverAction, categoryFocus,
                     onLogo = state.backend::logo, onRatings = state.backend::featuredRatings,
                     onTrailer = state.backend::trailer, randomMovies = { state.backend.discoverSection(com.framezoo.tv.model.DiscoverFilter(category = "movie"), "popular", page = 2) },
                     onRandom = state::playRandom, progressItems = state.progress, onOpen = state::openDetails, onPlay = state::playFeatured)
-                else Box(Modifier.fillMaxWidth().height(heroHeight).background(colors["background.secondary"]), contentAlignment = Alignment.Center) {
-                    Text(if (state.error.isNotBlank()) state.error else defaultLoadingText, color = colors["type.text"])
+                else Box(Modifier.fillMaxWidth().height(heroHeight).padding(8.dp).clip(RoundedCornerShape(18.dp)).skeletonShimmer(), contentAlignment = Alignment.Center) {
+                    if (state.error.isNotBlank()) Text(state.error, color = colors["type.danger"])
                 }
             }
-            val watching = state.progress.filter { it.duration > 0 && it.position > 0 }
-            if (watching.isNotEmpty()) item { Box(Modifier.padding(horizontal = 38.dp)) {
-                MediaGrid(t("settings.appearance.sections.watching"), watching.map { it.media }, state::openDetails, watching.associate { it.media.id to (it.position / it.duration).toFloat().coerceIn(0f, 1f) }, state.bookmarks.map { it.id }.toSet(), state::bookmark, state.backend::releaseQuality)
-            } }
-            if (state.bookmarks.isNotEmpty()) item { Box(Modifier.padding(horizontal = 38.dp)) {
-                MediaGrid(t("home.bookmarks.sectionTitle"), state.bookmarks.distinctBy { it.id }, state::openDetails, state.progress.filter { it.duration > 0 }.associate { it.media.id to (it.position / it.duration).toFloat().coerceIn(0f, 1f) }, state.bookmarks.map { it.id }.toSet(), state::bookmark, state.backend::releaseQuality)
-            } }
-            item { Column(Modifier.padding(horizontal = 38.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
-                val categoryFocus = remember { FocusRequester() }
+            val watching = state.progress.filter { it.duration > 0 && it.position > 0 && (it.position / it.duration) < 0.95 }
+            if (watching.isNotEmpty()) item {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 38.dp),
+                    verticalArrangement = Arrangement.spacedBy(14.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.desktop_clock),
+                            contentDescription = null,
+                            tint = colors["type.emphasis"],
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Text(
+                            text = t("home.continueWatching.sectionTitle").uppercase(),
+                            color = colors["type.emphasis"],
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp,
+                            letterSpacing = 1.sp
+                        )
+                    }
+                    LazyRow(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        contentPadding = PaddingValues(horizontal = 4.dp, vertical = 6.dp)
+                    ) {
+                        items(watching, key = { "discover_watching:${it.media.id}:${it.season}:${it.episode}" }) { libItem ->
+                            val progressVal = if (libItem.duration > 0) (libItem.position / libItem.duration).toFloat().coerceIn(0f, 1f) else null
+                            TvMediaCard(
+                                item = libItem.media,
+                                onOpen = { state.openDetails(libItem.media) },
+                                progress = progressVal,
+                                season = libItem.season,
+                                episode = libItem.episode,
+                                bookmarked = state.bookmarks.any { it.id == libItem.media.id },
+                                onBookmark = state::bookmark,
+                                qualityLoader = state.backend::releaseQuality
+                            )
+                        }
+                    }
+                }
+            }
+            if (state.bookmarks.isNotEmpty()) item {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 38.dp),
+                    verticalArrangement = Arrangement.spacedBy(14.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.desktop_bookmark),
+                            contentDescription = null,
+                            tint = colors["type.emphasis"],
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Text(
+                            text = t("home.bookmarks.sectionTitle").uppercase(),
+                            color = colors["type.emphasis"],
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp,
+                            letterSpacing = 1.sp
+                        )
+                    }
+                    LazyRow(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        contentPadding = PaddingValues(horizontal = 4.dp, vertical = 6.dp)
+                    ) {
+                        items(state.bookmarks.distinctBy { it.id }, key = { "discover_bm:${it.id}" }) { bmMedia ->
+                            TvMediaCard(
+                                item = bmMedia,
+                                onOpen = { state.openDetails(bmMedia) },
+                                bookmarked = true,
+                                onBookmark = state::bookmark,
+                                qualityLoader = state.backend::releaseQuality
+                            )
+                        }
+                    }
+                }
+            }
+            item { Column(Modifier.padding(start = 34.dp, end = 38.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
                 val countryFocus = remember { FocusRequester() }
                 val yearFocus = remember { FocusRequester() }
                 val focusManager = LocalFocusManager.current
@@ -314,16 +401,35 @@ internal fun DiscoverScreen(state: FrameZooState, discoverAction: FocusRequester
                         else -> false
                     }
                 }, horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
-                    LazyRow(Modifier.weight(1f).focusRequester(categoryFocus).onFocusChanged { inCategories = it.hasFocus }.focusGroup(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                        items(listOf(DiscoverOption("all", tabAll), DiscoverOption("tv", tabSeries), DiscoverOption("movie", tabMovie)) +
-                            state.genres.map { DiscoverOption("genre:${it.id}", it.name) }, key = { it.id }) { option ->
+                    LazyRow(
+                        Modifier.weight(1f).onFocusChanged { inCategories = it.hasFocus }.focusGroup(),
+                        contentPadding = PaddingValues(horizontal = 4.dp, vertical = 4.dp),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        items(listOf(DiscoverOption("all", tabAll), DiscoverOption("tv", tabSeries), DiscoverOption("movie", tabMovie)), key = { it.id }) { option ->
                             val focus = remember(option.id) { FocusRequester() }
                             DisposableEffect(focus) { onDispose { if (lastCategoryFocus === focus) lastCategoryFocus = null } }
+                            val modifier = Modifier
+                                .then(if (option.id == "all") Modifier.focusRequester(categoryFocus).focusProperties { up = discoverAction } else Modifier)
+                                .focusRequester(focus)
+                                .onFocusChanged { if (it.isFocused) lastCategoryFocus = focus }
+                            CategoryTab(option.name, state.filter.category == option.id, modifier) { state.updateFilter(state.filter.copy(category = option.id)) }
+                        }
+                        item(key = "tab_genre_spacing") {
+                            Spacer(Modifier.width(4.dp))
+                        }
+                        items(state.genres, key = { "genre:${it.id}" }) { genre ->
+                            val genreId = "genre:${genre.id}"
+                            val focus = remember(genreId) { FocusRequester() }
+                            DisposableEffect(focus) { onDispose { if (lastCategoryFocus === focus) lastCategoryFocus = null } }
                             val modifier = Modifier.focusRequester(focus).onFocusChanged { if (it.isFocused) lastCategoryFocus = focus }
-                            if (option.id.startsWith("genre:")) TvButton(option.name, selected = state.filter.category == option.id, modifier = modifier, navigation = true) { state.updateFilter(state.filter.copy(category = option.id)) }
-                            else CategoryTab(option.name, state.filter.category == option.id, modifier) { state.updateFilter(state.filter.copy(category = option.id)) }
+                            GenreChip(genre.name, selected = state.filter.category == genreId, modifier = modifier) {
+                                state.updateFilter(state.filter.copy(category = genreId))
+                            }
                         }
                     }
+                    Box(Modifier.padding(horizontal = 4.dp).width(1.dp).height(20.dp).background(Color.White.copy(alpha = 0.15f)))
                     FilterMenu(filterCountryLabel, state.filter.country, state.countries, modifier = Modifier.focusRequester(countryFocus).onFocusChanged { inCountry = it.hasFocus }) { state.updateFilter(state.filter.copy(country = it)) }
                     FilterMenu(filterYearLabel, state.filter.year, (Year.now().value downTo 1900).map { DiscoverOption(it.toString(), it.toString()) }, modifier = Modifier.focusRequester(yearFocus).onFocusChanged { inYear = it.hasFocus }) { state.updateFilter(state.filter.copy(year = it)) }
                 }
@@ -399,7 +505,14 @@ private fun DiscoverCarousel(state: FrameZooState, key: String, title: String, m
             }
         }
         when {
-            key in state.rowLoading -> CircularProgressIndicator(Modifier.size(24.dp).padding(4.dp))
+            key in state.rowLoading -> {
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    contentPadding = PaddingValues(horizontal = 4.dp, vertical = 6.dp)
+                ) {
+                    items(6) { TvMediaCardSkeleton() }
+                }
+            }
             key in state.rowErrors -> Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(state.rowErrors[key].orEmpty(), color = colors["type.danger"]); TvButton(t("notFound.reloadButton")) { state.refreshRow(key) }
             }
@@ -414,11 +527,11 @@ private fun DiscoverSkeleton(title: String) {
     val colors = LocalFrameZooColors.current
     Column(Modifier.padding(horizontal = 38.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
         Text(title, color = colors["type.emphasis"], fontSize = 27.sp, fontWeight = FontWeight.Bold)
-        Row(horizontalArrangement = Arrangement.spacedBy(18.dp)) {
-            repeat(5) { Column(Modifier.width(174.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Box(Modifier.fillMaxWidth().aspectRatio(2f / 3f).clip(RoundedCornerShape(10.dp)).background(colors["mediaCard.hoverBackground"]))
-                Box(Modifier.fillMaxWidth(.8f).height(16.dp).clip(RoundedCornerShape(4.dp)).background(colors["mediaCard.hoverBackground"]))
-            } }
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = PaddingValues(horizontal = 4.dp, vertical = 6.dp)
+        ) {
+            items(6) { TvMediaCardSkeleton() }
         }
     }
 }
@@ -524,11 +637,20 @@ internal fun DiscoverMoreScreen(state: FrameZooState, gridState: LazyGridState) 
         }
         item(span = { GridItemSpan(maxLineSpan) }) {
             when {
-                state.moreLoading -> CircularProgressIndicator(Modifier.size(24.dp).padding(4.dp))
+                state.moreLoading -> Row(
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    repeat(6) {
+                        TvMediaCardSkeleton()
+                    }
+                }
                 state.moreError.isNotBlank() -> Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
                     Text(state.moreError, color = colors["type.danger"]); TvButton(t("notFound.reloadButton")) { if (state.moreItems.isEmpty()) state.updateMoreFilter(force = true) else state.loadMore() }
                 }
-                state.moreHasNext -> TvButton(t("discover.page.loadMore")) { state.loadMore() }
+                state.moreHasNext -> Box(Modifier.fillMaxWidth().padding(vertical = 12.dp), contentAlignment = Alignment.Center) {
+                    TvButton(t("discover.page.loadMore"), icon = R.drawable.desktop_chevron_down) { state.loadMore() }
+                }
                 state.moreItems.isEmpty() -> Text(t("home.search.empty.default"), color = colors["type.secondary"])
             }
         }
@@ -538,30 +660,153 @@ internal fun DiscoverMoreScreen(state: FrameZooState, gridState: LazyGridState) 
 @Composable
 private fun CategoryTab(label: String, selected: Boolean, modifier: Modifier = Modifier, onClick: () -> Unit) {
     val colors = LocalFrameZooColors.current
-    val shape = RoundedCornerShape(8.dp)
-    TvSurface(onClick = onClick, modifier = modifier, shape = TvSurfaceDefaults.shape(shape),
-        colors = TvSurfaceDefaults.colors(containerColor = Color.Transparent, focusedContainerColor = Color.Transparent),
-        scale = TvSurfaceDefaults.scale(focusedScale = 1f),
-        border = TvSurfaceDefaults.border(focusedBorder = TvBorder(BorderStroke(2.dp, colors["type.logo"]), shape = shape))) {
-        Text(label, Modifier.padding(horizontal = 12.dp, vertical = 12.dp), color = if (selected) colors["type.logo"] else colors["type.secondary"], fontSize = 16.sp, fontWeight = FontWeight.Bold, maxLines = 1)
-    }
-}
-
-@Composable
-internal fun FilterMenu(label: String, selected: String, options: List<DiscoverOption>, allowAll: Boolean = true, modifier: Modifier = Modifier, onSelect: (String) -> Unit) {
-    val allLabel = t("discover.tabs.all")
-    var expanded by remember { mutableStateOf(false) }
-    Box(modifier) {
-        TvButton(options.firstOrNull { it.id == selected }?.name?.let { "$label: $it" } ?: label, navigation = true, trailingIcon = R.drawable.desktop_up_down_arrow) { expanded = true }
-        DropdownMenu(expanded, { expanded = false }, Modifier.heightIn(max = 350.dp).background(LocalFrameZooColors.current["pill.background"])) {
-            if (allowAll) TvButton("$allLabel $label", modifier = Modifier.fillMaxWidth(), navigation = true) { onSelect(""); expanded = false }
-            options.forEach { option -> TvButton(option.name, modifier = Modifier.fillMaxWidth(), navigation = true, selected = option.id == selected) { onSelect(option.id); expanded = false } }
+    val shape = RoundedCornerShape(50)
+    var focused by remember { mutableStateOf(false) }
+    TvSurface(
+        onClick = onClick,
+        modifier = modifier.height(36.dp).onFocusChanged { focused = it.isFocused },
+        shape = TvSurfaceDefaults.shape(shape),
+        colors = TvSurfaceDefaults.colors(
+            containerColor = Color.Transparent,
+            focusedContainerColor = if (focused) Color.White.copy(alpha = 0.08f) else Color.Transparent
+        ),
+        scale = TvSurfaceDefaults.scale(focusedScale = 1.0f),
+        border = TvSurfaceDefaults.border(
+            border = TvBorder.None,
+            focusedBorder = TvBorder(BorderStroke(2.dp, if (selected) colors["type.logo"] else Color.White.copy(alpha = 0.6f)), shape = shape)
+        )
+    ) {
+        Box(
+            modifier = Modifier.fillMaxHeight().padding(horizontal = 12.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = label,
+                color = if (selected) colors["type.logo"] else if (focused) colors["type.emphasis"] else colors["type.secondary"],
+                fontSize = if (selected) 17.sp else 16.sp,
+                fontWeight = if (selected) FontWeight.Bold else FontWeight.SemiBold,
+                maxLines = 1,
+                textAlign = TextAlign.Center
+            )
         }
     }
 }
 
 @Composable
-private fun FeaturedCarousel(state: FrameZooState, items: List<Media>, height: androidx.compose.ui.unit.Dp, discoverAction: FocusRequester, onLogo: suspend (Media) -> String?, onRatings: suspend (Media) -> FeaturedRatings, onTrailer: suspend (Media) -> String?, randomMovies: suspend () -> List<Media>, onRandom: (Media) -> Unit, progressItems: List<LibraryItem>, onOpen: (Media) -> Unit, onPlay: (Media) -> Unit) {
+private fun GenreChip(label: String, selected: Boolean, modifier: Modifier = Modifier, onClick: () -> Unit) {
+    val colors = LocalFrameZooColors.current
+    val shape = RoundedCornerShape(50)
+    var focused by remember { mutableStateOf(false) }
+    TvSurface(
+        onClick = onClick,
+        modifier = modifier.height(36.dp).onFocusChanged { focused = it.isFocused },
+        shape = TvSurfaceDefaults.shape(shape),
+        colors = TvSurfaceDefaults.colors(
+            containerColor = colors["mediaCard.hoverBackground"],
+            focusedContainerColor = colors["pill.activeBackground"]
+        ),
+        scale = TvSurfaceDefaults.scale(focusedScale = 1.0f),
+        border = TvSurfaceDefaults.border(
+            border = TvBorder.None,
+            focusedBorder = TvBorder(BorderStroke(2.dp, if (selected) colors["type.logo"] else Color.White), shape = shape)
+        )
+    ) {
+        Box(
+            modifier = Modifier.fillMaxHeight().padding(horizontal = 14.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = label,
+                color = if (selected) colors["type.logo"] else if (focused) colors["type.emphasis"] else colors["type.secondary"],
+                fontSize = 13.5.sp,
+                fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
+                maxLines = 1,
+                textAlign = TextAlign.Center
+            )
+        }
+    }
+}
+
+@Composable
+internal fun FilterMenu(label: String, selected: String, options: List<DiscoverOption>, allowAll: Boolean = true, modifier: Modifier = Modifier, onSelect: (String) -> Unit) {
+    val colors = LocalFrameZooColors.current
+    val allLabel = t("discover.tabs.all")
+    var expanded by remember { mutableStateOf(false) }
+    var focused by remember { mutableStateOf(false) }
+    val selectedName = options.firstOrNull { it.id == selected }?.name
+    val displayText = if (selected.isNotBlank() && selectedName != null) "$label: $selectedName" else label
+
+    Box(modifier) {
+        TvSurface(
+            onClick = { expanded = true },
+            shape = TvSurfaceDefaults.shape(RoundedCornerShape(50)),
+            colors = TvSurfaceDefaults.colors(
+                containerColor = colors["mediaCard.hoverBackground"],
+                focusedContainerColor = colors["pill.activeBackground"]
+            ),
+            scale = TvSurfaceDefaults.scale(focusedScale = 1.0f),
+            border = TvSurfaceDefaults.border(
+                border = TvBorder.None,
+                focusedBorder = TvBorder(BorderStroke(2.dp, Color.White), shape = RoundedCornerShape(50))
+            ),
+            modifier = Modifier.height(36.dp).onFocusChanged { focused = it.isFocused }
+        ) {
+            Row(
+                modifier = Modifier.fillMaxHeight().padding(horizontal = 14.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
+                Text(
+                    text = displayText,
+                    color = if (selected.isNotBlank() || focused) colors["type.emphasis"] else colors["type.secondary"],
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Medium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Icon(
+                    painter = painterResource(R.drawable.desktop_up_down_arrow),
+                    contentDescription = null,
+                    tint = colors["dropdown.secondary"],
+                    modifier = Modifier.size(11.dp)
+                )
+            }
+        }
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier
+                .heightIn(max = 350.dp)
+                .background(colors["pill.background"])
+        ) {
+            if (allowAll) {
+                TvButton(
+                    label = "$allLabel $label",
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 6.dp, vertical = 2.dp),
+                    navigation = true
+                ) {
+                    onSelect("")
+                    expanded = false
+                }
+            }
+            options.forEach { option ->
+                TvButton(
+                    label = option.name,
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 6.dp, vertical = 2.dp),
+                    navigation = true,
+                    selected = option.id == selected
+                ) {
+                    onSelect(option.id)
+                    expanded = false
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun FeaturedCarousel(state: FrameZooState, items: List<Media>, height: androidx.compose.ui.unit.Dp, discoverAction: FocusRequester, nextFocusDown: FocusRequester? = null, onLogo: suspend (Media) -> String?, onRatings: suspend (Media) -> FeaturedRatings, onTrailer: suspend (Media) -> String?, randomMovies: suspend () -> List<Media>, onRandom: (Media) -> Unit, progressItems: List<LibraryItem>, onOpen: (Media) -> Unit, onPlay: (Media) -> Unit) {
     val colors = LocalFrameZooColors.current
     var index by remember(items) { mutableIntStateOf(0) }
     var actionFocused by remember { mutableStateOf(false) }
@@ -583,7 +828,15 @@ private fun FeaturedCarousel(state: FrameZooState, items: List<Media>, height: a
     }
     Box(Modifier.fillMaxWidth().height(height).padding(8.dp).onFocusChanged { actionFocused = it.hasFocus }.clip(RoundedCornerShape(18.dp)).background(colors["background.secondary"])) {
         Crossfade(targetState = item, animationSpec = tween(800), label = "featured backdrop") { featured ->
-            if (!featured.backdrop.isNullOrBlank()) AsyncImage(featured.backdrop, featured.title, Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
+            if (!featured.backdrop.isNullOrBlank()) {
+                SubcomposeAsyncImage(
+                    model = featured.backdrop,
+                    contentDescription = featured.title,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop,
+                    loading = { Box(Modifier.fillMaxSize().skeletonShimmer()) }
+                )
+            }
         }
         if (trailerEnabled && trailerKey != null) TrailerBackground(trailerKey!!, trailerMuted, Modifier.fillMaxSize())
         Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Color.Black.copy(alpha = .24f), Color.Transparent, Color.Black.copy(alpha = .95f)))))
@@ -616,8 +869,8 @@ private fun FeaturedCarousel(state: FrameZooState, items: List<Media>, height: a
             }
             if (item.description.isNotBlank()) Text(item.description, color = Color.White.copy(alpha = .9f), maxLines = 3, overflow = TextOverflow.Ellipsis, fontSize = 16.sp)
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                TvButton(if (progressItems.any { it.media.id == item.id && it.media.type == item.type && it.position > 0 }) t("details.resume") else t("details.play"), modifier = Modifier.focusRequester(discoverAction), accent = true, icon = R.drawable.desktop_play) { onPlay(item) }
-                TvButton(t("discover.featured.moreInfo"), icon = R.drawable.desktop_question) { onOpen(item) }
+                TvButton(if (progressItems.any { it.media.id == item.id && it.media.type == item.type && it.position > 0 }) t("details.resume") else t("details.play"), modifier = Modifier.focusRequester(discoverAction).then(if (nextFocusDown != null) Modifier.focusProperties { down = nextFocusDown } else Modifier), accent = true, icon = R.drawable.desktop_play) { onPlay(item) }
+                TvButton(t("discover.featured.moreInfo"), modifier = if (nextFocusDown != null) Modifier.focusProperties { down = nextFocusDown } else Modifier, icon = R.drawable.desktop_question) { onOpen(item) }
             }
             progressItems.firstOrNull { it.media.id == item.id && it.media.type == item.type && it.position > 0 && it.duration > 0 }?.let { progress ->
                 val ratio = (progress.position / progress.duration).toFloat().coerceIn(0f, 1f)
@@ -664,6 +917,9 @@ private fun RandomMovieButton(load: suspend () -> List<Media>, onPlay: (Media) -
     var movies by remember { mutableStateOf<List<Media>>(emptyList()) }
     var choice by remember { mutableStateOf<Media?>(null) }
     var countdown by remember { mutableIntStateOf(0) }
+    var isRolling by remember { mutableStateOf(false) }
+    val diceRotation by animateFloatAsState(if (isRolling) 360f else 0f, tween(500), label = "diceRoll")
+
     LaunchedEffect(Unit) {
         try { movies = load() } catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (_: Exception) { movies = emptyList() }
     }
@@ -674,18 +930,72 @@ private fun RandomMovieButton(load: suspend () -> List<Media>, onPlay: (Media) -
         choice = null
         onPlay(movie)
     }
-    if (choice != null) {
-        TvButton("${choice?.title}  $countdown", modifier = modifier, navigation = true) { choice = null }
+
+    val colors = LocalFrameZooColors.current
+    val shape = RoundedCornerShape(50)
+
+    if (choice != null && countdown > 0) {
+        TvSurface(
+            onClick = { choice = null; countdown = 0 },
+            shape = TvSurfaceDefaults.shape(shape),
+            colors = TvSurfaceDefaults.colors(
+                containerColor = colors["pill.activeBackground"],
+                focusedContainerColor = colors["type.logo"]
+            ),
+            scale = TvSurfaceDefaults.scale(focusedScale = 1.05f),
+            border = TvSurfaceDefaults.border(focusedBorder = TvBorder(BorderStroke(2.dp, Color.White), shape = shape)),
+            modifier = modifier.height(44.dp)
+        ) {
+            Row(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Text(
+                    text = choice?.title ?: "",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Box(
+                    modifier = Modifier
+                        .size(26.dp)
+                        .clip(CircleShape)
+                        .background(colors["type.logo"]),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "$countdown",
+                        color = Color.White,
+                        fontWeight = FontWeight.Black,
+                        fontSize = 14.sp
+                    )
+                }
+            }
+        }
     } else {
-        val colors = LocalFrameZooColors.current
-        val randomMovieLabel = "Dice"
-        val shape = RoundedCornerShape(50)
-        TvIconButton(onClick = { choice = movies.randomOrNull() }, modifier = modifier.size(46.dp).semantics { contentDescription = randomMovieLabel },
+        TvIconButton(
+            onClick = {
+                isRolling = !isRolling
+                choice = movies.randomOrNull()
+            },
+            modifier = modifier.size(44.dp).semantics { contentDescription = "Random movie" },
             shape = TvIconButtonDefaults.shape(shape),
-            colors = TvIconButtonDefaults.colors(containerColor = colors["pill.background"], focusedContainerColor = colors["pill.activeBackground"]),
-            scale = TvIconButtonDefaults.scale(focusedScale = 1f),
-            border = TvIconButtonDefaults.border(focusedBorder = TvBorder(BorderStroke(2.dp, colors["type.logo"]), shape = shape))) {
-            RatingIcon("dice.svg", randomMovieLabel)
+            colors = TvIconButtonDefaults.colors(
+                containerColor = colors["pill.background"].copy(alpha = 0.65f),
+                focusedContainerColor = colors["pill.activeBackground"]
+            ),
+            scale = TvIconButtonDefaults.scale(focusedScale = 1.1f),
+            border = TvIconButtonDefaults.border(focusedBorder = TvBorder(BorderStroke(2.dp, colors["type.logo"]), shape = shape))
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.desktop_dice),
+                contentDescription = "Random",
+                tint = Color.White,
+                modifier = Modifier.size(22.dp).rotate(diceRotation)
+            )
         }
     }
 }

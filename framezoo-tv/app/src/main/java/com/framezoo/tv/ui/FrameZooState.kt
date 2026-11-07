@@ -166,6 +166,8 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         if (store.userId != null) {
             try { refreshUserData(); if (library.isNotEmpty()) refreshDiscover() }
             catch (e: CancellationException) { throw e } catch (_: Exception) { }
+        } else {
+            progress = backend.loadLocalProgress()
         }
     }
 
@@ -497,6 +499,14 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         if (store.userId == null) { openLogin(); return }
         runTask { backend.markMovieWatched(item, watched); refreshUserData() }
     }
+    fun removeProgressItem(item: LibraryItem) {
+        progress = progress.filter { it.media.id != item.media.id }
+        if (store.userId != null) {
+            scope.launch {
+                try { backend.removeProgress(item.media.id) } catch (_: Exception) {}
+            }
+        }
+    }
     fun chooseSeason(item: Media, season: Int) {
         seasonJob?.cancel(); selectedSeason = season; episodes = emptyList()
         episodesLoading = item.addonManifest == null
@@ -596,12 +606,20 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         backend.login(loginName, loginPassword)
         installed = addons.list(); refreshUserData(); page = loginReturnPage; loginPassword = ""; refreshDiscover()
     }
-    fun logout() { store.clearSession(); library = emptyList(); history = emptyList(); progress = emptyList(); bookmarks = emptyList(); bookmarkDetails = emptyList(); bookmarkGroups = emptyList(); page = "discover"; refreshDiscover() }
+    fun logout() { store.clearSession(); store.clearLocalProgress(); library = emptyList(); history = emptyList(); progress = emptyList(); bookmarks = emptyList(); bookmarkDetails = emptyList(); bookmarkGroups = emptyList(); page = "discover"; refreshDiscover() }
     fun resume(item: Media, target: Episode?): Double {
         val saved = progress.firstOrNull { it.media.id == item.id && it.season == target?.season && it.episode == target?.number }?.position ?: 0.0
         return recentResume?.takeIf { it.first == item.id && it.second == target }?.third ?: saved
     }
-    fun stopped(item: Media, target: Episode?, position: Double) { recentResume = Triple(item.id, target, position) }
+    fun stopped(item: Media, target: Episode?, position: Double) {
+        recentResume = Triple(item.id, target, position)
+        if (position > 20) {
+            val duration = episodes.firstOrNull { it.season == target?.season && it.number == target?.number }?.let { 2400.0 } ?: 7200.0
+            val newItem = LibraryItem(item, position, duration, target?.season, target?.number)
+            progress = (listOf(newItem) + progress.filter { it.media.id != item.id }).take(30)
+            backend.saveLocalProgress(item, position, duration, target)
+        }
+    }
     fun back() {
         page = when (page) {
             "player" -> "sources"

@@ -129,7 +129,7 @@ internal fun TvSearchBar(
         border = BorderStroke(if (isFocused) 2.dp else 1.dp, borderColor),
         modifier = modifier
             .fillMaxWidth()
-            .height(54.dp)
+            .height(48.dp)
             .clip(shape)
     ) {
         Row(
@@ -316,7 +316,7 @@ internal fun DropdownFilterPill(
         ) {
             TvButton(
                 label = "$allLabel $label",
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 6.dp, vertical = 2.dp),
                 navigation = true
             ) {
                 onSelect("")
@@ -325,7 +325,7 @@ internal fun DropdownFilterPill(
             options.forEach { option ->
                 TvButton(
                     label = option.name,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 6.dp, vertical = 2.dp),
                     navigation = true,
                     selected = option.id == selectedId
                 ) {
@@ -356,6 +356,16 @@ internal fun SearchScreen(
     val genres = remember(uiState.genres, genreIds) { uiState.genres.filter { it.id in genreIds } }
     val filtered = uiState.filteredResults
     val timeGreetingKey = remember { getTimeOfDayKey() }
+    val continueWatching = remember(uiState.progressItems, uiState.watchingSortBy) {
+        val filteredItems = uiState.progressItems.filter { it.duration > 0 && it.position > 0 && (it.position / it.duration) < 0.95 }
+        when (uiState.watchingSortBy) {
+            "titleAsc" -> filteredItems.sortedBy { it.media.title.lowercase() }
+            "titleDesc" -> filteredItems.sortedByDescending { it.media.title.lowercase() }
+            "yearAsc" -> filteredItems.sortedBy { it.media.year.toIntOrNull() ?: 0 }
+            "yearDesc" -> filteredItems.sortedByDescending { it.media.year.toIntOrNull() ?: 0 }
+            else -> filteredItems
+        }
+    }
 
     LazyVerticalGrid(
         columns = GridCells.Adaptive(174.dp),
@@ -368,16 +378,15 @@ internal fun SearchScreen(
         item(span = { GridItemSpan(maxLineSpan) }) {
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(18.dp)
+                verticalArrangement = Arrangement.spacedBy(if (uiState.query.isBlank()) 10.dp else 18.dp)
             ) {
                 // When query is blank: Desktop HeroTitle ("What would you like to watch this afternoon?")
                 if (uiState.query.isBlank()) {
-                    Spacer(Modifier.height(16.dp))
                     Text(
                         text = t(timeGreetingKey),
                         style = MaterialTheme.typography.headlineMedium.copy(
                             fontWeight = FontWeight.Bold,
-                            fontSize = 30.sp
+                            fontSize = 28.sp
                         ),
                         color = Color.White,
                         textAlign = TextAlign.Center,
@@ -385,7 +394,6 @@ internal fun SearchScreen(
                             .fillMaxWidth()
                             .padding(horizontal = 24.dp)
                     )
-                    Spacer(Modifier.height(8.dp))
                 }
 
                 // Centered Desktop-style SearchBar
@@ -398,7 +406,7 @@ internal fun SearchScreen(
                         onQueryChange = { onAction(SearchAction.QueryChanged(it)) },
                         onSearch = { onAction(SearchAction.ExecuteSearch) },
                         modifier = Modifier
-                            .fillMaxWidth(if (uiState.query.isBlank()) 0.75f else 1f)
+                            .fillMaxWidth(if (uiState.query.isBlank()) 0.72f else 1f)
                             .then(inputModifier)
                     )
                 }
@@ -522,28 +530,187 @@ internal fun SearchScreen(
             }
         }
 
-        // Empty Search State (When query is blank - Desktop welcoming state)
+        // When query is blank: Desktop Home/Search content (WatchingCarousel + Trending)
         if (uiState.query.isBlank()) {
-            item(span = { GridItemSpan(maxLineSpan) }) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 40.dp, bottom = 40.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(14.dp)
-                ) {
-                    IconPatch(
-                        icon = R.drawable.desktop_search,
-                        contentColor = colors["type.logo"],
-                        size = 54.dp,
-                        iconSize = 26.dp
-                    )
-                    Text(
-                        text = t("home.search.empty.default"),
-                        color = colors["type.secondary"],
-                        fontSize = 17.sp,
-                        fontWeight = FontWeight.Normal
-                    )
+            if (continueWatching.isNotEmpty()) {
+                item(span = { GridItemSpan(maxLineSpan) }) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp, bottom = 4.dp)
+                    ) {
+                        // Section Heading matching Desktop SectionHeading.tsx (Clock icon + Title + Edit Button)
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 4.dp, vertical = 6.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.desktop_clock),
+                                contentDescription = null,
+                                tint = colors["type.emphasis"],
+                                modifier = Modifier.size(18.dp)
+                            )
+                            Spacer(Modifier.width(10.dp))
+                            Text(
+                                text = t("home.continueWatching.sectionTitle").uppercase(),
+                                color = colors["type.emphasis"],
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 15.sp,
+                                letterSpacing = 1.sp
+                            )
+                            Spacer(Modifier.weight(1f))
+
+                            // Desktop Edit Pencil Button
+                            val editShape = RoundedCornerShape(50)
+                            var editFocused by remember { mutableStateOf(false) }
+                            TvSurface(
+                                onClick = { onAction(SearchAction.ToggleEditingWatching) },
+                                shape = TvSurfaceDefaults.shape(editShape),
+                                colors = TvSurfaceDefaults.colors(
+                                    containerColor = if (uiState.editingWatching) colors["type.logo"] else colors["mediaCard.hoverBackground"],
+                                    focusedContainerColor = colors["pill.activeBackground"]
+                                ),
+                                scale = TvSurfaceDefaults.scale(focusedScale = 1.08f),
+                                border = TvSurfaceDefaults.border(
+                                    focusedBorder = TvBorder(BorderStroke(2.dp, colors["type.logo"]), shape = editShape)
+                                ),
+                                modifier = Modifier
+                                    .size(36.dp)
+                                    .onFocusChanged { editFocused = it.isFocused }
+                            ) {
+                                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                    Icon(
+                                        painter = painterResource(R.drawable.desktop_edit),
+                                        contentDescription = "Edit",
+                                        tint = if (uiState.editingWatching || editFocused) Color.White else colors["type.secondary"],
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                }
+                            }
+                        }
+
+                        // Sorting dropdown when editing
+                        if (uiState.editingWatching) {
+                            val sortOptions = listOf(
+                                DiscoverOption("date", t("home.continueWatching.sorting.options.date")),
+                                DiscoverOption("titleAsc", t("home.continueWatching.sorting.options.titleAsc")),
+                                DiscoverOption("titleDesc", t("home.continueWatching.sorting.options.titleDesc")),
+                                DiscoverOption("yearAsc", t("home.continueWatching.sorting.options.yearAsc")),
+                                DiscoverOption("yearDesc", t("home.continueWatching.sorting.options.yearDesc"))
+                            )
+                            DropdownFilterPill(
+                                label = sortOptions.firstOrNull { it.id == uiState.watchingSortBy }?.name ?: t("home.continueWatching.sorting.options.date"),
+                                selectedId = uiState.watchingSortBy,
+                                options = sortOptions,
+                                modifier = Modifier.padding(start = 4.dp, top = 4.dp, bottom = 8.dp)
+                            ) { newSort ->
+                                onAction(SearchAction.ChangeWatchingSort(newSort))
+                            }
+                        }
+
+                        // Horizontal Continue Watching Carousel (LazyRow matching WatchingCarousel.tsx)
+                        LazyRow(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(16.dp),
+                            contentPadding = PaddingValues(horizontal = 4.dp, vertical = 6.dp)
+                        ) {
+                            rowItems(continueWatching, key = { "watching:${it.media.id}:${it.season}:${it.episode}" }) { libItem ->
+                                val progressVal = if (libItem.duration > 0) (libItem.position / libItem.duration).toFloat().coerceIn(0f, 1f) else null
+                                TvMediaCard(
+                                    item = libItem.media,
+                                    onOpen = {
+                                        if (uiState.editingWatching) {
+                                            onAction(SearchAction.RemoveProgressItem(libItem))
+                                        } else {
+                                            onOpenMedia(libItem.media)
+                                        }
+                                    },
+                                    progress = progressVal,
+                                    season = libItem.season,
+                                    episode = libItem.episode,
+                                    closable = uiState.editingWatching,
+                                    onClose = { onAction(SearchAction.RemoveProgressItem(libItem)) },
+                                    bookmarked = isBookmarked(libItem.media.id),
+                                    onBookmark = onToggleBookmark,
+                                    qualityLoader = qualityLoader
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Trending / Recommended row below continue watching (or as primary discover row)
+            if (uiState.recommendedMedia.isNotEmpty()) {
+                item(span = { GridItemSpan(maxLineSpan) }) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp, bottom = 4.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 4.dp, vertical = 6.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.desktop_film),
+                                contentDescription = null,
+                                tint = colors["type.emphasis"],
+                                modifier = Modifier.size(18.dp)
+                            )
+                            Text(
+                                text = t("discover.carousel.title.trending").uppercase(),
+                                color = colors["type.emphasis"],
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 15.sp,
+                                letterSpacing = 1.sp
+                            )
+                        }
+
+                        LazyRow(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(16.dp),
+                            contentPadding = PaddingValues(horizontal = 4.dp, vertical = 6.dp)
+                        ) {
+                            rowItems(uiState.recommendedMedia, key = { "rec:${it.type}:${it.id}" }) { item ->
+                                TvMediaCard(
+                                    item = item,
+                                    onOpen = { onOpenMedia(item) },
+                                    bookmarked = isBookmarked(item.id),
+                                    onBookmark = onToggleBookmark,
+                                    qualityLoader = qualityLoader
+                                )
+                            }
+                        }
+                    }
+                }
+            } else if (continueWatching.isEmpty()) {
+                item(span = { GridItemSpan(maxLineSpan) }) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 40.dp, bottom = 40.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(14.dp)
+                    ) {
+                        IconPatch(
+                            icon = R.drawable.desktop_search,
+                            contentColor = colors["type.logo"],
+                            size = 54.dp,
+                            iconSize = 26.dp
+                        )
+                        Text(
+                            text = t("home.search.empty.default"),
+                            color = colors["type.secondary"],
+                            fontSize = 17.sp,
+                            fontWeight = FontWeight.Normal
+                        )
+                    }
                 }
             }
         }
@@ -551,13 +718,7 @@ internal fun SearchScreen(
         // Skeleton loading items
         if (uiState.isLoading && filtered.isEmpty() && uiState.query.isNotBlank()) {
             items(12) {
-                Box(
-                    modifier = Modifier
-                        .width(174.dp)
-                        .aspectRatio(2f / 3f)
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(colors["background.secondary"].copy(alpha = 0.4f))
-                )
+                TvMediaCardSkeleton()
             }
         } else if (uiState.query.isNotBlank()) {
             items(filtered, key = { "${it.type}:${it.id}:${it.addonManifest}" }) { item ->
@@ -657,6 +818,9 @@ internal fun SearchScreen(
     searchAction: FocusRequester,
     inputModifier: Modifier
 ) {
+    var editingWatching by remember { mutableStateOf(false) }
+    var watchingSortBy by remember { mutableStateOf("date") }
+
     val genreIds = remember(state.results) { state.results.flatMap { it.genreIds }.toSet() }
     val genres = remember(state.genres, genreIds) { state.genres.filter { it.id in genreIds } }
     val filtered = filterSearchResults(state.results, state.searchCountry, state.searchYear, state.searchGenre)
@@ -677,7 +841,11 @@ internal fun SearchScreen(
             genres = genres,
             countries = state.countries,
             isLoading = state.searchLoading,
-            errorMessage = state.searchError.ifBlank { null }
+            errorMessage = state.searchError.ifBlank { null },
+            progressItems = state.progress,
+            editingWatching = editingWatching,
+            watchingSortBy = watchingSortBy,
+            recommendedMedia = state.discover.take(15)
         ),
         onAction = { action ->
             when (action) {
@@ -691,6 +859,9 @@ internal fun SearchScreen(
                     state.searchGenre = ""
                 }
                 is SearchAction.ExecuteSearch -> state.search()
+                is SearchAction.ToggleEditingWatching -> editingWatching = !editingWatching
+                is SearchAction.ChangeWatchingSort -> watchingSortBy = action.sort
+                is SearchAction.RemoveProgressItem -> state.removeProgressItem(action.item)
             }
         },
         onOpenMedia = { state.openDetails(it) },

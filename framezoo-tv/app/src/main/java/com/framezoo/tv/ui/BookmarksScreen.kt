@@ -1,7 +1,10 @@
 package com.framezoo.tv.ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items as rowItems
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -11,11 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,6 +25,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.tv.material3.Border as TvBorder
+import androidx.tv.material3.ClickableSurfaceDefaults as TvSurfaceDefaults
+import androidx.tv.material3.Surface as TvSurface
 import com.framezoo.tv.R
 import com.framezoo.tv.model.Media
 import com.framezoo.tv.ui.features.bookmarks.BookmarksAction
@@ -46,17 +48,17 @@ internal fun BookmarksScreen(
 
     val bookmarks = uiState.filteredBookmarks.distinctBy { it.id }
 
-    if (bookmarks.isEmpty()) {
+    if (uiState.bookmarks.isEmpty()) {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Icon(
-                painter = painterResource(R.drawable.desktop_bookmark),
-                contentDescription = null,
-                tint = colors["type.logo"],
-                modifier = Modifier.size(54.dp)
+            IconPatch(
+                icon = R.drawable.desktop_bookmark,
+                contentColor = colors["type.logo"],
+                size = 64.dp,
+                iconSize = 32.dp
             )
             Spacer(Modifier.height(18.dp))
             Text(
@@ -87,6 +89,7 @@ internal fun BookmarksScreen(
     ) {
         item(span = { GridItemSpan(maxLineSpan) }) {
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                // Top Header Row
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
@@ -109,6 +112,7 @@ internal fun BookmarksScreen(
                     }
                 }
 
+                // Back Button
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
@@ -123,46 +127,90 @@ internal fun BookmarksScreen(
                     }
                 }
 
-                Spacer(Modifier.height(8.dp))
+                // Sliding Group Filter Tabs (Matching Desktop AllBookmarks.tsx)
+                if (uiState.bookmarkGroups.isNotEmpty()) {
+                    LazyRow(
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        item {
+                            val selected = uiState.selectedGroup == null
+                            GenreFilterChip(
+                                label = "${t("discover.tabs.all")} (${uiState.bookmarks.size})",
+                                selected = selected,
+                                onClick = { onAction(BookmarksAction.SelectGroup(null)) }
+                            )
+                        }
+                        rowItems(uiState.bookmarkGroups) { group ->
+                            val count = uiState.bookmarkDetails.count { group in it.groups }
+                            val cleanName = group.replace(Regex("^\\[.*?\\]"), "").trim()
+                            val selected = uiState.selectedGroup == group
+                            GenreFilterChip(
+                                label = "$cleanName ($count)",
+                                selected = selected,
+                                onClick = { onAction(BookmarksAction.SelectGroup(group)) }
+                            )
+                        }
+                    }
+                }
+
+                Spacer(Modifier.height(4.dp))
             }
         }
 
-        items(bookmarks, key = { it.id }) { item ->
-            Box(contentAlignment = Alignment.TopEnd) {
-                TvMediaCard(
-                    item = item,
-                    onOpen = {
-                        if (!uiState.isEditing) onOpenMedia(item)
-                        else onAction(BookmarksAction.DeleteBookmark(item))
-                    },
-                    bookmarked = true,
-                    onBookmark = if (uiState.isEditing) null else { { onAction(BookmarksAction.DeleteBookmark(it)) } },
-                    qualityLoader = qualityLoader
-                )
-                if (uiState.isEditing) {
-                    Box(
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .clip(RoundedCornerShape(50))
-                            .background(colors["type.danger"])
-                            .padding(horizontal = 8.dp, vertical = 4.dp)
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+        if (bookmarks.isEmpty()) {
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 40.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = t("home.search.empty.default"),
+                        color = colors["type.secondary"],
+                        fontSize = 16.sp
+                    )
+                }
+            }
+        } else {
+            items(bookmarks, key = { it.id }) { item ->
+                Box(contentAlignment = Alignment.TopEnd) {
+                    TvMediaCard(
+                        item = item,
+                        onOpen = {
+                            if (!uiState.isEditing) onOpenMedia(item)
+                            else onAction(BookmarksAction.DeleteBookmark(item))
+                        },
+                        bookmarked = true,
+                        onBookmark = if (uiState.isEditing) null else { { onAction(BookmarksAction.DeleteBookmark(it)) } },
+                        qualityLoader = qualityLoader
+                    )
+                    if (uiState.isEditing) {
+                        Box(
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .clip(RoundedCornerShape(50))
+                                .background(colors["type.danger"])
+                                .padding(horizontal = 8.dp, vertical = 4.dp)
                         ) {
-                            Icon(
-                                painter = painterResource(R.drawable.desktop_close),
-                                contentDescription = null,
-                                tint = Color.White,
-                                modifier = Modifier.size(12.dp)
-                            )
-                            Text(
-                                text = t("lists.actions.delete"),
-                                color = Color.White,
-                                fontSize = 11.sp,
-                                fontWeight = FontWeight.Bold
-                            )
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                            ) {
+                                Icon(
+                                    painter = painterResource(R.drawable.desktop_close),
+                                    contentDescription = null,
+                                    tint = Color.White,
+                                    modifier = Modifier.size(12.dp)
+                                )
+                                Text(
+                                    text = t("lists.actions.delete"),
+                                    color = Color.White,
+                                    fontSize = 11.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
                         }
                     }
                 }
@@ -174,18 +222,21 @@ internal fun BookmarksScreen(
 @Composable
 internal fun BookmarksScreen(state: FrameZooState) {
     var editing by remember { mutableStateOf(false) }
+    var selectedGroup by remember { mutableStateOf<String?>(null) }
+
     BookmarksScreen(
         uiState = BookmarksUiState(
             bookmarks = state.bookmarks,
             bookmarkDetails = state.bookmarkDetails,
             bookmarkGroups = state.bookmarkGroups,
+            selectedGroup = selectedGroup,
             isEditing = editing
         ),
         onAction = { action ->
             when (action) {
                 is BookmarksAction.ToggleEditMode -> editing = !editing
                 is BookmarksAction.DeleteBookmark -> state.removeBookmark(action.media)
-                is BookmarksAction.SelectGroup -> {}
+                is BookmarksAction.SelectGroup -> selectedGroup = action.group
                 is BookmarksAction.Refresh -> {}
             }
         },

@@ -106,10 +106,14 @@ internal fun FrameZooApp() {
                 val colors = LocalFrameZooColors.current
                 Surface(color = MaterialTheme.colorScheme.background, contentColor = MaterialTheme.colorScheme.onBackground) {
                     Box(Modifier.fillMaxSize()) {
-                    Column(Modifier.fillMaxSize().then(if (page in listOf("discover", "details", "player", "trailer")) Modifier else Modifier.padding(horizontal = 48.dp, vertical = 32.dp))) {
+                    Column(Modifier.fillMaxSize().then(
+                        if (page in listOf("discover", "details", "player", "trailer")) Modifier
+                        else if (page == "search") Modifier.padding(start = 48.dp, top = 16.dp, end = 48.dp, bottom = 12.dp)
+                        else Modifier.padding(horizontal = 48.dp, vertical = 32.dp)
+                    )) {
                         if (page !in listOf("player", "discover", "details", "trailer")) {
                             DiscoverHeader(state)
-                            Spacer(Modifier.height(28.dp))
+                            Spacer(Modifier.height(if (page == "search") 10.dp else 28.dp))
                         }
                         if (busy && page != "details") CircularProgressIndicator(Modifier.size(26.dp))
                         if (error.isNotBlank() && page != "details") Text(error, color = colors["type.danger"], modifier = Modifier.padding(vertical = 10.dp))

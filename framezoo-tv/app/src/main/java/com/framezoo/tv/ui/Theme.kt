@@ -22,7 +22,7 @@ import com.framezoo.tv.R
 import org.json.JSONObject
 
 internal class FrameZooColors(private val values: Map<String, Color>) {
-    operator fun get(name: String): Color = checkNotNull(values[name]) { "Thiếu token màu: $name" }
+    operator fun get(name: String): Color = values[name] ?: values["type.emphasis"] ?: Color.White
     fun withTokens(source: FrameZooColors, names: List<String>) = FrameZooColors(values + names.associateWith { source[it] })
 }
 

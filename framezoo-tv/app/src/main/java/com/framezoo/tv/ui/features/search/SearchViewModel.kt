@@ -12,6 +12,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import com.framezoo.tv.model.LibraryItem
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -25,7 +26,11 @@ data class SearchUiState(
     val genres: List<DiscoverOption> = emptyList(),
     val countries: List<DiscoverOption> = emptyList(),
     val isLoading: Boolean = false,
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
+    val progressItems: List<LibraryItem> = emptyList(),
+    val editingWatching: Boolean = false,
+    val watchingSortBy: String = "date",
+    val recommendedMedia: List<Media> = emptyList()
 )
 
 sealed interface SearchAction {
@@ -35,6 +40,9 @@ sealed interface SearchAction {
     data class GenreChanged(val value: String) : SearchAction
     data object ClearFilters : SearchAction
     data object ExecuteSearch : SearchAction
+    data object ToggleEditingWatching : SearchAction
+    data class ChangeWatchingSort(val sort: String) : SearchAction
+    data class RemoveProgressItem(val item: LibraryItem) : SearchAction
 }
 
 class SearchViewModel(
@@ -96,6 +104,17 @@ class SearchViewModel(
             is SearchAction.ExecuteSearch -> {
                 searchJob?.cancel()
                 performSearch(_uiState.value.query)
+            }
+            is SearchAction.ToggleEditingWatching -> {
+                _uiState.update { it.copy(editingWatching = !it.editingWatching) }
+            }
+            is SearchAction.ChangeWatchingSort -> {
+                _uiState.update { it.copy(watchingSortBy = action.sort) }
+            }
+            is SearchAction.RemoveProgressItem -> {
+                _uiState.update { state ->
+                    state.copy(progressItems = state.progressItems.filter { it.media.id != action.item.media.id })
+                }
             }
         }
     }

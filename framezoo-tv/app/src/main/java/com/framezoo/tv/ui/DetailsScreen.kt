@@ -9,6 +9,7 @@ import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -49,6 +50,7 @@ import androidx.tv.material3.CardDefaults as TvCardDefaults
 import androidx.tv.material3.IconButton as TvIconButton
 import androidx.tv.material3.IconButtonDefaults as TvIconButtonDefaults
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import com.framezoo.tv.R
 import com.framezoo.tv.model.CastMember
 import com.framezoo.tv.model.Episode
@@ -86,6 +88,8 @@ internal fun DetailsScreen(state: FrameZooState, item: Media) {
     val context = LocalContext.current
     val firstAction = remember(item.id, item.type) { FocusRequester() }
     val seasonFocus = remember(item.id, item.type) { FocusRequester() }
+    val closeFocus = remember(item.id, item.type) { FocusRequester() }
+    val trailerFocus = remember(item.id, item.type) { FocusRequester() }
     val listState = rememberLazyListState()
     var logo by remember(item.id, item.type) { mutableStateOf<String?>(null) }
     var logoReady by remember(item.id, item.type) { mutableStateOf(false) }
@@ -164,41 +168,87 @@ internal fun DetailsScreen(state: FrameZooState, item: Media) {
       Box(Modifier.fillMaxWidth(.94f).fillMaxHeight(.94f).widthIn(max = 1200.dp).clip(RoundedCornerShape(22.dp)).background(colors["background.main"])) {
         LazyColumn(state = listState, contentPadding = PaddingValues(bottom = 32.dp)) {
             item {
-                Box(Modifier.fillMaxWidth().height(340.dp).background(colors["background.secondary"])) {
-                    AsyncImage(item.backdrop, null, Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
+                Box(Modifier.fillMaxWidth().height(480.dp).background(colors["background.secondary"])) {
+                    SubcomposeAsyncImage(
+                        model = item.backdrop,
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop,
+                        alignment = Alignment.TopCenter,
+                        loading = { Box(Modifier.fillMaxSize().skeletonShimmer()) }
+                    )
                     if (trailerEnabled && selectedTrailer == null && trailers.isNotEmpty()) TrailerBackground(trailers.first().key, trailerMuted, Modifier.fillMaxSize())
-                    Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Color.Black.copy(alpha = .12f), Color.Transparent, colors["background.main"]))))
-                    if (!logoReady) Text(item.title, Modifier.align(Alignment.BottomStart).padding(start = 26.dp, bottom = 42.dp), color = Color.White, fontSize = 32.sp, fontWeight = FontWeight.Bold)
-                    if (logo != null) AsyncImage(logo, item.title, Modifier.align(Alignment.BottomStart).padding(start = 26.dp, bottom = 42.dp).widthIn(max = 330.dp).heightIn(max = 95.dp), contentScale = ContentScale.Fit, onSuccess = { logoReady = true }, onError = { logoReady = false })
-                    if (trailers.isNotEmpty()) Row(Modifier.align(Alignment.BottomEnd).padding(end = 22.dp, bottom = 24.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        HeaderButton(if (trailerEnabled) R.drawable.desktop_image else R.drawable.desktop_video, if (trailerEnabled) "Show image" else "Show trailer", trailerEnabled) { state.toggleTrailer() }
-                        HeaderButton(if (trailerMuted) R.drawable.desktop_volume_x else R.drawable.desktop_volume, if (trailerMuted) "Unmute trailer" else "Mute trailer", !trailerMuted) { state.toggleTrailerAudio() }
+                    Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Color.Black.copy(alpha = .2f), Color.Transparent, colors["background.main"].copy(alpha = .65f), colors["background.main"]))))
+                    if (!logoReady) Text(item.title, Modifier.align(Alignment.BottomStart).padding(start = 32.dp, bottom = 44.dp), color = Color.White, fontSize = 34.sp, fontWeight = FontWeight.Bold)
+                    if (logo != null) AsyncImage(logo, item.title, Modifier.align(Alignment.BottomStart).padding(start = 32.dp, bottom = 44.dp).widthIn(max = 380.dp).heightIn(max = 110.dp), contentScale = ContentScale.Fit, onSuccess = { logoReady = true }, onError = { logoReady = false })
+                    if (trailers.isNotEmpty()) Row(Modifier.align(Alignment.BottomEnd).padding(end = 28.dp, bottom = 28.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                        HeaderButton(
+                            icon = if (trailerEnabled) R.drawable.desktop_image else R.drawable.desktop_video,
+                            label = if (trailerEnabled) "Show image" else "Show trailer",
+                            selected = trailerEnabled,
+                            modifier = Modifier
+                                .focusRequester(trailerFocus)
+                                .focusProperties {
+                                    up = closeFocus
+                                    down = firstAction
+                                }
+                        ) { state.toggleTrailer() }
+                        HeaderButton(
+                            icon = if (trailerMuted) R.drawable.desktop_volume_x else R.drawable.desktop_volume,
+                            label = if (trailerMuted) "Unmute trailer" else "Mute trailer",
+                            selected = !trailerMuted,
+                            modifier = Modifier.focusProperties {
+                                up = closeFocus
+                                down = firstAction
+                            }
+                        ) { state.toggleTrailerAudio() }
                     }
                 }
             }
             item {
-                Column(Modifier.padding(horizontal = 26.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                Column(Modifier.padding(horizontal = 32.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        if (item.type == "movie" && quality != null) Text(if (quality == "CAM") t("media.inCinema") else quality!!, Modifier.clip(RoundedCornerShape(5.dp)).background(colors["background.secondary"]).padding(horizontal = 8.dp, vertical = 4.dp), color = colors["type.emphasis"], fontSize = 13.sp)
+                        if (item.type == "movie" && quality != null) {
+                            val isCinema = quality == "CAM"
+                            Text(
+                                text = if (isCinema) t("media.inCinema") else quality!!,
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(4.dp))
+                                    .background(if (isCinema) Color(0xfff59e0b).copy(alpha = 0.2f) else colors["background.secondary"])
+                                    .padding(horizontal = 8.dp, vertical = 3.dp),
+                                color = if (isCinema) Color(0xfffbbf24) else colors["type.emphasis"],
+                                fontSize = 12.5.sp,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
                         if (item.rating > 0) {
                             Image(painterResource(R.drawable.desktop_tmdb), "TMDB", Modifier.width(28.dp).height(16.dp))
-                            Text("%.1f".format(item.rating) + if (item.voteCount > 0) " (%,d)".format(item.voteCount) else "", color = colors["type.text"], fontSize = 14.sp)
+                            Text("%.1f".format(item.rating) + if (item.voteCount > 0) " (%,d)".format(item.voteCount) else "", color = colors["type.emphasis"], fontSize = 14.sp)
                         }
                         ratings.imdbRating?.let { rating ->
-                            RatingIcon("imdb.svg", "IMDb"); Text("%.1f".format(rating) + (ratings.imdbVotes?.let { " (%,d)".format(it) } ?: ""), color = colors["type.text"], fontSize = 14.sp)
+                            RatingIcon("imdb.svg", "IMDb"); Text("%.1f".format(rating) + (ratings.imdbVotes?.let { " (%,d)".format(it) } ?: ""), color = colors["type.emphasis"], fontSize = 14.sp)
                         }
                         ratings.tomatoScore?.let { score ->
-                            RatingIcon(when (ratings.tomatoIcon) { "certified_fresh" -> "Certified_Fresh.svg"; "fresh" -> "Fresh.svg"; else -> "Rotten.svg" }, "Rotten Tomatoes"); Text("$score%", color = colors["type.text"], fontSize = 14.sp)
+                            RatingIcon(when (ratings.tomatoIcon) { "certified_fresh" -> "Certified_Fresh.svg"; "fresh" -> "Fresh.svg"; else -> "Rotten.svg" }, "Rotten Tomatoes"); Text("$score%", color = colors["type.emphasis"], fontSize = 14.sp)
                         }
                         ratings.audienceScore?.let { score ->
-                            RatingIcon(when (ratings.audienceIcon) { "upright" -> "Popcorn_Fresh.svg"; "spilled" -> "Popcorn_Rotten.svg"; else -> "Popcorn_Empty.svg" }, "Popcornmeter"); Text("$score%", color = colors["type.text"], fontSize = 14.sp)
+                            RatingIcon(when (ratings.audienceIcon) { "upright" -> "Popcorn_Fresh.svg"; "spilled" -> "Popcorn_Rotten.svg"; else -> "Popcorn_Empty.svg" }, "Popcornmeter"); Text("$score%", color = colors["type.emphasis"], fontSize = 14.sp)
                         }
                         if (item.year.isNotBlank()) Text("·  ${item.year}", color = colors["type.secondary"], fontSize = 14.sp)
                         if (item.type == "show" && state.seasons.isNotEmpty()) Text("·  " + "${state.seasons.size} " + t("details.seasons"), color = colors["type.secondary"], fontSize = 14.sp)
                     }
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         val playLabel = if (item.type == "movie" && (item.releaseDate.isBlank() || runCatching { LocalDate.parse(item.releaseDate).isAfter(LocalDate.now()) }.getOrDefault(false))) t("media.unreleased") else if (saved == null) t("details.play") else if (item.type == "show" && saved.season != null && saved.episode != null) "${t("details.resume")} S${saved.season}:E${saved.episode}" else t("details.resume")
-                        TvButton(playLabel, modifier = Modifier.focusRequester(firstAction), accent = true, icon = R.drawable.desktop_play) {
+                        TvButton(
+                            playLabel,
+                            modifier = Modifier
+                                .focusRequester(firstAction)
+                                .focusProperties {
+                                    up = if (trailers.isNotEmpty()) trailerFocus else closeFocus
+                                },
+                            accent = true,
+                            icon = R.drawable.desktop_play
+                        ) {
                             if (item.addonManifest != null) {
                                 if (item.type == "movie") state.loadSources(item, null)
                                 else state.episodes.firstOrNull()?.let { state.loadSources(item, it) } ?: run { state.error = i18n.t("player.menus.episodes.emptyState") }
@@ -206,16 +256,45 @@ internal fun DetailsScreen(state: FrameZooState, item: Media) {
                         }
                         if (item.id.isNotBlank() && item.id.all(Char::isDigit)) {
                             val bookmarked = state.bookmarks.any { it.id == item.id }
-                            HeaderButton(if (bookmarked) R.drawable.desktop_bookmark_filled else R.drawable.desktop_bookmark, t("home.bookmarks.sectionTitle"), bookmarked) { state.bookmark(item) }
-                            HeaderButton(R.drawable.desktop_share, t("actions.copy"), false) {
+                            HeaderButton(
+                                if (bookmarked) R.drawable.desktop_bookmark_filled else R.drawable.desktop_bookmark,
+                                t("home.bookmarks.sectionTitle"),
+                                bookmarked,
+                                modifier = Modifier.focusProperties {
+                                    up = if (trailers.isNotEmpty()) trailerFocus else closeFocus
+                                }
+                            ) { state.bookmark(item) }
+                            HeaderButton(
+                                R.drawable.desktop_share,
+                                t("actions.copy"),
+                                false,
+                                modifier = Modifier.focusProperties {
+                                    up = if (trailers.isNotEmpty()) trailerFocus else closeFocus
+                                }
+                            ) {
                                 val kind = if (item.type == "show") "tv" else "movie"
                                 val link = "https://framezoo.top/discover?detail=tmdb-$kind-${item.id}-media"
                                 (context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).setPrimaryClip(ClipData.newPlainText(item.title, link))
                                 copied = true
                             }
-                            TvButton(t("home.bookmarks.groups.reorder.button"), trailingIcon = R.drawable.desktop_chevron_down) {
+                            val currentItemGroups = state.bookmarkDetails.firstOrNull { it.media.id == item.id }?.groups.orEmpty()
+                            val groupLabel = if (currentItemGroups.isEmpty()) {
+                                t("home.bookmarks.groups.dropdown.placeholderButton")
+                            } else {
+                                currentItemGroups.joinToString(", ") { g ->
+                                    val match = Regex("^\\[([a-zA-Z0-9_]+)\\](.*)$").find(g)
+                                    match?.groupValues?.get(2)?.trim() ?: g
+                                }
+                            }
+                            TvButton(
+                                groupLabel,
+                                trailingIcon = R.drawable.desktop_chevron_down,
+                                modifier = Modifier.focusProperties {
+                                    up = if (trailers.isNotEmpty()) trailerFocus else closeFocus
+                                }
+                            ) {
                                 if (state.store.userId == null) state.openLogin() else {
-                                    selectedGroups = state.bookmarkDetails.firstOrNull { it.media.id == item.id }?.groups.orEmpty()
+                                    selectedGroups = currentItemGroups
                                     newGroup = ""; groupsOpen = true
                                 }
                             }
@@ -226,10 +305,21 @@ internal fun DetailsScreen(state: FrameZooState, item: Media) {
                     if (state.error.isNotBlank()) Text(state.error, color = colors["type.danger"], fontSize = 13.sp)
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(22.dp)) {
                         Column(Modifier.weight(2f), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                            if (item.description.isNotBlank()) Text(item.description, color = colors["type.text"], fontSize = 15.sp, lineHeight = 22.sp)
+                            if (item.description.isNotBlank()) Text(item.description, color = colors["type.secondary"], fontSize = 14.5.sp, lineHeight = 22.sp)
                             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                                androidx.compose.foundation.layout.FlowRow(Modifier.weight(1f), horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                                    item.genres.forEach { genre -> Text(genre, Modifier.clip(RoundedCornerShape(50)).background(Color.White.copy(alpha = .2f)).padding(horizontal = 9.dp, vertical = 4.dp), color = colors["type.text"], fontSize = 12.sp) }
+                                androidx.compose.foundation.layout.FlowRow(Modifier.weight(1f), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    item.genres.forEach { genre ->
+                                        Text(
+                                            text = genre,
+                                            modifier = Modifier
+                                                .clip(RoundedCornerShape(50))
+                                                .background(colors["mediaCard.hoverBackground"])
+                                                .padding(horizontal = 12.dp, vertical = 5.dp),
+                                            color = colors["type.secondary"],
+                                            fontSize = 12.5.sp,
+                                            fontWeight = FontWeight.Medium
+                                        )
+                                    }
                                 }
                                 if (item.type == "movie" && item.addonManifest == null) {
                                     val watched = state.history.any { it.media.id == item.id && it.duration > 0 && it.position / it.duration > .9 }
@@ -240,17 +330,49 @@ internal fun DetailsScreen(state: FrameZooState, item: Media) {
                             val actors = cast.filter { it.role != "Director" && it.role != "Đạo diễn" }.take(6).joinToString(", ") { it.name }
                             if (actors.isNotBlank()) Text(actors, color = colors["type.secondary"], fontSize = 13.sp)
                         }
-                        Column(Modifier.weight(1f).clip(RoundedCornerShape(8.dp)).background(colors["background.secondary"].copy(alpha = .5f)).padding(16.dp), verticalArrangement = Arrangement.spacedBy(9.dp)) {
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(colors["background.secondary"].copy(alpha = .5f))
+                                .border(BorderStroke(1.dp, Color.White.copy(alpha = 0.08f)), RoundedCornerShape(12.dp))
+                                .padding(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
                             if (item.runtime > 0) {
                                 val hours = item.runtime / 60
                                 val minutes = item.runtime % 60
                                 val runtimeText = if (hours > 0) "${hours}h ${minutes}m" else "${minutes}m"
-                                Text("${t("details.runtime")} $runtimeText", color = colors["type.text"], fontSize = 13.sp)
+                                val endTimeStr = LocalTime.now().plusMinutes(item.runtime.toLong()).format(DateTimeFormatter.ofPattern("h:mm a"))
+                                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                                    Text("${t("details.runtime")} $runtimeText", color = colors["type.emphasis"], fontSize = 12.5.sp, fontWeight = FontWeight.Medium)
+                                    if (item.type == "movie") {
+                                        Text("•", color = colors["type.secondary"], fontSize = 12.sp)
+                                        Text(t("details.endsAt", "time" to endTimeStr), color = colors["type.secondary"], fontSize = 12.5.sp)
+                                    }
+                                }
                             }
-                            if (item.type == "movie" && item.runtime > 0) Text(t("details.endsAt", "time" to LocalTime.now().plusMinutes(item.runtime.toLong()).format(DateTimeFormatter.ofPattern("HH:mm"))), color = colors["type.secondary"], fontSize = 13.sp)
-                            if (item.language.isNotBlank()) Text("${t("details.language")} ${item.language.uppercase()}", color = colors["type.text"], fontSize = 13.sp)
-                            if (item.releaseDate.isNotBlank()) Text(t("details.episodeReleaseDate", "date" to formattedDate(item.releaseDate)), color = colors["type.text"], fontSize = 13.sp)
-                            if (item.certification.isNotBlank()) Text("${t("details.rating")} ${item.certification}", color = colors["type.text"], fontSize = 13.sp)
+                            if (item.language.isNotBlank()) {
+                                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                                    Text(t("details.language"), color = colors["type.secondary"], fontSize = 12.5.sp)
+                                    Text(item.language.uppercase(), color = colors["type.emphasis"], fontSize = 12.5.sp, fontWeight = FontWeight.Medium)
+                                }
+                            }
+                            if (item.releaseDate.isNotBlank()) {
+                                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                                    Text(t("details.episodeReleaseDate", "date" to "").trimEnd(), color = colors["type.secondary"], fontSize = 12.5.sp)
+                                    Text(formattedDate(item.releaseDate), color = colors["type.emphasis"], fontSize = 12.5.sp, fontWeight = FontWeight.Medium)
+                                }
+                            }
+                            if (item.id.isNotBlank()) {
+                                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                                    Text("ID:", color = colors["type.secondary"], fontSize = 12.5.sp)
+                                    Text(item.id, color = colors["type.emphasis"], fontSize = 12.5.sp, fontWeight = FontWeight.Medium)
+                                }
+                            }
+                            if (item.certification.isNotBlank()) {
+                                Text("${t("details.rating")} ${item.certification}", color = colors["type.secondary"], fontSize = 12.5.sp)
+                            }
                             if (item.collectionId != null) TvButton(item.collectionName ?: t("lists.page.eyebrow"), trailingIcon = R.drawable.desktop_chevron_right) { collectionOpen = true }
                             Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                                 provider?.let { name ->
@@ -259,7 +381,7 @@ internal fun DetailsScreen(state: FrameZooState, item: Media) {
                                         AsyncImage("file:///android_asset/platforms/$key.png", name, Modifier.size(32.dp).clip(RoundedCornerShape(6.dp)), contentScale = ContentScale.Fit)
                                 }
                                 if (item.id.isNotBlank() && item.id.all(Char::isDigit)) DetailsRatingButton("TMDB", null, Color(0xff0d253f), R.drawable.desktop_tmdb) { openUrl("https://www.themoviedb.org/${if (item.type == "show") "tv" else "movie"}/${item.id}") }
-                                if (!item.imdbId.isNullOrBlank()) DetailsRatingButton("IMDb", "imdb.svg", Color(0xffeab308), null) { openUrl("https://www.imdb.com/title/${item.imdbId}") }
+                                if (!item.imdbId.isNullOrBlank()) DetailsRatingButton("IMDb", "imdb.svg", Color(0xfff5c518), null) { openUrl("https://www.imdb.com/title/${item.imdbId}") }
                                 listOf(Triple("Rotten Tomatoes", ratings.tomatoUrl, when (ratings.tomatoIcon) { "certified_fresh" -> "Certified_Fresh.svg"; "fresh" -> "Fresh.svg"; else -> "Rotten.svg" }), Triple("Popcornmeter", ratings.audienceUrl ?: ratings.tomatoUrl, when (ratings.audienceIcon) { "upright" -> "Popcorn_Fresh.svg"; "spilled" -> "Popcorn_Rotten.svg"; else -> "Popcorn_Empty.svg" })).forEach { (label, url, asset) ->
                                     if ((label != "Popcornmeter" || ratings.audienceScore != null) && url != null && try { val uri = Uri.parse(url); uri.scheme == "https" && (uri.host == "rottentomatoes.com" || uri.host?.endsWith(".rottentomatoes.com") == true) } catch (_: Exception) { false }) DetailsRatingButton(label, asset, Color.Transparent, null) { openUrl(url) }
                                 }
@@ -280,14 +402,17 @@ internal fun DetailsScreen(state: FrameZooState, item: Media) {
                         }
                     }
                     val shownEpisodes = if (showFavorites) favoriteEpisodes else state.episodes
-                    if (if (showFavorites) favoritesLoading else state.episodesLoading) CircularProgressIndicator(Modifier.size(24.dp).padding(4.dp))
-                    else if (shownEpisodes.isEmpty()) Text(if (showFavorites) t("player.menus.episodes.noFavorites") else t("player.menus.episodes.emptyState"), color = colors["type.secondary"])
+                    if (if (showFavorites) favoritesLoading else state.episodesLoading) {
+                        LazyRow(horizontalArrangement = Arrangement.spacedBy(14.dp), contentPadding = PaddingValues(vertical = 5.dp)) {
+                            items(4) { DetailsEpisodeSkeleton() }
+                        }
+                    } else if (shownEpisodes.isEmpty()) Text(if (showFavorites) t("player.menus.episodes.noFavorites") else t("player.menus.episodes.emptyState"), color = colors["type.secondary"])
                     else LazyRow(horizontalArrangement = Arrangement.spacedBy(14.dp), contentPadding = PaddingValues(vertical = 5.dp)) {
                         items(shownEpisodes, key = { "${it.season}:${it.number}" }) { episode ->
                             val progress = state.progress.firstOrNull { it.media.id == item.id && it.season == episode.season && it.episode == episode.number }
                             val watched = (state.history + listOfNotNull(progress)).any { it.media.id == item.id && it.season == episode.season && it.episode == episode.number && it.duration > 0 && it.position / it.duration > .9 }
                             val favorite = state.bookmarkDetails.firstOrNull { it.media.id == item.id }?.favoriteEpisodes?.contains(episode.id) == true
-                            DetailsEpisodeCard(episode, progress, seasonFocus, favorite, watched,
+                            DetailsEpisodeCard(episode, progress, seasonFocus, favorite, watched, showFavorites,
                                 onFavorite = { state.toggleFavoriteEpisode(item, episode) }, onWatched = { state.markEpisodeWatched(item, episode, !watched) }, onOverview = { expandedEpisode = episode }) { state.loadSources(item, episode) }
                         }
                     }
@@ -323,7 +448,19 @@ internal fun DetailsScreen(state: FrameZooState, item: Media) {
             }
             if (similar.isNotEmpty()) item { Box(Modifier.padding(start = 26.dp, top = 28.dp, end = 26.dp)) { MediaGrid(t("details.similar"), similar, state::openDetails, bookmarks = state.bookmarks.map { it.id }.toSet(), onBookmark = state::bookmark, qualityLoader = state.backend::releaseQuality) } }
         }
-        Box(Modifier.align(Alignment.TopEnd).padding(14.dp)) { HeaderButton(R.drawable.desktop_close, t("overlays.close"), false) { state.back() } }
+        Box(Modifier.align(Alignment.TopEnd).padding(14.dp)) {
+            HeaderButton(
+                icon = R.drawable.desktop_close,
+                label = t("overlays.close"),
+                selected = false,
+                modifier = Modifier
+                    .focusRequester(closeFocus)
+                    .focusProperties {
+                        down = if (trailers.isNotEmpty()) trailerFocus else firstAction
+                        left = firstAction
+                    }
+            ) { state.back() }
+        }
       }
     }
     selectedTrailer?.let { trailer ->
@@ -357,20 +494,112 @@ internal fun DetailsScreen(state: FrameZooState, item: Media) {
         }
     }
     if (groupsOpen) Dialog(onDismissRequest = { groupsOpen = false }) {
-        Column(Modifier.widthIn(min = 300.dp, max = 440.dp).heightIn(max = 500.dp).clip(RoundedCornerShape(14.dp)).background(colors["background.main"]).padding(20.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Text(t("home.bookmarks.groups.reorder.button"), color = colors["type.emphasis"], fontSize = 20.sp, fontWeight = FontWeight.Bold)
-            LazyColumn(Modifier.heightIn(max = 190.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
-                items((state.bookmarkGroups + selectedGroups).distinct()) { group ->
-                    TvButton(group, selected = group in selectedGroups, navigation = true) {
-                        selectedGroups = if (group in selectedGroups) selectedGroups - group else selectedGroups + group
+        Column(
+            Modifier
+                .widthIn(min = 360.dp, max = 480.dp)
+                .heightIn(max = 520.dp)
+                .clip(RoundedCornerShape(18.dp))
+                .background(colors["background.main"])
+                .border(BorderStroke(1.dp, colors["authentication.border"]), RoundedCornerShape(18.dp))
+                .padding(24.dp),
+            verticalArrangement = Arrangement.spacedBy(14.dp)
+        ) {
+            Text(
+                t("home.bookmarks.groups.dropdown.placeholderButton"),
+                color = colors["type.emphasis"],
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
+            val allAvailableGroups = (state.bookmarkGroups + selectedGroups).distinct()
+            if (allAvailableGroups.isEmpty()) {
+                Text(
+                    t("home.bookmarks.groups.dropdown.empty"),
+                    color = colors["type.secondary"],
+                    fontSize = 14.sp
+                )
+            } else {
+                LazyColumn(
+                    Modifier.heightIn(max = 220.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(allAvailableGroups) { group ->
+                        val isChecked = group in selectedGroups
+                        val cleanName = Regex("^\\[([a-zA-Z0-9_]+)\\](.*)$").find(group)?.groupValues?.get(2)?.trim() ?: group
+                        TvCard(
+                            onClick = {
+                                selectedGroups = if (isChecked) selectedGroups - group else selectedGroups + group
+                            },
+                            shape = TvCardDefaults.shape(RoundedCornerShape(10.dp)),
+                            colors = TvCardDefaults.colors(
+                                containerColor = if (isChecked) colors["pill.activeBackground"] else colors["background.secondary"].copy(alpha = 0.5f),
+                                focusedContainerColor = colors["pill.activeBackground"]
+                            ),
+                            border = TvCardDefaults.border(
+                                focusedBorder = TvBorder(BorderStroke(2.dp, colors["type.logo"]), shape = RoundedCornerShape(10.dp))
+                            ),
+                            scale = TvCardDefaults.scale(focusedScale = 1.02f),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 14.dp, vertical = 10.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(20.dp)
+                                        .clip(RoundedCornerShape(4.dp))
+                                        .background(if (isChecked) colors["buttons.purple"] ?: colors["type.logo"] else Color.Transparent)
+                                        .border(BorderStroke(1.5.dp, if (isChecked) colors["buttons.purple"] ?: colors["type.logo"] else colors["type.secondary"]), RoundedCornerShape(4.dp)),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    if (isChecked) {
+                                        Icon(painterResource(R.drawable.desktop_checkmark), null, tint = Color.White, modifier = Modifier.size(13.dp))
+                                    }
+                                }
+                                Text(cleanName, color = colors["type.emphasis"], fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                            }
+                        }
                     }
                 }
             }
-            OutlinedTextField(newGroup, { newGroup = it }, singleLine = true, label = { Text(t("home.bookmarks.groups.dropdown.placeholderButton")) }, colors = tvFieldColors())
-            TvButton(t("home.bookmarks.groups.dropdown.placeholderButton")) { newGroup.trim().takeIf { it.isNotEmpty() }?.let { selectedGroups = (selectedGroups + it).distinct(); newGroup = "" } }
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                TvButton(t("settings.save"), accent = true) { groupsOpen = false; state.updateBookmarkGroups(item, selectedGroups) }
-                TvButton(t("actions.cancel")) { groupsOpen = false }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                OutlinedTextField(
+                    value = newGroup,
+                    onValueChange = { newGroup = it },
+                    singleLine = true,
+                    placeholder = { Text(t("home.bookmarks.groups.dropdown.namePlaceholder")) },
+                    colors = tvFieldColors(),
+                    modifier = Modifier.weight(1f)
+                )
+                TvButton(
+                    label = "",
+                    icon = R.drawable.desktop_plus,
+                    accent = true
+                ) {
+                    newGroup.trim().takeIf { it.isNotEmpty() }?.let {
+                        selectedGroups = (selectedGroups + it).distinct()
+                        newGroup = ""
+                    }
+                }
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                TvButton(t("settings.save"), accent = true, modifier = Modifier.weight(1f)) {
+                    groupsOpen = false
+                    state.updateBookmarkGroups(item, selectedGroups)
+                }
+                TvButton(t("actions.cancel"), modifier = Modifier.weight(1f)) {
+                    groupsOpen = false
+                }
             }
         }
     }
@@ -413,8 +642,18 @@ internal fun DetailsScreen(state: FrameZooState, item: Media) {
 }
 
 @Composable
-private fun DetailsEpisodeCard(episode: Episode, progress: com.framezoo.tv.model.LibraryItem?, seasonFocus: FocusRequester,
-    favorite: Boolean, watched: Boolean, onFavorite: () -> Unit, onWatched: () -> Unit, onOverview: () -> Unit, onClick: () -> Unit) {
+private fun DetailsEpisodeCard(
+    episode: Episode,
+    progress: com.framezoo.tv.model.LibraryItem?,
+    seasonFocus: FocusRequester,
+    favorite: Boolean,
+    watched: Boolean,
+    showFavorites: Boolean,
+    onFavorite: () -> Unit,
+    onWatched: () -> Unit,
+    onOverview: () -> Unit,
+    onClick: () -> Unit
+) {
     val colors = LocalFrameZooColors.current
     val i18n = LocalI18n.current
     val unaired = episode.id.isNotBlank() && !detailEpisodeAired(episode.airDate)
@@ -424,23 +663,98 @@ private fun DetailsEpisodeCard(episode: Episode, progress: com.framezoo.tv.model
     var actionFocused by remember { mutableStateOf(false) }
     val hasActions = !unaired && episode.id.isNotBlank() && episode.seasonId.isNotBlank()
     val hasToolbar = hasActions || episode.overview.isNotBlank()
-    Box(Modifier.width(225.dp).zIndex(if (active || actionFocused) 1f else 0f)) {
-      DetailsCard(onClick, Modifier.width(225.dp).alpha(if (unaired) .6f else 1f).focusRequester(cardFocus)
-          .focusProperties { up = if (hasToolbar) favoriteFocus else seasonFocus }.onFocusChanged { active = it.hasFocus }) {
-        Column(Modifier.fillMaxWidth().height(255.dp)) {
-            Box(Modifier.fillMaxWidth().height(135.dp).background(colors["background.secondary"])) {
-                if (!episode.still.isNullOrBlank()) AsyncImage(episode.still, null, Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
-                else Image(painterResource(R.drawable.desktop_placeholder), null, Modifier.align(Alignment.Center).size(48.dp))
-                val statusSuffix = if (unaired && episode.airDate.isBlank()) "  ·  " + t("details.episodeReleaseDateUnknown") else if (unaired) "  ·  " + t("media.unreleased") else ""
-                Text("${t("details.episode")} ${episode.number}$statusSuffix", Modifier.align(Alignment.TopStart).padding(8.dp).clip(RoundedCornerShape(4.dp)).background(Color.Black.copy(alpha = .7f)).padding(horizontal = 7.dp, vertical = 3.dp), color = Color.White, fontSize = 12.sp)
+    val episodeBadgeLabel = if (showFavorites) {
+        t("media.episodeDisplay", "season" to episode.season.toString(), "episode" to episode.number.toString())
+    } else {
+        t("player.menus.episodes.episodeBadge", "episode" to episode.number.toString())
+    }
+
+    Box(Modifier.width(235.dp).zIndex(if (active || actionFocused) 1f else 0f)) {
+      DetailsCard(
+          onClick = onClick,
+          modifier = Modifier
+              .width(235.dp)
+              .alpha(if (unaired) .65f else 1f)
+              .focusRequester(cardFocus)
+              .focusProperties { up = if (hasToolbar) favoriteFocus else seasonFocus }
+              .onFocusChanged { active = it.hasFocus }
+      ) {
+        Column(Modifier.fillMaxWidth().height(265.dp)) {
+            Box(Modifier.fillMaxWidth().height(140.dp).background(colors["background.secondary"])) {
+                if (!episode.still.isNullOrBlank()) {
+                    SubcomposeAsyncImage(
+                        model = episode.still,
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop,
+                        loading = {
+                            Box(Modifier.fillMaxSize().skeletonShimmer())
+                        },
+                        error = {
+                            Box(Modifier.fillMaxSize().background(colors["background.secondary"]), contentAlignment = Alignment.Center) {
+                                Image(painterResource(R.drawable.desktop_placeholder), null, Modifier.size(44.dp).alpha(0.75f))
+                            }
+                        }
+                    )
+                } else {
+                    Box(Modifier.fillMaxSize().background(colors["background.secondary"]), contentAlignment = Alignment.Center) {
+                        Image(painterResource(R.drawable.desktop_placeholder), null, Modifier.size(44.dp).alpha(0.75f))
+                    }
+                }
+
+                // Episode Number Badge & Unaired Tag matching desktop
+                Row(
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .padding(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    Text(
+                        text = episodeBadgeLabel,
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(4.dp))
+                            .background(Color.Black.copy(alpha = .75f))
+                            .padding(horizontal = 7.dp, vertical = 3.dp),
+                        color = Color.White,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    if (unaired) {
+                        Text(
+                            text = t("media.unreleased"),
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(4.dp))
+                                .background(Color(0xFFE5A00D).copy(alpha = 0.85f))
+                                .padding(horizontal = 6.dp, vertical = 3.dp),
+                            color = Color.Black,
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+
+                // Progress Bar at bottom of thumbnail matching Desktop
+                if (progress != null && progress.duration > 0) {
+                    Box(
+                        Modifier
+                            .align(Alignment.BottomCenter)
+                            .fillMaxWidth()
+                            .height(4.dp)
+                            .background(colors["mediaCard.barColor"])
+                    ) {
+                        Box(
+                            Modifier
+                                .fillMaxWidth((progress.position / progress.duration).toFloat().coerceIn(0f, 1f))
+                                .fillMaxHeight()
+                                .background(colors["mediaCard.barFillColor"])
+                        )
+                    }
+                }
             }
             Column(Modifier.weight(1f).padding(10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(episode.title, color = colors["type.emphasis"], fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis, fontSize = 14.sp)
                 Text(if (episode.airDate.isBlank()) t("details.episodeReleaseDateUnknown") else formattedDate(episode.airDate), color = colors["type.secondary"], fontSize = 12.sp)
                 if (episode.overview.isNotBlank()) Text(episode.overview, color = colors["type.text"], maxLines = 2, overflow = TextOverflow.Ellipsis, fontSize = 13.sp, lineHeight = 17.sp)
-            }
-            if (progress != null && progress.duration > 0) Box(Modifier.fillMaxWidth().height(4.dp).background(colors["mediaCard.barColor"])) {
-                Box(Modifier.fillMaxWidth((progress.position / progress.duration).toFloat().coerceIn(0f, 1f)).fillMaxHeight().background(colors["mediaCard.barFillColor"]))
             }
         }
       }
@@ -516,6 +830,51 @@ private fun DetailsRatingButton(label: String, asset: String?, background: Color
         if (drawable != null) Image(painterResource(drawable), null, Modifier.size(28.dp), contentScale = ContentScale.Fit)
         else if (asset != null) AsyncImage(model = "file:///android_asset/ratings/$asset", contentDescription = null, modifier = Modifier.size(30.dp), imageLoader = loader,
             colorFilter = if (label == "IMDb") androidx.compose.ui.graphics.ColorFilter.tint(Color.Black) else null, contentScale = ContentScale.Fit)
+    }
+}
+
+@Composable
+internal fun DetailsEpisodeSkeleton() {
+    val colors = LocalFrameZooColors.current
+    val shape = RoundedCornerShape(12.dp)
+    Box(
+        modifier = Modifier
+            .width(235.dp)
+            .height(265.dp)
+            .clip(shape)
+            .background(colors["background.secondary"].copy(alpha = 0.5f))
+            .padding(10.dp)
+    ) {
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(140.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .skeletonShimmer()
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(0.75f)
+                    .height(16.dp)
+                    .clip(RoundedCornerShape(4.dp))
+                    .skeletonShimmer()
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(0.5f)
+                    .height(12.dp)
+                    .clip(RoundedCornerShape(4.dp))
+                    .skeletonShimmer()
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(0.9f)
+                    .height(12.dp)
+                    .clip(RoundedCornerShape(4.dp))
+                    .skeletonShimmer()
+            )
+        }
     }
 }
 

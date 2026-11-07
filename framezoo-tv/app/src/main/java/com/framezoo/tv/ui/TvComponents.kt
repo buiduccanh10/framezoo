@@ -1,7 +1,12 @@
 package com.framezoo.tv.ui
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -52,6 +57,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import androidx.tv.material3.Border as TvBorder
 import androidx.tv.material3.Button as MaterialTvButton
 import androidx.tv.material3.ButtonDefaults as TvButtonDefaults
@@ -138,15 +144,88 @@ internal fun MediaGrid(title: String, items: List<Media>, onOpen: (Media) -> Uni
 }
 
 @Composable
-internal fun TvMediaCard(item: Media, onOpen: (Media) -> Unit, progress: Float? = null,
-    bookmarked: Boolean = false, onBookmark: ((Media) -> Unit)? = null, qualityLoader: (suspend (Media) -> String?)? = null,
-    modifier: Modifier = Modifier) {
+internal fun Modifier.skeletonShimmer(): Modifier {
+    val transition = rememberInfiniteTransition(label = "skeleton_shimmer")
+    val alpha by transition.animateFloat(
+        initialValue = 0.35f,
+        targetValue = 0.85f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 850, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "skeleton_alpha"
+    )
+    val colors = LocalFrameZooColors.current
+    return this.background(colors["mediaCard.hoverBackground"].copy(alpha = alpha))
+}
+
+@Composable
+internal fun TvMediaCardSkeleton(
+    modifier: Modifier = Modifier
+) {
+    val colors = LocalFrameZooColors.current
+    val shape = RoundedCornerShape(12.dp)
+    Box(
+        modifier = modifier
+            .width(156.dp)
+            .clip(shape)
+            .background(colors["background.main"])
+            .padding(6.dp)
+    ) {
+        Column {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(2f / 3f)
+                    .clip(RoundedCornerShape(10.dp))
+                    .skeletonShimmer()
+            )
+            Spacer(Modifier.height(8.dp))
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(0.88f)
+                    .height(14.dp)
+                    .clip(RoundedCornerShape(4.dp))
+                    .skeletonShimmer()
+            )
+            Spacer(Modifier.height(5.dp))
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(0.55f)
+                    .height(12.dp)
+                    .clip(RoundedCornerShape(4.dp))
+                    .skeletonShimmer()
+            )
+        }
+    }
+}
+
+@Composable
+internal fun TvMediaCard(
+    item: Media,
+    onOpen: (Media) -> Unit,
+    progress: Float? = null,
+    bookmarked: Boolean = false,
+    onBookmark: ((Media) -> Unit)? = null,
+    qualityLoader: (suspend (Media) -> String?)? = null,
+    season: Int? = null,
+    episode: Int? = null,
+    closable: Boolean = false,
+    onClose: (() -> Unit)? = null,
+    modifier: Modifier = Modifier
+) {
+    // If the media data hasn't loaded yet (empty title and poster), render skeleton card!
+    if (item.title.isBlank() && item.poster.isNullOrBlank()) {
+        TvMediaCardSkeleton(modifier)
+        return
+    }
+
     val colors = LocalFrameZooColors.current
     var focused by remember { mutableStateOf(false) }
     var bookmarkFocused by remember { mutableStateOf(false) }
     val cardFocus = remember { FocusRequester() }
     val bookmarkFocus = remember { FocusRequester() }
-    val hasBookmarkAction = onBookmark != null && item.id.isNotEmpty() && item.id.all(Char::isDigit)
+    val hasBookmarkAction = onBookmark != null && item.id.isNotEmpty() && item.id.all(Char::isDigit) && !closable
     var quality by remember(item.id, item.type, item.releaseQuality) { mutableStateOf(item.releaseQuality) }
     LaunchedEffect(item.id, item.type, qualityLoader) {
         if (quality == null && qualityLoader != null) quality = try { qualityLoader(item) }
@@ -156,43 +235,125 @@ internal fun TvMediaCard(item: Media, onOpen: (Media) -> Unit, progress: Float? 
     val cardScale by animateFloatAsState(if (active) 1.03f else 1f, tween(200), label = "card scale")
     val cardBackground by animateColorAsState(if (active) colors["mediaCard.hoverBackground"] else colors["background.main"], tween(300), label = "card background")
     val shape = RoundedCornerShape(12.dp)
-    Box(Modifier.wrapContentWidth(Alignment.Start).width(174.dp).zIndex(if (active) 1f else 0f).graphicsLayer { scaleX = cardScale; scaleY = cardScale }) {
+    Box(Modifier.wrapContentWidth(Alignment.Start).width(156.dp).zIndex(if (active) 1f else 0f).graphicsLayer { scaleX = cardScale; scaleY = cardScale }) {
     TvCard(
-        onClick = { onOpen(item) },
+        onClick = { if (closable) onClose?.invoke() else onOpen(item) },
         modifier = modifier.focusRequester(cardFocus).then(if (hasBookmarkAction) Modifier.focusProperties { up = bookmarkFocus } else Modifier)
-            .width(174.dp).onFocusChanged { focused = it.hasFocus },
+            .width(156.dp).onFocusChanged { focused = it.hasFocus },
         shape = TvCardDefaults.shape(shape),
         colors = TvCardDefaults.colors(containerColor = cardBackground, focusedContainerColor = cardBackground),
         scale = TvCardDefaults.scale(focusedScale = 1f),
         border = TvCardDefaults.border(focusedBorder = TvBorder(BorderStroke(2.dp, colors["mediaCard.hoverAccent"]), shape = shape)),
     ) {
-      Column(Modifier.padding(7.dp)) {
-        Box(Modifier.fillMaxWidth().aspectRatio(2f / 3f).clip(RoundedCornerShape(10.dp))
-            .background(colors["mediaCard.hoverBackground"]), contentAlignment = Alignment.Center) {
-            androidx.compose.foundation.Image(painterResource(R.drawable.desktop_placeholder), null, Modifier.width(72.dp))
-            if (!item.poster.isNullOrBlank()) AsyncImage(item.poster, item.title, Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop)
+      Column(Modifier.padding(6.dp)) {
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .aspectRatio(2f / 3f)
+                .clip(RoundedCornerShape(10.dp))
+                .background(colors["mediaCard.hoverBackground"]),
+            contentAlignment = Alignment.Center
+        ) {
+            if (!item.poster.isNullOrBlank()) {
+                SubcomposeAsyncImage(
+                    model = item.poster,
+                    contentDescription = item.title,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop,
+                    loading = {
+                        Box(Modifier.fillMaxSize().skeletonShimmer())
+                    },
+                    error = {
+                        Box(
+                            Modifier
+                                .fillMaxSize()
+                                .background(colors["mediaCard.hoverBackground"]),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            androidx.compose.foundation.Image(
+                                painter = painterResource(R.drawable.desktop_placeholder),
+                                contentDescription = null,
+                                modifier = Modifier.width(54.dp).alpha(0.8f),
+                                contentScale = ContentScale.Fit
+                            )
+                        }
+                    }
+                )
+            } else {
+                androidx.compose.foundation.Image(
+                    painter = painterResource(R.drawable.desktop_placeholder),
+                    contentDescription = null,
+                    modifier = Modifier.width(54.dp).alpha(0.8f),
+                    contentScale = ContentScale.Fit
+                )
+            }
             progress?.let { value ->
                 Box(Modifier.fillMaxWidth().height(48.dp).align(Alignment.BottomCenter)
                     .background(Brush.verticalGradient(listOf(Color.Transparent, colors["mediaCard.shadow"]))), contentAlignment = Alignment.BottomCenter) {
-                    Box(Modifier.fillMaxWidth().padding(12.dp).height(4.dp).clip(RoundedCornerShape(50)).background(colors["mediaCard.barColor"])) {
+                    Box(Modifier.fillMaxWidth().padding(horizontal = 10.dp, vertical = 8.dp).height(4.dp).clip(RoundedCornerShape(50)).background(colors["mediaCard.barColor"])) {
                         Box(Modifier.fillMaxWidth(value.coerceIn(0f, 1f)).height(4.dp).background(colors["mediaCard.barFillColor"]))
                     }
                 }
             }
         }
-        Spacer(Modifier.height(12.dp))
-        Text(item.title, maxLines = 2, minLines = 2, overflow = TextOverflow.Ellipsis,
-            color = colors["type.emphasis"], fontWeight = FontWeight.Bold, fontSize = 16.sp)
-        Spacer(Modifier.height(4.dp))
+        Spacer(Modifier.height(8.dp))
+        Text(item.title, maxLines = 1, overflow = TextOverflow.Ellipsis,
+            color = colors["type.emphasis"], fontWeight = FontWeight.Bold, fontSize = 15.sp)
+        Spacer(Modifier.height(2.dp))
         Text("${if (item.type == "show") t("media.types.show") else t("media.types.movie")}${item.year.takeIf { it.isNotBlank() }?.let { " · $it" } ?: ""}",
-            color = colors["type.secondary"], fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+            color = colors["type.secondary"], fontSize = 12.sp, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
       }
     }
-    if (showCinemaBadge(item.type, quality)) {
+    if (season != null && episode != null) {
+        val epBadge = t("media.episodeDisplay")
+            .replace("{{season}}", season.toString())
+            .replace("{{episode}}", episode.toString())
+        Box(
+            modifier = Modifier
+                .zIndex(2f)
+                .align(Alignment.TopEnd)
+                .padding(10.dp)
+                .clip(RoundedCornerShape(6.dp))
+                .background(colors["mediaCard.badge"].copy(alpha = 0.92f))
+                .padding(horizontal = 7.dp, vertical = 3.dp)
+        ) {
+            Text(
+                text = epBadge,
+                color = colors["mediaCard.badgeText"],
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
+    if (showCinemaBadge(item.type, quality) && season == null) {
         Text(t("media.inCinema"), modifier = Modifier.zIndex(1f).align(Alignment.TopEnd).padding(12.dp)
             .clip(RoundedCornerShape(6.dp)).background(Color.DarkGray.copy(alpha = .8f)).padding(horizontal = 8.dp, vertical = 5.dp),
             color = Color(0xffffd54f), fontSize = 11.sp, fontWeight = FontWeight.SemiBold)
+    }
+    if (closable) {
+        Box(
+            modifier = Modifier
+                .zIndex(3f)
+                .matchParentSize()
+                .clip(shape)
+                .background(Color.Black.copy(alpha = 0.65f)),
+            contentAlignment = Alignment.Center
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(46.dp)
+                    .clip(RoundedCornerShape(50))
+                    .background(colors["type.danger"].copy(alpha = 0.88f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.desktop_close),
+                    contentDescription = "Remove",
+                    tint = Color.White,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
+        }
     }
     if (hasBookmarkAction) {
         val buttonShape = RoundedCornerShape(50)

@@ -2,6 +2,8 @@ package com.framezoo.tv.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items as rowItems
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -11,11 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,6 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import com.framezoo.tv.R
 import com.framezoo.tv.model.LibraryItem
 import com.framezoo.tv.model.Media
@@ -44,22 +43,28 @@ internal fun WatchHistoryScreen(
     val gridState = rememberLazyGridState()
     val backRequester = remember { FocusRequester() }
     val editRequester = remember { FocusRequester() }
+    var confirmClearAll by remember { mutableStateOf(false) }
 
     val historyItems = remember(uiState.history) {
         uiState.history.distinctBy { "${it.media.type}:${it.media.id}" }
     }
 
-    if (historyItems.isEmpty()) {
+    val continueWatchingItems = remember(uiState.progress) {
+        uiState.progress.filter { it.duration > 0 && it.position > 0 && (it.position / it.duration) < 0.95 }
+            .distinctBy { "${it.media.type}:${it.media.id}" }
+    }
+
+    if (historyItems.isEmpty() && continueWatchingItems.isEmpty()) {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Icon(
-                painter = painterResource(R.drawable.desktop_clock),
-                contentDescription = null,
-                tint = colors["type.logo"],
-                modifier = Modifier.size(54.dp)
+            IconPatch(
+                icon = R.drawable.desktop_clock,
+                contentColor = colors["type.logo"],
+                size = 64.dp,
+                iconSize = 32.dp
             )
             Spacer(Modifier.height(18.dp))
             Text(
@@ -78,6 +83,52 @@ internal fun WatchHistoryScreen(
             }
         }
         return
+    }
+
+    // Confirmation dialog for clearing history
+    if (confirmClearAll) {
+        Dialog(onDismissRequest = { confirmClearAll = false }) {
+            Column(
+                modifier = Modifier
+                    .widthIn(min = 320.dp, max = 460.dp)
+                    .clip(RoundedCornerShape(18.dp))
+                    .background(colors["background.main"])
+                    .padding(24.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Text(
+                    text = t("home.watchHistory.sectionTitle"),
+                    color = colors["type.emphasis"],
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = t("settings.torrent.clearCache"),
+                    color = colors["type.text"],
+                    fontSize = 15.sp,
+                    lineHeight = 22.sp
+                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    TvButton(
+                        label = t("actions.cancel")
+                    ) {
+                        confirmClearAll = false
+                    }
+                    Spacer(Modifier.width(12.dp))
+                    TvButton(
+                        label = t("lists.actions.delete"),
+                        primary = true
+                    ) {
+                        confirmClearAll = false
+                        onAction(WatchHistoryAction.ClearAll)
+                    }
+                }
+            }
+        }
     }
 
     LazyVerticalGrid(
@@ -106,7 +157,7 @@ internal fun WatchHistoryScreen(
                                 label = t("settings.torrent.clearCache"),
                                 icon = R.drawable.desktop_close
                             ) {
-                                onAction(WatchHistoryAction.ClearAll)
+                                confirmClearAll = true
                             }
                         }
                         TvButton(
@@ -134,6 +185,45 @@ internal fun WatchHistoryScreen(
                     }
                 }
 
+                // Continue Watching section (if available)
+                if (continueWatchingItems.isNotEmpty()) {
+                    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.desktop_play),
+                                contentDescription = null,
+                                tint = colors["type.logo"],
+                                modifier = Modifier.size(18.dp)
+                            )
+                            Text(
+                                text = t("home.continueWatching.sectionTitle"),
+                                color = colors["type.emphasis"],
+                                fontSize = 19.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                        LazyRow(
+                            horizontalArrangement = Arrangement.spacedBy(14.dp),
+                            contentPadding = PaddingValues(vertical = 4.dp)
+                        ) {
+                            rowItems(continueWatchingItems, key = { "cw:${it.media.type}:${it.media.id}" }) { item ->
+                                val progress = if (item.duration > 0) (item.position / item.duration).toFloat().coerceIn(0f, 1f) else null
+                                TvMediaCard(
+                                    item = item.media,
+                                    onOpen = { onOpenMedia(item.media) },
+                                    progress = progress,
+                                    qualityLoader = qualityLoader
+                                )
+                            }
+                        }
+                    }
+                    Spacer(Modifier.height(8.dp))
+                }
+
+                // Recently Watched heading
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)

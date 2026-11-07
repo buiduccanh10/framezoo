@@ -129,12 +129,29 @@ class Backend(private val store: SecureStore) {
     suspend fun discover(): List<Media> = mediaList(request("/api/tmdb/trending/all/day?language=vi-VN"))
 
     suspend fun discoverOptions(): Pair<List<DiscoverOption>, List<DiscoverOption>> {
+        val tmdbLang = if (store.language == "vi") "vi-VN" else "en-US"
         val genres = listOf("movie", "tv").flatMap { kind ->
-            val array = (request("/api/tmdb/genre/$kind/list?language=vi-VN") as JSONObject).optJSONArray("genres") ?: JSONArray()
-            (0 until array.length()).mapNotNull { array.optJSONObject(it) }.map { DiscoverOption(it.optString("id"), when (it.optInt("id")) { 10759 -> if (store.language == "vi") "Hành động & Phiêu lưu" else it.optString("name"); 10765 -> if (store.language == "vi") "Khoa học Viễn tưởng & Giả tưởng" else it.optString("name"); else -> it.optString("name") }) }
-        }.distinctBy { it.id }.sortedBy { it.name }
-        val countries = request("/api/tmdb/configuration/countries?language=vi-VN") as JSONArray
-        val locale = java.util.Locale.forLanguageTag("vi-VN")
+            val array = (request("/api/tmdb/genre/$kind/list?language=$tmdbLang") as JSONObject).optJSONArray("genres") ?: JSONArray()
+            (0 until array.length()).mapNotNull { array.optJSONObject(it) }.map {
+                val id = it.optString("id")
+                val name = if (store.language == "vi") {
+                    when (it.optInt("id")) {
+                        10759 -> "Phim Hành Động & Phiêu Lưu"
+                        10762 -> "Phim Trẻ Em"
+                        10763 -> "Tin Tức"
+                        10764 -> "Truyền Hình Thực Tế"
+                        10765 -> "Khoa Học Viễn Tưởng & Giả Tưởng"
+                        10766 -> "Phim Truyền Hình Dài Tập"
+                        10767 -> "Talk Show"
+                        10768 -> "Chiến Tranh & Chính Trị"
+                        else -> it.optString("name")
+                    }
+                } else it.optString("name")
+                DiscoverOption(id, name)
+            }
+        }.distinctBy { it.id }
+        val countries = request("/api/tmdb/configuration/countries?language=$tmdbLang") as JSONArray
+        val locale = if (store.language == "vi") java.util.Locale.forLanguageTag("vi-VN") else java.util.Locale.US
         return genres to (0 until countries.length()).mapNotNull { countries.optJSONObject(it) }.map {
             val code = it.optString("iso_3166_1")
             DiscoverOption(code, java.util.Locale("", code).getDisplayCountry(locale).ifBlank { it.optString("english_name") })
@@ -369,7 +386,73 @@ class Backend(private val store: SecureStore) {
         request("/users/${encode(id)}/progress/${encode(item.id)}", "PUT", body, auth = true)
         request("/users/${encode(id)}/watch-history/${encode(item.id)}", "PUT", JSONObject(body.toString()).put("watchedAt", Instant.now().toString()).put("completed", watched), auth = true)
     }
-    suspend fun watchProgress(): List<LibraryItem> = libraryItems("progress")
+    fun saveLocalProgress(item: Media, position: Double, duration: Double, episode: Episode?) {
+        try {
+            val raw = store.localProgress
+            val arr = if (raw != null) JSONArray(raw) else JSONArray()
+            val list = mutableListOf<JSONObject>()
+            for (i in 0 until arr.length()) {
+                val obj = arr.getJSONObject(i)
+                if (obj.optString("id") != item.id) {
+                    list.add(obj)
+                }
+            }
+            val newEntry = JSONObject().apply {
+                put("id", item.id)
+                put("title", item.title)
+                put("type", item.type)
+                put("year", item.year)
+                put("poster", item.poster ?: "")
+                put("position", position)
+                put("duration", duration)
+                if (episode != null) {
+                    put("season", episode.season)
+                    put("episode", episode.number)
+                    put("seasonId", episode.seasonId)
+                    put("episodeId", episode.id)
+                }
+            }
+            list.add(0, newEntry)
+            val trimmed = list.take(30)
+            val resultArr = JSONArray()
+            trimmed.forEach { resultArr.put(it) }
+            store.localProgress = resultArr.toString()
+        } catch (_: Exception) {}
+    }
+
+    fun loadLocalProgress(): List<LibraryItem> {
+        val raw = store.localProgress ?: return emptyList()
+        return try {
+            val arr = JSONArray(raw)
+            val list = mutableListOf<LibraryItem>()
+            for (i in 0 until arr.length()) {
+                val obj = arr.getJSONObject(i)
+                val media = Media(
+                    id = obj.getString("id"),
+                    title = obj.getString("title"),
+                    type = obj.getString("type"),
+                    year = obj.optString("year", ""),
+                    poster = obj.optString("poster", "").takeIf { it.isNotBlank() }
+                )
+                val season = if (obj.has("season")) obj.getInt("season") else null
+                val episode = if (obj.has("episode")) obj.getInt("episode") else null
+                list.add(LibraryItem(
+                    media = media,
+                    position = obj.optDouble("position", 0.0),
+                    duration = obj.optDouble("duration", 0.0),
+                    season = season,
+                    episode = episode
+                ))
+            }
+            list
+        } catch (_: Exception) { emptyList() }
+    }
+
+    suspend fun watchProgress(): List<LibraryItem> {
+        val remote = if (store.userId != null) runCatching { libraryItems("progress") }.getOrDefault(emptyList()) else emptyList()
+        val local = loadLocalProgress()
+        return (remote + local).distinctBy { "${it.media.id}:${it.season}:${it.episode}" }
+    }
     suspend fun library(): List<LibraryItem> {
         val id = store.userId ?: return emptyList()
         val bookmarks = request("/users/${encode(id)}/bookmarks", auth = true) as JSONArray
@@ -394,6 +477,25 @@ class Backend(private val store: SecureStore) {
         request("/users/${encode(id)}/watch-history/${encode(tmdbId)}", "DELETE", null, auth = true)
     }
 
+    suspend fun removeProgress(tmdbId: String) {
+        try {
+            val raw = store.localProgress
+            if (raw != null) {
+                val arr = JSONArray(raw)
+                val result = JSONArray()
+                for (i in 0 until arr.length()) {
+                    val obj = arr.getJSONObject(i)
+                    if (obj.optString("id") != tmdbId) {
+                        result.put(obj)
+                    }
+                }
+                store.localProgress = result.toString()
+            }
+        } catch (_: Exception) {}
+        val id = store.userId ?: return
+        request("/users/${encode(id)}/progress/${encode(tmdbId)}", "DELETE", null, auth = true)
+    }
+
     suspend fun bookmark(item: Media, remove: Boolean = false) {
         val id = requireNotNull(store.userId) { "Đăng nhập để lưu phim" }
         request("/users/${encode(id)}/bookmarks/${encode(item.id)}", if (remove) "DELETE" else "POST",
@@ -404,8 +506,9 @@ class Backend(private val store: SecureStore) {
         .put("year", item.year.toIntOrNull() ?: 0).also { value -> item.poster?.let { value.put("poster", it) } }
 
     suspend fun progress(item: Media, position: Double, duration: Double, episode: Episode?) {
-        val id = store.userId ?: return
         if (duration <= 0 || position < 20) return
+        saveLocalProgress(item, position, duration, episode)
+        val id = store.userId ?: return
         val body = JSONObject().put("tmdbId", item.id).put("meta", meta(item))
             .put("duration", duration).put("watched", position)
         episode?.let { body.put("seasonId", it.season.toString()).put("episodeId", it.number.toString())

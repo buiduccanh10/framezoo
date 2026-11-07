@@ -40,56 +40,73 @@ internal fun SettingsScreen(state: FrameZooState) {
     var selectedCategory by remember { mutableStateOf(SettingsCategory.PREFERENCES) }
     val backRequester = remember { FocusRequester() }
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 24.dp, vertical = 20.dp),
+        horizontalArrangement = Arrangement.spacedBy(28.dp)
+    ) {
+        // Left Column: Sidebar matching desktop SidebarPart.tsx
+        Column(
+            modifier = Modifier.width(260.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Text(
-                text = t("global.pages.settings"),
-                style = MaterialTheme.typography.headlineLarge,
-                color = colors["type.emphasis"]
-            )
-            TvButton(
-                label = t("discover.page.back"),
-                icon = R.drawable.desktop_chevron_left,
-                navigation = true,
-                modifier = Modifier.focusRequester(backRequester)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                state.back()
-            }
-        }
-
-        Spacer(Modifier.height(20.dp))
-
-        // Categories Tab Row
-        val categories = listOf(
-            SettingsCategory.PREFERENCES to t("settings.preferences.title"),
-            SettingsCategory.APPEARANCE to t("settings.appearance.title"),
-            SettingsCategory.CAPTIONS to t("settings.subtitles.title"),
-            SettingsCategory.TORRENT to t("settings.torrent.title"),
-            SettingsCategory.ACCOUNT to t("settings.account.title")
-        )
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
-            contentPadding = PaddingValues(vertical = 4.dp)
-        ) {
-            items(categories) { (cat, label) ->
                 TvButton(
-                    label = label,
-                    selected = selectedCategory == cat,
-                    navigation = true
+                    label = t("discover.page.back"),
+                    icon = R.drawable.desktop_chevron_left,
+                    navigation = true,
+                    modifier = Modifier.focusRequester(backRequester)
                 ) {
-                    selectedCategory = cat
+                    state.back()
+                }
+                Text(
+                    text = t("global.pages.settings"),
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = colors["type.emphasis"]
+                )
+            }
+
+            Spacer(Modifier.height(4.dp))
+
+            val categories = listOf(
+                Triple(SettingsCategory.PREFERENCES, t("settings.preferences.title"), R.drawable.desktop_settings),
+                Triple(SettingsCategory.APPEARANCE, t("settings.appearance.title"), R.drawable.desktop_edit),
+                Triple(SettingsCategory.CAPTIONS, t("settings.subtitles.title"), R.drawable.desktop_captions),
+                Triple(SettingsCategory.TORRENT, t("settings.torrent.title"), R.drawable.desktop_video),
+                Triple(SettingsCategory.ACCOUNT, t("settings.account.title"), R.drawable.desktop_user)
+            )
+
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                items(categories) { (cat, label, iconRes) ->
+                    val isSelected = selectedCategory == cat
+                    TvButton(
+                        label = label,
+                        icon = iconRes,
+                        selected = isSelected,
+                        navigation = true,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        selectedCategory = cat
+                    }
                 }
             }
         }
 
-        Spacer(Modifier.height(24.dp))
-
-        // Category Content Area
-        Box(modifier = Modifier.fillMaxSize()) {
+        // Right Column: Settings Content Pane
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight()
+                .clip(RoundedCornerShape(20.dp))
+                .background(colors["background.secondary"].copy(alpha = 0.35f))
+                .border(BorderStroke(1.dp, colors["authentication.border"]), RoundedCornerShape(20.dp))
+                .padding(26.dp)
+        ) {
             when (selectedCategory) {
                 SettingsCategory.PREFERENCES -> PreferencesSection(state)
                 SettingsCategory.APPEARANCE -> AppearanceSection(state)

@@ -41,7 +41,7 @@ class SecureStore(context: Context) {
         set(value) { prefs.edit().putString("theme", value).apply() }
 
     var language: String
-        get() = prefs.getString("language", if (java.util.Locale.getDefault().language == "vi") "vi" else "en") ?: "vi"
+        get() = prefs.getString("language", "vi") ?: "vi"
         set(value) { prefs.edit().putString("language", value).apply() }
 
     var customPrimary: String
@@ -72,6 +72,10 @@ class SecureStore(context: Context) {
         get() = prefs.getString("torrentCacheSize", "5gb") ?: "5gb"
         set(value) { prefs.edit().putString("torrentCacheSize", value).apply() }
 
+    var localProgress: String?
+        get() = prefs.getString("local_progress", null)
+        set(value) { prefs.edit().putString("local_progress", value).apply() }
+
     var userId: String?
         get() = prefs.getString("user", null)
         set(value) { prefs.edit().putString("user", value).apply() }
@@ -85,6 +89,7 @@ class SecureStore(context: Context) {
         set(value) { prefs.edit().putString("refresh", value?.let(::encrypt)).apply() }
 
     fun clearSession() { prefs.edit().remove("user").remove("access").remove("refresh").apply() }
+    fun clearLocalProgress() { prefs.edit().remove("local_progress").apply() }
 
     private fun key(): SecretKey {
         val store = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }

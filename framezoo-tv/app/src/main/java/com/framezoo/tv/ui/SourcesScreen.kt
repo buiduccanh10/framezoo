@@ -126,6 +126,10 @@ internal fun SourcesScreen(
         } else {
             items(filteredSources) { source ->
                 val isTorrent = source.infoHash != null || source.url.startsWith("magnet:")
+                val isDebrid = source.name.contains("RD", ignoreCase = true) || source.name.contains("RealDebrid", ignoreCase = true) || source.name.contains("[RD+]", ignoreCase = true)
+                val lines = source.name.split("\n").filter { it.isNotBlank() }
+                val mainTitle = lines.firstOrNull() ?: source.name
+                val subDetails = if (lines.size > 1) lines.drop(1).joinToString(" · ") else source.filename.orEmpty()
                 val shape = RoundedCornerShape(12.dp)
                 TvCard(
                     onClick = { onChooseSource(source) },
@@ -145,31 +149,47 @@ internal fun SourcesScreen(
                             .fillMaxWidth()
                             .padding(16.dp),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(14.dp)
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         Box(
                             modifier = Modifier
-                                .size(42.dp)
+                                .size(44.dp)
                                 .clip(RoundedCornerShape(8.dp))
-                                .background(if (isTorrent) Color(0xFFC53BB0).copy(alpha = 0.2f) else Color(0xFF48D3FF).copy(alpha = 0.2f)),
+                                .background(if (isDebrid) Color(0xFFF59E0B).copy(alpha = 0.2f) else if (isTorrent) Color(0xFFC53BB0).copy(alpha = 0.2f) else Color(0xFF48D3FF).copy(alpha = 0.2f)),
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
                                 painter = painterResource(if (isTorrent) R.drawable.desktop_video else R.drawable.desktop_play),
                                 contentDescription = null,
-                                tint = if (isTorrent) Color(0xFFC53BB0) else Color(0xFF48D3FF),
-                                modifier = Modifier.size(20.dp)
+                                tint = if (isDebrid) Color(0xFFF59E0B) else if (isTorrent) Color(0xFFC53BB0) else Color(0xFF48D3FF),
+                                modifier = Modifier.size(22.dp)
                             )
                         }
 
                         Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                            Text(
-                                text = source.name,
-                                color = colors["type.emphasis"],
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                Text(
+                                    text = mainTitle,
+                                    color = colors["type.emphasis"],
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    maxLines = 1
+                                )
+                                if (isDebrid) {
+                                    Box(
+                                        modifier = Modifier
+                                            .clip(RoundedCornerShape(4.dp))
+                                            .background(Color(0xFFF59E0B).copy(alpha = 0.25f))
+                                            .padding(horizontal = 6.dp, vertical = 2.dp)
+                                    ) {
+                                        Text(
+                                            text = "RD+",
+                                            color = Color(0xFFFBBF24),
+                                            fontSize = 11.sp,
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                    }
+                                }
                                 Box(
                                     modifier = Modifier
                                         .clip(RoundedCornerShape(4.dp))
@@ -183,6 +203,14 @@ internal fun SourcesScreen(
                                         fontWeight = FontWeight.Bold
                                     )
                                 }
+                            }
+                            if (subDetails.isNotBlank()) {
+                                Text(
+                                    text = subDetails,
+                                    color = colors["type.secondary"],
+                                    fontSize = 13.sp,
+                                    maxLines = 2
+                                )
                             }
                         }
 

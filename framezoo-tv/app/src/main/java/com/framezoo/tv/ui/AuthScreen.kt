@@ -5,23 +5,25 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.framezoo.tv.R
@@ -37,24 +39,24 @@ internal fun AuthScreen(
     onBack: () -> Unit
 ) {
     val colors = LocalFrameZooColors.current
+    var isRegisterMode by remember { mutableStateOf(false) }
+
     val passwordRequester = remember { FocusRequester() }
-    val loginAction = remember { FocusRequester() }
+    val submitAction = remember { FocusRequester() }
     val backRequester = remember { FocusRequester() }
 
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(20.dp)
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black.copy(alpha = 0.9f)),
+        contentAlignment = Alignment.Center
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+        // Back Button Top-Left
+        Box(
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(32.dp)
         ) {
-            Text(
-                text = if (userId == null) t("auth.login.submit") else t("settings.account.title"),
-                style = MaterialTheme.typography.headlineLarge,
-                color = colors["type.emphasis"]
-            )
             TvButton(
                 label = t("discover.page.back"),
                 icon = R.drawable.desktop_chevron_left,
@@ -66,88 +68,207 @@ internal fun AuthScreen(
         }
 
         Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
+            modifier = Modifier
+                .widthIn(min = 440.dp, max = 520.dp)
+                .clip(RoundedCornerShape(22.dp))
+                .background(colors["background.main"])
+                .border(BorderStroke(1.dp, colors["authentication.border"]), RoundedCornerShape(22.dp))
+                .padding(horizontal = 36.dp, vertical = 32.dp)
         ) {
-            Box(
-                modifier = Modifier
-                    .width(480.dp)
-                    .clip(RoundedCornerShape(20.dp))
-                    .background(colors["background.secondary"].copy(alpha = 0.6f))
-                    .border(BorderStroke(1.dp, colors["authentication.border"]), RoundedCornerShape(20.dp))
-                    .padding(32.dp)
-            ) {
-                if (userId != null) {
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.fillMaxWidth()
+            if (userId != null) {
+                // Logged in User Profile Card
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(18.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.framezoo_brand),
+                        contentDescription = "FrameZoo",
+                        modifier = Modifier.width(160.dp).height(46.dp)
+                    )
+
+                    Box(
+                        modifier = Modifier
+                            .size(72.dp)
+                            .clip(CircleShape)
+                            .background(colors["background.secondary"])
+                            .border(BorderStroke(2.dp, colors["type.logo"]), CircleShape),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Image(
-                            painter = painterResource(R.drawable.framezoo_brand),
-                            contentDescription = "FrameZoo",
-                            modifier = Modifier.width(160.dp).height(46.dp)
+                        Icon(
+                            painter = painterResource(R.drawable.desktop_user),
+                            contentDescription = null,
+                            tint = colors["type.logo"],
+                            modifier = Modifier.size(36.dp)
                         )
+                    }
+
+                    Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
                         Text(
                             text = userId,
                             color = colors["type.emphasis"],
-                            fontSize = 18.sp,
+                            fontSize = 20.sp,
                             fontWeight = FontWeight.Bold
                         )
-                        TvButton(
-                            label = t("navigation.menu.logout")
-                        ) {
-                            onLogout()
-                        }
+                        Text(
+                            text = t("settings.account.title"),
+                            color = colors["type.secondary"],
+                            fontSize = 14.sp
+                        )
                     }
-                } else {
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(18.dp),
+
+                    Spacer(Modifier.height(8.dp))
+
+                    TvButton(
+                        label = t("navigation.menu.logout"),
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Image(
-                            painter = painterResource(R.drawable.framezoo_brand),
-                            contentDescription = "FrameZoo",
-                            modifier = Modifier.width(160.dp).height(46.dp).align(Alignment.CenterHorizontally)
-                        )
+                        onLogout()
+                    }
+                }
+            } else {
+                // Login / Register Form Card
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.framezoo_brand),
+                        contentDescription = "FrameZoo",
+                        modifier = Modifier.width(150.dp).height(42.dp)
+                    )
 
-                        OutlinedTextField(
-                            value = uiState.name,
-                            onValueChange = { onAction(AuthAction.NameChanged(it)) },
-                            label = { Text(t("auth.login.identifierLabel")) },
-                            singleLine = true,
-                            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-                            keyboardActions = KeyboardActions(onNext = { passwordRequester.requestFocus() }),
-                            colors = tvFieldColors(),
-                            shape = RoundedCornerShape(12.dp),
-                            modifier = Modifier.fillMaxWidth()
-                        )
-
-                        OutlinedTextField(
-                            value = uiState.password,
-                            onValueChange = { onAction(AuthAction.PasswordChanged(it)) },
-                            label = { Text(t("auth.login.passwordLabel")) },
-                            singleLine = true,
-                            visualTransformation = PasswordVisualTransformation(),
-                            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                            keyboardActions = KeyboardActions(onDone = { loginAction.requestFocus() }),
-                            colors = tvFieldColors(),
-                            shape = RoundedCornerShape(12.dp),
-                            modifier = Modifier.fillMaxWidth().focusRequester(passwordRequester)
-                        )
-
-                        if (!uiState.errorMessage.isNullOrBlank()) {
-                            Text(uiState.errorMessage, color = colors["type.danger"], fontSize = 13.sp)
-                        }
-
+                    // Tab Pill Switcher (Sign In vs Register)
+                    Row(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(50))
+                            .background(colors["background.secondary"].copy(alpha = 0.6f))
+                            .padding(4.dp),
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
                         TvButton(
-                            label = t("auth.login.submit"),
-                            primary = true,
-                            loading = uiState.isLoading,
-                            modifier = Modifier.fillMaxWidth().focusRequester(loginAction)
+                            label = t("auth.login.title"),
+                            selected = !isRegisterMode,
+                            navigation = true
                         ) {
-                            onAction(AuthAction.SubmitLogin)
+                            isRegisterMode = false
+                            onAction(AuthAction.ClearError)
                         }
+                        TvButton(
+                            label = t("auth.register.submit"),
+                            selected = isRegisterMode,
+                            navigation = true
+                        ) {
+                            isRegisterMode = true
+                            onAction(AuthAction.ClearError)
+                        }
+                    }
+
+                    // Title & Description
+                    Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Text(
+                            text = if (isRegisterMode) t("auth.register.passwordInput.title") else t("auth.login.title"),
+                            color = colors["type.emphasis"],
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center
+                        )
+                        Text(
+                            text = if (isRegisterMode) t("auth.register.passwordInput.description") else t("auth.login.description"),
+                            color = colors["type.secondary"],
+                            fontSize = 13.sp,
+                            textAlign = TextAlign.Center,
+                            lineHeight = 18.sp
+                        )
+                    }
+
+                    // Error Banner
+                    if (!uiState.errorMessage.isNullOrBlank()) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(10.dp))
+                                .background(colors["type.danger"].copy(alpha = 0.15f))
+                                .border(BorderStroke(1.dp, colors["type.danger"].copy(alpha = 0.35f)), RoundedCornerShape(10.dp))
+                                .padding(horizontal = 14.dp, vertical = 10.dp)
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Icon(
+                                    painter = painterResource(R.drawable.desktop_warning),
+                                    contentDescription = null,
+                                    tint = colors["type.danger"],
+                                    modifier = Modifier.size(16.dp)
+                                )
+                                Text(
+                                    text = uiState.errorMessage,
+                                    color = colors["type.danger"],
+                                    fontSize = 13.sp
+                                )
+                            }
+                        }
+                    }
+
+                    // Identifier / Nickname Field
+                    OutlinedTextField(
+                        value = uiState.name,
+                        onValueChange = { onAction(AuthAction.NameChanged(it)) },
+                        label = { Text(if (isRegisterMode) t("auth.register.nicknameLabel") else t("auth.login.identifierLabel")) },
+                        placeholder = { Text(if (isRegisterMode) t("auth.register.nicknamePlaceholder") else t("auth.login.identifierLabel")) },
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                        keyboardActions = KeyboardActions(onNext = { passwordRequester.requestFocus() }),
+                        colors = tvFieldColors(),
+                        shape = RoundedCornerShape(12.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    // Password Field
+                    OutlinedTextField(
+                        value = uiState.password,
+                        onValueChange = { onAction(AuthAction.PasswordChanged(it)) },
+                        label = { Text(if (isRegisterMode) t("auth.register.passwordLabel") else t("auth.login.passwordLabel")) },
+                        placeholder = { Text(if (isRegisterMode) t("auth.register.passwordPlaceholder") else t("auth.login.passwordLabel")) },
+                        singleLine = true,
+                        visualTransformation = PasswordVisualTransformation(),
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(onDone = { submitAction.requestFocus() }),
+                        colors = tvFieldColors(),
+                        shape = RoundedCornerShape(12.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .focusRequester(passwordRequester)
+                    )
+
+                    Spacer(Modifier.height(4.dp))
+
+                    // Submit Button
+                    TvButton(
+                        label = if (isRegisterMode) t("auth.register.submit") else t("auth.login.submit"),
+                        accent = true,
+                        loading = uiState.isLoading,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .focusRequester(submitAction)
+                    ) {
+                        if (isRegisterMode) onAction(AuthAction.SubmitRegister) else onAction(AuthAction.SubmitLogin)
+                    }
+
+                    // Switcher Toggle Button
+                    TvButton(
+                        label = if (isRegisterMode) {
+                            t("auth.hasAccount").replace(Regex("<[^>]*>"), "")
+                        } else {
+                            t("auth.createAccount").replace(Regex("<[^>]*>"), "")
+                        },
+                        navigation = true
+                    ) {
+                        isRegisterMode = !isRegisterMode
+                        onAction(AuthAction.ClearError)
                     }
                 }
             }

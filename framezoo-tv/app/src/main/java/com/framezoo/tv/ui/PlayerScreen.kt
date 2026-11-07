@@ -239,20 +239,27 @@ internal fun PlayerScreen(
                     Text(text = error, color = colors["type.danger"], fontSize = 14.sp)
                 }
 
-                // Scrubber / Timeline
+                // Scrubber / Timeline with Buffer Time matching Desktop ProgressBar
                 val progressFraction = if (duration > 0) (position / duration).toFloat().coerceIn(0f, 1f) else 0f
-                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                val bufferFraction = if (duration > 0) ((position + 60.0) / duration).toFloat().coerceIn(0f, 1f) else 0f
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(6.dp)
+                            .height(8.dp)
                             .clip(RoundedCornerShape(50))
-                            .background(Color.White.copy(alpha = 0.25f))
+                            .background(Color.White.copy(alpha = 0.2f))
                     ) {
                         Box(
                             modifier = Modifier
+                                .fillMaxWidth(bufferFraction)
+                                .fillMaxHeight()
+                                .background(Color.White.copy(alpha = 0.45f))
+                        )
+                        Box(
+                            modifier = Modifier
                                 .fillMaxWidth(progressFraction)
-                                .height(6.dp)
+                                .fillMaxHeight()
                                 .background(colors["type.logo"])
                         )
                     }
@@ -401,7 +408,7 @@ internal fun PlayerScreen(
             }
         }
 
-        // Subtitles Menu Dialog
+        // Subtitles Menu Floating Modal matching Desktop Player Menus
         if (showSubtitlesMenu) {
             Dialog(
                 onDismissRequest = { showSubtitlesMenu = false },
@@ -410,28 +417,42 @@ internal fun PlayerScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(Color.Black.copy(alpha = 0.8f)),
+                        .background(Color.Black.copy(alpha = 0.7f)),
                     contentAlignment = Alignment.Center
                 ) {
                     Box(
                         modifier = Modifier
                             .width(540.dp)
-                            .clip(RoundedCornerShape(20.dp))
+                            .clip(RoundedCornerShape(22.dp))
                             .background(colors["background.main"])
-                            .border(BorderStroke(1.dp, colors["authentication.border"]), RoundedCornerShape(20.dp))
-                            .padding(28.dp)
+                            .border(BorderStroke(1.dp, colors["authentication.border"]), RoundedCornerShape(22.dp))
+                            .padding(26.dp)
                     ) {
                         Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                            Text(
-                                text = t("player.menus.settings.subtitleItem"),
-                                style = MaterialTheme.typography.headlineMedium,
-                                color = colors["type.emphasis"]
-                            )
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(
+                                    text = t("player.menus.settings.subtitleItem"),
+                                    style = MaterialTheme.typography.headlineMedium,
+                                    color = colors["type.emphasis"]
+                                )
+                                HeaderButton(
+                                    icon = R.drawable.desktop_close,
+                                    label = t("overlays.close"),
+                                    selected = false
+                                ) {
+                                    showSubtitlesMenu = false
+                                }
+                            }
 
                             Text(
                                 text = "Delay: ${subDelayMs}ms",
                                 color = colors["type.secondary"],
-                                fontSize = 14.sp
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Medium
                             )
                             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                                 TvButton("-250ms") {
@@ -449,20 +470,12 @@ internal fun PlayerScreen(
                             }
 
                             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                                TvButton("Cycle Subtitle Track") {
+                                TvButton("Cycle Subtitle Track", icon = R.drawable.desktop_captions) {
                                     player.command("cycle", "sub")
                                 }
-                                TvButton("Toggle Subtitles On/Off") {
+                                TvButton("Toggle On/Off", icon = R.drawable.desktop_eye) {
                                     player.command("cycle", "sub-visibility")
                                 }
-                            }
-
-                            TvButton(
-                                label = t("overlays.close"),
-                                primary = true,
-                                modifier = Modifier.align(Alignment.End)
-                            ) {
-                                showSubtitlesMenu = false
                             }
                         }
                     }
