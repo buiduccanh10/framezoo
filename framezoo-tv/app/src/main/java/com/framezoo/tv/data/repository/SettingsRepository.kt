@@ -94,9 +94,4 @@ class SettingsRepository(private val store: SecureStore) {
         store.trailerMuted = next
         _trailerMuted.value = next
     }
-
-    fun updateBackendUrl(url: String) {
-        store.backendUrl = url
-        _backendUrl.value = store.backendUrl
-    }
 }

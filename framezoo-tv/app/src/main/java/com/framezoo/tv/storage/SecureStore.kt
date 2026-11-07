@@ -3,6 +3,7 @@ package com.framezoo.tv.storage
 import com.framezoo.tv.BuildConfig
 
 import android.content.Context
+import android.os.Build
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Base64
@@ -17,18 +18,15 @@ class SecureStore(context: Context) {
     private val prefs = context.getSharedPreferences("framezoo_tv", Context.MODE_PRIVATE)
     private val alias = "framezoo_tv_session"
 
-    var backendUrl: String
-        get() = prefs.getString("backend", BuildConfig.BACKEND_URL) ?: BuildConfig.BACKEND_URL
-        set(value) {
-            val url = value.trim().trimEnd('/')
-            val uri = try { URI(url) } catch (_: Exception) { throw IllegalArgumentException("Backend URL không hợp lệ") }
-            require((uri.scheme == "https" || (BuildConfig.DEBUG && uri.scheme == "http")) &&
-                !uri.host.isNullOrBlank() && uri.userInfo == null && uri.query == null && uri.fragment == null) {
-                "Backend URL phải là HTTP(S) hợp lệ; bản release yêu cầu HTTPS"
-            }
-            if (backendUrl != url) clearSession()
-            prefs.edit().putString("backend", url).apply()
+    val backendUrl: String = resolveBackendUrl(BuildConfig.BACKEND_URL)
+
+    init {
+        val lastBackend = prefs.getString("last_backend_url", null)
+        if (lastBackend != null && lastBackend != backendUrl) {
+            clearSession()
         }
+        prefs.edit().putString("last_backend_url", backendUrl).remove("backend").apply()
+    }
 
     var trailerEnabled: Boolean
         get() = prefs.getBoolean("trailerEnabled", true)
@@ -112,4 +110,38 @@ class SecureStore(context: Context) {
             String(cipher.doFinal(raw.copyOfRange(12, raw.size)), Charsets.UTF_8)
         }
     } catch (_: Exception) { null }
+}
+
+internal fun resolveBackendUrl(rawUrl: String): String {
+    val trimmed = rawUrl.trim().trimEnd('/')
+    if (!BuildConfig.DEBUG) return trimmed
+    return try {
+        val uri = URI(trimmed)
+        val host = uri.host ?: return trimmed
+        if ((host == "localhost" || host == "127.0.0.1") && isEmulator()) {
+            val port = if (uri.port != -1) ":${uri.port}" else ""
+            "${uri.scheme}://10.0.2.2$port${uri.rawPath ?: ""}"
+        } else {
+            trimmed
+        }
+    } catch (_: Exception) {
+        trimmed
+    }
+}
+
+private fun isEmulator(): Boolean {
+    return (Build.FINGERPRINT.startsWith("generic")
+        || Build.FINGERPRINT.startsWith("unknown")
+        || Build.MODEL.contains("google_sdk")
+        || Build.MODEL.contains("Emulator")
+        || Build.MODEL.contains("Android SDK built for x86")
+        || Build.MANUFACTURER.contains("Genymotion")
+        || Build.HARDWARE.contains("goldfish")
+        || Build.HARDWARE.contains("ranchu")
+        || Build.PRODUCT.contains("sdk")
+        || Build.PRODUCT.contains("google_sdk")
+        || Build.PRODUCT.contains("sdk_x86")
+        || Build.PRODUCT.contains("vbox86p")
+        || Build.PRODUCT.contains("emulator")
+        || Build.PRODUCT.contains("simulator"))
 }

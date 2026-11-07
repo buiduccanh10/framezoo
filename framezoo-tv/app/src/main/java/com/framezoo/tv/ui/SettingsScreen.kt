@@ -8,11 +8,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -34,7 +31,6 @@ private enum class SettingsCategory {
     APPEARANCE,
     CAPTIONS,
     TORRENT,
-    CONNECTIONS,
     ACCOUNT
 }
 
@@ -43,7 +39,6 @@ internal fun SettingsScreen(state: FrameZooState) {
     val colors = LocalFrameZooColors.current
     var selectedCategory by remember { mutableStateOf(SettingsCategory.PREFERENCES) }
     val backRequester = remember { FocusRequester() }
-    val backendAction = remember { FocusRequester() }
 
     Column(modifier = Modifier.fillMaxSize()) {
         Row(
@@ -74,7 +69,6 @@ internal fun SettingsScreen(state: FrameZooState) {
             SettingsCategory.APPEARANCE to t("settings.appearance.title"),
             SettingsCategory.CAPTIONS to t("settings.subtitles.title"),
             SettingsCategory.TORRENT to t("settings.torrent.title"),
-            SettingsCategory.CONNECTIONS to t("settings.connections.title"),
             SettingsCategory.ACCOUNT to t("settings.account.title")
         )
         LazyRow(
@@ -101,7 +95,6 @@ internal fun SettingsScreen(state: FrameZooState) {
                 SettingsCategory.APPEARANCE -> AppearanceSection(state)
                 SettingsCategory.CAPTIONS -> CaptionsSection(state)
                 SettingsCategory.TORRENT -> TorrentSection(state)
-                SettingsCategory.CONNECTIONS -> ConnectionsSection(state, backendAction)
                 SettingsCategory.ACCOUNT -> AccountSection(state)
             }
         }
@@ -370,45 +363,6 @@ private fun TorrentSection(state: FrameZooState) {
 }
 
 @Composable
-private fun ConnectionsSection(state: FrameZooState, backendAction: FocusRequester) {
-    val colors = LocalFrameZooColors.current
-
-    LazyColumn(verticalArrangement = Arrangement.spacedBy(18.dp), contentPadding = PaddingValues(bottom = 40.dp)) {
-        item {
-            Text(
-                text = t("settings.connections.title"),
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold,
-                color = colors["type.emphasis"]
-            )
-        }
-        item {
-            OutlinedTextField(
-                value = state.backendUrl,
-                onValueChange = { state.backendUrl = it },
-                label = { Text(t("auth.backendSelection.customBackend")) },
-                placeholder = { Text("https://") },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                keyboardActions = KeyboardActions(onDone = { backendAction.requestFocus() }),
-                colors = tvFieldColors(),
-                shape = RoundedCornerShape(12.dp),
-                modifier = Modifier.fillMaxWidth(0.7f)
-            )
-        }
-        item {
-            TvButton(
-                label = t("settings.save"),
-                primary = true,
-                modifier = Modifier.focusRequester(backendAction)
-            ) {
-                state.saveBackend()
-            }
-        }
-    }
-}
-
-@Composable
 private fun AccountSection(state: FrameZooState) {
     val colors = LocalFrameZooColors.current
 
@@ -422,26 +376,27 @@ private fun AccountSection(state: FrameZooState) {
             )
         }
         item {
-            if (state.store.userId != null) {
-                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(
+                    text = "Backend: ${state.backendUrl}",
+                    color = colors["type.secondary"],
+                    fontSize = 15.sp
+                )
+                if (state.store.userId != null) {
                     Text(
                         text = "ID: ${state.store.userId}",
                         color = colors["type.emphasis"],
                         fontSize = 17.sp,
                         fontWeight = FontWeight.Medium
                     )
+                    Spacer(Modifier.height(4.dp))
                     TvButton(
                         label = t("navigation.menu.logout")
                     ) {
                         state.logout()
                     }
-                }
-            } else {
-                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text(
-                        text = t("auth.login.failedToReachServer"),
-                        color = colors["type.secondary"]
-                    )
+                } else {
+                    Spacer(Modifier.height(4.dp))
                     TvButton(
                         label = t("auth.login.submit"),
                         primary = true

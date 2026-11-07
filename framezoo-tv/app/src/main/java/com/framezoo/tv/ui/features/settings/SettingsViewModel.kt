@@ -16,7 +16,6 @@ enum class SettingsTab {
     APPEARANCE,
     CAPTIONS,
     TORRENT,
-    CONNECTIONS,
     ACCOUNT
 }
 
@@ -47,7 +46,6 @@ sealed interface SettingsAction {
     data class ChangeSubtitleBackgroundOpacity(val delta: Int) : SettingsAction
     data class ChangeTorrentCacheSize(val size: String) : SettingsAction
     data object ClearTorrentCache : SettingsAction
-    data class ChangeBackendUrl(val url: String) : SettingsAction
     data object Logout : SettingsAction
 }
 
@@ -126,10 +124,6 @@ class SettingsViewModel(
             }
             is SettingsAction.ClearTorrentCache -> {
                 _uiState.update { it.copy(isCacheCleared = true) }
-            }
-            is SettingsAction.ChangeBackendUrl -> {
-                settingsRepo.updateBackendUrl(action.url)
-                _uiState.update { it.copy(backendUrl = action.url) }
             }
             is SettingsAction.Logout -> {
                 authRepo.logout()

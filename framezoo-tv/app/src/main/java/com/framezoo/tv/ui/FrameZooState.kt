@@ -156,7 +156,7 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
     var addonUrl by mutableStateOf("")
     var loginName by mutableStateOf("")
     var loginPassword by mutableStateOf("")
-    var backendUrl by mutableStateOf(store.backendUrl)
+    val backendUrl: String get() = store.backendUrl
 
     suspend fun initialize() {
         try { discover = backend.discover() } catch (e: Exception) { error = e.message ?: i18n.t("auth.login.failedToReachServer") }
@@ -581,15 +581,6 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
     fun chooseSource(source: Stream) { playing = source; page = "player" }
     fun installAddon() = runTask { addons.install(addonUrl); installed = addons.list(); addonCatalog = addons.catalog(); addonUrl = "" }
     fun removeAddon(addon: Addon) = runTask { addons.remove(addon.manifestUrl); installed = addons.list(); addonCatalog = addons.catalog() }
-    fun saveBackend() = runTask {
-        val previous = store.backendUrl
-        store.backendUrl = backendUrl
-        backendUrl = store.backendUrl
-        if (previous != backendUrl) {
-            discoverJob?.cancel(); library = emptyList(); history = emptyList(); progress = emptyList(); bookmarks = emptyList(); bookmarkDetails = emptyList(); bookmarkGroups = emptyList(); discover = emptyList(); sections = emptyMap(); genres = emptyList(); countries = emptyList()
-            initialize()
-        }
-    }
     fun updateTheme(name: String) { theme = name; store.theme = name }
     fun updateCustomPart(part: String, name: String) {
         require(name in themeNames && name != "custom")

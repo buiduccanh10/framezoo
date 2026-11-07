@@ -19,18 +19,26 @@ android {
         versionCode = 1
         versionName = "0.1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        val backendUrlFromFile = providers.fileContents(rootProject.layout.projectDirectory.file(".env")).asText.orNull?.let { contents ->
-            Properties().apply { load(StringReader(contents)) }.getProperty("FRAMEZOO_TV_BACKEND_URL")
+        val tvEnv = rootProject.layout.projectDirectory.file(".env").asFile
+
+        fun readEnvProperty(file: java.io.File, key: String): String? {
+            if (!file.isFile) return null
+            return Properties().apply { file.reader().use { load(it) } }.getProperty(key)
                 ?.trim()?.removeSurrounding("\"")?.removeSurrounding("'")?.takeIf { it.isNotBlank() }
         }
-        val backendUrl = (providers.environmentVariable("FRAMEZOO_TV_BACKEND_URL").orNull
-            ?: providers.gradleProperty("framezooBackendUrl").orNull
-            ?: backendUrlFromFile
-            ?: "https://api.framezoo.top").trimEnd('/')
+
+        val backendUrl = (
+            providers.environmentVariable("FRAMEZOO_TV_BACKEND_URL").orNull
+                ?: providers.gradleProperty("framezooTvBackendUrl").orNull
+                ?: readEnvProperty(tvEnv, "FRAMEZOO_TV_BACKEND_URL")
+                ?: throw GradleException(
+                    "Backend URL chưa được cấu hình! Vui lòng set FRAMEZOO_TV_BACKEND_URL trong framezoo-tv/.env hoặc biến môi trường."
+                )
+        ).trimEnd('/')
         val backendUri = URI(backendUrl)
         require(backendUri.scheme in listOf("https", "http") && !backendUri.host.isNullOrBlank() &&
             backendUri.userInfo == null && backendUri.query == null && backendUri.fragment == null) {
-            "FRAMEZOO_TV_BACKEND_URL phải là URL HTTP(S) hợp lệ"
+            "Backend URL '$backendUrl' phải là URL HTTP(S) hợp lệ"
         }
         buildConfigField("String", "BACKEND_URL", "\"${backendUrl.replace("\\", "\\\\").replace("\"", "\\\"")}\"")
         externalNativeBuild { cmake { cppFlags += "-std=c++17" } }
