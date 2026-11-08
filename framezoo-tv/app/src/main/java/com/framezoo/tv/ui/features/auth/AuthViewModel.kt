@@ -55,9 +55,35 @@ class AuthViewModel(
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
-                _uiState.update { it.copy(isLoading = false, errorMessage = e.message ?: "Login failed") }
+                _uiState.update { it.copy(isLoading = false, errorMessage = getFriendlyLoginError(e)) }
             }
         }
+    }
+
+    private fun getFriendlyLoginError(error: Throwable): String {
+        val message = (error.message ?: "").lowercase()
+        if (message.contains("no backend url")) {
+            return "Không có URL backend"
+        }
+        if (message.contains("400") ||
+            message.contains("401") ||
+            message.contains("403") ||
+            message.contains("404") ||
+            message.contains("user cannot be found") ||
+            message.contains("user not found") ||
+            message.contains("invalid signature") ||
+            message.contains("invalid challenge") ||
+            message.contains("challenge code expired") ||
+            message.contains("invalid request body") ||
+            message.contains("unauthorized") ||
+            message.contains("forbidden") ||
+            message.contains("incorrect") ||
+            message.contains("failed to authenticate") ||
+            message.contains("notallowederror")
+        ) {
+            return "Mật khẩu không chính xác hoặc không đầy đủ"
+        }
+        return "Không thể truy cập máy chủ"
     }
 
     private fun register() {

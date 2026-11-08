@@ -48,6 +48,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
+import com.framezoo.tv.model.AccountProfile
+import com.framezoo.tv.model.UserIcon
+import com.framezoo.tv.ui.features.account.AccountMenuAction
+import com.framezoo.tv.ui.features.account.AccountMenuUiState
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -97,6 +101,10 @@ internal fun DiscoverHeader(state: FrameZooState, modifier: Modifier = Modifier)
     BackHandler(enabled = expanded) {
         expanded = false
         try { menuFocusRequester.requestFocus() } catch (_: Exception) {}
+    }
+    BackHandler(enabled = accountExpanded) {
+        accountExpanded = false
+        try { accountFocusRequester.requestFocus() } catch (_: Exception) {}
     }
 
     Row(modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
@@ -191,26 +199,65 @@ internal fun DiscoverHeader(state: FrameZooState, modifier: Modifier = Modifier)
             }
         }
         Spacer(Modifier.weight(1f))
-        Box {
-            TvButton(
-                if (state.store.userId == null) t("auth.login.submit") else t("settings.account.title"),
-                selected = state.page == "login",
-                navigation = true,
+        if (state.isOffline) {
+            Box(
                 modifier = Modifier
-                    .focusRequester(accountFocusRequester)
-                    .focusProperties {
-                        left = if (expanded) settingsFocusRequester else menuFocusRequester
-                    }
-            ) { accountExpanded = true }
-            DropdownMenu(accountExpanded, { accountExpanded = false }, Modifier.background(colors["pill.background"])) {
-                TvButton(if (state.store.userId == null) t("auth.login.submit") else t("settings.account.title"), navigation = true, modifier = Modifier.fillMaxWidth().padding(horizontal = 6.dp, vertical = 2.dp)) { accountExpanded = false; state.openLogin() }
-                TvButton(t("home.watchHistory.sectionTitle"), navigation = true, modifier = Modifier.fillMaxWidth().padding(horizontal = 6.dp, vertical = 2.dp)) { accountExpanded = false; state.openHistory() }
-                TvButton(t("home.bookmarks.sectionTitle"), navigation = true, modifier = Modifier.fillMaxWidth().padding(horizontal = 6.dp, vertical = 2.dp)) { accountExpanded = false; state.openLibrary() }
-                TvButton(t("navigation.menu.addons"), navigation = true, modifier = Modifier.fillMaxWidth().padding(horizontal = 6.dp, vertical = 2.dp)) { accountExpanded = false; state.openAddons() }
-                TvButton(t("navigation.menu.feedback"), navigation = true, modifier = Modifier.fillMaxWidth().padding(horizontal = 6.dp, vertical = 2.dp)) { accountExpanded = false; state.openFeedback() }
-                TvButton(t("navigation.menu.settings"), navigation = true, modifier = Modifier.fillMaxWidth().padding(horizontal = 6.dp, vertical = 2.dp)) { accountExpanded = false; state.page = "settings" }
-                if (state.store.userId != null) TvButton(t("navigation.menu.logout"), navigation = true, modifier = Modifier.fillMaxWidth().padding(horizontal = 6.dp, vertical = 2.dp)) { accountExpanded = false; state.logout() }
+                    .size(42.dp)
+                    .clip(RoundedCornerShape(50))
+                    .background(colors["pill.background"].copy(alpha = 0.85f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.desktop_wifi_off),
+                    contentDescription = t("navigation.status.offline"),
+                    tint = colors["type.danger"],
+                    modifier = Modifier.size(20.dp)
+                )
             }
+            Spacer(Modifier.width(10.dp))
+        }
+        val accountUiState = remember(state.store.userId, state.userNickname, state.userProfileColorA, state.userProfileColorB, state.userProfileIcon, accountExpanded) {
+            AccountMenuUiState(
+                isLoggedIn = state.store.userId != null,
+                profile = AccountProfile(
+                    colorA = state.userProfileColorA ?: "#6366F1",
+                    colorB = state.userProfileColorB ?: "#EC4899",
+                    icon = UserIcon.fromKey(state.userProfileIcon),
+                    nickname = state.userNickname.orEmpty(),
+                    userId = state.store.userId
+                ),
+                isExpanded = accountExpanded
+            )
+        }
+
+        Box {
+            HeaderAccountButton(
+                uiState = accountUiState,
+                focusRequester = accountFocusRequester,
+                leftFocusRequester = if (expanded) settingsFocusRequester else menuFocusRequester,
+                onClick = { accountExpanded = true }
+            )
+            AccountDropdownMenu(
+                uiState = accountUiState,
+                onDismissRequest = { accountExpanded = false },
+                onAction = { action ->
+                    accountExpanded = false
+                    when (action) {
+                        AccountMenuAction.ToggleMenu -> accountExpanded = !accountUiState.isExpanded
+                        AccountMenuAction.OpenMenu -> accountExpanded = true
+                        AccountMenuAction.CloseMenu -> accountExpanded = false
+                        AccountMenuAction.SelectProfile -> state.page = "settings"
+                        AccountMenuAction.SelectLogin -> state.openLogin()
+                        AccountMenuAction.SelectHistory -> state.openProtected { state.openHistory() }
+                        AccountMenuAction.SelectBookmarks -> state.openProtected { state.openLibrary() }
+                        AccountMenuAction.SelectAddons -> state.openAddons()
+                        AccountMenuAction.SelectWatchParty -> state.openWatchParty()
+                        AccountMenuAction.SelectFeedback -> state.openFeedback()
+                        AccountMenuAction.SelectSettings -> state.page = "settings"
+                        AccountMenuAction.SelectLogout -> state.logout()
+                    }
+                }
+            )
         }
     }
 }
@@ -363,100 +410,25 @@ internal fun DiscoverScreen(state: FrameZooState, discoverAction: FocusRequester
                     }
                 }
             }
-            item { Column(Modifier.padding(start = 34.dp, end = 38.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
-                val countryFocus = remember { FocusRequester() }
-                val yearFocus = remember { FocusRequester() }
-                val focusManager = LocalFocusManager.current
-                var inCategories by remember { mutableStateOf(false) }
-                var inCountry by remember { mutableStateOf(false) }
-                var inYear by remember { mutableStateOf(false) }
-                var lastCategoryFocus by remember { mutableStateOf<FocusRequester?>(null) }
-                var jumpKey by remember { mutableIntStateOf(0) }
-                var jumpTarget by remember { mutableStateOf<FocusRequester?>(null) }
-                var jumped by remember { mutableStateOf(false) }
-                Row(Modifier.onPreviewKeyEvent { event ->
-                    val key = event.nativeKeyEvent
-                    when {
-                        key.action == KeyEvent.ACTION_UP && key.keyCode == jumpKey -> {
-                            if (!jumped) focusManager.moveFocus(if (jumpKey == KeyEvent.KEYCODE_DPAD_RIGHT) FocusDirection.Right else FocusDirection.Left)
-                            jumpKey = 0; jumpTarget = null; jumped = false; true
-                        }
-                        key.action == KeyEvent.ACTION_DOWN && key.repeatCount == 0 -> {
-                            jumpTarget = when {
-                                inCategories && key.keyCode == KeyEvent.KEYCODE_DPAD_RIGHT -> countryFocus
-                                inCountry && key.keyCode == KeyEvent.KEYCODE_DPAD_LEFT -> lastCategoryFocus ?: categoryFocus
-                                inCountry && key.keyCode == KeyEvent.KEYCODE_DPAD_RIGHT -> yearFocus
-                                inYear && key.keyCode == KeyEvent.KEYCODE_DPAD_LEFT -> countryFocus
-                                else -> null
-                            }
-                            jumpKey = if (jumpTarget != null) key.keyCode else 0
-                            jumped = false; jumpKey != 0
-                        }
-                        key.action == KeyEvent.ACTION_DOWN && key.repeatCount > 0 && key.keyCode == jumpKey -> {
-                            if (!jumped) {
-                                jumped = true
-                                jumpTarget?.requestFocus()
-                            }
-                            true
-                        }
-                        else -> false
-                    }
-                }, horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
-                    LazyRow(
-                        Modifier.weight(1f).onFocusChanged { inCategories = it.hasFocus }.focusGroup(),
-                        contentPadding = PaddingValues(horizontal = 4.dp, vertical = 4.dp),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        items(listOf(DiscoverOption("all", tabAll), DiscoverOption("tv", tabSeries), DiscoverOption("movie", tabMovie)), key = { it.id }) { option ->
-                            val focus = remember(option.id) { FocusRequester() }
-                            DisposableEffect(focus) { onDispose { if (lastCategoryFocus === focus) lastCategoryFocus = null } }
-                            val modifier = Modifier
-                                .then(if (option.id == "all") Modifier.focusRequester(categoryFocus).focusProperties { up = discoverAction } else Modifier)
-                                .focusRequester(focus)
-                                .onFocusChanged { if (it.isFocused) lastCategoryFocus = focus }
-                            CategoryTab(option.name, state.filter.category == option.id, modifier) { state.updateFilter(state.filter.copy(category = option.id)) }
-                        }
-                        item(key = "tab_genre_spacing") {
-                            Spacer(Modifier.width(4.dp))
-                        }
-                        items(state.genres, key = { "genre:${it.id}" }) { genre ->
-                            val genreId = "genre:${genre.id}"
-                            val focus = remember(genreId) { FocusRequester() }
-                            DisposableEffect(focus) { onDispose { if (lastCategoryFocus === focus) lastCategoryFocus = null } }
-                            val modifier = Modifier.focusRequester(focus).onFocusChanged { if (it.isFocused) lastCategoryFocus = focus }
-                            GenreChip(genre.name, selected = state.filter.category == genreId, modifier = modifier) {
-                                state.updateFilter(state.filter.copy(category = genreId))
-                            }
-                        }
-                    }
-                    Box(Modifier.padding(horizontal = 4.dp).width(1.dp).height(20.dp).background(Color.White.copy(alpha = 0.15f)))
-                    FilterMenu(filterCountryLabel, state.filter.country, state.countries, modifier = Modifier.focusRequester(countryFocus).onFocusChanged { inCountry = it.hasFocus }) { state.updateFilter(state.filter.copy(country = it)) }
-                    FilterMenu(filterYearLabel, state.filter.year, (Year.now().value downTo 1900).map { DiscoverOption(it.toString(), it.toString()) }, modifier = Modifier.focusRequester(yearFocus).onFocusChanged { inYear = it.hasFocus }) { state.updateFilter(state.filter.copy(year = it)) }
-                }
-            } }
-            if (state.discoverError.isNotBlank()) item { Row(Modifier.padding(horizontal = 38.dp), horizontalArrangement = Arrangement.spacedBy(16.dp), verticalAlignment = Alignment.CenterVertically) {
-                Text(state.discoverError, color = colors["type.danger"]); TvButton(retryLabel) { state.refreshDiscover() }
-            } }
-            val rows = if (state.filter.category.startsWith("genre:")) listOf("genre" to (state.genres.firstOrNull { it.id == state.filter.category.substringAfter(':') }?.name ?: titleGenres))
-                else listOf("trending" to titleTrending) + (if (state.filter.category == "all") listOf("popular" to titlePopular) else emptyList()) + listOf("provider" to (state.providers.firstOrNull { it.id == state.provider }?.name ?: titleProvider),
-                    "top" to titleTopRated, "editor" to titleEditorPicks, "latest" to titleNewReleases) +
-                    (if (state.filter.category in listOf("movie", "tv") && state.hasPersonalSources) listOf("personal" to titleForYou) else emptyList()) +
-                    (if (state.filter.category in listOf("movie", "tv") && state.recommendationSources.isNotEmpty()) listOf("recommendations" to titleBasedOn) else emptyList()) + listOf("genre" to titleGenres)
-            rows.forEach { (key, title) ->
-                val media = state.sections[key]
-                if (media == null && state.discoverLoading) item(key = "loading:$key") { DiscoverSkeleton(title) }
-                else if (!media.isNullOrEmpty() || state.rowErrors.containsKey(key) || (media != null && key in listOf("provider", "genre", "recommendations"))) item(key = "row:$key") {
-                    DiscoverCarousel(state, key, title, media.orEmpty())
+            item {
+                Column(Modifier.padding(start = 34.dp, end = 38.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
+                    DiscoverNavigation(state = state, categoryFocus = categoryFocus, upFocus = discoverAction)
                 }
             }
-            val addonGroups = state.addonCatalog.filter { state.filter.category !in listOf("movie", "tv") || it.type == if (state.filter.category == "movie") "movie" else "series" }
-            addonGroups.forEach { group -> item(key = group.key) {
-                DiscoverCarousel(state, group.key, group.addonName, group.items, group)
-            } }
-            if (state.filter.category != "tv") item { Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                TvButton(t("discover.viewLists"), accent = true) { state.openAllLists() }
-            } }
+            discoverContentRows(
+                state = state,
+                titleTrending = titleTrending,
+                titlePopular = titlePopular,
+                titleProvider = titleProvider,
+                titleTopRated = titleTopRated,
+                titleEditorPicks = titleEditorPicks,
+                titleNewReleases = titleNewReleases,
+                titleForYou = titleForYou,
+                titleBasedOn = titleBasedOn,
+                titleGenres = titleGenres,
+                retryLabel = retryLabel,
+                colors = colors
+            )
         }
         AnimatedVisibility(visible = listState.firstVisibleItemIndex > 0, modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 12.dp)) {
             TvButton(t("discover.scrollToTop"), navigation = true, icon = R.drawable.desktop_chevron_up) {
@@ -467,7 +439,184 @@ internal fun DiscoverScreen(state: FrameZooState, discoverAction: FocusRequester
 }
 
 @Composable
-private fun DiscoverCarousel(state: FrameZooState, key: String, title: String, media: List<Media>, addon: AddonCatalog? = null) {
+internal fun DiscoverNavigation(
+    state: FrameZooState,
+    categoryFocus: FocusRequester,
+    upFocus: FocusRequester? = null,
+    modifier: Modifier = Modifier
+) {
+    val tabAll = t("discover.tabs.all")
+    val tabSeries = t("discover.tabs.tvshows")
+    val tabMovie = t("discover.tabs.movies")
+    val filterCountryLabel = t("discover.filters.country")
+    val filterYearLabel = t("home.bookmarks.edit.yearLabel")
+
+    val countryFocus = remember { FocusRequester() }
+    val yearFocus = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
+    var inCategories by remember { mutableStateOf(false) }
+    var inCountry by remember { mutableStateOf(false) }
+    var inYear by remember { mutableStateOf(false) }
+    var lastCategoryFocus by remember { mutableStateOf<FocusRequester?>(null) }
+    var jumpKey by remember { mutableIntStateOf(0) }
+    var jumpTarget by remember { mutableStateOf<FocusRequester?>(null) }
+    var jumped by remember { mutableStateOf(false) }
+
+    Row(
+        modifier
+            .onPreviewKeyEvent { event ->
+                val key = event.nativeKeyEvent
+                when {
+                    key.action == KeyEvent.ACTION_UP && key.keyCode == jumpKey -> {
+                        if (!jumped) focusManager.moveFocus(if (jumpKey == KeyEvent.KEYCODE_DPAD_RIGHT) FocusDirection.Right else FocusDirection.Left)
+                        jumpKey = 0; jumpTarget = null; jumped = false; true
+                    }
+                    key.action == KeyEvent.ACTION_DOWN && key.repeatCount == 0 -> {
+                        jumpTarget = when {
+                            inCategories && key.keyCode == KeyEvent.KEYCODE_DPAD_RIGHT -> countryFocus
+                            inCountry && key.keyCode == KeyEvent.KEYCODE_DPAD_LEFT -> lastCategoryFocus ?: categoryFocus
+                            inCountry && key.keyCode == KeyEvent.KEYCODE_DPAD_RIGHT -> yearFocus
+                            inYear && key.keyCode == KeyEvent.KEYCODE_DPAD_LEFT -> countryFocus
+                            else -> null
+                        }
+                        jumpKey = if (jumpTarget != null) key.keyCode else 0
+                        jumped = false; jumpKey != 0
+                    }
+                    key.action == KeyEvent.ACTION_DOWN && key.repeatCount > 0 && key.keyCode == jumpKey -> {
+                        if (!jumped) {
+                            jumped = true
+                            jumpTarget?.requestFocus()
+                        }
+                        true
+                    }
+                    else -> false
+                }
+            },
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        LazyRow(
+            Modifier.weight(1f).onFocusChanged { inCategories = it.hasFocus }.focusGroup(),
+            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 6.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            items(listOf(DiscoverOption("all", tabAll), DiscoverOption("tv", tabSeries), DiscoverOption("movie", tabMovie)), key = { it.id }) { option ->
+                val focus = remember(option.id) { FocusRequester() }
+                DisposableEffect(focus) { onDispose { if (lastCategoryFocus === focus) lastCategoryFocus = null } }
+                val itemModifier = Modifier
+                    .then(if (option.id == "all") Modifier.focusRequester(categoryFocus) else Modifier)
+                    .then(if (upFocus != null) Modifier.focusProperties { up = upFocus } else Modifier)
+                    .focusRequester(focus)
+                    .onFocusChanged { if (it.isFocused) lastCategoryFocus = focus }
+                CategoryTab(option.name, state.filter.category == option.id, itemModifier) {
+                    state.updateFilter(state.filter.copy(category = option.id))
+                }
+            }
+            item(key = "tab_genre_spacing") {
+                Spacer(Modifier.width(4.dp))
+            }
+            items(state.genres, key = { "genre:${it.id}" }) { genre ->
+                val genreId = "genre:${genre.id}"
+                val focus = remember(genreId) { FocusRequester() }
+                DisposableEffect(focus) { onDispose { if (lastCategoryFocus === focus) lastCategoryFocus = null } }
+                val itemModifier = Modifier
+                    .then(if (upFocus != null) Modifier.focusProperties { up = upFocus } else Modifier)
+                    .focusRequester(focus)
+                    .onFocusChanged { if (it.isFocused) lastCategoryFocus = focus }
+                GenreChip(genre.name, selected = state.filter.category == genreId, modifier = itemModifier) {
+                    state.updateFilter(state.filter.copy(category = genreId))
+                }
+            }
+        }
+        Box(Modifier.padding(horizontal = 4.dp).width(1.dp).height(20.dp).background(Color.White.copy(alpha = 0.15f)))
+        FilterMenu(
+            filterCountryLabel,
+            state.filter.country,
+            state.countries,
+            modifier = Modifier
+                .then(if (upFocus != null) Modifier.focusProperties { up = upFocus } else Modifier)
+                .focusRequester(countryFocus)
+                .onFocusChanged { inCountry = it.hasFocus }
+        ) {
+            state.updateFilter(state.filter.copy(country = it))
+        }
+        FilterMenu(
+            filterYearLabel,
+            state.filter.year,
+            (Year.now().value downTo 1900).map { DiscoverOption(it.toString(), it.toString()) },
+            modifier = Modifier
+                .then(if (upFocus != null) Modifier.focusProperties { up = upFocus } else Modifier)
+                .focusRequester(yearFocus)
+                .onFocusChanged { inYear = it.hasFocus }
+        ) {
+            state.updateFilter(state.filter.copy(year = it))
+        }
+    }
+}
+
+internal fun LazyListScope.discoverContentRows(
+    state: FrameZooState,
+    titleTrending: String,
+    titlePopular: String,
+    titleProvider: String,
+    titleTopRated: String,
+    titleEditorPicks: String,
+    titleNewReleases: String,
+    titleForYou: String,
+    titleBasedOn: String,
+    titleGenres: String,
+    retryLabel: String,
+    colors: FrameZooColors
+) {
+    if (state.discoverError.isNotBlank()) item {
+        Row(Modifier.padding(horizontal = 38.dp), horizontalArrangement = Arrangement.spacedBy(16.dp), verticalAlignment = Alignment.CenterVertically) {
+            Text(state.discoverError, color = colors["type.danger"])
+            TvButton(retryLabel) { state.refreshDiscover() }
+        }
+    }
+    val rows = if (state.filter.category.startsWith("genre:")) {
+        listOf("genre" to (state.genres.firstOrNull { it.id == state.filter.category.substringAfter(':') }?.name ?: titleGenres))
+    } else {
+        listOf("trending" to titleTrending) +
+        (if (state.filter.category == "all") listOf("popular" to titlePopular) else emptyList()) +
+        listOf(
+            "provider" to (state.providers.firstOrNull { it.id == state.provider }?.name ?: titleProvider),
+            "top" to titleTopRated,
+            "editor" to titleEditorPicks,
+            "latest" to titleNewReleases
+        ) +
+        (if (state.filter.category in listOf("movie", "tv") && state.hasPersonalSources) listOf("personal" to titleForYou) else emptyList()) +
+        (if (state.filter.category in listOf("movie", "tv") && state.recommendationSources.isNotEmpty()) listOf("recommendations" to titleBasedOn) else emptyList()) +
+        listOf("genre" to titleGenres)
+    }
+
+    rows.forEach { (key, title) ->
+        val media = state.sections[key]
+        if (media == null && state.discoverLoading) item(key = "loading:$key") { DiscoverSkeleton(title) }
+        else if (!media.isNullOrEmpty() || state.rowErrors.containsKey(key) || (media != null && key in listOf("provider", "genre", "recommendations"))) item(key = "row:$key") {
+            DiscoverCarousel(state, key, title, media.orEmpty())
+        }
+    }
+
+    val addonGroups = state.addonCatalog.filter {
+        state.filter.category !in listOf("movie", "tv") || it.type == if (state.filter.category == "movie") "movie" else "series"
+    }
+    addonGroups.forEach { group ->
+        item(key = group.key) {
+            DiscoverCarousel(state, group.key, group.addonName, group.items, group)
+        }
+    }
+
+    if (state.filter.category != "tv") item {
+        Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+            TvButton(t("discover.viewLists"), accent = true) { state.openAllLists() }
+        }
+    }
+}
+
+@Composable
+internal fun DiscoverCarousel(state: FrameZooState, key: String, title: String, media: List<Media>, addon: AddonCatalog? = null) {
     val colors = LocalFrameZooColors.current
     val moreFocus = remember { FocusRequester() }
     LaunchedEffect(state.focusReturnSection, media.isNotEmpty()) {
@@ -524,7 +673,7 @@ private fun DiscoverCarousel(state: FrameZooState, key: String, title: String, m
 }
 
 @Composable
-private fun DiscoverSkeleton(title: String) {
+internal fun DiscoverSkeleton(title: String) {
     val colors = LocalFrameZooColors.current
     Column(Modifier.padding(horizontal = 38.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
         Text(title, color = colors["type.emphasis"], fontSize = 27.sp, fontWeight = FontWeight.Bold)
@@ -659,43 +808,45 @@ internal fun DiscoverMoreScreen(state: FrameZooState, gridState: LazyGridState) 
 }
 
 @Composable
-private fun CategoryTab(label: String, selected: Boolean, modifier: Modifier = Modifier, onClick: () -> Unit) {
+internal fun CategoryTab(label: String, selected: Boolean, modifier: Modifier = Modifier, onClick: () -> Unit) {
     val colors = LocalFrameZooColors.current
     val shape = RoundedCornerShape(50)
     var focused by remember { mutableStateOf(false) }
     val focusBorderColor = if (selected) Color.White else colors["type.logo"]
-    TvSurface(
-        onClick = onClick,
-        modifier = modifier.height(36.dp).onFocusChanged { focused = it.isFocused },
-        shape = TvSurfaceDefaults.shape(shape),
-        colors = TvSurfaceDefaults.colors(
-            containerColor = Color.Transparent,
-            focusedContainerColor = if (focused) Color.White.copy(alpha = 0.08f) else Color.Transparent
-        ),
-        scale = TvSurfaceDefaults.scale(focusedScale = 1.05f),
-        border = TvSurfaceDefaults.border(
-            border = TvBorder.None,
-            focusedBorder = TvBorder(BorderStroke(2.dp, focusBorderColor), shape = shape)
-        )
-    ) {
-        Box(
-            modifier = Modifier.fillMaxHeight().padding(horizontal = 12.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = label,
-                color = if (selected) colors["type.logo"] else if (focused) colors["type.emphasis"] else colors["type.secondary"],
-                fontSize = if (selected) 17.sp else 16.sp,
-                fontWeight = if (selected) FontWeight.Bold else FontWeight.SemiBold,
-                maxLines = 1,
-                textAlign = TextAlign.Center
+    Box(Modifier.padding(horizontal = 2.dp)) {
+        TvSurface(
+            onClick = onClick,
+            modifier = modifier.height(36.dp).onFocusChanged { focused = it.isFocused },
+            shape = TvSurfaceDefaults.shape(shape),
+            colors = TvSurfaceDefaults.colors(
+                containerColor = Color.Transparent,
+                focusedContainerColor = if (focused) Color.White.copy(alpha = 0.08f) else Color.Transparent
+            ),
+            scale = TvSurfaceDefaults.scale(focusedScale = 1.05f),
+            border = TvSurfaceDefaults.border(
+                border = TvBorder.None,
+                focusedBorder = TvBorder(BorderStroke(2.dp, focusBorderColor), shape = shape)
             )
+        ) {
+            Box(
+                modifier = Modifier.fillMaxHeight().padding(horizontal = 12.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = label,
+                    color = if (selected) colors["type.logo"] else if (focused) colors["type.emphasis"] else colors["type.secondary"],
+                    fontSize = if (selected) 17.sp else 16.sp,
+                    fontWeight = if (selected) FontWeight.Bold else FontWeight.SemiBold,
+                    maxLines = 1,
+                    textAlign = TextAlign.Center
+                )
+            }
         }
     }
 }
 
 @Composable
-private fun GenreChip(label: String, selected: Boolean, modifier: Modifier = Modifier, onClick: () -> Unit) {
+internal fun GenreChip(label: String, selected: Boolean, modifier: Modifier = Modifier, onClick: () -> Unit) {
     val colors = LocalFrameZooColors.current
     val shape = RoundedCornerShape(50)
     var focused by remember { mutableStateOf(false) }

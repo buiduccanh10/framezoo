@@ -68,33 +68,29 @@ internal fun tvFieldColors(): TextFieldColors {
 }
 
 @Composable
-internal fun FrameZooApp() {
+internal fun FrameZooApp(initialPage: String? = null) {
     val context = LocalContext.current
     val activity = context as MainActivity
-    var focusedTextAction by remember { mutableStateOf<FocusRequester?>(null) }
     val discoverAction = remember { FocusRequester() }
     val discoverListState = rememberLazyListState()
     val allListsState = rememberLazyListState()
     val moreGridState = rememberLazyGridState()
     val searchGridState = rememberLazyGridState()
+    val searchListState = rememberLazyListState()
     val searchAction = remember { FocusRequester() }
     val addonAction = remember { FocusRequester() }
     val backendAction = remember { FocusRequester() }
     val passwordField = remember { FocusRequester() }
     val loginAction = remember { FocusRequester() }
-    fun downTo(target: FocusRequester) = Modifier
-        .onFocusChanged { if (it.hasFocus) focusedTextAction = target else if (focusedTextAction === target) focusedTextAction = null }
-        .focusProperties { down = target }
-    DisposableEffect(activity) {
-        activity.moveDownFromText = {
-            focusedTextAction?.let { it.requestFocus(); true } ?: false
-        }
-        onDispose { activity.moveDownFromText = null }
-    }
     val scope = rememberCoroutineScope()
     val state = remember(context) { FrameZooState(context, scope) }
     var renderedMoreGeneration by remember { mutableStateOf(0) }
     LaunchedEffect(state) { state.initialize() }
+    LaunchedEffect(initialPage) {
+        if (!initialPage.isNullOrBlank()) {
+            state.page = initialPage
+        }
+    }
     LaunchedEffect(state.moreGeneration) {
         if (renderedMoreGeneration != state.moreGeneration) { moreGridState.scrollToItem(0); renderedMoreGeneration = state.moreGeneration }
     }
@@ -107,45 +103,67 @@ internal fun FrameZooApp() {
                 Surface(color = MaterialTheme.colorScheme.background, contentColor = MaterialTheme.colorScheme.onBackground) {
                     Box(Modifier.fillMaxSize()) {
                     Column(Modifier.fillMaxSize().then(
-                        if (page in listOf("discover", "details", "player", "trailer")) Modifier
-                        else if (page == "search") Modifier.padding(start = 48.dp, top = 16.dp, end = 48.dp, bottom = 12.dp)
+                        if (page in listOf("discover", "search", "details", "player", "trailer")) Modifier
                         else Modifier.padding(horizontal = 48.dp, vertical = 32.dp)
                     )) {
-                        if (page !in listOf("player", "discover", "details", "trailer")) {
+                        if (page !in listOf("player", "discover", "search", "details", "trailer")) {
                             DiscoverHeader(state)
-                            Spacer(Modifier.height(if (page == "search") 10.dp else 28.dp))
+                            Spacer(Modifier.height(28.dp))
                         }
                         if (busy && page != "details") CircularProgressIndicator(Modifier.size(26.dp))
                         if (error.isNotBlank() && page != "details") Text(error, color = colors["type.danger"], modifier = Modifier.padding(vertical = 10.dp))
-                        when (page) {
-                            "discover" -> DiscoverScreen(state, discoverAction, discoverListState)
-                            "discover-more" -> DiscoverMoreScreen(state, moreGridState)
-                            "discover-lists" -> DiscoverListsScreen(state, allListsState)
-                            "search" -> SearchScreen(state, searchGridState, searchAction, downTo(searchAction))
-                            "details" -> selected?.let { item -> DetailsScreen(state, item) }
-                            "trailer" -> TrailerScreen(state)
-                            "feedback" -> FeedbackScreen(state)
-                            "sources" -> SourcesScreen(state)
-                            "player" -> selected?.let { item -> playing?.let { stream ->
-                                PlayerScreen(player, item, episode, stream, subtitles, backend, resume(item, episode),
-                                    onStopped = { pos -> stopped(item, episode, pos) }) { page = "sources" }
-                            } }
-                            "library" -> BookmarksScreen(state)
-                            "history" -> WatchHistoryScreen(state)
-                            "addons" -> AddonsScreen(state)
-                            "settings" -> SettingsScreen(state)
-                            "login" -> AuthScreen(state)
+                        val isConnectionError = page == "error" || (page == "discover" && discover.isEmpty() && (discoverError.isNotBlank() || error.isNotBlank()))
+                        if (isConnectionError) {
+                            ErrorScreen(
+                                state = state,
+                                onReload = { refreshDiscover() },
+                                onGoHome = { page = "discover"; refreshDiscover() }
+                            )
+                        } else {
+                            when (page) {
+                                "discover" -> DiscoverScreen(state, discoverAction, discoverListState)
+                                "discover-more" -> DiscoverMoreScreen(state, moreGridState)
+                                "discover-lists" -> DiscoverListsScreen(state, allListsState)
+                                "search" -> SearchScreen(state, searchListState, searchGridState, searchAction, Modifier)
+                                "details" -> selected?.let { item -> DetailsScreen(state, item) }
+                                "trailer" -> TrailerScreen(state)
+                                "feedback" -> FeedbackScreen(state)
+                                "sources" -> SourcesScreen(state)
+                                "player" -> selected?.let { item -> playing?.let { stream ->
+                                    PlayerScreen(player, item, episode, stream, subtitles, backend, resume(item, episode),
+                                        onStopped = { pos -> stopped(item, episode, pos) }) { page = "sources" }
+                                } }
+                                "library" -> BookmarksScreen(state)
+                                "history" -> WatchHistoryScreen(state)
+                                "addons" -> AddonsScreen(state)
+                                "settings" -> SettingsScreen(state)
+                                "login" -> AuthScreen(state)
+                                "not-found" -> ErrorScreen(state, is404 = true, onReload = { refreshDiscover() }, onGoHome = { page = "discover" })
+                            }
                         }
                     }
-                    if (page == "discover") DiscoverHeader(state, Modifier.align(Alignment.TopCenter).padding(horizontal = 24.dp, vertical = 20.dp)
-                        .onPreviewKeyEvent { event ->
-                            if (event.nativeKeyEvent.action == KeyEvent.ACTION_DOWN && event.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_DPAD_UP &&
-                                (discoverListState.firstVisibleItemIndex > 0 || discoverListState.firstVisibleItemScrollOffset > 0)) {
-                                scope.launch { discoverListState.animateScrollToItem(0) }
-                                true
-                            } else false
-                        }
-                        .then(if (discover.isNotEmpty() && discoverListState.firstVisibleItemIndex == 0) Modifier.focusProperties { down = discoverAction } else Modifier))
+                    val isConnectionError = page == "error" || (page == "discover" && discover.isEmpty() && (discoverError.isNotBlank() || error.isNotBlank()))
+                    if (page in listOf("discover", "search") && !isConnectionError) DiscoverHeader(
+                        state = state,
+                        modifier = Modifier.align(Alignment.TopCenter).padding(horizontal = 24.dp, vertical = 20.dp)
+                            .onPreviewKeyEvent { event ->
+                                if (event.nativeKeyEvent.action == KeyEvent.ACTION_DOWN && event.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_DPAD_UP) {
+                                    if (page == "discover" && (discoverListState.firstVisibleItemIndex > 0 || discoverListState.firstVisibleItemScrollOffset > 0)) {
+                                        scope.launch { discoverListState.animateScrollToItem(0) }
+                                        true
+                                    } else if (page == "search" && (searchListState.firstVisibleItemIndex > 0 || searchListState.firstVisibleItemScrollOffset > 0)) {
+                                        scope.launch { searchListState.animateScrollToItem(0) }
+                                        true
+                                    } else false
+                                } else false
+                            }
+                            .then(
+                                if (page == "discover" && discover.isNotEmpty() && discoverListState.firstVisibleItemIndex == 0) Modifier.focusProperties { down = discoverAction }
+                                else if (page == "search" && state.query.isBlank() && searchListState.firstVisibleItemIndex == 0) Modifier.focusProperties { down = searchAction }
+                                else Modifier
+                            )
+                    )
+                    if (watchPartyDialogOpen) WatchPartyJoinDialog(state)
                     }
                 }
             }

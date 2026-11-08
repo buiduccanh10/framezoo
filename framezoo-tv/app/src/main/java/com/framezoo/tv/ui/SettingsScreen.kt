@@ -400,15 +400,37 @@ private fun AccountSection(state: FrameZooState) {
                     fontSize = 15.sp
                 )
                 if (state.store.userId != null) {
-                    Text(
-                        text = "ID: ${state.store.userId}",
-                        color = colors["type.emphasis"],
-                        fontSize = 17.sp,
-                        fontWeight = FontWeight.Medium
-                    )
-                    Spacer(Modifier.height(4.dp))
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(14.dp),
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    ) {
+                        UserAvatar(
+                            colorA = state.userProfileColorA,
+                            colorB = state.userProfileColorB,
+                            icon = state.userProfileIcon,
+                            size = 48.dp,
+                            fontSize = 22.sp
+                        )
+                        Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                            Text(
+                                text = state.userNickname?.takeIf { it.isNotBlank() } ?: "Tài khoản",
+                                color = colors["type.emphasis"],
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                text = "ID: ${state.store.userId}",
+                                color = colors["type.secondary"],
+                                fontSize = 14.sp
+                            )
+                        }
+                    }
+                    Spacer(Modifier.height(8.dp))
                     TvButton(
-                        label = t("navigation.menu.logout")
+                        label = t("navigation.menu.logout"),
+                        icon = R.drawable.desktop_logout,
+                        accent = true
                     ) {
                         state.logout()
                     }
@@ -416,6 +438,7 @@ private fun AccountSection(state: FrameZooState) {
                     Spacer(Modifier.height(4.dp))
                     TvButton(
                         label = t("auth.login.submit"),
+                        icon = R.drawable.desktop_user,
                         primary = true
                     ) {
                         state.openLogin()

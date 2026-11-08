@@ -26,8 +26,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import android.view.KeyEvent
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.focus.FocusRequester
 import kotlinx.coroutines.launch
@@ -146,9 +148,9 @@ internal fun DetailsScreen(state: FrameZooState, item: Media) {
     }
     LaunchedEffect(copied) { if (copied) { delay(2500); copied = false } }
     LaunchedEffect(item.id, item.type) {
-        firstAction.requestFocus()
         withFrameNanos { }
         listState.scrollToItem(0)
+        runCatching { firstAction.requestFocus() }
         if (item.type == "show" && state.episodes.isEmpty()) {
             initialDetailSeason(state.seasons, state.selectedSeason, saved?.season)?.let { state.chooseSeason(item, it) }
         }
@@ -173,13 +175,13 @@ internal fun DetailsScreen(state: FrameZooState, item: Media) {
       Box(Modifier.fillMaxWidth(.94f).fillMaxHeight(.94f).widthIn(max = 1200.dp).clip(RoundedCornerShape(22.dp)).background(colors["background.main"])) {
         LazyColumn(state = listState, contentPadding = PaddingValues(bottom = 32.dp)) {
             item {
-                Box(Modifier.fillMaxWidth().height(480.dp).background(colors["background.secondary"])) {
+                Box(Modifier.fillMaxWidth().aspectRatio(16f / 9f).heightIn(max = 440.dp).background(colors["background.secondary"])) {
                     SubcomposeAsyncImage(
                         model = item.backdrop,
                         contentDescription = null,
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.Crop,
-                        alignment = Alignment.TopCenter,
+                        alignment = Alignment.Center,
                         loading = { Box(Modifier.fillMaxSize().skeletonShimmer()) }
                     )
                     if (trailerEnabled && selectedTrailer == null && trailers.isNotEmpty()) TrailerBackground(trailers.first().key, trailerMuted, Modifier.fillMaxSize())
@@ -428,7 +430,18 @@ internal fun DetailsScreen(state: FrameZooState, item: Media) {
                     items(cast.filter { !it.image.isNullOrBlank() }, key = { "${it.id}:${it.role}" }) { person ->
                         DetailsCard({ openUrl("https://www.themoviedb.org/person/${person.id}") }, Modifier.width(120.dp)) {
                             Column(Modifier.fillMaxWidth().padding(5.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(5.dp)) {
-                                AsyncImage(person.image, person.name, Modifier.size(100.dp).clip(CircleShape), contentScale = ContentScale.Crop)
+                                SubcomposeAsyncImage(
+                                    model = person.image,
+                                    contentDescription = person.name,
+                                    modifier = Modifier.size(100.dp).clip(CircleShape),
+                                    contentScale = ContentScale.Crop,
+                                    loading = { Box(Modifier.fillMaxSize().skeletonShimmer()) },
+                                    error = {
+                                        Box(Modifier.fillMaxSize().background(colors["background.secondary"]), contentAlignment = Alignment.Center) {
+                                            Icon(painterResource(R.drawable.desktop_user), null, tint = colors["type.secondary"], modifier = Modifier.size(36.dp))
+                                        }
+                                    }
+                                )
                                 Text(person.name, color = colors["type.emphasis"], maxLines = 1, overflow = TextOverflow.Ellipsis, fontSize = 14.sp)
                                 Text(person.role, color = colors["type.secondary"], maxLines = 1, overflow = TextOverflow.Ellipsis, fontSize = 12.sp)
                             }
@@ -460,27 +473,19 @@ internal fun DetailsScreen(state: FrameZooState, item: Media) {
                 selected = false,
                 modifier = Modifier
                     .focusRequester(closeFocus)
-                    .onKeyEvent { event ->
-                        if (event.type == KeyEventType.KeyDown) {
+                    .focusProperties {
+                        down = if (trailers.isNotEmpty() && listState.firstVisibleItemIndex == 0) trailerFocus else firstAction
+                        left = firstAction
+                    }
+                    .onPreviewKeyEvent { event ->
+                        if (event.nativeKeyEvent.action == android.view.KeyEvent.ACTION_DOWN) {
                             when (event.nativeKeyEvent.keyCode) {
-                                android.view.KeyEvent.KEYCODE_DPAD_DOWN -> {
-                                    val target = if (trailers.isNotEmpty() && listState.firstVisibleItemIndex == 0) trailerFocus else firstAction
-                                    val success = runCatching { target.requestFocus() }.isSuccess
-                                    if (!success) {
-                                        coroutineScope.launch {
-                                            listState.scrollToItem(0)
-                                            firstAction.requestFocus()
-                                        }
-                                    }
-                                    true
-                                }
+                                android.view.KeyEvent.KEYCODE_DPAD_DOWN,
                                 android.view.KeyEvent.KEYCODE_DPAD_LEFT -> {
-                                    val success = runCatching { firstAction.requestFocus() }.isSuccess
-                                    if (!success) {
-                                        coroutineScope.launch {
-                                            listState.scrollToItem(0)
-                                            firstAction.requestFocus()
-                                        }
+                                    coroutineScope.launch {
+                                        listState.scrollToItem(0)
+                                        val target = if (event.nativeKeyEvent.keyCode == android.view.KeyEvent.KEYCODE_DPAD_DOWN && trailers.isNotEmpty()) trailerFocus else firstAction
+                                        target.requestFocus()
                                     }
                                     true
                                 }

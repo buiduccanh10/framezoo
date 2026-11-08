@@ -86,10 +86,66 @@ class Backend(private val store: SecureStore) {
         val oauth = reply.optJSONObject("oauth") ?: throw IllegalStateException("Backend không trả token")
         val token = oauth.optString("accessToken", oauth.optString("access_token"))
         require(token.isNotBlank()) { "Backend không trả access token" }
-        store.userId = reply.getJSONObject("user").getString("id")
+        val userObj = reply.optJSONObject("user")
+        if (userObj != null) {
+            store.userId = userObj.optString("id").takeIf { it.isNotBlank() }
+            store.userNickname = userObj.optString("nickname").takeIf { it.isNotBlank() }
+            val profileObj = userObj.optJSONObject("profile")
+            if (profileObj != null) {
+                store.userProfileColorA = profileObj.optString("colorA").takeIf { it.isNotBlank() }
+                store.userProfileColorB = profileObj.optString("colorB").takeIf { it.isNotBlank() }
+                store.userProfileIcon = profileObj.optString("icon").takeIf { it.isNotBlank() }
+            }
+        } else {
+            store.userId = reply.optString("user")
+        }
         store.accessToken = token
         store.refreshToken = oauth.optString("refreshToken", oauth.optString("refresh_token"))
     }
+
+    /** Mirrors desktop getRoomStatuses + host lookup in WatchPartyJoinDialog. */
+    suspend fun watchPartyHost(roomCode: String): WatchPartyHost {
+        val reply = request("/api/player/status?roomCode=${encode(roomCode)}", auth = true) as JSONObject
+        val users = reply.optJSONObject("users") ?: JSONObject()
+        val statuses = buildList {
+            users.keys().forEach { key ->
+                val arr = users.optJSONArray(key) ?: return@forEach
+                for (i in 0 until arr.length()) arr.optJSONObject(i)?.let(::add)
+            }
+        }
+        if (statuses.isEmpty()) throw WatchPartyException(WatchPartyError.EMPTY_ROOM)
+        val host = statuses.filter { it.optBoolean("isHost") }.maxByOrNull { it.optDouble("timestamp", 0.0) }
+            ?: throw WatchPartyException(WatchPartyError.NO_HOST)
+        val content = host.optJSONObject("content") ?: throw WatchPartyException(WatchPartyError.NO_HOST)
+        val tmdbId = content.opt("tmdbId")?.toString()?.removeSuffix(".0").orEmpty()
+        if (tmdbId.isBlank()) throw WatchPartyException(WatchPartyError.NO_HOST)
+        val isShow = content.optString("type").lowercase() == "tv show"
+        return WatchPartyHost(
+            tmdbId = tmdbId,
+            title = content.optString("title"),
+            isShow = isShow && content.has("seasonNumber") && content.has("episodeNumber"),
+            season = content.optInt("seasonNumber", -1).takeIf { it >= 0 },
+            episode = content.optInt("episodeNumber", -1).takeIf { it >= 0 },
+        )
+    }
+
+    suspend fun getMe(): JSONObject? = try {
+        if (store.userId == null) null else {
+            val reply = request("/users/@me", auth = true) as? JSONObject
+            val userObj = reply?.optJSONObject("user")
+            if (userObj != null) {
+                userObj.optString("id").takeIf { it.isNotBlank() }?.let { store.userId = it }
+                userObj.optString("nickname").takeIf { it.isNotBlank() }?.let { store.userNickname = it }
+                val profileObj = userObj.optJSONObject("profile")
+                if (profileObj != null) {
+                    profileObj.optString("colorA").takeIf { it.isNotBlank() }?.let { store.userProfileColorA = it }
+                    profileObj.optString("colorB").takeIf { it.isNotBlank() }?.let { store.userProfileColorB = it }
+                    profileObj.optString("icon").takeIf { it.isNotBlank() }?.let { store.userProfileIcon = it }
+                }
+            }
+            userObj
+        }
+    } catch (_: Exception) { null }
 
     private fun media(raw: JSONObject, forcedType: String? = null): Media {
         val type = forcedType ?: if (raw.optString("media_type") == "tv") "show" else "movie"

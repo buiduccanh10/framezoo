@@ -18,6 +18,9 @@ import com.framezoo.tv.model.LibraryItem
 import com.framezoo.tv.model.Media
 import com.framezoo.tv.model.Stream
 import com.framezoo.tv.model.Subtitle
+import com.framezoo.tv.model.WatchPartyError
+import com.framezoo.tv.model.WatchPartyException
+import com.framezoo.tv.model.parseWatchPartyCode
 import com.framezoo.tv.player.PlayerController
 import com.framezoo.tv.storage.SecureStore
 import kotlinx.coroutines.CoroutineScope
@@ -124,7 +127,64 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
     var episodesLoading by mutableStateOf(false)
     var trailerKey by mutableStateOf("")
     var trailerTitle by mutableStateOf("")
+    var userNickname by mutableStateOf(store.userNickname)
+        private set
+    var userProfileColorA by mutableStateOf(store.userProfileColorA)
+        private set
+    var userProfileColorB by mutableStateOf(store.userProfileColorB)
+        private set
+    var userProfileIcon by mutableStateOf(store.userProfileIcon)
+        private set
+
+    fun syncUserProfile() {
+        userNickname = store.userNickname
+        userProfileColorA = store.userProfileColorA
+        userProfileColorB = store.userProfileColorB
+        userProfileIcon = store.userProfileIcon
+    }
     private var loginReturnPage = "discover"
+
+    // Watch party join dialog (desktop WatchPartyJoinDialog)
+    var watchPartyDialogOpen by mutableStateOf(false)
+        private set
+    var watchPartyCodeInput by mutableStateOf("")
+    var watchPartyError by mutableStateOf<String?>(null)
+        private set
+    var watchPartyLoading by mutableStateOf(false)
+        private set
+    var activeWatchParty by mutableStateOf<String?>(null)
+        private set
+
+    /** Desktop `openDialog`: requires account, otherwise opens login. */
+    fun openWatchParty() {
+        if (store.userId == null) { openLogin(); return }
+        watchPartyCodeInput = ""; watchPartyError = null; watchPartyDialogOpen = true
+    }
+    fun closeWatchParty() { watchPartyDialogOpen = false; watchPartyError = null; watchPartyLoading = false }
+
+    /** Desktop `handleProtectedRoute`: history/bookmarks need login. */
+    fun openProtected(open: () -> Unit) { if (store.userId == null) openLogin() else open() }
+
+    fun submitWatchParty() {
+        if (store.userId == null) { closeWatchParty(); openLogin(); return }
+        val code = parseWatchPartyCode(watchPartyCodeInput)
+        if (code == null) { watchPartyError = i18n.t("watchParty.invalidRoom"); return }
+        watchPartyLoading = true; watchPartyError = null
+        scope.launch {
+            try {
+                val host = backend.watchPartyHost(code)
+                activeWatchParty = code
+                closeWatchParty()
+                openDetails(Media(id = host.tmdbId, type = if (host.isShow) "show" else "movie", title = host.title))
+                if (host.isShow && host.season != null) chooseSeason(selected ?: Media(host.tmdbId, "show", host.title), host.season)
+            } catch (e: CancellationException) { throw e }
+            catch (e: WatchPartyException) {
+                watchPartyError = i18n.t(if (e.kind == WatchPartyError.EMPTY_ROOM) "watchParty.emptyRoom" else "watchParty.noHost")
+            } catch (_: Exception) {
+                watchPartyError = i18n.t("watchParty.invalidRoom")
+            } finally { watchPartyLoading = false }
+        }
+    }
     private var feedbackReturnPage = "discover"
     var results by mutableStateOf<List<Media>>(emptyList())
     var searchCountry by mutableStateOf("")
@@ -156,10 +216,18 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
     var addonUrl by mutableStateOf("")
     var loginName by mutableStateOf("")
     var loginPassword by mutableStateOf("")
+    var isOffline by mutableStateOf(false)
     val backendUrl: String get() = store.backendUrl
 
     suspend fun initialize() {
-        try { discover = backend.discover() } catch (e: Exception) { error = e.message ?: i18n.t("auth.login.failedToReachServer") }
+        try {
+            discover = backend.discover()
+            isOffline = false
+        } catch (e: Exception) {
+            isOffline = true
+            error = e.message ?: i18n.t("auth.login.failedToReachServer")
+            discoverError = error
+        }
         refreshDiscover()
         installed = addons.list()
         addonCatalog = addons.catalog()
@@ -387,10 +455,19 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
     }
 
     private suspend fun refreshUserData() = coroutineScope {
+        val userMe = async {
+            try {
+                backend.getMe()
+            } catch (_: Exception) {
+                null
+            }
+        }
         val saved = async { backend.bookmarkDetails() }
         val groups = async { backend.bookmarkGroups() }
         val watched = async { backend.watchHistory() }
         val ongoing = async { backend.watchProgress() }
+        userMe.await()
+        syncUserProfile()
         bookmarkDetails = saved.await(); bookmarks = bookmarkDetails.map { it.media }; bookmarkGroups = (groups.await() + bookmarkDetails.flatMap { it.groups }).distinct(); history = watched.await(); progress = ongoing.await()
         library = (bookmarks.map { LibraryItem(it) } + history + progress)
             .associateBy { "${it.media.id}:${it.season ?: -1}:${it.episode ?: -1}" }.values.toList()
@@ -603,10 +680,33 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
     fun openLogin() { if (page != "login") { loginReturnPage = page; page = "login" } }
     fun openFeedback() { if (page != "feedback") { feedbackReturnPage = page; page = "feedback" } }
     fun login() = runTask {
-        backend.login(loginName, loginPassword)
-        installed = addons.list(); refreshUserData(); page = loginReturnPage; loginPassword = ""; refreshDiscover()
+        try {
+            backend.login(loginName, loginPassword)
+            syncUserProfile()
+            installed = addons.list()
+            refreshUserData()
+            page = loginReturnPage
+            loginPassword = ""
+            refreshDiscover()
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            error = getFriendlyLoginError(e, i18n)
+        }
     }
-    fun logout() { store.clearSession(); store.clearLocalProgress(); library = emptyList(); history = emptyList(); progress = emptyList(); bookmarks = emptyList(); bookmarkDetails = emptyList(); bookmarkGroups = emptyList(); page = "discover"; refreshDiscover() }
+    fun logout() {
+        store.clearSession()
+        store.clearLocalProgress()
+        syncUserProfile()
+        library = emptyList()
+        history = emptyList()
+        progress = emptyList()
+        bookmarks = emptyList()
+        bookmarkDetails = emptyList()
+        bookmarkGroups = emptyList()
+        page = "discover"
+        refreshDiscover()
+    }
     fun resume(item: Media, target: Episode?): Double {
         val saved = progress.firstOrNull { it.media.id == item.id && it.season == target?.season && it.episode == target?.number }?.position ?: 0.0
         return recentResume?.takeIf { it.first == item.id && it.second == target }?.third ?: saved
@@ -647,4 +747,31 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
             else -> "discover"
         }
     }
+}
+
+internal fun getFriendlyLoginError(error: Throwable?, i18n: I18n): String {
+    if (error == null) return i18n.t("auth.login.failedToReachServer")
+    val message = (error.message ?: "").lowercase()
+    if (message.contains("no backend url")) {
+        return i18n.t("auth.login.noBackendUrl")
+    }
+    if (message.contains("400") ||
+        message.contains("401") ||
+        message.contains("403") ||
+        message.contains("404") ||
+        message.contains("user cannot be found") ||
+        message.contains("user not found") ||
+        message.contains("invalid signature") ||
+        message.contains("invalid challenge") ||
+        message.contains("challenge code expired") ||
+        message.contains("invalid request body") ||
+        message.contains("unauthorized") ||
+        message.contains("forbidden") ||
+        message.contains("incorrect") ||
+        message.contains("failed to authenticate") ||
+        message.contains("notallowederror")
+    ) {
+        return i18n.t("auth.login.validationError")
+    }
+    return i18n.t("auth.login.failedToReachServer")
 }

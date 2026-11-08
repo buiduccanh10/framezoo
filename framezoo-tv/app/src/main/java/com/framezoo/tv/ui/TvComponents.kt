@@ -160,17 +160,28 @@ internal fun MediaGrid(title: String, items: List<Media>, onOpen: (Media) -> Uni
 @Composable
 internal fun Modifier.skeletonShimmer(): Modifier {
     val transition = rememberInfiniteTransition(label = "skeleton_shimmer")
-    val alpha by transition.animateFloat(
-        initialValue = 0.35f,
-        targetValue = 0.85f,
+    val translateAnim by transition.animateFloat(
+        initialValue = -300f,
+        targetValue = 900f,
         animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 850, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
+            animation = tween(durationMillis = 1100, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Restart
         ),
-        label = "skeleton_alpha"
+        label = "skeleton_shimmer_translate"
     )
     val colors = LocalFrameZooColors.current
-    return this.background(colors["mediaCard.hoverBackground"].copy(alpha = alpha))
+    val baseColor = colors["mediaCard.hoverBackground"]
+    val shimmerColor = Color.White.copy(alpha = 0.12f)
+    val brush = Brush.linearGradient(
+        colors = listOf(
+            baseColor,
+            shimmerColor,
+            baseColor
+        ),
+        start = androidx.compose.ui.geometry.Offset(translateAnim, translateAnim),
+        end = androidx.compose.ui.geometry.Offset(translateAnim + 300f, translateAnim + 300f)
+    )
+    return this.background(baseColor).background(brush)
 }
 
 @Composable
@@ -294,11 +305,8 @@ internal fun TvMediaCard(
                     }
                 )
             } else {
-                androidx.compose.foundation.Image(
-                    painter = painterResource(R.drawable.desktop_placeholder),
-                    contentDescription = null,
-                    modifier = Modifier.width(54.dp).alpha(0.8f),
-                    contentScale = ContentScale.Fit
+                Box(
+                    Modifier.fillMaxSize().skeletonShimmer()
                 )
             }
             progress?.let { value ->

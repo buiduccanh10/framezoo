@@ -34,6 +34,10 @@ import com.framezoo.tv.ui.features.auth.AuthUiState
 internal fun AuthScreen(
     uiState: AuthUiState,
     userId: String? = null,
+    userNickname: String? = null,
+    colorA: String? = null,
+    colorB: String? = null,
+    icon: String? = null,
     onAction: (AuthAction) -> Unit,
     onLogout: () -> Unit = {},
     onBack: () -> Unit
@@ -88,31 +92,23 @@ internal fun AuthScreen(
                         modifier = Modifier.width(160.dp).height(46.dp)
                     )
 
-                    Box(
-                        modifier = Modifier
-                            .size(72.dp)
-                            .clip(CircleShape)
-                            .background(colors["background.secondary"])
-                            .border(BorderStroke(2.dp, colors["type.logo"]), CircleShape),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.desktop_user),
-                            contentDescription = null,
-                            tint = colors["type.logo"],
-                            modifier = Modifier.size(36.dp)
-                        )
-                    }
+                    UserAvatar(
+                        colorA = colorA,
+                        colorB = colorB,
+                        icon = icon,
+                        size = 72.dp,
+                        fontSize = 32.sp
+                    )
 
                     Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
                         Text(
-                            text = userId,
+                            text = userNickname?.takeIf { it.isNotBlank() } ?: userId,
                             color = colors["type.emphasis"],
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold
                         )
                         Text(
-                            text = t("settings.account.title"),
+                            text = if (userNickname != null && userNickname != userId) "ID: $userId" else t("settings.account.title"),
                             color = colors["type.secondary"],
                             fontSize = 14.sp
                         )
@@ -122,6 +118,8 @@ internal fun AuthScreen(
 
                     TvButton(
                         label = t("navigation.menu.logout"),
+                        icon = R.drawable.desktop_logout,
+                        accent = true,
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         onLogout()
@@ -286,6 +284,10 @@ internal fun AuthScreen(state: FrameZooState) {
             errorMessage = state.error.ifBlank { null }
         ),
         userId = state.store.userId,
+        userNickname = state.userNickname,
+        colorA = state.userProfileColorA,
+        colorB = state.userProfileColorB,
+        icon = state.userProfileIcon,
         onAction = { action ->
             when (action) {
                 is AuthAction.NameChanged -> state.loginName = action.value

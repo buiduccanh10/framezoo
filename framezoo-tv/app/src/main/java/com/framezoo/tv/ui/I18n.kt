@@ -20,9 +20,13 @@ class I18n(
 
     private var translations: Map<String, String> = emptyMap()
     private var fallbackTranslations: Map<String, String> = emptyMap()
+    private var extraTranslations: Map<String, List<String>> = emptyMap()
+    private var fallbackExtraTranslations: Map<String, List<String>> = emptyMap()
 
     init {
-        fallbackTranslations = loadLocale("en")
+        val (fallbackMap, fallbackExtras) = loadLocaleWithExtras("en")
+        fallbackTranslations = fallbackMap
+        fallbackExtraTranslations = fallbackExtras
         loadLanguage(initialLanguage)
     }
 
@@ -34,35 +38,55 @@ class I18n(
     }
 
     private fun loadLanguage(lang: String) {
-        translations = if (lang == "en") {
-            fallbackTranslations
+        if (lang == "en") {
+            translations = fallbackTranslations
+            extraTranslations = fallbackExtraTranslations
         } else {
-            loadLocale(lang)
+            val (map, extras) = loadLocaleWithExtras(lang)
+            translations = map
+            extraTranslations = extras
         }
     }
 
-    private fun loadLocale(lang: String): Map<String, String> {
+    private fun loadLocaleWithExtras(lang: String): Pair<Map<String, String>, Map<String, List<String>>> {
         return try {
             val fileName = "locales/$lang.json"
-            val stream = assetLoader?.invoke(fileName) ?: context?.assets?.open(fileName) ?: return emptyMap()
+            val stream = assetLoader?.invoke(fileName) ?: context?.assets?.open(fileName) ?: return (emptyMap<String, String>() to emptyMap())
             val text = stream.bufferedReader(Charsets.UTF_8).use { it.readText() }
             val json = JSONObject(text)
             val map = mutableMapOf<String, String>()
-            flattenJson(json, "", map)
-            map
+            val extras = mutableMapOf<String, List<String>>()
+            flattenJson(json, "", map, extras)
+            map to extras
         } catch (_: Exception) {
-            emptyMap()
+            emptyMap<String, String>() to emptyMap()
         }
     }
 
-    private fun flattenJson(obj: JSONObject, prefix: String, out: MutableMap<String, String>) {
+    private fun flattenJson(
+        obj: JSONObject,
+        prefix: String,
+        out: MutableMap<String, String>,
+        extraOut: MutableMap<String, List<String>>
+    ) {
         val keys = obj.keys()
         while (keys.hasNext()) {
             val k = keys.next()
             val p = if (prefix.isEmpty()) k else "$prefix.$k"
             val v = obj.opt(k)
             if (v is JSONObject) {
-                flattenJson(v, p, out)
+                flattenJson(v, p, out, extraOut)
+            } else if (v is org.json.JSONArray) {
+                val list = mutableListOf<String>()
+                for (i in 0 until v.length()) {
+                    val item = v.opt(i)
+                    if (item != null && item != JSONObject.NULL) {
+                        val s = item.toString()
+                        out["$p.$i"] = s
+                        list.add(s)
+                    }
+                }
+                extraOut[p] = list
             } else if (v is String) {
                 out[p] = v
             } else if (v != null && v != JSONObject.NULL) {
@@ -78,6 +102,18 @@ class I18n(
                 .replace("{$argKey}", argVal.toString())
         }
         return str
+    }
+
+    fun randomT(key: String, jokeChance: Double = 0.35): String {
+        val defaultVal = t("$key.default")
+        val fallback = if (defaultVal != "$key.default") defaultVal else t(key)
+        if (Math.random() < jokeChance) {
+            val extras = extraTranslations["$key.extra"] ?: fallbackExtraTranslations["$key.extra"]
+            if (!extras.isNullOrEmpty()) {
+                return extras.random()
+            }
+        }
+        return fallback
     }
 
     val availableLanguages: List<Pair<String, String>> by lazy {
@@ -138,4 +174,9 @@ val LocalI18n = compositionLocalOf<I18n> { error("LocalI18n not provided") }
 @Composable
 fun t(key: String, vararg args: Pair<String, Any>): String {
     return LocalI18n.current.t(key, *args)
+}
+
+@Composable
+fun randomT(key: String, jokeChance: Double = 0.35): String {
+    return LocalI18n.current.randomT(key, jokeChance)
 }

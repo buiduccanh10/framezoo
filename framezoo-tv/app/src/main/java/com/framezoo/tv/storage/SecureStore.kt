@@ -80,6 +80,22 @@ class SecureStore(context: Context) {
         get() = prefs.getString("user", null)
         set(value) { prefs.edit().putString("user", value).apply() }
 
+    var userNickname: String?
+        get() = prefs.getString("user_nickname", null)
+        set(value) { prefs.edit().putString("user_nickname", value).apply() }
+
+    var userProfileColorA: String?
+        get() = prefs.getString("user_profile_color_a", null)
+        set(value) { prefs.edit().putString("user_profile_color_a", value).apply() }
+
+    var userProfileColorB: String?
+        get() = prefs.getString("user_profile_color_b", null)
+        set(value) { prefs.edit().putString("user_profile_color_b", value).apply() }
+
+    var userProfileIcon: String?
+        get() = prefs.getString("user_profile_icon", null)
+        set(value) { prefs.edit().putString("user_profile_icon", value).apply() }
+
     var accessToken: String?
         get() = decrypt(prefs.getString("access", null))
         set(value) { prefs.edit().putString("access", value?.let(::encrypt)).apply() }
@@ -88,7 +104,17 @@ class SecureStore(context: Context) {
         get() = decrypt(prefs.getString("refresh", null))
         set(value) { prefs.edit().putString("refresh", value?.let(::encrypt)).apply() }
 
-    fun clearSession() { prefs.edit().remove("user").remove("access").remove("refresh").apply() }
+    fun clearSession() {
+        prefs.edit()
+            .remove("user")
+            .remove("access")
+            .remove("refresh")
+            .remove("user_nickname")
+            .remove("user_profile_color_a")
+            .remove("user_profile_color_b")
+            .remove("user_profile_icon")
+            .apply()
+    }
     fun clearLocalProgress() { prefs.edit().remove("local_progress").apply() }
 
     private fun key(): SecretKey {
