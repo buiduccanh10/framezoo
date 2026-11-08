@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -43,8 +44,7 @@ private enum class SettingsCategory {
     ACCOUNT,
     PREFERENCES,
     APPEARANCE,
-    CAPTIONS,
-    TORRENT
+    CAPTIONS
 }
 
 @Composable
@@ -93,8 +93,7 @@ internal fun SettingsScreen(state: FrameZooState) {
                     Triple(SettingsCategory.ACCOUNT, t("settings.account.title"), R.drawable.desktop_user),
                     Triple(SettingsCategory.PREFERENCES, t("settings.preferences.title"), R.drawable.desktop_settings),
                     Triple(SettingsCategory.APPEARANCE, t("settings.appearance.title"), R.drawable.user_icon_brush),
-                    Triple(SettingsCategory.CAPTIONS, t("settings.subtitles.title"), R.drawable.desktop_captions),
-                    Triple(SettingsCategory.TORRENT, t("settings.torrent.title"), R.drawable.desktop_video)
+                    Triple(SettingsCategory.CAPTIONS, t("settings.subtitles.title"), R.drawable.desktop_captions)
                 )
 
                 Column(
@@ -159,7 +158,6 @@ internal fun SettingsScreen(state: FrameZooState) {
                 SettingsCategory.PREFERENCES -> PreferencesSection(state)
                 SettingsCategory.APPEARANCE -> AppearanceSection(state)
                 SettingsCategory.CAPTIONS -> CaptionsSection(state)
-                SettingsCategory.TORRENT -> TorrentSection(state)
             }
         }
     }
@@ -557,86 +555,6 @@ private fun CaptionsSection(state: FrameZooState) {
 }
 
 @Composable
-private fun TorrentSection(state: FrameZooState) {
-    val colors = LocalFrameZooColors.current
-
-    LazyColumn(verticalArrangement = Arrangement.spacedBy(18.dp), contentPadding = PaddingValues(bottom = 40.dp)) {
-        item {
-            Text(
-                text = t("settings.torrent.title"),
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                color = colors["type.emphasis"]
-            )
-        }
-        item {
-            SettingsCardContainer {
-                Text(
-                    text = t("settings.torrent.maxSizeLabel"),
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = colors["type.emphasis"]
-                )
-                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    val sizeOptions = listOf(
-                        "0" to t("settings.torrent.noCaching"),
-                        "2gb" to "2 GiB",
-                        "5gb" to "5 GiB",
-                        "10gb" to "10 GiB",
-                        "unlimited" to t("settings.torrent.infinite")
-                    )
-                    sizeOptions.forEach { (id, label) ->
-                        TvButton(
-                            label = label,
-                            selected = state.torrentCacheSize == id,
-                            navigation = true
-                        ) {
-                            state.updateTorrentCacheSize(id)
-                        }
-                    }
-                }
-                Text(
-                    text = t("settings.torrent.cacheSizeBehaviorDescription"),
-                    color = colors["type.secondary"],
-                    fontSize = 13.sp
-                )
-
-                Spacer(Modifier.height(6.dp))
-
-                Text(
-                    text = t("settings.torrent.torrentProfileLabel"),
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = colors["type.emphasis"]
-                )
-                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    val profiles = listOf(
-                        "default" to t("settings.torrent.profileDefault"),
-                        "soft" to t("settings.torrent.profileSoft"),
-                        "fast" to t("settings.torrent.profileFast"),
-                        "ultra-fast" to t("settings.torrent.profileUltraFast")
-                    )
-                    profiles.forEach { (id, label) ->
-                        TvButton(
-                            label = label,
-                            selected = state.torrentProfile == id,
-                            navigation = true
-                        ) {
-                            state.updateTorrentProfile(id)
-                        }
-                    }
-                }
-                Text(
-                    text = t("settings.torrent.torrentProfileDescription"),
-                    color = colors["type.secondary"],
-                    fontSize = 13.sp
-                )
-            }
-        }
-    }
-}
-
-@Composable
 private fun AccountSection(state: FrameZooState) {
     val colors = LocalFrameZooColors.current
     val scope = rememberCoroutineScope()
@@ -870,11 +788,21 @@ private fun AccountSection(state: FrameZooState) {
             }
             if (sessionsLoading) {
                 item {
-                    Text(
-                        text = t("settings.torrent.currentSizeLoading"),
-                        color = colors["type.secondary"],
-                        fontSize = 14.sp
-                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(16.dp),
+                            color = colors["type.secondary"],
+                            strokeWidth = 2.dp
+                        )
+                        Text(
+                            text = t("addons.native.loading"),
+                            color = colors["type.secondary"],
+                            fontSize = 14.sp
+                        )
+                    }
                 }
             } else if (sessionsError && sessions.isEmpty()) {
                 item {

@@ -15,7 +15,6 @@ enum class SettingsTab {
     PREFERENCES,
     APPEARANCE,
     CAPTIONS,
-    TORRENT,
     ACCOUNT
 }
 
@@ -29,11 +28,9 @@ data class SettingsUiState(
     val subtitleFontSize: Int = 100,
     val subtitleColor: String = "#FFFFFF",
     val subtitleBackgroundOpacity: Int = 50,
-    val torrentCacheSize: String = "5gb",
     val backendUrl: String = "",
     val isLoggedIn: Boolean = false,
-    val userId: String? = null,
-    val isCacheCleared: Boolean = false
+    val userId: String? = null
 )
 
 sealed interface SettingsAction {
@@ -44,8 +41,6 @@ sealed interface SettingsAction {
     data class ChangeSubtitleFontSize(val delta: Int) : SettingsAction
     data class ChangeSubtitleColor(val color: String) : SettingsAction
     data class ChangeSubtitleBackgroundOpacity(val delta: Int) : SettingsAction
-    data class ChangeTorrentCacheSize(val size: String) : SettingsAction
-    data object ClearTorrentCache : SettingsAction
     data object Logout : SettingsAction
 }
 
@@ -64,7 +59,6 @@ class SettingsViewModel(
             subtitleFontSize = settingsRepo.subtitleFontSize.value,
             subtitleColor = settingsRepo.subtitleColor.value,
             subtitleBackgroundOpacity = settingsRepo.subtitleBackgroundOpacity.value,
-            torrentCacheSize = settingsRepo.torrentCacheSize.value,
             backendUrl = settingsRepo.backendUrl.value,
             isLoggedIn = authRepo.isLoggedIn.value,
             userId = authRepo.userId.value
@@ -117,13 +111,6 @@ class SettingsViewModel(
                 val newOp = (_uiState.value.subtitleBackgroundOpacity + action.delta).coerceIn(0, 100)
                 settingsRepo.updateSubtitleBackgroundOpacity(newOp)
                 _uiState.update { it.copy(subtitleBackgroundOpacity = newOp) }
-            }
-            is SettingsAction.ChangeTorrentCacheSize -> {
-                settingsRepo.updateTorrentCacheSize(action.size)
-                _uiState.update { it.copy(torrentCacheSize = action.size) }
-            }
-            is SettingsAction.ClearTorrentCache -> {
-                _uiState.update { it.copy(isCacheCleared = true) }
             }
             is SettingsAction.Logout -> {
                 authRepo.logout()

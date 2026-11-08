@@ -96,14 +96,6 @@ class SecureStore(context: Context) {
         get() = prefs.getInt("subVerticalPosition", 1)
         set(value) { prefs.edit().putInt("subVerticalPosition", value).apply() }
 
-    var torrentCacheSize: String
-        get() = prefs.getString("torrentCacheSize", "5gb") ?: "5gb"
-        set(value) { prefs.edit().putString("torrentCacheSize", value).apply() }
-
-    var torrentProfile: String
-        get() = prefs.getString("torrentProfile", "default") ?: "default"
-        set(value) { prefs.edit().putString("torrentProfile", value).apply() }
-
     var localProgress: String?
         get() = prefs.getString("local_progress", null)
         set(value) { prefs.edit().putString("local_progress", value).apply() }

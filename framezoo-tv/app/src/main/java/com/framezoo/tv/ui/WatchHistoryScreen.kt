@@ -103,7 +103,7 @@ internal fun WatchHistoryScreen(
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = t("settings.torrent.clearCache"),
+                    text = t("lists.delete.confirm").replace(" \"{{name}}\"?", ""),
                     color = colors["type.text"],
                     fontSize = 15.sp,
                     lineHeight = 22.sp
@@ -154,7 +154,7 @@ internal fun WatchHistoryScreen(
                     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         if (uiState.isEditing) {
                             TvButton(
-                                label = t("settings.torrent.clearCache"),
+                                label = t("lists.actions.delete"),
                                 icon = R.drawable.desktop_close
                             ) {
                                 confirmClearAll = true

@@ -31,9 +31,6 @@ class SettingsRepository(private val store: SecureStore) {
     private val _subtitleBackgroundOpacity = MutableStateFlow(store.subtitleBackgroundOpacity)
     val subtitleBackgroundOpacity: StateFlow<Int> = _subtitleBackgroundOpacity.asStateFlow()
 
-    private val _torrentCacheSize = MutableStateFlow(store.torrentCacheSize)
-    val torrentCacheSize: StateFlow<String> = _torrentCacheSize.asStateFlow()
-
     private val _trailerEnabled = MutableStateFlow(store.trailerEnabled)
     val trailerEnabled: StateFlow<Boolean> = _trailerEnabled.asStateFlow()
 
@@ -76,11 +73,6 @@ class SettingsRepository(private val store: SecureStore) {
         val clamped = opacity.coerceIn(0, 100)
         store.subtitleBackgroundOpacity = clamped
         _subtitleBackgroundOpacity.value = clamped
-    }
-
-    fun updateTorrentCacheSize(size: String) {
-        store.torrentCacheSize = size
-        _torrentCacheSize.value = size
     }
 
     fun toggleTrailer() {

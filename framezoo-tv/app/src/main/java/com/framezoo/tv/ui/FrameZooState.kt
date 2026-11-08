@@ -690,10 +690,6 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         private set
     var subtitleVerticalPosition by mutableIntStateOf(store.subtitleVerticalPosition)
         private set
-    var torrentCacheSize by mutableStateOf(store.torrentCacheSize)
-        private set
-    var torrentProfile by mutableStateOf(store.torrentProfile)
-        private set
 
     fun toggleAutoplay() {
         enableAutoplay = !enableAutoplay
@@ -759,16 +755,6 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         updateSubtitleFontStyle("default")
         if (subtitleBold) toggleSubtitleBold()
         updateSubtitleVerticalPosition(1)
-    }
-
-    fun updateTorrentCacheSize(size: String) {
-        torrentCacheSize = size
-        store.torrentCacheSize = size
-    }
-
-    fun updateTorrentProfile(profile: String) {
-        torrentProfile = profile
-        store.torrentProfile = profile
     }
 
     fun removeBookmark(item: Media) {
