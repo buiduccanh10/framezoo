@@ -572,10 +572,6 @@ internal fun DetailsScreen(state: FrameZooState, item: Media) {
                 modifier = Modifier
                     .size(38.dp)
                     .focusRequester(closeFocus)
-                    .focusProperties {
-                        down = if (trailers.isNotEmpty() && listState.firstVisibleItemIndex == 0) trailerFocus else firstAction
-                        left = firstAction
-                    }
                     .onFocusChanged { closeFocused = it.isFocused }
                     .onPreviewKeyEvent { event ->
                         if (event.nativeKeyEvent.action == android.view.KeyEvent.ACTION_DOWN) {
@@ -595,7 +591,7 @@ internal fun DetailsScreen(state: FrameZooState, item: Media) {
                                             listState.scrollToItem(0)
                                         }
                                         val target = if (event.nativeKeyEvent.keyCode == android.view.KeyEvent.KEYCODE_DPAD_DOWN && trailers.isNotEmpty()) trailerFocus else firstAction
-                                        target.requestFocus()
+                                        runCatching { target.requestFocus() }
                                     }
                                     true
                                 }
@@ -962,7 +958,7 @@ private fun DetailsTrailerPlayer(key: String, title: String, onClose: () -> Unit
     var status by remember(key) { mutableStateOf("loading") }
     val context = LocalContext.current
     val focus = remember { FocusRequester() }
-    LaunchedEffect(Unit) { focus.requestFocus() }
+    LaunchedEffect(Unit) { runCatching { focus.requestFocus() } }
     Box(Modifier.fillMaxSize().background(Color.Black)) {
         if (isImdb) ImdbTrailerPlayer(key, muted, paused, Modifier.fillMaxSize()) { status = it } else TrailerBackground(key, muted, Modifier.fillMaxSize(), paused) { status = it }
         if (status != "playing") {

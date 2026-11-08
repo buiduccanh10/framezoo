@@ -1323,11 +1323,7 @@ internal fun SearchScreen(
                                         bookmarked = state.bookmarks.any { it.id == libItem.media.id },
                                         onBookmark = state::bookmark,
                                         qualityLoader = state.backend::releaseQuality,
-                                        modifier = (if (isFirst) Modifier.focusRequester(continueWatchingFocus) else Modifier)
-                                            .focusProperties {
-                                                up = searchInputFocus
-                                                down = categoryFocus
-                                            }
+                                        modifier = if (isFirst) Modifier.focusRequester(continueWatchingFocus) else Modifier
                                     )
                                 }
                             }
@@ -1343,8 +1339,7 @@ internal fun SearchScreen(
                     ) {
                         DiscoverNavigation(
                             state = state,
-                            categoryFocus = categoryFocus,
-                            upFocus = if (continueWatching.isNotEmpty()) continueWatchingFocus else searchInputFocus
+                            categoryFocus = categoryFocus
                         )
                     }
                 }
@@ -1379,7 +1374,7 @@ internal fun SearchScreen(
                 ) {
                     scope.launch {
                         searchListState.animateScrollToItem(0)
-                        searchInputFocus.requestFocus()
+                        runCatching { searchInputFocus.requestFocus() }
                     }
                 }
             }

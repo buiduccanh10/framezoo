@@ -313,7 +313,7 @@ internal fun DiscoverScreen(state: FrameZooState, discoverAction: FocusRequester
         val heroHeight = maxHeight - 16.dp
         LazyColumn(Modifier.fillMaxSize(), state = listState, verticalArrangement = Arrangement.spacedBy(26.dp), contentPadding = PaddingValues(bottom = 48.dp)) {
             item {
-                if (state.discover.isNotEmpty()) FeaturedCarousel(state, state.discover.take(15), heroHeight, discoverAction, categoryFocus,
+                if (state.discover.isNotEmpty()) FeaturedCarousel(state, state.discover.take(15), heroHeight, discoverAction,
                     onLogo = state.backend::logo, onRatings = state.backend::featuredRatings,
                     onTrailer = state.backend::trailer, randomMovies = { state.backend.discoverSection(com.framezoo.tv.model.DiscoverFilter(category = "movie"), "popular", page = 2) },
                     onRandom = state::playRandom, progressItems = state.progress, onOpen = state::openDetails, onPlay = state::playFeatured)
@@ -414,7 +414,7 @@ internal fun DiscoverScreen(state: FrameZooState, discoverAction: FocusRequester
             }
             item {
                 Column(Modifier.padding(start = 34.dp, end = 38.dp), verticalArrangement = Arrangement.spacedBy(18.dp)) {
-                    DiscoverNavigation(state = state, categoryFocus = categoryFocus, upFocus = discoverAction)
+                    DiscoverNavigation(state = state, categoryFocus = categoryFocus)
                 }
             }
             discoverContentRows(
@@ -434,7 +434,7 @@ internal fun DiscoverScreen(state: FrameZooState, discoverAction: FocusRequester
         }
         AnimatedVisibility(visible = listState.firstVisibleItemIndex > 0, modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 12.dp)) {
             TvButton(t("discover.scrollToTop"), navigation = true, icon = R.drawable.desktop_chevron_up) {
-                scope.launch { listState.animateScrollToItem(0); if (state.discover.isNotEmpty()) discoverAction.requestFocus() }
+                scope.launch { listState.animateScrollToItem(0); if (state.discover.isNotEmpty()) runCatching { discoverAction.requestFocus() } }
             }
         }
     }
@@ -444,7 +444,6 @@ internal fun DiscoverScreen(state: FrameZooState, discoverAction: FocusRequester
 internal fun DiscoverNavigation(
     state: FrameZooState,
     categoryFocus: FocusRequester,
-    upFocus: FocusRequester? = null,
     modifier: Modifier = Modifier
 ) {
     val tabAll = t("discover.tabs.all")
@@ -487,7 +486,7 @@ internal fun DiscoverNavigation(
                     key.action == KeyEvent.ACTION_DOWN && key.repeatCount > 0 && key.keyCode == jumpKey -> {
                         if (!jumped) {
                             jumped = true
-                            jumpTarget?.requestFocus()
+                            runCatching { jumpTarget?.requestFocus() }
                         }
                         true
                     }
@@ -508,7 +507,6 @@ internal fun DiscoverNavigation(
                 DisposableEffect(focus) { onDispose { if (lastCategoryFocus === focus) lastCategoryFocus = null } }
                 val itemModifier = Modifier
                     .then(if (option.id == "all") Modifier.focusRequester(categoryFocus) else Modifier)
-                    .then(if (upFocus != null) Modifier.focusProperties { up = upFocus } else Modifier)
                     .focusRequester(focus)
                     .onFocusChanged { if (it.isFocused) lastCategoryFocus = focus }
                 CategoryTab(option.name, state.filter.category == option.id, itemModifier) {
@@ -523,7 +521,6 @@ internal fun DiscoverNavigation(
                 val focus = remember(genreId) { FocusRequester() }
                 DisposableEffect(focus) { onDispose { if (lastCategoryFocus === focus) lastCategoryFocus = null } }
                 val itemModifier = Modifier
-                    .then(if (upFocus != null) Modifier.focusProperties { up = upFocus } else Modifier)
                     .focusRequester(focus)
                     .onFocusChanged { if (it.isFocused) lastCategoryFocus = focus }
                 GenreChip(genre.name, selected = state.filter.category == genreId, modifier = itemModifier) {
@@ -537,7 +534,6 @@ internal fun DiscoverNavigation(
             state.filter.country,
             state.countries,
             modifier = Modifier
-                .then(if (upFocus != null) Modifier.focusProperties { up = upFocus } else Modifier)
                 .focusRequester(countryFocus)
                 .onFocusChanged { inCountry = it.hasFocus }
         ) {
@@ -548,7 +544,6 @@ internal fun DiscoverNavigation(
             state.filter.year,
             (Year.now().value downTo 1900).map { DiscoverOption(it.toString(), it.toString()) },
             modifier = Modifier
-                .then(if (upFocus != null) Modifier.focusProperties { up = upFocus } else Modifier)
                 .focusRequester(yearFocus)
                 .onFocusChanged { inYear = it.hasFocus }
         ) {
@@ -623,7 +618,7 @@ internal fun DiscoverCarousel(state: FrameZooState, key: String, title: String, 
     val moreFocus = remember { FocusRequester() }
     LaunchedEffect(state.focusReturnSection, media.isNotEmpty()) {
         if (state.focusReturnSection == key && media.isNotEmpty()) {
-            moreFocus.requestFocus()
+            runCatching { moreFocus.requestFocus() }
             state.focusReturnSection = null
         }
     }
@@ -696,7 +691,7 @@ internal fun DiscoverListsScreen(state: FrameZooState, listState: LazyListState)
     val newReleases4KTitle = t("discover.carousel.title.4kReleases")
     val popularTitle = t("discover.carousel.title.popular")
     val trendingTitle = t("discover.carousel.title.trending")
-    LaunchedEffect(Unit) { if (state.focusReturnSection == null) backFocus.requestFocus() }
+    LaunchedEffect(Unit) { if (state.focusReturnSection == null) runCatching { backFocus.requestFocus() } }
     LazyColumn(state = listState, verticalArrangement = Arrangement.spacedBy(24.dp), contentPadding = PaddingValues(bottom = 48.dp)) {
         item { Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(18.dp)) {
             TvButton(t("discover.page.back"), modifier = Modifier.focusRequester(backFocus), icon = R.drawable.desktop_chevron_left) { state.back() }
@@ -733,7 +728,7 @@ private fun LazyListScope.allListRow(state: FrameZooState, key: String, title: S
 private fun DiscoverListRow(state: FrameZooState, key: String, title: String, media: List<Media>) {
     val moreFocus = remember { FocusRequester() }
     LaunchedEffect(state.focusReturnSection) {
-        if (state.focusReturnSection == key) { moreFocus.requestFocus(); state.focusReturnSection = null }
+        if (state.focusReturnSection == key) { runCatching { moreFocus.requestFocus() }; state.focusReturnSection = null }
     }
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Text(title, color = LocalFrameZooColors.current["type.emphasis"], fontSize = 24.sp, fontWeight = FontWeight.Bold)
@@ -746,11 +741,11 @@ private fun DiscoverListRow(state: FrameZooState, key: String, title: String, me
 internal fun DiscoverMoreScreen(state: FrameZooState, gridState: LazyGridState) {
     val colors = LocalFrameZooColors.current
     val backFocus = remember { FocusRequester() }
-    LaunchedEffect(Unit) { if (state.focusReturnMediaId == null) backFocus.requestFocus() }
+    LaunchedEffect(Unit) { if (state.focusReturnMediaId == null) runCatching { backFocus.requestFocus() } }
     LaunchedEffect(state.focusReturnMediaId) {
         val key = state.focusReturnMediaId ?: return@LaunchedEffect
         val index = state.moreItems.indexOfFirst { "${it.type}:${it.id}:${it.addonManifest}" == key }
-        if (index >= 0) gridState.scrollToItem(index + 1) else { state.focusReturnMediaId = null; backFocus.requestFocus() }
+        if (index >= 0) gridState.scrollToItem(index + 1) else { state.focusReturnMediaId = null; runCatching { backFocus.requestFocus() } }
     }
     LazyVerticalGrid(columns = GridCells.Adaptive(174.dp), state = gridState, verticalArrangement = Arrangement.spacedBy(18.dp),
         horizontalArrangement = Arrangement.spacedBy(18.dp), contentPadding = PaddingValues(start = 4.dp, end = 4.dp, top = 6.dp, bottom = 48.dp)) {
@@ -784,7 +779,7 @@ internal fun DiscoverMoreScreen(state: FrameZooState, gridState: LazyGridState) 
         gridItems(state.moreItems, key = { "${it.type}:${it.id}:${it.addonManifest}" }) { media ->
             val focus = remember { FocusRequester() }
             val key = "${media.type}:${media.id}:${media.addonManifest}"
-            LaunchedEffect(state.focusReturnMediaId) { if (state.focusReturnMediaId == key) { focus.requestFocus(); state.focusReturnMediaId = null } }
+            LaunchedEffect(state.focusReturnMediaId) { if (state.focusReturnMediaId == key) { runCatching { focus.requestFocus() }; state.focusReturnMediaId = null } }
             TvMediaCard(media, state::openDetails, bookmarked = state.bookmarks.any { it.id == media.id }, onBookmark = state::bookmark, qualityLoader = state.backend::releaseQuality, modifier = Modifier.focusRequester(focus))
         }
         item(span = { GridItemSpan(maxLineSpan) }) {
@@ -964,7 +959,7 @@ internal fun FilterMenu(label: String, selected: String, options: List<DiscoverO
 }
 
 @Composable
-private fun FeaturedCarousel(state: FrameZooState, items: List<Media>, height: androidx.compose.ui.unit.Dp, discoverAction: FocusRequester, nextFocusDown: FocusRequester? = null, onLogo: suspend (Media) -> String?, onRatings: suspend (Media) -> FeaturedRatings, onTrailer: suspend (Media) -> String?, randomMovies: suspend () -> List<Media>, onRandom: (Media) -> Unit, progressItems: List<LibraryItem>, onOpen: (Media) -> Unit, onPlay: (Media) -> Unit) {
+private fun FeaturedCarousel(state: FrameZooState, items: List<Media>, height: androidx.compose.ui.unit.Dp, discoverAction: FocusRequester, onLogo: suspend (Media) -> String?, onRatings: suspend (Media) -> FeaturedRatings, onTrailer: suspend (Media) -> String?, randomMovies: suspend () -> List<Media>, onRandom: (Media) -> Unit, progressItems: List<LibraryItem>, onOpen: (Media) -> Unit, onPlay: (Media) -> Unit) {
     val colors = LocalFrameZooColors.current
     var index by remember(items) { mutableIntStateOf(0) }
     var actionFocused by remember { mutableStateOf(false) }
@@ -1027,8 +1022,8 @@ private fun FeaturedCarousel(state: FrameZooState, items: List<Media>, height: a
             }
             if (item.description.isNotBlank()) Text(item.description, color = Color.White.copy(alpha = .9f), maxLines = 3, overflow = TextOverflow.Ellipsis, fontSize = 16.sp)
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                TvButton(if (progressItems.any { it.media.id == item.id && it.media.type == item.type && it.position > 0 }) t("details.resume") else t("details.play"), modifier = Modifier.focusRequester(discoverAction).then(if (nextFocusDown != null) Modifier.focusProperties { down = nextFocusDown } else Modifier), accent = true, icon = R.drawable.desktop_play) { onPlay(item) }
-                TvButton(t("discover.featured.moreInfo"), modifier = if (nextFocusDown != null) Modifier.focusProperties { down = nextFocusDown } else Modifier, icon = R.drawable.desktop_question) { onOpen(item) }
+                TvButton(if (progressItems.any { it.media.id == item.id && it.media.type == item.type && it.position > 0 }) t("details.resume") else t("details.play"), modifier = Modifier.focusRequester(discoverAction), accent = true, icon = R.drawable.desktop_play) { onPlay(item) }
+                TvButton(t("discover.featured.moreInfo"), icon = R.drawable.desktop_question) { onOpen(item) }
             }
             progressItems.firstOrNull { it.media.id == item.id && it.media.type == item.type && it.position > 0 && it.duration > 0 }?.let { progress ->
                 val ratio = (progress.position / progress.duration).toFloat().coerceIn(0f, 1f)
