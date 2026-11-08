@@ -21,12 +21,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import coil.compose.SubcomposeAsyncImage
 import com.framezoo.tv.R
 import com.framezoo.tv.model.Addon
 import com.framezoo.tv.ui.features.addons.AddonsAction
@@ -179,16 +181,32 @@ internal fun AddonsScreen(
                             modifier = Modifier
                                 .size(46.dp)
                                 .clip(RoundedCornerShape(12.dp))
-                                .background(Color.Black.copy(alpha = 0.3f)),
+                                .background(Color.White.copy(alpha = 0.08f)),
                             contentAlignment = Alignment.Center
                         ) {
-                            val icon = if (addon.resources.contains("subtitles")) R.drawable.desktop_captions else R.drawable.desktop_extension
-                            Icon(
-                                painter = painterResource(icon),
-                                contentDescription = null,
-                                tint = colors["type.logo"],
-                                modifier = Modifier.size(24.dp)
-                            )
+                            if (!addon.logo.isNullOrBlank()) {
+                                SubcomposeAsyncImage(
+                                    model = addon.logo,
+                                    contentDescription = "${addon.name} logo",
+                                    modifier = Modifier.fillMaxSize().padding(4.dp),
+                                    contentScale = ContentScale.Fit,
+                                    error = {
+                                        Icon(
+                                            painter = painterResource(R.drawable.desktop_extension),
+                                            contentDescription = null,
+                                            tint = colors["type.logo"],
+                                            modifier = Modifier.size(24.dp)
+                                        )
+                                    }
+                                )
+                            } else {
+                                Icon(
+                                    painter = painterResource(if (addon.resources.contains("subtitles")) R.drawable.desktop_captions else R.drawable.desktop_extension),
+                                    contentDescription = null,
+                                    tint = colors["type.logo"],
+                                    modifier = Modifier.size(24.dp)
+                                )
+                            }
                         }
 
                         Spacer(Modifier.width(16.dp))

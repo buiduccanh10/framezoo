@@ -139,8 +139,22 @@ internal fun FrameZooApp(
                                 "feedback" -> FeedbackScreen(state)
                                 "sources" -> SourcesScreen(state)
                                 "player" -> selected?.let { item -> playing?.let { stream ->
-                                    PlayerScreen(player, item, episode, stream, subtitles, backend, resume(item, episode),
-                                        onStopped = { pos -> stopped(item, episode, pos) }) { page = "sources" }
+                                    val currentEp = episode
+                                    val nextEp = if (item.type == "show" && currentEp != null) {
+                                        episodes.firstOrNull { it.season == currentEp.season && it.number == currentEp.number + 1 }
+                                    } else null
+                                    PlayerScreen(
+                                        player = player,
+                                        item = item,
+                                        episode = currentEp,
+                                        stream = stream,
+                                        subtitles = subtitles,
+                                        backend = backend,
+                                        resume = resume(item, currentEp),
+                                        onNextEpisode = nextEp?.let { ep -> { loadSources(item, ep) } },
+                                        onStopped = { pos -> stopped(item, currentEp, pos) },
+                                        onExit = { page = "sources" }
+                                    )
                                 } }
                                 "library" -> BookmarksScreen(state)
                                 "history" -> WatchHistoryScreen(state)

@@ -65,12 +65,19 @@ class Addons(context: Context, private val backend: Backend, private val store: 
         } finally { connection.disconnect() }
     }
 
+    private fun resolveLogo(logo: String?, manifestUrl: String): String? {
+        if (logo.isNullOrBlank()) return null
+        if (logo.startsWith("http://") || logo.startsWith("https://")) return logo
+        return runCatching { URI(manifestUrl).resolve(logo).toString() }.getOrDefault(logo)
+    }
+
     private fun parse(raw: JSONObject): Addon {
+        val manifestUrl = raw.getString("manifestUrl")
         val manifest = raw.optJSONObject("manifest") ?: JSONObject()
         val resources = manifest.optJSONArray("resources") ?: JSONArray()
         val id = manifest.optString("id", raw.optString("id"))
         return Addon(
-            manifestUrl = raw.getString("manifestUrl"),
+            manifestUrl = manifestUrl,
             id = id,
             name = manifest.optString("name", raw.optString("name")),
             resources = (0 until resources.length()).mapNotNull { i ->
@@ -83,7 +90,7 @@ class Addons(context: Context, private val backend: Backend, private val store: 
             enabled = raw.optBoolean("enabled", true),
             version = manifest.optString("version").ifBlank { raw.optString("version").ifBlank { null } },
             description = manifest.optString("description").ifBlank { raw.optString("description").ifBlank { null } },
-            logo = manifest.optString("logo").ifBlank { raw.optString("logo").ifBlank { null } },
+            logo = resolveLogo(manifest.optString("logo").ifBlank { raw.optString("logo").ifBlank { null } }, manifestUrl),
             isNative = raw.optBoolean("isNative", false) || id == NATIVE_SUBTITLE_ADDON_ID
         )
     }
@@ -100,8 +107,17 @@ class Addons(context: Context, private val backend: Backend, private val store: 
         } catch (_: Exception) { }
         for (i in 0 until local.length()) local.optJSONObject(i)?.let { merged[it.optString("manifestUrl")] = it }
         prefs.edit().putString("installed", JSONArray(merged.values).toString()).apply()
-        val userAddons = merged.values.mapNotNull { runCatching { parse(it) }.getOrNull() }
-            .filter { it.id != NATIVE_SUBTITLE_ADDON_ID && !it.isNative && it.manifestUrl != nativeAddon.manifestUrl }
+        val userAddons = merged.values.mapNotNull { raw ->
+            val manifestUrl = raw.optString("manifestUrl")
+            var manifestObj = raw.optJSONObject("manifest")
+            if (manifestObj == null && manifestUrl.isNotBlank()) {
+                val fetched = runCatching { json(manifestUrl) }.getOrNull()
+                if (fetched != null) {
+                    raw.put("manifest", fetched)
+                }
+            }
+            runCatching { parse(raw) }.getOrNull()
+        }.filter { it.id != NATIVE_SUBTITLE_ADDON_ID && !it.isNative && it.manifestUrl != nativeAddon.manifestUrl }
         return listOf(nativeAddon) + userAddons
     }
 
@@ -254,7 +270,8 @@ class Addons(context: Context, private val backend: Backend, private val store: 
                     title = rawTitle,
                     description = rawDesc,
                     videoSize = videoSize,
-                    addonName = addon.name
+                    addonName = addon.name,
+                    addonLogo = addon.logo
                 )
             }
         } catch (_: Exception) { }

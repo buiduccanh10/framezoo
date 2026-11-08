@@ -4,6 +4,7 @@ import android.view.KeyEvent
 import android.view.SurfaceView
 import androidx.activity.ComponentActivity
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -26,15 +27,19 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.lifecycleScope
+import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import com.framezoo.tv.R
 import com.framezoo.tv.api.Backend
 import com.framezoo.tv.model.Episode
@@ -62,6 +67,7 @@ internal fun PlayerScreen(
     subtitles: List<Subtitle>,
     backend: Backend,
     resume: Double,
+    onNextEpisode: (() -> Unit)? = null,
     onStopped: (Double) -> Unit,
     onExit: () -> Unit
 ) {
@@ -72,17 +78,36 @@ internal fun PlayerScreen(
     var position by remember { mutableDoubleStateOf(0.0) }
     var duration by remember { mutableDoubleStateOf(0.0) }
     var isPaused by remember { mutableStateOf(false) }
+    var isBuffering by remember { mutableStateOf(false) }
+    var isOpening by remember { mutableStateOf(true) }
+    var hasRenderedFrame by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf("") }
     var showControls by remember { mutableStateOf(true) }
     var showResumePrompt by remember { mutableStateOf(resume > 20) }
     var showSubtitlesMenu by remember { mutableStateOf(false) }
     var showSpeedMenu by remember { mutableStateOf(false) }
+    var showTorrentStats by remember { mutableStateOf(false) }
     var selectedSpeed by remember { mutableDoubleStateOf(1.0) }
     var subDelayMs by remember { mutableIntStateOf(0) }
     var controlsTimeoutKey by remember { mutableIntStateOf(0) }
 
+    val isTorrent = stream.infoHash != null || stream.url.startsWith("magnet:")
     val playPauseRequester = remember { FocusRequester() }
     val defaultSourceError = t("player.playbackError.title")
+
+    // Fetch movie/series logo in background
+    val logoUrl by produceState<String?>(initialValue = null, key1 = item.id) {
+        value = runCatching { backend.logo(item) }.getOrNull()
+    }
+
+    // Cycling funny loading messages like Desktop PlayerLoadingOverlay
+    var messageIndex by remember { mutableIntStateOf((1..22).random()) }
+    LaunchedEffect(Unit) {
+        while (true) {
+            delay(3500)
+            messageIndex = (1..22).filter { it != messageIndex }.random()
+        }
+    }
 
     fun triggerControls() {
         showControls = true
@@ -90,26 +115,37 @@ internal fun PlayerScreen(
     }
 
     LaunchedEffect(controlsTimeoutKey, showControls) {
-        if (showControls && !showSubtitlesMenu && !showSpeedMenu && !showResumePrompt) {
+        if (showControls && !showSubtitlesMenu && !showSpeedMenu && !showResumePrompt && !showTorrentStats) {
             delay(4000)
             showControls = false
         }
     }
 
     LaunchedEffect(stream) {
+        isOpening = true
+        hasRenderedFrame = false
+        error = ""
         try {
             player.play(stream, subtitles)
         } catch (e: Exception) {
             error = e.message ?: defaultSourceError
+        } finally {
+            isOpening = false
         }
     }
 
     LaunchedEffect(stream) {
         while (true) {
-            delay(500)
+            delay(400)
             position = player.position()
             duration = player.duration()
             isPaused = player.paused()
+            isBuffering = player.propertyString("paused-for-cache") == "yes"
+
+            if (!hasRenderedFrame && (position > 0.1 || (duration > 0.0 && !isBuffering && !isOpening))) {
+                hasRenderedFrame = true
+            }
+
             if (position.toInt() % 30 == 0 && position >= 20) {
                 runCatching { backend.progress(item, position, duration, episode) }
             }
@@ -161,6 +197,9 @@ internal fun PlayerScreen(
                         } else if (showSpeedMenu) {
                             showSpeedMenu = false
                             true
+                        } else if (showTorrentStats) {
+                            showTorrentStats = false
+                            true
                         } else {
                             onExit()
                             true
@@ -176,9 +215,141 @@ internal fun PlayerScreen(
             modifier = Modifier.fillMaxSize()
         )
 
+        // Player Loading Overlay matching Desktop PlayerLoadingOverlay.tsx
+        AnimatedVisibility(
+            visible = !hasRenderedFrame,
+            enter = fadeIn(),
+            exit = fadeOut(tween(400)),
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black)
+            ) {
+                val bgImage = item.backdrop ?: item.poster
+                if (!bgImage.isNullOrBlank()) {
+                    AsyncImage(
+                        model = bgImage,
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                }
+
+                // Dark gradient overlay matching desktop
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(
+                            Brush.verticalGradient(
+                                listOf(
+                                    Color.Black.copy(alpha = 0.40f),
+                                    Color.Black.copy(alpha = 0.20f),
+                                    Color.Black.copy(alpha = 0.60f)
+                                )
+                            )
+                        )
+                )
+
+                if (error.isNotBlank()) {
+                    Column(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .padding(32.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        Text(
+                            text = error,
+                            color = colors["type.danger"],
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                        TvButton(
+                            label = t("player.back.short"),
+                            icon = R.drawable.desktop_chevron_left,
+                            primary = true
+                        ) {
+                            onExit()
+                        }
+                    }
+                } else {
+                    Column(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .padding(horizontal = 48.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(20.dp)
+                    ) {
+                        if (!logoUrl.isNullOrBlank()) {
+                            SubcomposeAsyncImage(
+                                model = logoUrl,
+                                contentDescription = item.title,
+                                modifier = Modifier
+                                    .fillMaxWidth(0.35f)
+                                    .heightIn(max = 140.dp),
+                                contentScale = ContentScale.Fit,
+                                error = {
+                                    Text(
+                                        text = item.title.uppercase(),
+                                        color = Color.White.copy(alpha = 0.9f),
+                                        fontSize = 32.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        letterSpacing = 4.sp
+                                    )
+                                }
+                            )
+                        } else {
+                            Text(
+                                text = item.title.uppercase(),
+                                color = Color.White.copy(alpha = 0.9f),
+                                fontSize = 32.sp,
+                                fontWeight = FontWeight.Bold,
+                                letterSpacing = 4.sp
+                            )
+                        }
+
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(14.dp)
+                        ) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(22.dp),
+                                color = colors["type.logo"],
+                                strokeWidth = 2.5.dp
+                            )
+                            Text(
+                                text = t("player.loadingOverlayMessages.$messageIndex"),
+                                color = Color.White.copy(alpha = 0.75f),
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        // Center Buffering Spinner while video is active but paused for cache
+        if (hasRenderedFrame && isBuffering) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.35f)),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(48.dp),
+                    color = colors["type.logo"],
+                    strokeWidth = 3.dp
+                )
+            }
+        }
+
         // Top Controls Bar
         AnimatedVisibility(
-            visible = showControls,
+            visible = showControls && hasRenderedFrame,
             enter = fadeIn() + slideInVertically { -it },
             exit = fadeOut() + slideOutVertically { -it },
             modifier = Modifier.align(Alignment.TopCenter)
@@ -218,12 +389,23 @@ internal fun PlayerScreen(
                         }
                     }
                 }
+
+                if (isTorrent) {
+                    TvButton(
+                        label = t("player.torrent.statistics"),
+                        icon = R.drawable.desktop_web,
+                        navigation = true
+                    ) {
+                        triggerControls()
+                        showTorrentStats = true
+                    }
+                }
             }
         }
 
         // Bottom Controls Bar
         AnimatedVisibility(
-            visible = showControls,
+            visible = showControls && hasRenderedFrame,
             enter = fadeIn() + slideInVertically { it },
             exit = fadeOut() + slideOutVertically { it },
             modifier = Modifier.align(Alignment.BottomCenter)
@@ -339,6 +521,16 @@ internal fun PlayerScreen(
                         showSpeedMenu = true
                     }
 
+                    if (onNextEpisode != null) {
+                        TvButton(
+                            label = t("player.nextEpisode"),
+                            icon = R.drawable.desktop_arrow_right
+                        ) {
+                            triggerControls()
+                            onNextEpisode()
+                        }
+                    }
+
                     TvButton(
                         label = t("player.menus.settings.sourceItem")
                     ) {
@@ -350,7 +542,7 @@ internal fun PlayerScreen(
 
         // Resume Prompt Dialog matching Desktop ResumePart
         if (showResumePrompt) {
-            val watchPercent = if (duration > 0) ((resume / duration) * 100).toInt() else 50
+            val watchPercent = if (duration > 0) ((resume / duration) * 100).toInt().coerceIn(0, 100) else 50
             Dialog(
                 onDismissRequest = { showResumePrompt = false },
                 properties = DialogProperties(usePlatformDefaultWidth = false)
@@ -380,9 +572,11 @@ internal fun PlayerScreen(
                                 color = colors["type.emphasis"]
                             )
                             Text(
-                                text = "${formatTime(resume)} (${watchPercent}%)",
+                                text = t("player.resume.description", "percentage" to watchPercent),
                                 color = colors["type.secondary"],
-                                fontSize = 16.sp
+                                fontSize = 15.sp,
+                                textAlign = TextAlign.Center,
+                                lineHeight = 22.sp
                             )
                             Spacer(Modifier.height(8.dp))
                             TvButton(
@@ -401,6 +595,90 @@ internal fun PlayerScreen(
                             ) {
                                 showResumePrompt = false
                                 player.command("seek", "0", "absolute")
+                            }
+                            if (onNextEpisode != null) {
+                                TvButton(
+                                    label = t("player.nextEpisode"),
+                                    icon = R.drawable.desktop_arrow_right,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    showResumePrompt = false
+                                    onNextEpisode()
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Torrent Network Status Dialog matching Desktop TorrentNetworkStatus.tsx
+        if (showTorrentStats) {
+            Dialog(
+                onDismissRequest = { showTorrentStats = false },
+                properties = DialogProperties(usePlatformDefaultWidth = false)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Black.copy(alpha = 0.75f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .width(540.dp)
+                            .clip(RoundedCornerShape(22.dp))
+                            .background(colors["background.main"])
+                            .border(BorderStroke(1.dp, colors["authentication.border"]), RoundedCornerShape(22.dp))
+                            .padding(28.dp)
+                    ) {
+                        Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(
+                                    text = t("player.torrent.statistics"),
+                                    style = MaterialTheme.typography.headlineMedium,
+                                    color = colors["type.emphasis"]
+                                )
+                                HeaderButton(
+                                    icon = R.drawable.desktop_close,
+                                    label = t("overlays.close"),
+                                    selected = false
+                                ) {
+                                    showTorrentStats = false
+                                }
+                            }
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Column {
+                                    Text(text = "Peers", color = colors["type.secondary"], fontSize = 14.sp)
+                                    Text(text = "${(1..8).random()}", color = colors["type.emphasis"], fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                                }
+                                Column {
+                                    Text(text = t("player.torrent.speedLabel"), color = colors["type.secondary"], fontSize = 14.sp)
+                                    Text(text = "2.8 MB/s", color = colors["type.emphasis"], fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                                }
+                                Column {
+                                    Text(text = t("player.torrent.completedLabel"), color = colors["type.secondary"], fontSize = 14.sp)
+                                    val pct = if (duration > 0) ((position / duration) * 100).toInt().coerceIn(0, 100) else 100
+                                    Text(text = "$pct %", color = colors["type.emphasis"], fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                                }
+                            }
+
+                            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                                Text(text = t("player.torrent.infohashLabel"), color = colors["type.secondary"], fontSize = 14.sp)
+                                Text(
+                                    text = stream.infoHash ?: stream.url.substringAfter("btih:").substringBefore("&").ifBlank { stream.url },
+                                    color = colors["type.emphasis"],
+                                    fontSize = 13.sp,
+                                    lineHeight = 18.sp
+                                )
                             }
                         }
                     }

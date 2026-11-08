@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -18,10 +19,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.SubcomposeAsyncImage
 import androidx.tv.material3.Border as TvBorder
 import androidx.tv.material3.Card as TvCard
 import androidx.tv.material3.CardDefaults as TvCardDefaults
@@ -57,6 +60,11 @@ internal fun SourcesScreen(
     val colors = LocalFrameZooColors.current
     val backRequester = remember { FocusRequester() }
     var selectedQuality by remember { mutableStateOf("all") }
+    var startingStreamKey by remember { mutableStateOf<String?>(null) }
+
+    LaunchedEffect(Unit) {
+        runCatching { backRequester.requestFocus() }
+    }
 
     val filteredSources = remember(sources, selectedQuality) {
         if (selectedQuality == "all") sources
@@ -189,8 +197,12 @@ internal fun SourcesScreen(
                 val secondaryDetails = if (detailsLines.size > 1) detailsLines.drop(1).joinToString("  •  ") else sizeStr?.let { "💾 $it" }.orEmpty()
 
                 val shape = RoundedCornerShape(12.dp)
+                val isStartingThis = startingStreamKey == (source.url + source.name)
                 TvCard(
-                    onClick = { onChooseSource(source) },
+                    onClick = {
+                        startingStreamKey = source.url + source.name
+                        onChooseSource(source)
+                    },
                     shape = TvCardDefaults.shape(shape),
                     colors = TvCardDefaults.colors(
                         containerColor = colors["background.secondary"].copy(alpha = 0.5f),
@@ -213,20 +225,39 @@ internal fun SourcesScreen(
                             modifier = Modifier
                                 .size(44.dp)
                                 .clip(RoundedCornerShape(8.dp))
-                                .background(if (isDebrid) Color(0xFFF59E0B).copy(alpha = 0.2f) else if (isTorrent) Color(0xFFC53BB0).copy(alpha = 0.2f) else Color(0xFF48D3FF).copy(alpha = 0.2f)),
+                                .background(Color.White.copy(alpha = 0.08f)),
                             contentAlignment = Alignment.Center
                         ) {
-                            Icon(
-                                painter = painterResource(if (isTorrent) R.drawable.desktop_video else R.drawable.desktop_play),
-                                contentDescription = null,
-                                tint = if (isDebrid) Color(0xFFF59E0B) else if (isTorrent) Color(0xFFC53BB0) else Color(0xFF48D3FF),
-                                modifier = Modifier.size(22.dp)
-                            )
+                            if (!source.addonLogo.isNullOrBlank()) {
+                                SubcomposeAsyncImage(
+                                    model = source.addonLogo,
+                                    contentDescription = "${source.addonName} logo",
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(4.dp),
+                                    contentScale = ContentScale.Fit,
+                                    error = {
+                                        Icon(
+                                            painter = painterResource(R.drawable.desktop_extension),
+                                            contentDescription = null,
+                                            tint = colors["type.logo"],
+                                            modifier = Modifier.size(22.dp)
+                                        )
+                                    }
+                                )
+                            } else {
+                                Icon(
+                                    painter = painterResource(R.drawable.desktop_extension),
+                                    contentDescription = null,
+                                    tint = colors["type.logo"],
+                                    modifier = Modifier.size(22.dp)
+                                )
+                            }
                         }
 
                         // Left section: Addon Name, Quality tag badge, Type badge
                         Column(
-                            modifier = Modifier.widthIn(min = 120.dp, max = 160.dp),
+                            modifier = Modifier.widthIn(min = 160.dp, max = 280.dp),
                             verticalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
                             Text(
@@ -245,13 +276,14 @@ internal fun SourcesScreen(
                                         modifier = Modifier
                                             .clip(RoundedCornerShape(4.dp))
                                             .background(colors["dropdown.altBackground"])
-                                            .padding(horizontal = 5.dp, vertical = 2.dp)
+                                            .padding(horizontal = 6.dp, vertical = 2.dp)
                                     ) {
                                         Text(
                                             text = qualityTag,
                                             color = colors["type.emphasis"],
                                             fontSize = 11.sp,
-                                            fontWeight = FontWeight.SemiBold
+                                            fontWeight = FontWeight.SemiBold,
+                                            maxLines = 1
                                         )
                                     }
                                 }
@@ -259,13 +291,14 @@ internal fun SourcesScreen(
                                     modifier = Modifier
                                         .clip(RoundedCornerShape(4.dp))
                                         .background(if (isTorrent) Color(0xFFC53BB0).copy(alpha = 0.15f) else Color(0xFF48D3FF).copy(alpha = 0.15f))
-                                        .padding(horizontal = 5.dp, vertical = 2.dp)
+                                        .padding(horizontal = 6.dp, vertical = 2.dp)
                                 ) {
                                     Text(
                                         text = if (isDebrid) "RD+" else if (isTorrent) "Torrent" else "HTTP",
                                         color = if (isDebrid) Color(0xFFFBBF24) else if (isTorrent) Color(0xFFC53BB0) else Color(0xFF48D3FF),
                                         fontSize = 11.sp,
-                                        fontWeight = FontWeight.Bold
+                                        fontWeight = FontWeight.Bold,
+                                        maxLines = 1
                                     )
                                 }
                             }
@@ -294,12 +327,20 @@ internal fun SourcesScreen(
                             }
                         }
 
-                        Icon(
-                            painter = painterResource(R.drawable.desktop_play),
-                            contentDescription = null,
-                            tint = colors["type.logo"],
-                            modifier = Modifier.size(18.dp)
-                        )
+                        if (isStartingThis) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(18.dp),
+                                color = colors["type.logo"],
+                                strokeWidth = 2.dp
+                            )
+                        } else {
+                            Icon(
+                                painter = painterResource(R.drawable.desktop_play),
+                                contentDescription = null,
+                                tint = colors["type.logo"],
+                                modifier = Modifier.size(18.dp)
+                            )
+                        }
                     }
                 }
             }
