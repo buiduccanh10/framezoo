@@ -35,7 +35,14 @@ class Backend(private val store: SecureStore) {
         if (it.startsWith("http")) it else "https://image.tmdb.org/t/p/$size$it"
     }
 
-    private suspend fun request(path: String, method: String = "GET", body: JSONObject? = null, auth: Boolean = false, retry: Boolean = true): Any = withContext(Dispatchers.IO) {
+    private suspend fun request(
+        path: String,
+        method: String = "GET",
+        body: JSONObject? = null,
+        auth: Boolean = false,
+        retry: Boolean = true,
+        headers: Map<String, String> = emptyMap()
+    ): Any = withContext(Dispatchers.IO) {
         val base = store.backendUrl.trimEnd('/')
         require(base.startsWith("https://") || (BuildConfig.DEBUG && base.startsWith("http://"))) { "Backend URL phải dùng HTTPS" }
         val connection = (URL(base + path).openConnection() as HttpURLConnection).apply {
@@ -43,6 +50,7 @@ class Backend(private val store: SecureStore) {
             connectTimeout = 15_000
             readTimeout = 20_000
             setRequestProperty("Accept", "application/json")
+            headers.forEach { (k, v) -> setRequestProperty(k, v) }
             if (auth) store.accessToken?.let { setRequestProperty("Authorization", "Bearer $it") }
             if (body != null) {
                 doOutput = true
@@ -52,7 +60,13 @@ class Backend(private val store: SecureStore) {
         }
         try {
             val status = connection.responseCode
-            if (status == 401 && auth && retry && refresh()) return@withContext request(path, method, body, auth, false)
+            if (status == 401 && auth && retry) {
+                if (refresh()) {
+                    return@withContext request(path, method, body, auth, false, headers)
+                } else {
+                    store.clearSession()
+                }
+            }
             val text = (if (status in 200..299) connection.inputStream else connection.errorStream)?.bufferedReader()?.use { it.readText() }.orEmpty()
             if (status !in 200..299) throw IllegalStateException("HTTP $status: ${text.take(180)}")
             when {
@@ -71,36 +85,301 @@ class Backend(private val store: SecureStore) {
         !store.accessToken.isNullOrBlank()
     } catch (_: Exception) { false }
 
+    private fun applyUserAndSession(reply: JSONObject, seedBytes: ByteArray? = null) {
+        if (seedBytes != null) {
+            store.userSeed = Auth.base64(seedBytes)
+        }
+        val oauth = reply.optJSONObject("oauth")
+        if (oauth != null) {
+            val token = oauth.optString("accessToken", oauth.optString("access_token"))
+            if (token.isNotBlank()) store.accessToken = token
+            val ref = oauth.optString("refreshToken", oauth.optString("refresh_token"))
+            if (ref.isNotBlank()) store.refreshToken = ref
+        }
+        val sessionObj = reply.optJSONObject("session")
+        if (sessionObj != null) {
+            sessionObj.optString("id").takeIf { it.isNotBlank() }?.let { store.userSessionId = it }
+            val sessionUser = sessionObj.optString("user", sessionObj.optString("userId"))
+            if (sessionUser.isNotBlank() && store.userId.isNullOrBlank()) {
+                store.userId = sessionUser
+            }
+            sessionObj.optString("device").takeIf { it.isNotBlank() }?.let { store.userDeviceName = it }
+        }
+        val userObj = reply.optJSONObject("user")
+        if (userObj != null) {
+            userObj.optString("id").takeIf { it.isNotBlank() }?.let { store.userId = it }
+            userObj.optString("nickname").takeIf { it.isNotBlank() }?.let { store.userNickname = it }
+            userObj.optString("email").takeIf { it.isNotBlank() && it != "null" }?.let { store.userEmail = it }
+            val profileObj = userObj.optJSONObject("profile")
+            if (profileObj != null) {
+                profileObj.optString("colorA").takeIf { it.isNotBlank() }?.let { store.userProfileColorA = it }
+                profileObj.optString("colorB").takeIf { it.isNotBlank() }?.let { store.userProfileColorB = it }
+                profileObj.optString("icon").takeIf { it.isNotBlank() }?.let { store.userProfileIcon = it }
+            }
+        } else {
+            reply.optString("user").takeIf { it.isNotBlank() && !it.startsWith("{") }?.let { store.userId = it }
+        }
+    }
+
     suspend fun login(identifier: String, password: String) {
         require(identifier.isNotBlank() && password.isNotBlank())
+        val seed = Auth.seed(password)
         val key = Auth.key(password)
         val start = request("/auth/login/start", "POST", JSONObject().put("identifier", identifier.trim())) as JSONObject
         val challenge = start.getString("challenge")
+        val encryptedDevice = runCatching { Auth.encryptData("FrameZoo TV", seed) }.getOrDefault("FrameZoo TV")
         val body = JSONObject()
             .put("namespace", "mobile")
             .put("identifier", identifier.trim())
             .put("publicKey", start.optString("publicKey").ifBlank { Auth.publicKey(key) })
             .put("challenge", JSONObject().put("code", challenge).put("signature", Auth.signature(key, challenge)))
-            .put("device", "FrameZoo TV")
+            .put("device", encryptedDevice)
         val reply = request("/auth/login/complete", "POST", body) as JSONObject
         val oauth = reply.optJSONObject("oauth") ?: throw IllegalStateException("Backend không trả token")
         val token = oauth.optString("accessToken", oauth.optString("access_token"))
         require(token.isNotBlank()) { "Backend không trả access token" }
-        val userObj = reply.optJSONObject("user")
-        if (userObj != null) {
-            store.userId = userObj.optString("id").takeIf { it.isNotBlank() }
-            store.userNickname = userObj.optString("nickname").takeIf { it.isNotBlank() }
-            val profileObj = userObj.optJSONObject("profile")
-            if (profileObj != null) {
-                store.userProfileColorA = profileObj.optString("colorA").takeIf { it.isNotBlank() }
-                store.userProfileColorB = profileObj.optString("colorB").takeIf { it.isNotBlank() }
-                store.userProfileIcon = profileObj.optString("icon").takeIf { it.isNotBlank() }
-            }
-        } else {
-            store.userId = reply.optString("user")
+        applyUserAndSession(reply, seed)
+        store.userDeviceName = encryptedDevice
+        getMe()
+    }
+
+    suspend fun checkNicknameExists(nickname: String): Boolean = try {
+        val reply = request("/nickname/${encode(nickname.trim())}/exists") as JSONObject
+        reply.optBoolean("exists", false)
+    } catch (_: Exception) {
+        true
+    }
+
+    suspend fun checkEmailExists(email: String): Boolean = try {
+        val reply = request("/auth/email/exists?email=${encode(email.trim())}") as JSONObject
+        reply.optBoolean("exists", false)
+    } catch (_: Exception) {
+        false
+    }
+
+    private fun parseOtpChallenge(reply: JSONObject): OtpChallenge = OtpChallenge(
+        challengeId = reply.optString("challengeId"),
+        expiresIn = reply.optInt("expiresIn", 600),
+        resendAfter = reply.optInt("resendAfter", 60),
+        message = reply.optString("message")
+    )
+
+    suspend fun requestRegistrationOtp(email: String): OtpChallenge {
+        val reply = request(
+            path = "/auth/register/otp/request",
+            method = "POST",
+            body = JSONObject().put("email", email.trim()),
+            headers = mapOf("Idempotency-Key" to java.util.UUID.randomUUID().toString())
+        ) as JSONObject
+        return parseOtpChallenge(reply)
+    }
+
+    suspend fun resendOtp(challengeId: String): OtpChallenge {
+        val reply = request(
+            path = "/auth/otp/resend",
+            method = "POST",
+            body = JSONObject().put("challengeId", challengeId),
+            headers = mapOf("Idempotency-Key" to java.util.UUID.randomUUID().toString())
+        ) as JSONObject
+        return parseOtpChallenge(reply)
+    }
+
+    suspend fun register(
+        nickname: String,
+        email: String,
+        password: String,
+        colorA: String,
+        colorB: String,
+        icon: String,
+        otpChallengeId: String? = null,
+        otpCode: String? = null
+    ) {
+        val seed = Auth.seed(password)
+        val key = Auth.key(password)
+        val start = request("/auth/register/start", "POST", JSONObject()) as JSONObject
+        val challenge = start.getString("challenge")
+        val encryptedDevice = runCatching { Auth.encryptData("FrameZoo TV", seed) }.getOrDefault("FrameZoo TV")
+        val profileJson = JSONObject()
+            .put("colorA", colorA)
+            .put("colorB", colorB)
+            .put("icon", icon)
+        val body = JSONObject()
+            .put("namespace", "mobile")
+            .put("publicKey", Auth.publicKey(key))
+            .put("challenge", JSONObject().put("code", challenge).put("signature", Auth.signature(key, challenge)))
+            .put("device", encryptedDevice)
+            .put("nickname", nickname.trim())
+            .put("email", email.trim())
+            .put("profile", profileJson)
+        if (!otpChallengeId.isNullOrBlank() && !otpCode.isNullOrBlank()) {
+            body.put("emailOtp", JSONObject().put("challengeId", otpChallengeId).put("code", otpCode.trim()))
         }
-        store.accessToken = token
-        store.refreshToken = oauth.optString("refreshToken", oauth.optString("refresh_token"))
+        val reply = request("/auth/register/complete", "POST", body) as JSONObject
+        applyUserAndSession(reply, seed)
+        if (store.accessToken.isNullOrBlank()) {
+            login(nickname.trim(), password)
+        }
+    }
+
+    suspend fun requestPasswordReset(email: String): OtpChallenge {
+        val reply = request(
+            path = "/auth/password/reset/request",
+            method = "POST",
+            body = JSONObject().put("email", email.trim()),
+            headers = mapOf("Idempotency-Key" to java.util.UUID.randomUUID().toString())
+        ) as JSONObject
+        return parseOtpChallenge(reply)
+    }
+
+    suspend fun verifyPasswordReset(challengeId: String, code: String): String {
+        val reply = request(
+            path = "/auth/password/reset/verify",
+            method = "POST",
+            body = JSONObject().put("challengeId", challengeId).put("code", code.trim())
+        ) as JSONObject
+        val token = reply.optString("actionToken")
+        require(token.isNotBlank()) { "Không nhận được mã xác thực đặt lại mật khẩu" }
+        return token
+    }
+
+    suspend fun completePasswordReset(actionToken: String, email: String, newPassword: String) {
+        val seed = Auth.seed(newPassword)
+        val key = Auth.key(newPassword)
+        val encryptedDevice = runCatching { Auth.encryptData("FrameZoo TV", seed) }.getOrDefault("FrameZoo TV")
+        val reply = request(
+            path = "/auth/password/reset/complete",
+            method = "POST",
+            body = JSONObject()
+                .put("actionToken", actionToken)
+                .put("newPublicKey", Auth.publicKey(key))
+                .put("device", encryptedDevice)
+        ) as JSONObject
+        applyUserAndSession(reply, seed)
+        if (store.accessToken.isNullOrBlank()) {
+            login(email.trim(), newPassword)
+        }
+    }
+
+    suspend fun editUser(
+        nickname: String? = null,
+        colorA: String? = null,
+        colorB: String? = null,
+        icon: String? = null
+    ): JSONObject? {
+        val id = store.userId ?: return null
+        val body = JSONObject()
+        if (!nickname.isNullOrBlank()) {
+            body.put("nickname", nickname.trim())
+        }
+        if (!colorA.isNullOrBlank() && !colorB.isNullOrBlank() && !icon.isNullOrBlank()) {
+            body.put(
+                "profile",
+                JSONObject()
+                    .put("colorA", colorA)
+                    .put("colorB", colorB)
+                    .put("icon", icon)
+            )
+        }
+        val reply = request("/users/${encode(id)}", "PATCH", body, auth = true) as JSONObject
+        applyUserAndSession(reply)
+        return reply.optJSONObject("user")
+    }
+
+    suspend fun deleteAccount() {
+        val id = store.userId ?: return
+        request("/users/${encode(id)}", "DELETE", auth = true)
+        store.clearSession()
+    }
+
+    suspend fun getSessions(): List<DeviceSession> {
+        val id = store.userId ?: return emptyList()
+        val rows = request("/users/${encode(id)}/sessions", auth = true) as JSONArray
+        val currentSessionId = store.userSessionId
+        val seedBase64 = store.userSeed
+        return (0 until rows.length()).mapNotNull { rows.optJSONObject(it) }.map { row ->
+            resolveDeviceSession(
+                id = row.optString("id"),
+                userId = row.optString("userId", id),
+                createdAt = row.optString("createdAt"),
+                accessedAt = row.optString("accessedAt"),
+                rawDevice = row.optString("device"),
+                userAgent = row.optString("userAgent"),
+                currentSessionId = currentSessionId,
+                seedBase64 = seedBase64
+            )
+        }.sortedWith(compareByDescending<DeviceSession> { it.isCurrent }.thenByDescending { it.accessedAt })
+    }
+
+    suspend fun removeSession(sessionId: String) {
+        if (sessionId.isBlank()) return
+        request("/sessions/${encode(sessionId)}", "DELETE", auth = true)
+    }
+
+    suspend fun logoutCurrentSession() {
+        val sessionId = store.userSessionId
+        if (!sessionId.isNullOrBlank()) {
+            runCatching { removeSession(sessionId) }
+        }
+        store.clearSession()
+    }
+
+    suspend fun requestPasswordChange(): OtpChallenge {
+        val reply = request(
+            path = "/auth/password/change/request",
+            method = "POST",
+            body = JSONObject(),
+            auth = true,
+            headers = mapOf("Idempotency-Key" to java.util.UUID.randomUUID().toString())
+        ) as JSONObject
+        return parseOtpChallenge(reply)
+    }
+
+    suspend fun completePasswordChange(challengeId: String, code: String, newPassword: String) {
+        val seed = Auth.seed(newPassword)
+        val key = Auth.key(newPassword)
+        val encryptedDevice = runCatching { Auth.encryptData("FrameZoo TV", seed) }.getOrDefault("FrameZoo TV")
+        val reply = request(
+            path = "/auth/password/change/complete",
+            method = "POST",
+            body = JSONObject()
+                .put("challengeId", challengeId)
+                .put("code", code.trim())
+                .put("newPublicKey", Auth.publicKey(key))
+                .put("device", encryptedDevice),
+            auth = true
+        ) as JSONObject
+        applyUserAndSession(reply, seed)
+    }
+
+    suspend fun requestEmailChange(newEmail: String): OtpChallenge {
+        val reply = request(
+            path = "/auth/email/change/request",
+            method = "POST",
+            body = JSONObject().put("newEmail", newEmail.trim()),
+            auth = true,
+            headers = mapOf("Idempotency-Key" to java.util.UUID.randomUUID().toString())
+        ) as JSONObject
+        return parseOtpChallenge(reply)
+    }
+
+    suspend fun verifyEmailChangeOld(challengeId: String, code: String): OtpChallenge {
+        val reply = request(
+            path = "/auth/email/change/verify-old",
+            method = "POST",
+            body = JSONObject().put("challengeId", challengeId).put("code", code.trim()),
+            auth = true
+        ) as JSONObject
+        return parseOtpChallenge(reply)
+    }
+
+    suspend fun completeEmailChange(flowId: String, code: String) {
+        val reply = request(
+            path = "/auth/email/change/complete",
+            method = "POST",
+            body = JSONObject().put("flowId", flowId).put("code", code.trim()),
+            auth = true
+        ) as JSONObject
+        applyUserAndSession(reply)
     }
 
     /** Mirrors desktop getRoomStatuses + host lookup in WatchPartyJoinDialog. */
@@ -132,18 +411,10 @@ class Backend(private val store: SecureStore) {
     suspend fun getMe(): JSONObject? = try {
         if (store.userId == null) null else {
             val reply = request("/users/@me", auth = true) as? JSONObject
-            val userObj = reply?.optJSONObject("user")
-            if (userObj != null) {
-                userObj.optString("id").takeIf { it.isNotBlank() }?.let { store.userId = it }
-                userObj.optString("nickname").takeIf { it.isNotBlank() }?.let { store.userNickname = it }
-                val profileObj = userObj.optJSONObject("profile")
-                if (profileObj != null) {
-                    profileObj.optString("colorA").takeIf { it.isNotBlank() }?.let { store.userProfileColorA = it }
-                    profileObj.optString("colorB").takeIf { it.isNotBlank() }?.let { store.userProfileColorB = it }
-                    profileObj.optString("icon").takeIf { it.isNotBlank() }?.let { store.userProfileIcon = it }
-                }
+            if (reply != null) {
+                applyUserAndSession(reply)
             }
-            userObj
+            reply?.optJSONObject("user")
         }
     } catch (_: Exception) { null }
 

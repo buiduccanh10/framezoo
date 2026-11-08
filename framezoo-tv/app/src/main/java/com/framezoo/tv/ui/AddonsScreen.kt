@@ -208,6 +208,21 @@ internal fun AddonsScreen(
                                     fontSize = 18.sp,
                                     fontWeight = FontWeight.Bold
                                 )
+                                if (!addon.version.isNullOrBlank()) {
+                                    Box(
+                                        modifier = Modifier
+                                            .clip(RoundedCornerShape(4.dp))
+                                            .background(colors["dropdown.altBackground"])
+                                            .padding(horizontal = 6.dp, vertical = 2.dp)
+                                    ) {
+                                        Text(
+                                            text = "v${addon.version}",
+                                            color = colors["type.secondary"],
+                                            fontSize = 11.sp,
+                                            fontWeight = FontWeight.Medium
+                                        )
+                                    }
+                                }
                                 Text(
                                     text = addon.manifestUrl,
                                     color = colors["type.secondary"],
@@ -220,6 +235,14 @@ internal fun AddonsScreen(
                                 if (addon.resources.contains("subtitles")) AddonBadge("Subtitles", Color(0xFFC53BB0))
                                 if (addon.resources.contains("catalog")) AddonBadge("Catalogs", Color(0xFF4CAF50))
                                 if (addon.resources.contains("meta")) AddonBadge("Metadata", Color(0xFFFFB300))
+                            }
+                            if (!addon.description.isNullOrBlank()) {
+                                Text(
+                                    text = addon.description,
+                                    color = colors["type.secondary"],
+                                    fontSize = 12.sp,
+                                    maxLines = 2
+                                )
                             }
                         }
 
@@ -235,11 +258,13 @@ internal fun AddonsScreen(
                                 onAction(AddonsAction.ToggleAddon(addon.manifestUrl))
                             }
 
-                            TvButton(
-                                label = t("addons.page.removeAddon"),
-                                icon = R.drawable.desktop_close
-                            ) {
-                                onAction(AddonsAction.RemoveAddon(addon.manifestUrl))
+                            if (!addon.isNative) {
+                                TvButton(
+                                    label = t("addons.page.removeAddon"),
+                                    icon = R.drawable.desktop_close
+                                ) {
+                                    onAction(AddonsAction.RemoveAddon(addon.manifestUrl))
+                                }
                             }
                         }
                     }
@@ -345,8 +370,8 @@ internal fun AddonsScreen(state: FrameZooState) {
                         isLoading = false
                     }
                 }
-                is AddonsAction.RemoveAddon -> state.installed.firstOrNull { it.id == action.id }?.let { state.removeAddon(it) }
-                is AddonsAction.ToggleAddon -> state.installed.firstOrNull { it.id == action.id }?.let { state.toggleAddon(it) }
+                is AddonsAction.RemoveAddon -> state.installed.firstOrNull { it.id == action.id || it.manifestUrl == action.id }?.let { state.removeAddon(it) }
+                is AddonsAction.ToggleAddon -> state.installed.firstOrNull { it.id == action.id || it.manifestUrl == action.id }?.let { state.toggleAddon(it) }
                 is AddonsAction.Refresh -> {}
             }
         },

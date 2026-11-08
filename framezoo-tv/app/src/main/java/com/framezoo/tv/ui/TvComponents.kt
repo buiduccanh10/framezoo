@@ -105,13 +105,15 @@ internal fun TvButton(
     val focusBorderColor = if (isHighContrast) Color.White else colors["type.logo"]
     val focusScale = when {
         accent || primary -> 1.05f
-        navigation -> 1.04f
-        else -> 1.05f
+        navigation -> 1.02f
+        else -> 1.04f
     }
     val animatedBackground by animateColorAsState(background, tween(300), label = "button background")
     MaterialTvButton(
         onClick = onClick,
-        modifier = modifier.onFocusChanged { focused = it.isFocused },
+        modifier = modifier
+            .zIndex(if (focused) 10f else 1f)
+            .onFocusChanged { focused = it.isFocused },
         shape = TvButtonDefaults.shape(shape),
         colors = TvButtonDefaults.colors(
             containerColor = animatedBackground,
@@ -125,7 +127,7 @@ internal fun TvButton(
         border = TvButtonDefaults.border(focusedBorder = TvBorder(BorderStroke(2.dp, focusBorderColor), shape = shape)),
         contentPadding = PaddingValues(horizontal = if (navigation) 14.dp else 22.dp, vertical = 12.dp),
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(if (label.isNotBlank()) 8.dp else 0.dp)) {
             if (loading) {
                 androidx.compose.material3.CircularProgressIndicator(
                     color = foreground,
@@ -135,8 +137,10 @@ internal fun TvButton(
             } else {
                 icon?.let { Icon(painterResource(it), contentDescription = null, modifier = Modifier.width(18.dp).height(18.dp), tint = foreground) }
             }
-            Text(label, color = foreground, fontSize = 16.sp, fontWeight = if (navigation) FontWeight.Medium else FontWeight.Bold,
-                maxLines = 1, softWrap = false, overflow = TextOverflow.Ellipsis)
+            if (label.isNotBlank()) {
+                Text(label, color = foreground, fontSize = 16.sp, fontWeight = if (navigation) FontWeight.Medium else FontWeight.Bold,
+                    maxLines = 1, softWrap = false, overflow = TextOverflow.Ellipsis)
+            }
             trailingIcon?.let { Icon(painterResource(it), contentDescription = null, modifier = Modifier.width(16.dp).height(16.dp), tint = foreground) }
         }
     }

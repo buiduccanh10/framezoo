@@ -68,7 +68,12 @@ internal fun tvFieldColors(): TextFieldColors {
 }
 
 @Composable
-internal fun FrameZooApp(initialPage: String? = null) {
+internal fun FrameZooApp(
+    initialPage: String? = null,
+    detailId: String? = null,
+    detailType: String? = null,
+    detailTitle: String? = null
+) {
     val context = LocalContext.current
     val activity = context as MainActivity
     val discoverAction = remember { FocusRequester() }
@@ -91,6 +96,11 @@ internal fun FrameZooApp(initialPage: String? = null) {
             state.page = initialPage
         }
     }
+    LaunchedEffect(detailId, detailType) {
+        if (!detailId.isNullOrBlank()) {
+            state.openDetails(com.framezoo.tv.model.Media(id = detailId, type = detailType ?: "movie", title = detailTitle ?: ""))
+        }
+    }
     LaunchedEffect(state.moreGeneration) {
         if (renderedMoreGeneration != state.moreGeneration) { moreGridState.scrollToItem(0); renderedMoreGeneration = state.moreGeneration }
     }
@@ -103,14 +113,13 @@ internal fun FrameZooApp(initialPage: String? = null) {
                 Surface(color = MaterialTheme.colorScheme.background, contentColor = MaterialTheme.colorScheme.onBackground) {
                     Box(Modifier.fillMaxSize()) {
                     Column(Modifier.fillMaxSize().then(
-                        if (page in listOf("discover", "search", "details", "player", "trailer")) Modifier
+                        if (page in listOf("discover", "search", "details", "player", "trailer", "login", "settings")) Modifier
                         else Modifier.padding(horizontal = 48.dp, vertical = 32.dp)
                     )) {
-                        if (page !in listOf("player", "discover", "search", "details", "trailer")) {
+                        if (page !in listOf("player", "discover", "search", "details", "trailer", "login", "settings")) {
                             DiscoverHeader(state)
                             Spacer(Modifier.height(28.dp))
                         }
-                        if (busy && page != "details") CircularProgressIndicator(Modifier.size(26.dp))
                         if (error.isNotBlank() && page != "details") Text(error, color = colors["type.danger"], modifier = Modifier.padding(vertical = 10.dp))
                         val isConnectionError = page == "error" || (page == "discover" && discover.isEmpty() && (discoverError.isNotBlank() || error.isNotBlank()))
                         if (isConnectionError) {

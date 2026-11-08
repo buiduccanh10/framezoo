@@ -30,11 +30,27 @@ import com.framezoo.tv.model.Episode
 import com.framezoo.tv.model.Media
 import com.framezoo.tv.model.Stream
 
+private fun formatSize(bytes: Long?): String? {
+    if (bytes == null || bytes <= 0L) return null
+    val units = listOf("B", "KB", "MB", "GB", "TB")
+    var value = bytes.toDouble()
+    var index = 0
+    while (value >= 1024.0 && index < units.size - 1) {
+        value /= 1024.0
+        index++
+    }
+    return if (index == 0) "${value.toInt()} ${units[index]}" else "%.1f %s".format(value, units[index])
+}
+
+private fun streamLines(value: String): List<String> =
+    value.lines().map { it.trim() }.filter { it.isNotBlank() }
+
 @Composable
 internal fun SourcesScreen(
     media: Media?,
     episode: Episode?,
     sources: List<Stream>,
+    isLoading: Boolean = false,
     onChooseSource: (Stream) -> Unit,
     onBack: () -> Unit
 ) {
@@ -45,12 +61,12 @@ internal fun SourcesScreen(
     val filteredSources = remember(sources, selectedQuality) {
         if (selectedQuality == "all") sources
         else sources.filter { stream ->
-            val lower = stream.name.lowercase()
+            val text = "${stream.name} ${stream.title} ${stream.description} ${stream.filename.orEmpty()}".lowercase()
             when (selectedQuality) {
-                "4k" -> lower.contains("4k") || lower.contains("2160")
-                "1080p" -> lower.contains("1080")
-                "720p" -> lower.contains("720")
-                "480p" -> lower.contains("480") || lower.contains("sd")
+                "4k" -> text.contains("4k") || text.contains("2160")
+                "1080p" -> text.contains("1080")
+                "720p" -> text.contains("720")
+                "480p" -> text.contains("480") || text.contains("sd")
                 else -> true
             }
         }
@@ -104,7 +120,36 @@ internal fun SourcesScreen(
             }
         }
 
-        if (filteredSources.isEmpty()) {
+        if (isLoading) {
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(16.dp))
+                        .border(BorderStroke(1.dp, colors["authentication.border"]), RoundedCornerShape(16.dp))
+                        .background(colors["background.secondary"].copy(alpha = 0.35f))
+                        .padding(40.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(14.dp)
+                    ) {
+                        androidx.compose.material3.CircularProgressIndicator(
+                            color = colors["type.logo"],
+                            modifier = Modifier.size(36.dp),
+                            strokeWidth = 3.dp
+                        )
+                        Text(
+                            text = t("addons.player.loadingStreams"),
+                            color = colors["type.emphasis"],
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
+                }
+            }
+        } else if (filteredSources.isEmpty()) {
             item {
                 Box(
                     modifier = Modifier
@@ -127,9 +172,22 @@ internal fun SourcesScreen(
             items(filteredSources) { source ->
                 val isTorrent = source.infoHash != null || source.url.startsWith("magnet:")
                 val isDebrid = source.name.contains("RD", ignoreCase = true) || source.name.contains("RealDebrid", ignoreCase = true) || source.name.contains("[RD+]", ignoreCase = true)
-                val lines = source.name.split("\n").filter { it.isNotBlank() }
-                val mainTitle = lines.firstOrNull() ?: source.name
-                val subDetails = if (lines.size > 1) lines.drop(1).joinToString(" · ") else source.filename.orEmpty()
+
+                val nameLines = streamLines(source.name.ifBlank { source.addonName })
+                val addonNameHeader = nameLines.firstOrNull() ?: source.addonName.ifBlank { "Addon" }
+                val qualityTag = if (nameLines.size > 1) nameLines.drop(1).joinToString(" ") else null
+
+                val titleLines = streamLines(source.title)
+                val descLines = streamLines(source.description)
+                val sizeStr = formatSize(source.videoSize)
+                val fallbackDetails = listOfNotNull(
+                    sizeStr?.let { "💾 $it" },
+                    source.filename?.let { "⚙ $it" }
+                )
+                val detailsLines = (titleLines + descLines).ifEmpty { fallbackDetails }
+                val primaryTitle = detailsLines.firstOrNull() ?: source.filename ?: source.name
+                val secondaryDetails = if (detailsLines.size > 1) detailsLines.drop(1).joinToString("  •  ") else sizeStr?.let { "💾 $it" }.orEmpty()
+
                 val shape = RoundedCornerShape(12.dp)
                 TvCard(
                     onClick = { onChooseSource(source) },
@@ -166,27 +224,34 @@ internal fun SourcesScreen(
                             )
                         }
 
-                        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                Text(
-                                    text = mainTitle,
-                                    color = colors["type.emphasis"],
-                                    fontSize = 16.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    maxLines = 1
-                                )
-                                if (isDebrid) {
+                        // Left section: Addon Name, Quality tag badge, Type badge
+                        Column(
+                            modifier = Modifier.widthIn(min = 120.dp, max = 160.dp),
+                            verticalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            Text(
+                                text = addonNameHeader,
+                                color = colors["type.emphasis"],
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold,
+                                maxLines = 1
+                            )
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                if (qualityTag != null) {
                                     Box(
                                         modifier = Modifier
                                             .clip(RoundedCornerShape(4.dp))
-                                            .background(Color(0xFFF59E0B).copy(alpha = 0.25f))
-                                            .padding(horizontal = 6.dp, vertical = 2.dp)
+                                            .background(colors["dropdown.altBackground"])
+                                            .padding(horizontal = 5.dp, vertical = 2.dp)
                                     ) {
                                         Text(
-                                            text = "RD+",
-                                            color = Color(0xFFFBBF24),
+                                            text = qualityTag,
+                                            color = colors["type.emphasis"],
                                             fontSize = 11.sp,
-                                            fontWeight = FontWeight.Bold
+                                            fontWeight = FontWeight.SemiBold
                                         )
                                     }
                                 }
@@ -194,21 +259,36 @@ internal fun SourcesScreen(
                                     modifier = Modifier
                                         .clip(RoundedCornerShape(4.dp))
                                         .background(if (isTorrent) Color(0xFFC53BB0).copy(alpha = 0.15f) else Color(0xFF48D3FF).copy(alpha = 0.15f))
-                                        .padding(horizontal = 6.dp, vertical = 2.dp)
+                                        .padding(horizontal = 5.dp, vertical = 2.dp)
                                 ) {
                                     Text(
-                                        text = if (isTorrent) "Torrent" else "HTTP / HLS",
-                                        color = if (isTorrent) Color(0xFFC53BB0) else Color(0xFF48D3FF),
+                                        text = if (isDebrid) "RD+" else if (isTorrent) "Torrent" else "HTTP",
+                                        color = if (isDebrid) Color(0xFFFBBF24) else if (isTorrent) Color(0xFFC53BB0) else Color(0xFF48D3FF),
                                         fontSize = 11.sp,
                                         fontWeight = FontWeight.Bold
                                     )
                                 }
                             }
-                            if (subDetails.isNotBlank()) {
+                        }
+
+                        // Middle section: Release Title and details (seeds, size, audio/video specs)
+                        Column(
+                            modifier = Modifier.weight(1f),
+                            verticalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            Text(
+                                text = primaryTitle,
+                                color = Color.White,
+                                fontSize = 14.5.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                maxLines = 1
+                            )
+                            if (secondaryDetails.isNotBlank()) {
                                 Text(
-                                    text = subDetails,
+                                    text = secondaryDetails,
                                     color = colors["type.secondary"],
-                                    fontSize = 13.sp,
+                                    fontSize = 12.5.sp,
+                                    lineHeight = 18.sp,
                                     maxLines = 2
                                 )
                             }
@@ -233,6 +313,7 @@ internal fun SourcesScreen(state: FrameZooState) {
         media = state.selected,
         episode = state.episode,
         sources = state.sources,
+        isLoading = state.sourcesLoading,
         onChooseSource = { state.chooseSource(it) },
         onBack = { state.back() }
     )

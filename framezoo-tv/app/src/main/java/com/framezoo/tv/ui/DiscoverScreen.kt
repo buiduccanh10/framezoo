@@ -216,15 +216,17 @@ internal fun DiscoverHeader(state: FrameZooState, modifier: Modifier = Modifier)
             }
             Spacer(Modifier.width(10.dp))
         }
-        val accountUiState = remember(state.store.userId, state.userNickname, state.userProfileColorA, state.userProfileColorB, state.userProfileIcon, accountExpanded) {
+        val accountUiState = remember(state.userId, state.isLoggedIn, state.userNickname, state.userDeviceName, state.store.userSeed, state.userProfileColorA, state.userProfileColorB, state.userProfileIcon, accountExpanded) {
             AccountMenuUiState(
-                isLoggedIn = state.store.userId != null,
+                isLoggedIn = state.isLoggedIn,
                 profile = AccountProfile(
                     colorA = state.userProfileColorA ?: "#6366F1",
                     colorB = state.userProfileColorB ?: "#EC4899",
                     icon = UserIcon.fromKey(state.userProfileIcon),
                     nickname = state.userNickname.orEmpty(),
-                    userId = state.store.userId
+                    userId = state.userId,
+                    deviceName = state.userDeviceName,
+                    seedBase64 = state.store.userSeed
                 ),
                 isExpanded = accountExpanded
             )

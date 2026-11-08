@@ -22,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.tv.material3.Border as TvBorder
 import androidx.tv.material3.Button as MaterialTvButton
 import androidx.tv.material3.ButtonDefaults as TvButtonDefaults
@@ -144,16 +145,20 @@ fun HeaderAccountButton(
     focusRequester: FocusRequester,
     leftFocusRequester: FocusRequester,
     modifier: Modifier = Modifier,
+    deviceName: String? = null,
+    seedBase64: String? = null,
     onClick: () -> Unit
 ) {
-    val state = remember(isLoggedIn, userNickname, colorA, colorB, icon, expanded) {
+    val state = remember(isLoggedIn, userNickname, colorA, colorB, icon, expanded, deviceName, seedBase64) {
         AccountMenuUiState(
             isLoggedIn = isLoggedIn,
             profile = AccountProfile(
                 colorA = colorA ?: "#6366F1",
                 colorB = colorB ?: "#EC4899",
                 icon = com.framezoo.tv.model.UserIcon.fromKey(icon),
-                nickname = userNickname.orEmpty()
+                nickname = userNickname.orEmpty(),
+                deviceName = deviceName,
+                seedBase64 = seedBase64
             ),
             isExpanded = expanded
         )
@@ -197,6 +202,7 @@ fun DropdownItemRow(
     MaterialTvButton(
         onClick = onClick,
         modifier = modifier
+            .zIndex(if (focused) 10f else 1f)
             .fillMaxWidth()
             .height(TvDesignTokens.Dimensions.MenuItemHeight)
             .padding(horizontal = 6.dp, vertical = 2.dp)

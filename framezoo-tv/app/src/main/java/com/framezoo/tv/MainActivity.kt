@@ -24,7 +24,17 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val initialPage = intent.getStringExtra("page")
-        setContent { FrameZooApp(initialPage = initialPage) }
+        val detailId = intent.getStringExtra("detail_id")
+        val detailType = intent.getStringExtra("detail_type")
+        val detailTitle = intent.getStringExtra("detail_title")
+        setContent {
+            FrameZooApp(
+                initialPage = initialPage,
+                detailId = detailId,
+                detailType = detailType,
+                detailTitle = detailTitle
+            )
+        }
     }
 }
 

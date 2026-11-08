@@ -127,7 +127,15 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
     var episodesLoading by mutableStateOf(false)
     var trailerKey by mutableStateOf("")
     var trailerTitle by mutableStateOf("")
+    var userId by mutableStateOf(store.userId)
+        private set
+    val isLoggedIn: Boolean
+        get() = userId != null
     var userNickname by mutableStateOf(store.userNickname)
+        private set
+    var userDeviceName by mutableStateOf(store.userDeviceName)
+        private set
+    var userEmail by mutableStateOf(store.userEmail)
         private set
     var userProfileColorA by mutableStateOf(store.userProfileColorA)
         private set
@@ -137,7 +145,10 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         private set
 
     fun syncUserProfile() {
+        userId = store.userId
         userNickname = store.userNickname
+        userDeviceName = store.userDeviceName
+        userEmail = store.userEmail
         userProfileColorA = store.userProfileColorA
         userProfileColorB = store.userProfileColorB
         userProfileIcon = store.userProfileIcon
@@ -209,6 +220,7 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
     private var addonEpisodes by mutableStateOf<List<Episode>>(emptyList())
     var episode by mutableStateOf<Episode?>(null)
     var sources by mutableStateOf<List<Stream>>(emptyList())
+    var sourcesLoading by mutableStateOf(false)
     var playing by mutableStateOf<Stream?>(null)
     private var recentResume by mutableStateOf<Triple<String, Episode?, Double>?>(null)
     var subtitles by mutableStateOf<List<Subtitle>>(emptyList())
@@ -429,32 +441,86 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         episode = null; page = "details"
     }
 
-    fun playFeatured(item: Media) = runTask {
+    fun playFeatured(item: Media) {
         if (page != "details") { detailsReturnPage = page; detailsStack.clear() }
-        val (detail, seasonList) = backend.details(item)
-        selected = detail; seasons = seasonList; episodes = emptyList(); addonEpisodes = emptyList()
         val saved = progress.firstOrNull { it.media.id == item.id && it.media.type == item.type && it.position > 0 }
-        val target = if (item.type == "show") {
-            val season = saved?.season ?: seasonList.firstOrNull()
-            season?.let { number -> backend.episodes(item.id, number).let { eps ->
-                saved?.episode?.let { ep -> eps.firstOrNull { it.number == ep } } ?: eps.firstOrNull()
-            } }
+        val initialTarget = if (item.type == "show" && saved?.season != null && saved.episode != null) {
+            Episode(
+                id = "${item.id}:${saved.season}:${saved.episode}",
+                number = saved.episode,
+                season = saved.season,
+                title = "",
+                overview = "",
+                still = "",
+                airDate = "",
+                seasonId = ""
+            )
         } else null
-        episode = target
-        if (item.type == "show" && target == null) page = "details" else {
-            sources = addons.streams(detail, target); subtitles = addons.subtitles(detail, target); page = "sources"
+        selected = item
+        episode = initialTarget
+        sources = emptyList()
+        subtitles = emptyList()
+        sourcesLoading = true
+        page = "sources"
+
+        scope.launch {
+            try {
+                val (detail, seasonList) = backend.details(item)
+                selected = detail
+                seasons = seasonList
+                val resolvedTarget = if (item.type == "show") {
+                    val season = saved?.season ?: seasonList.firstOrNull()
+                    season?.let { number ->
+                        val eps = backend.episodes(item.id, number)
+                        saved?.episode?.let { ep -> eps.firstOrNull { it.number == ep } } ?: eps.firstOrNull()
+                    }
+                } else null
+                episode = resolvedTarget
+                if (item.type == "show" && resolvedTarget == null) {
+                    sourcesLoading = false
+                    page = "details"
+                    return@launch
+                }
+                val streamList = addons.streams(detail, resolvedTarget)
+                val subList = addons.subtitles(detail, resolvedTarget)
+                sources = streamList
+                subtitles = subList
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                error = e.message ?: "Failed to load sources"
+            } finally {
+                sourcesLoading = false
+            }
         }
     }
     fun playRandom(item: Media) = playFeatured(item)
 
-    fun loadSources(item: Media, target: Episode?) = runTask {
-        selected = item; episode = target
-        sources = addons.streams(item, target)
-        subtitles = addons.subtitles(item, target)
+    fun loadSources(item: Media, target: Episode?) {
+        selected = item
+        episode = target
+        sources = emptyList()
+        subtitles = emptyList()
+        sourcesLoading = true
         page = "sources"
+
+        scope.launch {
+            try {
+                val streamList = addons.streams(item, target)
+                val subList = addons.subtitles(item, target)
+                sources = streamList
+                subtitles = subList
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                error = e.message ?: "Failed to load sources"
+            } finally {
+                sourcesLoading = false
+            }
+        }
     }
 
-    private suspend fun refreshUserData() = coroutineScope {
+    internal suspend fun refreshUserData() = coroutineScope {
         val userMe = async {
             try {
                 backend.getMe()
@@ -462,12 +528,21 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
                 null
             }
         }
-        val saved = async { backend.bookmarkDetails() }
-        val groups = async { backend.bookmarkGroups() }
-        val watched = async { backend.watchHistory() }
-        val ongoing = async { backend.watchProgress() }
+        val saved = async { runCatching { backend.bookmarkDetails() }.getOrDefault(emptyList()) }
+        val groups = async { runCatching { backend.bookmarkGroups() }.getOrDefault(emptyList()) }
+        val watched = async { runCatching { backend.watchHistory() }.getOrDefault(emptyList()) }
+        val ongoing = async { runCatching { backend.watchProgress() }.getOrDefault(emptyList()) }
         userMe.await()
         syncUserProfile()
+        if (store.userId == null) {
+            library = emptyList()
+            history = emptyList()
+            progress = backend.loadLocalProgress()
+            bookmarks = emptyList()
+            bookmarkDetails = emptyList()
+            bookmarkGroups = emptyList()
+            return@coroutineScope
+        }
         bookmarkDetails = saved.await(); bookmarks = bookmarkDetails.map { it.media }; bookmarkGroups = (groups.await() + bookmarkDetails.flatMap { it.groups }).distinct(); history = watched.await(); progress = ongoing.await()
         library = (bookmarks.map { LibraryItem(it) } + history + progress)
             .associateBy { "${it.media.id}:${it.season ?: -1}:${it.episode ?: -1}" }.values.toList()
@@ -595,14 +670,45 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         }
     }
     fun openTrailer(key: String, title: String) { trailerKey = key; trailerTitle = title; page = "trailer" }
+    var enableAutoplay by mutableStateOf(store.enableAutoplay)
+        private set
+    var enableSkipCredits by mutableStateOf(store.enableSkipCredits)
+        private set
+    var enableAutoSkipSegments by mutableStateOf(store.enableAutoSkipSegments)
+        private set
     var subtitleFontSize by mutableIntStateOf(store.subtitleFontSize)
         private set
     var subtitleColor by mutableStateOf(store.subtitleColor)
         private set
     var subtitleBackgroundOpacity by mutableIntStateOf(store.subtitleBackgroundOpacity)
         private set
+    var subtitleBackgroundBlurEnabled by mutableStateOf(store.subtitleBackgroundBlurEnabled)
+        private set
+    var subtitleFontStyle by mutableStateOf(store.subtitleFontStyle)
+        private set
+    var subtitleBold by mutableStateOf(store.subtitleBold)
+        private set
+    var subtitleVerticalPosition by mutableIntStateOf(store.subtitleVerticalPosition)
+        private set
     var torrentCacheSize by mutableStateOf(store.torrentCacheSize)
         private set
+    var torrentProfile by mutableStateOf(store.torrentProfile)
+        private set
+
+    fun toggleAutoplay() {
+        enableAutoplay = !enableAutoplay
+        store.enableAutoplay = enableAutoplay
+    }
+
+    fun toggleSkipCredits() {
+        enableSkipCredits = !enableSkipCredits
+        store.enableSkipCredits = enableSkipCredits
+    }
+
+    fun toggleAutoSkipSegments() {
+        enableAutoSkipSegments = !enableAutoSkipSegments
+        store.enableAutoSkipSegments = enableAutoSkipSegments
+    }
 
     fun updateSubtitleFontSize(size: Int) {
         subtitleFontSize = size
@@ -623,9 +729,46 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         player.command("set", "sub-back-color", "0/0/0/$alpha")
     }
 
+    fun toggleSubtitleBackgroundBlur() {
+        subtitleBackgroundBlurEnabled = !subtitleBackgroundBlurEnabled
+        store.subtitleBackgroundBlurEnabled = subtitleBackgroundBlurEnabled
+    }
+
+    fun updateSubtitleFontStyle(style: String) {
+        subtitleFontStyle = style
+        store.subtitleFontStyle = style
+    }
+
+    fun toggleSubtitleBold() {
+        subtitleBold = !subtitleBold
+        store.subtitleBold = subtitleBold
+        player.command("set", "sub-bold", if (subtitleBold) "yes" else "no")
+    }
+
+    fun updateSubtitleVerticalPosition(pos: Int) {
+        subtitleVerticalPosition = pos
+        store.subtitleVerticalPosition = pos
+    }
+
+    fun resetSubtitleStyling() {
+        updateSubtitleFontSize(100)
+        updateSubtitleColor("#FFFFFF")
+        updateSubtitleBackgroundOpacity(50)
+        subtitleBackgroundBlurEnabled = false
+        store.subtitleBackgroundBlurEnabled = false
+        updateSubtitleFontStyle("default")
+        if (subtitleBold) toggleSubtitleBold()
+        updateSubtitleVerticalPosition(1)
+    }
+
     fun updateTorrentCacheSize(size: String) {
         torrentCacheSize = size
         store.torrentCacheSize = size
+    }
+
+    fun updateTorrentProfile(profile: String) {
+        torrentProfile = profile
+        store.torrentProfile = profile
     }
 
     fun removeBookmark(item: Media) {
@@ -677,8 +820,30 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
             "tertiary" -> { customTertiary = name; store.customTertiary = name }
         }
     }
-    fun openLogin() { if (page != "login") { loginReturnPage = page; page = "login" } }
+    fun openLogin() {
+        if (isLoggedIn) {
+            page = "settings"
+            return
+        }
+        if (page != "login") {
+            loginReturnPage = page
+            page = "login"
+        }
+    }
     fun openFeedback() { if (page != "feedback") { feedbackReturnPage = page; page = "feedback" } }
+    fun completeAuthSuccess() {
+        syncUserProfile()
+        val target = if (loginReturnPage == "login" || loginReturnPage.isBlank()) "discover" else loginReturnPage
+        loginReturnPage = "discover"
+        page = target
+        loginPassword = ""
+        scope.launch {
+            installed = addons.list()
+            runCatching { refreshUserData() }
+            syncUserProfile()
+            refreshDiscover()
+        }
+    }
     fun login() = runTask {
         try {
             backend.login(loginName, loginPassword)
@@ -695,6 +860,10 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         }
     }
     fun logout() {
+        val currentSessionId = store.userSessionId
+        if (!currentSessionId.isNullOrBlank()) {
+            scope.launch { runCatching { backend.removeSession(currentSessionId) } }
+        }
         store.clearSession()
         store.clearLocalProgress()
         syncUserProfile()

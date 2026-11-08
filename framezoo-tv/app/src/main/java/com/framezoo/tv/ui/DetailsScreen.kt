@@ -148,8 +148,10 @@ internal fun DetailsScreen(state: FrameZooState, item: Media) {
     }
     LaunchedEffect(copied) { if (copied) { delay(2500); copied = false } }
     LaunchedEffect(item.id, item.type) {
-        withFrameNanos { }
         listState.scrollToItem(0)
+        delay(50)
+        runCatching { firstAction.requestFocus() }
+        delay(100)
         runCatching { firstAction.requestFocus() }
         if (item.type == "show" && state.episodes.isEmpty()) {
             initialDetailSeason(state.seasons, state.selectedSeason, saved?.season)?.let { state.chooseSeason(item, it) }
@@ -172,118 +174,216 @@ internal fun DetailsScreen(state: FrameZooState, item: Media) {
         }
     }
     Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha = .94f)), contentAlignment = Alignment.Center) {
-      Box(Modifier.fillMaxWidth(.94f).fillMaxHeight(.94f).widthIn(max = 1200.dp).clip(RoundedCornerShape(22.dp)).background(colors["background.main"])) {
+      Box(Modifier.fillMaxWidth(.94f).fillMaxHeight(.94f).widthIn(max = 1120.dp).clip(RoundedCornerShape(20.dp)).background(colors["background.main"])) {
         LazyColumn(state = listState, contentPadding = PaddingValues(bottom = 32.dp)) {
             item {
-                Box(Modifier.fillMaxWidth().aspectRatio(16f / 9f).heightIn(max = 440.dp).background(colors["background.secondary"])) {
-                    SubcomposeAsyncImage(
+                Box(Modifier.fillMaxWidth().height(380.dp).background(colors["background.secondary"])) {
+                    AsyncImage(
                         model = item.backdrop,
                         contentDescription = null,
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.Crop,
-                        alignment = Alignment.Center,
-                        loading = { Box(Modifier.fillMaxSize().skeletonShimmer()) }
+                        alignment = Alignment.TopCenter
                     )
-                    if (trailerEnabled && selectedTrailer == null && trailers.isNotEmpty()) TrailerBackground(trailers.first().key, trailerMuted, Modifier.fillMaxSize())
-                    Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Color.Black.copy(alpha = .2f), Color.Transparent, colors["background.main"].copy(alpha = .65f), colors["background.main"]))))
-                    if (!logoReady) Text(item.title, Modifier.align(Alignment.BottomStart).padding(start = 32.dp, bottom = 44.dp), color = Color.White, fontSize = 34.sp, fontWeight = FontWeight.Bold)
-                    if (logo != null) AsyncImage(logo, item.title, Modifier.align(Alignment.BottomStart).padding(start = 32.dp, bottom = 44.dp).widthIn(max = 380.dp).heightIn(max = 110.dp), contentScale = ContentScale.Fit, onSuccess = { logoReady = true }, onError = { logoReady = false })
-                    if (trailers.isNotEmpty()) Row(Modifier.align(Alignment.BottomEnd).padding(end = 28.dp, bottom = 28.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                        HeaderButton(
-                            icon = if (trailerEnabled) R.drawable.desktop_image else R.drawable.desktop_video,
-                            label = if (trailerEnabled) "Show image" else "Show trailer",
-                            selected = trailerEnabled,
-                            modifier = Modifier
-                                .focusRequester(trailerFocus)
-                                .focusProperties {
-                                    up = closeFocus
-                                    down = firstAction
-                                }
-                        ) { state.toggleTrailer() }
-                        HeaderButton(
-                            icon = if (trailerMuted) R.drawable.desktop_volume_x else R.drawable.desktop_volume,
-                            label = if (trailerMuted) "Unmute trailer" else "Mute trailer",
-                            selected = !trailerMuted,
-                            modifier = Modifier.focusProperties {
-                                up = closeFocus
-                                down = firstAction
+                    if (trailerEnabled && selectedTrailer == null && trailers.isNotEmpty()) {
+                        TrailerBackground(trailers.first().key, trailerMuted, Modifier.fillMaxSize())
+                    }
+                    Box(
+                        Modifier
+                            .fillMaxSize()
+                            .background(
+                                Brush.verticalGradient(
+                                    colorStops = arrayOf(
+                                        0.0f to Color.Black.copy(alpha = 0.25f),
+                                        0.35f to Color.Transparent,
+                                        0.60f to Color.Transparent,
+                                        0.78f to colors["background.main"].copy(alpha = 0.65f),
+                                        0.90f to colors["background.main"].copy(alpha = 0.95f),
+                                        1.0f to colors["background.main"]
+                                    )
+                                )
+                            )
+                    )
+
+                    // Bottom Content overlay on Backdrop: Title/Logo + Badges & Trailer Controls
+                    Column(
+                        modifier = Modifier
+                            .align(Alignment.BottomStart)
+                            .fillMaxWidth()
+                            .padding(start = 28.dp, end = 24.dp, bottom = 12.dp),
+                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        // Title or Logo
+                        Box {
+                            if (logo != null) {
+                                AsyncImage(
+                                    model = logo,
+                                    contentDescription = item.title,
+                                    modifier = Modifier
+                                        .widthIn(max = 320.dp)
+                                        .heightIn(max = 80.dp),
+                                    contentScale = ContentScale.Fit,
+                                    onSuccess = { logoReady = true },
+                                    onError = { logoReady = false }
+                                )
                             }
-                        ) { state.toggleTrailerAudio() }
+                            if (!logoReady || logo == null) {
+                                Text(
+                                    text = item.title,
+                                    color = Color.White,
+                                    fontSize = 32.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    maxLines = 2,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                            }
+                        }
+
+                        // Badges line + Trailer controls on the same row!
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            // Badges row
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                if (item.type == "movie" && quality != null) {
+                                    val isCinema = quality == "CAM"
+                                    Text(
+                                        text = if (isCinema) t("media.inCinema") else quality!!,
+                                        modifier = Modifier
+                                            .clip(RoundedCornerShape(4.dp))
+                                            .background(if (isCinema) Color(0xfff59e0b).copy(alpha = 0.25f) else colors["background.secondary"])
+                                            .padding(horizontal = 8.dp, vertical = 3.dp),
+                                        color = if (isCinema) Color(0xfffbbf24) else colors["type.emphasis"],
+                                        fontSize = 12.sp,
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                    Text("•", color = colors["type.secondary"], fontSize = 12.sp)
+                                }
+                                if (item.rating > 0) {
+                                    Image(painterResource(R.drawable.desktop_tmdb), "TMDB", Modifier.width(28.dp).height(16.dp))
+                                    Text("%.1f".format(item.rating) + if (item.voteCount > 0) " (%,d)".format(item.voteCount) else "", color = colors["type.emphasis"], fontSize = 13.5.sp)
+                                }
+                                ratings.imdbRating?.let { rating ->
+                                    Text("•", color = colors["type.secondary"], fontSize = 12.sp)
+                                    RatingIcon("imdb.svg", "IMDb")
+                                    Text("%.1f".format(rating) + (ratings.imdbVotes?.let { " (%,d)".format(it) } ?: ""), color = colors["type.emphasis"], fontSize = 13.5.sp)
+                                }
+                                ratings.tomatoScore?.let { score ->
+                                    Text("•", color = colors["type.secondary"], fontSize = 12.sp)
+                                    RatingIcon(when (ratings.tomatoIcon) { "certified_fresh" -> "Certified_Fresh.svg"; "fresh" -> "Fresh.svg"; else -> "Rotten.svg" }, "Rotten Tomatoes")
+                                    Text("$score%", color = colors["type.emphasis"], fontSize = 13.5.sp)
+                                }
+                                ratings.audienceScore?.let { score ->
+                                    Text("•", color = colors["type.secondary"], fontSize = 12.sp)
+                                    RatingIcon(when (ratings.audienceIcon) { "upright" -> "Popcorn_Fresh.svg"; "spilled" -> "Popcorn_Rotten.svg"; else -> "Popcorn_Empty.svg" }, "Popcornmeter")
+                                    Text("$score%", color = colors["type.emphasis"], fontSize = 13.5.sp)
+                                }
+                                if (item.year.isNotBlank()) {
+                                    Text("•", color = colors["type.secondary"], fontSize = 12.sp)
+                                    Text(item.year, color = colors["type.secondary"], fontSize = 13.5.sp)
+                                }
+                                if (item.type == "show" && state.seasons.isNotEmpty()) {
+                                    Text("•", color = colors["type.secondary"], fontSize = 12.sp)
+                                    Text("${state.seasons.size} " + t("details.seasons"), color = colors["type.secondary"], fontSize = 13.5.sp)
+                                }
+                            }
+
+                            // Trailer Buttons on the right
+                            if (trailers.isNotEmpty()) {
+                                Row(
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    HeaderButton(
+                                        icon = if (trailerMuted) R.drawable.desktop_volume_x else R.drawable.desktop_volume,
+                                        label = if (trailerMuted) "Unmute trailer" else "Mute trailer",
+                                        selected = !trailerMuted,
+                                        modifier = Modifier.focusProperties {
+                                            up = closeFocus
+                                            down = firstAction
+                                        }
+                                    ) { state.toggleTrailerAudio() }
+                                    HeaderButton(
+                                        icon = if (trailerEnabled) R.drawable.desktop_image else R.drawable.desktop_video,
+                                        label = if (trailerEnabled) "Show image" else "Show trailer",
+                                        selected = trailerEnabled,
+                                        modifier = Modifier
+                                            .focusRequester(trailerFocus)
+                                            .focusProperties {
+                                                up = closeFocus
+                                                down = firstAction
+                                            }
+                                    ) { state.toggleTrailer() }
+                                }
+                            }
+                        }
                     }
                 }
             }
             item {
-                Column(Modifier.padding(horizontal = 32.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
-                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        if (item.type == "movie" && quality != null) {
-                            val isCinema = quality == "CAM"
-                            Text(
-                                text = if (isCinema) t("media.inCinema") else quality!!,
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(4.dp))
-                                    .background(if (isCinema) Color(0xfff59e0b).copy(alpha = 0.2f) else colors["background.secondary"])
-                                    .padding(horizontal = 8.dp, vertical = 3.dp),
-                                color = if (isCinema) Color(0xfffbbf24) else colors["type.emphasis"],
-                                fontSize = 12.5.sp,
-                                fontWeight = FontWeight.SemiBold
-                            )
-                        }
-                        if (item.rating > 0) {
-                            Image(painterResource(R.drawable.desktop_tmdb), "TMDB", Modifier.width(28.dp).height(16.dp))
-                            Text("%.1f".format(item.rating) + if (item.voteCount > 0) " (%,d)".format(item.voteCount) else "", color = colors["type.emphasis"], fontSize = 14.sp)
-                        }
-                        ratings.imdbRating?.let { rating ->
-                            RatingIcon("imdb.svg", "IMDb"); Text("%.1f".format(rating) + (ratings.imdbVotes?.let { " (%,d)".format(it) } ?: ""), color = colors["type.emphasis"], fontSize = 14.sp)
-                        }
-                        ratings.tomatoScore?.let { score ->
-                            RatingIcon(when (ratings.tomatoIcon) { "certified_fresh" -> "Certified_Fresh.svg"; "fresh" -> "Fresh.svg"; else -> "Rotten.svg" }, "Rotten Tomatoes"); Text("$score%", color = colors["type.emphasis"], fontSize = 14.sp)
-                        }
-                        ratings.audienceScore?.let { score ->
-                            RatingIcon(when (ratings.audienceIcon) { "upright" -> "Popcorn_Fresh.svg"; "spilled" -> "Popcorn_Rotten.svg"; else -> "Popcorn_Empty.svg" }, "Popcornmeter"); Text("$score%", color = colors["type.emphasis"], fontSize = 14.sp)
-                        }
-                        if (item.year.isNotBlank()) Text("·  ${item.year}", color = colors["type.secondary"], fontSize = 14.sp)
-                        if (item.type == "show" && state.seasons.isNotEmpty()) Text("·  " + "${state.seasons.size} " + t("details.seasons"), color = colors["type.secondary"], fontSize = 14.sp)
-                    }
-                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                        val playLabel = if (item.type == "movie" && (item.releaseDate.isBlank() || runCatching { LocalDate.parse(item.releaseDate).isAfter(LocalDate.now()) }.getOrDefault(false))) t("media.unreleased") else if (saved == null) t("details.play") else if (item.type == "show" && saved.season != null && saved.episode != null) "${t("details.resume")} S${saved.season}:E${saved.episode}" else t("details.resume")
-                        TvButton(
-                            playLabel,
-                            modifier = Modifier
-                                .focusRequester(firstAction)
-                                .focusProperties {
-                                    up = if (trailers.isNotEmpty()) trailerFocus else closeFocus
-                                },
-                            accent = true,
-                            icon = R.drawable.desktop_play
+                Column(
+                    modifier = Modifier
+                        .padding(horizontal = 28.dp)
+                        .padding(top = 14.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
-                            if (item.addonManifest != null) {
-                                if (item.type == "movie") state.loadSources(item, null)
-                                else state.episodes.firstOrNull()?.let { state.loadSources(item, it) } ?: run { state.error = i18n.t("player.menus.episodes.emptyState") }
-                            } else state.playFeatured(item)
+                            val playLabel = if (item.type == "movie" && (item.releaseDate.isBlank() || runCatching { LocalDate.parse(item.releaseDate).isAfter(LocalDate.now()) }.getOrDefault(false))) t("media.unreleased") else if (saved == null) t("details.play") else if (item.type == "show" && saved.season != null && saved.episode != null) "${t("details.resume")} S${saved.season}:E${saved.episode}" else t("details.resume")
+                            TvButton(
+                                playLabel,
+                                modifier = Modifier
+                                    .focusRequester(firstAction)
+                                    .focusProperties {
+                                        up = if (trailers.isNotEmpty()) trailerFocus else closeFocus
+                                    },
+                                accent = true,
+                                loading = state.busy,
+                                icon = R.drawable.desktop_play
+                            ) {
+                                if (item.addonManifest != null) {
+                                    if (item.type == "movie") state.loadSources(item, null)
+                                    else state.episodes.firstOrNull()?.let { state.loadSources(item, it) } ?: run { state.error = i18n.t("player.menus.episodes.emptyState") }
+                                } else state.playFeatured(item)
+                            }
+                            if (item.id.isNotBlank() && item.id.all(Char::isDigit)) {
+                                val bookmarked = state.bookmarks.any { it.id == item.id }
+                                HeaderButton(
+                                    if (bookmarked) R.drawable.desktop_bookmark_filled else R.drawable.desktop_bookmark,
+                                    t("home.bookmarks.sectionTitle"),
+                                    bookmarked,
+                                    modifier = Modifier.focusProperties {
+                                        up = if (trailers.isNotEmpty()) trailerFocus else closeFocus
+                                    }
+                                ) { state.bookmark(item) }
+                                HeaderButton(
+                                    R.drawable.desktop_share,
+                                    t("actions.copy"),
+                                    false,
+                                    modifier = Modifier.focusProperties {
+                                        up = if (trailers.isNotEmpty()) trailerFocus else closeFocus
+                                    }
+                                ) {
+                                    val kind = if (item.type == "show") "tv" else "movie"
+                                    val link = "https://framezoo.top/discover?detail=tmdb-$kind-${item.id}-media"
+                                    (context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).setPrimaryClip(ClipData.newPlainText(item.title, link))
+                                    copied = true
+                                }
+                            }
                         }
                         if (item.id.isNotBlank() && item.id.all(Char::isDigit)) {
-                            val bookmarked = state.bookmarks.any { it.id == item.id }
-                            HeaderButton(
-                                if (bookmarked) R.drawable.desktop_bookmark_filled else R.drawable.desktop_bookmark,
-                                t("home.bookmarks.sectionTitle"),
-                                bookmarked,
-                                modifier = Modifier.focusProperties {
-                                    up = if (trailers.isNotEmpty()) trailerFocus else closeFocus
-                                }
-                            ) { state.bookmark(item) }
-                            HeaderButton(
-                                R.drawable.desktop_share,
-                                t("actions.copy"),
-                                false,
-                                modifier = Modifier.focusProperties {
-                                    up = if (trailers.isNotEmpty()) trailerFocus else closeFocus
-                                }
-                            ) {
-                                val kind = if (item.type == "show") "tv" else "movie"
-                                val link = "https://framezoo.top/discover?detail=tmdb-$kind-${item.id}-media"
-                                (context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).setPrimaryClip(ClipData.newPlainText(item.title, link))
-                                copied = true
-                            }
                             val currentItemGroups = state.bookmarkDetails.firstOrNull { it.media.id == item.id }?.groups.orEmpty()
                             val groupLabel = if (currentItemGroups.isEmpty()) {
                                 t("home.bookmarks.groups.dropdown.placeholderButton")
@@ -300,15 +400,14 @@ internal fun DetailsScreen(state: FrameZooState, item: Media) {
                                     up = if (trailers.isNotEmpty()) trailerFocus else closeFocus
                                 }
                             ) {
-                                if (state.store.userId == null) state.openLogin() else {
+                                if (!state.isLoggedIn) state.openLogin() else {
                                     selectedGroups = currentItemGroups
                                     newGroup = ""; groupsOpen = true
                                 }
                             }
-                            if (copied) Text(t("toasts.linkCopied"), color = colors["type.secondary"], fontSize = 13.sp)
                         }
                     }
-                    if (state.busy) CircularProgressIndicator(Modifier.size(22.dp))
+                    if (copied) Text(t("toasts.linkCopied"), color = colors["type.secondary"], fontSize = 13.sp)
                     if (state.error.isNotBlank()) Text(state.error, color = colors["type.danger"], fontSize = 13.sp)
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(22.dp)) {
                         Column(Modifier.weight(2f), verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -403,7 +502,7 @@ internal fun DetailsScreen(state: FrameZooState, item: Media) {
                         Text(t("details.episodes"), color = colors["type.emphasis"], fontSize = 21.sp, fontWeight = FontWeight.Bold)
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             if (!showFavorites && eligibleEpisodes.isNotEmpty()) HeaderButton(R.drawable.desktop_eye, if (seasonWatched) t("media.seasonUnwatched") else t("media.seasonWatched"), seasonWatched) {
-                                if (state.store.userId == null) state.openLogin() else confirmSeasonWatched = true
+                                if (!state.isLoggedIn) state.openLogin() else confirmSeasonWatched = true
                             }
                             TvButton(if (showFavorites) "${t("player.menus.episodes.favorites")} (${favoriteIds.size})" else "${t("details.season")} ${state.selectedSeason ?: state.seasons.first()}", modifier = Modifier.focusRequester(seasonFocus), trailingIcon = R.drawable.desktop_chevron_down) { seasonOpen = true }
                         }
@@ -466,24 +565,35 @@ internal fun DetailsScreen(state: FrameZooState, item: Media) {
             }
             if (similar.isNotEmpty()) item { Box(Modifier.padding(start = 26.dp, top = 28.dp, end = 26.dp)) { MediaGrid(t("details.similar"), similar, state::openDetails, bookmarks = state.bookmarks.map { it.id }.toSet(), onBookmark = state::bookmark, qualityLoader = state.backend::releaseQuality) } }
         }
-        Box(Modifier.align(Alignment.TopEnd).padding(14.dp)) {
-            HeaderButton(
-                icon = R.drawable.desktop_close,
-                label = t("overlays.close"),
-                selected = false,
+        Box(Modifier.align(Alignment.TopEnd).padding(16.dp)) {
+            var closeFocused by remember { mutableStateOf(false) }
+            TvIconButton(
+                onClick = { state.back() },
                 modifier = Modifier
+                    .size(38.dp)
                     .focusRequester(closeFocus)
                     .focusProperties {
                         down = if (trailers.isNotEmpty() && listState.firstVisibleItemIndex == 0) trailerFocus else firstAction
                         left = firstAction
                     }
+                    .onFocusChanged { closeFocused = it.isFocused }
                     .onPreviewKeyEvent { event ->
                         if (event.nativeKeyEvent.action == android.view.KeyEvent.ACTION_DOWN) {
                             when (event.nativeKeyEvent.keyCode) {
+                                android.view.KeyEvent.KEYCODE_DPAD_UP -> {
+                                    if (listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > 0) {
+                                        coroutineScope.launch {
+                                            listState.animateScrollToItem(0)
+                                        }
+                                        true
+                                    } else false
+                                }
                                 android.view.KeyEvent.KEYCODE_DPAD_DOWN,
                                 android.view.KeyEvent.KEYCODE_DPAD_LEFT -> {
                                     coroutineScope.launch {
-                                        listState.scrollToItem(0)
+                                        if (listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > 0) {
+                                            listState.scrollToItem(0)
+                                        }
                                         val target = if (event.nativeKeyEvent.keyCode == android.view.KeyEvent.KEYCODE_DPAD_DOWN && trailers.isNotEmpty()) trailerFocus else firstAction
                                         target.requestFocus()
                                     }
@@ -493,7 +603,24 @@ internal fun DetailsScreen(state: FrameZooState, item: Media) {
                             }
                         } else false
                     }
-            ) { state.back() }
+                    .semantics { contentDescription = i18n.t("overlays.close") },
+                shape = TvIconButtonDefaults.shape(CircleShape),
+                colors = TvIconButtonDefaults.colors(
+                    containerColor = Color.Black.copy(alpha = 0.5f),
+                    focusedContainerColor = Color.Black.copy(alpha = 0.75f)
+                ),
+                scale = TvIconButtonDefaults.scale(focusedScale = 1.08f),
+                border = TvIconButtonDefaults.border(
+                    focusedBorder = TvBorder(BorderStroke(2.dp, Color.White), shape = CircleShape)
+                )
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.desktop_close),
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier.size(16.dp)
+                )
+            }
         }
       }
     }
@@ -657,7 +784,7 @@ internal fun DetailsScreen(state: FrameZooState, item: Media) {
             collection?.overview?.takeIf { it.isNotBlank() }?.let { Text(it, color = colors["type.text"], fontSize = 14.sp) }
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 if (!collection?.parts.isNullOrEmpty()) TvButton(t("details.collection.bookmarkAll"), icon = R.drawable.desktop_bookmark) {
-                    if (state.store.userId == null) { collectionOpen = false; state.openLogin() }
+                    if (!state.isLoggedIn) { collectionOpen = false; state.openLogin() }
                     else state.bookmarkCollection(collection!!.parts, item.collectionName ?: i18n.t("lists.page.eyebrow"))
                 }
                 TvButton(t("details.collection.releaseDate"), selected = !collectionSort, navigation = true) { collectionSort = false }

@@ -44,6 +44,18 @@ class SecureStore(context: Context) {
         get() = prefs.getString("language", "vi") ?: "vi"
         set(value) { prefs.edit().putString("language", value).apply() }
 
+    var enableAutoplay: Boolean
+        get() = prefs.getBoolean("enableAutoplay", true)
+        set(value) { prefs.edit().putBoolean("enableAutoplay", value).apply() }
+
+    var enableSkipCredits: Boolean
+        get() = prefs.getBoolean("enableSkipCredits", true)
+        set(value) { prefs.edit().putBoolean("enableSkipCredits", value).apply() }
+
+    var enableAutoSkipSegments: Boolean
+        get() = prefs.getBoolean("enableAutoSkipSegments", true)
+        set(value) { prefs.edit().putBoolean("enableAutoSkipSegments", value).apply() }
+
     var customPrimary: String
         get() = prefs.getString("customPrimary", "classic") ?: "classic"
         set(value) { prefs.edit().putString("customPrimary", value).apply() }
@@ -68,9 +80,29 @@ class SecureStore(context: Context) {
         get() = prefs.getInt("subBgOpacity", 50)
         set(value) { prefs.edit().putInt("subBgOpacity", value).apply() }
 
+    var subtitleBackgroundBlurEnabled: Boolean
+        get() = prefs.getBoolean("subBgBlurEnabled", false)
+        set(value) { prefs.edit().putBoolean("subBgBlurEnabled", value).apply() }
+
+    var subtitleFontStyle: String
+        get() = prefs.getString("subFontStyle", "default") ?: "default"
+        set(value) { prefs.edit().putString("subFontStyle", value).apply() }
+
+    var subtitleBold: Boolean
+        get() = prefs.getBoolean("subBold", false)
+        set(value) { prefs.edit().putBoolean("subBold", value).apply() }
+
+    var subtitleVerticalPosition: Int
+        get() = prefs.getInt("subVerticalPosition", 1)
+        set(value) { prefs.edit().putInt("subVerticalPosition", value).apply() }
+
     var torrentCacheSize: String
         get() = prefs.getString("torrentCacheSize", "5gb") ?: "5gb"
         set(value) { prefs.edit().putString("torrentCacheSize", value).apply() }
+
+    var torrentProfile: String
+        get() = prefs.getString("torrentProfile", "default") ?: "default"
+        set(value) { prefs.edit().putString("torrentProfile", value).apply() }
 
     var localProgress: String?
         get() = prefs.getString("local_progress", null)
@@ -80,9 +112,21 @@ class SecureStore(context: Context) {
         get() = prefs.getString("user", null)
         set(value) { prefs.edit().putString("user", value).apply() }
 
+    var userSessionId: String?
+        get() = prefs.getString("user_session_id", null)
+        set(value) { prefs.edit().putString("user_session_id", value).apply() }
+
+    var userEmail: String?
+        get() = prefs.getString("user_email", null)
+        set(value) { prefs.edit().putString("user_email", value).apply() }
+
     var userNickname: String?
         get() = prefs.getString("user_nickname", null)
         set(value) { prefs.edit().putString("user_nickname", value).apply() }
+
+    var userDeviceName: String?
+        get() = prefs.getString("user_device_name", null)
+        set(value) { prefs.edit().putString("user_device_name", value).apply() }
 
     var userProfileColorA: String?
         get() = prefs.getString("user_profile_color_a", null)
@@ -96,6 +140,10 @@ class SecureStore(context: Context) {
         get() = prefs.getString("user_profile_icon", null)
         set(value) { prefs.edit().putString("user_profile_icon", value).apply() }
 
+    var userSeed: String?
+        get() = decrypt(prefs.getString("user_seed", null))
+        set(value) { prefs.edit().putString("user_seed", value?.let(::encrypt)).apply() }
+
     var accessToken: String?
         get() = decrypt(prefs.getString("access", null))
         set(value) { prefs.edit().putString("access", value?.let(::encrypt)).apply() }
@@ -104,12 +152,42 @@ class SecureStore(context: Context) {
         get() = decrypt(prefs.getString("refresh", null))
         set(value) { prefs.edit().putString("refresh", value?.let(::encrypt)).apply() }
 
+    var rememberLogin: Boolean
+        get() = prefs.getBoolean("remember_login", false)
+        set(value) { prefs.edit().putBoolean("remember_login", value).apply() }
+
+    var rememberedIdentifier: String?
+        get() = prefs.getString("remembered_identifier", null)
+        set(value) { prefs.edit().putString("remembered_identifier", value).apply() }
+
+    var rememberedPassword: String?
+        get() = decrypt(prefs.getString("remembered_password", null))
+        set(value) { prefs.edit().putString("remembered_password", value?.let(::encrypt)).apply() }
+
+    fun saveRememberedCredentials(identifier: String, password: String) {
+        rememberLogin = true
+        rememberedIdentifier = identifier
+        rememberedPassword = password
+    }
+
+    fun clearRememberedCredentials() {
+        prefs.edit()
+            .putBoolean("remember_login", false)
+            .remove("remembered_identifier")
+            .remove("remembered_password")
+            .apply()
+    }
+
     fun clearSession() {
         prefs.edit()
             .remove("user")
+            .remove("user_session_id")
+            .remove("user_email")
+            .remove("user_seed")
             .remove("access")
             .remove("refresh")
             .remove("user_nickname")
+            .remove("user_device_name")
             .remove("user_profile_color_a")
             .remove("user_profile_color_b")
             .remove("user_profile_icon")

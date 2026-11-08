@@ -7,6 +7,7 @@ from pathlib import Path
 
 root = Path(__file__).resolve().parents[2]
 source = (root / 'framezoo-desktop/renderer-src/src/components/Icon.tsx').read_text()
+user_icon_source = (root / 'framezoo-desktop/renderer-src/src/components/UserIcon.tsx').read_text()
 out = root / 'framezoo-tv/app/src/main/res/drawable'
 icons = {
     'search': 'search', 'bookmark_outline': 'bookmark', 'bookmark': 'bookmark_filled', 'ios_share': 'share', 'x': 'close', 'film': 'film', 'eye': 'eye', 'eyeSlash': 'eye_slash', 'extension': 'extension',
@@ -14,21 +15,25 @@ icons = {
     'chevronLeft': 'chevron_left', 'chevronRight': 'chevron_right', 'chevronDown': 'chevron_down',
     'skip_forward': 'skip_forward', 'skip_backward': 'skip_backward',
     'arrowRight': 'arrow_right', 'up_down_arrow': 'up_down_arrow', 'chevronUp': 'chevron_up', 'clock_outline': 'clock', 'video': 'video', 'img': 'image', 'volume': 'volume', 'volume_x': 'volume_x',
+    'cloud_arrow_up': 'cloud_arrow_up', 'pause': 'pause', 'watch_party': 'watch_party',
 }
 
+user_svg_icons = [
+    'cat', 'weed', 'user_group', 'couch', 'mobile', 'ticket', 'saturn', 'headphones',
+    'tv', 'ghost', 'coffee', 'fire', 'megaphone', 'dragon', 'rising_star', 'cloud_arrow_up',
+    'wand', 'clapper_board', 'film', 'play', 'watch_party', 'tachometer', 'circle_question',
+    'brush', 'bell', 'thumbs_up', 'bookmark', 'firefox', 'chrome', 'safari', 'orion', 'edge',
+]
 
-def vector(key):
-    match = re.search(r'^  ' + re.escape(key) + r': `([\s\S]*?)`,', source, re.M)
-    if not match:
-        raise ValueError(f'Missing desktop icon: {key}')
-    svg = match.group(1)
+
+def svg_to_vector(svg, key, source_label):
     node = ET.fromstring(svg)
     x, y, width, height = map(float, node.attrib['viewBox'].split())
     if x or y:
         raise ValueError(f'Unsupported viewBox: {key}')
     comments = re.findall(r'<!--(.*?)-->', svg, re.S)
     lines = ['<?xml version="1.0" encoding="utf-8"?>',
-             f'<!-- Generated from framezoo-desktop Icon.tsx: {key}. -->']
+             f'<!-- Generated from framezoo-desktop {source_label}: {key}. -->']
     lines += [f'<!-- {comment.strip()} -->' for comment in comments]
     # Match SVG preserveAspectRatio=meet for every non-square viewBox.
     scale = 24 / max(width, height)
@@ -68,6 +73,9 @@ def vector(key):
         parts = [f'android:pathData="{data}"']
         if fill != 'none':
             parts.append('android:fillColor="#FFFFFFFF"')
+            fill_rule = attrs.get('fill-rule', node.attrib.get('fill-rule'))
+            if fill_rule == 'evenodd':
+                parts.append('android:fillType="evenOdd"')
         if stroke != 'none':
             parts.extend(['android:strokeColor="#FFFFFFFF"', f'android:strokeWidth="{attrs.get("stroke-width", node.attrib.get("stroke-width", "1"))}"'])
             for prop, target in [('stroke-linecap', 'strokeLineCap'), ('stroke-linejoin', 'strokeLineJoin')]:
@@ -78,12 +86,36 @@ def vector(key):
     lines.append('</vector>')
     return '\n'.join(lines) + '\n'
 
+
+def vector(key):
+    match = re.search(r'^  ' + re.escape(key) + r': `([\s\S]*?)`,', source, re.M)
+    if not match:
+        raise ValueError(f'Missing desktop icon: {key}')
+    return svg_to_vector(match.group(1), key, 'Icon.tsx')
+
+
+def user_vector(key):
+    match = re.search(r'^  ' + re.escape(key) + r': `([\s\S]*?)`,', user_icon_source, re.M)
+    if not match:
+        raise ValueError(f'Missing desktop user icon: {key}')
+    return svg_to_vector(match.group(1), key, 'UserIcon.tsx')
+
+
 for key, name in icons.items():
     path = out / f'desktop_{name}.xml'
     expected = vector(key)
     if '--check' in sys.argv:
         if not path.exists() or path.read_text() != expected:
             raise SystemExit(f'Icon differs from desktop: {path}')
+    else:
+        path.write_text(expected)
+
+for key in user_svg_icons:
+    path = out / f'user_icon_{key}.xml'
+    expected = user_vector(key)
+    if '--check' in sys.argv:
+        if not path.exists() or path.read_text() != expected:
+            raise SystemExit(f'User icon differs from desktop: {path}')
     else:
         path.write_text(expected)
 

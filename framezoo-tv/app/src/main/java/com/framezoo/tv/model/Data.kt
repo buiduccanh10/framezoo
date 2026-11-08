@@ -43,7 +43,17 @@ data class FeaturedRatings(
 data class BookmarkDetails(val media: Media, val groups: List<String>, val favoriteEpisodes: List<String>)
 
 data class Episode(val season: Int, val number: Int, val title: String, val still: String? = null, val id: String = "", val overview: String = "", val airDate: String = "", val seasonId: String = "")
-data class Addon(val manifestUrl: String, val id: String, val name: String, val resources: Set<String>, val enabled: Boolean = true)
+data class Addon(
+    val manifestUrl: String,
+    val id: String,
+    val name: String,
+    val resources: Set<String>,
+    val enabled: Boolean = true,
+    val version: String? = null,
+    val description: String? = null,
+    val logo: String? = null,
+    val isNative: Boolean = false
+)
 data class AddonCatalog(val manifestUrl: String, val addonName: String, val type: String, val id: String, val items: List<Media>) {
     val key: String get() = "addon:$manifestUrl:$type:$id"
 }
@@ -55,6 +65,10 @@ data class Stream(
     val filename: String? = null,
     val headers: Map<String, String> = emptyMap(),
     val subtitles: List<Subtitle> = emptyList(),
+    val title: String = "",
+    val description: String = "",
+    val videoSize: Long? = null,
+    val addonName: String = ""
 )
 data class Subtitle(val language: String, val url: String, val label: String = "")
 data class LibraryItem(val media: Media, val position: Double = 0.0, val duration: Double = 0.0,

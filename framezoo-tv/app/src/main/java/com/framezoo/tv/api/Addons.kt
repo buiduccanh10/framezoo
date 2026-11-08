@@ -14,8 +14,32 @@ import java.net.URL
 import java.net.URLEncoder
 
 class Addons(context: Context, private val backend: Backend, private val store: SecureStore) {
+    companion object {
+        const val NATIVE_SUBTITLE_ADDON_ID = "community.framezoo.subtitles"
+    }
+
     private val prefs = context.getSharedPreferences("framezoo_tv_addons", Context.MODE_PRIVATE)
     private fun encode(value: String) = URLEncoder.encode(value, "UTF-8")
+
+    fun getNativeSubtitlesAddon(): Addon {
+        val rawBackend = store.backendUrl.trimEnd('/')
+        val isLocalBackend = rawBackend.contains("localhost") || rawBackend.contains("127.0.0.1") || rawBackend.contains("10.0.2.2")
+        val appDomain = "https://framezoo.top"
+        val base = if (isLocalBackend) rawBackend else appDomain
+        val manifestUrl = "$base/addon/subtitles/manifest.json"
+        val enabled = prefs.getBoolean("native_subtitles_enabled", true)
+        return Addon(
+            manifestUrl = manifestUrl,
+            id = NATIVE_SUBTITLE_ADDON_ID,
+            name = "Framezoo Subtitles",
+            resources = setOf("subtitles"),
+            enabled = enabled,
+            version = "1.0.0",
+            description = "Native subtitle provider (Wyzie, OpenSubtitles, SubSource, Granite)",
+            logo = "https://framezoo.top/favicon-192.png",
+            isNative = true
+        )
+    }
 
     private suspend fun json(url: String): JSONObject = withContext(Dispatchers.IO) {
         val uri = URI(url)
@@ -44,19 +68,30 @@ class Addons(context: Context, private val backend: Backend, private val store: 
     private fun parse(raw: JSONObject): Addon {
         val manifest = raw.optJSONObject("manifest") ?: JSONObject()
         val resources = manifest.optJSONArray("resources") ?: JSONArray()
-        return Addon(raw.getString("manifestUrl"), manifest.optString("id"), manifest.optString("name"),
-            (0 until resources.length()).mapNotNull { i ->
+        val id = manifest.optString("id", raw.optString("id"))
+        return Addon(
+            manifestUrl = raw.getString("manifestUrl"),
+            id = id,
+            name = manifest.optString("name", raw.optString("name")),
+            resources = (0 until resources.length()).mapNotNull { i ->
                 when (val resource = resources.opt(i)) {
                     is String -> resource
                     is JSONObject -> resource.optString("name")
                     else -> null
                 }
-            }.toSet(), raw.optBoolean("enabled", true))
+            }.toSet(),
+            enabled = raw.optBoolean("enabled", true),
+            version = manifest.optString("version").ifBlank { raw.optString("version").ifBlank { null } },
+            description = manifest.optString("description").ifBlank { raw.optString("description").ifBlank { null } },
+            logo = manifest.optString("logo").ifBlank { raw.optString("logo").ifBlank { null } },
+            isNative = raw.optBoolean("isNative", false) || id == NATIVE_SUBTITLE_ADDON_ID
+        )
     }
 
     private fun local(): JSONArray = try { JSONArray(prefs.getString("installed", "[]")) } catch (_: Exception) { JSONArray() }
 
     suspend fun list(): List<Addon> {
+        val nativeAddon = getNativeSubtitlesAddon()
         val local = local()
         val merged = linkedMapOf<String, JSONObject>()
         if (store.userId != null) try {
@@ -65,7 +100,9 @@ class Addons(context: Context, private val backend: Backend, private val store: 
         } catch (_: Exception) { }
         for (i in 0 until local.length()) local.optJSONObject(i)?.let { merged[it.optString("manifestUrl")] = it }
         prefs.edit().putString("installed", JSONArray(merged.values).toString()).apply()
-        return merged.values.mapNotNull { runCatching { parse(it) }.getOrNull() }
+        val userAddons = merged.values.mapNotNull { runCatching { parse(it) }.getOrNull() }
+            .filter { it.id != NATIVE_SUBTITLE_ADDON_ID && !it.isNative && it.manifestUrl != nativeAddon.manifestUrl }
+        return listOf(nativeAddon) + userAddons
     }
 
     suspend fun install(input: String) {
@@ -82,16 +119,31 @@ class Addons(context: Context, private val backend: Backend, private val store: 
     }
 
     suspend fun remove(manifestUrl: String) {
+        val nativeAddon = getNativeSubtitlesAddon()
+        if (manifestUrl == nativeAddon.manifestUrl || manifestUrl == NATIVE_SUBTITLE_ADDON_ID) return
         val next = local()
-        for (i in next.length() - 1 downTo 0) if (next.optJSONObject(i)?.optString("manifestUrl") == manifestUrl) next.remove(i)
+        for (i in next.length() - 1 downTo 0) {
+            val item = next.optJSONObject(i) ?: continue
+            val itemUrl = item.optString("manifestUrl")
+            val itemId = item.optJSONObject("manifest")?.optString("id", "") ?: item.optString("id", "")
+            if (itemUrl == manifestUrl || itemId == manifestUrl) next.remove(i)
+        }
         save(next)
     }
 
     suspend fun toggleEnabled(manifestUrl: String) {
+        val nativeAddon = getNativeSubtitlesAddon()
+        if (manifestUrl == nativeAddon.manifestUrl || manifestUrl == NATIVE_SUBTITLE_ADDON_ID) {
+            val current = prefs.getBoolean("native_subtitles_enabled", true)
+            prefs.edit().putBoolean("native_subtitles_enabled", !current).apply()
+            return
+        }
         val next = local()
         for (i in 0 until next.length()) {
             val item = next.optJSONObject(i) ?: continue
-            if (item.optString("manifestUrl") == manifestUrl) {
+            val itemUrl = item.optString("manifestUrl")
+            val itemId = item.optJSONObject("manifest")?.optString("id", "") ?: item.optString("id", "")
+            if (itemUrl == manifestUrl || itemId == manifestUrl) {
                 val current = item.optBoolean("enabled", true)
                 item.put("enabled", !current)
                 break
@@ -185,11 +237,25 @@ class Addons(context: Context, private val backend: Backend, private val store: 
                 val headers = requestHeaders.keys().asSequence().associateWith { requestHeaders.optString(it) }
                     .filter { (name, content) -> name.matches(Regex("[A-Za-z0-9!#$%&'*+.^_`|~-]+")) && '\r' !in content && '\n' !in content }
                 val subs = value.optJSONArray("subtitles") ?: JSONArray()
-                result += Stream(value.optString("name", value.optString("title", addon.name)), url, hash,
-                    value.optInt("fileIdx", -1).takeIf { it >= 0 }, hints.optString("filename").ifBlank { null }, headers,
-                    (0 until subs.length()).mapNotNull { subs.optJSONObject(it) }.mapNotNull {
+                val rawName = value.optString("name").trim()
+                val rawTitle = value.optString("title").trim()
+                val rawDesc = value.optString("description").trim()
+                val videoSize = hints.optLong("videoSize", -1L).takeIf { it > 0 }
+                result += Stream(
+                    name = if (rawName.isNotBlank()) rawName else if (rawTitle.isNotBlank()) rawTitle else addon.name,
+                    url = url,
+                    infoHash = hash,
+                    fileIdx = value.optInt("fileIdx", -1).takeIf { it >= 0 },
+                    filename = hints.optString("filename").ifBlank { null },
+                    headers = headers,
+                    subtitles = (0 until subs.length()).mapNotNull { subs.optJSONObject(it) }.mapNotNull {
                         it.optString("url").takeIf(String::isNotBlank)?.let { url -> Subtitle(it.optString("lang", it.optString("language", "und")), url, it.optString("label")) }
-                    })
+                    },
+                    title = rawTitle,
+                    description = rawDesc,
+                    videoSize = videoSize,
+                    addonName = addon.name
+                )
             }
         } catch (_: Exception) { }
         return result
