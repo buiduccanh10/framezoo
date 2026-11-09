@@ -18,7 +18,7 @@ extern "C" {
 }
 
 struct StreamCookie { TorrentStream* torrent; std::int64_t offset{0}; std::atomic<bool> cancelled{false}; };
-struct Player { mpv_handle* mpv{nullptr}; jobject surface{nullptr}; std::unique_ptr<TorrentStream> torrent; std::mutex torrentMutex; std::atomic<bool> cancelled{false}; std::thread events; std::atomic<bool> eventsDone{false}; std::mutex loadMutex; std::condition_variable loadChanged; bool fileLoaded{false}; bool playbackReady{false}; bool fileFailed{false}; };
+struct Player { bool emulator{false}; mpv_handle* mpv{nullptr}; jobject surface{nullptr}; std::unique_ptr<TorrentStream> torrent; std::mutex torrentMutex; std::atomic<bool> cancelled{false}; std::thread events; std::atomic<bool> eventsDone{false}; std::mutex loadMutex; std::condition_variable loadChanged; bool fileLoaded{false}; bool playbackReady{false}; bool fileFailed{false}; };
 
 static int open_stream(void* data, char*, mpv_stream_cb_info* info) {
 	auto* player = static_cast<Player*>(data);
@@ -56,6 +56,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_framezoo_tv_player_NativePlayer_crea
 	JavaVM* vm = nullptr;
 	if (env->GetJavaVM(&vm) == JNI_OK) av_jni_set_java_vm(vm, nullptr);
 	auto result = std::make_unique<Player>();
+	result->emulator = emulator;
 	result->mpv = mpv_create();
 	if (!result->mpv) return 0;
 	mpv_request_log_messages(result->mpv, "warn");
@@ -66,6 +67,10 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_framezoo_tv_player_NativePlayer_crea
 	mpv_set_option_string(result->mpv, "hwdec", emulator ? "no" : "mediacodec-copy");
 	mpv_set_option_string(result->mpv, "gpu-context", "android");
 	mpv_set_option_string(result->mpv, "opengl-es", "yes");
+	// ponytail: use simpler GPU rendering on emulators; retry the default when their renderer is reliable.
+	if (emulator) mpv_set_option_string(result->mpv, "gpu-dumb-mode", "yes");
+	// ponytail: emulator frames are limited to 8-bit and 1920px wide; remove this when high-resolution playback is reliable.
+	if (emulator) mpv_set_option_string(result->mpv, "vf", "lavfi=[scale=w='min(1920,iw)':h=-2,format=yuv420p]");
 	mpv_set_option_string(result->mpv, "ao", "audiotrack,opensles");
 	mpv_set_option_string(result->mpv, "sub-pos", "68"); // subtitles stay above the persistent TV controls
 	mpv_set_option_string(result->mpv, "keep-open", "yes");
@@ -156,8 +161,11 @@ extern "C" JNIEXPORT jstring JNICALL Java_com_framezoo_tv_player_NativePlayer_pl
 	std::string error = ptr->torrent->start(java_string(env, magnet), fileIdx);
 	if (!error.empty()) return java_error(env, error);
 	if (ptr->cancelled) return java_error(env, "Đã dừng torrent");
+	// ponytail: emulator torrents need bounded read-ahead; tune when its network and decoder sustain 4K.
 	char const* command[] = {"loadfile", "framezoo://video.mkv", nullptr};
-	int status = mpv_command(ptr->mpv, command);
+	char const* emulatorCommand[] = {"loadfile", "framezoo://video.mkv", "replace", "-1",
+		"cache=yes,cache-secs=20,cache-pause-wait=8,cache-pause-initial=yes,demuxer-max-bytes=64MiB,demuxer-max-back-bytes=16MiB", nullptr};
+	int status = mpv_command(ptr->mpv, ptr->emulator ? emulatorCommand : command);
 	return java_error(env, status < 0 ? "Không mở được luồng torrent" : "");
 }
 extern "C" JNIEXPORT jboolean JNICALL Java_com_framezoo_tv_player_NativePlayer_waitLoaded(JNIEnv*, jobject, jlong value, jint timeoutMs) {
