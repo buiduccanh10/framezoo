@@ -866,6 +866,7 @@
       "quality": {
         "auto": "Tự động",
         "automaticLabel": "Chất lượng tự động",
+        "mpvAutoHint": "Tự động chọn mức mặc định khi mở; không tự điều chỉnh theo tốc độ mạng.",
         "hint": "Bạn có thể thử <0>chuyển đổi nguồn</0> để có các tùy chọn chất lượng khác nhau.",
         "iosNoQuality": "Do những hạn chế do Apple xác định, lựa chọn chất lượng không khả dụng trên iOS cho nguồn này. Bạn có thể thử <0>chuyển sang nguồn khác</0> để có các tùy chọn chất lượng khác.",
         "title": "Chất lượng"

@@ -20,6 +20,7 @@ import com.framezoo.tv.model.Stream
 import com.framezoo.tv.model.Subtitle
 import com.framezoo.tv.model.WatchPartyError
 import com.framezoo.tv.model.WatchPartyException
+import com.framezoo.tv.model.WatchPartyUser
 import com.framezoo.tv.model.parseWatchPartyCode
 import com.framezoo.tv.player.PlayerController
 import com.framezoo.tv.storage.SecureStore
@@ -163,37 +164,79 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         private set
     var watchPartyLoading by mutableStateOf(false)
         private set
+    private var watchPartyJob: Job? = null
+    private var watchPartyGeneration = 0
     var activeWatchParty by mutableStateOf<String?>(null)
         private set
+    var watchPartyIsHost by mutableStateOf(false)
+        private set
+    var watchPartyUsers by mutableStateOf<List<WatchPartyUser>>(emptyList())
+    var watchPartyStatusOverlay by mutableStateOf(false)
+    var watchPartyNotice by mutableStateOf<String?>(null)
+    var watchPartyConnected by mutableStateOf(false)
+
+    fun hostWatchParty() {
+        if (store.userId == null) { openLogin(); return }
+        activeWatchParty = (100000 + java.security.SecureRandom().nextInt(900000)).toString()
+        watchPartyIsHost = true; watchPartyUsers = emptyList(); watchPartyNotice = null; watchPartyConnected = false
+        player.command("set", "speed", "1")
+    }
+
+    fun leaveWatchParty(notice: String? = null) {
+        activeWatchParty = null; watchPartyIsHost = false; watchPartyUsers = emptyList(); watchPartyNotice = notice; watchPartyConnected = false
+    }
 
     /** Desktop `openDialog`: requires account, otherwise opens login. */
     fun openWatchParty() {
         if (store.userId == null) { openLogin(); return }
         watchPartyCodeInput = ""; watchPartyError = null; watchPartyDialogOpen = true
     }
-    fun closeWatchParty() { watchPartyDialogOpen = false; watchPartyError = null; watchPartyLoading = false }
+    fun closeWatchParty() {
+        watchPartyGeneration++
+        watchPartyJob?.cancel(); watchPartyJob = null
+        watchPartyDialogOpen = false; watchPartyError = null; watchPartyLoading = false
+    }
 
     /** Desktop `handleProtectedRoute`: history/bookmarks need login. */
     fun openProtected(open: () -> Unit) { if (store.userId == null) openLogin() else open() }
 
     fun submitWatchParty() {
+        if (watchPartyLoading) return
         if (store.userId == null) { closeWatchParty(); openLogin(); return }
         val code = parseWatchPartyCode(watchPartyCodeInput)
         if (code == null) { watchPartyError = i18n.t("watchParty.invalidRoom"); return }
         watchPartyLoading = true; watchPartyError = null
-        scope.launch {
+        val generation = ++watchPartyGeneration
+        watchPartyJob = scope.launch {
             try {
                 val host = backend.watchPartyHost(code)
+                if (page == "player" && playing != null) {
+                    if (selected?.id != host.tmdbId || (selected?.type == "show") != host.isShow) {
+                        watchPartyError = i18n.t("watchParty.contentMismatch"); return@launch
+                    }
+                    if (host.isShow && (episode?.season != host.season || episode?.number != host.episode)) {
+                        watchPartyError = i18n.t("watchParty.episodeMismatch"); return@launch
+                    }
+                } else {
+                    openDetailsNow(Media(id = host.tmdbId, type = if (host.isShow) "show" else "movie", title = host.title))
+                    val item = requireNotNull(selected)
+                    val target = if (host.isShow && host.season != null && host.episode != null) {
+                        val list = backend.episodes(item.id, host.season)
+                        list.firstOrNull { it.number == host.episode } ?: throw IllegalStateException("Episode unavailable")
+                    } else null
+                    loadSources(item, target)
+                }
                 activeWatchParty = code
+                watchPartyIsHost = false; watchPartyUsers = emptyList(); watchPartyNotice = null; watchPartyConnected = false
+                player.command("set", "speed", "1")
+                watchPartyJob = null
                 closeWatchParty()
-                openDetails(Media(id = host.tmdbId, type = if (host.isShow) "show" else "movie", title = host.title))
-                if (host.isShow && host.season != null) chooseSeason(selected ?: Media(host.tmdbId, "show", host.title), host.season)
             } catch (e: CancellationException) { throw e }
             catch (e: WatchPartyException) {
                 watchPartyError = i18n.t(if (e.kind == WatchPartyError.EMPTY_ROOM) "watchParty.emptyRoom" else "watchParty.noHost")
             } catch (_: Exception) {
                 watchPartyError = i18n.t("watchParty.invalidRoom")
-            } finally { watchPartyLoading = false }
+            } finally { if (generation == watchPartyGeneration) { watchPartyJob = null; watchPartyLoading = false } }
         }
     }
     private var feedbackReturnPage = "discover"
@@ -224,6 +267,8 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
     var addonStreams by mutableStateOf<Map<String, List<Stream>>>(emptyMap())
     var addonLoading by mutableStateOf<Set<String>>(emptySet())
     private var sourcesJob: Job? = null
+    private var sourcesGeneration = 0
+    private var autoSourceResolved = false
     private var playerReturnPage = "discover"
     var playing by mutableStateOf<Stream?>(null)
     private var recentResume by mutableStateOf<Triple<String, Episode?, Double>?>(null)
@@ -428,15 +473,18 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         }
     }
 
-    fun openDetails(item: Media) = runTask {
+    fun openDetails(item: Media) = runTask { openDetailsNow(item) }
+
+    private suspend fun openDetailsNow(item: Media) {
         val fromPage = page
         val previous = selected?.let { DetailsSnapshot(it, seasons, episodes, addonEpisodes, selectedSeason) }
-        seasonJob?.cancel()
         if (item.addonManifest != null) {
             val (detail, videos) = addons.details(item)
+            seasonJob?.cancel()
             selected = detail; addonEpisodes = videos; seasons = videos.map { it.season }.distinct(); episodes = emptyList()
         } else {
             val (detail, seasonList) = backend.details(item)
+            seasonJob?.cancel()
             selected = detail; seasons = seasonList; episodes = emptyList(); addonEpisodes = emptyList()
         }
         if (fromPage == "details" && previous != null) detailsStack.add(previous)
@@ -475,6 +523,8 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         sourcesLoading = true
         page = "player"
 
+        val generation = ++sourcesGeneration
+        autoSourceResolved = false
         sourcesJob?.cancel()
         sourcesJob = scope.launch {
             try {
@@ -513,7 +563,7 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
                             } catch (_: Exception) {
                                 addonStreams = addonStreams + (addon.id to emptyList())
                             } finally {
-                                addonLoading = addonLoading - addon.id
+                                if (generation == sourcesGeneration) addonLoading = addonLoading - addon.id
                             }
                         }
                     }
@@ -525,8 +575,10 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
             } catch (e: Exception) {
                 error = e.message ?: "Failed to load sources"
             } finally {
-                sourcesLoading = false
-                addonLoading = emptySet()
+                if (generation == sourcesGeneration) {
+                    sourcesLoading = false
+                    addonLoading = emptySet()
+                }
             }
         }
     }
@@ -545,6 +597,8 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         sourcesLoading = true
         page = "player"
 
+        val generation = ++sourcesGeneration
+        autoSourceResolved = false
         sourcesJob?.cancel()
         sourcesJob = scope.launch {
             try {
@@ -564,7 +618,7 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
                             } catch (_: Exception) {
                                 addonStreams = addonStreams + (addon.id to emptyList())
                             } finally {
-                                addonLoading = addonLoading - addon.id
+                                if (generation == sourcesGeneration) addonLoading = addonLoading - addon.id
                             }
                         }
                     }
@@ -576,8 +630,10 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
             } catch (e: Exception) {
                 error = e.message ?: "Failed to load sources"
             } finally {
-                sourcesLoading = false
-                addonLoading = emptySet()
+                if (generation == sourcesGeneration) {
+                    sourcesLoading = false
+                    addonLoading = emptySet()
+                }
             }
         }
     }
@@ -731,7 +787,22 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
             finally { if (selectedSeason == season) episodesLoading = false }
         }
     }
+    suspend fun nextEpisode(item: Media, current: Episode): Episode? {
+        suspend fun seasonEpisodes(season: Int): List<Episode> = when {
+            item.addonManifest != null -> addonEpisodes.filter { it.season == season }
+            selectedSeason == season && !episodesLoading && episodes.isNotEmpty() -> episodes
+            else -> backend.episodes(item.id, season)
+        }
+        return resolveNextEpisode(current, seasons, ::seasonEpisodes)
+    }
     fun openTrailer(key: String, title: String) { trailerKey = key; trailerTitle = title; page = "trailer" }
+    var automaticVideoQuality by mutableStateOf(store.automaticVideoQuality)
+    var preferredVideoQuality by mutableStateOf(store.preferredVideoQuality)
+    fun setVideoQualityPreference(value: String, bitrate: Long) {
+        preferredVideoQuality = value; store.preferredVideoQuality = value; store.preferredVideoBitrate = bitrate.coerceAtLeast(0)
+    }
+    fun updateAutomaticVideoQuality(value: Boolean) { automaticVideoQuality = value; store.automaticVideoQuality = value }
+
     var enableAutoplay by mutableStateOf(store.enableAutoplay)
         private set
     var enableSkipCredits by mutableStateOf(store.enableSkipCredits)
@@ -769,9 +840,9 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
     }
 
     fun updateSubtitleFontSize(size: Int) {
-        subtitleFontSize = size
-        store.subtitleFontSize = size
-        player.command("set", "sub-font-size", (55 * size / 100).toString())
+        subtitleFontSize = size.coerceIn(1, 200)
+        store.subtitleFontSize = subtitleFontSize
+        player.command("set", "sub-font-size", (55.0 * subtitleFontSize / 100).toString())
     }
 
     fun updateSubtitleColor(color: String) {
@@ -781,10 +852,19 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
     }
 
     fun updateSubtitleBackgroundOpacity(opacity: Int) {
-        subtitleBackgroundOpacity = opacity
-        store.subtitleBackgroundOpacity = opacity
-        val alpha = (opacity * 255 / 100).toString()
-        player.command("set", "sub-back-color", "0/0/0/$alpha")
+        subtitleBackgroundOpacity = opacity.coerceIn(0, 100)
+        store.subtitleBackgroundOpacity = subtitleBackgroundOpacity
+        player.command("set", "sub-back-color", "0/0/0/${subtitleBackgroundOpacity / 100.0}")
+    }
+
+    fun applySubtitleStyling() {
+        player.command("set", "sub-font-size", (55.0 * subtitleFontSize.coerceIn(1, 200) / 100).toString())
+        player.command("set", "sub-color", subtitleColor)
+        player.command("set", "sub-border-style", "background-box")
+        player.command("set", "sub-shadow-offset", "4")
+        player.command("set", "sub-back-color", "0/0/0/${subtitleBackgroundOpacity.coerceIn(0, 100) / 100.0}")
+        player.command("set", "sub-bold", if (subtitleBold) "yes" else "no")
+        player.command("set", "sub-pos", subtitlePosition(false, subtitleVerticalPosition).toString())
     }
 
     fun toggleSubtitleBackgroundBlur() {
@@ -804,8 +884,8 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
     }
 
     fun updateSubtitleVerticalPosition(pos: Int) {
-        subtitleVerticalPosition = pos
-        store.subtitleVerticalPosition = pos
+        subtitleVerticalPosition = if (pos == 3) 3 else 1
+        store.subtitleVerticalPosition = subtitleVerticalPosition
     }
 
     fun resetSubtitleStyling() {
@@ -856,7 +936,60 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         addonCatalog = addons.catalog()
     }
 
-    fun chooseSource(source: Stream) { playing = source; page = "player" }
+    private fun preferenceKey(item: Media) = "${item.type}:${item.id}"
+    private fun episodeKey(item: Media, target: Episode?) = "${preferenceKey(item)}:${target?.season ?: 0}:${target?.number ?: 0}"
+
+    fun chooseSource(source: Stream) {
+        autoSourceResolved = true
+        selected?.let { item ->
+            val now = System.currentTimeMillis()
+            val preference = streamPreference(source)
+            val record = JSONObject().put("addon", preference.addonId).put("kind", preference.kind)
+                .put("quality", preference.quality).put("name", preference.name).put("title", preference.title)
+                .put("bingeGroup", preference.bingeGroup).put("savedAt", now)
+            store.savePlaybackSelection("preference:${preferenceKey(item)}", record.toString())
+            if (preference.kind == "torrent") {
+                val exact = JSONObject().put("addon", source.addonId).put("url", source.url).put("hash", source.infoHash)
+                    .put("fileIdx", source.fileIdx).put("filename", source.filename).put("savedAt", now)
+                store.savePlaybackSelection("torrent:${episodeKey(item, episode)}", exact.toString())
+            }
+        }
+        playing = source
+        page = "player"
+    }
+
+    fun selectPreferredSourceWhenReady() {
+        if (autoSourceResolved || playing != null || page != "player") return
+        val item = selected ?: return
+        val savedPreference = store.playbackSelection("preference:${preferenceKey(item)}")
+        val preference = savedPreference?.let { runCatching { JSONObject(it) }.getOrNull() }
+            ?: run { autoSourceResolved = true; return }
+        val exact = runCatching { JSONObject(store.playbackSelection("torrent:${episodeKey(item, episode)}") ?: "") }.getOrNull()
+            ?.takeIf { it.optLong("savedAt") >= preference.optLong("savedAt") }
+        val addonId = exact?.optString("addon").orEmpty().ifEmpty { preference.optString("addon") }
+        if (sourcesLoading && (addonId in addonLoading || addonId !in addonStreams)) return
+        val candidates = addonStreams[addonId].orEmpty()
+        val exactMatch = exact?.let { saved ->
+            candidates.firstOrNull { source ->
+                val hash = saved.optString("hash").takeIf { it.isNotBlank() }
+                val sameHash = if (hash != null && !source.infoHash.isNullOrBlank()) hash.equals(source.infoHash, true)
+                    else saved.optString("url") == source.url
+                val index = if (saved.has("fileIdx") && !saved.isNull("fileIdx")) saved.optInt("fileIdx") else null
+                val filename = saved.optString("filename").takeIf { it.isNotBlank() }
+                val sameFile = if (index != null && source.fileIdx != null) index == source.fileIdx
+                    else if (filename != null && source.filename != null) filename == source.filename
+                    else index == source.fileIdx && filename == source.filename
+                streamKind(source) == "torrent" && sameHash && sameFile
+            }
+        }
+        val preferred = StreamPreference(preference.optString("addon"), preference.optString("kind"),
+            preference.optString("quality"), preference.optString("name"), preference.optString("title"),
+            preference.optString("bingeGroup").takeIf { it.isNotBlank() })
+        // A stale exact selection can refer to another addon; wait for the preferred addon too.
+        if (exactMatch == null && sourcesLoading && (preferred.addonId in addonLoading || preferred.addonId !in addonStreams)) return
+        autoSourceResolved = true
+        (exactMatch ?: findPreferredStream(addonStreams[preferred.addonId].orEmpty(), preferred))?.let(::chooseSource)
+    }
     fun installAddon() = runTask { addons.install(addonUrl); installed = addons.list(); addonCatalog = addons.catalog(); addonUrl = "" }
     fun removeAddon(addon: Addon) = runTask { addons.remove(addon.manifestUrl); installed = addons.list(); addonCatalog = addons.catalog() }
     fun updateTheme(name: String) { theme = name; store.theme = name }
@@ -908,6 +1041,8 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         }
     }
     fun logout() {
+        closeWatchParty()
+        leaveWatchParty()
         val currentSessionId = store.userSessionId
         if (!currentSessionId.isNullOrBlank()) {
             scope.launch { runCatching { backend.removeSession(currentSessionId) } }
@@ -933,16 +1068,20 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         if (saved > 0.0) return saved
         return if (item.runtime > 0) item.runtime * 60.0 else if (item.type == "show") 2400.0 else 7200.0
     }
-    fun stopped(item: Media, target: Episode?, position: Double) {
+    fun stopped(item: Media, target: Episode?, position: Double, actualDuration: Double) {
         recentResume = Triple(item.id, target, position)
         if (position > 20) {
-            val duration = resumeDuration(item, target)
+            val duration = actualDuration.takeIf { it.isFinite() && it > 0.0 } ?: resumeDuration(item, target)
             val newItem = LibraryItem(item, position, duration, target?.season, target?.number)
-            progress = (listOf(newItem) + progress.filter { it.media.id != item.id }).take(30)
+            progress = (listOf(newItem) + progress.filter {
+                it.media.id != item.id || it.media.type != item.type || it.season != target?.season || it.episode != target?.number
+            }).take(30)
             backend.saveLocalProgress(item, position, duration, target)
         }
     }
     fun exitPlayer() {
+        leaveWatchParty()
+        sourcesGeneration++
         sourcesJob?.cancel()
         playing = null
         page = if (playerReturnPage in listOf("player", "sources")) "details" else playerReturnPage
@@ -950,11 +1089,15 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
     fun back() {
         page = when (page) {
             "player" -> {
+                leaveWatchParty()
+                sourcesGeneration++
                 sourcesJob?.cancel()
                 playing = null
                 if (playerReturnPage in listOf("player", "sources")) "details" else playerReturnPage
             }
             "sources" -> {
+                leaveWatchParty()
+                sourcesGeneration++
                 sourcesJob?.cancel()
                 playing = null
                 if (playerReturnPage in listOf("player", "sources")) "details" else playerReturnPage

@@ -799,7 +799,7 @@ internal fun DetailsScreen(state: FrameZooState, item: Media) {
 }
 
 @Composable
-private fun DetailsEpisodeCard(
+internal fun DetailsEpisodeCard(
     episode: Episode,
     progress: com.framezoo.tv.model.LibraryItem?,
     seasonFocus: FocusRequester,
@@ -809,6 +809,8 @@ private fun DetailsEpisodeCard(
     onFavorite: () -> Unit,
     onWatched: () -> Unit,
     onOverview: () -> Unit,
+    modifier: Modifier = Modifier,
+    playing: Boolean = false,
     onClick: () -> Unit
 ) {
     val colors = LocalFrameZooColors.current
@@ -832,6 +834,7 @@ private fun DetailsEpisodeCard(
           modifier = Modifier
               .width(235.dp)
               .alpha(if (unaired) .65f else 1f)
+              .then(modifier)
               .focusRequester(cardFocus)
               .focusProperties { up = if (hasToolbar) favoriteFocus else seasonFocus }
               .onFocusChanged { active = it.hasFocus }
@@ -906,6 +909,10 @@ private fun DetailsEpisodeCard(
                                 .background(colors["mediaCard.barFillColor"])
                         )
                     }
+                }
+                if (playing) {
+                    Icon(painterResource(R.drawable.desktop_play), contentDescription = null,
+                        modifier = Modifier.align(Alignment.BottomEnd).padding(8.dp).size(24.dp), tint = Color.White)
                 }
             }
             Column(Modifier.weight(1f).padding(10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {

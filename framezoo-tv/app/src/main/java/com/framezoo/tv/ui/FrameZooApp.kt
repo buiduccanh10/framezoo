@@ -31,6 +31,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -53,6 +54,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.shape.RoundedCornerShape
 import com.framezoo.tv.MainActivity
 import coil.compose.AsyncImage
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 
 @Composable
@@ -139,10 +141,16 @@ internal fun FrameZooApp(
                                 "feedback" -> FeedbackScreen(state)
                                 "sources", "player" -> selected?.let { item ->
                                     val currentEp = episode
-                                    val nextEp = if (item.type == "show" && currentEp != null) {
-                                        episodes.firstOrNull { it.season == currentEp.season && it.number == currentEp.number + 1 }
-                                    } else null
-                                    PlayerScreen(
+                                    var nextEp by remember(item.id, currentEp?.season, currentEp?.number) { mutableStateOf<com.framezoo.tv.model.Episode?>(null) }
+                                    LaunchedEffect(item.id, currentEp?.season, currentEp?.number, seasons) {
+                                        nextEp = if (item.type == "show" && currentEp != null) {
+                                            try { nextEpisode(item, currentEp) }
+                                            catch (e: CancellationException) { throw e }
+                                            catch (_: Exception) { null }
+                                        } else null
+                                    }
+                                    key(item.id, currentEp?.season, currentEp?.number) {
+                                        PlayerScreen(
                                         state = state,
                                         player = player,
                                         item = item,
@@ -154,9 +162,10 @@ internal fun FrameZooApp(
                                         resumeDuration = resumeDuration(item, currentEp),
                                         onNextEpisode = nextEp?.let { ep -> { loadSources(item, ep) } },
                                         onSelectEpisode = { ep -> loadSources(item, ep) },
-                                        onStopped = { pos -> stopped(item, currentEp, pos) },
+                                        onStopped = { pos, duration -> stopped(item, currentEp, pos, duration) },
                                         onExit = { exitPlayer() }
-                                    )
+                                        )
+                                    }
                                 }
                                 "library" -> BookmarksScreen(state)
                                 "history" -> WatchHistoryScreen(state)

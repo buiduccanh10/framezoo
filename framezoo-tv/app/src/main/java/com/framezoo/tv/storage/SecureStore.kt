@@ -48,6 +48,18 @@ class SecureStore(context: Context) {
         get() = prefs.getBoolean("enableAutoplay", true)
         set(value) { prefs.edit().putBoolean("enableAutoplay", value).apply() }
 
+    var automaticVideoQuality: Boolean
+        get() = prefs.getBoolean("automaticVideoQuality", true)
+        set(value) { prefs.edit().putBoolean("automaticVideoQuality", value).apply() }
+
+    var preferredVideoQuality: String?
+        get() = prefs.getString("preferredVideoQuality", null)
+        set(value) { prefs.edit().putString("preferredVideoQuality", value).apply() }
+
+    var preferredVideoBitrate: Long
+        get() = prefs.getLong("preferredVideoBitrate", 0L)
+        set(value) { prefs.edit().putLong("preferredVideoBitrate", value).apply() }
+
     var enableSkipCredits: Boolean
         get() = prefs.getBoolean("enableSkipCredits", true)
         set(value) { prefs.edit().putBoolean("enableSkipCredits", value).apply() }
@@ -95,6 +107,9 @@ class SecureStore(context: Context) {
     var subtitleVerticalPosition: Int
         get() = prefs.getInt("subVerticalPosition", 1)
         set(value) { prefs.edit().putInt("subVerticalPosition", value).apply() }
+
+    fun playbackSelection(key: String): String? = prefs.getString("playback_selection_$key", null)
+    fun savePlaybackSelection(key: String, value: String) { prefs.edit().putString("playback_selection_$key", value).apply() }
 
     var localProgress: String?
         get() = prefs.getString("local_progress", null)

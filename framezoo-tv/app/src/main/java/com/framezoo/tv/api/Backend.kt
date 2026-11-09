@@ -389,28 +389,37 @@ class Backend(private val store: SecureStore) {
 
     /** Mirrors desktop getRoomStatuses + host lookup in WatchPartyJoinDialog. */
     suspend fun watchPartyHost(roomCode: String): WatchPartyHost {
-        val reply = request("/api/player/status?roomCode=${encode(roomCode)}", auth = true) as JSONObject
-        val users = reply.optJSONObject("users") ?: JSONObject()
-        val statuses = buildList {
-            users.keys().forEach { key ->
-                val arr = users.optJSONArray(key) ?: return@forEach
-                for (i in 0 until arr.length()) arr.optJSONObject(i)?.let(::add)
-            }
-        }
-        if (statuses.isEmpty()) throw WatchPartyException(WatchPartyError.EMPTY_ROOM)
-        val host = statuses.filter { it.optBoolean("isHost") }.maxByOrNull { it.optDouble("timestamp", 0.0) }
+        val users = watchPartyUsers(roomCode)
+        if (users.isEmpty()) throw WatchPartyException(WatchPartyError.EMPTY_ROOM)
+        val host = users.firstOrNull { it.isHost }
             ?: throw WatchPartyException(WatchPartyError.NO_HOST)
-        val content = host.optJSONObject("content") ?: throw WatchPartyException(WatchPartyError.NO_HOST)
-        val tmdbId = content.opt("tmdbId")?.toString()?.removeSuffix(".0").orEmpty()
-        if (tmdbId.isBlank()) throw WatchPartyException(WatchPartyError.NO_HOST)
-        val isShow = content.optString("type").lowercase() == "tv show"
+        if (host.tmdbId.isBlank() || (host.isShow && (host.season == null || host.episode == null)))
+            throw WatchPartyException(WatchPartyError.NO_HOST)
         return WatchPartyHost(
-            tmdbId = tmdbId,
-            title = content.optString("title"),
-            isShow = isShow && content.has("seasonNumber") && content.has("episodeNumber"),
-            season = content.optInt("seasonNumber", -1).takeIf { it >= 0 },
-            episode = content.optInt("episodeNumber", -1).takeIf { it >= 0 },
+            tmdbId = host.tmdbId, title = host.title, isShow = host.isShow,
+            season = host.season, episode = host.episode,
         )
+    }
+
+    internal suspend fun watchPartyUsers(roomCode: String): List<WatchPartyUser> =
+        parseWatchPartyUsers(request("/api/player/status?roomCode=${encode(roomCode)}", auth = true) as JSONObject)
+
+    internal suspend fun reportWatchParty(roomCode: String, isHost: Boolean, item: Media, episode: Episode?,
+                                          playing: Boolean, paused: Boolean, loading: Boolean,
+                                          time: Double, duration: Double, buffered: Double) {
+        val id = requireNotNull(store.userId)
+        val content = JSONObject().put("title", item.title).put("type", if (item.type == "show") "TV Show" else "Movie")
+            .put("tmdbId", item.id.toLongOrNull() ?: item.id)
+        episode?.let {
+            content.put("seasonNumber", it.season).put("episodeNumber", it.number)
+            it.seasonId.toLongOrNull()?.let { number -> content.put("seasonId", number) }
+            it.id.toLongOrNull()?.let { number -> content.put("episodeId", number) }
+        }
+        val state = JSONObject().put("isPlaying", playing).put("isPaused", paused).put("isLoading", loading)
+            .put("hasPlayedOnce", true).put("time", time).put("duration", duration).put("playbackRate", 1).put("buffered", buffered)
+        request("/api/player/status", "POST", JSONObject().put("participantId", id).put("userId", id)
+            .put("nickname", store.userNickname.orEmpty()).put("roomCode", roomCode).put("isHost", isHost)
+            .put("content", content).put("player", state), auth = true)
     }
 
     suspend fun getMe(): JSONObject? = try {

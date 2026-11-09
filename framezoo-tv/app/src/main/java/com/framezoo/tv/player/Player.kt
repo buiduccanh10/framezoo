@@ -2,7 +2,6 @@ package com.framezoo.tv.player
 
 import com.framezoo.tv.api.Addons
 import com.framezoo.tv.model.Stream
-import com.framezoo.tv.model.Subtitle
 
 import android.content.Context
 import android.view.Surface
@@ -36,6 +35,43 @@ data class TorrentLiveStats(
     val downloadedBytes: Long = 0L,
     val totalBytes: Long = 0L
 )
+
+data class AudioTrack(val id: String, val language: String, val title: String, val selected: Boolean)
+data class VideoTrack(val id: String, val width: Int, val height: Int, val bitrate: Long, val selected: Boolean)
+data class SubtitleTrack(val id: String, val language: String, val title: String, val externalFilename: String?, val selected: Boolean)
+
+internal fun readAudioTracks(property: (String) -> String?): List<AudioTrack> {
+    val count = property("track-list/count")?.toIntOrNull()?.coerceIn(0, 256) ?: return emptyList()
+    return (0 until count).mapNotNull { index ->
+        val prefix = "track-list/$index"
+        if (property("$prefix/type") != "audio") return@mapNotNull null
+        val id = property("$prefix/id") ?: return@mapNotNull null
+        AudioTrack(id, property("$prefix/lang").orEmpty(), property("$prefix/title").orEmpty(), property("$prefix/selected") == "yes")
+    }
+}
+
+internal fun readVideoTracks(property: (String) -> String?): List<VideoTrack> {
+    val count = property("track-list/count")?.toIntOrNull()?.coerceIn(0, 256) ?: return emptyList()
+    return (0 until count).mapNotNull { index ->
+        val prefix = "track-list/$index"
+        if (property("$prefix/type") != "video" || property("$prefix/albumart") == "yes" || property("$prefix/image") == "yes") return@mapNotNull null
+        val id = property("$prefix/id") ?: return@mapNotNull null
+        VideoTrack(id, property("$prefix/demux-w")?.toIntOrNull() ?: 0,
+            property("$prefix/demux-h")?.toIntOrNull() ?: 0,
+            property("$prefix/hls-bitrate")?.toLongOrNull() ?: 0, property("$prefix/selected") == "yes")
+    }
+}
+
+internal fun readSubtitleTracks(property: (String) -> String?): List<SubtitleTrack> {
+    val count = property("track-list/count")?.toIntOrNull()?.coerceIn(0, 256) ?: return emptyList()
+    return (0 until count).mapNotNull { index ->
+        val prefix = "track-list/$index"
+        if (property("$prefix/type") != "sub") return@mapNotNull null
+        val id = property("$prefix/id") ?: return@mapNotNull null
+        SubtitleTrack(id, property("$prefix/lang").orEmpty(), property("$prefix/title").orEmpty(),
+            property("$prefix/external-filename"), property("$prefix/selected") == "yes")
+    }
+}
 
 object NativePlayer {
     init { System.loadLibrary("framezoo_native") }
@@ -116,6 +152,8 @@ class PlayerController(private val context: Context) {
     private var handle = 0L
     private var opening = 0L
     private var generation = 0
+    private var subtitleRevision = 0
+    private val subtitleFiles = mutableMapOf<String, File>()
     @Volatile private var surface: Surface? = null
     private var surfaceWidth = 0
     private var surfaceHeight = 0
@@ -203,7 +241,7 @@ class PlayerController(private val context: Context) {
         }
     }
 
-    suspend fun play(stream: Stream, subtitles: List<Subtitle>, startAtSeconds: Double = 0.0) {
+    suspend fun play(stream: Stream, startAtSeconds: Double = 0.0, initialHlsBitrate: Long = 0L) {
         stop()
         val ticket = synchronized(lock) { generation }
         withContext(Dispatchers.IO) {
@@ -245,6 +283,7 @@ class PlayerController(private val context: Context) {
                     }
                 }
 
+                if (initialHlsBitrate > 0) NativePlayer.command(local, arrayOf("set", "hls-bitrate", initialHlsBitrate.coerceAtMost(Int.MAX_VALUE.toLong()).toString()))
                 val error = if (stream.url.startsWith("magnet:"))
                     NativePlayer.playTorrent(local, stream.url, stream.fileIdx ?: -1)
                 else NativePlayer.playUrl(local, stream.url, stream.headers.map { "${it.key}: ${it.value}" }.toTypedArray())
@@ -258,18 +297,6 @@ class PlayerController(private val context: Context) {
                         if (startAtSeconds > 1.0) {
                             NativePlayer.command(local, arrayOf("seek", startAtSeconds.toString(), "absolute"))
                         }
-                    }
-                }
-                val firstSub = (stream.subtitles + subtitles).distinctBy { it.url }
-                    .firstOrNull { it.language.startsWith("vi", ignoreCase = true) }
-                    ?: (stream.subtitles + subtitles).firstOrNull { it.language.startsWith("en", ignoreCase = true) }
-                if (firstSub != null) {
-                    CoroutineScope(Dispatchers.IO).launch {
-                        val status = synchronized(lock) {
-                            if (handle == local) NativePlayer.command(local, arrayOf("sub-add", firstSub.url, "select", firstSub.label.ifBlank { firstSub.language }))
-                            else -1
-                        }
-                        if (status < 0) Log.w("FrameZooTV", "Không thêm được phụ đề: ${firstSub.url}, libmpv=$status")
                     }
                 }
             } finally {
@@ -308,13 +335,96 @@ class PlayerController(private val context: Context) {
     fun duration(): Double = synchronized(lock) { if (handle == 0L) 0.0 else NativePlayer.propertyDouble(handle, "duration") }
     fun paused(): Boolean = synchronized(lock) { handle != 0L && NativePlayer.propertyString(handle, "pause") == "yes" }
     fun propertyString(name: String): String? = synchronized(lock) { if (handle == 0L) null else NativePlayer.propertyString(handle, name) }
+    fun audioTracks(): List<AudioTrack> = synchronized(lock) {
+        if (handle == 0L) emptyList() else readAudioTracks { NativePlayer.propertyString(handle, it) }
+    }
+    fun videoTracks(): List<VideoTrack> = synchronized(lock) {
+        if (handle == 0L) emptyList() else readVideoTracks { NativePlayer.propertyString(handle, it) }
+    }
+    fun subtitleTracks(): List<SubtitleTrack> = synchronized(lock) {
+        if (handle == 0L) emptyList() else readSubtitleTracks { NativePlayer.propertyString(handle, it) }.map { track ->
+            track.copy(externalFilename = subtitleFiles.entries.firstOrNull { it.value.absolutePath == track.externalFilename }?.key ?: track.externalFilename)
+        }
+    }
+    // Read on Dispatchers.IO. The cached file is owned by the current player generation.
+    internal fun transcript(url: String): List<TranscriptCue> {
+        val file = synchronized(lock) { subtitleFiles[url] } ?: return emptyList()
+        return runCatching {
+            val bytes = file.readBytes()
+            val charset = when {
+                bytes.size >= 2 && bytes[0] == 0xff.toByte() && bytes[1] == 0xfe.toByte() -> Charsets.UTF_16LE
+                bytes.size >= 2 && bytes[0] == 0xfe.toByte() && bytes[1] == 0xff.toByte() -> Charsets.UTF_16BE
+                else -> Charsets.UTF_8
+            }
+            parseSubtitleTranscript(bytes.toString(charset))
+        }.onFailure { Log.w("FrameZooTV", "Không đọc được danh sách thoại", it) }.getOrDefault(emptyList())
+    }
+    fun subtitleToken(): Pair<Int, Int>? = synchronized(lock) {
+        if (handle == 0L) null else generation to subtitleRevision
+    }
+    fun markSubtitleChanged() = synchronized(lock) { subtitleRevision++ }
+    // Call on Dispatchers.IO: remote downloads must never hold the player lock.
+    fun selectSubtitle(token: Pair<Int, Int>, id: String?, url: String?, title: String, language: String,
+                       secondary: Boolean, headers: Map<String, String>, mediaUrl: String): Int {
+        var downloaded: File? = null
+        val existing = synchronized(lock) {
+            if (handle == 0L || token != (generation to subtitleRevision)) return -1
+            url?.let { subtitleFiles[it] }
+        }
+        val local = if (id == null && url != null && existing == null) {
+            try {
+                downloadSubtitle(url, context.cacheDir, headers, mediaUrl).also { downloaded = it }
+            } catch (error: Exception) {
+                Log.w("FrameZooTV", "Không tải được phụ đề", error)
+                return -1
+            }
+        } else existing
+        try {
+            return synchronized(lock) {
+                if (handle == 0L || token != (generation to subtitleRevision)) return@synchronized -1
+                val property = if (secondary) "secondary-sid" else "sid"
+                val other = if (secondary) "sid" else "secondary-sid"
+                val previous = NativePlayer.propertyString(handle, property)
+                var trackId = id
+                if (trackId == null && url != null && local != null) {
+                    val cached = subtitleFiles[url]
+                    val file = cached ?: local
+                    trackId = readSubtitleTracks { NativePlayer.propertyString(handle, it) }
+                        .firstOrNull { it.externalFilename == file.absolutePath }?.id
+                    if (trackId == null) {
+                        if (NativePlayer.command(handle, arrayOf("sub-add", file.absolutePath, "auto", title, language)) < 0) return@synchronized -1
+                        trackId = readSubtitleTracks { NativePlayer.propertyString(handle, it) }
+                            .firstOrNull { it.externalFilename == file.absolutePath }?.id
+                    }
+                    if (trackId != null && cached == null) {
+                        subtitleFiles[url] = file
+                        downloaded = null
+                    }
+                }
+                if (trackId == null) return@synchronized -1
+                if (trackId == NativePlayer.propertyString(handle, other)) return@synchronized -2
+                val result = NativePlayer.command(handle, arrayOf("set", property, trackId))
+                if (result < 0 || NativePlayer.propertyString(handle, property) != trackId) -1 else {
+                    if (previous != trackId) NativePlayer.command(handle, arrayOf("set", if (secondary) "secondary-sub-delay" else "sub-delay", "0"))
+                    result
+                }
+            }
+        } finally {
+            downloaded?.delete()
+        }
+    }
     fun propertyDouble(name: String): Double = synchronized(lock) { if (handle == 0L) 0.0 else NativePlayer.propertyDouble(handle, name) }
     fun stop() {
-        val old = synchronized(lock) {
+        val (old, files) = synchronized(lock) {
             generation++
             if (opening != 0L) NativePlayer.cancel(opening)
-            handle.also { handle = 0L }
+            val old = handle
+            handle = 0L
+            val files = subtitleFiles.values.toList()
+            subtitleFiles.clear()
+            old to files
         }
         if (old != 0L) NativePlayer.destroy(old)
+        files.forEach { it.delete() }
     }
 }

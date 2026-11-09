@@ -866,6 +866,7 @@
       "quality": {
         "auto": "Auto",
         "automaticLabel": "Automatic quality",
+        "mpvAutoHint": "Automatically selects a default track when opened; it does not adapt to network speed.",
         "hint": "You can try <0>switching source</0> to get different quality options.",
         "iosNoQuality": "Due to Apple-defined (common IOS L) limitations, quality selection is not available on iOS for this source. You can try <0>switching to another source</0> to get different quality options.",
         "title": "Quality"

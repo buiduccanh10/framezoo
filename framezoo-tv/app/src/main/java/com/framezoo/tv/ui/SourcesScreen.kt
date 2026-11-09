@@ -59,10 +59,11 @@ internal fun splitStreamLines(value: String): List<String> =
 internal fun detectStreamQualityCategory(stream: Stream): String {
     val text = "${stream.name} ${stream.title} ${stream.description} ${stream.filename.orEmpty()}".lowercase()
     return when {
-        Regex("\\b(2160p|4k|uhd)\\b").containsMatchIn(text) -> "4k"
-        Regex("\\b1080p\\b").containsMatchIn(text) -> "1080p"
-        Regex("\\b720p\\b").containsMatchIn(text) -> "720p"
-        Regex("\\b(480p|576p|360p|sd)\\b").containsMatchIn(text) -> "480p"
+        Regex("\\b(2160p|4k)\\b").containsMatchIn(text) -> "4k"
+        Regex("\\b(1440p|2k|qhd)\\b").containsMatchIn(text) -> "1440p"
+        Regex("\\b(1080p|1080i|fhd|full\\s*hd)\\b").containsMatchIn(text) -> "1080p"
+        Regex("\\b(720p|720i|hd)\\b").containsMatchIn(text) -> "720p"
+        Regex("\\b(480p|480i|360p|240p|sd|dvd|cam|ts)\\b").containsMatchIn(text) -> "480p"
         else -> "other"
     }
 }
@@ -109,7 +110,7 @@ internal fun AddonLogoBox(
 }
 
 /**
- * 100% clone of Desktop `SourceSelectPart.tsx` inside `Menu.CardWithScrollable`.
+ * Source selector based on Desktop `SourceSelectPart.tsx`.
  * Supports:
  * - Step 1 (`showAddonList = true`): Addon list with per-addon stream counts & loading states, plus Quality filter dropdown
  * - Step 2 (`showAddonList = false`): Selected addon's streams list with Back arrow, Addon logo & name, Quality filter dropdown, and 2-column stream rows (`nameLines` on left, `detailsLines` on right)
@@ -139,6 +140,7 @@ internal fun SourceSelectModalCard(
     val qualityOptions = listOf(
         "all" to t("addons.player.qualities.all"),
         "4k" to t("addons.player.qualities.4k"),
+        "1440p" to "1440p",
         "1080p" to t("addons.player.qualities.1080p"),
         "720p" to t("addons.player.qualities.720p"),
         "480p" to t("addons.player.qualities.480p"),
@@ -154,10 +156,11 @@ internal fun SourceSelectModalCard(
         streamAddons.firstOrNull { it.id == selectedAddonId }
     }
     val showAddonList = selectedAddon == null
+    var initialFocusSet by remember(selectedAddonId) { mutableStateOf(false) }
 
-    LaunchedEffect(showAddonList, isLoadingAll, streamAddons.size, selectedQuality) {
-        if (!qualityDropdownOpen) {
-            runCatching { firstItemRequester.requestFocus() }
+    LaunchedEffect(showAddonList, isLoadingAll, streamAddons.size, addonStreams, selectedQuality) {
+        if (!qualityDropdownOpen && !initialFocusSet) {
+            initialFocusSet = runCatching { firstItemRequester.requestFocus() }.getOrDefault(false)
         }
     }
 
@@ -765,7 +768,7 @@ internal fun SourcesScreen(state: FrameZooState) {
         resumeDuration = state.resumeDuration(item, currentEp),
         onNextEpisode = nextEp?.let { ep -> { state.loadSources(item, ep) } },
         onSelectEpisode = { ep -> state.loadSources(item, ep) },
-        onStopped = { pos -> state.stopped(item, currentEp, pos) },
+        onStopped = { pos, duration -> state.stopped(item, currentEp, pos, duration) },
         onExit = { state.exitPlayer() }
     )
 }
