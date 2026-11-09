@@ -68,8 +68,10 @@ data class Stream(
     val title: String = "",
     val description: String = "",
     val videoSize: Long? = null,
+    val addonId: String = "",
     val addonName: String = "",
-    val addonLogo: String? = null
+    val addonLogo: String? = null,
+    val bingeGroup: String? = null
 )
 data class Subtitle(val language: String, val url: String, val label: String = "")
 data class LibraryItem(val media: Media, val position: Double = 0.0, val duration: Double = 0.0,

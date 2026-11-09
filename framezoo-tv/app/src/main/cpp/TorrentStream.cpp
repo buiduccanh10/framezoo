@@ -358,7 +358,17 @@ public:
 		params.settings.set_int(lt::settings_pack::alert_mask,
 			lt::alert_category::status | lt::alert_category::error | lt::alert_category::storage | lt::alert_category::piece_progress | lt::alert_category::peer);
 		params.settings.set_bool(lt::settings_pack::close_redundant_connections, false);
-		// ponytail: one stream per session; a one-second retry hides force_recheck's peer disconnect on healthy swarms.
+		params.settings.set_bool(lt::settings_pack::enable_dht, true);
+		params.settings.set_bool(lt::settings_pack::enable_lsd, true);
+		params.settings.set_bool(lt::settings_pack::enable_incoming_utp, true);
+		params.settings.set_bool(lt::settings_pack::enable_outgoing_utp, true);
+		params.settings.set_bool(lt::settings_pack::enable_incoming_tcp, true);
+		params.settings.set_bool(lt::settings_pack::enable_outgoing_tcp, true);
+		params.settings.set_str(lt::settings_pack::dht_bootstrap_nodes,
+			"router.bittorrent.com:6881,router.utorrent.com:6881,dht.transmissionbt.com:6881");
+		params.settings.set_int(lt::settings_pack::connections_limit, 200);
+		params.settings.set_int(lt::settings_pack::connection_speed, 60);
+		params.settings.set_int(lt::settings_pack::torrent_connect_boost, 80);
 		params.settings.set_int(lt::settings_pack::min_reconnect_time, 1);
 		session = std::make_unique<lt::session>(std::move(params));
 		alerts = std::thread([this] { alert_loop(); });
@@ -379,10 +389,17 @@ public:
 			params.save_path = "."; // disk_interface never opens this path
 			handle = session->add_torrent(std::move(params));
 			std::unique_lock<std::mutex> lock(mutex);
-			if (!changed.wait_for(lock, std::chrono::seconds(40), [this] { return cancelled || metadataReady || !error.empty(); }))
-				return "Hết thời gian lấy metadata torrent";
+			for (int elapsed = 0; elapsed < 60; ++elapsed) {
+				if (changed.wait_for(lock, std::chrono::seconds(1), [this] { return cancelled || metadataReady || !error.empty(); }))
+					break;
+				if (elapsed % 4 == 3 && handle.is_valid()) {
+					handle.force_reannounce(0, -1, lt::torrent_handle::ignore_min_interval);
+					handle.force_dht_announce();
+				}
+			}
 			if (cancelled) return "Đã dừng torrent";
 			if (!error.empty()) return error;
+			if (!metadataReady || !info) return "Hết thời gian lấy metadata torrent";
 			auto const& files = info->layout();
 			std::int64_t largest = -1;
 			for (int i = 0; i < files.num_files(); ++i) {
@@ -393,7 +410,7 @@ public:
 				bool video = ends(".mkv") || ends(".mp4") || ends(".webm") || ends(".avi") || ends(".mov");
 				if (video && files.file_size(index) > largest) { largest = files.file_size(index); selectedFile = index; }
 			}
-			if (requestedFile >= 0) selectedFile = lt::file_index_t{requestedFile};
+			if (requestedFile >= 0 && requestedFile < files.num_files()) selectedFile = lt::file_index_t{requestedFile};
 			if (selectedFile < lt::file_index_t{0} || selectedFile >= files.end_file()) return "Torrent không có file video hợp lệ";
 			fileSize = files.file_size(selectedFile);
 			if (fileSize <= 0) return "File torrent rỗng";
@@ -408,12 +425,8 @@ public:
 			if (!error.empty()) return error;
 			lock.unlock();
 			std::vector<lt::download_priority_t> pieces(static_cast<int>(info->end_piece()), lt::dont_download);
-			int const first = static_cast<int>(files.map_file(selectedFile, 0, 1).piece);
-			int const ahead = std::clamp((64 * 1024 * 1024) / info->piece_length(), 2, 24);
-			for (int i = first; i < std::min(first + ahead, int(pieces.size())); ++i) pieces[std::size_t(i)] = lt::top_priority;
-			pieces[static_cast<int>(files.map_file(selectedFile, fileSize - 1, 1).piece)] = lt::top_priority;
 			handle.prioritize_pieces(pieces);
-			prioritize(0);
+			prioritize(0, true);
 			return {};
 		} catch (std::exception const& e) { return e.what(); }
 	}
@@ -444,13 +457,70 @@ public:
 				prioritize(offset + copied);
 				ensure_missing(request.piece, storage);
 				auto status = handle.status();
-				__android_log_print(ANDROID_LOG_INFO, "FrameZooTorrent", "wait piece=%d priority=%d state=%d paused=%d peers=%d wanted=%lld done=%lld", static_cast<int>(request.piece), int(static_cast<std::uint8_t>(handle.piece_priority(request.piece))), int(status.state), int(bool(status.flags & lt::torrent_flags::paused)), status.num_peers, static_cast<long long>(status.total_wanted), static_cast<long long>(status.total_wanted_done));
-				if (!storage->wait_piece(request.piece, cancelled, std::chrono::seconds(45))) return copied ? copied : -1;
+				__android_log_print(ANDROID_LOG_INFO, "FrameZooTorrent", "wait piece=%d priority=%d state=%d paused=%d peers=%d rate=%d wanted=%lld done=%lld",
+					static_cast<int>(request.piece), int(static_cast<std::uint8_t>(handle.piece_priority(request.piece))),
+					int(status.state), int(bool(status.flags & lt::torrent_flags::paused)), status.num_peers, status.download_rate,
+					static_cast<long long>(status.total_wanted), static_cast<long long>(status.total_wanted_done));
+				int waitedSeconds = 0;
+				while (!storage->wait_piece(request.piece, cancelled, std::chrono::seconds(2))) {
+					if (cancelled) return copied ? copied : -1;
+					waitedSeconds += 2;
+					focus_piece(request.piece, waitedSeconds >= 4);
+					if (waitedSeconds % 6 == 0 && handle.is_valid()) {
+						handle.force_reannounce(0, -1, lt::torrent_handle::ignore_min_interval);
+						handle.force_dht_announce();
+					}
+					if (waitedSeconds >= 90) return copied ? copied : -1;
+				}
 			}
 			if (!storage->copy(request.piece, request.start, target + copied, chunk)) return copied ? copied : -1;
 			copied += chunk;
 		}
 		return copied;
+	}
+
+	void add_peer(std::string const& host, int port) {
+		if (port <= 0 || port > 65535 || host.empty()) return;
+		boost::system::error_code ec;
+		auto addr = lt::make_address(host, ec);
+		if (ec) return;
+		lt::tcp::endpoint ep(addr, static_cast<std::uint16_t>(port));
+		{
+			std::lock_guard<std::mutex> lock(prioritiesMutex);
+			if (std::find(peers.begin(), peers.end(), ep) == peers.end()) {
+				peers.push_back(ep);
+			}
+		}
+		if (handle.is_valid()) {
+			handle.connect_peer(ep);
+		}
+	}
+
+	std::string stats_json() const {
+		if (!handle.is_valid()) {
+			return "{\"state\":\"opening\",\"peers\":0,\"downloadRate\":0,\"progress\":0.0,\"downloadedBytes\":0,\"totalBytes\":0}";
+		}
+		auto status = handle.status();
+		std::string stateStr = "downloading";
+		if (!metadataReady) stateStr = "metadata";
+		else if (status.state == lt::torrent_status::checking_files || status.state == lt::torrent_status::checking_resume_data) stateStr = "checking";
+		else if (status.state == lt::torrent_status::seeding || status.state == lt::torrent_status::finished) stateStr = "seeding";
+		double prog = 0.0;
+		if (status.total_wanted > 0) {
+			prog = double(status.total_wanted_done) / double(status.total_wanted);
+		} else if (fileSize > 0 && status.all_time_download > 0) {
+			prog = std::min(1.0, double(status.all_time_download) / double(fileSize));
+		}
+		std::ostringstream oss;
+		oss << "{\"state\":\"" << stateStr << "\""
+		    << ",\"peers\":" << status.num_peers
+		    << ",\"seeds\":" << status.num_seeds
+		    << ",\"downloadRate\":" << status.download_rate
+		    << ",\"progress\":" << prog
+		    << ",\"downloadedBytes\":" << status.total_wanted_done
+		    << ",\"totalBytes\":" << (fileSize > 0 ? fileSize : status.total_wanted)
+		    << "}";
+		return oss.str();
 	}
 
 private:
@@ -462,6 +532,21 @@ private:
 			handle.force_recheck();
 		}
 	}
+	void focus_piece(lt::piece_index_t targetPiece, bool kick) {
+		if (!info || !handle.is_valid()) return;
+		std::lock_guard<std::mutex> lock(prioritiesMutex);
+		for (auto piece : hotPieces) {
+			if (piece != targetPiece) {
+				handle.piece_priority(piece, lt::download_priority_t{2});
+			}
+		}
+		if (kick) {
+			// Cancel non-critical in-flight block requests from slow peers and re-request from fastest peers
+			handle.reset_piece_deadline(targetPiece);
+		}
+		handle.piece_priority(targetPiece, lt::top_priority);
+		handle.set_piece_deadline(targetPiece, 0);
+	}
 	void prioritize(std::int64_t offset, bool force = false) {
 		if (!info || fileSize <= 0) return;
 		std::lock_guard<std::mutex> lock(prioritiesMutex);
@@ -470,27 +555,48 @@ private:
 		if (auto storage = disk ? disk->active_storage() : nullptr) storage->center(start);
 		if (start == currentPiece && !force) return;
 		currentPiece = start;
-		int const ahead = std::clamp((64 * 1024 * 1024) / info->piece_length(), 2, 24);
-		std::set<lt::piece_index_t> desired;
-		for (int i = -2; i < ahead && static_cast<int>(start) + i < static_cast<int>(info->end_piece()); ++i)
-			if (static_cast<int>(start) + i >= 0) desired.insert(lt::piece_index_t{static_cast<int>(start) + i});
-		// MP4/MKV indexes are often near the end of a file.
-		auto tail = info->layout().map_file(selectedFile, fileSize - 1, 1).piece;
-		desired.insert(tail);
+		int const endPiece = static_cast<int>(info->end_piece());
+		int const startIdx = static_cast<int>(start);
+		int const ahead = std::clamp((16 * 1024 * 1024) / info->piece_length(), 3, 8);
+		std::map<lt::piece_index_t, std::pair<lt::download_priority_t, int>> desired;
+
+		// Top priority (7) ONLY on the immediate playhead piece and next piece so bandwidth isn't scattered!
+		for (int i = 0; i < ahead && startIdx + i < endPiece; ++i) {
+			lt::piece_index_t p{startIdx + i};
+			if (i <= 1) {
+				desired[p] = {lt::top_priority, i * 40};
+			} else if (i <= 3) {
+				desired[p] = {lt::download_priority_t{5}, 100 + i * 60};
+			} else {
+				desired[p] = {lt::download_priority_t{3}, 250 + i * 80};
+			}
+		}
+
+		// MP4 moov / MKV Cues are often in the last 1-2 pieces of the file.
+		int const tailIdx = static_cast<int>(info->layout().map_file(selectedFile, fileSize - 1, 1).piece);
+		int const firstIdx = static_cast<int>(info->layout().map_file(selectedFile, 0, 1).piece);
+		if (tailIdx >= firstIdx) {
+			desired[lt::piece_index_t{tailIdx}] = {lt::top_priority, 80};
+			if (tailIdx - 1 >= firstIdx) {
+				desired[lt::piece_index_t{tailIdx - 1}] = {lt::top_priority, 120};
+			}
+		}
+
 		if (force) {
-			// force_recheck resets the picker; restore the bounded streaming window.
-			std::vector<lt::download_priority_t> priorities(static_cast<int>(info->end_piece()), lt::dont_download);
+			std::vector<lt::download_priority_t> priorities(endPiece, lt::dont_download);
 			handle.prioritize_pieces(priorities);
 		}
 		for (auto piece : hotPieces) if (!desired.count(piece)) {
 			handle.reset_piece_deadline(piece);
 			handle.piece_priority(piece, lt::dont_download);
 		}
-		for (auto piece : desired) if (force || !hotPieces.count(piece)) {
-			handle.piece_priority(piece, lt::top_priority);
-			handle.set_piece_deadline(piece, piece == tail ? 500 : std::max(0, static_cast<int>(piece) - static_cast<int>(start)) * 50);
+		std::set<lt::piece_index_t> nextHot;
+		for (auto const& [piece, cfg] : desired) {
+			nextHot.insert(piece);
+			handle.piece_priority(piece, cfg.first);
+			handle.set_piece_deadline(piece, cfg.second);
 		}
-		hotPieces = std::move(desired);
+		hotPieces = std::move(nextHot);
 		for (auto const& peer : peers) handle.connect_peer(peer);
 	}
 	void alert_loop() {
@@ -515,8 +621,10 @@ private:
 					filePrioritiesReady = true; changed.notify_all();
 				}
 				if (auto* state = lt::alert_cast<lt::state_changed_alert>(alert);
-					state && state->state == lt::torrent_status::downloading)
+					state && state->state == lt::torrent_status::downloading) {
+					std::lock_guard<std::mutex> lock(prioritiesMutex);
 					for (auto const& peer : peers) handle.connect_peer(peer);
+				}
 				if (auto* finished = lt::alert_cast<lt::piece_finished_alert>(alert))
 					if (auto storage = disk ? disk->active_storage() : nullptr) {
 						if (storage->was_evicted(finished->piece_index)) __android_log_print(ANDROID_LOG_INFO, "FrameZooTorrent", "reloaded piece=%d", static_cast<int>(finished->piece_index));
@@ -526,8 +634,10 @@ private:
 					auto status = handle.status();
 					__android_log_print(ANDROID_LOG_INFO, "FrameZooTorrent", "checked after eviction state=%d paused=%d peers=%d", int(status.state), int(bool(status.flags & lt::torrent_flags::paused)), status.num_peers);
 					handle.resume();
-				// force_recheck disconnects peers; clear their reconnect backoff before retrying explicit magnet peers.
-				if (!peers.empty()) handle.clear_peers();
+					{
+						std::lock_guard<std::mutex> lock(prioritiesMutex);
+						if (!peers.empty()) handle.clear_peers();
+					}
 					prioritize(currentOffset, true);
 				}
 			}
@@ -563,3 +673,5 @@ void TorrentStream::cancel_start() { impl->cancel_start(); }
 void TorrentStream::cancel() { impl->cancel(); }
 void TorrentStream::seek(std::int64_t offset) { impl->seek(offset); }
 std::int64_t TorrentStream::read(std::int64_t offset, char* target, std::uint64_t wanted) { return impl->read(offset, target, wanted); }
+void TorrentStream::add_peer(std::string const& host, int port) { impl->add_peer(host, port); }
+std::string TorrentStream::stats_json() const { return impl->stats_json(); }

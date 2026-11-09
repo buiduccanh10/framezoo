@@ -3,6 +3,10 @@ package com.framezoo.tv
 import com.framezoo.tv.api.Addons
 import com.framezoo.tv.model.Addon
 import com.framezoo.tv.model.Stream
+import com.framezoo.tv.player.hexInfoHashToUrlEncodedBytes
+import com.framezoo.tv.player.parseCompactPeersFromBencode
+import com.framezoo.tv.ui.detectStreamQualityCategory
+import com.framezoo.tv.ui.formatStreamBytes
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
@@ -52,5 +56,22 @@ class AddonAndStreamTest {
         assertEquals(15247133696L, stream.videoSize)
         assertEquals("Torrentio", stream.addonName)
         assertEquals("abcdef1234567890abcdef1234567890abcdef12", stream.infoHash)
+        assertEquals("4k", detectStreamQualityCategory(stream))
+        assertEquals("14.2 GB", formatStreamBytes(stream.videoSize))
+    }
+
+    @Test
+    fun testCompactPeersAndInfoHashEncoding() {
+        val encoded = hexInfoHashToUrlEncodedBytes("abcdef1234567890abcdef1234567890abcdef12")
+        assertEquals("%ab%cd%ef%12%34%56%78%90%ab%cd%ef%12%34%56%78%90%ab%cd%ef%12", encoded)
+        assertTrue(Addons.DEFAULT_TRACKERS.size >= 40)
+
+        // Build compact bencode payload: d8:intervali1800e5:peers6:<1.2.3.4:6881>e
+        val prefix = "d8:intervali1800e5:peers6:".toByteArray(Charsets.ISO_8859_1)
+        val peerBytes = byteArrayOf(1, 2, 3, 4, 0x1A, 0xE1.toByte()) // 1.2.3.4:6881
+        val suffix = "e".toByteArray(Charsets.ISO_8859_1)
+        val payload = prefix + peerBytes + suffix
+        val peers = parseCompactPeersFromBencode(payload)
+        assertEquals(listOf("1.2.3.4" to 6881), peers)
     }
 }

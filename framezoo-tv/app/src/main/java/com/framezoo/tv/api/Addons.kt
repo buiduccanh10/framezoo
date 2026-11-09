@@ -16,6 +16,59 @@ import java.net.URLEncoder
 class Addons(context: Context, private val backend: Backend, private val store: SecureStore) {
     companion object {
         const val NATIVE_SUBTITLE_ADDON_ID = "community.framezoo.subtitles"
+        val DEFAULT_TRACKERS = listOf(
+            "http://tracker.dler.org:6969/announce",
+            "http://tracker.opentrackr.org:1337/announce",
+            "https://tracker.opentrackr.org:443/announce",
+            "http://zer0day.ch:1337/announce",
+            "http://tracker.qu.ax:6969/announce",
+            "http://tracker.auctor.tv:6969/announce",
+            "http://tracker.ducks.party:1984/announce",
+            "http://bittorrent-tracker.e-n-c-r-y-p-t.net:1337/announce",
+            "http://t.overflow.biz:6969/announce",
+            "http://open.tracker.cl:1337/announce",
+            "http://tracker.tryhackx.org:6969/announce",
+            "https://tracker.zhuqiy.com:443/announce",
+            "http://tracker.renfei.net:8080/announce",
+            "https://tracker.pmman.tech:443/announce",
+            "https://ht.therarbg.to:443/announce",
+            "udp://zer0day.ch:1337/announce",
+            "udp://tracker.publictracker.xyz:6969/announce",
+            "udp://tracker.opentrackr.org:1337/announce",
+            "udp://tracker.openbittorrent.com:6969/announce",
+            "udp://open.demonii.com:1337/announce",
+            "udp://open.stealth.si:80/announce",
+            "udp://udp.tracker.projectk.org:23333/announce",
+            "udp://tracker.tryhackx.org:6969/announce",
+            "udp://tracker.torrent.eu.org:451/announce",
+            "udp://tracker.theoks.net:6969/announce",
+            "udp://tracker.startwork.cv:1337/announce",
+            "udp://tracker.qu.ax:6969/announce",
+            "udp://tracker.dler.org:6969/announce",
+            "udp://tracker.auctor.tv:6969/announce",
+            "udp://tracker-udp.gbitt.info:80/announce",
+            "udp://torrentclub.online:54123/announce",
+            "udp://torrentclub.online:1984/announce",
+            "udp://t.overflow.biz:6969/announce",
+            "udp://explodie.org:6969/announce",
+            "udp://bittorrent-tracker.e-n-c-r-y-p-t.net:1337/announce",
+            "udp://tracker.plx.im:6969/announce",
+            "udp://tracker.nyaa.vc:6969/announce",
+            "udp://tracker.iperson.xyz:6969/announce",
+            "udp://tracker.gmi.gd:6969/announce",
+            "udp://tracker.fnix.net:6969/announce",
+            "udp://tracker.flatuslifir.is:6969/announce",
+            "udp://tracker.ducks.party:1984/announce",
+            "udp://tracker.bluefrog.pw:2710/announce",
+            "https://tracker.yemekyedim.com:443/announce",
+            "https://tracker.bt4g.com:443/announce",
+            "https://tr.zukizuki.org:443/announce",
+            "http://tracker810.xyz:11450/announce",
+            "udp://opentor.net:6969",
+            "http://bt.t-ru.org/ann?magnet",
+            "http://bt2.t-ru.org/ann?magnet",
+            "http://bt4.t-ru.org/ann?magnet"
+        )
     }
 
     private val prefs = context.getSharedPreferences("framezoo_tv_addons", Context.MODE_PRIVATE)
@@ -234,46 +287,62 @@ class Addons(context: Context, private val backend: Backend, private val store: 
             backdrop = raw.optString("background", item.backdrop.orEmpty()).ifBlank { null }, description = raw.optString("description", item.description)) to episodes
     }
 
-    suspend fun streams(item: Media, episode: Episode?): List<Stream> {
+    suspend fun streamsForAddon(addon: Addon, item: Media, episode: Episode?): List<Stream> {
         val id = mediaId(item, episode)
         val result = mutableListOf<Stream>()
-        for (addon in list().filter { it.enabled && "stream" in it.resources }) try {
-            val raw = json(endpoint(addon, "stream", if (item.type == "show") "series" else "movie", id)).optJSONArray("streams") ?: JSONArray()
-            for (i in 0 until raw.length()) {
-                val value = raw.optJSONObject(i) ?: continue
-                val hash = value.optString("infoHash").takeIf { it.matches(Regex("(?i)[0-9a-f]{40}|[a-z2-7]{32}")) }
-                val trackers = value.optJSONArray("sources") ?: JSONArray()
-                val magnet = hash?.let { "magnet:?xt=urn:btih:$it" + (0 until trackers.length()).mapNotNull { index ->
-                    trackers.optString(index).removePrefix("tracker:").takeIf { trackers.optString(index).startsWith("tracker:") }
-                }.joinToString("") { "&tr=${encode(it)}" } }
-                val url = value.optString("url").ifBlank { magnet ?: "" }
-                if (runCatching { URI(url).scheme?.lowercase() }.getOrNull() !in setOf("http", "https", "magnet")) continue
-                val hints = value.optJSONObject("behaviorHints") ?: JSONObject()
-                val requestHeaders = hints.optJSONObject("proxyHeaders")?.optJSONObject("request") ?: JSONObject()
-                val headers = requestHeaders.keys().asSequence().associateWith { requestHeaders.optString(it) }
-                    .filter { (name, content) -> name.matches(Regex("[A-Za-z0-9!#$%&'*+.^_`|~-]+")) && '\r' !in content && '\n' !in content }
-                val subs = value.optJSONArray("subtitles") ?: JSONArray()
-                val rawName = value.optString("name").trim()
-                val rawTitle = value.optString("title").trim()
-                val rawDesc = value.optString("description").trim()
-                val videoSize = hints.optLong("videoSize", -1L).takeIf { it > 0 }
-                result += Stream(
-                    name = if (rawName.isNotBlank()) rawName else if (rawTitle.isNotBlank()) rawTitle else addon.name,
-                    url = url,
-                    infoHash = hash,
-                    fileIdx = value.optInt("fileIdx", -1).takeIf { it >= 0 },
-                    filename = hints.optString("filename").ifBlank { null },
-                    headers = headers,
-                    subtitles = (0 until subs.length()).mapNotNull { subs.optJSONObject(it) }.mapNotNull {
-                        it.optString("url").takeIf(String::isNotBlank)?.let { url -> Subtitle(it.optString("lang", it.optString("language", "und")), url, it.optString("label")) }
-                    },
-                    title = rawTitle,
-                    description = rawDesc,
-                    videoSize = videoSize,
-                    addonName = addon.name,
-                    addonLogo = addon.logo
-                )
+        val raw = json(endpoint(addon, "stream", if (item.type == "show") "series" else "movie", id)).optJSONArray("streams") ?: JSONArray()
+        for (i in 0 until raw.length()) {
+            val value = raw.optJSONObject(i) ?: continue
+            val hash = value.optString("infoHash").takeIf { it.matches(Regex("(?i)[0-9a-f]{40}|[a-z2-7]{32}")) }
+            val trackers = value.optJSONArray("sources") ?: JSONArray()
+            val streamTrackers = (0 until trackers.length()).mapNotNull { index ->
+                val src = trackers.optString(index).trim()
+                if (src.startsWith("tracker:")) src.removePrefix("tracker:").trim()
+                else if (src.startsWith("http://") || src.startsWith("https://") || src.startsWith("udp://")) src
+                else null
             }
+            val allTrackers = (streamTrackers + DEFAULT_TRACKERS).distinct()
+            val magnet = hash?.let {
+                "magnet:?xt=urn:btih:$it" + allTrackers.joinToString("") { tr -> "&tr=${encode(tr)}" }
+            }
+            val url = value.optString("url").ifBlank { magnet ?: "" }
+            if (runCatching { URI(url).scheme?.lowercase() }.getOrNull() !in setOf("http", "https", "magnet")) continue
+            val hints = value.optJSONObject("behaviorHints") ?: JSONObject()
+            val requestHeaders = hints.optJSONObject("proxyHeaders")?.optJSONObject("request") ?: JSONObject()
+            val headers = requestHeaders.keys().asSequence().associateWith { requestHeaders.optString(it) }
+                .filter { (name, content) -> name.matches(Regex("[A-Za-z0-9!#$%&'*+.^_`|~-]+")) && '\r' !in content && '\n' !in content }
+            val subs = value.optJSONArray("subtitles") ?: JSONArray()
+            val rawName = value.optString("name").trim()
+            val rawTitle = value.optString("title").trim()
+            val rawDesc = value.optString("description").trim()
+            val videoSize = hints.optLong("videoSize", -1L).takeIf { it > 0 }
+            val bingeGroup = hints.optString("bingeGroup").trim().ifBlank { null }
+            result += Stream(
+                name = if (rawName.isNotBlank()) rawName else if (rawTitle.isNotBlank()) rawTitle else addon.name,
+                url = url,
+                infoHash = hash,
+                fileIdx = value.optInt("fileIdx", -1).takeIf { it >= 0 },
+                filename = hints.optString("filename").ifBlank { null },
+                headers = headers,
+                subtitles = (0 until subs.length()).mapNotNull { subs.optJSONObject(it) }.mapNotNull {
+                    it.optString("url").takeIf(String::isNotBlank)?.let { subUrl -> Subtitle(it.optString("lang", it.optString("language", "und")), subUrl, it.optString("label")) }
+                },
+                title = rawTitle,
+                description = rawDesc,
+                videoSize = videoSize,
+                addonId = addon.id,
+                addonName = addon.name,
+                addonLogo = addon.logo,
+                bingeGroup = bingeGroup
+            )
+        }
+        return result
+    }
+
+    suspend fun streams(item: Media, episode: Episode?): List<Stream> {
+        val result = mutableListOf<Stream>()
+        for (addon in list().filter { it.enabled && "stream" in it.resources }) try {
+            result += streamsForAddon(addon, item, episode)
         } catch (_: Exception) { }
         return result
     }

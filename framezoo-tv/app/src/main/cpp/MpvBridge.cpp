@@ -191,3 +191,15 @@ extern "C" JNIEXPORT jstring JNICALL Java_com_framezoo_tv_player_NativePlayer_pr
 	mpv_free(result);
 	return output;
 }
+extern "C" JNIEXPORT void JNICALL Java_com_framezoo_tv_player_NativePlayer_addTorrentPeer(JNIEnv* env, jobject, jlong value, jstring host, jint port) {
+	auto* ptr = player(value); if (!ptr) return;
+	std::lock_guard<std::mutex> lock(ptr->torrentMutex);
+	if (ptr->torrent) ptr->torrent->add_peer(java_string(env, host), port);
+}
+extern "C" JNIEXPORT jstring JNICALL Java_com_framezoo_tv_player_NativePlayer_torrentStats(JNIEnv* env, jobject, jlong value) {
+	auto* ptr = player(value); if (!ptr) return nullptr;
+	std::lock_guard<std::mutex> lock(ptr->torrentMutex);
+	if (!ptr->torrent) return nullptr;
+	std::string stats = ptr->torrent->stats_json();
+	return env->NewStringUTF(stats.c_str());
+}

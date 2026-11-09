@@ -221,6 +221,10 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
     var episode by mutableStateOf<Episode?>(null)
     var sources by mutableStateOf<List<Stream>>(emptyList())
     var sourcesLoading by mutableStateOf(false)
+    var addonStreams by mutableStateOf<Map<String, List<Stream>>>(emptyMap())
+    var addonLoading by mutableStateOf<Set<String>>(emptySet())
+    private var sourcesJob: Job? = null
+    private var playerReturnPage = "discover"
     var playing by mutableStateOf<Stream?>(null)
     private var recentResume by mutableStateOf<Triple<String, Episode?, Double>?>(null)
     var subtitles by mutableStateOf<List<Subtitle>>(emptyList())
@@ -441,8 +445,14 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         episode = null; page = "details"
     }
 
+    val streamAddons: List<Addon>
+        get() = installed.filter { it.enabled && "stream" in it.resources }
+
     fun playFeatured(item: Media) {
-        if (page != "details") { detailsReturnPage = page; detailsStack.clear() }
+        if (page != "player" && page != "sources") {
+            playerReturnPage = page
+            if (page != "details") { detailsReturnPage = page; detailsStack.clear() }
+        }
         val saved = progress.firstOrNull { it.media.id == item.id && it.media.type == item.type && it.position > 0 }
         val initialTarget = if (item.type == "show" && saved?.season != null && saved.episode != null) {
             Episode(
@@ -458,13 +468,19 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         } else null
         selected = item
         episode = initialTarget
+        playing = null
         sources = emptyList()
         subtitles = emptyList()
+        addonStreams = emptyMap()
         sourcesLoading = true
-        page = "sources"
+        page = "player"
 
-        scope.launch {
+        sourcesJob?.cancel()
+        sourcesJob = scope.launch {
             try {
+                if (installed.isEmpty()) installed = addons.list()
+                val eligible = installed.filter { it.enabled && "stream" in it.resources }
+                addonLoading = eligible.map { it.id }.toSet()
                 val (detail, seasonList) = backend.details(item)
                 selected = detail
                 seasons = seasonList
@@ -472,50 +488,96 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
                     val season = saved?.season ?: seasonList.firstOrNull()
                     season?.let { number ->
                         val eps = backend.episodes(item.id, number)
+                        episodes = eps
+                        selectedSeason = number
                         saved?.episode?.let { ep -> eps.firstOrNull { it.number == ep } } ?: eps.firstOrNull()
                     }
                 } else null
                 episode = resolvedTarget
                 if (item.type == "show" && resolvedTarget == null) {
                     sourcesLoading = false
+                    addonLoading = emptySet()
                     page = "details"
                     return@launch
                 }
-                val streamList = addons.streams(detail, resolvedTarget)
-                val subList = addons.subtitles(detail, resolvedTarget)
-                sources = streamList
-                subtitles = subList
+                coroutineScope {
+                    val subDeferred = async { runCatching { addons.subtitles(detail, resolvedTarget) }.getOrDefault(emptyList()) }
+                    val addonDeferreds = eligible.map { addon ->
+                        async {
+                            try {
+                                val list = addons.streamsForAddon(addon, detail, resolvedTarget)
+                                addonStreams = addonStreams + (addon.id to list)
+                                sources = addonStreams.values.flatten()
+                            } catch (e: CancellationException) {
+                                throw e
+                            } catch (_: Exception) {
+                                addonStreams = addonStreams + (addon.id to emptyList())
+                            } finally {
+                                addonLoading = addonLoading - addon.id
+                            }
+                        }
+                    }
+                    subtitles = subDeferred.await()
+                    addonDeferreds.forEach { it.await() }
+                }
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
                 error = e.message ?: "Failed to load sources"
             } finally {
                 sourcesLoading = false
+                addonLoading = emptySet()
             }
         }
     }
     fun playRandom(item: Media) = playFeatured(item)
 
     fun loadSources(item: Media, target: Episode?) {
+        if (page != "player" && page != "sources") {
+            playerReturnPage = page
+        }
         selected = item
         episode = target
+        playing = null
         sources = emptyList()
         subtitles = emptyList()
+        addonStreams = emptyMap()
         sourcesLoading = true
-        page = "sources"
+        page = "player"
 
-        scope.launch {
+        sourcesJob?.cancel()
+        sourcesJob = scope.launch {
             try {
-                val streamList = addons.streams(item, target)
-                val subList = addons.subtitles(item, target)
-                sources = streamList
-                subtitles = subList
+                if (installed.isEmpty()) installed = addons.list()
+                val eligible = installed.filter { it.enabled && "stream" in it.resources }
+                addonLoading = eligible.map { it.id }.toSet()
+                coroutineScope {
+                    val subDeferred = async { runCatching { addons.subtitles(item, target) }.getOrDefault(emptyList()) }
+                    val addonDeferreds = eligible.map { addon ->
+                        async {
+                            try {
+                                val list = addons.streamsForAddon(addon, item, target)
+                                addonStreams = addonStreams + (addon.id to list)
+                                sources = addonStreams.values.flatten()
+                            } catch (e: CancellationException) {
+                                throw e
+                            } catch (_: Exception) {
+                                addonStreams = addonStreams + (addon.id to emptyList())
+                            } finally {
+                                addonLoading = addonLoading - addon.id
+                            }
+                        }
+                    }
+                    subtitles = subDeferred.await()
+                    addonDeferreds.forEach { it.await() }
+                }
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
                 error = e.message ?: "Failed to load sources"
             } finally {
                 sourcesLoading = false
+                addonLoading = emptySet()
             }
         }
     }
@@ -866,19 +928,37 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         val saved = progress.firstOrNull { it.media.id == item.id && it.season == target?.season && it.episode == target?.number }?.position ?: 0.0
         return recentResume?.takeIf { it.first == item.id && it.second == target }?.third ?: saved
     }
+    fun resumeDuration(item: Media, target: Episode?): Double {
+        val saved = progress.firstOrNull { it.media.id == item.id && it.season == target?.season && it.episode == target?.number }?.duration ?: 0.0
+        if (saved > 0.0) return saved
+        return if (item.runtime > 0) item.runtime * 60.0 else if (item.type == "show") 2400.0 else 7200.0
+    }
     fun stopped(item: Media, target: Episode?, position: Double) {
         recentResume = Triple(item.id, target, position)
         if (position > 20) {
-            val duration = episodes.firstOrNull { it.season == target?.season && it.number == target?.number }?.let { 2400.0 } ?: 7200.0
+            val duration = resumeDuration(item, target)
             val newItem = LibraryItem(item, position, duration, target?.season, target?.number)
             progress = (listOf(newItem) + progress.filter { it.media.id != item.id }).take(30)
             backend.saveLocalProgress(item, position, duration, target)
         }
     }
+    fun exitPlayer() {
+        sourcesJob?.cancel()
+        playing = null
+        page = if (playerReturnPage in listOf("player", "sources")) "details" else playerReturnPage
+    }
     fun back() {
         page = when (page) {
-            "player" -> "sources"
-            "sources" -> "details"
+            "player" -> {
+                sourcesJob?.cancel()
+                playing = null
+                if (playerReturnPage in listOf("player", "sources")) "details" else playerReturnPage
+            }
+            "sources" -> {
+                sourcesJob?.cancel()
+                playing = null
+                if (playerReturnPage in listOf("player", "sources")) "details" else playerReturnPage
+            }
             "trailer" -> "details"
             "details" -> {
                 seasonJob?.cancel()

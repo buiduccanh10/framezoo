@@ -113,14 +113,14 @@ internal fun FrameZooApp(
                 Surface(color = MaterialTheme.colorScheme.background, contentColor = MaterialTheme.colorScheme.onBackground) {
                     Box(Modifier.fillMaxSize()) {
                     Column(Modifier.fillMaxSize().then(
-                        if (page in listOf("discover", "search", "details", "player", "trailer", "login", "settings")) Modifier
+                        if (page in listOf("discover", "search", "details", "player", "sources", "trailer", "login", "settings")) Modifier
                         else Modifier.padding(horizontal = 48.dp, vertical = 32.dp)
                     )) {
-                        if (page !in listOf("player", "discover", "search", "details", "trailer", "login", "settings")) {
+                        if (page !in listOf("player", "sources", "discover", "search", "details", "trailer", "login", "settings")) {
                             DiscoverHeader(state)
                             Spacer(Modifier.height(28.dp))
                         }
-                        if (error.isNotBlank() && page != "details") Text(error, color = colors["type.danger"], modifier = Modifier.padding(vertical = 10.dp))
+                        if (error.isNotBlank() && page !in listOf("details", "player", "sources")) Text(error, color = colors["type.danger"], modifier = Modifier.padding(vertical = 10.dp))
                         val isConnectionError = page == "error" || (page == "discover" && discover.isEmpty() && (discoverError.isNotBlank() || error.isNotBlank()))
                         if (isConnectionError) {
                             ErrorScreen(
@@ -137,25 +137,27 @@ internal fun FrameZooApp(
                                 "details" -> selected?.let { item -> DetailsScreen(state, item) }
                                 "trailer" -> TrailerScreen(state)
                                 "feedback" -> FeedbackScreen(state)
-                                "sources" -> SourcesScreen(state)
-                                "player" -> selected?.let { item -> playing?.let { stream ->
+                                "sources", "player" -> selected?.let { item ->
                                     val currentEp = episode
                                     val nextEp = if (item.type == "show" && currentEp != null) {
                                         episodes.firstOrNull { it.season == currentEp.season && it.number == currentEp.number + 1 }
                                     } else null
                                     PlayerScreen(
+                                        state = state,
                                         player = player,
                                         item = item,
                                         episode = currentEp,
-                                        stream = stream,
+                                        stream = playing,
                                         subtitles = subtitles,
                                         backend = backend,
                                         resume = resume(item, currentEp),
+                                        resumeDuration = resumeDuration(item, currentEp),
                                         onNextEpisode = nextEp?.let { ep -> { loadSources(item, ep) } },
+                                        onSelectEpisode = { ep -> loadSources(item, ep) },
                                         onStopped = { pos -> stopped(item, currentEp, pos) },
-                                        onExit = { page = "sources" }
+                                        onExit = { exitPlayer() }
                                     )
-                                } }
+                                }
                                 "library" -> BookmarksScreen(state)
                                 "history" -> WatchHistoryScreen(state)
                                 "addons" -> AddonsScreen(state)
