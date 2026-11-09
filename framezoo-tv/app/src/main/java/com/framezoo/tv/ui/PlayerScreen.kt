@@ -11,6 +11,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -145,28 +146,15 @@ internal fun PlayerIconButton(
 
 @Composable
 internal fun PlayerBrandPill() {
-    val colors = LocalFrameZooColors.current
-    Row(
+    Box(
         modifier = Modifier
             .clip(RoundedCornerShape(50))
             .background(Color.White.copy(alpha = 0.10f))
             .border(BorderStroke(1.dp, Color.White.copy(alpha = 0.10f)), RoundedCornerShape(50))
-            .padding(horizontal = 14.dp, vertical = 7.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+            .padding(horizontal = 12.dp, vertical = 6.dp),
+        contentAlignment = Alignment.Center
     ) {
-        Icon(
-            painter = painterResource(R.drawable.desktop_film),
-            contentDescription = null,
-            tint = colors["type.logo"],
-            modifier = Modifier.size(16.dp)
-        )
-        Text(
-            text = "framezoo",
-            color = Color.White,
-            fontSize = 15.sp,
-            fontWeight = FontWeight.Bold
-        )
+        Image(painterResource(R.drawable.framezoo_brand), contentDescription = "Framezoo", modifier = Modifier.width(92.dp).height(27.dp), contentScale = ContentScale.Fit)
     }
 }
 
@@ -233,6 +221,8 @@ internal fun PlayerScreen(
     val logoUrl by produceState<String?>(initialValue = null, key1 = item.id) {
         value = runCatching { backend.logo(item) }.getOrNull()
     }
+
+    var logoFailed by remember(logoUrl) { mutableStateOf(false) }
 
     // Cycling funny loading messages matching Desktop PlayerLoadingOverlay
     var messageIndex by remember { mutableIntStateOf((1..22).random()) }
@@ -322,11 +312,11 @@ internal fun PlayerScreen(
             isBuffering = player.propertyString("paused-for-cache") == "yes"
             torrentStats = player.torrentStats()
 
-            if (!hasRenderedFrame && error.isBlank() && (position > 0.1 || duration > 0.0 || !isOpening)) {
+            if (!hasRenderedFrame && error.isBlank() && player.hasVideoFrame()) {
                 hasRenderedFrame = true
             }
 
-            if (position.toInt() % 30 == 0 && position >= 20) {
+            if (hasRenderedFrame && position.toInt() % 30 == 0 && position >= 20) {
                 runCatching { backend.progress(item, position, duration, episode) }
             }
         }
@@ -337,9 +327,9 @@ internal fun PlayerScreen(
             if (stream != null) {
                 val pos = player.position()
                 val len = player.duration()
-                if (pos >= 20) onStopped(pos)
+                if (hasRenderedFrame && pos >= 20) onStopped(pos)
                 player.stop()
-                if (pos >= 20) {
+                if (hasRenderedFrame && pos >= 20) {
                     activity.lifecycleScope.launch {
                         runCatching { backend.progress(item, pos, len, episode) }
                     }
@@ -663,11 +653,11 @@ internal fun PlayerScreen(
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         val grayscaleMatrix = remember { ColorMatrix().apply { setToSaturation(0f) } }
-                        if (!logoUrl.isNullOrBlank()) {
+                        if (!logoUrl.isNullOrBlank() && !logoFailed) {
                             Box(
                                 modifier = Modifier
-                                    .widthIn(max = 420.dp)
-                                    .heightIn(max = 160.dp),
+                                    .width(320.dp)
+                                    .height(150.dp),
                                 contentAlignment = Alignment.Center
                             ) {
                                 // Base grayscale 30% opacity layer
@@ -675,19 +665,18 @@ internal fun PlayerScreen(
                                     model = logoUrl,
                                     contentDescription = item.title,
                                     modifier = Modifier
-                                        .fillMaxWidth(0.42f)
-                                        .heightIn(max = 150.dp)
+                                        .fillMaxSize()
                                         .alpha(0.30f),
                                     contentScale = ContentScale.Fit,
-                                    colorFilter = ColorFilter.colorMatrix(grayscaleMatrix)
+                                    colorFilter = ColorFilter.colorMatrix(grayscaleMatrix),
+                                    onError = { logoFailed = true }
                                 )
                                 // Foreground full-color layer clipped horizontally from left to right by `animatedFillFraction`
                                 AsyncImage(
                                     model = logoUrl,
                                     contentDescription = null,
                                     modifier = Modifier
-                                        .fillMaxWidth(0.42f)
-                                        .heightIn(max = 150.dp)
+                                        .fillMaxSize()
                                         .drawWithContent {
                                             clipRect(right = size.width * animatedFillFraction) {
                                                 this@drawWithContent.drawContent()
@@ -890,7 +879,7 @@ internal fun PlayerScreen(
 
         // 8. `Player.BottomControls` (matching `PlayerPart.tsx` lines 276-332)
         AnimatedVisibility(
-            visible = isPlayingStream && hasRenderedFrame && (showControls || activeOverlay != null),
+            visible = isPlayingStream && error.isBlank() && (!hasRenderedFrame || showControls || activeOverlay != null),
             enter = fadeIn() + slideInVertically { it },
             exit = fadeOut() + slideOutVertically { it },
             modifier = Modifier.align(Alignment.BottomCenter)

@@ -506,10 +506,8 @@ public:
 		else if (status.state == lt::torrent_status::checking_files || status.state == lt::torrent_status::checking_resume_data) stateStr = "checking";
 		else if (status.state == lt::torrent_status::seeding || status.state == lt::torrent_status::finished) stateStr = "seeding";
 		double prog = 0.0;
-		if (status.total_wanted > 0) {
-			prog = double(status.total_wanted_done) / double(status.total_wanted);
-		} else if (fileSize > 0 && status.all_time_download > 0) {
-			prog = std::min(1.0, double(status.all_time_download) / double(fileSize));
+		if (fileSize > 0) {
+			prog = std::min(1.0, double(status.total_wanted_done) / double(fileSize));
 		}
 		std::ostringstream oss;
 		oss << "{\"state\":\"" << stateStr << "\""

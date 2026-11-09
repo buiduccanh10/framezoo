@@ -49,6 +49,7 @@ object NativePlayer {
     external fun playTorrent(handle: Long, magnet: String, fileIdx: Int): String?
     external fun waitLoaded(handle: Long, timeoutMs: Int): Boolean
     external fun command(handle: Long, args: Array<String>): Int
+    external fun hasVideoFrame(handle: Long): Boolean
     external fun propertyDouble(handle: Long, name: String): Double
     external fun propertyString(handle: Long, name: String): String?
     external fun addTorrentPeer(handle: Long, host: String, port: Int)
@@ -302,6 +303,7 @@ class PlayerController(private val context: Context) {
     }
 
     fun command(vararg args: String) = synchronized(lock) { if (handle != 0L) NativePlayer.command(handle, args.toList().toTypedArray()) else -1 }
+    fun hasVideoFrame(): Boolean = synchronized(lock) { handle != 0L && NativePlayer.hasVideoFrame(handle) }
     fun position(): Double = synchronized(lock) { if (handle == 0L) 0.0 else NativePlayer.propertyDouble(handle, "time-pos") }
     fun duration(): Double = synchronized(lock) { if (handle == 0L) 0.0 else NativePlayer.propertyDouble(handle, "duration") }
     fun paused(): Boolean = synchronized(lock) { handle != 0L && NativePlayer.propertyString(handle, "pause") == "yes" }

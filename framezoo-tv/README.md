@@ -4,15 +4,15 @@ Android TV riêng; Kotlin, Compose, Material 3 for TV, libtorrent RAM storage, l
 
 ## Cấu trúc
 
-| Thư mục | Trách nhiệm |
-| --- | --- |
-| `app/src/main/java/com/framezoo/tv/ui` | Màn hình Compose, state holder (`FrameZooState`), component D-pad, theme, player UI |
-| `app/src/main/java/com/framezoo/tv/api` | Backend FrameZoo/TMDB và addon Stremio |
-| `app/src/main/java/com/framezoo/tv/auth`, `model`, `storage` | Ed25519, kiểu dữ liệu, token mã hóa bằng Keystore |
-| `app/src/main/java/com/framezoo/tv/player` | Vòng đời libmpv và SurfaceView phía Kotlin |
-| `app/src/main/cpp/TorrentStream.cpp` | libtorrent, piece trong RAM, ưu tiên tải và tua |
-| `app/src/main/cpp/MpvBridge.cpp` | JNI, libmpv và stream callback |
-| `native` | Script build thư viện native, checksum, giấy phép |
+| Thư mục                                                      | Trách nhiệm                                                                         |
+| ------------------------------------------------------------ | ----------------------------------------------------------------------------------- |
+| `app/src/main/java/com/framezoo/tv/ui`                       | Màn hình Compose, state holder (`FrameZooState`), component D-pad, theme, player UI |
+| `app/src/main/java/com/framezoo/tv/api`                      | Backend FrameZoo/TMDB và addon Stremio                                              |
+| `app/src/main/java/com/framezoo/tv/auth`, `model`, `storage` | Ed25519, kiểu dữ liệu, token mã hóa bằng Keystore                                   |
+| `app/src/main/java/com/framezoo/tv/player`                   | Vòng đời libmpv và SurfaceView phía Kotlin                                          |
+| `app/src/main/cpp/TorrentStream.cpp`                         | libtorrent, piece trong RAM, ưu tiên tải và tua                                     |
+| `app/src/main/cpp/MpvBridge.cpp`                             | JNI, libmpv và stream callback                                                      |
+| `native`                                                     | Script build thư viện native, checksum, giấy phép                                   |
 
 Compose dùng state holder và callback; Kotlin không có `hooks` như React. Tách thêm file theo từng màn khi mỗi màn có trạng thái hoặc luồng độc lập.
 
@@ -49,7 +49,7 @@ FRAMEZOO_TV_BACKEND_URL=http://localhost:3000
 
 - **Thứ tự ưu tiên**: Biến môi trường `FRAMEZOO_TV_BACKEND_URL` > Gradle property (`-PframezooTvBackendUrl=...`) > file `framezoo-tv/.env`.
 - **Bắt buộc cấu hình**: Nếu thiếu `FRAMEZOO_TV_BACKEND_URL`, quá trình build sẽ dừng ngay lập tức và ném lỗi `GradleException`.
-- **Cố định theo build (không chỉnh sửa qua UI)**: URL backend được gắn trực tiếp vào `BuildConfig.BACKEND_URL` lúc biên dịch và không lưu đè qua SharedPreferences. Màn hình Cài đặt chỉ hiển thị địa chỉ Backend hiện tại dạng read-only trong mục *Tài khoản*.
+- **Cố định theo build (không chỉnh sửa qua UI)**: URL backend được gắn trực tiếp vào `BuildConfig.BACKEND_URL` lúc biên dịch và không lưu đè qua SharedPreferences. Màn hình Cài đặt chỉ hiển thị địa chỉ Backend hiện tại dạng read-only trong mục _Tài khoản_.
 - **Tự động ánh xạ trên Android Emulator (Debug mode)**: Trên Android Emulator, `localhost` (127.0.0.1) là chính thiết bị Android ảo. Ở chế độ Debug, ứng dụng tự động ánh xạ `localhost` hoặc `127.0.0.1` sang `10.0.2.2` để kết nối thẳng tới backend chạy trên máy host. Do đó bạn có thể để nguyên `http://localhost:3000` trong `.env`.
 - **Android TV thật qua LAN**: Khi test trên TV thật qua Wi-Fi/LAN, cấu hình địa chỉ IP máy host: `FRAMEZOO_TV_BACKEND_URL=http://<IP_LAN_CUA_MAY_HOST>:3000`.
 - **Bản Release**: Bắt buộc phải sử dụng URL HTTPS (ví dụ: `https://api.framezoo.top`).
@@ -89,7 +89,7 @@ Mở thư mục `framezoo-tv` trong Android Studio. Gradle tự chạy `native/b
 
 ```sh
 # Cách 1: Dùng Gradle tự động cài đè bản Debug vào thiết bị đang kết nối:
-./gradlew installDebug
+./gradlew installDebug (case failed: cd framezoo-tv && JAVA_HOME="/Users/buiduccanh/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home" ./gradlew installDebug)
 
 # Cách 2: Dùng lệnh adb install trực tiếp file APK vừa build:
 adb install -r app/build/outputs/apk/debug/app-debug.apk
@@ -103,6 +103,6 @@ adb shell am force-stop com.framezoo.tv
 adb shell am start -n com.framezoo.tv/.MainActivity
 ```
 
- Addon manifest do người dùng tự cài. Torrent chỉ giữ tối đa 128 MiB piece trong RAM; dừng phát giải phóng dữ liệu. Phát 4K/HDR cần kiểm trên TV thật và codec/display tương ứng.
+Addon manifest do người dùng tự cài. Torrent chỉ giữ tối đa 128 MiB piece trong RAM; dừng phát giải phóng dữ liệu. Phát 4K/HDR cần kiểm trên TV thật và codec/display tương ứng.
 
 Native RAM storage bắt đầu từ ví dụ `examples/custom_storage.cpp` của libtorrent (BSD license), sau đó thêm giới hạn RAM, xác minh piece và kết nối libmpv. Nguồn libtorrent 2.1.2, OpenSSL 3.4.2, Boost 1.86.0 được kiểm SHA-256 trong script. mpv-android build scripts khóa commit `3137f2e`; mpv khóa `v0.41.0`.

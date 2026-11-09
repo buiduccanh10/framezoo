@@ -24,16 +24,21 @@ import java.net.URI
 import java.net.URLEncoder
 import java.time.Instant
 
+internal fun tmdbImageUrl(path: String?, size: String = "w500"): String? =
+    path?.takeIf { it.isNotBlank() && it != "null" }?.let {
+        if (it.startsWith("http")) it else "https://image.tmdb.org/t/p/$size$it"
+    }
+
 class Backend(private val store: SecureStore) {
     private val qualityCache = java.util.concurrent.ConcurrentHashMap<String, String>()
+    private val libraryArtwork = java.util.concurrent.ConcurrentHashMap<String, Media>()
+    private val libraryArtworkRequests = Semaphore(6)
     private val qualityRequests = Semaphore(6)
     private fun encode(value: String) = URLEncoder.encode(value, "UTF-8")
     private fun secureUrl(value: String?): String? = value?.takeIf {
         try { val uri = URI(it); uri.scheme == "https" && !uri.host.isNullOrBlank() && uri.userInfo == null } catch (_: Exception) { false }
     }
-    private fun image(path: String?, size: String = "w500") = path?.takeIf { it.isNotBlank() }?.let {
-        if (it.startsWith("http")) it else "https://image.tmdb.org/t/p/$size$it"
-    }
+    private fun image(path: String?, size: String = "w500") = tmdbImageUrl(path, size)
 
     private suspend fun request(
         path: String,
@@ -670,22 +675,36 @@ class Backend(private val store: SecureStore) {
         val meta = item.optJSONObject("meta") ?: JSONObject()
         return Media(item.optString("tmdbId"), meta.optString("type", "movie"), meta.optString("title", "Untitled"), image(meta.optString("poster")), year = meta.optInt("year", 0).takeIf { it > 0 }?.toString().orEmpty())
     }
-    private suspend fun libraryItems(path: String): List<LibraryItem> {
-        val id = store.userId ?: return emptyList()
+    private suspend fun artwork(item: Media): Media {
+        if (!item.poster.isNullOrBlank() || item.id.isBlank()) return item
+        val key = "${item.type}:${item.id}"
+        val found = libraryArtwork[key] ?: libraryArtworkRequests.withPermit {
+            libraryArtwork[key] ?: try {
+                val kind = if (item.type == "show") "tv" else "movie"
+                media(request("/api/tmdb/$kind/${encode(item.id)}?language=vi-VN") as JSONObject, item.type)
+                    .also { if (!it.poster.isNullOrBlank()) libraryArtwork[key] = it }
+            } catch (e: CancellationException) { throw e } catch (_: Exception) { item }
+        }
+        return item.copy(poster = found.poster, backdrop = item.backdrop ?: found.backdrop)
+    }
+    private suspend fun libraryItems(path: String): List<LibraryItem> = coroutineScope {
+        val id = store.userId ?: return@coroutineScope emptyList()
         val rows = request("/users/${encode(id)}/$path", auth = true) as JSONArray
-        return (0 until rows.length()).mapNotNull { rows.optJSONObject(it) }.map { row ->
-            LibraryItem(libraryMedia(row), row.optDouble("watched", 0.0), row.optDouble("duration", 0.0),
+        (0 until rows.length()).mapNotNull { rows.optJSONObject(it) }.map { row -> async {
+            LibraryItem(artwork(libraryMedia(row)), row.optDouble("watched", 0.0), row.optDouble("duration", 0.0),
                 row.optJSONObject("season")?.optInt("number", -1)?.takeIf { it >= 0 },
                 row.optJSONObject("episode")?.optInt("number", -1)?.takeIf { it >= 0 }, row.optString("watchedAt"),
                 row.optJSONObject("season")?.optString("id").orEmpty().takeUnless { it == "null" }.orEmpty(),
                 row.optJSONObject("episode")?.optString("id").orEmpty().takeUnless { it == "null" }.orEmpty())
-        }
+        } }.awaitAll()
     }
-    suspend fun bookmarkDetails(): List<BookmarkDetails> {
-        val id = store.userId ?: return emptyList()
+    suspend fun bookmarkDetails(): List<BookmarkDetails> = coroutineScope {
+        val id = store.userId ?: return@coroutineScope emptyList()
         val rows = request("/users/${encode(id)}/bookmarks", auth = true) as JSONArray
         fun values(row: JSONObject, name: String): List<String> = row.optJSONArray(name)?.let { a -> (0 until a.length()).map(a::optString).filter(String::isNotBlank) } ?: emptyList()
-        return (0 until rows.length()).mapNotNull(rows::optJSONObject).map { BookmarkDetails(libraryMedia(it), values(it, "group"), values(it, "favoriteEpisodes")) }
+        (0 until rows.length()).mapNotNull(rows::optJSONObject).map { row -> async {
+            BookmarkDetails(artwork(libraryMedia(row)), values(row, "group"), values(row, "favoriteEpisodes"))
+        } }.awaitAll()
     }
     suspend fun bookmarks(): List<Media> = bookmarkDetails().map { it.media }
     suspend fun bookmarkGroups(): List<String> {

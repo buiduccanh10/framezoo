@@ -177,6 +177,14 @@ extern "C" JNIEXPORT jint JNICALL Java_com_framezoo_tv_player_NativePlayer_comma
 	command.push_back(nullptr);
 	return mpv_command(ptr->mpv, command.data());
 }
+extern "C" JNIEXPORT jboolean JNICALL Java_com_framezoo_tv_player_NativePlayer_hasVideoFrame(JNIEnv*, jobject, jlong value) {
+    auto* ptr = player(value); if (!ptr) return JNI_FALSE;
+    mpv_node frame{};
+    int status = mpv_get_property(ptr->mpv, "video-frame-info", MPV_FORMAT_NODE, &frame);
+    if (status < 0) return JNI_FALSE;
+    mpv_free_node_contents(&frame);
+    return JNI_TRUE;
+}
 extern "C" JNIEXPORT jdouble JNICALL Java_com_framezoo_tv_player_NativePlayer_propertyDouble(JNIEnv* env, jobject, jlong value, jstring name) {
 	auto* ptr = player(value); if (!ptr) return 0;
 	double result = 0;
