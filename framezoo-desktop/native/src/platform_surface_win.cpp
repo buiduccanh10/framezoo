@@ -170,6 +170,29 @@ void surface_reparent(NativeSurface* surface, void* parent_handle) {
 
 void surface_request_paint(NativeSurface*) {}
 
+void surface_notify_system_wake(NativeSurface* surface) {
+  if (!surface || !surface->hwnd) return;
+  // After sleep/resume the popup can lose its z-order/position relative to the
+  // Electron window and DWM may keep a stale composition of it. Re-apply the
+  // physical bounds and invalidate so the next mpv frame is presented.
+  const RECT target = screen_bounds(surface->parent, surface->bounds);
+  SetWindowPos(
+      surface->hwnd,
+      surface->parent,
+      target.left,
+      target.top,
+      surface->bounds.width,
+      surface->bounds.height,
+      surface_position_flags(surface->parent) | SWP_FRAMECHANGED
+  );
+  RedrawWindow(
+      surface->hwnd,
+      nullptr,
+      nullptr,
+      RDW_INVALIDATE | RDW_UPDATENOW | RDW_ALLCHILDREN
+  );
+}
+
 void surface_disable_paint(NativeSurface* surface) {
   if (!surface) return;
   surface->paint_callback = nullptr;

@@ -122,6 +122,7 @@ type LibMpvElectronApi = {
   platform?: string;
   onMaximizeState?: (listener: (isMaximized: boolean) => void) => () => void;
   onFullscreenState?: (listener: (isFullscreen: boolean) => void) => () => void;
+  onOsResume?: (listener: () => void) => () => void;
   getStartupNativeWarmupState?: () => Promise<{
     status?: string;
     libmpv?: { status?: string; message?: string };
@@ -1760,11 +1761,22 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
 
   fscreen.addEventListener("fullscreenchange", fullscreenChanged);
 
-  unbindFullscreen =
+  const unbindFullscreenState =
     electronApi?.onFullscreenState?.((isFull) => {
       isFullscreen = isFull;
       emit("fullscreen", isFull);
     }) ?? null;
+  // After OS sleep/wake the main process rebuilds the decoder/audio/surface;
+  // re-push the current surface bounds so the native view matches the DOM.
+  const unbindOsResume =
+    electronApi?.onOsResume?.(() => {
+      if (destroyed) return;
+      updateBounds();
+    }) ?? null;
+  unbindFullscreen = () => {
+    unbindFullscreenState?.();
+    unbindOsResume?.();
+  };
 
   if (electronApi?.getFullscreenState) {
     electronApi

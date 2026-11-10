@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAsyncFn } from "react-use";
 
@@ -297,6 +297,21 @@ export function DeviceListPart(props: {
   const currentSessionId = account?.sessionId;
   const url = useBackendUrl();
   const hasHealedDeviceRef = useRef(false);
+  const [localDeviceName, setLocalDeviceName] = useState<string | null>(null);
+
+  // The current device's real name is always known locally, even when the
+  // seed needed to decrypt session names is unavailable.
+  useEffect(() => {
+    let cancelled = false;
+    getClientDeviceName()
+      .then((name) => {
+        if (!cancelled && name && name !== "Browser") setLocalDeviceName(name);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   // Self-heal current session device name if it is currently "Browser" or empty
   useEffect(() => {
@@ -415,7 +430,10 @@ export function DeviceListPart(props: {
         groups.set(key, {
           current: isCurrent,
           ids: [session.id],
-          name: deviceInfo.name,
+          name:
+            isCurrent && !deviceInfo.hasCustomName && localDeviceName
+              ? localDeviceName
+              : deviceInfo.name,
           browser: deviceInfo.browser,
           operatingSystem: deviceInfo.operatingSystem,
           type: deviceInfo.type,
@@ -433,7 +451,7 @@ export function DeviceListPart(props: {
       return timeB - timeA;
     });
     return list;
-  }, [seed, sessions, currentSessionId, getDeviceInfo]);
+  }, [seed, sessions, currentSessionId, getDeviceInfo, localDeviceName]);
 
   return (
     <div>

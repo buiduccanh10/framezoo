@@ -1,6 +1,13 @@
+import {
+  bytesToBase64,
+  decryptData,
+  keysFromMnemonic,
+} from "@/backend/accounts/crypto";
+
 import type { AccountWithToken } from "./index";
 
 const AUTH_SESSION_KEY = "auth_session";
+const SAVED_LOGIN_KEY = "saved_login";
 
 type AuthSecrets = Pick<AccountWithToken, "token" | "refreshToken" | "seed">;
 type StoredAuthSecrets = AuthSecrets &
@@ -41,6 +48,13 @@ export async function saveAuthSecrets(
       seed = seed || existing.seed;
     }
   }
+
+  // Never persist a seed-less session. Every logged-in account has a seed
+  // (it is the only key able to decrypt device names and synced data); an
+  // empty one means the state was saved before secrets were hydrated, or
+  // safeStorage/Keychain could not read the stored entry (e.g. right after an
+  // app update re-signed the bundle). Overwriting would destroy the seed.
+  if (!seed) return false;
 
   return api.secureStoreSave(
     AUTH_SESSION_KEY,
@@ -92,4 +106,39 @@ export async function loadAuthSecrets(): Promise<StoredAuthSecrets | null> {
 
 export async function removeAuthSecrets() {
   await secureStore()?.secureStoreRemove?.(AUTH_SESSION_KEY);
+}
+
+/**
+ * Re-derive a lost account seed from the "remember me" credentials.
+ *
+ * Login derives the seed deterministically from the password
+ * (`keysFromMnemonic(password)`), so it can be rebuilt without logging in
+ * again. The candidate is only accepted if it decrypts the current session's
+ * encrypted device name (AES-GCM authenticates the key), so a stale or
+ * different saved password can never install a wrong seed.
+ */
+export async function recoverSeedFromSavedLogin(
+  account: Pick<AccountWithToken, "deviceName">,
+): Promise<string | null> {
+  if (!account.deviceName) return null;
+  const raw = await secureStore()
+    ?.secureStoreGet?.(SAVED_LOGIN_KEY)
+    .catch(() => null);
+  if (!raw) return null;
+
+  let password: unknown;
+  try {
+    password = (JSON.parse(raw) as { password?: unknown }).password;
+  } catch {
+    return null;
+  }
+  if (typeof password !== "string" || !password) return null;
+
+  try {
+    const keys = await keysFromMnemonic(password);
+    decryptData(account.deviceName, keys.seed);
+    return bytesToBase64(keys.seed);
+  } catch {
+    return null;
+  }
 }
