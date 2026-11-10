@@ -670,6 +670,32 @@ class Backend(private val store: SecureStore) {
             it.optString("site") == "YouTube" && it.optString("type") == "Trailer" && it.optString("key").matches(Regex("[A-Za-z0-9_-]{11}"))
         }.map { Trailer(it.getString("key"), it.optString("name", "Trailer")) }.take(6)
     }
+
+    suspend fun skipSegments(item: Media, episode: Episode?): List<SkipSegment> {
+        val query = buildString {
+            append("/api/skip-segments?type=")
+            append(encode(if (item.type == "show") "show" else "movie"))
+            append("&tmdbId=").append(encode(item.id))
+            if (item.type == "show" && episode != null) {
+                append("&season=").append(episode.season)
+                append("&episode=").append(episode.number)
+            }
+            item.imdbId?.takeIf { it.isNotBlank() }?.let { append("&imdbId=").append(encode(it)) }
+        }
+        val raw = request(query) as? JSONObject ?: return emptyList()
+        val rows = raw.optJSONArray("segments") ?: return emptyList()
+        return (0 until rows.length()).mapNotNull { index ->
+            val row = rows.optJSONObject(index) ?: return@mapNotNull null
+            val type = when (row.optString("type").lowercase()) {
+                "intro", "recap", "credits", "preview" -> row.optString("type").lowercase()
+                "outro" -> "credits"
+                else -> return@mapNotNull null
+            }
+            val start = if (row.has("start_ms") && !row.isNull("start_ms")) row.optLong("start_ms") else null
+            val end = if (row.has("end_ms") && !row.isNull("end_ms")) row.optLong("end_ms") else null
+            if (start == null && end == null) null else SkipSegment(type, start, end)
+        }
+    }
     suspend fun episodes(id: String, season: Int): List<Episode> {
         val raw = request("/api/tmdb/tv/${encode(id)}/season/$season") as JSONObject
         val episodes = raw.optJSONArray("episodes") ?: JSONArray()

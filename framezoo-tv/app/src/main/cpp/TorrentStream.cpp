@@ -473,7 +473,17 @@ public:
 					if (waitedSeconds >= 90) return copied ? copied : -1;
 				}
 			}
-			if (!storage->copy(request.piece, request.start, target + copied, chunk)) return copied ? copied : -1;
+			if (!storage->copy(request.piece, request.start, target + copied, chunk)) {
+				// A RAM piece can be evicted between `has()` and `copy()` while the
+				// demuxer is reading video and audio concurrently. Do not expose a
+				// short read as EOF; wait for that piece to be rechecked/downloaded.
+				ensure_missing(request.piece, storage);
+				if (!storage->wait_piece(request.piece, cancelled, std::chrono::seconds(2))) {
+					if (cancelled) return copied ? copied : -1;
+					continue;
+				}
+				continue;
+			}
 			copied += chunk;
 		}
 		return copied;
@@ -555,7 +565,9 @@ private:
 		currentPiece = start;
 		int const endPiece = static_cast<int>(info->end_piece());
 		int const startIdx = static_cast<int>(start);
-		int const ahead = std::clamp((16 * 1024 * 1024) / info->piece_length(), 3, 8);
+		// Keep up to 64 MiB around the playhead. The previous 16 MiB window
+		// could starve HEVC video/audio reads when a 4K torrent interleaves tracks.
+		int const ahead = std::clamp((64 * 1024 * 1024) / info->piece_length(), 4, 24);
 		std::map<lt::piece_index_t, std::pair<lt::download_priority_t, int>> desired;
 
 		// Top priority (7) ONLY on the immediate playhead piece and next piece so bandwidth isn't scattered!

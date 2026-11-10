@@ -8,6 +8,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
@@ -120,8 +122,11 @@ internal fun SourceSelectModalCard(
     streamAddons: List<Addon>,
     addonStreams: Map<String, List<Stream>>,
     addonLoading: Set<String>,
+    addonErrors: Map<String, String> = emptyMap(),
     allSources: List<Stream>,
     isLoadingAll: Boolean,
+    preferredAddonId: String? = null,
+    preferredQuality: String? = null,
     activeStream: Stream? = null,
     isModalOverlay: Boolean = false,
     onSelectStream: (Stream) -> Unit,
@@ -130,13 +135,8 @@ internal fun SourceSelectModalCard(
     modifier: Modifier = Modifier
 ) {
     val colors = LocalFrameZooColors.current
-    var selectedAddonId by remember { mutableStateOf<String?>(null) }
-    var selectedQuality by remember { mutableStateOf("all") }
-    var qualityDropdownOpen by remember { mutableStateOf(false) }
-    var startingStreamKey by remember { mutableStateOf<String?>(null) }
-    val firstItemRequester = remember { FocusRequester() }
-    val activeQualityRequester = remember { FocusRequester() }
-
+    // Full source settings opens on the currently playing addon's stream list,
+    // matching desktop's `displayedSelectedAddonId`.
     val qualityOptions = listOf(
         "all" to t("addons.player.qualities.all"),
         "4k" to t("addons.player.qualities.4k"),
@@ -146,6 +146,31 @@ internal fun SourceSelectModalCard(
         "480p" to t("addons.player.qualities.480p"),
         "other" to t("addons.player.qualities.other")
     )
+    val initialQuality = preferredQuality?.lowercase()?.let { value ->
+        qualityOptions.firstOrNull { it.first == value }?.first
+    } ?: "all"
+    var selectedAddonId by remember(activeStream?.addonId, isModalOverlay, preferredAddonId) {
+        mutableStateOf(
+            when {
+                isModalOverlay -> activeStream?.addonId
+                preferredAddonId != null && addonStreams[preferredAddonId].orEmpty().isNotEmpty() -> preferredAddonId
+                else -> null
+            }
+        )
+    }
+    var selectedQuality by remember(isModalOverlay, initialQuality) {
+        mutableStateOf(if (isModalOverlay) "all" else initialQuality)
+    }
+    var qualityDropdownOpen by remember { mutableStateOf(false) }
+    var startingStreamKey by remember { mutableStateOf<String?>(null) }
+    val firstItemRequester = remember { FocusRequester() }
+    val activeQualityRequester = remember { FocusRequester() }
+
+    // A failed initial selection returns to this card with no active stream.
+    // Clear the desktop-equivalent in-flight guard so another row can be tried.
+    LaunchedEffect(activeStream, isModalOverlay) {
+        if (activeStream == null) startingStreamKey = null
+    }
 
     fun filterByQuality(streams: List<Stream>): List<Stream> {
         if (selectedQuality == "all") return streams
@@ -217,7 +242,7 @@ internal fun SourceSelectModalCard(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                if (showAddonList) {
+                if (selectedAddon == null) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -238,7 +263,7 @@ internal fun SourceSelectModalCard(
                             overflow = TextOverflow.Ellipsis
                         )
                     }
-                } else if (selectedAddon != null) {
+                } else {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -318,6 +343,7 @@ internal fun SourceSelectModalCard(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .horizontalScroll(rememberScrollState())
                         .background(colors["video.context.inputBg"])
                         .padding(horizontal = 24.dp, vertical = 10.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -390,7 +416,7 @@ internal fun SourceSelectModalCard(
                             onManageAddons()
                         }
                     }
-                } else if (showAddonList) {
+                } else if (selectedAddon == null) {
                     // Step 1: Addon List (`showAddonList == true`) matching Desktop lines 993-1052
                     val anyLoading = isLoadingAll || addonLoading.isNotEmpty()
                     val totalStreamsCount = allSources.size
@@ -433,23 +459,69 @@ internal fun SourceSelectModalCard(
                             }
                         }
                     } else {
+                        val visibleAddons = streamAddons.filter { addon ->
+                            val rawList = addonStreams[addon.id]
+                                ?: allSources.filter { it.addonId == addon.id || it.addonName == addon.name }
+                            val loading = addon.id in addonLoading || (isLoadingAll && addon.id !in addonStreams)
+                            loading || filterByQuality(rawList).isNotEmpty() || addon.id in addonErrors
+                        }
+                        if (!isLoadingAll && addonLoading.isEmpty() && visibleAddons.isEmpty()) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(vertical = 32.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                Icon(
+                                    painter = painterResource(R.drawable.desktop_video),
+                                    contentDescription = null,
+                                    tint = secondaryText,
+                                    modifier = Modifier.size(36.dp)
+                                )
+                                Spacer(Modifier.height(12.dp))
+                                Text(
+                                    text = t("addons.player.title"),
+                                    color = Color.White,
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    textAlign = TextAlign.Center
+                                )
+                                Spacer(Modifier.height(8.dp))
+                                Text(
+                                    text = t("addons.player.noTorrentStreams"),
+                                    color = mainText,
+                                    fontSize = 14.sp,
+                                    textAlign = TextAlign.Center
+                                )
+                                Spacer(Modifier.height(20.dp))
+                                TvButton(
+                                    label = t("addons.player.manageAddonsButton"),
+                                    accent = true,
+                                    modifier = Modifier.focusRequester(firstItemRequester)
+                                ) {
+                                    onManageAddons()
+                                }
+                            }
+                        } else {
                         LazyColumn(
                             modifier = Modifier.fillMaxSize(),
                             contentPadding = PaddingValues(vertical = 12.dp),
                             verticalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
-                            items(streamAddons.size) { index ->
-                                val addon = streamAddons[index]
+                            items(visibleAddons.size) { index ->
+                                val addon = visibleAddons[index]
                                 val rawList = addonStreams[addon.id] ?: allSources.filter { it.addonId == addon.id || it.addonName == addon.name }
                                 val filteredCount = filterByQuality(rawList).size
                                 val isAddonLoading = addon.id in addonLoading || (isLoadingAll && addon.id !in addonStreams)
+                                val addonFailed = addon.id in addonErrors
                                 val isActiveAddon = activeStream?.let { it.addonId == addon.id || it.addonName == addon.name } == true
 
                                 val rowShape = RoundedCornerShape(10.dp)
                                 var rowFocused by remember { mutableStateOf(false) }
                                 TvCard(
                                     onClick = {
-                                        if (!isAddonLoading) {
+                                        if (!isAddonLoading && !addonFailed) {
                                             selectedAddonId = addon.id
                                         }
                                     },
@@ -491,8 +563,9 @@ internal fun SourceSelectModalCard(
                                                 )
                                                 Text(
                                                     text = if (isAddonLoading) t("addons.player.loadingStreams")
+                                                    else if (addonFailed) t("addons.player.unableToLoad")
                                                     else t("addons.player.streamCount", "count" to filteredCount),
-                                                    color = mainText,
+                                                    color = if (addonFailed) colors["type.danger"] else mainText,
                                                     fontSize = 13.sp,
                                                     maxLines = 1
                                                 )
@@ -508,6 +581,13 @@ internal fun SourceSelectModalCard(
                                                     modifier = Modifier.size(18.dp),
                                                     color = colors["type.logo"],
                                                     strokeWidth = 2.dp
+                                                )
+                                            } else if (addonFailed) {
+                                                Icon(
+                                                    painter = painterResource(R.drawable.desktop_warning),
+                                                    contentDescription = t("addons.player.unableToLoad"),
+                                                    tint = colors["type.danger"],
+                                                    modifier = Modifier.size(18.dp)
                                                 )
                                             } else {
                                                 if (isActiveAddon) {
@@ -530,12 +610,14 @@ internal fun SourceSelectModalCard(
                                 }
                             }
                         }
+                        }
                     }
-                } else if (selectedAddon != null) {
+                } else {
                     // Step 2: Stream List for Selected Addon (`showAddonList == false`) matching Desktop lines 1053-1102
                     val rawStreams = addonStreams[selectedAddon.id] ?: allSources.filter { it.addonId == selectedAddon.id || it.addonName == selectedAddon.name }
                     val streams = remember(rawStreams, selectedQuality) { filterByQuality(rawStreams) }
                     val isAddonLoading = selectedAddon.id in addonLoading || (isLoadingAll && selectedAddon.id !in addonStreams)
+                    val selectedAddonFailed = selectedAddon.id in addonErrors
 
                     if (isAddonLoading) {
                         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -554,6 +636,15 @@ internal fun SourceSelectModalCard(
                                     fontSize = 15.sp
                                 )
                             }
+                        }
+                    } else if (selectedAddonFailed) {
+                        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                            Text(
+                                text = t("addons.player.unableToLoad"),
+                                color = colors["type.danger"],
+                                fontSize = 15.sp,
+                                textAlign = TextAlign.Center
+                            )
                         }
                     } else if (streams.isEmpty()) {
                         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -594,8 +685,10 @@ internal fun SourceSelectModalCard(
 
                                 TvCard(
                                     onClick = {
-                                        startingStreamKey = streamKey
-                                        onSelectStream(stream)
+                                        if (startingStreamKey == null || isStartingThis) {
+                                            startingStreamKey = streamKey
+                                            onSelectStream(stream)
+                                        }
                                     },
                                     modifier = Modifier
                                         .fillMaxWidth()

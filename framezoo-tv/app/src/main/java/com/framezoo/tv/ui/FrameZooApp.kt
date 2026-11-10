@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.background
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -70,6 +71,31 @@ internal fun tvFieldColors(): TextFieldColors {
 }
 
 @Composable
+private fun EntryLoadingScreen(title: String?) {
+    val colors = LocalFrameZooColors.current
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colors["background.main"]),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            CircularProgressIndicator(color = colors["type.logo"])
+            if (!title.isNullOrBlank()) {
+                Text(
+                    text = title,
+                    color = colors["type.emphasis"],
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        }
+    }
+}
+
+@Composable
 internal fun FrameZooApp(
     initialPage: String? = null,
     detailId: String? = null,
@@ -106,7 +132,17 @@ internal fun FrameZooApp(
     LaunchedEffect(state.moreGeneration) {
         if (renderedMoreGeneration != state.moreGeneration) { moreGridState.scrollToItem(0); renderedMoreGeneration = state.moreGeneration }
     }
-    BackHandler(state.page != "discover") { state.back() }
+    BackHandler(state.page != "discover") {
+        // PlayerScreen owns the same back action, but Compose can recompose it
+        // while clearing a failed/loading stream. Keep the outer handler from
+        // skipping the source picker during that transition.
+        if (state.page == "player" && state.playing != null && !state.playbackReady) {
+            state.player.stop()
+            state.returnToSourcePicker()
+        } else {
+            state.back()
+        }
+    }
 
     with(state) {
         CompositionLocalProvider(LocalI18n provides i18n) {
@@ -137,6 +173,7 @@ internal fun FrameZooApp(
                                 "discover-lists" -> DiscoverListsScreen(state, allListsState)
                                 "search" -> SearchScreen(state, searchListState, searchGridState, searchAction, Modifier)
                                 "details" -> selected?.let { item -> DetailsScreen(state, item) }
+                                    ?: EntryLoadingScreen(detailTitle)
                                 "trailer" -> TrailerScreen(state)
                                 "feedback" -> FeedbackScreen(state)
                                 "sources", "player" -> selected?.let { item ->
@@ -166,7 +203,7 @@ internal fun FrameZooApp(
                                         onExit = { exitPlayer() }
                                         )
                                     }
-                                }
+                                } ?: EntryLoadingScreen(detailTitle)
                                 "library" -> BookmarksScreen(state)
                                 "history" -> WatchHistoryScreen(state)
                                 "addons" -> AddonsScreen(state)

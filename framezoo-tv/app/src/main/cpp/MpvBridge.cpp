@@ -4,6 +4,7 @@
 #include <chrono>
 #include <condition_variable>
 #include <cstdint>
+#include <cmath>
 #include <memory>
 #include <mutex>
 #include <string>
@@ -60,6 +61,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_framezoo_tv_player_NativePlayer_crea
 	result->mpv = mpv_create();
 	if (!result->mpv) return 0;
 	mpv_request_log_messages(result->mpv, "warn");
+	mpv_set_option_string(result->mpv, "terminal", "no");
 	mpv_set_option_string(result->mpv, "sub-fonts-dir", java_string(env, fontsDir).c_str());
 	mpv_set_option_string(result->mpv, "sub-font", java_string(env, fontFamily).c_str());
 	mpv_set_option_string(result->mpv, "vo", "gpu");
@@ -69,9 +71,46 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_framezoo_tv_player_NativePlayer_crea
 	mpv_set_option_string(result->mpv, "opengl-es", "yes");
 	// ponytail: use simpler GPU rendering on emulators; retry the default when their renderer is reliable.
 	if (emulator) mpv_set_option_string(result->mpv, "gpu-dumb-mode", "yes");
-	// ponytail: emulator frames are limited to 8-bit and 1920px wide; remove this when high-resolution playback is reliable.
-	if (emulator) mpv_set_option_string(result->mpv, "vf", "lavfi=[scale=w='min(1920,iw)':h=-2,format=yuv420p]");
+	// Keep the emulator path in 8-bit and <=1920px, but use mpv's filters rather
+	// than a libavfilter graph. libavfilter rejects the HDR metadata transition
+	// emitted by Dolby Vision streams (`Changing video frame properties...`) and
+	// can leave the Android surface black even though HEVC decoding continues.
+	if (emulator) mpv_set_option_string(result->mpv, "vf", "scale=w='min(1920,iw)':h=-2:flags=fast_bilinear,format=yuv420p");
 	mpv_set_option_string(result->mpv, "ao", "audiotrack,opensles");
+	// Keep the stream's default audio track. Restricting `alang` to English
+	// drops audio on French, Korean, and other single-language releases.
+	mpv_set_option_string(result->mpv, "audio-buffer", emulator ? "0.40" : "0.08");
+	mpv_set_option_string(result->mpv, "audio-channels", emulator ? "stereo" : "auto");
+	mpv_set_option_string(result->mpv, "audio-normalize-downmix", "yes");
+	mpv_set_option_string(result->mpv, "ad-lavc-downmix", emulator ? "yes" : "no");
+	mpv_set_option_string(result->mpv, "ad-lavc-ac3drc", "1");
+	mpv_set_option_string(result->mpv, "vd-lavc-threads", "0");
+	mpv_set_option_string(result->mpv, "vd-lavc-dr", "yes");
+	mpv_set_option_string(result->mpv, "vd-lavc-check-hw-profile", "yes");
+	// Emulator audio output can underrun while software HEVC catches up. Keep
+	// video tied to the display clock there so a missing audio packet cannot
+	// stall decoded frames; physical TVs retain audio-clock sync.
+	mpv_set_option_string(result->mpv, "video-sync", emulator ? "display-resample" : "audio");
+	mpv_set_option_string(result->mpv, "framedrop", "vo");
+	mpv_set_option_string(result->mpv, "hr-seek", "yes");
+	mpv_set_option_string(result->mpv, "hr-seek-framedrop", "yes");
+	mpv_set_option_string(result->mpv, "vd-lavc-show-all", "no");
+	mpv_set_option_string(result->mpv, "vd-lavc-fast", "no");
+	mpv_set_option_string(result->mpv, "force-seekable", "yes");
+	mpv_set_option_string(result->mpv, "network-timeout", "120");
+	mpv_set_option_string(result->mpv, "cache", "yes");
+	mpv_set_option_string(result->mpv, "cache-pause", "yes");
+	mpv_set_option_string(result->mpv, "cache-pause-initial", emulator ? "yes" : "no");
+	mpv_set_option_string(result->mpv, "cache-pause-wait", emulator ? "8" : "0.5");
+	mpv_set_option_string(result->mpv, "cache-secs", emulator ? "20" : "90");
+	mpv_set_option_string(result->mpv, "demuxer-readahead-secs", emulator ? "30" : "90");
+	mpv_set_option_string(result->mpv, "demuxer-max-bytes", emulator ? "96MiB" : "768MiB");
+	mpv_set_option_string(result->mpv, "demuxer-max-back-bytes", emulator ? "24MiB" : "128MiB");
+	mpv_set_option_string(result->mpv, "demuxer-hysteresis-secs", "10");
+	mpv_set_option_string(result->mpv, "demuxer-seekable-cache", "yes");
+	mpv_set_option_string(result->mpv, "stream-buffer-size", emulator ? "16MiB" : "32MiB");
+	mpv_set_option_string(result->mpv, "demuxer-lavf-analyzeduration", "0.5");
+	mpv_set_option_string(result->mpv, "demuxer-lavf-probesize", "1048576");
 	mpv_set_option_string(result->mpv, "sub-pos", "68"); // subtitles stay above the persistent TV controls
 	mpv_set_option_string(result->mpv, "keep-open", "yes");
 	int cb = mpv_stream_cb_add_ro(result->mpv, "framezoo", result.get(), open_stream);
@@ -92,7 +131,10 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_framezoo_tv_player_NativePlayer_crea
 			} else if (event->event_id == MPV_EVENT_END_FILE) {
 				auto* end = static_cast<mpv_event_end_file*>(event->data);
 				__android_log_print(ANDROID_LOG_INFO, "FrameZooMPV", "end file: reason=%d error=%s", end->reason, mpv_error_string(end->error));
-				{ std::lock_guard<std::mutex> lock(p->loadMutex); if (!p->fileLoaded) p->fileFailed = true; }
+				// A source can emit FILE_LOADED and still fail before the first
+				// playback restart. Wake waitLoaded immediately so the UI can return
+				// to the source picker instead of waiting for its full timeout.
+				{ std::lock_guard<std::mutex> lock(p->loadMutex); if (!p->playbackReady) p->fileFailed = true; }
 				p->loadChanged.notify_all();
 			}
 		}
@@ -161,10 +203,9 @@ extern "C" JNIEXPORT jstring JNICALL Java_com_framezoo_tv_player_NativePlayer_pl
 	std::string error = ptr->torrent->start(java_string(env, magnet), fileIdx);
 	if (!error.empty()) return java_error(env, error);
 	if (ptr->cancelled) return java_error(env, "Đã dừng torrent");
-	// ponytail: emulator torrents need bounded read-ahead; tune when its network and decoder sustain 4K.
 	char const* command[] = {"loadfile", "framezoo://video.mkv", nullptr};
 	char const* emulatorCommand[] = {"loadfile", "framezoo://video.mkv", "replace", "-1",
-		"cache=yes,cache-secs=20,cache-pause-wait=8,cache-pause-initial=yes,demuxer-max-bytes=64MiB,demuxer-max-back-bytes=16MiB", nullptr};
+		"cache=yes,cache-secs=20,cache-pause-wait=8,cache-pause-initial=yes,demuxer-max-bytes=96MiB,demuxer-max-back-bytes=24MiB", nullptr};
 	int status = mpv_command(ptr->mpv, ptr->emulator ? emulatorCommand : command);
 	return java_error(env, status < 0 ? "Không mở được luồng torrent" : "");
 }
@@ -187,11 +228,31 @@ extern "C" JNIEXPORT jint JNICALL Java_com_framezoo_tv_player_NativePlayer_comma
 }
 extern "C" JNIEXPORT jboolean JNICALL Java_com_framezoo_tv_player_NativePlayer_hasVideoFrame(JNIEnv*, jobject, jlong value) {
     auto* ptr = player(value); if (!ptr) return JNI_FALSE;
-    mpv_node frame{};
-    int status = mpv_get_property(ptr->mpv, "video-frame-info", MPV_FORMAT_NODE, &frame);
-    if (status < 0) return JNI_FALSE;
-    mpv_free_node_contents(&frame);
-    return JNI_TRUE;
+    // `video-frame-info` exists as soon as the decoder is configured. Its
+    // picture type stays `unavailable` until a frame is actually displayed.
+    char* pictureType = mpv_get_property_string(ptr->mpv, "video-frame-info/picture-type");
+    if (!pictureType) {
+        __android_log_print(ANDROID_LOG_INFO, "FrameZooMPV", "video-frame-info/picture-type unavailable");
+        return JNI_FALSE;
+    }
+    std::string type(pictureType);
+    mpv_free(pictureType);
+    if (type != "I" && type != "P" && type != "B") {
+        __android_log_print(ANDROID_LOG_INFO, "FrameZooMPV", "video-frame-info/picture-type=%s", type.c_str());
+    }
+    if (type == "I" || type == "P" || type == "B") return JNI_TRUE;
+
+    // Some Android emulator builds expose frame metadata without a picture
+    // type. `frame-time` is populated only after a decoded frame is presented;
+    // require valid video dimensions to avoid treating decoder setup as ready.
+    double frameTime = 0.0;
+    std::int64_t width = 0;
+    std::int64_t height = 0;
+    const int frameStatus = mpv_get_property(ptr->mpv, "video-frame-info/frame-time", MPV_FORMAT_DOUBLE, &frameTime);
+    const int widthStatus = mpv_get_property(ptr->mpv, "video-params/w", MPV_FORMAT_INT64, &width);
+    const int heightStatus = mpv_get_property(ptr->mpv, "video-params/h", MPV_FORMAT_INT64, &height);
+    return frameStatus >= 0 && widthStatus >= 0 && heightStatus >= 0 &&
+        std::isfinite(frameTime) && width > 0 && height > 0 ? JNI_TRUE : JNI_FALSE;
 }
 extern "C" JNIEXPORT jdouble JNICALL Java_com_framezoo_tv_player_NativePlayer_propertyDouble(JNIEnv* env, jobject, jlong value, jstring name) {
 	auto* ptr = player(value); if (!ptr) return 0;

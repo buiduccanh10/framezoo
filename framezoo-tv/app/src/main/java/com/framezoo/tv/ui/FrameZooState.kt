@@ -1,6 +1,7 @@
 package com.framezoo.tv.ui
 
 import android.content.Context
+import android.os.SystemClock
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.mutableIntStateOf
@@ -18,6 +19,7 @@ import com.framezoo.tv.model.LibraryItem
 import com.framezoo.tv.model.Media
 import com.framezoo.tv.model.Stream
 import com.framezoo.tv.model.Subtitle
+import com.framezoo.tv.model.SkipSegment
 import com.framezoo.tv.model.WatchPartyError
 import com.framezoo.tv.model.WatchPartyException
 import com.framezoo.tv.model.WatchPartyUser
@@ -186,10 +188,17 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         activeWatchParty = null; watchPartyIsHost = false; watchPartyUsers = emptyList(); watchPartyNotice = notice; watchPartyConnected = false
     }
 
+    fun updateWatchPartyCode(code: String) {
+        val value = code.trim().uppercase().take(10)
+        if (watchPartyIsHost && value.isNotEmpty()) {
+            activeWatchParty = value; watchPartyUsers = emptyList(); watchPartyConnected = false; watchPartyNotice = null
+        }
+    }
+
     /** Desktop `openDialog`: requires account, otherwise opens login. */
     fun openWatchParty() {
         if (store.userId == null) { openLogin(); return }
-        watchPartyCodeInput = ""; watchPartyError = null; watchPartyDialogOpen = true
+        watchPartyCodeInput = ""; watchPartyError = null; watchPartyNotice = null; watchPartyDialogOpen = true
     }
     fun closeWatchParty() {
         watchPartyGeneration++
@@ -205,7 +214,7 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         if (store.userId == null) { closeWatchParty(); openLogin(); return }
         val code = parseWatchPartyCode(watchPartyCodeInput)
         if (code == null) { watchPartyError = i18n.t("watchParty.invalidRoom"); return }
-        watchPartyLoading = true; watchPartyError = null
+        watchPartyLoading = true; watchPartyError = null; watchPartyNotice = null
         val generation = ++watchPartyGeneration
         watchPartyJob = scope.launch {
             try {
@@ -266,11 +275,24 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
     var sourcesLoading by mutableStateOf(false)
     var addonStreams by mutableStateOf<Map<String, List<Stream>>>(emptyMap())
     var addonLoading by mutableStateOf<Set<String>>(emptySet())
+    var addonErrors by mutableStateOf<Map<String, String>>(emptyMap())
+    var skipSegments by mutableStateOf<List<SkipSegment>>(emptyList())
+    var skipSegmentsLoading by mutableStateOf(false)
     private var sourcesJob: Job? = null
     private var sourcesGeneration = 0
     private var autoSourceResolved = false
+    /** Mirrors desktop SourceSelectPart's auto-selection gate. */
+    val sourceSelectionResolved: Boolean
+        get() = autoSourceResolved
+    private var skipSegmentsJob: Job? = null
+    private var skipSegmentsKey: String? = null
     private var playerReturnPage = "discover"
     var playing by mutableStateOf<Stream?>(null)
+    var playbackReady by mutableStateOf(false)
+    // Back from an active loading surface must return to the source picker.
+    // The nested PlayerScreen handler clears `playing`; guard the outer app
+    // handler from immediately navigating to Details during that recomposition.
+    private var sourcePickerBackGuardUntil = 0L
     private var recentResume by mutableStateOf<Triple<String, Episode?, Double>?>(null)
     var subtitles by mutableStateOf<List<Subtitle>>(emptyList())
     var query by mutableStateOf("")
@@ -497,6 +519,7 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         get() = installed.filter { it.enabled && "stream" in it.resources }
 
     fun playFeatured(item: Media) {
+        if (activeWatchParty != null && (selected?.id != item.id || selected?.type != item.type)) leaveWatchParty()
         if (page != "player" && page != "sources") {
             playerReturnPage = page
             if (page != "details") { detailsReturnPage = page; detailsStack.clear() }
@@ -517,9 +540,11 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         selected = item
         episode = initialTarget
         playing = null
+        playbackReady = false
         sources = emptyList()
         subtitles = emptyList()
         addonStreams = emptyMap()
+        addonErrors = emptyMap()
         sourcesLoading = true
         page = "player"
 
@@ -544,6 +569,7 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
                     }
                 } else null
                 episode = resolvedTarget
+                loadSkipSegments(detail, resolvedTarget)
                 if (item.type == "show" && resolvedTarget == null) {
                     sourcesLoading = false
                     addonLoading = emptySet()
@@ -556,24 +582,28 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
                         async {
                             try {
                                 val list = addons.streamsForAddon(addon, detail, resolvedTarget)
+                                if (generation != sourcesGeneration) return@async
                                 addonStreams = addonStreams + (addon.id to list)
                                 sources = addonStreams.values.flatten()
                             } catch (e: CancellationException) {
                                 throw e
                             } catch (_: Exception) {
+                                if (generation != sourcesGeneration) return@async
                                 addonStreams = addonStreams + (addon.id to emptyList())
+                                addonErrors = addonErrors + (addon.id to "Không tải được nguồn từ addon")
                             } finally {
                                 if (generation == sourcesGeneration) addonLoading = addonLoading - addon.id
                             }
                         }
                     }
-                    subtitles = subDeferred.await()
+                    val loadedSubtitles = subDeferred.await()
+                    if (generation == sourcesGeneration) subtitles = loadedSubtitles
                     addonDeferreds.forEach { it.await() }
                 }
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
-                error = e.message ?: "Failed to load sources"
+                if (generation == sourcesGeneration) error = e.message ?: "Failed to load sources"
             } finally {
                 if (generation == sourcesGeneration) {
                     sourcesLoading = false
@@ -585,17 +615,21 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
     fun playRandom(item: Media) = playFeatured(item)
 
     fun loadSources(item: Media, target: Episode?) {
+        if (activeWatchParty != null && (selected?.id != item.id || selected?.type != item.type)) leaveWatchParty()
         if (page != "player" && page != "sources") {
             playerReturnPage = page
         }
         selected = item
         episode = target
         playing = null
+        playbackReady = false
         sources = emptyList()
         subtitles = emptyList()
         addonStreams = emptyMap()
+        addonErrors = emptyMap()
         sourcesLoading = true
         page = "player"
+        loadSkipSegments(item, target)
 
         val generation = ++sourcesGeneration
         autoSourceResolved = false
@@ -611,29 +645,53 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
                         async {
                             try {
                                 val list = addons.streamsForAddon(addon, item, target)
+                                if (generation != sourcesGeneration) return@async
                                 addonStreams = addonStreams + (addon.id to list)
                                 sources = addonStreams.values.flatten()
                             } catch (e: CancellationException) {
                                 throw e
                             } catch (_: Exception) {
+                                if (generation != sourcesGeneration) return@async
                                 addonStreams = addonStreams + (addon.id to emptyList())
+                                addonErrors = addonErrors + (addon.id to "Không tải được nguồn từ addon")
                             } finally {
                                 if (generation == sourcesGeneration) addonLoading = addonLoading - addon.id
                             }
                         }
                     }
-                    subtitles = subDeferred.await()
+                    val loadedSubtitles = subDeferred.await()
+                    if (generation == sourcesGeneration) subtitles = loadedSubtitles
                     addonDeferreds.forEach { it.await() }
                 }
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
-                error = e.message ?: "Failed to load sources"
+                if (generation == sourcesGeneration) error = e.message ?: "Failed to load sources"
             } finally {
                 if (generation == sourcesGeneration) {
                     sourcesLoading = false
                     addonLoading = emptySet()
                 }
+            }
+        }
+    }
+
+    fun loadSkipSegments(item: Media, target: Episode?) {
+        val key = "${item.type}:${item.id}:${target?.season ?: 0}:${target?.number ?: 0}"
+        if (skipSegmentsKey == key && !skipSegmentsLoading) return
+        skipSegmentsJob?.cancel()
+        skipSegmentsKey = key
+        skipSegments = emptyList()
+        skipSegmentsLoading = true
+        skipSegmentsJob = scope.launch {
+            try {
+                skipSegments = backend.skipSegments(item, target)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (_: Exception) {
+                skipSegments = emptyList()
+            } finally {
+                if (skipSegmentsKey == key) skipSegmentsLoading = false
             }
         }
     }
@@ -673,7 +731,7 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         if (store.userId != null) history = backend.watchHistory()
         page = "history"
     }
-    fun openAddons() = runTask { installed = addons.list(); page = "addons" }
+    fun openAddons() = runTask { installed = addons.list(); if (page == "player") leaveWatchParty(); page = "addons" }
     fun search() {
         val term = query.trim()
         searchJob?.cancel(); val generation = ++searchGeneration
@@ -939,7 +997,33 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
     private fun preferenceKey(item: Media) = "${item.type}:${item.id}"
     private fun episodeKey(item: Media, target: Episode?) = "${preferenceKey(item)}:${target?.season ?: 0}:${target?.number ?: 0}"
 
+    /** Desktop source picker hint used when a saved stream cannot be auto-started. */
+    fun preferredSourceHint(item: Media): StreamPreference? {
+        val raw = store.playbackSelection("preference:${preferenceKey(item)}") ?: return null
+        val value = runCatching { JSONObject(raw) }.getOrNull() ?: return null
+        val addonId = value.optString("addon").trim()
+        if (addonId.isBlank()) return null
+        val quality = when (value.optString("quality").trim().lowercase()) {
+            "4k", "2160p" -> "4k"
+            "1440p", "2k", "qhd" -> "1440p"
+            "1080p", "1080i", "fhd" -> "1080p"
+            "720p", "720i", "hd" -> "720p"
+            "480p", "480i", "360p", "240p", "sd", "dvd", "cam", "ts" -> "480p"
+            else -> "other"
+        }
+        return StreamPreference(
+            addonId = addonId,
+            kind = value.optString("kind"),
+            quality = quality,
+            name = value.optString("name"),
+            title = value.optString("title"),
+            bingeGroup = value.optString("bingeGroup").takeIf { it.isNotBlank() }
+        )
+    }
+
     fun chooseSource(source: Stream) {
+        sourcePickerBackGuardUntil = 0L
+        playbackReady = false
         autoSourceResolved = true
         selected?.let { item ->
             val now = System.currentTimeMillis()
@@ -955,6 +1039,13 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
             }
         }
         playing = source
+        page = "player"
+    }
+
+    fun returnToSourcePicker() {
+        sourcePickerBackGuardUntil = SystemClock.uptimeMillis() + 500L
+        playbackReady = false
+        playing = null
         page = "player"
     }
 
@@ -1080,26 +1171,43 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         }
     }
     fun exitPlayer() {
+        sourcePickerBackGuardUntil = 0L
+        playbackReady = false
         leaveWatchParty()
         sourcesGeneration++
         sourcesJob?.cancel()
+        skipSegmentsJob?.cancel()
+        skipSegmentsKey = null
+        skipSegments = emptyList()
         playing = null
         page = if (playerReturnPage in listOf("player", "sources")) "details" else playerReturnPage
     }
     fun back() {
+        if (page == "player" && sourcePickerBackGuardUntil > SystemClock.uptimeMillis()) {
+            sourcePickerBackGuardUntil = 0L
+            return
+        }
         page = when (page) {
             "player" -> {
                 leaveWatchParty()
                 sourcesGeneration++
                 sourcesJob?.cancel()
+                skipSegmentsJob?.cancel()
+                skipSegmentsKey = null
+                skipSegments = emptyList()
                 playing = null
+                playbackReady = false
                 if (playerReturnPage in listOf("player", "sources")) "details" else playerReturnPage
             }
             "sources" -> {
                 leaveWatchParty()
                 sourcesGeneration++
                 sourcesJob?.cancel()
+                skipSegmentsJob?.cancel()
+                skipSegmentsKey = null
+                skipSegments = emptyList()
                 playing = null
+                playbackReady = false
                 if (playerReturnPage in listOf("player", "sources")) "details" else playerReturnPage
             }
             "trailer" -> "details"

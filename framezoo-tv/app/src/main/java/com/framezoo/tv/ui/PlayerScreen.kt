@@ -1,7 +1,8 @@
 package com.framezoo.tv.ui
 
 import android.view.KeyEvent
-import android.view.SurfaceView
+import android.view.Surface
+import android.view.TextureView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
@@ -43,6 +44,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.layout.ContentScale
@@ -81,6 +83,7 @@ import com.framezoo.tv.model.Episode
 import com.framezoo.tv.model.Media
 import com.framezoo.tv.model.Stream
 import com.framezoo.tv.model.Subtitle
+import com.framezoo.tv.model.SkipSegment
 import com.framezoo.tv.player.PlayerController
 import com.framezoo.tv.player.AudioTrack
 import com.framezoo.tv.player.VideoTrack
@@ -94,6 +97,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.sync.withLock
 
 private fun formatDurationTime(seconds: Double): String {
     val total = seconds.toInt().coerceAtLeast(0)
@@ -135,7 +139,8 @@ internal fun PlayerIconButton(
     size: Dp = 44.dp,
     iconSize: Dp = 22.dp,
     active: Boolean = false,
-    pillBackground: Boolean = false
+    pillBackground: Boolean = false,
+    enabled: Boolean = true
 ) {
     val colors = LocalFrameZooColors.current
     var focused by remember { mutableStateOf(false) }
@@ -148,6 +153,7 @@ internal fun PlayerIconButton(
     }
     MaterialTvButton(
         onClick = onClick,
+        enabled = enabled,
         modifier = modifier
             .size(size)
             .onFocusChanged { focused = it.isFocused },
@@ -222,6 +228,7 @@ internal fun PlayerScreen(
     var isBuffering by remember { mutableStateOf(false) }
     var isOpening by remember { mutableStateOf(false) }
     var hasRenderedFrame by remember { mutableStateOf(false) }
+    var isHdr by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf("") }
     var showControls by remember { mutableStateOf(true) }
     var showRemainingTime by remember { mutableStateOf(false) }
@@ -241,7 +248,13 @@ internal fun PlayerScreen(
     val subtitleScope = rememberCoroutineScope()
     var subtitleChosen by remember(stream) { mutableStateOf(false) }
     var bufferedSeconds by remember { mutableDoubleStateOf(0.0) }
+    var showLoadingMessage by remember(stream) { mutableStateOf(false) }
+    var canHidePlaybackOverlay by remember(stream) { mutableStateOf(false) }
+    var surfaceFramePending by remember(stream) { mutableStateOf(false) }
+    var surfaceFrameCount by remember(stream) { mutableIntStateOf(0) }
     var switchPosition by remember(item.id, episode?.season, episode?.number) { mutableStateOf<Double?>(null) }
+    val progressMutex = remember(item.id, episode?.season, episode?.number) { kotlinx.coroutines.sync.Mutex() }
+    val latestHasRenderedFrame = rememberUpdatedState(hasRenderedFrame)
 
     // Active Overlay Router (`null`, `"settings"`, `"source"`, `"captions"`, `"captions_lang"`, `"captions_settings"`, `"playback"`, `"audio"`, `"quality"`, `"episodes"`, `"torrent"`)
     var activeOverlay by remember { mutableStateOf<String?>(null) }
@@ -254,11 +267,34 @@ internal fun PlayerScreen(
     val topBackRequester = remember { FocusRequester() }
     val rootPlayerRequester = remember { FocusRequester() }
 
+    // TextureView is the authoritative signal that a decoded frame reached the
+    // Android surface. mpv's `video-frame-info/picture-type` can stay
+    // unavailable on the emulator even while the surface is updating.
+    val currentStream by rememberUpdatedState(stream)
+    val surfaceFrameSignal = rememberUpdatedState {
+        if (currentStream != null && !isOpening) {
+            // TextureView updates can arrive for the previous source during a
+            // source switch. Keep this as a candidate until native confirms
+            // the new decoder has a frame.
+            surfaceFramePending = true
+            surfaceFrameCount = (surfaceFrameCount + 1).coerceAtMost(3)
+        }
+    }
+
     val isSourceSelecting = resumeHandled && stream == null
+    val preferredSourceHint = remember(item.id, item.type) { state.preferredSourceHint(item) }
     LaunchedEffect(isSourceSelecting, state.sourcesLoading, state.addonLoading, state.addonStreams) {
         if (isSourceSelecting) state.selectPreferredSourceWhenReady()
     }
     val isPlayingStream = resumeHandled && stream != null
+    // Desktop keeps its loading cover mounted while addon streams are fetched.
+    // Without this state the TV briefly renders only the black video surface.
+    val showSourceLoadingOverlay = isSourceSelecting &&
+        state.sourcesLoading && !state.sourceSelectionResolved
+    // Desktop keeps the initial picker hidden while a saved source preference
+    // is still being resolved. This avoids a flash of an empty addon list.
+    val showInitialSourcePicker = isSourceSelecting &&
+        (state.sourceSelectionResolved || !state.sourcesLoading)
     val isTorrent = stream != null && (stream.infoHash != null || stream.url.startsWith("magnet:"))
     val isBookmarked = state.bookmarks.any { it.id == item.id }
 
@@ -277,41 +313,19 @@ internal fun PlayerScreen(
 
     var logoFailed by remember(logoUrl) { mutableStateOf(false) }
 
-    // Cycling funny loading messages matching Desktop PlayerLoadingOverlay
+    // Desktop waits six seconds before showing a message, then rotates it every
+    // six seconds with a short fade. Keep the same timing on TV so a slow source
+    // does not flash copy before the loading title has settled.
     var messageIndex by remember { mutableIntStateOf((1..22).random()) }
-    LaunchedEffect(Unit) {
-        while (true) {
-            delay(3500)
-            messageIndex = (1..22).filter { it != messageIndex }.random()
-        }
-    }
 
-    // Progressive loading percentage for horizontal logo reveal (matching Desktop `loadingProgress` in `PlayerLoadingOverlay.tsx`)
-    var simulatedProgress by remember(stream) { mutableFloatStateOf(8f) }
-    LaunchedEffect(stream, isOpening, hasRenderedFrame) {
-        if (stream != null && !hasRenderedFrame) {
-            simulatedProgress = 8f
-            while (!hasRenderedFrame && simulatedProgress < 92f) {
-                delay(400)
-                val step = if (simulatedProgress < 45f) 4.5f else if (simulatedProgress < 75f) 2.2f else 0.8f
-                simulatedProgress = (simulatedProgress + step).coerceAtMost(92f)
-            }
-        } else if (hasRenderedFrame) {
-            simulatedProgress = 100f
-        }
-    }
-    val realProgress = remember(simulatedProgress, torrentStats, hasRenderedFrame) {
-        if (hasRenderedFrame) 100f
-        else {
-            val tProg = ((torrentStats?.progress ?: 0.0) * 100.0).toFloat()
-            maxOf(simulatedProgress, tProg).coerceIn(5f, 98f)
-        }
-    }
+    // Same source-readiness calculation as desktop PlayerLoadingOverlay.
+    val realProgress = playerLoadingProgress(hasRenderedFrame, duration, bufferedSeconds, torrentStats)
     val animatedFillFraction by animateFloatAsState(
         targetValue = (realProgress / 100f).coerceIn(0f, 1f),
         animationSpec = tween(350),
         label = "logo_fill_fraction"
     )
+    val playbackInteractionLocked = !hasRenderedFrame
 
     fun triggerControls() {
         showControls = true
@@ -320,7 +334,8 @@ internal fun PlayerScreen(
 
     LaunchedEffect(controlsTimeoutKey, showControls, activeOverlay, hasRenderedFrame, isPaused) {
         if (showControls && activeOverlay == null && hasRenderedFrame && !isPaused && isPlayingStream) {
-            delay(4500)
+            // Desktop Container clears hover targets after three seconds.
+            delay(3000)
             showControls = false
             runCatching { rootPlayerRequester.requestFocus() }
         }
@@ -346,6 +361,8 @@ internal fun PlayerScreen(
         val currentStream = stream ?: return@LaunchedEffect
         isOpening = true
         hasRenderedFrame = false
+        surfaceFramePending = false
+        surfaceFrameCount = 0
         error = ""
         val startAt = switchPosition ?: if (shouldStartFromBeginning) 0.0 else resume
         switchPosition = null
@@ -354,6 +371,12 @@ internal fun PlayerScreen(
         subtitleTracks = emptyList()
         primarySubtitleId = null
         secondarySubtitleId = null
+        position = 0.0
+        duration = 0.0
+        isPaused = false
+        isBuffering = false
+        isHdr = false
+        torrentStats = null
         bufferedSeconds = 0.0
         try {
             // ponytail: bitrate approximates the previous HLS quality; parse the new manifest to match its resolution.
@@ -369,8 +392,27 @@ internal fun PlayerScreen(
         } catch (e: Exception) {
             error = e.message ?: defaultSourceError
         } finally {
-            isOpening = false
+            // A cancelled source-opening coroutine must not finish the newer
+            // source's loading state.
+            if (currentStream == stream) isOpening = false
         }
+    }
+
+    LaunchedEffect(stream, isOpening, surfaceFramePending, surfaceFrameCount) {
+        if (stream != null && shouldAcceptSurfaceFrame(
+                surfaceFramePending,
+                isOpening,
+                player.hasVideoFrame(),
+                duration,
+                position,
+                surfaceFrameCount
+            )) {
+            hasRenderedFrame = true
+        }
+    }
+
+    LaunchedEffect(hasRenderedFrame) {
+        state.playbackReady = hasRenderedFrame
     }
 
     LaunchedEffect(stream, subtitles, isOpening, resumeHandled) {
@@ -388,6 +430,37 @@ internal fun PlayerScreen(
         }
     }
 
+    LaunchedEffect(stream, isPlayingStream, showSourceLoadingOverlay, hasRenderedFrame, error) {
+        showLoadingMessage = false
+        if ((isPlayingStream || showSourceLoadingOverlay) && !hasRenderedFrame && error.isBlank()) {
+            delay(6_000)
+            if (!hasRenderedFrame && error.isBlank()) {
+                showLoadingMessage = true
+                while (!hasRenderedFrame && error.isBlank()) {
+                    delay(6_000)
+                    if (!hasRenderedFrame && error.isBlank()) {
+                        showLoadingMessage = false
+                        delay(260)
+                        messageIndex = (1..22).filter { it != messageIndex }.random()
+                        showLoadingMessage = true
+                    }
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(stream, isPlayingStream, hasRenderedFrame, isOpening, isBuffering, error) {
+        if (!isPlayingStream || !hasRenderedFrame || isOpening || isBuffering || error.isNotBlank()) {
+            canHidePlaybackOverlay = false
+        } else {
+            // Match desktop's native-surface settle window before removing the cover.
+            delay(140)
+            if (isPlayingStream && hasRenderedFrame && !isOpening && !isBuffering && error.isBlank()) {
+                canHidePlaybackOverlay = true
+            }
+        }
+    }
+
     LaunchedEffect(stream, isOpening, resumeHandled, showControls, state.subtitleVerticalPosition) {
         if (stream != null && resumeHandled && !isOpening) {
             player.command("set", "sub-pos", subtitlePosition(showControls, state.subtitleVerticalPosition).toString())
@@ -397,9 +470,12 @@ internal fun PlayerScreen(
 
     val currentNextEpisode by rememberUpdatedState(onNextEpisode)
     // Poll player state & torrent live stats
-    LaunchedEffect(stream, resumeHandled) {
+    LaunchedEffect(stream, resumeHandled, state.skipSegments, state.enableAutoSkipSegments) {
         if (stream == null || !resumeHandled) return@LaunchedEffect
         var autoplayed = false
+        var lastAutoSkippedSegment: String? = null
+        var lastProgressReport = -30.0
+        var progressReportInFlight = false
         while (true) {
             delay(400)
             position = player.position()
@@ -411,11 +487,37 @@ internal fun PlayerScreen(
             audioTracks = player.audioTracks()
             videoTracks = player.videoTracks()
             subtitleTracks = player.subtitleTracks()
+            val hdrFormat = player.propertyString("video-params/hdr-format").orEmpty().lowercase()
+            val transfer = player.propertyString("video-params/transfer").orEmpty().lowercase()
+            isHdr = hdrFormat.isNotBlank() && hdrFormat != "unknown" ||
+                transfer.contains("pq") || transfer.contains("hlg") || hdrFormat.contains("dolby")
             primarySubtitleId = player.propertyString("sid")
             secondarySubtitleId = player.propertyString("secondary-sid")
 
-            if (!hasRenderedFrame && error.isBlank() && player.hasVideoFrame()) {
+            if (!hasRenderedFrame && error.isBlank() && shouldAcceptSurfaceFrame(
+                    surfaceFramePending,
+                    isOpening,
+                    player.hasVideoFrame(),
+                    duration,
+                    position,
+                    surfaceFrameCount
+                )) {
                 hasRenderedFrame = true
+            }
+
+            if (state.enableAutoSkipSegments) {
+                val segment = activePlaybackSegment(state.skipSegments, position, duration)
+                val bounds = segment?.let { playbackSegmentBounds(it, duration) }
+                val key = segment?.let { "${it.type}:${it.startMs}:${it.endMs}" }
+                if (segment != null && segment.type != "credits" && key != null && key != lastAutoSkippedSegment) {
+                    val target = bounds?.end ?: duration
+                    if (target > position + 0.5) {
+                        player.command("seek", target.toString(), "absolute")
+                        lastAutoSkippedSegment = key
+                    }
+                } else if (segment == null) {
+                    lastAutoSkippedSegment = null
+                }
             }
 
             val next = currentNextEpisode
@@ -425,8 +527,20 @@ internal fun PlayerScreen(
                 next()
             }
 
-            if (hasRenderedFrame && position.toInt() % 30 == 0 && position >= 20) {
-                runCatching { backend.progress(item, position, duration, episode) }
+            if (hasRenderedFrame && position >= 20 && position - lastProgressReport >= 30.0 && !progressReportInFlight) {
+                val reportPosition = position
+                val reportDuration = duration
+                progressReportInFlight = true
+                activity.lifecycleScope.launch {
+                    try {
+                        progressMutex.withLock { backend.progress(item, reportPosition, reportDuration, episode) }
+                        lastProgressReport = reportPosition
+                    } catch (_: Exception) {
+                        // Retry on the next 30-second checkpoint without blocking player polling.
+                    } finally {
+                        progressReportInFlight = false
+                    }
+                }
             }
         }
     }
@@ -436,11 +550,11 @@ internal fun PlayerScreen(
             if (stream != null) {
                 val pos = player.position()
                 val len = player.duration()
-                if (hasRenderedFrame && pos >= 20) onStopped(pos, len)
+                if (latestHasRenderedFrame.value && pos >= 20) onStopped(pos, len)
                 player.stop()
-                if (hasRenderedFrame && pos >= 20) {
+                if (latestHasRenderedFrame.value && pos >= 20) {
                     activity.lifecycleScope.launch {
-                        runCatching { backend.progress(item, pos, len, episode) }
+                        runCatching { progressMutex.withLock { backend.progress(item, pos, len, episode) } }
                     }
                 }
             }
@@ -460,7 +574,7 @@ internal fun PlayerScreen(
             activeOverlay == "source" -> {
                 activeOverlay = sourceReturn
             }
-            activeOverlay in listOf("playback", "audio", "quality", "watchparty") -> {
+            activeOverlay in listOf("playback", "skip_segments", "audio", "quality", "watchparty") -> {
                 activeOverlay = "settings"
             }
             activeOverlay != null -> {
@@ -469,7 +583,7 @@ internal fun PlayerScreen(
             isPlayingStream && !hasRenderedFrame -> {
                 // Cancel loading stream and return to SourceSelectPart inside PlayerView
                 player.stop()
-                state.playing = null
+                state.returnToSourcePicker()
             }
             else -> {
                 onExit()
@@ -537,7 +651,31 @@ internal fun PlayerScreen(
     ) {
         // 1. Always keep Video Surface mounted so `PlayerController` has a valid Surface immediately when a stream is selected
         AndroidView(
-            factory = { context -> SurfaceView(context).apply { player.bind(this) } },
+            factory = { context ->
+                TextureView(context).apply {
+                    var videoSurface: Surface? = null
+                    surfaceTextureListener = object : TextureView.SurfaceTextureListener {
+                        override fun onSurfaceTextureAvailable(surfaceTexture: android.graphics.SurfaceTexture, width: Int, height: Int) {
+                            videoSurface = Surface(surfaceTexture)
+                            player.bindTextureSurface(videoSurface!!, width, height)
+                        }
+
+                        override fun onSurfaceTextureSizeChanged(surfaceTexture: android.graphics.SurfaceTexture, width: Int, height: Int) {
+                            videoSurface?.let { player.bindTextureSurface(it, width, height) }
+                        }
+
+                        override fun onSurfaceTextureDestroyed(surfaceTexture: android.graphics.SurfaceTexture): Boolean {
+                            videoSurface?.let(player::unbindTextureSurface)
+                            videoSurface = null
+                            return true
+                        }
+
+                        override fun onSurfaceTextureUpdated(surfaceTexture: android.graphics.SurfaceTexture) {
+                            surfaceFrameSignal.value()
+                        }
+                    }
+                }
+            },
             modifier = Modifier.fillMaxSize()
         )
         if (state.watchPartyNotice != null || (state.activeWatchParty != null && state.watchPartyStatusOverlay)) {
@@ -644,7 +782,7 @@ internal fun PlayerScreen(
         }
 
         // 3. Phase 2: `SourceSelectPart` inside `PlayerPart` (matching Desktop `PlayerView.tsx` + `SourceSelectPart.tsx`)
-        if (isSourceSelecting) {
+        if (showInitialSourcePicker) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -680,8 +818,11 @@ internal fun PlayerScreen(
                     streamAddons = state.streamAddons,
                     addonStreams = state.addonStreams,
                     addonLoading = state.addonLoading,
+                    addonErrors = state.addonErrors,
                     allSources = state.sources,
                     isLoadingAll = state.sourcesLoading,
+                    preferredAddonId = preferredSourceHint?.addonId,
+                    preferredQuality = preferredSourceHint?.quality,
                     activeStream = stream,
                     isModalOverlay = false,
                     onSelectStream = { chosen ->
@@ -697,7 +838,8 @@ internal fun PlayerScreen(
 
         // 4. Loading overlay with horizontal progressive logo clip.
         AnimatedVisibility(
-            visible = isPlayingStream && !hasRenderedFrame,
+            visible = showSourceLoadingOverlay ||
+                (isPlayingStream && (!hasRenderedFrame || !canHidePlaybackOverlay)),
             enter = fadeIn(),
             exit = fadeOut(tween(400)),
             modifier = Modifier.fillMaxSize()
@@ -705,10 +847,10 @@ internal fun PlayerScreen(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.Black)
+                    .background(if (hasRenderedFrame) Color.Transparent else Color.Black)
             ) {
                 val bgImage = item.backdrop ?: item.poster
-                if (!bgImage.isNullOrBlank()) {
+                if (!hasRenderedFrame && !bgImage.isNullOrBlank()) {
                     AsyncImage(
                         model = bgImage,
                         contentDescription = null,
@@ -732,7 +874,7 @@ internal fun PlayerScreen(
                         )
                 )
 
-                if (error.isNotBlank()) {
+                if (error.isNotBlank() && isPlayingStream) {
                     Column(
                         modifier = Modifier
                             .align(Alignment.Center)
@@ -758,7 +900,7 @@ internal fun PlayerScreen(
                                 accent = true
                             ) {
                                 player.stop()
-                                state.playing = null
+                                state.returnToSourcePicker()
                             }
                             TvButton(
                                 label = t("player.back.short")
@@ -835,13 +977,19 @@ internal fun PlayerScreen(
                             }
                         }
 
-                        Text(
-                            text = t("player.loadingOverlayMessages.$messageIndex"),
-                            color = Color.White.copy(alpha = 0.65f),
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Medium,
-                            textAlign = TextAlign.Center
-                        )
+                        AnimatedVisibility(
+                            visible = showLoadingMessage,
+                            enter = fadeIn(tween(260)),
+                            exit = fadeOut(tween(260))
+                        ) {
+                            Text(
+                                text = t("player.loadingOverlayMessages.$messageIndex"),
+                                color = Color.White.copy(alpha = 0.65f),
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Medium,
+                                textAlign = TextAlign.Center
+                            )
+                        }
                     }
                 }
             }
@@ -859,6 +1007,22 @@ internal fun PlayerScreen(
                     modifier = Modifier.size(48.dp),
                     color = colors["type.logo"],
                     strokeWidth = 3.dp
+                )
+            }
+        }
+
+        if (isPlayingStream && hasRenderedFrame && isPaused && position <= 0.5 && activeOverlay == null) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                PlayerIconButton(
+                    icon = R.drawable.desktop_play,
+                    size = 64.dp,
+                    iconSize = 30.dp,
+                    pillBackground = true,
+                    onClick = {
+                        player.command("set", "pause", "no")
+                        isPaused = false
+                        triggerControls()
+                    }
                 )
             }
         }
@@ -896,7 +1060,7 @@ internal fun PlayerScreen(
                         onClick = {
                             if (isPlayingStream && !hasRenderedFrame) {
                                 player.stop()
-                                state.playing = null
+                                state.returnToSourcePicker()
                             } else {
                                 onExit()
                             }
@@ -911,6 +1075,18 @@ internal fun PlayerScreen(
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.widthIn(max = 360.dp)
                     )
+                    if (isHdr) {
+                        Text(
+                            text = if (player.propertyString("video-params/hdr-format").orEmpty().contains("dolby", true)) "DV" else "HDR",
+                            color = Color(0xFFFFE7A3),
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(4.dp))
+                                .background(Color(0x33F59E0B))
+                                .padding(horizontal = 6.dp, vertical = 3.dp)
+                        )
+                    }
                 }
 
                 // Center: `Player.EpisodeTitle` (`S1 E1` in white + episode title in secondary color)
@@ -974,9 +1150,40 @@ internal fun PlayerScreen(
             }
         }
 
+        val visibleSkipSegments = if (isPlayingStream && hasRenderedFrame && activeOverlay == null && !state.enableAutoSkipSegments) {
+            state.skipSegments.filter { segment ->
+                segment.type != "credits" && skipSegmentVisible(segment, position, duration, showControls)
+            }
+        } else emptyList()
+        visibleSkipSegments.forEachIndexed { index, segment ->
+            AnimatedVisibility(
+                visible = true,
+                enter = fadeIn(),
+                exit = fadeOut(),
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(
+                        end = 36.dp,
+                        bottom = ((if (showControls) 178 else 36) + index * 56).dp
+                    )
+            ) {
+                TvButton(
+                    label = t("player.skipTime.${segment.type}"),
+                    icon = R.drawable.desktop_skip_episode,
+                    primary = true
+                ) {
+                    val target = playbackSegmentBounds(segment, duration)?.end ?: duration
+                    if (target > position + 0.5) {
+                        player.command("seek", target.toString(), "absolute")
+                        triggerControls()
+                    }
+                }
+            }
+        }
+
         // 7. Floating `NextEpisodeButton` near end of episode (matching `PlayerPart.tsx` lines 253-273)
         val showFloatingNextEpisode = isPlayingStream && hasRenderedFrame && onNextEpisode != null &&
-            duration > 60.0 && (duration - position) <= 90.0 && activeOverlay == null
+            activeOverlay == null && nextEpisodeVisible(position, duration, showControls)
         AnimatedVisibility(
             visible = showFloatingNextEpisode,
             enter = fadeIn(),
@@ -1004,7 +1211,8 @@ internal fun PlayerScreen(
 
         // 8. `Player.BottomControls` (matching `PlayerPart.tsx` lines 276-332)
         AnimatedVisibility(
-            visible = isPlayingStream && error.isBlank() && (!hasRenderedFrame || showControls || activeOverlay != null),
+            visible = (isPlayingStream || showSourceLoadingOverlay) && error.isBlank() &&
+                (!hasRenderedFrame || showControls || activeOverlay != null),
             enter = fadeIn() + slideInVertically { it },
             exit = fadeOut() + slideOutVertically { it },
             modifier = Modifier.align(Alignment.BottomCenter)
@@ -1035,11 +1243,13 @@ internal fun PlayerScreen(
                             if (event.nativeKeyEvent.action == KeyEvent.ACTION_DOWN && barFocused) {
                                 when (event.nativeKeyEvent.keyCode) {
                                     KeyEvent.KEYCODE_DPAD_LEFT -> {
+                                        if (playbackInteractionLocked) return@onPreviewKeyEvent false
                                         player.command("seek", "-15", "relative")
                                         triggerControls()
                                         true
                                     }
                                     KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                                        if (playbackInteractionLocked) return@onPreviewKeyEvent false
                                         player.command("seek", "15", "relative")
                                         triggerControls()
                                         true
@@ -1050,6 +1260,7 @@ internal fun PlayerScreen(
                         }
                 ) {
                     MaterialTvButton(
+                        enabled = !playbackInteractionLocked,
                         onClick = {
                             player.command("cycle", "pause")
                             isPaused = !isPaused
@@ -1114,6 +1325,7 @@ internal fun PlayerScreen(
                             size = 52.dp,
                             iconSize = 28.dp,
                             modifier = Modifier.focusRequester(playPauseRequester),
+                            enabled = !playbackInteractionLocked,
                             onClick = {
                                 triggerControls()
                                 player.command("cycle", "pause")
@@ -1124,6 +1336,7 @@ internal fun PlayerScreen(
                             icon = R.drawable.desktop_skip_backward,
                             size = 44.dp,
                             iconSize = 22.dp,
+                            enabled = !playbackInteractionLocked,
                             onClick = {
                                 triggerControls()
                                 player.command("seek", "-10", "relative")
@@ -1133,6 +1346,7 @@ internal fun PlayerScreen(
                             icon = R.drawable.desktop_skip_forward,
                             size = 44.dp,
                             iconSize = 22.dp,
+                            enabled = !playbackInteractionLocked,
                             onClick = {
                                 triggerControls()
                                 player.command("seek", "10", "relative")
@@ -1208,6 +1422,7 @@ internal fun PlayerScreen(
                             var epFocused by remember { mutableStateOf(false) }
                             val isEpOpen = activeOverlay == "episodes"
                             MaterialTvButton(
+                                enabled = !playbackInteractionLocked && isPlayingStream,
                                 onClick = {
                                     triggerControls()
                                     activeOverlay = if (isEpOpen) null else "episodes"
@@ -1250,6 +1465,7 @@ internal fun PlayerScreen(
                                     icon = R.drawable.desktop_skip_episode,
                                     size = 44.dp,
                                     iconSize = 22.dp,
+                                    enabled = !playbackInteractionLocked && isPlayingStream,
                                     onClick = {
                                         triggerControls()
                                         onNextEpisode()
@@ -1311,6 +1527,7 @@ internal fun PlayerScreen(
                     streamAddons = state.streamAddons,
                     addonStreams = state.addonStreams,
                     addonLoading = state.addonLoading,
+                    addonErrors = state.addonErrors,
                     allSources = state.sources,
                     isLoadingAll = state.sourcesLoading,
                     activeStream = stream,
@@ -1431,6 +1648,7 @@ internal fun PlayerScreen(
                 videoTracks = videoTracks,
                 subtitleTracks = subtitleTracks,
                 position = position,
+                duration = duration,
                 primarySubtitleId = primarySubtitleId,
                 secondarySubtitleId = secondarySubtitleId,
                 captionMode = captionMode,
@@ -1518,6 +1736,7 @@ private fun PlayerMenuOverlayCard(
     videoTracks: List<VideoTrack>,
     subtitleTracks: List<SubtitleTrack>,
     position: Double,
+    duration: Double,
     primarySubtitleId: String?,
     secondarySubtitleId: String?,
     captionMode: String?,
@@ -1543,6 +1762,8 @@ private fun PlayerMenuOverlayCard(
     val accentColor = colors["video.context.type.accent"]
     val firstRequester = remember(activeOverlay) { FocusRequester() }
     var expandedEpisode by remember { mutableStateOf<Episode?>(null) }
+    var editingRoomCode by remember(activeOverlay, state.activeWatchParty) { mutableStateOf(false) }
+    var editedRoomCode by remember(activeOverlay, state.activeWatchParty) { mutableStateOf(state.activeWatchParty.orEmpty()) }
 
     LaunchedEffect(activeOverlay, episode?.season) {
         if (activeOverlay == "episodes" && episode != null && state.selectedSeason != episode.season) {
@@ -1550,7 +1771,7 @@ private fun PlayerMenuOverlayCard(
         }
     }
 
-    LaunchedEffect(activeOverlay) {
+    LaunchedEffect(activeOverlay, state.activeWatchParty, state.isLoggedIn, stream == null, editingRoomCode) {
         runCatching { firstRequester.requestFocus() }
     }
 
@@ -1679,6 +1900,14 @@ private fun PlayerMenuOverlayCard(
                             rightText = "${selectedSpeed}x",
                             chevron = true,
                             onClick = { onNavigateOverlay("playback") }
+                        )
+                    }
+                    item {
+                        PlayerMenuRowLink(
+                            title = t("player.skipTime.skipSegments"),
+                            rightText = if (state.skipSegmentsLoading) "…" else state.skipSegments.size.toString(),
+                            chevron = true,
+                            onClick = { onNavigateOverlay("skip_segments") }
                         )
                     }
                 }
@@ -2009,11 +2238,22 @@ private fun PlayerMenuOverlayCard(
                         } else {
                             item { Text(if (!state.watchPartyConnected) t("watchParty.validating") else if (state.watchPartyIsHost) t("watchParty.hosting") else t("watchParty.connectedAsGuest"),
                                 color = secondaryText, fontSize = 13.sp, modifier = Modifier.padding(8.dp)) }
+                            if (editingRoomCode) {
+                                item { BasicTextField(value = editedRoomCode, onValueChange = { editedRoomCode = it.uppercase().take(10) },
+                                    singleLine = true, textStyle = TextStyle(color = mainText, fontSize = 18.sp), cursorBrush = SolidColor(mainText),
+                                    modifier = Modifier.fillMaxWidth().focusRequester(firstRequester)
+                                        .background(colors["video.context.buttons.list"], RoundedCornerShape(8.dp)).padding(12.dp)) }
+                                item { PlayerMenuRowLink(t("watchParty.save"), enabled = editedRoomCode.isNotBlank()) {
+                                    state.updateWatchPartyCode(editedRoomCode); editingRoomCode = false
+                                } }
+                            } else {
                             item { PlayerMenuRowLink(state.activeWatchParty.orEmpty(), rightText = t("watchParty.copyCode"),
                                 modifier = Modifier.focusRequester(firstRequester)) {
                                 val clipboard = context.getSystemService(android.content.Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
                                 clipboard.setPrimaryClip(android.content.ClipData.newPlainText("Watch Party", state.activeWatchParty.orEmpty()))
                             } }
+                            if (state.watchPartyIsHost) item { PlayerMenuRowLink(t("lists.actions.edit")) { editingRoomCode = true } }
+                            }
                             item { Text(t("watchParty.viewers", "count" to state.watchPartyUsers.size), color = mainText,
                                 fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(8.dp)) }
                             items(state.watchPartyUsers, key = { it.participantId }) { user ->
@@ -2029,6 +2269,53 @@ private fun PlayerMenuOverlayCard(
                     }
                 }
             }
+            "skip_segments" -> {
+                Column(modifier = Modifier.fillMaxSize()) {
+                    PlayerMenuHeader(
+                        title = t("player.skipTime.skipSegments"),
+                        onBack = { onNavigateOverlay("settings") },
+                        backModifier = Modifier.focusRequester(firstRequester)
+                    )
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(top = 8.dp),
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        item {
+                            PlayerMenuRowLink(
+                                title = t("settings.preferences.autoSkipSegments"),
+                                showToggle = true,
+                                toggleEnabled = state.enableAutoSkipSegments,
+                                onClick = { state.toggleAutoSkipSegments() }
+                            )
+                        }
+                        if (state.skipSegments.isEmpty()) {
+                            item {
+                                Text(
+                                    text = if (state.skipSegmentsLoading) "…" else t("player.skipTime.noSegments"),
+                                    color = secondaryText,
+                                    fontSize = 13.sp,
+                                    modifier = Modifier.padding(8.dp)
+                                )
+                            }
+                        } else {
+                            items(state.skipSegments) { segment ->
+                                val bounds = playbackSegmentBounds(segment, duration)
+                                PlayerMenuRowLink(
+                                    title = t("player.skipTime.${segment.type}"),
+                                    rightText = bounds?.let { "${formatDurationTime(it.start)} – ${it.end?.let { end -> formatDurationTime(end) } ?: formatDurationTime(duration)}" } ?: "",
+                                    modifier = if (segment == state.skipSegments.first()) Modifier.focusRequester(firstRequester) else Modifier,
+                                    onClick = {
+                                        bounds?.let { player.command("seek", it.start.toString(), "absolute") }
+                                        onNavigateOverlay(null)
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
             "playback" -> {
                 Column(modifier = Modifier.fillMaxSize()) {
                     PlayerMenuHeader(

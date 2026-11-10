@@ -74,6 +74,11 @@ data class Stream(
     val bingeGroup: String? = null
 )
 data class Subtitle(val language: String, val url: String, val label: String = "")
+data class SkipSegment(
+    val type: String,
+    val startMs: Long?,
+    val endMs: Long?
+)
 data class LibraryItem(val media: Media, val position: Double = 0.0, val duration: Double = 0.0,
     val season: Int? = null, val episode: Int? = null, val watchedAt: String = "", val seasonId: String = "", val episodeId: String = "")
 

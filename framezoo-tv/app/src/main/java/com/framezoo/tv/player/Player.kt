@@ -158,6 +158,9 @@ class PlayerController(private val context: Context) {
     private var surfaceWidth = 0
     private var surfaceHeight = 0
 
+    /** Read-only native state is available while a source is still opening. */
+    private fun currentReadHandleLocked(): Long = if (handle != 0L) handle else opening
+
     val surfaceCallback = object : SurfaceHolder.Callback {
         override fun surfaceCreated(holder: SurfaceHolder) {
             synchronized(lock) {
@@ -189,6 +192,32 @@ class PlayerController(private val context: Context) {
     }
 
     fun bind(view: SurfaceView) { view.holder.addCallback(surfaceCallback) }
+
+    /** TextureView keeps Compose loading and control layers above the video surface. */
+    fun bindTextureSurface(value: Surface, width: Int, height: Int) {
+        synchronized(lock) {
+            surface = value
+            surfaceWidth = width
+            surfaceHeight = height
+            val current = if (handle != 0L) handle else opening
+            if (current != 0L) {
+                NativePlayer.attachSurface(current, value)
+                NativePlayer.surfaceSize(current, width, height)
+            }
+        }
+    }
+
+    fun unbindTextureSurface(value: Surface) {
+        synchronized(lock) {
+            if (surface !== value) return
+            val current = if (handle != 0L) handle else opening
+            if (current != 0L) NativePlayer.detachSurface(current)
+            surface = null
+            surfaceWidth = 0
+            surfaceHeight = 0
+        }
+        value.release()
+    }
 
     private fun announceHttpTracker(trackerUrl: String, encodedInfoHash: String, peerId: String): List<Pair<String, Int>> {
         return try {
@@ -330,19 +359,37 @@ class PlayerController(private val context: Context) {
     }
 
     fun command(vararg args: String) = synchronized(lock) { if (handle != 0L) NativePlayer.command(handle, args.toList().toTypedArray()) else -1 }
-    fun hasVideoFrame(): Boolean = synchronized(lock) { handle != 0L && NativePlayer.hasVideoFrame(handle) }
-    fun position(): Double = synchronized(lock) { if (handle == 0L) 0.0 else NativePlayer.propertyDouble(handle, "time-pos") }
-    fun duration(): Double = synchronized(lock) { if (handle == 0L) 0.0 else NativePlayer.propertyDouble(handle, "duration") }
-    fun paused(): Boolean = synchronized(lock) { handle != 0L && NativePlayer.propertyString(handle, "pause") == "yes" }
-    fun propertyString(name: String): String? = synchronized(lock) { if (handle == 0L) null else NativePlayer.propertyString(handle, name) }
+    fun hasVideoFrame(): Boolean = synchronized(lock) {
+        val current = currentReadHandleLocked()
+        current != 0L && NativePlayer.hasVideoFrame(current)
+    }
+    fun position(): Double = synchronized(lock) {
+        val current = currentReadHandleLocked()
+        if (current == 0L) 0.0 else NativePlayer.propertyDouble(current, "time-pos")
+    }
+    fun duration(): Double = synchronized(lock) {
+        val current = currentReadHandleLocked()
+        if (current == 0L) 0.0 else NativePlayer.propertyDouble(current, "duration")
+    }
+    fun paused(): Boolean = synchronized(lock) {
+        val current = currentReadHandleLocked()
+        current != 0L && NativePlayer.propertyString(current, "pause") == "yes"
+    }
+    fun propertyString(name: String): String? = synchronized(lock) {
+        val current = currentReadHandleLocked()
+        if (current == 0L) null else NativePlayer.propertyString(current, name)
+    }
     fun audioTracks(): List<AudioTrack> = synchronized(lock) {
-        if (handle == 0L) emptyList() else readAudioTracks { NativePlayer.propertyString(handle, it) }
+        val current = currentReadHandleLocked()
+        if (current == 0L) emptyList() else readAudioTracks { NativePlayer.propertyString(current, it) }
     }
     fun videoTracks(): List<VideoTrack> = synchronized(lock) {
-        if (handle == 0L) emptyList() else readVideoTracks { NativePlayer.propertyString(handle, it) }
+        val current = currentReadHandleLocked()
+        if (current == 0L) emptyList() else readVideoTracks { NativePlayer.propertyString(current, it) }
     }
     fun subtitleTracks(): List<SubtitleTrack> = synchronized(lock) {
-        if (handle == 0L) emptyList() else readSubtitleTracks { NativePlayer.propertyString(handle, it) }.map { track ->
+        val current = currentReadHandleLocked()
+        if (current == 0L) emptyList() else readSubtitleTracks { NativePlayer.propertyString(current, it) }.map { track ->
             track.copy(externalFilename = subtitleFiles.entries.firstOrNull { it.value.absolutePath == track.externalFilename }?.key ?: track.externalFilename)
         }
     }
@@ -413,7 +460,10 @@ class PlayerController(private val context: Context) {
             downloaded?.delete()
         }
     }
-    fun propertyDouble(name: String): Double = synchronized(lock) { if (handle == 0L) 0.0 else NativePlayer.propertyDouble(handle, name) }
+    fun propertyDouble(name: String): Double = synchronized(lock) {
+        val current = currentReadHandleLocked()
+        if (current == 0L) 0.0 else NativePlayer.propertyDouble(current, name)
+    }
     fun stop() {
         val (old, files) = synchronized(lock) {
             generation++
