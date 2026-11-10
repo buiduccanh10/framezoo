@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import type { AppDownloadOption } from "@/backend/download";
 
@@ -23,6 +23,34 @@ export function PlatformSelector({
     null,
   );
 
+  const displayOptions = useMemo(() => {
+    if (!recommendedId) return options;
+
+    const recommended = options.find((opt) => opt.id === recommendedId);
+    if (!recommended) return options;
+
+    const isWinRecommended = recommended.id.startsWith("win-");
+    const isMacRecommended = recommended.id.startsWith("mac-");
+
+    const samePlatform = options.filter(
+      (opt) =>
+        opt.id !== recommendedId &&
+        ((isWinRecommended && opt.id.startsWith("win-")) ||
+          (isMacRecommended && opt.id.startsWith("mac-"))),
+    );
+
+    const otherPlatform = options.filter(
+      (opt) =>
+        opt.id !== recommendedId &&
+        !(
+          (isWinRecommended && opt.id.startsWith("win-")) ||
+          (isMacRecommended && opt.id.startsWith("mac-"))
+        ),
+    );
+
+    return [recommended, ...samePlatform, ...otherPlatform];
+  }, [options, recommendedId]);
+
   const handleCardClick = (
     event: React.MouseEvent<HTMLAnchorElement>,
     option: AppDownloadOption,
@@ -41,7 +69,7 @@ export function PlatformSelector({
   return (
     <div className="landing-platforms" aria-label={copy.chooseBuild}>
       <div className="landing-platform-grid">
-        {options.map((option) => {
+        {displayOptions.map((option) => {
           const isRecommended = recommendedId === option.id;
 
           return (

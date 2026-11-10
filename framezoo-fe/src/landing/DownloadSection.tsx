@@ -1,6 +1,6 @@
 import type { LandingCopy } from "./i18n";
 import { ArrowUpRightIcon } from "./LandingIcon";
-import { detectPlatformForManifest } from "./platform";
+import { usePlatformDetection } from "./platform";
 import { PlatformSelector } from "./PlatformSelector";
 import type { DownloadState } from "./useDownloadManifest";
 
@@ -17,8 +17,8 @@ export function DownloadSection({
   onRetry,
   state,
 }: DownloadSectionProps) {
-  const detection =
-    state.status === "ready" ? detectPlatformForManifest(state.manifest) : null;
+  const manifest = state.status === "ready" ? state.manifest : null;
+  const detection = usePlatformDetection(manifest);
 
   return (
     <section className="landing-download" id="download">
@@ -64,7 +64,7 @@ export function DownloadSection({
         ) : (
           <PlatformSelector
             options={state.manifest.options}
-            recommendedId={detection?.recommendedId ?? null}
+            recommendedId={detection.recommendedId}
             copy={copy}
             fullCopy={fullCopy}
           />
