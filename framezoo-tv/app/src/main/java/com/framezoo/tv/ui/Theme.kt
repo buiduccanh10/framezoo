@@ -10,20 +10,25 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.tv.material3.MaterialTheme as TvMaterialTheme
+import androidx.tv.material3.Typography as TvTypography
+import androidx.tv.material3.darkColorScheme as tvDarkColorScheme
 import com.framezoo.tv.R
 import org.json.JSONObject
 
 internal class FrameZooColors(private val values: Map<String, Color>) {
-    operator fun get(name: String): Color = checkNotNull(values[name]) { "Thiếu token màu: $name" }
+    operator fun get(name: String): Color = values[name] ?: values["type.emphasis"] ?: Color.White
     fun withTokens(source: FrameZooColors, names: List<String>) = FrameZooColors(values + names.associateWith { source[it] })
 }
 
 internal val LocalFrameZooColors = compositionLocalOf<FrameZooColors> { error("FrameZooTheme chưa được khởi tạo") }
 internal val LocalFrameZooPalettes = compositionLocalOf<Map<String, FrameZooColors>> { error("FrameZooTheme chưa được khởi tạo") }
-internal val LocalFrameZooThemeLabels = compositionLocalOf<Map<String, String>> { error("FrameZooTheme chưa được khởi tạo") }
+internal val LocalFrameZooThemeLabels = compositionLocalOf<Map<String, String>> { emptyMap() }
 
 private val lato = FontFamily(
     Font(R.font.lato_regular, FontWeight.Normal),
@@ -43,6 +48,14 @@ private val typography = Typography().let { base ->
     )
 }
 
+private val tvTypography = TvTypography(
+    displayLarge = typography.displayLarge, displayMedium = typography.displayMedium, displaySmall = typography.displaySmall,
+    headlineLarge = typography.headlineLarge, headlineMedium = typography.headlineMedium, headlineSmall = typography.headlineSmall,
+    titleLarge = typography.titleLarge, titleMedium = typography.titleMedium, titleSmall = typography.titleSmall,
+    bodyLarge = typography.bodyLarge, bodyMedium = typography.bodyMedium, bodySmall = typography.bodySmall,
+    labelLarge = typography.labelLarge, labelMedium = typography.labelMedium, labelSmall = typography.labelSmall,
+)
+
 @Composable
 internal fun FrameZooTheme(theme: String, primary: String, secondary: String, tertiary: String, content: @Composable () -> Unit) {
     val context = LocalContext.current
@@ -60,9 +73,13 @@ internal fun FrameZooTheme(theme: String, primary: String, secondary: String, te
             (0 until names.length()).map(names::getString)
         }
     }
-    val labels = remember(context) {
-        val json = JSONObject(context.assets.open("theme-labels.json").bufferedReader().use { it.readText() })
-        json.keys().asSequence().associateWith(json::getString)
+    val i18n = runCatching { LocalI18n.current }.getOrNull()
+    val labels = remember(palettes, i18n?.language) {
+        (palettes.keys + "custom").associateWith { name ->
+            val key = "settings.appearance.themes.$name"
+            val translated = i18n?.t(key)
+            if (translated != null && translated != key) translated else name.replaceFirstChar { it.uppercase() }
+        }
     }
     val custom = remember(palettes, parts, primary, secondary, tertiary) {
         palettes.getValue("default")
@@ -84,8 +101,19 @@ internal fun FrameZooTheme(theme: String, primary: String, secondary: String, te
         outline = colors["utils.divider"],
         error = colors["type.danger"],
     )
-    CompositionLocalProvider(LocalFrameZooColors provides colors, LocalFrameZooPalettes provides allPalettes,
+    val tvScheme = tvDarkColorScheme(
+        primary = colors["type.logo"], onPrimary = colors["buttons.primaryText"],
+        background = colors["background.main"], onBackground = colors["type.emphasis"],
+        surface = colors["settings.card.background"], onSurface = colors["type.emphasis"],
+        surfaceVariant = colors["search.background"], onSurfaceVariant = colors["type.text"],
+        border = colors["utils.divider"], error = colors["type.danger"],
+    )
+    val density = LocalDensity.current
+    CompositionLocalProvider(LocalDensity provides Density(density.density * 0.85f, density.fontScale),
+        LocalFrameZooColors provides colors, LocalFrameZooPalettes provides allPalettes,
         LocalFrameZooThemeLabels provides labels) {
-        MaterialTheme(colorScheme = scheme, typography = typography, content = content)
+        MaterialTheme(colorScheme = scheme, typography = typography) {
+            TvMaterialTheme(colorScheme = tvScheme, typography = tvTypography, content = content)
+        }
     }
 }

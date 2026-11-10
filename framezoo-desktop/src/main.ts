@@ -6,6 +6,7 @@ import {
   ipcMain,
   Menu,
   net,
+  powerMonitor,
   protocol,
   screen,
   session,
@@ -127,7 +128,33 @@ protocol.registerSchemesAsPrivileged([
 ]);
 
 let mainWindow: BrowserWindow | null = null;
+let desktopUserAgent: string | null = null;
 const PROTOCOL_PREFIX = "framezoo";
+const POWER_RESUME_RECOVERY_DELAY_MS = 1500;
+let powerResumeTimer: ReturnType<typeof setTimeout> | null = null;
+
+function registerPowerLifecycle(): void {
+  // Sleep/wake (lid close, Windows standby) invalidates the GPU decoder
+  // sessions, audio clock and native video surface. Pause before sleep and
+  // rebuild them after wake; otherwise playback renders black frames until
+  // the OS idles the stale connections out minutes later.
+  powerMonitor.on("suspend", () => {
+    if (powerResumeTimer) {
+      clearTimeout(powerResumeTimer);
+      powerResumeTimer = null;
+    }
+    libmpvController.handleSystemSuspend("power:suspend");
+  });
+  powerMonitor.on("resume", () => {
+    if (powerResumeTimer) clearTimeout(powerResumeTimer);
+    // Give the display/GPU/audio stacks a moment to come back online.
+    powerResumeTimer = setTimeout(() => {
+      powerResumeTimer = null;
+      libmpvController.handleSystemResume("power:resume");
+      sendToMainWindow("desktop:os-resume");
+    }, POWER_RESUME_RECOVERY_DELAY_MS);
+  });
+}
 
 function sendToMainWindow(channel: string, ...args: unknown[]): void {
   if (
@@ -670,6 +697,21 @@ async function handleExtensionMessage(
   };
 }
 
+function isGoogleMediaHost(hostname: string): boolean {
+  return [
+    "youtube.com",
+    "youtube-nocookie.com",
+    "youtu.be",
+    "googlevideo.com",
+    "ytimg.com",
+    "ggpht.com",
+    "google.com",
+    "gstatic.com",
+    "googleapis.com",
+    "doubleclick.net",
+  ].some((domain) => hostname === domain || hostname.endsWith(`.${domain}`));
+}
+
 function registerHeaderInterceptors() {
   session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
     let nextHeaders = { ...details.requestHeaders };
@@ -687,6 +729,26 @@ function registerHeaderInterceptors() {
         hostname === "youtube-nocookie.com"
       ) {
         nextHeaders["Referer"] = "https://framezoo.com/";
+      }
+
+      // The default session UA is stripped of Electron/Framezoo for YouTube.
+      // Restore the desktop UA for the app's own fetch/XHR calls (backend
+      // auth/sessions) so devices are reported as "Framezoo Desktop" instead
+      // of a generic Chrome build. YouTube/Google and stream provider hosts
+      // keep the stripped UA.
+      const usesProviderRule = [...streamRules.values()].some((rule) =>
+        matchesRule(hostname, rule.targetDomains),
+      );
+      if (
+        desktopUserAgent &&
+        details.resourceType === "xhr" &&
+        !usesProviderRule &&
+        !isGoogleMediaHost(hostname)
+      ) {
+        for (const key of Object.keys(nextHeaders)) {
+          if (key.toLowerCase() === "user-agent") delete nextHeaders[key];
+        }
+        nextHeaders["User-Agent"] = desktopUserAgent;
       }
 
       for (const rule of streamRules.values()) {
@@ -2380,8 +2442,11 @@ if (!hasSingleInstanceLock) {
   });
 
   app.whenReady().then(() => {
-    // Strip Electron and App name from User-Agent to prevent YouTube Error 152
+    // Strip Electron and App name from User-Agent to prevent YouTube Error 152.
+    // Keep the original string so backend requests can still identify the
+    // desktop app (see registerHeaderInterceptors).
     const currentUserAgent = session.defaultSession.getUserAgent();
+    desktopUserAgent = currentUserAgent;
     app.userAgentFallback = currentUserAgent
       .replace(/Electron\/\S+\s*/gi, "")
       .replace(/Framezoo\/\S+\s*/gi, "")
@@ -2390,6 +2455,7 @@ if (!hasSingleInstanceLock) {
     registerRendererProtocol();
     registerIpcHandlers();
     registerHeaderInterceptors();
+    registerPowerLifecycle();
     installApplicationMenu();
     createMainWindow();
 

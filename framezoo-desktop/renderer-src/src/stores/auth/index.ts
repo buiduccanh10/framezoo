@@ -5,6 +5,7 @@ import { immer } from "zustand/middleware/immer";
 import {
   hasSecureSessionSupport,
   loadAuthSecrets,
+  recoverSeedFromSavedLogin,
   removeAuthSecrets,
   saveAuthSecrets,
 } from "./secureSession";
@@ -52,10 +53,27 @@ export const useAuthStore = create(
       backendUrl: null,
       proxySet: null,
       setAccount(acc) {
+        let next = acc;
         set((s) => {
-          s.account = acc;
+          const prev = s.account;
+          // Callers often spread an account snapshot taken before secrets
+          // were hydrated (seed/token are stripped from localStorage). Keep
+          // the in-memory secrets instead of wiping them with empty values.
+          if (
+            prev &&
+            prev.userId === acc.userId &&
+            prev.sessionId === acc.sessionId
+          ) {
+            next = {
+              ...acc,
+              seed: acc.seed || prev.seed,
+              token: acc.token || prev.token,
+              refreshToken: acc.refreshToken || prev.refreshToken,
+            };
+          }
+          s.account = next;
         });
-        void saveAuthSecrets(acc);
+        void saveAuthSecrets(next);
       },
       removeAccount() {
         set((s) => {
@@ -101,12 +119,31 @@ export const useAuthStore = create(
           refreshToken: current.refreshToken,
           seed: current.seed,
         };
-        const secrets = secure ?? legacy;
         if (stored && !secure) {
           await removeAuthSecrets();
         }
-        if (!secure && (legacy.token || legacy.refreshToken || legacy.seed)) {
-          await saveAuthSecrets(current);
+        // Merge field by field so an empty stored value never wipes a value
+        // that is still available elsewhere.
+        const secrets = {
+          token: secure?.token || legacy.token,
+          refreshToken: secure?.refreshToken || legacy.refreshToken,
+          seed: secure?.seed || legacy.seed,
+        };
+        let recoveredSeed = false;
+        if (!secrets.seed) {
+          // Seed lost (overwritten by an older build or unreadable after an
+          // update): rebuild it from the remembered login, if verifiable.
+          const seed = await recoverSeedFromSavedLogin(current);
+          if (seed) {
+            secrets.seed = seed;
+            recoveredSeed = true;
+          }
+        }
+        if (
+          (!secure || recoveredSeed) &&
+          (secrets.token || secrets.refreshToken || secrets.seed)
+        ) {
+          await saveAuthSecrets({ ...current, ...secrets });
         }
 
         set((s) => {
@@ -116,7 +153,12 @@ export const useAuthStore = create(
           ) {
             return;
           }
-          s.account = { ...s.account, ...secrets };
+          s.account = {
+            ...s.account,
+            token: s.account.token || secrets.token,
+            refreshToken: s.account.refreshToken || secrets.refreshToken,
+            seed: s.account.seed || secrets.seed,
+          };
           s.authHydrated = true;
         });
       },

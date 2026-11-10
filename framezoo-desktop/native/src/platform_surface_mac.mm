@@ -202,7 +202,12 @@ void attach_surface(NativeSurface* surface, NSView* anchor) {
   (void)t;
   (void)ts;
   NativeSurface* surface = self.surface;
-  return (surface && surface->paint_callback && surface->user) ? YES : NO;
+  const BOOL can_draw =
+      (surface && surface->paint_callback && surface->user) ? YES : NO;
+  if (!can_draw && surface) {
+    surface->paint_requested->store(false, std::memory_order_relaxed);
+  }
+  return can_draw;
 }
 
 - (void)drawInCGLContext:(CGLContextObj)ctx
@@ -274,7 +279,21 @@ void attach_surface(NativeSurface* surface, NSView* anchor) {
 - (void)viewDidMoveToWindow {
   [super viewDidMoveToWindow];
   [NSNotificationCenter.defaultCenter removeObserver:self];
+  NSNotificationCenter* workspace_center =
+      NSWorkspace.sharedWorkspace.notificationCenter;
+  [workspace_center removeObserver:self];
   if (self.window) {
+    // Clamshell sleep/wake and display sleep do not always post a screen
+    // change notification, so refresh the GL context, EDR state and pending
+    // paint flag explicitly when the displays or the system wake up.
+    [workspace_center addObserver:self
+                         selector:@selector(systemDidWake:)
+                             name:NSWorkspaceScreensDidWakeNotification
+                           object:nil];
+    [workspace_center addObserver:self
+                         selector:@selector(systemDidWake:)
+                             name:NSWorkspaceDidWakeNotification
+                           object:nil];
     [NSNotificationCenter.defaultCenter addObserver:self
                                            selector:@selector(windowDidChangeScreen:)
                                                name:NSWindowDidChangeScreenNotification
@@ -293,6 +312,9 @@ void attach_surface(NativeSurface* surface, NSView* anchor) {
 
 - (void)windowDidChangeScreen:(NSNotification*)note {
   (void)note;
+  if (self.surface && self.surface->gl_context) {
+    CGLUpdateContext(self.surface->gl_context);
+  }
   update_backing_scale_factor(self.surface);
   update_display_hdr_capabilities(self.surface);
   if (self.surface && self.surface->gl_layer) {
@@ -300,8 +322,14 @@ void attach_surface(NativeSurface* surface, NSView* anchor) {
   }
 }
 
+- (void)systemDidWake:(NSNotification*)note {
+  (void)note;
+  surface_notify_system_wake(self.surface);
+}
+
 - (void)dealloc {
   [NSNotificationCenter.defaultCenter removeObserver:self];
+  [NSWorkspace.sharedWorkspace.notificationCenter removeObserver:self];
   [super dealloc];
 }
 
@@ -465,14 +493,51 @@ void surface_request_paint(NativeSurface* surface) {
   [view retain];
   [gl_layer retain];
   dispatch_async(dispatch_get_main_queue(), ^{
+    // Clear the coalescing flag before asking CoreAnimation to redraw.
+    // CoreAnimation may silently drop or coalesce setNeedsDisplay without
+    // calling drawInCGLContext: (display asleep, clamshell reconfiguration,
+    // occluded window). If the flag were only cleared inside the draw
+    // callback it could stay stuck at true forever, discarding every later
+    // mpv frame update until a resize forced a direct redraw.
+    paint_requested->store(false, std::memory_order_relaxed);
     if (view.surface && gl_layer.surface) {
       [gl_layer setNeedsDisplay];
-    } else {
-      paint_requested->store(false, std::memory_order_relaxed);
     }
     [gl_layer release];
     [view release];
   });
+}
+
+void surface_notify_system_wake(NativeSurface* surface) {
+  if (!surface || !surface->view) return;
+  FrameZooMpvView* view = surface->view;
+  [view retain];
+  void (^refresh)(void) = ^{
+    NativeSurface* current = view.surface;
+    if (current) {
+      current->paint_requested->store(false, std::memory_order_relaxed);
+      if (current->gl_context) {
+        CGLUpdateContext(current->gl_context);
+      }
+      update_backing_scale_factor(current);
+      update_display_hdr_capabilities(current);
+      if (current->gl_layer) {
+        [current->gl_layer setNeedsDisplay];
+      }
+      std::fprintf(
+          stderr,
+          "[libmpv-native] surface_system_wake edr_max=%.2f display=%u\n",
+          current->max_potential_edr.load(std::memory_order_relaxed),
+          current->display_id.load(std::memory_order_relaxed)
+      );
+    }
+    [view release];
+  };
+  if ([NSThread isMainThread]) {
+    refresh();
+  } else {
+    dispatch_async(dispatch_get_main_queue(), refresh);
+  }
 }
 
 void surface_disable_paint(NativeSurface* surface) {

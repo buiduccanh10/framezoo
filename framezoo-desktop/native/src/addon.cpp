@@ -391,6 +391,67 @@ struct MpvPlayer {
   }
 #endif
 
+  // Called before the OS sleeps. Stop feeding the hardware decoder and the
+  // audio renderer while the GPU/audio devices are being torn down.
+  void handle_system_suspend() {
+    if (!running.load(std::memory_order_acquire) || !handle) return;
+    const bool was_paused =
+        is_paused.exchange(true, std::memory_order_acq_rel);
+    if (was_paused) return;
+    set_property_string("pause", "yes");
+#if defined(__APPLE__)
+    const char* flush_cmd[] = {"seek", "0", "relative", "exact", nullptr};
+    command_async(flush_cmd);
+#endif
+  }
+
+  // Called after the OS wakes. VideoToolbox/D3D11 decoder sessions and the
+  // AVFoundation/WASAPI audio clock survive sleep in a broken state (the
+  // synchronizer reports time=nan until macOS idles the XPC connections out
+  // minutes later), which renders black frames on play. Rebuild them now.
+  void handle_system_resume() {
+    if (!running.load(std::memory_order_acquire) || !handle) return;
+
+    surface_notify_system_wake(surface);
+#if defined(__APPLE__)
+    {
+      std::lock_guard<std::mutex> lock(hdr_mutex);
+      hdr_output_initialized = false;
+    }
+    update_hdr_output();
+#endif
+
+    const char* ao_reload[] = {"ao-reload", nullptr};
+    command_async(ao_reload);
+
+    std::string hwdec;
+    if (api.get_property_string) {
+      std::lock_guard<std::mutex> lock(command_mutex);
+      char* value = api.get_property_string(handle, "hwdec");
+      if (value) {
+        hwdec = value;
+        api.free_memory(value);
+      }
+    }
+    if (!hwdec.empty() && hwdec != "no") {
+      // Toggling hwdec makes mpv reinitialize the decoder (fresh
+      // VTDecompressionSession / D3D11VA device) and queue an exact seek to
+      // the current position, without software-decoding any frame.
+      set_property_string("hwdec", "no");
+      set_property_string("hwdec", hwdec.c_str());
+    }
+
+    const char* refresh_cmd[] = {"seek", "0", "relative", "exact", nullptr};
+    command_async(refresh_cmd);
+    std::fprintf(
+        stderr,
+        "[libmpv-native] system resume player=%s hwdec=%s paused=%d\n",
+        id.c_str(),
+        hwdec.c_str(),
+        is_paused.load(std::memory_order_acquire) ? 1 : 0
+    );
+  }
+
   void stop() {
     const bool wasRunning = running.exchange(false, std::memory_order_acq_rel);
 
@@ -1846,6 +1907,10 @@ napi_value command_player(napi_env env, napi_callback_info info) {
       player->command_async(flush_cmd);
     }
 #endif
+  } else if (type == "system-suspend") {
+    player->handle_system_suspend();
+  } else if (type == "system-resume") {
+    player->handle_system_resume();
   } else if (type == "seek" && get_number(env, argv[1], "time", &number)) {
     const std::string time_str = std::to_string(number);
     const char* seek_cmd[] = {"seek", time_str.c_str(), "absolute", nullptr};

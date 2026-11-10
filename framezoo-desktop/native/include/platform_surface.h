@@ -26,6 +26,9 @@ NativeSurface* surface_create(
 void surface_resize(NativeSurface* surface, SurfaceBounds bounds);
 void surface_reparent(NativeSurface* surface, void* parent_handle);
 void surface_request_paint(NativeSurface* surface);
+// Re-sync the native surface after the OS (or its displays) wakes from sleep:
+// clears stuck paint state, refreshes GL/EDR/window state and forces a redraw.
+void surface_notify_system_wake(NativeSurface* surface);
 void surface_disable_paint(NativeSurface* surface);
 void surface_destroy(NativeSurface* surface);
 void* surface_get_proc_address(NativeSurface* surface, const char* name);

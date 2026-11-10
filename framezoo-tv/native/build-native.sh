@@ -64,6 +64,12 @@ build_torrent() {
     [[ "$ABI" == x86_64 ]] && target=android-x86_64
     (
       cd "$WORK/src/openssl-3.4.2"
+      # The source tree is shared by both ABIs. Reusing generated objects
+      # after switching ARM64 <-> x86_64 makes the linker consume the wrong
+      # architecture from libcrypto.a.
+      if [[ -f Makefile ]]; then
+        make distclean >/dev/null 2>&1 || make clean >/dev/null 2>&1 || true
+      fi
       export ANDROID_NDK_ROOT="$NDK" PATH="$host/bin:$PATH"
       perl Configure "$target" -D__ANDROID_API__=26 no-shared no-tests --prefix="$prefix"
       make -j"$(sysctl -n hw.ncpu)"

@@ -45,7 +45,6 @@ for (const name of [...Object.keys(themes), "custom"]) {
 const outputs = [
   [new URL("../app/src/main/assets/themes.json", import.meta.url), `${JSON.stringify(themes, null, 2)}\n`],
   [new URL("../app/src/main/assets/custom-parts.json", import.meta.url), `${JSON.stringify(customParts, null, 2)}\n`],
-  [new URL("../app/src/main/assets/theme-labels.json", import.meta.url), `${JSON.stringify(labels, null, 2)}\n`],
 ];
 if (process.argv.includes("--check")) {
   for (const [output, json] of outputs) {

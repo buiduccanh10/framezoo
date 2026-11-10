@@ -993,6 +993,46 @@ export class LibMpvController {
     }
   }
 
+  public handleSystemSuspend(reason: string): void {
+    this.dispatchSystemLifecycle("system-suspend", reason);
+  }
+
+  public handleSystemResume(reason: string): void {
+    this.dispatchSystemLifecycle("system-resume", reason);
+  }
+
+  private dispatchSystemLifecycle(
+    type: "system-suspend" | "system-resume",
+    reason: string,
+  ): void {
+    if (!this.addon) return;
+    for (const player of this.players.values()) {
+      try {
+        // Native-only lifecycle commands; intentionally not part of the
+        // renderer-facing LibMpvCommand union.
+        this.addon.commandPlayer(player.id, {
+          type,
+        } as unknown as LibMpvCommand);
+        if (type === "system-suspend") {
+          player.desiredPaused = true;
+          player.isPaused = true;
+        }
+        this.broadcastLog("info", type, {
+          playerId: player.id,
+          generation: player.generation,
+          reason,
+        });
+      } catch (error) {
+        this.broadcastError(
+          "command_failed",
+          error instanceof Error ? error.message : String(error),
+          { playerId: player.id, generation: player.generation, command: type },
+        );
+      }
+    }
+    this.syncNativeMediaPlaybackState();
+  }
+
   public async extractAudio(request: LibMpvAudioRequest): Promise<Uint8Array> {
     if (!this.addon) {
       throw new Error("Native libmpv addon is unavailable");

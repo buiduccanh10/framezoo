@@ -1,13 +1,21 @@
 package com.framezoo.tv.ui
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,11 +23,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,15 +39,34 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.zIndex
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
+import androidx.tv.material3.Border as TvBorder
+import androidx.tv.material3.Button as MaterialTvButton
+import androidx.tv.material3.ButtonDefaults as TvButtonDefaults
+import androidx.tv.material3.Card as TvCard
+import androidx.tv.material3.CardDefaults as TvCardDefaults
+import androidx.tv.material3.IconButton as TvIconButton
+import androidx.tv.material3.IconButtonDefaults as TvIconButtonDefaults
+import com.framezoo.tv.R
+import com.framezoo.tv.api.showCinemaBadge
 import com.framezoo.tv.model.Media
 
 @Composable
@@ -46,6 +77,9 @@ internal fun TvButton(
     primary: Boolean = false,
     navigation: Boolean = false,
     accent: Boolean = false,
+    loading: Boolean = false,
+    icon: Int? = null,
+    trailingIcon: Int? = null,
     onClick: () -> Unit,
 ) {
     val colors = LocalFrameZooColors.current
@@ -66,58 +100,304 @@ internal fun TvButton(
         primary -> colors["buttons.primaryText"]
         else -> colors["type.emphasis"]
     }
-    Box(
-        modifier
-            .onFocusChanged { focused = it.isFocused }
-            .clip(shape)
-            .background(background)
-            .then(if (focused) Modifier.border(BorderStroke(2.dp, colors["type.logo"]), shape) else Modifier)
-            .clickable(onClick = onClick)
-            .padding(horizontal = if (navigation) 14.dp else 22.dp, vertical = 12.dp),
-        contentAlignment = Alignment.Center,
+    val isRedBackground = accent || primary
+    val isHighContrast = isRedBackground || selected || (navigation && active)
+    val focusBorderColor = if (isHighContrast) Color.White else colors["type.logo"]
+    val focusScale = when {
+        accent || primary -> 1.05f
+        navigation -> 1.02f
+        else -> 1.04f
+    }
+    val animatedBackground by animateColorAsState(background, tween(300), label = "button background")
+    MaterialTvButton(
+        onClick = onClick,
+        modifier = modifier
+            .zIndex(if (focused) 10f else 1f)
+            .onFocusChanged { focused = it.isFocused },
+        shape = TvButtonDefaults.shape(shape),
+        colors = TvButtonDefaults.colors(
+            containerColor = animatedBackground,
+            contentColor = foreground,
+            focusedContainerColor = if (accent) colors["buttons.purpleHover"] ?: animatedBackground
+                                   else if (primary) colors["buttons.primaryHover"] ?: animatedBackground
+                                   else animatedBackground,
+            focusedContentColor = foreground
+        ),
+        scale = TvButtonDefaults.scale(focusedScale = focusScale),
+        border = TvButtonDefaults.border(focusedBorder = TvBorder(BorderStroke(2.dp, focusBorderColor), shape = shape)),
+        contentPadding = PaddingValues(horizontal = if (navigation) 14.dp else 22.dp, vertical = 12.dp),
     ) {
-        Text(label, color = foreground, fontSize = 16.sp, fontWeight = FontWeight.Bold,
-            maxLines = 1, softWrap = false, overflow = TextOverflow.Ellipsis)
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(if (label.isNotBlank()) 8.dp else 0.dp)) {
+            if (loading) {
+                androidx.compose.material3.CircularProgressIndicator(
+                    color = foreground,
+                    modifier = Modifier.size(16.dp),
+                    strokeWidth = 2.dp
+                )
+            } else {
+                icon?.let { Icon(painterResource(it), contentDescription = null, modifier = Modifier.width(18.dp).height(18.dp), tint = foreground) }
+            }
+            if (label.isNotBlank()) {
+                Text(label, color = foreground, fontSize = 16.sp, fontWeight = if (navigation) FontWeight.Medium else FontWeight.Bold,
+                    maxLines = 1, softWrap = false, overflow = TextOverflow.Ellipsis)
+            }
+            trailingIcon?.let { Icon(painterResource(it), contentDescription = null, modifier = Modifier.width(16.dp).height(16.dp), tint = foreground) }
+        }
     }
 }
 
 @Composable
-internal fun MediaGrid(title: String, items: List<Media>, onOpen: (Media) -> Unit, progress: Map<String, Float> = emptyMap()) {
+internal fun MediaGrid(title: String, items: List<Media>, onOpen: (Media) -> Unit, progress: Map<String, Float> = emptyMap(),
+    bookmarks: Set<String> = emptySet(), onBookmark: ((Media) -> Unit)? = null, qualityLoader: (suspend (Media) -> String?)? = null) {
     val colors = LocalFrameZooColors.current
     Column(verticalArrangement = Arrangement.spacedBy(18.dp)) {
         if (title.isNotBlank()) Text(title, fontSize = 27.sp, fontWeight = FontWeight.Bold, color = colors["type.emphasis"])
-        if (items.isEmpty()) Text("Chưa có nội dung", color = colors["type.secondary"])
-        LazyRow(horizontalArrangement = Arrangement.spacedBy(18.dp)) {
+        if (items.isEmpty()) Text(t("home.search.empty.default"), color = colors["type.secondary"])
+        LazyRow(horizontalArrangement = Arrangement.spacedBy(18.dp), contentPadding = PaddingValues(horizontal = 4.dp, vertical = 6.dp)) {
             items(items) { item ->
-                var focused by remember { mutableStateOf(false) }
-                Column(
-                    Modifier.width(174.dp)
-                        .onFocusChanged { focused = it.isFocused }
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(if (focused) colors["mediaCard.hoverBackground"] else colors["background.main"])
-                        .then(if (focused) Modifier.border(BorderStroke(2.dp, colors["mediaCard.hoverAccent"]), RoundedCornerShape(12.dp)) else Modifier)
-                        .clickable { onOpen(item) }
-                        .padding(7.dp),
-                ) {
-                    Box(Modifier.fillMaxWidth().aspectRatio(2f / 3f).clip(RoundedCornerShape(10.dp))
-                        .background(colors["mediaCard.hoverBackground"]), contentAlignment = Alignment.Center) {
-                        Text("FRAMEZOO", color = colors["type.logo"], fontSize = 13.sp, fontWeight = FontWeight.Black)
-                        if (!item.poster.isNullOrBlank()) AsyncImage(item.poster, item.title, Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
-                    }
-                    progress[item.id]?.let { value ->
-                        Box(Modifier.fillMaxWidth().height(3.dp).background(colors["utils.divider"])) {
-                            Box(Modifier.fillMaxWidth(value).height(3.dp).background(colors["type.logo"]))
+                TvMediaCard(item, onOpen, progress[item.id], item.id in bookmarks, onBookmark, qualityLoader)
+            }
+        }
+    }
+}
+
+@Composable
+internal fun Modifier.skeletonShimmer(): Modifier {
+    val transition = rememberInfiniteTransition(label = "skeleton_shimmer")
+    val translateAnim by transition.animateFloat(
+        initialValue = -300f,
+        targetValue = 900f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 1100, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Restart
+        ),
+        label = "skeleton_shimmer_translate"
+    )
+    val colors = LocalFrameZooColors.current
+    val baseColor = colors["mediaCard.hoverBackground"]
+    val shimmerColor = Color.White.copy(alpha = 0.12f)
+    val brush = Brush.linearGradient(
+        colors = listOf(
+            baseColor,
+            shimmerColor,
+            baseColor
+        ),
+        start = androidx.compose.ui.geometry.Offset(translateAnim, translateAnim),
+        end = androidx.compose.ui.geometry.Offset(translateAnim + 300f, translateAnim + 300f)
+    )
+    return this.background(baseColor).background(brush)
+}
+
+@Composable
+internal fun TvMediaCardSkeleton(
+    modifier: Modifier = Modifier
+) {
+    val colors = LocalFrameZooColors.current
+    val shape = RoundedCornerShape(12.dp)
+    Box(
+        modifier = modifier
+            .width(156.dp)
+            .clip(shape)
+            .background(colors["background.main"])
+            .padding(6.dp)
+    ) {
+        Column {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(2f / 3f)
+                    .clip(RoundedCornerShape(10.dp))
+                    .skeletonShimmer()
+            )
+            Spacer(Modifier.height(8.dp))
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(0.88f)
+                    .height(14.dp)
+                    .clip(RoundedCornerShape(4.dp))
+                    .skeletonShimmer()
+            )
+            Spacer(Modifier.height(5.dp))
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(0.55f)
+                    .height(12.dp)
+                    .clip(RoundedCornerShape(4.dp))
+                    .skeletonShimmer()
+            )
+        }
+    }
+}
+
+@Composable
+internal fun TvMediaCard(
+    item: Media,
+    onOpen: (Media) -> Unit,
+    progress: Float? = null,
+    bookmarked: Boolean = false,
+    onBookmark: ((Media) -> Unit)? = null,
+    qualityLoader: (suspend (Media) -> String?)? = null,
+    season: Int? = null,
+    episode: Int? = null,
+    closable: Boolean = false,
+    onClose: (() -> Unit)? = null,
+    modifier: Modifier = Modifier
+) {
+    // If the media data hasn't loaded yet (empty title and poster), render skeleton card!
+    if (item.title.isBlank() && item.poster.isNullOrBlank()) {
+        TvMediaCardSkeleton(modifier)
+        return
+    }
+
+    val colors = LocalFrameZooColors.current
+    var focused by remember { mutableStateOf(false) }
+    var bookmarkFocused by remember { mutableStateOf(false) }
+    val cardFocus = remember { FocusRequester() }
+    val bookmarkFocus = remember { FocusRequester() }
+    val hasBookmarkAction = onBookmark != null && item.id.isNotEmpty() && item.id.all(Char::isDigit) && !closable
+    var quality by remember(item.id, item.type, item.releaseQuality) { mutableStateOf(item.releaseQuality) }
+    LaunchedEffect(item.id, item.type, qualityLoader) {
+        if (quality == null && qualityLoader != null) quality = try { qualityLoader(item) }
+            catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (_: Exception) { null }
+    }
+    val active = focused || bookmarkFocused
+    val cardScale by animateFloatAsState(if (active) 1.03f else 1f, tween(200), label = "card scale")
+    val cardBackground by animateColorAsState(if (active) colors["mediaCard.hoverBackground"] else colors["background.main"], tween(300), label = "card background")
+    val shape = RoundedCornerShape(12.dp)
+    Box(Modifier.wrapContentWidth(Alignment.Start).width(156.dp).zIndex(if (active) 1f else 0f).graphicsLayer { scaleX = cardScale; scaleY = cardScale }) {
+    TvCard(
+        onClick = { if (closable) onClose?.invoke() else onOpen(item) },
+        modifier = modifier.focusRequester(cardFocus).then(if (hasBookmarkAction) Modifier.focusProperties { up = bookmarkFocus } else Modifier)
+            .width(156.dp).onFocusChanged { focused = it.hasFocus },
+        shape = TvCardDefaults.shape(shape),
+        colors = TvCardDefaults.colors(containerColor = cardBackground, focusedContainerColor = cardBackground),
+        scale = TvCardDefaults.scale(focusedScale = 1f),
+        border = TvCardDefaults.border(focusedBorder = TvBorder(BorderStroke(2.dp, colors["mediaCard.hoverAccent"]), shape = shape)),
+    ) {
+      Column(Modifier.padding(6.dp)) {
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .aspectRatio(2f / 3f)
+                .clip(RoundedCornerShape(10.dp))
+                .background(colors["mediaCard.hoverBackground"]),
+            contentAlignment = Alignment.Center
+        ) {
+            if (!item.poster.isNullOrBlank()) {
+                SubcomposeAsyncImage(
+                    model = item.poster,
+                    contentDescription = item.title,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop,
+                    loading = {
+                        Box(Modifier.fillMaxSize().skeletonShimmer())
+                    },
+                    error = {
+                        Box(
+                            Modifier
+                                .fillMaxSize()
+                                .background(colors["mediaCard.hoverBackground"]),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            androidx.compose.foundation.Image(
+                                painter = painterResource(R.drawable.desktop_placeholder),
+                                contentDescription = null,
+                                modifier = Modifier.width(54.dp).alpha(0.8f),
+                                contentScale = ContentScale.Fit
+                            )
                         }
                     }
-                    Spacer(Modifier.height(12.dp))
-                    Text(item.title, maxLines = 2, minLines = 2, overflow = TextOverflow.Ellipsis,
-                        color = colors["type.emphasis"], fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                    Spacer(Modifier.height(4.dp))
-                    Text("${if (item.type == "show") "Series" else "Phim"}${item.year.takeIf { it.isNotBlank() }?.let { " · $it" } ?: ""}",
-                        color = colors["type.secondary"], fontSize = 13.sp)
+                )
+            } else {
+                Box(
+                    Modifier.fillMaxSize().skeletonShimmer()
+                )
+            }
+            progress?.let { value ->
+                Box(Modifier.fillMaxWidth().height(48.dp).align(Alignment.BottomCenter)
+                    .background(Brush.verticalGradient(listOf(Color.Transparent, colors["mediaCard.shadow"]))), contentAlignment = Alignment.BottomCenter) {
+                    Box(Modifier.fillMaxWidth().padding(horizontal = 10.dp, vertical = 8.dp).height(4.dp).clip(RoundedCornerShape(50)).background(colors["mediaCard.barColor"])) {
+                        Box(Modifier.fillMaxWidth(value.coerceIn(0f, 1f)).height(4.dp).background(colors["mediaCard.barFillColor"]))
+                    }
                 }
             }
         }
+        Spacer(Modifier.height(8.dp))
+        Text(item.title, maxLines = 1, overflow = TextOverflow.Ellipsis,
+            color = colors["type.emphasis"], fontWeight = FontWeight.Bold, fontSize = 15.sp)
+        Spacer(Modifier.height(2.dp))
+        Text("${if (item.type == "show") t("media.types.show") else t("media.types.movie")}${item.year.takeIf { it.isNotBlank() }?.let { " · $it" } ?: ""}",
+            color = colors["type.secondary"], fontSize = 12.sp, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
+      }
+    }
+    if (season != null && episode != null) {
+        val epBadge = t("media.episodeDisplay")
+            .replace("{{season}}", season.toString())
+            .replace("{{episode}}", episode.toString())
+        Box(
+            modifier = Modifier
+                .zIndex(2f)
+                .align(Alignment.TopEnd)
+                .padding(10.dp)
+                .clip(RoundedCornerShape(6.dp))
+                .background(colors["mediaCard.badge"].copy(alpha = 0.92f))
+                .padding(horizontal = 7.dp, vertical = 3.dp)
+        ) {
+            Text(
+                text = epBadge,
+                color = colors["mediaCard.badgeText"],
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
+    if (showCinemaBadge(item.type, quality) && season == null) {
+        Text(t("media.inCinema"), modifier = Modifier.zIndex(1f).align(Alignment.TopEnd).padding(12.dp)
+            .clip(RoundedCornerShape(6.dp)).background(Color.DarkGray.copy(alpha = .8f)).padding(horizontal = 8.dp, vertical = 5.dp),
+            color = Color(0xffffd54f), fontSize = 11.sp, fontWeight = FontWeight.SemiBold)
+    }
+    if (closable) {
+        Box(
+            modifier = Modifier
+                .zIndex(3f)
+                .matchParentSize()
+                .clip(shape)
+                .background(Color.Black.copy(alpha = 0.65f)),
+            contentAlignment = Alignment.Center
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(46.dp)
+                    .clip(RoundedCornerShape(50))
+                    .background(colors["type.danger"].copy(alpha = 0.88f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.desktop_close),
+                    contentDescription = "Remove",
+                    tint = Color.White,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
+        }
+    }
+    if (hasBookmarkAction) {
+        val buttonShape = RoundedCornerShape(50)
+        val bookmarkDescription = t("home.bookmarks.sectionTitle")
+        val focusBorderColor = if (bookmarked) Color.White else colors["type.logo"]
+        TvIconButton(onClick = { onBookmark(item) }, modifier = Modifier.zIndex(1f).align(Alignment.TopStart).padding(8.dp).size(42.dp)
+            .alpha(if (active) 1f else 0f)
+            .focusRequester(bookmarkFocus).onFocusChanged { bookmarkFocused = it.isFocused }
+            .focusProperties { down = cardFocus; canFocus = focused || bookmarkFocused }
+            .semantics { contentDescription = bookmarkDescription },
+            shape = TvIconButtonDefaults.shape(buttonShape),
+            colors = TvIconButtonDefaults.colors(containerColor = colors["pill.background"].copy(alpha = .75f), focusedContainerColor = colors["pill.background"].copy(alpha = .9f)),
+            scale = TvIconButtonDefaults.scale(focusedScale = 1.08f),
+            border = TvIconButtonDefaults.border(focusedBorder = TvBorder(BorderStroke(2.dp, focusBorderColor), shape = buttonShape))) {
+            Icon(painterResource(if (bookmarked) R.drawable.desktop_bookmark_filled else R.drawable.desktop_bookmark), contentDescription = null,
+                modifier = Modifier.size(14.dp), tint = colors["type.emphasis"].copy(alpha = if (bookmarkFocused) 1f else .75f))
+        }
+    }
     }
 }
 
@@ -131,18 +411,22 @@ internal val themeNames = listOf(
 internal fun TvThemePreview(name: String, selected: Boolean, onClick: () -> Unit) {
     val current = LocalFrameZooColors.current
     val preview = LocalFrameZooPalettes.current.getValue(name)
-    var focused by remember { mutableStateOf(false) }
     val shape = RoundedCornerShape(10.dp)
-    Column(Modifier.width(174.dp).onFocusChanged { focused = it.isFocused }
-        .clip(shape).background(preview["background.main"])
-        .border(BorderStroke(if (focused || selected) 2.dp else 1.dp,
-            if (focused || selected) current["type.logo"] else current["utils.divider"]), shape)
-        .clickable(onClick = onClick).padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+    val selectedBorder = TvBorder(BorderStroke(if (selected) 2.dp else 1.dp,
+        if (selected) current["type.logo"] else current["utils.divider"]), shape = shape)
+    val focusBorderColor = if (selected) Color.White else current["type.logo"]
+    TvCard(onClick = onClick, modifier = Modifier.width(174.dp), shape = TvCardDefaults.shape(shape),
+        colors = TvCardDefaults.colors(containerColor = preview["background.main"], focusedContainerColor = preview["background.main"]),
+        scale = TvCardDefaults.scale(focusedScale = 1.05f),
+        border = TvCardDefaults.border(border = selectedBorder,
+            focusedBorder = TvBorder(BorderStroke(2.dp, focusBorderColor), shape = shape))) {
+      Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Row(horizontalArrangement = Arrangement.spacedBy(7.dp)) {
             Box(Modifier.width(23.dp).height(23.dp).clip(RoundedCornerShape(50)).background(preview["themePreview.primary"]))
             Box(Modifier.width(23.dp).height(23.dp).clip(RoundedCornerShape(50)).background(preview["themePreview.secondary"]))
         }
         Text(LocalFrameZooThemeLabels.current[name] ?: name, color = preview["type.emphasis"], fontWeight = FontWeight.Bold,
             maxLines = 1, overflow = TextOverflow.Ellipsis)
+      }
     }
 }
