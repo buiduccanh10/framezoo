@@ -114,6 +114,14 @@ export async function fetchDesktopDownloadManifest(): Promise<DesktopDownloadMan
   }
 }
 
+export function isDesktopAppDownloadAsset(fileName: string): boolean {
+  const lower = fileName.toLowerCase();
+  return (
+    (lower.endsWith('.dmg') || lower.endsWith('.exe') || lower.endsWith('.zip')) &&
+    !lower.endsWith('.blockmap')
+  );
+}
+
 interface GitHubReleaseAsset {
   name?: string;
   download_count?: number;
@@ -162,7 +170,12 @@ export async function fetchDesktopTotalDownloads(): Promise<number | null> {
     for (const release of releases as GitHubReleaseItem[]) {
       if (Array.isArray(release.assets)) {
         for (const asset of release.assets) {
-          if (typeof asset.download_count === 'number' && asset.download_count > 0) {
+          if (
+            typeof asset.name === 'string' &&
+            isDesktopAppDownloadAsset(asset.name) &&
+            typeof asset.download_count === 'number' &&
+            asset.download_count > 0
+          ) {
             total += asset.download_count;
           }
         }

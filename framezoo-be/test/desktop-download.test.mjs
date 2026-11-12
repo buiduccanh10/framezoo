@@ -13,4 +13,5 @@ test('desktop download route aggregates total downloads alongside manifest optio
   assert.match(downloadRoute, /totalDownloads: totalDownloads \?\? null/);
   assert.match(desktopUtils, /fetchDesktopTotalDownloads/);
   assert.match(desktopUtils, /DOWNLOAD_STATS_CACHE_TTL_MS/);
+  assert.match(desktopUtils, /isDesktopAppDownloadAsset/);
 });
