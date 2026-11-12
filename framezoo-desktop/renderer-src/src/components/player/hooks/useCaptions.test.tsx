@@ -90,6 +90,31 @@ function createCaption(id: string): CaptionListItem {
   };
 }
 
+function createEmbeddedCaption(id: string): CaptionListItem {
+  return {
+    id,
+    language: "vi",
+    url: "",
+    trackId: `track-${id}`,
+    type: "embedded",
+    needsProxy: false,
+    opensubtitles: false,
+    source: "embedded",
+  };
+}
+
+function createSourceCaption(id: string): CaptionListItem {
+  return {
+    id,
+    language: "vi",
+    url: `https://example.com/${id}.vtt`,
+    type: "vtt",
+    needsProxy: false,
+    opensubtitles: false,
+    source: "stream",
+  };
+}
+
 function CaptionsHarness({
   onReady,
 }: {
@@ -203,6 +228,30 @@ describe("caption auto-selection across episode transitions", () => {
     expect(usePlayerStore.getState().caption.selected?.id).toBe(
       episodeTwoCaption.id,
     );
+  });
+
+  it("prioritizes an embedded subtitle over another in-source subtitle", async () => {
+    const sourceCaption = createSourceCaption("stream-vietnamese");
+    const embeddedCaption = createEmbeddedCaption("embedded-vietnamese");
+    const externalCaption = createCaption("external-vietnamese");
+    const store = usePlayerStore.getState();
+    store.setMeta(createMeta(1));
+    store.setSource(
+      createSource("source-1"),
+      [sourceCaption, embeddedCaption, externalCaption],
+      0,
+    );
+
+    await act(async () => {
+      root.render(<CaptionsHarness />);
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+
+    expect(usePlayerStore.getState().caption.selected?.id).toBe(
+      embeddedCaption.id,
+    );
+    expect(mocks.downloadCaptionAsVtt).not.toHaveBeenCalledWith(sourceCaption);
   });
 });
 
