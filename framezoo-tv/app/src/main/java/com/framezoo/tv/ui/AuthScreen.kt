@@ -132,6 +132,7 @@ internal fun AuthScreen(
                                         code = uiState.otpCode,
                                         isLoading = uiState.isLoading,
                                         submitLabel = t("auth.otp.continue"),
+                                        email = uiState.email,
                                         onCodeChanged = { onAction(AuthAction.OtpCodeChanged(it)) },
                                         onVerify = { onAction(AuthAction.NextRegisterStep) },
                                         onResend = { onAction(AuthAction.ResendOtp) },
@@ -506,6 +507,7 @@ private fun RecoveryStepContent(
                     code = uiState.otpCode,
                     isLoading = uiState.isLoading,
                     submitLabel = t("auth.otp.continue"),
+                    email = uiState.email,
                     onCodeChanged = { onAction(AuthAction.OtpCodeChanged(it)) },
                     onVerify = { onAction(AuthAction.SubmitRecovery) },
                     onResend = { onAction(AuthAction.ResendOtp) },
@@ -866,6 +868,7 @@ internal fun TvOtpVerificationCard(
     code: String,
     isLoading: Boolean,
     submitLabel: String,
+    email: String? = null,
     onCodeChanged: (String) -> Unit,
     onVerify: () -> Unit,
     onResend: () -> Unit,
@@ -891,7 +894,7 @@ internal fun TvOtpVerificationCard(
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
         Text(
@@ -901,12 +904,49 @@ internal fun TvOtpVerificationCard(
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center
         )
-        Text(
-            text = description,
-            color = colors["type.secondary"],
-            fontSize = 13.sp,
-            textAlign = TextAlign.Center
-        )
+        if (!email.isNullOrBlank()) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Text(
+                    text = t("auth.otp.sentToPrompt"),
+                    color = colors["type.secondary"],
+                    fontSize = 13.sp,
+                    textAlign = TextAlign.Center
+                )
+                Text(
+                    text = email,
+                    color = colors["type.emphasis"],
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center,
+                    maxLines = 1,
+                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+                )
+            }
+        } else {
+            Text(
+                text = description,
+                color = colors["type.secondary"],
+                fontSize = 13.sp,
+                textAlign = TextAlign.Center
+            )
+        }
+        Box(
+            modifier = Modifier
+                .clip(RoundedCornerShape(8.dp))
+                .background(Color(0x26F59E0B))
+                .border(BorderStroke(1.dp, Color(0x4DF59E0B)), RoundedCornerShape(8.dp))
+                .padding(horizontal = 10.dp, vertical = 4.dp)
+        ) {
+            Text(
+                text = "⚠️ " + t("auth.otp.spamNotice"),
+                color = Color(0xFFFCD34D),
+                fontSize = 11.sp,
+                textAlign = TextAlign.Center
+            )
+        }
 
         OutlinedTextField(
             value = code,

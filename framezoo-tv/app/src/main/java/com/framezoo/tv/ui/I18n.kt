@@ -101,7 +101,7 @@ class I18n(
             str = str.replace("{{$argKey}}", argVal.toString())
                 .replace("{$argKey}", argVal.toString())
         }
-        return str
+        return str.replace(Regex("<[^>]+>"), "")
     }
 
     fun randomT(key: String, jokeChance: Double = 0.35): String {

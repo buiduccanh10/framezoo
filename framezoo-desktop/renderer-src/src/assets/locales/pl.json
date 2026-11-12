@@ -147,7 +147,10 @@
       "resendIn": "Możliwość ponownego wysłania za {{seconds}}s",
       "resetDescription": "Wprowadź kod wysłany na Twój adres e-mail.",
       "resetTitle": "Zresetuj swoje hasło",
-      "send": "Wyślij kod"
+      "send": "Wyślij kod",
+      "sentToEmail": "Kod weryfikacyjny został wysłany do <bold>{{email}}</bold>",
+      "sentToPrompt": "Kod weryfikacyjny został wysłany na adres:",
+      "spamNotice": "Nie możesz znaleźć wiadomości? Sprawdź folder ze spamem lub niechcianą pocztą."
     },
     "register": {
       "confirmPasswordLabel": "Potwierdź hasło",

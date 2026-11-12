@@ -203,6 +203,7 @@ export function RegisterPanel() {
             "auth.otp.registrationDescription",
             "Enter the code sent to your email to finish creating your account.",
           )}
+          email={passwordData?.email}
           challenge={registrationOtp}
           onVerify={completeRegistration}
           onResend={resendOtp}

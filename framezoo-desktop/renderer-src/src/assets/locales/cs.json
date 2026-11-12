@@ -147,7 +147,10 @@
       "resendIn": "Znovu odeslat za {{seconds}} s",
       "resetDescription": "Zadejte kód zaslaný na váš e-mail.",
       "resetTitle": "Obnovte si heslo",
-      "send": "Odeslat kód"
+      "send": "Odeslat kód",
+      "sentToEmail": "Ověřovací kód byl odeslán na číslo <bold>{{email}}</bold>",
+      "sentToPrompt": "Ověřovací kód byl odeslán na adresu:",
+      "spamNotice": "Nemůžete najít e-mail? Zkontrolujte prosím složku s nevyžádanou poštou."
     },
     "register": {
       "confirmPasswordLabel": "Potvrďte heslo",

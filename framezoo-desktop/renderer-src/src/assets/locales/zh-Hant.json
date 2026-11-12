@@ -147,7 +147,10 @@
       "resendIn": "{{seconds}}s 中提供重新傳送功能",
       "resetDescription": "請輸入發送到您信箱的驗證碼。",
       "resetTitle": "重設密碼",
-      "send": "傳送代碼"
+      "send": "傳送代碼",
+      "sentToEmail": "驗證碼已傳送至<bold>{{email}}</bold>",
+      "sentToPrompt": "驗證碼已發送至：",
+      "spamNotice": "找不到郵件？請檢查您的垃圾郵件或廣告郵件資料夾。"
     },
     "register": {
       "confirmPasswordLabel": "確認密碼",

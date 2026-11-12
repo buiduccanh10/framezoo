@@ -44,6 +44,7 @@ export function PasswordRecoveryPart(props: {
           "auth.otp.resetDescription",
           "Enter the code sent to your email.",
         )}
+        email={email}
         challenge={challenge}
         onVerify={verifyOtp}
         onResend={resendOtp}

@@ -147,7 +147,10 @@
       "resendIn": "Endursending möguleg eftir {{seconds}}s",
       "resetDescription": "Sláðu inn kóðann sem sendur var á netfangið þitt.",
       "resetTitle": "Endurstilla lykilorðið þitt",
-      "send": "Senda kóða"
+      "send": "Senda kóða",
+      "sentToEmail": "Staðfestingarkóði hefur verið sendur til <bold>{{email}}</bold>",
+      "sentToPrompt": "Staðfestingarkóði hefur verið sendur til:",
+      "spamNotice": "Finnurðu ekki tölvupóstinn? Athugaðu ruslpóstmöppuna þína."
     },
     "register": {
       "confirmPasswordLabel": "Staðfestu lykilorð",

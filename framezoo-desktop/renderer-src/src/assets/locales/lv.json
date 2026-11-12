@@ -147,7 +147,10 @@
       "resendIn": "Atkārtota nosūtīšana pieejama pēc {{seconds}}s",
       "resetDescription": "Ievadiet kodu, kas nosūtīts uz jūsu e-pastu.",
       "resetTitle": "Atiestatiet paroli",
-      "send": "Sūtīt kodu"
+      "send": "Sūtīt kodu",
+      "sentToEmail": "Verifikācijas kods ir nosūtīts uz <bold>{{email}}</bold>",
+      "sentToPrompt": "Verifikācijas kods ir nosūtīts uz:",
+      "spamNotice": "Nevarat atrast e-pastu? Lūdzu, pārbaudiet surogpasta vai nevēlamā pasta mapi."
     },
     "register": {
       "confirmPasswordLabel": "Apstipriniet paroli",

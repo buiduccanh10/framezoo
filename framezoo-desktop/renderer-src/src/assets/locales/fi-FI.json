@@ -147,7 +147,10 @@
       "resendIn": "Uudelleenlähetys mahdollinen {{seconds}}s kuluttua",
       "resetDescription": "Syötä sähköpostiisi lähetetty koodi.",
       "resetTitle": "Palauta salasanasi",
-      "send": "Lähetä koodi"
+      "send": "Lähetä koodi",
+      "sentToEmail": "Vahvistuskoodi on lähetetty osoitteeseen <bold>{{email}}</bold>",
+      "sentToPrompt": "Vahvistuskoodi on lähetetty osoitteeseen:",
+      "spamNotice": "Eikö sähköpostia löydy? Tarkista roskapostikansiosi."
     },
     "register": {
       "confirmPasswordLabel": "Vahvista salasana",

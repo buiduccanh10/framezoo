@@ -147,7 +147,10 @@
       "resendIn": "Erneutes Senden verfügbar in {{seconds}}s",
       "resetDescription": "Geben Sie den an Ihre E-Mail-Adresse gesendeten Code ein.",
       "resetTitle": "Setzen Sie Ihr Passwort zurück",
-      "send": "Code senden"
+      "send": "Code senden",
+      "sentToEmail": "Der Bestätigungscode wurde an <bold>{{email}}</bold> gesendet.",
+      "sentToPrompt": "Der Bestätigungscode wurde an folgende Adresse gesendet:",
+      "spamNotice": "Sie können die E-Mail nicht finden? Bitte überprüfen Sie Ihren Spam- oder Junk-Ordner."
     },
     "register": {
       "confirmPasswordLabel": "Passwort bestätigen",

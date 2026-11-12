@@ -147,7 +147,10 @@
       "resendIn": "Genafsendelse tilgængelig om {{seconds}}s",
       "resetDescription": "Indtast den kode, der er sendt til din e-mail.",
       "resetTitle": "Nulstil din adgangskode",
-      "send": "Send kode"
+      "send": "Send kode",
+      "sentToEmail": "Bekræftelseskoden er blevet sendt til <bold>{{email}}</bold>",
+      "sentToPrompt": "Bekræftelseskoden er blevet sendt til:",
+      "spamNotice": "Kan du ikke finde e-mailen? Tjek venligst din spam- eller uønsket mappe."
     },
     "register": {
       "confirmPasswordLabel": "Bekræft adgangskode",

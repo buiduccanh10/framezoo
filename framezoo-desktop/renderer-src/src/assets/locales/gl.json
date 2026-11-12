@@ -147,7 +147,10 @@
       "resendIn": "Reenvío dispoñible en {{seconds}}s",
       "resetDescription": "Introduce o código que che enviamos ao teu correo electrónico.",
       "resetTitle": "Restablecer o teu contrasinal",
-      "send": "Enviar código"
+      "send": "Enviar código",
+      "sentToEmail": "Enviouse o código de verificación a <bold>{{email}}</bold>",
+      "sentToPrompt": "Enviouse o código de verificación a:",
+      "spamNotice": "Non atopas o correo electrónico? Comproba o teu cartafol de correo non desexado ou spam."
     },
     "register": {
       "confirmPasswordLabel": "Confirme o contrasinal",

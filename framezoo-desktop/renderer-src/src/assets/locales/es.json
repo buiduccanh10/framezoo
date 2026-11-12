@@ -147,7 +147,10 @@
       "resendIn": "Reenvío disponible en {{seconds}}s",
       "resetDescription": "Introduce el código que te enviamos por correo electrónico.",
       "resetTitle": "Restablecer su contraseña",
-      "send": "Enviar código"
+      "send": "Enviar código",
+      "sentToEmail": "El código de verificación se ha enviado a <bold>{{email}}</bold>",
+      "sentToPrompt": "El código de verificación se ha enviado a:",
+      "spamNotice": "¿No encuentras el correo electrónico? Revisa tu carpeta de correo no deseado o spam."
     },
     "register": {
       "confirmPasswordLabel": "confirmar Contraseña",

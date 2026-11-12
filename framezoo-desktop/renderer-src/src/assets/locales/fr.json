@@ -147,7 +147,10 @@
       "resendIn": "Renvoi disponible dans {{seconds}}s",
       "resetDescription": "Saisissez le code qui vous a été envoyé par courriel.",
       "resetTitle": "Réinitialisez votre mot de passe",
-      "send": "Envoyer le code"
+      "send": "Envoyer le code",
+      "sentToEmail": "Le code de vérification a été envoyé à <bold>{{email}}</bold>",
+      "sentToPrompt": "Le code de vérification a été envoyé à :",
+      "spamNotice": "Vous ne trouvez pas l'e-mail ? Veuillez vérifier votre dossier de courriers indésirables."
     },
     "register": {
       "confirmPasswordLabel": "Confirmez le mot de passe",
