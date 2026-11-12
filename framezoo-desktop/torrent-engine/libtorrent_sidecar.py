@@ -47,10 +47,16 @@ def main() -> None:
                     )
                 elif message_type == "stop":
                     if session_id:
-                        engine.stop(session_id)
+                        engine.stop(
+                            session_id,
+                            discard_cache=bool(message.get("discardCache")),
+                        )
                     else:
                         for s_id in list(engine.sessions.keys()):
-                            engine.stop(s_id)
+                            engine.stop(
+                                s_id,
+                                discard_cache=bool(message.get("discardCache")),
+                            )
                     emit(
                         {
                             "type": "response",
@@ -59,15 +65,22 @@ def main() -> None:
                         },
                     )
                 elif message_type == "stop_all":
+                    discard_cache = bool(message.get("discardCache"))
                     for s_id in list(engine.sessions.keys()):
-                        engine.stop(s_id)
+                        engine.stop(s_id, discard_cache=discard_cache)
+                    discard_keys = []
                     with engine.lock:
                         for record in list(engine.records.values()):
                             if not record.session_ids:
+                                if discard_cache:
+                                    record.persistent_cache = False
+                                    discard_keys.append(record.key)
                                 record.pause_discovery()
                                 record.update_file_priorities()
                                 if record.persistent_cache and record.cache_ready:
                                     engine._save_record_resume_data(record)
+                    for record_key in discard_keys:
+                        engine._schedule_record_removal(record_key)
                     emit(
                         {
                             "type": "response",

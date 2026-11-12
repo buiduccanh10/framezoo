@@ -1068,6 +1068,136 @@ class SidecarStreamTest(unittest.TestCase):
 
         self.assertEqual(calls, ["tracker", "dht"])
 
+    def test_reactivates_shared_record_when_target_piece_stalls(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.session_id = "torrent-target-reactivate-test"
+        runtime._reannounce_lock = threading.Lock()
+        runtime._last_reannounce = -constants.REANNOUNCE_COOLDOWN
+        reactivated = []
+
+        class FakeStatus:
+            num_peers = 42
+            download_rate = 300_000
+
+        class FakeRecord:
+            def reactivate(self, session_id):
+                reactivated.append(session_id)
+
+        class FakeHandle:
+            def status(self):
+                return FakeStatus()
+
+            def piece_availability(self):
+                return [0] * 8
+
+            def force_reannounce(self):
+                pass
+
+            def force_dht_announce(self):
+                pass
+
+        runtime.record = FakeRecord()
+        runtime.handle = FakeHandle()
+        runtime._force_reannounce_if_stalled(7, 20, 1.1)
+
+        self.assertEqual(reactivated, [runtime.session_id])
+
+    def test_discard_cache_on_stop_removes_existing_record(self):
+        from torrent_engine import LibtorrentEngine, TorrentRecord
+
+        class FakeStatus:
+            has_metadata = True
+            paused = False
+            num_peers = 0
+            download_rate = 0
+            total_done = 0
+            total_wanted = 1
+
+        class FakeFiles:
+            def num_files(self):
+                return 1
+
+        class FakeInfo:
+            def files(self):
+                return FakeFiles()
+
+        class FakeHandle:
+            def status(self):
+                return FakeStatus()
+
+            def torrent_file(self):
+                return FakeInfo()
+
+            def info_hash(self):
+                return "68a3810de8b2faffda6a431e89c7fe97c85645b3"
+
+            def get_peer_info(self):
+                return []
+
+            def prioritize_files(self, _priorities):
+                pass
+
+        root = Path(tempfile.mkdtemp(prefix="torrent-no-cache-test-"))
+        cache_path = root / "cache"
+        cache_path.mkdir()
+        (cache_path / "partial.data").write_bytes(b"partial")
+
+        class FakeSession:
+            def remove_torrent(self, _handle):
+                pass
+
+        class FakeHttpServer:
+            def unregister(self, _session_id):
+                pass
+
+            def close(self):
+                pass
+
+        engine = object.__new__(LibtorrentEngine)
+        engine._session = FakeSession()
+        engine._session_lock = threading.Lock()
+        engine._start_lock = threading.RLock()
+        engine.http_server = FakeHttpServer()
+        engine.sessions = {}
+        engine.records = {}
+        engine.session_records = {}
+        engine.lock = threading.RLock()
+        engine.peer_id = b"-FZTEST-0123456789"
+        engine.listen_port = 0
+        try:
+            handle = FakeHandle()
+            record = TorrentRecord(
+                engine,
+                "no-cache-key",
+                handle,
+                str(cache_path),
+                persistent_cache=True,
+                cache_ready=True,
+                cache_root=str(root),
+                max_bytes=1024,
+                trackers=[],
+            )
+            runtime = TorrentRuntime(
+                engine,
+                "no-cache-session",
+                {"sourceId": "test"},
+                handle,
+                str(cache_path),
+                persistent_cache=True,
+                record=record,
+            )
+            engine.records[record.key] = record
+            engine.sessions[runtime.session_id] = runtime
+            engine.session_records[runtime.session_id] = record.key
+            record.session_ids.add(runtime.session_id)
+
+            engine.stop(runtime.session_id, discard_cache=True)
+
+            self.assertFalse(cache_path.exists())
+        finally:
+            engine.close()
+            shutil.rmtree(root, ignore_errors=True)
+
     def test_kicks_target_piece_to_force_endgame_re_request(self):
         runtime = object.__new__(TorrentRuntime)
         runtime.session_id = "torrent-target-escalation-test"

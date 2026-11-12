@@ -632,6 +632,10 @@ class LibtorrentEngine:
                     record_was_idle = record.add_session(session_id)
                     record.persistent_cache = persistent_cache
                     record.max_bytes = max_bytes
+                    if not persistent_cache:
+                        for active_runtime in self.sessions.values():
+                            if getattr(active_runtime, "record", None) is record:
+                                active_runtime.persistent_cache = False
             if record is not None:
                 runtime = TorrentRuntime(
                     self,
@@ -787,7 +791,7 @@ class LibtorrentEngine:
             return False
         return write_atomic_resume_data(record.handle, record.save_path)
 
-    def stop(self, session_id: str) -> None:
+    def stop(self, session_id: str, discard_cache: bool = False) -> None:
         with self._start_lock:
             with self.lock:
                 runtime = self.sessions.pop(session_id, None)
@@ -795,7 +799,22 @@ class LibtorrentEngine:
                 record = self.records.get(record_key) if record_key else None
             if runtime is None:
                 return
+            if discard_cache:
+                runtime.persistent_cache = False
             if record is not None:
+                if discard_cache:
+                    # Settings can change while an idle handle is retained. Apply
+                    # the current no-cache choice before runtime.stop() can write
+                    # resume data or schedule the grace-period timer.
+                    with record.lock:
+                        record.persistent_cache = False
+                        if record.removal_timer is not None:
+                            record.removal_timer.cancel()
+                            record.removal_timer = None
+                    with self.lock:
+                        for active_runtime in self.sessions.values():
+                            if getattr(active_runtime, "record", None) is record:
+                                active_runtime.persistent_cache = False
                 if record.discovery is not None:
                     try:
                         record.discovery._harvest_peers_from_handle()

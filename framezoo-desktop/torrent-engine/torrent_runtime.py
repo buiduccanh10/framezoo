@@ -1824,24 +1824,35 @@ class TorrentRuntime:
                 return
 
             announced = False
-            force_reannounce = getattr(self.handle, "force_reannounce", None)
-            force_dht_announce = getattr(
-                self.handle,
-                "force_dht_announce",
-                None,
-            )
-            try:
-                if callable(force_reannounce):
-                    force_reannounce()
+            record = getattr(self, "record", None)
+            reactivate = getattr(record, "reactivate", None)
+            if callable(reactivate):
+                try:
+                    reactivate(self.session_id)
                     announced = True
-            except Exception:
-                pass
-            try:
-                if callable(force_dht_announce):
-                    force_dht_announce()
-                    announced = True
-            except Exception:
-                pass
+                except Exception as error:
+                    sys.stderr.write(
+                        f"[sidecar] Failed to reactivate stalled torrent: {error}\n",
+                    )
+            if not announced:
+                force_reannounce = getattr(self.handle, "force_reannounce", None)
+                force_dht_announce = getattr(
+                    self.handle,
+                    "force_dht_announce",
+                    None,
+                )
+                try:
+                    if callable(force_reannounce):
+                        force_reannounce()
+                        announced = True
+                except Exception:
+                    pass
+                try:
+                    if callable(force_dht_announce):
+                        force_dht_announce()
+                        announced = True
+                except Exception:
+                    pass
             if not announced:
                 return
             self._last_reannounce = now
