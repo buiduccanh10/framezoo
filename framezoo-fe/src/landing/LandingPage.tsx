@@ -195,6 +195,11 @@ export function LandingPage() {
                 ? downloadState.manifest.version
                 : null
             }
+            totalDownloads={
+              downloadState.status === "ready"
+                ? downloadState.manifest.totalDownloads
+                : null
+            }
           />
         </div>
         <FeatureSection copy={activeCopy.features} />

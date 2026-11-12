@@ -18,6 +18,7 @@ export interface AppDownloadOption {
 export interface AppDownloadManifest {
   version: string | null;
   options: AppDownloadOption[];
+  totalDownloads?: number | null;
 }
 
 export class DownloadManifestError extends Error {
@@ -109,12 +110,20 @@ export function validateAppDownloadManifest(
     };
   });
 
+  const rawTotalDownloads = (manifest as { totalDownloads?: unknown })
+    .totalDownloads;
+  const totalDownloads =
+    typeof rawTotalDownloads === "number" && Number.isFinite(rawTotalDownloads)
+      ? Math.max(0, Math.floor(rawTotalDownloads))
+      : null;
+
   return {
     version:
       typeof manifest.version === "string"
         ? manifest.version.trim() || null
         : null,
     options,
+    totalDownloads,
   };
 }
 

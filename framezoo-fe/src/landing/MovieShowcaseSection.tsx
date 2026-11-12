@@ -542,9 +542,6 @@ export function MovieShowcaseSection({
         aria-label={copy.title}
       >
         <div className="landing-mosaic-shell" ref={mosaicShellRef}>
-          <div className="landing-mosaic-label">
-            <span className="landing-eyebrow">{copy.eyebrow}</span>
-          </div>
           <div
             className="landing-movie-mosaic"
             aria-hidden="true"

@@ -22,7 +22,8 @@
     "primaryCta": "Tải xuống",
     "secondaryCta": "Khám phá trải nghiệm",
     "imageAlt": "Trình phát stream tốc độ cao Framezoo hiển thị màn hình khám phá",
-    "version": "Bản desktop"
+    "version": "Bản desktop",
+    "downloads": "lượt tải"
   },
   "movies": {
     "eyebrow": "KHÁM PHÁ CÙNG FRAMEZOO",
@@ -268,11 +269,11 @@
     "step3": {
       "step": "3",
       "title": "Cài đặt & Áp dụng",
-      "openFramezoo": "Open Framezoo",
+      "openFramezoo": "Mở Framezoo",
       "openFramezooDisabledTooltip": "Cần mở từ Framezoo Desktop sau khi đã đăng nhập",
       "notConnectedNotice": "Lưu ý: Trang này chưa được liên kết tài khoản Framezoo. Để đồng bộ tự động bằng nút 'Open Framezoo', vui lòng mở cấu hình từ Framezoo Desktop (sau khi đã đăng nhập). Hoặc bạn có thể dùng 'Copy Manifest URL' để dùng cho Stremio hoặc cài đặt thủ công.",
       "or": "hoặc",
-      "copyManifest": "Copy Manifest URL",
+      "copyManifest": "Sao chép URL kê khai",
       "copied": "Đã sao chép!",
       "noticeLabel": "Lưu ý:",
       "noticeText": "API Key được lưu trên trình duyệt của bạn. Khi sử dụng Framezoo Desktop hoặc Stremio, key này sẽ được chuyển tiếp an toàn để tìm kiếm phụ đề. Bạn có thể thay đổi hoặc xóa bất kỳ lúc nào."

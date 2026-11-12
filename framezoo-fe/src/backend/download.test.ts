@@ -37,6 +37,24 @@ describe("download manifest", () => {
           url: "https://downloads.example.com/download?option=mac-universal",
         },
       ],
+      totalDownloads: null,
+    });
+  });
+
+  it("parses total downloads when provided", () => {
+    const manifest = validateAppDownloadManifest(
+      {
+        version: "2.2.4",
+        options: [],
+        totalDownloads: 4324,
+      },
+      "https://downloads.example.com",
+    );
+
+    expect(manifest).toEqual({
+      version: "2.2.4",
+      options: [],
+      totalDownloads: 4324,
     });
   });
 
@@ -46,7 +64,7 @@ describe("download manifest", () => {
         { version: null, options: [] },
         "https://downloads.example.com",
       ),
-    ).toEqual({ version: null, options: [] });
+    ).toEqual({ version: null, options: [], totalDownloads: null });
   });
 
   it("rejects malformed manifests", () => {

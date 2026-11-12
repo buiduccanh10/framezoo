@@ -19,7 +19,8 @@
     "description": "Framezoo est un lecteur de streaming haut débit doté d'une interface utilisateur fluide et intuitive, de métadonnées de film riches, d'une synchronisation illimitée des sous-titres en flux et d'une prise en charge des sous-titres multi-sources.",
     "imageAlt": "Lecteur de streaming haut débit Framezoo affichant l'écran de découverte",
     "titleAccent": "surveillez votre chemin.",
-    "title": "Diffusez rapidement,"
+    "title": "Diffusez rapidement,",
+    "downloads": "téléchargements"
   },
   "download": {
     "eyebrow": "CHOISISSEZ VOTRE CONSTRUCTION",

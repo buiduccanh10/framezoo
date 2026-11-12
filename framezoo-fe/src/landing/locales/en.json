@@ -22,7 +22,8 @@
     "primaryCta": "Download",
     "secondaryCta": "Explore the experience",
     "imageAlt": "Framezoo high-speed streaming player showing the discovery screen",
-    "version": "Desktop release"
+    "version": "Desktop release",
+    "downloads": "downloads"
   },
   "movies": {
     "eyebrow": "FRAMEZOO DISCOVERY",
