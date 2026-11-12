@@ -19,7 +19,8 @@
     "title": "流速度快，",
     "titleAccent": "注意你的方式。",
     "description": "Framezoo 是一款高速流媒体播放器，具有流畅、直观的 UI、丰富的电影元数据、无限流字幕同步和多源字幕支持。",
-    "imageAlt": "Framezoo 高速流媒体播放器显示发现屏幕"
+    "imageAlt": "Framezoo 高速流媒体播放器显示发现屏幕",
+    "downloads": "下载"
   },
   "download": {
     "eyebrow": "选择您的构建",
@@ -390,6 +391,60 @@
           }
         ]
       }
+    }
+  },
+  "subtitlesConfigure": {
+    "account": {
+      "configuringFor": "配置帐户：",
+      "verifying": "正在从桌面应用程序验证帐户票证...",
+      "desktopLinked": "桌面链接",
+      "saveFailed": "保存失败。",
+      "saveButton": "保存到 Framezoo 帐户",
+      "saving": "正在保存到帐户...",
+      "instantHint": "（立即同步到桌面应用程序）",
+      "saveSuccess": "已成功保存到您的帐户！桌面应用程序现在将自动使用此密钥。",
+      "saveNetworkError": "保存到帐户时出现网络错误。"
+    },
+    "hero": {
+      "description": "设置您的个人 Wyzie API 密钥以获得更快的字幕并绕过共享社区速率限制。",
+      "title": "配置 Framezoo 字幕"
+    },
+    "pageTitle": "配置 Framezoo 字幕 |框架动物园",
+    "step1": {
+      "title": "获取免费的 Wyzie API 密钥",
+      "step1": "访问上面的链接获取或兑换 API 密钥。",
+      "description": "Wyzie Subtitles 提供了庞大的多语言字幕目录。您可以在其官方门户上生成或兑换您的个人 API 密钥：",
+      "step2": "复制生成的 API 密钥字符串。",
+      "step3": "返回此处并将其粘贴到下面的步骤 2 中。",
+      "openStore": "开设 Wyzie 商店（兑换）"
+    },
+    "step2": {
+      "title": "输入 Wyzie API 密钥",
+      "show": "展示",
+      "hide": "隐藏",
+      "testing": "正在验证...",
+      "placeholder": "将您的 Wyzie API 密钥粘贴到此处...",
+      "testButton": "测试 API 密钥",
+      "messages": {
+        "verifying": "与 Wyzie 验证...",
+        "valid": "API 密钥有效且有效！",
+        "invalid": "API 密钥无效或已过期。",
+        "empty": "请在测试前输入 API 密钥。",
+        "rateLimit": "API 密钥已超出速率限制。",
+        "networkError": "连接到 sub.wyzie.io 时出现网络错误。请检查您的连接。",
+        "serverError": "Wyzie 服务器返回 HTTP {{status}}。"
+      },
+      "clearButton": "清除键"
+    },
+    "step3": {
+      "openFramezooDisabledTooltip": "需要在登录时从 Framezoo Desktop 打开",
+      "copied": "复制了！",
+      "noticeLabel": "注意：",
+      "title": "安装和应用",
+      "openFramezoo": "开放框架动物园",
+      "copyManifest": "复制清单 URL",
+      "noticeText": "您的 API 密钥安全地存储在您的设备上。它仅被转发以搜索和检索电影和电视剧的字幕。您可以随时更新或删除它。",
+      "notConnectedNotice": "注意：您尚未连接 Framezoo 帐户票证。要直接与“打开 Framezoo”同步，请在登录后从 Framezoo 桌面应用程序打开此页面。否则，请复制下面的清单 URL 来使用它。"
     }
   }
 }

@@ -13,11 +13,7 @@ const DESKTOP_DOWNLOAD_OPTION_IDS = new Set([
 ]);
 
 export type DesktopDownloadOptionId =
-  | 'mac-arm64'
-  | 'mac-x64'
-  | 'mac-universal'
-  | 'win-x64'
-  | 'win-arm64';
+  'mac-arm64' | 'mac-x64' | 'mac-universal' | 'win-x64' | 'win-arm64';
 
 export interface DesktopDownloadManifestOption {
   id: DesktopDownloadOptionId;
@@ -115,5 +111,67 @@ export async function fetchDesktopDownloadManifest(): Promise<DesktopDownloadMan
     return isDesktopDownloadManifest(payload) ? payload : null;
   } catch {
     return null;
+  }
+}
+
+interface GitHubReleaseAsset {
+  name?: string;
+  download_count?: number;
+}
+
+interface GitHubReleaseItem {
+  tag_name?: string;
+  assets?: GitHubReleaseAsset[];
+}
+
+let cachedTotalDownloads: { value: number; timestamp: number } | null = null;
+const DOWNLOAD_STATS_CACHE_TTL_MS = 30 * 60 * 1000; // 30 minutes
+
+export async function fetchDesktopTotalDownloads(): Promise<number | null> {
+  const now = Date.now();
+  if (cachedTotalDownloads && now - cachedTotalDownloads.timestamp < DOWNLOAD_STATS_CACHE_TTL_MS) {
+    return cachedTotalDownloads.value;
+  }
+
+  const endpoint = `https://api.github.com/repos/${DESKTOP_RELEASE_OWNER}/${DESKTOP_RELEASE_REPO}/releases?per_page=100`;
+
+  try {
+    const headers: Record<string, string> = {
+      Accept: 'application/vnd.github+json',
+      'User-Agent': 'Framezoo-Backend',
+    };
+    if (process.env.GITHUB_TOKEN) {
+      headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
+    }
+
+    const response = await fetch(endpoint, {
+      headers,
+      signal: AbortSignal.timeout(6000),
+    });
+
+    if (!response.ok) {
+      return cachedTotalDownloads ? cachedTotalDownloads.value : null;
+    }
+
+    const releases: unknown = await response.json();
+    if (!Array.isArray(releases)) {
+      return cachedTotalDownloads ? cachedTotalDownloads.value : null;
+    }
+
+    let total = 0;
+    for (const release of releases as GitHubReleaseItem[]) {
+      if (Array.isArray(release.assets)) {
+        for (const asset of release.assets) {
+          if (typeof asset.download_count === 'number' && asset.download_count > 0) {
+            total += asset.download_count;
+          }
+        }
+      }
+    }
+
+    cachedTotalDownloads = { value: total, timestamp: now };
+    return total;
+  } catch {
+    return cachedTotalDownloads ? cachedTotalDownloads.value : null;
   }
 }

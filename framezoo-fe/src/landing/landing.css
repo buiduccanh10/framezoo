@@ -487,6 +487,41 @@
   margin-top: 34px;
 }
 
+.landing-hero-meta {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+  color: var(--landing-muted);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.landing-hero-meta .landing-app-version {
+  margin-top: 0;
+}
+
+.landing-hero-meta-dot {
+  opacity: 0.45;
+}
+
+.landing-hero-downloads {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--color-accent-warm);
+}
+
+.landing-hero-downloads-icon {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+}
+
 .landing-app-version {
   display: inline-block;
   margin-top: 16px;
@@ -3282,7 +3317,6 @@ body {
   position: relative;
   height: min(48rem, calc(100svh - 8rem));
   min-height: 31rem;
-  padding-top: var(--space-lg);
 }
 
 .landing-mosaic-label {

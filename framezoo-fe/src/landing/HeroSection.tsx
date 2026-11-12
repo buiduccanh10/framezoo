@@ -1,14 +1,23 @@
 import { type MouseEvent } from "react";
 
 import type { LandingCopy } from "./i18n";
-import { ArrowUpRightIcon } from "./LandingIcon";
+import { ArrowUpRightIcon, DownloadIcon } from "./LandingIcon";
 import { MovieShowcaseSection } from "./MovieShowcaseSection";
+
+export function formatDownloadCount(count: number): string {
+  if (count >= 1000) {
+    const inK = (count / 1000).toFixed(1).replace(/\.0$/, "");
+    return `${inK}k+`;
+  }
+  return `${count}`;
+}
 
 interface HeroSectionProps {
   copy: LandingCopy["hero"];
   movieCopy: LandingCopy["movies"];
   onHashLinkClick: (event: MouseEvent<HTMLAnchorElement>) => void;
   version: string | null;
+  totalDownloads?: number | null;
 }
 
 export function HeroSection({
@@ -16,11 +25,11 @@ export function HeroSection({
   movieCopy,
   onHashLinkClick,
   version,
+  totalDownloads,
 }: HeroSectionProps) {
   return (
     <section className="landing-hero" aria-labelledby="hero-title">
       <div className="landing-hero-copy landing-reveal landing-reveal-one">
-        <span className="landing-hero-kicker">{copy.version}</span>
         <h1 id="hero-title">
           {copy.title} <span>{copy.titleAccent}</span>
         </h1>
@@ -42,8 +51,26 @@ export function HeroSection({
             {copy.secondaryCta}
           </a>
         </div>
-        {version ? (
-          <span className="landing-app-version">v{version}</span>
+        {version || totalDownloads ? (
+          <div className="landing-hero-meta">
+            {version ? (
+              <span className="landing-app-version">v{version}</span>
+            ) : null}
+            {version && totalDownloads ? (
+              <span className="landing-hero-meta-dot" aria-hidden="true">
+                •
+              </span>
+            ) : null}
+            {totalDownloads ? (
+              <span className="landing-hero-downloads">
+                <DownloadIcon className="landing-hero-downloads-icon" />
+                <span>
+                  {formatDownloadCount(totalDownloads)}{" "}
+                  {copy.downloads ?? "lượt tải"}
+                </span>
+              </span>
+            ) : null}
+          </div>
         ) : null}
       </div>
 

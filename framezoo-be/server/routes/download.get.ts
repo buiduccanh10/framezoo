@@ -1,9 +1,12 @@
 import { setHeader } from 'h3';
 
-import { fetchDesktopDownloadManifest } from '../utils/desktopRelease';
+import { fetchDesktopDownloadManifest, fetchDesktopTotalDownloads } from '../utils/desktopRelease';
 
 export default defineEventHandler(async event => {
-  const manifest = await fetchDesktopDownloadManifest();
+  const [manifest, totalDownloads] = await Promise.all([
+    fetchDesktopDownloadManifest(),
+    fetchDesktopTotalDownloads(),
+  ]);
 
   setHeader(event, 'Cache-Control', 'no-store');
 
@@ -16,5 +19,6 @@ export default defineEventHandler(async event => {
         description: entry.description,
         url: entry.url,
       })) ?? [],
+    totalDownloads: totalDownloads ?? null,
   };
 });

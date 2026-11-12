@@ -19,7 +19,8 @@
     "title": "빠르게 스트리밍하고,",
     "titleAccent": "조심하세요.",
     "imageAlt": "검색 화면을 보여주는 Framezoo 고속 스트리밍 플레이어",
-    "description": "Framezoo는 부드럽고 직관적인 UI, 풍부한 영화 메타데이터, 무제한 스트림 자막 동기화 및 다중 소스 자막 지원을 갖춘 고속 스트리밍 플레이어입니다."
+    "description": "Framezoo는 부드럽고 직관적인 UI, 풍부한 영화 메타데이터, 무제한 스트림 자막 동기화 및 다중 소스 자막 지원을 갖춘 고속 스트리밍 플레이어입니다.",
+    "downloads": "다운로드"
   },
   "download": {
     "eyebrow": "빌드를 선택하세요",
