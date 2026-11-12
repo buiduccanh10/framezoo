@@ -1921,10 +1921,6 @@ class TorrentRuntime:
         sync_metadata: Optional[dict[str, Any]] = None,
     ) -> bool:
         is_tail_probe = start > 0 and not track_position and not is_sync
-        tail_pending = any(
-            not self._piece_have(tp)
-            for tp in getattr(self, "_startup_required_tail_pieces", set())
-        )
         is_startup_header_probe = (
             start < constants.RANGE_PREFETCH_BYTES
             and not getattr(self, "_has_streamed_bytes", False)
@@ -1932,10 +1928,7 @@ class TorrentRuntime:
         startup_bounded = (
             getattr(self, "info", None) is not None
             and not is_sync
-            and (
-                is_startup_header_probe
-                or tail_pending
-            )
+            and is_startup_header_probe
         )
         if is_tail_probe:
             prefetch_length = max(1, end - start + 1)
