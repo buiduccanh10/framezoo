@@ -147,7 +147,10 @@
       "resendIn": "Có thể gửi lại sau {{seconds}}s",
       "resetDescription": "Nhập mã đã được gửi đến email của bạn.",
       "resetTitle": "Đặt lại mật khẩu",
-      "send": "Gửi mã"
+      "send": "Gửi mã",
+      "sentToEmail": "Mã xác minh đã được gửi đến <bold>{{email}}</bold>",
+      "sentToPrompt": "Mã xác minh đã được gửi đến:",
+      "spamNotice": "Không nhận được email? Vui lòng kiểm tra hộp thư rác hoặc mục Spam."
     },
     "register": {
       "confirmPasswordLabel": "Xác nhận mật khẩu",

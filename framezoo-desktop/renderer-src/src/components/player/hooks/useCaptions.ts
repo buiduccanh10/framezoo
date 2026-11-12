@@ -648,7 +648,13 @@ export function useCaptions() {
               scoreSubtitleReleaseMatch(caption, source?.releaseTitle) ?? 100,
             confidence: "high" as const,
           }))
-          .sort((a, b) => b.score - a.score || a.index - b.index);
+          .sort((a, b) => {
+            const embeddedPriority =
+              Number(isEmbeddedCaption(b.caption)) -
+              Number(isEmbeddedCaption(a.caption));
+            if (embeddedPriority !== 0) return embeddedPriority;
+            return b.score - a.score || a.index - b.index;
+          });
       }
 
       const videoDurationMs = videoDuration > 0 ? videoDuration * 1000 : 0;

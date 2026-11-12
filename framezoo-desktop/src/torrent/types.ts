@@ -11,8 +11,8 @@ export interface TorrentEngine {
     request: TorrentStartRequest,
     onStatus: TorrentStatusListener,
   ): Promise<TorrentSession>;
-  stop(sessionId: string): Promise<void>;
-  stopAll?(): Promise<void>;
+  stop(sessionId: string, discardCache?: boolean): Promise<void>;
+  stopAll?(discardCache?: boolean): Promise<void>;
   getStatus(sessionId: string): TorrentStatus | null;
   dispose(): Promise<void>;
   /** Pre-initialize the engine so OS network-permission dialogs appear at

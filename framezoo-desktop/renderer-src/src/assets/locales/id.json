@@ -147,7 +147,10 @@
       "resendIn": "Pengiriman ulang tersedia di __PH__0__s",
       "resetDescription": "Masukkan kode yang dikirimkan ke email Anda.",
       "resetTitle": "Atur ulang kata sandi Anda",
-      "send": "Kirim kode"
+      "send": "Kirim kode",
+      "sentToEmail": "Kode verifikasi telah dikirim ke <bold>{{email}}</bold>",
+      "sentToPrompt": "Kode verifikasi telah dikirim ke:",
+      "spamNotice": "Tidak menemukan emailnya? Silakan periksa folder spam atau sampah Anda."
     },
     "register": {
       "confirmPasswordLabel": "Konfirmasi Kata Sandi",

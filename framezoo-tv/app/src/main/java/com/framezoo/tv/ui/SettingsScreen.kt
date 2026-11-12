@@ -1145,6 +1145,7 @@ private fun PasswordChangeDialog(
                         code = otpCode,
                         isLoading = loading,
                         submitLabel = t("auth.otp.finish"),
+                        email = state.userEmail,
                         onCodeChanged = { otpCode = it.filter(Char::isDigit).take(6) },
                         onVerify = {
                             scope.launch {
@@ -1287,6 +1288,7 @@ private fun EmailChangeDialog(
                         code = otpCode,
                         isLoading = loading,
                         submitLabel = t("auth.otp.continue"),
+                        email = state.userEmail,
                         onCodeChanged = { otpCode = it.filter(Char::isDigit).take(6) },
                         onVerify = {
                             scope.launch {
@@ -1318,6 +1320,7 @@ private fun EmailChangeDialog(
                         code = otpCode,
                         isLoading = loading,
                         submitLabel = t("auth.otp.finish"),
+                        email = newEmail,
                         onCodeChanged = { otpCode = it.filter(Char::isDigit).take(6) },
                         onVerify = {
                             scope.launch {

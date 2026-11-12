@@ -20,6 +20,7 @@ import { useQualityStore } from "@/stores/quality";
 import { useSubtitleStore } from "@/stores/subtitles";
 import { isAutoplayAllowed } from "@/utils/autoplay";
 import { getExternalSubtitleLanguageKey } from "@/utils/externalSubtitles/language";
+import { getExternalSubtitleCredentialScope } from "@/utils/externalSubtitles/scope";
 import {
   EXTERNAL_SUBTITLE_CACHE_GC_MS,
   EXTERNAL_SUBTITLE_CACHE_TTL_MS,
@@ -261,7 +262,7 @@ function getExternalSubtitleMediaKey(meta: PlayerMeta | null): string | null {
   const mediaKey = getMediaKey(meta);
   if (!mediaKey) return null;
 
-  return `${mediaKey}:${getExternalSubtitleLanguageKey(
+  return `${mediaKey}:${getExternalSubtitleCredentialScope()}:${getExternalSubtitleLanguageKey(
     useSubtitleStore.getState().lastSelectedLanguage,
     useLanguageStore.getState().language,
   )}`;
@@ -859,10 +860,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       if (s.externalSubtitleRefreshMediaKey === requestedMediaKey) {
         s.externalSubtitleRefreshMediaKey = null;
       }
-      if (
-        s.externalSubtitleRequestId === activeRequestId ||
-        getMediaKey(s.meta) === requestedMediaKey
-      ) {
+      if (getExternalSubtitleMediaKey(s.meta) === mediaKey) {
         s.isLoadingExternalSubtitles = true;
         s.externalSubtitleLoadError = null;
         s.externalSubtitleLoadProgress = {
@@ -885,7 +883,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       progressTimer = setInterval(() => {
         const activeStore = get();
         if (
-          getMediaKey(activeStore.meta) !== requestedMediaKey ||
+          getExternalSubtitleMediaKey(activeStore.meta) !== mediaKey ||
           !activeStore.isLoadingExternalSubtitles
         ) {
           if (progressTimer) clearInterval(progressTimer);
@@ -896,7 +894,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
           const step = Math.max(2, Math.floor((90 - currentProgress) / 7));
           currentProgress = Math.min(90, currentProgress + step);
           set((s) => {
-            if (getMediaKey(s.meta) === requestedMediaKey) {
+            if (getExternalSubtitleMediaKey(s.meta) === mediaKey) {
               s.externalSubtitleLoadProgress = {
                 completed: currentProgress,
                 total: 100,
@@ -940,7 +938,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
             total: number;
           }) => {
             const currentStore = get();
-            if (getMediaKey(currentStore.meta) !== requestedMediaKey) {
+            if (getExternalSubtitleMediaKey(currentStore.meta) !== mediaKey) {
               return;
             }
 
@@ -1003,7 +1001,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       if (progressTimer) clearInterval(progressTimer);
 
       const currentStore = get();
-      if (getMediaKey(currentStore.meta) === requestedMediaKey) {
+      if (getExternalSubtitleMediaKey(currentStore.meta) === mediaKey) {
         if (captions.length === 0) {
           queryClient.removeQueries({ queryKey, exact: true });
         }
@@ -1021,7 +1019,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
         });
       }
     } catch (error) {
-      if (getMediaKey(get().meta) !== requestedMediaKey) return;
+      if (getExternalSubtitleMediaKey(get().meta) !== mediaKey) return;
       console.error("Failed to load external subtitles:", error);
       set((s) => {
         s.externalSubtitleLoadError =
@@ -1030,7 +1028,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     } finally {
       if (progressTimer) clearInterval(progressTimer);
       set((s) => {
-        if (getMediaKey(s.meta) === requestedMediaKey) {
+        if (getExternalSubtitleMediaKey(s.meta) === mediaKey) {
           s.isLoadingExternalSubtitles = false;
         }
       });

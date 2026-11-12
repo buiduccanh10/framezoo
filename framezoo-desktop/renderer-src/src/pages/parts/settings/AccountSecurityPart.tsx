@@ -62,6 +62,7 @@ export function EmailChangeModal(props: {
               "auth.otp.emailOldDescription",
               "Enter the code sent to your current email.",
             )}
+            email={props.account.email}
             challenge={oldEmailChallenge}
             onVerify={verifyOldEmailOtp}
             onResend={resendOtp}
@@ -74,6 +75,7 @@ export function EmailChangeModal(props: {
               "auth.otp.emailNewDescription",
               "Enter the code sent to your new email.",
             )}
+            email={newEmail}
             challenge={newEmailChallenge}
             submitLabel={t("auth.otp.finish", "Finish")}
             onVerify={completeEmailChangeOtp}
@@ -187,6 +189,7 @@ export function PasswordChangeModal(props: {
               "auth.otp.passwordChangeDescription",
               "Enter the code sent to your email.",
             )}
+            email={props.account.email}
             challenge={passwordChallenge}
             submitLabel={t("auth.otp.finish", "Finish")}
             onVerify={completePasswordChangeOtp}

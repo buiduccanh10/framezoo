@@ -86,7 +86,7 @@ export class SidecarTorrentEngine implements TorrentEngine {
     }
   }
 
-  async stop(sessionId: string) {
+  async stop(sessionId: string, discardCache = false) {
     try {
       if (this.process) {
         await this.send(
@@ -94,6 +94,7 @@ export class SidecarTorrentEngine implements TorrentEngine {
             type: "stop",
             requestId: randomUUID(),
             sessionId,
+            discardCache,
           },
           5_000,
         );
@@ -106,7 +107,7 @@ export class SidecarTorrentEngine implements TorrentEngine {
     }
   }
 
-  async stopAll(): Promise<void> {
+  async stopAll(discardCache = false): Promise<void> {
     const sessions = Array.from(this.statuses.keys());
     try {
       if (this.process?.stdin.writable) {
@@ -114,6 +115,7 @@ export class SidecarTorrentEngine implements TorrentEngine {
           {
             type: "stop_all",
             requestId: randomUUID(),
+            discardCache,
           },
           5_000,
         );
@@ -123,7 +125,9 @@ export class SidecarTorrentEngine implements TorrentEngine {
         "[torrent] sidecar stop_all failed, falling back to per-session stop:",
         error,
       );
-      await Promise.allSettled(sessions.map((id) => this.stop(id)));
+      await Promise.allSettled(
+        sessions.map((id) => this.stop(id, discardCache)),
+      );
     } finally {
       this.listeners.clear();
       this.statuses.clear();

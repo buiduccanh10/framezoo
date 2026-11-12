@@ -1,6 +1,8 @@
+import { createHash } from 'node:crypto';
+
 import type { StremioSubtitle } from './types';
 
-export const SUBTITLE_CACHE_PREFIX = 'addon:subtitles:v1:';
+export const SUBTITLE_CACHE_PREFIX = 'addon:subtitles:v2:';
 export const MOVIE_SUBTITLE_CACHE_TTL = 24 * 60 * 60; // 24 hours
 export const SERIES_SUBTITLE_CACHE_TTL = 12 * 60 * 60; // 12 hours
 export const EMPTY_SUBTITLE_CACHE_TTL = 10 * 60; // 10 minutes (negative caching for retries)
@@ -10,11 +12,22 @@ const inFlightSearches = new Map<string, Promise<StremioSubtitle[]>>();
 
 /**
  * Generates a normalized cache key for subtitles.
- * e.g. "addon:subtitles:v1:movie:tt1877830" or "addon:subtitles:v1:series:tt0944947:1:1"
+ * e.g. "addon:subtitles:v2:server:movie:tt1877830:all" or
+ * "addon:subtitles:v2:user:<hash>:series:tt0944947:1:1:vi,en"
  */
-export const getSubtitleCacheKey = (type: string, cleanId: string): string => {
+export const hashSubtitleCredential = (value: string): string =>
+  createHash('sha256').update(value).digest('hex');
+
+export const getSubtitleCacheKey = (
+  type: string,
+  cleanId: string,
+  credentialScope = 'server',
+  languageScope = 'all',
+): string => {
   const sanitizedId = cleanId.replace(/\s+/g, '_');
-  return `${SUBTITLE_CACHE_PREFIX}${type}:${sanitizedId}`;
+  const sanitizedScope = credentialScope.replace(/[^a-zA-Z0-9:_-]/g, '_');
+  const sanitizedLanguageScope = languageScope.replace(/[^a-zA-Z0-9,_-]/g, '_');
+  return `${SUBTITLE_CACHE_PREFIX}${sanitizedScope}:${type}:${sanitizedId}:${sanitizedLanguageScope}`;
 };
 
 /**
@@ -32,7 +45,7 @@ export const getSubtitleTtl = (type: string, subtitleCount: number): number => {
  */
 export const normalizeSubtitleDownloadUrls = (
   subtitles: StremioSubtitle[],
-  currentOrigin: string
+  currentOrigin: string,
 ): StremioSubtitle[] => {
   return subtitles.map(sub => {
     if (sub.source === 'subsource' && sub.url) {
@@ -85,7 +98,7 @@ export const setCachedSubtitles = async (
  */
 export const executeWithInFlightDeduplication = (
   cacheKey: string,
-  searchFn: () => Promise<StremioSubtitle[]>
+  searchFn: () => Promise<StremioSubtitle[]>,
 ): Promise<StremioSubtitle[]> => {
   const existing = inFlightSearches.get(cacheKey);
   if (existing) {

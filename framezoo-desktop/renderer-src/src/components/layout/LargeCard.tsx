@@ -55,15 +55,17 @@ export function LargeCardText(props: {
   children?: React.ReactNode;
   icon?: React.ReactNode;
   compact?: boolean;
+  className?: string;
 }) {
   return (
     <div
       className={classNames(
         "flex flex-col items-center text-center",
         props.compact ? "mb-5 sm:mb-6" : "mb-8",
+        props.className,
       )}
     >
-      <div className="flex flex-col items-center text-center max-w-[320px]">
+      <div className="flex flex-col items-center text-center max-w-[460px] w-full">
         {props.icon ? (
           <div className="text-2xl mb-4 text-largeCard-icon">{props.icon}</div>
         ) : null}

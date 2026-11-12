@@ -147,7 +147,10 @@
       "resendIn": "Ponovno pošiljanje na voljo čez {{seconds}}s",
       "resetDescription": "Vnesite kodo, poslano na vaš e-poštni naslov.",
       "resetTitle": "Ponastavite geslo",
-      "send": "Pošlji kodo"
+      "send": "Pošlji kodo",
+      "sentToEmail": "Potrditvena koda je bila poslana na <bold>{{email}}</bold>",
+      "sentToPrompt": "Potrditvena koda je bila poslana na:",
+      "spamNotice": "Ne najdete e-poštnega sporočila? Preverite mapo z neželeno pošto."
     },
     "register": {
       "confirmPasswordLabel": "Potrdite geslo",

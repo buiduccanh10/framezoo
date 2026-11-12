@@ -147,7 +147,10 @@
       "resendIn": "Resend available in {{seconds}}s",
       "resetDescription": "Enter the code sent to your email.",
       "resetTitle": "Reset your password",
-      "send": "Send code"
+      "send": "Send code",
+      "sentToEmail": "Verification code has been sent to {{email}}",
+      "sentToPrompt": "Verification code has been sent to:",
+      "spamNotice": "Can't find the email? Please check your spam or junk folder."
     },
     "register": {
       "confirmPasswordLabel": "Confirm Password",

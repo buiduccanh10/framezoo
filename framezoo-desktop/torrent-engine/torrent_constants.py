@@ -10,8 +10,11 @@ MAX_REPLAN_PREFETCH_BYTES = 128 * 1024 * 1024
 # Fallback for addons that omit a resolution hint. Keep 4K files around
 # 3.7 GiB on the high-bitrate window even when their title is incomplete.
 HIGH_BITRATE_FILE_THRESHOLD_BYTES = 3 * 1024 * 1024 * 1024
-HIGH_BITRATE_RANGE_PREFETCH_BYTES = 96 * 1024 * 1024
-HIGH_BITRATE_MAX_REPLAN_PREFETCH_BYTES = 256 * 1024 * 1024
+# Keep enough contiguous data for a bursty 4K swarm. The old 96 MiB window
+# could be consumed before the next piece arrived even when the instantaneous
+# torrent rate looked healthy.
+HIGH_BITRATE_RANGE_PREFETCH_BYTES = 384 * 1024 * 1024
+HIGH_BITRATE_MAX_REPLAN_PREFETCH_BYTES = 768 * 1024 * 1024
 # Keep the selected file materialized on disk while the playback scheduler
 # boosts the contiguous range that libmpv currently needs.
 STREAM_IDLE_FILE_PRIORITY = 1

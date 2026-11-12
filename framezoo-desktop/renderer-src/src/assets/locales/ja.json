@@ -147,7 +147,10 @@
       "resendIn": "再送信は{{seconds}}sで可能です",
       "resetDescription": "メールで送信されたコードを入力してください。",
       "resetTitle": "パスワードをリセット",
-      "send": "コードを送信"
+      "send": "コードを送信",
+      "sentToEmail": "認証コードが<bold>{{email}}</bold>に送信されました",
+      "sentToPrompt": "確認コードが送信されました：",
+      "spamNotice": "メールが見つからない場合は、迷惑メールフォルダをご確認ください。"
     },
     "register": {
       "confirmPasswordLabel": "パスワードを認証する",

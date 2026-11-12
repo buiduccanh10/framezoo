@@ -14,7 +14,6 @@ import { BrowserRouter, HashRouter } from "react-router-dom";
 import { useAsync, useAsyncFn } from "react-use";
 
 import { Button } from "@/components/buttons/Button";
-import { Icon, Icons } from "@/components/Icon";
 import { Loading } from "@/components/layout/Loading";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { useAuthRestore } from "@/hooks/auth/useAuthRestore";
@@ -352,8 +351,7 @@ if (isDesktopPipRoute) {
               persister: queryPersister,
               dehydrateOptions: {
                 shouldDehydrateQuery: (query) =>
-                  (query.queryKey[0] === "tmdb" ||
-                    query.queryKey[0] === "externalSubtitles") &&
+                  query.queryKey[0] === "tmdb" &&
                   query.state.status === "success",
               },
             }}

@@ -147,7 +147,10 @@
       "resendIn": "Újraküldés {{seconds}}s múlva lehetséges",
       "resetDescription": "Add meg az e-mail címedre küldött kódot.",
       "resetTitle": "Jelszó visszaállítása",
-      "send": "Kód küldése"
+      "send": "Kód küldése",
+      "sentToEmail": "Ellenőrző kód elküldve a következő címre: <bold>{{email}}</bold>",
+      "sentToPrompt": "Ellenőrző kód elküldve a következő címre:",
+      "spamNotice": "Nem találja az e-mailt? Kérjük, ellenőrizze a spam vagy a levélszemét mappáját."
     },
     "register": {
       "confirmPasswordLabel": "Jelszó megerősítése",

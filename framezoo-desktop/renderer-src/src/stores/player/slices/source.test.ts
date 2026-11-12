@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { DisplayInterface } from "@/components/player/display/displayInterface";
+import { bumpExternalSubtitleCredentialScope } from "@/utils/externalSubtitles/scope";
 import { queryClient } from "@/utils/queryClient";
 
 import { usePlayerStore } from "../store";
@@ -225,6 +226,34 @@ describe("external subtitle source transitions", () => {
 
     expect(usePlayerStore.getState().captionList).not.toContainEqual(
       oldEpisodeCaption,
+    );
+  });
+
+  it("rejects a late caption response after the provider credential changes", async () => {
+    let resolveRequest:
+      | ((res: { captions: CaptionListItem[]; errors: any[] }) => void)
+      | undefined;
+    subtitleMocks.loadAll.mockImplementationOnce(
+      () =>
+        new Promise<{ captions: CaptionListItem[]; errors: any[] }>(
+          (resolve) => {
+            resolveRequest = resolve;
+          },
+        ),
+    );
+
+    const store = usePlayerStore.getState();
+    store.setMeta(createMeta(5));
+    store.setSource(createSource("source-a"), [], 0);
+    await vi.advanceTimersByTimeAsync(100);
+
+    bumpExternalSubtitleCredentialScope();
+    const staleCaption = createCaption("stale-provider-caption");
+    resolveRequest?.({ captions: [staleCaption], errors: [] });
+    await vi.runAllTimersAsync();
+
+    expect(usePlayerStore.getState().captionList).not.toContainEqual(
+      staleCaption,
     );
   });
 

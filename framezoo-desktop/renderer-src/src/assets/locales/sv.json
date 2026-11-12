@@ -147,7 +147,10 @@
       "resendIn": "Omsändning tillgänglig om {{seconds}}s",
       "resetDescription": "Ange koden som skickades till din e-postadress.",
       "resetTitle": "Återställ ditt lösenord",
-      "send": "Skicka kod"
+      "send": "Skicka kod",
+      "sentToEmail": "Verifieringskoden har skickats till <bold>{{email}}</bold>",
+      "sentToPrompt": "Verifieringskoden har skickats till:",
+      "spamNotice": "Hittar du inte e-postmeddelandet? Kontrollera din skräppostmapp."
     },
     "register": {
       "confirmPasswordLabel": "Bekräfta lösenord",

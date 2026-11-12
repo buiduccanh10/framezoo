@@ -147,7 +147,10 @@
       "resendIn": "Yeniden gönderme işlemi {{seconds}}s'de mümkün.",
       "resetDescription": "E-postanıza gönderilen kodu girin.",
       "resetTitle": "Parolanızı sıfırlayın",
-      "send": "Kodu gönder"
+      "send": "Kodu gönder",
+      "sentToEmail": "Doğrulama kodu <bold>{{email}}</bold> adresine gönderildi.",
+      "sentToPrompt": "Doğrulama kodu şu adrese gönderildi:",
+      "spamNotice": "E-postayı bulamadınız mı? Lütfen spam veya önemsiz posta klasörünüzü kontrol edin."
     },
     "register": {
       "confirmPasswordLabel": "Şifreyi Onayla",

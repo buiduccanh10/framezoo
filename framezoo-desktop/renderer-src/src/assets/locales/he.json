@@ -147,7 +147,10 @@
       "resendIn": "שליחה חוזרת זמינה בעוד {{seconds}} שניות",
       "resetDescription": "הזן את הקוד שנשלח למייל שלך.",
       "resetTitle": "איפוס הסיסמה שלך",
-      "send": "שלח קוד"
+      "send": "שלח קוד",
+      "sentToEmail": "קוד אימות נשלח אל <bold>{{email}}</bold>",
+      "sentToPrompt": "קוד אימות נשלח אל:",
+      "spamNotice": "לא מוצא את האימייל? אנא בדוק את תיקיית הספאם או דואר הזבל שלך."
     },
     "register": {
       "confirmPasswordLabel": "אשר את הסיסמה",

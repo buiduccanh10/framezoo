@@ -147,7 +147,10 @@
       "resendIn": "Reinvia disponibile in {{seconds}}s",
       "resetDescription": "Inserisci il codice che ti è stato inviato via email.",
       "resetTitle": "Reimposta la tua password",
-      "send": "Invia il codice"
+      "send": "Invia il codice",
+      "sentToEmail": "Il codice di verifica è stato inviato a <bold>{{email}}</bold>",
+      "sentToPrompt": "Il codice di verifica è stato inviato a:",
+      "spamNotice": "Non trovi l'email? Controlla la cartella spam o posta indesiderata."
     },
     "register": {
       "confirmPasswordLabel": "Conferma password",

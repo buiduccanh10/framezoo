@@ -66,14 +66,15 @@ export class TorrentManager {
   }
 
   async stop(sessionId: string) {
-    await this.engine.stop(sessionId);
+    await this.engine.stop(sessionId, this.settings.maxBytes === 0);
     this.statuses.delete(sessionId);
   }
 
   async stopAll() {
+    const discardCache = this.settings.maxBytes === 0;
     if (typeof this.engine.stopAll === "function") {
       try {
-        await this.engine.stopAll();
+        await this.engine.stopAll(discardCache);
       } catch (error) {
         console.warn("[torrent] engine.stopAll failed:", error);
       } finally {

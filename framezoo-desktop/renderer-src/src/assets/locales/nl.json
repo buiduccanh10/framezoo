@@ -147,7 +147,10 @@
       "resendIn": "Opnieuw verzenden beschikbaar in {{seconds}}s",
       "resetDescription": "Voer de code in die naar uw e-mailadres is verzonden.",
       "resetTitle": "Stel uw wachtwoord opnieuw in",
-      "send": "Code verzenden"
+      "send": "Code verzenden",
+      "sentToEmail": "De verificatiecode is verzonden naar <bold>{{email}}</bold>",
+      "sentToPrompt": "De verificatiecode is verzonden naar:",
+      "spamNotice": "Kunt u de e-mail niet vinden? Controleer dan uw spam- of ongewenste e-mailmap."
     },
     "register": {
       "confirmPasswordLabel": "Bevestig wachtwoord",

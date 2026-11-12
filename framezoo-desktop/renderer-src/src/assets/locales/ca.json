@@ -147,7 +147,10 @@
       "resendIn": "Reenviament disponible en {{seconds}}s",
       "resetDescription": "Introdueix el codi que t'hem enviat al correu electrònic.",
       "resetTitle": "Restableix la teva contrasenya",
-      "send": "Enviar codi"
+      "send": "Enviar codi",
+      "sentToEmail": "El codi de verificació s'ha enviat a <bold>{{email}}</bold>",
+      "sentToPrompt": "El codi de verificació s'ha enviat a:",
+      "spamNotice": "No trobes el correu electrònic? Si us plau, revisa la carpeta de correu brossa o brossa."
     },
     "register": {
       "confirmPasswordLabel": "Confirmeu la contrasenya",

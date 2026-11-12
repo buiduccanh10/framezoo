@@ -1824,24 +1824,35 @@ class TorrentRuntime:
                 return
 
             announced = False
-            force_reannounce = getattr(self.handle, "force_reannounce", None)
-            force_dht_announce = getattr(
-                self.handle,
-                "force_dht_announce",
-                None,
-            )
-            try:
-                if callable(force_reannounce):
-                    force_reannounce()
+            record = getattr(self, "record", None)
+            reactivate = getattr(record, "reactivate", None)
+            if callable(reactivate):
+                try:
+                    reactivate(self.session_id)
                     announced = True
-            except Exception:
-                pass
-            try:
-                if callable(force_dht_announce):
-                    force_dht_announce()
-                    announced = True
-            except Exception:
-                pass
+                except Exception as error:
+                    sys.stderr.write(
+                        f"[sidecar] Failed to reactivate stalled torrent: {error}\n",
+                    )
+            if not announced:
+                force_reannounce = getattr(self.handle, "force_reannounce", None)
+                force_dht_announce = getattr(
+                    self.handle,
+                    "force_dht_announce",
+                    None,
+                )
+                try:
+                    if callable(force_reannounce):
+                        force_reannounce()
+                        announced = True
+                except Exception:
+                    pass
+                try:
+                    if callable(force_dht_announce):
+                        force_dht_announce()
+                        announced = True
+                except Exception:
+                    pass
             if not announced:
                 return
             self._last_reannounce = now
@@ -1921,10 +1932,6 @@ class TorrentRuntime:
         sync_metadata: Optional[dict[str, Any]] = None,
     ) -> bool:
         is_tail_probe = start > 0 and not track_position and not is_sync
-        tail_pending = any(
-            not self._piece_have(tp)
-            for tp in getattr(self, "_startup_required_tail_pieces", set())
-        )
         is_startup_header_probe = (
             start < constants.RANGE_PREFETCH_BYTES
             and not getattr(self, "_has_streamed_bytes", False)
@@ -1932,10 +1939,7 @@ class TorrentRuntime:
         startup_bounded = (
             getattr(self, "info", None) is not None
             and not is_sync
-            and (
-                is_startup_header_probe
-                or tail_pending
-            )
+            and is_startup_header_probe
         )
         if is_tail_probe:
             prefetch_length = max(1, end - start + 1)

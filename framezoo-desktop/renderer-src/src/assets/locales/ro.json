@@ -147,7 +147,10 @@
       "resendIn": "Retrimitere disponibilă în {{seconds}}s",
       "resetDescription": "Introdu codul trimis pe adresa ta de e-mail.",
       "resetTitle": "Resetați parola",
-      "send": "Trimiteți codul"
+      "send": "Trimiteți codul",
+      "sentToEmail": "Codul de verificare a fost trimis către <bold>{{email}}</bold>",
+      "sentToPrompt": "Codul de verificare a fost trimis la:",
+      "spamNotice": "Nu găsești adresa de e-mail? Verifică folderul de spam sau junk."
     },
     "register": {
       "confirmPasswordLabel": "Confirmați parola",

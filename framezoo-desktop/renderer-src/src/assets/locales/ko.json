@@ -147,7 +147,10 @@
       "resendIn": "{{seconds}}초 내에 재전송 가능합니다.",
       "resetDescription": "이메일로 전송된 코드를 입력하세요.",
       "resetTitle": "비밀번호를 재설정하세요",
-      "send": "전송 코드"
+      "send": "전송 코드",
+      "sentToEmail": "인증 코드가 <bold>{{email}}</bold>로 전송되었습니다.",
+      "sentToPrompt": "인증 코드가 다음 주소로 전송되었습니다:",
+      "spamNotice": "이메일을 찾을 수 없으신가요? 스팸 또는 정크 메일함을 확인해 주세요."
     },
     "register": {
       "confirmPasswordLabel": "비밀번호 확인",

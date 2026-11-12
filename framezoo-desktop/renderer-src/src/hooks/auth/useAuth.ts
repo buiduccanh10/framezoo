@@ -44,6 +44,8 @@ import { BookmarkMediaItem } from "@/stores/bookmarks";
 import { useToastStore } from "@/stores/interface/toast";
 import { ProgressMediaItem } from "@/stores/progress";
 import { getClientDeviceName } from "@/utils/deviceName";
+import { bumpExternalSubtitleCredentialScope } from "@/utils/externalSubtitles/scope";
+import { queryClient } from "@/utils/queryClient";
 
 export interface RegistrationData {
   recaptchaToken?: string;
@@ -227,6 +229,8 @@ export function useAuth() {
       // we dont care about failing to delete session
     }
     // Only remove the account, keep all local data
+    bumpExternalSubtitleCredentialScope();
+    queryClient.removeQueries({ queryKey: ["externalSubtitles"] });
     useAuthStore.getState().removeAccount();
     showToast(t("toasts.logoutSuccess"), "success");
   }, [backendUrl, currentAccount, showToast]);

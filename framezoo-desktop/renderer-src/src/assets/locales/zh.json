@@ -147,7 +147,10 @@
       "resendIn": "{{seconds}}s 中提供重新发送功能",
       "resetDescription": "请输入发送到您邮箱的验证码。",
       "resetTitle": "重置密码",
-      "send": "发送代码"
+      "send": "发送代码",
+      "sentToEmail": "验证码已发送至<bold>{{email}}</bold>",
+      "sentToPrompt": "验证码已发送至：",
+      "spamNotice": "找不到邮件？请检查您的垃圾邮件或广告邮件文件夹。"
     },
     "register": {
       "confirmPasswordLabel": "确认密码",
