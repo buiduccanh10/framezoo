@@ -8,7 +8,7 @@ packages:
 shamefullyHoist: true
 strictPeerDependencies: false
 
-# Rechecked 2026-10-28: node-forge 1.4.1 patches GHSA-86w9-cpqp-85rv.
+# Rechecked 2026-11-12: node-forge 1.4.3 patches GHSA-w4xr-hqv8-ch44, GHSA-6cv4-p8m7-4r25, GHSA-j8rw-jp99-435v, GHSA-6889-vf6x-f3g5.
 # Dev/build-only path: framezoo-be > nitropack > listhen > node-forge.
 # React Native CLI and Nitro build tooling still resolve deepmerge@4.3.1.
 # GHSA-gcqx-w48m-w2h4 has no published patched release.
@@ -55,7 +55,7 @@ overrides:
   "brace-expansion@<1.1.18": "^1.1.18"
   "brace-expansion@>=3.0.0 <5.0.9": ">=5.0.9"
   "handlebars@>=4.0.0 <4.7.9": ">=4.7.9"
-  "node-forge": "1.4.1"
+  "node-forge": "1.4.3"
   "picomatch@<2.3.2": ">=2.3.2"
   "picomatch@4.0.3": "4.0.4"
   "picomatch@>=4.0.0": "4.0.4"
@@ -99,7 +99,7 @@ overrides:
   "valibot@<=1.4.1": ">=1.4.2"
   "find-my-way@<=9.6.0": ">=9.6.1"
   "shell-quote@<1.11.0": ">=1.11.0"
-  "fast-xml-parser@<5.7.0": "5.7.0"
+  "fast-xml-parser@<5.12.0": "5.12.0"
   "deepmerge-ts@<8.0.0": ">=8.0.0"
   "decode-uri-component": "^0.5.0"
   "browserslist": "^4.28.7"
