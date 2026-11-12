@@ -5,6 +5,7 @@ import {
   getCachedSubtitles,
   getSubtitleCacheKey,
   getSubtitleTtl,
+  hashSubtitleCredential,
   normalizeSubtitleDownloadUrls,
   resolveSubtitleContext,
   searchAllSubtitles,
@@ -48,47 +49,57 @@ export default defineEventHandler(async event => {
     cacheControlHeader.includes('no-cache') ||
     pragmaHeader.includes('no-cache');
 
-  const cacheKey = getSubtitleCacheKey(type, cleanId);
-
-  // Serve from Redis cache if available and not a forced reload
-  if (!isForceRefresh) {
-    const cachedSubtitles = await getCachedSubtitles(cacheKey);
-    if (cachedSubtitles) {
-      setHeader(event, 'Content-Type', 'application/json');
-      setHeader(event, 'X-Cache', 'HIT');
-      setHeader(event, 'Cache-Control', 'public, max-age=300, stale-while-revalidate=3600');
-
-      return {
-        subtitles: normalizeSubtitleDownloadUrls(cachedSubtitles, origin),
-      };
-    }
-  }
-
   const config = useRuntimeConfig();
   const serverWyzieApiKey =
     (config.wyzieApiKey || process.env.WYZIE_API_KEY || '').trim() || undefined;
 
-  // 1. Check if an API key was passed in query parameter (e.g. Stremio encoded URL)
+  // Query keys are for unauthenticated Stremio URLs. An authenticated native
+  // request must use its account key or the server fallback.
   const queryWyzieKey =
     typeof query.key === 'string' && query.key.trim() ? query.key.trim() : undefined;
 
-  // 2. Check if request belongs to an authenticated user with a custom saved key
-  let userWyzieKey: string | undefined;
+  let authSession;
   try {
-    const authSession =
+    authSession =
       event.context.session || (await useAuth().getOptionalCurrentSessionForEvent(event));
-    if (authSession?.user) {
-      const savedKey = await getUserProviderCredential(authSession.user);
-      if (savedKey) {
-        userWyzieKey = savedKey;
-      }
-    }
-  } catch {
-    // Non-blocking fallback
+  } catch (error) {
+    console.warn('[subtitles:auth] Failed to resolve request session:', error);
+    throw createError({
+      statusCode: 503,
+      statusMessage: 'Service Unavailable',
+      message: 'Unable to resolve subtitle provider credentials',
+    });
   }
 
-  // Priority: Stremio URL param > Logged-in user's custom key > Server default key
-  const wyzieApiKey = queryWyzieKey || userWyzieKey || serverWyzieApiKey;
+  let userWyzieKey: string | undefined;
+  if (authSession?.user) {
+    try {
+      const savedKey = await getUserProviderCredential(authSession.user);
+      if (savedKey?.trim()) userWyzieKey = savedKey.trim();
+    } catch (error) {
+      console.warn('[subtitles:credentials] Failed to load user Wyzie key:', error);
+      throw createError({
+        statusCode: 503,
+        statusMessage: 'Service Unavailable',
+        message: 'Unable to load subtitle provider credentials',
+      });
+    }
+  }
+
+  const wyzieApiKey =
+    userWyzieKey || (!authSession?.user ? queryWyzieKey : undefined) || serverWyzieApiKey;
+  const credentialSource = userWyzieKey
+    ? 'user'
+    : !authSession?.user && queryWyzieKey
+      ? 'query'
+      : 'server';
+  const credentialScope =
+    credentialSource === 'user'
+      ? `user:${hashSubtitleCredential(`${authSession.user}:${userWyzieKey}`)}`
+      : credentialSource === 'query'
+        ? `query:${hashSubtitleCredential(queryWyzieKey ?? '')}`
+        : `server:${hashSubtitleCredential(serverWyzieApiKey ?? 'missing')}`;
+
   const subsourceApiKey =
     (
       (config.subsourceApiKey as string | undefined) ||
@@ -98,7 +109,7 @@ export default defineEventHandler(async event => {
 
   const acceptLanguage = getRequestHeader(event, 'accept-language') || '';
   const preferredLanguages: string[] = [];
-  const addPreferredLanguages = (raw: string) => {
+  const addPreferredLanguages = (raw: string): void => {
     for (const value of raw.split(',')) {
       const language = value.trim().toLowerCase().split(';')[0].split('-')[0];
       if (!/^[a-z]{2,3}$/.test(language) || preferredLanguages.includes(language)) continue;
@@ -118,6 +129,32 @@ export default defineEventHandler(async event => {
   }
 
   const searchLanguages = Array.from(new Set(['vi', 'en', ...preferredLanguages].filter(Boolean)));
+  const cacheKey = getSubtitleCacheKey(
+    type,
+    cleanId,
+    credentialScope,
+    searchLanguages.join(',') || 'all',
+  );
+  const cacheControl =
+    credentialSource === 'server'
+      ? 'public, max-age=300, stale-while-revalidate=3600'
+      : 'private, no-store';
+
+  // Credential scope is resolved before reading shared cache or joining an
+  // in-flight search. This prevents cross-user/provider-key result reuse.
+  if (!isForceRefresh) {
+    const cachedSubtitles = await getCachedSubtitles(cacheKey);
+    if (cachedSubtitles) {
+      setHeader(event, 'Content-Type', 'application/json');
+      setHeader(event, 'X-Cache', 'HIT');
+      setHeader(event, 'Cache-Control', cacheControl);
+      setHeader(event, 'Vary', 'Authorization, Cookie, Accept-Language');
+
+      return {
+        subtitles: normalizeSubtitleDownloadUrls(cachedSubtitles, origin),
+      };
+    }
+  }
 
   // Deduplicate in-flight upstream search requests for the same media key
   const subtitles = await executeWithInFlightDeduplication(cacheKey, async () => {
@@ -135,7 +172,8 @@ export default defineEventHandler(async event => {
 
   setHeader(event, 'Content-Type', 'application/json');
   setHeader(event, 'X-Cache', 'MISS');
-  setHeader(event, 'Cache-Control', 'public, max-age=300, stale-while-revalidate=3600');
+  setHeader(event, 'Cache-Control', cacheControl);
+  setHeader(event, 'Vary', 'Authorization, Cookie, Accept-Language');
 
   return {
     subtitles: normalizeSubtitleDownloadUrls(subtitles, origin),

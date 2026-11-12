@@ -29,6 +29,8 @@ import { useProgressStore } from "@/stores/progress";
 import { useSubtitleStore } from "@/stores/subtitles";
 import { useThemeStore } from "@/stores/theme";
 import { useWatchHistoryStore } from "@/stores/watchHistory";
+import { bumpExternalSubtitleCredentialScope } from "@/utils/externalSubtitles/scope";
+import { queryClient } from "@/utils/queryClient";
 
 export function useAuthData() {
   const loggedIn = useAuthStore((s) => s.authHydrated && !!s.account);
@@ -82,6 +84,8 @@ export function useAuthData() {
         refreshToken,
         seed,
       };
+      bumpExternalSubtitleCredentialScope();
+      queryClient.removeQueries({ queryKey: ["externalSubtitles"] });
       setAccount(account);
       return account;
     },
@@ -89,6 +93,8 @@ export function useAuthData() {
   );
 
   const logout = useCallback(async () => {
+    bumpExternalSubtitleCredentialScope();
+    queryClient.removeQueries({ queryKey: ["externalSubtitles"] });
     removeAccount();
     clearBookmarks();
     clearProgress();

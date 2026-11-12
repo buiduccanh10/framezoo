@@ -15,6 +15,8 @@ import { InstalledAddon } from "@/desktop/addons/types";
 import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
 import { useToastStore } from "@/stores/interface/toast";
+import { bumpExternalSubtitleCredentialScope } from "@/utils/externalSubtitles/scope";
+import { queryClient } from "@/utils/queryClient";
 
 export function useNativeSubtitlesConfig() {
   const { t } = useTranslation();
@@ -51,6 +53,8 @@ export function useNativeSubtitlesConfig() {
     if (!status) return;
 
     if (status === "success") {
+      bumpExternalSubtitleCredentialScope();
+      queryClient.removeQueries({ queryKey: ["externalSubtitles"] });
       showToast(
         t(
           "addons.page.subtitlesConfiguredSuccess",
@@ -133,10 +137,7 @@ export function useNativeSubtitlesConfig() {
           return;
         }
       } catch (err) {
-        console.warn(
-          "[addons] Failed to request one-time config ticket:",
-          err,
-        );
+        console.warn("[addons] Failed to request one-time config ticket:", err);
       }
 
       void openExternalUrl(fallbackUrl);

@@ -7,6 +7,7 @@ import {
   executeWithInFlightDeduplication,
   getSubtitleCacheKey,
   getSubtitleTtl,
+  hashSubtitleCredential,
   MOVIE_SUBTITLE_CACHE_TTL,
   normalizeSubtitleDownloadUrls,
   SERIES_SUBTITLE_CACHE_TTL,
@@ -19,20 +20,40 @@ const read = relativePath =>
 test('getSubtitleCacheKey generates stable and sanitized keys', () => {
   assert.equal(
     getSubtitleCacheKey('movie', 'tt1877830'),
-    `${SUBTITLE_CACHE_PREFIX}movie:tt1877830`
+    `${SUBTITLE_CACHE_PREFIX}server:movie:tt1877830:all`
   );
   assert.equal(
     getSubtitleCacheKey('series', 'tt0944947:1:1'),
-    `${SUBTITLE_CACHE_PREFIX}series:tt0944947:1:1`
+    `${SUBTITLE_CACHE_PREFIX}server:series:tt0944947:1:1:all`
   );
   assert.equal(
     getSubtitleCacheKey('series', 'tmdb:12345:2:10'),
-    `${SUBTITLE_CACHE_PREFIX}series:tmdb:12345:2:10`
+    `${SUBTITLE_CACHE_PREFIX}server:series:tmdb:12345:2:10:all`
   );
   assert.equal(
     getSubtitleCacheKey('movie', 'tt 123 456'),
-    `${SUBTITLE_CACHE_PREFIX}movie:tt_123_456`
+    `${SUBTITLE_CACHE_PREFIX}server:movie:tt_123_456:all`
   );
+  assert.notEqual(
+    getSubtitleCacheKey('movie', 'tt1877830', 'user:alice', 'vi,en'),
+    getSubtitleCacheKey('movie', 'tt1877830', 'user:bob', 'vi,en')
+  );
+  assert.notEqual(
+    getSubtitleCacheKey('movie', 'tt1877830', 'server:key-a', 'vi,en'),
+    getSubtitleCacheKey('movie', 'tt1877830', 'server:key-b', 'vi,en')
+  );
+  assert.notEqual(
+    getSubtitleCacheKey('movie', 'tt1877830', 'user:alice', 'vi'),
+    getSubtitleCacheKey('movie', 'tt1877830', 'user:alice', 'en')
+  );
+});
+
+test('hashSubtitleCredential is stable and does not expose the credential', () => {
+  const hash = hashSubtitleCredential('wyzie-secret');
+
+  assert.equal(hash, hashSubtitleCredential('wyzie-secret'));
+  assert.equal(hash.length, 64);
+  assert.ok(!hash.includes('wyzie-secret'));
 });
 
 test('getSubtitleTtl applies 24h for movies, 12h for series, 10m for empty results', () => {

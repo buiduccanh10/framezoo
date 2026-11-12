@@ -41,15 +41,21 @@ test('status route checks user provider credential without throwing on unauthent
   assert.match(statusRoute, /hasCustomKey:/);
 });
 
-test('subtitles search prioritizes query key over user custom key over server key', () => {
+test('subtitles search scopes credentials and keeps query keys unauthenticated-only', () => {
   const subtitlesRoute = read('server/routes/addon/subtitles/subtitles/[type]/[...id].get.ts');
 
   assert.match(subtitlesRoute, /getUserProviderCredential/);
   assert.match(subtitlesRoute, /queryWyzieKey/);
   assert.match(subtitlesRoute, /userWyzieKey/);
   assert.match(subtitlesRoute, /serverWyzieApiKey/);
-  assert.match(
-    subtitlesRoute,
-    /const wyzieApiKey = queryWyzieKey \|\| userWyzieKey \|\| serverWyzieApiKey/
-  );
+  assert.match(subtitlesRoute, /userWyzieKey \|\| \(!authSession\?\.user \? queryWyzieKey : undefined\) \|\| serverWyzieApiKey/);
+  assert.match(subtitlesRoute, /credentialSource/);
+  assert.match(subtitlesRoute, /hashSubtitleCredential/);
+  assert.match(subtitlesRoute, /private, no-store/);
+  assert.match(subtitlesRoute, /Vary', 'Authorization, Cookie, Accept-Language/);
+
+  const credentialLookup = subtitlesRoute.indexOf('const savedKey = await getUserProviderCredential');
+  const cacheLookup = subtitlesRoute.indexOf('const cachedSubtitles = await getCachedSubtitles');
+  assert.ok(credentialLookup >= 0 && credentialLookup < cacheLookup);
+  assert.doesNotMatch(subtitlesRoute, /queryWyzieKey \|\| userWyzieKey \|\| serverWyzieApiKey/);
 });
