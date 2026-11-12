@@ -79,35 +79,58 @@ jobs:
               return;
             }
 
-            const currentRun = context.payload.workflow_run;
-            const runs = await github.paginate(github.rest.actions.listWorkflowRuns, {
-              owner,
-              repo,
-              workflow_id: "deploy-web.yml",
-              branch: currentRun.head_branch,
-              per_page: 100,
-            });
-            const previousRun = runs
-              .filter(
-                (run) =>
-                  run.id !== currentRun.id &&
-                  run.conclusion === "success" &&
-                  new Date(run.created_at) < new Date(currentRun.created_at),
-              )
-              .sort(
-                (first, second) =>
-                  new Date(second.created_at).getTime() -
-                  new Date(first.created_at).getTime(),
-              )[0];
+            let baseSha = null;
+            const currentRun = context.payload?.workflow_run;
 
-            let baseSha = previousRun?.head_sha ?? null;
+            if (currentRun?.head_branch) {
+              try {
+                const response = await github.rest.actions.listWorkflowRuns({
+                  owner,
+                  repo,
+                  workflow_id: "deploy-web.yml",
+                  branch: currentRun.head_branch,
+                  status: "success",
+                  per_page: 15,
+                });
+                const runs = response.data?.workflow_runs ?? [];
+                const previousRun = runs
+                  .filter(
+                    (run) =>
+                      run.id !== currentRun.id &&
+                      new Date(run.created_at) < new Date(currentRun.created_at),
+                  )
+                  .sort(
+                    (first, second) =>
+                      new Date(second.created_at).getTime() -
+                      new Date(first.created_at).getTime(),
+                  )[0];
+
+                baseSha = previousRun?.head_sha ?? null;
+              } catch (err) {
+                core.warning(`Failed to query previous workflow run: ${err.message}`);
+              }
+            }
+
             if (!baseSha) {
-              const commit = await github.rest.repos.getCommit({
-                owner,
-                repo,
-                ref: currentSha,
-              });
-              baseSha = commit.data.parents?.[0]?.sha ?? null;
+              try {
+                const commit = await github.rest.repos.getCommit({
+                  owner,
+                  repo,
+                  ref: currentSha,
+                });
+                baseSha = commit.data.parents?.[0]?.sha ?? null;
+              } catch (err) {
+                core.warning(`Failed to retrieve commit parent via API: ${err.message}`);
+              }
+            }
+
+            if (!baseSha) {
+              try {
+                const { execSync } = require("child_process");
+                baseSha = execSync("git rev-parse HEAD~1", { encoding: "utf8" }).trim() || null;
+              } catch {
+                baseSha = null;
+              }
             }
 
             if (!baseSha) {
@@ -121,12 +144,25 @@ jobs:
               return;
             }
 
-            const compare = await github.rest.repos.compareCommitsWithBasehead({
-              owner,
-              repo,
-              basehead: `${baseSha}...${currentSha}`,
-            });
-            const changedFiles = (compare.data.files ?? []).map((file) => file.filename);
+            let changedFiles = [];
+            try {
+              const compare = await github.rest.repos.compareCommitsWithBasehead({
+                owner,
+                repo,
+                basehead: `${baseSha}...${currentSha}`,
+              });
+              changedFiles = (compare.data.files ?? []).map((file) => file.filename);
+            } catch (err) {
+              core.warning(`GitHub compare API failed (${err.message}). Falling back to local git diff.`);
+              try {
+                const { execSync } = require("child_process");
+                const output = execSync(`git diff --name-only ${baseSha} ${currentSha}`, { encoding: "utf8" });
+                changedFiles = output.split("\n").map((file) => file.trim()).filter(Boolean);
+              } catch (gitErr) {
+                core.warning(`Local git diff also failed: ${gitErr.message}`);
+              }
+            }
+
             const shouldPublish = changedFiles.some((file) =>
               desktopPatterns.some((pattern) => pattern.test(file)),
             );

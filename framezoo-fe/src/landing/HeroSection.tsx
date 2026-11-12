@@ -9,7 +9,10 @@ export function formatDownloadCount(count: number): string {
     const inK = (count / 1000).toFixed(1).replace(/\.0$/, "");
     return `${inK}k+`;
   }
-  return `${count}`;
+  if (count >= 100) {
+    return `${Math.floor(count / 10) * 10}+`;
+  }
+  return `${count}+`;
 }
 
 interface HeroSectionProps {
