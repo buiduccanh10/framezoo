@@ -147,7 +147,10 @@
       "resendIn": "Uudelleenlähetys mahdollinen {{seconds}}s kuluttua",
       "resetDescription": "Syötä sähköpostiisi lähetetty koodi.",
       "resetTitle": "Palauta salasanasi",
-      "send": "Lähetä koodi"
+      "send": "Lähetä koodi",
+      "sentToEmail": "Vahvistuskoodi on lähetetty osoitteeseen <bold>{{email}}</bold>",
+      "sentToPrompt": "Vahvistuskoodi on lähetetty osoitteeseen:",
+      "spamNotice": "Eikö sähköpostia löydy? Tarkista roskapostikansiosi."
     },
     "register": {
       "confirmPasswordLabel": "Vahvista salasana",
@@ -866,6 +869,7 @@
       "quality": {
         "auto": "Auto",
         "automaticLabel": "Automaattinen laatu",
+        "mpvAutoHint": "Valitsee automaattisesti oletusraidan avattaessa; se ei sopeudu verkon nopeuteen.",
         "hint": "Voit kokeilla <0>vaihtaa lähdettä</0> saadaksesi eri laatuasetuksia.",
         "iosNoQuality": "Applen määrittelemien (yleinen IOS L) rajoitusten vuoksi laatuvalinta ei ole saatavilla iOS:ssä tälle lähteelle. Voit yrittää <0>vaihtaa toiseen lähteeseen</0> saadaksesi erilaisia ​​laatuvaihtoehtoja.",
         "title": "Laatu"
@@ -931,6 +935,14 @@
         "syncSubtitlePreparingAudio": "Valmistellaan ääntä synkronoitavaksi...",
         "syncSubtitleWorking": "Framezoo synkronoi tekstityksiä...",
         "syncSubtitleApplying": "Otetaan tekstityksen synkronointia käyttöön...",
+        "syncStageSample": "Ääniskannaus",
+        "syncStageVad": "Ääni MITÄ",
+        "syncStageCorrelate": "Tasaa ajo",
+        "syncStageLock": "Lukitse synkronointi",
+        "syncPhasePreparing": "Akustisten tensorien koodaus...",
+        "syncPhaseVad": "Eristetään puhuttua dialogia (VAD)...",
+        "syncPhaseCorrelate": "Skannausoffset- ja FPS-drift-spektri...",
+        "syncPhaseConsensus": "Vahvistetaan moniikkunakonsensusta...",
         "settings": {
           "backlink": "Mukautetut tekstitykset",
           "delay": "Tekstityksen viive",
@@ -1483,6 +1495,10 @@
     "subtitle": "Kerro meille kaikista ongelmista tai bugeista, joita kohtasit kokemuksesi aikana.",
     "titleLabel": "1. Julkaisun otsikko",
     "titlePlaceholder": "esim. tekstityksen latausvirhe, nykivä toisto...",
+    "contactLabel": "Yhteystiedot (sähköposti tai puhelin)",
+    "contactPlaceholder": "esim. nimi@esimerkki.com tai +84912345678",
+    "contactRequired": "Anna sähköpostiosoitteesi tai puhelinnumerosi, jotta voimme vastata.",
+    "contactInvalid": "Anna kelvollinen sähköpostiosoite tai puhelinnumero.",
     "descriptionLabel": "2. Ongelman kuvaus",
     "descriptionPlaceholder": "Kuvaile ongelmaa yksityiskohtaisesti, anna vaiheet sen toistamiseksi tai ehdotuksia...",
     "submit": "Lähetä palautetta",

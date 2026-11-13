@@ -869,6 +869,7 @@
       "quality": {
         "auto": "自動",
         "automaticLabel": "自動品質",
+        "mpvAutoHint": "起動時にデフォルトのトラックを自動的に選択します。ネットワーク速度には対応していません。",
         "hint": "<0>ソースを切り替える</0> と、さまざまな品質オプションを試すことができます。",
         "iosNoQuality": "Apple が定義した (一般的な IOS L) 制限により、iOS ではこのソースの品質を選択できません。 <0>別のソースに切り替える</0> と、さまざまな品質オプションを試すことができます。",
         "title": "品質"
@@ -1494,6 +1495,10 @@
     "subtitle": "ご利用中に発生した問題や不具合についてお知らせください。",
     "titleLabel": "1. 号題",
     "titlePlaceholder": "例：字幕読み込みエラー、再生の途切れなど...",
+    "contactLabel": "連絡先情報（メールアドレスまたは電話番号）",
+    "contactPlaceholder": "例：name@example.com または +84912345678",
+    "contactRequired": "ご返信のため、メールアドレスまたは電話番号をご入力ください。",
+    "contactInvalid": "有効なメールアドレスまたは電話番号を入力してください。",
     "descriptionLabel": "2. 問題の説明",
     "descriptionPlaceholder": "問題の詳細、再現手順、または解決策を記述してください。",
     "submit": "フィードバックを送信",

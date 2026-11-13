@@ -7,6 +7,15 @@ import type { LandingCopy } from "./i18n";
 import { MessageSquareIcon } from "./LandingIcon";
 
 const MAX_FEEDBACK_FILE_BYTES = 55 * 1024 * 1024;
+const EMAIL_CONTACT_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const PHONE_CONTACT_REGEX = /^\+?\d{7,15}$/;
+
+function isValidContact(value: string) {
+  const trimmed = value.trim();
+  if (!trimmed || trimmed.length > 255) return false;
+  if (EMAIL_CONTACT_REGEX.test(trimmed)) return true;
+  return PHONE_CONTACT_REGEX.test(trimmed.replace(/[\s().-]/g, ""));
+}
 
 interface LandingFeedbackModalProps {
   isOpen: boolean;
@@ -22,9 +31,14 @@ const defaultFeedbackCopy: LandingCopy["feedback"] = {
     "Hãy cho chúng tôi biết vấn đề hoặc khó khăn bạn gặp phải trong quá trình trải nghiệm Framezoo.",
   titleLabel: "1. Tiêu đề vấn đề",
   titlePlaceholder: "Ví dụ: Lỗi tải phụ đề phim, Giật lag khi phát...",
-  descLabel: "2. Mô tả chi tiết vấn đề",
+  contactLabel: "2. Email hoặc Số điện thoại",
+  contactPlaceholder: "Ví dụ: name@example.com hoặc 0912345678",
+  contactInvalid:
+    "Vui lòng nhập email hoặc số điện thoại hợp lệ để chúng tôi phản hồi.",
+  descLabel: "3. Mô tả chi tiết vấn đề",
   descPlaceholder: "Mô tả cụ thể vấn đề hoặc các bước dẫn tới lỗi...",
-  errorRequired: "Vui lòng nhập đầy đủ tiêu đề và nội dung mô tả vấn đề.",
+  errorRequired:
+    "Vui lòng nhập đầy đủ tiêu đề, thông tin liên hệ và nội dung mô tả vấn đề.",
   errorSubmit:
     "Có lỗi xảy ra trong quá trình gửi phản hồi. Vui lòng thử lại sau.",
   successTitle: "Gửi phản hồi thành công!",
@@ -45,6 +59,7 @@ export function LandingFeedbackModal({
   copy = defaultFeedbackCopy,
 }: LandingFeedbackModalProps) {
   const [title, setTitle] = useState("");
+  const [contact, setContact] = useState("");
   const [description, setDescription] = useState("");
   const [attachments, setAttachments] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
@@ -56,6 +71,7 @@ export function LandingFeedbackModal({
   useEffect(() => {
     if (!isOpen) {
       setTitle("");
+      setContact("");
       setDescription("");
       setAttachments([]);
       setError(null);
@@ -83,8 +99,12 @@ export function LandingFeedbackModal({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !description.trim()) {
+    if (!title.trim() || !contact.trim() || !description.trim()) {
       setError(fbCopy.errorRequired);
+      return;
+    }
+    if (!isValidContact(contact)) {
+      setError(fbCopy.contactInvalid);
       return;
     }
 
@@ -114,6 +134,7 @@ export function LandingFeedbackModal({
 
       const formData = new FormData();
       formData.append("title", title.trim());
+      formData.append("contact", contact.trim());
       formData.append("description", description.trim());
       attachments.forEach((file) => formData.append("files", file));
 
@@ -301,6 +322,46 @@ export function LandingFeedbackModal({
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder={fbCopy.titlePlaceholder}
+                  maxLength={255}
+                  disabled={loading}
+                  required
+                  style={{
+                    width: "100%",
+                    padding: "0.625rem 0.875rem",
+                    borderRadius: "0.625rem",
+                    background: "rgba(255, 255, 255, 0.05)",
+                    border: "1px solid var(--landing-line)",
+                    color: "var(--color-ink)",
+                    fontSize: "0.875rem",
+                    outline: "none",
+                  }}
+                />
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0.375rem",
+                }}
+              >
+                <label
+                  style={{
+                    fontSize: "0.75rem",
+                    fontWeight: 600,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.05em",
+                    color: "var(--landing-muted)",
+                  }}
+                >
+                  {fbCopy.contactLabel}{" "}
+                  <span style={{ color: "#ef4444" }}>*</span>
+                </label>
+                <input
+                  type="text"
+                  value={contact}
+                  onChange={(e) => setContact(e.target.value)}
+                  placeholder={fbCopy.contactPlaceholder}
                   maxLength={255}
                   disabled={loading}
                   required

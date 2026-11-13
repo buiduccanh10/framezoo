@@ -165,9 +165,7 @@
     "button": "回饋",
     "modalTitle": "向我們發送您的回饋",
     "titleLabel": "1. 問題標題",
-    "descLabel": "2. 詳細說明",
     "errorSubmit": "提交反饋失敗。請稍後重試。",
-    "errorRequired": "請填寫標題和問題描述。",
     "subtitle": "請告訴我們您在使用 Framezoo 時遇到的任何問題或困難。",
     "cancel": "取消",
     "successTitle": "反饋發送成功！",
@@ -179,7 +177,12 @@
     "descPlaceholder": "描述具體問題或重現問題的步驟...",
     "attachmentsLabel": "文件",
     "attachmentsHint": "圖片/影片 · 總計最大 55 MB",
-    "attachmentsTooLarge": "檔案總大小不得超過 55 MB。"
+    "attachmentsTooLarge": "檔案總大小不得超過 55 MB。",
+    "descLabel": "3. 詳細說明",
+    "contactLabel": "2. 電子郵件或電話號碼",
+    "contactPlaceholder": "例如name@example.com 或 +84912345678",
+    "errorRequired": "請填寫標題、聯絡方式、問題描述。",
+    "contactInvalid": "請輸入有效的電子郵件地址或電話號碼，以便我們回覆。"
   },
   "seo": {
     "title": "Framezoo - 快速流暢的影片串流",

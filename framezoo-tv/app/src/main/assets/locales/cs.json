@@ -147,7 +147,10 @@
       "resendIn": "Znovu odeslat za {{seconds}} s",
       "resetDescription": "Zadejte kód zaslaný na váš e-mail.",
       "resetTitle": "Obnovte si heslo",
-      "send": "Odeslat kód"
+      "send": "Odeslat kód",
+      "sentToEmail": "Ověřovací kód byl odeslán na číslo <bold>{{email}}</bold>",
+      "sentToPrompt": "Ověřovací kód byl odeslán na adresu:",
+      "spamNotice": "Nemůžete najít e-mail? Zkontrolujte prosím složku s nevyžádanou poštou."
     },
     "register": {
       "confirmPasswordLabel": "Potvrďte heslo",
@@ -866,6 +869,7 @@
       "quality": {
         "auto": "Auto",
         "automaticLabel": "Automatická kvalita",
+        "mpvAutoHint": "Automaticky vybere výchozí skladbu při otevření; nepřizpůsobuje se rychlosti sítě.",
         "hint": "Chcete-li získat jinou kvalitu, můžete zkusit <0>přepnout zdroj</0>.",
         "iosNoQuality": "Kvůli omezením definovaným společností Apple není pro tento zdroj v iOS k dispozici výběr kvality. Chcete-li získat jinou kvalitu, můžete zkusit <0>přepnout zdroj</0>.",
         "title": "Kvalita"
@@ -931,6 +935,14 @@
         "syncSubtitlePreparingAudio": "Příprava zvuku k synchronizaci...",
         "syncSubtitleWorking": "Framezoo synchronizuje titulky...",
         "syncSubtitleApplying": "Probíhá synchronizace titulků...",
+        "syncStageSample": "Skenování zvuku",
+        "syncStageVad": "Hlas CO",
+        "syncStageCorrelate": "Zarovnání posunu",
+        "syncStageLock": "Synchronizace zámku",
+        "syncPhasePreparing": "Kódování akustických tenzorů...",
+        "syncPhaseVad": "Izolování mluveného dialogu (VAD)...",
+        "syncPhaseCorrelate": "Spektrum offsetu skenování a driftu FPS...",
+        "syncPhaseConsensus": "Ověřování konsensu pro více oken...",
         "settings": {
           "backlink": "Vlastní titulky",
           "delay": "Posunutí titulků",
@@ -1483,6 +1495,10 @@
     "subtitle": "Dejte nám vědět o jakémkoli problému nebo chybě, na kterou jste se během vaší zkušenosti narazili.",
     "titleLabel": "1. Název problému",
     "titlePlaceholder": "např. chyba načítání titulků, zasekávání přehrávání...",
+    "contactLabel": "Kontaktní informace (e-mail nebo telefon)",
+    "contactPlaceholder": "např. jméno@example.com nebo +84912345678",
+    "contactRequired": "Zadejte prosím svůj e-mail nebo telefonní číslo, abychom vám mohli odpovědět.",
+    "contactInvalid": "Zadejte prosím platnou e-mailovou adresu nebo telefonní číslo.",
     "descriptionLabel": "2. Popis problému",
     "descriptionPlaceholder": "Popište problém podrobně, kroky k jeho reprodukci nebo návrhy...",
     "submit": "Odeslat zpětnou vazbu",

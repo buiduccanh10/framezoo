@@ -147,7 +147,10 @@
       "resendIn": "Erneutes Senden verfügbar in {{seconds}}s",
       "resetDescription": "Geben Sie den an Ihre E-Mail-Adresse gesendeten Code ein.",
       "resetTitle": "Setzen Sie Ihr Passwort zurück",
-      "send": "Code senden"
+      "send": "Code senden",
+      "sentToEmail": "Der Bestätigungscode wurde an <bold>{{email}}</bold> gesendet.",
+      "sentToPrompt": "Der Bestätigungscode wurde an folgende Adresse gesendet:",
+      "spamNotice": "Sie können die E-Mail nicht finden? Bitte überprüfen Sie Ihren Spam- oder Junk-Ordner."
     },
     "register": {
       "confirmPasswordLabel": "Passwort bestätigen",
@@ -866,6 +869,7 @@
       "quality": {
         "auto": "Auto",
         "automaticLabel": "Automatischi Quallität",
+        "mpvAutoHint": "Wählt beim Öffnen automatisch einen Standardtitel aus; passt sich nicht der Netzwerkgeschwindigkeit an.",
         "hint": "Du chasch <0>d’Quelle wechsle</0>, um anderi Qualität-Optione z’überchun.",
         "iosNoQuality": "Wäge vo Apple definierti (typisch iOS L) Einschränkige isch s’Wähle vo dr Qualität bi däre Quelle uf iOS nöd verfügbar. Du chasch <0>uf e anderi Quelle wechsle</0>, um verschideni Qualitäte z’überchun.",
         "title": "Qualität"
@@ -931,6 +935,14 @@
         "syncSubtitlePreparingAudio": "Audio wird für die Synchronisierung vorbereitet...",
         "syncSubtitleWorking": "Framezoo synchronisiert Untertitel...",
         "syncSubtitleApplying": "Untertitelsynchronisierung wird angewendet...",
+        "syncStageSample": "Audio Scan",
+        "syncStageVad": "Stimme WAS",
+        "syncStageCorrelate": "Drift ausrichten",
+        "syncStageLock": "Sperrsynchronisierung",
+        "syncPhasePreparing": "Kodierung akustischer Tensoren...",
+        "syncPhaseVad": "Gesprochenen Dialog isolieren (VAD)...",
+        "syncPhaseCorrelate": "Spektrum der Scan-Offsets und FPS-Drift...",
+        "syncPhaseConsensus": "Überprüfung des Konsens über mehrere Fenster...",
         "settings": {
           "backlink": "Eigeni Ontertetel",
           "delay": "Ontertitelverzögerig",
@@ -1483,6 +1495,10 @@
     "subtitle": "Bitte teilen Sie uns alle Probleme oder Fehler mit, die Ihnen während Ihrer Nutzung aufgefallen sind.",
     "titleLabel": "1. Titel der Ausgabe",
     "titlePlaceholder": "z. B. Fehler beim Laden der Untertitel, ruckelnde Wiedergabe...",
+    "contactLabel": "Kontaktinformationen (E-Mail oder Telefon)",
+    "contactPlaceholder": "z.B. name@example.com oder +84912345678",
+    "contactRequired": "Bitte geben Sie Ihre E-Mail-Adresse oder Telefonnummer an, damit wir Ihnen antworten können.",
+    "contactInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse oder Telefonnummer ein.",
     "descriptionLabel": "2. Problembeschreibung",
     "descriptionPlaceholder": "Beschreiben Sie das Problem detailliert, die Schritte zur Reproduktion oder geben Sie Lösungsvorschläge an...",
     "submit": "Feedback senden",

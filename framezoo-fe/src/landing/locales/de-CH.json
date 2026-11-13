@@ -164,12 +164,10 @@
     "button": "Rückmeldung",
     "titleLabel": "1. Titel der Ausgabe",
     "subtitle": "Teilen Sie uns alle Probleme oder Schwierigkeiten mit, die Sie mit Framezoo hatten.",
-    "descLabel": "2. Detaillierte Beschreibung",
     "modalTitle": "Senden Sie uns Ihr Feedback",
     "titlePlaceholder": "z.B. Problem mit der Untertitelsynchronisierung, Verzögerung während der Wiedergabe ...",
     "badge": "Rückmeldung",
     "descPlaceholder": "Beschreiben Sie das spezifische Problem oder die Schritte, um es zu reproduzieren ...",
-    "errorRequired": "Bitte geben Sie sowohl den Titel als auch die Problembeschreibung ein.",
     "errorSubmit": "Feedback konnte nicht übermittelt werden. Bitte versuchen Sie es später noch einmal.",
     "successTitle": "Feedback erfolgreich gesendet!",
     "cancel": "Stornieren",
@@ -179,7 +177,12 @@
     "submit": "Feedback abgeben",
     "attachmentsLabel": "Dateien",
     "attachmentsHint": "Bilder/Videos · Maximal 55 MB insgesamt",
-    "attachmentsTooLarge": "Die Gesamtdateigröße darf 55 MB nicht überschreiten."
+    "attachmentsTooLarge": "Die Gesamtdateigröße darf 55 MB nicht überschreiten.",
+    "contactLabel": "2. E-Mail oder Telefonnummer",
+    "contactPlaceholder": "z.B. name@example.com oder +84912345678",
+    "contactInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse oder Telefonnummer ein, damit wir antworten können.",
+    "descLabel": "3. Detaillierte Beschreibung",
+    "errorRequired": "Bitte geben Sie den Titel, die Kontaktinformationen und die Problembeschreibung ein."
   },
   "seo": {
     "title": "Framezoo – Schnelles und reibungsloses Video-Streaming",

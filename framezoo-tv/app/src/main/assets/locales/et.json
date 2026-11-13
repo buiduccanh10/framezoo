@@ -147,7 +147,10 @@
       "resendIn": "Uuesti saatmine on võimalik {{seconds}}s pärast",
       "resetDescription": "Sisesta oma e-posti aadressile saadetud kood.",
       "resetTitle": "Lähtesta oma parool",
-      "send": "Saada kood"
+      "send": "Saada kood",
+      "sentToEmail": "Kinnituskood on saadetud aadressile <bold>{{email}}</bold>",
+      "sentToPrompt": "Kinnituskood on saadetud aadressile:",
+      "spamNotice": "Ei leia e-kirja? Palun kontrollige rämpsposti kausta."
     },
     "register": {
       "confirmPasswordLabel": "Kinnitage parool",
@@ -866,6 +869,7 @@
       "quality": {
         "auto": "Automaatne",
         "automaticLabel": "Automaatne kvaliteet",
+        "mpvAutoHint": "Valib avamisel automaatselt vaikeraja; see ei kohandu võrgu kiirusega.",
         "hint": "Võid proovida <0>vahetada allikat</0>, et saada teisi kvaliteedi valikuid.",
         "iosNoQuality": "Apple'i poolt määratletud piirangute tõttu ei ole sellel allikal kvaliteedivalik saadaval. Te võite proovida <0>vahetada teisele allikale</0>, et saada erinevaid kvaliteedivalikuid.",
         "title": "Kvaliteet"
@@ -931,6 +935,14 @@
         "syncSubtitlePreparingAudio": "Heli ettevalmistamine sünkroonimiseks...",
         "syncSubtitleWorking": "Framezoo sünkroonib subtiitreid...",
         "syncSubtitleApplying": "Subtiitrite sünkroonimise rakendamine...",
+        "syncStageSample": "Heli skaneerimine",
+        "syncStageVad": "Hääl MIDA",
+        "syncStageCorrelate": "Joonda triiv",
+        "syncStageLock": "Lukusta sünkroonimine",
+        "syncPhasePreparing": "Akustiliste tensorite kodeerimine...",
+        "syncPhaseVad": "Suulise dialoogi (VAD) eraldamine...",
+        "syncPhaseCorrelate": "Skanniva nihke ja FPS-i triivi spektri...",
+        "syncPhaseConsensus": "Mitme akna konsensuse kontrollimine...",
         "settings": {
           "backlink": "Kohandatud subtiitrid",
           "delay": "Subtiitrite viivitus",
@@ -1483,6 +1495,10 @@
     "subtitle": "Andke meile teada kõigist probleemidest või vigadest, millega oma kogemuse käigus kokku puutusite.",
     "titleLabel": "1. Väljaande pealkiri",
     "titlePlaceholder": "nt subtiitrite laadimise viga, katkendlik taasesitus...",
+    "contactLabel": "Kontaktandmed (e-post või telefon)",
+    "contactPlaceholder": "nt nimi@näide.com või +84912345678",
+    "contactRequired": "Palun sisestage oma e-posti aadress või telefoninumber, et saaksime vastata.",
+    "contactInvalid": "Palun sisestage kehtiv e-posti aadress või telefoninumber.",
     "descriptionLabel": "2. Probleemi kirjeldus",
     "descriptionPlaceholder": "Kirjeldage probleemi üksikasjalikult, esitage samme selle taasesitamiseks või ettepanekuid...",
     "submit": "Esita tagasisidet",

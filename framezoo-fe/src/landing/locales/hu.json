@@ -165,11 +165,9 @@
     "button": "Visszacsatolás",
     "modalTitle": "Küldje el nekünk visszajelzését",
     "subtitle": "Értesítsen minket a Framezoo-val kapcsolatban tapasztalt problémákról vagy nehézségekről.",
-    "errorRequired": "Kérjük, töltse ki a címet és a probléma leírását is.",
     "descPlaceholder": "Ismertesse a konkrét problémát vagy a reprodukálás lépéseit...",
     "titlePlaceholder": "például Felirat szinkronizálási probléma, késés lejátszás közben...",
     "errorSubmit": "Nem sikerült visszajelzést küldeni. Kérjük, próbálja újra később.",
-    "descLabel": "2. Részletes leírás",
     "titleLabel": "1. Kiadás címe",
     "submit": "Visszajelzés küldése",
     "cancel": "Mégse",
@@ -179,7 +177,12 @@
     "submitting": "Beküldés...",
     "attachmentsLabel": "Fájlok",
     "attachmentsHint": "Képek/videók · Maximum 55 MB",
-    "attachmentsTooLarge": "A teljes fájlméret nem haladhatja meg az 55 MB-ot."
+    "attachmentsTooLarge": "A teljes fájlméret nem haladhatja meg az 55 MB-ot.",
+    "errorRequired": "Kérjük, adja meg a címet, a kapcsolatfelvételi adatokat és a probléma leírását.",
+    "contactInvalid": "Kérjük, adjon meg egy érvényes e-mail címet vagy telefonszámot, hogy válaszolni tudjunk.",
+    "contactPlaceholder": "például név@example.com vagy +84912345678",
+    "descLabel": "3. Részletes leírás",
+    "contactLabel": "2. E-mail vagy telefonszám"
   },
   "seo": {
     "title": "Framezoo – Gyors és zökkenőmentes videoközvetítés",

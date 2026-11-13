@@ -301,3 +301,20 @@ export const downloadFeedbackAttachment = async (attachment: FeedbackAttachment)
   if (!lstatSync(filePath).isFile()) throw new Error('Attachment not found');
   return readFile(filePath);
 };
+
+const EMAIL_CONTACT_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const PHONE_CONTACT_REGEX = /^\+?\d{7,15}$/;
+
+export const normalizeFeedbackContact = (raw: unknown): string | null => {
+  if (typeof raw !== 'string') return null;
+  const trimmed = raw.trim();
+  return trimmed.length > 0 ? trimmed.slice(0, 255) : null;
+};
+
+export const isValidFeedbackContact = (value: string): boolean => {
+  const trimmed = value.trim();
+  if (!trimmed || trimmed.length > 255) return false;
+  if (EMAIL_CONTACT_REGEX.test(trimmed)) return true;
+  const normalizedPhone = trimmed.replace(/[\s().-]/g, '');
+  return PHONE_CONTACT_REGEX.test(normalizedPhone);
+};

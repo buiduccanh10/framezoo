@@ -147,7 +147,10 @@
       "resendIn": "Reenviament disponible en {{seconds}}s",
       "resetDescription": "Introdueix el codi que t'hem enviat al correu electrònic.",
       "resetTitle": "Restableix la teva contrasenya",
-      "send": "Enviar codi"
+      "send": "Enviar codi",
+      "sentToEmail": "El codi de verificació s'ha enviat a <bold>{{email}}</bold>",
+      "sentToPrompt": "El codi de verificació s'ha enviat a:",
+      "spamNotice": "No trobes el correu electrònic? Si us plau, revisa la carpeta de correu brossa o brossa."
     },
     "register": {
       "confirmPasswordLabel": "Confirmeu la contrasenya",
@@ -866,6 +869,7 @@
       "quality": {
         "auto": "Automàtic",
         "automaticLabel": "Qualitat automàtica",
+        "mpvAutoHint": "Selecciona automàticament una pista predeterminada quan s'obre; no s'adapta a la velocitat de la xarxa.",
         "hint": "Podeu provar a <0>canviar la font</0> per a obtenir diferents opcions de qualitat.",
         "iosNoQuality": "A causa de les limitacions definides per Apple, la selecció de qualitat no està disponible a iOS per a aquesta font. Podeu provar a <0>canviar a una altra font</0> per a obtenir diferents opcions de qualitat.",
         "title": "Qualitat"
@@ -931,6 +935,14 @@
         "syncSubtitlePreparingAudio": "S'està preparant l'àudio per sincronitzar...",
         "syncSubtitleWorking": "Framezoo està sincronitzant els subtítols...",
         "syncSubtitleApplying": "S'està aplicant la sincronització de subtítols...",
+        "syncStageSample": "Escaneig d'àudio",
+        "syncStageVad": "Veu QUÈ",
+        "syncStageCorrelate": "Alinea la deriva",
+        "syncStageLock": "Bloqueja la sincronització",
+        "syncPhasePreparing": "Codificació de tensors acústics...",
+        "syncPhaseVad": "Aïllant el diàleg parlat (VAD)...",
+        "syncPhaseCorrelate": "Escanejant l'espectre de desplaçament i deriva dels FPS...",
+        "syncPhaseConsensus": "Verificant el consens multifinestra...",
         "settings": {
           "backlink": "Subtítols personalitzats",
           "delay": "Retard dels subtítols",
@@ -1483,6 +1495,10 @@
     "subtitle": "Feu-nos saber qualsevol problema o error que hàgiu trobat durant la vostra experiència.",
     "titleLabel": "1. Títol del número",
     "titlePlaceholder": "p. ex., error de càrrega de subtítols, reproducció entrecortada...",
+    "contactLabel": "Informació de contacte (correu electrònic o telèfon)",
+    "contactPlaceholder": "p. ex. nom@exemple.com o +84912345678",
+    "contactRequired": "Si us plau, introdueix el teu correu electrònic o número de telèfon perquè puguem respondre't.",
+    "contactInvalid": "Si us plau, introduïu una adreça electrònica o un número de telèfon vàlids.",
     "descriptionLabel": "2. Descripció del problema",
     "descriptionPlaceholder": "Descriviu el problema detalladament, els passos per reproduir-lo o els suggeriments...",
     "submit": "Envia comentaris",

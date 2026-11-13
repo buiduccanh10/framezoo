@@ -165,11 +165,9 @@
     "badge": "Endurgjöf",
     "subtitle": "Láttu okkur vita um öll vandamál eða erfiðleika sem þú lentir í með Framezoo.",
     "modalTitle": "Sendu okkur álit þitt",
-    "descLabel": "2. Ítarleg lýsing",
     "titleLabel": "1. Heiti tölublaðs",
     "titlePlaceholder": "t.d. Vandamál með samstillingu texta, töf meðan á spilun stendur...",
     "errorSubmit": "Mistókst að senda inn álit. Vinsamlegast reyndu aftur síðar.",
-    "errorRequired": "Vinsamlega fylltu út bæði titil og útgáfulýsingu.",
     "descPlaceholder": "Lýstu tilteknu vandamáli eða skrefunum til að endurskapa það...",
     "cancel": "Hætta við",
     "submit": "Sendu álit",
@@ -179,7 +177,12 @@
     "submitting": "Sendir inn...",
     "attachmentsLabel": "Skrár",
     "attachmentsHint": "Myndir/myndbönd · 55 MB samtals að hámarki",
-    "attachmentsTooLarge": "Heildarskráarstærð má ekki vera meiri en 55 MB."
+    "attachmentsTooLarge": "Heildarskráarstærð má ekki vera meiri en 55 MB.",
+    "contactPlaceholder": "t.d. nafn@example.com eða +84912345678",
+    "descLabel": "3. Ítarleg lýsing",
+    "errorRequired": "Vinsamlegast fylltu út titil, tengiliðaupplýsingar og lýsingu á útgáfu.",
+    "contactInvalid": "Vinsamlegast sláðu inn gilt netfang eða símanúmer svo við getum svarað.",
+    "contactLabel": "2. Netfang eða símanúmer"
   },
   "seo": {
     "title": "Framezoo - Hröð og slétt myndstraumur",

@@ -6,16 +6,28 @@ import { Button } from "@/components/buttons/Button";
 import { Icon, Icons } from "@/components/Icon";
 import { FancyModal, useModal } from "@/components/overlays/Modal";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
+import { useAuthStore } from "@/stores/auth";
 import { getBackendAuthHeadersAsync } from "@/utils/backendAuth";
 
 const MAX_FEEDBACK_FILE_BYTES = 55 * 1024 * 1024;
+const EMAIL_CONTACT_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const PHONE_CONTACT_REGEX = /^\+?\d{7,15}$/;
+
+function isValidContact(value: string) {
+  const trimmed = value.trim();
+  if (!trimmed || trimmed.length > 255) return false;
+  if (EMAIL_CONTACT_REGEX.test(trimmed)) return true;
+  return PHONE_CONTACT_REGEX.test(trimmed.replace(/[\s().-]/g, ""));
+}
 
 export function FeedbackModal({ id = "feedback" }: { id?: string }) {
   const { t } = useTranslation();
   const modal = useModal(id);
   const backendUrl = useBackendUrl();
+  const isLoggedIn = useAuthStore((s) => Boolean(s.account));
 
   const [title, setTitle] = useState("");
+  const [contact, setContact] = useState("");
   const [description, setDescription] = useState("");
   const [attachments, setAttachments] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
@@ -24,6 +36,7 @@ export function FeedbackModal({ id = "feedback" }: { id?: string }) {
 
   const resetForm = useCallback(() => {
     setTitle("");
+    setContact("");
     setDescription("");
     setAttachments([]);
     setError(null);
@@ -50,6 +63,27 @@ export function FeedbackModal({ id = "feedback" }: { id?: string }) {
       return;
     }
 
+    if (!isLoggedIn) {
+      if (!contact.trim()) {
+        setError(
+          t(
+            "feedback.contactRequired",
+            "Vui lòng nhập email hoặc số điện thoại để chúng tôi phản hồi.",
+          ),
+        );
+        return;
+      }
+      if (!isValidContact(contact)) {
+        setError(
+          t(
+            "feedback.contactInvalid",
+            "Thông tin liên hệ phải là email hoặc số điện thoại hợp lệ.",
+          ),
+        );
+        return;
+      }
+    }
+
     setLoading(true);
     setError(null);
 
@@ -65,6 +99,9 @@ export function FeedbackModal({ id = "feedback" }: { id?: string }) {
       );
       const formData = new FormData();
       formData.append("title", title.trim());
+      if (!isLoggedIn && contact.trim()) {
+        formData.append("contact", contact.trim());
+      }
       formData.append("description", description.trim());
       attachments.forEach((file) => formData.append("files", file));
 
@@ -187,6 +224,34 @@ export function FeedbackModal({ id = "feedback" }: { id?: string }) {
               )}
             />
           </div>
+
+          {!isLoggedIn && (
+            <div className="space-y-1.5">
+              <label className="block text-xs font-semibold text-white/90 uppercase tracking-wide">
+                {t(
+                  "feedback.contactLabel",
+                  "Thông tin liên hệ (Email hoặc SĐT)",
+                )}{" "}
+                <span className="text-red-400">*</span>
+              </label>
+              <input
+                type="text"
+                value={contact}
+                onChange={(e) => setContact(e.target.value)}
+                placeholder={t(
+                  "feedback.contactPlaceholder",
+                  "Ví dụ: name@example.com hoặc 0912345678",
+                )}
+                maxLength={255}
+                disabled={loading}
+                required
+                className={classNames(
+                  "w-full rounded-xl px-4 py-2.5 text-sm text-white placeholder-type-dimmed",
+                  "bg-video-context-border/30 border border-white/10 focus:border-buttons-purple focus:outline-none transition-colors",
+                )}
+              />
+            </div>
+          )}
 
           <div className="space-y-1.5">
             <label className="block text-xs font-semibold text-white/90 uppercase tracking-wide">

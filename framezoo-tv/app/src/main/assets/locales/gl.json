@@ -147,7 +147,10 @@
       "resendIn": "Reenvío dispoñible en {{seconds}}s",
       "resetDescription": "Introduce o código que che enviamos ao teu correo electrónico.",
       "resetTitle": "Restablecer o teu contrasinal",
-      "send": "Enviar código"
+      "send": "Enviar código",
+      "sentToEmail": "Enviouse o código de verificación a <bold>{{email}}</bold>",
+      "sentToPrompt": "Enviouse o código de verificación a:",
+      "spamNotice": "Non atopas o correo electrónico? Comproba o teu cartafol de correo non desexado ou spam."
     },
     "register": {
       "confirmPasswordLabel": "Confirme o contrasinal",
@@ -866,6 +869,7 @@
       "quality": {
         "auto": "Automático",
         "automaticLabel": "Calidade automática",
+        "mpvAutoHint": "Selecciona automaticamente unha pista predeterminada ao abrirse; non se adapta á velocidade da rede.",
         "hint": "Podes intentar <0>cambiar de fonte</0> para obter diferentes opcións de calidade.",
         "iosNoQuality": "Debido a limitacións definidas por Apple, a selección de calidade no está disponible en iOS para esta fonte. Podes intentar <0>cambiar a outra fonte</0> para obter diferentes opcións de calidade.",
         "title": "Calidade"
@@ -931,6 +935,14 @@
         "syncSubtitlePreparingAudio": "Preparando audio para sincronizar...",
         "syncSubtitleWorking": "Framezoo está sincronizando subtítulos...",
         "syncSubtitleApplying": "Aplicando sincronización de subtítulos...",
+        "syncStageSample": "Escaneado de audio",
+        "syncStageVad": "Voz QUE",
+        "syncStageCorrelate": "Aliñar a deriva",
+        "syncStageLock": "Bloquear sincronización",
+        "syncPhasePreparing": "Codificación de tensores acústicos...",
+        "syncPhaseVad": "Illando o diálogo falado (VAD)...",
+        "syncPhaseCorrelate": "Escaneando o espectro de desprazamento e deriva de FPS...",
+        "syncPhaseConsensus": "Verificando o consenso multixanela...",
         "settings": {
           "backlink": "Subtítulos personalizados",
           "delay": "Retardo dos subtítulos",
@@ -1483,6 +1495,10 @@
     "subtitle": "Infórmanos de calquera problema ou erro que atopaches durante a túa experiencia.",
     "titleLabel": "1. Título do problema",
     "titlePlaceholder": "por exemplo, erro de carga de subtítulos, reprodución con atraso...",
+    "contactLabel": "Información de contacto (correo electrónico ou teléfono)",
+    "contactPlaceholder": "por exemplo, nome@exemplo.com ou +84912345678",
+    "contactRequired": "Introduce o teu correo electrónico ou número de teléfono para que poidamos responderche.",
+    "contactInvalid": "Introduza un enderezo de correo electrónico ou un número de teléfono válido.",
     "descriptionLabel": "2. Descrición do problema",
     "descriptionPlaceholder": "Describe o problema en detalle, os pasos para reproducilo ou as suxestións...",
     "submit": "Enviar comentarios",

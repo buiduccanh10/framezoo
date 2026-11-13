@@ -147,7 +147,10 @@
       "resendIn": "Reenvio disponível em {{seconds}}s",
       "resetDescription": "Insira o código enviado para o seu e-mail.",
       "resetTitle": "Redefina sua senha",
-      "send": "Enviar código"
+      "send": "Enviar código",
+      "sentToEmail": "O código de verificação foi enviado para <bold>{{email}}</bold>",
+      "sentToPrompt": "O código de verificação foi enviado para:",
+      "spamNotice": "Não encontrou o e-mail? Verifique sua pasta de spam ou lixo eletrônico."
     },
     "register": {
       "confirmPasswordLabel": "Confirme sua senha",
@@ -866,6 +869,7 @@
       "quality": {
         "auto": "Automático",
         "automaticLabel": "Qualidade automática",
+        "mpvAutoHint": "Seleciona automaticamente uma faixa padrão ao ser aberto; não se adapta à velocidade da rede.",
         "hint": "Você pode tentar <0>trocar de fonte</0> para obter diferentes opções de qualidade.",
         "iosNoQuality": "Devido a limitações definidas pela Apple, a seleção de qualidade não está disponível no iOS para esta fonte. Você pode tentar <0>trocar para outra fonte</0> para obter diferentes opções de qualidade.",
         "title": "Qualidade"
@@ -931,6 +935,14 @@
         "syncSubtitlePreparingAudio": "Preparando áudio para sincronização...",
         "syncSubtitleWorking": "Framezoo está sincronizando legendas...",
         "syncSubtitleApplying": "Aplicando sincronização de legendas...",
+        "syncStageSample": "Varredura de áudio",
+        "syncStageVad": "Voz O QUÊ",
+        "syncStageCorrelate": "Desvio de alinhamento",
+        "syncStageLock": "Sincronização de bloqueio",
+        "syncPhasePreparing": "Codificação de tensores acústicos...",
+        "syncPhaseVad": "Isolando o diálogo falado (VAD)...",
+        "syncPhaseCorrelate": "Espectro de deslocamento de varredura e deriva de FPS...",
+        "syncPhaseConsensus": "Verificando consenso em múltiplas janelas...",
         "settings": {
           "backlink": "Legendas personalizadas",
           "delay": "Atraso da legenda",
@@ -1483,6 +1495,10 @@
     "subtitle": "Informe-nos sobre qualquer problema ou erro que você encontrar durante sua experiência.",
     "titleLabel": "1. Título da Edição",
     "titlePlaceholder": "Por exemplo, erro ao carregar legendas, reprodução intermitente...",
+    "contactLabel": "Informações de contato (e-mail ou telefone)",
+    "contactPlaceholder": "Exemplo: nome@exemplo.com ou +84912345678",
+    "contactRequired": "Por favor, insira seu e-mail ou número de telefone para que possamos responder.",
+    "contactInvalid": "Por favor, insira um endereço de e-mail ou número de telefone válido.",
     "descriptionLabel": "2. Descrição do Problema",
     "descriptionPlaceholder": "Descreva o problema em detalhes, os passos para reproduzi-lo ou sugestões...",
     "submit": "Enviar feedback",

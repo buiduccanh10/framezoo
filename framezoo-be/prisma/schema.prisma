@@ -183,6 +183,7 @@ model feedbacks {
   id          String   @id @db.Uuid
   title       String   @db.VarChar(255)
   description String   @db.Text
+  contact     String?  @db.VarChar(255)
   status      String   @default("pending") @db.VarChar(50)
   user_id     String?  @db.VarChar(255)
   attachments Json     @default("[]")

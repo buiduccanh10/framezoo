@@ -166,9 +166,7 @@
     "subtitle": "Andke meile teada kõigist Framezooga seotud probleemidest või raskustest.",
     "modalTitle": "Saatke meile oma tagasiside",
     "titleLabel": "1. Väljaande pealkiri",
-    "descLabel": "2. Üksikasjalik kirjeldus",
     "titlePlaceholder": "nt. Subtiitrite sünkroonimise probleem, viivitus taasesituse ajal...",
-    "errorRequired": "Sisestage nii pealkiri kui ka probleemi kirjeldus.",
     "descPlaceholder": "Kirjeldage konkreetset probleemi või selle taasesitamise samme...",
     "cancel": "Tühista",
     "submit": "Esitage tagasisidet",
@@ -179,7 +177,12 @@
     "submitting": "Esitamine...",
     "attachmentsLabel": "Failid",
     "attachmentsTooLarge": "Faili kogumaht ei tohi ületada 55 MB.",
-    "attachmentsHint": "Pildid/videod · Maksimaalselt 55 MB"
+    "attachmentsHint": "Pildid/videod · Maksimaalselt 55 MB",
+    "contactPlaceholder": "nt. nimi@example.com või +84912345678",
+    "descLabel": "3. Üksikasjalik kirjeldus",
+    "contactLabel": "2. E-post või telefoninumber",
+    "errorRequired": "Sisestage pealkiri, kontaktteave ja probleemi kirjeldus.",
+    "contactInvalid": "Sisestage kehtiv e-posti aadress või telefoninumber, et saaksime vastata."
   },
   "seo": {
     "description": "Framezoo on kiire video voogedastuspleier, mis on loodud sujuvaks, intuitiivseks ja hõlpsasti kasutatavaks. Avastage rikkalikke filmide metaandmeid, sünkroonige subtiitreid piiranguteta videovoogudega ja laadige subtiitreid mitmest allikast.",

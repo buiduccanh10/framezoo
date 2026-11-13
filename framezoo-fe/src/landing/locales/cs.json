@@ -165,12 +165,10 @@
     "button": "Zpětná vazba",
     "subtitle": "Dejte nám vědět o jakýchkoli problémech nebo potížích, se kterými jste se setkali s Framezoo.",
     "modalTitle": "Pošlete nám svůj názor",
-    "errorRequired": "Vyplňte prosím název i popis problému.",
     "titlePlaceholder": "např. Problém se synchronizací titulků, zpoždění při přehrávání...",
     "errorSubmit": "Zpětnou vazbu se nepodařilo odeslat. Zkuste to znovu později.",
     "cancel": "Zrušit",
     "submit": "Odeslat zpětnou vazbu",
-    "descLabel": "2. Podrobný popis",
     "titleLabel": "1. Název vydání",
     "descPlaceholder": "Popište konkrétní problém nebo kroky k jeho reprodukci...",
     "close": "Blízko",
@@ -179,7 +177,12 @@
     "successDesc": "děkujeme za vaši zpětnou vazbu. Náš tým problém co nejdříve zkontroluje a vyřeší.",
     "attachmentsLabel": "Soubory",
     "attachmentsTooLarge": "Celková velikost souboru nesmí přesáhnout 55 MB.",
-    "attachmentsHint": "Obrázky/videa · Celková maximální velikost 55 MB"
+    "attachmentsHint": "Obrázky/videa · Celková maximální velikost 55 MB",
+    "descLabel": "3. Podrobný popis",
+    "contactInvalid": "Zadejte prosím platnou e-mailovou adresu nebo telefonní číslo, abychom vám mohli odpovědět.",
+    "errorRequired": "Vyplňte prosím název, kontaktní údaje a popis problému.",
+    "contactLabel": "2. E-mail nebo telefonní číslo",
+    "contactPlaceholder": "např. jmeno@example.com nebo +84912345678"
   },
   "seo": {
     "title": "Framezoo - Rychlé a plynulé streamování videa",

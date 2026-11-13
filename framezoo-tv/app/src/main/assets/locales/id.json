@@ -147,7 +147,10 @@
       "resendIn": "Pengiriman ulang tersedia di __PH__0__s",
       "resetDescription": "Masukkan kode yang dikirimkan ke email Anda.",
       "resetTitle": "Atur ulang kata sandi Anda",
-      "send": "Kirim kode"
+      "send": "Kirim kode",
+      "sentToEmail": "Kode verifikasi telah dikirim ke <bold>{{email}}</bold>",
+      "sentToPrompt": "Kode verifikasi telah dikirim ke:",
+      "spamNotice": "Tidak menemukan emailnya? Silakan periksa folder spam atau sampah Anda."
     },
     "register": {
       "confirmPasswordLabel": "Konfirmasi Kata Sandi",
@@ -866,6 +869,7 @@
       "quality": {
         "auto": "Mobil",
         "automaticLabel": "Otomatis",
+        "mpvAutoHint": "Secara otomatis memilih trek default saat dibuka; tidak menyesuaikan dengan kecepatan jaringan.",
         "hint": "Anda dapat mencoba <0>mengganti sumber</0> untuk mendapatkan opsi kualitas yang berbeda.",
         "iosNoQuality": "Karena keterbatasan dari Apple, opsi kualitas pada sumber ini tidak tersedia untuk iOS. Anda dapat mencoba <0>mengganti sumber</0> untuk mendapatkan opsi kualitas yang berbeda.",
         "title": "Kualitas"
@@ -931,6 +935,14 @@
         "syncSubtitlePreparingAudio": "Mempersiapkan audio untuk disinkronkan...",
         "syncSubtitleWorking": "Framezoo sedang menyinkronkan subtitle...",
         "syncSubtitleApplying": "Menerapkan sinkronisasi subtitle...",
+        "syncStageSample": "Pemindaian Audio",
+        "syncStageVad": "Suara APA",
+        "syncStageCorrelate": "Sejajarkan Pergeseran",
+        "syncStageLock": "Kunci Sinkronisasi",
+        "syncPhasePreparing": "Mengkodekan tensor akustik...",
+        "syncPhaseVad": "Mengisolasi dialog lisan (VAD)...",
+        "syncPhaseCorrelate": "Pemindaian offset & spektrum pergeseran FPS...",
+        "syncPhaseConsensus": "Memverifikasi konsensus multi-jendela...",
         "settings": {
           "backlink": "Subtitle khusus",
           "delay": "Penundaan subtitle",
@@ -1483,6 +1495,10 @@
     "subtitle": "Beri tahu kami tentang masalah atau bug apa pun yang Anda temui selama pengalaman Anda.",
     "titleLabel": "1. Judul Masalah",
     "titlePlaceholder": "Contoh: Kesalahan pemuatan subtitle, Pemutaran tersendat-sendat...",
+    "contactLabel": "Informasi kontak (Email atau Telepon)",
+    "contactPlaceholder": "misalnya name@example.com atau +84912345678",
+    "contactRequired": "Silakan masukkan alamat email atau nomor telepon Anda agar kami dapat membalas.",
+    "contactInvalid": "Silakan masukkan alamat email atau nomor telepon yang valid.",
     "descriptionLabel": "2. Deskripsi Masalah",
     "descriptionPlaceholder": "Jelaskan masalahnya secara detail, langkah-langkah untuk mereproduksinya, atau saran...",
     "submit": "Kirim Masukan",

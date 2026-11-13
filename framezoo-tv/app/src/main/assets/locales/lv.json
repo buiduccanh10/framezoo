@@ -147,7 +147,10 @@
       "resendIn": "Atkārtota nosūtīšana pieejama pēc {{seconds}}s",
       "resetDescription": "Ievadiet kodu, kas nosūtīts uz jūsu e-pastu.",
       "resetTitle": "Atiestatiet paroli",
-      "send": "Sūtīt kodu"
+      "send": "Sūtīt kodu",
+      "sentToEmail": "Verifikācijas kods ir nosūtīts uz <bold>{{email}}</bold>",
+      "sentToPrompt": "Verifikācijas kods ir nosūtīts uz:",
+      "spamNotice": "Nevarat atrast e-pastu? Lūdzu, pārbaudiet surogpasta vai nevēlamā pasta mapi."
     },
     "register": {
       "confirmPasswordLabel": "Apstipriniet paroli",
@@ -866,6 +869,7 @@
       "quality": {
         "auto": "Auto",
         "automaticLabel": "Automātiskā kvalitāte",
+        "mpvAutoHint": "Atverot, automātiski tiek atlasīta noklusējuma dziesma; tā nepielāgojas tīkla ātrumam.",
         "hint": "Varat mēģināt <0>pārslēgt avotu</0>, lai iegūtu dažādas kvalitātes opcijas.",
         "iosNoQuality": "Apple noteikto ierobežojumu dēļ šim avotam iOS nav pieejama kvalitātes izvēle. Varat mēģināt <0>pārslēgties uz citu avotu</0>, lai iegūtu dažādas kvalitātes opcijas.",
         "title": "Kvalitāte"
@@ -931,6 +935,14 @@
         "syncSubtitlePreparingAudio": "Notiek audio sagatavošana sinhronizēšanai...",
         "syncSubtitleWorking": "Framezoo sinhronizē subtitrus...",
         "syncSubtitleApplying": "Notiek subtitru sinhronizēšana...",
+        "syncStageSample": "Audio skenēšana",
+        "syncStageVad": "Balss KAS",
+        "syncStageCorrelate": "Izlīdzināt dreifēšanu",
+        "syncStageLock": "Bloķēt sinhronizāciju",
+        "syncPhasePreparing": "Akustisko tenzoru kodēšana...",
+        "syncPhaseVad": "Runā dialoga (VAD) izolēšana...",
+        "syncPhaseCorrelate": "Skenēšanas nobīdes un FPS dreifa spektrs...",
+        "syncPhaseConsensus": "Notiek vairāku logu vienprātības pārbaude...",
         "settings": {
           "backlink": "Pielāgoti subtitri",
           "delay": "Subtitru aizkave",
@@ -1483,6 +1495,10 @@
     "subtitle": "Informējiet mūs par jebkuru problēmu vai kļūdu, ar kuru saskārāties savas pieredzes laikā.",
     "titleLabel": "1. Izdevuma nosaukums",
     "titlePlaceholder": "piem., subtitru ielādes kļūda, atskaņošanas raustīšanās...",
+    "contactLabel": "Kontaktinformācija (e-pasts vai tālrunis)",
+    "contactPlaceholder": "piem., name@example.com vai +84912345678",
+    "contactRequired": "Lūdzu, ievadiet savu e-pasta adresi vai tālruņa numuru, lai mēs varētu atbildēt.",
+    "contactInvalid": "Lūdzu, ievadiet derīgu e-pasta adresi vai tālruņa numuru.",
     "descriptionLabel": "2. Problēmas apraksts",
     "descriptionPlaceholder": "Detalizēti aprakstiet problēmu, sniedziet darbības, lai to atkārtotu, vai ieteikumus...",
     "submit": "Iesniegt atsauksmes",

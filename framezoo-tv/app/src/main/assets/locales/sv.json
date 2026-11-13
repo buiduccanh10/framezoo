@@ -147,7 +147,10 @@
       "resendIn": "Omsändning tillgänglig om {{seconds}}s",
       "resetDescription": "Ange koden som skickades till din e-postadress.",
       "resetTitle": "Återställ ditt lösenord",
-      "send": "Skicka kod"
+      "send": "Skicka kod",
+      "sentToEmail": "Verifieringskoden har skickats till <bold>{{email}}</bold>",
+      "sentToPrompt": "Verifieringskoden har skickats till:",
+      "spamNotice": "Hittar du inte e-postmeddelandet? Kontrollera din skräppostmapp."
     },
     "register": {
       "confirmPasswordLabel": "Bekräfta lösenord",
@@ -866,6 +869,7 @@
       "quality": {
         "auto": "Bil",
         "automaticLabel": "Automatisk kvalitet",
+        "mpvAutoHint": "Väljer automatiskt ett standardspår när det öppnas; det anpassar sig inte till nätverkshastigheten.",
         "hint": "Du kan prova att <0>byta källa</0> för att få olika kvalitetsval.",
         "iosNoQuality": "På grund av Apple-definierade begränsningar är kvalitetsval inte tillgängligt på iOS för denna källa. Du kan prova att <0>byta till en annan källa</0> för att få olika kvalitetsval.",
         "title": "Kvalitet"
@@ -931,6 +935,14 @@
         "syncSubtitlePreparingAudio": "Förbereder ljud för synkronisering...",
         "syncSubtitleWorking": "Framezoo synkroniserar undertexter...",
         "syncSubtitleApplying": "Använder undertextsynkronisering...",
+        "syncStageSample": "Ljudskanning",
+        "syncStageVad": "Voice VAD",
+        "syncStageCorrelate": "Justera driften",
+        "syncStageLock": "Lås synkronisering",
+        "syncPhasePreparing": "Kodning av akustiska tensorer...",
+        "syncPhaseVad": "Isolating spoken dialogue (VAD)...",
+        "syncPhaseCorrelate": "Skanningsoffset och FPS-driftspektrum...",
+        "syncPhaseConsensus": "Verifierar konsensus i flera fönster...",
         "settings": {
           "backlink": "Anpassade undertexter",
           "delay": "Undertexts fördrivning",
@@ -1483,6 +1495,10 @@
     "subtitle": "Berätta för oss om eventuella problem eller buggar du stötte på under din upplevelse.",
     "titleLabel": "1. Utgåvatitel",
     "titlePlaceholder": "t.ex. fel på textning, hackig uppspelning...",
+    "contactLabel": "Kontaktinformation (e-post eller telefon)",
+    "contactPlaceholder": "t.ex. namn@example.com eller +84912345678",
+    "contactRequired": "Vänligen ange din e-postadress eller ditt telefonnummer så att vi kan svara.",
+    "contactInvalid": "Ange en giltig e-postadress eller ett giltigt telefonnummer.",
     "descriptionLabel": "2. Problembeskrivning",
     "descriptionPlaceholder": "Beskriv problemet i detalj, steg för att reproducera det, eller förslag...",
     "submit": "Skicka feedback",

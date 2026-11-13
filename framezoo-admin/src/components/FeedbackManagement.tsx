@@ -1,8 +1,10 @@
 import {
   Check,
+  Copy,
   Eye,
   Image,
   Loader2,
+  Mail,
   MessageSquare,
   RotateCcw,
   Search,
@@ -25,6 +27,15 @@ export function FeedbackManagement({
   onPendingChange,
 }: FeedbackManagementProps) {
   const feedback = useFeedbackManagement(onMessage, onPendingChange);
+
+  const copyContact = async (value: string) => {
+    try {
+      await navigator.clipboard.writeText(value);
+      onMessage("Đã sao chép thông tin liên hệ.");
+    } catch {
+      onMessage("Không thể sao chép vào clipboard.");
+    }
+  };
 
   useEffect(() => {
     if (!feedback.selected) return;
@@ -135,6 +146,11 @@ export function FeedbackManagement({
                         <User size={12} aria-hidden="true" />{" "}
                         {item.user?.nickname || "Khách"}
                       </span>
+                      {item.contact ? (
+                        <span className="person-chip" title="Thông tin liên hệ">
+                          <Mail size={12} aria-hidden="true" /> {item.contact}
+                        </span>
+                      ) : null}
                       {item.attachments.length > 0 ? (
                         <span className="person-chip">
                           <Image size={12} aria-hidden="true" />{" "}
@@ -228,6 +244,20 @@ export function FeedbackManagement({
               <span className="person-chip">
                 <User size={12} /> {feedback.selected.user?.nickname || "Khách"}
               </span>
+              {feedback.selected.contact ? (
+                <span className="person-chip">
+                  <Mail size={12} /> {feedback.selected.contact}
+                  <button
+                    className="text-button"
+                    type="button"
+                    onClick={() => void copyContact(feedback.selected!.contact!)}
+                    aria-label="Sao chép thông tin liên hệ"
+                    title="Sao chép thông tin liên hệ"
+                  >
+                    <Copy size={11} />
+                  </button>
+                </span>
+              ) : null}
               <time dateTime={feedback.selected.created_at}>
                 {new Date(feedback.selected.created_at).toLocaleString("vi-VN")}
               </time>

@@ -164,7 +164,6 @@
     "badge": "Masukan",
     "button": "Masukan",
     "modalTitle": "Kirimkan masukan Anda kepada kami",
-    "descLabel": "2. Deskripsi rinci",
     "titleLabel": "1. Judul terbitan",
     "subtitle": "Beri tahu kami tentang masalah atau kesulitan apa pun yang Anda alami dengan Framezoo.",
     "titlePlaceholder": "misalnya Masalah sinkronisasi subtitle, kelambatan saat pemutaran...",
@@ -175,11 +174,15 @@
     "submit": "Kirim masukan",
     "close": "Menutup",
     "descPlaceholder": "Jelaskan masalah spesifik atau langkah-langkah untuk mereproduksinya...",
-    "errorRequired": "Silakan isi judul dan deskripsi terbitan.",
     "successDesc": "Terima kasih atas tanggapan Anda. Tim kami akan meninjau dan menyelesaikan masalah ini sesegera mungkin.",
     "attachmentsLabel": "File",
     "attachmentsHint": "Gambar/video · Total maksimum 55 MB",
-    "attachmentsTooLarge": "Total ukuran file tidak boleh melebihi 55 MB."
+    "attachmentsTooLarge": "Total ukuran file tidak boleh melebihi 55 MB.",
+    "contactPlaceholder": "misalnya nama@example.com atau +84912345678",
+    "descLabel": "3. Deskripsi rinci",
+    "contactLabel": "2. Email atau Nomor Telepon",
+    "contactInvalid": "Silakan masukkan alamat email atau nomor telepon yang valid agar kami dapat membalas.",
+    "errorRequired": "Silakan isi judul, informasi kontak, dan deskripsi masalah."
   },
   "seo": {
     "title": "Framezoo - Streaming Video Cepat & Lancar",

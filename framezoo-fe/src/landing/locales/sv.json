@@ -166,7 +166,6 @@
     "modalTitle": "Skicka oss din feedback",
     "titleLabel": "1. Nummertitel",
     "titlePlaceholder": "till exempel Subtitle sync issue, lag during playback...",
-    "errorRequired": "Vänligen fyll i både titel och problembeskrivning.",
     "descPlaceholder": "Beskriv det specifika problemet eller stegen för att återskapa det...",
     "errorSubmit": "Det gick inte att skicka feedback. Försök igen senare.",
     "cancel": "Avboka",
@@ -176,10 +175,14 @@
     "successTitle": "Feedback har skickats!",
     "submit": "Skicka feedback",
     "submitting": "Skickar...",
-    "descLabel": "2. Detaljerad beskrivning",
     "attachmentsLabel": "Filer",
     "attachmentsTooLarge": "Den totala filstorleken får inte överstiga 55 MB.",
-    "attachmentsHint": "Bilder/videor · 55 MB totalt max"
+    "attachmentsHint": "Bilder/videor · 55 MB totalt max",
+    "errorRequired": "Vänligen fyll i titel, kontaktinformation och problembeskrivning.",
+    "descLabel": "3. Detaljerad beskrivning",
+    "contactPlaceholder": "till exempel name@example.com eller +84912345678",
+    "contactInvalid": "Vänligen ange en giltig e-postadress eller telefonnummer så att vi kan svara.",
+    "contactLabel": "2. E-post eller telefonnummer"
   },
   "seo": {
     "description": "Framezoo är en höghastighetsvideospelare som är designad för att vara smidig, intuitiv och enkel att använda. Utforska rik filmmetadata, synkronisera undertexter med videoströmmar utan begränsningar och ladda undertexter från flera källor.",

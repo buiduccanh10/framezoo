@@ -869,6 +869,7 @@
       "quality": {
         "auto": "자동",
         "automaticLabel": "자동 품질 제어",
+        "mpvAutoHint": "앱을 열면 자동으로 기본 트랙이 선택되며, 네트워크 속도에 따라 자동으로 조정되지 않습니다.",
         "hint": "<0>소스 전환</0>을 사용하여 다양한 화질 옵션을 확인할 수 있습니다.",
         "iosNoQuality": "Apple에서 정의한 제한 사항으로 인해 이 소스에 대해 iOS에서 품질 선택을 사용할 수 없습니다. <0>다른 소스로 전환</0>하여 다른 품질 옵션을 사용해 볼 수 있습니다.",
         "title": "화질"
@@ -1494,6 +1495,10 @@
     "subtitle": "이용 중 발생한 문제나 버그가 있으면 알려주세요.",
     "titleLabel": "1. 문제 제목",
     "titlePlaceholder": "예: 자막 로딩 오류, 재생 끊김 현상 등",
+    "contactLabel": "연락처 정보 (이메일 또는 전화번호)",
+    "contactPlaceholder": "예: name@example.com 또는 +84912345678",
+    "contactRequired": "답변을 드릴 수 있도록 이메일 주소 또는 전화번호를 입력해 주세요.",
+    "contactInvalid": "유효한 이메일 주소 또는 전화번호를 입력해 주세요.",
     "descriptionLabel": "2. 문제 설명",
     "descriptionPlaceholder": "문제점을 자세히 설명하고, 재현 단계 또는 제안 사항을 제시해 주세요.",
     "submit": "피드백 제출",

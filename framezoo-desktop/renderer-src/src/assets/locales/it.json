@@ -869,6 +869,7 @@
       "quality": {
         "auto": "Auto",
         "automaticLabel": "Qualità automatica",
+        "mpvAutoHint": "Seleziona automaticamente una traccia predefinita all'apertura; non si adatta alla velocità della rete.",
         "hint": "Si può provare a <0>cambiare sorgente</0> per avere diverse opzioni di qualità.",
         "iosNoQuality": "A causa delle limitazioni definite da Apple (comuni IOS L), la selezione della qualità non è disponibile su iOS per questa fonte. Puoi provare a <0>passare a un'altra sorgente</0> per ottenere opzioni di qualità diverse.",
         "title": "Qualità"
@@ -1494,6 +1495,10 @@
     "subtitle": "Segnalaci eventuali problemi o bug riscontrati durante la tua esperienza.",
     "titleLabel": "1. Titolo del numero",
     "titlePlaceholder": "Ad esempio, errore di caricamento dei sottotitoli, riproduzione a scatti...",
+    "contactLabel": "Informazioni di contatto (e-mail o telefono)",
+    "contactPlaceholder": "Ad esempio, name@example.com o +84912345678",
+    "contactRequired": "Inserisci il tuo indirizzo email o numero di telefono per consentirci di risponderti.",
+    "contactInvalid": "Inserisci un indirizzo email o un numero di telefono valido.",
     "descriptionLabel": "2. Descrizione del problema",
     "descriptionPlaceholder": "Descrivi il problema in dettaglio, i passaggi per riprodurlo o eventuali suggerimenti...",
     "submit": "Invia feedback",

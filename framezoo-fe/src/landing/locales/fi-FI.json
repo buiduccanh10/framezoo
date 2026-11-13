@@ -169,9 +169,7 @@
     "titlePlaceholder": "esim. Tekstityssynkronointiongelma, viive toiston aikana...",
     "successTitle": "Palautteen lähetys onnistui!",
     "errorSubmit": "Palautteen lähettäminen epäonnistui. Yritä myöhemmin uudelleen.",
-    "errorRequired": "Täytä sekä otsikko että ongelman kuvaus.",
     "descPlaceholder": "Kuvaile tietty ongelma tai vaiheet sen toistamiseksi...",
-    "descLabel": "2. Yksityiskohtainen kuvaus",
     "cancel": "Peruuttaa",
     "close": "Lähellä",
     "submitting": "Lähetetään...",
@@ -179,7 +177,12 @@
     "submit": "Lähetä palautetta",
     "attachmentsLabel": "Tiedostot",
     "attachmentsHint": "Kuvat/videot · Enimmäiskoko 55 Mt",
-    "attachmentsTooLarge": "Tiedoston kokonaiskoko ei saa ylittää 55 megatavua."
+    "attachmentsTooLarge": "Tiedoston kokonaiskoko ei saa ylittää 55 megatavua.",
+    "contactPlaceholder": "esim. nimi@esimerkki.fi tai +84912345678",
+    "contactInvalid": "Anna kelvollinen sähköpostiosoite tai puhelinnumero, jotta voimme vastata.",
+    "errorRequired": "Täytä otsikko, yhteystiedot ja ongelman kuvaus.",
+    "descLabel": "3. Yksityiskohtainen kuvaus",
+    "contactLabel": "2. Sähköposti tai puhelinnumero"
   },
   "seo": {
     "description": "Framezoo on nopea videon suoratoistosoitin, joka on suunniteltu sujuvaksi, intuitiiviseksi ja helppokäyttöiseksi. Tutustu monipuolisiin elokuvien metatietoihin, synkronoi tekstitykset videovirtojen kanssa ilman rajoituksia ja lataa tekstityksiä useista lähteistä.",

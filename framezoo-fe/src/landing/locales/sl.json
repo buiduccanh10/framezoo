@@ -164,10 +164,8 @@
     "button": "Povratne informacije",
     "badge": "Povratne informacije",
     "titlePlaceholder": "npr. Težava pri sinhronizaciji podnapisov, zamik med predvajanjem ...",
-    "descLabel": "2. Podroben opis",
     "modalTitle": "Pošljite nam povratne informacije",
     "subtitle": "Sporočite nam morebitne težave ali težave, ki ste jih imeli s Framezoo.",
-    "errorRequired": "Prosimo, izpolnite naslov in opis težave.",
     "cancel": "Prekliči",
     "titleLabel": "1. Naslov izdaje",
     "submit": "Pošlji povratne informacije",
@@ -179,7 +177,12 @@
     "submitting": "Pošiljanje ...",
     "attachmentsLabel": "Datoteke",
     "attachmentsTooLarge": "Skupna velikost datoteke ne sme presegati 55 MB.",
-    "attachmentsHint": "Slike/videoposnetki · Skupno največ 55 MB"
+    "attachmentsHint": "Slike/videoposnetki · Skupno največ 55 MB",
+    "contactPlaceholder": "npr. ime@example.com ali +84912345678",
+    "contactInvalid": "Vnesite veljaven e-poštni naslov ali telefonsko številko, da vam lahko odgovorimo.",
+    "errorRequired": "Vnesite naslov, kontaktne podatke in opis težave.",
+    "descLabel": "3. Podroben opis",
+    "contactLabel": "2. E-pošta ali telefonska številka"
   },
   "seo": {
     "title": "Framezoo - Hitro in gladko pretakanje videa",

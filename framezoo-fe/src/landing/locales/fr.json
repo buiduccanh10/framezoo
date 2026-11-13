@@ -167,10 +167,8 @@
     "titleLabel": "1. Titre du numéro",
     "modalTitle": "Envoyez-nous vos commentaires",
     "descPlaceholder": "Décrivez le problème spécifique ou les étapes pour le reproduire...",
-    "errorRequired": "Veuillez remplir à la fois le titre et la description du problème.",
     "subtitle": "Faites-nous part de tout problème ou difficulté que vous avez rencontré avec Framezoo.",
     "cancel": "Annuler",
-    "descLabel": "2. Description détaillée",
     "submit": "Soumettre des commentaires",
     "errorSubmit": "Échec de l'envoi des commentaires. Veuillez réessayer plus tard.",
     "successTitle": "Commentaires envoyés avec succès !",
@@ -179,7 +177,12 @@
     "successDesc": "Merci pour vos commentaires. Notre équipe examinera et résoudra le problème dans les plus brefs délais.",
     "attachmentsLabel": "Fichiers",
     "attachmentsHint": "Images/vidéos · 55 Mo maximum au total",
-    "attachmentsTooLarge": "La taille totale du fichier ne doit pas dépasser 55 Mo."
+    "attachmentsTooLarge": "La taille totale du fichier ne doit pas dépasser 55 Mo.",
+    "contactLabel": "2. Email ou numéro de téléphone",
+    "contactPlaceholder": "par ex. nom@exemple.com ou +84912345678",
+    "contactInvalid": "Veuillez saisir une adresse e-mail ou un numéro de téléphone valide afin que nous puissions vous répondre.",
+    "errorRequired": "Veuillez remplir le titre, les coordonnées et la description du problème.",
+    "descLabel": "3. Description détaillée"
   },
   "seo": {
     "title": "Framezoo - Streaming vidéo rapide et fluide",

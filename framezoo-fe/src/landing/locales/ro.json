@@ -164,7 +164,6 @@
     "button": "Feedback",
     "badge": "Feedback",
     "subtitle": "Anunțați-ne despre orice probleme sau dificultăți pe care le-ați întâmpinat cu Framezoo.",
-    "descLabel": "2. Descriere detaliată",
     "modalTitle": "Trimite-ne feedback-ul tău",
     "titleLabel": "1. Titlul emisiunii",
     "titlePlaceholder": "de ex. Problemă de sincronizare a subtitrarilor, decalaj în timpul redării...",
@@ -173,13 +172,17 @@
     "submitting": "Se trimite...",
     "successDesc": "Vă mulțumim pentru feedback. Echipa noastră va analiza și rezolva problema cât mai curând posibil.",
     "descPlaceholder": "Descrieți problema specifică sau pașii pentru a o reproduce...",
-    "errorRequired": "Vă rugăm să completați atât titlul, cât și descrierea problemei.",
     "errorSubmit": "Feedbackul nu a fost trimis. Vă rugăm să încercați din nou mai târziu.",
     "successTitle": "Feedback trimis cu succes!",
     "close": "Aproape",
     "attachmentsLabel": "Fișiere",
     "attachmentsHint": "Imagini/videoclipuri · 55 MB total maxim",
-    "attachmentsTooLarge": "Dimensiunea totală a fișierului nu trebuie să depășească 55 MB."
+    "attachmentsTooLarge": "Dimensiunea totală a fișierului nu trebuie să depășească 55 MB.",
+    "contactInvalid": "Vă rugăm să introduceți o adresă de e-mail sau un număr de telefon valide pentru a vă putea răspunde.",
+    "errorRequired": "Vă rugăm să completați titlul, informațiile de contact și descrierea problemei.",
+    "contactPlaceholder": "de ex. nume@example.com sau +84912345678",
+    "descLabel": "3. Descriere detaliată",
+    "contactLabel": "2. E-mail sau număr de telefon"
   },
   "seo": {
     "title": "Framezoo - Streaming video rapid și fără probleme",

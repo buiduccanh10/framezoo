@@ -166,9 +166,7 @@
     "modalTitle": "Inviaci il tuo feedback",
     "titleLabel": "1. Titolo del problema",
     "titlePlaceholder": "per esempio. Problema di sincronizzazione dei sottotitoli, ritardo durante la riproduzione...",
-    "errorRequired": "Compila sia il titolo che la descrizione del problema.",
     "descPlaceholder": "Descrivi il problema specifico o i passaggi per riprodurlo...",
-    "descLabel": "2. Descrizione dettagliata",
     "cancel": "Cancellare",
     "submitting": "Invio...",
     "close": "Vicino",
@@ -179,7 +177,12 @@
     "submit": "Invia feedback",
     "attachmentsLabel": "File",
     "attachmentsHint": "Immagini/video · Massimo 55 MB totali",
-    "attachmentsTooLarge": "La dimensione totale del file non deve superare i 55 MB."
+    "attachmentsTooLarge": "La dimensione totale del file non deve superare i 55 MB.",
+    "contactLabel": "2. E-mail o numero di telefono",
+    "descLabel": "3. Descrizione dettagliata",
+    "contactPlaceholder": "per esempio. nome@esempio.com o +84912345678",
+    "errorRequired": "Inserisci il titolo, le informazioni di contatto e la descrizione del problema.",
+    "contactInvalid": "Inserisci un indirizzo email o un numero di telefono valido per consentirci di rispondere."
   },
   "seo": {
     "title": "Framezoo: streaming video veloce e fluido",

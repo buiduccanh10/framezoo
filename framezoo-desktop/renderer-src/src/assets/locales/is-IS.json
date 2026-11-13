@@ -869,6 +869,7 @@
       "quality": {
         "auto": "Sjálfvirk",
         "automaticLabel": "Sjálfkrafa gæði",
+        "mpvAutoHint": "Velur sjálfkrafa sjálfgefið lag þegar það er opnað; það aðlagast ekki hraða netsins.",
         "hint": "Þú getur reynt að <0>skipta um heimild</0>til að fá öðruvísi gæða valkosti.",
         "iosNoQuality": "Vegna takmörkum á Apple tækjum er ekki hægt að breyta um gæði á iOS með þessari heimild. Þú getur reynt að <0>breyta í aðra heimild</0> til að fá mismunandi gæðastillingar.",
         "title": "Gæði"
@@ -1494,6 +1495,10 @@
     "subtitle": "Láttu okkur vita af öllum vandamálum eða villum sem þú lentir í viðskiptum þínum.",
     "titleLabel": "1. Heiti tölublaðs",
     "titlePlaceholder": "t.d. villa í hleðslu texta, hik í spilun...",
+    "contactLabel": "Tengiliðaupplýsingar (tölvupóstur eða sími)",
+    "contactPlaceholder": "t.d. nafn@dæmi.is eða +84912345678",
+    "contactRequired": "Vinsamlegast sláðu inn netfangið þitt eða símanúmer svo við getum svarað.",
+    "contactInvalid": "Vinsamlegast sláðu inn gilt netfang eða símanúmer.",
     "descriptionLabel": "2. Lýsing á vandamáli",
     "descriptionPlaceholder": "Lýstu vandamálinu í smáatriðum, skrefum til að endurtaka eða tillögum ...",
     "submit": "Senda inn ábendingu",

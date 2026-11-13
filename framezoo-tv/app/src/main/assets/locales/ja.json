@@ -147,7 +147,10 @@
       "resendIn": "再送信は{{seconds}}sで可能です",
       "resetDescription": "メールで送信されたコードを入力してください。",
       "resetTitle": "パスワードをリセット",
-      "send": "コードを送信"
+      "send": "コードを送信",
+      "sentToEmail": "認証コードが<bold>{{email}}</bold>に送信されました",
+      "sentToPrompt": "確認コードが送信されました：",
+      "spamNotice": "メールが見つからない場合は、迷惑メールフォルダをご確認ください。"
     },
     "register": {
       "confirmPasswordLabel": "パスワードを認証する",
@@ -866,6 +869,7 @@
       "quality": {
         "auto": "自動",
         "automaticLabel": "自動品質",
+        "mpvAutoHint": "起動時にデフォルトのトラックを自動的に選択します。ネットワーク速度には対応していません。",
         "hint": "<0>ソースを切り替える</0> と、さまざまな品質オプションを試すことができます。",
         "iosNoQuality": "Apple が定義した (一般的な IOS L) 制限により、iOS ではこのソースの品質を選択できません。 <0>別のソースに切り替える</0> と、さまざまな品質オプションを試すことができます。",
         "title": "品質"
@@ -931,6 +935,14 @@
         "syncSubtitlePreparingAudio": "オーディオを同期する準備をしています...",
         "syncSubtitleWorking": "Framezoo は字幕を同期しています...",
         "syncSubtitleApplying": "字幕同期を適用しています...",
+        "syncStageSample": "音声スキャン",
+        "syncStageVad": "声 何",
+        "syncStageCorrelate": "アラインドリフト",
+        "syncStageLock": "同期をロックする",
+        "syncPhasePreparing": "音響テンソルのエンコード...",
+        "syncPhaseVad": "音声対話 (VAD) を分離しています...",
+        "syncPhaseCorrelate": "スキャンオフセットとFPSドリフトスペクトル...",
+        "syncPhaseConsensus": "マルチウィンドウコンセンサスの検証中...",
         "settings": {
           "backlink": "カスタム字幕",
           "delay": "字幕の遅延",
@@ -1483,6 +1495,10 @@
     "subtitle": "ご利用中に発生した問題や不具合についてお知らせください。",
     "titleLabel": "1. 号題",
     "titlePlaceholder": "例：字幕読み込みエラー、再生の途切れなど...",
+    "contactLabel": "連絡先情報（メールアドレスまたは電話番号）",
+    "contactPlaceholder": "例：name@example.com または +84912345678",
+    "contactRequired": "ご返信のため、メールアドレスまたは電話番号をご入力ください。",
+    "contactInvalid": "有効なメールアドレスまたは電話番号を入力してください。",
     "descriptionLabel": "2. 問題の説明",
     "descriptionPlaceholder": "問題の詳細、再現手順、または解決策を記述してください。",
     "submit": "フィードバックを送信",

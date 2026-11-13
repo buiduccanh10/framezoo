@@ -7,6 +7,7 @@ export interface FeedbackItem {
   id: string;
   title: string;
   description: string;
+  contact: string | null;
   status: "pending" | "resolved" | string;
   user_id: string | null;
   user: FeedbackUser | null;
