@@ -2863,13 +2863,30 @@ body {
 }
 
 .landing-scroll-reveal {
+  opacity: 1;
   transform: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .landing-shell.is-motion-ready .landing-scroll-reveal {
-    transform: translateY(0);
-    transition: opacity var(--dur-medium) var(--ease-out);
+    opacity: 0;
+    transform: translate3d(0, 30px, 0);
+    transition:
+      opacity var(--dur-medium) var(--ease-out),
+      transform var(--dur-medium) var(--ease-out);
+  }
+
+  .landing-shell.is-motion-ready .landing-scroll-reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  .landing-shell.is-motion-ready .landing-scroll-reveal-delay-one {
+    transition-delay: 100ms;
+  }
+
+  .landing-shell.is-motion-ready .landing-scroll-reveal-delay-two {
+    transition-delay: 180ms;
   }
 }
 
@@ -3232,8 +3249,8 @@ body {
 }
 
 .landing-home > .landing-hero {
-  min-height: clamp(38rem, calc(100svh - 5rem), 52rem);
-  padding-block: clamp(4rem, 8vw, 7rem) clamp(4rem, 7vw, 6rem);
+  min-height: clamp(34rem, calc(100svh - 5rem), 52rem);
+  padding-block: clamp(2rem, 5vh, 4rem) clamp(2.5rem, 6vh, 4.5rem);
 }
 
 .landing-hero-copy {
@@ -3252,8 +3269,8 @@ body {
 }
 
 .landing-hero h1 {
-  max-width: 10ch;
-  font-size: clamp(3.35rem, 6.2vw, 6.4rem);
+  max-width: 12ch;
+  font-size: clamp(3.35rem, min(6.2vw, 8vh), 6.4rem);
   line-height: 0.9;
   letter-spacing: -0.08em;
 }
@@ -3421,10 +3438,10 @@ body {
 @media (min-width: 901px) {
   .landing-home > .landing-hero {
     grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
-    align-items: start;
+    align-items: center;
     gap: clamp(var(--space-xl), 5vw, var(--space-3xl));
     height: auto;
-    padding-block: clamp(2rem, 4vw, 3.5rem) clamp(4rem, 7vw, 6rem);
+    padding-block: clamp(1.5rem, 4vh, 3.5rem) clamp(2rem, 5vh, 4.5rem);
   }
 
   .landing-home .landing-hero-visual {
@@ -3432,6 +3449,22 @@ body {
     inset: auto;
     width: auto;
     margin: 0;
+  }
+}
+
+@media (min-width: 901px) and (max-height: 900px) {
+  .landing-home > .landing-hero {
+    min-height: calc(100svh - 5rem);
+    padding-block: clamp(1rem, 3vh, 2.5rem);
+  }
+
+  .landing-hero-copy > p {
+    margin-top: clamp(1rem, 2.5vh, var(--space-lg));
+    font-size: clamp(0.88rem, 1.8vh, 1rem);
+  }
+
+  .landing-hero-actions {
+    margin-top: clamp(1rem, 3vh, var(--space-xl));
   }
 }
 
@@ -3462,7 +3495,7 @@ body {
   }
 
   .landing-hero h1 {
-    max-width: 9ch;
+    max-width: 11ch;
     font-size: clamp(2.7rem, 12vw, 4.2rem);
   }
 
