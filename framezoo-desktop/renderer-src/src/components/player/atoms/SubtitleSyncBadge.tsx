@@ -4,6 +4,10 @@ import { useTranslation } from "react-i18next";
 import { Icon, Icons } from "@/components/Icon";
 import { useSkipTime } from "@/components/player/hooks/useSkipTime";
 import {
+  clearStoredSubtitleAlignment,
+  saveStoredSubtitleAlignment,
+} from "@/components/player/utils/captions";
+import {
   getSkipSegmentVisibility,
   isSegmentEndingAtVideoEnd,
 } from "@/components/player/utils/controlVisibility";
@@ -30,11 +34,14 @@ export function SubtitleSyncBadge(props: {
   if (!caption?.isPendingSyncConfirmation || !alignment || !meta || !source)
     return null;
 
-  const storageKey = `subtitle-sync:${meta.tmdbId || "unknown"}:${source.id || "unknown"}:${caption.id}`;
-
   const handleConfirm = () => {
     const finalAlignment = { ...alignment, aligned: true };
-    localStorage.setItem(storageKey, JSON.stringify(finalAlignment));
+    saveStoredSubtitleAlignment(
+      meta.tmdbId,
+      source.id,
+      caption.id,
+      finalAlignment,
+    );
     setCaption({
       ...caption,
       alignment: finalAlignment,
@@ -50,7 +57,7 @@ export function SubtitleSyncBadge(props: {
       alignment: undefined,
       isPendingSyncConfirmation: false,
     });
-    localStorage.removeItem(storageKey);
+    clearStoredSubtitleAlignment(meta.tmdbId, source.id, caption.id);
     // Reset the manual cue delay since we are rejecting the AI sync
     useSubtitleStore.getState().setPrimaryDelay(0);
   };
@@ -82,6 +89,18 @@ export function SubtitleSyncBadge(props: {
   const skipFeedbackOffsetRem = props.skipFeedbackActive ? 5 : 0;
   const finalOffsetRem = baseOffsetRem + skipOffsetRem + skipFeedbackOffsetRem;
 
+  const signedOffsetSec = `${alignment.offsetMs >= 0 ? "+" : ""}${(
+    alignment.offsetMs / 1000
+  ).toFixed(2)}s`;
+  const driftLabel =
+    typeof alignment.rateRatio === "number" &&
+    Math.abs(alignment.rateRatio - 1) > 0.0001
+      ? ` · ×${alignment.rateRatio.toFixed(4)}`
+      : alignment.segments && alignment.segments.length > 1
+        ? ` · ${alignment.segments.length} seg`
+        : "";
+  const alignmentSummary = `${signedOffsetSec}${driftLabel}`;
+
   return (
     <div className="absolute right-[calc(3rem+env(safe-area-inset-right))] bottom-0 pointer-events-none">
       <Transition
@@ -95,37 +114,44 @@ export function SubtitleSyncBadge(props: {
             bottom: `calc(${finalOffsetRem}rem + env(safe-area-inset-bottom))`,
           }}
         >
-          <div className="text-sm font-medium text-white whitespace-nowrap shadow-black drop-shadow-md">
-            {t(
-              "player.menus.subtitles.confirmSyncTitle",
-              "Đồng bộ hiện tại đúng không?",
-            )}
-          </div>
-          <div className="flex items-center space-x-3 pointer-events-auto">
-            <button
-              type="button"
-              onClick={handleConfirm}
-              className={classNames(
-                "h-10 w-10 rounded-full flex items-center justify-center pointer-events-auto",
-                "bg-buttons-primary hover:bg-buttons-primaryHover text-buttons-primaryText",
-                "scale-95 hover:scale-100 transition-all duration-200",
-              )}
-              aria-label={t("player.menus.subtitles.confirmSync", "Confirm")}
-            >
-              <Icon className="text-xl" icon={Icons.THUMBS_UP} />
-            </button>
-            <button
-              type="button"
-              onClick={handleReject}
-              className={classNames(
-                "h-10 w-10 rounded-full flex items-center justify-center pointer-events-auto",
-                "bg-buttons-primary hover:bg-buttons-primaryHover text-buttons-primaryText",
-                "scale-95 hover:scale-100 transition-all duration-200",
-              )}
-              aria-label={t("player.menus.subtitles.rejectSync", "Reject")}
-            >
-              <Icon className="text-xl" icon={Icons.THUMBS_DOWN} />
-            </button>
+          <div className="pointer-events-auto flex items-center gap-3 rounded-xl border border-video-context-border/70 bg-video-context-background/95 px-3.5 py-2.5 shadow-xl backdrop-blur-md">
+            <div className="flex flex-col items-start">
+              <span className="font-mono text-[11px] font-semibold text-video-context-type-accent tabular-nums">
+                {alignmentSummary}
+              </span>
+              <span className="text-xs font-medium text-white whitespace-nowrap">
+                {t(
+                  "player.menus.subtitles.confirmSyncTitle",
+                  "Đồng bộ hiện tại đúng không?",
+                )}
+              </span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <button
+                type="button"
+                onClick={handleConfirm}
+                className={classNames(
+                  "h-9 w-9 rounded-full flex items-center justify-center pointer-events-auto",
+                  "bg-buttons-primary hover:bg-buttons-primaryHover text-buttons-primaryText",
+                  "scale-95 hover:scale-100 transition-all duration-200",
+                )}
+                aria-label={t("player.menus.subtitles.confirmSync", "Confirm")}
+              >
+                <Icon className="text-lg" icon={Icons.THUMBS_UP} />
+              </button>
+              <button
+                type="button"
+                onClick={handleReject}
+                className={classNames(
+                  "h-9 w-9 rounded-full flex items-center justify-center pointer-events-auto",
+                  "bg-buttons-primary hover:bg-buttons-primaryHover text-buttons-primaryText",
+                  "scale-95 hover:scale-100 transition-all duration-200",
+                )}
+                aria-label={t("player.menus.subtitles.rejectSync", "Reject")}
+              >
+                <Icon className="text-lg" icon={Icons.THUMBS_DOWN} />
+              </button>
+            </div>
           </div>
         </div>
       </Transition>

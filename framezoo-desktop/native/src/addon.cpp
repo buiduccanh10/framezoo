@@ -1102,9 +1102,10 @@ bool wait_for_audio_file(
   bool stop_requested = false;
   auto capture_started_at = std::chrono::steady_clock::now();
   auto started_at = std::chrono::steady_clock::now();
-  const auto timeout = std::chrono::seconds(
-      static_cast<int>(std::ceil(request->duration)) + 120
+  const auto total_timeout = std::chrono::seconds(
+      static_cast<int>(std::ceil(request->duration)) + 45
   );
+  const auto load_timeout = std::chrono::seconds(30);
 
   while (true) {
     if (request->cancelled->load(std::memory_order_acquire)) {
@@ -1115,9 +1116,8 @@ bool wait_for_audio_file(
       }
       return false;
     }
-    if (
-        std::chrono::steady_clock::now() - started_at > timeout
-    ) {
+    const auto elapsed = std::chrono::steady_clock::now() - started_at;
+    if ((!file_loaded && elapsed > load_timeout) || elapsed > total_timeout) {
       request->error = "libmpv audio extraction timed out";
       return false;
     }
@@ -1226,7 +1226,10 @@ void run_audio_extraction(AudioExtractionRequest* request) {
       !set_option("keep-open", "no") ||
       !set_option("idle", "no") ||
       !set_option("cache", "yes") ||
-      !set_option("force-seekable", "yes")
+      !set_option("force-seekable", "yes") ||
+      !set_option("demuxer-max-bytes", "8388608") ||
+      !set_option("demuxer-max-back-bytes", "2097152") ||
+      !set_option("demuxer-readahead-secs", "12")
   ) {
     request->error = "libmpv audio extraction option failed";
     cleanup();

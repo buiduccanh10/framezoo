@@ -84,6 +84,7 @@ export interface SubtitleAlignmentSegment {
 
 export interface SubtitleAlignmentState {
   offsetMs: number;
+  rateRatio?: number;
   segments?: SubtitleAlignmentSegment[];
 }
 
@@ -124,12 +125,31 @@ export interface AddExternalSubtitlesOptions {
 }
 
 export type SubtitleSyncPhase =
-  "idle" | "pausing" | "capturing" | "analyzing" | "applying";
+  "idle" | "pausing" | "capturing" | "preparing" | "analyzing" | "applying";
+
+export type SubtitleSyncStage = "upload" | "vad" | "correlate" | "consensus";
+
+export type SubtitleSyncWindowStatus =
+  "queued" | "capturing" | "captured" | "failed";
+
+export interface SubtitleSyncWindowInfo {
+  index: number;
+  startAt: number;
+  duration: number;
+  priority: "nearby" | "buffered" | "fallback";
+  status: SubtitleSyncWindowStatus;
+}
 
 export interface SubtitleSyncState {
   active: boolean;
   phase: SubtitleSyncPhase;
   progress: number;
+  stage?: SubtitleSyncStage;
+  windows?: SubtitleSyncWindowInfo[];
+  capturedCount?: number;
+  totalWindows?: number;
+  startedAt?: number;
+  phaseStartedAt?: number;
 }
 
 export interface AudioTrack {

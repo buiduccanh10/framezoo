@@ -56,7 +56,7 @@ export default defineEventHandler(async event => {
     ),
   ];
 
-  let userMap = new Map<string, { id: string; nickname: string; email: string | null }>();
+  let userMap = new Map<string, { id: string; nickname: string }>();
 
   if (userIds.length > 0) {
     const users = await prisma.users.findMany({
@@ -66,7 +66,6 @@ export default defineEventHandler(async event => {
       select: {
         id: true,
         nickname: true,
-        email: true,
       },
     });
     userMap = new Map(users.map(u => [u.id, u]));
@@ -84,7 +83,6 @@ export default defineEventHandler(async event => {
         ? {
             id: user.id,
             nickname: user.nickname,
-            email: user.email,
           }
         : null,
       attachments: parseFeedbackAttachments(f.attachments).map(attachment => ({

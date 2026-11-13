@@ -510,6 +510,8 @@ export function PlayerPart(props: PlayerPartProps) {
         </>
       )}
 
+      <Player.SubtitleSyncHud />
+
       <Player.UnreleasedEpisodeOverlay />
     </Player.Container>
   );

@@ -37,15 +37,19 @@ export function useUserManagement(
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [userDetail, setUserDetail] = useState<UserDetailData | null>(null);
   const [detailLoading, setDetailLoading] = useState(false);
-  const [detailTab, setDetailTab] = useState<
-    "overview" | "addons" | "sessions"
-  >("overview");
+  const [detailTab, setDetailTab] = useState<"overview" | "sessions">(
+    "overview",
+  );
   const [userToEdit, setUserToEdit] = useState<AdminUserItem | null>(null);
   const [editNickname, setEditNickname] = useState("");
   const [editEmail, setEditEmail] = useState("");
   const [editLoading, setEditLoading] = useState(false);
   const [userToDelete, setUserToDelete] = useState<AdminUserItem | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [userToRevoke, setUserToRevoke] = useState<{
+    id: string;
+    nickname: string;
+  } | null>(null);
   const [revokingId, setRevokingId] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
@@ -159,17 +163,14 @@ export function useUserManagement(
     }
   };
 
-  const revokeSessions = async (userId: string, userName: string) => {
-    if (
-      !window.confirm(
-        `Đăng xuất toàn bộ các thiết bị của người dùng "${userName}"?`,
-      )
-    )
-      return;
+  const confirmRevokeSessions = async () => {
+    if (!userToRevoke) return;
+    const { id: userId } = userToRevoke;
     setRevokingId(userId);
     try {
       const result = await api.revokeUserSessions(userId);
       showMessage(result.message || "Đã đăng xuất các thiết bị của người dùng");
+      setUserToRevoke(null);
       await loadUsers(page, search, sort, limit);
       if (selectedUserId === userId) await openUserDetail(userId);
     } catch {
@@ -226,6 +227,7 @@ export function useUserManagement(
     editLoading,
     userToDelete,
     deleteLoading,
+    userToRevoke,
     revokingId,
     copiedId,
     setSearch: setSearchAndReset,
@@ -237,13 +239,14 @@ export function useUserManagement(
     setEditEmail,
     setUserToEdit,
     setUserToDelete,
+    setUserToRevoke,
     loadUsers,
     openUserDetail,
     closeDetail,
     openEdit,
     saveEdit,
     confirmDelete,
-    revokeSessions,
+    confirmRevokeSessions,
     copyText,
   };
 }

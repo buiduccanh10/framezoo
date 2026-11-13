@@ -454,4 +454,97 @@ Episode dialogue.`;
       ]),
     ).toBe(false);
   });
+
+  it("preserves exact fallback starts with empty VTT and nudges fallbacks toward dialogue-dense cues", () => {
+    const emptyPlan = buildAlignmentWindowPlan(600, 3600, 900, {
+      subtitleVtts: ["WEBVTT"],
+    });
+    expect(emptyPlan.map((w) => w.startAt)).toEqual([
+      600, 840, 531, 1239, 1947, 2655,
+    ]);
+
+    // Anchor 1239s..1299s only has SDH music/effects, while 1329s..1389s (+90s) has 4 dialogue cues.
+    const richVtt = `WEBVTT
+
+00:20:45.000 --> 00:20:48.000
+[DRAMATIC MUSIC]
+
+00:22:10.000 --> 00:22:12.000
+Line one right around 1330s.
+
+00:22:18.000 --> 00:22:20.000
+Line two right around 1338s.
+
+00:22:26.000 --> 00:22:28.000
+Line three right around 1346s.
+
+00:22:34.000 --> 00:22:36.000
+Line four right around 1354s.`;
+
+    const nudgedPlan = buildAlignmentWindowPlan(600, 3600, 900, {
+      subtitleVtts: [richVtt],
+    });
+    const nudgedStarts = nudgedPlan.map((w) => w.startAt);
+    expect(nudgedStarts).not.toContain(1239);
+    expect(nudgedStarts.some((s) => s >= 1295 && s <= 1350)).toBe(true);
+  });
+
+  it("applies rateRatio alongside offsetMs in applySubtitleAlignment", () => {
+    const rawVtt = `WEBVTT
+
+00:01:40.000 --> 00:01:42.000
+Dialogue at 100s.`;
+    const aligned = applySubtitleAlignment(rawVtt, {
+      ...baseResult,
+      offsetMs: 500,
+      rateRatio: 1.01,
+    });
+    // 100_000 * 1.01 + 500 = 101_500ms = 00:01:41.500
+    expect(aligned).toContain("00:01:41.500 --> 00:01:43.520");
+  });
+
+  it("emits live window probe states and preparing/analyzing phases via onTelemetry", async () => {
+    const telemetryEvents: Array<{
+      phase: string;
+      stage?: string;
+      statuses: string[];
+    }> = [];
+
+    await alignSubtitlesWithCurrentStream({
+      sourceUrl: "https://example.test/video.m3u8",
+      startAt: 600,
+      language: "en",
+      subtitles: [{ track: "primary", vttData: "WEBVTT" }],
+      videoDuration: 3600,
+      buffered: 3600,
+      onTelemetry: (telemetry) => {
+        telemetryEvents.push({
+          phase: telemetry.phase,
+          stage: telemetry.stage,
+          statuses: telemetry.windows.map((w) => w.status),
+        });
+      },
+    });
+
+    expect(telemetryEvents[0]?.phase).toBe("capturing");
+    expect(telemetryEvents[0]?.statuses.every((s) => s === "queued")).toBe(
+      true,
+    );
+    expect(telemetryEvents.some((e) => e.statuses.includes("capturing"))).toBe(
+      true,
+    );
+    expect(
+      telemetryEvents.some(
+        (e) => e.phase === "preparing" && e.stage === "upload",
+      ),
+    ).toBe(true);
+    expect(
+      telemetryEvents.some((e) => e.phase === "analyzing" && e.stage === "vad"),
+    ).toBe(true);
+    expect(telemetryEvents.at(-1)?.phase).toBe("analyzing");
+    expect(telemetryEvents.at(-1)?.stage).toBe("consensus");
+    expect(
+      telemetryEvents.at(-1)?.statuses.every((s) => s === "captured"),
+    ).toBe(true);
+  });
 });

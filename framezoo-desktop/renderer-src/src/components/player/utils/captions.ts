@@ -652,16 +652,150 @@ export interface SubtitleTimingSegment {
   offsetMs: number;
 }
 
+export interface SubtitleAlignmentTransform {
+  aligned?: boolean;
+  offsetMs: number;
+  rateRatio?: number;
+  segments?: SubtitleTimingSegment[];
+}
+
+function normalizeRateRatio(rateRatio?: number): number {
+  return typeof rateRatio === "number" &&
+    Number.isFinite(rateRatio) &&
+    rateRatio >= 0.5 &&
+    rateRatio <= 2.0
+    ? rateRatio
+    : 1;
+}
+
+export function getSubtitleSyncStorageKeys(
+  tmdbId?: string | number | null,
+  sourceId?: string | null,
+  captionId?: string | null,
+): string[] {
+  if (!captionId) return [];
+  const mediaKey = tmdbId || "unknown";
+  const primaryKey = `subtitle-sync:${mediaKey}:${sourceId || "unknown"}:${captionId}`;
+  const fallbackKey =
+    tmdbId && sourceId
+      ? `subtitle-sync:${mediaKey}:caption:${captionId}`
+      : null;
+  return fallbackKey && fallbackKey !== primaryKey
+    ? [primaryKey, fallbackKey]
+    : [primaryKey];
+}
+
+export function loadStoredSubtitleAlignment(
+  tmdbId?: string | number | null,
+  sourceId?: string | null,
+  captionId?: string | null,
+): SubtitleAlignmentTransform | null {
+  for (const key of getSubtitleSyncStorageKeys(tmdbId, sourceId, captionId)) {
+    try {
+      const raw = localStorage.getItem(key);
+      if (!raw) continue;
+      const parsed = JSON.parse(raw) as Partial<SubtitleAlignmentTransform>;
+      if (
+        typeof parsed?.offsetMs !== "number" ||
+        !Number.isFinite(parsed.offsetMs)
+      ) {
+        continue;
+      }
+      return {
+        aligned: true,
+        offsetMs: parsed.offsetMs,
+        ...(typeof parsed.rateRatio === "number" &&
+        Number.isFinite(parsed.rateRatio)
+          ? { rateRatio: parsed.rateRatio }
+          : {}),
+        ...(Array.isArray(parsed.segments) && parsed.segments.length > 0
+          ? { segments: parsed.segments }
+          : {}),
+      };
+    } catch {
+      continue;
+    }
+  }
+  return null;
+}
+
+export function saveStoredSubtitleAlignment(
+  tmdbId: string | number | null | undefined,
+  sourceId: string | null | undefined,
+  captionId: string | null | undefined,
+  alignment: SubtitleAlignmentTransform,
+): void {
+  const payload = JSON.stringify({
+    offsetMs: alignment.offsetMs,
+    ...(typeof alignment.rateRatio === "number" &&
+    Number.isFinite(alignment.rateRatio)
+      ? { rateRatio: alignment.rateRatio }
+      : {}),
+    ...(alignment.segments && alignment.segments.length > 0
+      ? { segments: alignment.segments }
+      : {}),
+    aligned: true,
+  });
+  for (const key of getSubtitleSyncStorageKeys(tmdbId, sourceId, captionId)) {
+    try {
+      localStorage.setItem(key, payload);
+    } catch {
+      // Ignore storage quota / private mode errors cleanly
+    }
+  }
+}
+
+export function clearStoredSubtitleAlignment(
+  tmdbId?: string | number | null,
+  sourceId?: string | null,
+  captionId?: string | null,
+): void {
+  for (const key of getSubtitleSyncStorageKeys(tmdbId, sourceId, captionId)) {
+    try {
+      localStorage.removeItem(key);
+    } catch {
+      // Ignore storage errors cleanly
+    }
+  }
+}
+
+export function applyVttAlignment(
+  vttData: string,
+  alignment?: SubtitleAlignmentTransform | null,
+): string {
+  if (!alignment || !Number.isFinite(alignment.offsetMs)) {
+    return vttData;
+  }
+  if (alignment.aligned === false) {
+    return vttData;
+  }
+  if (alignment.segments && alignment.segments.length > 0) {
+    return shiftVttPiecewiseTimestamps(
+      vttData,
+      alignment.segments,
+      alignment.offsetMs,
+      alignment.rateRatio,
+    );
+  }
+  return shiftVttTimestamps(
+    vttData,
+    alignment.offsetMs / 1000,
+    alignment.rateRatio,
+  );
+}
+
 export function shiftVttPiecewiseTimestamps(
   vttText: string,
   segments: SubtitleTimingSegment[],
   fallbackOffsetMs = 0,
+  rateRatio = 1,
 ): string {
   const normalizedVtt = normalizeSubtitleToVtt(vttText);
   if (!segments || segments.length === 0) {
-    return shiftVttTimestamps(vttText, fallbackOffsetMs / 1000);
+    return shiftVttTimestamps(vttText, fallbackOffsetMs / 1000, rateRatio);
   }
 
+  const effectiveRateRatio = normalizeRateRatio(rateRatio);
   const sortedSegments = [...segments].sort((a, b) => a.startMs - b.startMs);
 
   return normalizedVtt
@@ -698,32 +832,11 @@ export function shiftVttPiecewiseTimestamps(
       }
 
       if (!insideSegment && sortedSegments.length > 0) {
-        if (sortedSegments.length === 1) {
+        if (sortedSegments.length === 1 || start < sortedSegments[0].startMs) {
+          // Clamp outside boundary segments without extrapolating artificial drift
           appliedOffsetMs = sortedSegments[0].offsetMs;
-        } else if (start < sortedSegments[0].startMs) {
-          const s0 = sortedSegments[0];
-          const s1 = sortedSegments[1];
-          const c0 = (s0.startMs + s0.endMs) / 2;
-          const c1 = (s1.startMs + s1.endMs) / 2;
-          if (c1 !== c0) {
-            let slope = (s1.offsetMs - s0.offsetMs) / (c1 - c0);
-            slope = Math.max(-0.1, Math.min(0.1, slope));
-            appliedOffsetMs = s0.offsetMs + slope * (start - s0.startMs);
-          } else {
-            appliedOffsetMs = s0.offsetMs;
-          }
         } else if (start >= sortedSegments[sortedSegments.length - 1].endMs) {
-          const sLast = sortedSegments[sortedSegments.length - 1];
-          const sPrev = sortedSegments[sortedSegments.length - 2];
-          const cLast = (sLast.startMs + sLast.endMs) / 2;
-          const cPrev = (sPrev.startMs + sPrev.endMs) / 2;
-          if (cLast !== cPrev) {
-            let slope = (sLast.offsetMs - sPrev.offsetMs) / (cLast - cPrev);
-            slope = Math.max(-0.1, Math.min(0.1, slope));
-            appliedOffsetMs = sLast.offsetMs + slope * (start - sLast.endMs);
-          } else {
-            appliedOffsetMs = sLast.offsetMs;
-          }
+          appliedOffsetMs = sortedSegments[sortedSegments.length - 1].offsetMs;
         } else {
           for (let i = 0; i < sortedSegments.length - 1; i++) {
             const s1 = sortedSegments[i];
@@ -737,7 +850,7 @@ export function shiftVttPiecewiseTimestamps(
             }
             if (start >= s1.endMs && start < s2.startMs) {
               const gap = s2.startMs - s1.endMs;
-              const slope = (s2.offsetMs - s1.offsetMs) / gap;
+              const slope = gap > 0 ? (s2.offsetMs - s1.offsetMs) / gap : 0;
               appliedOffsetMs = s1.offsetMs + slope * (start - s1.endMs);
               break;
             }
@@ -745,8 +858,14 @@ export function shiftVttPiecewiseTimestamps(
         }
       }
 
-      const shiftedStart = Math.max(0, start + appliedOffsetMs);
-      const shiftedEnd = Math.max(0, end + appliedOffsetMs);
+      const shiftedStart = Math.max(
+        0,
+        start * effectiveRateRatio + appliedOffsetMs,
+      );
+      const shiftedEnd = Math.max(
+        0,
+        end * effectiveRateRatio + appliedOffsetMs,
+      );
       if (shiftedEnd <= shiftedStart) return null;
 
       lines[timingLineIndex] =
@@ -768,11 +887,16 @@ export function shiftVttPiecewiseTimestamps(
     .join("\n\n");
 }
 
-export function shiftVttTimestamps(vttText: string, delay: number): string {
+export function shiftVttTimestamps(
+  vttText: string,
+  delay: number,
+  rateRatio = 1,
+): string {
   const normalizedVtt = normalizeSubtitleToVtt(vttText);
   const delayMilliseconds = Number.isFinite(delay)
     ? Math.round(delay * 1000)
     : 0;
+  const effectiveRateRatio = normalizeRateRatio(rateRatio);
 
   return normalizedVtt
     .split(/\r?\n\s*\r?\n/)
@@ -788,7 +912,7 @@ export function shiftVttTimestamps(vttText: string, delay: number): string {
         return null;
       }
 
-      if (delayMilliseconds === 0) return block;
+      if (delayMilliseconds === 0 && effectiveRateRatio === 1) return block;
 
       const timingLine = lines[timingLineIndex];
       const match = VTT_TIMING_LINE_RE.exec(timingLine);
@@ -798,8 +922,14 @@ export function shiftVttTimestamps(vttText: string, delay: number): string {
       const end = parseVttTimestamp(match[2]);
       if (!Number.isFinite(start) || !Number.isFinite(end)) return block;
 
-      const shiftedStart = Math.max(0, start + delayMilliseconds);
-      const shiftedEnd = Math.max(0, end + delayMilliseconds);
+      const shiftedStart = Math.max(
+        0,
+        start * effectiveRateRatio + delayMilliseconds,
+      );
+      const shiftedEnd = Math.max(
+        0,
+        end * effectiveRateRatio + delayMilliseconds,
+      );
       if (shiftedEnd <= shiftedStart) return null;
 
       lines[timingLineIndex] =

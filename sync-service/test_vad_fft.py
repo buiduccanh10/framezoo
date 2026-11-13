@@ -118,6 +118,39 @@ class VadFftTests(unittest.TestCase):
         self.assertAlmostEqual(offset_ms, -2_000, delta=50)
         self.assertGreaterEqual(conf, 90.0)
 
+    def test_split_filters_isolated_interior_outlier(self):
+        # Single noisy interior outlier (A -> B -> A) must NOT create bogus splits
+        windows = [
+            {"startAt": 0, "result": {"aligned": True, "offsetMs": 2_000, "confidence": 92}},
+            {"startAt": 60, "result": {"aligned": True, "offsetMs": 2_050, "confidence": 90}},
+            {"startAt": 300, "result": {"aligned": True, "offsetMs": 18_000, "confidence": 70}},
+            {"startAt": 600, "result": {"aligned": True, "offsetMs": 2_020, "confidence": 91}},
+            {"startAt": 900, "result": {"aligned": True, "offsetMs": 1_990, "confidence": 93}},
+        ]
+        segments = compute_piecewise_segments(windows, global_offset_ms=2_015)
+        self.assertEqual(segments, [])
+
+    def test_split_honors_high_penalty(self):
+        windows = [
+            {"startAt": 0, "result": {"aligned": True, "offsetMs": 2_000, "confidence": 90}},
+            {"startAt": 300, "result": {"aligned": True, "offsetMs": 4_500, "confidence": 85}},
+        ]
+        self.assertEqual(
+            compute_piecewise_segments(windows, global_offset_ms=3_000, split_penalty=100.0),
+            [],
+        )
+
+    def test_fft_rejects_oversized_duration_oom(self):
+        from fft_align import find_top_offsets_fft
+
+        with self.assertRaises(ValueError):
+            find_top_offsets_fft(
+                speech_intervals=[(1_000, 2_000)],
+                subtitle_intervals=[(1_000, 2_000)],
+                audio_start_ms=0,
+                audio_end_ms=10_000_000,
+            )
+
 
 if __name__ == "__main__":
     unittest.main()

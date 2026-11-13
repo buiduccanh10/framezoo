@@ -6,6 +6,9 @@ import numpy as np
 
 SPLIT_MIN_DIFF_MS = 2_000  # Minimum 2s difference to consider a split
 DEFAULT_SPLIT_PENALTY = 7.0  # Same default as ffsubsync/alass
+MAX_GROUP_SPREAD_MS = 1_200
+RESIDUAL_SCALE_MS = 600.0
+MAX_WINDOW_RESIDUAL_PENALTY = 25.0
 
 
 @dataclass
@@ -22,19 +25,62 @@ class TimingSegment:
         }
 
 
+def _weighted_offset(windows: list[dict[str, Any]]) -> float:
+    total_w = 0.0
+    total_val = 0.0
+    for w in windows:
+        conf = max(1.0, float(w["result"].get("confidence", 60)))
+        total_w += conf
+        total_val += conf * float(w["result"]["offsetMs"])
+    return total_val / total_w
+
+
+def _segment_cost(windows: list[dict[str, Any]], seg_offset: float) -> float:
+    cost = 0.0
+    for w in windows:
+        diff = abs(float(w["result"]["offsetMs"]) - seg_offset)
+        conf_weight = max(0.75, float(w["result"].get("confidence", 60)) / 80.0)
+        norm_err = min(MAX_WINDOW_RESIDUAL_PENALTY, (diff / RESIDUAL_SCALE_MS) ** 2)
+        cost += norm_err * conf_weight
+    return cost
+
+
+def _prune_isolated_interior_outliers(
+    windows: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Drop isolated 1-window interior spikes whose left & right neighbors agree (A -> B -> A)."""
+    if len(windows) < 3:
+        return windows
+    kept: list[dict[str, Any]] = [windows[0]]
+    for idx in range(1, len(windows) - 1):
+        prev_off = int(kept[-1]["result"]["offsetMs"])
+        cur_off = int(windows[idx]["result"]["offsetMs"])
+        next_off = int(windows[idx + 1]["result"]["offsetMs"])
+        if (
+            abs(prev_off - next_off) <= MAX_GROUP_SPREAD_MS
+            and abs(cur_off - prev_off) >= SPLIT_MIN_DIFF_MS
+        ):
+            continue
+        kept.append(windows[idx])
+    kept.append(windows[-1])
+    return kept
+
+
 def compute_piecewise_segments(
     window_entries: list[dict[str, Any]],
     global_offset_ms: int,
     split_penalty: float = DEFAULT_SPLIT_PENALTY,
 ) -> list[dict[str, int]]:
     """
-    Given alignment results for multiple timeline windows, determine if
-    piecewise segments (splits due to ads, recuts) should be introduced.
-    
+    Given alignment results for multiple timeline windows, determine via penalized
+    dynamic programming if piecewise segments (splits due to ads, recuts) should
+    be introduced, filtering isolated interior A -> B -> A outliers.
+
     Each window_entry contains:
       - startAt: start position in seconds
       - result: {"offsetMs": int, "confidence": int, "aligned": bool}
     """
+    _ = global_offset_ms
     valid_windows = [
         w
         for w in window_entries
@@ -46,51 +92,67 @@ def compute_piecewise_segments(
     if len(valid_windows) < 2:
         return []
 
-    # Sort chronologically
     sorted_windows = sorted(valid_windows, key=lambda w: float(w["startAt"]))
+    cleaned_windows = _prune_isolated_interior_outliers(sorted_windows)
+    n = len(cleaned_windows)
+    if n < 2:
+        return []
 
-    # Group into consecutive runs of similar offsets (within 1200ms)
+    # Optimal 1D penalized partitioning DP: minimize sum(segment_cost) + split_penalty * (K - 1)
+    dp_cost = [float("inf")] * (n + 1)
+    dp_prev = [-1] * (n + 1)
+    dp_cost[0] = -float(split_penalty)
+
+    for j in range(1, n + 1):
+        for i in range(j):
+            sub = cleaned_windows[i:j]
+            seg_cost = _segment_cost(sub, _weighted_offset(sub))
+            cand_cost = dp_cost[i] + seg_cost + float(split_penalty)
+            if cand_cost < dp_cost[j]:
+                dp_cost[j] = cand_cost
+                dp_prev[j] = i
+
     groups: list[list[dict[str, Any]]] = []
-    for w in sorted_windows:
-        cur_offset = int(w["result"]["offsetMs"])
-        if not groups:
-            groups.append([w])
-            continue
-        prev_group = groups[-1]
-        prev_avg_offset = sum(int(item["result"]["offsetMs"]) for item in prev_group) / len(prev_group)
-        if abs(cur_offset - prev_avg_offset) <= 1_200:
-            prev_group.append(w)
-        else:
-            groups.append([w])
+    cur = n
+    while cur > 0:
+        prev = dp_prev[cur]
+        groups.append(cleaned_windows[prev:cur])
+        cur = prev
+    groups.reverse()
 
     if len(groups) < 2:
         return []
 
-    # Check if the split between groups is significant and supported by multiple windows
-    # or high confidence
-    segments: list[dict[str, int]] = []
-    for i, group in enumerate(groups):
-        avg_offset = round(
-            sum(int(item["result"]["offsetMs"]) for item in group) / len(group)
-        )
-        avg_conf = sum(int(item["result"]["confidence"]) for item in group) / len(group)
+    # Merge adjacent groups whose offsets do not differ meaningfully
+    merged_groups: list[list[dict[str, Any]]] = [groups[0]]
+    for grp in groups[1:]:
+        prev_off = _weighted_offset(merged_groups[-1])
+        cur_off = _weighted_offset(grp)
+        if abs(cur_off - prev_off) < SPLIT_MIN_DIFF_MS:
+            merged_groups[-1].extend(grp)
+        else:
+            merged_groups.append(grp)
 
-        # Start of this segment
+    if len(merged_groups) < 2:
+        return []
+
+    segments: list[dict[str, int]] = []
+    for i, group in enumerate(merged_groups):
+        avg_offset = round(_weighted_offset(group))
+
         if i == 0:
             seg_start_ms = 0
         else:
-            # Boundary is halfway between previous group end and current group start
-            prev_end_s = float(groups[i - 1][-1]["startAt"]) + 60.0
+            prev_end_s = float(merged_groups[i - 1][-1]["startAt"]) + 60.0
             cur_start_s = float(group[0]["startAt"])
             boundary_s = max(prev_end_s, (prev_end_s + cur_start_s) / 2.0)
             seg_start_ms = int(round(boundary_s * 1000))
 
-        # End of this segment
-        if i == len(groups) - 1:
+        if i == len(merged_groups) - 1:
             seg_end_ms = 9_007_199_254_740_991  # JS Number.MAX_SAFE_INTEGER
         else:
             cur_end_s = float(group[-1]["startAt"]) + 60.0
-            next_start_s = float(groups[i + 1][0]["startAt"])
+            next_start_s = float(merged_groups[i + 1][0]["startAt"])
             boundary_s = max(cur_end_s, (cur_end_s + next_start_s) / 2.0)
             seg_end_ms = int(round(boundary_s * 1000))
 
@@ -102,10 +164,8 @@ def compute_piecewise_segments(
             }
         )
 
-    # Check if any segment differs significantly from another
     offsets = [s["offsetMs"] for s in segments]
-    max_diff = max(offsets) - min(offsets)
-    if max_diff < SPLIT_MIN_DIFF_MS:
+    if max(offsets) - min(offsets) < SPLIT_MIN_DIFF_MS:
         return []
 
     return segments

@@ -53,6 +53,7 @@ model sessions {
   refresh_expires_at DateTime? @db.Timestamptz(0)
   device      String
   user_agent  String
+  app_version String?  @db.VarChar(64)
 }
 
 model user_group_order {
@@ -100,6 +101,7 @@ model users {
   nickname       String    @unique @db.VarChar(255)
   email             String?   @unique @db.VarChar(255)
   email_verified_at DateTime? @db.Timestamptz(0)
+  app_version       String?   @db.VarChar(64)
 }
 
 model email_otp_challenges {

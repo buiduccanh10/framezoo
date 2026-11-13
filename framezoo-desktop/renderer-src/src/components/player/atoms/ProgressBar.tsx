@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Icon, Icons } from "@/components/Icon";
-import { cancelActiveSubtitleSync } from "@/components/player/hooks/useCaptions";
+import { useSubtitleSyncTelemetry } from "@/components/player/atoms/SubtitleSyncHud";
 import { usePlaybackClock } from "@/components/player/hooks/usePlaybackClock";
 import {
   getSegmentBoundsSeconds,
@@ -27,13 +26,13 @@ const SEGMENT_COLORS: Record<
 };
 
 export function ProgressBar() {
-  const { t } = useTranslation();
+  const { t: _t } = useTranslation();
   const { duration, buffered } = usePlayerStore((s) => s.progress);
   const time = usePlaybackClock();
   const torrentStatus = useActiveTorrentStatus();
   const display = usePlayerStore((s) => s.display);
   const mediaPlaying = usePlayerStore((s) => s.mediaPlaying);
-  const subtitleSync = usePlayerStore((s) => s.subtitleSync);
+  const { subtitleSync, percent: syncProgress } = useSubtitleSyncTelemetry();
   const setDraggingTime = usePlayerStore((s) => s.setDraggingTime);
   const setSeeking = usePlayerStore((s) => s.setSeeking);
   const { isSeeking } = usePlayerStore((s) => s.interface);
@@ -120,29 +119,33 @@ export function ProgressBar() {
     duration,
     torrentStatus?.progress ?? 0,
   );
-  const syncProgress = Math.round(
-    Math.max(0, Math.min(1, subtitleSync.progress)) * 100,
-  );
   const aiAccent = "rgb(var(--colors-video-context-type-accent) / 1)";
   const aiProgressFill = "rgb(var(--colors-progress-filled) / 1)";
   const aiEmphasis = "rgb(var(--colors-type-emphasis) / 1)";
   const withAlpha = (color: string, alpha: number) =>
     color.replace("/ 1)", `/ ${alpha})`);
-  const syncPhaseLabel =
-    subtitleSync.phase === "pausing" || subtitleSync.phase === "capturing"
-      ? t(
-          "player.menus.subtitles.syncSubtitlePreparingAudio",
-          "Preparing audio to sync...",
-        )
-      : subtitleSync.phase === "applying"
-        ? t(
-            "player.menus.subtitles.syncSubtitleApplying",
-            "Applying subtitle sync...",
-          )
-        : t(
-            "player.menus.subtitles.syncSubtitleWorking",
-            "Framezoo is syncing subtitles...",
-          );
+  const timelineSyncMarkers = useMemo(() => {
+    if (
+      !subtitleSync.active ||
+      duration <= 0 ||
+      !subtitleSync.windows?.length
+    ) {
+      return [];
+    }
+    return subtitleSync.windows.map((probe) => {
+      const left = Math.max(
+        0,
+        Math.min(99.2, (probe.startAt / duration) * 100),
+      );
+      const rawWidth = (probe.duration / duration) * 100;
+      const width = Math.max(0.75, Math.min(100 - left, rawWidth));
+      return {
+        ...probe,
+        left,
+        width,
+      };
+    });
+  }, [subtitleSync.active, subtitleSync.windows, duration]);
   const tooltipPercentage = dragging ? dragPercentage : hoverPercentage;
   const tooltipTime =
     duration > 0 && tooltipPercentage !== null
@@ -151,33 +154,6 @@ export function ProgressBar() {
 
   return (
     <div className="relative w-full" dir="ltr">
-      {subtitleSync.active ? (
-        <div className="pointer-events-none absolute bottom-full left-0 right-0 mb-1 flex justify-center">
-          <div className="flex items-center gap-2 rounded-full border border-video-context-type-accent/30 bg-video-context-background/90 px-3 py-1 text-xs text-type-emphasis shadow-lg backdrop-blur-sm">
-            <span className="relative flex h-4 w-4 items-center justify-center text-video-context-type-accent">
-              <span className="absolute inset-[-3px] rounded-full border border-video-context-type-accent/35 motion-safe:animate-ai-progress-orbit" />
-              <span className="absolute inset-0 rounded-full bg-video-context-type-accent/20 motion-safe:animate-ping" />
-              <Icon
-                icon={Icons.WAND}
-                className="relative text-sm motion-safe:animate-pulse"
-              />
-            </span>
-            <span className="font-medium">{syncPhaseLabel}</span>
-            <span className="min-w-[3ch] text-right font-mono font-semibold text-video-context-type-accent">
-              {syncProgress}%
-            </span>
-            <button
-              type="button"
-              className="pointer-events-auto ml-1 inline-flex h-5 w-5 items-center justify-center rounded-full text-type-secondary transition-colors hover:bg-white/10 hover:text-white"
-              aria-label={t("actions.cancel", "Cancel")}
-              title={t("actions.cancel", "Cancel")}
-              onClick={cancelActiveSubtitleSync}
-            >
-              <Icon icon={Icons.X} className="text-xs" />
-            </button>
-          </div>
-        </div>
-      ) : null}
       <div className="w-full" ref={ref}>
         <div
           className={[
@@ -206,8 +182,8 @@ export function ProgressBar() {
           ) : null}
           <div
             className={[
-              "relative w-full h-[4px] bg-progress-background/25 rounded-sm transition-[height] duration-100 group-hover:h-[6px]",
-              dragging ? "!h-[6px]" : "",
+              "relative w-full h-[4px] bg-progress-background/25 rounded-sm transition-[height] duration-150 group-hover:h-[6px]",
+              dragging || subtitleSync.active ? "!h-[6px]" : "",
             ].join(" ")}
           >
             {/* Skip segment markers */}
@@ -267,25 +243,38 @@ export function ProgressBar() {
                   style={{
                     backgroundImage: `linear-gradient(90deg, transparent 0%, ${withAlpha(
                       aiAccent,
-                      0.16,
+                      0.18,
                     )} 50%, transparent 100%)`,
                   }}
-                ></div>
+                />
+                {timelineSyncMarkers.map((marker) => (
+                  <div
+                    key={marker.index}
+                    className={[
+                      "absolute top-[-1px] bottom-[-1px] rounded-full transition-all duration-300",
+                      marker.status === "capturing"
+                        ? "bg-white shadow-[0_0_8px_rgb(var(--colors-video-context-type-accent)/0.85)] motion-safe:animate-pulse"
+                        : marker.status === "captured"
+                          ? "bg-video-context-type-accent/90"
+                          : marker.status === "failed"
+                            ? "bg-white/10"
+                            : "bg-white/25",
+                    ].join(" ")}
+                    style={{
+                      left: `${marker.left}%`,
+                      width: `${marker.width}%`,
+                    }}
+                  />
+                ))}
                 <div
-                  className="absolute inset-y-0 left-0 overflow-hidden rounded-sm transition-[width] duration-500 ease-out"
+                  className="absolute inset-y-0 left-0 overflow-hidden rounded-sm transition-[width] duration-300 ease-out"
                   style={{
                     width: `${syncProgress}%`,
                     background: `linear-gradient(90deg, ${withAlpha(
                       aiProgressFill,
-                      0.25,
-                    )}, ${withAlpha(aiAccent, 0.72)}, ${withAlpha(
-                      aiProgressFill,
-                      0.4,
-                    )})`,
-                    boxShadow: `0 0 14px ${withAlpha(
-                      aiAccent,
-                      0.55,
-                    )}, inset 0 1px 0 ${withAlpha(aiEmphasis, 0.35)}`,
+                      0.35,
+                    )}, ${withAlpha(aiAccent, 0.85)})`,
+                    boxShadow: `0 0 10px ${withAlpha(aiAccent, 0.45)}`,
                   }}
                 >
                   <div
@@ -294,7 +283,7 @@ export function ProgressBar() {
                       backgroundImage: `linear-gradient(110deg, transparent 0%, ${withAlpha(
                         aiEmphasis,
                         0.04,
-                      )} 35%, ${withAlpha(aiEmphasis, 0.5)} 50%, ${withAlpha(
+                      )} 35%, ${withAlpha(aiEmphasis, 0.45)} 50%, ${withAlpha(
                         aiEmphasis,
                         0.04,
                       )} 65%, transparent 100%)`,
@@ -302,27 +291,23 @@ export function ProgressBar() {
                   />
                 </div>
                 <div
-                  className="absolute inset-y-[-120%] w-14 blur-[2px] motion-safe:animate-ai-progress-scan"
+                  className="absolute inset-y-[-120%] w-12 blur-[2px] motion-safe:animate-ai-progress-scan"
                   style={{
                     background: `linear-gradient(90deg, transparent, ${withAlpha(
                       aiEmphasis,
-                      0.78,
-                    )}, ${withAlpha(aiAccent, 0.95)}, transparent)`,
-                    boxShadow: `0 0 18px ${withAlpha(aiAccent, 0.7)}`,
+                      0.7,
+                    )}, ${withAlpha(aiAccent, 0.9)}, transparent)`,
                   }}
                 />
                 <div
-                  className="absolute inset-y-[-150%] w-px transition-[left] duration-500 ease-out"
+                  className="absolute inset-y-[-150%] w-px transition-[left] duration-300 ease-out"
                   style={{ left: `${syncProgress}%` }}
                 >
                   <div
-                    className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full motion-safe:animate-pulse"
+                    className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full"
                     style={{
                       backgroundColor: aiEmphasis,
-                      boxShadow: `0 0 0 3px ${withAlpha(
-                        aiAccent,
-                        0.16,
-                      )}, 0 0 12px ${withAlpha(aiAccent, 0.95)}`,
+                      boxShadow: `0 0 8px ${withAlpha(aiAccent, 0.9)}`,
                     }}
                   />
                 </div>

@@ -24,6 +24,7 @@ export function useFeedbackManagement(
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [selected, setSelected] = useState<FeedbackItem | null>(null);
+  const [itemToDelete, setItemToDelete] = useState<FeedbackItem | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [error, setError] = useState("");
 
@@ -113,17 +114,14 @@ export function useFeedbackManagement(
     }
   };
 
-  const remove = async (item: FeedbackItem) => {
-    if (
-      !window.confirm(
-        `Xóa feedback “${item.title}” và toàn bộ files đính kèm? Hành động này không thể hoàn tác.`,
-      )
-    )
-      return;
+  const confirmRemove = async () => {
+    if (!itemToDelete) return;
+    const item = itemToDelete;
     setBusyId(item.id);
     try {
       await adminApi.deleteFeedback(item.id);
-      setSelected(null);
+      setItemToDelete(null);
+      setSelected((current) => (current?.id === item.id ? null : current));
       onMessage("Đã xóa feedback.");
       void load(page, search, filter, limit);
     } catch (requestError) {
@@ -143,6 +141,7 @@ export function useFeedbackManagement(
     page,
     limit,
     selected,
+    itemToDelete,
     busyId,
     error,
     setSearch: setSearchAndReset,
@@ -150,8 +149,9 @@ export function useFeedbackManagement(
     setPage,
     setLimit: setLimitAndReset,
     setSelected,
+    setItemToDelete,
     load,
     updateStatus,
-    remove,
+    confirmRemove,
   };
 }

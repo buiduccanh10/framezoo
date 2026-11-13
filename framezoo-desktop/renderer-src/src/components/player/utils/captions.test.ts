@@ -1,12 +1,17 @@
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 
 import {
+  applyVttAlignment,
   captionIsVisible,
+  clearStoredSubtitleAlignment,
   getCaptionLookahead,
   getCaptionTimelineIndex,
+  getSubtitleSyncStorageKeys,
   isHearingImpairedCaption,
+  loadStoredSubtitleAlignment,
   normalizeSubtitleToVtt,
   parseCanonicalVtt,
+  saveStoredSubtitleAlignment,
   shiftVttPiecewiseTimestamps,
   shiftVttTimestamps,
   tryParseCanonicalVtt,
@@ -377,5 +382,78 @@ Của anh đây.`;
     for (const cue of cues) {
       expect(cue.start).toBeLessThan(cue.end);
     }
+  });
+});
+
+describe("subtitle alignment transforms & persistence", () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
+  it("clamps outside piecewise segment boundaries instead of extrapolating wildly", () => {
+    const vtt = `WEBVTT
+
+00:00:10.000 --> 00:00:12.000
+Early cue before first segment
+
+00:15:00.000 --> 00:15:02.000
+Late cue after last segment`;
+
+    const shifted = shiftVttPiecewiseTimestamps(
+      vtt,
+      [
+        { startMs: 180_000, endMs: 240_000, offsetMs: -5_000 },
+        { startMs: 600_000, endMs: 660_000, offsetMs: 5_000 },
+      ],
+      0,
+    );
+
+    // Clamps cleanly to -5000ms (00:00:05.000) and +5000ms (00:15:05.000), not slope-extrapolated.
+    expect(shifted).toContain("00:00:05.000 --> 00:00:07.000");
+    expect(shifted).toContain("00:15:05.000 --> 00:15:07.000");
+  });
+
+  it("applies FPS rateRatio together with offsetMs in applyVttAlignment", () => {
+    const vtt = `WEBVTT
+
+00:01:40.000 --> 00:01:42.000
+Exactly at 100s`;
+
+    const shifted = applyVttAlignment(vtt, {
+      aligned: true,
+      offsetMs: 1_000,
+      rateRatio: 1.001,
+    });
+
+    // 100_000 * 1.001 + 1000 = 101_100ms = 00:01:41.100
+    expect(shifted).toContain("00:01:41.100 --> 00:01:43.102");
+  });
+
+  it("persists and restores saved alignment across source ID changes via caption fallback key", () => {
+    const alignment = {
+      aligned: true,
+      offsetMs: -2_450,
+      rateRatio: 24 / 23.976,
+    };
+
+    const keys = getSubtitleSyncStorageKeys("12345", "source-a", "cap-vi-1");
+    expect(keys).toHaveLength(2);
+
+    saveStoredSubtitleAlignment("12345", "source-a", "cap-vi-1", alignment);
+
+    expect(
+      loadStoredSubtitleAlignment("12345", "source-a", "cap-vi-1"),
+    ).toEqual(alignment);
+    expect(
+      loadStoredSubtitleAlignment("12345", "source-b-after-pip", "cap-vi-1"),
+    ).toEqual(alignment);
+
+    clearStoredSubtitleAlignment("12345", "source-a", "cap-vi-1");
+    expect(
+      loadStoredSubtitleAlignment("12345", "source-a", "cap-vi-1"),
+    ).toBeNull();
+    expect(
+      loadStoredSubtitleAlignment("12345", "source-b-after-pip", "cap-vi-1"),
+    ).toBeNull();
   });
 });

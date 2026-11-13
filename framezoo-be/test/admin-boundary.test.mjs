@@ -87,3 +87,20 @@ test('feedback attachments stay bounded, private, and are cleaned up on deletion
   assert.match(compose, /FRESHCLAM_CHECKS/);
   assert.match(compose, /CLAMD_CONF_ConcurrentDatabaseReload/);
 });
+
+test('admin user surfaces minimize legal/privacy PII and track app_version', () => {
+  const emailOtp = read('server/utils/emailOtp.ts');
+  const userDetail = read('server/api/admin/users/[id].get.ts');
+  const userList = read('server/api/admin/users/index.get.ts');
+  const auth = read('server/utils/auth.ts');
+  const cors = read('server/utils/cors.ts');
+
+  assert.match(emailOtp, /request_ip:\s*null/);
+  assert.doesNotMatch(userDetail, /public_key|watch_history|bookmarks|progress_items|addons/);
+  assert.match(userDetail, /summarizeClientPlatform/);
+  assert.match(userDetail, /app_version/);
+  assert.match(userList, /app_version/);
+  assert.doesNotMatch(userList, /watch_history|bookmarks|progress_items|addons/);
+  assert.match(auth, /x-app-version/);
+  assert.match(cors, /X-App-Version/);
+});

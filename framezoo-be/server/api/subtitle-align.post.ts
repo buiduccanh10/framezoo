@@ -1,17 +1,18 @@
+import { createError, defineEventHandler, getHeader, getRequestIP } from 'h3';
 import {
-  createError,
-  defineEventHandler,
-  getHeader,
-  getRequestIP,
-  readMultipartFormData,
-} from 'h3';
-
-const MAX_AUDIO_BYTES = 8 * 1024 * 1024;
-const MAX_VTT_BYTES = 2 * 1024 * 1024;
-const MAX_BATCH_SUBTITLES_BYTES = MAX_VTT_BYTES * 2 + 8 * 1024;
-const MAX_ALIGNMENT_WINDOWS = 6;
-const MAX_ALIGNMENT_TOTAL_AUDIO_BYTES = 14 * 1024 * 1024;
-const MAX_ALIGNMENT_SPEECH_BYTES = 512 * 1024;
+  MAX_ALIGNMENT_SPEECH_BYTES,
+  MAX_ALIGNMENT_TOTAL_AUDIO_BYTES,
+  MAX_ALIGNMENT_WINDOWS,
+  MAX_AUDIO_BYTES,
+  MAX_BATCH_SUBTITLES_BYTES,
+  MAX_MULTIPART_REQUEST_BYTES,
+  MAX_VTT_BYTES,
+  parseBoundedSpeechIntervalWindows,
+  parseBoundedWindowDurations,
+  parseBoundedWindowStarts,
+  readBoundedMultipartFormData,
+  validateSpeechIntervalList,
+} from '../utils/subtitleAlignValidation';
 
 function copyToArrayBuffer(data: Uint8Array): ArrayBuffer {
   const copy = new Uint8Array(data.byteLength);
@@ -24,7 +25,7 @@ function getSyncServiceUrl() {
 }
 
 export default defineEventHandler(async event => {
-  const parts = await readMultipartFormData(event);
+  const parts = await readBoundedMultipartFormData(event, MAX_MULTIPART_REQUEST_BYTES);
   const audioPart = parts?.find(part => part.name === 'audio');
   const audioParts = parts?.filter(part => part.name === 'audio' && part.data) || [];
   const vttPart = parts?.find(part => part.name === 'vtt');
@@ -70,9 +71,11 @@ export default defineEventHandler(async event => {
     }
 
     let windowCount = audioParts.length;
+    let rawSpeechJson = '';
     if (!hasAudio) {
+      rawSpeechJson = Buffer.from(speechIntervalsPart!.data).toString('utf8');
       try {
-        const intervals = JSON.parse(Buffer.from(speechIntervalsPart!.data).toString('utf8'));
+        const intervals = JSON.parse(rawSpeechJson);
         windowCount = Array.isArray(intervals) ? intervals.length : 0;
       } catch {
         throw createError({
@@ -81,29 +84,16 @@ export default defineEventHandler(async event => {
         });
       }
     }
-    let windowStarts: unknown;
-    try {
-      windowStarts = JSON.parse(
-        windowStartsPart?.data ? Buffer.from(windowStartsPart.data).toString('utf8') : 'null'
-      );
-    } catch {
-      throw createError({
-        statusCode: 400,
-        statusMessage: 'windowStartsMs must be valid JSON',
-      });
-    }
-    if (
-      windowCount < 1 ||
-      windowCount > MAX_ALIGNMENT_WINDOWS ||
-      !Array.isArray(windowStarts) ||
-      windowStarts.length !== windowCount ||
-      windowStarts.some(value => typeof value !== 'number' || !Number.isInteger(value) || value < 0)
-    ) {
+    if (windowCount < 1 || windowCount > MAX_ALIGNMENT_WINDOWS) {
       throw createError({
         statusCode: 400,
         statusMessage: 'invalid alignment window metadata',
       });
     }
+    const windowStarts = parseBoundedWindowStarts(
+      windowStartsPart?.data ? Buffer.from(windowStartsPart.data).toString('utf8') : 'null',
+      windowCount
+    );
     if (hasSpeechIntervals) {
       if (!windowDurationsPart?.data) {
         throw createError({
@@ -111,25 +101,11 @@ export default defineEventHandler(async event => {
           statusMessage: 'windowDurationsMs is required for speechIntervals',
         });
       }
-      let durations: unknown;
-      try {
-        durations = JSON.parse(Buffer.from(windowDurationsPart.data).toString('utf8'));
-      } catch {
-        throw createError({
-          statusCode: 400,
-          statusMessage: 'windowDurationsMs must be valid JSON',
-        });
-      }
-      if (
-        !Array.isArray(durations) ||
-        durations.length !== windowCount ||
-        durations.some(value => typeof value !== 'number' || !Number.isInteger(value) || value <= 0)
-      ) {
-        throw createError({
-          statusCode: 400,
-          statusMessage: 'invalid alignment window durations',
-        });
-      }
+      const durations = parseBoundedWindowDurations(
+        Buffer.from(windowDurationsPart.data).toString('utf8'),
+        windowCount
+      );
+      parseBoundedSpeechIntervalWindows(rawSpeechJson, windowStarts, durations);
     }
 
     const totalAudioBytes = audioParts.reduce(
@@ -146,11 +122,24 @@ export default defineEventHandler(async event => {
         statusMessage: 'alignment audio is too large',
       });
     }
-  } else if (!audioPart?.data || audioPart.data.byteLength > MAX_AUDIO_BYTES) {
-    throw createError({
-      statusCode: 413,
-      statusMessage: 'audio is too large',
-    });
+  } else if (hasAudio) {
+    if (!audioPart?.data || audioPart.data.byteLength > MAX_AUDIO_BYTES) {
+      throw createError({
+        statusCode: 413,
+        statusMessage: 'audio is too large',
+      });
+    }
+  } else if (hasSpeechIntervals) {
+    let parsedIntervals: unknown;
+    try {
+      parsedIntervals = JSON.parse(Buffer.from(speechIntervalsPart!.data).toString('utf8'));
+    } catch {
+      throw createError({
+        statusCode: 400,
+        statusMessage: 'speechIntervals must be valid JSON',
+      });
+    }
+    validateSpeechIntervalList(parsedIntervals);
   }
   if (vttPart?.data && vttPart.data.byteLength > MAX_VTT_BYTES) {
     throw createError({

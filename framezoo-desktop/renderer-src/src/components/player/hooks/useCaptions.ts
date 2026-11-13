@@ -2,6 +2,10 @@ import { useCallback, useEffect, useMemo, useRef } from "react";
 
 import { downloadCaptionAsVtt } from "@/backend/helpers/subs";
 import { useSkipTime } from "@/components/player/hooks/useSkipTime";
+import {
+  applyVttAlignment,
+  loadStoredSubtitleAlignment,
+} from "@/components/player/utils/captions";
 import { scoreCaptionSourceFit } from "@/components/player/utils/captionSourceFit";
 import {
   type SubtitleAlignmentTrack,
@@ -41,6 +45,27 @@ const SUBTITLE_SYNC_STABLE_SAMPLES = 2;
 
 // Matches valid ISO-639-1 (2-letter) or ISO-639-2/3 (3-letter) codes, with optional region suffix
 const VALID_LANGUAGE_TAG_RE = /^[a-z]{2,3}(?:[-_][a-z]{2,4})?$/i;
+
+function applySavedCaptionAlignment(
+  captionToSet: Caption,
+  captionId: string,
+): void {
+  const state = usePlayerStore.getState();
+  const savedSync = loadStoredSubtitleAlignment(
+    state.meta?.tmdbId,
+    state.source?.id,
+    captionId,
+  );
+  if (!savedSync) return;
+
+  const alignment = { ...savedSync, aligned: true };
+  captionToSet.alignment = alignment;
+  captionToSet.alignmentBaseVttData = captionToSet.vttData;
+  captionToSet.vttData = applyVttAlignment(
+    captionToSet.alignmentBaseVttData,
+    alignment,
+  );
+}
 
 /**
  * Resolves the best language code to use for subtitle alignment.
@@ -291,10 +316,16 @@ export function useCaptions() {
         startAt: initialState.progress.time,
       });
 
+      const syncStartedAt = Date.now();
+      let currentPhase = wasPlaying ? "pausing" : "capturing";
+      let phaseStartedAt = syncStartedAt;
+
       setSubtitleSyncState({
         active: true,
         phase: wasPlaying ? "pausing" : "capturing",
-        progress: 0,
+        progress: 0.02,
+        startedAt: syncStartedAt,
+        phaseStartedAt,
       });
 
       try {
@@ -328,10 +359,14 @@ export function useCaptions() {
             ? pausedState.progress.duration
             : (contextSource.duration ?? 0);
 
+        currentPhase = "capturing";
+        phaseStartedAt = Date.now();
         setSubtitleSyncState({
           active: true,
           phase: "capturing",
-          progress: 0,
+          progress: 0.06,
+          startedAt: syncStartedAt,
+          phaseStartedAt,
         });
 
         const batchResult = await alignSubtitlesWithCurrentStream({
@@ -351,12 +386,22 @@ export function useCaptions() {
           videoDuration: alignmentVideoDuration,
           buffered: pausedState.progress.buffered,
           signal: abortController.signal,
-          onProgress: (progress, phase) => {
+          onTelemetry: (telemetry) => {
             if (requestId === subtitleAlignmentRequestId) {
+              if (telemetry.phase !== currentPhase) {
+                currentPhase = telemetry.phase;
+                phaseStartedAt = Date.now();
+              }
               setSubtitleSyncState({
                 active: true,
-                phase: phase ?? (progress < 0.35 ? "capturing" : "analyzing"),
-                progress,
+                phase: telemetry.phase,
+                stage: telemetry.stage,
+                progress: telemetry.progress,
+                windows: telemetry.windows,
+                capturedCount: telemetry.capturedCount,
+                totalWindows: telemetry.totalWindows,
+                startedAt: syncStartedAt,
+                phaseStartedAt,
               });
             }
           },
@@ -407,10 +452,14 @@ export function useCaptions() {
           };
         }
 
+        const previousSync = usePlayerStore.getState().subtitleSync;
         setSubtitleSyncState({
+          ...previousSync,
           active: true,
           phase: "applying",
+          stage: "consensus",
           progress: 1,
+          phaseStartedAt: Date.now(),
         });
 
         for (const {
@@ -423,6 +472,10 @@ export function useCaptions() {
           const alignment = {
             aligned: true,
             offsetMs: result.offsetMs,
+            ...(typeof result.rateRatio === "number" &&
+            Number.isFinite(result.rateRatio)
+              ? { rateRatio: result.rateRatio }
+              : {}),
             ...(result.segments ? { segments: result.segments } : {}),
           };
 
@@ -503,6 +556,12 @@ export function useCaptions() {
           active: false,
           phase: "idle",
           progress: 0,
+          stage: undefined,
+          windows: undefined,
+          capturedCount: undefined,
+          totalWindows: undefined,
+          startedAt: undefined,
+          phaseStartedAt: undefined,
         });
       }
     },
@@ -773,23 +832,8 @@ export function useCaptions() {
           captionToSet.vttData = await downloadCaptionAsVtt(caption);
         }
 
-        const state = usePlayerStore.getState();
-        const storageKey = `subtitle-sync:${state.meta?.tmdbId || "unknown"}:${state.source?.id || "unknown"}:${caption.id}`;
-        const savedSync = localStorage.getItem(storageKey);
-        if (savedSync) {
-          try {
-            const alignment = { ...JSON.parse(savedSync), aligned: true };
-            captionToSet.alignment = alignment;
-            captionToSet.alignmentBaseVttData = captionToSet.vttData;
-            captionToSet.vttData = applySubtitleAlignment(
-              captionToSet.alignmentBaseVttData,
-              alignment as any,
-            );
-            // Delay will be restored after setDirectCaption
-          } catch (e) {
-            console.warn("Failed to parse saved subtitle sync", e);
-          }
-        }
+        applySavedCaptionAlignment(captionToSet, caption.id);
+        // Delay will be restored after setDirectCaption
 
         if (options?.isCurrent && !options.isCurrent()) return false;
         setDirectCaption(captionToSet, caption);
@@ -850,22 +894,7 @@ export function useCaptions() {
             captionToSet.vttData = await downloadCaptionAsVtt(candidate);
           }
 
-          const state = usePlayerStore.getState();
-          const storageKey = `subtitle-sync:${state.meta?.tmdbId || "unknown"}:${state.source?.id || "unknown"}:${candidate.id}`;
-          const savedSync = localStorage.getItem(storageKey);
-          if (savedSync) {
-            try {
-              const alignment = JSON.parse(savedSync);
-              captionToSet.alignment = alignment;
-              captionToSet.alignmentBaseVttData = captionToSet.vttData;
-              captionToSet.vttData = applySubtitleAlignment(
-                captionToSet.alignmentBaseVttData,
-                alignment as any,
-              );
-            } catch (e) {
-              console.warn("Failed to parse saved subtitle sync", e);
-            }
-          }
+          applySavedCaptionAlignment(captionToSet, candidate.id);
 
           if (secondaryCaption?.id !== candidate.id) {
             resetSubtitleSpecificSettings("secondary");

@@ -1,13 +1,16 @@
 from __future__ import annotations
 
+from bisect import bisect_left
 import re
 import struct
 import threading
 from dataclasses import dataclass
 from typing import Any, Callable
 
+import numpy as np
+
 from vad import detect_speech_intervals
-from fft_align import find_best_offset_fft, find_top_offsets_fft
+from fft_align import FRAMERATE_RATIOS, find_best_offset_fft, find_top_offsets_fft
 from split_align import compute_piecewise_segments
 
 
@@ -18,6 +21,7 @@ TIMING_RE = re.compile(
 
 MAX_AUDIO_BYTES = 8 * 1024 * 1024
 MAX_VTT_BYTES = 2 * 1024 * 1024
+MAX_VTT_CUES = 20_000
 MAX_ALIGNMENT_TOTAL_AUDIO_BYTES = 14 * 1024 * 1024
 MIN_ALIGNMENT_CONFIDENCE = 60
 MIN_SPEECH_INTERVAL_MS = 120
@@ -27,12 +31,13 @@ MIN_ALIGNMENT_SPEECH_DURATION_MS = 1_000
 # different scene than a real subtitle timing error.
 MAX_ALIGNMENT_OFFSET_MS = 45_000
 MAX_PLAUSIBLE_ALIGNMENT_OFFSET_MS = 180_000
+MAX_POOLED_WINDOW_SPAN_MS = 600_000
 SEARCH_RANGE_MS = MAX_ALIGNMENT_OFFSET_MS
 SEARCH_STEP_MS = 250
 REFINE_RANGE_MS = 750
 REFINE_STEP_MS = 25
 ACTIVITY_FINGERPRINT_BIN_MS = 100
-ACTIVITY_FINGERPRINT_TOP_K = 8
+ACTIVITY_FINGERPRINT_TOP_K = 6
 ACTIVITY_FINGERPRINT_REFINE_RANGE_MS = 500
 SUBTITLE_ACTIVITY_MERGE_GAP_MS = 250
 MAX_SPEECH_ANCHOR_ERROR_MS = 1_800
@@ -45,6 +50,8 @@ SUBTITLE_EARLY_START_GRACE_MS = 250
 SPEECH_ANCHOR_START_WEIGHT = 0.65
 SPEECH_ANCHOR_END_WEIGHT = 0.35
 SPEECH_ANCHOR_EARLY_START_PENALTY_WEIGHT = 0.15
+MIN_RATE_RATIO = 0.95
+MAX_RATE_RATIO = 1.05
 _TRANSCRIPTION_LOCK = threading.Lock()
 
 
@@ -74,7 +81,19 @@ MOJIBAKE_SYMBOLS = frozenset(
 SDH_BRACKET_RE = re.compile(
     r"\[[^\]]*\]|\([^)]*\)|\{[^}]*\}|<[^>]+>|[♪♫♬♩]+"
 )
-PURE_MUSIC_CUE_RE = re.compile(r"^\s*[♪♫♬♩\s\-~]+\s*$|^\s*[♪♫♬♩].*[♪♫♬♩]\s*$")
+MUSIC_GLYPHS = frozenset("♪♫♬♩")
+PURE_MUSIC_ALLOWED_CHARS = frozenset("♪♫♬♩-~ \t\r\n")
+SPEAKER_LABEL_RE = re.compile(r"^[ \t]*[-–—]?[ \t]*[A-ZÀ-Ỹ0-9][A-ZÀ-Ỹ0-9 \t]{0,19}:[ \t]*")
+
+
+def _is_pure_music_cue(text: str) -> bool:
+    """Linear-time check for music-only cues (replaces backtracking regex)."""
+    stripped = text.strip()
+    if not stripped:
+        return False
+    if all(ch in PURE_MUSIC_ALLOWED_CHARS for ch in stripped):
+        return True
+    return stripped[0] in MUSIC_GLYPHS and stripped[-1] in MUSIC_GLYPHS
 
 
 @dataclass(frozen=True)
@@ -106,11 +125,11 @@ def is_non_speech_sdh_cue(cue: Cue) -> bool:
     text = _cue_text(cue)
     if not text:
         return True
-    if PURE_MUSIC_CUE_RE.match(text):
+    if _is_pure_music_cue(text):
         return True
     cleaned = SDH_BRACKET_RE.sub(" ", text)
     # Remove speaker labels like "MAN:" or "- " and check if any letters/digits remain
-    cleaned = re.sub(r"^\s*[-–—]?\s*[A-ZÀ-Ỹ0-9\s]{1,20}:\s*", "", cleaned)
+    cleaned = SPEAKER_LABEL_RE.sub("", cleaned)
     has_word_char = any(ch.isalnum() for ch in cleaned)
     return not has_word_char
 
@@ -273,7 +292,19 @@ def parse_timestamp(value: str) -> int:
 
 def parse_vtt(text: str) -> list[Cue]:
     cues: list[Cue] = []
-    for block in re.split(r"\r?\n\s*\r?\n", text.strip()):
+    # Split blocks in linear O(N) time without regex backtracking on malformed files
+    blocks: list[str] = []
+    current_lines: list[str] = []
+    for raw_line in text.splitlines():
+        if raw_line.strip():
+            current_lines.append(raw_line)
+        elif current_lines:
+            blocks.append("\n".join(current_lines))
+            current_lines.clear()
+    if current_lines:
+        blocks.append("\n".join(current_lines))
+
+    for block in blocks:
         lines = block.splitlines()
         timing_index = next(
             (index for index, line in enumerate(lines) if TIMING_RE.match(line)),
@@ -289,6 +320,8 @@ def parse_vtt(text: str) -> list[Cue]:
         end_ms = parse_timestamp(match.group(2))
         if end_ms <= start_ms:
             continue
+        if len(cues) >= MAX_VTT_CUES:
+            raise ValueError("subtitle contains too many cues")
         cues.append(
             Cue(
                 index=len(cues),
@@ -305,7 +338,7 @@ def parse_alignment_cues(text: str) -> list[Cue]:
     return filter_alignment_cues(cues)
 
 
-def decode_wav(data: bytes) -> tuple[list[float], int]:
+def decode_wav(data: bytes) -> tuple[Any, int]:
     if len(data) < 12 or data[:4] != b"RIFF" or data[8:12] != b"WAVE":
         raise ValueError("audio must be a RIFF/WAVE file")
 
@@ -354,20 +387,17 @@ def decode_wav(data: bytes) -> tuple[list[float], int]:
     if sample_rate <= 0:
         raise ValueError("audio must have a valid sample rate")
 
-    samples: list[float] = []
     frame_width = channels * 2
     if len(frames) % frame_width:
         raise ValueError("audio data is not aligned to complete PCM frames")
-    for offset in range(0, len(frames), frame_width):
-        total = 0
-        for channel in range(channels):
-            start = offset + channel * 2
-            total += int.from_bytes(
-                frames[start : start + 2],
-                byteorder="little",
-                signed=True,
-            )
-        samples.append(total / channels / 32768.0)
+    pcm = np.frombuffer(frames, dtype="<i2")
+    if channels == 1:
+        samples = pcm.astype(np.float32) * np.float32(1.0 / 32768.0)
+    else:
+        stereo = pcm.reshape(-1, 2)
+        samples = (
+            stereo[:, 0].astype(np.float32) + stereo[:, 1].astype(np.float32)
+        ) * np.float32(0.5 / 32768.0)
     return samples, sample_rate
 
 
@@ -456,6 +486,34 @@ def total_interval_overlap(
     return total
 
 
+def _slice_cues_overlapping(
+    cues: list[Cue],
+    min_cue_end: int,
+    max_cue_start: int,
+) -> list[Cue]:
+    """Slice cues overlapping (min_cue_end, max_cue_start), using binary search when sorted."""
+    if not cues:
+        return []
+    if len(cues) > 32 and cues[0].start_ms <= cues[-1].start_ms:
+        start_idx = bisect_left(
+            cues,
+            min_cue_end - 60_000,
+            key=lambda cue: cue.start_ms,
+        )
+        selected: list[Cue] = []
+        for cue in cues[start_idx:]:
+            if cue.start_ms >= max_cue_start:
+                break
+            if cue.end_ms > min_cue_end:
+                selected.append(cue)
+        return selected
+    return [
+        cue
+        for cue in cues
+        if cue.end_ms > min_cue_end and cue.start_ms < max_cue_start
+    ]
+
+
 def build_shifted_subtitle_intervals(
     cues: list[Cue],
     offset_ms: int,
@@ -464,12 +522,12 @@ def build_shifted_subtitle_intervals(
 ) -> list[tuple[int, int]]:
     min_cue_end = audio_start_ms - offset_ms
     max_cue_start = audio_end_ms - offset_ms
+    overlapping = _slice_cues_overlapping(cues, min_cue_end, max_cue_start)
     return merge_activity_intervals(
         clip_intervals(
             [
                 (cue.start_ms + offset_ms, cue.end_ms + offset_ms)
-                for cue in cues
-                if cue.end_ms > min_cue_end and cue.start_ms < max_cue_start
+                for cue in overlapping
             ],
             audio_start_ms,
             audio_end_ms,
@@ -533,11 +591,11 @@ def _build_activity_fingerprint(
         origin_ms,
         fingerprint_end_ms,
     )
+    overlapping_cues = _slice_cues_overlapping(cues, origin_ms, fingerprint_end_ms)
     subtitle_intervals = merge_activity_intervals(
         [
             (cue.start_ms, cue.end_ms)
-            for cue in cues
-            if cue.end_ms > origin_ms and cue.start_ms < fingerprint_end_ms
+            for cue in overlapping_cues
         ],
         SUBTITLE_ACTIVITY_MERGE_GAP_MS,
     )
@@ -863,9 +921,14 @@ def find_best_offset(
     audio_end_ms: int,
     search_centers: list[int] | None = None,
 ) -> tuple[int, float]:
+    local_cues = _slice_cues_overlapping(
+        cues,
+        audio_start_ms - MAX_PLAUSIBLE_ALIGNMENT_OFFSET_MS - 60_000,
+        audio_end_ms + MAX_PLAUSIBLE_ALIGNMENT_OFFSET_MS + 60_000,
+    ) or cues
     centers_set = set(search_centers or [0])
     fft_peak_offsets: list[int] = []
-    cue_intervals = [(c.start_ms, c.end_ms) for c in cues if c.end_ms > c.start_ms]
+    cue_intervals = [(c.start_ms, c.end_ms) for c in local_cues if c.end_ms > c.start_ms]
     try:
         fft_peaks = find_top_offsets_fft(
             speech_intervals,
@@ -876,30 +939,57 @@ def find_best_offset(
             search_centers=search_centers,
             top_k=5,
         )
+        top_fft_conf = fft_peaks[0][1] if fft_peaks else 0.0
+        if top_fft_conf < 50.0 and (audio_end_ms - audio_start_ms) <= 180_000:
+            ratio_peaks = find_top_offsets_fft(
+                speech_intervals,
+                cue_intervals,
+                audio_start_ms,
+                audio_end_ms,
+                try_framerate_ratios=True,
+                search_centers=search_centers,
+                top_k=5,
+            )
+            fft_peaks = sorted(
+                [*fft_peaks, *ratio_peaks],
+                key=lambda item: item[1],
+                reverse=True,
+            )[:8]
         for fft_offset, fft_conf, _ in fft_peaks:
             if fft_conf >= 15.0 and abs(fft_offset) <= MAX_PLAUSIBLE_ALIGNMENT_OFFSET_MS:
                 centers_set.add(fft_offset)
-                fft_peak_offsets.append(fft_offset)
+                if fft_offset not in fft_peak_offsets:
+                    fft_peak_offsets.append(fft_offset)
     except Exception:
         pass
     centers = sorted(centers_set)
 
+    score_memo: dict[int, float] = {}
+
+    def cached_score_offset(value: int) -> float:
+        cached = score_memo.get(value)
+        if cached is not None:
+            return cached
+        val = score_offset(
+            local_cues,
+            speech_intervals,
+            value,
+            audio_start_ms,
+            audio_end_ms,
+        )
+        score_memo[value] = val
+        return val
+
     def rank_offset(value: int) -> tuple[float, int, int]:
         dist_to_center = min(abs(value - c) for c in centers)
         return (
-            score_offset(
-                cues,
-                speech_intervals,
-                value,
-                audio_start_ms,
-                audio_end_ms,
-            ),
+            cached_score_offset(value),
             -dist_to_center,
             -abs(value),
         )
 
     speech_bits, subtitle_bits, audio_mask = _build_activity_fingerprint(
-        cues,
+        local_cues,
         speech_intervals,
         audio_start_ms,
         audio_end_ms,
@@ -940,32 +1030,44 @@ def find_best_offset(
     )
 
     if top_fingerprint_score > 0:
-        coarse_candidates = set(
-            fingerprint_ranked_candidates[:ACTIVITY_FINGERPRINT_TOP_K]
-        )
-        for center in centers:
-            coarse_candidates.add(
-                min(
-                    coarse_candidates_set,
-                    key=lambda value: abs(value - center),
+        seed_candidates: list[int] = []
+        for cand in (
+            *fft_peak_offsets,
+            *[
+                min(coarse_candidates_set, key=lambda value, c=center: abs(value - c))
+                for center in centers
+            ],
+            *fingerprint_ranked_candidates[:ACTIVITY_FINGERPRINT_TOP_K],
+        ):
+            if all(abs(cand - existing) >= 200 for existing in seed_candidates):
+                seed_candidates.append(cand)
+            if len(seed_candidates) >= 10:
+                break
+
+        stage1_candidates: set[int] = set()
+        for seed in seed_candidates:
+            stage1_candidates.update(
+                range(
+                    seed - ACTIVITY_FINGERPRINT_REFINE_RANGE_MS,
+                    seed + ACTIVITY_FINGERPRINT_REFINE_RANGE_MS + 1,
+                    100,
                 )
             )
-        for fft_off in fft_peak_offsets:
-            coarse_candidates.add(fft_off)
+            stage1_candidates.add(seed)
+        top_stage1 = sorted(stage1_candidates, key=rank_offset, reverse=True)[:2]
+
         refined_candidates_set: set[int] = set()
-        for coarse_offset in coarse_candidates:
+        for peak in top_stage1:
             refined_candidates_set.update(
                 range(
-                    coarse_offset - ACTIVITY_FINGERPRINT_REFINE_RANGE_MS,
-                    coarse_offset
-                    + ACTIVITY_FINGERPRINT_REFINE_RANGE_MS
-                    + 1,
+                    peak - 125,
+                    peak + 126,
                     REFINE_STEP_MS,
                 )
             )
         refined_candidates = refined_candidates_set
     else:
-        # Preserve the exhaustive path for sparse or empty fingerprints.
+        # Preserve exhaustive sweep for sparse/empty fingerprints (pre-sliced O(log N) cues).
         coarse_offset = max(coarse_candidates_set, key=rank_offset)
         refined_candidates = range(
             coarse_offset - REFINE_RANGE_MS,
@@ -974,13 +1076,7 @@ def find_best_offset(
         )
 
     best_offset = max(refined_candidates, key=rank_offset)
-    best_score = score_offset(
-        cues,
-        speech_intervals,
-        best_offset,
-        audio_start_ms,
-        audio_end_ms,
-    )
+    best_score = cached_score_offset(best_offset)
     return best_offset, best_score
 
 
@@ -1261,15 +1357,28 @@ def align_speech_batch(
                 cue_intervals = [
                     (c.start_ms, c.end_ms) for c in cues if c.end_ms > c.start_ms
                 ]
-                for fft_off, fft_conf, _ in find_top_offsets_fft(
+                fft_peaks = find_top_offsets_fft(
                     speech_intervals,
                     cue_intervals,
                     audio_start_ms,
                     audio_end_ms,
                     try_framerate_ratios=False,
                     top_k=3,
-                ):
-                    if fft_conf >= 35.0:
+                )
+                if (not fft_peaks or fft_peaks[0][1] < 35.0) and (audio_end_ms - audio_start_ms) <= 180_000:
+                    fft_peaks = [
+                        *fft_peaks,
+                        *find_top_offsets_fft(
+                            speech_intervals,
+                            cue_intervals,
+                            audio_start_ms,
+                            audio_end_ms,
+                            try_framerate_ratios=True,
+                            top_k=3,
+                        ),
+                    ]
+                for fft_off, fft_conf, _ in fft_peaks:
+                    if fft_conf >= 30.0 and fft_off not in fft_hints:
                         fft_hints.append(fft_off)
             except Exception:
                 pass
@@ -1435,6 +1544,137 @@ def _build_unaligned_consensus_result(
     }
 
 
+def _weighted_linear_fit(
+    xs: list[float],
+    ys: list[float],
+    weights: list[float],
+) -> tuple[float, float] | None:
+    total_w = sum(weights)
+    if total_w <= 0:
+        return None
+    mean_x = sum(w * x for w, x in zip(weights, xs)) / total_w
+    mean_y = sum(w * y for w, y in zip(weights, ys)) / total_w
+    denom = sum(w * (x - mean_x) ** 2 for w, x in zip(weights, xs))
+    if denom <= 1e-6:
+        return None
+    slope = sum(w * (x - mean_x) * (y - mean_y) for w, x, y in zip(weights, xs, ys)) / denom
+    intercept = mean_y - slope * mean_x
+    return slope, intercept
+
+
+def _fit_framerate_drift(
+    valid_entries: list[dict[str, Any]],
+) -> dict[str, Any] | None:
+    """Detect smooth linear FPS drift (e.g. 23.976<->24, 24<->25) across >= 3 windows."""
+    if len(valid_entries) < 3:
+        return None
+
+    sorted_entries = sorted(valid_entries, key=lambda e: float(e["startAt"]))
+    points: list[tuple[float, float, float, float, dict[str, Any]]] = []
+    for entry in sorted_entries:
+        t_v = float(entry.get("midMs", float(entry["startAt"]) * 1000.0))
+        offset_ms = float(entry["result"]["offsetMs"])
+        t_s = t_v - offset_ms
+        conf = max(1.0, float(entry["result"].get("confidence", 60)))
+        points.append((t_s, t_v, offset_ms, conf, entry))
+
+    min_required_inliers = max(3, int(np.ceil(len(points) * 0.6)))
+    best_model: dict[str, Any] | None = None
+
+    for i in range(len(points)):
+        for j in range(i + 1, len(points)):
+            t_si, t_vi, _, _, _ = points[i]
+            t_sj, t_vj, _, _, _ = points[j]
+            if abs(t_vj - t_vi) < 240_000 or abs(t_sj - t_si) < 240_000:
+                continue
+            cand_slope = (t_vj - t_vi) / (t_sj - t_si)
+            if not (MIN_RATE_RATIO <= cand_slope <= MAX_RATE_RATIO):
+                continue
+            cand_intercept = t_vi - cand_slope * t_si
+
+            inliers = [
+                p
+                for p in points
+                if abs(p[1] - (cand_slope * p[0] + cand_intercept)) <= 650.0
+            ]
+            if len(inliers) < min_required_inliers:
+                continue
+            if inliers[-1][1] - inliers[0][1] < 300_000:
+                continue
+
+            fit = _weighted_linear_fit(
+                [p[0] for p in inliers],
+                [p[1] for p in inliers],
+                [p[3] for p in inliers],
+            )
+            if fit is None:
+                continue
+            slope, intercept = fit
+            if not (MIN_RATE_RATIO <= slope <= MAX_RATE_RATIO):
+                continue
+            if abs(slope - 1.0) < 0.0004:
+                continue
+
+            # Recompute inliers tightly around OLS refit
+            inliers = [
+                p
+                for p in points
+                if abs(p[1] - (slope * p[0] + intercept)) <= 650.0
+            ]
+            if len(inliers) < min_required_inliers or (inliers[-1][1] - inliers[0][1]) < 300_000:
+                continue
+
+            # Snap cleanly to broadcast FPS ratio when within 0.035% and errors stay <= 650ms
+            best_std = min(
+                (r for r in FRAMERATE_RATIOS if abs(r - 1.0) > 1e-6),
+                key=lambda r: abs(r - slope),
+                default=None,
+            )
+            if best_std is not None and abs(best_std - slope) <= 0.00035:
+                w_sum = sum(p[3] for p in inliers)
+                std_intercept = sum(p[3] * (p[1] - best_std * p[0]) for p in inliers) / w_sum
+                std_max_err = max(abs(p[1] - (best_std * p[0] + std_intercept)) for p in inliers)
+                if std_max_err <= 650.0:
+                    slope = best_std
+                    intercept = std_intercept
+
+            offsets = [p[2] for p in inliers]
+            if max(offsets) - min(offsets) < 800.0:
+                continue
+
+            w_sum = sum(p[3] for p in inliers)
+            const_mean = sum(p[3] * p[2] for p in inliers) / w_sum
+            const_rmse = float(
+                np.sqrt(sum(p[3] * (p[2] - const_mean) ** 2 for p in inliers) / w_sum)
+            )
+            lin_residuals = [abs(p[1] - (slope * p[0] + intercept)) for p in inliers]
+            linear_rmse = float(
+                np.sqrt(sum(p[3] * r ** 2 for p, r in zip(inliers, lin_residuals)) / w_sum)
+            )
+            if max(lin_residuals) > 650.0:
+                continue
+            if const_rmse < max(450.0, linear_rmse * 3.0):
+                continue
+
+            score_tuple = (len(inliers), -linear_rmse)
+            if best_model is None or score_tuple > best_model["rank"]:
+                avg_conf = round(sum(p[3] for p in inliers) / len(inliers))
+                rep = max(inliers, key=lambda p: p[3])[4]["result"]
+                best_model = {
+                    "rank": score_tuple,
+                    "result": {
+                        **rep,
+                        "aligned": True,
+                        "offsetMs": int(round(intercept)),
+                        "rateRatio": round(float(slope), 6),
+                        "confidence": avg_conf,
+                        "reason": None,
+                    },
+                }
+
+    return best_model["result"] if best_model is not None else None
+
+
 def select_alignment_consensus(
     entries: list[dict[str, Any]],
 ) -> dict[str, Any]:
@@ -1538,6 +1778,10 @@ def select_alignment_consensus(
                 "reason": None,
             }
 
+    fps_drift_result = _fit_framerate_drift(valid_entries)
+    if fps_drift_result is not None:
+        return fps_drift_result
+
     has_consensus = (
         len(best_cluster["candidates"]) >= 2
         and best_cluster["averageConfidence"] >= MIN_ALIGNMENT_CONFIDENCE
@@ -1623,6 +1867,7 @@ def align_speech_windows(
             entries_by_track.setdefault(track, []).append(
                 {
                     "startAt": audio_start_ms / 1_000,
+                    "midMs": (audio_start_ms + audio_end_ms) // 2,
                     "result": result,
                 }
             )
@@ -1635,8 +1880,7 @@ def align_speech_windows(
         consensus = select_alignment_consensus(entries)
         cues = parsed_tracks.get(track)
 
-        # Cross-window hint rescue & pooled multi-window fallback when individual
-        # windows had sparse speech or one window needed a hint from another.
+        # Cross-window hint rescue & bounded pooled fallback for sparse-dialogue movies
         if not consensus.get("aligned") and cues and not is_mocked_batch and len(windows) >= 2:
             aligned_hints = [
                 int(e["result"]["offsetMs"])
@@ -1670,23 +1914,59 @@ def align_speech_windows(
                     rescued_entries.append(
                         {
                             "startAt": orig_entry["startAt"],
+                            "midMs": orig_entry.get("midMs", (audio_start_ms + audio_end_ms) // 2),
                             "result": re_res if re_res.get("aligned") else orig_entry["result"],
                         }
                     )
                 consensus = select_alignment_consensus(rescued_entries)
 
-            # Pooled multi-window fallback for sparse-dialogue movies where each
-            # 60s window only contains 1 speech anchor.
-            if not consensus.get("aligned"):
+            dense_rejected_windows = sum(
+                1
+                for idx, (win_speech, _, _) in enumerate(windows)
+                if not entries[idx]["result"].get("aligned")
+                and entries[idx]["result"].get("reason") in {
+                    "low_alignment_confidence",
+                    "offset_out_of_range",
+                    "ambiguous_alignment",
+                }
+                and len(win_speech) >= 2
+                and sum(max(0, e - s) for s, e in win_speech) >= 4_000
+            )
+            should_run_pooled_fallback = (
+                not consensus.get("aligned")
+                and not (not aligned_hints and dense_rejected_windows >= 2)
+            )
+
+            # Pooled multi-window fallback for sparse-dialogue movies (bounded span <= 10 min)
+            if should_run_pooled_fallback:
+                sorted_windows = sorted(windows, key=lambda w: w[1])
+                pooled_subset = sorted_windows
+                if sorted_windows[-1][2] - sorted_windows[0][1] > MAX_POOLED_WINDOW_SPAN_MS:
+                    best_subset: list[tuple[list[tuple[int, int]], int, int]] = []
+                    best_speech_ms = -1
+                    for start_idx in range(len(sorted_windows)):
+                        sub_start = sorted_windows[start_idx][1]
+                        cand: list[tuple[list[tuple[int, int]], int, int]] = []
+                        cand_speech_ms = 0
+                        for item in sorted_windows[start_idx:]:
+                            if item[2] - sub_start > MAX_POOLED_WINDOW_SPAN_MS:
+                                break
+                            cand.append(item)
+                            cand_speech_ms += sum(max(0, e - s) for s, e in item[0])
+                        if cand_speech_ms > best_speech_ms:
+                            best_speech_ms = cand_speech_ms
+                            best_subset = cand
+                    pooled_subset = best_subset
+
                 pooled_speech = merge_intervals(
-                    [iv for win_speech, _, _ in windows for iv in win_speech]
+                    [iv for win_speech, _, _ in pooled_subset for iv in win_speech]
                 )
-                if len(pooled_speech) >= 2:
-                    min_start_ms = min(s for _, s, _ in windows)
-                    max_end_ms = max(e for _, _, e in windows)
+                if len(pooled_speech) >= 2 and pooled_subset:
+                    min_start_ms = min(s for _, s, _ in pooled_subset)
+                    max_end_ms = max(e for _, _, e in pooled_subset)
                     cue_intervals = [(c.start_ms, c.end_ms) for c in cues if c.end_ms > c.start_ms]
                     pooled_hints = list(aligned_hints)
-                    for _, s_ms, e_ms in windows:
+                    for _, s_ms, e_ms in pooled_subset:
                         win_sp = [iv for iv in pooled_speech if iv[1] > s_ms and iv[0] < e_ms]
                         if win_sp:
                             for fft_off, fft_conf, _ in find_top_offsets_fft(

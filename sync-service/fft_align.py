@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from bisect import bisect_left
 import math
 from typing import Optional
 import numpy as np
@@ -7,8 +8,12 @@ from scipy.signal import fftconvolve
 
 FRAME_MS = 25  # 25ms per bin
 MAX_SEARCH_OFFSET_MS = 180_000  # ±3 minutes search range
+MAX_FFT_OFFSET_MS = 300_000
+MAX_FFT_DURATION_MS = 600_000
 ONSET_BOOST_FRAMES = 8  # First 200ms of an utterance/cue receives onset emphasis
 ONSET_BOOST_WEIGHT = 1.45
+PAUSE_ONSET_GAP_MS = 480
+PAUSE_ONSET_BOOST_WEIGHT = 1.65
 
 # Common framerate ratios between film/TV standards
 FRAMERATE_RATIOS = [
@@ -24,6 +29,31 @@ FRAMERATE_RATIOS = [
 ]
 
 
+def _slice_intervals_in_range(
+    intervals: list[tuple[int, int]],
+    range_start_ms: int,
+    range_end_ms: int,
+) -> list[tuple[int, int]]:
+    """Slice sorted (or mostly sorted) intervals overlapping [range_start_ms, range_end_ms]."""
+    if not intervals:
+        return []
+    # Check fast sorted path cleanly
+    if len(intervals) > 16 and intervals[0][0] <= intervals[-1][0]:
+        idx = bisect_left(intervals, (range_start_ms - 60_000, -1))
+        sliced: list[tuple[int, int]] = []
+        for s, e in intervals[idx:]:
+            if s > range_end_ms:
+                break
+            if e >= range_start_ms:
+                sliced.append((s, e))
+        return sliced
+    return [
+        (s, e)
+        for s, e in intervals
+        if e >= range_start_ms and s <= range_end_ms
+    ]
+
+
 def intervals_to_signal(
     intervals: list[tuple[int, int]],
     origin_ms: int,
@@ -31,24 +61,39 @@ def intervals_to_signal(
     frame_ms: int = FRAME_MS,
     onset_weight: float = 1.0,
 ) -> np.ndarray:
-    n_frames = max(1, int(math.ceil(duration_ms / frame_ms)))
+    bounded_duration_ms = min(max(1, int(duration_ms)), MAX_FFT_DURATION_MS + 2 * MAX_FFT_OFFSET_MS)
+    n_frames = max(1, int(math.ceil(bounded_duration_ms / frame_ms)))
     signal = np.zeros(n_frames, dtype=np.float32)
+    range_end_ms = origin_ms + bounded_duration_ms
+    prev_end_ms: int | None = None
     for start_ms, end_ms in intervals:
+        if end_ms <= origin_ms or start_ms >= range_end_ms:
+            prev_end_ms = end_ms if prev_end_ms is None else max(prev_end_ms, end_ms)
+            continue
         clipped_start = max(origin_ms, start_ms)
-        clipped_end = min(origin_ms + duration_ms, end_ms)
+        clipped_end = min(range_end_ms, end_ms)
         if clipped_end <= clipped_start:
+            prev_end_ms = end_ms if prev_end_ms is None else max(prev_end_ms, end_ms)
             continue
         start_frame = max(0, int((clipped_start - origin_ms) / frame_ms))
         end_frame = min(n_frames, int(math.ceil((clipped_end - origin_ms) / frame_ms)))
         if end_frame <= start_frame:
+            prev_end_ms = end_ms if prev_end_ms is None else max(prev_end_ms, end_ms)
             continue
         signal[start_frame:end_frame] = np.maximum(signal[start_frame:end_frame], 1.0)
         if onset_weight > 1.0 and start_ms >= origin_ms:
+            has_pause_before = prev_end_ms is None or (start_ms - prev_end_ms) >= PAUSE_ONSET_GAP_MS
+            eff_weight = (
+                max(onset_weight, PAUSE_ONSET_BOOST_WEIGHT)
+                if has_pause_before and onset_weight >= ONSET_BOOST_WEIGHT
+                else onset_weight
+            )
             onset_end = min(end_frame, start_frame + ONSET_BOOST_FRAMES)
             signal[start_frame:onset_end] = np.maximum(
                 signal[start_frame:onset_end],
-                onset_weight,
+                eff_weight,
             )
+        prev_end_ms = end_ms if prev_end_ms is None else max(prev_end_ms, end_ms)
     return signal
 
 
@@ -74,6 +119,10 @@ def find_top_offsets_fft(
     duration_ms = audio_end_ms - audio_start_ms
     if duration_ms <= 0:
         return []
+    if duration_ms > MAX_FFT_DURATION_MS:
+        raise ValueError("FFT alignment window span exceeds maximum supported duration")
+
+    bounded_max_offset_ms = max(FRAME_MS, min(int(max_offset_ms), MAX_FFT_OFFSET_MS))
 
     ref_signal = intervals_to_signal(
         speech_intervals,
@@ -88,15 +137,26 @@ def find_top_offsets_fft(
         return []
 
     ratios = FRAMERATE_RATIOS if try_framerate_ratios else [1.0]
-    query_origin_ms = audio_start_ms - max_offset_ms
-    query_duration_ms = duration_ms + 2 * max_offset_ms
-    max_offset_frames = int(max_offset_ms / FRAME_MS)
+    query_origin_ms = audio_start_ms - bounded_max_offset_ms
+    query_duration_ms = duration_ms + 2 * bounded_max_offset_ms
+    max_offset_frames = int(bounded_max_offset_ms / FRAME_MS)
+
+    # Slice subtitle intervals once for the maximum framerate expansion range
+    ratio_margin_ms = int(math.ceil(duration_ms * 0.25)) + bounded_max_offset_ms + 5_000
+    relevant_subs = _slice_intervals_in_range(
+        subtitle_intervals,
+        audio_start_ms - ratio_margin_ms,
+        audio_end_ms + ratio_margin_ms,
+    )
+    if not relevant_subs:
+        return []
 
     candidates: list[tuple[int, float, float]] = []
+    sep_frames = max(1, int(math.ceil(min_separation_ms / FRAME_MS)))
 
     for ratio in ratios:
         if ratio == 1.0:
-            scaled_subs = subtitle_intervals
+            scaled_subs = relevant_subs
         else:
             # Scale relative to audio_start_ms so non-unit ratios do not inject
             # a huge (ratio - 1) * audio_start_ms shift for later timeline windows.
@@ -105,7 +165,7 @@ def find_top_offsets_fft(
                     int(round(audio_start_ms + (s - audio_start_ms) * ratio)),
                     int(round(audio_start_ms + (e - audio_start_ms) * ratio)),
                 )
-                for s, e in subtitle_intervals
+                for s, e in relevant_subs
             ]
 
         query_signal = intervals_to_signal(
@@ -154,31 +214,24 @@ def find_top_offsets_fft(
             norm_scores = norm_scores * 0.985
 
         if ratio == 1.0:
-            # Extract top local peaks for ratio == 1.0
-            sorted_idx = np.argsort(norm_scores)[::-1]
-            picked_for_ratio = 0
-            for idx in sorted_idx:
-                raw_score = float(norm_scores[idx])
+            scores_work = norm_scores.copy()
+            for _ in range(top_k):
+                idx = int(np.argmax(scores_work))
+                raw_score = float(scores_work[idx])
                 if raw_score <= 0:
                     break
                 k = int(low_k + idx)
                 lag = k - zero_k
-                offset_ms = lag * FRAME_MS + max_offset_ms
-                if any(
-                    abs(offset_ms - existing_off) < min_separation_ms
-                    for existing_off, _, existing_r in candidates
-                    if existing_r == 1.0
-                ):
-                    continue
+                offset_ms = lag * FRAME_MS + bounded_max_offset_ms
                 adjusted_score = raw_score
                 if search_centers:
                     closest_dist = min(abs(offset_ms - c) for c in search_centers)
                     if closest_dist < 1000:
                         adjusted_score *= 1.05
                 candidates.append((offset_ms, adjusted_score, ratio))
-                picked_for_ratio += 1
-                if picked_for_ratio >= top_k:
-                    break
+                lo_supp = max(0, idx - sep_frames + 1)
+                hi_supp = min(len(scores_work), idx + sep_frames)
+                scores_work[lo_supp:hi_supp] = -1.0
         else:
             best_idx = int(np.argmax(norm_scores))
             raw_score = float(norm_scores[best_idx])
@@ -186,7 +239,7 @@ def find_top_offsets_fft(
                 continue
             k = int(low_k + best_idx)
             lag = k - zero_k
-            offset_ms = lag * FRAME_MS + max_offset_ms
+            offset_ms = lag * FRAME_MS + bounded_max_offset_ms
             adjusted_score = raw_score
             if search_centers:
                 closest_dist = min(abs(offset_ms - c) for c in search_centers)

@@ -25,3 +25,4 @@ export * from "./UnreleasedEpisodeOverlay";
 export * from "./KeyboardCommandsButton";
 export * from "./Widescreen";
 export * from "./SubtitleSyncBadge";
+export * from "./SubtitleSyncHud";

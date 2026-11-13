@@ -49,6 +49,7 @@ const DEFAULT_ALLOWED_HEADERS = [
   'If-Range',
   'X-Token',
   'X-Frontend-Origin',
+  'X-App-Version',
 ];
 const ALLOWED_HEADER_NAMES = new Map(
   DEFAULT_ALLOWED_HEADERS.map(header => [header.toLowerCase(), header])

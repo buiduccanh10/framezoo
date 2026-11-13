@@ -32,6 +32,28 @@ const GUEST_TOKEN_EXPIRY_SECONDS = parsePositiveInt(
 const SESSION_EXPIRY_MS = REFRESH_TOKEN_EXPIRY_SECONDS * 1000;
 const SESSION_EXPIRY_SECONDS = REFRESH_TOKEN_EXPIRY_SECONDS;
 
+const APP_VERSION_PATTERN = /^[a-zA-Z0-9._+-]{1,40}$/;
+
+const extractAppVersion = (event?: H3EventCompat, userAgent?: string): string | null => {
+  try {
+    const targetEvent = event ?? useEvent();
+    const headerValue = targetEvent ? getRequestHeader(targetEvent, 'x-app-version') : undefined;
+    const trimmed = typeof headerValue === 'string' ? headerValue.trim() : '';
+    if (trimmed && APP_VERSION_PATTERN.test(trimmed)) {
+      return trimmed;
+    }
+  } catch {
+    // useEvent() throws outside an active H3 request context (e.g. unit tests).
+  }
+
+  if (userAgent) {
+    const match = userAgent.match(/Framezoo\/([a-zA-Z0-9._+-]{1,40})/i);
+    if (match?.[1]) return match[1];
+  }
+
+  return null;
+};
+
 type AccessTokenPayload = {
   sid: string;
   typ?: 'access';
@@ -187,30 +209,54 @@ export function useAuth() {
 
     const now = new Date();
     const expiryDate = new Date(now.getTime() + SESSION_EXPIRY_MS);
+    const detectedVersion = extractAppVersion(undefined, session.user_agent);
+    const nextVersion =
+      detectedVersion && detectedVersion !== session.app_version ? detectedVersion : undefined;
 
-    return await prisma.sessions.update({
+    const updated = await prisma.sessions.update({
       where: { id },
       data: {
         accessed_at: now,
         expires_at: expiryDate,
         refresh_jti: session.refresh_jti || randomUUID(),
         refresh_expires_at: expiryDate,
+        ...(nextVersion ? { app_version: nextVersion } : {}),
       },
     });
+
+    if (nextVersion) {
+      await prisma.users
+        .updateMany({
+          where: { id: session.user },
+          data: { app_version: nextVersion },
+        })
+        .catch(() => {});
+    }
+
+    return updated;
   };
 
-  const makeSession = async (user: string, device: string, userAgent?: string) => {
+  const makeSession = async (
+    user: string,
+    device: string,
+    userAgent?: string,
+    appVersion?: string
+  ) => {
     if (!userAgent) throw new Error('No useragent provided');
 
     const now = new Date();
     const expiryDate = new Date(now.getTime() + SESSION_EXPIRY_MS);
+    const resolvedVersion =
+      (appVersion && APP_VERSION_PATTERN.test(appVersion.trim()) ? appVersion.trim() : null) ||
+      extractAppVersion(undefined, userAgent);
 
-    return await prisma.sessions.create({
+    const created = await prisma.sessions.create({
       data: {
         id: randomUUID(),
         user,
         device,
         user_agent: userAgent,
+        app_version: resolvedVersion,
         created_at: now,
         accessed_at: now,
         expires_at: expiryDate,
@@ -218,6 +264,17 @@ export function useAuth() {
         refresh_expires_at: expiryDate,
       },
     });
+
+    if (resolvedVersion) {
+      await prisma.users
+        .updateMany({
+          where: { id: user },
+          data: { app_version: resolvedVersion },
+        })
+        .catch(() => {});
+    }
+
+    return created;
   };
 
   const makeAccessToken = (session: { id: string }) => {

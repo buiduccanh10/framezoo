@@ -371,12 +371,13 @@ export function useSmoothPlaybackClock(
   return clockTime;
 }
 
-function getPlaybackClockResetKey(state: {
+export function getPlaybackClockResetKey(state: {
   source: { id?: string; url?: string } | null;
   sourceId: string | null;
   meta: Parameters<typeof getMediaKey>[0];
+  interface?: { pictureInPictureMode?: string | null };
 }): string {
-  return `${state.sourceId ?? state.source?.id ?? state.source?.url ?? ""}:${getMediaKey(state.meta) ?? ""}`;
+  return `${state.sourceId ?? state.source?.id ?? state.source?.url ?? ""}:${getMediaKey(state.meta) ?? ""}:${state.interface?.pictureInPictureMode ?? ""}`;
 }
 
 /**
