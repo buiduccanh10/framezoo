@@ -165,10 +165,8 @@
     "badge": "Comentarios",
     "subtitle": "Infórmanos sobre calquera problema ou dificultade que experimentou con Framezoo.",
     "modalTitle": "Envíanos o teu comentario",
-    "descLabel": "2. Descrición detallada",
     "titleLabel": "1. Título da emisión",
     "descPlaceholder": "Describe o problema específico ou os pasos para reproducilo...",
-    "errorRequired": "Enche tanto o título como a descrición do problema.",
     "cancel": "Cancelar",
     "titlePlaceholder": "p.ex. Problema de sincronización de subtítulos, atraso durante a reprodución...",
     "errorSubmit": "Produciuse un erro ao enviar comentarios. Téntao de novo máis tarde.",
@@ -179,7 +177,12 @@
     "successDesc": "Grazas polos teus comentarios. O noso equipo revisará e resolverá o problema o antes posible.",
     "attachmentsLabel": "Arquivos",
     "attachmentsHint": "Imaxes/vídeos · 55 MB en total como máximo",
-    "attachmentsTooLarge": "O tamaño total do ficheiro non debe superar os 55 MB."
+    "attachmentsTooLarge": "O tamaño total do ficheiro non debe superar os 55 MB.",
+    "contactPlaceholder": "p.ex. nome@example.com ou +84912345678",
+    "descLabel": "3. Descrición detallada",
+    "contactLabel": "2. Correo electrónico ou número de teléfono",
+    "contactInvalid": "Introduce un enderezo de correo electrónico ou un número de teléfono válido para que poidamos responder.",
+    "errorRequired": "Encha o título, a información de contacto e a descrición do problema."
   },
   "seo": {
     "description": "Framezoo é un reprodutor de transmisión de vídeo de alta velocidade deseñado para ser suave, intuitivo e fácil de usar. Explora metadatos de películas enriquecidos, sincroniza subtítulos con fluxos de vídeo sen límites e carga subtítulos de varias fontes.",

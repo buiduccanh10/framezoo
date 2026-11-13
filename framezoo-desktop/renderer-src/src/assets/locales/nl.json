@@ -869,6 +869,7 @@
       "quality": {
         "auto": "Auto",
         "automaticLabel": "Automatische kwaliteit",
+        "mpvAutoHint": "Selecteert automatisch een standaardnummer bij het openen; het past zich niet aan de netwerksnelheid aan.",
         "hint": "Je kunt <0>bron omschakelen</0> proberen om verschillende kwaliteitsopties te krijgen.",
         "iosNoQuality": "Vanwege door Apple gedefinieerde beperkingen is kwaliteitsselectie niet beschikbaar op iOS voor deze bron. U kunt <0>omschakelen naar een andere bron</0> proberen om andere kwaliteitsopties te krijgen.",
         "title": "Kwaliteit"
@@ -1494,6 +1495,10 @@
     "subtitle": "Laat ons weten of u tijdens uw ervaring problemen of bugs bent tegengekomen.",
     "titleLabel": "1. Titel van het probleem",
     "titlePlaceholder": "Bijvoorbeeld: Fout bij het laden van ondertitels, haperende weergave...",
+    "contactLabel": "Contactgegevens (e-mail of telefoonnummer)",
+    "contactPlaceholder": "bijv. name@example.com of +84912345678",
+    "contactRequired": "Vul uw e-mailadres of telefoonnummer in, zodat we u kunnen antwoorden.",
+    "contactInvalid": "Voer een geldig e-mailadres of telefoonnummer in.",
     "descriptionLabel": "2. Probleemomschrijving",
     "descriptionPlaceholder": "Beschrijf het probleem in detail, de stappen om het te reproduceren, of suggesties...",
     "submit": "Feedback verzenden",

@@ -147,7 +147,10 @@
       "resendIn": "{{seconds}}초 내에 재전송 가능합니다.",
       "resetDescription": "이메일로 전송된 코드를 입력하세요.",
       "resetTitle": "비밀번호를 재설정하세요",
-      "send": "전송 코드"
+      "send": "전송 코드",
+      "sentToEmail": "인증 코드가 <bold>{{email}}</bold>로 전송되었습니다.",
+      "sentToPrompt": "인증 코드가 다음 주소로 전송되었습니다:",
+      "spamNotice": "이메일을 찾을 수 없으신가요? 스팸 또는 정크 메일함을 확인해 주세요."
     },
     "register": {
       "confirmPasswordLabel": "비밀번호 확인",
@@ -866,6 +869,7 @@
       "quality": {
         "auto": "자동",
         "automaticLabel": "자동 품질 제어",
+        "mpvAutoHint": "앱을 열면 자동으로 기본 트랙이 선택되며, 네트워크 속도에 따라 자동으로 조정되지 않습니다.",
         "hint": "<0>소스 전환</0>을 사용하여 다양한 화질 옵션을 확인할 수 있습니다.",
         "iosNoQuality": "Apple에서 정의한 제한 사항으로 인해 이 소스에 대해 iOS에서 품질 선택을 사용할 수 없습니다. <0>다른 소스로 전환</0>하여 다른 품질 옵션을 사용해 볼 수 있습니다.",
         "title": "화질"
@@ -931,6 +935,14 @@
         "syncSubtitlePreparingAudio": "동기화할 오디오 준비 중...",
         "syncSubtitleWorking": "Framezoo에서 자막을 동기화하는 중입니다...",
         "syncSubtitleApplying": "자막 동기화 적용 중...",
+        "syncStageSample": "오디오 스캔",
+        "syncStageVad": "목소리 무엇",
+        "syncStageCorrelate": "정렬 드리프트",
+        "syncStageLock": "잠금 동기화",
+        "syncPhasePreparing": "음향 텐서 인코딩 중...",
+        "syncPhaseVad": "음성 대화(VAD)를 분리하는 중...",
+        "syncPhaseCorrelate": "스캐닝 오프셋 및 FPS 드리프트 스펙트럼...",
+        "syncPhaseConsensus": "다중 창 합의 검증 중...",
         "settings": {
           "backlink": "자막 커스텀",
           "delay": "자막 딜레이",
@@ -1483,6 +1495,10 @@
     "subtitle": "이용 중 발생한 문제나 버그가 있으면 알려주세요.",
     "titleLabel": "1. 문제 제목",
     "titlePlaceholder": "예: 자막 로딩 오류, 재생 끊김 현상 등",
+    "contactLabel": "연락처 정보 (이메일 또는 전화번호)",
+    "contactPlaceholder": "예: name@example.com 또는 +84912345678",
+    "contactRequired": "답변을 드릴 수 있도록 이메일 주소 또는 전화번호를 입력해 주세요.",
+    "contactInvalid": "유효한 이메일 주소 또는 전화번호를 입력해 주세요.",
     "descriptionLabel": "2. 문제 설명",
     "descriptionPlaceholder": "문제점을 자세히 설명하고, 재현 단계 또는 제안 사항을 제시해 주세요.",
     "submit": "피드백 제출",

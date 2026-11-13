@@ -31,6 +31,7 @@ export default defineEventHandler(async event => {
     where.OR = [
       { title: { contains: search, mode: 'insensitive' } },
       { description: { contains: search, mode: 'insensitive' } },
+      { contact: { contains: search, mode: 'insensitive' } },
       ...(matchingUsers.length ? [{ user_id: { in: matchingUsers.map(user => user.id) } }] : []),
     ];
   }
@@ -77,6 +78,7 @@ export default defineEventHandler(async event => {
       id: f.id,
       title: f.title,
       description: f.description,
+      contact: f.contact ?? null,
       status: f.status,
       user_id: f.user_id,
       user: user

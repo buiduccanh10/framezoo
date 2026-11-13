@@ -869,6 +869,7 @@
       "quality": {
         "auto": "Bil",
         "automaticLabel": "Automatisk kvalitet",
+        "mpvAutoHint": "Väljer automatiskt ett standardspår när det öppnas; det anpassar sig inte till nätverkshastigheten.",
         "hint": "Du kan prova att <0>byta källa</0> för att få olika kvalitetsval.",
         "iosNoQuality": "På grund av Apple-definierade begränsningar är kvalitetsval inte tillgängligt på iOS för denna källa. Du kan prova att <0>byta till en annan källa</0> för att få olika kvalitetsval.",
         "title": "Kvalitet"
@@ -1494,6 +1495,10 @@
     "subtitle": "Berätta för oss om eventuella problem eller buggar du stötte på under din upplevelse.",
     "titleLabel": "1. Utgåvatitel",
     "titlePlaceholder": "t.ex. fel på textning, hackig uppspelning...",
+    "contactLabel": "Kontaktinformation (e-post eller telefon)",
+    "contactPlaceholder": "t.ex. namn@example.com eller +84912345678",
+    "contactRequired": "Vänligen ange din e-postadress eller ditt telefonnummer så att vi kan svara.",
+    "contactInvalid": "Ange en giltig e-postadress eller ett giltigt telefonnummer.",
     "descriptionLabel": "2. Problembeskrivning",
     "descriptionPlaceholder": "Beskriv problemet i detalj, steg för att reproducera det, eller förslag...",
     "submit": "Skicka feedback",

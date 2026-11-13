@@ -869,6 +869,7 @@
       "quality": {
         "auto": "Automático",
         "automaticLabel": "Calidade automática",
+        "mpvAutoHint": "Selecciona automaticamente unha pista predeterminada ao abrirse; non se adapta á velocidade da rede.",
         "hint": "Podes intentar <0>cambiar de fonte</0> para obter diferentes opcións de calidade.",
         "iosNoQuality": "Debido a limitacións definidas por Apple, a selección de calidade no está disponible en iOS para esta fonte. Podes intentar <0>cambiar a outra fonte</0> para obter diferentes opcións de calidade.",
         "title": "Calidade"
@@ -1494,6 +1495,10 @@
     "subtitle": "Infórmanos de calquera problema ou erro que atopaches durante a túa experiencia.",
     "titleLabel": "1. Título do problema",
     "titlePlaceholder": "por exemplo, erro de carga de subtítulos, reprodución con atraso...",
+    "contactLabel": "Información de contacto (correo electrónico ou teléfono)",
+    "contactPlaceholder": "por exemplo, nome@exemplo.com ou +84912345678",
+    "contactRequired": "Introduce o teu correo electrónico ou número de teléfono para que poidamos responderche.",
+    "contactInvalid": "Introduza un enderezo de correo electrónico ou un número de teléfono válido.",
     "descriptionLabel": "2. Descrición do problema",
     "descriptionPlaceholder": "Describe o problema en detalle, os pasos para reproducilo ou as suxestións...",
     "submit": "Enviar comentarios",

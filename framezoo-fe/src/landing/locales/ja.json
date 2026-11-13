@@ -171,15 +171,18 @@
     "cancel": "キャンセル",
     "submit": "フィードバックを送信する",
     "submitting": "送信中...",
-    "descLabel": "2. 詳細説明",
     "close": "近い",
     "errorSubmit": "フィードバックの送信に失敗しました。後でもう一度試してください。",
     "successTitle": "フィードバックは正常に送信されました。",
     "successDesc": "ご意見ありがとうございます。私たちのチームが問題を確認し、できるだけ早く解決します。",
-    "errorRequired": "タイトルと問題の説明の両方を入力してください。",
     "attachmentsLabel": "ファイル",
     "attachmentsHint": "画像/動画・合計最大55MB",
-    "attachmentsTooLarge": "ファイルの合計サイズは 55 MB を超えてはなりません。"
+    "attachmentsTooLarge": "ファイルの合計サイズは 55 MB を超えてはなりません。",
+    "descLabel": "3. 詳細な説明",
+    "contactLabel": "2. メールアドレスまたは電話番号",
+    "errorRequired": "タイトル、連絡先情報、問題の説明を入力してください。",
+    "contactPlaceholder": "例えばname@example.com または +84912345678",
+    "contactInvalid": "返信できるように、有効な電子メール アドレスまたは電話番号を入力してください。"
   },
   "seo": {
     "title": "Framezoo - 高速かつスムーズなビデオ ストリーミング",

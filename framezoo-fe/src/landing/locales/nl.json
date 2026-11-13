@@ -167,11 +167,9 @@
     "subtitle": "Laat ons weten welke problemen of moeilijkheden u heeft ondervonden met Framezoo.",
     "titlePlaceholder": "bijv. Probleem met ondertitelsynchronisatie, vertraging tijdens afspelen...",
     "titleLabel": "1. Titel van het nummer",
-    "errorRequired": "Vul zowel de titel als de probleembeschrijving in.",
     "descPlaceholder": "Beschrijf het specifieke probleem of de stappen om het te reproduceren...",
     "cancel": "Annuleren",
     "submitting": "Verzenden...",
-    "descLabel": "2. Gedetailleerde beschrijving",
     "close": "Dichtbij",
     "successTitle": "Feedback succesvol verzonden!",
     "errorSubmit": "Het is niet gelukt om feedback in te dienen. Probeer het later opnieuw.",
@@ -179,7 +177,12 @@
     "submit": "Geef feedback",
     "attachmentsLabel": "Bestanden",
     "attachmentsTooLarge": "De totale bestandsgrootte mag niet groter zijn dan 55 MB.",
-    "attachmentsHint": "Afbeeldingen/video's · Maximaal 55 MB totaal"
+    "attachmentsHint": "Afbeeldingen/video's · Maximaal 55 MB totaal",
+    "contactInvalid": "Voer een geldig e-mailadres of telefoonnummer in, zodat we kunnen antwoorden.",
+    "errorRequired": "Vul de titel, contactgegevens en beschrijving van het probleem in.",
+    "contactLabel": "2. E-mailadres of telefoonnummer",
+    "descLabel": "3. Gedetailleerde beschrijving",
+    "contactPlaceholder": "bijv. naam@voorbeeld.com of +84912345678"
   },
   "seo": {
     "title": "Framezoo - Snelle en vloeiende videostreaming",

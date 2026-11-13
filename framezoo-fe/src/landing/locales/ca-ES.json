@@ -165,11 +165,9 @@
     "badge": "Feedback",
     "titleLabel": "1. Títol de l'emissió",
     "modalTitle": "Envieu-nos els vostres comentaris",
-    "descLabel": "2. Descripció detallada",
     "subtitle": "Feu-nos saber qualsevol problema o dificultat que hàgiu experimentat amb Framezoo.",
     "titlePlaceholder": "p. ex. Problema de sincronització dels subtítols, retard durant la reproducció...",
     "descPlaceholder": "Descriu el problema concret o els passos per reproduir-lo...",
-    "errorRequired": "Si us plau, ompliu tant el títol com la descripció del problema.",
     "errorSubmit": "No s'han pogut enviar comentaris. Si us plau, torna-ho a provar més tard.",
     "cancel": "Cancel·la",
     "successDesc": "Gràcies pels teus comentaris. El nostre equip revisarà i resoldrà el problema tan aviat com sigui possible.",
@@ -179,7 +177,12 @@
     "submitting": "S'està enviant...",
     "attachmentsLabel": "Fitxers",
     "attachmentsHint": "Imatges/vídeos · 55 MB total màxim",
-    "attachmentsTooLarge": "La mida total del fitxer no ha de superar els 55 MB."
+    "attachmentsTooLarge": "La mida total del fitxer no ha de superar els 55 MB.",
+    "contactLabel": "2. Correu electrònic o número de telèfon",
+    "contactPlaceholder": "p. ex. nom@example.com o +84912345678",
+    "contactInvalid": "Introduïu una adreça electrònica o un número de telèfon vàlid perquè puguem respondre.",
+    "descLabel": "3. Descripció detallada",
+    "errorRequired": "Ompliu el títol, la informació de contacte i la descripció del problema."
   },
   "seo": {
     "title": "Framezoo - Transmissió de vídeo ràpida i suau",

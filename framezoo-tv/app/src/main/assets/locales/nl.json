@@ -147,7 +147,10 @@
       "resendIn": "Opnieuw verzenden beschikbaar in {{seconds}}s",
       "resetDescription": "Voer de code in die naar uw e-mailadres is verzonden.",
       "resetTitle": "Stel uw wachtwoord opnieuw in",
-      "send": "Code verzenden"
+      "send": "Code verzenden",
+      "sentToEmail": "De verificatiecode is verzonden naar <bold>{{email}}</bold>",
+      "sentToPrompt": "De verificatiecode is verzonden naar:",
+      "spamNotice": "Kunt u de e-mail niet vinden? Controleer dan uw spam- of ongewenste e-mailmap."
     },
     "register": {
       "confirmPasswordLabel": "Bevestig wachtwoord",
@@ -866,6 +869,7 @@
       "quality": {
         "auto": "Auto",
         "automaticLabel": "Automatische kwaliteit",
+        "mpvAutoHint": "Selecteert automatisch een standaardnummer bij het openen; het past zich niet aan de netwerksnelheid aan.",
         "hint": "Je kunt <0>bron omschakelen</0> proberen om verschillende kwaliteitsopties te krijgen.",
         "iosNoQuality": "Vanwege door Apple gedefinieerde beperkingen is kwaliteitsselectie niet beschikbaar op iOS voor deze bron. U kunt <0>omschakelen naar een andere bron</0> proberen om andere kwaliteitsopties te krijgen.",
         "title": "Kwaliteit"
@@ -931,6 +935,14 @@
         "syncSubtitlePreparingAudio": "Audio voorbereiden voor synchronisatie...",
         "syncSubtitleWorking": "Framezoo synchroniseert ondertitels...",
         "syncSubtitleApplying": "Ondertitelsynchronisatie toepassen...",
+        "syncStageSample": "Audioscan",
+        "syncStageVad": "Stem WAT",
+        "syncStageCorrelate": "Uitlijnen Drift",
+        "syncStageLock": "Vergrendel synchronisatie",
+        "syncPhasePreparing": "Het coderen van akoestische tensoren...",
+        "syncPhaseVad": "Gesproken dialoog (VAD) isoleren...",
+        "syncPhaseCorrelate": "Scanoffset en FPS-driftspectrum...",
+        "syncPhaseConsensus": "Het verifiëren van consensus via meerdere vensters...",
         "settings": {
           "backlink": "Aangepaste ondertiteling",
           "delay": "Ondertiteling vertraging",
@@ -1483,6 +1495,10 @@
     "subtitle": "Laat ons weten of u tijdens uw ervaring problemen of bugs bent tegengekomen.",
     "titleLabel": "1. Titel van het probleem",
     "titlePlaceholder": "Bijvoorbeeld: Fout bij het laden van ondertitels, haperende weergave...",
+    "contactLabel": "Contactgegevens (e-mail of telefoonnummer)",
+    "contactPlaceholder": "bijv. name@example.com of +84912345678",
+    "contactRequired": "Vul uw e-mailadres of telefoonnummer in, zodat we u kunnen antwoorden.",
+    "contactInvalid": "Voer een geldig e-mailadres of telefoonnummer in.",
     "descriptionLabel": "2. Probleemomschrijving",
     "descriptionPlaceholder": "Beschrijf het probleem in detail, de stappen om het te reproduceren, of suggesties...",
     "submit": "Feedback verzenden",

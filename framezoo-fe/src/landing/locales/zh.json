@@ -166,12 +166,10 @@
     "modalTitle": "向我们发送您的反馈",
     "subtitle": "请告诉我们您在使用 Framezoo 时遇到的任何问题或困难。",
     "titlePlaceholder": "例如字幕同步问题，播放时滞后......",
-    "descLabel": "2. 详细说明",
     "titleLabel": "1. 问题标题",
     "errorSubmit": "提交反馈失败。请稍后重试。",
     "descPlaceholder": "描述具体问题或重现该问题的步骤...",
     "cancel": "取消",
-    "errorRequired": "请填写标题和问题描述。",
     "submit": "提交反馈",
     "submitting": "正在提交...",
     "close": "关闭",
@@ -179,7 +177,12 @@
     "successTitle": "反馈发送成功！",
     "attachmentsLabel": "文件",
     "attachmentsHint": "图片/视频 · 总计最大 55 MB",
-    "attachmentsTooLarge": "文件总大小不得超过 55 MB。"
+    "attachmentsTooLarge": "文件总大小不得超过 55 MB。",
+    "contactPlaceholder": "例如name@example.com 或 +84912345678",
+    "errorRequired": "请填写标题、联系方式、问题描述。",
+    "contactInvalid": "请输入有效的电子邮件地址或电话号码，以便我们回复。",
+    "contactLabel": "2. 电子邮件或电话号码",
+    "descLabel": "3. 详细说明"
   },
   "seo": {
     "description": "Framezoo 是一款高速视频流播放器，设计流畅、直观且易于使用。探索丰富的电影元数据，无限制地将字幕与视频流同步，并从多个来源加载字幕。",

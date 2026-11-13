@@ -903,9 +903,25 @@ class Backend(private val store: SecureStore) {
         val id = store.userId ?: return JSONObject()
         return request("/users/${encode(id)}/settings", auth = true) as JSONObject
     }
-    suspend fun feedback(title: String, description: String, attachments: List<Uri>, resolver: ContentResolver) = withContext(Dispatchers.IO) {
+    suspend fun feedback(
+        title: String,
+        description: String,
+        attachments: List<Uri>,
+        resolver: ContentResolver,
+        contact: String? = null
+    ) = withContext(Dispatchers.IO) {
         val subject = title.trim(); val message = description.trim()
+        val trimmedContact = contact?.trim()?.take(255).orEmpty()
+        val isGuest = store.userId == null
         require(subject.isNotBlank() && subject.length <= 255 && message.isNotBlank()) { "Nhập tiêu đề tối đa 255 ký tự và nội dung phản hồi" }
+        if (isGuest) {
+            require(trimmedContact.isNotBlank()) { "Vui lòng nhập email hoặc số điện thoại để chúng tôi phản hồi" }
+        }
+        if (trimmedContact.isNotBlank()) {
+            val isEmail = trimmedContact.matches(Regex("^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$"))
+            val isPhone = trimmedContact.replace(Regex("[\\s().-]"), "").matches(Regex("^\\+?\\d{7,15}$"))
+            require(isEmail || isPhone) { "Thông tin liên hệ phải là email hoặc số điện thoại hợp lệ" }
+        }
         require(attachments.all { it.scheme == "content" }) { "File đính kèm không hợp lệ" }
         val token = store.accessToken ?: (request("/api/auth/guest", "POST", JSONObject()) as JSONObject).optString("access_token").ifBlank { null }
         val boundary = "framezoo-${java.util.UUID.randomUUID()}"
@@ -919,6 +935,7 @@ class Backend(private val store: SecureStore) {
                 fun write(value: String) = out.write(value.toByteArray(Charsets.UTF_8))
                 fun field(name: String, value: String) { write("--$boundary\r\nContent-Disposition: form-data; name=\"$name\"\r\n\r\n$value\r\n") }
                 field("title", subject); field("description", message)
+                if (trimmedContact.isNotBlank()) field("contact", trimmedContact)
                 var total = 0L
                 attachments.forEachIndexed { index, uri ->
                     val type = resolver.getType(uri).orEmpty()

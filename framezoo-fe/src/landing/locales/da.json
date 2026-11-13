@@ -167,11 +167,9 @@
     "titleLabel": "1. Udgavetitel",
     "modalTitle": "Send os din feedback",
     "titlePlaceholder": "f.eks. Problem med synkronisering af undertekster, forsinkelse under afspilning...",
-    "descLabel": "2. Detaljeret beskrivelse",
     "cancel": "Ophæve",
     "errorSubmit": "Kunne ikke sende feedback. Prøv venligst igen senere.",
     "successDesc": "Tak for din feedback. Vores team vil gennemgå og løse problemet så hurtigt som muligt.",
-    "errorRequired": "Udfyld venligst både titel og problembeskrivelse.",
     "descPlaceholder": "Beskriv det specifikke problem eller trinene til at genskabe det...",
     "close": "Tæt",
     "successTitle": "Feedback sendt!",
@@ -179,7 +177,12 @@
     "submit": "Send feedback",
     "attachmentsLabel": "Filer",
     "attachmentsTooLarge": "Den samlede filstørrelse må ikke overstige 55 MB.",
-    "attachmentsHint": "Billeder/videoer · 55 MB i alt maksimum"
+    "attachmentsHint": "Billeder/videoer · 55 MB i alt maksimum",
+    "contactInvalid": "Indtast venligst en gyldig e-mailadresse eller telefonnummer, så vi kan svare.",
+    "errorRequired": "Udfyld venligst titel, kontaktoplysninger og problembeskrivelse.",
+    "contactPlaceholder": "f.eks. navn@eksempel.com eller +84912345678",
+    "contactLabel": "2. E-mail eller telefonnummer",
+    "descLabel": "3. Detaljeret beskrivelse"
   },
   "seo": {
     "title": "Framezoo - Hurtig og glat videostreaming",

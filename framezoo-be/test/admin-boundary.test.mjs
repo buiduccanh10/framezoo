@@ -104,3 +104,15 @@ test('admin user surfaces minimize legal/privacy PII and track app_version', () 
   assert.match(auth, /x-app-version/);
   assert.match(cors, /X-App-Version/);
 });
+
+test('guest feedback requires valid email or phone contact while logged-in users do not', async () => {
+  const feedbackPost = read('server/api/feedback/index.post.ts');
+  const feedbackGet = read('server/api/feedback/index.get.ts');
+  const storage = read('server/utils/feedback-storage.ts');
+
+  assert.match(feedbackPost, /!userId && !contact/);
+  assert.match(feedbackPost, /isValidFeedbackContact\(contact\)/);
+  assert.match(feedbackGet, /contact:\s*f\.contact/);
+  assert.match(storage, /EMAIL_CONTACT_REGEX/);
+  assert.match(storage, /PHONE_CONTACT_REGEX/);
+});

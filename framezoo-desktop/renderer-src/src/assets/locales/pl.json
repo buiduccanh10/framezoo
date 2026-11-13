@@ -869,6 +869,7 @@
       "quality": {
         "auto": "Automatyczny",
         "automaticLabel": "Jakość automatyczna",
+        "mpvAutoHint": "Automatycznie wybiera domyślną ścieżkę po jej otwarciu. Nie dostosowuje się ona do szybkości sieci.",
         "hint": "Możesz spróbować <0>przełączyć źródło</0> aby uzyskać różne opcje jakości.",
         "iosNoQuality": "Ze względu na ograniczenia zdefiniowane przez Apple, wybór jakości nie jest dostępny w systemie iOS dla tego źródła. Możesz spróbować <0>przełączyć na inne źródło</0> aby uzyskać inne opcje jakości.",
         "title": "Jakość"
@@ -1494,6 +1495,10 @@
     "subtitle": "Poinformuj nas o wszelkich problemach i błędach, na jakie natrafiłeś w trakcie korzystania z naszego serwisu.",
     "titleLabel": "1. Tytuł wydania",
     "titlePlaceholder": "np. błąd ładowania napisów, zacinanie się odtwarzania...",
+    "contactLabel": "Dane kontaktowe (e-mail lub telefon)",
+    "contactPlaceholder": "np. nazwa@example.com lub +84912345678",
+    "contactRequired": "Proszę podać swój adres e-mail lub numer telefonu, abyśmy mogli odpowiedzieć.",
+    "contactInvalid": "Proszę podać prawidłowy adres e-mail lub numer telefonu.",
     "descriptionLabel": "2. Opis problemu",
     "descriptionPlaceholder": "Opisz problem szczegółowo, podaj kroki umożliwiające jego odtworzenie lub sugestie...",
     "submit": "Prześlij opinię",

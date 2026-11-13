@@ -869,6 +869,7 @@
       "quality": {
         "auto": "Otomatik",
         "automaticLabel": "Otomatik kalite",
+        "mpvAutoHint": "Açıldığında otomatik olarak varsayılan bir parça seçer; ağ hızına uyum sağlamaz.",
         "hint": "Farklı kalite seçenekleri elde etmek için <0>kaynak değiştirmeyi</0> deneyebilirsiniz.",
         "iosNoQuality": "Apple tarafından tanımlanan sınırlamalar nedeniyle, iOS'ta bu kaynak için kalite seçimi mevcut değildir. Farklı kalite seçenekleri elde etmek için <0>başka bir kaynağa geçmeyi</0> deneyebilirsiniz.",
         "title": "Kalite"
@@ -1494,6 +1495,10 @@
     "subtitle": "Deneyiminiz sırasında karşılaştığınız herhangi bir sorun veya hatayı bize bildirin.",
     "titleLabel": "1. Sayı Başlığı",
     "titlePlaceholder": "Örneğin, altyazı yükleme hatası, takılarak oynatma...",
+    "contactLabel": "İletişim bilgileri (E-posta veya Telefon)",
+    "contactPlaceholder": "Örneğin name@example.com veya +84912345678",
+    "contactRequired": "Size yanıt verebilmemiz için lütfen e-posta adresinizi veya telefon numaranızı girin.",
+    "contactInvalid": "Lütfen geçerli bir e-posta adresi veya telefon numarası girin.",
     "descriptionLabel": "2. Sorun Tanımı",
     "descriptionPlaceholder": "Sorunu ayrıntılı olarak açıklayın, sorunu yeniden oluşturmak için izlenecek adımları veya önerileri belirtin...",
     "submit": "Geri Bildirim Gönder",

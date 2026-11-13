@@ -147,7 +147,10 @@
       "resendIn": "Ponovno pošiljanje na voljo čez {{seconds}}s",
       "resetDescription": "Vnesite kodo, poslano na vaš e-poštni naslov.",
       "resetTitle": "Ponastavite geslo",
-      "send": "Pošlji kodo"
+      "send": "Pošlji kodo",
+      "sentToEmail": "Potrditvena koda je bila poslana na <bold>{{email}}</bold>",
+      "sentToPrompt": "Potrditvena koda je bila poslana na:",
+      "spamNotice": "Ne najdete e-poštnega sporočila? Preverite mapo z neželeno pošto."
     },
     "register": {
       "confirmPasswordLabel": "Potrdite geslo",
@@ -866,6 +869,7 @@
       "quality": {
         "auto": "Avto",
         "automaticLabel": "Avtomatska izbira kvalitete",
+        "mpvAutoHint": "Ob odprtju samodejno izbere privzeto skladbo; ne prilagaja se hitrosti omrežja.",
         "hint": "Poskusite <0>preklop vira</0>, da dobite različne možnosti kakovosti.",
         "iosNoQuality": "Zaradi omejitev, ki jih je določil Apple, izbira kakovosti v sistemu iOS za ta vir ni na voljo. Poskusite <0>preklopiti na drug vir</0>, da dobite različne možnosti kakovosti.",
         "title": "Kvaliteta"
@@ -931,6 +935,14 @@
         "syncSubtitlePreparingAudio": "Priprava zvoka za sinhronizacijo ...",
         "syncSubtitleWorking": "Framezoo sinhronizira podnapise ...",
         "syncSubtitleApplying": "Uporaba sinhronizacije podnapisov ...",
+        "syncStageSample": "Zvočno skeniranje",
+        "syncStageVad": "Glas KAJ",
+        "syncStageCorrelate": "Poravnaj odnašanje",
+        "syncStageLock": "Zakleni sinhronizacijo",
+        "syncPhasePreparing": "Kodiranje akustičnih tenzorjev ...",
+        "syncPhaseVad": "Izoliranje govorjenega dialoga (VAD) ...",
+        "syncPhaseCorrelate": "Spekter odmika skeniranja in odmika FPS ...",
+        "syncPhaseConsensus": "Preverjanje soglasja za več oken ...",
         "settings": {
           "backlink": "Podnapisi po meri",
           "delay": "Zamik podnapisov",
@@ -1483,6 +1495,10 @@
     "subtitle": "Sporočite nam vse težave ali napake, na katere ste naleteli med svojo izkušnjo.",
     "titleLabel": "1. Naslov izdaje",
     "titlePlaceholder": "npr. napaka pri nalaganju podnapisov, zatikanje pri predvajanju ...",
+    "contactLabel": "Kontaktni podatki (e-pošta ali telefon)",
+    "contactPlaceholder": "npr. ime@primer.com ali +84912345678",
+    "contactRequired": "Prosimo, vnesite svoj e-poštni naslov ali telefonsko številko, da vam lahko odgovorimo.",
+    "contactInvalid": "Vnesite veljaven e-poštni naslov ali telefonsko številko.",
     "descriptionLabel": "2. Opis težave",
     "descriptionPlaceholder": "Podrobno opišite težavo, korake za reprodukcijo ali predloge ...",
     "submit": "Pošlji povratne informacije",

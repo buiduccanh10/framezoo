@@ -869,6 +869,7 @@
       "quality": {
         "auto": "Auto",
         "automaticLabel": "Automatisk kvalitet",
+        "mpvAutoHint": "Vælger automatisk et standardspor ved åbning; den tilpasser sig ikke netværkshastigheden.",
         "hint": "Du kan prøve <0>at skifte kilde</0> for at få forskellige muligheder for kvalitet.",
         "iosNoQuality": "På grund af Apple-definerede (almindelige IOS L) begrænsninger er valg af kvalitet ikke tilgængelig på iOS for denne kilde. Du kan prøve <0>at skifte til en anden kilde</0> for at få forskellige muligheder for kvalitet.",
         "title": "Kvalitet"
@@ -1494,6 +1495,10 @@
     "subtitle": "Fortæl os om eventuelle problemer eller fejl, du stødte på under din oplevelse.",
     "titleLabel": "1. Udgavetitel",
     "titlePlaceholder": "f.eks. fejl ved indlæsning af undertekster, hakkende afspilning...",
+    "contactLabel": "Kontaktoplysninger (e-mail eller telefon)",
+    "contactPlaceholder": "f.eks. navn@eksempel.com eller +84912345678",
+    "contactRequired": "Indtast venligst din e-mail eller dit telefonnummer, så vi kan svare.",
+    "contactInvalid": "Indtast venligst en gyldig e-mailadresse eller et gyldigt telefonnummer.",
     "descriptionLabel": "2. Problembeskrivelse",
     "descriptionPlaceholder": "Beskriv problemet i detaljer, trin til reproduktion eller forslag...",
     "submit": "Send feedback",

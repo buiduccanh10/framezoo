@@ -165,11 +165,9 @@
     "badge": "Geri bildirim",
     "subtitle": "Framezoo ile yaşadığınız sorunları veya zorlukları bize bildirin.",
     "titleLabel": "1. Sayı başlığı",
-    "descLabel": "2. Ayrıntılı açıklama",
     "modalTitle": "Bize geri bildiriminizi gönderin",
     "errorSubmit": "Geri bildirim gönderilemedi. Lütfen daha sonra tekrar deneyin.",
     "titlePlaceholder": "örneğin Altyazı senkronizasyonu sorunu, oynatma sırasında gecikme...",
-    "errorRequired": "Lütfen hem başlığı hem de konu açıklamasını girin.",
     "descPlaceholder": "Belirli bir sorunu veya sorunu yeniden oluşturma adımlarını açıklayın...",
     "submitting": "Gönderiliyor...",
     "cancel": "İptal etmek",
@@ -179,7 +177,12 @@
     "successDesc": "Geri bildiriminiz için teşekkür ederiz. Ekibimiz sorunu en kısa sürede inceleyip çözecektir.",
     "attachmentsLabel": "Dosyalar",
     "attachmentsTooLarge": "Toplam dosya boyutu 55 MB'ı geçmemelidir.",
-    "attachmentsHint": "Resimler/videolar · toplam maksimum 55 MB"
+    "attachmentsHint": "Resimler/videolar · toplam maksimum 55 MB",
+    "errorRequired": "Lütfen başlığı, iletişim bilgilerini ve sorun açıklamasını girin.",
+    "contactInvalid": "Yanıt verebilmemiz için lütfen geçerli bir e-posta adresi veya telefon numarası girin.",
+    "contactPlaceholder": "örneğin name@example.com veya +84912345678",
+    "descLabel": "3. Ayrıntılı açıklama",
+    "contactLabel": "2. E-posta veya Telefon numarası"
   },
   "seo": {
     "description": "Framezoo akıcı, sezgisel ve kullanımı kolay olacak şekilde tasarlanmış yüksek hızlı bir video akış oynatıcısıdır. Zengin film meta verilerini keşfedin, altyazıları sınırsız video akışlarıyla senkronize edin ve birden fazla kaynaktan altyazı yükleyin.",

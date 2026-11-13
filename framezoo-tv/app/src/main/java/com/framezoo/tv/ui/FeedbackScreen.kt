@@ -200,6 +200,32 @@ internal fun FeedbackScreen(
                         }
                     }
 
+                    // 1.5. Contact Input (required in guest mode)
+                    if (uiState.requireContact) {
+                        item {
+                            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                                    Text(
+                                        text = t("feedback.contactLabel"),
+                                        color = colors["type.emphasis"],
+                                        fontSize = 12.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                    Text("*", color = colors["type.danger"], fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                                }
+                                OutlinedTextField(
+                                    value = uiState.contact,
+                                    onValueChange = { onAction(FeedbackAction.ContactChanged(it)) },
+                                    placeholder = { Text(t("feedback.contactPlaceholder")) },
+                                    singleLine = true,
+                                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                                    colors = tvFieldColors(),
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                            }
+                        }
+                    }
+
                     // 2. Description Input
                     item {
                         Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -290,7 +316,9 @@ internal fun FeedbackScreen(
 @Composable
 internal fun FeedbackScreen(state: FrameZooState) {
     val scope = rememberCoroutineScope()
+    val isGuest = state.store.userId == null
     var title by remember { mutableStateOf("") }
+    var contact by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var attachments by remember { mutableStateOf<List<Uri>>(emptyList()) }
     var isSubmitting by remember { mutableStateOf(false) }
@@ -300,6 +328,8 @@ internal fun FeedbackScreen(state: FrameZooState) {
     FeedbackScreen(
         uiState = FeedbackUiState(
             title = title,
+            contact = contact,
+            requireContact = isGuest,
             description = description,
             attachments = attachments,
             isSubmitting = isSubmitting,
@@ -308,16 +338,36 @@ internal fun FeedbackScreen(state: FrameZooState) {
         ),
         onAction = { action ->
             when (action) {
-                is FeedbackAction.TitleChanged -> title = action.value
+                is FeedbackAction.TitleChanged -> title = action.value.take(255)
+                is FeedbackAction.ContactChanged -> contact = action.value.take(255)
                 is FeedbackAction.DescriptionChanged -> description = action.value
                 is FeedbackAction.AttachmentsChanged -> attachments = action.uris
-                is FeedbackAction.Reset -> { title = ""; description = ""; attachments = emptyList(); isSuccess = false }
+                is FeedbackAction.Reset -> { title = ""; contact = ""; description = ""; attachments = emptyList(); isSuccess = false }
                 is FeedbackAction.Submit -> {
+                    if (isGuest) {
+                        val trimmed = contact.trim()
+                        if (trimmed.isBlank()) {
+                            errorMessage = state.i18n.t("feedback.contactRequired")
+                            return@FeedbackScreen
+                        }
+                        val isEmail = trimmed.matches(Regex("^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$"))
+                        val isPhone = trimmed.replace(Regex("[\\s().-]"), "").matches(Regex("^\\+?\\d{7,15}$"))
+                        if (!isEmail && !isPhone) {
+                            errorMessage = state.i18n.t("feedback.contactInvalid")
+                            return@FeedbackScreen
+                        }
+                    }
                     scope.launch {
                         isSubmitting = true
                         errorMessage = null
                         try {
-                            state.backend.feedback(title, description, attachments, action.resolver)
+                            state.backend.feedback(
+                                title,
+                                description,
+                                attachments,
+                                action.resolver,
+                                contact.takeIf { isGuest }
+                            )
                             isSuccess = true
                         } catch (e: Exception) {
                             errorMessage = e.message ?: state.i18n.t("feedback.errorSubmit")

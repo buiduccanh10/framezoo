@@ -869,6 +869,7 @@
       "quality": {
         "auto": "Auto",
         "automaticLabel": "Automātiskā kvalitāte",
+        "mpvAutoHint": "Atverot, automātiski tiek atlasīta noklusējuma dziesma; tā nepielāgojas tīkla ātrumam.",
         "hint": "Varat mēģināt <0>pārslēgt avotu</0>, lai iegūtu dažādas kvalitātes opcijas.",
         "iosNoQuality": "Apple noteikto ierobežojumu dēļ šim avotam iOS nav pieejama kvalitātes izvēle. Varat mēģināt <0>pārslēgties uz citu avotu</0>, lai iegūtu dažādas kvalitātes opcijas.",
         "title": "Kvalitāte"
@@ -1494,6 +1495,10 @@
     "subtitle": "Informējiet mūs par jebkuru problēmu vai kļūdu, ar kuru saskārāties savas pieredzes laikā.",
     "titleLabel": "1. Izdevuma nosaukums",
     "titlePlaceholder": "piem., subtitru ielādes kļūda, atskaņošanas raustīšanās...",
+    "contactLabel": "Kontaktinformācija (e-pasts vai tālrunis)",
+    "contactPlaceholder": "piem., name@example.com vai +84912345678",
+    "contactRequired": "Lūdzu, ievadiet savu e-pasta adresi vai tālruņa numuru, lai mēs varētu atbildēt.",
+    "contactInvalid": "Lūdzu, ievadiet derīgu e-pasta adresi vai tālruņa numuru.",
     "descriptionLabel": "2. Problēmas apraksts",
     "descriptionPlaceholder": "Detalizēti aprakstiet problēmu, sniedziet darbības, lai to atkārtotu, vai ieteikumus...",
     "submit": "Iesniegt atsauksmes",

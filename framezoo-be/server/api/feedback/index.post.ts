@@ -13,6 +13,8 @@ import {
   MAX_FEEDBACK_FILE_BYTES,
   FeedbackMalwareError,
   FeedbackScannerUnavailableError,
+  isValidFeedbackContact,
+  normalizeFeedbackContact,
   removeFeedbackAttachments,
   uploadFeedbackAttachments,
   validateFeedbackFileParts,
@@ -30,16 +32,21 @@ export default defineEventHandler(async event => {
 
   let title: string | undefined;
   let description: string | undefined;
+  let contact: string | null = null;
   let fileParts: { filename?: string; type?: string; data: Uint8Array }[] = [];
 
   if (contentType.toLowerCase().startsWith('multipart/form-data')) {
     const parts = await readMultipartFormData(event);
     const titlePart = parts?.find(part => part.name === 'title' && !part.filename);
     const descriptionPart = parts?.find(part => part.name === 'description' && !part.filename);
+    const contactPart = parts?.find(part => part.name === 'contact' && !part.filename);
     title = titlePart ? Buffer.from(titlePart.data).toString('utf8').trim() : undefined;
     description = descriptionPart
       ? Buffer.from(descriptionPart.data).toString('utf8').trim()
       : undefined;
+    contact = normalizeFeedbackContact(
+      contactPart ? Buffer.from(contactPart.data).toString('utf8') : undefined
+    );
     fileParts = (parts || [])
       .filter(
         part =>
@@ -54,9 +61,10 @@ export default defineEventHandler(async event => {
       throw createError({ statusCode: message.includes('vượt quá') ? 413 : 400, message });
     }
   } else {
-    const body = await readBody<{ title?: string; description?: string }>(event);
+    const body = await readBody<{ title?: string; description?: string; contact?: string }>(event);
     title = body?.title?.trim();
     description = body?.description?.trim();
+    contact = normalizeFeedbackContact(body?.contact);
   }
 
   if (!title || !description) {
@@ -104,6 +112,21 @@ export default defineEventHandler(async event => {
     console.warn('[feedback] could not resolve user session:', err);
   }
 
+  // Guest submissions must include a valid email or phone contact so support can reply.
+  if (!userId && !contact) {
+    throw createError({
+      statusCode: 400,
+      message: 'Vui lòng nhập email hoặc số điện thoại để chúng tôi phản hồi',
+    });
+  }
+
+  if (contact && !isValidFeedbackContact(contact)) {
+    throw createError({
+      statusCode: 400,
+      message: 'Thông tin liên hệ phải là email hoặc số điện thoại hợp lệ',
+    });
+  }
+
   const feedbackId = randomUUID();
   let attachments;
   try {
@@ -131,6 +154,7 @@ export default defineEventHandler(async event => {
         id: feedbackId,
         title,
         description,
+        contact,
         status: 'pending',
         user_id: userId,
         attachments,

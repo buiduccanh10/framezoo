@@ -869,6 +869,7 @@
       "quality": {
         "auto": "Auto",
         "automaticLabel": "Automatic quality",
+        "mpvAutoHint": "Automatically selects a default track when opened; it does not adapt to network speed.",
         "hint": "You can try <0>switching source</0> to get different quality options.",
         "iosNoQuality": "Due to Apple-defined (common IOS L) limitations, quality selection is not available on iOS for this source. You can try <0>switching to another source</0> to get different quality options.",
         "title": "Quality"
@@ -1494,6 +1495,10 @@
     "subtitle": "Let us know about any issue or bug you encountered during your experience.",
     "titleLabel": "1. Issue Title",
     "titlePlaceholder": "e.g., Subtitle loading error, Stuttering playback...",
+    "contactLabel": "Contact info (Email or Phone)",
+    "contactPlaceholder": "e.g. name@example.com or +84912345678",
+    "contactRequired": "Please enter your email or phone number so we can reply.",
+    "contactInvalid": "Please enter a valid email address or phone number.",
     "descriptionLabel": "2. Issue Description",
     "descriptionPlaceholder": "Describe the problem in detail, steps to reproduce, or suggestions...",
     "submit": "Submit Feedback",

@@ -167,9 +167,7 @@
     "modalTitle": "Prześlij nam swoją opinię",
     "errorSubmit": "Nie udało się przesłać opinii. Spróbuj ponownie później.",
     "titlePlaceholder": "np. Problem z synchronizacją napisów, opóźnienie podczas odtwarzania...",
-    "descLabel": "2. Szczegółowy opis",
     "titleLabel": "1. Tytuł wydania",
-    "errorRequired": "Proszę podać tytuł i opis problemu.",
     "descPlaceholder": "Opisz konkretny problem lub kroki umożliwiające jego odtworzenie...",
     "cancel": "Anulować",
     "submitting": "Przedkładający...",
@@ -179,7 +177,12 @@
     "submit": "Prześlij opinię",
     "attachmentsLabel": "Akta",
     "attachmentsTooLarge": "Całkowity rozmiar pliku nie może przekraczać 55 MB.",
-    "attachmentsHint": "Obrazy/wideo · Maksymalnie 55 MB"
+    "attachmentsHint": "Obrazy/wideo · Maksymalnie 55 MB",
+    "contactPlaceholder": "np. nazwa@example.com lub +84912345678",
+    "contactInvalid": "Podaj prawidłowy adres e-mail lub numer telefonu, abyśmy mogli odpowiedzieć.",
+    "descLabel": "3. Szczegółowy opis",
+    "errorRequired": "Podaj tytuł, dane kontaktowe i opis problemu.",
+    "contactLabel": "2. E-mail lub numer telefonu"
   },
   "seo": {
     "title": "Framezoo — szybkie i płynne przesyłanie strumieniowe wideo",

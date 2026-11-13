@@ -15,6 +15,8 @@ import kotlinx.coroutines.launch
 
 data class FeedbackUiState(
     val title: String = "",
+    val contact: String = "",
+    val requireContact: Boolean = false,
     val description: String = "",
     val attachments: List<Uri> = emptyList(),
     val isSubmitting: Boolean = false,
@@ -24,6 +26,7 @@ data class FeedbackUiState(
 
 sealed interface FeedbackAction {
     data class TitleChanged(val value: String) : FeedbackAction
+    data class ContactChanged(val value: String) : FeedbackAction
     data class DescriptionChanged(val value: String) : FeedbackAction
     data class AttachmentsChanged(val uris: List<Uri>) : FeedbackAction
     data class Submit(val resolver: ContentResolver) : FeedbackAction
@@ -40,9 +43,10 @@ class FeedbackViewModel(
     fun onAction(action: FeedbackAction) {
         when (action) {
             is FeedbackAction.TitleChanged -> _uiState.update { it.copy(title = action.value.take(255)) }
+            is FeedbackAction.ContactChanged -> _uiState.update { it.copy(contact = action.value.take(255)) }
             is FeedbackAction.DescriptionChanged -> _uiState.update { it.copy(description = action.value) }
             is FeedbackAction.AttachmentsChanged -> _uiState.update { it.copy(attachments = action.uris) }
-            is FeedbackAction.Reset -> _uiState.value = FeedbackUiState()
+            is FeedbackAction.Reset -> _uiState.value = FeedbackUiState(requireContact = _uiState.value.requireContact)
             is FeedbackAction.Submit -> submit(action.resolver)
         }
     }
@@ -53,7 +57,13 @@ class FeedbackViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isSubmitting = true, errorMessage = null) }
             try {
-                repo.submitFeedback(current.title, current.description, current.attachments, resolver)
+                repo.submitFeedback(
+                    current.title,
+                    current.description,
+                    current.attachments,
+                    resolver,
+                    current.contact.takeIf { current.requireContact }
+                )
                 _uiState.update { it.copy(isSubmitting = false, isSuccess = true) }
             } catch (e: CancellationException) {
                 throw e

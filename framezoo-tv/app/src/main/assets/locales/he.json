@@ -147,7 +147,10 @@
       "resendIn": "שליחה חוזרת זמינה בעוד {{seconds}} שניות",
       "resetDescription": "הזן את הקוד שנשלח למייל שלך.",
       "resetTitle": "איפוס הסיסמה שלך",
-      "send": "שלח קוד"
+      "send": "שלח קוד",
+      "sentToEmail": "קוד אימות נשלח אל <bold>{{email}}</bold>",
+      "sentToPrompt": "קוד אימות נשלח אל:",
+      "spamNotice": "לא מוצא את האימייל? אנא בדוק את תיקיית הספאם או דואר הזבל שלך."
     },
     "register": {
       "confirmPasswordLabel": "אשר את הסיסמה",
@@ -866,6 +869,7 @@
       "quality": {
         "auto": "אוטומטי",
         "automaticLabel": "איכות אוטומטית",
+        "mpvAutoHint": "בוחר אוטומטית רצועה המוגדרת כברירת מחדל בעת הפתיחה; אינו מסתגל למהירות הרשת.",
         "hint": "אתה יכול לנסות <0>להחליף מקור</0> כדי לקבל אפשרויות איכות שונות.",
         "iosNoQuality": "בשל מגבלות שהוגדרו על ידי אפל, בחירת איכות אינה זמינה ב-iOS עבור מקור זה. אתה יכול לנסות <0>לעבור למקור אחר</0> כדי לקבל אפשרויות איכות שונות.",
         "title": "איכות"
@@ -931,6 +935,14 @@
         "syncSubtitlePreparingAudio": "מכין אודיו לסנכרון...",
         "syncSubtitleWorking": "Framezoo מסנכרן כתוביות...",
         "syncSubtitleApplying": "מחיל סנכרון כתוביות...",
+        "syncStageSample": "סריקת שמע",
+        "syncStageVad": "קול מה",
+        "syncStageCorrelate": "יישור הסחף",
+        "syncStageLock": "נעילת סנכרון",
+        "syncPhasePreparing": "קידוד טנזורים אקוסטיים...",
+        "syncPhaseVad": "בידוד דיאלוג מדובר (VAD)...",
+        "syncPhaseCorrelate": "ספקטרום סריקה וסטיית פריימים לשנייה...",
+        "syncPhaseConsensus": "מאמת קונצנזוס של חלונות מרובים...",
         "settings": {
           "backlink": "כתוביות מותאמות אישית",
           "delay": "עיכוב בכיתוב",
@@ -1483,6 +1495,10 @@
     "subtitle": "ספרו לנו על כל בעיה או באג שנתקלתם בהם במהלך החוויה.",
     "titleLabel": "1. כותרת הגיליון",
     "titlePlaceholder": "לדוגמה, שגיאת טעינת כתוביות, השמעה מגמגמת...",
+    "contactLabel": "פרטי קשר (דוא\"ל או טלפון)",
+    "contactPlaceholder": "לדוגמה name@example.com או +84912345678",
+    "contactRequired": "אנא הזינו את כתובת האימייל או מספר הטלפון שלכם כדי שנוכל לענות.",
+    "contactInvalid": "אנא הזן כתובת דוא\"ל או מספר טלפון תקינים.",
     "descriptionLabel": "2. תיאור הבעיה",
     "descriptionPlaceholder": "תאר את הבעיה בפירוט, שלבים לשחזור, או הצעות...",
     "submit": "שלח משוב",

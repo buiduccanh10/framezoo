@@ -869,6 +869,7 @@
       "quality": {
         "auto": "Automatikus",
         "automaticLabel": "Automatikus minőség",
+        "mpvAutoHint": "Megnyitáskor automatikusan kiválasztja az alapértelmezett sávot; nem alkalmazkodik a hálózati sebességhez.",
         "hint": "Megpróbálhatsz <0>forrást váltani<0/> különböző minőségi beállításokért.",
         "iosNoQuality": "Az Apple által megadott (gyakori iOS L, de ez csak a szoki) limitációk miatt, a minőség kiválasztása nem elérhető iOS-en ennél a forrásnál. Megpróbálhatsz egy <0>másik forrást választani<0/> hogy legyenek különböző minőségi beállításaid.",
         "title": "Minőség"
@@ -1494,6 +1495,10 @@
     "subtitle": "Tudasd velünk a tapasztalatod során felmerült problémákat vagy hibákat.",
     "titleLabel": "1. Kiadás címe",
     "titlePlaceholder": "pl. felirat betöltési hiba, akadozó lejátszás...",
+    "contactLabel": "Elérhetőségek (e-mail vagy telefon)",
+    "contactPlaceholder": "pl. nev@example.com vagy +84912345678",
+    "contactRequired": "Kérjük, adja meg e-mail címét vagy telefonszámát, hogy válaszolni tudjunk.",
+    "contactInvalid": "Kérjük, adjon meg egy érvényes e-mail címet vagy telefonszámot.",
     "descriptionLabel": "2. A probléma leírása",
     "descriptionPlaceholder": "Írd le részletesen a problémát, adj lépéseket a reprodukálására, vagy javaslatokat...",
     "submit": "Visszajelzés küldése",

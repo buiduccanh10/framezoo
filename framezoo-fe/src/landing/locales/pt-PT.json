@@ -166,11 +166,9 @@
     "modalTitle": "Envie-nos seu feedback",
     "subtitle": "Conte-nos sobre quaisquer problemas ou dificuldades que você tenha enfrentado com o Framezoo.",
     "titleLabel": "1. Título da edição",
-    "descLabel": "2. Descrição detalhada",
     "titlePlaceholder": "por exemplo Problema de sincronização de legendas, atraso durante a reprodução...",
     "descPlaceholder": "Descreva o problema específico ou as etapas para reproduzi-lo...",
     "errorSubmit": "Falha ao enviar comentários. Por favor, tente novamente mais tarde.",
-    "errorRequired": "Preencha o título e a descrição do problema.",
     "successTitle": "Feedback enviado com sucesso!",
     "submitting": "Enviando...",
     "cancel": "Cancelar",
@@ -179,7 +177,12 @@
     "close": "Fechar",
     "attachmentsTooLarge": "O tamanho total do arquivo não deve exceder 55 MB.",
     "attachmentsLabel": "Arquivos",
-    "attachmentsHint": "Imagens/vídeos · Máximo de 55 MB no total"
+    "attachmentsHint": "Imagens/vídeos · Máximo de 55 MB no total",
+    "contactLabel": "2. E-mail ou número de telefone",
+    "contactInvalid": "Por favor, insira um endereço de e-mail ou número de telefone válido para que possamos responder.",
+    "contactPlaceholder": "por exemplo nome@exemplo.com ou +84912345678",
+    "descLabel": "3. Descrição detalhada",
+    "errorRequired": "Preencha o título, informações de contato e descrição do problema."
   },
   "seo": {
     "description": "Framezoo é um reprodutor de streaming de vídeo de alta velocidade projetado para ser suave, intuitivo e fácil de usar. Explore metadados avançados de filmes, sincronize legendas com streams de vídeo sem limites e carregue legendas de diversas fontes.",

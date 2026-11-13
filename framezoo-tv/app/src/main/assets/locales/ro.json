@@ -147,7 +147,10 @@
       "resendIn": "Retrimitere disponibilă în {{seconds}}s",
       "resetDescription": "Introdu codul trimis pe adresa ta de e-mail.",
       "resetTitle": "Resetați parola",
-      "send": "Trimiteți codul"
+      "send": "Trimiteți codul",
+      "sentToEmail": "Codul de verificare a fost trimis către <bold>{{email}}</bold>",
+      "sentToPrompt": "Codul de verificare a fost trimis la:",
+      "spamNotice": "Nu găsești adresa de e-mail? Verifică folderul de spam sau junk."
     },
     "register": {
       "confirmPasswordLabel": "Confirmați parola",
@@ -866,6 +869,7 @@
       "quality": {
         "auto": "Auto",
         "automaticLabel": "Calitate automată",
+        "mpvAutoHint": "Selectează automat o piesă implicită la deschidere; nu se adaptează la viteza rețelei.",
         "hint": "Puteți încerca <0>Schimbarea sursei</0> pentru a primi opțiuni de calitate diferită.",
         "iosNoQuality": "Din cauza limitărilor definite de Apple, selecția calității nu este disponibilă pe iOS pentru această sursă. Puteți încerca să <0>treceți la altă sursă</0> pentru a obține diferite opțiuni de calitate.",
         "title": "Calitate"
@@ -931,6 +935,14 @@
         "syncSubtitlePreparingAudio": "Se pregătește sunetul pentru sincronizare...",
         "syncSubtitleWorking": "Framezoo sincronizează subtitrările...",
         "syncSubtitleApplying": "Se aplică sincronizarea subtitrarilor...",
+        "syncStageSample": "Scanare audio",
+        "syncStageVad": "Voce CE",
+        "syncStageCorrelate": "Aliniere Drift",
+        "syncStageLock": "Blocare sincronizare",
+        "syncPhasePreparing": "Codificarea tensorilor acustici...",
+        "syncPhaseVad": "Izolarea dialogului vorbit (VAD)...",
+        "syncPhaseCorrelate": "Scanarea spectrului offset și a derivei FPS...",
+        "syncPhaseConsensus": "Se verifică consensul pentru mai multe ferestre...",
         "settings": {
           "backlink": "Subtitluri personalizate",
           "delay": "Intârziera subtitlurilor",
@@ -1483,6 +1495,10 @@
     "subtitle": "Spuneți-ne despre orice problemă sau eroare pe care ați întâmpinat-o în timpul experienței dumneavoastră.",
     "titleLabel": "1. Titlul problemei",
     "titlePlaceholder": "de exemplu, eroare la încărcarea subtitrării, redare sacadată...",
+    "contactLabel": "Informații de contact (e-mail sau telefon)",
+    "contactPlaceholder": "de exemplu, nume@exemplu.com sau +84912345678",
+    "contactRequired": "Vă rugăm să introduceți adresa dvs. de e-mail sau numărul de telefon pentru a vă putea răspunde.",
+    "contactInvalid": "Vă rugăm să introduceți o adresă de e-mail sau un număr de telefon valid.",
     "descriptionLabel": "2. Descrierea problemei",
     "descriptionPlaceholder": "Descrieți problema în detaliu, pașii pentru reproducere sau sugestii...",
     "submit": "Trimiteți feedback",

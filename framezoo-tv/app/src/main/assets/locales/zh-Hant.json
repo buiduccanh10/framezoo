@@ -147,7 +147,10 @@
       "resendIn": "{{seconds}}s 中提供重新傳送功能",
       "resetDescription": "請輸入發送到您信箱的驗證碼。",
       "resetTitle": "重設密碼",
-      "send": "傳送代碼"
+      "send": "傳送代碼",
+      "sentToEmail": "驗證碼已傳送至<bold>{{email}}</bold>",
+      "sentToPrompt": "驗證碼已發送至：",
+      "spamNotice": "找不到郵件？請檢查您的垃圾郵件或廣告郵件資料夾。"
     },
     "register": {
       "confirmPasswordLabel": "確認密碼",
@@ -866,6 +869,7 @@
       "quality": {
         "auto": "汽車",
         "automaticLabel": "自動品質",
+        "mpvAutoHint": "開啟時自動選擇預設曲目；不會適應網路速度。",
         "hint": "您可以嘗試<0>切換源</0>以獲得不同的質量選項。",
         "iosNoQuality": "由於 Apple 的限制，此來源的品質選擇在 iOS 上不可用。您可以嘗試<0>切換到另一個來源</0>以獲得不同的質量選項。",
         "title": "品質"
@@ -931,6 +935,14 @@
         "syncSubtitlePreparingAudio": "正在準備音訊同步...",
         "syncSubtitleWorking": "Framezoo 正在同步字幕...",
         "syncSubtitleApplying": "正在套用字幕同步...",
+        "syncStageSample": "音訊掃描",
+        "syncStageVad": "語音 什麼",
+        "syncStageCorrelate": "對齊漂移",
+        "syncStageLock": "鎖定同步",
+        "syncPhasePreparing": "對聲學張量進行編碼…",
+        "syncPhaseVad": "隔離口頭對話 (VAD)...",
+        "syncPhaseCorrelate": "掃描偏移和幀速率漂移譜…",
+        "syncPhaseConsensus": "驗證多視窗共識...",
         "settings": {
           "backlink": "自訂字幕",
           "delay": "字幕延遲",
@@ -1483,6 +1495,10 @@
     "subtitle": "如果您在使用過程中遇到任何問題或漏洞，請告知我們。",
     "titleLabel": "1. 問題標題",
     "titlePlaceholder": "例如：字幕載入錯誤、播放卡頓…",
+    "contactLabel": "聯絡方式（電子郵件或電話）",
+    "contactPlaceholder": "例如 name@example.com 或 +84912345678",
+    "contactRequired": "請留下您的信箱或電話號碼，以便我們回覆您。",
+    "contactInvalid": "請輸入有效的電子郵件地址或電話號碼。",
     "descriptionLabel": "2. 問題描述",
     "descriptionPlaceholder": "請詳細描述問題、重現步驟或提出建議…",
     "submit": "提交回饋",

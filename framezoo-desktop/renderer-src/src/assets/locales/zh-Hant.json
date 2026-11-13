@@ -869,6 +869,7 @@
       "quality": {
         "auto": "汽車",
         "automaticLabel": "自動品質",
+        "mpvAutoHint": "開啟時自動選擇預設曲目；不會適應網路速度。",
         "hint": "您可以嘗試<0>切換源</0>以獲得不同的質量選項。",
         "iosNoQuality": "由於 Apple 的限制，此來源的品質選擇在 iOS 上不可用。您可以嘗試<0>切換到另一個來源</0>以獲得不同的質量選項。",
         "title": "品質"
@@ -1494,6 +1495,10 @@
     "subtitle": "如果您在使用過程中遇到任何問題或漏洞，請告知我們。",
     "titleLabel": "1. 問題標題",
     "titlePlaceholder": "例如：字幕載入錯誤、播放卡頓…",
+    "contactLabel": "聯絡方式（電子郵件或電話）",
+    "contactPlaceholder": "例如 name@example.com 或 +84912345678",
+    "contactRequired": "請留下您的信箱或電話號碼，以便我們回覆您。",
+    "contactInvalid": "請輸入有效的電子郵件地址或電話號碼。",
     "descriptionLabel": "2. 問題描述",
     "descriptionPlaceholder": "請詳細描述問題、重現步驟或提出建議…",
     "submit": "提交回饋",
