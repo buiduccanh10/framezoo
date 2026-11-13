@@ -44,7 +44,7 @@ def get_vad_session() -> ort.InferenceSession:
                 urllib.request.urlretrieve(SILERO_VAD_URL, model_path)
             opts = ort.SessionOptions()
             opts.inter_op_num_threads = 1
-            opts.intra_op_num_threads = 2
+            opts.intra_op_num_threads = max(1, int(os.getenv("ORT_INTRA_OP_THREADS", "1")))
             opts.graph_optimization_level = ort.GraphOptimizationLevel.ORT_ENABLE_ALL
             _SESSION = ort.InferenceSession(
                 model_path,
@@ -93,21 +93,38 @@ def detect_speech_intervals(
     amplitude normalization for quiet cinema tracks, and onset/offset padding.
     Returns merged [(start_ms, end_ms), ...] in absolute timestamps.
     """
-    session = get_vad_session()
+    if sample_rate <= 0:
+        raise ValueError("sample_rate must be positive")
     samples = resample_audio(audio, sample_rate, SILERO_SAMPLE_RATE)
     num_samples = len(samples)
     if num_samples < FRAME_SAMPLES:
         return []
 
-    # Normalize quiet audio tracks (e.g. downmixed AC3/DTS 5.1/7.1 streams)
+    samples = np.ascontiguousarray(samples, dtype=np.float32)
+
+    # Short-circuit completely digital silence before invoking ONNX
     max_abs = float(np.max(np.abs(samples)))
+    if max_abs <= 1e-6:
+        return []
+
+    # Normalize quiet audio tracks (e.g. downmixed AC3/DTS 5.1/7.1 streams)
     if 0.0005 < max_abs < 0.25:
         samples = np.clip(samples * (0.5 / max_abs), -1.0, 1.0).astype(np.float32)
 
+    session = get_vad_session()
     neg_threshold = max(0.15, threshold - VAD_NEG_THRESHOLD_OFFSET)
     state = np.zeros((2, 1, 128), dtype=np.float32)
-    context = np.zeros((1, CONTEXT_SIZE), dtype=np.float32)
     sr_tensor = np.array(SILERO_SAMPLE_RATE, dtype=np.int64)
+
+    remainder = num_samples % FRAME_SAMPLES
+    if remainder:
+        padded_samples = np.pad(samples, (0, FRAME_SAMPLES - remainder))
+    else:
+        padded_samples = samples
+    padded_len = len(padded_samples)
+
+    # Pre-allocate reusable input tensor [context(64) + frame(512)]
+    x = np.zeros((1, CONTEXT_SIZE + FRAME_SAMPLES), dtype=np.float32)
 
     raw_intervals: list[tuple[int, int]] = []
     current_speech_start: int | None = None
@@ -116,16 +133,11 @@ def detect_speech_intervals(
     frame_duration_ms = int(round((FRAME_SAMPLES / SILERO_SAMPLE_RATE) * 1000))
     total_duration_ms = audio_start_ms + int(round((num_samples / SILERO_SAMPLE_RATE) * 1000))
 
-    for offset in range(0, num_samples, FRAME_SAMPLES):
-        frame = samples[offset : offset + FRAME_SAMPLES]
-        if len(frame) < FRAME_SAMPLES:
-            frame = np.pad(frame, (0, FRAME_SAMPLES - len(frame)))
-
-        chunk = frame.reshape(1, FRAME_SAMPLES).astype(np.float32)
-        x = np.concatenate([context, chunk], axis=1)
+    for offset in range(0, padded_len, FRAME_SAMPLES):
+        x[0, CONTEXT_SIZE:] = padded_samples[offset : offset + FRAME_SAMPLES]
         out, state = session.run(None, {"input": x, "state": state, "sr": sr_tensor})
         prob = float(out[0][0])
-        context = x[:, -CONTEXT_SIZE:]
+        x[0, :CONTEXT_SIZE] = x[0, -CONTEXT_SIZE:]
 
         frame_start_ms = audio_start_ms + int(round((offset / SILERO_SAMPLE_RATE) * 1000))
 

@@ -11,6 +11,7 @@ import {
   VISUAL_PLAYBACK_CLOCK_TICK_MS,
   advancePlaybackClockState,
   createPlaybackClockState,
+  getPlaybackClockResetKey,
   getProjectedPlaybackTime,
   reconcilePlaybackClockState,
   usePlaybackClock,
@@ -535,5 +536,32 @@ describe("playback clock", () => {
 
     await renderClock({ ...props, time: 2, resetKey: "source-b" });
     expect(times.at(-1)).toBe(2);
+  });
+
+  it("changes resetKey when pictureInPictureMode toggles so exit snaps subtitles immediately", () => {
+    const baseState = {
+      source: { id: "source-a", url: "https://example.test/a.mp4" },
+      sourceId: "source-a",
+      meta: {
+        type: "movie" as const,
+        tmdbId: "123",
+        title: "Movie",
+        releaseYear: 2024,
+      },
+      interface: { pictureInPictureMode: null as string | null },
+    };
+
+    const mainKey = getPlaybackClockResetKey(baseState);
+    const pipKey = getPlaybackClockResetKey({
+      ...baseState,
+      interface: { pictureInPictureMode: "desktop" },
+    });
+    const exitedKey = getPlaybackClockResetKey({
+      ...baseState,
+      interface: { pictureInPictureMode: null },
+    });
+
+    expect(pipKey).not.toBe(mainKey);
+    expect(exitedKey).toBe(mainKey);
   });
 });

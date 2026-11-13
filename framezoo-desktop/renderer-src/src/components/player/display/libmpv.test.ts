@@ -2504,4 +2504,101 @@ describe("libmpv display", () => {
 
     display.destroy();
   });
+
+  it("emits pictureinpicture null and lets first post-PiP time-pos snap backward once", async () => {
+    let eventListener:
+      | ((event: {
+          playerId: string;
+          generation: number;
+          type: "property";
+          name: string;
+          data: unknown;
+        }) => void)
+      | undefined;
+    let pipClosedListener: (() => void) | undefined;
+    const times: number[] = [];
+    const pipStates: Array<{ active: boolean; mode: string | null }> = [];
+
+    usePlayerStore.setState({
+      source: {
+        type: "hls",
+        url: "https://example.test/video.m3u8",
+      },
+      currentQuality: null,
+      mediaPlaying: {
+        ...usePlayerStore.getState().mediaPlaying,
+        isPaused: false,
+      },
+    });
+
+    (window as any).electronAPI = {
+      createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
+      loadLibMpvSource: vi.fn().mockResolvedValue(true),
+      sendLibMpvCommand: vi.fn().mockResolvedValue(true),
+      onLibMpvEvent: vi.fn((listener) => {
+        eventListener = listener;
+        return () => undefined;
+      }),
+      onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
+      openDesktopPipWindow: vi.fn().mockResolvedValue(true),
+      activateDesktopPipWindow: vi.fn().mockResolvedValue(true),
+      reparentLibMpvPlayer: vi.fn().mockResolvedValue(true),
+      onDesktopPipAction: vi.fn().mockReturnValue(() => undefined),
+      onDesktopPipClosed: vi.fn((listener: () => void) => {
+        pipClosedListener = listener;
+        return () => undefined;
+      }),
+      updateDesktopPipWindow: vi.fn(),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.on("time", (t) => times.push(t));
+    display.on("pictureinpicture", (state) => pipStates.push(state));
+    display.processContainerElement(makeElement());
+    display.load({
+      source: {
+        type: "hls",
+        url: "https://example.test/video.m3u8",
+      } as Source,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const emitTimePos = (pos: number) =>
+      eventListener?.({
+        playerId: "player-1",
+        generation: 1,
+        type: "property",
+        name: "time-pos",
+        data: pos,
+      });
+
+    emitTimePos(120);
+    expect(times.at(-1)).toBe(120);
+
+    display.togglePictureInPicture();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(pipStates.at(-1)?.mode).toBe("desktop");
+
+    pipClosedListener?.();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(pipStates.at(-1)).toMatchObject({ active: false, mode: null });
+
+    // First post-PiP time-pos snaps even if >0.5s earlier than main's pre-PiP timestamp
+    emitTimePos(118.2);
+    expect(times.at(-1)).toBe(118.2);
+
+    // Subsequent unforced backtrack beyond tolerance is still ignored as stale decoder state
+    emitTimePos(115.0);
+    expect(times.at(-1)).toBe(118.2);
+
+    display.destroy();
+    usePlayerStore.setState({
+      source: null,
+      currentQuality: null,
+    });
+  });
 });

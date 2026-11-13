@@ -270,6 +270,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
   const PENDING_SEEK_TIMEOUT_MS = 8000;
   const TIME_BACKTRACK_TOLERANCE_SECONDS = 0.5;
   let lastTimePosValue = -1;
+  let forceNextTimePosSnap = false;
   let isFullscreen = false;
   let pictureInPictureMode: PictureInPictureMode = null;
   let caption: DisplayCaption | null = null;
@@ -415,10 +416,12 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
 
       desktopPipTarget = "main";
       desktopPipShouldResume = false;
+      forceNextTimePosSnap = true;
       emit("loading", false);
       emitPictureInPictureState(null);
       syncPipState(true);
       updateBounds();
+      publishTimePosition(time);
 
       const didClose = api.closeDesktopPipWindow
         ? await api.closeDesktopPipWindow()
@@ -528,8 +531,10 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
 
           if (!destroyed) {
             desktopPipTarget = "main";
+            forceNextTimePosSnap = true;
             emit("loading", false);
             emitPictureInPictureState(null);
+            publishTimePosition(time);
             if (!reparented) {
               console.warn(
                 "[libmpv] desktop PiP player reparent did not confirm",
@@ -1051,15 +1056,20 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
             applyTimePosition(rawPosition, true);
             break;
           }
-          if (rawPosition < time - TIME_BACKTRACK_TOLERANCE_SECONDS) {
+          const shouldSnapTimePos = forceNextTimePosSnap;
+          if (
+            !shouldSnapTimePos &&
+            rawPosition < time - TIME_BACKTRACK_TOLERANCE_SECONDS
+          ) {
             // A backward jump without a pending seek is stale decoder state,
             // not user navigation.
             break;
           }
+          forceNextTimePosSnap = false;
           if (Math.abs(rawPosition - lastTimePosValue) > 0.001) {
             lastTimePosValue = rawPosition;
           }
-          applyTimePosition(rawPosition);
+          applyTimePosition(rawPosition, shouldSnapTimePos);
         }
         break;
       case "duration":

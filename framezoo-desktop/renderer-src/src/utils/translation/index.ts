@@ -2,10 +2,7 @@
 import subsrt from "subsrt-ts";
 import { Caption, ContentCaption } from "subsrt-ts/dist/types/handler";
 
-import {
-  shiftVttPiecewiseTimestamps,
-  shiftVttTimestamps,
-} from "@/components/player/utils/captions";
+import { applyVttAlignment } from "@/components/player/utils/captions";
 import {
   type Caption as PlayerCaption,
   type SubtitleAlignmentState,
@@ -19,15 +16,7 @@ export function applyStoredCaptionAlignment(
   vttData: string,
   alignment?: SubtitleAlignmentState,
 ): string {
-  if (!alignment) return vttData;
-  if (alignment.segments && alignment.segments.length > 0) {
-    return shiftVttPiecewiseTimestamps(
-      vttData,
-      alignment.segments,
-      alignment.offsetMs,
-    );
-  }
-  return shiftVttTimestamps(vttData, alignment.offsetMs / 1000);
+  return applyVttAlignment(vttData, alignment);
 }
 
 // single will not be used if multi-line is supported

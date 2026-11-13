@@ -1,8 +1,8 @@
 import { extractAudioWindow } from "./audioCapture";
 import {
   SubtitleTimingSegment,
-  shiftVttPiecewiseTimestamps,
-  shiftVttTimestamps,
+  applyVttAlignment,
+  tryParseCanonicalVtt,
 } from "./captions";
 import { mwFetch } from "../../../backend/helpers/fetch";
 import { conf } from "../../../setup/config";
@@ -22,6 +22,7 @@ const SUBTITLE_ALIGNMENT_CAPTURE_CONCURRENCY = 3;
 export interface SubtitleAlignmentResponse {
   aligned: boolean;
   offsetMs: number;
+  rateRatio?: number;
   confidence: number;
   speechIntervals: Array<{
     startMs: number;
@@ -193,10 +194,162 @@ function addUniqueAlignmentWindow(
   plans.push({ startAt: normalizedStart, priority });
 }
 
+const DIALOGUE_NUDGE_RADIUS_SECONDS = 180;
+const DIALOGUE_NUDGE_STEP_SECONDS = 15;
+const MIN_DIALOGUE_CUES_FOR_NUDGE = 2;
+
+interface DialogueCueSpan {
+  startSec: number;
+  endSec: number;
+}
+
+function extractDialogueCueSpans(subtitleVtts?: string[]): DialogueCueSpan[] {
+  if (!subtitleVtts || subtitleVtts.length === 0) return [];
+
+  for (const vtt of subtitleVtts) {
+    const cues = tryParseCanonicalVtt(vtt);
+    const spans: DialogueCueSpan[] = [];
+    for (const cue of cues) {
+      const text = (cue.content ?? "").replace(/<[^>]*>/g, " ").trim();
+      if (
+        !text ||
+        /^[♪♫\s]+$/.test(text) ||
+        /^(?:\[[^\]]*\]|\([^)]*\))$/.test(text)
+      ) {
+        continue;
+      }
+      const startSec = cue.start / 1000;
+      const endSec = cue.end / 1000;
+      if (
+        Number.isFinite(startSec) &&
+        Number.isFinite(endSec) &&
+        endSec > startSec
+      ) {
+        spans.push({ startSec, endSec });
+      }
+    }
+    if (spans.length >= MIN_DIALOGUE_CUES_FOR_NUDGE) {
+      spans.sort((a, b) => a.startSec - b.startSec);
+      return spans;
+    }
+  }
+
+  return [];
+}
+
+function scoreWindowDialogueDensity(
+  spans: DialogueCueSpan[],
+  windowStart: number,
+  windowDuration: number,
+): { count: number; speechSeconds: number } {
+  const windowEnd = windowStart + windowDuration;
+  // Binary search for the first cue that starts at or after windowEnd to bound the scan
+  let lo = 0;
+  let hi = spans.length;
+  while (lo < hi) {
+    const mid = (lo + hi) >>> 1;
+    if (spans[mid].startSec < windowEnd) {
+      lo = mid + 1;
+    } else {
+      hi = mid;
+    }
+  }
+
+  let count = 0;
+  let speechSeconds = 0;
+  for (let i = 0; i < lo; i++) {
+    const span = spans[i];
+    if (span.endSec <= windowStart) continue;
+    count += 1;
+    speechSeconds +=
+      Math.min(span.endSec, windowEnd) - Math.max(span.startSec, windowStart);
+  }
+  return { count, speechSeconds };
+}
+
+function hasWindowOverlap(
+  plans: AlignmentWindowPlan[],
+  startAt: number,
+  windowDuration: number,
+): boolean {
+  return plans.some(
+    (plan) =>
+      startAt < plan.startAt + windowDuration &&
+      plan.startAt < startAt + windowDuration,
+  );
+}
+
+function pickDialogueDenseWindowStart(
+  anchorStart: number,
+  plans: AlignmentWindowPlan[],
+  dialogueSpans: DialogueCueSpan[],
+  videoDuration: number | undefined,
+  windowDuration: number,
+): number {
+  const clampedAnchor = clampAlignmentWindowStart(
+    anchorStart,
+    videoDuration,
+    windowDuration,
+  );
+  if (dialogueSpans.length < MIN_DIALOGUE_CUES_FOR_NUDGE) {
+    return clampedAnchor;
+  }
+
+  const candidateOffsets = [0];
+  for (
+    let delta = DIALOGUE_NUDGE_STEP_SECONDS;
+    delta <= DIALOGUE_NUDGE_RADIUS_SECONDS;
+    delta += DIALOGUE_NUDGE_STEP_SECONDS
+  ) {
+    candidateOffsets.push(delta, -delta);
+  }
+
+  let bestStart: number | null = null;
+  let bestCount = 0;
+  let bestSpeechSeconds = 0;
+  let bestDistance = Number.POSITIVE_INFINITY;
+  const seenStarts = new Set<number>();
+
+  for (const offset of candidateOffsets) {
+    const candidate = clampAlignmentWindowStart(
+      clampedAnchor + offset,
+      videoDuration,
+      windowDuration,
+    );
+    if (seenStarts.has(candidate)) continue;
+    seenStarts.add(candidate);
+    if (hasWindowOverlap(plans, candidate, windowDuration)) continue;
+
+    const { count, speechSeconds } = scoreWindowDialogueDensity(
+      dialogueSpans,
+      candidate,
+      windowDuration,
+    );
+    if (count === 0) continue;
+
+    const distance = Math.abs(candidate - clampedAnchor);
+    if (
+      count > bestCount ||
+      (count === bestCount &&
+        (speechSeconds > bestSpeechSeconds + 0.5 ||
+          (Math.abs(speechSeconds - bestSpeechSeconds) <= 0.5 &&
+            distance < bestDistance)))
+    ) {
+      bestStart = candidate;
+      bestCount = count;
+      bestSpeechSeconds = speechSeconds;
+      bestDistance = distance;
+    }
+  }
+
+  return bestStart ?? clampedAnchor;
+}
+
 export function buildAlignmentWindowPlan(
   startAt: number,
   videoDuration?: number,
   buffered?: number,
+  options?: { subtitleVtts?: string[] },
 ): AlignmentWindowPlan[] {
   const windowDuration = getSubtitleAlignmentWindowDuration(videoDuration);
   const currentStart = clampAlignmentWindowStart(
@@ -245,6 +398,8 @@ export function buildAlignmentWindowPlan(
     videoDuration > 0
       ? Math.max(0, videoDuration - windowDuration)
       : null;
+  const dialogueSpans = extractDialogueCueSpans(options?.subtitleVtts);
+
   const fallbackStarts =
     maxStart !== null
       ? SUBTITLE_ALIGNMENT_TIMELINE_ANCHOR_FRACTIONS.map((fraction) =>
@@ -255,9 +410,16 @@ export function buildAlignmentWindowPlan(
         );
 
   for (const fallbackStart of fallbackStarts) {
+    const targetStart = pickDialogueDenseWindowStart(
+      fallbackStart,
+      plans,
+      dialogueSpans,
+      videoDuration,
+      windowDuration,
+    );
     addUniqueAlignmentWindow(
       plans,
-      fallbackStart,
+      targetStart,
       "fallback",
       videoDuration,
       windowDuration,
@@ -265,6 +427,29 @@ export function buildAlignmentWindowPlan(
   }
 
   return plans.slice(0, SUBTITLE_ALIGNMENT_MAX_WINDOWS);
+}
+
+export type SubtitleAlignmentTelemetryPhase =
+  "capturing" | "preparing" | "analyzing";
+
+export type SubtitleAlignmentTelemetryStage =
+  "upload" | "vad" | "correlate" | "consensus";
+
+export interface SubtitleAlignmentWindowTelemetry {
+  index: number;
+  startAt: number;
+  duration: number;
+  priority: "nearby" | "buffered" | "fallback";
+  status: "queued" | "capturing" | "captured" | "failed";
+}
+
+export interface SubtitleAlignmentProgressTelemetry {
+  progress: number;
+  phase: SubtitleAlignmentTelemetryPhase;
+  stage?: SubtitleAlignmentTelemetryStage;
+  windows: SubtitleAlignmentWindowTelemetry[];
+  capturedCount: number;
+  totalWindows: number;
 }
 
 export async function alignSubtitlesWithCurrentStream(options: {
@@ -282,15 +467,44 @@ export async function alignSubtitlesWithCurrentStream(options: {
   buffered?: number;
   isTorrent?: boolean;
   onProgress?: (progress: number, phase?: "capturing" | "analyzing") => void;
+  onTelemetry?: (telemetry: SubtitleAlignmentProgressTelemetry) => void;
 }): Promise<SubtitleAlignmentBatchResponse> {
   const windowPlan = buildAlignmentWindowPlan(
     options.startAt,
     options.videoDuration,
     options.buffered,
+    { subtitleVtts: options.subtitles.map((subtitle) => subtitle.vttData) },
   );
   const windowDuration = getSubtitleAlignmentWindowDuration(
     options.videoDuration,
   );
+  const windowTelemetry: SubtitleAlignmentWindowTelemetry[] = windowPlan.map(
+    (plan, index) => ({
+      index,
+      startAt: plan.startAt,
+      duration: windowDuration,
+      priority: plan.priority,
+      status: "queued",
+    }),
+  );
+  const emitTelemetry = (
+    progress: number,
+    phase: SubtitleAlignmentTelemetryPhase,
+    stage?: SubtitleAlignmentTelemetryStage,
+  ) => {
+    const capturedCount = windowTelemetry.filter(
+      (item) => item.status === "captured",
+    ).length;
+    options.onTelemetry?.({
+      progress,
+      phase,
+      stage,
+      windows: windowTelemetry.map((item) => ({ ...item })),
+      capturedCount,
+      totalWindows: windowTelemetry.length,
+    });
+  };
+  emitTelemetry(0.06, "capturing");
   const capturedWindows: Array<{
     audio: Uint8Array;
     startMs: number;
@@ -311,6 +525,13 @@ export async function alignSubtitlesWithCurrentStream(options: {
   let nextCaptureIndex = options.isTorrent ? 1 : 0;
   const processWindow = async (index: number) => {
     const plan = windowPlan[index]!;
+    if (windowTelemetry[index]) {
+      windowTelemetry[index].status = "capturing";
+      emitTelemetry(
+        0.06 + (completedCaptures / Math.max(1, windowPlan.length)) * 0.42,
+        "capturing",
+      );
+    }
     try {
       const audio = await captureCurrentStreamAudio({
         ...options,
@@ -320,6 +541,9 @@ export async function alignSubtitlesWithCurrentStream(options: {
         signal: captureAbortController.signal,
       });
       capturedAudio[index] = audio;
+      if (windowTelemetry[index]) {
+        windowTelemetry[index].status = "captured";
+      }
       if (index === 0) {
         logSyncTelemetry("first_audio_window_ready", {
           windowIndex: index,
@@ -328,6 +552,9 @@ export async function alignSubtitlesWithCurrentStream(options: {
         });
       }
     } catch (error) {
+      if (windowTelemetry[index]) {
+        windowTelemetry[index].status = "failed";
+      }
       if (
         captureAbortController.signal.aborted ||
         (error instanceof DOMException && error.name === "AbortError")
@@ -344,6 +571,10 @@ export async function alignSubtitlesWithCurrentStream(options: {
       completedCaptures += 1;
       options.onProgress?.(
         (completedCaptures / windowPlan.length) * 0.4,
+        "capturing",
+      );
+      emitTelemetry(
+        0.06 + (completedCaptures / windowPlan.length) * 0.42,
         "capturing",
       );
     }
@@ -383,10 +614,12 @@ export async function alignSubtitlesWithCurrentStream(options: {
     options.signal?.removeEventListener("abort", abortCaptures);
   }
 
+  emitTelemetry(0.52, "preparing", "upload");
+
   const timelineWindows = windowPlan
     .map((plan, index) => ({ index, plan }))
     .sort((left, right) => left.plan.startAt - right.plan.startAt);
-  for (const [processedIndex, { index, plan }] of timelineWindows.entries()) {
+  for (const { index, plan } of timelineWindows) {
     const audio = capturedAudio[index];
     if (audio) {
       capturedWindows.push({
@@ -396,11 +629,6 @@ export async function alignSubtitlesWithCurrentStream(options: {
       windowStartsMs.push(Math.round(plan.startAt * 1000));
       windowDurationsMs.push(Math.round(windowDuration * 1000));
     }
-
-    options.onProgress?.(
-      0.4 + ((processedIndex + 1) / timelineWindows.length) * 0.35,
-      "analyzing",
-    );
   }
 
   if (capturedWindows.length === 0) {
@@ -428,6 +656,9 @@ export async function alignSubtitlesWithCurrentStream(options: {
     appendAudio(body, window.audio, index);
   }
 
+  options.onProgress?.(0.58, "analyzing");
+  emitTelemetry(0.58, "analyzing", "vad");
+
   const response = await mwFetch<SubtitleAlignmentBatchResponse>(
     "/api/subtitle-align",
     {
@@ -443,6 +674,7 @@ export async function alignSubtitlesWithCurrentStream(options: {
     windowDuration,
   });
   options.onProgress?.(1, "analyzing");
+  emitTelemetry(0.95, "analyzing", "consensus");
   // Discard any server-side warningMessage — we don't surface fallback details to users
   return { ...response, warningMessage: undefined };
 }
@@ -486,15 +718,5 @@ export function applySubtitleAlignment(
   vttData: string,
   result: SubtitleAlignmentResponse,
 ): string {
-  if (!result.aligned || !Number.isFinite(result.offsetMs)) {
-    return vttData;
-  }
-  if (result.segments && result.segments.length > 0) {
-    return shiftVttPiecewiseTimestamps(
-      vttData,
-      result.segments,
-      result.offsetMs,
-    );
-  }
-  return shiftVttTimestamps(vttData, result.offsetMs / 1000);
+  return applyVttAlignment(vttData, result);
 }

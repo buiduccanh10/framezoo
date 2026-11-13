@@ -776,6 +776,105 @@ Let's move out.
         self.assertTrue(result["results"]["primary"]["aligned"])
         self.assertAlmostEqual(result["results"]["primary"]["offsetMs"], -3_000, delta=250)
 
+    def test_fits_global_framerate_drift_23976_to_24(self):
+        from alignment import select_alignment_consensus
+
+        ratio = 23.976 / 24.0
+        entries = []
+        for start_s in (0, 600, 1200, 1800):
+            t_v = start_s * 1_000
+            t_s = round(t_v / ratio)
+            entries.append(
+                {
+                    "startAt": start_s,
+                    "result": {
+                        "aligned": True,
+                        "offsetMs": int(t_v - t_s),
+                        "confidence": 90,
+                        "speechAnchorCount": 3,
+                        "speechAnchorCoverage": 0.6,
+                        "speechIntervals": [{"startMs": t_v + 1_000, "endMs": t_v + 3_000}],
+                    },
+                }
+            )
+        consensus = select_alignment_consensus(entries)
+        self.assertTrue(consensus["aligned"])
+        self.assertAlmostEqual(consensus.get("rateRatio", 1.0), ratio, delta=0.0001)
+        self.assertAlmostEqual(consensus["offsetMs"], 0, delta=100)
+
+    def test_fits_global_framerate_drift_24_to_25_with_offset(self):
+        from alignment import select_alignment_consensus
+
+        ratio = 25.0 / 24.0
+        offset0 = 2_000
+        entries = []
+        for start_s in (0, 300, 600, 900):
+            t_v = start_s * 1_000
+            t_s = round((t_v - offset0) / ratio)
+            entries.append(
+                {
+                    "startAt": start_s,
+                    "result": {
+                        "aligned": True,
+                        "offsetMs": int(t_v - t_s),
+                        "confidence": 92,
+                        "speechAnchorCount": 4,
+                        "speechAnchorCoverage": 0.7,
+                        "speechIntervals": [{"startMs": t_v + 1_000, "endMs": t_v + 3_000}],
+                    },
+                }
+            )
+        consensus = select_alignment_consensus(entries)
+        self.assertTrue(consensus["aligned"])
+        self.assertAlmostEqual(consensus.get("rateRatio", 1.0), ratio, delta=0.0002)
+        self.assertAlmostEqual(consensus["offsetMs"], offset0, delta=150)
+
+    def test_parses_vtt_enforces_max_cues_and_redos_safe(self):
+        import time as pytime
+        from alignment import MAX_VTT_CUES, Cue, is_non_speech_sdh_cue, parse_vtt
+
+        malicious = "♪" + ("x " * 15_000)
+        cue = Cue(0, 1000, 2000, f"00:00:01.000 --> 00:00:02.000\n{malicious}")
+        t0 = pytime.perf_counter()
+        self.assertFalse(is_non_speech_sdh_cue(cue))
+        self.assertLess(pytime.perf_counter() - t0, 0.1)
+
+        too_many_lines = ["WEBVTT\n"]
+        for i in range(MAX_VTT_CUES + 5):
+            s0 = i * 2
+            s1 = s0 + 1
+            t_start = f"{s0 // 3600:02d}:{(s0 // 60) % 60:02d}:{s0 % 60:02d}.000"
+            t_end = f"{s1 // 3600:02d}:{(s1 // 60) % 60:02d}:{s1 % 60:02d}.000"
+            too_many_lines.append(f"{t_start} --> {t_end}\nLine {i}\n")
+        with self.assertRaises(ValueError):
+            parse_vtt("\n".join(too_many_lines))
+
+    def test_dense_unalignable_movie_skips_pooled_fallback(self):
+        calls = 0
+
+        def always_low(*args, **kwargs):
+            nonlocal calls
+            calls += 1
+            return {
+                "aligned": False,
+                "offsetMs": 0,
+                "confidence": 20,
+                "speechIntervals": [{"startMs": 1_000, "endMs": 4_000}, {"startMs": 6_000, "endMs": 10_000}],
+                "reason": "low_alignment_confidence",
+            }
+
+        windows = [
+            ([(1_000, 4_000), (6_000, 10_000)], 0, 60_000),
+            ([(121_000, 124_000), (126_000, 130_000)], 120_000, 180_000),
+        ]
+        res = align_speech_windows(
+            windows,
+            [{"track": "primary", "vttData": "WEBVTT\n\n00:00:01.000 --> 00:00:03.000\nHi\n"}],
+            alignment_result_fn=always_low,
+        )
+        self.assertFalse(res["results"]["primary"]["aligned"])
+        self.assertEqual(calls, 2)
+
 
 if __name__ == "__main__":
     unittest.main()

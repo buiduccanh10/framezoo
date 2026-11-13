@@ -502,6 +502,168 @@ Third
 
         asyncio.run(run_multi())
 
+    def test_rate_limiter_lru_eviction_bounds_memory(self):
+        import asyncio
+        from limiter import SlidingWindowRateLimiter
+
+        limiter = SlidingWindowRateLimiter(max_clients=10)
+
+        async def run_many():
+            for idx in range(50):
+                await limiter.check_rate_limit(f"client-{idx}")
+            self.assertLessEqual(len(limiter._history), 10)
+            self.assertIn("client-49", limiter._history)
+            self.assertNotIn("client-0", limiter._history)
+
+        asyncio.run(run_many())
+
+    def test_get_client_id_ignores_spoofed_xff_by_default(self):
+        from types import SimpleNamespace
+        from limiter import get_client_id
+
+        req = SimpleNamespace(
+            client=SimpleNamespace(host="127.0.0.1"),
+            headers={"x-forwarded-for": "9.9.9.9"},
+        )
+        with patch.dict("os.environ", {"TRUST_PROXY_HEADERS": "0"}):
+            self.assertEqual(get_client_id(req), "127.0.0.1")
+        with patch.dict("os.environ", {"TRUST_PROXY_HEADERS": "1"}):
+            self.assertEqual(get_client_id(req), "9.9.9.9")
+
+    def test_align_windows_rejects_huge_duration_and_oversized_body(self):
+        import asyncio
+        from fastapi import HTTPException
+        from starlette.requests import Request
+        import app as sync_app
+
+        with self.assertRaises(ValueError):
+            sync_app.parse_window_durations("[100000000]", 1)
+
+        req = Request(
+            {
+                "type": "http",
+                "method": "POST",
+                "path": "/v1/align-windows",
+                "headers": [],
+                "client": ("127.0.0.1", 12345),
+            }
+        )
+
+        async def run_endpoint():
+            with self.assertRaises(HTTPException) as ctx:
+                await sync_app.align_windows_endpoint(
+                    request=req,
+                    audio=None,
+                    subtitles='[{"track":"primary","vttData":"WEBVTT\\n\\n00:00:01.000 --> 00:00:02.000\\nHi"}]',
+                    window_starts_ms="[0]",
+                    language="en",
+                    window_durations_ms="[100000000]",
+                    speech_intervals='[[{"startMs":1000,"endMs":2000}]]',
+                    x_internal_token=None,
+                )
+            self.assertEqual(ctx.exception.status_code, 400)
+
+            sent_messages = []
+
+            async def dummy_app(scope, receive, send):
+                while True:
+                    msg = await receive()
+                    if not msg.get("more_body", False):
+                        break
+
+            mw = sync_app.BodySizeLimitMiddleware(dummy_app, max_body_bytes=64)
+
+            async def header_receive():
+                return {"type": "http.request", "body": b"", "more_body": False}
+
+            async def capture_send(msg):
+                sent_messages.append(msg)
+
+            await mw(
+                {
+                    "type": "http",
+                    "method": "POST",
+                    "headers": [(b"content-length", b"2048")],
+                },
+                header_receive,
+                capture_send,
+            )
+            self.assertEqual(sent_messages[0]["status"], 413)
+
+            sent_messages.clear()
+            chunks = [
+                {"type": "http.request", "body": b"a" * 40, "more_body": True},
+                {"type": "http.request", "body": b"b" * 40, "more_body": False},
+            ]
+
+            async def chunked_receive():
+                return chunks.pop(0)
+
+            await mw(
+                {"type": "http", "method": "POST", "headers": []},
+                chunked_receive,
+                capture_send,
+            )
+            self.assertEqual(sent_messages[0]["status"], 413)
+
+        asyncio.run(run_endpoint())
+
+    def test_subprocess_timeout_kills_runaway_worker_and_recovers(self):
+        import asyncio
+        import os
+        import time as pytime
+        from fastapi import HTTPException
+        import limiter
+
+        async def run_scenario():
+            limiter.shutdown_inference_pool_sync()
+            orig_conc = limiter.MAX_CONCURRENT_INFERENCES
+            orig_timeout = limiter.INFERENCE_TIMEOUT_SEC
+            orig_wait = limiter.CONCURRENCY_TIMEOUT_SEC
+            try:
+                limiter.MAX_CONCURRENT_INFERENCES = 1
+                limiter.INFERENCE_TIMEOUT_SEC = 0.4
+                limiter.CONCURRENCY_TIMEOUT_SEC = 1.0
+
+                pid1 = await limiter.run_protected_inference(_test_pid_worker)
+                t0 = pytime.monotonic()
+                with self.assertRaises(HTTPException) as ctx:
+                    await limiter.run_protected_inference(_test_sleep_worker, 10.0)
+                elapsed = pytime.monotonic() - t0
+                self.assertEqual(ctx.exception.status_code, 504)
+                self.assertLess(elapsed, 3.0)
+
+                # Slot must kill old PID and respawn a clean worker without starvation
+                pid2 = await limiter.run_protected_inference(_test_pid_worker)
+                self.assertNotEqual(pid1, pid2)
+                self.assertNotEqual(pid2, os.getpid())
+                out = await limiter.run_protected_inference(_test_echo_worker, 42)
+                self.assertEqual(out, 42)
+            finally:
+                limiter.MAX_CONCURRENT_INFERENCES = orig_conc
+                limiter.INFERENCE_TIMEOUT_SEC = orig_timeout
+                limiter.CONCURRENCY_TIMEOUT_SEC = orig_wait
+                limiter.shutdown_inference_pool_sync()
+
+        asyncio.run(run_scenario())
+
+
+def _test_sleep_worker(seconds: float) -> str:
+    import time as _t
+
+    _t.sleep(seconds)
+    return "woke"
+
+
+def _test_pid_worker() -> int:
+    import os as _os
+
+    return _os.getpid()
+
+
+def _test_echo_worker(value: int) -> int:
+    return value
+
 
 if __name__ == "__main__":
     unittest.main()
