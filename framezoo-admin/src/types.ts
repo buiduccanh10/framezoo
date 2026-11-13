@@ -1,7 +1,6 @@
 export interface FeedbackUser {
   id: string;
   nickname: string;
-  email: string | null;
 }
 
 export interface FeedbackItem {
@@ -32,11 +31,7 @@ export interface UserProfile {
 }
 
 export interface UserCounts {
-  bookmarks: number;
-  watchHistory: number;
-  progress: number;
   sessions: number;
-  addons: number;
 }
 
 export interface AdminUserItem {
@@ -47,36 +42,18 @@ export interface AdminUserItem {
   last_logged_in: string | null;
   permissions: string[];
   profile?: UserProfile;
+  app_version: string | null;
   counts: UserCounts;
 }
 
 export interface UserSessionItem {
   id: string;
   device: string;
-  user_agent: string;
+  platform: string;
+  app_version: string | null;
   created_at: string;
   accessed_at: string;
   expires_at: string;
-}
-
-export interface InstalledAddonManifest {
-  id?: string;
-  version?: string;
-  name?: string;
-  description?: string;
-  logo?: string;
-  resources?: any[];
-  types?: string[];
-  behaviorHints?: Record<string, any>;
-}
-
-export interface UserInstalledAddon {
-  manifestUrl: string;
-  baseUrl?: string;
-  manifest?: InstalledAddonManifest;
-  enabled?: boolean;
-  addedAt?: number;
-  isNative?: boolean;
 }
 
 export interface UserSettingsDetail {
@@ -85,8 +62,6 @@ export interface UserSettingsDetail {
   defaultSubtitleLanguage?: string | null;
   enableAutoplay?: boolean;
   enableSkipCredits?: boolean;
-  proxyTmdb?: boolean;
-  addons?: UserInstalledAddon[];
 }
 
 export interface UserDetailData {
@@ -98,8 +73,8 @@ export interface UserDetailData {
     last_logged_in: string | null;
     permissions: string[];
     profile?: UserProfile;
-    public_key?: string;
     namespace?: string;
+    app_version: string | null;
   };
   settings: UserSettingsDetail | null;
   sessions: UserSessionItem[];

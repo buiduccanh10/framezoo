@@ -1,6 +1,6 @@
 import { defineEventHandler, createError } from 'h3';
 import { prisma } from '~/utils/prisma';
-import { requireAdmin } from '~/utils/admin';
+import { requireAdmin, summarizeClientPlatform } from '~/utils/admin';
 
 export default defineEventHandler(async event => {
   await requireAdmin(event);
@@ -15,6 +15,17 @@ export default defineEventHandler(async event => {
 
   const user = await prisma.users.findUnique({
     where: { id: userId },
+    select: {
+      id: true,
+      nickname: true,
+      email: true,
+      created_at: true,
+      last_logged_in: true,
+      permissions: true,
+      profile: true,
+      namespace: true,
+      app_version: true,
+    },
   });
 
   if (!user) {
@@ -24,27 +35,31 @@ export default defineEventHandler(async event => {
     });
   }
 
-  const [settings, sessionsList, bookmarksCount, progressCount, watchHistoryCount] =
-    await Promise.all([
-      prisma.user_settings.findUnique({
-        where: { id: userId },
-      }),
-      prisma.sessions.findMany({
-        where: { user: userId },
-        orderBy: { accessed_at: 'desc' },
-        select: {
-          id: true,
-          device: true,
-          user_agent: true,
-          created_at: true,
-          accessed_at: true,
-          expires_at: true,
-        },
-      }),
-      prisma.bookmarks.count({ where: { user_id: userId } }),
-      prisma.progress_items.count({ where: { user_id: userId } }),
-      prisma.watch_history.count({ where: { user_id: userId } }),
-    ]);
+  const [settings, sessionsList] = await Promise.all([
+    prisma.user_settings.findUnique({
+      where: { id: userId },
+      select: {
+        application_theme: true,
+        application_language: true,
+        default_subtitle_language: true,
+        enable_autoplay: true,
+        enable_skip_credits: true,
+      },
+    }),
+    prisma.sessions.findMany({
+      where: { user: userId },
+      orderBy: { accessed_at: 'desc' },
+      select: {
+        id: true,
+        device: true,
+        user_agent: true,
+        app_version: true,
+        created_at: true,
+        accessed_at: true,
+        expires_at: true,
+      },
+    }),
+  ]);
 
   const latestSessionAccessedAt = sessionsList[0]?.accessed_at;
   const lastActive =
@@ -53,18 +68,18 @@ export default defineEventHandler(async event => {
       ? latestSessionAccessedAt
       : user.last_logged_in;
 
-  let userSettings = null;
-  if (settings) {
-    userSettings = {
-      applicationTheme: settings.application_theme,
-      applicationLanguage: settings.application_language,
-      defaultSubtitleLanguage: settings.default_subtitle_language,
-      enableAutoplay: settings.enable_autoplay,
-      enableSkipCredits: settings.enable_skip_credits,
-      proxyTmdb: settings.proxy_tmdb,
-      addons: Array.isArray(settings.addons) ? settings.addons : [],
-    };
-  }
+  const userSettings = settings
+    ? {
+        applicationTheme: settings.application_theme,
+        applicationLanguage: settings.application_language,
+        defaultSubtitleLanguage: settings.default_subtitle_language,
+        enableAutoplay: settings.enable_autoplay,
+        enableSkipCredits: settings.enable_skip_credits,
+      }
+    : null;
+
+  const currentVersion =
+    user.app_version || sessionsList.find(s => s.app_version)?.app_version || null;
 
   return {
     user: {
@@ -75,17 +90,21 @@ export default defineEventHandler(async event => {
       last_logged_in: lastActive,
       permissions: user.permissions,
       profile: user.profile,
-      public_key: user.public_key,
       namespace: user.namespace,
+      app_version: currentVersion,
     },
     settings: userSettings,
-    sessions: sessionsList,
+    sessions: sessionsList.map(s => ({
+      id: s.id,
+      device: s.device,
+      platform: summarizeClientPlatform(s.user_agent),
+      app_version: s.app_version,
+      created_at: s.created_at,
+      accessed_at: s.accessed_at,
+      expires_at: s.expires_at,
+    })),
     counts: {
-      bookmarks: bookmarksCount,
-      progress: progressCount,
-      watchHistory: watchHistoryCount,
       sessions: sessionsList.length,
-      addons: settings && Array.isArray(settings.addons) ? settings.addons.length : 0,
     },
   };
 });

@@ -39,6 +39,12 @@ export default defineEventHandler(async event => {
     case 'nickname_desc':
       orderBy = { nickname: 'desc' };
       break;
+    case 'version_desc':
+      orderBy = { app_version: { sort: 'desc', nulls: 'last' } };
+      break;
+    case 'version_asc':
+      orderBy = { app_version: { sort: 'asc', nulls: 'last' } };
+      break;
     case 'created_desc':
     default:
       orderBy = { created_at: 'desc' };
@@ -77,62 +83,40 @@ export default defineEventHandler(async event => {
           last_logged_in: true,
           permissions: true,
           profile: true,
+          app_version: true,
         },
       }),
     ]);
 
-  // Aggregate per-user counts for the current page
+  // Aggregate per-user session counts and latest app version without exposing media history or addon URLs.
   const userIds = users.map(u => u.id);
 
-  let bookmarksCountMap = new Map<string, number>();
-  let watchHistoryCountMap = new Map<string, number>();
-  let progressCountMap = new Map<string, number>();
   let sessionsCountMap = new Map<string, number>();
   let sessionMaxMap = new Map<string, Date | null>();
-  let addonsCountMap = new Map<string, number>();
+  let sessionVersionMap = new Map<string, string>();
 
   if (userIds.length > 0) {
-    const [bookmarksGroup, watchHistoryGroup, progressGroup, sessionsGroup, settingsList] =
-      await Promise.all([
-        prisma.bookmarks.groupBy({
-          by: ['user_id'],
-          where: { user_id: { in: userIds } },
-          _count: { _all: true },
-        }),
-        prisma.watch_history.groupBy({
-          by: ['user_id'],
-          where: { user_id: { in: userIds } },
-          _count: { _all: true },
-        }),
-        prisma.progress_items.groupBy({
-          by: ['user_id'],
-          where: { user_id: { in: userIds } },
-          _count: { _all: true },
-        }),
-        prisma.sessions.groupBy({
-          by: ['user'],
-          where: { user: { in: userIds } },
-          _count: { _all: true },
-          _max: { accessed_at: true },
-        }),
-        prisma.user_settings.findMany({
-          where: { id: { in: userIds } },
-          select: { id: true, addons: true },
-        }),
-      ]);
+    const [sessionsGroup, latestSessions] = await Promise.all([
+      prisma.sessions.groupBy({
+        by: ['user'],
+        where: { user: { in: userIds } },
+        _count: { _all: true },
+        _max: { accessed_at: true },
+      }),
+      prisma.sessions.findMany({
+        where: { user: { in: userIds }, app_version: { not: null } },
+        orderBy: { accessed_at: 'desc' },
+        select: { user: true, app_version: true },
+      }),
+    ]);
 
-    bookmarksCountMap = new Map(bookmarksGroup.map(g => [g.user_id, g._count._all]));
-    watchHistoryCountMap = new Map(watchHistoryGroup.map(g => [g.user_id, g._count._all]));
-    progressCountMap = new Map(progressGroup.map(g => [g.user_id, g._count._all]));
     sessionsCountMap = new Map(sessionsGroup.map(g => [g.user, g._count._all]));
     sessionMaxMap = new Map(sessionsGroup.map(g => [g.user, g._max.accessed_at]));
-
-    addonsCountMap = new Map(
-      settingsList.map(s => {
-        const count = Array.isArray(s.addons) ? s.addons.length : 0;
-        return [s.id, count];
-      })
-    );
+    for (const s of latestSessions) {
+      if (s.app_version && !sessionVersionMap.has(s.user)) {
+        sessionVersionMap.set(s.user, s.app_version);
+      }
+    }
   }
 
   const items = users.map(u => {
@@ -150,12 +134,9 @@ export default defineEventHandler(async event => {
       last_logged_in: lastActive,
       permissions: u.permissions,
       profile: u.profile,
+      app_version: u.app_version || sessionVersionMap.get(u.id) || null,
       counts: {
-        bookmarks: bookmarksCountMap.get(u.id) || 0,
-        watchHistory: watchHistoryCountMap.get(u.id) || 0,
-        progress: progressCountMap.get(u.id) || 0,
         sessions: sessionsCountMap.get(u.id) || 0,
-        addons: addonsCountMap.get(u.id) || 0,
       },
     };
   });

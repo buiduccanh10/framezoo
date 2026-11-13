@@ -6,6 +6,12 @@ import type { ListPagination } from "../types";
 const MAX_UPLOAD_BYTES = 512 * 1024 * 1024;
 const EMPTY_PAGINATION: ListPagination = { page: 1, limit: 10, total: 0, totalPages: 1 };
 
+type PendingBackupAction =
+  | { kind: "restore"; file: File }
+  | { kind: "delete"; filename: string }
+  | { kind: "delete-all" }
+  | null;
+
 export function useBackupManagement(onMessage: (message: string) => void) {
   const [status, setStatus] = useState<BackupStatus | null>(null);
   const [files, setFiles] = useState<BackupFile[]>([]);
@@ -14,6 +20,7 @@ export function useBackupManagement(onMessage: (message: string) => void) {
   const [limit, setLimit] = useState(10);
   const [loading, setLoading] = useState(true);
   const [action, setAction] = useState<"backup" | "restore" | "delete" | null>(null);
+  const [pendingConfirm, setPendingConfirm] = useState<PendingBackupAction>(null);
   const [error, setError] = useState("");
 
   const load = useCallback(async (targetPage = page, targetLimit = limit) => {
@@ -58,7 +65,7 @@ export function useBackupManagement(onMessage: (message: string) => void) {
     } finally { setAction(null); }
   };
 
-  const restore = async (event: ChangeEvent<HTMLInputElement>) => {
+  const restore = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     event.target.value = "";
     if (!file) return;
@@ -66,15 +73,7 @@ export function useBackupManagement(onMessage: (message: string) => void) {
       onMessage("Tệp phục hồi vượt quá giới hạn 512 MB.");
       return;
     }
-    if (!window.confirm(`Phục hồi dữ liệu từ “${file.name}”? Dữ liệu hiện tại sẽ bị ghi đè.`)) return;
-    setAction("restore");
-    try {
-      const result = await adminApi.restoreBackup(file);
-      onMessage(result.message || "Đã phục hồi cơ sở dữ liệu.");
-      await load(page, limit);
-    } catch (requestError) {
-      onMessage(getApiError(requestError, "Không thể phục hồi cơ sở dữ liệu."));
-    } finally { setAction(null); }
+    setPendingConfirm({ kind: "restore", file });
   };
 
   const download = async (file: BackupFile) => {
@@ -91,30 +90,73 @@ export function useBackupManagement(onMessage: (message: string) => void) {
     }
   };
 
-  const remove = async (filename: string) => {
-    if (!window.confirm(`Xóa bản sao lưu “${filename}”?`)) return;
-    setAction("delete");
-    try {
-      const result = await adminApi.deleteBackup(filename);
-      onMessage(result.message || "Đã xóa bản sao lưu.");
-      await load(page, limit);
-    } catch (requestError) {
-      onMessage(getApiError(requestError, "Không thể xóa bản sao lưu."));
-    } finally { setAction(null); }
+  const remove = (filename: string) => {
+    setPendingConfirm({ kind: "delete", filename });
   };
 
-  const removeAll = async () => {
-    if (!window.confirm("Xóa toàn bộ bản sao lưu? Hành động này không thể hoàn tác.")) return;
-    setAction("delete");
-    try {
-      const result = await adminApi.deleteAllBackups();
-      onMessage(result.message || "Đã xóa toàn bộ bản sao lưu.");
-      if (page === 1) await load(1, limit);
-      else setPage(1);
-    } catch (requestError) {
-      onMessage(getApiError(requestError, "Không thể xóa bản sao lưu."));
-    } finally { setAction(null); }
+  const removeAll = () => {
+    setPendingConfirm({ kind: "delete-all" });
   };
 
-  return { status, files, pagination, page, limit, setPage, setLimit: setLimitAndReset, loading, action, error, load, createBackup, restore, download, remove, removeAll };
+  const confirmPending = async () => {
+    if (!pendingConfirm) return;
+    const current = pendingConfirm;
+
+    if (current.kind === "restore") {
+      setAction("restore");
+      try {
+        const result = await adminApi.restoreBackup(current.file);
+        onMessage(result.message || "Đã phục hồi cơ sở dữ liệu.");
+        setPendingConfirm(null);
+        await load(page, limit);
+      } catch (requestError) {
+        onMessage(getApiError(requestError, "Không thể phục hồi cơ sở dữ liệu."));
+      } finally {
+        setAction(null);
+      }
+      return;
+    }
+
+    setAction("delete");
+    try {
+      if (current.kind === "delete") {
+        const result = await adminApi.deleteBackup(current.filename);
+        onMessage(result.message || "Đã xóa bản sao lưu.");
+        setPendingConfirm(null);
+        await load(page, limit);
+      } else {
+        const result = await adminApi.deleteAllBackups();
+        onMessage(result.message || "Đã xóa toàn bộ bản sao lưu.");
+        setPendingConfirm(null);
+        if (page === 1) await load(1, limit);
+        else setPage(1);
+      }
+    } catch (requestError) {
+      onMessage(getApiError(requestError, "Không thể xóa bản sao lưu."));
+    } finally {
+      setAction(null);
+    }
+  };
+
+  return {
+    status,
+    files,
+    pagination,
+    page,
+    limit,
+    setPage,
+    setLimit: setLimitAndReset,
+    loading,
+    action,
+    pendingConfirm,
+    setPendingConfirm,
+    confirmPending,
+    error,
+    load,
+    createBackup,
+    restore,
+    download,
+    remove,
+    removeAll,
+  };
 }

@@ -85,6 +85,7 @@ export default defineEventHandler(async event => {
         last_logged_in: user.last_logged_in,
         permissions: user.permissions,
         profile: user.profile,
+        app_version: user.app_version,
       },
     };
   }
@@ -100,6 +101,7 @@ export default defineEventHandler(async event => {
       last_logged_in: true,
       permissions: true,
       profile: true,
+      app_version: true,
     },
   });
 

@@ -79,4 +79,24 @@ export const requireAdmin = async (event: H3Event) => {
   }
 };
 
+export const summarizeClientPlatform = (userAgent: string): string => {
+  const ua = userAgent.toLowerCase();
+  if (!ua) return 'Không rõ thiết bị';
+
+  let os = 'Khác';
+  if (ua.includes('iphone') || ua.includes('ipad') || ua.includes('ios')) os = 'iOS';
+  else if (ua.includes('android')) os = 'Android';
+  else if (ua.includes('mac os') || ua.includes('macintosh')) os = 'macOS';
+  else if (ua.includes('windows')) os = 'Windows';
+  else if (ua.includes('linux')) os = 'Linux';
+
+  let client = 'Web';
+  if (ua.includes('electron') || ua.includes('framezoo-desktop')) client = 'Desktop';
+  else if (ua.includes('expo') || ua.includes('reactnative') || ua.includes('framezoo-mobile'))
+    client = 'Mobile';
+  else if (ua.includes('tv') || ua.includes('tizen') || ua.includes('webos')) client = 'TV';
+
+  return `${os} · ${client}`;
+};
+
 export { ADMIN_COOKIE, ADMIN_SESSION_TTL };

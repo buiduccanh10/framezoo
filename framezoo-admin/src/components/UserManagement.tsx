@@ -1,34 +1,29 @@
 import {
-  AlertTriangle,
-  Bookmark,
   Check,
   Clock,
   Copy,
   Edit2,
   Eye,
-  Film,
+  EyeOff,
   Loader2,
   LogOut,
   Mail,
-  Puzzle,
   RotateCcw,
   Search,
-  Smartphone,
   Sliders,
+  Smartphone,
+  Tag,
   Trash2,
   UserRound,
   Users,
   X,
 } from "lucide-react";
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
+import { ConfirmModal } from "./ConfirmModal";
 import { Pagination } from "./Pagination";
 import { useUserManagement } from "../hooks/useUserManagement";
 import type { adminApi } from "../lib/api";
-import type {
-  AdminUserItem,
-  UserInstalledAddon,
-  UserSessionItem,
-} from "../types";
+import type { AdminUserItem, UserSessionItem } from "../types";
 
 interface UserManagementProps {
   api: typeof adminApi;
@@ -42,14 +37,14 @@ export function UserManagement({
   onStatsUpdate,
 }: UserManagementProps) {
   const users = useUserManagement(api, showMessage, onStatsUpdate);
+
   return (
     <section className="workspace-section" aria-labelledby="users-heading">
       <div className="section-heading">
         <div>
-          <p className="eyebrow">Account directory</p>
           <h1 id="users-heading">Người dùng</h1>
           <p className="section-lede">
-            Kiểm tra tài khoản, thiết bị và quyền truy cập theo trang.
+            Quản lý tài khoản, phiên bản ứng dụng đang dùng và phiên đăng nhập.
           </p>
         </div>
         <button
@@ -62,36 +57,38 @@ export function UserManagement({
             <Loader2 size={16} className="spin" />
           ) : (
             <RotateCcw size={16} />
-          )}{" "}
+          )}
           Làm mới
         </button>
       </div>
+
       <div className="metric-grid metric-grid-four">
         <UserMetric
           label="Tổng người dùng"
           value={users.stats.totalUsers}
-          icon={<Users size={17} />}
+          icon={<Users size={16} />}
           tone="blue"
         />
         <UserMetric
           label="Hoạt động 30 ngày"
           value={users.stats.activeRecently}
-          icon={<Clock size={17} />}
+          icon={<Clock size={16} />}
           tone="green"
         />
         <UserMetric
           label="Có email"
           value={users.stats.usersWithEmail}
-          icon={<Mail size={17} />}
+          icon={<Mail size={16} />}
           tone="amber"
         />
         <UserMetric
           label="Phiên hoạt động"
           value={users.stats.totalSessions}
-          icon={<Smartphone size={17} />}
+          icon={<Smartphone size={16} />}
           tone="red"
         />
       </div>
+
       <div className="toolbar">
         <label className="search-field">
           <Search size={16} aria-hidden="true" />
@@ -99,7 +96,7 @@ export function UserManagement({
           <input
             value={users.search}
             onChange={(event) => users.setSearch(event.target.value)}
-            placeholder="Tìm nickname, email hoặc ID"
+            placeholder="Tìm nickname, email hoặc ID…"
           />
           {users.search ? (
             <button
@@ -120,33 +117,53 @@ export function UserManagement({
           >
             <option value="created_desc">Mới nhất</option>
             <option value="login_desc">Hoạt động gần nhất</option>
+            <option value="version_desc">Phiên bản cao → thấp</option>
+            <option value="version_asc">Phiên bản thấp → cao</option>
             <option value="nickname_asc">Tên A–Z</option>
             <option value="created_asc">Cũ nhất</option>
           </select>
         </label>
       </div>
-      <div className="content-panel users-panel">
+
+      <div className="content-panel">
         {users.loading && users.users.length === 0 ? (
           <LoadingState />
         ) : users.users.length === 0 ? (
           <EmptyUsers hasSearch={Boolean(users.search)} />
         ) : (
-          <div className="user-list">
-            {users.users.map((user) => (
-              <UserRow
-                key={user.id}
-                user={user}
-                copied={users.copiedId === user.id}
-                revoking={users.revokingId === user.id}
-                onCopy={() => void users.copyText(user.id)}
-                onDetail={() => void users.openUserDetail(user.id)}
-                onEdit={() => users.openEdit(user)}
-                onDelete={() => users.setUserToDelete(user)}
-                onRevoke={() =>
-                  void users.revokeSessions(user.id, user.nickname)
-                }
-              />
-            ))}
+          <div className="table-wrap">
+            <table className="data-table users-table">
+              <thead>
+                <tr>
+                  <th>Người dùng</th>
+                  <th>Phiên bản</th>
+                  <th>Phiên</th>
+                  <th>Hoạt động cuối</th>
+                  <th>Ngày tạo</th>
+                  <th className="col-actions">Thao tác</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.users.map((user) => (
+                  <UserTableRow
+                    key={user.id}
+                    user={user}
+                    copied={users.copiedId === user.id}
+                    revoking={users.revokingId === user.id}
+                    onCopy={() => void users.copyText(user.id)}
+                    onDetail={() => void users.openUserDetail(user.id)}
+                    onEdit={() => users.openEdit(user)}
+                    onDelete={() => users.setUserToDelete(user)}
+                    onRevoke={() =>
+                      users.setUserToRevoke({
+                        id: user.id,
+                        nickname: user.nickname,
+                      })
+                    }
+                  />
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
         <Pagination
@@ -157,9 +174,41 @@ export function UserManagement({
           onLimitChange={users.setLimit}
         />
       </div>
-      {users.selectedUserId ? <UserDetailModal state={users} /> : null}
+
+      {users.selectedUserId ? (
+        <UserDetailModal key={users.selectedUserId} state={users} />
+      ) : null}
       {users.userToEdit ? <EditUserModal state={users} /> : null}
-      {users.userToDelete ? <DeleteUserModal state={users} /> : null}
+
+      <ConfirmModal
+        open={Boolean(users.userToDelete)}
+        title="Xóa tài khoản?"
+        description={
+          users.userToDelete
+            ? `Xóa vĩnh viễn tài khoản “${users.userToDelete.nickname}” cùng toàn bộ dữ liệu liên quan và ${users.userToDelete.counts.sessions} phiên đăng nhập.`
+            : ""
+        }
+        confirmLabel="Xóa vĩnh viễn"
+        tone="danger"
+        busy={users.deleteLoading}
+        onConfirm={() => void users.confirmDelete()}
+        onCancel={() => users.setUserToDelete(null)}
+      />
+
+      <ConfirmModal
+        open={Boolean(users.userToRevoke)}
+        title="Đăng xuất tất cả thiết bị?"
+        description={
+          users.userToRevoke
+            ? `Thu hồi toàn bộ phiên đăng nhập hiện tại của “${users.userToRevoke.nickname}”.`
+            : ""
+        }
+        confirmLabel="Đăng xuất thiết bị"
+        tone="warning"
+        busy={Boolean(users.revokingId)}
+        onConfirm={() => void users.confirmRevokeSessions()}
+        onCancel={() => users.setUserToRevoke(null)}
+      />
     </section>
   );
 }
@@ -176,17 +225,17 @@ function UserMetric({
   tone: string;
 }) {
   return (
-    <div className={`metric-card user-metric tone-${tone}`}>
-      <span>
+    <div className={`metric-card tone-${tone}`}>
+      <span className="metric-label">
         {icon}
         {label}
       </span>
-      <strong>{value}</strong>
+      <strong>{value.toLocaleString("vi-VN")}</strong>
     </div>
   );
 }
 
-function UserRow({
+function UserTableRow({
   user,
   copied,
   revoking,
@@ -206,110 +255,101 @@ function UserRow({
   onRevoke: () => void;
 }) {
   return (
-    <article className="user-row">
-      <div className="user-identity">
-        <span
-          className="avatar"
-          style={{ background: avatarColor(user.profile?.colorA) }}
-        >
-          {user.nickname.slice(0, 1).toUpperCase() || "U"}
-        </span>
-        <div className="user-copy">
-          <div className="user-name-line">
-            <strong>{user.nickname}</strong>
-            {user.email ? (
-              <span className="person-chip">
-                <Mail size={12} />
-                {user.email}
-              </span>
-            ) : (
-              <span className="muted-label">Chưa có email</span>
-            )}
-          </div>
-          <div className="user-id">
-            <code>{user.id}</code>
-            <button
-              type="button"
-              onClick={onCopy}
-              title="Sao chép User ID"
-              aria-label="Sao chép User ID"
-            >
-              {copied ? <Check size={13} /> : <Copy size={13} />}
-            </button>
-          </div>
-        </div>
-      </div>
-      <div className="user-facts">
-        <span>
-          Lần cuối hoạt động{" "}
-          <strong>{formatDateTime(user.last_logged_in)}</strong>
-        </span>
-        <span>
-          Tham gia{" "}
-          <strong>
-            {new Date(user.created_at).toLocaleDateString("vi-VN")}
-          </strong>
-        </span>
-        <div className="count-chips">
-          <span title="Bookmarks">
-            <Bookmark size={13} />
-            {user.counts.bookmarks}
-          </span>
-          <span title="Đã xem">
-            <Film size={13} />
-            {user.counts.watchHistory}
-          </span>
-          <span title="Addons">
-            <Puzzle size={13} />
-            {user.counts.addons}
-          </span>
-          <span title="Thiết bị">
-            <Smartphone size={13} />
-            {user.counts.sessions}
-          </span>
-        </div>
-      </div>
-      <div className="row-actions">
-        <button
-          className="button button-secondary"
-          type="button"
-          onClick={onDetail}
-        >
-          <Eye size={15} /> Chi tiết
-        </button>
-        <button
-          className="icon-button"
-          type="button"
-          onClick={onEdit}
-          title="Chỉnh sửa"
-        >
-          <Edit2 size={15} />
-        </button>
-        {user.counts.sessions > 0 ? (
-          <button
-            className="icon-button warning"
-            type="button"
-            onClick={onRevoke}
-            disabled={revoking}
-            title="Đăng xuất thiết bị"
+    <tr>
+      <td data-label="Người dùng">
+        <div className="user-identity">
+          <span
+            className="avatar"
+            style={{ background: avatarColor(user.profile?.colorA) }}
           >
-            {revoking ? (
-              <Loader2 size={15} className="spin" />
-            ) : (
-              <LogOut size={15} />
-            )}
+            {user.nickname.slice(0, 1).toUpperCase() || "U"}
+          </span>
+          <div className="user-copy">
+            <div className="user-name-line">
+              <strong>{user.nickname}</strong>
+              {user.email ? (
+                <span className="masked-email" title="Email được ẩn một phần">
+                  {maskEmail(user.email)}
+                </span>
+              ) : (
+                <span className="muted-label">Chưa có email</span>
+              )}
+            </div>
+            <div className="user-id">
+              <code>{shortId(user.id)}</code>
+              <button
+                type="button"
+                onClick={onCopy}
+                title="Sao chép User ID"
+                aria-label="Sao chép User ID"
+              >
+                {copied ? <Check size={12} /> : <Copy size={12} />}
+              </button>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td data-label="Phiên bản">
+        <VersionBadge version={user.app_version} />
+      </td>
+      <td data-label="Phiên">
+        <span className="count-pill">
+          <Smartphone size={13} aria-hidden="true" />
+          {user.counts.sessions}
+        </span>
+      </td>
+      <td data-label="Hoạt động cuối" className="cell-date">
+        {formatDateTime(user.last_logged_in)}
+      </td>
+      <td data-label="Ngày tạo" className="cell-date">
+        {new Date(user.created_at).toLocaleDateString("vi-VN")}
+      </td>
+      <td data-label="Thao tác" className="col-actions">
+        <div className="row-actions">
+          <button
+            className="button button-secondary button-sm"
+            type="button"
+            onClick={onDetail}
+          >
+            <Eye size={14} /> Chi tiết
           </button>
-        ) : null}
-        <button
-          className="icon-button danger"
-          type="button"
-          onClick={onDelete}
-          title="Xóa"
-        >
-          <Trash2 size={15} />
-        </button>
-      </div>
-    </article>
+          <button
+            className="icon-button"
+            type="button"
+            onClick={onEdit}
+            title="Chỉnh sửa"
+            aria-label={`Chỉnh sửa ${user.nickname}`}
+          >
+            <Edit2 size={14} />
+          </button>
+          {user.counts.sessions > 0 ? (
+            <button
+              className="icon-button warning"
+              type="button"
+              onClick={onRevoke}
+              disabled={revoking}
+              title="Đăng xuất thiết bị"
+              aria-label={`Đăng xuất thiết bị của ${user.nickname}`}
+            >
+              {revoking ? (
+                <Loader2 size={14} className="spin" />
+              ) : (
+                <LogOut size={14} />
+              )}
+            </button>
+          ) : null}
+          <button
+            className="icon-button danger"
+            type="button"
+            onClick={onDelete}
+            title="Xóa tài khoản"
+            aria-label={`Xóa ${user.nickname}`}
+          >
+            <Trash2 size={14} />
+          </button>
+        </div>
+      </td>
+    </tr>
   );
 }
 
@@ -319,6 +359,16 @@ function UserDetailModal({
   state: ReturnType<typeof useUserManagement>;
 }) {
   const detail = state.userDetail;
+  const [revealEmail, setRevealEmail] = useState(false);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") state.closeDetail();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [state]);
+
   return (
     <div
       className="modal-backdrop"
@@ -348,50 +398,65 @@ function UserDetailModal({
               </span>
             )}
             <div>
-              <p className="eyebrow">User detail</p>
+              <p className="eyebrow">Hồ sơ tài khoản</p>
               <h2 id="user-detail-title">
                 {detail?.user.nickname || "Đang tải…"}
               </h2>
-              <p className="modal-subtitle">
-                {detail?.user.email || "Chưa liên kết email"}
-              </p>
+              <div className="modal-subtitle-row">
+                <span className="modal-subtitle">
+                  {detail?.user.email
+                    ? revealEmail
+                      ? detail.user.email
+                      : maskEmail(detail.user.email)
+                    : "Chưa liên kết email"}
+                </span>
+                {detail?.user.email ? (
+                  <button
+                    className="text-button"
+                    type="button"
+                    onClick={() => setRevealEmail((prev) => !prev)}
+                    aria-label={revealEmail ? "Ẩn email" : "Hiện email"}
+                    title={revealEmail ? "Ẩn email" : "Hiện email"}
+                  >
+                    {revealEmail ? <EyeOff size={13} /> : <Eye size={13} />}
+                  </button>
+                ) : null}
+              </div>
             </div>
           </div>
           <button
             className="icon-button"
             type="button"
             onClick={state.closeDetail}
-            title="Đóng"
+            aria-label="Đóng"
           >
             <X size={17} />
           </button>
         </div>
+
         {state.detailLoading || !detail ? (
-          <LoadingState label="Đang tải thông tin chi tiết" />
+          <LoadingState label="Đang tải thông tin chi tiết…" />
         ) : (
           <>
-            <div className="detail-metrics">
-              {(
-                [
-                  [Bookmark, "Bookmarks", detail.counts.bookmarks],
-                  [Film, "Đã xem", detail.counts.watchHistory],
-                  [Clock, "Tiến độ", detail.counts.progress],
-                  [Puzzle, "Addons", detail.counts.addons],
-                  [Smartphone, "Thiết bị", detail.counts.sessions],
-                ] as const
-              ).map(([Icon, label, value]) => (
-                <div key={label}>
-                  <Icon size={14} />
-                  <span>{label}</span>
-                  <strong>{value}</strong>
-                </div>
-              ))}
+            <div className="detail-summary-strip">
+              <div>
+                <span>Phiên bản hiện tại</span>
+                <VersionBadge version={detail.user.app_version} />
+              </div>
+              <div>
+                <span>Phiên hoạt động</span>
+                <strong>{detail.counts.sessions}</strong>
+              </div>
+              <div>
+                <span>Hoạt động cuối</span>
+                <strong>{formatDateTime(detail.user.last_logged_in)}</strong>
+              </div>
             </div>
+
             <div className="detail-tabs" role="tablist">
               {(
                 [
                   ["overview", Sliders, "Tài khoản"],
-                  ["addons", Puzzle, `Addons (${detail.counts.addons})`],
                   ["sessions", Smartphone, `Phiên (${detail.counts.sessions})`],
                 ] as const
               ).map(([tab, Icon, label]) => (
@@ -408,27 +473,24 @@ function UserDetailModal({
                 </button>
               ))}
             </div>
+
             {state.detailTab === "overview" ? (
               <Overview detail={detail} onCopy={state.copyText} />
-            ) : state.detailTab === "addons" ? (
-              <AddonList
-                addons={detail.settings?.addons || []}
-                onCopy={state.copyText}
-              />
             ) : (
               <SessionList
                 detail={detail}
                 onRevoke={() =>
-                  void state.revokeSessions(
-                    detail.user.id,
-                    detail.user.nickname,
-                  )
+                  state.setUserToRevoke({
+                    id: detail.user.id,
+                    nickname: detail.user.nickname,
+                  })
                 }
                 revoking={state.revokingId === detail.user.id}
               />
             )}
           </>
         )}
+
         <div className="modal-footer">
           <button
             className="button button-secondary"
@@ -462,19 +524,20 @@ function Overview({
               className="text-button"
               type="button"
               onClick={() => void onCopy(detail.user.id)}
+              aria-label="Sao chép User ID"
             >
               <Copy size={12} />
             </button>
           </Info>
+          <Info label="Phiên bản ứng dụng">
+            <VersionBadge version={detail.user.app_version} />
+          </Info>
           <Info label="Namespace">{detail.user.namespace || "—"}</Info>
           <Info label="Ngày tạo">{formatDateTime(detail.user.created_at)}</Info>
-          <Info label="Lần cuối hoạt động">
-            {formatDateTime(detail.user.last_logged_in)}
-          </Info>
         </dl>
       </div>
       <div className="detail-block">
-        <h3>Tùy chọn & cấu hình</h3>
+        <h3>Tùy chọn giao diện</h3>
         <dl className="detail-grid">
           <Info label="Giao diện">
             {settings?.applicationTheme || "ember (mặc định)"}
@@ -494,6 +557,7 @@ function Overview({
     </div>
   );
 }
+
 function Info({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div>
@@ -502,77 +566,7 @@ function Info({ label, children }: { label: string; children: ReactNode }) {
     </div>
   );
 }
-function AddonList({
-  addons,
-  onCopy,
-}: {
-  addons: UserInstalledAddon[];
-  onCopy: (text: string, label?: string) => Promise<void>;
-}) {
-  if (!addons.length)
-    return (
-      <EmptyState
-        title="Chưa cài addon"
-        detail="Addon được đồng bộ khi người dùng cài trên client."
-      />
-    );
-  return (
-    <div className="detail-list">
-      {addons.map((addon, index) => {
-        const manifest = addon.manifest || {};
-        const resources = Array.isArray(manifest.resources)
-          ? manifest.resources.map((resource) =>
-              typeof resource === "string"
-                ? resource
-                : String((resource as { name?: string }).name || ""),
-            )
-          : [];
-        return (
-          <article className="addon-row" key={`${addon.manifestUrl}-${index}`}>
-            {manifest.logo ? (
-              <img src={manifest.logo} alt={manifest.name || "Addon"} />
-            ) : (
-              <span className="addon-icon">
-                <Puzzle size={17} />
-              </span>
-            )}
-            <div>
-              <div className="addon-title">
-                <strong>{manifest.name || "Addon không tên"}</strong>
-                {manifest.version ? (
-                  <span className="status-badge">v{manifest.version}</span>
-                ) : null}
-                <span
-                  className={`status-badge ${addon.enabled === false ? "status-muted" : "status-resolved"}`}
-                >
-                  {addon.enabled === false ? "Đã tắt" : "Đang bật"}
-                </span>
-              </div>
-              {manifest.description ? <p>{manifest.description}</p> : null}
-              <div className="addon-url">
-                <code>{addon.manifestUrl}</code>
-                <button
-                  className="text-button"
-                  type="button"
-                  onClick={() => void onCopy(addon.manifestUrl, "Manifest URL")}
-                >
-                  <Copy size={12} />
-                </button>
-              </div>
-              {resources.length ? (
-                <div className="resource-tags">
-                  {resources.map((resource) => (
-                    <span key={resource}>{resource}</span>
-                  ))}
-                </div>
-              ) : null}
-            </div>
-          </article>
-        );
-      })}
-    </div>
-  );
-}
+
 function SessionList({
   detail,
   onRevoke,
@@ -588,7 +582,7 @@ function SessionList({
         <div className="detail-list-heading">
           <span>{detail.sessions.length} thiết bị đang đăng nhập</span>
           <button
-            className="button button-danger"
+            className="button button-danger button-sm"
             type="button"
             onClick={onRevoke}
             disabled={revoking}
@@ -600,19 +594,26 @@ function SessionList({
       {detail.sessions.length ? (
         detail.sessions.map((session: UserSessionItem) => (
           <article className="session-row" key={session.id}>
-            <div>
+            <div className="session-main">
               <strong>
                 <Smartphone size={14} /> {session.device || "Framezoo Client"}
               </strong>
-              <code>{session.user_agent}</code>
+              <div className="session-tags">
+                <span className="platform-chip">{session.platform}</span>
+                {session.app_version ? (
+                  <VersionBadge version={session.app_version} />
+                ) : null}
+              </div>
             </div>
-            <span>
-              Hết hạn {new Date(session.expires_at).toLocaleDateString("vi-VN")}
-            </span>
-            <small>
-              Tạo {formatDateTime(session.created_at)} · Truy cập{" "}
-              {formatDateTime(session.accessed_at)}
-            </small>
+            <div className="session-meta">
+              <span>
+                Hết hạn {new Date(session.expires_at).toLocaleDateString("vi-VN")}
+              </span>
+              <small>
+                Tạo {formatDateTime(session.created_at)} · Truy cập{" "}
+                {formatDateTime(session.accessed_at)}
+              </small>
+            </div>
           </article>
         ))
       ) : (
@@ -630,8 +631,26 @@ function EditUserModal({
 }: {
   state: ReturnType<typeof useUserManagement>;
 }) {
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && !state.editLoading) {
+        state.setUserToEdit(null);
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [state]);
+
   return (
-    <div className="modal-backdrop" role="presentation">
+    <div
+      className="modal-backdrop"
+      role="presentation"
+      onMouseDown={(event) => {
+        if (event.currentTarget === event.target && !state.editLoading) {
+          state.setUserToEdit(null);
+        }
+      }}
+    >
       <section
         className="modal-panel compact-modal"
         role="dialog"
@@ -646,7 +665,8 @@ function EditUserModal({
             className="icon-button"
             type="button"
             onClick={() => state.setUserToEdit(null)}
-            title="Đóng"
+            disabled={state.editLoading}
+            aria-label="Đóng"
           >
             <X size={17} />
           </button>
@@ -688,7 +708,7 @@ function EditUserModal({
                 <Loader2 size={15} className="spin" />
               ) : (
                 <Check size={15} />
-              )}{" "}
+              )}
               Lưu
             </button>
           </div>
@@ -697,60 +717,30 @@ function EditUserModal({
     </div>
   );
 }
-function DeleteUserModal({
-  state,
-}: {
-  state: ReturnType<typeof useUserManagement>;
-}) {
-  const user = state.userToDelete!;
+
+function VersionBadge({ version }: { version: string | null }) {
+  if (!version) {
+    return <span className="version-badge is-unknown">Chưa rõ</span>;
+  }
+  const label = version.startsWith("v") ? version : `v${version}`;
   return (
-    <div className="modal-backdrop" role="presentation">
-      <section
-        className="modal-panel compact-modal"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="delete-user-title"
-      >
-        <div className="modal-header">
-          <div className="danger-heading">
-            <AlertTriangle size={19} />
-            <div>
-              <h2 id="delete-user-title">Xóa tài khoản?</h2>
-              <p>Hành động này không thể hoàn tác.</p>
-            </div>
-          </div>
-        </div>
-        <p className="delete-copy">
-          Xóa <strong>{user.nickname}</strong> cùng bookmarks (
-          {user.counts.bookmarks}), lịch sử xem ({user.counts.watchHistory}),
-          addon và phiên đăng nhập.
-        </p>
-        <div className="modal-footer">
-          <button
-            className="button button-secondary"
-            type="button"
-            onClick={() => state.setUserToDelete(null)}
-            disabled={state.deleteLoading}
-          >
-            Hủy
-          </button>
-          <button
-            className="button button-danger"
-            type="button"
-            onClick={() => void state.confirmDelete()}
-            disabled={state.deleteLoading}
-          >
-            {state.deleteLoading ? (
-              <Loader2 size={15} className="spin" />
-            ) : (
-              <Trash2 size={15} />
-            )}{" "}
-            Xóa vĩnh viễn
-          </button>
-        </div>
-      </section>
-    </div>
+    <span className="version-badge">
+      <Tag size={11} aria-hidden="true" />
+      {label}
+    </span>
   );
+}
+
+function maskEmail(email: string): string {
+  const [local, domain] = email.split("@");
+  if (!local || !domain) return email;
+  const visible = local.slice(0, Math.min(2, local.length));
+  return `${visible}***@${domain}`;
+}
+
+function shortId(id: string): string {
+  if (id.length <= 14) return id;
+  return `${id.slice(0, 6)}…${id.slice(-4)}`;
 }
 
 function avatarColor(value: unknown) {
@@ -758,6 +748,7 @@ function avatarColor(value: unknown) {
     ? value
     : "var(--color-accent)";
 }
+
 function formatDateTime(value: string | null) {
   if (!value) return "Chưa hoạt động";
   const date = new Date(value);
@@ -765,6 +756,7 @@ function formatDateTime(value: string | null) {
     ? "Chưa hoạt động"
     : date.toLocaleString("vi-VN");
 }
+
 function LoadingState({
   label = "Đang tải danh sách người dùng…",
 }: {
@@ -772,11 +764,12 @@ function LoadingState({
 }) {
   return (
     <div className="empty-state">
-      <Loader2 size={25} className="spin" />
+      <Loader2 size={24} className="spin" />
       <p>{label}</p>
     </div>
   );
 }
+
 function EmptyUsers({ hasSearch }: { hasSearch: boolean }) {
   return (
     <div className="empty-state">
@@ -794,10 +787,11 @@ function EmptyUsers({ hasSearch }: { hasSearch: boolean }) {
     </div>
   );
 }
+
 function EmptyState({ title, detail }: { title: string; detail: string }) {
   return (
     <div className="empty-state">
-      <Puzzle size={25} />
+      <Smartphone size={24} />
       <strong>{title}</strong>
       <p>{detail}</p>
     </div>

@@ -242,7 +242,8 @@ export async function createOtpChallenge(options: {
           expires_at: new Date(now.getTime() + OTP_EXPIRY_MS),
           max_attempts: OTP_MAX_ATTEMPTS,
           last_sent_at: now,
-          request_ip: requestIp,
+          // Do not persist raw client IP addresses in the database to minimize PII exposure.
+          request_ip: null,
         },
       });
 

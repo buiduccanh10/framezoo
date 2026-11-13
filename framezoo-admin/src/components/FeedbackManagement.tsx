@@ -10,6 +10,8 @@ import {
   User,
   X,
 } from "lucide-react";
+import { useEffect } from "react";
+import { ConfirmModal } from "./ConfirmModal";
 import { Pagination } from "./Pagination";
 import { useFeedbackManagement } from "../hooks/useFeedbackManagement";
 
@@ -24,14 +26,22 @@ export function FeedbackManagement({
 }: FeedbackManagementProps) {
   const feedback = useFeedbackManagement(onMessage, onPendingChange);
 
+  useEffect(() => {
+    if (!feedback.selected) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") feedback.setSelected(null);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [feedback]);
+
   return (
     <section className="workspace-section" aria-labelledby="feedback-heading">
       <div className="section-heading">
         <div>
-          <p className="eyebrow">Support queue</p>
           <h1 id="feedback-heading">Phản hồi người dùng</h1>
           <p className="section-lede">
-            Hàng đợi có trạng thái, tìm kiếm và xử lý theo trang.
+            Hàng đợi hỗ trợ có trạng thái, tìm kiếm và xử lý theo trang.
           </p>
         </div>
         <button
@@ -44,16 +54,13 @@ export function FeedbackManagement({
             <Loader2 size={16} className="spin" />
           ) : (
             <RotateCcw size={16} />
-          )}{" "}
+          )}
           Làm mới
         </button>
       </div>
+
       <div className="metric-grid metric-grid-three">
-        <Metric
-          label="Tổng phản hồi"
-          value={feedback.stats.total}
-          tone="blue"
-        />
+        <Metric label="Tổng phản hồi" value={feedback.stats.total} tone="blue" />
         <Metric
           label="Đang xử lý"
           value={feedback.stats.pending}
@@ -61,6 +68,7 @@ export function FeedbackManagement({
         />
         <Metric label="Đã xử lý" value={feedback.stats.resolved} tone="green" />
       </div>
+
       <div className="toolbar">
         <label className="search-field">
           <Search size={16} aria-hidden="true" />
@@ -68,8 +76,18 @@ export function FeedbackManagement({
           <input
             value={feedback.search}
             onChange={(event) => feedback.setSearch(event.target.value)}
-            placeholder="Tìm tiêu đề, nội dung, người dùng"
+            placeholder="Tìm tiêu đề, nội dung, người dùng…"
           />
+          {feedback.search ? (
+            <button
+              className="clear-search"
+              type="button"
+              onClick={() => feedback.setSearch("")}
+              aria-label="Xóa tìm kiếm"
+            >
+              <X size={15} />
+            </button>
+          ) : null}
         </label>
         <div className="segmented" role="group" aria-label="Lọc feedback">
           {(["all", "pending", "resolved"] as const).map((value) => (
@@ -88,6 +106,7 @@ export function FeedbackManagement({
           ))}
         </div>
       </div>
+
       <div className="content-panel">
         {feedback.error ? (
           <p className="inline-error" role="alert">
@@ -95,7 +114,7 @@ export function FeedbackManagement({
           </p>
         ) : null}
         {feedback.loading && feedback.items.length === 0 ? (
-          <LoadingState label="Đang tải feedback" />
+          <LoadingState label="Đang tải feedback…" />
         ) : feedback.items.length === 0 ? (
           <EmptyState
             title="Không có feedback phù hợp"
@@ -113,55 +132,53 @@ export function FeedbackManagement({
                       <h2>{item.title}</h2>
                       <StatusBadge pending={pending} />
                       <span className="person-chip">
-                        <User size={13} /> {item.user?.nickname || "Khách"}
+                        <User size={12} aria-hidden="true" />{" "}
+                        {item.user?.nickname || "Khách"}
                       </span>
                       {item.attachments.length > 0 ? (
                         <span className="person-chip">
-                          <Image size={13} /> {item.attachments.length} files
+                          <Image size={12} aria-hidden="true" />{" "}
+                          {item.attachments.length} tệp
                         </span>
                       ) : null}
                     </div>
-                    <p>{item.description}</p>
+                    <p className="feedback-excerpt">{item.description}</p>
                     <time dateTime={item.created_at}>
                       {new Date(item.created_at).toLocaleString("vi-VN")}
                     </time>
                   </div>
                   <div className="row-actions">
                     <button
-                      className="icon-button"
+                      className="button button-secondary button-sm"
                       type="button"
                       onClick={() => feedback.setSelected(item)}
-                      title="Xem chi tiết"
                     >
-                      <Eye size={16} />
+                      <Eye size={14} /> Chi tiết
                     </button>
                     <button
-                      className={`button ${pending ? "button-danger" : "button-secondary"}`}
+                      className={`button button-sm ${pending ? "button-primary" : "button-secondary"}`}
                       type="button"
-                      onClick={() =>
-                        void (pending
-                          ? feedback.remove(item)
-                          : feedback.updateStatus(item))
-                      }
+                      onClick={() => void feedback.updateStatus(item)}
                       disabled={busy}
                     >
                       {busy ? (
-                        <Loader2 size={15} className="spin" />
+                        <Loader2 size={14} className="spin" />
                       ) : pending ? (
-                        <Trash2 size={15} />
+                        <Check size={14} />
                       ) : (
-                        <RotateCcw size={15} />
+                        <RotateCcw size={14} />
                       )}
-                      {pending ? "Xác nhận & xóa" : "Mở lại"}
+                      {pending ? "Hoàn tất" : "Mở lại"}
                     </button>
                     <button
                       className="icon-button danger"
                       type="button"
-                      onClick={() => void feedback.remove(item)}
+                      onClick={() => feedback.setItemToDelete(item)}
                       disabled={busy}
-                      title="Xóa feedback và files"
+                      title="Xóa feedback và tệp đính kèm"
+                      aria-label={`Xóa feedback ${item.title}`}
                     >
-                      <Trash2 size={16} />
+                      <Trash2 size={14} />
                     </button>
                   </div>
                 </article>
@@ -177,6 +194,7 @@ export function FeedbackManagement({
           onLimitChange={feedback.setLimit}
         />
       </div>
+
       {feedback.selected ? (
         <div
           className="modal-backdrop"
@@ -193,30 +211,38 @@ export function FeedbackManagement({
           >
             <div className="modal-header">
               <div>
-                <p className="eyebrow">Feedback detail</p>
+                <p className="eyebrow">Chi tiết phản hồi</p>
                 <h2 id="feedback-detail-title">{feedback.selected.title}</h2>
               </div>
               <button
                 className="icon-button"
                 type="button"
                 onClick={() => feedback.setSelected(null)}
-                title="Đóng"
+                aria-label="Đóng"
               >
                 <X size={17} />
               </button>
             </div>
-            <StatusBadge pending={feedback.selected.status === "pending"} />
+            <div className="feedback-detail-meta">
+              <StatusBadge pending={feedback.selected.status === "pending"} />
+              <span className="person-chip">
+                <User size={12} /> {feedback.selected.user?.nickname || "Khách"}
+              </span>
+              <time dateTime={feedback.selected.created_at}>
+                {new Date(feedback.selected.created_at).toLocaleString("vi-VN")}
+              </time>
+            </div>
             <div className="detail-copy">{feedback.selected.description}</div>
             {feedback.selected.attachments.length > 0 ? (
               <div className="feedback-attachments">
-                <h3>Files đính kèm</h3>
+                <h3>Tệp đính kèm</h3>
                 <div className="feedback-attachment-grid">
                   {feedback.selected.attachments.map((attachment) => (
                     <a
                       key={attachment.key}
                       href={attachment.url}
                       target="_blank"
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
                       title={attachment.name}
                     >
                       {attachment.kind === "video" ? (
@@ -250,27 +276,50 @@ export function FeedbackManagement({
                 Đóng
               </button>
               <button
-                className={`button ${feedback.selected.status === "pending" ? "button-danger" : "button-primary"}`}
+                className="button button-danger"
                 type="button"
-                onClick={() =>
-                  void (feedback.selected!.status === "pending"
-                    ? feedback.remove(feedback.selected!)
-                    : feedback.updateStatus(feedback.selected!))
-                }
+                onClick={() => feedback.setItemToDelete(feedback.selected)}
+              >
+                <Trash2 size={15} /> Xóa
+              </button>
+              <button
+                className="button button-primary"
+                type="button"
+                onClick={() => void feedback.updateStatus(feedback.selected!)}
+                disabled={feedback.busyId === feedback.selected.id}
               >
                 {feedback.selected.status === "pending" ? (
-                  <Trash2 size={16} />
+                  <>
+                    <Check size={15} /> Đánh dấu đã xử lý
+                  </>
                 ) : (
-                  <RotateCcw size={16} />
+                  <>
+                    <RotateCcw size={15} /> Mở lại
+                  </>
                 )}
-                {feedback.selected.status === "pending"
-                  ? "Xác nhận & xóa"
-                  : "Mở lại"}
               </button>
             </div>
           </section>
         </div>
       ) : null}
+
+      <ConfirmModal
+        open={Boolean(feedback.itemToDelete)}
+        title="Xóa phản hồi?"
+        description={
+          feedback.itemToDelete
+            ? `Xóa phản hồi “${feedback.itemToDelete.title}” và toàn bộ tệp đính kèm.`
+            : ""
+        }
+        confirmLabel="Xóa vĩnh viễn"
+        tone="danger"
+        busy={
+          Boolean(feedback.itemToDelete) &&
+          feedback.busyId === feedback.itemToDelete?.id
+        }
+        onConfirm={() => void feedback.confirmRemove()}
+        onCancel={() => feedback.setItemToDelete(null)}
+      />
     </section>
   );
 }
@@ -286,11 +335,12 @@ function Metric({
 }) {
   return (
     <div className={`metric-card tone-${tone}`}>
-      <span>{label}</span>
-      <strong>{value}</strong>
+      <span className="metric-label">{label}</span>
+      <strong>{value.toLocaleString("vi-VN")}</strong>
     </div>
   );
 }
+
 function StatusBadge({ pending }: { pending: boolean }) {
   return (
     <span
@@ -306,6 +356,7 @@ function StatusBadge({ pending }: { pending: boolean }) {
     </span>
   );
 }
+
 function LoadingState({ label }: { label: string }) {
   return (
     <div className="empty-state">
@@ -314,6 +365,7 @@ function LoadingState({ label }: { label: string }) {
     </div>
   );
 }
+
 function EmptyState({ title, detail }: { title: string; detail: string }) {
   return (
     <div className="empty-state">
