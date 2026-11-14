@@ -3,11 +3,14 @@ package com.framezoo.tv.ui
 import android.content.Context
 import android.os.SystemClock
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
 import com.framezoo.tv.api.Addons
 import com.framezoo.tv.api.Backend
+import com.framezoo.tv.api.buildBackendSettingsJson
+import com.framezoo.tv.api.parseBackendSettingsJson
 import com.framezoo.tv.model.Addon
 import com.framezoo.tv.model.BookmarkDetails
 import com.framezoo.tv.model.AddonCatalog
@@ -24,14 +27,19 @@ import com.framezoo.tv.model.WatchPartyError
 import com.framezoo.tv.model.WatchPartyException
 import com.framezoo.tv.model.WatchPartyUser
 import com.framezoo.tv.model.parseWatchPartyCode
+import com.framezoo.tv.player.AudioOutputMode
+import com.framezoo.tv.player.GoogleSubtitleTranslator
 import com.framezoo.tv.player.PlayerController
 import com.framezoo.tv.storage.SecureStore
+import java.util.Locale
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.CancellationException
+import org.json.JSONArray
 import org.json.JSONObject
 
 internal class FrameZooState(context: Context, private val scope: CoroutineScope) {
@@ -40,8 +48,88 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
     val backend = Backend(store)
     private val addons = Addons(context, backend, store)
     val player = PlayerController(context)
+    internal val subtitleTranslator = GoogleSubtitleTranslator()
+    private var settingsSyncJob: Job? = null
 
-    fun setLanguage(lang: String) { store.language = lang; i18n.setLanguage(lang) }
+    var hasTidbBackendSupport by mutableStateOf(false)
+        private set
+    var tidbKey by mutableStateOf(store.tidbKey.orEmpty())
+        private set
+    val canSubmitTidb: Boolean
+        get() = hasTidbBackendSupport || tidbKey.isNotBlank()
+
+    var homeSectionOrder by mutableStateOf(loadHomeSectionOrder(store.homeSectionOrderJson))
+        private set
+    var bookmarkGroupOrder by mutableStateOf<List<String>>(emptyList())
+        private set
+
+    init {
+        player.setAudioMode(AudioOutputMode.fromWire(store.audioOutputMode))
+    }
+
+    private fun loadHomeSectionOrder(rawJson: String?): List<String> {
+        val parsed = rawJson?.let {
+            runCatching {
+                val arr = JSONArray(it)
+                (0 until arr.length()).mapNotNull { idx -> arr.optString(idx).takeIf(String::isNotBlank) }
+            }.getOrNull()
+        }
+        return normalizeHomeSectionOrder(parsed ?: DEFAULT_HOME_SECTION_ORDER)
+    }
+
+    private fun scheduleSettingsSync() {
+        if (store.userId == null) return
+        settingsSyncJob?.cancel()
+        settingsSyncJob = scope.launch {
+            delay(400)
+            runCatching {
+                backend.updateSettings(
+                    buildBackendSettingsJson(
+                        applicationLanguage = i18n.language,
+                        applicationTheme = theme,
+                        defaultSubtitleLanguage = defaultSubtitleLanguage,
+                        enableAutoplay = enableAutoplay,
+                        enableSkipCredits = enableSkipCredits,
+                        enableAutoSkipSegments = enableAutoSkipSegments,
+                        customPrimary = customPrimary,
+                        customSecondary = customSecondary,
+                        customTertiary = customTertiary,
+                    )
+                )
+            }
+        }
+    }
+
+    fun updateTidbKey(key: String) {
+        val clean = key.trim()
+        tidbKey = clean
+        store.tidbKey = clean.takeIf { it.isNotBlank() }
+    }
+
+    fun updateHomeSectionOrder(order: List<String>) {
+        val normalized = normalizeHomeSectionOrder(order)
+        homeSectionOrder = normalized
+        store.homeSectionOrderJson = JSONArray(normalized).toString()
+    }
+
+    fun moveHomeSection(index: Int, delta: Int) {
+        updateHomeSectionOrder(moveListItem(homeSectionOrder, index, index + delta))
+    }
+
+    fun resetHomeSectionOrder() {
+        homeSectionOrder = DEFAULT_HOME_SECTION_ORDER
+        store.homeSectionOrderJson = null
+    }
+
+    private fun setLanguageLocal(lang: String) {
+        store.language = lang
+        i18n.setLanguage(lang)
+    }
+
+    fun setLanguage(lang: String) {
+        setLanguageLocal(lang)
+        scheduleSettingsSync()
+    }
 
     var trailerEnabled by mutableStateOf(store.trailerEnabled)
         private set
@@ -311,6 +399,7 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
             error = e.message ?: i18n.t("auth.login.failedToReachServer")
             discoverError = error
         }
+        scope.launch { hasTidbBackendSupport = backend.metaTidbAvailability() }
         refreshDiscover()
         installed = addons.list()
         addonCatalog = addons.catalog()
@@ -697,6 +786,7 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
     }
 
     internal suspend fun refreshUserData() = coroutineScope {
+        val tidbAvailable = async { backend.metaTidbAvailability() }
         val userMe = async {
             try {
                 backend.getMe()
@@ -704,10 +794,12 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
                 null
             }
         }
+        val remoteSettings = async { runCatching { backend.settings() }.getOrNull() }
         val saved = async { runCatching { backend.bookmarkDetails() }.getOrDefault(emptyList()) }
         val groups = async { runCatching { backend.bookmarkGroups() }.getOrDefault(emptyList()) }
         val watched = async { runCatching { backend.watchHistory() }.getOrDefault(emptyList()) }
         val ongoing = async { runCatching { backend.watchProgress() }.getOrDefault(emptyList()) }
+        hasTidbBackendSupport = tidbAvailable.await()
         userMe.await()
         syncUserProfile()
         if (store.userId == null) {
@@ -717,9 +809,35 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
             bookmarks = emptyList()
             bookmarkDetails = emptyList()
             bookmarkGroups = emptyList()
+            bookmarkGroupOrder = emptyList()
             return@coroutineScope
         }
-        bookmarkDetails = saved.await(); bookmarks = bookmarkDetails.map { it.media }; bookmarkGroups = (groups.await() + bookmarkDetails.flatMap { it.groups }).distinct(); history = watched.await(); progress = ongoing.await()
+        remoteSettings.await()?.let { rawSettings ->
+            val snapshot = parseBackendSettingsJson(rawSettings, themeNames.toSet())
+            snapshot.applicationTheme?.takeIf { snapshot.hasApplicationTheme }?.let {
+                theme = it
+                store.theme = it
+            }
+            snapshot.customPrimary?.let { customPrimary = it; store.customPrimary = it }
+            snapshot.customSecondary?.let { customSecondary = it; store.customSecondary = it }
+            snapshot.customTertiary?.let { customTertiary = it; store.customTertiary = it }
+            snapshot.applicationLanguage?.let { setLanguageLocal(it) }
+            snapshot.defaultSubtitleLanguage?.let {
+                defaultSubtitleLanguage = it
+                store.defaultSubtitleLanguage = it
+            }
+            snapshot.enableAutoplay?.let { enableAutoplay = it; store.enableAutoplay = it }
+            snapshot.enableSkipCredits?.let { enableSkipCredits = it; store.enableSkipCredits = it }
+            snapshot.enableAutoSkipSegments?.let { enableAutoSkipSegments = it; store.enableAutoSkipSegments = it }
+        }
+        val loadedDetails = saved.await()
+        val loadedGroupOrder = groups.await()
+        bookmarkDetails = loadedDetails
+        bookmarks = loadedDetails.map { it.media }
+        bookmarkGroupOrder = loadedGroupOrder
+        bookmarkGroups = mergeAndOrderBookmarkGroups(loadedGroupOrder, loadedDetails)
+        history = watched.await()
+        progress = ongoing.await()
         library = (bookmarks.map { LibraryItem(it) } + history + progress)
             .associateBy { "${it.media.id}:${it.season ?: -1}:${it.episode ?: -1}" }.values.toList()
     }
@@ -740,10 +858,10 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         searchLoading = true
         searchJob = scope.launch {
             try {
-                val initial = backend.search(term)
+                val initial = rankSearchResults(term, backend.search(term))
                 if (generation != searchGeneration) return@launch
                 results = initial; searchLoading = false
-                val enriched = backend.enrichSearch(initial)
+                val enriched = rankSearchResults(term, backend.enrichSearch(initial))
                 if (generation == searchGeneration) results = enriched
             }
             catch (e: CancellationException) { throw e }
@@ -779,6 +897,55 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
                 refreshUserData()
             } finally { savingBookmarks.remove(item.id) }
         }
+    }
+    fun renameBookmarkGroup(oldGroup: String, newGroup: String) {
+        if (store.userId == null) { openLogin(); return }
+        val (changed, nextOrder) = computeBookmarkGroupRename(bookmarkDetails, bookmarkGroupOrder, oldGroup, newGroup)
+        if (changed.isEmpty()) return
+        runTask {
+            changed.forEach { entry ->
+                backend.saveBookmarkDetails(entry.media, entry.groups, entry.favoriteEpisodes)
+            }
+            if (nextOrder != bookmarkGroupOrder) {
+                backend.saveGroupOrder(nextOrder)
+            }
+            refreshUserData()
+        }
+    }
+    fun deleteBookmarkGroup(targetGroup: String) {
+        if (store.userId == null) { openLogin(); return }
+        val (changed, nextOrder) = computeBookmarkGroupDelete(bookmarkDetails, bookmarkGroupOrder, targetGroup)
+        if (changed.isEmpty() && targetGroup !in bookmarkGroupOrder) return
+        runTask {
+            changed.forEach { entry ->
+                backend.saveBookmarkDetails(entry.media, entry.groups, entry.favoriteEpisodes)
+            }
+            if (nextOrder != bookmarkGroupOrder) {
+                backend.saveGroupOrder(nextOrder)
+            }
+            refreshUserData()
+        }
+    }
+    fun reorderBookmarkGroups(newOrder: List<String>) {
+        if (store.userId == null) { openLogin(); return }
+        val clean = newOrder.filter { it.isNotBlank() }.distinct()
+        bookmarkGroupOrder = clean
+        bookmarkGroups = mergeAndOrderBookmarkGroups(clean, bookmarkDetails)
+        runTask {
+            backend.saveGroupOrder(clean)
+            refreshUserData()
+        }
+    }
+    suspend fun submitSkipSegment(
+        item: Media,
+        target: Episode?,
+        segmentType: String,
+        startSec: Double?,
+        endSec: Double?
+    ): Result<Unit> = runCatching {
+        backend.submitSkipSegment(item, target, segmentType, startSec, endSec)
+        skipSegmentsKey = null
+        loadSkipSegments(item, target)
     }
     fun bookmarkCollection(items: List<Media>, group: String) {
         if (busy) return
@@ -875,86 +1042,225 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         private set
     var subtitleBackgroundBlurEnabled by mutableStateOf(store.subtitleBackgroundBlurEnabled)
         private set
+    var subtitleBackgroundBlur by mutableIntStateOf(store.subtitleBackgroundBlur)
+        private set
     var subtitleFontStyle by mutableStateOf(store.subtitleFontStyle)
+        private set
+    var subtitleBorderThickness by mutableFloatStateOf(store.subtitleBorderThickness)
         private set
     var subtitleBold by mutableStateOf(store.subtitleBold)
         private set
     var subtitleVerticalPosition by mutableIntStateOf(store.subtitleVerticalPosition)
         private set
 
+    var secondarySubtitleFontSize by mutableIntStateOf(store.secondarySubtitleFontSize)
+        private set
+    var secondarySubtitleColor by mutableStateOf(store.secondarySubtitleColor)
+        private set
+    var secondarySubtitleBackgroundOpacity by mutableIntStateOf(store.secondarySubtitleBackgroundOpacity)
+        private set
+    var secondarySubtitleBackgroundBlurEnabled by mutableStateOf(store.secondarySubtitleBackgroundBlurEnabled)
+        private set
+    var secondarySubtitleBackgroundBlur by mutableIntStateOf(store.secondarySubtitleBackgroundBlur)
+        private set
+    var secondarySubtitleFontStyle by mutableStateOf(store.secondarySubtitleFontStyle)
+        private set
+    var secondarySubtitleBorderThickness by mutableFloatStateOf(store.secondarySubtitleBorderThickness)
+        private set
+    var secondarySubtitleBold by mutableStateOf(store.secondarySubtitleBold)
+        private set
+    var secondarySubtitleVerticalPosition by mutableIntStateOf(store.secondarySubtitleVerticalPosition)
+        private set
+
+    var defaultSubtitleLanguage by mutableStateOf(store.defaultSubtitleLanguage)
+        private set
+    var lastSubtitleLanguage by mutableStateOf(store.lastSubtitleLanguage)
+        private set
+    var audioOutputMode by mutableStateOf(AudioOutputMode.fromWire(store.audioOutputMode))
+        private set
+
+    fun updateAudioOutputMode(mode: AudioOutputMode) {
+        audioOutputMode = mode
+        store.audioOutputMode = mode.wireValue
+        player.setAudioMode(mode)
+    }
+
+    fun updateDefaultSubtitleLanguage(lang: String?) {
+        val clean = lang?.trim()?.takeIf { it.isNotBlank() }
+        defaultSubtitleLanguage = clean
+        store.defaultSubtitleLanguage = clean
+        scheduleSettingsSync()
+    }
+
+    fun rememberLastSubtitleLanguage(lang: String?) {
+        val clean = lang?.trim()?.takeIf { it.isNotBlank() && it != "und" } ?: return
+        lastSubtitleLanguage = clean
+        store.lastSubtitleLanguage = clean
+    }
+
     fun toggleAutoplay() {
         enableAutoplay = !enableAutoplay
         store.enableAutoplay = enableAutoplay
+        scheduleSettingsSync()
     }
 
     fun toggleSkipCredits() {
         enableSkipCredits = !enableSkipCredits
         store.enableSkipCredits = enableSkipCredits
+        scheduleSettingsSync()
     }
 
     fun toggleAutoSkipSegments() {
         enableAutoSkipSegments = !enableAutoSkipSegments
         store.enableAutoSkipSegments = enableAutoSkipSegments
+        scheduleSettingsSync()
     }
 
-    fun updateSubtitleFontSize(size: Int) {
-        subtitleFontSize = size.coerceIn(1, 200)
-        store.subtitleFontSize = subtitleFontSize
-        player.command("set", "sub-font-size", (55.0 * subtitleFontSize / 100).toString())
+    fun updateSubtitleFontSize(size: Int, secondary: Boolean = false) {
+        val clamped = size.coerceIn(1, 200)
+        if (secondary) {
+            secondarySubtitleFontSize = clamped
+            store.secondarySubtitleFontSize = clamped
+        } else {
+            subtitleFontSize = clamped
+            store.subtitleFontSize = clamped
+        }
+        applySubtitleStyling()
     }
 
-    fun updateSubtitleColor(color: String) {
-        subtitleColor = color
-        store.subtitleColor = color
-        player.command("set", "sub-color", color)
+    fun updateSubtitleColor(color: String, secondary: Boolean = false) {
+        if (secondary) {
+            secondarySubtitleColor = color
+            store.secondarySubtitleColor = color
+        } else {
+            subtitleColor = color
+            store.subtitleColor = color
+        }
+        applySubtitleStyling()
     }
 
-    fun updateSubtitleBackgroundOpacity(opacity: Int) {
-        subtitleBackgroundOpacity = opacity.coerceIn(0, 100)
-        store.subtitleBackgroundOpacity = subtitleBackgroundOpacity
-        player.command("set", "sub-back-color", "0/0/0/${subtitleBackgroundOpacity / 100.0}")
+    fun updateSubtitleBackgroundOpacity(opacity: Int, secondary: Boolean = false) {
+        val clamped = opacity.coerceIn(0, 100)
+        if (secondary) {
+            secondarySubtitleBackgroundOpacity = clamped
+            store.secondarySubtitleBackgroundOpacity = clamped
+        } else {
+            subtitleBackgroundOpacity = clamped
+            store.subtitleBackgroundOpacity = clamped
+        }
+        applySubtitleStyling()
     }
 
-    fun applySubtitleStyling() {
-        player.command("set", "sub-font-size", (55.0 * subtitleFontSize.coerceIn(1, 200) / 100).toString())
-        player.command("set", "sub-color", subtitleColor)
-        player.command("set", "sub-border-style", "background-box")
-        player.command("set", "sub-shadow-offset", "4")
-        player.command("set", "sub-back-color", "0/0/0/${subtitleBackgroundOpacity.coerceIn(0, 100) / 100.0}")
-        player.command("set", "sub-bold", if (subtitleBold) "yes" else "no")
-        player.command("set", "sub-pos", subtitlePosition(false, subtitleVerticalPosition).toString())
+    fun applySubtitleStyling(controlsShown: Boolean = false) {
+        buildMpvSubtitleStyleProperties(
+            fontSize = subtitleFontSize,
+            color = subtitleColor,
+            backgroundOpacity = subtitleBackgroundOpacity,
+            backgroundBlurEnabled = subtitleBackgroundBlurEnabled,
+            backgroundBlur = subtitleBackgroundBlur,
+            fontStyle = subtitleFontStyle,
+            borderThickness = subtitleBorderThickness,
+            bold = subtitleBold,
+            verticalPosition = subtitleVerticalPosition,
+            secondaryVerticalPosition = secondarySubtitleVerticalPosition,
+            controlsShown = controlsShown
+        ).forEach { (key, value) ->
+            player.command("set", key, value)
+        }
     }
 
-    fun toggleSubtitleBackgroundBlur() {
-        subtitleBackgroundBlurEnabled = !subtitleBackgroundBlurEnabled
-        store.subtitleBackgroundBlurEnabled = subtitleBackgroundBlurEnabled
+    fun toggleSubtitleBackgroundBlur(secondary: Boolean = false) {
+        if (secondary) {
+            secondarySubtitleBackgroundBlurEnabled = !secondarySubtitleBackgroundBlurEnabled
+            store.secondarySubtitleBackgroundBlurEnabled = secondarySubtitleBackgroundBlurEnabled
+        } else {
+            subtitleBackgroundBlurEnabled = !subtitleBackgroundBlurEnabled
+            store.subtitleBackgroundBlurEnabled = subtitleBackgroundBlurEnabled
+        }
+        applySubtitleStyling()
     }
 
-    fun updateSubtitleFontStyle(style: String) {
-        subtitleFontStyle = style
-        store.subtitleFontStyle = style
+    fun updateSubtitleBackgroundBlur(blur: Int, secondary: Boolean = false) {
+        val clamped = blur.coerceIn(0, 100)
+        if (secondary) {
+            secondarySubtitleBackgroundBlur = clamped
+            store.secondarySubtitleBackgroundBlur = clamped
+        } else {
+            subtitleBackgroundBlur = clamped
+            store.subtitleBackgroundBlur = clamped
+        }
+        applySubtitleStyling()
     }
 
-    fun toggleSubtitleBold() {
-        subtitleBold = !subtitleBold
-        store.subtitleBold = subtitleBold
-        player.command("set", "sub-bold", if (subtitleBold) "yes" else "no")
+    fun updateSubtitleFontStyle(style: String, secondary: Boolean = false) {
+        if (secondary) {
+            secondarySubtitleFontStyle = style
+            store.secondarySubtitleFontStyle = style
+        } else {
+            subtitleFontStyle = style
+            store.subtitleFontStyle = style
+        }
+        applySubtitleStyling()
     }
 
-    fun updateSubtitleVerticalPosition(pos: Int) {
-        subtitleVerticalPosition = if (pos == 3) 3 else 1
-        store.subtitleVerticalPosition = subtitleVerticalPosition
+    fun updateSubtitleBorderThickness(thickness: Float, secondary: Boolean = false) {
+        val clamped = (kotlin.math.round(thickness * 10f) / 10f).coerceIn(0f, 10f)
+        if (secondary) {
+            secondarySubtitleBorderThickness = clamped
+            store.secondarySubtitleBorderThickness = clamped
+        } else {
+            subtitleBorderThickness = clamped
+            store.subtitleBorderThickness = clamped
+        }
+        applySubtitleStyling()
     }
 
-    fun resetSubtitleStyling() {
-        updateSubtitleFontSize(100)
-        updateSubtitleColor("#FFFFFF")
-        updateSubtitleBackgroundOpacity(50)
-        subtitleBackgroundBlurEnabled = false
-        store.subtitleBackgroundBlurEnabled = false
-        updateSubtitleFontStyle("default")
-        if (subtitleBold) toggleSubtitleBold()
-        updateSubtitleVerticalPosition(1)
+    fun toggleSubtitleBold(secondary: Boolean = false) {
+        if (secondary) {
+            secondarySubtitleBold = !secondarySubtitleBold
+            store.secondarySubtitleBold = secondarySubtitleBold
+        } else {
+            subtitleBold = !subtitleBold
+            store.subtitleBold = subtitleBold
+        }
+        applySubtitleStyling()
+    }
+
+    fun updateSubtitleVerticalPosition(pos: Int, secondary: Boolean = false) {
+        val normalized = if (pos == 3) 3 else 1
+        if (secondary) {
+            secondarySubtitleVerticalPosition = normalized
+            store.secondarySubtitleVerticalPosition = normalized
+        } else {
+            subtitleVerticalPosition = normalized
+            store.subtitleVerticalPosition = normalized
+        }
+        applySubtitleStyling()
+    }
+
+    fun resetSubtitleStyling(secondary: Boolean = false) {
+        if (secondary) {
+            secondarySubtitleFontSize = 100; store.secondarySubtitleFontSize = 100
+            secondarySubtitleColor = "#FFFFFF"; store.secondarySubtitleColor = "#FFFFFF"
+            secondarySubtitleBackgroundOpacity = 50; store.secondarySubtitleBackgroundOpacity = 50
+            secondarySubtitleBackgroundBlurEnabled = false; store.secondarySubtitleBackgroundBlurEnabled = false
+            secondarySubtitleBackgroundBlur = 50; store.secondarySubtitleBackgroundBlur = 50
+            secondarySubtitleFontStyle = "default"; store.secondarySubtitleFontStyle = "default"
+            secondarySubtitleBorderThickness = 1.0f; store.secondarySubtitleBorderThickness = 1.0f
+            secondarySubtitleBold = false; store.secondarySubtitleBold = false
+            secondarySubtitleVerticalPosition = 1; store.secondarySubtitleVerticalPosition = 1
+        } else {
+            subtitleFontSize = 100; store.subtitleFontSize = 100
+            subtitleColor = "#FFFFFF"; store.subtitleColor = "#FFFFFF"
+            subtitleBackgroundOpacity = 50; store.subtitleBackgroundOpacity = 50
+            subtitleBackgroundBlurEnabled = false; store.subtitleBackgroundBlurEnabled = false
+            subtitleBackgroundBlur = 50; store.subtitleBackgroundBlur = 50
+            subtitleFontStyle = "default"; store.subtitleFontStyle = "default"
+            subtitleBorderThickness = 1.0f; store.subtitleBorderThickness = 1.0f
+            subtitleBold = false; store.subtitleBold = false
+            subtitleVerticalPosition = 1; store.subtitleVerticalPosition = 1
+        }
+        applySubtitleStyling()
     }
 
     fun removeBookmark(item: Media) {
@@ -1083,7 +1389,11 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
     }
     fun installAddon() = runTask { addons.install(addonUrl); installed = addons.list(); addonCatalog = addons.catalog(); addonUrl = "" }
     fun removeAddon(addon: Addon) = runTask { addons.remove(addon.manifestUrl); installed = addons.list(); addonCatalog = addons.catalog() }
-    fun updateTheme(name: String) { theme = name; store.theme = name }
+    fun updateTheme(name: String) {
+        theme = name
+        store.theme = name
+        scheduleSettingsSync()
+    }
     fun updateCustomPart(part: String, name: String) {
         require(name in themeNames && name != "custom")
         when (part) {
@@ -1091,6 +1401,7 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
             "secondary" -> { customSecondary = name; store.customSecondary = name }
             "tertiary" -> { customTertiary = name; store.customTertiary = name }
         }
+        scheduleSettingsSync()
     }
     fun openLogin() {
         if (isLoggedIn) {
@@ -1147,6 +1458,7 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         bookmarks = emptyList()
         bookmarkDetails = emptyList()
         bookmarkGroups = emptyList()
+        bookmarkGroupOrder = emptyList()
         page = "discover"
         refreshDiscover()
     }
@@ -1233,6 +1545,53 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
             else -> "discover"
         }
     }
+}
+
+internal fun buildMpvSubtitleStyleProperties(
+    fontSize: Int,
+    color: String,
+    backgroundOpacity: Int,
+    backgroundBlurEnabled: Boolean,
+    backgroundBlur: Int,
+    fontStyle: String,
+    borderThickness: Float,
+    bold: Boolean,
+    verticalPosition: Int,
+    secondaryVerticalPosition: Int = verticalPosition,
+    controlsShown: Boolean = false
+): Map<String, String> {
+    val opacity = backgroundOpacity.coerceIn(0, 100) / 100.0
+    val backColor = String.format(Locale.US, "0/0/0/%.2f", opacity)
+    val blurValue = if (backgroundBlurEnabled) {
+        String.format(Locale.US, "%.2f", backgroundBlur.coerceIn(0, 100) / 25.0)
+    } else "0"
+    val (borderStyle, borderSize, borderColor, shadowOffset, shadowColor) = when (fontStyle) {
+        "Border" -> listOf(
+            "outline-and-shadow",
+            String.format(Locale.US, "%.2f", borderThickness.coerceIn(0f, 10f) * 1.5f + 0.5f),
+            "0/0/0/1",
+            if (backgroundOpacity > 0) "2" else "0",
+            "0/0/0/0.75"
+        )
+        "dropShadow" -> listOf("outline-and-shadow", "1", "0/0/0/0.6", "4", "0/0/0/0.9")
+        "raised" -> listOf("outline-and-shadow", "1.2", "0/0/0/0.85", "3", "0/0/0/0.9")
+        "depressed" -> listOf("outline-and-shadow", "1.5", "1/1/1/0.25", "2", "0/0/0/0.9")
+        else -> listOf("background-box", "2", "0/0/0/0.85", "0", "0/0/0/0.6")
+    }
+    return linkedMapOf(
+        "sub-font-size" to String.format(Locale.US, "%.1f", 55.0 * fontSize.coerceIn(1, 200) / 100.0),
+        "sub-color" to color,
+        "sub-bold" to if (bold) "yes" else "no",
+        "sub-blur" to blurValue,
+        "sub-border-style" to borderStyle,
+        "sub-border-size" to borderSize,
+        "sub-border-color" to borderColor,
+        "sub-shadow-offset" to shadowOffset,
+        "sub-shadow-color" to shadowColor,
+        "sub-back-color" to backColor,
+        "sub-pos" to subtitlePosition(controlsShown, verticalPosition).toString(),
+        "secondary-sub-pos" to secondarySubtitlePosition(controlsShown, secondaryVerticalPosition).toString()
+    )
 }
 
 internal fun getFriendlyLoginError(error: Throwable?, i18n: I18n): String {

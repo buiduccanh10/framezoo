@@ -1,6 +1,10 @@
 import { ofetch } from "ofetch";
 
-import { OAuthTokenResponse, SessionResponse } from "@/backend/accounts/auth";
+import {
+  OAuthTokenResponse,
+  SessionResponse,
+  getAppVersionHeaders,
+} from "@/backend/accounts/auth";
 import { UserResponse } from "@/backend/accounts/user";
 
 export interface ChallengeTokenResponse {
@@ -73,6 +77,7 @@ export async function registerAccount(
   return ofetch<RegisterResponse>("/auth/register/complete", {
     method: "POST",
     credentials: "include",
+    headers: getAppVersionHeaders(),
     body: {
       namespace: "desktop",
       ...data,

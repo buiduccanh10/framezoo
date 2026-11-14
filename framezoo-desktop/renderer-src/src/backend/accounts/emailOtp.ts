@@ -5,6 +5,7 @@ import { AccountWithToken } from "@/stores/auth";
 import {
   OAuthTokenResponse,
   SessionResponse,
+  getAppVersionHeaders,
   getAuthHeaders,
   withAuthRetry,
 } from "./auth";
@@ -58,6 +59,7 @@ export async function completePasswordReset(
   return ofetch<ResetPasswordResponse>("/auth/password/reset/complete", {
     method: "POST",
     credentials: "include",
+    headers: getAppVersionHeaders(),
     body: { actionToken, newPublicKey, device },
     baseURL: url,
   });

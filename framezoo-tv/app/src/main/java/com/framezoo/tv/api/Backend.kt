@@ -6,6 +6,7 @@ import com.framezoo.tv.model.*
 import com.framezoo.tv.storage.SecureStore
 import android.content.ContentResolver
 import android.net.Uri
+import android.os.Build
 import android.provider.OpenableColumns
 
 import kotlinx.coroutines.Dispatchers
@@ -14,7 +15,9 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.sync.withPermit
 import org.json.JSONArray
 import org.json.JSONObject
@@ -29,16 +32,65 @@ internal fun tmdbImageUrl(path: String?, size: String = "w500"): String? =
         if (it.startsWith("http")) it else "https://image.tmdb.org/t/p/$size$it"
     }
 
+internal class HttpException(
+    val statusCode: Int,
+    val responseBody: String,
+    message: String
+) : IllegalStateException(message)
+
 class Backend(private val store: SecureStore) {
     private val qualityCache = java.util.concurrent.ConcurrentHashMap<String, String>()
     private val libraryArtwork = java.util.concurrent.ConcurrentHashMap<String, Media>()
     private val libraryArtworkRequests = Semaphore(6)
     private val qualityRequests = Semaphore(6)
+    private val guestTokenMutex = Mutex()
     private fun encode(value: String) = URLEncoder.encode(value, "UTF-8")
+    private fun userAgentHeader() = "Framezoo-TV/${BuildConfig.VERSION_NAME} (Android TV ${Build.VERSION.RELEASE})"
+    private fun isPublicGuestPath(path: String): Boolean {
+        val clean = path.substringBefore('?')
+        return clean == "/api/tmdb" ||
+            clean.startsWith("/api/tmdb/") ||
+            clean == "/api/skip-segments" ||
+            clean == "/api/subtitle-align" ||
+            clean.startsWith("/addon/subtitles/")
+    }
     private fun secureUrl(value: String?): String? = value?.takeIf {
         try { val uri = URI(it); uri.scheme == "https" && !uri.host.isNullOrBlank() && uri.userInfo == null } catch (_: Exception) { false }
     }
     private fun image(path: String?, size: String = "w500") = tmdbImageUrl(path, size)
+
+    private suspend fun ensureGuestToken(): String? {
+        val now = System.currentTimeMillis()
+        store.guestToken?.takeIf { it.isNotBlank() && store.guestTokenExpiresAt - now > 30_000L }?.let { return it }
+        return guestTokenMutex.withLock {
+            val refreshedNow = System.currentTimeMillis()
+            store.guestToken?.takeIf { it.isNotBlank() && store.guestTokenExpiresAt - refreshedNow > 30_000L }?.let { return@withLock it }
+            try {
+                val payload = JSONObject().apply {
+                    store.guestId?.takeIf { it.isNotBlank() }?.let { put("guestId", it) }
+                }
+                val reply = request(
+                    path = "/api/auth/guest",
+                    method = "POST",
+                    body = payload,
+                    auth = false,
+                    retry = false,
+                    skipGuestToken = true
+                ) as? JSONObject ?: return@withLock null
+                val token = reply.optString("access_token").ifBlank { null } ?: return@withLock null
+                val gid = reply.optString("guest_id", reply.optString("guestId")).ifBlank { null }
+                val expiresInSec = reply.optLong("expires_in", 1800L).coerceAtLeast(60L)
+                if (gid != null) store.guestId = gid
+                store.guestToken = token
+                store.guestTokenExpiresAt = System.currentTimeMillis() + expiresInSec * 1000L
+                token
+            } catch (e: CancellationException) {
+                throw e
+            } catch (_: Exception) {
+                null
+            }
+        }
+    }
 
     private suspend fun request(
         path: String,
@@ -46,34 +98,48 @@ class Backend(private val store: SecureStore) {
         body: JSONObject? = null,
         auth: Boolean = false,
         retry: Boolean = true,
-        headers: Map<String, String> = emptyMap()
+        headers: Map<String, String> = emptyMap(),
+        rawBody: String? = null,
+        skipGuestToken: Boolean = false
     ): Any = withContext(Dispatchers.IO) {
         val base = store.backendUrl.trimEnd('/')
         require(base.startsWith("https://") || (BuildConfig.DEBUG && base.startsWith("http://"))) { "Backend URL phải dùng HTTPS" }
+        val guestBearer = if (!auth && !skipGuestToken && store.accessToken.isNullOrBlank() && isPublicGuestPath(path)) {
+            ensureGuestToken()
+        } else {
+            null
+        }
+        val payloadText = rawBody ?: body?.toString()
         val connection = (URL(base + path).openConnection() as HttpURLConnection).apply {
             requestMethod = method
             connectTimeout = 15_000
             readTimeout = 20_000
             setRequestProperty("Accept", "application/json")
+            setRequestProperty("X-App-Version", BuildConfig.VERSION_NAME)
+            setRequestProperty("User-Agent", userAgentHeader())
             headers.forEach { (k, v) -> setRequestProperty(k, v) }
-            if (auth) store.accessToken?.let { setRequestProperty("Authorization", "Bearer $it") }
-            if (body != null) {
+            if (auth) {
+                store.accessToken?.let { setRequestProperty("Authorization", "Bearer $it") }
+            } else if (!guestBearer.isNullOrBlank()) {
+                setRequestProperty("Authorization", "Bearer $guestBearer")
+            }
+            if (payloadText != null) {
                 doOutput = true
                 setRequestProperty("Content-Type", "application/json")
-                outputStream.use { it.write(body.toString().toByteArray(Charsets.UTF_8)) }
+                outputStream.use { it.write(payloadText.toByteArray(Charsets.UTF_8)) }
             }
         }
         try {
             val status = connection.responseCode
             if (status == 401 && auth && retry) {
                 if (refresh()) {
-                    return@withContext request(path, method, body, auth, false, headers)
+                    return@withContext request(path, method, body, auth, false, headers, rawBody)
                 } else {
                     store.clearSession()
                 }
             }
             val text = (if (status in 200..299) connection.inputStream else connection.errorStream)?.bufferedReader()?.use { it.readText() }.orEmpty()
-            if (status !in 200..299) throw IllegalStateException("HTTP $status: ${text.take(180)}")
+            if (status !in 200..299) throw HttpException(status, text, "HTTP $status: ${text.take(180)}")
             when {
                 text.trimStart().startsWith("[") -> JSONArray(text)
                 text.trimStart().startsWith("{") -> JSONObject(text)
@@ -457,6 +523,7 @@ class Backend(private val store: SecureStore) {
                     if (type == "movie") region.optJSONArray("release_dates")?.optJSONObject(0)?.optString("certification") else region.optString("rating")
                 }
             }.orEmpty(),
+            originalTitle = raw.optString("original_title", raw.optString("original_name")),
         )
     }
 
@@ -744,9 +811,17 @@ class Backend(private val store: SecureStore) {
     suspend fun bookmarks(): List<Media> = bookmarkDetails().map { it.media }
     suspend fun bookmarkGroups(): List<String> {
         val id = store.userId ?: return emptyList()
-        val data = request("/users/${encode(id)}/group-order", auth = true) as JSONObject
-        val groups = data.optJSONArray("groupOrder") ?: return emptyList()
-        return (0 until groups.length()).map(groups::optString).filter(String::isNotBlank)
+        return try {
+            val data = request("/users/${encode(id)}/group-order", auth = true) as JSONObject
+            val groups = data.optJSONArray("groupOrder") ?: return emptyList()
+            (0 until groups.length()).map(groups::optString).filter(String::isNotBlank)
+        } catch (e: HttpException) {
+            if (e.statusCode == 404) emptyList() else throw e
+        }
+    }
+    suspend fun saveGroupOrder(groups: List<String>) {
+        val id = store.userId ?: return
+        request("/users/${encode(id)}/group-order", "PUT", rawBody = JSONArray(groups).toString(), auth = true)
     }
     suspend fun saveBookmarkDetails(item: Media, groups: List<String>, favorites: List<String>) {
         val id = requireNotNull(store.userId) { "Đăng nhập để lưu phim" }
@@ -899,6 +974,61 @@ class Backend(private val store: SecureStore) {
             .put("watchedAt", Instant.now().toString()), auth = true)
     }
 
+    suspend fun metaTidbAvailability(): Boolean = try {
+        (request("/meta") as? JSONObject)?.optBoolean("hasTIDBSubmission", false) == true
+    } catch (e: CancellationException) {
+        throw e
+    } catch (_: Exception) {
+        false
+    }
+
+    suspend fun submitSkipSegment(
+        item: Media,
+        episode: Episode?,
+        segmentType: String,
+        startSec: Double?,
+        endSec: Double?
+    ) = withContext(Dispatchers.IO) {
+        val payload = buildTidbSubmissionPayload(item, episode, segmentType, startSec, endSec)
+        val tidbKey = store.tidbKey?.trim()?.takeIf { it.isNotBlank() }
+        try {
+            request("/api/skip-segments/submit", "POST", payload)
+            return@withContext
+        } catch (e: HttpException) {
+            if (!shouldFallbackToClientTidbKey(e.statusCode, tidbKey)) {
+                val parsed = runCatching { JSONObject(e.responseBody) }.getOrNull()
+                val msg = parsed?.optString("statusMessage")?.ifBlank { null }
+                    ?: parsed?.optString("message")?.ifBlank { null }
+                    ?: (e.message ?: "Failed to submit segment")
+                val details = parsed?.optJSONObject("data")?.optString("details")?.ifBlank { null }
+                throw TidbSubmissionException(msg, e.statusCode, details)
+            }
+        }
+        val key = tidbKey ?: throw TidbSubmissionException("TIDB API key is not set")
+        val connection = (URL("https://api.theintrodb.org/v1/submit").openConnection() as HttpURLConnection).apply {
+            requestMethod = "POST"
+            connectTimeout = 15_000
+            readTimeout = 20_000
+            doOutput = true
+            setRequestProperty("Content-Type", "application/json")
+            setRequestProperty("Authorization", "Bearer $key")
+            outputStream.use { it.write(payload.toString().toByteArray(Charsets.UTF_8)) }
+        }
+        try {
+            val status = connection.responseCode
+            val text = (if (status in 200..299) connection.inputStream else connection.errorStream)
+                ?.bufferedReader()?.use { it.readText() }.orEmpty()
+            if (status !in 200..299) {
+                val parsed = runCatching { JSONObject(text) }.getOrNull()
+                val err = parsed?.optString("error")?.ifBlank { null } ?: "HTTP $status"
+                val details = parsed?.optString("details")?.ifBlank { null }
+                throw TidbSubmissionException(err, status, details)
+            }
+        } finally {
+            connection.disconnect()
+        }
+    }
+
     suspend fun settings(): JSONObject {
         val id = store.userId ?: return JSONObject()
         return request("/users/${encode(id)}/settings", auth = true) as JSONObject
@@ -923,11 +1053,13 @@ class Backend(private val store: SecureStore) {
             require(isEmail || isPhone) { "Thông tin liên hệ phải là email hoặc số điện thoại hợp lệ" }
         }
         require(attachments.all { it.scheme == "content" }) { "File đính kèm không hợp lệ" }
-        val token = store.accessToken ?: (request("/api/auth/guest", "POST", JSONObject()) as JSONObject).optString("access_token").ifBlank { null }
+        val token = store.accessToken ?: ensureGuestToken()
         val boundary = "framezoo-${java.util.UUID.randomUUID()}"
         val connection = (URL(store.backendUrl.trimEnd('/') + "/api/feedback").openConnection() as HttpURLConnection).apply {
             requestMethod = "POST"; connectTimeout = 15_000; readTimeout = 60_000; doOutput = true
             setChunkedStreamingMode(8192); setRequestProperty("Content-Type", "multipart/form-data; boundary=$boundary")
+            setRequestProperty("X-App-Version", BuildConfig.VERSION_NAME)
+            setRequestProperty("User-Agent", userAgentHeader())
             token?.let { setRequestProperty("Authorization", "Bearer $it") }
         }
         try {

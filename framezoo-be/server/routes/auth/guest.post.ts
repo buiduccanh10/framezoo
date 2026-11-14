@@ -1,7 +1,3 @@
-import { useAuth } from '~/utils/auth';
+import { issueGuestTokenForEvent } from '~/utils/guestTracking';
 
-export default defineEventHandler(async () => {
-  const auth = useAuth();
-  const tokens = auth.makeGuestToken();
-  return auth.toGuestTokenResponse(tokens);
-});
+export default defineEventHandler(event => issueGuestTokenForEvent(event));

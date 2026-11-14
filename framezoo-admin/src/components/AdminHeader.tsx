@@ -1,4 +1,5 @@
 import {
+  Activity,
   HardDrive,
   LockKeyhole,
   LogOut,
@@ -10,12 +11,13 @@ import {
 } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 
-export type AdminTab = "users" | "feedbacks" | "backups";
+export type AdminTab = "users" | "guests" | "feedbacks" | "backups";
 
 interface AdminShellProps {
   activeTab: AdminTab;
   pendingFeedbacks: number;
   totalUsers: number;
+  activeGuests24h: number;
   onTabChange: (tab: AdminTab) => void;
   onLogout: () => void;
   children: ReactNode;
@@ -25,6 +27,10 @@ const SECTION_META: Record<AdminTab, { title: string; subtitle: string }> = {
   users: {
     title: "Quản lý người dùng",
     subtitle: "Tài khoản, phiên bản ứng dụng & phiên hoạt động",
+  },
+  guests: {
+    title: "Người dùng khách",
+    subtitle: "Thiết bị chưa đăng nhập hoạt động 6h, 24h, 7 ngày & 30 ngày",
   },
   feedbacks: {
     title: "Phản hồi người dùng",
@@ -40,6 +46,7 @@ export function AdminShell({
   activeTab,
   pendingFeedbacks,
   totalUsers,
+  activeGuests24h,
   onTabChange,
   onLogout,
   children,
@@ -61,6 +68,13 @@ export function AdminShell({
       label: "Người dùng",
       icon: Users,
       count: totalUsers,
+      badgeTone: "neutral",
+    },
+    {
+      id: "guests" as const,
+      label: "Khách (24h)",
+      icon: Activity,
+      count: activeGuests24h,
       badgeTone: "neutral",
     },
     {

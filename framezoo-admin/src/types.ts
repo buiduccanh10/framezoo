@@ -103,3 +103,33 @@ export interface ListPagination {
   total: number;
   totalPages: number;
 }
+
+export type GuestWindow = "6h" | "24h" | "7d" | "30d";
+export type GuestPlatformFilter = "all" | "Desktop" | "Mobile" | "TV" | "Web";
+
+export interface GuestItem {
+  id: string;
+  app_version: string | null;
+  platform: string;
+  request_count: number;
+  first_seen_at: string;
+  last_seen_at: string;
+}
+
+export interface GuestStats {
+  counts: {
+    h6: number;
+    h24: number;
+    d7: number;
+    d30: number;
+  };
+  platforms: Array<{ platform: string; count: number }>;
+  versions: Array<{ version: string | null; count: number }>;
+}
+
+export interface GuestListResponse {
+  window: GuestWindow;
+  items: GuestItem[];
+  pagination: ListPagination;
+  stats: GuestStats;
+}

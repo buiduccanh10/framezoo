@@ -1,5 +1,6 @@
 import { createHash, randomBytes } from 'node:crypto';
 import { H3Event, createError, getCookie, getHeader } from 'h3';
+import { Prisma } from '~/utils/prisma';
 
 const ADMIN_COOKIE = 'admin_session';
 const ADMIN_SESSION_TTL = 8 * 60 * 60;
@@ -79,24 +80,19 @@ export const requireAdmin = async (event: H3Event) => {
   }
 };
 
-export const summarizeClientPlatform = (userAgent: string): string => {
-  const ua = userAgent.toLowerCase();
-  if (!ua) return 'Không rõ thiết bị';
-
-  let os = 'Khác';
-  if (ua.includes('iphone') || ua.includes('ipad') || ua.includes('ios')) os = 'iOS';
-  else if (ua.includes('android')) os = 'Android';
-  else if (ua.includes('mac os') || ua.includes('macintosh')) os = 'macOS';
-  else if (ua.includes('windows')) os = 'Windows';
-  else if (ua.includes('linux')) os = 'Linux';
-
-  let client = 'Web';
-  if (ua.includes('electron') || ua.includes('framezoo-desktop')) client = 'Desktop';
-  else if (ua.includes('expo') || ua.includes('reactnative') || ua.includes('framezoo-mobile'))
-    client = 'Mobile';
-  else if (ua.includes('tv') || ua.includes('tizen') || ua.includes('webos')) client = 'TV';
-
-  return `${os} · ${client}`;
+export const getSemverOrderBySql = (
+  column: 'effective_app_version' | 'app_version',
+  direction: 'ASC' | 'DESC',
+  tieBreaker: Prisma.Sql
+): Prisma.Sql => {
+  const col = Prisma.raw(column);
+  const dir = Prisma.raw(direction);
+  return Prisma.sql`ORDER BY
+    (regexp_match(${col}, '([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?'))[1]::numeric ${dir} NULLS LAST,
+    COALESCE((regexp_match(${col}, '([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?'))[2], '0')::numeric ${dir},
+    COALESCE((regexp_match(${col}, '([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?'))[3], '0')::numeric ${dir},
+    ${col} ${dir} NULLS LAST,
+    ${tieBreaker}`;
 };
 
 export { ADMIN_COOKIE, ADMIN_SESSION_TTL };

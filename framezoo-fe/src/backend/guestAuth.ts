@@ -1,9 +1,25 @@
+const GUEST_ID_KEY = "fz_guest_id";
 const GUEST_TOKEN_KEY = "fz_guest_token";
 const GUEST_TOKEN_EXP_KEY = "fz_guest_token_exp";
 
+let inMemoryGuestId: string | null = null;
 let inMemoryGuestToken: string | null = null;
 let inMemoryGuestTokenExp = 0;
 let pendingGuestTokenPromise: Promise<string | null> | null = null;
+
+function getStoredGuestId(): string | null {
+  if (inMemoryGuestId) return inMemoryGuestId;
+  try {
+    const storedId = localStorage.getItem(GUEST_ID_KEY);
+    if (storedId) {
+      inMemoryGuestId = storedId;
+      return storedId;
+    }
+  } catch {
+    // Ignore localStorage access issues
+  }
+  return null;
+}
 
 export function getStoredGuestToken(): string | null {
   const now = Date.now();
@@ -43,9 +59,13 @@ export async function ensureGuestToken(
         ? `${baseUrl}/api/auth/guest`
         : "/api/auth/guest";
 
+      const existingGuestId = getStoredGuestId();
       const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(
+          existingGuestId ? { guestId: existingGuestId } : {},
+        ),
       });
 
       if (!response.ok) {
@@ -55,20 +75,27 @@ export async function ensureGuestToken(
       const data = (await response.json()) as {
         access_token?: string;
         expires_in?: number;
+        guest_id?: string;
+        guestId?: string;
       };
 
       if (!data.access_token) return null;
 
       const token = data.access_token;
+      const resolvedGuestId = data.guest_id || data.guestId || existingGuestId;
       const expiresInMs = (data.expires_in ?? 1800) * 1000;
       const expTimestamp = Date.now() + expiresInMs;
 
       inMemoryGuestToken = token;
       inMemoryGuestTokenExp = expTimestamp;
+      if (resolvedGuestId) inMemoryGuestId = resolvedGuestId;
 
       try {
         localStorage.setItem(GUEST_TOKEN_KEY, token);
         localStorage.setItem(GUEST_TOKEN_EXP_KEY, String(expTimestamp));
+        if (resolvedGuestId) {
+          localStorage.setItem(GUEST_ID_KEY, resolvedGuestId);
+        }
       } catch {
         // Ignore localStorage error
       }

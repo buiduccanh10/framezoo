@@ -1,5 +1,6 @@
 import { ofetch } from "ofetch";
 
+import { APP_VERSION } from "@/setup/constants";
 import { useAuthStore } from "@/stores/auth";
 import type { AccountWithToken } from "@/stores/auth";
 
@@ -53,12 +54,19 @@ export function normalizeRefreshToken(
   return oauth.refreshToken || oauth.refresh_token;
 }
 
+export function getAppVersionHeaders(): Record<string, string> {
+  const version = APP_VERSION?.trim();
+  return version && version !== "unknown" ? { "x-app-version": version } : {};
+}
+
 export function getAuthHeaders(token?: string): Record<string, string> {
+  const versionHeaders = getAppVersionHeaders();
   if (!token) {
-    return {};
+    return versionHeaders;
   }
 
   return {
+    ...versionHeaders,
     authorization: `Bearer ${token}`,
   };
 }
@@ -101,6 +109,7 @@ export async function refreshOAuthToken(
   return ofetch<OAuthTokenResponse>("/oauth/token", {
     method: "POST",
     credentials: "include",
+    headers: getAppVersionHeaders(),
     body: {
       grant_type: "refresh_token",
       ...(refreshToken ? { refresh_token: refreshToken } : {}),
@@ -171,6 +180,7 @@ export async function accountLogin(
   return ofetch<LoginResponse>("/auth/login", {
     method: "POST",
     credentials: "include",
+    headers: getAppVersionHeaders(),
     body: {
       id,
       device: deviceName,

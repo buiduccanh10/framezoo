@@ -12,7 +12,6 @@ import {
   Search,
   Sliders,
   Smartphone,
-  Tag,
   Trash2,
   UserRound,
   Users,
@@ -21,8 +20,10 @@ import {
 import { useEffect, useState, type ReactNode } from "react";
 import { ConfirmModal } from "./ConfirmModal";
 import { Pagination } from "./Pagination";
+import { VersionBadge } from "./VersionBadge";
 import { useUserManagement } from "../hooks/useUserManagement";
 import type { adminApi } from "../lib/api";
+import { formatDateTime, shortId } from "../lib/format";
 import type { AdminUserItem, UserSessionItem } from "../types";
 
 interface UserManagementProps {
@@ -726,19 +727,6 @@ function EditUserModal({
   );
 }
 
-function VersionBadge({ version }: { version: string | null }) {
-  if (!version) {
-    return <span className="version-badge is-unknown">Chưa rõ</span>;
-  }
-  const label = version.startsWith("v") ? version : `v${version}`;
-  return (
-    <span className="version-badge">
-      <Tag size={11} aria-hidden="true" />
-      {label}
-    </span>
-  );
-}
-
 function maskEmail(email: string): string {
   const [local, domain] = email.split("@");
   if (!local || !domain) return email;
@@ -746,23 +734,10 @@ function maskEmail(email: string): string {
   return `${visible}***@${domain}`;
 }
 
-function shortId(id: string): string {
-  if (id.length <= 14) return id;
-  return `${id.slice(0, 6)}…${id.slice(-4)}`;
-}
-
 function avatarColor(value: unknown) {
   return typeof value === "string" && /^#[\da-f]{6}$/i.test(value)
     ? value
     : "var(--color-accent)";
-}
-
-function formatDateTime(value: string | null) {
-  if (!value) return "Chưa hoạt động";
-  const date = new Date(value);
-  return Number.isNaN(date.getTime())
-    ? "Chưa hoạt động"
-    : date.toLocaleString("vi-VN");
 }
 
 function LoadingState({

@@ -198,3 +198,17 @@ model feedbacks {
   @@index([contact_hash], map: "feedbacks_contact_hash_idx")
 }
 
+model guests {
+  id            String   @id @db.Uuid
+  app_version   String?  @db.VarChar(64)
+  platform      String?  @db.VarChar(64)
+  user_agent    String?  @db.VarChar(1024)
+  request_count Int      @default(1)
+  first_seen_at DateTime @default(now()) @db.Timestamptz(0)
+  last_seen_at  DateTime @default(now()) @db.Timestamptz(0)
+
+  @@index([last_seen_at(sort: Desc)], map: "guests_last_seen_at_idx")
+  @@index([first_seen_at(sort: Desc)], map: "guests_first_seen_at_idx")
+  @@index([app_version], map: "guests_app_version_idx")
+}
+

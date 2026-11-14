@@ -1,6 +1,6 @@
 import { defineEventHandler, getQuery } from 'h3';
 import { prisma, Prisma } from '~/utils/prisma';
-import { requireAdmin } from '~/utils/admin';
+import { getSemverOrderBySql, requireAdmin } from '~/utils/admin';
 import { decryptPiiOrNull, hashEmailIndex } from '~/utils/piiCrypto';
 
 interface AdminUserRow {
@@ -34,19 +34,9 @@ const getOrderBySql = (sort: string): Prisma.Sql => {
     case 'nickname_desc':
       return Prisma.sql`ORDER BY LOWER(nickname) DESC, created_at DESC`;
     case 'version_desc':
-      return Prisma.sql`ORDER BY
-        (regexp_match(effective_app_version, '([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?'))[1]::numeric DESC NULLS LAST,
-        COALESCE((regexp_match(effective_app_version, '([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?'))[2], '0')::numeric DESC,
-        COALESCE((regexp_match(effective_app_version, '([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?'))[3], '0')::numeric DESC,
-        effective_app_version DESC NULLS LAST,
-        created_at DESC`;
+      return getSemverOrderBySql('effective_app_version', 'DESC', Prisma.sql`created_at DESC`);
     case 'version_asc':
-      return Prisma.sql`ORDER BY
-        (regexp_match(effective_app_version, '([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?'))[1]::numeric ASC NULLS LAST,
-        COALESCE((regexp_match(effective_app_version, '([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?'))[2], '0')::numeric ASC,
-        COALESCE((regexp_match(effective_app_version, '([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?'))[3], '0')::numeric ASC,
-        effective_app_version ASC NULLS LAST,
-        created_at DESC`;
+      return getSemverOrderBySql('effective_app_version', 'ASC', Prisma.sql`created_at DESC`);
     case 'created_desc':
     default:
       return Prisma.sql`ORDER BY created_at DESC`;
@@ -87,7 +77,7 @@ export default defineEventHandler(async event => {
         u.created_at,
         u.permissions,
         u.profile,
-        COALESCE(NULLIF(u.app_version, ''), sa.latest_session_version) AS effective_app_version,
+        COALESCE(sa.latest_session_version, NULLIF(u.app_version, '')) AS effective_app_version,
         CASE
           WHEN u.last_logged_in IS NULL THEN sa.max_accessed_at
           WHEN sa.max_accessed_at IS NULL THEN u.last_logged_in

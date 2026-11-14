@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { AdminShell, type AdminTab } from "./components/AdminHeader";
 import { BackupManagement } from "./components/BackupManagement";
 import { FeedbackManagement } from "./components/FeedbackManagement";
+import { GuestManagement } from "./components/GuestManagement";
 import { LoginScreen } from "./components/LoginScreen";
 import { UserManagement } from "./components/UserManagement";
 import { adminApi } from "./lib/api";
@@ -13,6 +14,7 @@ function App() {
   const { message, showMessage } = useToast();
   const [activeTab, setActiveTab] = useState<AdminTab>("users");
   const [totalUsers, setTotalUsers] = useState(0);
+  const [activeGuests24h, setActiveGuests24h] = useState(0);
   const [pendingFeedbacks, setPendingFeedbacks] = useState(0);
 
   useEffect(() => {
@@ -22,6 +24,12 @@ function App() {
       .listFeedback(1, 1)
       .then((result) => {
         if (!cancelled) setPendingFeedbacks(result.stats.pending);
+      })
+      .catch(() => {});
+    void adminApi
+      .listGuests({ page: 1, limit: 1, window: "24h" })
+      .then((result) => {
+        if (!cancelled) setActiveGuests24h(result.stats.counts.h24);
       })
       .catch(() => {});
     return () => {
@@ -60,6 +68,7 @@ function App() {
       activeTab={activeTab}
       pendingFeedbacks={pendingFeedbacks}
       totalUsers={totalUsers}
+      activeGuests24h={activeGuests24h}
       onTabChange={setActiveTab}
       onLogout={() => void handleLogout()}
     >
@@ -68,6 +77,13 @@ function App() {
           api={adminApi}
           showMessage={showMessage}
           onStatsUpdate={setTotalUsers}
+        />
+      ) : null}
+      {activeTab === "guests" ? (
+        <GuestManagement
+          api={adminApi}
+          showMessage={showMessage}
+          onStatsUpdate={setActiveGuests24h}
         />
       ) : null}
       {activeTab === "feedbacks" ? (

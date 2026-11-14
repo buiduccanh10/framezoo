@@ -11,6 +11,7 @@ import android.os.Build
 import android.util.Log
 import java.io.File
 import java.net.HttpURLConnection
+import java.net.InetAddress
 import java.net.URL
 import java.nio.file.Files
 import kotlinx.coroutines.CoroutineScope
@@ -90,51 +91,132 @@ object NativePlayer {
     external fun propertyString(handle: Long, name: String): String?
     external fun addTorrentPeer(handle: Long, host: String, port: Int)
     external fun torrentStats(handle: Long): String?
+    external fun setAudioMode(handle: Long, mode: String): Int
+    external fun cancelExtractAudio(handle: Long)
+    external fun extractAudio(
+        handle: Long,
+        url: String,
+        headers: Array<String>,
+        startAtSec: Double,
+        durationSec: Double,
+        outputPath: String,
+        audioTrackId: String
+    ): String?
+}
+
+enum class AudioOutputMode(val wireValue: String) {
+    AUTO("auto"),
+    STEREO_DIALOGUE("stereo-dialogue"),
+    PASSTHROUGH("passthrough");
+
+    companion object {
+        fun fromWire(value: String?): AudioOutputMode =
+            entries.firstOrNull { it.wireValue == value } ?: AUTO
+    }
+}
+
+private sealed interface BencodeValue {
+    data class IntVal(val value: Long) : BencodeValue
+    data class BytesVal(val value: ByteArray) : BencodeValue
+    data class ListVal(val items: List<BencodeValue>) : BencodeValue
+    data class DictVal(val entries: Map<String, BencodeValue>) : BencodeValue
+}
+
+private class BencodeDecoder(private val data: ByteArray) {
+    private var pos = 0
+
+    fun decode(): BencodeValue? {
+        if (pos >= data.size) return null
+        return when (data[pos].toInt().toChar()) {
+            'i' -> {
+                pos++
+                val end = findByte('e'.code.toByte()) ?: return null
+                val num = String(data, pos, end - pos, Charsets.US_ASCII).toLongOrNull() ?: return null
+                pos = end + 1
+                BencodeValue.IntVal(num)
+            }
+            'l' -> {
+                pos++
+                val items = mutableListOf<BencodeValue>()
+                while (pos < data.size && data[pos] != 'e'.code.toByte()) {
+                    items += decode() ?: return null
+                }
+                if (pos >= data.size) return null
+                pos++
+                BencodeValue.ListVal(items)
+            }
+            'd' -> {
+                pos++
+                val entries = linkedMapOf<String, BencodeValue>()
+                while (pos < data.size && data[pos] != 'e'.code.toByte()) {
+                    val key = (decode() as? BencodeValue.BytesVal)?.value?.toString(Charsets.UTF_8) ?: return null
+                    val value = decode() ?: return null
+                    entries[key] = value
+                }
+                if (pos >= data.size) return null
+                pos++
+                BencodeValue.DictVal(entries)
+            }
+            in '0'..'9' -> {
+                val colon = findByte(':'.code.toByte()) ?: return null
+                val len = String(data, pos, colon - pos, Charsets.US_ASCII).toIntOrNull() ?: return null
+                val start = colon + 1
+                if (len < 0 || start + len > data.size) return null
+                pos = start + len
+                BencodeValue.BytesVal(data.copyOfRange(start, start + len))
+            }
+            else -> null
+        }
+    }
+
+    private fun findByte(target: Byte): Int? {
+        for (i in pos until data.size) if (data[i] == target) return i
+        return null
+    }
+}
+
+private fun isUsablePeerHost(host: String): Boolean =
+    host.isNotBlank() &&
+        !host.startsWith("0.") &&
+        !host.startsWith("127.") &&
+        host != "::" &&
+        host != "::1" &&
+        host != "0:0:0:0:0:0:0:0" &&
+        host != "0:0:0:0:0:0:0:1"
+
+private fun parseCompactBlockPeers(raw: ByteArray, addrWidth: Int): List<Pair<String, Int>> {
+    val stride = addrWidth + 2
+    if (raw.isEmpty() || raw.size % stride != 0) return emptyList()
+    val result = ArrayList<Pair<String, Int>>(raw.size / stride)
+    for (offset in raw.indices step stride) {
+        val port = ((raw[offset + addrWidth].toInt() and 0xFF) shl 8) or (raw[offset + addrWidth + 1].toInt() and 0xFF)
+        if (port !in 1..65535) continue
+        if (addrWidth == 4 && (raw[offset].toInt() and 0xFF) == 0) continue
+        val addr = runCatching { InetAddress.getByAddress(raw.copyOfRange(offset, offset + addrWidth)) }.getOrNull() ?: continue
+        if (addr.isAnyLocalAddress || addr.isLoopbackAddress || addr.isMulticastAddress) continue
+        val host = addr.hostAddress?.substringBefore('%') ?: continue
+        if (isUsablePeerHost(host)) result += host to port
+    }
+    return result
 }
 
 internal fun parseCompactPeersFromBencode(payload: ByteArray): List<Pair<String, Int>> {
-    val result = mutableListOf<Pair<String, Int>>()
-    val marker = "5:peers".toByteArray(Charsets.ISO_8859_1)
-    var idx = 0
-    while (idx <= payload.size - marker.size) {
-        var match = true
-        for (j in marker.indices) {
-            if (payload[idx + j] != marker[j]) {
-                match = false
-                break
+    val root = (BencodeDecoder(payload).decode() as? BencodeValue.DictVal)?.entries ?: return emptyList()
+    val peers = mutableListOf<Pair<String, Int>>()
+    when (val p = root["peers"]) {
+        is BencodeValue.BytesVal -> peers += parseCompactBlockPeers(p.value, 4)
+        is BencodeValue.ListVal -> {
+            for (item in p.items) {
+                val dict = (item as? BencodeValue.DictVal)?.entries ?: continue
+                val host = (dict["ip"] as? BencodeValue.BytesVal)?.value?.toString(Charsets.UTF_8)?.trim() ?: continue
+                val port = (dict["port"] as? BencodeValue.IntVal)?.value?.toInt() ?: continue
+                if (port in 1..65535 && isUsablePeerHost(host)) peers += host to port
             }
         }
-        if (match) {
-            var pos = idx + marker.size
-            var len = 0
-            var hasDigits = false
-            while (pos < payload.size && payload[pos].toInt().toChar().isDigit()) {
-                len = len * 10 + (payload[pos].toInt() - '0'.code)
-                pos++
-                hasDigits = true
-            }
-            if (hasDigits && pos < payload.size && payload[pos] == ':'.code.toByte()) {
-                pos++
-                if (len > 0 && len % 6 == 0 && pos + len <= payload.size) {
-                    var offset = pos
-                    val end = pos + len
-                    while (offset + 6 <= end) {
-                        val b0 = payload[offset].toInt() and 0xFF
-                        val b1 = payload[offset + 1].toInt() and 0xFF
-                        val b2 = payload[offset + 2].toInt() and 0xFF
-                        val b3 = payload[offset + 3].toInt() and 0xFF
-                        val port = ((payload[offset + 4].toInt() and 0xFF) shl 8) or (payload[offset + 5].toInt() and 0xFF)
-                        if (port in 1..65535 && b0 != 0 && b0 != 127) {
-                            result += "$b0.$b1.$b2.$b3" to port
-                        }
-                        offset += 6
-                    }
-                }
-            }
-        }
-        idx++
+        else -> Unit
     }
-    return result.distinct()
+    (root["peers6"] as? BencodeValue.BytesVal)?.let { peers += parseCompactBlockPeers(it.value, 16) }
+    return peers.distinct()
 }
 
 internal fun hexInfoHashToUrlEncodedBytes(infoHash: String): String? {
@@ -154,6 +236,9 @@ class PlayerController(private val context: Context) {
     private var generation = 0
     private var subtitleRevision = 0
     private val subtitleFiles = mutableMapOf<String, File>()
+    private val handleRefCounts = mutableMapOf<Long, Int>()
+    private val pendingDestroyHandles = mutableSetOf<Long>()
+    private var currentAudioMode = AudioOutputMode.AUTO
     @Volatile private var surface: Surface? = null
     private var surfaceWidth = 0
     private var surfaceHeight = 0
@@ -222,7 +307,7 @@ class PlayerController(private val context: Context) {
     private fun announceHttpTracker(trackerUrl: String, encodedInfoHash: String, peerId: String): List<Pair<String, Int>> {
         return try {
             val sep = if ('?' in trackerUrl) "&" else "?"
-            val fullUrl = "${trackerUrl}${sep}numwant=50&uploaded=0&downloaded=0&left=1073741824&event=started&compact=1&info_hash=$encodedInfoHash&peer_id=$peerId&port=6881"
+            val fullUrl = "${trackerUrl}${sep}numwant=80&uploaded=0&downloaded=0&left=1073741824&event=started&compact=1&info_hash=$encodedInfoHash&peer_id=$peerId&port=6881"
             val conn = (URL(fullUrl).openConnection() as HttpURLConnection).apply {
                 connectTimeout = 3000
                 readTimeout = 3000
@@ -265,7 +350,7 @@ class PlayerController(private val context: Context) {
                     NativePlayer.addTorrentPeer(targetHandle, peer.first, peer.second)
                 }
             }
-            if (injected.size >= 80) break
+            if (injected.size >= 150) break
             delay(4000)
         }
     }
@@ -323,6 +408,9 @@ class PlayerController(private val context: Context) {
                         opening = 0L
                         handle = local
                         if (surface?.isValid != true) NativePlayer.detachSurface(local)
+                        if (currentAudioMode != AudioOutputMode.AUTO) {
+                            NativePlayer.setAudioMode(local, currentAudioMode.wireValue)
+                        }
                         if (startAtSeconds > 1.0) {
                             NativePlayer.command(local, arrayOf("seek", startAtSeconds.toString(), "absolute"))
                         }
@@ -393,18 +481,36 @@ class PlayerController(private val context: Context) {
             track.copy(externalFilename = subtitleFiles.entries.firstOrNull { it.value.absolutePath == track.externalFilename }?.key ?: track.externalFilename)
         }
     }
+    internal fun readSubtitleText(url: String): String? {
+        val file = synchronized(lock) { subtitleFiles[url] } ?: return null
+        return runCatching { decodeSubtitleFileBytes(file.readBytes()) }
+            .onFailure { Log.w("FrameZooTV", "Không đọc được phụ đề", it) }
+            .getOrNull()
+    }
+
+    internal fun downloadSubtitleText(url: String, headers: Map<String, String>, mediaUrl: String): String {
+        readSubtitleText(url)?.let { return it }
+        val temp = downloadSubtitle(url, context.cacheDir, headers, mediaUrl)
+        return try {
+            decodeSubtitleFileBytes(temp.readBytes())
+        } finally {
+            temp.delete()
+        }
+    }
+
+    private fun decodeSubtitleFileBytes(bytes: ByteArray): String {
+        val charset = when {
+            bytes.size >= 2 && bytes[0] == 0xff.toByte() && bytes[1] == 0xfe.toByte() -> Charsets.UTF_16LE
+            bytes.size >= 2 && bytes[0] == 0xfe.toByte() && bytes[1] == 0xff.toByte() -> Charsets.UTF_16BE
+            else -> Charsets.UTF_8
+        }
+        return bytes.toString(charset)
+    }
+
     // Read on Dispatchers.IO. The cached file is owned by the current player generation.
     internal fun transcript(url: String): List<TranscriptCue> {
-        val file = synchronized(lock) { subtitleFiles[url] } ?: return emptyList()
-        return runCatching {
-            val bytes = file.readBytes()
-            val charset = when {
-                bytes.size >= 2 && bytes[0] == 0xff.toByte() && bytes[1] == 0xfe.toByte() -> Charsets.UTF_16LE
-                bytes.size >= 2 && bytes[0] == 0xfe.toByte() && bytes[1] == 0xff.toByte() -> Charsets.UTF_16BE
-                else -> Charsets.UTF_8
-            }
-            parseSubtitleTranscript(bytes.toString(charset))
-        }.onFailure { Log.w("FrameZooTV", "Không đọc được danh sách thoại", it) }.getOrDefault(emptyList())
+        val raw = readSubtitleText(url) ?: return emptyList()
+        return parseSubtitleTranscript(raw)
     }
     fun subtitleToken(): Pair<Int, Int>? = synchronized(lock) {
         if (handle == 0L) null else generation to subtitleRevision
@@ -426,38 +532,148 @@ class PlayerController(private val context: Context) {
                 return -1
             }
         } else existing
+        var replaced: File? = null
         try {
             return synchronized(lock) {
                 if (handle == 0L || token != (generation to subtitleRevision)) return@synchronized -1
-                val property = if (secondary) "secondary-sid" else "sid"
-                val other = if (secondary) "sid" else "secondary-sid"
-                val previous = NativePlayer.propertyString(handle, property)
-                var trackId = id
-                if (trackId == null && url != null && local != null) {
-                    val cached = subtitleFiles[url]
-                    val file = cached ?: local
-                    trackId = readSubtitleTracks { NativePlayer.propertyString(handle, it) }
-                        .firstOrNull { it.externalFilename == file.absolutePath }?.id
-                    if (trackId == null) {
-                        if (NativePlayer.command(handle, arrayOf("sub-add", file.absolutePath, "auto", title, language)) < 0) return@synchronized -1
-                        trackId = readSubtitleTracks { NativePlayer.propertyString(handle, it) }
-                            .firstOrNull { it.externalFilename == file.absolutePath }?.id
-                    }
-                    if (trackId != null && cached == null) {
-                        subtitleFiles[url] = file
-                        downloaded = null
-                    }
-                }
-                if (trackId == null) return@synchronized -1
-                if (trackId == NativePlayer.propertyString(handle, other)) return@synchronized -2
-                val result = NativePlayer.command(handle, arrayOf("set", property, trackId))
-                if (result < 0 || NativePlayer.propertyString(handle, property) != trackId) -1 else {
-                    if (previous != trackId) NativePlayer.command(handle, arrayOf("set", if (secondary) "secondary-sub-delay" else "sub-delay", "0"))
-                    result
-                }
+                val (res, consumed, old) = applySubtitleSelectionLocked(id, url, local, title, language, secondary, replaceCached = false)
+                if (consumed) downloaded = null
+                replaced = old
+                res
             }
         } finally {
             downloaded?.delete()
+            replaced?.delete()
+        }
+    }
+
+    // Call on Dispatchers.IO.
+    fun selectSubtitleFromText(
+        token: Pair<Int, Int>,
+        syntheticUrl: String,
+        vttText: String,
+        title: String,
+        language: String,
+        secondary: Boolean
+    ): Int {
+        val file = File.createTempFile("subtitle-vtt-", ".vtt", context.cacheDir)
+        var keepTemp = false
+        var replaced: File? = null
+        try {
+            file.writeText(vttText, Charsets.UTF_8)
+            return synchronized(lock) {
+                if (handle == 0L || token != (generation to subtitleRevision)) return@synchronized -1
+                val (res, consumed, old) = applySubtitleSelectionLocked(null, syntheticUrl, file, title, language, secondary, replaceCached = true)
+                keepTemp = consumed
+                replaced = old
+                res
+            }
+        } finally {
+            if (!keepTemp) file.delete()
+            replaced?.delete()
+        }
+    }
+
+    private fun applySubtitleSelectionLocked(
+        id: String?,
+        url: String?,
+        local: File?,
+        title: String,
+        language: String,
+        secondary: Boolean,
+        replaceCached: Boolean
+    ): Triple<Int, Boolean, File?> {
+        val property = if (secondary) "secondary-sid" else "sid"
+        val other = if (secondary) "sid" else "secondary-sid"
+        val previous = NativePlayer.propertyString(handle, property)
+        var trackId = id
+        var consumedLocal = false
+        var oldReplaced: File? = null
+        if (trackId == null && url != null && local != null) {
+            val cached = if (replaceCached) null else subtitleFiles[url]
+            val file = cached ?: local
+            trackId = if (replaceCached) null else readSubtitleTracks { NativePlayer.propertyString(handle, it) }
+                .firstOrNull { it.externalFilename == file.absolutePath }?.id
+            if (trackId == null) {
+                if (NativePlayer.command(handle, arrayOf("sub-add", file.absolutePath, "auto", title, language)) < 0) {
+                    return Triple(-1, false, null)
+                }
+                trackId = readSubtitleTracks { NativePlayer.propertyString(handle, it) }
+                    .firstOrNull { it.externalFilename == file.absolutePath }?.id
+            }
+            if (trackId != null && (cached == null || replaceCached)) {
+                oldReplaced = subtitleFiles.put(url, file)?.takeIf { it != file }
+                consumedLocal = true
+            }
+        }
+        if (trackId == null) return Triple(-1, consumedLocal, oldReplaced)
+        if (trackId == NativePlayer.propertyString(handle, other)) return Triple(-2, consumedLocal, oldReplaced)
+        val result = NativePlayer.command(handle, arrayOf("set", property, trackId))
+        val finalResult = if (result < 0 || NativePlayer.propertyString(handle, property) != trackId) -1 else {
+            if (previous != trackId) NativePlayer.command(handle, arrayOf("set", if (secondary) "secondary-sub-delay" else "sub-delay", "0"))
+            result
+        }
+        return Triple(finalResult, consumedLocal, oldReplaced)
+    }
+    fun audioMode(): AudioOutputMode = synchronized(lock) { currentAudioMode }
+    fun setAudioMode(mode: AudioOutputMode): Boolean = synchronized(lock) {
+        currentAudioMode = mode
+        val current = currentReadHandleLocked()
+        current != 0L && NativePlayer.setAudioMode(current, mode.wireValue) >= 0
+    }
+    fun reloadAudio() { command("ao-reload") }
+    fun onLifecyclePause(): Boolean {
+        val wasPlaying = !paused()
+        if (wasPlaying) command("set", "pause", "yes")
+        return wasPlaying
+    }
+    fun onLifecycleResume(resumePlayback: Boolean) {
+        synchronized(lock) {
+            val current = currentReadHandleLocked()
+            if (current == 0L) return
+            NativePlayer.command(current, arrayOf("ao-reload"))
+            if (currentAudioMode != AudioOutputMode.AUTO) {
+                NativePlayer.setAudioMode(current, currentAudioMode.wireValue)
+            }
+            if (resumePlayback) NativePlayer.command(current, arrayOf("set", "pause", "no"))
+        }
+    }
+    fun cancelExtractAudio() {
+        synchronized(lock) {
+            if (handle != 0L) NativePlayer.cancelExtractAudio(handle)
+        }
+    }
+    fun extractAudio(
+        stream: Stream,
+        startAtSeconds: Double,
+        durationSeconds: Double,
+        outputFile: File,
+        audioTrackId: String? = null
+    ): String? {
+        val activeHandle = synchronized(lock) {
+            if (handle != 0L) handleRefCounts[handle] = (handleRefCounts[handle] ?: 0) + 1
+            handle
+        }
+        if (activeHandle == 0L) return "Trình phát chưa sẵn sàng"
+        return try {
+            val sourceUri = if (stream.url.startsWith("magnet:")) "framezoo://video.mkv" else stream.url
+            val headerArray = stream.headers.map { "${it.key}: ${it.value}" }.toTypedArray()
+            NativePlayer.extractAudio(
+                activeHandle,
+                sourceUri,
+                headerArray,
+                startAtSeconds.coerceAtLeast(0.0),
+                durationSeconds,
+                outputFile.absolutePath,
+                audioTrackId.orEmpty()
+            )
+        } finally {
+            val shouldDestroy = synchronized(lock) {
+                val remaining = (handleRefCounts[activeHandle] ?: 1) - 1
+                if (remaining <= 0) handleRefCounts.remove(activeHandle) else handleRefCounts[activeHandle] = remaining
+                remaining <= 0 && pendingDestroyHandles.remove(activeHandle)
+            }
+            if (shouldDestroy) NativePlayer.destroy(activeHandle)
         }
     }
     fun propertyDouble(name: String): Double = synchronized(lock) {
@@ -465,16 +681,22 @@ class PlayerController(private val context: Context) {
         if (current == 0L) 0.0 else NativePlayer.propertyDouble(current, name)
     }
     fun stop() {
+        var deferred = false
         val (old, files) = synchronized(lock) {
             generation++
             if (opening != 0L) NativePlayer.cancel(opening)
             val old = handle
             handle = 0L
+            if (old != 0L && (handleRefCounts[old] ?: 0) > 0) {
+                NativePlayer.cancelExtractAudio(old)
+                pendingDestroyHandles.add(old)
+                deferred = true
+            }
             val files = subtitleFiles.values.toList()
             subtitleFiles.clear()
             old to files
         }
-        if (old != 0L) NativePlayer.destroy(old)
+        if (old != 0L && !deferred) NativePlayer.destroy(old)
         files.forEach { it.delete() }
     }
 }

@@ -19,7 +19,7 @@ extern "C" {
 }
 
 struct StreamCookie { TorrentStream* torrent; std::int64_t offset{0}; std::atomic<bool> cancelled{false}; };
-struct Player { bool emulator{false}; mpv_handle* mpv{nullptr}; jobject surface{nullptr}; std::unique_ptr<TorrentStream> torrent; std::mutex torrentMutex; std::atomic<bool> cancelled{false}; std::thread events; std::atomic<bool> eventsDone{false}; std::mutex loadMutex; std::condition_variable loadChanged; bool fileLoaded{false}; bool playbackReady{false}; bool fileFailed{false}; };
+struct Player { bool emulator{false}; mpv_handle* mpv{nullptr}; jobject surface{nullptr}; std::shared_ptr<TorrentStream> torrent; std::mutex torrentMutex; std::atomic<bool> cancelled{false}; std::shared_ptr<std::atomic<bool>> extractCancelled{std::make_shared<std::atomic<bool>>(false)}; std::thread events; std::atomic<bool> eventsDone{false}; std::mutex loadMutex; std::condition_variable loadChanged; bool fileLoaded{false}; bool playbackReady{false}; bool fileFailed{false}; };
 
 static int open_stream(void* data, char*, mpv_stream_cb_info* info) {
 	auto* player = static_cast<Player*>(data);
@@ -98,11 +98,13 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_framezoo_tv_player_NativePlayer_crea
 	mpv_set_option_string(result->mpv, "vd-lavc-fast", "no");
 	mpv_set_option_string(result->mpv, "force-seekable", "yes");
 	mpv_set_option_string(result->mpv, "network-timeout", "120");
+	mpv_set_option_string(result->mpv, "stream-lavf-o", "reconnect=1,reconnect_streamed=1,reconnect_delay_max=5");
+	mpv_set_option_string(result->mpv, "demuxer-lavf-buffersize", "131072");
 	mpv_set_option_string(result->mpv, "cache", "yes");
 	mpv_set_option_string(result->mpv, "cache-pause", "yes");
 	mpv_set_option_string(result->mpv, "cache-pause-initial", emulator ? "yes" : "no");
 	mpv_set_option_string(result->mpv, "cache-pause-wait", emulator ? "8" : "0.5");
-	mpv_set_option_string(result->mpv, "cache-secs", emulator ? "20" : "90");
+	mpv_set_option_string(result->mpv, "cache-secs", emulator ? "20" : "120");
 	mpv_set_option_string(result->mpv, "demuxer-readahead-secs", emulator ? "30" : "90");
 	mpv_set_option_string(result->mpv, "demuxer-max-bytes", emulator ? "96MiB" : "768MiB");
 	mpv_set_option_string(result->mpv, "demuxer-max-back-bytes", emulator ? "24MiB" : "128MiB");
@@ -113,6 +115,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_framezoo_tv_player_NativePlayer_crea
 	mpv_set_option_string(result->mpv, "demuxer-lavf-probesize", "1048576");
 	mpv_set_option_string(result->mpv, "sub-pos", "68"); // subtitles stay above the persistent TV controls
 	mpv_set_option_string(result->mpv, "keep-open", "yes");
+	mpv_set_option_string(result->mpv, "idle", "yes");
 	int cb = mpv_stream_cb_add_ro(result->mpv, "framezoo", result.get(), open_stream);
 	if (cb < 0) { mpv_destroy(result->mpv); return 0; }
 	if (mpv_initialize(result->mpv) < 0) { mpv_destroy(result->mpv); return 0; }
@@ -189,6 +192,7 @@ extern "C" JNIEXPORT jstring JNICALL Java_com_framezoo_tv_player_NativePlayer_pl
 		joined += java_string(env, static_cast<jstring>(env->GetObjectArrayElement(headers, i)));
 	}
 	mpv_set_property_string(ptr->mpv, "http-header-fields", joined.c_str());
+	mpv_set_property_string(ptr->mpv, "hr-seek-framedrop", "yes");
 	std::string source = java_string(env, url);
 	char const* command[] = {"loadfile", source.c_str(), nullptr};
 	return java_error(env, mpv_command(ptr->mpv, command) < 0 ? "Không mở được nguồn HTTP" : "");
@@ -197,17 +201,198 @@ extern "C" JNIEXPORT jstring JNICALL Java_com_framezoo_tv_player_NativePlayer_pl
 	auto* ptr = player(value); if (!ptr) return java_error(env, "libmpv chưa khởi tạo");
 	{
 		std::lock_guard<std::mutex> lock(ptr->torrentMutex);
-		ptr->torrent = std::make_unique<TorrentStream>();
+		ptr->torrent = std::make_shared<TorrentStream>();
 		if (ptr->cancelled) ptr->torrent->cancel_start();
 	}
 	std::string error = ptr->torrent->start(java_string(env, magnet), fileIdx);
 	if (!error.empty()) return java_error(env, error);
 	if (ptr->cancelled) return java_error(env, "Đã dừng torrent");
+	mpv_set_property_string(ptr->mpv, "hr-seek-framedrop", "no");
 	char const* command[] = {"loadfile", "framezoo://video.mkv", nullptr};
 	char const* emulatorCommand[] = {"loadfile", "framezoo://video.mkv", "replace", "-1",
 		"cache=yes,cache-secs=20,cache-pause-wait=8,cache-pause-initial=yes,demuxer-max-bytes=96MiB,demuxer-max-back-bytes=24MiB", nullptr};
 	int status = mpv_command(ptr->mpv, ptr->emulator ? emulatorCommand : command);
 	return java_error(env, status < 0 ? "Không mở được luồng torrent" : "");
+}
+
+namespace {
+struct ExtractSource {
+	std::shared_ptr<TorrentStream> torrent;
+	std::shared_ptr<std::atomic<bool>> cancelled;
+};
+struct ExtractCookie {
+	std::shared_ptr<TorrentStream> torrent;
+	std::shared_ptr<std::atomic<bool>> cancelled;
+	std::atomic<bool> localCancel{false};
+	std::int64_t offset{0};
+};
+int64_t extract_read_fn(void* raw, char* buf, uint64_t nbytes) {
+	auto* c = static_cast<ExtractCookie*>(raw);
+	if (!c || !c->torrent || c->localCancel || (c->cancelled && *c->cancelled)) return -1;
+	std::int64_t got = c->torrent->read(c->offset, buf, nbytes, c->cancelled ? c->cancelled.get() : nullptr);
+	if (got > 0) c->offset += got;
+	return got;
+}
+int64_t extract_seek_fn(void* raw, int64_t offset) {
+	auto* c = static_cast<ExtractCookie*>(raw);
+	if (!c || !c->torrent || c->localCancel || (c->cancelled && *c->cancelled)) return MPV_ERROR_GENERIC;
+	std::int64_t size = c->torrent->size();
+	if (offset < 0 || offset > size) return MPV_ERROR_GENERIC;
+	c->offset = offset;
+	c->torrent->seek(offset);
+	return offset;
+}
+int64_t extract_size_fn(void* raw) {
+	auto* c = static_cast<ExtractCookie*>(raw);
+	return (c && c->torrent) ? c->torrent->size() : MPV_ERROR_UNSUPPORTED;
+}
+void extract_close_fn(void* raw) { delete static_cast<ExtractCookie*>(raw); }
+void extract_cancel_fn(void* raw) { if (auto* c = static_cast<ExtractCookie*>(raw)) c->localCancel = true; }
+int extract_open_ro(void* user_data, char*, mpv_stream_cb_info* info) {
+	auto* src = static_cast<ExtractSource*>(user_data);
+	if (!src || !src->torrent || (src->cancelled && *src->cancelled)) return MPV_ERROR_LOADING_FAILED;
+	auto* c = new ExtractCookie{src->torrent, src->cancelled, false, 0};
+	info->cookie = c;
+	info->read_fn = extract_read_fn;
+	info->seek_fn = extract_seek_fn;
+	info->size_fn = extract_size_fn;
+	info->close_fn = extract_close_fn;
+	info->cancel_fn = extract_cancel_fn;
+	return 0;
+}
+} // namespace
+
+extern "C" JNIEXPORT jint JNICALL Java_com_framezoo_tv_player_NativePlayer_setAudioMode(JNIEnv* env, jobject, jlong value, jstring mode) {
+	auto* ptr = player(value); if (!ptr || !ptr->mpv) return -1;
+	std::string m = mode ? java_string(env, mode) : "auto";
+	int s1 = 0, s2 = 0, s3 = 0;
+	if (m == "stereo-dialogue") {
+		s1 = mpv_set_property_string(ptr->mpv, "audio-spdif", "");
+		s2 = mpv_set_property_string(ptr->mpv, "audio-channels", "stereo");
+		s3 = mpv_set_property_string(ptr->mpv, "af", "lavfi=[dynaudnorm=f=250:g=31:p=0.5]");
+	} else if (m == "passthrough") {
+		s1 = mpv_set_property_string(ptr->mpv, "af", "");
+		s2 = mpv_set_property_string(ptr->mpv, "audio-channels", "auto");
+		s3 = mpv_set_property_string(ptr->mpv, "audio-spdif", "ac3,eac3,dts,dts-hd,truehd");
+	} else {
+		s1 = mpv_set_property_string(ptr->mpv, "audio-spdif", "");
+		s2 = mpv_set_property_string(ptr->mpv, "af", "");
+		s3 = mpv_set_property_string(ptr->mpv, "audio-channels", ptr->emulator ? "stereo" : "auto");
+	}
+	return (s1 < 0 || s2 < 0 || s3 < 0) ? -1 : 0;
+}
+extern "C" JNIEXPORT void JNICALL Java_com_framezoo_tv_player_NativePlayer_cancelExtractAudio(JNIEnv*, jobject, jlong value) {
+	if (auto* ptr = player(value)) {
+		if (ptr->extractCancelled) ptr->extractCancelled->store(true);
+	}
+}
+extern "C" JNIEXPORT jstring JNICALL Java_com_framezoo_tv_player_NativePlayer_extractAudio(JNIEnv* env, jobject, jlong value, jstring url, jobjectArray headers, jdouble startAtSec, jdouble durationSec, jstring outputPath, jstring audioTrackId) {
+	auto* ptr = player(value);
+	std::string src = url ? java_string(env, url) : "";
+	std::string out = outputPath ? java_string(env, outputPath) : "";
+	std::string aid = audioTrackId ? java_string(env, audioTrackId) : "";
+	if (src.empty() || out.empty() || durationSec <= 0) return java_error(env, "Tham số tách âm thanh không hợp lệ");
+	std::string joined;
+	if (headers) {
+		for (jsize i = 0; i < env->GetArrayLength(headers); ++i) {
+			if (i) joined += ",";
+			joined += java_string(env, static_cast<jstring>(env->GetObjectArrayElement(headers, i)));
+		}
+	}
+	std::shared_ptr<std::atomic<bool>> cancelFlag = ptr && ptr->extractCancelled ? ptr->extractCancelled : std::make_shared<std::atomic<bool>>(false);
+	cancelFlag->store(false);
+	bool useTorrent = src.rfind("framezoo://", 0) == 0;
+	std::shared_ptr<TorrentStream> torrentCopy;
+	if (useTorrent) {
+		if (!ptr) return java_error(env, "libmpv chưa khởi tạo");
+		std::lock_guard<std::mutex> lock(ptr->torrentMutex);
+		torrentCopy = ptr->torrent;
+		if (!torrentCopy) return java_error(env, "Không có luồng torrent");
+	}
+	mpv_handle* extract = mpv_create();
+	if (!extract) return java_error(env, "Không tạo được phiên tách âm thanh");
+	std::string startStr = std::to_string(std::max(0.0, double(startAtSec)));
+	std::string durStr = std::to_string(double(durationSec));
+	mpv_set_option_string(extract, "terminal", "no");
+	mpv_set_option_string(extract, "vo", "null");
+	mpv_set_option_string(extract, "vid", "no");
+	mpv_set_option_string(extract, "sid", "no");
+	mpv_set_option_string(extract, "ao", "pcm");
+	mpv_set_option_string(extract, "ao-pcm-file", out.c_str());
+	mpv_set_option_string(extract, "ao-pcm-waveheader", "yes");
+	mpv_set_option_string(extract, "audio-format", "s16");
+	mpv_set_option_string(extract, "audio-channels", "mono");
+	mpv_set_option_string(extract, "audio-samplerate", "16000");
+	mpv_set_option_string(extract, "hr-seek", "yes");
+	mpv_set_option_string(extract, "start", startStr.c_str());
+	mpv_set_option_string(extract, "length", durStr.c_str());
+	mpv_set_option_string(extract, "pause", "yes");
+	mpv_set_option_string(extract, "keep-open", "no");
+	mpv_set_option_string(extract, "idle", "no");
+	mpv_set_option_string(extract, "cache", "yes");
+	mpv_set_option_string(extract, "force-seekable", "yes");
+	mpv_set_option_string(extract, "network-timeout", "45");
+	mpv_set_option_string(extract, "demuxer-max-bytes", "8388608");
+	mpv_set_option_string(extract, "demuxer-max-back-bytes", "2097152");
+	mpv_set_option_string(extract, "demuxer-readahead-secs", "12");
+	if (!aid.empty() && aid != "auto" && aid != "no") {
+		mpv_set_option_string(extract, "aid", aid.c_str());
+	}
+	if (!useTorrent) {
+		mpv_set_option_string(extract, "stream-lavf-o", "reconnect=1,reconnect_streamed=1,reconnect_delay_max=5");
+	}
+	if (mpv_initialize(extract) < 0) {
+		mpv_terminate_destroy(extract);
+		return java_error(env, "Không khởi tạo được phiên tách âm thanh");
+	}
+	ExtractSource extractSrc{torrentCopy, cancelFlag};
+	if (useTorrent) {
+		mpv_stream_cb_add_ro(extract, "framezoo", &extractSrc, extract_open_ro);
+	} else if (!joined.empty()) {
+		mpv_set_property_string(extract, "http-header-fields", joined.c_str());
+	}
+	char const* targetUri = useTorrent ? "framezoo://video.mkv" : src.c_str();
+	char const* loadCmd[] = {"loadfile", targetUri, "replace", nullptr};
+	if (mpv_command(extract, loadCmd) < 0) {
+		mpv_terminate_destroy(extract);
+		return java_error(env, "Không nạp được nguồn để tách âm thanh");
+	}
+	bool started = false;
+	bool completed = false;
+	std::string errMsg;
+	auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds(90);
+	while (std::chrono::steady_clock::now() < deadline) {
+		if (cancelFlag->load()) {
+			errMsg = "Đã hủy tách âm thanh";
+			break;
+		}
+		mpv_event* ev = mpv_wait_event(extract, 0.25);
+		if (!ev || ev->event_id == MPV_EVENT_NONE) continue;
+		if (ev->event_id == MPV_EVENT_FILE_LOADED) {
+			started = true;
+			mpv_set_property_string(extract, "pause", "no");
+		} else if (ev->event_id == MPV_EVENT_END_FILE) {
+			auto* eof = static_cast<mpv_event_end_file*>(ev->data);
+			if (started && eof && (eof->reason == MPV_END_FILE_REASON_EOF || eof->reason == MPV_END_FILE_REASON_STOP)) {
+				completed = true;
+			} else if (eof && eof->error < 0) {
+				errMsg = mpv_error_string(eof->error);
+			} else {
+				errMsg = "Không đọc được âm thanh từ nguồn phát";
+			}
+			break;
+		} else if (ev->event_id == MPV_EVENT_SHUTDOWN) {
+			break;
+		}
+	}
+	if (!completed && errMsg.empty()) {
+		errMsg = "Hết thời gian tách âm thanh";
+	}
+	mpv_terminate_destroy(extract);
+	if (!completed) {
+		return java_error(env, errMsg);
+	}
+	return java_error(env, "");
 }
 extern "C" JNIEXPORT jboolean JNICALL Java_com_framezoo_tv_player_NativePlayer_waitLoaded(JNIEnv*, jobject, jlong value, jint timeoutMs) {
 	auto* ptr = player(value); if (!ptr) return false;

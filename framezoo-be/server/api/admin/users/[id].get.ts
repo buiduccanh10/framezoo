@@ -1,6 +1,7 @@
 import { defineEventHandler, createError } from 'h3';
 import { prisma } from '~/utils/prisma';
-import { requireAdmin, summarizeClientPlatform } from '~/utils/admin';
+import { requireAdmin } from '~/utils/admin';
+import { summarizeClientPlatform } from '~/utils/guestUtils';
 import { decryptPiiOrNull } from '~/utils/piiCrypto';
 
 export default defineEventHandler(async event => {
@@ -83,7 +84,7 @@ export default defineEventHandler(async event => {
     : null;
 
   const currentVersion =
-    user.app_version || sessionsList.find(s => s.app_version)?.app_version || null;
+    sessionsList.find(s => s.app_version)?.app_version || user.app_version || null;
 
   return {
     user: {

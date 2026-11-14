@@ -1,16 +1,29 @@
 package com.framezoo.tv.player
 
+import java.util.Locale
+
 internal data class TranscriptCue(val start: Double, val end: Double, val text: String)
 
-private fun subtitleTime(value: String): Double? {
+internal fun parseSubtitleTimestampMs(value: String): Long? {
     val parts = value.trim().replace(',', '.').split(':')
     if (parts.size !in 2..3) return null
     val hours = if (parts.size == 3) parts[0].toIntOrNull() ?: return null else 0
     val minutes = parts[parts.size - 2].toIntOrNull() ?: return null
     val seconds = parts.last().toDoubleOrNull() ?: return null
     if (hours < 0 || minutes !in 0..59 || seconds < 0 || seconds >= 60 || !seconds.isFinite()) return null
-    return hours * 3600.0 + minutes * 60.0 + seconds
+    return Math.round((hours * 3600.0 + minutes * 60.0 + seconds) * 1000.0)
 }
+
+internal fun formatVttTimestampMs(milliseconds: Long): String {
+    val total = milliseconds.coerceAtLeast(0L)
+    val hours = total / 3_600_000L
+    val minutes = (total % 3_600_000L) / 60_000L
+    val seconds = (total % 60_000L) / 1000L
+    val rem = total % 1000L
+    return String.format(Locale.US, "%02d:%02d:%02d.%03d", hours, minutes, seconds, rem)
+}
+
+private fun subtitleTime(value: String): Double? = parseSubtitleTimestampMs(value)?.div(1000.0)
 
 private fun plainSubtitleText(text: String): String = text
     .replace(Regex("\\{[^}]*\\}"), "")

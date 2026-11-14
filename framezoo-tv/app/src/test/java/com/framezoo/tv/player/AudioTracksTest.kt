@@ -43,4 +43,19 @@ class AudioTracksTest {
             SubtitleTrack("2", "vi", "", "https://example.test/sub.srt", false)
         ), readSubtitleTracks(properties::get))
     }
+
+    @Test fun resolvesPreferredOriginalAudioAndAvoidsCommentary() {
+        val tracks = listOf(
+            AudioTrack("1", "eng", "Director's Commentary", true),
+            AudioTrack("2", "eng", "English Stereo", false),
+            AudioTrack("3", "kor", "Korean 5.1", false)
+        )
+        assertEquals("3", resolveDefaultAudioTrack(tracks, "ko")?.id)
+        assertEquals("2", resolveDefaultAudioTrack(tracks, "ja")?.id)
+        assertEquals(
+            "1",
+            resolveDefaultAudioTrack(listOf(AudioTrack("1", "fra", "French", true)), "en")?.id
+        )
+        assertEquals("Korean • Korean 5.1".isNotBlank(), audioTrackDisplayTitle(tracks[2]).contains("Korean"))
+    }
 }

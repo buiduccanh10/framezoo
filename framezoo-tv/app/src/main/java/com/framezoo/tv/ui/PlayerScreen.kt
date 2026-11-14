@@ -69,6 +69,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
@@ -90,6 +93,16 @@ import com.framezoo.tv.player.VideoTrack
 import com.framezoo.tv.player.SubtitleTrack
 import com.framezoo.tv.player.TranscriptCue
 import com.framezoo.tv.player.TorrentLiveStats
+import com.framezoo.tv.player.SubtitleSyncStage
+import com.framezoo.tv.player.TranslationTargetLanguage
+import com.framezoo.tv.player.alignSubtitleWithBackend
+import com.framezoo.tv.player.audioTrackDisplayTitle
+import com.framezoo.tv.player.isExactReleaseMatchScore
+import com.framezoo.tv.player.isHearingImpairedSubtitle
+import com.framezoo.tv.player.pickBestSubtitle
+import com.framezoo.tv.player.rankSubtitlesForStream
+import com.framezoo.tv.player.resolveDefaultAudioTrack
+import com.framezoo.tv.player.scoreSubtitleReleaseMatch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -99,7 +112,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.sync.withLock
 
-private fun formatDurationTime(seconds: Double): String {
+internal fun formatDurationTime(seconds: Double): String {
     val total = seconds.toInt().coerceAtLeast(0)
     val hrs = total / 3600
     val mins = (total % 3600) / 60
@@ -123,13 +136,16 @@ private fun formatEndTime(remainingSeconds: Double): String {
     }.getOrDefault("")
 }
 
-private fun audioTrackLabel(track: AudioTrack): String {
-    val language = track.language.takeIf { it.isNotBlank() && it != "und" }
-        ?.let { Locale.forLanguageTag(it).getDisplayLanguage(Locale.getDefault()).replaceFirstChar { c -> c.uppercase() } }
-    return listOfNotNull(language, track.title.takeIf { it.isNotBlank() }).distinct().joinToString(" · ")
-}
-
-private data class CaptionChoice(val language: String, val label: String, val url: String?, val nativeId: String?, val selected: Boolean)
+internal data class CaptionChoice(
+    val language: String,
+    val label: String,
+    val url: String?,
+    val nativeId: String?,
+    val selected: Boolean,
+    val releaseName: String = "",
+    val isHearingImpaired: Boolean = false,
+    val releaseScore: Int = 0
+)
 
 @Composable
 internal fun PlayerIconButton(
@@ -255,8 +271,61 @@ internal fun PlayerScreen(
     var switchPosition by remember(item.id, episode?.season, episode?.number) { mutableStateOf<Double?>(null) }
     val progressMutex = remember(item.id, episode?.season, episode?.number) { kotlinx.coroutines.sync.Mutex() }
     val latestHasRenderedFrame = rememberUpdatedState(hasRenderedFrame)
+    var pausedByLifecycle by remember { mutableStateOf(false) }
+    var audioAutoSelected by remember(stream) { mutableStateOf(false) }
+    var syncStage by remember(stream) { mutableStateOf<SubtitleSyncStage?>(null) }
+    var syncStep by remember(stream) { mutableIntStateOf(0) }
+    var syncTotal by remember(stream) { mutableIntStateOf(0) }
+    var syncStatusMessage by remember(stream) { mutableStateOf<String?>(null) }
+    var syncIsError by remember(stream) { mutableStateOf(false) }
+    var syncJob by remember(stream) { mutableStateOf<kotlinx.coroutines.Job?>(null) }
+    var isTranslating by remember(stream) { mutableStateOf(false) }
+    var translateDone by remember(stream) { mutableIntStateOf(0) }
+    var translateTotal by remember(stream) { mutableIntStateOf(0) }
+    var translateError by remember(stream) { mutableStateOf("") }
+    var translateJob by remember(stream) { mutableStateOf<kotlinx.coroutines.Job?>(null) }
+    var transcriptVersion by remember(stream) { mutableIntStateOf(0) }
+    var lastSkippedFeedbackSegment by remember(stream) { mutableStateOf<SkipSegment?>(null) }
 
-    // Active Overlay Router (`null`, `"settings"`, `"source"`, `"captions"`, `"captions_lang"`, `"captions_settings"`, `"playback"`, `"audio"`, `"quality"`, `"episodes"`, `"torrent"`)
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner, player) {
+        val observer = LifecycleEventObserver { _, event ->
+            when (event) {
+                Lifecycle.Event.ON_PAUSE -> {
+                    if (player.onLifecyclePause()) {
+                        pausedByLifecycle = true
+                        isPaused = true
+                    }
+                }
+                Lifecycle.Event.ON_RESUME -> {
+                    if (pausedByLifecycle) {
+                        player.onLifecycleResume(true)
+                        pausedByLifecycle = false
+                        isPaused = player.paused()
+                    }
+                }
+                else -> Unit
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
+
+    LaunchedEffect(syncStatusMessage) {
+        if (!syncStatusMessage.isNullOrBlank()) {
+            delay(5_000)
+            syncStatusMessage = null
+        }
+    }
+
+    LaunchedEffect(lastSkippedFeedbackSegment) {
+        if (lastSkippedFeedbackSegment != null) {
+            delay(8_000)
+            lastSkippedFeedbackSegment = null
+        }
+    }
+
+    // Active Overlay Router (`null`, `"settings"`, `"source"`, `"captions"`, `"captions_lang"`, `"captions_settings"`, `"captions_translate"`, `"playback"`, `"skip_segments"`, `"skip_submit"`, `"audio"`, `"quality"`, `"episodes"`, `"torrent"`)
     var activeOverlay by remember { mutableStateOf<String?>(null) }
     var captionsReturn by remember { mutableStateOf<String?>(null) }
     var sourceReturn by remember { mutableStateOf("settings") }
@@ -386,7 +455,7 @@ internal fun PlayerScreen(
             player.command("set", "mute", if (isMuted) "yes" else "no")
             player.command("set", "sub-visibility", if (subtitlesEnabled) "yes" else "no")
             player.command("set", "secondary-sub-visibility", if (secondarySubtitlesEnabled) "yes" else "no")
-            state.applySubtitleStyling()
+            state.applySubtitleStyling(showControls)
         } catch (e: kotlinx.coroutines.CancellationException) {
             throw e
         } catch (e: Exception) {
@@ -415,14 +484,17 @@ internal fun PlayerScreen(
         state.playbackReady = hasRenderedFrame
     }
 
-    LaunchedEffect(stream, subtitles, isOpening, resumeHandled) {
+    LaunchedEffect(stream, subtitles, isOpening, resumeHandled, state.lastSubtitleLanguage, state.defaultSubtitleLanguage, state.i18n.language) {
         if (!resumeHandled) return@LaunchedEffect
         val currentStream = stream ?: return@LaunchedEffect
         if (isOpening || subtitleChosen) return@LaunchedEffect
         val candidates = (currentStream.subtitles + subtitles).distinctBy { it.url }
-        val sub = candidates.firstOrNull { it.language.startsWith("vi", true) }
-            ?: candidates.firstOrNull { it.language.startsWith("en", true) }
-            ?: return@LaunchedEffect
+        val streamRelease = currentStream.filename ?: currentStream.title.ifBlank { currentStream.name }
+        val sub = pickBestSubtitle(
+            candidates = candidates,
+            preferredLanguages = listOf(state.lastSubtitleLanguage, state.defaultSubtitleLanguage, state.i18n.language, "vi", "en"),
+            streamReleaseName = streamRelease
+        ) ?: return@LaunchedEffect
         val token = player.subtitleToken() ?: return@LaunchedEffect
         subtitleChosen = true
         withContext(Dispatchers.IO) {
@@ -461,10 +533,20 @@ internal fun PlayerScreen(
         }
     }
 
-    LaunchedEffect(stream, isOpening, resumeHandled, showControls, state.subtitleVerticalPosition) {
+    LaunchedEffect(
+        stream, isOpening, resumeHandled, showControls,
+        state.subtitleFontSize, state.subtitleColor, state.subtitleBackgroundOpacity,
+        state.subtitleBackgroundBlurEnabled, state.subtitleBackgroundBlur,
+        state.subtitleFontStyle, state.subtitleBorderThickness,
+        state.subtitleBold, state.subtitleVerticalPosition,
+        state.secondarySubtitleFontSize, state.secondarySubtitleColor,
+        state.secondarySubtitleBackgroundOpacity, state.secondarySubtitleBackgroundBlurEnabled,
+        state.secondarySubtitleBackgroundBlur, state.secondarySubtitleFontStyle,
+        state.secondarySubtitleBorderThickness, state.secondarySubtitleBold,
+        state.secondarySubtitleVerticalPosition
+    ) {
         if (stream != null && resumeHandled && !isOpening) {
-            player.command("set", "sub-pos", subtitlePosition(showControls, state.subtitleVerticalPosition).toString())
-            player.command("set", "secondary-sub-pos", secondarySubtitlePosition(showControls, state.subtitleVerticalPosition).toString())
+            state.applySubtitleStyling(showControls)
         }
     }
 
@@ -485,6 +567,14 @@ internal fun PlayerScreen(
             torrentStats = player.torrentStats()
             bufferedSeconds = player.propertyDouble("demuxer-cache-duration").coerceAtLeast(0.0)
             audioTracks = player.audioTracks()
+            if (audioTracks.isNotEmpty() && !audioAutoSelected) {
+                audioAutoSelected = true
+                val preferred = resolveDefaultAudioTrack(audioTracks, item.language)
+                if (preferred != null && !preferred.selected) {
+                    player.command("set", "aid", preferred.id)
+                    audioTracks = player.audioTracks()
+                }
+            }
             videoTracks = player.videoTracks()
             subtitleTracks = player.subtitleTracks()
             val hdrFormat = player.propertyString("video-params/hdr-format").orEmpty().lowercase()
@@ -509,11 +599,27 @@ internal fun PlayerScreen(
                 val segment = activePlaybackSegment(state.skipSegments, position, duration)
                 val bounds = segment?.let { playbackSegmentBounds(it, duration) }
                 val key = segment?.let { "${it.type}:${it.startMs}:${it.endMs}" }
-                if (segment != null && segment.type != "credits" && key != null && key != lastAutoSkippedSegment) {
-                    val target = bounds?.end ?: duration
-                    if (target > position + 0.5) {
-                        player.command("seek", target.toString(), "absolute")
-                        lastAutoSkippedSegment = key
+                if (segment != null && key != null && key != lastAutoSkippedSegment) {
+                    if (segment.type == "credits") {
+                        if (state.enableSkipCredits) {
+                            val endTarget = bounds?.end
+                            if (endTarget != null && endTarget > position + 0.5) {
+                                player.command("seek", endTarget.toString(), "absolute")
+                                lastAutoSkippedSegment = key
+                                if (state.canSubmitTidb) lastSkippedFeedbackSegment = segment
+                            } else if (!autoplayed && currentNextEpisode != null && state.activeWatchParty == null && state.enableAutoplay) {
+                                lastAutoSkippedSegment = key
+                                autoplayed = true
+                                currentNextEpisode?.invoke()
+                            }
+                        }
+                    } else {
+                        val target = bounds?.end ?: duration
+                        if (target > position + 0.5) {
+                            player.command("seek", target.toString(), "absolute")
+                            lastAutoSkippedSegment = key
+                            if (state.canSubmitTidb) lastSkippedFeedbackSegment = segment
+                        }
                     }
                 } else if (segment == null) {
                     lastAutoSkippedSegment = null
@@ -547,6 +653,8 @@ internal fun PlayerScreen(
 
     DisposableEffect(stream) {
         onDispose {
+            syncJob?.cancel()
+            translateJob?.cancel()
             if (stream != null) {
                 val pos = player.position()
                 val len = player.duration()
@@ -563,8 +671,11 @@ internal fun PlayerScreen(
 
     BackHandler(enabled = true) {
         when {
-            activeOverlay in listOf("captions_lang", "captions_settings", "captions_transcript") -> {
+            activeOverlay in listOf("captions_lang", "captions_settings", "captions_transcript", "captions_translate") -> {
                 activeOverlay = "captions"
+            }
+            activeOverlay == "skip_submit" -> {
+                activeOverlay = "skip_segments"
             }
             activeOverlay == "captions" -> {
                 activeOverlay = if (captionMode != null) "captions_dual" else captionsReturn
@@ -1150,9 +1261,27 @@ internal fun PlayerScreen(
             }
         }
 
+        SubtitleSyncHudBanner(
+            stage = syncStage,
+            step = syncStep,
+            total = syncTotal,
+            statusMessage = syncStatusMessage,
+            isError = syncIsError,
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(top = 24.dp),
+            onCancel = {
+                syncJob?.cancel()
+                syncJob = null
+                syncStage = null
+            }
+        )
+
         val visibleSkipSegments = if (isPlayingStream && hasRenderedFrame && activeOverlay == null && !state.enableAutoSkipSegments) {
             state.skipSegments.filter { segment ->
-                segment.type != "credits" && skipSegmentVisible(segment, position, duration, showControls)
+                val bounds = playbackSegmentBounds(segment, duration)
+                val canAct = segment.type != "credits" || bounds?.end != null || onNextEpisode != null
+                canAct && skipSegmentVisible(segment, position, duration, showControls)
             }
         } else emptyList()
         visibleSkipSegments.forEachIndexed { index, segment ->
@@ -1172,14 +1301,34 @@ internal fun PlayerScreen(
                     icon = R.drawable.desktop_skip_episode,
                     primary = true
                 ) {
-                    val target = playbackSegmentBounds(segment, duration)?.end ?: duration
-                    if (target > position + 0.5) {
-                        player.command("seek", target.toString(), "absolute")
-                        triggerControls()
+                    val endTarget = playbackSegmentBounds(segment, duration)?.end
+                    if (segment.type == "credits" && endTarget == null && onNextEpisode != null) {
+                        onNextEpisode.invoke()
+                    } else {
+                        val target = endTarget ?: duration
+                        if (target > position + 0.5) {
+                            player.command("seek", target.toString(), "absolute")
+                            triggerControls()
+                            if (state.canSubmitTidb) lastSkippedFeedbackSegment = segment
+                        }
                     }
                 }
             }
         }
+
+        SkipThumbsFeedbackBanner(
+            segment = if (activeOverlay == null && state.canSubmitTidb) lastSkippedFeedbackSegment else null,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(end = 36.dp, bottom = if (showControls) 124.dp else 36.dp),
+            onSubmitAdjustment = {
+                lastSkippedFeedbackSegment = null
+                activeOverlay = "skip_submit"
+            },
+            onDismiss = {
+                lastSkippedFeedbackSegment = null
+            }
+        )
 
         // 7. Floating `NextEpisodeButton` near end of episode (matching `PlayerPart.tsx` lines 253-273)
         val showFloatingNextEpisode = isPlayingStream && hasRenderedFrame && onNextEpisode != null &&
@@ -1698,6 +1847,9 @@ internal fun PlayerScreen(
                                     subtitlesEnabled = true
                                     player.command("set", "sub-visibility", "yes")
                                 }
+                                if (result >= 0 && !secondary) {
+                                    state.rememberLastSubtitleLanguage(sub.language)
+                                }
                             }
                         }
                     }
@@ -1713,6 +1865,132 @@ internal fun PlayerScreen(
                     activeOverlay = null
                     onSelectEpisode?.invoke(ep)
                 },
+                transcriptVersion = transcriptVersion,
+                isSyncing = syncStage != null,
+                onStartSubtitleSync = { url, label, lang ->
+                    val currentStream = stream ?: return@PlayerMenuOverlayCard
+                    val secondary = captionMode == "secondary"
+                    syncJob?.cancel()
+                    syncStatusMessage = null
+                    syncIsError = false
+                    activeOverlay = null
+                    syncJob = subtitleScope.launch {
+                        try {
+                            val rawText = withContext(Dispatchers.IO) {
+                                player.downloadSubtitleText(url, currentStream.headers, currentStream.url)
+                            }
+                            val selectedAid = audioTracks.firstOrNull { it.selected }?.id
+                            val aligned = alignSubtitleWithBackend(
+                                player = player,
+                                stream = currentStream,
+                                rawSubtitleText = rawText,
+                                language = lang,
+                                currentPositionSec = player.position(),
+                                videoDurationSec = player.duration(),
+                                audioTrackId = selectedAid,
+                                backendUrl = state.store.backendUrl,
+                                accessToken = state.store.accessToken,
+                                cacheDir = activity.cacheDir,
+                                onStage = { stage, step, total ->
+                                    subtitleScope.launch {
+                                        syncStage = stage
+                                        syncStep = step
+                                        syncTotal = total
+                                    }
+                                }
+                            )
+                            player.markSubtitleChanged()
+                            val token = player.subtitleToken()
+                            if (token != null) {
+                                val res = withContext(Dispatchers.IO) {
+                                    player.selectSubtitleFromText(token, url, aligned.alignedVtt, label, lang, secondary)
+                                }
+                                if (res >= 0) {
+                                    if (secondary) {
+                                        secondarySubtitlesEnabled = true
+                                        player.command("set", "secondary-sub-visibility", "yes")
+                                    } else {
+                                        subtitlesEnabled = true
+                                        player.command("set", "sub-visibility", "yes")
+                                    }
+                                    transcriptVersion++
+                                    syncStatusMessage = state.i18n.t("player.menus.subtitles.syncSubtitleSuccess")
+                                    syncIsError = false
+                                }
+                            }
+                        } catch (e: kotlinx.coroutines.CancellationException) {
+                            throw e
+                        } catch (e: Throwable) {
+                            syncIsError = true
+                            syncStatusMessage = state.i18n.t(
+                                "player.menus.subtitles.syncSubtitleFailedWithDetail",
+                                "detail" to (e.message ?: "Error")
+                            )
+                        } finally {
+                            syncStage = null
+                        }
+                    }
+                },
+                isTranslating = isTranslating,
+                translateDone = translateDone,
+                translateTotal = translateTotal,
+                translateError = translateError,
+                onCancelTranslate = {
+                    translateJob?.cancel()
+                    translateJob = null
+                    isTranslating = false
+                },
+                onStartSubtitleTranslate = { url, label, target ->
+                    val currentStream = stream ?: return@PlayerMenuOverlayCard
+                    val secondary = captionMode == "secondary"
+                    translateJob?.cancel()
+                    translateError = ""
+                    translateDone = 0
+                    translateTotal = 0
+                    isTranslating = true
+                    translateJob = subtitleScope.launch {
+                        try {
+                            val rawText = withContext(Dispatchers.IO) {
+                                player.downloadSubtitleText(url, currentStream.headers, currentStream.url)
+                            }
+                            val vttText = state.subtitleTranslator.translateSubtitleText(rawText, target.code) { done, total ->
+                                subtitleScope.launch {
+                                    translateDone = done
+                                    translateTotal = total
+                                }
+                            }
+                            player.markSubtitleChanged()
+                            val token = player.subtitleToken()
+                            if (token != null) {
+                                val syntheticUrl = "translated://${target.code}/$url"
+                                val title = "${target.name} (${label.ifBlank { target.code.uppercase() }})"
+                                val res = withContext(Dispatchers.IO) {
+                                    player.selectSubtitleFromText(token, syntheticUrl, vttText, title, target.code, secondary)
+                                }
+                                if (res >= 0) {
+                                    subtitleChosen = true
+                                    if (secondary) {
+                                        secondarySubtitlesEnabled = true
+                                        player.command("set", "secondary-sub-visibility", "yes")
+                                    } else {
+                                        subtitlesEnabled = true
+                                        player.command("set", "sub-visibility", "yes")
+                                        state.rememberLastSubtitleLanguage(target.code)
+                                    }
+                                    transcriptVersion++
+                                    activeOverlay = null
+                                }
+                            }
+                        } catch (e: kotlinx.coroutines.CancellationException) {
+                            throw e
+                        } catch (e: Throwable) {
+                            translateError = e.message ?: state.i18n.t("player.menus.subtitles.downloadFailed")
+                        } finally {
+                            isTranslating = false
+                        }
+                    }
+                },
+                onCloseSkipSubmit = { activeOverlay = "skip_segments" },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(end = 32.dp, bottom = 100.dp)
@@ -1751,6 +2029,16 @@ private fun PlayerMenuOverlayCard(
     selectedSpeed: Double,
     onSelectSpeed: (Double) -> Unit,
     onSelectEpisode: (Episode) -> Unit,
+    transcriptVersion: Int,
+    isSyncing: Boolean,
+    onStartSubtitleSync: (url: String, label: String, language: String) -> Unit,
+    isTranslating: Boolean,
+    translateDone: Int,
+    translateTotal: Int,
+    translateError: String,
+    onCancelTranslate: () -> Unit,
+    onStartSubtitleTranslate: (url: String, label: String, target: TranslationTargetLanguage) -> Unit,
+    onCloseSkipSubmit: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val colors = LocalFrameZooColors.current
@@ -1776,22 +2064,47 @@ private fun PlayerMenuOverlayCard(
     }
 
     val selectedCaptionId = if (captionMode == "secondary") secondarySubtitleId else primarySubtitleId
-    val allSubs = remember(stream, subtitles, subtitleTracks, selectedCaptionId) {
-        val external = ((stream?.subtitles ?: emptyList()) + subtitles).distinctBy { it.url }.map { sub ->
+    val streamReleaseName = remember(stream) {
+        stream?.let { it.filename ?: it.title.ifBlank { it.name } }
+    }
+    val allSubs = remember(stream, subtitles, subtitleTracks, selectedCaptionId, streamReleaseName) {
+        val rankedExternal = rankSubtitlesForStream(
+            ((stream?.subtitles ?: emptyList()) + subtitles).distinctBy { it.url },
+            streamReleaseName
+        ).map { sub ->
             val track = subtitleTracks.firstOrNull { it.externalFilename == sub.url }
-            CaptionChoice(sub.language, sub.label, sub.url, track?.id, track?.id != null && track.id == selectedCaptionId)
+            val hi = sub.isHearingImpaired || isHearingImpairedSubtitle(sub.label, sub.releaseName)
+            val score = scoreSubtitleReleaseMatch(streamReleaseName, sub.releaseName.ifBlank { sub.label })
+            CaptionChoice(
+                language = sub.language,
+                label = sub.label,
+                url = sub.url,
+                nativeId = track?.id,
+                selected = track?.id != null && track.id == selectedCaptionId,
+                releaseName = sub.releaseName,
+                isHearingImpaired = hi,
+                releaseScore = score
+            )
         }
         val embedded = subtitleTracks.filter { it.externalFilename.isNullOrBlank() }.map { track ->
-            CaptionChoice(track.language, track.title, null, track.id, track.id == selectedCaptionId)
+            CaptionChoice(
+                language = track.language,
+                label = track.title,
+                url = null,
+                nativeId = track.id,
+                selected = track.id == selectedCaptionId,
+                isHearingImpaired = isHearingImpairedSubtitle(track.title)
+            )
         }
-        embedded + external
+        embedded + rankedExternal
     }
     val subGroups = remember(allSubs) {
         allSubs.groupBy { subtitleLanguage(it.language) }
     }
     val selectionVisible = if (captionMode == "secondary") secondarySubtitlesEnabled else subtitlesEnabled
-    val activeCaptionUrl = allSubs.firstOrNull { it.selected }?.url
-    val transcript by produceState<List<TranscriptCue>?>(initialValue = null, activeOverlay, activeCaptionUrl) {
+    val activeChoice = allSubs.firstOrNull { it.selected }
+    val activeCaptionUrl = activeChoice?.url
+    val transcript by produceState<List<TranscriptCue>?>(initialValue = null, activeOverlay, activeCaptionUrl, transcriptVersion) {
         value = if (activeOverlay in listOf("captions", "captions_transcript") && activeCaptionUrl != null)
             withContext(Dispatchers.IO) { player.transcript(activeCaptionUrl) } else emptyList()
     }
@@ -1862,7 +2175,7 @@ private fun PlayerMenuOverlayCard(
                             )
                             SettingsGridButton(
                                 title = t("player.menus.settings.audioItem"),
-                                subtitle = audioTracks.firstOrNull { it.selected }?.let(::audioTrackLabel)
+                                subtitle = audioTracks.firstOrNull { it.selected }?.let(::audioTrackDisplayTitle)
                                     ?.ifBlank { null } ?: t("player.menus.audio.default"),
                                 modifier = Modifier.weight(1f),
                                 onClick = { onNavigateOverlay("audio") }
@@ -1945,8 +2258,14 @@ private fun PlayerMenuOverlayCard(
                         }
                         item {
                             val candidates = allSubs.filter { it.nativeId == null || it.nativeId != (if (captionMode == "secondary") primarySubtitleId else secondarySubtitleId) }
-                            val bestSub = candidates.firstOrNull { it.language.startsWith("vi", true) }
-                                ?: candidates.firstOrNull { it.language.startsWith("en", true) }
+                            val externalPick = pickBestSubtitle(
+                                candidates = candidates.mapNotNull { c ->
+                                    c.url?.let { Subtitle(c.language, it, c.label, c.isHearingImpaired, c.releaseName) }
+                                },
+                                preferredLanguages = listOf(state.lastSubtitleLanguage, state.defaultSubtitleLanguage, state.i18n.language, "vi", "en"),
+                                streamReleaseName = streamReleaseName
+                            )
+                            val bestSub = externalPick?.let { picked -> candidates.firstOrNull { it.url == picked.url } }
                                 ?: candidates.firstOrNull()
                             if (bestSub != null) {
                                 PlayerMenuRowLink(
@@ -1971,6 +2290,32 @@ private fun PlayerMenuOverlayCard(
                                 enabled = activeCaptionUrl != null && !transcript.isNullOrEmpty(),
                                 onClick = { onNavigateOverlay("captions_transcript") }
                             )
+                        }
+                        if (activeChoice != null && activeCaptionUrl != null) {
+                            item {
+                                val srcCode = subtitleLanguage(activeChoice.language)
+                                val srcDisplay = if (srcCode == "und") activeChoice.language.uppercase()
+                                else Locale.forLanguageTag(srcCode).getDisplayLanguage(Locale.getDefault())
+                                    .replaceFirstChar { it.uppercase() }.ifBlank { srcCode.uppercase() }
+                                PlayerMenuRowLink(
+                                    title = t("player.menus.subtitles.translate.title", "language" to srcDisplay),
+                                    chevron = true,
+                                    onClick = { onNavigateOverlay("captions_translate") }
+                                )
+                            }
+                            item {
+                                PlayerMenuRowLink(
+                                    title = t("player.menus.subtitles.syncSubtitleOpen"),
+                                    enabled = !isSyncing,
+                                    onClick = {
+                                        onStartSubtitleSync(
+                                            activeCaptionUrl,
+                                            activeChoice.label.ifBlank { activeChoice.language },
+                                            activeChoice.language
+                                        )
+                                    }
+                                )
+                            }
                         }
                         val entries = subGroups.entries.toList()
                         items(entries.size) { idx ->
@@ -2109,8 +2454,13 @@ private fun PlayerMenuOverlayCard(
                     ) {
                         items(list.size) { idx ->
                             val sub = list[idx]
+                            val badge = listOfNotNull(
+                                "✓".takeIf { isExactReleaseMatchScore(sub.releaseScore) },
+                                "SDH".takeIf { sub.isHearingImpaired }
+                            ).joinToString(" · ")
                             PlayerMenuRowLink(
                                 title = sub.label.ifBlank { if (sub.url == null) t("player.menus.subtitles.embedded") else "${lang.uppercase()} #${idx + 1}" },
+                                rightText = badge,
                                 selected = selectionVisible && sub.selected,
                                 modifier = if (idx == 0) Modifier.focusRequester(firstRequester) else Modifier,
                                 onClick = { onSelectSubtitle(sub) }
@@ -2121,8 +2471,18 @@ private fun PlayerMenuOverlayCard(
             }
 
             "captions_settings" -> {
-                // `CaptionSettingsView.tsx`: Subtitle delay, size, background opacity
-                var delayMs by remember { mutableIntStateOf((player.propertyDouble("sub-delay") * 1000).toInt()) }
+                val isSecondary = captionMode == "secondary"
+                val delayProperty = if (isSecondary) "secondary-sub-delay" else "sub-delay"
+                var delayMs by remember(delayProperty) { mutableIntStateOf((player.propertyDouble(delayProperty) * 1000).toInt()) }
+                val curOpacity = if (isSecondary) state.secondarySubtitleBackgroundOpacity else state.subtitleBackgroundOpacity
+                val curBlurEnabled = if (isSecondary) state.secondarySubtitleBackgroundBlurEnabled else state.subtitleBackgroundBlurEnabled
+                val curBlur = if (isSecondary) state.secondarySubtitleBackgroundBlur else state.subtitleBackgroundBlur
+                val curFontSize = if (isSecondary) state.secondarySubtitleFontSize else state.subtitleFontSize
+                val curFontStyle = if (isSecondary) state.secondarySubtitleFontStyle else state.subtitleFontStyle
+                val curBorderThickness = if (isSecondary) state.secondarySubtitleBorderThickness else state.subtitleBorderThickness
+                val curBold = if (isSecondary) state.secondarySubtitleBold else state.subtitleBold
+                val curColor = if (isSecondary) state.secondarySubtitleColor else state.subtitleColor
+                val curVerticalPos = if (isSecondary) state.secondarySubtitleVerticalPosition else state.subtitleVerticalPosition
                 Column(modifier = Modifier.fillMaxSize()) {
                     PlayerMenuHeader(
                         title = t("player.menus.subtitles.settings.backlink"),
@@ -2149,64 +2509,110 @@ private fun PlayerMenuOverlayCard(
                                     modifier = Modifier.focusRequester(firstRequester)
                                 ) {
                                     delayMs -= 250
-                                    player.command("set", "sub-delay", (delayMs / 1000.0).toString())
+                                    player.command("set", delayProperty, (delayMs / 1000.0).toString())
                                 }
                                 TvButton(label = "0ms", navigation = true) {
                                     delayMs = 0
-                                    player.command("set", "sub-delay", "0")
+                                    player.command("set", delayProperty, "0")
                                 }
                                 TvButton(label = "+250ms", navigation = true) {
                                     delayMs += 250
-                                    player.command("set", "sub-delay", (delayMs / 1000.0).toString())
+                                    player.command("set", delayProperty, (delayMs / 1000.0).toString())
                                 }
                             }
                         }
                         item {
                             Text(
-                                text = "${t("settings.subtitles.backgroundLabel")}: ${state.subtitleBackgroundOpacity}%",
+                                text = "${t("settings.subtitles.backgroundLabel")}: $curOpacity%",
                                 color = secondaryText,
                                 fontSize = 13.sp
                             )
                             Row(modifier = Modifier.padding(top = 6.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                TvButton(label = "−", navigation = true) { state.updateSubtitleBackgroundOpacity(state.subtitleBackgroundOpacity - 10) }
-                                TvButton(label = "+", navigation = true) { state.updateSubtitleBackgroundOpacity(state.subtitleBackgroundOpacity + 10) }
+                                TvButton(label = "−", navigation = true) { state.updateSubtitleBackgroundOpacity(curOpacity - 10, isSecondary) }
+                                TvButton(label = "+", navigation = true) { state.updateSubtitleBackgroundOpacity(curOpacity + 10, isSecondary) }
+                            }
+                        }
+                        item {
+                            PlayerMenuRowLink(
+                                title = t("settings.subtitles.backgroundBlurEnabledLabel"),
+                                showToggle = true,
+                                toggleEnabled = curBlurEnabled,
+                                onClick = { state.toggleSubtitleBackgroundBlur(isSecondary) }
+                            )
+                            if (curBlurEnabled) {
+                                Text(
+                                    text = "${t("settings.subtitles.backgroundBlurLabel")}: $curBlur%",
+                                    color = secondaryText,
+                                    fontSize = 13.sp,
+                                    modifier = Modifier.padding(top = 6.dp)
+                                )
+                                Row(modifier = Modifier.padding(top = 4.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    TvButton(label = "−", navigation = true) { state.updateSubtitleBackgroundBlur(curBlur - 25, isSecondary) }
+                                    TvButton(label = "+", navigation = true) { state.updateSubtitleBackgroundBlur(curBlur + 25, isSecondary) }
+                                }
                             }
                         }
                         item {
                             Text(
-                                text = "${t("settings.subtitles.textSizeLabel")}: ${state.subtitleFontSize}%",
+                                text = "${t("settings.subtitles.textSizeLabel")}: $curFontSize%",
                                 color = secondaryText,
                                 fontSize = 13.sp
                             )
                             Row(modifier = Modifier.padding(top = 6.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                TvButton(label = "−", navigation = true) { state.updateSubtitleFontSize(state.subtitleFontSize - 5) }
-                                TvButton(label = "100%", selected = state.subtitleFontSize == 100, navigation = true) { state.updateSubtitleFontSize(100) }
-                                TvButton(label = "+", navigation = true) { state.updateSubtitleFontSize(state.subtitleFontSize + 5) }
+                                TvButton(label = "−", navigation = true) { state.updateSubtitleFontSize(curFontSize - 5, isSecondary) }
+                                TvButton(label = "100%", selected = curFontSize == 100, navigation = true) { state.updateSubtitleFontSize(100, isSecondary) }
+                                TvButton(label = "+", navigation = true) { state.updateSubtitleFontSize(curFontSize + 5, isSecondary) }
+                            }
+                        }
+                        item {
+                            Text(t("settings.subtitles.textStyle.title"), color = secondaryText, fontSize = 13.sp)
+                            LazyRow(modifier = Modifier.padding(top = 6.dp), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                                val styles = listOf("default", "raised", "depressed", "Border", "dropShadow")
+                                items(styles) { styleId ->
+                                    TvButton(
+                                        label = t("settings.subtitles.textStyle.$styleId"),
+                                        selected = curFontStyle == styleId,
+                                        navigation = true
+                                    ) { state.updateSubtitleFontStyle(styleId, isSecondary) }
+                                }
+                            }
+                        }
+                        if (curFontStyle == "Border") {
+                            item {
+                                Text(
+                                    text = "${t("settings.subtitles.BorderThicknessLabel")}: ${"%.1f".format(Locale.US, curBorderThickness)}",
+                                    color = secondaryText,
+                                    fontSize = 13.sp
+                                )
+                                Row(modifier = Modifier.padding(top = 6.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    TvButton(label = "−", navigation = true) { state.updateSubtitleBorderThickness(curBorderThickness - 0.5f, isSecondary) }
+                                    TvButton(label = "+", navigation = true) { state.updateSubtitleBorderThickness(curBorderThickness + 0.5f, isSecondary) }
+                                }
                             }
                         }
                         item {
                             PlayerMenuRowLink(
                                 title = t("settings.subtitles.textBoldLabel"),
                                 showToggle = true,
-                                toggleEnabled = state.subtitleBold,
-                                onClick = { state.toggleSubtitleBold() }
+                                toggleEnabled = curBold,
+                                onClick = { state.toggleSubtitleBold(isSecondary) }
                             )
                         }
                         item {
                             val label = t("settings.subtitles.colorLabel")
                             Text(label, color = secondaryText, fontSize = 13.sp)
                             Row(modifier = Modifier.padding(top = 6.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                listOf("#FFFFFF", "#80B1FA", "#E2E535", "#10B239").forEach { hex ->
-                                    val selected = state.subtitleColor.equals(hex, ignoreCase = true)
+                                listOf("#FFFFFF", "#80B1FA", "#E2E535", "#10B239", "#F472B6").forEach { hex ->
+                                    val selected = curColor.equals(hex, ignoreCase = true)
                                     MaterialTvButton(
-                                        onClick = { state.updateSubtitleColor(hex) },
-                                        modifier = Modifier.size(44.dp).semantics { contentDescription = "$label $hex" },
+                                        onClick = { state.updateSubtitleColor(hex, isSecondary) },
+                                        modifier = Modifier.size(40.dp).semantics { contentDescription = "$label $hex" },
                                         shape = TvButtonDefaults.shape(CircleShape),
                                         colors = TvButtonDefaults.colors(containerColor = Color(android.graphics.Color.parseColor(hex)), focusedContainerColor = Color(android.graphics.Color.parseColor(hex))),
                                         border = TvButtonDefaults.border(focusedBorder = TvBorder(BorderStroke(3.dp, colors["type.logo"]), shape = CircleShape)),
                                         contentPadding = PaddingValues(0.dp)
                                     ) {
-                                        if (selected) Icon(painterResource(R.drawable.desktop_checkmark), null, Modifier.size(20.dp), tint = Color.Black)
+                                        if (selected) Icon(painterResource(R.drawable.desktop_checkmark), null, Modifier.size(18.dp), tint = Color.Black)
                                     }
                                 }
                             }
@@ -2214,11 +2620,11 @@ private fun PlayerMenuOverlayCard(
                         item {
                             Text(t("settings.subtitles.verticalPositionLabel"), color = secondaryText, fontSize = 13.sp)
                             Row(modifier = Modifier.padding(top = 6.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                TvButton(t("settings.subtitles.low"), selected = state.subtitleVerticalPosition == 1, navigation = true) { state.updateSubtitleVerticalPosition(1) }
-                                TvButton(t("settings.subtitles.high"), selected = state.subtitleVerticalPosition == 3, navigation = true) { state.updateSubtitleVerticalPosition(3) }
+                                TvButton(t("settings.subtitles.low"), selected = curVerticalPos == 1, navigation = true) { state.updateSubtitleVerticalPosition(1, isSecondary) }
+                                TvButton(t("settings.subtitles.high"), selected = curVerticalPos == 3, navigation = true) { state.updateSubtitleVerticalPosition(3, isSecondary) }
                             }
                         }
-                        item { TvButton(t("settings.reset"), navigation = true) { state.resetSubtitleStyling() } }
+                        item { TvButton(t("settings.reset"), navigation = true) { state.resetSubtitleStyling(isSecondary) } }
                     }
                 }
             }
@@ -2289,6 +2695,25 @@ private fun PlayerMenuOverlayCard(
                                 onClick = { state.toggleAutoSkipSegments() }
                             )
                         }
+                        if (state.canSubmitTidb) {
+                            item {
+                                PlayerMenuRowLink(
+                                    title = t("player.skipTime.submitSegment"),
+                                    chevron = true,
+                                    onClick = { onNavigateOverlay("skip_submit") }
+                                )
+                            }
+                        } else {
+                            item {
+                                Text(
+                                    text = t("player.skipTime.submissionUnavailableMessage"),
+                                    color = secondaryText,
+                                    fontSize = 12.sp,
+                                    lineHeight = 16.sp,
+                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                                )
+                            }
+                        }
                         if (state.skipSegments.isEmpty()) {
                             item {
                                 Text(
@@ -2302,9 +2727,8 @@ private fun PlayerMenuOverlayCard(
                             items(state.skipSegments) { segment ->
                                 val bounds = playbackSegmentBounds(segment, duration)
                                 PlayerMenuRowLink(
-                                    title = t("player.skipTime.${segment.type}"),
+                                    title = t("player.skipTime.feedback.modal.types.${segment.type}"),
                                     rightText = bounds?.let { "${formatDurationTime(it.start)} – ${it.end?.let { end -> formatDurationTime(end) } ?: formatDurationTime(duration)}" } ?: "",
-                                    modifier = if (segment == state.skipSegments.first()) Modifier.focusRequester(firstRequester) else Modifier,
                                     onClick = {
                                         bounds?.let { player.command("seek", it.start.toString(), "absolute") }
                                         onNavigateOverlay(null)
@@ -2314,6 +2738,36 @@ private fun PlayerMenuOverlayCard(
                         }
                     }
                 }
+            }
+
+            "skip_submit" -> {
+                TidbSkipSubmitOverlayContent(
+                    state = state,
+                    item = item,
+                    episode = episode,
+                    currentPositionSec = position,
+                    firstRequester = firstRequester,
+                    onBack = onCloseSkipSubmit
+                )
+            }
+
+            "captions_translate" -> {
+                PlayerTranslateOverlayContent(
+                    sourceLanguage = activeChoice?.language ?: "und",
+                    isTranslating = isTranslating,
+                    progressDone = translateDone,
+                    progressTotal = translateTotal,
+                    errorText = translateError,
+                    firstRequester = firstRequester,
+                    onBack = { onNavigateOverlay("captions") },
+                    onCancelTranslate = onCancelTranslate,
+                    onSelectTarget = { target ->
+                        val url = activeCaptionUrl
+                        if (url != null && activeChoice != null) {
+                            onStartSubtitleTranslate(url, activeChoice.label.ifBlank { activeChoice.language }, target)
+                        }
+                    }
+                )
             }
 
             "playback" -> {
@@ -2365,30 +2819,14 @@ private fun PlayerMenuOverlayCard(
             }
 
             "audio" -> {
-                Column(modifier = Modifier.fillMaxSize()) {
-                    PlayerMenuHeader(
-                        title = t("player.menus.settings.audioItem"),
-                        onBack = { onNavigateOverlay("settings") }
-                    )
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(top = 12.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        items(audioTracks.size) { index ->
-                            val track = audioTracks[index]
-                            PlayerMenuRowLink(
-                                title = audioTrackLabel(track).ifBlank { t("player.menus.subtitles.unknownLanguage") },
-                                selected = track.selected,
-                                modifier = if (index == 0) Modifier.focusRequester(firstRequester) else Modifier,
-                                onClick = {
-                                    if (player.command("set", "aid", track.id) >= 0) onNavigateOverlay(null)
-                                }
-                            )
-                        }
-                    }
-                }
+                PlayerAudioOverlayContent(
+                    state = state,
+                    player = player,
+                    audioTracks = audioTracks,
+                    firstRequester = firstRequester,
+                    onBack = { onNavigateOverlay("settings") },
+                    onClose = { onNavigateOverlay(null) }
+                )
             }
 
             "quality" -> {
@@ -2588,7 +3026,7 @@ private fun SettingsGridButton(
 }
 
 @Composable
-private fun PlayerMenuHeader(
+internal fun PlayerMenuHeader(
     title: String,
     onBack: () -> Unit,
     backModifier: Modifier = Modifier,
@@ -2641,7 +3079,7 @@ private fun PlayerMenuHeader(
 }
 
 @Composable
-private fun PlayerMenuRowLink(
+internal fun PlayerMenuRowLink(
     title: String,
     rightText: String = "",
     selected: Boolean = false,

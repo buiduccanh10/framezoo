@@ -572,37 +572,65 @@ internal fun LazyListScope.discoverContentRows(
             TvButton(retryLabel) { state.refreshDiscover() }
         }
     }
-    val rows = if (state.filter.category.startsWith("genre:")) {
-        listOf("genre" to (state.genres.firstOrNull { it.id == state.filter.category.substringAfter(':') }?.name ?: titleGenres))
-    } else {
-        listOf("trending" to titleTrending) +
-        (if (state.filter.category == "all") listOf("popular" to titlePopular) else emptyList()) +
-        listOf(
-            "provider" to (state.providers.firstOrNull { it.id == state.provider }?.name ?: titleProvider),
-            "top" to titleTopRated,
-            "editor" to titleEditorPicks,
-            "latest" to titleNewReleases
-        ) +
-        (if (state.filter.category in listOf("movie", "tv") && state.hasPersonalSources) listOf("personal" to titleForYou) else emptyList()) +
-        (if (state.filter.category in listOf("movie", "tv") && state.recommendationSources.isNotEmpty()) listOf("recommendations" to titleBasedOn) else emptyList()) +
-        listOf("genre" to titleGenres)
-    }
-
-    rows.forEach { (key, title) ->
-        val media = state.sections[key]
-        if (media == null && state.discoverLoading) item(key = "loading:$key") { DiscoverSkeleton(title) }
-        else if (!media.isNullOrEmpty() || state.rowErrors.containsKey(key) || (media != null && key in listOf("provider", "genre", "recommendations"))) item(key = "row:$key") {
-            DiscoverCarousel(state, key, title, media.orEmpty())
-        }
-    }
-
     val addonGroups = state.addonCatalog.filter {
         state.filter.category !in listOf("movie", "tv") || it.type == if (state.filter.category == "movie") "movie" else "series"
     }
-    addonGroups.forEach { group ->
-        item(key = group.key) {
-            DiscoverCarousel(state, group.key, group.addonName, group.items, group)
+    if (state.filter.category.startsWith("genre:")) {
+        val genreTitle = state.genres.firstOrNull { it.id == state.filter.category.substringAfter(':') }?.name ?: titleGenres
+        val media = state.sections["genre"]
+        if (media == null && state.discoverLoading) item(key = "loading:genre") { DiscoverSkeleton(genreTitle) }
+        else if (!media.isNullOrEmpty() || state.rowErrors.containsKey("genre") || media != null) item(key = "row:genre") {
+            DiscoverCarousel(state, "genre", genreTitle, media.orEmpty())
         }
+        addonGroups.forEach { group ->
+            item(key = group.key) {
+                DiscoverCarousel(state, group.key, group.addonName, group.items, group)
+            }
+        }
+    } else {
+        val sectionTitles = linkedMapOf(
+            "trending" to titleTrending,
+            *if (state.filter.category == "all") arrayOf("popular" to titlePopular) else emptyArray(),
+            "provider" to (state.providers.firstOrNull { it.id == state.provider }?.name ?: titleProvider),
+            "top" to titleTopRated,
+            "editor" to titleEditorPicks,
+            "latest" to titleNewReleases,
+            *if (state.filter.category in listOf("movie", "tv") && state.hasPersonalSources) arrayOf("personal" to titleForYou) else emptyArray(),
+            *if (state.filter.category in listOf("movie", "tv") && state.recommendationSources.isNotEmpty()) arrayOf("recommendations" to titleBasedOn) else emptyArray(),
+            "genre" to titleGenres
+        )
+        val addonByKey = addonGroups.associateBy { it.key }
+        val emittedCore = mutableSetOf<String>()
+        val emittedAddons = mutableSetOf<String>()
+
+        fun emitCoreRow(key: String) {
+            val title = sectionTitles[key] ?: return
+            if (!emittedCore.add(key)) return
+            val media = state.sections[key]
+            if (media == null && state.discoverLoading) item(key = "loading:$key") { DiscoverSkeleton(title) }
+            else if (!media.isNullOrEmpty() || state.rowErrors.containsKey(key) || (media != null && key in listOf("provider", "genre", "recommendations"))) {
+                item(key = "row:$key") {
+                    DiscoverCarousel(state, key, title, media.orEmpty())
+                }
+            }
+        }
+
+        fun emitAddonGroup(group: AddonCatalog) {
+            if (!emittedAddons.add(group.key)) return
+            item(key = group.key) {
+                DiscoverCarousel(state, group.key, group.addonName, group.items, group)
+            }
+        }
+
+        state.homeSectionOrder.forEach { orderKey ->
+            when {
+                orderKey == "addons" -> addonGroups.forEach(::emitAddonGroup)
+                orderKey.startsWith("addon:") -> addonByKey[orderKey]?.let(::emitAddonGroup)
+                else -> emitCoreRow(orderKey)
+            }
+        }
+        sectionTitles.keys.forEach(::emitCoreRow)
+        addonGroups.forEach(::emitAddonGroup)
     }
 
     if (state.filter.category != "tv") item {
