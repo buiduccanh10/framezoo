@@ -36,19 +36,19 @@ export function getLandingSeoMetadata(
 
   const categoryMetadata = {
     experience: {
-      title: copy.features.experienceTitle,
+      title: locale === "en" ? "Features & Experience" : copy.nav.features,
       description: copy.features.overviewDescription,
     },
     ecosystem: {
-      title: copy.features.ecosystemTitle,
+      title: locale === "en" ? "Addon Ecosystem" : copy.nav.addons,
       description: copy.features.ecosystemDescription,
     },
     "create-addon": {
-      title: copy.addonGuide.title,
+      title: locale === "en" ? "Build an Addon" : copy.nav.addonGuide,
       description: copy.addonGuide.description,
     },
     download: {
-      title: copy.download.title,
+      title: locale === "en" ? "Downloads" : copy.nav.download,
       description: copy.download.description,
     },
   }[category];
@@ -90,13 +90,13 @@ function setCanonicalUrl(url: string) {
   element.href = url;
 }
 
-export function applyLandingSeo(
+export function applyPageSeo(
   locale: LandingLocale,
-  category: LandingSeoCategoryId | null = null,
+  metadata: { title: string; description: string; path: string },
 ) {
   if (typeof document === "undefined") return;
 
-  const metadata = getLandingSeoMetadata(locale, category);
+  const canonical = `${SITE_URL}${metadata.path}`;
 
   document.title = metadata.title;
   setMeta("name", "robots", "index,follow,max-image-preview:large");
@@ -104,7 +104,7 @@ export function applyLandingSeo(
   setMeta("name", "thumbnail", SOCIAL_IMAGE_URL);
   setMeta("property", "og:title", metadata.title);
   setMeta("property", "og:description", metadata.description);
-  setMeta("property", "og:url", metadata.canonical);
+  setMeta("property", "og:url", canonical);
   setMeta("property", "og:image", SOCIAL_IMAGE_URL);
   setMeta("property", "og:image:width", "1200");
   setMeta("property", "og:image:height", "782");
@@ -117,5 +117,21 @@ export function applyLandingSeo(
   setMeta("name", "twitter:title", metadata.title);
   setMeta("name", "twitter:description", metadata.description);
   setMeta("name", "twitter:image", SOCIAL_IMAGE_URL);
-  setCanonicalUrl(metadata.canonical);
+  setCanonicalUrl(canonical);
+}
+
+export function applyLandingSeo(
+  locale: LandingLocale,
+  category: LandingSeoCategoryId | null = null,
+) {
+  const metadata = getLandingSeoMetadata(locale, category);
+  const path = category
+    ? (LANDING_SEO_CATEGORIES.find((item) => item.id === category)?.path ?? "/")
+    : "/";
+
+  applyPageSeo(locale, {
+    title: metadata.title,
+    description: metadata.description,
+    path,
+  });
 }

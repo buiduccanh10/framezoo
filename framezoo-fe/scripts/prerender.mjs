@@ -19,7 +19,7 @@ const routes = [
   {
     pathname: "/download",
     output: "download/index.html",
-    title: "Downloads | Framezoo - macOS and Windows",
+    title: "Downloads | Framezoo",
     description:
       "Download Framezoo for macOS and Windows. Watch movies, TV series, and video streams instantly at high speed.",
   },
@@ -50,6 +50,7 @@ const routes = [
     title: "Configure Framezoo Subtitles | Framezoo",
     description:
       "Configure your personal Wyzie Subtitles API Key to enjoy fast, multi-source subtitles without shared rate limits.",
+    noindex: true,
   },
   {
     pathname: "/guide/install",
@@ -113,6 +114,9 @@ function applyRouteSeo(html, route) {
     `<title>${escapeHtml(route.title)}</title>`,
   );
   output = setMeta(output, "name", "description", route.description);
+  if (route.noindex) {
+    output = setMeta(output, "name", "robots", "noindex,follow");
+  }
   output = setMeta(output, "property", "og:title", route.title);
   output = setMeta(output, "property", "og:description", route.description);
   output = setMeta(output, "property", "og:url", canonical);

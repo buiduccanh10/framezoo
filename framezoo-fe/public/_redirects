@@ -3,5 +3,9 @@
 /ecosystem /ecosystem/index.html 200
 /create-addon /create-addon/index.html 200
 /download /download/index.html 200
+/guide/install /guide/install/index.html 200
+/legal/terms /legal/terms/index.html 200
+/legal/privacy /legal/privacy/index.html 200
+/legal/copyright /legal/copyright/index.html 200
+/legal/addon-policy /legal/addon-policy/index.html 200
 /* /index.html 200
-˜

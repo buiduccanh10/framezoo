@@ -670,15 +670,12 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .landing-shell.is-motion-ready .landing-scroll-reveal {
-    opacity: 0;
+    /* Keep opacity: 1 so crawlers rendering without scroll still see below-the-fold sections. */
     transform: translate3d(0, 30px, 0);
-    transition:
-      opacity 720ms cubic-bezier(0.2, 0.8, 0.2, 1),
-      transform 720ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition: transform 720ms cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 
   .landing-shell.is-motion-ready .landing-scroll-reveal.is-visible {
-    opacity: 1;
     transform: none;
   }
 
@@ -2869,15 +2866,12 @@ body {
 
 @media (prefers-reduced-motion: no-preference) {
   .landing-shell.is-motion-ready .landing-scroll-reveal {
-    opacity: 0;
+    /* Keep opacity: 1 so crawlers rendering without scroll still see below-the-fold sections. */
     transform: translate3d(0, 30px, 0);
-    transition:
-      opacity var(--dur-medium) var(--ease-out),
-      transform var(--dur-medium) var(--ease-out);
+    transition: transform var(--dur-medium) var(--ease-out);
   }
 
   .landing-shell.is-motion-ready .landing-scroll-reveal.is-visible {
-    opacity: 1;
     transform: none;
   }
 
