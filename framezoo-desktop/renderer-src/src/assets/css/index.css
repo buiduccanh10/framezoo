@@ -2,6 +2,13 @@
 @import "tailwindcss";
 @config "../../../tailwind.config.mts";
 
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
+}
+
 html,
 body {
   font-family: "Lato", sans-serif !important;
@@ -46,7 +53,11 @@ body {
   padding: clamp(1.25rem, 3vw, 2rem);
   color: #fff8ee;
   background:
-    radial-gradient(circle at 100% 0%, rgba(228, 79, 79, 0.2), transparent 20rem),
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(228, 79, 79, 0.2),
+      transparent 20rem
+    ),
     linear-gradient(150deg, rgba(34, 20, 21, 0.98), rgba(15, 11, 12, 0.98));
   border: 1px solid rgba(255, 225, 210, 0.18);
   border-radius: 24px;
@@ -81,7 +92,10 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 50%;
   cursor: pointer;
-  transition: background 180ms ease, color 180ms ease, transform 180ms ease;
+  transition:
+    background 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
 }
 
 .donate-modal-close:hover {
@@ -183,7 +197,9 @@ body {
   font-size: 0.78rem;
   font-weight: 700;
   cursor: pointer;
-  transition: background 180ms ease, color 180ms ease;
+  transition:
+    background 180ms ease,
+    color 180ms ease;
 }
 
 .donate-modal-dismiss:hover {
