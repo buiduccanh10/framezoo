@@ -141,7 +141,17 @@ export function GuestManagement({
         setLoading(false);
       }
     },
-    [api, limit, onStatsUpdate, page, platformFilter, search, showMessage, sort, windowFilter],
+    [
+      api,
+      limit,
+      onStatsUpdate,
+      page,
+      platformFilter,
+      search,
+      showMessage,
+      sort,
+      windowFilter,
+    ],
   );
 
   useEffect(() => {
@@ -206,7 +216,8 @@ export function GuestManagement({
         <div>
           <h1 id="guests-heading">Người dùng khách</h1>
           <p className="section-lede">
-            Thiết bị unique đang dùng app ở chế độ chưa đăng nhập ({activeWindowLabel}).
+            Thiết bị unique đang dùng app ở chế độ chưa đăng nhập (
+            {activeWindowLabel}).
           </p>
         </div>
         <button
@@ -326,7 +337,6 @@ export function GuestManagement({
               <option value="Desktop">Desktop</option>
               <option value="Mobile">Mobile</option>
               <option value="TV">TV</option>
-              <option value="Web">Web</option>
             </select>
           </label>
 

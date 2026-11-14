@@ -70,16 +70,19 @@ export default defineEventHandler(async event => {
   const cutoff30d = getGuestWindowStart('30d', now);
   const windowStart = getGuestWindowStart(window, now);
 
-  const conditions: Prisma.Sql[] = [Prisma.sql`last_seen_at >= ${windowStart}`];
+  const normalizedPlatformSql = Prisma.sql`CASE WHEN COALESCE(platform, '') LIKE '% · Web' AND NULLIF(app_version, '') IS NOT NULL THEN REPLACE(platform, ' · Web', ' · Desktop') ELSE COALESCE(NULLIF(platform, ''), 'Không rõ thiết bị') END`;
+  const appOnlyCondition = Prisma.sql`(COALESCE(platform, '') LIKE '% · Desktop' OR COALESCE(platform, '') LIKE '% · Mobile' OR COALESCE(platform, '') LIKE '% · TV' OR NULLIF(app_version, '') IS NOT NULL)`;
+
+  const conditions: Prisma.Sql[] = [Prisma.sql`last_seen_at >= ${windowStart}`, appOnlyCondition];
   if (platformFilter !== 'all') {
-    conditions.push(Prisma.sql`COALESCE(platform, '') LIKE ${`% · ${platformFilter}`}`);
+    conditions.push(Prisma.sql`${normalizedPlatformSql} LIKE ${`% · ${platformFilter}`}`);
   }
   if (search) {
     conditions.push(
       Prisma.sql`(
         strpos(lower(id::text), lower(${search})) > 0
         OR strpos(lower(COALESCE(app_version, '')), lower(${search})) > 0
-        OR strpos(lower(COALESCE(platform, '')), lower(${search})) > 0
+        OR strpos(lower(${normalizedPlatformSql}), lower(${search})) > 0
       )`
     );
   }
@@ -94,12 +97,12 @@ export default defineEventHandler(async event => {
         COUNT(*) FILTER (WHERE last_seen_at >= ${cutoff7d})::int AS d7,
         COUNT(*) FILTER (WHERE last_seen_at >= ${cutoff30d})::int AS d30
       FROM guests
-      WHERE last_seen_at >= ${cutoff30d}
+      WHERE last_seen_at >= ${cutoff30d} AND ${appOnlyCondition}
     `,
     prisma.$queryRaw<PlatformBreakdownRow[]>`
-      SELECT COALESCE(NULLIF(platform, ''), 'Không rõ thiết bị') AS platform, COUNT(*)::int AS count
+      SELECT ${normalizedPlatformSql} AS platform, COUNT(*)::int AS count
       FROM guests
-      WHERE last_seen_at >= ${windowStart}
+      WHERE last_seen_at >= ${windowStart} AND ${appOnlyCondition}
       GROUP BY 1
       ORDER BY count DESC, platform ASC
       LIMIT 8
@@ -107,7 +110,7 @@ export default defineEventHandler(async event => {
     prisma.$queryRaw<VersionBreakdownRow[]>`
       SELECT NULLIF(app_version, '') AS version, COUNT(*)::int AS count
       FROM guests
-      WHERE last_seen_at >= ${windowStart}
+      WHERE last_seen_at >= ${windowStart} AND ${appOnlyCondition}
       GROUP BY 1
       ORDER BY count DESC, version DESC NULLS LAST
       LIMIT 6
@@ -121,7 +124,7 @@ export default defineEventHandler(async event => {
       SELECT
         id::text AS id,
         NULLIF(app_version, '') AS app_version,
-        COALESCE(NULLIF(platform, ''), 'Không rõ thiết bị') AS platform,
+        ${normalizedPlatformSql} AS platform,
         request_count,
         first_seen_at,
         last_seen_at
