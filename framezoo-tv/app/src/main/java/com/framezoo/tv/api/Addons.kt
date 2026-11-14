@@ -325,7 +325,15 @@ class Addons(context: Context, private val backend: Backend, private val store: 
                 filename = hints.optString("filename").ifBlank { null },
                 headers = headers,
                 subtitles = (0 until subs.length()).mapNotNull { subs.optJSONObject(it) }.mapNotNull {
-                    it.optString("url").takeIf(String::isNotBlank)?.let { subUrl -> Subtitle(it.optString("lang", it.optString("language", "und")), subUrl, it.optString("label")) }
+                    it.optString("url").takeIf(String::isNotBlank)?.let { subUrl ->
+                        Subtitle(
+                            language = it.optString("lang", it.optString("language", "und")),
+                            url = subUrl,
+                            label = it.optString("label", it.optString("display")),
+                            isHearingImpaired = it.optBoolean("isHearingImpaired", false) || it.optBoolean("hearingImpaired", false),
+                            releaseName = it.optString("release", it.optString("fileName", it.optString("title")))
+                        )
+                    }
                 },
                 title = rawTitle,
                 description = rawDesc,
@@ -354,7 +362,13 @@ class Addons(context: Context, private val backend: Backend, private val store: 
                 .optJSONArray("subtitles") ?: JSONArray()
             for (i in 0 until raw.length()) raw.optJSONObject(i)?.let {
                 val url = it.optString("url")
-                if (url.isNotBlank()) result += Subtitle(it.optString("lang", "und"), url, it.optString("label"))
+                if (url.isNotBlank()) result += Subtitle(
+                    language = it.optString("lang", it.optString("language", "und")),
+                    url = url,
+                    label = it.optString("label", it.optString("display")),
+                    isHearingImpaired = it.optBoolean("isHearingImpaired", false) || it.optBoolean("hearingImpaired", false),
+                    releaseName = it.optString("release", it.optString("fileName", it.optString("title")))
+                )
             }
         } catch (_: Exception) { }
         return result

@@ -1,5 +1,6 @@
 package com.framezoo.tv.ui
 
+import android.view.KeyEvent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -9,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
@@ -16,14 +18,25 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -40,17 +53,20 @@ import com.framezoo.tv.ui.features.auth.IconPickerTab
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 
-private enum class SettingsCategory {
-    ACCOUNT,
-    PREFERENCES,
-    APPEARANCE,
-    CAPTIONS
+private enum class SettingsCategory(val searchKeywords: String) {
+    ACCOUNT("account profile nickname email password otp sessions delete logout tài khoản hồ sơ mật khẩu"),
+    PREFERENCES("preferences language autoplay skip credits segments order categories home section tùy chọn ngôn ngữ tự động chuyên mục thứ tự"),
+    APPEARANCE("appearance theme colors palette custom giao diện chủ đề màu sắc"),
+    CAPTIONS("subtitles captions font size color blur border shadow delay position primary secondary phụ đề cỡ chữ viền bóng"),
+    CONNECTIONS("connections tidb theintrodb intro api key token submit kết nối")
 }
 
 @Composable
 internal fun SettingsScreen(state: FrameZooState) {
     val colors = LocalFrameZooColors.current
+    val focusManager = LocalFocusManager.current
     var selectedCategory by remember { mutableStateOf(SettingsCategory.ACCOUNT) }
+    var searchQuery by remember { mutableStateOf("") }
     val backRequester = remember { FocusRequester() }
 
     Row(
@@ -87,14 +103,67 @@ internal fun SettingsScreen(state: FrameZooState) {
                     )
                 }
 
-                Spacer(Modifier.height(4.dp))
+                BasicTextField(
+                    value = searchQuery,
+                    onValueChange = { searchQuery = it },
+                    singleLine = true,
+                    textStyle = TextStyle(color = colors["type.emphasis"], fontSize = 14.sp),
+                    cursorBrush = SolidColor(colors["type.emphasis"]),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(colors["background.main"].copy(alpha = 0.7f))
+                        .border(BorderStroke(1.dp, colors["authentication.border"]), RoundedCornerShape(10.dp))
+                        .onPreviewKeyEvent { event ->
+                            if (event.nativeKeyEvent.action == KeyEvent.ACTION_DOWN &&
+                                event.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_DPAD_DOWN
+                            ) focusManager.moveFocus(FocusDirection.Down) else false
+                        }
+                        .padding(horizontal = 12.dp, vertical = 10.dp),
+                    decorationBox = { inner ->
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.desktop_search),
+                                contentDescription = null,
+                                tint = colors["type.secondary"],
+                                modifier = Modifier.size(16.dp)
+                            )
+                            Box(modifier = Modifier.weight(1f)) {
+                                if (searchQuery.isEmpty()) {
+                                    Text(
+                                        text = t("settings.search.placeholder"),
+                                        color = colors["type.secondary"],
+                                        fontSize = 13.5.sp
+                                    )
+                                }
+                                inner()
+                            }
+                        }
+                    }
+                )
 
-                val categories = listOf(
+                val allCategories = listOf(
                     Triple(SettingsCategory.ACCOUNT, t("settings.account.title"), R.drawable.desktop_user),
                     Triple(SettingsCategory.PREFERENCES, t("settings.preferences.title"), R.drawable.desktop_settings),
                     Triple(SettingsCategory.APPEARANCE, t("settings.appearance.title"), R.drawable.user_icon_brush),
-                    Triple(SettingsCategory.CAPTIONS, t("settings.subtitles.title"), R.drawable.desktop_captions)
+                    Triple(SettingsCategory.CAPTIONS, t("settings.subtitles.title"), R.drawable.desktop_captions),
+                    Triple(SettingsCategory.CONNECTIONS, t("settings.connections.title"), R.drawable.desktop_web)
                 )
+                val queryClean = searchQuery.trim().lowercase()
+                val visibleCategories = remember(queryClean, allCategories) {
+                    if (queryClean.isEmpty()) allCategories
+                    else allCategories.filter { (cat, label, _) ->
+                        label.lowercase().contains(queryClean) || cat.searchKeywords.contains(queryClean)
+                    }
+                }
+                LaunchedEffect(visibleCategories) {
+                    if (visibleCategories.isNotEmpty() && visibleCategories.none { it.first == selectedCategory }) {
+                        selectedCategory = visibleCategories.first().first
+                    }
+                }
 
                 Column(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -102,16 +171,25 @@ internal fun SettingsScreen(state: FrameZooState) {
                         .fillMaxWidth()
                         .padding(horizontal = 4.dp, vertical = 4.dp)
                 ) {
-                    categories.forEach { (cat, label, iconRes) ->
-                        val isSelected = selectedCategory == cat
-                        TvButton(
-                            label = label,
-                            icon = iconRes,
-                            selected = isSelected,
-                            navigation = true,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            selectedCategory = cat
+                    if (visibleCategories.isEmpty()) {
+                        Text(
+                            text = t("home.search.empty.default"),
+                            color = colors["type.secondary"],
+                            fontSize = 13.sp,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp)
+                        )
+                    } else {
+                        visibleCategories.forEach { (cat, label, iconRes) ->
+                            val isSelected = selectedCategory == cat
+                            TvButton(
+                                label = label,
+                                icon = iconRes,
+                                selected = isSelected,
+                                navigation = true,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                selectedCategory = cat
+                            }
                         }
                     }
                 }
@@ -158,6 +236,7 @@ internal fun SettingsScreen(state: FrameZooState) {
                 SettingsCategory.PREFERENCES -> PreferencesSection(state)
                 SettingsCategory.APPEARANCE -> AppearanceSection(state)
                 SettingsCategory.CAPTIONS -> CaptionsSection(state)
+                SettingsCategory.CONNECTIONS -> ConnectionsSection(state)
             }
         }
     }
@@ -291,6 +370,88 @@ private fun PreferencesSection(state: FrameZooState) {
                 }
             }
         }
+
+        // Category Order Card matching PreferencesPart.tsx (`sectionOrder`)
+        item {
+            SettingsCardContainer {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Text(
+                            text = t("settings.preferences.homeSectionOrder"),
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = colors["type.emphasis"]
+                        )
+                        Text(
+                            text = t("settings.preferences.homeSectionOrderDescription"),
+                            fontSize = 13.5.sp,
+                            color = colors["type.secondary"]
+                        )
+                    }
+                    TvButton(
+                        label = t("settings.preferences.resetHomeSectionOrder"),
+                        navigation = true
+                    ) {
+                        state.resetHomeSectionOrder()
+                    }
+                }
+                val order = state.homeSectionOrder
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    order.forEachIndexed { idx, key ->
+                        val sectionTitle = when (key) {
+                            "trending" -> t("discover.carousel.title.trending")
+                            "popular" -> t("discover.carousel.title.popular")
+                            "provider" -> t("discover.carousel.title.providers")
+                            "top" -> t("discover.carousel.title.topRated")
+                            "editor" -> t("discover.carousel.title.editorPicks")
+                            "latest" -> t("discover.carousel.title.latestReleases")
+                            "personal" -> t("discover.carousel.title.forYou")
+                            "recommendations" -> t("discover.carousel.title.recommendations")
+                            "genre" -> t("discover.carousel.title.genres")
+                            "addons" -> t("discover.carousel.title.addons")
+                            else -> key
+                        }
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(10.dp))
+                                .background(colors["background.main"].copy(alpha = 0.55f))
+                                .border(BorderStroke(1.dp, colors["authentication.border"]), RoundedCornerShape(10.dp))
+                                .padding(horizontal = 14.dp, vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                text = "${idx + 1}. $sectionTitle",
+                                color = colors["type.emphasis"],
+                                fontSize = 14.5.sp,
+                                fontWeight = FontWeight.Medium
+                            )
+                            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                                TvButton(
+                                    label = "▲",
+                                    navigation = true,
+                                    modifier = Modifier.alpha(if (idx > 0) 1f else 0.35f)
+                                ) {
+                                    if (idx > 0) state.moveHomeSection(idx, -1)
+                                }
+                                TvButton(
+                                    label = "▼",
+                                    navigation = true,
+                                    modifier = Modifier.alpha(if (idx < order.lastIndex) 1f else 0.35f)
+                                ) {
+                                    if (idx < order.lastIndex) state.moveHomeSection(idx, 1)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -343,23 +504,60 @@ private fun AppearanceSection(state: FrameZooState) {
 @Composable
 private fun CaptionsSection(state: FrameZooState) {
     val colors = LocalFrameZooColors.current
+    var editingSecondary by remember { mutableStateOf(false) }
+
+    val curFontSize = if (editingSecondary) state.secondarySubtitleFontSize else state.subtitleFontSize
+    val curColor = if (editingSecondary) state.secondarySubtitleColor else state.subtitleColor
+    val curOpacity = if (editingSecondary) state.secondarySubtitleBackgroundOpacity else state.subtitleBackgroundOpacity
+    val curBlurEnabled = if (editingSecondary) state.secondarySubtitleBackgroundBlurEnabled else state.subtitleBackgroundBlurEnabled
+    val curBlur = if (editingSecondary) state.secondarySubtitleBackgroundBlur else state.subtitleBackgroundBlur
+    val curFontStyle = if (editingSecondary) state.secondarySubtitleFontStyle else state.subtitleFontStyle
+    val curBorderThickness = if (editingSecondary) state.secondarySubtitleBorderThickness else state.subtitleBorderThickness
+    val curBold = if (editingSecondary) state.secondarySubtitleBold else state.subtitleBold
+    val curVerticalPos = if (editingSecondary) state.secondarySubtitleVerticalPosition else state.subtitleVerticalPosition
 
     LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp), contentPadding = PaddingValues(bottom = 40.dp)) {
         item {
-            Text(
-                text = t("settings.subtitles.title"),
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                color = colors["type.emphasis"]
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = t("settings.subtitles.title"),
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = colors["type.emphasis"]
+                )
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    TvButton(
+                        label = t("player.menus.subtitles.primary"),
+                        selected = !editingSecondary,
+                        navigation = true
+                    ) { editingSecondary = false }
+                    TvButton(
+                        label = t("player.menus.subtitles.secondary"),
+                        selected = editingSecondary,
+                        navigation = true
+                    ) { editingSecondary = true }
+                }
+            }
         }
 
         // Live Subtitle Preview Card matching desktop CaptionPreview
         item {
             val previewQuote = t("settings.subtitles.previewQuote")
-            val fontSizeSp = (18 * state.subtitleFontSize / 100).sp
-            val textColor = parseHexColor(state.subtitleColor, Color.White)
-            val bgColor = Color.Black.copy(alpha = state.subtitleBackgroundOpacity / 100f)
+            val fontSizeSp = (18 * curFontSize / 100).sp
+            val textColor = parseHexColor(curColor, Color.White)
+            val blurAlphaBoost = if (curBlurEnabled) (curBlur / 100f) * 0.2f else 0f
+            val bgColor = Color.Black.copy(alpha = ((curOpacity / 100f) + blurAlphaBoost).coerceIn(0f, 1f))
+            val fontWeight = if (curBold) FontWeight.Bold else FontWeight.Medium
+            val textShadow = when (curFontStyle) {
+                "dropShadow" -> Shadow(Color.Black.copy(alpha = 0.9f), Offset(3f, 3f), 6f)
+                "raised" -> Shadow(Color.Black.copy(alpha = 0.9f), Offset(0f, 3f), 2f)
+                "depressed" -> Shadow(Color.Black.copy(alpha = 0.9f), Offset(0f, -3f), 2f)
+                else -> Shadow(Color.Black.copy(alpha = 0.45f), Offset(1f, 1f), 2f)
+            }
 
             Box(
                 modifier = Modifier
@@ -371,20 +569,39 @@ private fun CaptionsSection(state: FrameZooState) {
                             listOf(Color(0xFFEEAA45), Color(0xFF48D3FF).copy(alpha = 0.5f), Color(0xFF3B27B2))
                         )
                     ),
-                contentAlignment = if (state.subtitleVerticalPosition == 3) Alignment.Center else Alignment.BottomCenter
+                contentAlignment = if (curVerticalPos == 3) Alignment.Center else Alignment.BottomCenter
             ) {
                 Box(
                     modifier = Modifier
                         .padding(16.dp)
                         .clip(RoundedCornerShape(6.dp))
                         .background(bgColor)
+                        .then(
+                            if (curBlurEnabled && curBlur > 0) {
+                                Modifier.border(BorderStroke(1.dp, Color.White.copy(alpha = 0.14f)), RoundedCornerShape(6.dp))
+                            } else Modifier
+                        )
                         .padding(horizontal = 14.dp, vertical = 6.dp)
                 ) {
+                    if (curFontStyle == "Border") {
+                        Text(
+                            text = previewQuote,
+                            style = TextStyle(
+                                color = Color.Black,
+                                fontSize = fontSizeSp,
+                                fontWeight = fontWeight,
+                                drawStyle = Stroke(width = (curBorderThickness * 3f).coerceIn(1.5f, 18f))
+                            )
+                        )
+                    }
                     Text(
                         text = previewQuote,
-                        color = textColor,
-                        fontSize = fontSizeSp,
-                        fontWeight = if (state.subtitleBold) FontWeight.Bold else FontWeight.Medium
+                        style = TextStyle(
+                            color = textColor,
+                            fontSize = fontSizeSp,
+                            fontWeight = fontWeight,
+                            shadow = if (curFontStyle == "Border") null else textShadow
+                        )
                     )
                 }
             }
@@ -404,22 +621,45 @@ private fun CaptionsSection(state: FrameZooState) {
                 listOf(0, 25, 50, 75, 100).forEach { opacity ->
                     TvButton(
                         label = "$opacity%",
-                        selected = state.subtitleBackgroundOpacity == opacity,
+                        selected = curOpacity == opacity,
                         navigation = true
                     ) {
-                        state.updateSubtitleBackgroundOpacity(opacity)
+                        state.updateSubtitleBackgroundOpacity(opacity, editingSecondary)
                     }
                 }
             }
         }
 
-        // Background Blur Toggle
+        // Background Blur Toggle + Intensity
         item {
             TvCheckboxRow(
-                checked = state.subtitleBackgroundBlurEnabled,
+                checked = curBlurEnabled,
                 label = t("settings.subtitles.backgroundBlurEnabledLabel"),
-                onToggle = { state.toggleSubtitleBackgroundBlur() }
+                onToggle = { state.toggleSubtitleBackgroundBlur(editingSecondary) }
             )
+        }
+        if (curBlurEnabled) {
+            item {
+                Text(
+                    text = t("settings.subtitles.backgroundBlurLabel"),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = colors["type.secondary"]
+                )
+            }
+            item {
+                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    listOf(0, 25, 50, 75, 100).forEach { blur ->
+                        TvButton(
+                            label = "$blur%",
+                            selected = curBlur == blur,
+                            navigation = true
+                        ) {
+                            state.updateSubtitleBackgroundBlur(blur, editingSecondary)
+                        }
+                    }
+                }
+            }
         }
 
         // Font Size
@@ -436,10 +676,10 @@ private fun CaptionsSection(state: FrameZooState) {
                 listOf(75, 100, 125, 150, 200).forEach { size ->
                     TvButton(
                         label = "$size%",
-                        selected = state.subtitleFontSize == size,
+                        selected = curFontSize == size,
                         navigation = true
                     ) {
-                        state.updateSubtitleFontSize(size)
+                        state.updateSubtitleFontSize(size, editingSecondary)
                     }
                 }
             }
@@ -466,10 +706,34 @@ private fun CaptionsSection(state: FrameZooState) {
                 styles.forEach { (id, label) ->
                     TvButton(
                         label = label,
-                        selected = state.subtitleFontStyle == id,
+                        selected = curFontStyle == id,
                         navigation = true
                     ) {
-                        state.updateSubtitleFontStyle(id)
+                        state.updateSubtitleFontStyle(id, editingSecondary)
+                    }
+                }
+            }
+        }
+
+        if (curFontStyle == "Border") {
+            item {
+                Text(
+                    text = "${t("settings.subtitles.BorderThicknessLabel")}: ${"%.1f".format(java.util.Locale.US, curBorderThickness)}",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = colors["type.secondary"]
+                )
+            }
+            item {
+                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    TvButton(label = "−", navigation = true) {
+                        state.updateSubtitleBorderThickness(curBorderThickness - 0.5f, editingSecondary)
+                    }
+                    TvButton(label = "1.0", selected = curBorderThickness == 1.0f, navigation = true) {
+                        state.updateSubtitleBorderThickness(1.0f, editingSecondary)
+                    }
+                    TvButton(label = "+", navigation = true) {
+                        state.updateSubtitleBorderThickness(curBorderThickness + 0.5f, editingSecondary)
                     }
                 }
             }
@@ -478,9 +742,9 @@ private fun CaptionsSection(state: FrameZooState) {
         // Bold Toggle
         item {
             TvCheckboxRow(
-                checked = state.subtitleBold,
+                checked = curBold,
                 label = t("settings.subtitles.textBoldLabel"),
-                onToggle = { state.toggleSubtitleBold() }
+                onToggle = { state.toggleSubtitleBold(editingSecondary) }
             )
         }
 
@@ -505,10 +769,10 @@ private fun CaptionsSection(state: FrameZooState) {
                 colorOptions.forEach { (hex, label) ->
                     TvButton(
                         label = label,
-                        selected = state.subtitleColor.equals(hex, ignoreCase = true),
+                        selected = curColor.equals(hex, ignoreCase = true),
                         navigation = true
                     ) {
-                        state.updateSubtitleColor(hex)
+                        state.updateSubtitleColor(hex, editingSecondary)
                     }
                 }
             }
@@ -527,17 +791,17 @@ private fun CaptionsSection(state: FrameZooState) {
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 TvButton(
                     label = t("settings.subtitles.low"),
-                    selected = state.subtitleVerticalPosition == 1,
+                    selected = curVerticalPos == 1,
                     navigation = true
                 ) {
-                    state.updateSubtitleVerticalPosition(1)
+                    state.updateSubtitleVerticalPosition(1, editingSecondary)
                 }
                 TvButton(
                     label = t("settings.subtitles.high"),
-                    selected = state.subtitleVerticalPosition == 3,
+                    selected = curVerticalPos == 3,
                     navigation = true
                 ) {
-                    state.updateSubtitleVerticalPosition(3)
+                    state.updateSubtitleVerticalPosition(3, editingSecondary)
                 }
             }
         }
@@ -548,7 +812,111 @@ private fun CaptionsSection(state: FrameZooState) {
                 label = t("settings.reset"),
                 navigation = true
             ) {
-                state.resetSubtitleStyling()
+                state.resetSubtitleStyling(editingSecondary)
+            }
+        }
+    }
+}
+
+@Composable
+private fun ConnectionsSection(state: FrameZooState) {
+    val colors = LocalFrameZooColors.current
+    var tidbKeyInput by remember(state.tidbKey) { mutableStateOf(state.tidbKey) }
+    var revealKey by remember { mutableStateOf(false) }
+    var savedNotice by remember { mutableStateOf(false) }
+
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(20.dp),
+        contentPadding = PaddingValues(bottom = 40.dp)
+    ) {
+        item {
+            Text(
+                text = t("settings.connections.title"),
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = colors["type.emphasis"]
+            )
+        }
+        item {
+            SettingsCardContainer {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "TheIntroDB",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = colors["type.emphasis"]
+                    )
+                    if (state.canSubmitTidb) {
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(50))
+                                .background(colors["buttons.purple"].copy(alpha = 0.25f))
+                                .border(BorderStroke(1.dp, colors["buttons.purple"]), RoundedCornerShape(50))
+                                .padding(horizontal = 10.dp, vertical = 4.dp)
+                        ) {
+                            Text(
+                                text = "✓ Active",
+                                color = colors["type.emphasis"],
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
+                    }
+                }
+                Text(
+                    text = t("settings.connections.tidb.description"),
+                    fontSize = 14.sp,
+                    color = colors["type.secondary"]
+                )
+                OutlinedTextField(
+                    value = tidbKeyInput,
+                    onValueChange = { tidbKeyInput = it; savedNotice = false },
+                    label = { Text(t("settings.connections.tidb.tokenLabel")) },
+                    singleLine = true,
+                    visualTransformation = if (revealKey) VisualTransformation.None else PasswordVisualTransformation(),
+                    colors = tvFieldColors(),
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    TvButton(
+                        label = t("settings.save"),
+                        accent = true,
+                        navigation = true
+                    ) {
+                        state.updateTidbKey(tidbKeyInput)
+                        savedNotice = true
+                    }
+                    if (tidbKeyInput.isNotBlank() || state.tidbKey.isNotBlank()) {
+                        TvButton(
+                            label = t("lists.actions.delete"),
+                            navigation = true
+                        ) {
+                            tidbKeyInput = ""
+                            state.updateTidbKey("")
+                            savedNotice = true
+                        }
+                    }
+                    val label = if (revealKey) t("settings.preferences.showLess") else t("settings.preferences.showMore")
+                    TvButton(
+                        label = label,
+                        navigation = true
+                    ) {
+                        revealKey = !revealKey
+                    }
+                }
+                if (savedNotice) {
+                    Text(
+                        text = "✓ ${t("settings.save")}",
+                        color = colors["type.logo"],
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
             }
         }
     }

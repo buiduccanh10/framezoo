@@ -31,6 +31,10 @@ see LICENSE file.
 
 namespace {
 
+inline int stream_ahead_pieces(int pieceLength) {
+	return std::clamp((72 * 1024 * 1024) / std::max(pieceLength, 1), 2, 48);
+}
+
 // -- example begin
 struct temp_storage
 {
@@ -76,9 +80,11 @@ struct temp_storage
 	bool has(lt::piece_index_t piece) const { std::lock_guard<std::mutex> lock(m_mutex); return m_verified.count(piece) != 0; }
 	bool was_evicted(lt::piece_index_t piece) const { std::lock_guard<std::mutex> lock(m_mutex); return m_evicted.count(piece) != 0; }
 	void center(lt::piece_index_t piece) { std::lock_guard<std::mutex> lock(m_mutex); m_center = piece; }
-	bool wait_piece(lt::piece_index_t piece, std::atomic<bool> const& cancelled, std::chrono::seconds timeout) {
+	bool wait_piece(lt::piece_index_t piece, std::atomic<bool> const& cancelled, std::chrono::milliseconds timeout, std::atomic<bool> const* abortFlag = nullptr) {
 		std::unique_lock<std::mutex> lock(m_mutex);
-		return m_changed.wait_for(lock, timeout, [&] { return m_verified.count(piece) || cancelled; }) && m_verified.count(piece);
+		return m_changed.wait_for(lock, timeout, [&] {
+			return m_verified.count(piece) || cancelled || (abortFlag && *abortFlag);
+		}) && m_verified.count(piece);
 	}
 	bool copy(lt::piece_index_t piece, int offset, char* out, int length) const {
 		std::lock_guard<std::mutex> lock(m_mutex);
@@ -135,7 +141,7 @@ struct temp_storage
 
 private:
 	bool evict_one(lt::piece_index_t incoming) {
-		int const ahead = std::clamp((64 * 1024 * 1024) / m_files.piece_length(), 2, 24);
+		int const ahead = stream_ahead_pieces(m_files.piece_length());
 		for (auto p : m_verified) {
 			int const index = static_cast<int>(p);
 			int const center = static_cast<int>(m_center);
@@ -360,16 +366,32 @@ public:
 		params.settings.set_bool(lt::settings_pack::close_redundant_connections, false);
 		params.settings.set_bool(lt::settings_pack::enable_dht, true);
 		params.settings.set_bool(lt::settings_pack::enable_lsd, true);
+		params.settings.set_bool(lt::settings_pack::enable_upnp, true);
+		params.settings.set_bool(lt::settings_pack::enable_natpmp, true);
 		params.settings.set_bool(lt::settings_pack::enable_incoming_utp, true);
 		params.settings.set_bool(lt::settings_pack::enable_outgoing_utp, true);
 		params.settings.set_bool(lt::settings_pack::enable_incoming_tcp, true);
 		params.settings.set_bool(lt::settings_pack::enable_outgoing_tcp, true);
 		params.settings.set_str(lt::settings_pack::dht_bootstrap_nodes,
 			"router.bittorrent.com:6881,router.utorrent.com:6881,dht.transmissionbt.com:6881");
-		params.settings.set_int(lt::settings_pack::connections_limit, 200);
-		params.settings.set_int(lt::settings_pack::connection_speed, 60);
+		params.settings.set_int(lt::settings_pack::connections_limit, 300);
+		params.settings.set_int(lt::settings_pack::connection_speed, 200);
 		params.settings.set_int(lt::settings_pack::torrent_connect_boost, 80);
+		params.settings.set_int(lt::settings_pack::request_queue_time, 1);
+		params.settings.set_int(lt::settings_pack::max_out_request_queue, 1500);
+		params.settings.set_int(lt::settings_pack::max_allowed_in_request_queue, 2000);
+		params.settings.set_int(lt::settings_pack::whole_pieces_threshold, 0);
+		params.settings.set_int(lt::settings_pack::peer_connect_timeout, 3);
+		params.settings.set_int(lt::settings_pack::piece_timeout, 3);
 		params.settings.set_int(lt::settings_pack::min_reconnect_time, 1);
+		params.settings.set_int(lt::settings_pack::max_failcount, 1);
+		params.settings.set_int(lt::settings_pack::suggest_mode, 1);
+		params.settings.set_int(lt::settings_pack::mixed_mode_algorithm, 0);
+		// Partial byte-range reads benefit from disabling disk-locality grouping.
+		params.settings.set_bool(lt::settings_pack::piece_extent_affinity, false);
+		params.settings.set_bool(lt::settings_pack::announce_to_all_trackers, true);
+		params.settings.set_bool(lt::settings_pack::announce_to_all_tiers, true);
+		params.settings.set_bool(lt::settings_pack::allow_multiple_connections_per_ip, true);
 		session = std::make_unique<lt::session>(std::move(params));
 		alerts = std::thread([this] { alert_loop(); });
 	}
@@ -407,7 +429,7 @@ public:
 				std::string path = files.file_path(index);
 				std::transform(path.begin(), path.end(), path.begin(), [](char c) { return char(std::tolower(c)); });
 				auto ends = [&](char const* suffix) { std::size_t n = std::strlen(suffix); return path.size() >= n && path.compare(path.size() - n, n, suffix) == 0; };
-				bool video = ends(".mkv") || ends(".mp4") || ends(".webm") || ends(".avi") || ends(".mov");
+				bool video = ends(".mkv") || ends(".mp4") || ends(".m4v") || ends(".webm") || ends(".avi") || ends(".mov");
 				if (video && files.file_size(index) > largest) { largest = files.file_size(index); selectedFile = index; }
 			}
 			if (requestedFile >= 0 && requestedFile < files.num_files()) selectedFile = lt::file_index_t{requestedFile};
@@ -435,19 +457,19 @@ public:
 	void cancel_start() { cancelled = true; changed.notify_all(); }
 	void cancel() { cancelled = true; changed.notify_all(); if (auto storage = disk ? disk->active_storage() : nullptr) storage->wake(); }
 	void seek(std::int64_t offset) {
-		cancelled = false;
-		if (offset >= fileSize) return;
+		if (cancelled || offset < 0 || offset >= fileSize) return;
 		prioritize(offset);
 		if (auto storage = disk ? disk->active_storage() : nullptr) {
 			auto request = info->layout().map_file(selectedFile, offset, 1);
 			ensure_missing(request.piece, storage);
 		}
 	}
-	std::int64_t read(std::int64_t offset, char* target, std::uint64_t wanted) {
-		if (!info || offset >= fileSize || cancelled) return 0;
+	std::int64_t read(std::int64_t offset, char* target, std::uint64_t wanted, std::atomic<bool> const* abortFlag = nullptr) {
+		auto aborted = [&] { return cancelled || (abortFlag && *abortFlag); };
+		if (!info || offset >= fileSize || aborted()) return 0;
 		int total = int(std::min<std::int64_t>({std::int64_t(wanted), fileSize - offset, 1024 * 1024}));
 		int copied = 0;
-		while (copied < total && !cancelled) {
+		while (copied < total && !aborted()) {
 			auto request = info->layout().map_file(selectedFile, offset + copied, total - copied);
 			int chunk = std::min(total - copied, info->piece_length() - request.start);
 			auto storage = disk ? disk->active_storage() : nullptr;
@@ -461,25 +483,30 @@ public:
 					static_cast<int>(request.piece), int(static_cast<std::uint8_t>(handle.piece_priority(request.piece))),
 					int(status.state), int(bool(status.flags & lt::torrent_flags::paused)), status.num_peers, status.download_rate,
 					static_cast<long long>(status.total_wanted), static_cast<long long>(status.total_wanted_done));
-				int waitedSeconds = 0;
-				while (!storage->wait_piece(request.piece, cancelled, std::chrono::seconds(2))) {
-					if (cancelled) return copied ? copied : -1;
-					waitedSeconds += 2;
-					focus_piece(request.piece, waitedSeconds >= 4);
-					if (waitedSeconds % 6 == 0 && handle.is_valid()) {
+				int waitedMs = 0;
+				int lastKickMs = -10000;
+				while (!storage->wait_piece(request.piece, cancelled, std::chrono::milliseconds(500), abortFlag)) {
+					if (aborted()) return copied ? copied : -1;
+					waitedMs += 500;
+					restore_kicks();
+					bool shouldKick = waitedMs >= 4000 && (waitedMs - lastKickMs) >= 10000;
+					if (shouldKick) lastKickMs = waitedMs;
+					focus_piece(request.piece, shouldKick);
+					if (waitedMs % 6000 == 0 && handle.is_valid()) {
 						handle.force_reannounce(0, -1, lt::torrent_handle::ignore_min_interval);
 						handle.force_dht_announce();
 					}
-					if (waitedSeconds >= 90) return copied ? copied : -1;
+					if (waitedMs >= 90000) return copied ? copied : -1;
 				}
+				restore_kicks();
 			}
 			if (!storage->copy(request.piece, request.start, target + copied, chunk)) {
 				// A RAM piece can be evicted between `has()` and `copy()` while the
 				// demuxer is reading video and audio concurrently. Do not expose a
 				// short read as EOF; wait for that piece to be rechecked/downloaded.
 				ensure_missing(request.piece, storage);
-				if (!storage->wait_piece(request.piece, cancelled, std::chrono::seconds(2))) {
-					if (cancelled) return copied ? copied : -1;
+				if (!storage->wait_piece(request.piece, cancelled, std::chrono::seconds(2), abortFlag)) {
+					if (aborted()) return copied ? copied : -1;
 					continue;
 				}
 				continue;
@@ -540,17 +567,68 @@ private:
 			handle.force_recheck();
 		}
 	}
-	void focus_piece(lt::piece_index_t targetPiece, bool kick) {
+	void post_kick_cancel(lt::piece_index_t targetPiece) {
+		if (!info || !handle.is_valid()) return;
+		// libtorrent sends CANCEL from cancel_non_critical only when a dummy piece enters the time-critical list.
+		int const numPieces = info->num_pieces();
+		for (int i = 0; i < numPieces; ++i) {
+			lt::piece_index_t dummy{i};
+			if (dummy == targetPiece || handle.have_piece(dummy)) continue;
+			handle.set_piece_deadline(dummy, 10000);
+			handle.reset_piece_deadline(dummy);
+			return;
+		}
+	}
+	void restore_kicks() {
 		if (!info || !handle.is_valid()) return;
 		std::lock_guard<std::mutex> lock(prioritiesMutex);
+		restore_kicks_locked();
+	}
+	void restore_kicks_locked() {
+		if (pendingKicks.empty() || !handle.is_valid()) return;
+		auto const now = std::chrono::steady_clock::now();
+		for (auto it = pendingKicks.begin(); it != pendingKicks.end();) {
+			if (now < it->second) {
+				++it;
+				continue;
+			}
+			lt::piece_index_t piece = it->first;
+			it = pendingKicks.erase(it);
+			if (handle.have_piece(piece)) continue;
+			handle.piece_priority(piece, lt::top_priority);
+			handle.reset_piece_deadline(piece);
+			handle.set_piece_deadline(piece, 0);
+			hotPieces.insert(piece);
+		}
+	}
+	void focus_piece(lt::piece_index_t targetPiece, bool kick) {
+		if (!info || !handle.is_valid() || handle.have_piece(targetPiece)) return;
+		std::lock_guard<std::mutex> lock(prioritiesMutex);
+		restore_kicks_locked();
+		if (pendingKicks.count(targetPiece)) return;
 		for (auto piece : hotPieces) {
-			if (piece != targetPiece) {
+			if (piece != targetPiece && !pendingKicks.count(piece)) {
 				handle.piece_priority(piece, lt::download_priority_t{2});
 			}
 		}
 		if (kick) {
-			// Cancel non-critical in-flight block requests from slow peers and re-request from fastest peers
-			handle.reset_piece_deadline(targetPiece);
+			handle.clear_piece_deadlines();
+			handle.piece_priority(targetPiece, lt::dont_download);
+			post_kick_cancel(targetPiece);
+			pendingKicks[targetPiece] = std::chrono::steady_clock::now() + std::chrono::milliseconds(500);
+			if (fileSize > 0) {
+				int const tailIdx = static_cast<int>(info->layout().map_file(selectedFile, fileSize - 1, 1).piece);
+				int const firstIdx = static_cast<int>(info->layout().map_file(selectedFile, 0, 1).piece);
+				for (int tp : {tailIdx, tailIdx - 1}) {
+					if (tp < firstIdx) continue;
+					lt::piece_index_t p{tp};
+					if (p != targetPiece && !pendingKicks.count(p) && !handle.have_piece(p)) {
+						handle.piece_priority(p, lt::top_priority);
+						handle.set_piece_deadline(p, 100);
+					}
+				}
+			}
+			return;
 		}
 		handle.piece_priority(targetPiece, lt::top_priority);
 		handle.set_piece_deadline(targetPiece, 0);
@@ -558,6 +636,7 @@ private:
 	void prioritize(std::int64_t offset, bool force = false) {
 		if (!info || fileSize <= 0) return;
 		std::lock_guard<std::mutex> lock(prioritiesMutex);
+		restore_kicks_locked();
 		currentOffset = offset;
 		auto start = info->layout().map_file(selectedFile, std::min(offset, fileSize - 1), 1).piece;
 		if (auto storage = disk ? disk->active_storage() : nullptr) storage->center(start);
@@ -565,9 +644,7 @@ private:
 		currentPiece = start;
 		int const endPiece = static_cast<int>(info->end_piece());
 		int const startIdx = static_cast<int>(start);
-		// Keep up to 64 MiB around the playhead. The previous 16 MiB window
-		// could starve HEVC video/audio reads when a 4K torrent interleaves tracks.
-		int const ahead = std::clamp((64 * 1024 * 1024) / info->piece_length(), 4, 24);
+		int const ahead = stream_ahead_pieces(info->piece_length());
 		std::map<lt::piece_index_t, std::pair<lt::download_priority_t, int>> desired;
 
 		// Top priority (7) ONLY on the immediate playhead piece and next piece so bandwidth isn't scattered!
@@ -593,16 +670,18 @@ private:
 		}
 
 		if (force) {
+			pendingKicks.clear();
 			std::vector<lt::download_priority_t> priorities(endPiece, lt::dont_download);
 			handle.prioritize_pieces(priorities);
 		}
-		for (auto piece : hotPieces) if (!desired.count(piece)) {
+		for (auto piece : hotPieces) if (!desired.count(piece) && !pendingKicks.count(piece)) {
 			handle.reset_piece_deadline(piece);
 			handle.piece_priority(piece, lt::dont_download);
 		}
 		std::set<lt::piece_index_t> nextHot;
 		for (auto const& [piece, cfg] : desired) {
 			nextHot.insert(piece);
+			if (pendingKicks.count(piece)) continue;
 			handle.piece_priority(piece, cfg.first);
 			handle.set_piece_deadline(piece, cfg.second);
 		}
@@ -666,6 +745,7 @@ private:
 	std::atomic<std::int64_t> currentOffset{0};
 	std::mutex prioritiesMutex;
 	std::set<lt::piece_index_t> hotPieces;
+	std::map<lt::piece_index_t, std::chrono::steady_clock::time_point> pendingKicks;
 	std::vector<lt::tcp::endpoint> peers;
 	lt::piece_index_t currentPiece{-1};
 	bool metadataReady{false};
@@ -682,6 +762,6 @@ std::int64_t TorrentStream::size() const { return impl->size(); }
 void TorrentStream::cancel_start() { impl->cancel_start(); }
 void TorrentStream::cancel() { impl->cancel(); }
 void TorrentStream::seek(std::int64_t offset) { impl->seek(offset); }
-std::int64_t TorrentStream::read(std::int64_t offset, char* target, std::uint64_t wanted) { return impl->read(offset, target, wanted); }
+std::int64_t TorrentStream::read(std::int64_t offset, char* target, std::uint64_t wanted, std::atomic<bool> const* abortFlag) { return impl->read(offset, target, wanted, abortFlag); }
 void TorrentStream::add_peer(std::string const& host, int port) { impl->add_peer(host, port); }
 std::string TorrentStream::stats_json() const { return impl->stats_json(); }

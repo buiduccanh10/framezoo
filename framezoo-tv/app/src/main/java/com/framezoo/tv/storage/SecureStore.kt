@@ -108,6 +108,70 @@ class SecureStore(context: Context) {
         get() = prefs.getInt("subVerticalPosition", 1)
         set(value) { prefs.edit().putInt("subVerticalPosition", value).apply() }
 
+    var subtitleBorderThickness: Float
+        get() = prefs.getFloat("subBorderThickness", 1.0f)
+        set(value) { prefs.edit().putFloat("subBorderThickness", value).apply() }
+
+    var subtitleBackgroundBlur: Int
+        get() = prefs.getInt("subBgBlur", 50)
+        set(value) { prefs.edit().putInt("subBgBlur", value).apply() }
+
+    var secondarySubtitleFontSize: Int
+        get() = prefs.getInt("secSubFontSize", 100)
+        set(value) { prefs.edit().putInt("secSubFontSize", value).apply() }
+
+    var secondarySubtitleColor: String
+        get() = prefs.getString("secSubColor", "#FFFFFF") ?: "#FFFFFF"
+        set(value) { prefs.edit().putString("secSubColor", value).apply() }
+
+    var secondarySubtitleBackgroundOpacity: Int
+        get() = prefs.getInt("secSubBgOpacity", 50)
+        set(value) { prefs.edit().putInt("secSubBgOpacity", value).apply() }
+
+    var secondarySubtitleBackgroundBlurEnabled: Boolean
+        get() = prefs.getBoolean("secSubBgBlurEnabled", false)
+        set(value) { prefs.edit().putBoolean("secSubBgBlurEnabled", value).apply() }
+
+    var secondarySubtitleBackgroundBlur: Int
+        get() = prefs.getInt("secSubBgBlur", 50)
+        set(value) { prefs.edit().putInt("secSubBgBlur", value).apply() }
+
+    var secondarySubtitleFontStyle: String
+        get() = prefs.getString("secSubFontStyle", "default") ?: "default"
+        set(value) { prefs.edit().putString("secSubFontStyle", value).apply() }
+
+    var secondarySubtitleBorderThickness: Float
+        get() = prefs.getFloat("secSubBorderThickness", 1.0f)
+        set(value) { prefs.edit().putFloat("secSubBorderThickness", value).apply() }
+
+    var secondarySubtitleBold: Boolean
+        get() = prefs.getBoolean("secSubBold", false)
+        set(value) { prefs.edit().putBoolean("secSubBold", value).apply() }
+
+    var secondarySubtitleVerticalPosition: Int
+        get() = prefs.getInt("secSubVerticalPosition", 1)
+        set(value) { prefs.edit().putInt("secSubVerticalPosition", value).apply() }
+
+    var defaultSubtitleLanguage: String?
+        get() = prefs.getString("defaultSubtitleLanguage", null)
+        set(value) { prefs.edit().putString("defaultSubtitleLanguage", value).apply() }
+
+    var lastSubtitleLanguage: String?
+        get() = prefs.getString("lastSubtitleLanguage", null)
+        set(value) { prefs.edit().putString("lastSubtitleLanguage", value).apply() }
+
+    var audioOutputMode: String
+        get() = prefs.getString("audioOutputMode", "auto") ?: "auto"
+        set(value) { prefs.edit().putString("audioOutputMode", value).apply() }
+
+    var homeSectionOrderJson: String?
+        get() = prefs.getString("homeSectionOrder", null)
+        set(value) { prefs.edit().putString("homeSectionOrder", value).apply() }
+
+    var tidbKey: String?
+        get() = decrypt(prefs.getString("tidb_key", null))
+        set(value) { prefs.edit().putString("tidb_key", value?.takeIf { it.isNotBlank() }?.let(::encrypt)).apply() }
+
     fun playbackSelection(key: String): String? = prefs.getString("playback_selection_$key", null)
     fun savePlaybackSelection(key: String, value: String) { prefs.edit().putString("playback_selection_$key", value).apply() }
 

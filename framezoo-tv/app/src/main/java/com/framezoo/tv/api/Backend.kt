@@ -29,6 +29,12 @@ internal fun tmdbImageUrl(path: String?, size: String = "w500"): String? =
         if (it.startsWith("http")) it else "https://image.tmdb.org/t/p/$size$it"
     }
 
+internal class HttpException(
+    val statusCode: Int,
+    val responseBody: String,
+    message: String
+) : IllegalStateException(message)
+
 class Backend(private val store: SecureStore) {
     private val qualityCache = java.util.concurrent.ConcurrentHashMap<String, String>()
     private val libraryArtwork = java.util.concurrent.ConcurrentHashMap<String, Media>()
@@ -46,10 +52,12 @@ class Backend(private val store: SecureStore) {
         body: JSONObject? = null,
         auth: Boolean = false,
         retry: Boolean = true,
-        headers: Map<String, String> = emptyMap()
+        headers: Map<String, String> = emptyMap(),
+        rawBody: String? = null
     ): Any = withContext(Dispatchers.IO) {
         val base = store.backendUrl.trimEnd('/')
         require(base.startsWith("https://") || (BuildConfig.DEBUG && base.startsWith("http://"))) { "Backend URL phải dùng HTTPS" }
+        val payloadText = rawBody ?: body?.toString()
         val connection = (URL(base + path).openConnection() as HttpURLConnection).apply {
             requestMethod = method
             connectTimeout = 15_000
@@ -58,23 +66,23 @@ class Backend(private val store: SecureStore) {
             setRequestProperty("X-App-Version", BuildConfig.VERSION_NAME)
             headers.forEach { (k, v) -> setRequestProperty(k, v) }
             if (auth) store.accessToken?.let { setRequestProperty("Authorization", "Bearer $it") }
-            if (body != null) {
+            if (payloadText != null) {
                 doOutput = true
                 setRequestProperty("Content-Type", "application/json")
-                outputStream.use { it.write(body.toString().toByteArray(Charsets.UTF_8)) }
+                outputStream.use { it.write(payloadText.toByteArray(Charsets.UTF_8)) }
             }
         }
         try {
             val status = connection.responseCode
             if (status == 401 && auth && retry) {
                 if (refresh()) {
-                    return@withContext request(path, method, body, auth, false, headers)
+                    return@withContext request(path, method, body, auth, false, headers, rawBody)
                 } else {
                     store.clearSession()
                 }
             }
             val text = (if (status in 200..299) connection.inputStream else connection.errorStream)?.bufferedReader()?.use { it.readText() }.orEmpty()
-            if (status !in 200..299) throw IllegalStateException("HTTP $status: ${text.take(180)}")
+            if (status !in 200..299) throw HttpException(status, text, "HTTP $status: ${text.take(180)}")
             when {
                 text.trimStart().startsWith("[") -> JSONArray(text)
                 text.trimStart().startsWith("{") -> JSONObject(text)
@@ -458,6 +466,7 @@ class Backend(private val store: SecureStore) {
                     if (type == "movie") region.optJSONArray("release_dates")?.optJSONObject(0)?.optString("certification") else region.optString("rating")
                 }
             }.orEmpty(),
+            originalTitle = raw.optString("original_title", raw.optString("original_name")),
         )
     }
 
@@ -745,9 +754,17 @@ class Backend(private val store: SecureStore) {
     suspend fun bookmarks(): List<Media> = bookmarkDetails().map { it.media }
     suspend fun bookmarkGroups(): List<String> {
         val id = store.userId ?: return emptyList()
-        val data = request("/users/${encode(id)}/group-order", auth = true) as JSONObject
-        val groups = data.optJSONArray("groupOrder") ?: return emptyList()
-        return (0 until groups.length()).map(groups::optString).filter(String::isNotBlank)
+        return try {
+            val data = request("/users/${encode(id)}/group-order", auth = true) as JSONObject
+            val groups = data.optJSONArray("groupOrder") ?: return emptyList()
+            (0 until groups.length()).map(groups::optString).filter(String::isNotBlank)
+        } catch (e: HttpException) {
+            if (e.statusCode == 404) emptyList() else throw e
+        }
+    }
+    suspend fun saveGroupOrder(groups: List<String>) {
+        val id = store.userId ?: return
+        request("/users/${encode(id)}/group-order", "PUT", rawBody = JSONArray(groups).toString(), auth = true)
     }
     suspend fun saveBookmarkDetails(item: Media, groups: List<String>, favorites: List<String>) {
         val id = requireNotNull(store.userId) { "Đăng nhập để lưu phim" }
@@ -898,6 +915,61 @@ class Backend(private val store: SecureStore) {
         request("/users/${encode(id)}/progress/${encode(item.id)}", "PUT", body, auth = true)
         request("/users/${encode(id)}/watch-history/${encode(item.id)}", "PUT", JSONObject(body.toString())
             .put("watchedAt", Instant.now().toString()), auth = true)
+    }
+
+    suspend fun metaTidbAvailability(): Boolean = try {
+        (request("/meta") as? JSONObject)?.optBoolean("hasTIDBSubmission", false) == true
+    } catch (e: CancellationException) {
+        throw e
+    } catch (_: Exception) {
+        false
+    }
+
+    suspend fun submitSkipSegment(
+        item: Media,
+        episode: Episode?,
+        segmentType: String,
+        startSec: Double?,
+        endSec: Double?
+    ) = withContext(Dispatchers.IO) {
+        val payload = buildTidbSubmissionPayload(item, episode, segmentType, startSec, endSec)
+        val tidbKey = store.tidbKey?.trim()?.takeIf { it.isNotBlank() }
+        try {
+            request("/api/skip-segments/submit", "POST", payload)
+            return@withContext
+        } catch (e: HttpException) {
+            if (!shouldFallbackToClientTidbKey(e.statusCode, tidbKey)) {
+                val parsed = runCatching { JSONObject(e.responseBody) }.getOrNull()
+                val msg = parsed?.optString("statusMessage")?.ifBlank { null }
+                    ?: parsed?.optString("message")?.ifBlank { null }
+                    ?: (e.message ?: "Failed to submit segment")
+                val details = parsed?.optJSONObject("data")?.optString("details")?.ifBlank { null }
+                throw TidbSubmissionException(msg, e.statusCode, details)
+            }
+        }
+        val key = tidbKey ?: throw TidbSubmissionException("TIDB API key is not set")
+        val connection = (URL("https://api.theintrodb.org/v1/submit").openConnection() as HttpURLConnection).apply {
+            requestMethod = "POST"
+            connectTimeout = 15_000
+            readTimeout = 20_000
+            doOutput = true
+            setRequestProperty("Content-Type", "application/json")
+            setRequestProperty("Authorization", "Bearer $key")
+            outputStream.use { it.write(payload.toString().toByteArray(Charsets.UTF_8)) }
+        }
+        try {
+            val status = connection.responseCode
+            val text = (if (status in 200..299) connection.inputStream else connection.errorStream)
+                ?.bufferedReader()?.use { it.readText() }.orEmpty()
+            if (status !in 200..299) {
+                val parsed = runCatching { JSONObject(text) }.getOrNull()
+                val err = parsed?.optString("error")?.ifBlank { null } ?: "HTTP $status"
+                val details = parsed?.optString("details")?.ifBlank { null }
+                throw TidbSubmissionException(err, status, details)
+            }
+        } finally {
+            connection.disconnect()
+        }
     }
 
     suspend fun settings(): JSONObject {

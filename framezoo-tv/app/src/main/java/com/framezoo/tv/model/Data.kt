@@ -24,6 +24,7 @@ data class Media(
     val collectionId: String? = null,
     val collectionName: String? = null,
     val certification: String = "",
+    val originalTitle: String = "",
 )
 
 data class FeaturedRatings(
@@ -73,7 +74,13 @@ data class Stream(
     val addonLogo: String? = null,
     val bingeGroup: String? = null
 )
-data class Subtitle(val language: String, val url: String, val label: String = "")
+data class Subtitle(
+    val language: String,
+    val url: String,
+    val label: String = "",
+    val isHearingImpaired: Boolean = false,
+    val releaseName: String = ""
+)
 data class SkipSegment(
     val type: String,
     val startMs: Long?,
