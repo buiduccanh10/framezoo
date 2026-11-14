@@ -30,7 +30,7 @@ MIN_ALIGNMENT_SPEECH_DURATION_MS = 1_000
 # A subtitle offset beyond this range is more likely a false match from a
 # different scene than a real subtitle timing error.
 MAX_ALIGNMENT_OFFSET_MS = 45_000
-MAX_PLAUSIBLE_ALIGNMENT_OFFSET_MS = 180_000
+MAX_PLAUSIBLE_ALIGNMENT_OFFSET_MS = 360_000
 MAX_POOLED_WINDOW_SPAN_MS = 600_000
 SEARCH_RANGE_MS = MAX_ALIGNMENT_OFFSET_MS
 SEARCH_STEP_MS = 250
@@ -940,7 +940,7 @@ def find_best_offset(
             top_k=5,
         )
         top_fft_conf = fft_peaks[0][1] if fft_peaks else 0.0
-        if top_fft_conf < 50.0 and (audio_end_ms - audio_start_ms) <= 180_000:
+        if top_fft_conf < 65.0 and (audio_end_ms - audio_start_ms) <= 180_000:
             ratio_peaks = find_top_offsets_fft(
                 speech_intervals,
                 cue_intervals,
@@ -1116,10 +1116,13 @@ def alignment_result_from_speech(
             "invalid_subtitle",
         )
 
+    max_center_abs = max((abs(c) for c in (search_centers or ())), default=0)
     max_allowed_offset = (
-        MAX_PLAUSIBLE_ALIGNMENT_OFFSET_MS
-        if search_centers
-        and any(abs(c) > MAX_ALIGNMENT_OFFSET_MS for c in search_centers)
+        min(
+            MAX_PLAUSIBLE_ALIGNMENT_OFFSET_MS,
+            max(180_000, max_center_abs + SEARCH_RANGE_MS),
+        )
+        if max_center_abs > MAX_ALIGNMENT_OFFSET_MS
         else MAX_ALIGNMENT_OFFSET_MS
     )
 
@@ -1141,27 +1144,20 @@ def alignment_result_from_speech(
         )
 
     confidence = int(round(max(0.0, min(1.0, score)) * 100))
-    if abs(offset_ms) >= max_allowed_offset:
+    if abs(offset_ms) >= MAX_PLAUSIBLE_ALIGNMENT_OFFSET_MS:
         return {
-            "aligned": False,
-            "offsetMs": 0,
+            **invalid_alignment_result(speech_intervals, "offset_out_of_range"),
             "confidence": confidence,
-            "speechIntervals": [
-                {"startMs": start_ms, "endMs": end_ms}
-                for start_ms, end_ms in speech_intervals
-            ],
-            "reason": "offset_out_of_range",
         }
     if confidence < MIN_ALIGNMENT_CONFIDENCE:
+        reason = (
+            "offset_out_of_range"
+            if abs(offset_ms) >= max_allowed_offset
+            else "low_alignment_confidence"
+        )
         return {
-            "aligned": False,
-            "offsetMs": 0,
+            **invalid_alignment_result(speech_intervals, reason),
             "confidence": confidence,
-            "speechIntervals": [
-                {"startMs": start_ms, "endMs": end_ms}
-                for start_ms, end_ms in speech_intervals
-            ],
-            "reason": "low_alignment_confidence",
         }
 
     evidence = evaluate_offset(
@@ -1171,69 +1167,25 @@ def alignment_result_from_speech(
         audio_start_ms,
         audio_end_ms,
     )
-    minimum_anchors = 1 if evidence.speech_anchor_count <= 1 else 2
-    if evidence.matched_anchors < minimum_anchors:
+    if abs(offset_ms) >= max_allowed_offset and not (
+        confidence >= 68
+        and evidence.matched_anchors >= 3
+        and evidence.anchor_coverage >= 0.35
+    ):
         return {
-            "aligned": False,
-            "offsetMs": 0,
+            **invalid_alignment_result(speech_intervals, "offset_out_of_range"),
             "confidence": confidence,
-            "speechIntervals": [
-                {"startMs": start_ms, "endMs": end_ms}
-                for start_ms, end_ms in speech_intervals
-            ],
-            "speechAnchorCount": evidence.matched_anchors,
-            "speechAnchorCoverage": evidence.anchor_coverage,
-            "reason": "insufficient_speech_anchors",
-        }
-
-    if evidence.matched_anchors == 1 and confidence < 80:
-        return {
-            "aligned": False,
-            "offsetMs": 0,
-            "confidence": confidence,
-            "speechIntervals": [
-                {"startMs": start_ms, "endMs": end_ms}
-                for start_ms, end_ms in speech_intervals
-            ],
-            "speechAnchorCount": evidence.matched_anchors,
-            "speechAnchorCoverage": evidence.anchor_coverage,
-            "reason": "low_confidence_for_single_anchor",
-        }
-
-    minimum_anchor_coverage = (
-        MIN_SPEECH_ANCHOR_COVERAGE
-        if evidence.matched_anchors >= 3
-        else MIN_SPEECH_ANCHOR_COVERAGE_2_ANCHORS
-    )
-    if evidence.anchor_coverage < minimum_anchor_coverage:
-        return {
-            "aligned": False,
-            "offsetMs": 0,
-            "confidence": confidence,
-            "speechIntervals": [
-                {"startMs": start_ms, "endMs": end_ms}
-                for start_ms, end_ms in speech_intervals
-            ],
-            "speechAnchorCount": evidence.matched_anchors,
-            "speechAnchorCoverage": evidence.anchor_coverage,
-            "reason": "insufficient_speech_anchors",
         }
 
     # Keep the original timeline in the response. The renderer aggregates
     # multiple windows and applies one consensus offset once; local snapping
     # from a single window would mix evidence and can double-shift cues.
-    return {
-        "aligned": confidence >= MIN_ALIGNMENT_CONFIDENCE,
-        "offsetMs": offset_ms,
-        "confidence": confidence,
-        "speechIntervals": [
-            {"startMs": start_ms, "endMs": end_ms}
-            for start_ms, end_ms in speech_intervals
-        ],
-        "speechAnchorCount": evidence.matched_anchors,
-        "speechAnchorCoverage": evidence.anchor_coverage,
-        "reason": None,
-    }
+    return _finalize_offset_evidence(
+        speech_intervals,
+        offset_ms,
+        confidence,
+        evidence,
+    )
 
 
 def invalid_alignment_result(
@@ -1281,6 +1233,239 @@ def compute_track_search_centers(
                 centers.add(speech_guided_offset)
 
     return sorted(centers)
+
+
+def _finalize_offset_evidence(
+    speech_intervals: list[tuple[int, int]],
+    offset_ms: int,
+    confidence: int,
+    evidence: OffsetEvidence,
+    require_multi_anchor: bool = False,
+) -> dict[str, Any]:
+    """Validate confidence and speech anchor evidence into an alignment result."""
+    serialized_intervals = [
+        {"startMs": start_ms, "endMs": end_ms}
+        for start_ms, end_ms in speech_intervals
+    ]
+    if confidence < MIN_ALIGNMENT_CONFIDENCE:
+        return {
+            "aligned": False,
+            "offsetMs": 0,
+            "confidence": confidence,
+            "speechIntervals": serialized_intervals,
+            "reason": "low_alignment_confidence",
+        }
+
+    minimum_anchors = (
+        2
+        if require_multi_anchor
+        else (1 if evidence.speech_anchor_count <= 1 else 2)
+    )
+    if evidence.matched_anchors < minimum_anchors:
+        return {
+            "aligned": False,
+            "offsetMs": 0,
+            "confidence": confidence,
+            "speechIntervals": serialized_intervals,
+            "speechAnchorCount": evidence.matched_anchors,
+            "speechAnchorCoverage": evidence.anchor_coverage,
+            "reason": "insufficient_speech_anchors",
+        }
+
+    if evidence.matched_anchors == 1 and confidence < 80:
+        return {
+            "aligned": False,
+            "offsetMs": 0,
+            "confidence": confidence,
+            "speechIntervals": serialized_intervals,
+            "speechAnchorCount": evidence.matched_anchors,
+            "speechAnchorCoverage": evidence.anchor_coverage,
+            "reason": "low_confidence_for_single_anchor",
+        }
+
+    minimum_anchor_coverage = (
+        MIN_SPEECH_ANCHOR_COVERAGE
+        if evidence.matched_anchors >= 3
+        else MIN_SPEECH_ANCHOR_COVERAGE_2_ANCHORS
+    )
+    if evidence.anchor_coverage < minimum_anchor_coverage:
+        return {
+            "aligned": False,
+            "offsetMs": 0,
+            "confidence": confidence,
+            "speechIntervals": serialized_intervals,
+            "speechAnchorCount": evidence.matched_anchors,
+            "speechAnchorCoverage": evidence.anchor_coverage,
+            "reason": "insufficient_speech_anchors",
+        }
+
+    return {
+        "aligned": confidence >= MIN_ALIGNMENT_CONFIDENCE,
+        "offsetMs": offset_ms,
+        "confidence": confidence,
+        "speechIntervals": serialized_intervals,
+        "speechAnchorCount": evidence.matched_anchors,
+        "speechAnchorCoverage": evidence.anchor_coverage,
+        "reason": None,
+    }
+
+
+def _scale_cues_around_subtitle_pivot(
+    cues: list[Cue],
+    subtitle_pivot_ms: int,
+    rate_ratio: float,
+    min_cue_end: int,
+    max_cue_start: int,
+) -> list[Cue]:
+    """Scale cues locally around a subtitle pivot to eliminate intra-window drift."""
+    effective_rate = rate_ratio if rate_ratio > 0 else 1.0
+    raw_min = (
+        subtitle_pivot_ms
+        + int((min_cue_end - subtitle_pivot_ms) / effective_rate)
+        - 5_000
+    )
+    raw_max = (
+        subtitle_pivot_ms
+        + int((max_cue_start - subtitle_pivot_ms) / effective_rate)
+        + 5_000
+    )
+    overlapping = _slice_cues_overlapping(cues, raw_min, raw_max)
+    scaled: list[Cue] = []
+    for cue in overlapping:
+        start_ms = int(
+            round(subtitle_pivot_ms + (cue.start_ms - subtitle_pivot_ms) * effective_rate)
+        )
+        end_ms = int(
+            round(subtitle_pivot_ms + (cue.end_ms - subtitle_pivot_ms) * effective_rate)
+        )
+        if end_ms > start_ms:
+            scaled.append(Cue(cue.index, start_ms, end_ms, cue.block))
+    return scaled
+
+
+def _align_window_at_projected_rate(
+    cues: list[Cue],
+    speech_intervals: list[tuple[int, int]],
+    audio_start_ms: int,
+    audio_end_ms: int,
+    expected_offset_ms: int,
+    rate_ratio: float,
+    search_radius_ms: int = 2_400,
+) -> dict[str, Any]:
+    """Align a single audio window under a local linear framerate ratio hypothesis."""
+    if not speech_intervals:
+        return invalid_alignment_result([], "no_speech_detected")
+    total_speech_duration_ms = sum(
+        max(0, end_ms - start_ms) for start_ms, end_ms in speech_intervals
+    )
+    if total_speech_duration_ms < MIN_ALIGNMENT_SPEECH_DURATION_MS:
+        return invalid_alignment_result(
+            speech_intervals,
+            "insufficient_speech_in_window",
+        )
+    if not cues:
+        return invalid_alignment_result(speech_intervals, "invalid_subtitle")
+    if abs(expected_offset_ms) > MAX_PLAUSIBLE_ALIGNMENT_OFFSET_MS:
+        return invalid_alignment_result(speech_intervals, "offset_out_of_range")
+
+    window_mid_ms = (audio_start_ms + audio_end_ms) // 2
+    subtitle_pivot_ms = window_mid_ms - expected_offset_ms
+    scaled_cues = _scale_cues_around_subtitle_pivot(
+        cues,
+        subtitle_pivot_ms,
+        rate_ratio,
+        audio_start_ms - expected_offset_ms - search_radius_ms - 2_000,
+        audio_end_ms - expected_offset_ms + search_radius_ms + 2_000,
+    )
+    if not scaled_cues:
+        return invalid_alignment_result(speech_intervals, "low_alignment_confidence")
+
+    score_memo: dict[int, float] = {}
+
+    def cached_score(cand: int) -> float:
+        val = score_memo.get(cand)
+        if val is None:
+            val = score_offset(
+                scaled_cues,
+                speech_intervals,
+                cand,
+                audio_start_ms,
+                audio_end_ms,
+            )
+            score_memo[cand] = val
+        return val
+
+    coarse_candidates = [
+        cand
+        for cand in range(
+            expected_offset_ms - search_radius_ms,
+            expected_offset_ms + search_radius_ms + 1,
+            150,
+        )
+        if abs(cand) < MAX_PLAUSIBLE_ALIGNMENT_OFFSET_MS
+    ]
+    if not coarse_candidates:
+        return invalid_alignment_result(speech_intervals, "offset_out_of_range")
+
+    coarse_ranked = sorted(
+        coarse_candidates,
+        key=lambda cand: (cached_score(cand), -abs(cand - expected_offset_ms)),
+        reverse=True,
+    )
+    if cached_score(coarse_ranked[0]) < 0.45:
+        return invalid_alignment_result(speech_intervals, "low_alignment_confidence")
+
+    top_peaks: list[int] = []
+    for cand in coarse_ranked:
+        if all(abs(cand - peak) >= 300 for peak in top_peaks):
+            top_peaks.append(cand)
+            if len(top_peaks) >= 2:
+                break
+
+    refined_candidates: set[int] = set()
+    for peak in top_peaks:
+        for cand in range(peak - 150, peak + 151, REFINE_STEP_MS):
+            if abs(cand) < MAX_PLAUSIBLE_ALIGNMENT_OFFSET_MS:
+                refined_candidates.add(cand)
+    if not refined_candidates:
+        refined_candidates.add(coarse_ranked[0])
+
+    best_offset = max(
+        refined_candidates,
+        key=lambda cand: (cached_score(cand), -abs(cand - expected_offset_ms)),
+    )
+    best_score = cached_score(best_offset)
+    confidence = int(round(max(0.0, min(1.0, best_score)) * 100))
+    evidence = evaluate_offset(
+        scaled_cues,
+        speech_intervals,
+        best_offset,
+        audio_start_ms,
+        audio_end_ms,
+    )
+    true_offset_ms = (
+        best_offset
+        if abs(rate_ratio - 1.0) <= 1e-6
+        else int(
+            round(
+                expected_offset_ms
+                + (best_offset - expected_offset_ms) / rate_ratio
+            )
+        )
+    )
+    if abs(true_offset_ms) >= MAX_PLAUSIBLE_ALIGNMENT_OFFSET_MS:
+        return {
+            **invalid_alignment_result(speech_intervals, "offset_out_of_range"),
+            "confidence": confidence,
+        }
+
+    return _finalize_offset_evidence(
+        speech_intervals,
+        true_offset_ms,
+        confidence,
+        evidence,
+        require_multi_anchor=abs(rate_ratio - 1.0) > 1e-4,
+    )
 
 
 def align_vtt(
@@ -1565,8 +1750,8 @@ def _weighted_linear_fit(
 def _fit_framerate_drift(
     valid_entries: list[dict[str, Any]],
 ) -> dict[str, Any] | None:
-    """Detect smooth linear FPS drift (e.g. 23.976<->24, 24<->25) across >= 3 windows."""
-    if len(valid_entries) < 3:
+    """Detect smooth linear FPS drift (e.g. 23.976<->24, 24<->25) across >= 2 windows."""
+    if len(valid_entries) < 2:
         return None
 
     sorted_entries = sorted(valid_entries, key=lambda e: float(e["startAt"]))
@@ -1578,98 +1763,164 @@ def _fit_framerate_drift(
         conf = max(1.0, float(entry["result"].get("confidence", 60)))
         points.append((t_s, t_v, offset_ms, conf, entry))
 
-    min_required_inliers = max(3, int(np.ceil(len(points) * 0.6)))
+    min_required_inliers = max(3, int(np.ceil(len(points) * 0.5)))
     best_model: dict[str, Any] | None = None
 
-    for i in range(len(points)):
-        for j in range(i + 1, len(points)):
-            t_si, t_vi, _, _, _ = points[i]
-            t_sj, t_vj, _, _, _ = points[j]
-            if abs(t_vj - t_vi) < 240_000 or abs(t_sj - t_si) < 240_000:
-                continue
-            cand_slope = (t_vj - t_vi) / (t_sj - t_si)
-            if not (MIN_RATE_RATIO <= cand_slope <= MAX_RATE_RATIO):
-                continue
-            cand_intercept = t_vi - cand_slope * t_si
+    if len(points) >= 3:
+        for i in range(len(points)):
+            for j in range(i + 1, len(points)):
+                t_si, t_vi, _, _, _ = points[i]
+                t_sj, t_vj, _, _, _ = points[j]
+                if abs(t_vj - t_vi) < 180_000 or abs(t_sj - t_si) < 180_000:
+                    continue
+                cand_slope = (t_vj - t_vi) / (t_sj - t_si)
+                if not (MIN_RATE_RATIO <= cand_slope <= MAX_RATE_RATIO):
+                    continue
+                cand_intercept = t_vi - cand_slope * t_si
 
-            inliers = [
-                p
-                for p in points
-                if abs(p[1] - (cand_slope * p[0] + cand_intercept)) <= 650.0
-            ]
-            if len(inliers) < min_required_inliers:
-                continue
-            if inliers[-1][1] - inliers[0][1] < 300_000:
-                continue
+                inliers = [
+                    p
+                    for p in points
+                    if abs(p[1] - (cand_slope * p[0] + cand_intercept)) <= 750.0
+                ]
+                if (
+                    len(inliers) < min_required_inliers
+                    or (inliers[-1][1] - inliers[0][1]) < 180_000
+                ):
+                    continue
 
-            fit = _weighted_linear_fit(
-                [p[0] for p in inliers],
-                [p[1] for p in inliers],
-                [p[3] for p in inliers],
-            )
-            if fit is None:
-                continue
-            slope, intercept = fit
-            if not (MIN_RATE_RATIO <= slope <= MAX_RATE_RATIO):
-                continue
-            if abs(slope - 1.0) < 0.0004:
-                continue
+                fit = _weighted_linear_fit(
+                    [p[0] for p in inliers],
+                    [p[1] for p in inliers],
+                    [p[3] for p in inliers],
+                )
+                if fit is None:
+                    continue
+                slope, intercept = fit
+                if (
+                    not (MIN_RATE_RATIO <= slope <= MAX_RATE_RATIO)
+                    or abs(slope - 1.0) < 0.0004
+                ):
+                    continue
 
-            # Recompute inliers tightly around OLS refit
-            inliers = [
-                p
-                for p in points
-                if abs(p[1] - (slope * p[0] + intercept)) <= 650.0
-            ]
-            if len(inliers) < min_required_inliers or (inliers[-1][1] - inliers[0][1]) < 300_000:
-                continue
+                # Recompute inliers tightly around OLS refit
+                inliers = [
+                    p
+                    for p in points
+                    if abs(p[1] - (slope * p[0] + intercept)) <= 750.0
+                ]
+                if (
+                    len(inliers) < min_required_inliers
+                    or (inliers[-1][1] - inliers[0][1]) < 180_000
+                ):
+                    continue
 
-            # Snap cleanly to broadcast FPS ratio when within 0.035% and errors stay <= 650ms
+                # Snap cleanly to broadcast FPS ratio when within 0.04% and errors stay <= 750ms
+                snapped_to_std = False
+                best_std = min(
+                    (r for r in FRAMERATE_RATIOS if abs(r - 1.0) > 1e-6),
+                    key=lambda r: abs(r - slope),
+                    default=None,
+                )
+                if best_std is not None and abs(best_std - slope) <= 0.0004:
+                    w_sum = sum(p[3] for p in inliers)
+                    std_intercept = (
+                        sum(p[3] * (p[1] - best_std * p[0]) for p in inliers) / w_sum
+                    )
+                    std_max_err = max(
+                        abs(p[1] - (best_std * p[0] + std_intercept))
+                        for p in inliers
+                    )
+                    if std_max_err <= 750.0:
+                        slope = best_std
+                        intercept = std_intercept
+                        snapped_to_std = True
+
+                offsets = [p[2] for p in inliers]
+                offset_spread = max(offsets) - min(offsets)
+                min_offset_spread = 500.0 if snapped_to_std else 800.0
+                if offset_spread < min_offset_spread:
+                    continue
+                min_span_ms = (
+                    180_000
+                    if (snapped_to_std and offset_spread >= 1_500.0)
+                    else 240_000
+                )
+                if inliers[-1][1] - inliers[0][1] < min_span_ms:
+                    continue
+
+                w_sum = sum(p[3] for p in inliers)
+                const_mean = sum(p[3] * p[2] for p in inliers) / w_sum
+                const_rmse = float(
+                    np.sqrt(
+                        sum(p[3] * (p[2] - const_mean) ** 2 for p in inliers) / w_sum
+                    )
+                )
+                lin_residuals = [
+                    abs(p[1] - (slope * p[0] + intercept)) for p in inliers
+                ]
+                linear_rmse = float(
+                    np.sqrt(
+                        sum(p[3] * r**2 for p, r in zip(inliers, lin_residuals))
+                        / w_sum
+                    )
+                )
+                if max(lin_residuals) > 750.0:
+                    continue
+                min_const_rmse = (
+                    max(250.0, linear_rmse * 1.6)
+                    if snapped_to_std
+                    else max(420.0, linear_rmse * 2.5)
+                )
+                if const_rmse < min_const_rmse:
+                    continue
+
+                score_tuple = (len(inliers), -linear_rmse)
+                if best_model is None or score_tuple > best_model["rank"]:
+                    avg_conf = round(sum(p[3] for p in inliers) / len(inliers))
+                    rep = max(inliers, key=lambda p: p[3])[4]["result"]
+                    best_model = {
+                        "rank": score_tuple,
+                        "result": {
+                            **rep,
+                            "aligned": True,
+                            "offsetMs": int(round(intercept)),
+                            "rateRatio": round(float(slope), 6),
+                            "confidence": avg_conf,
+                            "reason": None,
+                        },
+                    }
+
+    if best_model is None and len(points) == 2:
+        p0, p1 = points[0], points[1]
+        if (
+            p1[1] - p0[1] >= 600_000
+            and p1[0] - p0[0] >= 600_000
+            and abs(p1[2] - p0[2]) > 1_200.0
+            and min(p0[3], p1[3]) >= 72.0
+            and int(p0[4]["result"].get("speechAnchorCount", 0)) >= 2
+            and int(p1[4]["result"].get("speechAnchorCount", 0)) >= 2
+        ):
+            cand_slope = (p1[1] - p0[1]) / (p1[0] - p0[0])
             best_std = min(
                 (r for r in FRAMERATE_RATIOS if abs(r - 1.0) > 1e-6),
-                key=lambda r: abs(r - slope),
+                key=lambda r: abs(r - cand_slope),
                 default=None,
             )
-            if best_std is not None and abs(best_std - slope) <= 0.00035:
-                w_sum = sum(p[3] for p in inliers)
-                std_intercept = sum(p[3] * (p[1] - best_std * p[0]) for p in inliers) / w_sum
-                std_max_err = max(abs(p[1] - (best_std * p[0] + std_intercept)) for p in inliers)
-                if std_max_err <= 650.0:
-                    slope = best_std
-                    intercept = std_intercept
-
-            offsets = [p[2] for p in inliers]
-            if max(offsets) - min(offsets) < 800.0:
-                continue
-
-            w_sum = sum(p[3] for p in inliers)
-            const_mean = sum(p[3] * p[2] for p in inliers) / w_sum
-            const_rmse = float(
-                np.sqrt(sum(p[3] * (p[2] - const_mean) ** 2 for p in inliers) / w_sum)
-            )
-            lin_residuals = [abs(p[1] - (slope * p[0] + intercept)) for p in inliers]
-            linear_rmse = float(
-                np.sqrt(sum(p[3] * r ** 2 for p, r in zip(inliers, lin_residuals)) / w_sum)
-            )
-            if max(lin_residuals) > 650.0:
-                continue
-            if const_rmse < max(450.0, linear_rmse * 3.0):
-                continue
-
-            score_tuple = (len(inliers), -linear_rmse)
-            if best_model is None or score_tuple > best_model["rank"]:
-                avg_conf = round(sum(p[3] for p in inliers) / len(inliers))
-                rep = max(inliers, key=lambda p: p[3])[4]["result"]
-                best_model = {
-                    "rank": score_tuple,
-                    "result": {
-                        **rep,
-                        "aligned": True,
-                        "offsetMs": int(round(intercept)),
-                        "rateRatio": round(float(slope), 6),
-                        "confidence": avg_conf,
-                        "reason": None,
-                    },
+            if best_std is not None and abs(best_std - cand_slope) <= 0.0004:
+                w_sum = p0[3] + p1[3]
+                std_intercept = (
+                    p0[3] * (p0[1] - best_std * p0[0])
+                    + p1[3] * (p1[1] - best_std * p1[0])
+                ) / w_sum
+                rep = p1[4]["result"] if p1[3] >= p0[3] else p0[4]["result"]
+                return {
+                    **rep,
+                    "aligned": True,
+                    "offsetMs": int(round(std_intercept)),
+                    "rateRatio": round(float(best_std), 6),
+                    "confidence": round((p0[3] + p1[3]) / 2),
+                    "reason": None,
                 }
 
     return best_model["result"] if best_model is not None else None
@@ -1714,6 +1965,10 @@ def select_alignment_consensus(
         else float("inf")
     )
 
+    fps_drift_result = _fit_framerate_drift(valid_entries)
+    if fps_drift_result is not None:
+        return fps_drift_result
+
     intro_entry = next(
         (entry for entry in valid_entries if entry["startAt"] <= 120),
         None,
@@ -1739,6 +1994,10 @@ def select_alignment_consensus(
             key=lambda cluster: cluster["score"],
             reverse=True,
         )
+        if len(main_entries) >= 3 and len(main_clusters) > 1:
+            main_fps_drift = _fit_framerate_drift(main_entries)
+            if main_fps_drift is not None:
+                return main_fps_drift
         main_best_cluster = main_clusters[0] if main_clusters else None
         if (
             main_best_cluster
@@ -1777,10 +2036,6 @@ def select_alignment_consensus(
                 ],
                 "reason": None,
             }
-
-    fps_drift_result = _fit_framerate_drift(valid_entries)
-    if fps_drift_result is not None:
-        return fps_drift_result
 
     has_consensus = (
         len(best_cluster["candidates"]) >= 2
@@ -1836,6 +2091,319 @@ def select_alignment_consensus(
     return consensus_res
 
 
+def _window_needs_drift_rescue(
+    windows: list[tuple[list[tuple[int, int]], int, int]],
+    entries: list[dict[str, Any]],
+    consensus: dict[str, Any],
+) -> bool:
+    """Return True when any speech window failed alignment or diverges from consensus."""
+    if not consensus.get("aligned"):
+        return True
+    if consensus.get("rateRatio") is not None:
+        return False
+    consensus_offset = int(consensus.get("offsetMs", 0))
+    for idx, (win_speech, _, _) in enumerate(windows):
+        speech_ms = sum(max(0, end - start) for start, end in win_speech)
+        if speech_ms < MIN_ALIGNMENT_SPEECH_DURATION_MS:
+            continue
+        result = entries[idx]["result"]
+        if not result.get("aligned"):
+            return True
+        if abs(int(result.get("offsetMs", 0)) - consensus_offset) > 1_200:
+            return True
+    return False
+
+
+def _seed_rate_scaled_entries(
+    windows: list[tuple[list[tuple[int, int]], int, int]],
+    entries: list[dict[str, Any]],
+    cues: list[Cue],
+) -> list[dict[str, Any]]:
+    """Seed up to two speech-dense windows when Pass 1 produced zero aligned windows."""
+    seeded_entries = [dict(entry) for entry in entries]
+    speech_ranked = sorted(
+        (
+            (sum(max(0, e - s) for s, e in win_speech), idx, win_speech, s_ms, e_ms)
+            for idx, (win_speech, s_ms, e_ms) in enumerate(windows)
+            if sum(max(0, e - s) for s, e in win_speech) >= MIN_ALIGNMENT_SPEECH_DURATION_MS
+        ),
+        key=lambda item: item[0],
+        reverse=True,
+    )
+    if not speech_ranked:
+        return seeded_entries
+
+    cue_intervals = [(c.start_ms, c.end_ms) for c in cues if c.end_ms > c.start_ms]
+    non_unit_ratios = [r for r in FRAMERATE_RATIOS if abs(r - 1.0) > 1e-4]
+
+    for _, idx, win_speech, s_ms, e_ms in speech_ranked[:2]:
+        merged_speech = merge_intervals(win_speech)
+        fft_peaks = find_top_offsets_fft(
+            merged_speech,
+            cue_intervals,
+            s_ms,
+            e_ms,
+            try_framerate_ratios=True,
+            top_k=3,
+        )
+        seen_peaks: list[int] = []
+        best_res: dict[str, Any] | None = None
+        for fft_off, fft_conf, fft_ratio in fft_peaks:
+            if fft_conf < 20.0 or any(abs(fft_off - p) < 1_500 for p in seen_peaks):
+                continue
+            seen_peaks.append(fft_off)
+            ratios_to_try = (
+                [fft_ratio, *[r for r in non_unit_ratios if abs(r - fft_ratio) > 1e-4]]
+                if abs(fft_ratio - 1.0) > 1e-4
+                else non_unit_ratios
+            )
+            for ratio in ratios_to_try:
+                res = _align_window_at_projected_rate(
+                    cues,
+                    merged_speech,
+                    s_ms,
+                    e_ms,
+                    fft_off,
+                    ratio,
+                )
+                if (
+                    res.get("aligned")
+                    and int(res.get("confidence", 0)) >= 68
+                    and int(res.get("speechAnchorCount", 0)) >= 2
+                ):
+                    if best_res is None or int(res["confidence"]) > int(best_res["confidence"]):
+                        best_res = res
+                    break
+            if best_res is not None:
+                break
+        if best_res is not None:
+            seeded_entries[idx] = {**seeded_entries[idx], "result": best_res}
+
+    return seeded_entries
+
+
+def _project_and_fit_framerate_drift(
+    windows: list[tuple[list[tuple[int, int]], int, int]],
+    base_entries: list[dict[str, Any]],
+    cues: list[Cue],
+) -> dict[str, Any] | None:
+    """Project linear FPS hypotheses from aligned anchor windows across the timeline."""
+    aligned_indices = [
+        i
+        for i, entry in enumerate(base_entries)
+        if entry["result"].get("aligned")
+        and isinstance(entry["result"].get("offsetMs"), int)
+    ]
+    if not aligned_indices:
+        return None
+
+    best_anchor_idx = max(
+        aligned_indices,
+        key=lambda i: int(base_entries[i]["result"].get("confidence", 0)),
+    )
+    anchor_indices = [best_anchor_idx]
+    best_mid_ms = int(base_entries[best_anchor_idx]["midMs"])
+    furthest_idx = max(
+        aligned_indices,
+        key=lambda i: abs(int(base_entries[i]["midMs"]) - best_mid_ms),
+    )
+    if (
+        furthest_idx != best_anchor_idx
+        and abs(int(base_entries[furthest_idx]["midMs"]) - best_mid_ms) >= 180_000
+    ):
+        anchor_indices.append(furthest_idx)
+
+    candidate_ratios = [r for r in FRAMERATE_RATIOS if abs(r - 1.0) > 1e-4]
+    if len(anchor_indices) == 2:
+        i0, i1 = anchor_indices
+        t_v0 = float(base_entries[i0]["midMs"])
+        t_v1 = float(base_entries[i1]["midMs"])
+        t_s0 = t_v0 - float(base_entries[i0]["result"]["offsetMs"])
+        t_s1 = t_v1 - float(base_entries[i1]["result"]["offsetMs"])
+        if abs(t_v1 - t_v0) >= 180_000 and abs(t_s1 - t_s0) >= 180_000:
+            emp_r = (t_v1 - t_v0) / (t_s1 - t_s0)
+            if (
+                MIN_RATE_RATIO <= emp_r <= MAX_RATE_RATIO
+                and abs(emp_r - 1.0) >= 0.0004
+                and all(abs(emp_r - r) > 1e-5 for r in candidate_ratios)
+            ):
+                candidate_ratios.append(emp_r)
+
+    merged_windows = [
+        (
+            idx,
+            merge_intervals(win_speech),
+            s_ms,
+            e_ms,
+            (s_ms + e_ms) // 2,
+            sum(max(0, e - s) for s, e in win_speech),
+        )
+        for idx, (win_speech, s_ms, e_ms) in enumerate(windows)
+    ]
+    eval_cache: dict[tuple[int, int, float, int], dict[str, Any]] = {}
+
+    def cached_projected_align(
+        idx: int,
+        win_speech: list[tuple[int, int]],
+        s_ms: int,
+        e_ms: int,
+        expected_offset_ms: int,
+        ratio: float,
+        radius_ms: int,
+    ) -> dict[str, Any]:
+        key = (idx, expected_offset_ms, round(ratio, 6), radius_ms)
+        cached = eval_cache.get(key)
+        if cached is None:
+            cached = _align_window_at_projected_rate(
+                cues,
+                win_speech,
+                s_ms,
+                e_ms,
+                expected_offset_ms,
+                ratio,
+                search_radius_ms=radius_ms,
+            )
+            eval_cache[key] = cached
+        return cached
+
+    best_hypothesis: tuple[tuple[int, int], dict[str, Any]] | None = None
+
+    for anchor_idx in anchor_indices:
+        anchor_mid_ms = int(base_entries[anchor_idx]["midMs"])
+        anchor_offset_ms = int(base_entries[anchor_idx]["result"]["offsetMs"])
+        for ratio in candidate_ratios:
+            cand_entries: list[dict[str, Any]] = []
+            far_window_verified = False
+
+            for idx, win_speech, s_ms, e_ms, win_mid_ms, speech_ms in merged_windows:
+                orig_entry = base_entries[idx]
+                orig_res = orig_entry["result"]
+                expected_offset_ms = int(
+                    round(
+                        anchor_offset_ms
+                        + (1.0 - 1.0 / ratio) * (win_mid_ms - anchor_mid_ms)
+                    )
+                )
+
+                chosen_res = orig_res
+                was_rescued_or_refined = False
+
+                if idx == anchor_idx:
+                    if abs(ratio - 1.0) >= 0.005 and speech_ms >= MIN_ALIGNMENT_SPEECH_DURATION_MS:
+                        refined = cached_projected_align(
+                            idx,
+                            win_speech,
+                            s_ms,
+                            e_ms,
+                            anchor_offset_ms,
+                            ratio,
+                            900,
+                        )
+                        if (
+                            refined.get("aligned")
+                            and int(refined.get("confidence", 0))
+                            >= int(orig_res.get("confidence", 0)) - 5
+                        ):
+                            chosen_res = refined
+                elif (
+                    orig_res.get("aligned")
+                    and abs(int(orig_res["offsetMs"]) - expected_offset_ms) <= 750
+                ):
+                    if abs(ratio - 1.0) >= 0.005 and speech_ms >= MIN_ALIGNMENT_SPEECH_DURATION_MS:
+                        refined = cached_projected_align(
+                            idx,
+                            win_speech,
+                            s_ms,
+                            e_ms,
+                            expected_offset_ms,
+                            ratio,
+                            900,
+                        )
+                        if refined.get("aligned") and int(refined.get("confidence", 0)) >= int(
+                            orig_res.get("confidence", 0)
+                        ):
+                            chosen_res = refined
+                            was_rescued_or_refined = True
+                elif (
+                    speech_ms >= MIN_ALIGNMENT_SPEECH_DURATION_MS
+                    and abs(expected_offset_ms) <= MAX_PLAUSIBLE_ALIGNMENT_OFFSET_MS
+                ):
+                    rescued = cached_projected_align(
+                        idx,
+                        win_speech,
+                        s_ms,
+                        e_ms,
+                        expected_offset_ms,
+                        ratio,
+                        2_400,
+                    )
+                    if (
+                        rescued.get("aligned")
+                        and isinstance(rescued.get("offsetMs"), int)
+                        and abs(int(rescued["offsetMs"]) - expected_offset_ms) <= 900
+                        and (
+                            not orig_res.get("aligned")
+                            or int(rescued.get("confidence", 0))
+                            >= int(orig_res.get("confidence", 0)) - 6
+                        )
+                    ):
+                        chosen_res = rescued
+                        was_rescued_or_refined = True
+
+                if (
+                    idx != anchor_idx
+                    and was_rescued_or_refined
+                    and abs(win_mid_ms - anchor_mid_ms) >= 240_000
+                    and chosen_res.get("aligned")
+                    and int(chosen_res.get("confidence", 0)) >= 65
+                    and int(chosen_res.get("speechAnchorCount", 0)) >= 2
+                ):
+                    far_window_verified = True
+
+                cand_entries.append(
+                    {
+                        "startAt": orig_entry["startAt"],
+                        "midMs": orig_entry["midMs"],
+                        "result": chosen_res,
+                    }
+                )
+
+            if not far_window_verified:
+                continue
+
+            valid_cand_entries = [
+                entry
+                for entry in cand_entries
+                if _has_speech_evidence(entry["result"])
+                and entry["result"].get("aligned") is True
+                and isinstance(entry["result"].get("offsetMs"), int)
+                and int(entry["result"].get("confidence", 0)) >= MIN_ALIGNMENT_CONFIDENCE
+            ]
+            fps_result = _fit_framerate_drift(valid_cand_entries)
+            if fps_result is None:
+                continue
+
+            slope = float(fps_result["rateRatio"])
+            intercept = float(fps_result["offsetMs"])
+            inlier_count = sum(
+                1
+                for entry in valid_cand_entries
+                if abs(
+                    float(entry["midMs"])
+                    - (
+                        slope * (float(entry["midMs"]) - float(entry["result"]["offsetMs"]))
+                        + intercept
+                    )
+                )
+                <= 750.0
+            )
+            rank = (inlier_count, int(fps_result.get("confidence", 0)))
+            if best_hypothesis is None or rank > best_hypothesis[0]:
+                best_hypothesis = (rank, fps_result)
+
+    return best_hypothesis[1] if best_hypothesis is not None else None
+
+
 def align_speech_windows(
     windows: list[tuple[list[tuple[int, int]], int, int]],
     subtitles: list[dict[str, str]],
@@ -1880,17 +2448,30 @@ def align_speech_windows(
         consensus = select_alignment_consensus(entries)
         cues = parsed_tracks.get(track)
 
-        # Cross-window hint rescue & bounded pooled fallback for sparse-dialogue movies
-        if not consensus.get("aligned") and cues and not is_mocked_batch and len(windows) >= 2:
+        # Cross-window hint rescue, FPS drift projection & bounded pooled fallback
+        if (
+            cues
+            and not is_mocked_batch
+            and len(windows) >= 2
+            and _window_needs_drift_rescue(windows, entries, consensus)
+        ):
+            working_entries = entries
+            if (
+                alignment_result_fn is None
+                and not any(e["result"].get("aligned") for e in working_entries)
+            ):
+                working_entries = _seed_rate_scaled_entries(windows, working_entries, cues)
+
             aligned_hints = [
                 int(e["result"]["offsetMs"])
-                for e in entries
+                for e in working_entries
                 if e["result"].get("aligned") and isinstance(e["result"].get("offsetMs"), int)
             ]
+            rescued_entries = working_entries
             if aligned_hints:
-                rescued_entries: list[dict[str, Any]] = []
+                rescued_entries = []
                 for idx, (speech_intervals, audio_start_ms, audio_end_ms) in enumerate(windows):
-                    orig_entry = entries[idx]
+                    orig_entry = working_entries[idx]
                     if orig_entry["result"].get("aligned"):
                         rescued_entries.append(orig_entry)
                         continue
@@ -1918,7 +2499,38 @@ def align_speech_windows(
                             "result": re_res if re_res.get("aligned") else orig_entry["result"],
                         }
                     )
-                consensus = select_alignment_consensus(rescued_entries)
+                rescued_consensus = select_alignment_consensus(rescued_entries)
+                if rescued_consensus.get("aligned") and (
+                    not consensus.get("aligned")
+                    or rescued_consensus.get("rateRatio") is not None
+                ):
+                    consensus = rescued_consensus
+
+            if (
+                alignment_result_fn is None
+                and consensus.get("rateRatio") is None
+                and _window_needs_drift_rescue(windows, rescued_entries, consensus)
+            ):
+                projected_drift = _project_and_fit_framerate_drift(
+                    windows,
+                    rescued_entries,
+                    cues,
+                )
+                if projected_drift is not None:
+                    const_inliers = [
+                        e
+                        for e in rescued_entries
+                        if e["result"].get("aligned")
+                        and isinstance(e["result"].get("offsetMs"), int)
+                        and abs(int(e["result"]["offsetMs"]) - int(consensus.get("offsetMs", 0)))
+                        <= 750
+                    ]
+                    if not consensus.get("aligned") or not (
+                        len(const_inliers) >= 3
+                        and int(projected_drift.get("confidence", 0))
+                        < int(consensus.get("confidence", 0)) - 8
+                    ):
+                        consensus = projected_drift
 
             dense_rejected_windows = sum(
                 1

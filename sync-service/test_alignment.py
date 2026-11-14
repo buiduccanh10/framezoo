@@ -875,6 +875,159 @@ Let's move out.
         self.assertFalse(res["results"]["primary"]["aligned"])
         self.assertEqual(calls, 2)
 
+    @staticmethod
+    def _format_vtt_ms(ms: int) -> str:
+        total_ms = max(0, int(round(ms)))
+        hours, rem = divmod(total_ms, 3_600_000)
+        minutes, rem = divmod(rem, 60_000)
+        seconds, millis = divmod(rem, 1_000)
+        return f"{hours:02d}:{minutes:02d}:{seconds:02d}.{millis:03d}"
+
+    def _build_drifted_vtt_and_windows(
+        self,
+        window_specs: list[tuple[int, int, bool]],
+        *,
+        rate_ratio: float,
+        offset0_ms: int,
+        end_s_ms: int = 2_600_000,
+    ) -> tuple[str, list[tuple[list[tuple[int, int]], int, int]]]:
+        cues: list[tuple[int, int]] = []
+        cursor = 5_000
+        idx = 0
+        while cursor < end_s_ms:
+            dur = 1_300 + ((idx * 733 + idx * idx * 197) % 2_900)
+            gap = 800 + ((idx * 1_103 + idx * idx * 311) % 3_600)
+            cues.append((cursor, cursor + dur))
+            cursor += dur + gap
+            idx += 1
+
+        lines = ["WEBVTT", ""]
+        for cue_idx, (s_ms, e_ms) in enumerate(cues, start=1):
+            lines.append(f"{self._format_vtt_ms(s_ms)} --> {self._format_vtt_ms(e_ms)}")
+            lines.append(f"Line {cue_idx}")
+            lines.append("")
+        vtt_data = "\n".join(lines)
+
+        windows: list[tuple[list[tuple[int, int]], int, int]] = []
+        for center_ms, jitter_ms, has_speech in window_specs:
+            win_start = center_ms - 30_000
+            win_end = center_ms + 30_000
+            if not has_speech:
+                windows.append(([], win_start, win_end))
+                continue
+            speech: list[tuple[int, int]] = []
+            for s_ms, e_ms in cues:
+                v_start = int(round(s_ms * rate_ratio + offset0_ms + jitter_ms))
+                v_end = int(round(e_ms * rate_ratio + offset0_ms + jitter_ms))
+                clipped_start = max(v_start, win_start)
+                clipped_end = min(v_end, win_end)
+                if clipped_end - clipped_start >= 600:
+                    speech.append((clipped_start, clipped_end))
+            windows.append((speech, win_start, win_end))
+
+        return vtt_data, windows
+
+    def test_single_sync_locks_25_over_23976_drift_despite_early_playhead_cluster(self):
+        ratio = 25.0 / 23.976
+        offset0 = 1_500
+        vtt_data, windows = self._build_drifted_vtt_and_windows(
+            [
+                (90_000, 0, True),
+                (150_000, 0, True),
+                (723_000, 0, True),
+                (1_471_000, 0, True),
+                (1_993_000, 0, True),
+            ],
+            rate_ratio=ratio,
+            offset0_ms=offset0,
+        )
+
+        res = align_speech_windows(windows, [{"track": "primary", "vttData": vtt_data}])
+        primary = res["results"]["primary"]
+        self.assertTrue(primary["aligned"])
+        self.assertIsNotNone(primary.get("rateRatio"))
+        self.assertAlmostEqual(primary["rateRatio"], ratio, delta=0.0003)
+        self.assertLessEqual(abs(primary["offsetMs"] - offset0), 300)
+        self.assertNotIn("segments", primary)
+
+    def test_detects_subtle_23976_to_24_drift_with_window_jitter(self):
+        from alignment import select_alignment_consensus
+
+        ratio = 23.976 / 24.0
+        offset0 = 2_000
+        specs = [
+            (90_000, 120, True),
+            (480_000, -160, True),
+            (960_000, 180, True),
+            (1_440_000, -140, True),
+            (1_920_000, 150, True),
+            (2_370_000, -170, True),
+        ]
+        entries = []
+        for center_ms, jitter_ms, _ in specs:
+            window_offset = int(round(offset0 + (1.0 - 1.0 / ratio) * center_ms + jitter_ms))
+            result = self.make_aligned_result(window_offset, 88.0)
+            result["matchedAnchors"] = 4
+            entries.append({"startAt": center_ms / 1000.0, "midMs": center_ms, "result": result})
+
+        consensus = select_alignment_consensus(entries)
+        self.assertTrue(consensus["aligned"])
+        self.assertIsNotNone(consensus.get("rateRatio"))
+        self.assertAlmostEqual(consensus["rateRatio"], ratio, delta=0.0003)
+
+        vtt_data, windows = self._build_drifted_vtt_and_windows(
+            specs,
+            rate_ratio=ratio,
+            offset0_ms=offset0,
+        )
+        res = align_speech_windows(windows, [{"track": "primary", "vttData": vtt_data}])
+        primary = res["results"]["primary"]
+        self.assertTrue(primary["aligned"])
+        self.assertIsNotNone(primary.get("rateRatio"))
+        self.assertAlmostEqual(primary["rateRatio"], ratio, delta=0.0003)
+
+    def test_two_wide_windows_fit_broadcast_fps_drift(self):
+        ratio = 25.0 / 24.0
+        offset0 = -1_000
+        vtt_data, windows = self._build_drifted_vtt_and_windows(
+            [
+                (120_000, 0, True),
+                (450_000, 0, False),
+                (900_000, 0, False),
+                (1_500_000, 0, True),
+                (2_100_000, 0, False),
+            ],
+            rate_ratio=ratio,
+            offset0_ms=offset0,
+        )
+
+        res = align_speech_windows(windows, [{"track": "primary", "vttData": vtt_data}])
+        primary = res["results"]["primary"]
+        self.assertTrue(primary["aligned"])
+        self.assertIsNotNone(primary.get("rateRatio"))
+        self.assertAlmostEqual(primary["rateRatio"], ratio, delta=0.0003)
+
+    def test_constant_offset_with_outlier_keeps_rate_ratio_none(self):
+        offset0 = -3_000
+        vtt_data, windows = self._build_drifted_vtt_and_windows(
+            [
+                (90_000, 0, True),
+                (150_000, 0, True),
+                (500_000, 0, True),
+                (1_000_000, 42_000, True),
+                (1_500_000, 0, True),
+                (2_000_000, 0, True),
+            ],
+            rate_ratio=1.0,
+            offset0_ms=offset0,
+        )
+
+        res = align_speech_windows(windows, [{"track": "primary", "vttData": vtt_data}])
+        primary = res["results"]["primary"]
+        self.assertTrue(primary["aligned"])
+        self.assertLessEqual(abs(primary["offsetMs"] - offset0), 250)
+        self.assertIsNone(primary.get("rateRatio"))
+
 
 if __name__ == "__main__":
     unittest.main()
