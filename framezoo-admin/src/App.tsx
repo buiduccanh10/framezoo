@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AdminShell, type AdminTab } from "./components/AdminHeader";
 import { BackupManagement } from "./components/BackupManagement";
 import { FeedbackManagement } from "./components/FeedbackManagement";
@@ -14,6 +14,20 @@ function App() {
   const [activeTab, setActiveTab] = useState<AdminTab>("users");
   const [totalUsers, setTotalUsers] = useState(0);
   const [pendingFeedbacks, setPendingFeedbacks] = useState(0);
+
+  useEffect(() => {
+    if (authState !== "authenticated") return;
+    let cancelled = false;
+    void adminApi
+      .listFeedback(1, 1)
+      .then((result) => {
+        if (!cancelled) setPendingFeedbacks(result.stats.pending);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [authState]);
 
   const handleLogout = async () => {
     if (!(await logout())) {

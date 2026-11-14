@@ -1,6 +1,7 @@
 import { defineEventHandler, createError } from 'h3';
 import { prisma } from '~/utils/prisma';
 import { requireAdmin, summarizeClientPlatform } from '~/utils/admin';
+import { decryptPiiOrNull } from '~/utils/piiCrypto';
 
 export default defineEventHandler(async event => {
   await requireAdmin(event);
@@ -61,6 +62,9 @@ export default defineEventHandler(async event => {
     }),
   ]);
 
+  const now = new Date();
+  const activeSessions = sessionsList.filter(s => s.expires_at > now);
+
   const latestSessionAccessedAt = sessionsList[0]?.accessed_at;
   const lastActive =
     latestSessionAccessedAt &&
@@ -85,7 +89,7 @@ export default defineEventHandler(async event => {
     user: {
       id: user.id,
       nickname: user.nickname,
-      email: user.email,
+      email: decryptPiiOrNull(user.email),
       created_at: user.created_at,
       last_logged_in: lastActive,
       permissions: user.permissions,
@@ -94,7 +98,7 @@ export default defineEventHandler(async event => {
       app_version: currentVersion,
     },
     settings: userSettings,
-    sessions: sessionsList.map(s => ({
+    sessions: activeSessions.map(s => ({
       id: s.id,
       device: s.device,
       platform: summarizeClientPlatform(s.user_agent),
@@ -104,7 +108,7 @@ export default defineEventHandler(async event => {
       expires_at: s.expires_at,
     })),
     counts: {
-      sessions: sessionsList.length,
+      sessions: activeSessions.length,
     },
   };
 });

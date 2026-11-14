@@ -4,6 +4,7 @@ import { prisma } from '~/utils/prisma';
 import { useAuth } from '~/utils/auth';
 import { consumeVerifiedChallenge, verifyOtp } from '~/utils/emailOtp';
 import { throwOtpHttpError } from '~/utils/otpHttp';
+import { decryptPii, encryptPii, hashEmailIndex } from '~/utils/piiCrypto';
 
 const schema = z.object({
   flowId: z.string().uuid(),
@@ -30,7 +31,7 @@ export default defineEventHandler(async event => {
         consume: true,
         db: tx,
       });
-      const newEmail = normalizeEmail(newChallenge.email);
+      const newEmail = normalizeEmail(decryptPii(newChallenge.email));
       const newPayload = newChallenge.payload;
       const oldChallengeId =
         newPayload && typeof newPayload === 'object' && !Array.isArray(newPayload)
@@ -46,22 +47,29 @@ export default defineEventHandler(async event => {
         db: tx,
       });
       const oldPayload = oldChallenge.payload;
-      const expectedEmail =
+      const rawExpectedEmail =
         oldPayload && typeof oldPayload === 'object' && !Array.isArray(oldPayload)
           ? (oldPayload as { newEmail?: unknown }).newEmail
           : null;
+      const expectedEmail =
+        typeof rawExpectedEmail === 'string' ? normalizeEmail(decryptPii(rawExpectedEmail)) : null;
       if (expectedEmail !== newEmail) {
         throw createError({ statusCode: 403, message: 'Invalid email change flow' });
       }
 
-      const existing = await tx.users.findUnique({ where: { email: newEmail } });
+      const newEmailHash = hashEmailIndex(newEmail);
+      const existing = await tx.users.findUnique({ where: { email_hash: newEmailHash } });
       if (existing && existing.id !== session.user) {
         throw createError({ statusCode: 409, message: 'Email is already registered' });
       }
 
       const user = await tx.users.update({
         where: { id: session.user },
-        data: { email: newEmail, email_verified_at: new Date() },
+        data: {
+          email: encryptPii(newEmail),
+          email_hash: newEmailHash,
+          email_verified_at: new Date(),
+        },
       });
 
       return {
@@ -72,7 +80,7 @@ export default defineEventHandler(async event => {
           profile: user.profile,
           permissions: user.permissions,
           nickname: user.nickname,
-          email: user.email,
+          email: newEmail,
         },
       };
     });

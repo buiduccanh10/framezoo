@@ -2,19 +2,22 @@ import { z } from 'zod';
 import { useChallenge } from '~/utils/challenge';
 import { useAuth } from '~/utils/auth';
 import { findUserByAccountIdentifier } from '~/utils/accountIdentifier';
+import { decryptPiiOrNull } from '~/utils/piiCrypto';
 
-const completeSchema = z.object({
-  identifier: z.string().min(1).max(255).optional(),
-  nickname: z.string().min(1).max(255).optional(),
-  publicKey: z.string(),
-  challenge: z.object({
-    code: z.string(),
-    signature: z.string(),
-  }),
-  device: z.string().max(500).min(1),
-}).refine((value) => value.identifier || value.nickname || value.publicKey, {
-  message: 'Account identifier is required',
-});
+const completeSchema = z
+  .object({
+    identifier: z.string().min(1).max(255).optional(),
+    nickname: z.string().min(1).max(255).optional(),
+    publicKey: z.string(),
+    challenge: z.object({
+      code: z.string(),
+      signature: z.string(),
+    }),
+    device: z.string().max(500).min(1),
+  })
+  .refine(value => value.identifier || value.nickname || value.publicKey, {
+    message: 'Account identifier is required',
+  });
 
 export default defineEventHandler(async event => {
   const body = await readBody(event);
@@ -29,7 +32,7 @@ export default defineEventHandler(async event => {
 
   const user = await findUserByAccountIdentifier(
     body.identifier ?? body.nickname ?? body.publicKey,
-    body.publicKey,
+    body.publicKey
   );
 
   if (!user) {
@@ -76,7 +79,7 @@ export default defineEventHandler(async event => {
       profile: user.profile,
       permissions: user.permissions,
       nickname: (user as any).nickname,
-      email: user.email,
+      email: decryptPiiOrNull(user.email),
     },
     session: {
       id: hydratedSession.id,

@@ -99,7 +99,8 @@ model users {
   profile        Json
   ratings        Json      @default("[]")
   nickname       String    @unique @db.VarChar(255)
-  email             String?   @unique @db.VarChar(255)
+  email             String?   @db.Text
+  email_hash        String?   @unique @db.VarChar(64)
   email_verified_at DateTime? @db.Timestamptz(0)
   app_version       String?   @db.VarChar(64)
 }
@@ -108,7 +109,8 @@ model email_otp_challenges {
   id                String    @id @default(uuid()) @db.Uuid
   purpose           String    @db.VarChar(64)
   user_id           String?
-  email             String    @db.VarChar(255)
+  email             String    @db.Text
+  email_hash        String?   @db.VarChar(64)
   payload           Json?
   code_hash         String    @db.VarChar(128)
   expires_at        DateTime  @db.Timestamptz(0)
@@ -122,7 +124,7 @@ model email_otp_challenges {
   created_at        DateTime  @default(now()) @db.Timestamptz(0)
   request_ip        String?   @db.VarChar(255)
 
-  @@index([email, purpose, created_at])
+  @@index([email_hash, purpose, created_at])
   @@index([user_id, purpose, created_at])
   @@index([action_token_hash])
 }
@@ -180,17 +182,19 @@ model watch_history {
 }
 
 model feedbacks {
-  id          String   @id @db.Uuid
-  title       String   @db.VarChar(255)
-  description String   @db.Text
-  contact     String?  @db.VarChar(255)
-  status      String   @default("pending") @db.VarChar(50)
-  user_id     String?  @db.VarChar(255)
-  attachments Json     @default("[]")
-  created_at  DateTime @default(now()) @db.Timestamptz(0)
-  updated_at  DateTime @default(now()) @db.Timestamptz(0)
+  id           String   @id @db.Uuid
+  title        String   @db.VarChar(255)
+  description  String   @db.Text
+  contact      String?  @db.Text
+  contact_hash String?  @db.VarChar(64)
+  status       String   @default("pending") @db.VarChar(50)
+  user_id      String?  @db.VarChar(255)
+  attachments  Json     @default("[]")
+  created_at   DateTime @default(now()) @db.Timestamptz(0)
+  updated_at   DateTime @default(now()) @db.Timestamptz(0)
 
   @@index([status], map: "feedbacks_status_idx")
   @@index([created_at(sort: Desc)], map: "feedbacks_created_at_idx")
+  @@index([contact_hash], map: "feedbacks_contact_hash_idx")
 }
 

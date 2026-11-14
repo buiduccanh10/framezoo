@@ -103,11 +103,11 @@ export function useUserManagement(
   }, [limit, loadUsers, page, search, sort]);
 
   const openUserDetail = useCallback(
-    async (userId: string) => {
+    async (userId: string, resetTab = true) => {
       setSelectedUserId(userId);
       setUserDetail(null);
       setDetailLoading(true);
-      setDetailTab("overview");
+      if (resetTab) setDetailTab("overview");
       try {
         setUserDetail(await api.getUser(userId));
       } catch {
@@ -136,7 +136,9 @@ export function useUserManagement(
       showMessage(`Đã cập nhật người dùng ${user.nickname}`);
       setUserToEdit(null);
       await loadUsers(page, search, sort, limit);
-      if (selectedUserId === userToEdit.id) await openUserDetail(userToEdit.id);
+      if (selectedUserId === userToEdit.id) {
+        await openUserDetail(userToEdit.id, false);
+      }
     } catch {
       showMessage("Không thể cập nhật người dùng");
     } finally {
@@ -172,7 +174,7 @@ export function useUserManagement(
       showMessage(result.message || "Đã đăng xuất các thiết bị của người dùng");
       setUserToRevoke(null);
       await loadUsers(page, search, sort, limit);
-      if (selectedUserId === userId) await openUserDetail(userId);
+      if (selectedUserId === userId) await openUserDetail(userId, false);
     } catch {
       showMessage("Không thể đăng xuất phiên người dùng");
     } finally {

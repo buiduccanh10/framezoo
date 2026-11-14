@@ -66,18 +66,27 @@ export default defineEventHandler(async event => {
   }
 
   if (event.method === 'DELETE') {
-    const sid = event.context.params?.sid;
-    const sessionExists = await prisma.sessions.findUnique({
-      where: { id: sid },
-    });
+    const latestActivity =
+      targetedSession.accessed_at > currentSession.accessed_at
+        ? targetedSession.accessed_at
+        : currentSession.accessed_at;
 
-    if (!sessionExists) {
-      return { success: true };
-    }
-    await auth.getSessionAndBump(sid);
+    await prisma.$transaction(async tx => {
+      const user = await tx.users.findUnique({
+        where: { id: targetedSession.user },
+        select: { last_logged_in: true },
+      });
 
-    await prisma.sessions.delete({
-      where: { id: sessionId },
+      if (user && (!user.last_logged_in || latestActivity > user.last_logged_in)) {
+        await tx.users.update({
+          where: { id: targetedSession.user },
+          data: { last_logged_in: latestActivity },
+        });
+      }
+
+      await tx.sessions.deleteMany({
+        where: { id: sessionId },
+      });
     });
 
     if (currentSession.id === sessionId) {

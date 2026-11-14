@@ -40,8 +40,7 @@ export function BackupManagement({ onMessage }: BackupManagementProps) {
     }
     return {
       title: "Xóa toàn bộ bản sao lưu?",
-      description:
-        "Tất cả tệp sao lưu trên máy chủ sẽ bị xóa vĩnh viễn.",
+      description: "Tất cả tệp sao lưu trên máy chủ sẽ bị xóa vĩnh viễn.",
       confirmLabel: "Xóa toàn bộ",
       tone: "danger" as const,
     };
@@ -101,7 +100,7 @@ export function BackupManagement({ onMessage }: BackupManagementProps) {
             Phục hồi dữ liệu
             <input
               type="file"
-              accept=".tar.gz,.gz,application/gzip,application/x-gzip,.sql,text/plain,application/sql"
+              accept=".tar.gz.enc,.enc,.tar.gz,.gz,application/gzip,application/x-gzip,application/octet-stream,.sql,text/plain,application/sql"
               onChange={backup.restore}
               disabled={Boolean(backup.action)}
             />
@@ -117,7 +116,8 @@ export function BackupManagement({ onMessage }: BackupManagementProps) {
             </button>
           ) : null}
           <p className="panel-note">
-            Phiên xác thực nằm trong cookie HTTP-only, tải xuống qua Blob an toàn.
+            Phiên xác thực nằm trong cookie HTTP-only, tải xuống qua Blob an
+            toàn.
           </p>
         </aside>
 

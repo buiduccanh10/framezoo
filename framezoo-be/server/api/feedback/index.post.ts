@@ -9,6 +9,7 @@ import {
 import { randomUUID } from 'crypto';
 import { prisma } from '~/utils/prisma';
 import { useAuth } from '~/utils/auth';
+import { encryptPii, hashContactIndex } from '~/utils/piiCrypto';
 import {
   MAX_FEEDBACK_FILE_BYTES,
   FeedbackMalwareError,
@@ -32,7 +33,7 @@ export default defineEventHandler(async event => {
 
   let title: string | undefined;
   let description: string | undefined;
-  let contact: string | null = null;
+  let contact: string | null;
   let fileParts: { filename?: string; type?: string; data: Uint8Array }[] = [];
 
   if (contentType.toLowerCase().startsWith('multipart/form-data')) {
@@ -154,7 +155,8 @@ export default defineEventHandler(async event => {
         id: feedbackId,
         title,
         description,
-        contact,
+        contact: contact ? encryptPii(contact) : null,
+        contact_hash: contact ? hashContactIndex(contact) : null,
         status: 'pending',
         user_id: userId,
         attachments,
@@ -165,6 +167,7 @@ export default defineEventHandler(async event => {
       success: true,
       feedback: {
         ...feedback,
+        contact,
         attachments: attachments.map(attachment => ({
           key: attachment.key,
           name: attachment.name,

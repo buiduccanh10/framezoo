@@ -3,6 +3,7 @@ import { useChallenge } from '~/utils/challenge';
 import { useAuth } from '~/utils/auth';
 import { randomUUID } from 'crypto';
 import { normalizeEmail } from '~/utils/accountIdentifier';
+import { encryptPii, hashEmailIndex } from '~/utils/piiCrypto';
 import { verifyOtp } from '~/utils/emailOtp';
 import { sendEmail } from '~/utils/email';
 import { throwOtpHttpError } from '~/utils/otpHttp';
@@ -72,6 +73,7 @@ export default defineEventHandler(async event => {
 
   const nickname = input.nickname;
   const email = normalizeEmail(input.email);
+  const emailHash = hashEmailIndex(email);
 
   // Both fields have unique B-tree indexes. Keep these as two indexed lookups
   // instead of an OR/insensitive scan so the check remains O(log n) as users grow.
@@ -81,7 +83,7 @@ export default defineEventHandler(async event => {
       select: { id: true },
     }),
     prisma.users.findUnique({
-      where: { email },
+      where: { email_hash: emailHash },
       select: { id: true },
     }),
   ]);
@@ -112,7 +114,8 @@ export default defineEventHandler(async event => {
           namespace: input.namespace,
           public_key: input.publicKey,
           nickname,
-          email,
+          email: encryptPii(email),
+          email_hash: emailHash,
           created_at: now,
           last_logged_in: now,
           email_verified_at: now,
@@ -168,7 +171,7 @@ export default defineEventHandler(async event => {
       nickname: user.nickname,
       profile: user.profile,
       permissions: user.permissions,
-      email: user.email,
+      email,
     },
     session: {
       id: hydratedSession.id,

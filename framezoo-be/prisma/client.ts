@@ -1,5 +1,5 @@
 import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from '../generated/prisma/client';
+import { Prisma, PrismaClient } from '../generated/prisma/client';
 
 function createAdapter() {
   const connectionString = process.env.DATABASE_URL;
@@ -15,5 +15,5 @@ export function createPrismaClient() {
   return new PrismaClient({ adapter: createAdapter() });
 }
 
-export { PrismaClient };
+export { Prisma, PrismaClient };
 export type { bookmarks, feedbacks } from '../generated/prisma/client';

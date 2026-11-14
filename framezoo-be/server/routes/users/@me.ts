@@ -1,4 +1,5 @@
 import { useAuth } from '~/utils/auth';
+import { decryptPiiOrNull } from '~/utils/piiCrypto';
 
 export default defineEventHandler(async event => {
   const session = await useAuth().getCurrentSession();
@@ -20,7 +21,7 @@ export default defineEventHandler(async event => {
       publicKey: user.public_key,
       namespace: user.namespace,
       nickname: user.nickname,
-      email: user.email,
+      email: decryptPiiOrNull(user.email),
       profile: user.profile,
       permissions: user.permissions,
     },

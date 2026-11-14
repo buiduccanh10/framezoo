@@ -1,8 +1,9 @@
 import { z } from 'zod';
-import { prisma } from '~/utils/prisma';
+import { findUserByEmail, normalizeEmail } from '~/utils/accountIdentifier';
 import { useAuth } from '~/utils/auth';
 import { verifyOtp, createOtpChallenge } from '~/utils/emailOtp';
 import { throwOtpHttpError } from '~/utils/otpHttp';
+import { decryptPii } from '~/utils/piiCrypto';
 
 const schema = z.object({
   challengeId: z.string().uuid(),
@@ -32,15 +33,16 @@ export default defineEventHandler(async event => {
   }
 
   const oldPayload = verified.challenge.payload;
-  const newEmail =
+  const rawNewEmail =
     oldPayload && typeof oldPayload === 'object' && !Array.isArray(oldPayload)
       ? (oldPayload as { newEmail?: unknown }).newEmail
       : null;
-  if (typeof newEmail !== 'string') {
+  if (typeof rawNewEmail !== 'string') {
     throw createError({ statusCode: 400, message: 'Invalid email change flow' });
   }
+  const newEmail = normalizeEmail(decryptPii(rawNewEmail));
 
-  const existing = await prisma.users.findUnique({ where: { email: newEmail } });
+  const existing = await findUserByEmail(newEmail);
   if (existing) throw createError({ statusCode: 409, message: 'Email is already registered' });
 
   try {

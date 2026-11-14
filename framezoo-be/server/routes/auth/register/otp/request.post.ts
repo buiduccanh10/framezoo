@@ -1,6 +1,5 @@
 import { z } from 'zod';
-import { normalizeEmail } from '~/utils/accountIdentifier';
-import { prisma } from '~/utils/prisma';
+import { findUserByEmail, normalizeEmail } from '~/utils/accountIdentifier';
 import { createOtpChallenge } from '~/utils/emailOtp';
 import { throwOtpHttpError } from '~/utils/otpHttp';
 
@@ -15,10 +14,7 @@ export default defineEventHandler(async event => {
   }
 
   const email = normalizeEmail(result.data.email);
-  const existingEmail = await prisma.users.findUnique({
-    where: { email },
-    select: { id: true },
-  });
+  const existingEmail = await findUserByEmail(email);
   if (existingEmail) {
     throw createError({
       statusCode: 409,

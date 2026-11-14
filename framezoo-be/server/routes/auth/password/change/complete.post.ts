@@ -4,6 +4,7 @@ import { useAuth } from '~/utils/auth';
 import { verifyOtp } from '~/utils/emailOtp';
 import { throwOtpHttpError } from '~/utils/otpHttp';
 import { isValidPublicKey } from '~/utils/publicKey';
+import { decryptPiiOrNull } from '~/utils/piiCrypto';
 
 const schema = z.object({
   challengeId: z.string().uuid(),
@@ -59,7 +60,7 @@ export default defineEventHandler(async event => {
       profile: user.profile,
       permissions: user.permissions,
       nickname: user.nickname,
-      email: user.email,
+      email: decryptPiiOrNull(user.email),
     },
     session: {
       id: session.id,

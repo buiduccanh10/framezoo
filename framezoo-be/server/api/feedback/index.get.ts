@@ -2,6 +2,7 @@ import { defineEventHandler, getQuery } from 'h3';
 import { prisma } from '~/utils/prisma';
 import { requireAdmin } from '~/utils/admin';
 import { parseFeedbackAttachments } from '~/utils/feedback-storage';
+import { decryptPiiOrNull, hashContactIndex, hashEmailIndex } from '~/utils/piiCrypto';
 
 export default defineEventHandler(async event => {
   await requireAdmin(event);
@@ -17,7 +18,7 @@ export default defineEventHandler(async event => {
         where: {
           OR: [
             { nickname: { contains: search, mode: 'insensitive' } },
-            { email: { contains: search, mode: 'insensitive' } },
+            { email_hash: hashEmailIndex(search) },
             { id: { contains: search, mode: 'insensitive' } },
           ],
         },
@@ -31,7 +32,7 @@ export default defineEventHandler(async event => {
     where.OR = [
       { title: { contains: search, mode: 'insensitive' } },
       { description: { contains: search, mode: 'insensitive' } },
-      { contact: { contains: search, mode: 'insensitive' } },
+      { contact_hash: hashContactIndex(search) },
       ...(matchingUsers.length ? [{ user_id: { in: matchingUsers.map(user => user.id) } }] : []),
     ];
   }
@@ -57,7 +58,7 @@ export default defineEventHandler(async event => {
     ),
   ];
 
-  let userMap = new Map<string, { id: string; nickname: string }>();
+  let userMap = new Map<string, { id: string; nickname: string; email: string | null }>();
 
   if (userIds.length > 0) {
     const users = await prisma.users.findMany({
@@ -67,9 +68,12 @@ export default defineEventHandler(async event => {
       select: {
         id: true,
         nickname: true,
+        email: true,
       },
     });
-    userMap = new Map(users.map(u => [u.id, u]));
+    userMap = new Map(
+      users.map(u => [u.id, { id: u.id, nickname: u.nickname, email: decryptPiiOrNull(u.email) }])
+    );
   }
 
   const items = feedbacks.map(f => {
@@ -78,13 +82,14 @@ export default defineEventHandler(async event => {
       id: f.id,
       title: f.title,
       description: f.description,
-      contact: f.contact ?? null,
+      contact: decryptPiiOrNull(f.contact),
       status: f.status,
       user_id: f.user_id,
       user: user
         ? {
             id: user.id,
             nickname: user.nickname,
+            email: user.email,
           }
         : null,
       attachments: parseFeedbackAttachments(f.attachments).map(attachment => ({

@@ -3,6 +3,7 @@ import type { H3Event } from 'h3';
 import type { Prisma } from '../../generated/prisma/client';
 import { prisma } from './prisma';
 import { normalizeEmail } from './accountIdentifier';
+import { decryptPii, encryptPii, hashEmailIndex, isEncryptedPii } from './piiCrypto';
 import type { EmailTemplate } from './email';
 import { encryptEmailPayload } from './emailOutbox';
 import { enqueueEmailOutbox } from './emailQueue';
@@ -119,14 +120,15 @@ export async function createOtpChallenge(options: {
   template: EmailTemplate;
 }): Promise<OtpChallengeResponse> {
   const email = normalizeEmail(options.email);
+  const emailHash = hashEmailIndex(email);
   const requestIp = options.event ? getRequestIp(options.event) : undefined;
   const idempotencyKey = getIdempotencyKey(options.event);
-  const idempotencyScope = `${options.purpose}:${email}:${options.userId || 'anonymous'}`;
+  const idempotencyScope = `${options.purpose}:${emailHash}:${options.userId || 'anonymous'}`;
   const requestHash = createHash('sha256')
     .update(
       JSON.stringify({
         purpose: options.purpose,
-        email,
+        email: emailHash,
         userId: options.userId || null,
         payload: options.payload || null,
         isResend: Boolean(options.isResend),
@@ -202,7 +204,7 @@ export async function createOtpChallenge(options: {
 
       const latest = await tx.email_otp_challenges.findFirst({
         where: {
-          email,
+          email_hash: emailHash,
           purpose: options.purpose,
           consumed_at: null,
           expires_at: { gt: now },
@@ -227,17 +229,28 @@ export async function createOtpChallenge(options: {
       }
 
       await tx.email_otp_challenges.updateMany({
-        where: { email, purpose: options.purpose, consumed_at: null },
+        where: { email_hash: emailHash, purpose: options.purpose, consumed_at: null },
         data: { consumed_at: now },
       });
+
+      const storedPayload: Prisma.InputJsonObject | undefined =
+        options.payload &&
+        typeof options.payload.newEmail === 'string' &&
+        !isEncryptedPii(options.payload.newEmail)
+          ? {
+              ...options.payload,
+              newEmail: encryptPii(normalizeEmail(options.payload.newEmail)),
+            }
+          : options.payload;
 
       const code = randomInt(0, 1_000_000).toString().padStart(6, '0');
       const challenge = await tx.email_otp_challenges.create({
         data: {
           purpose: options.purpose,
-          email,
+          email: encryptPii(email),
+          email_hash: emailHash,
           user_id: options.userId,
-          payload: options.payload,
+          payload: storedPayload,
           code_hash: hashCode(options.purpose, email, code),
           expires_at: new Date(now.getTime() + OTP_EXPIRY_MS),
           max_attempts: OTP_MAX_ATTEMPTS,
@@ -337,10 +350,12 @@ export async function verifyOtp(options: {
   if (challenge?.purpose !== options.purpose) {
     throw new OtpError('Invalid verification code', 'not_found');
   }
+  const challengeEmail = normalizeEmail(decryptPii(challenge.email));
+
   if (options.userId && challenge.user_id !== options.userId) {
     throw new OtpError('Invalid verification code', 'invalid');
   }
-  if (options.email && challenge.email !== normalizeEmail(options.email)) {
+  if (options.email && challengeEmail !== normalizeEmail(options.email)) {
     throw new OtpError('Invalid verification code', 'invalid');
   }
   if (challenge.consumed_at) throw new OtpError('Verification code already used', 'consumed');
@@ -350,7 +365,7 @@ export async function verifyOtp(options: {
     throw new OtpError('Too many invalid attempts', 'locked');
   }
 
-  const expected = hashCode(options.purpose, challenge.email, options.code.trim());
+  const expected = hashCode(options.purpose, challengeEmail, options.code.trim());
   if (!constantTimeEqual(expected, challenge.code_hash)) {
     const updated = await db.email_otp_challenges.updateMany({
       where: {
@@ -412,11 +427,19 @@ export async function resendOtpChallenge(options: {
     throw new OtpError('Verification code is no longer available', 'expired');
   }
 
+  const payload =
+    challenge.payload && typeof challenge.payload === 'object' && !Array.isArray(challenge.payload)
+      ? ({ ...challenge.payload } as Record<string, unknown>)
+      : undefined;
+  if (payload && typeof payload.newEmail === 'string') {
+    payload.newEmail = normalizeEmail(decryptPii(payload.newEmail));
+  }
+
   return createOtpChallenge({
     purpose: challenge.purpose as OtpPurpose,
-    email: challenge.email,
+    email: decryptPii(challenge.email),
     userId: challenge.user_id ?? undefined,
-    payload: challenge.payload as Prisma.InputJsonObject | undefined,
+    payload: payload as Prisma.InputJsonObject | undefined,
     event: options.event,
     isResend: true,
     template: options.templateForPurpose(challenge.purpose as OtpPurpose),
