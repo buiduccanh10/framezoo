@@ -1,6 +1,7 @@
 import { defineEventHandler, createError } from 'h3';
 import { prisma } from '~/utils/prisma';
-import { requireAdmin, summarizeClientPlatform } from '~/utils/admin';
+import { requireAdmin } from '~/utils/admin';
+import { summarizeClientPlatform } from '~/utils/guestUtils';
 import { decryptPiiOrNull } from '~/utils/piiCrypto';
 
 export default defineEventHandler(async event => {

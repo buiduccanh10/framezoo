@@ -1,4 +1,5 @@
 import { useAuth } from '~/utils/auth';
+import { touchGuestActivityFromEvent } from '~/utils/guestTracking';
 import { isValidInternalApiRequest } from '~/utils/internalApi';
 
 const isPublicApiRequest = (path: string, method: string) => {
@@ -67,6 +68,7 @@ export default defineEventHandler(async event => {
 
       // Guest tokens are permitted ONLY on public API endpoints
       if (isPublicApiRequest(path, event.method)) {
+        void touchGuestActivityFromEvent(event, guestPayload.gid);
         return;
       }
 

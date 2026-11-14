@@ -2,6 +2,9 @@ import axios, { AxiosError } from "axios";
 import type {
   AdminUserItem,
   FeedbackItem,
+  GuestListResponse,
+  GuestPlatformFilter,
+  GuestWindow,
   UserDetailData,
   UserPagination,
   UserStats,
@@ -225,6 +228,30 @@ export const adminApi = {
     const { data } = await adminHttp.post<{ message?: string }>(
       `/admin/users/${encodeURIComponent(id)}/revoke-sessions`,
     );
+    return data;
+  },
+
+  async listGuests(params?: {
+    page?: number;
+    limit?: number;
+    window?: GuestWindow;
+    search?: string;
+    sort?: string;
+    platform?: GuestPlatformFilter;
+  }) {
+    const { data } = await adminHttp.get<GuestListResponse>("/admin/guests", {
+      params: {
+        page: params?.page ?? 1,
+        limit: params?.limit ?? 10,
+        window: params?.window ?? "24h",
+        search: params?.search || undefined,
+        sort: params?.sort || "last_seen_desc",
+        platform:
+          params?.platform && params.platform !== "all"
+            ? params.platform
+            : undefined,
+      },
+    });
     return data;
   },
 };

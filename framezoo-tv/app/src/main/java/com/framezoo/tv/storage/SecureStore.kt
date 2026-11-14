@@ -223,6 +223,18 @@ class SecureStore(context: Context) {
         get() = decrypt(prefs.getString("refresh", null))
         set(value) { prefs.edit().putString("refresh", value?.let(::encrypt)).apply() }
 
+    var guestId: String?
+        get() = prefs.getString("guest_id", null)
+        set(value) { prefs.edit().putString("guest_id", value).apply() }
+
+    var guestToken: String?
+        get() = prefs.getString("guest_token", null)
+        set(value) { prefs.edit().putString("guest_token", value).apply() }
+
+    var guestTokenExpiresAt: Long
+        get() = prefs.getLong("guest_token_exp", 0L)
+        set(value) { prefs.edit().putLong("guest_token_exp", value).apply() }
+
     var rememberLogin: Boolean
         get() = prefs.getBoolean("remember_login", false)
         set(value) { prefs.edit().putBoolean("remember_login", value).apply() }
@@ -262,6 +274,8 @@ class SecureStore(context: Context) {
             .remove("user_profile_color_a")
             .remove("user_profile_color_b")
             .remove("user_profile_icon")
+            .remove("guest_token")
+            .remove("guest_token_exp")
             .apply()
     }
     fun clearLocalProgress() { prefs.edit().remove("local_progress").apply() }

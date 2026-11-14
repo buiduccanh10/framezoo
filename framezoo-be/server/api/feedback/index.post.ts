@@ -9,6 +9,7 @@ import {
 import { randomUUID } from 'crypto';
 import { prisma } from '~/utils/prisma';
 import { useAuth } from '~/utils/auth';
+import { touchGuestActivityFromEvent } from '~/utils/guestTracking';
 import { encryptPii, hashContactIndex } from '~/utils/piiCrypto';
 import {
   MAX_FEEDBACK_FILE_BYTES,
@@ -105,6 +106,11 @@ export default defineEventHandler(async event => {
           if (user) {
             userId = user.id;
           }
+        }
+      } else {
+        const guestPayload = auth.verifyGuestToken(token);
+        if (guestPayload) {
+          void touchGuestActivityFromEvent(event, guestPayload.gid);
         }
       }
     }
