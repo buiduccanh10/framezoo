@@ -105,7 +105,7 @@ export interface ListPagination {
 }
 
 export type GuestWindow = "6h" | "24h" | "7d" | "30d";
-export type GuestPlatformFilter = "all" | "Desktop" | "Mobile" | "TV" | "Web";
+export type GuestPlatformFilter = "all" | "Desktop" | "Mobile" | "TV";
 
 export interface GuestItem {
   id: string;

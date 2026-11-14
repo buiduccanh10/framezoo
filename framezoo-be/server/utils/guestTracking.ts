@@ -3,6 +3,7 @@ import { prisma } from '~/utils/prisma';
 import { useAuth } from '~/utils/auth';
 import { extractAppVersionFromHeaders } from '~/utils/clientVersion';
 import {
+  isAppGuestPlatform,
   normalizeGuestId,
   reserveGuestActivityFlush,
   summarizeClientPlatform,
@@ -15,7 +16,7 @@ export function resolveGuestClientMeta(event: H3Event) {
   const rawUa = getHeader(event, 'user-agent');
   const userAgent = typeof rawUa === 'string' ? rawUa.trim().slice(0, 1024) : '';
   const appVersion = extractAppVersionFromHeaders(getHeader(event, 'x-app-version'), userAgent);
-  const platform = summarizeClientPlatform(userAgent);
+  const platform = summarizeClientPlatform(userAgent, appVersion);
 
   return {
     appVersion,
@@ -33,6 +34,7 @@ export async function recordGuestActivity(input: {
 }): Promise<void> {
   const normalizedId = normalizeGuestId(input.guestId);
   if (!normalizedId) return;
+  if (!isAppGuestPlatform(input.platform, input.appVersion)) return;
 
   const { shouldFlush, hitIncrement } = reserveGuestActivityFlush(guestActivityCache, {
     guestId: normalizedId,
@@ -60,7 +62,14 @@ export async function recordGuestActivity(input: {
         last_seen_at = GREATEST(guests.last_seen_at, EXCLUDED.last_seen_at),
         app_version = COALESCE(EXCLUDED.app_version, guests.app_version),
         platform = CASE
-          WHEN EXCLUDED.platform IS NOT NULL AND EXCLUDED.platform <> 'Không rõ thiết bị'
+          WHEN EXCLUDED.platform IS NOT NULL
+            AND EXCLUDED.platform <> 'Không rõ thiết bị'
+            AND (
+              guests.platform IS NULL
+              OR guests.platform = 'Không rõ thiết bị'
+              OR guests.platform LIKE 'Khác · %'
+              OR EXCLUDED.platform NOT LIKE 'Khác · %'
+            )
           THEN EXCLUDED.platform
           ELSE guests.platform
         END,

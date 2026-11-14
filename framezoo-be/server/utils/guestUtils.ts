@@ -1,6 +1,6 @@
 export type GuestWindow = '6h' | '24h' | '7d' | '30d';
 
-export type GuestPlatformFilter = 'all' | 'Desktop' | 'Mobile' | 'TV' | 'Web';
+export type GuestPlatformFilter = 'all' | 'Desktop' | 'Mobile' | 'TV';
 
 export const GUEST_WINDOW_HOURS: Record<GuestWindow, number> = {
   '6h': 6,
@@ -36,7 +36,7 @@ export function parseGuestWindow(value: unknown): GuestWindow {
 }
 
 export function parseGuestPlatformFilter(value: unknown): GuestPlatformFilter {
-  if (value === 'Desktop' || value === 'Mobile' || value === 'TV' || value === 'Web') {
+  if (value === 'Desktop' || value === 'Mobile' || value === 'TV') {
     return value;
   }
   return 'all';
@@ -46,9 +46,21 @@ export function getGuestWindowStart(window: GuestWindow, now = new Date()): Date
   return new Date(now.getTime() - GUEST_WINDOW_HOURS[window] * 60 * 60 * 1000);
 }
 
-export const summarizeClientPlatform = (userAgent: string): string => {
+export const isAppGuestPlatform = (
+  platform: string | null | undefined,
+  appVersion?: string | null
+): boolean => {
+  if (typeof appVersion === 'string' && appVersion.trim().length > 0) return true;
+  if (typeof platform !== 'string') return false;
+  return (
+    platform.endsWith(' · Desktop') || platform.endsWith(' · Mobile') || platform.endsWith(' · TV')
+  );
+};
+
+export const summarizeClientPlatform = (userAgent: string, appVersion?: string | null): string => {
   const ua = userAgent.toLowerCase();
-  if (!ua) return 'Không rõ thiết bị';
+  const hasAppVersion = Boolean(appVersion && appVersion.trim());
+  if (!ua && !hasAppVersion) return 'Không rõ thiết bị';
 
   let os = 'Khác';
   if (ua.includes('iphone') || ua.includes('ipad') || ua.includes('ios')) os = 'iOS';
@@ -61,8 +73,15 @@ export const summarizeClientPlatform = (userAgent: string): string => {
   if (ua.includes('electron') || ua.includes('framezoo-desktop')) client = 'Desktop';
   else if (ua.includes('expo') || ua.includes('reactnative') || ua.includes('framezoo-mobile')) {
     client = 'Mobile';
-  } else if (ua.includes('tv') || ua.includes('tizen') || ua.includes('webos')) {
+  } else if (
+    ua.includes('tv') ||
+    ua.includes('tizen') ||
+    ua.includes('webos') ||
+    ua.includes('framezoo-tv')
+  ) {
     client = 'TV';
+  } else if (ua.includes('framezoo/') || hasAppVersion) {
+    client = 'Desktop';
   }
 
   return `${os} · ${client}`;

@@ -6,6 +6,7 @@ const {
   GUEST_CACHE_MAX_ENTRIES,
   GUEST_THROTTLE_MS,
   getGuestWindowStart,
+  isAppGuestPlatform,
   normalizeGuestId,
   parseGuestPlatformFilter,
   parseGuestWindow,
@@ -52,11 +53,11 @@ test('normalizeGuestId and parseGuestPlatformFilter validate inputs strictly', (
   assert.equal(parseGuestPlatformFilter('Desktop'), 'Desktop');
   assert.equal(parseGuestPlatformFilter('Mobile'), 'Mobile');
   assert.equal(parseGuestPlatformFilter('TV'), 'TV');
-  assert.equal(parseGuestPlatformFilter('Web'), 'Web');
+  assert.equal(parseGuestPlatformFilter('Web'), 'all');
   assert.equal(parseGuestPlatformFilter('random'), 'all');
 });
 
-test('summarizeClientPlatform classifies Desktop, Mobile, TV, and Web guests accurately', () => {
+test('summarizeClientPlatform and isAppGuestPlatform separate App guests from Web landing traffic', () => {
   assert.equal(
     summarizeClientPlatform('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Framezoo/2.2.6 Electron/42.8.1'),
     'macOS · Desktop'
@@ -73,10 +74,18 @@ test('summarizeClientPlatform classifies Desktop, Mobile, TV, and Web guests acc
     summarizeClientPlatform('Framezoo-TV/0.1.0 (Android TV 13)'),
     'Android · TV'
   );
+  assert.equal(summarizeClientPlatform('node', '2.2.8'), 'Khác · Desktop');
   assert.equal(
     summarizeClientPlatform('Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/131.0.0.0'),
     'Windows · Web'
   );
+
+  assert.equal(isAppGuestPlatform('macOS · Desktop', null), true);
+  assert.equal(isAppGuestPlatform('Android · Mobile', null), true);
+  assert.equal(isAppGuestPlatform('Android · TV', null), true);
+  assert.equal(isAppGuestPlatform('Windows · Web', '2.2.8'), true);
+  assert.equal(isAppGuestPlatform('Windows · Web', null), false);
+  assert.equal(isAppGuestPlatform('Không rõ thiết bị', null), false);
 });
 
 test('reserveGuestActivityFlush coalesces burst hits, flushes version upgrades immediately, and bounds memory', () => {
