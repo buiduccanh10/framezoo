@@ -10,6 +10,7 @@ import {
 import { LandingFooter, triggerLandingFeedback } from "./LandingFooter";
 import { LandingLanguageSelector } from "./LandingLanguageSelector";
 import { LandingParticles } from "./LandingParticles";
+import { applyPageSeo } from "./seo";
 import "./landing.css";
 
 export type LegalTabId = "terms" | "privacy" | "copyright" | "addon-policy";
@@ -59,14 +60,18 @@ export function LegalPage({
     document.documentElement.lang = locale;
     document.documentElement.dir =
       getLandingLocaleOption(locale)?.direction ?? "ltr";
-    document.title = `${activeDocument.title} | Framezoo`;
+    applyPageSeo(locale, {
+      title: `${activeDocument.title} | Framezoo`,
+      description: activeDocument.summary,
+      path: `/legal/${activeTab}`,
+    });
 
     try {
       window.localStorage.setItem(LANDING_LOCALE_STORAGE_KEY, locale);
     } catch {
       // Storage unavailable
     }
-  }, [activeDocument.title, locale]);
+  }, [activeDocument.summary, activeDocument.title, activeTab, locale]);
 
   const handleSelectTab = (tab: LegalTabId) => {
     setActiveTab(tab);

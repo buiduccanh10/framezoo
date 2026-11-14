@@ -22,7 +22,9 @@ export function IconPatch(props: IconPatchProps) {
       : "bg-pill-background/100";
   const clickableClasses = props.clickable
     ? "cursor-pointer hover:scale-110 hover:text-white active:scale-125"
-    : "";
+    : props.onClick
+      ? "cursor-pointer"
+      : "";
   const activeClasses = props.active
     ? "bg-pill-backgroundHover/100 text-white"
     : "";

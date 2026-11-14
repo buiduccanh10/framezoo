@@ -185,7 +185,7 @@ export function StatusIndicators(props: {
       {isOffline && (
         <div
           className={classNames(
-            "cursor-default flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-transparent bg-pill-background/50 text-red-400 backdrop-blur-lg transition-transform hover:scale-105 active:scale-95",
+            "cursor-default flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-transparent bg-pill-background/50 text-red-400 backdrop-blur-lg",
             props.itemClassName,
           )}
           role="status"
@@ -199,7 +199,7 @@ export function StatusIndicators(props: {
       {isLowSpace && (
         <div
           className={classNames(
-            "cursor-default flex h-10 shrink-0 items-center gap-1.5 rounded-full border-2 border-transparent bg-pill-background/50 px-3 text-red-400 backdrop-blur-lg transition-transform hover:scale-105 active:scale-95",
+            "cursor-default flex h-10 shrink-0 items-center gap-1.5 rounded-full border-2 border-transparent bg-pill-background/50 px-3 text-red-400 backdrop-blur-lg",
             props.itemClassName,
           )}
           role="status"

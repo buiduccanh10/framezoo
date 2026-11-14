@@ -81,7 +81,7 @@ function CaptionOptionRightSide(props: CaptionOptionProps) {
       props.translatable && (
         <span
           className={classNames(
-            "text-buttons-secondaryText px-2 py-1 rounded bg-transparent",
+            "text-buttons-secondaryText px-2 py-1 rounded bg-transparent cursor-pointer",
             {
               "mr-1": margin,
               "bg-buttons-purpleHover/100": props.isTranslatedTarget,

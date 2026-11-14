@@ -13,6 +13,7 @@ import {
 import { LandingFooter } from "./LandingFooter";
 import { LandingLanguageSelector } from "./LandingLanguageSelector";
 import { LandingParticles } from "./LandingParticles";
+import { applyPageSeo } from "./seo";
 import { useDownloadManifest } from "./useDownloadManifest";
 
 export function InstallGuidePage() {
@@ -46,14 +47,23 @@ export function InstallGuidePage() {
     document.documentElement.lang = locale;
     document.documentElement.dir =
       getLandingLocaleOption(locale)?.direction ?? "ltr";
-    document.title = `${activeCopy.installGuide.title} | Framezoo`;
+    applyPageSeo(locale, {
+      title: `${locale === "en" ? activeCopy.nav.installGuide : activeCopy.installGuide.title} | Framezoo`,
+      description: activeCopy.installGuide.subtitle,
+      path: "/guide/install",
+    });
 
     try {
       window.localStorage.setItem(LANDING_LOCALE_STORAGE_KEY, locale);
     } catch {
       // Storage unavailable in private browsing
     }
-  }, [activeCopy.installGuide.title, locale]);
+  }, [
+    activeCopy.installGuide.subtitle,
+    activeCopy.installGuide.title,
+    activeCopy.nav.installGuide,
+    locale,
+  ]);
 
   useEffect(() => {
     const handleHashChange = () => {

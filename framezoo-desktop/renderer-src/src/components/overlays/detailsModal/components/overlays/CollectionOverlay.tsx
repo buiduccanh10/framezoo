@@ -313,7 +313,14 @@ export function CollectionOverlay({
                     </div>
                   </div>
 
-                  <IconPatch icon={Icons.X} onClick={onClose} />
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    aria-label={t("overlays.close", "Close")}
+                    className="text-type-secondary hover:text-white transition-transform hover:scale-95"
+                  >
+                    <IconPatch icon={Icons.X} />
+                  </button>
                 </div>
 
                 {/* Collection Overview */}

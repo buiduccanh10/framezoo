@@ -14,7 +14,7 @@ export function LandingFooter({ copy }: LandingFooterProps) {
   const { nav, footer } = copy;
 
   return (
-    <footer className="landing-footer" data-nosnippet>
+    <footer className="landing-footer">
       <div className="landing-footer-container">
         <div className="landing-footer-grid">
           <div className="landing-footer-brand">
@@ -28,7 +28,9 @@ export function LandingFooter({ copy }: LandingFooterProps) {
             </a>
             <p className="landing-footer-tagline">{footer.line}</p>
             <span className="landing-footer-status">{footer.status}</span>
-            <p className="landing-footer-disclaimer">{footer.disclaimer}</p>
+            <p className="landing-footer-disclaimer" data-nosnippet>
+              {footer.disclaimer}
+            </p>
           </div>
 
           <div className="landing-footer-column">

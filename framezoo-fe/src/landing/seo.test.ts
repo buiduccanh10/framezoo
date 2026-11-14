@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it } from "vitest";
 
 import { getLandingCopy } from "./i18n";
-import { applyLandingSeo } from "./seo";
+import { applyLandingSeo, getLandingSeoMetadata } from "./seo";
 
 afterEach(() => {
   document.title = "";
@@ -58,5 +58,21 @@ describe("landing SEO", () => {
     expect(
       document.querySelector<HTMLLinkElement>('link[rel="canonical"]')?.href,
     ).toBe("https://framezoo.top/");
+  });
+
+  it("keeps distinct category titles aligned with prerendered routes", () => {
+    expect(getLandingSeoMetadata("en", "download")).toMatchObject({
+      title: "Downloads | Framezoo",
+      canonical: "https://framezoo.top/download",
+    });
+    expect(getLandingSeoMetadata("en", "experience").title).toBe(
+      "Features & Experience | Framezoo",
+    );
+    expect(getLandingSeoMetadata("en", "ecosystem").title).toBe(
+      "Addon Ecosystem | Framezoo",
+    );
+    expect(getLandingSeoMetadata("en", "create-addon").title).toBe(
+      "Build an Addon | Framezoo",
+    );
   });
 });
