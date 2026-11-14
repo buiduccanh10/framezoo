@@ -2,11 +2,22 @@ import { execFile } from 'child_process';
 import { promisify } from 'util';
 import * as fs from 'fs';
 import * as path from 'path';
+import { decryptBackupBuffer, encryptBackupBuffer } from './backupCrypto';
 import { useSupabase } from './supabase';
 
 const execFileAsync = promisify(execFile);
 const MAX_BACKUP_ARCHIVE_BYTES = 512 * 1024 * 1024;
 const MAX_BACKUP_UNCOMPRESSED_BYTES = 2 * 1024 * 1024 * 1024;
+
+const isStoredBackupFile = (name: string): boolean =>
+  name.endsWith('.tar.gz.enc') || name.endsWith('.tar.gz');
+
+const isValidStoredFilename = (filename: string): boolean =>
+  Boolean(filename) &&
+  !filename.includes('/') &&
+  !filename.includes('\\') &&
+  !filename.includes('..') &&
+  isStoredBackupFile(filename);
 
 export interface BackupFileInfo {
   name: string;
@@ -91,13 +102,13 @@ export const useBackup = () => {
       console.log('Creating tar.gz archive...');
       await execFileAsync('tar', ['-czf', archivePath, '-C', tempFolder, sqlFile]);
 
-      // Upload to Supabase Storage
-      const fileBuffer = fs.readFileSync(archivePath);
-      const storagePath = `backups/${archiveFile}`;
+      // Encrypt compressed archive before uploading to Supabase Storage
+      const fileBuffer = encryptBackupBuffer(fs.readFileSync(archivePath));
+      const storagePath = `backups/${archiveFile}.enc`;
 
-      console.log(`Uploading backup to Supabase: ${storagePath}`);
+      console.log(`Uploading encrypted backup to Supabase: ${storagePath}`);
       const { error: uploadError } = await storage.upload(storagePath, fileBuffer, {
-        contentType: 'application/gzip',
+        contentType: 'application/octet-stream',
         upsert: false,
       });
 
@@ -123,9 +134,11 @@ export const useBackup = () => {
         sortBy: { column: 'created_at', order: 'desc' },
       });
 
-      if (error || !files || files.length <= maxBackups) return;
+      if (error || !files) return;
+      const backupFiles = files.filter(f => isStoredBackupFile(f.name));
+      if (backupFiles.length <= maxBackups) return;
 
-      const filesToDelete = files.slice(maxBackups).map(f => `backups/${f.name}`);
+      const filesToDelete = backupFiles.slice(maxBackups).map(f => `backups/${f.name}`);
 
       if (filesToDelete.length > 0) {
         await storage.remove(filesToDelete);
@@ -170,8 +183,8 @@ export const useBackup = () => {
       return { totalBackups: 0, backupSize: '0 MB', totalSizeBytes: 0, backupExists: false };
     }
 
-    // Filter out potential non-tar.gz files or hidden files
-    const backupFiles = files.filter(f => f.name.endsWith('.tar.gz'));
+    // Filter out non-backup files or hidden files
+    const backupFiles = files.filter(f => isStoredBackupFile(f.name));
 
     const totalSizeBytes = backupFiles.reduce((sum, file) => sum + (file.metadata?.size || 0), 0);
 
@@ -184,7 +197,13 @@ export const useBackup = () => {
     };
   };
 
-  const getBackupFiles = async (page = 1, limit = 10): Promise<{ files: BackupFileInfo[]; pagination: { page: number; limit: number; total: number; totalPages: number } }> => {
+  const getBackupFiles = async (
+    page = 1,
+    limit = 10
+  ): Promise<{
+    files: BackupFileInfo[];
+    pagination: { page: number; limit: number; total: number; totalPages: number };
+  }> => {
     const storage = getStorage();
     if (!storage) return { files: [], pagination: { page, limit, total: 0, totalPages: 1 } };
 
@@ -196,10 +215,14 @@ export const useBackup = () => {
       sortBy: { column: 'created_at', order: 'desc' },
     });
 
-    if (error || !files) return { files: [], pagination: { page: safePage, limit: safeLimit, total: 0, totalPages: 1 } };
+    if (error || !files)
+      return {
+        files: [],
+        pagination: { page: safePage, limit: safeLimit, total: 0, totalPages: 1 },
+      };
 
     const backupFiles = files
-      .filter(file => file.name.endsWith('.tar.gz'))
+      .filter(file => isStoredBackupFile(file.name))
       .map(file => {
         const size = file.metadata?.size || 0;
         return {
@@ -214,7 +237,12 @@ export const useBackup = () => {
     const start = (safePage - 1) * safeLimit;
     return {
       files: backupFiles.slice(start, start + safeLimit),
-      pagination: { page: safePage, limit: safeLimit, total: backupFiles.length, totalPages: Math.ceil(backupFiles.length / safeLimit) || 1 },
+      pagination: {
+        page: safePage,
+        limit: safeLimit,
+        total: backupFiles.length,
+        totalPages: Math.ceil(backupFiles.length / safeLimit) || 1,
+      },
     };
   };
 
@@ -222,12 +250,7 @@ export const useBackup = () => {
     const storage = getStorage();
     if (!storage) return { success: false, error: 'Supabase is not configured' };
 
-    if (
-      !filename ||
-      filename.includes('/') ||
-      filename.includes('..') ||
-      !filename.endsWith('.tar.gz')
-    ) {
+    if (!isValidStoredFilename(filename)) {
       return { success: false, error: 'Invalid filename' };
     }
 
@@ -239,19 +262,20 @@ export const useBackup = () => {
     }
 
     const buffer = Buffer.from(await data.arrayBuffer());
-    return { success: true, buffer, contentType: 'application/gzip' };
+    return {
+      success: true,
+      buffer,
+      contentType: filename.endsWith('.tar.gz.enc')
+        ? 'application/octet-stream'
+        : 'application/gzip',
+    };
   };
 
   const deleteBackupFile = async (filename: string) => {
     const storage = getStorage();
     if (!storage) return { success: false, error: 'Supabase is not configured' };
 
-    if (
-      !filename ||
-      filename.includes('/') ||
-      filename.includes('..') ||
-      !filename.endsWith('.tar.gz')
-    ) {
+    if (!isValidStoredFilename(filename)) {
       return { success: false, error: 'Invalid filename' };
     }
 
@@ -306,11 +330,13 @@ export const useBackup = () => {
       fs.mkdirSync(tempDir, { recursive: true });
 
       // Use a safe internal filename to prevent command injection
-      const ext = filename.endsWith('.tar.gz') ? '.tar.gz' : '.sql';
+      const isEncryptedArchive = filename.endsWith('.tar.gz.enc');
+      const payloadBuffer = isEncryptedArchive ? decryptBackupBuffer(buffer) : buffer;
+      const ext = isEncryptedArchive || filename.endsWith('.tar.gz') ? '.tar.gz' : '.sql';
       const safeFilename = `upload${ext}`;
       const uploadedFilePath = path.join(tempDir, safeFilename);
 
-      fs.writeFileSync(uploadedFilePath, buffer);
+      fs.writeFileSync(uploadedFilePath, payloadBuffer);
       console.log(`Saved uploaded file to: ${uploadedFilePath}`);
 
       let backupFilePath = uploadedFilePath;

@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { prisma } from '~/utils/prisma';
 import { requireAdmin } from '~/utils/admin';
 import { normalizeEmail } from '~/utils/accountIdentifier';
+import { decryptPiiOrNull, encryptPii, hashEmailIndex } from '~/utils/piiCrypto';
 
 const updateSchema = z.object({
   nickname: z.string().min(1, 'Nickname cannot be empty').max(50, 'Nickname too long').optional(),
@@ -53,16 +54,20 @@ export default defineEventHandler(async event => {
     updateData.nickname = validated.nickname;
   }
 
+  const currentEmail = decryptPiiOrNull(user.email);
+
   if (validated.email !== undefined) {
     const newEmail = validated.email === '' ? null : normalizeEmail(validated.email);
-    if (newEmail !== user.email) {
+    if (newEmail !== (currentEmail ? normalizeEmail(currentEmail) : null)) {
       if (newEmail) {
+        const emailHash = hashEmailIndex(newEmail);
         // Check if new email is already taken by another user
         const existingEmail = await prisma.users.findFirst({
           where: {
-            email: { equals: newEmail, mode: 'insensitive' },
+            email_hash: emailHash,
             id: { not: userId },
           },
+          select: { id: true },
         });
         if (existingEmail) {
           throw createError({
@@ -70,8 +75,12 @@ export default defineEventHandler(async event => {
             message: 'Email already in use by another user',
           });
         }
+        updateData.email = encryptPii(newEmail);
+        updateData.email_hash = emailHash;
+      } else {
+        updateData.email = null;
+        updateData.email_hash = null;
       }
-      updateData.email = newEmail;
     }
   }
 
@@ -80,7 +89,7 @@ export default defineEventHandler(async event => {
       user: {
         id: user.id,
         nickname: user.nickname,
-        email: user.email,
+        email: currentEmail,
         created_at: user.created_at,
         last_logged_in: user.last_logged_in,
         permissions: user.permissions,
@@ -105,5 +114,10 @@ export default defineEventHandler(async event => {
     },
   });
 
-  return { user: updatedUser };
+  return {
+    user: {
+      ...updatedUser,
+      email: decryptPiiOrNull(updatedUser.email),
+    },
+  };
 });

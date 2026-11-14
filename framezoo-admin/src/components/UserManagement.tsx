@@ -363,7 +363,14 @@ function UserDetailModal({
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") state.closeDetail();
+      if (
+        event.key === "Escape" &&
+        !state.userToEdit &&
+        !state.userToDelete &&
+        !state.userToRevoke
+      ) {
+        state.closeDetail();
+      }
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
@@ -607,7 +614,8 @@ function SessionList({
             </div>
             <div className="session-meta">
               <span>
-                Hết hạn {new Date(session.expires_at).toLocaleDateString("vi-VN")}
+                Hết hạn{" "}
+                {new Date(session.expires_at).toLocaleDateString("vi-VN")}
               </span>
               <small>
                 Tạo {formatDateTime(session.created_at)} · Truy cập{" "}

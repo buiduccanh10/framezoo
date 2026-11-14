@@ -38,7 +38,7 @@ export function FeedbackManagement({
   };
 
   useEffect(() => {
-    if (!feedback.selected) return;
+    if (!feedback.selected || feedback.itemToDelete) return;
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") feedback.setSelected(null);
     };
@@ -71,7 +71,11 @@ export function FeedbackManagement({
       </div>
 
       <div className="metric-grid metric-grid-three">
-        <Metric label="Tổng phản hồi" value={feedback.stats.total} tone="blue" />
+        <Metric
+          label="Tổng phản hồi"
+          value={feedback.stats.total}
+          tone="blue"
+        />
         <Metric
           label="Đang xử lý"
           value={feedback.stats.pending}
@@ -136,6 +140,7 @@ export function FeedbackManagement({
             {feedback.items.map((item) => {
               const pending = item.status === "pending";
               const busy = feedback.busyId === item.id;
+              const contactValue = item.contact || item.user?.email;
               return (
                 <article key={item.id} className="feedback-row">
                   <div className="feedback-main">
@@ -146,9 +151,16 @@ export function FeedbackManagement({
                         <User size={12} aria-hidden="true" />{" "}
                         {item.user?.nickname || "Khách"}
                       </span>
-                      {item.contact ? (
-                        <span className="person-chip" title="Thông tin liên hệ">
-                          <Mail size={12} aria-hidden="true" /> {item.contact}
+                      {contactValue ? (
+                        <span
+                          className="person-chip"
+                          title={
+                            item.contact
+                              ? "Thông tin liên hệ"
+                              : "Email tài khoản"
+                          }
+                        >
+                          <Mail size={12} aria-hidden="true" /> {contactValue}
                         </span>
                       ) : null}
                       {item.attachments.length > 0 ? (
@@ -244,20 +256,32 @@ export function FeedbackManagement({
               <span className="person-chip">
                 <User size={12} /> {feedback.selected.user?.nickname || "Khách"}
               </span>
-              {feedback.selected.contact ? (
-                <span className="person-chip">
-                  <Mail size={12} /> {feedback.selected.contact}
-                  <button
-                    className="text-button"
-                    type="button"
-                    onClick={() => void copyContact(feedback.selected!.contact!)}
-                    aria-label="Sao chép thông tin liên hệ"
-                    title="Sao chép thông tin liên hệ"
+              {(() => {
+                const selectedContact =
+                  feedback.selected.contact || feedback.selected.user?.email;
+                if (!selectedContact) return null;
+                return (
+                  <span
+                    className="person-chip"
+                    title={
+                      feedback.selected.contact
+                        ? "Thông tin liên hệ"
+                        : "Email tài khoản"
+                    }
                   >
-                    <Copy size={11} />
-                  </button>
-                </span>
-              ) : null}
+                    <Mail size={12} /> {selectedContact}
+                    <button
+                      className="text-button"
+                      type="button"
+                      onClick={() => void copyContact(selectedContact)}
+                      aria-label="Sao chép thông tin liên hệ"
+                      title="Sao chép thông tin liên hệ"
+                    >
+                      <Copy size={11} />
+                    </button>
+                  </span>
+                );
+              })()}
               <time dateTime={feedback.selected.created_at}>
                 {new Date(feedback.selected.created_at).toLocaleString("vi-VN")}
               </time>

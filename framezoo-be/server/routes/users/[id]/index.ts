@@ -1,6 +1,8 @@
 import { useAuth } from '~/utils/auth';
 import { z } from 'zod';
 import { scopedLogger } from '~/utils/logger';
+import { decryptPiiOrNull } from '~/utils/piiCrypto';
+import { deleteUserAccountData } from '~/utils/accountDeletion';
 
 const log = scopedLogger('user-profile');
 
@@ -42,7 +44,7 @@ export default defineEventHandler(async event => {
       id: user.id,
       namespace: user.namespace,
       nickname: (user as any).nickname,
-      email: user.email,
+      email: decryptPiiOrNull(user.email),
       profile: user.profile,
     };
   }
@@ -83,7 +85,7 @@ export default defineEventHandler(async event => {
         publicKey: user.public_key,
         namespace: user.namespace,
         nickname: (user as any).nickname,
-        email: user.email,
+        email: decryptPiiOrNull(user.email),
         profile: user.profile,
         permissions: user.permissions,
         createdAt: user.created_at,
@@ -115,63 +117,7 @@ export default defineEventHandler(async event => {
     try {
       log.info('Deleting user account', { userId });
 
-      await prisma.$transaction(async tx => {
-        const user = await tx.users.findUnique({
-          where: { id: userId },
-          select: { email: true },
-        });
-        if (!user) {
-          throw createError({ statusCode: 404, message: 'User not found' });
-        }
-
-        const otpWhere = {
-          OR: [{ user_id: userId }, ...(user.email ? [{ email: user.email }] : [])],
-        };
-        const challenges = await tx.email_otp_challenges.findMany({
-          where: otpWhere,
-          select: { id: true },
-        });
-        if (challenges.length) {
-          await tx.email_outbox.deleteMany({
-            where: { challenge_id: { in: challenges.map(challenge => challenge.id) } },
-          });
-        }
-        await tx.email_otp_challenges.deleteMany({ where: otpWhere });
-        if (user.email) {
-          await tx.otp_idempotency_keys.deleteMany({
-            where: { scope: { contains: `:${user.email}:` } },
-          });
-        }
-
-        await tx.bookmarks.deleteMany({
-          where: { user_id: userId },
-        });
-
-        await tx.progress_items.deleteMany({
-          where: { user_id: userId },
-        });
-        await tx.watch_history.deleteMany({ where: { user_id: userId } });
-        await tx.user_group_order.deleteMany({ where: { user_id: userId } });
-        await tx.user_settings.deleteMany({ where: { id: userId } });
-        await tx.user_provider_credentials.deleteMany({
-          where: { user_id: userId },
-        });
-
-        await tx.sessions.deleteMany({
-          where: { user: userId },
-        });
-
-        // Reports can contain evidence needed for support or copyright claims.
-        // Remove the account link; users can request report deletion separately.
-        await tx.feedbacks.updateMany({
-          where: { user_id: userId },
-          data: { user_id: null },
-        });
-
-        await tx.users.delete({
-          where: { id: userId },
-        });
-      });
+      await deleteUserAccountData(userId);
 
       log.info('User account deleted successfully', { userId });
 

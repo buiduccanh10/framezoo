@@ -100,7 +100,9 @@ test('admin user surfaces minimize legal/privacy PII and track app_version', () 
   assert.match(userDetail, /summarizeClientPlatform/);
   assert.match(userDetail, /app_version/);
   assert.match(userList, /app_version/);
-  assert.doesNotMatch(userList, /watch_history|bookmarks|progress_items|addons/);
+  assert.match(userList, /last_active/);
+  assert.match(userList, /expires_at/);
+  assert.doesNotMatch(userList, /public_key|watch_history|bookmarks|progress_items|addons/);
   assert.match(auth, /x-app-version/);
   assert.match(cors, /X-App-Version/);
 });
@@ -112,7 +114,7 @@ test('guest feedback requires valid email or phone contact while logged-in users
 
   assert.match(feedbackPost, /!userId && !contact/);
   assert.match(feedbackPost, /isValidFeedbackContact\(contact\)/);
-  assert.match(feedbackGet, /contact:\s*f\.contact/);
+  assert.match(feedbackGet, /contact:\s*decryptPiiOrNull\(f\.contact\)/);
   assert.match(storage, /EMAIL_CONTACT_REGEX/);
   assert.match(storage, /PHONE_CONTACT_REGEX/);
 });

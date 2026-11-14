@@ -2,6 +2,7 @@ import { prisma } from '~/utils/prisma';
 import { useAuth } from '~/utils/auth';
 import { createOtpChallenge } from '~/utils/emailOtp';
 import { throwOtpHttpError } from '~/utils/otpHttp';
+import { decryptPiiOrNull } from '~/utils/piiCrypto';
 
 export default defineEventHandler(async event => {
   const auth = useAuth();
@@ -9,8 +10,9 @@ export default defineEventHandler(async event => {
   if (!session) throw createError({ statusCode: 401, message: 'Unauthorized' });
 
   const user = await prisma.users.findUnique({ where: { id: session.user } });
-  if (!user?.email) throw createError({ statusCode: 400, message: 'Account has no email address' });
-  const email = user.email;
+  const email = decryptPiiOrNull(user?.email);
+  if (!user || !email)
+    throw createError({ statusCode: 400, message: 'Account has no email address' });
 
   try {
     return await createOtpChallenge({

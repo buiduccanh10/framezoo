@@ -1,6 +1,5 @@
 import { z } from 'zod';
-import { normalizeEmail } from '~/utils/accountIdentifier';
-import { prisma } from '~/utils/prisma';
+import { findUserByEmail, normalizeEmail } from '~/utils/accountIdentifier';
 
 const querySchema = z.object({
   email: z.string().trim().email().max(255),
@@ -16,10 +15,7 @@ export default defineEventHandler(async event => {
   }
 
   const email = normalizeEmail(parsed.data.email);
-  const user = await prisma.users.findUnique({
-    where: { email },
-    select: { id: true },
-  });
+  const user = await findUserByEmail(email);
 
   return {
     exists: !!user,

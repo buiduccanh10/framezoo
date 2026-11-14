@@ -4,6 +4,7 @@ import { useAuth } from '~/utils/auth';
 import { consumeActionToken, getChallengeUserId } from '~/utils/emailOtp';
 import { throwOtpHttpError } from '~/utils/otpHttp';
 import { isValidPublicKey } from '~/utils/publicKey';
+import { decryptPiiOrNull } from '~/utils/piiCrypto';
 
 const schema = z.object({
   actionToken: z.string().min(40).max(200),
@@ -53,7 +54,7 @@ export default defineEventHandler(async event => {
       profile: user.profile,
       permissions: user.permissions,
       nickname: user.nickname,
-      email: user.email,
+      email: decryptPiiOrNull(user.email),
     },
     session: {
       id: hydratedSession.id,

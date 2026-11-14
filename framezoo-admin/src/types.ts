@@ -1,6 +1,7 @@
 export interface FeedbackUser {
   id: string;
   nickname: string;
+  email?: string | null;
 }
 
 export interface FeedbackItem {

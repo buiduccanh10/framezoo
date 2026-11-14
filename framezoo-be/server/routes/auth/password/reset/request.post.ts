@@ -1,6 +1,5 @@
 import { z } from 'zod';
-import { normalizeEmail } from '~/utils/accountIdentifier';
-import { prisma } from '~/utils/prisma';
+import { findUserByEmail, normalizeEmail } from '~/utils/accountIdentifier';
 import { createOtpChallenge } from '~/utils/emailOtp';
 import { throwOtpHttpError } from '~/utils/otpHttp';
 
@@ -15,7 +14,7 @@ export default defineEventHandler(async event => {
   }
 
   const email = normalizeEmail(result.data.email);
-  const user = await prisma.users.findUnique({ where: { email } });
+  const user = await findUserByEmail(email);
 
   // Keep the response generic so the endpoint does not enumerate accounts.
   if (!user) {

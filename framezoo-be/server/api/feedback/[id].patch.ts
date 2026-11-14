@@ -2,6 +2,7 @@ import { defineEventHandler, getRouterParam, readBody, createError } from 'h3';
 import { prisma } from '~/utils/prisma';
 import { requireAdmin } from '~/utils/admin';
 import { parseFeedbackAttachments } from '~/utils/feedback-storage';
+import { decryptPiiOrNull } from '~/utils/piiCrypto';
 
 export default defineEventHandler(async event => {
   await requireAdmin(event);
@@ -47,6 +48,7 @@ export default defineEventHandler(async event => {
     success: true,
     feedback: {
       ...updated,
+      contact: decryptPiiOrNull(updated.contact),
       attachments: parseFeedbackAttachments(updated.attachments).map(attachment => ({
         key: attachment.key,
         name: attachment.name,

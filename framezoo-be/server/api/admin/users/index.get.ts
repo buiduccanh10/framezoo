@@ -1,6 +1,57 @@
 import { defineEventHandler, getQuery } from 'h3';
-import { prisma } from '~/utils/prisma';
+import { prisma, Prisma } from '~/utils/prisma';
 import { requireAdmin } from '~/utils/admin';
+import { decryptPiiOrNull, hashEmailIndex } from '~/utils/piiCrypto';
+
+interface AdminUserRow {
+  id: string;
+  nickname: string;
+  email: string | null;
+  created_at: Date;
+  last_active: Date | null;
+  permissions: string[];
+  profile: Prisma.JsonValue;
+  effective_app_version: string | null;
+  active_sessions: number;
+}
+
+interface AdminStatsRow {
+  total_users: number;
+  active_recently: number;
+  users_with_email: number;
+}
+
+const getOrderBySql = (sort: string): Prisma.Sql => {
+  switch (sort) {
+    case 'created_asc':
+      return Prisma.sql`ORDER BY created_at ASC`;
+    case 'login_desc':
+      return Prisma.sql`ORDER BY last_active DESC NULLS LAST, created_at DESC`;
+    case 'login_asc':
+      return Prisma.sql`ORDER BY last_active ASC NULLS LAST, created_at ASC`;
+    case 'nickname_asc':
+      return Prisma.sql`ORDER BY LOWER(nickname) ASC, created_at DESC`;
+    case 'nickname_desc':
+      return Prisma.sql`ORDER BY LOWER(nickname) DESC, created_at DESC`;
+    case 'version_desc':
+      return Prisma.sql`ORDER BY
+        (regexp_match(effective_app_version, '([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?'))[1]::numeric DESC NULLS LAST,
+        COALESCE((regexp_match(effective_app_version, '([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?'))[2], '0')::numeric DESC,
+        COALESCE((regexp_match(effective_app_version, '([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?'))[3], '0')::numeric DESC,
+        effective_app_version DESC NULLS LAST,
+        created_at DESC`;
+    case 'version_asc':
+      return Prisma.sql`ORDER BY
+        (regexp_match(effective_app_version, '([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?'))[1]::numeric ASC NULLS LAST,
+        COALESCE((regexp_match(effective_app_version, '([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?'))[2], '0')::numeric ASC,
+        COALESCE((regexp_match(effective_app_version, '([0-9]+)(?:\\.([0-9]+))?(?:\\.([0-9]+))?'))[3], '0')::numeric ASC,
+        effective_app_version ASC NULLS LAST,
+        created_at DESC`;
+    case 'created_desc':
+    default:
+      return Prisma.sql`ORDER BY created_at DESC`;
+  }
+};
 
 export default defineEventHandler(async event => {
   await requireAdmin(event);
@@ -11,135 +62,102 @@ export default defineEventHandler(async event => {
   const limit = Math.min(100, Math.max(1, parseInt(String(query.limit || '10'), 10) || 10));
   const sort = typeof query.sort === 'string' ? query.sort : 'created_desc';
 
-  // Build where filter
-  const where: any = {};
-  if (search) {
-    where.OR = [
-      { nickname: { contains: search, mode: 'insensitive' } },
-      { email: { contains: search, mode: 'insensitive' } },
-      { id: { contains: search, mode: 'insensitive' } },
-    ];
-  }
+  const now = new Date();
+  const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+  const offset = (page - 1) * limit;
+  const searchEmailHash = search ? hashEmailIndex(search) : '';
 
-  // Determine sorting order
-  let orderBy: any;
-  switch (sort) {
-    case 'created_asc':
-      orderBy = { created_at: 'asc' };
-      break;
-    case 'login_desc':
-      orderBy = { last_logged_in: { sort: 'desc', nulls: 'last' } };
-      break;
-    case 'login_asc':
-      orderBy = { last_logged_in: { sort: 'asc', nulls: 'first' } };
-      break;
-    case 'nickname_asc':
-      orderBy = { nickname: 'asc' };
-      break;
-    case 'nickname_desc':
-      orderBy = { nickname: 'desc' };
-      break;
-    case 'version_desc':
-      orderBy = { app_version: { sort: 'desc', nulls: 'last' } };
-      break;
-    case 'version_asc':
-      orderBy = { app_version: { sort: 'asc', nulls: 'last' } };
-      break;
-    case 'created_desc':
-    default:
-      orderBy = { created_at: 'desc' };
-      break;
-  }
+  const userViewCte = Prisma.sql`
+    WITH session_agg AS (
+      SELECT
+        "user" AS user_id,
+        MAX(accessed_at) AS max_accessed_at,
+        COUNT(*) FILTER (WHERE expires_at > ${now})::int AS active_sessions,
+        (ARRAY_AGG(app_version ORDER BY accessed_at DESC NULLS LAST)
+          FILTER (WHERE app_version IS NOT NULL AND app_version <> ''))[1] AS latest_session_version
+      FROM sessions
+      GROUP BY "user"
+    ),
+    user_view AS (
+      SELECT
+        u.id,
+        u.nickname,
+        u.email,
+        u.email_hash,
+        u.created_at,
+        u.permissions,
+        u.profile,
+        COALESCE(NULLIF(u.app_version, ''), sa.latest_session_version) AS effective_app_version,
+        CASE
+          WHEN u.last_logged_in IS NULL THEN sa.max_accessed_at
+          WHEN sa.max_accessed_at IS NULL THEN u.last_logged_in
+          ELSE GREATEST(u.last_logged_in, sa.max_accessed_at)
+        END AS last_active,
+        COALESCE(sa.active_sessions, 0)::int AS active_sessions
+      FROM users u
+      LEFT JOIN session_agg sa ON sa.user_id = u.id
+    )
+  `;
 
-  // Calculate 30 days ago for active users metric
-  const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+  const whereClause = search
+    ? Prisma.sql`WHERE strpos(lower(nickname), lower(${search})) > 0 OR strpos(lower(id), lower(${search})) > 0 OR email_hash = ${searchEmailHash}`
+    : Prisma.empty;
+  const orderByClause = getOrderBySql(sort);
 
-  // Fetch metrics and user data in parallel
-  const [totalCount, totalUsers, activeRecently, usersWithEmail, totalSessions, users] =
-    await Promise.all([
-      prisma.users.count({ where }),
-      prisma.users.count(),
-      prisma.users.count({
-        where: {
-          last_logged_in: { gte: thirtyDaysAgo },
-        },
-      }),
-      prisma.users.count({
-        where: {
-          email: { not: null },
-        },
-      }),
-      prisma.sessions.count(),
-      prisma.users.findMany({
-        where,
-        orderBy,
-        skip: (page - 1) * limit,
-        take: limit,
-        select: {
-          id: true,
-          nickname: true,
-          email: true,
-          created_at: true,
-          last_logged_in: true,
-          permissions: true,
-          profile: true,
-          app_version: true,
-        },
-      }),
-    ]);
+  const [statsRows, totalSessions, countRows, users] = await Promise.all([
+    prisma.$queryRaw<AdminStatsRow[]>`
+      ${userViewCte}
+      SELECT
+        COUNT(*)::int AS total_users,
+        COUNT(*) FILTER (WHERE last_active >= ${thirtyDaysAgo})::int AS active_recently,
+        COUNT(*) FILTER (WHERE email IS NOT NULL)::int AS users_with_email
+      FROM user_view
+    `,
+    prisma.sessions.count({ where: { expires_at: { gt: now } } }),
+    search
+      ? prisma.$queryRaw<{ total: number }[]>`
+          ${userViewCte}
+          SELECT COUNT(*)::int AS total
+          FROM user_view
+          ${whereClause}
+        `
+      : Promise.resolve(null),
+    prisma.$queryRaw<AdminUserRow[]>`
+      ${userViewCte}
+      SELECT
+        id,
+        nickname,
+        email,
+        created_at,
+        last_active,
+        permissions,
+        profile,
+        effective_app_version,
+        active_sessions
+      FROM user_view
+      ${whereClause}
+      ${orderByClause}
+      LIMIT ${limit}
+      OFFSET ${offset}
+    `,
+  ]);
 
-  // Aggregate per-user session counts and latest app version without exposing media history or addon URLs.
-  const userIds = users.map(u => u.id);
+  const statsRow = statsRows[0] ?? { total_users: 0, active_recently: 0, users_with_email: 0 };
+  const totalCount = countRows ? (countRows[0]?.total ?? 0) : statsRow.total_users;
 
-  let sessionsCountMap = new Map<string, number>();
-  let sessionMaxMap = new Map<string, Date | null>();
-  let sessionVersionMap = new Map<string, string>();
-
-  if (userIds.length > 0) {
-    const [sessionsGroup, latestSessions] = await Promise.all([
-      prisma.sessions.groupBy({
-        by: ['user'],
-        where: { user: { in: userIds } },
-        _count: { _all: true },
-        _max: { accessed_at: true },
-      }),
-      prisma.sessions.findMany({
-        where: { user: { in: userIds }, app_version: { not: null } },
-        orderBy: { accessed_at: 'desc' },
-        select: { user: true, app_version: true },
-      }),
-    ]);
-
-    sessionsCountMap = new Map(sessionsGroup.map(g => [g.user, g._count._all]));
-    sessionMaxMap = new Map(sessionsGroup.map(g => [g.user, g._max.accessed_at]));
-    for (const s of latestSessions) {
-      if (s.app_version && !sessionVersionMap.has(s.user)) {
-        sessionVersionMap.set(s.user, s.app_version);
-      }
-    }
-  }
-
-  const items = users.map(u => {
-    const sessionAccessedAt = sessionMaxMap.get(u.id);
-    const lastActive =
-      sessionAccessedAt && (!u.last_logged_in || sessionAccessedAt > u.last_logged_in)
-        ? sessionAccessedAt
-        : u.last_logged_in;
-
-    return {
-      id: u.id,
-      nickname: u.nickname,
-      email: u.email,
-      created_at: u.created_at,
-      last_logged_in: lastActive,
-      permissions: u.permissions,
-      profile: u.profile,
-      app_version: u.app_version || sessionVersionMap.get(u.id) || null,
-      counts: {
-        sessions: sessionsCountMap.get(u.id) || 0,
-      },
-    };
-  });
+  const items = users.map(u => ({
+    id: u.id,
+    nickname: u.nickname,
+    email: decryptPiiOrNull(u.email),
+    created_at: u.created_at,
+    last_logged_in: u.last_active,
+    permissions: u.permissions,
+    profile: u.profile,
+    app_version: u.effective_app_version || null,
+    counts: {
+      sessions: u.active_sessions,
+    },
+  }));
 
   return {
     items,
@@ -150,9 +168,9 @@ export default defineEventHandler(async event => {
       totalPages: Math.ceil(totalCount / limit) || 1,
     },
     stats: {
-      totalUsers,
-      activeRecently,
-      usersWithEmail,
+      totalUsers: statsRow.total_users,
+      activeRecently: statsRow.active_recently,
+      usersWithEmail: statsRow.users_with_email,
       totalSessions,
     },
   };

@@ -22,10 +22,14 @@ export default defineEventHandler(async event => {
   }
 
   const filename = fileItem.filename;
-  if (!filename.endsWith('.tar.gz') && !filename.endsWith('.sql')) {
+  if (
+    !filename.endsWith('.tar.gz.enc') &&
+    !filename.endsWith('.tar.gz') &&
+    !filename.endsWith('.sql')
+  ) {
     throw createError({
       statusCode: 400,
-      message: 'Backup file must be .tar.gz or .sql format',
+      message: 'Backup file must be .tar.gz.enc, .tar.gz, or .sql format',
     });
   }
 

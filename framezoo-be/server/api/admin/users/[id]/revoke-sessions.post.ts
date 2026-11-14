@@ -13,13 +13,35 @@ export default defineEventHandler(async event => {
     });
   }
 
-  const deleted = await prisma.sessions.deleteMany({
-    where: { user: userId },
+  const deletedCount = await prisma.$transaction(async tx => {
+    const [user, agg] = await Promise.all([
+      tx.users.findUnique({
+        where: { id: userId },
+        select: { last_logged_in: true },
+      }),
+      tx.sessions.aggregate({
+        where: { user: userId },
+        _max: { accessed_at: true },
+      }),
+    ]);
+
+    const maxAccessed = agg._max.accessed_at;
+    if (user && maxAccessed && (!user.last_logged_in || maxAccessed > user.last_logged_in)) {
+      await tx.users.update({
+        where: { id: userId },
+        data: { last_logged_in: maxAccessed },
+      });
+    }
+
+    const deleted = await tx.sessions.deleteMany({
+      where: { user: userId },
+    });
+    return deleted.count;
   });
 
   return {
     success: true,
-    revokedCount: deleted.count,
-    message: `Đã đăng xuất ${deleted.count} phiên hoạt động của người dùng`,
+    revokedCount: deletedCount,
+    message: `Đã đăng xuất ${deletedCount} phiên hoạt động của người dùng`,
   };
 });
