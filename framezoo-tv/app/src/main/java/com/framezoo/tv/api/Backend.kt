@@ -55,6 +55,7 @@ class Backend(private val store: SecureStore) {
             connectTimeout = 15_000
             readTimeout = 20_000
             setRequestProperty("Accept", "application/json")
+            setRequestProperty("X-App-Version", BuildConfig.VERSION_NAME)
             headers.forEach { (k, v) -> setRequestProperty(k, v) }
             if (auth) store.accessToken?.let { setRequestProperty("Authorization", "Bearer $it") }
             if (body != null) {
@@ -928,6 +929,7 @@ class Backend(private val store: SecureStore) {
         val connection = (URL(store.backendUrl.trimEnd('/') + "/api/feedback").openConnection() as HttpURLConnection).apply {
             requestMethod = "POST"; connectTimeout = 15_000; readTimeout = 60_000; doOutput = true
             setChunkedStreamingMode(8192); setRequestProperty("Content-Type", "multipart/form-data; boundary=$boundary")
+            setRequestProperty("X-App-Version", BuildConfig.VERSION_NAME)
             token?.let { setRequestProperty("Authorization", "Bearer $it") }
         }
         try {

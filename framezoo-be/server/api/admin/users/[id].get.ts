@@ -83,7 +83,7 @@ export default defineEventHandler(async event => {
     : null;
 
   const currentVersion =
-    user.app_version || sessionsList.find(s => s.app_version)?.app_version || null;
+    sessionsList.find(s => s.app_version)?.app_version || user.app_version || null;
 
   return {
     user: {

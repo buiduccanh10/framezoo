@@ -87,7 +87,7 @@ export default defineEventHandler(async event => {
         u.created_at,
         u.permissions,
         u.profile,
-        COALESCE(NULLIF(u.app_version, ''), sa.latest_session_version) AS effective_app_version,
+        COALESCE(sa.latest_session_version, NULLIF(u.app_version, '')) AS effective_app_version,
         CASE
           WHEN u.last_logged_in IS NULL THEN sa.max_accessed_at
           WHEN sa.max_accessed_at IS NULL THEN u.last_logged_in

@@ -46,7 +46,7 @@ export default defineEventHandler(async event => {
     });
   }
 
-  const rotated = await auth.rotateRefreshToken(token, { rotate: true });
+  const rotated = await auth.rotateRefreshToken(token, { rotate: true, event });
   if (!rotated.success) {
     throw createError({
       statusCode: 401,

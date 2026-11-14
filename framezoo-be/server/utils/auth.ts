@@ -1,4 +1,5 @@
 import { prisma } from './prisma';
+import { resolveSessionClientUpdate } from './clientVersion';
 import jwt from 'jsonwebtoken';
 const { sign, verify } = jwt;
 import { randomUUID } from 'crypto';
@@ -32,26 +33,22 @@ const GUEST_TOKEN_EXPIRY_SECONDS = parsePositiveInt(
 const SESSION_EXPIRY_MS = REFRESH_TOKEN_EXPIRY_SECONDS * 1000;
 const SESSION_EXPIRY_SECONDS = REFRESH_TOKEN_EXPIRY_SECONDS;
 
-const APP_VERSION_PATTERN = /^[a-zA-Z0-9._+-]{1,40}$/;
-
-const extractAppVersion = (event?: H3EventCompat, userAgent?: string): string | null => {
+const getEventClientHeaders = (
+  event?: H3EventCompat
+): { headerAppVersion?: string; requestUserAgent?: string } => {
   try {
     const targetEvent = event ?? useEvent();
-    const headerValue = targetEvent ? getRequestHeader(targetEvent, 'x-app-version') : undefined;
-    const trimmed = typeof headerValue === 'string' ? headerValue.trim() : '';
-    if (trimmed && APP_VERSION_PATTERN.test(trimmed)) {
-      return trimmed;
-    }
+    if (!targetEvent) return {};
+    const headerAppVersion = getRequestHeader(targetEvent, 'x-app-version');
+    const requestUserAgent = getRequestHeader(targetEvent, 'user-agent');
+    return {
+      headerAppVersion: typeof headerAppVersion === 'string' ? headerAppVersion : undefined,
+      requestUserAgent: typeof requestUserAgent === 'string' ? requestUserAgent : undefined,
+    };
   } catch {
     // useEvent() throws outside an active H3 request context (e.g. unit tests).
+    return {};
   }
-
-  if (userAgent) {
-    const match = userAgent.match(/Framezoo\/([a-zA-Z0-9._+-]{1,40})/i);
-    if (match?.[1]) return match[1];
-  }
-
-  return null;
 };
 
 type AccessTokenPayload = {
@@ -203,15 +200,29 @@ export function useAuth() {
     });
   };
 
-  const getSessionAndBump = async (id: string) => {
+  const syncUserAppVersion = async (userId: string, appVersion?: string) => {
+    if (!appVersion) return;
+    await prisma.users
+      .updateMany({
+        where: { id: userId },
+        data: { app_version: appVersion },
+      })
+      .catch(() => {});
+  };
+
+  const getSessionAndBump = async (id: string, event?: H3EventCompat) => {
     const session = await getSession(id);
     if (!session) return null;
 
     const now = new Date();
     const expiryDate = new Date(now.getTime() + SESSION_EXPIRY_MS);
-    const detectedVersion = extractAppVersion(undefined, session.user_agent);
-    const nextVersion =
-      detectedVersion && detectedVersion !== session.app_version ? detectedVersion : undefined;
+    const { headerAppVersion, requestUserAgent } = getEventClientHeaders(event);
+    const { nextVersion, nextUserAgent } = resolveSessionClientUpdate({
+      headerAppVersion,
+      requestUserAgent,
+      storedAppVersion: session.app_version,
+      storedUserAgent: session.user_agent,
+    });
 
     const updated = await prisma.sessions.update({
       where: { id },
@@ -221,17 +232,11 @@ export function useAuth() {
         refresh_jti: session.refresh_jti || randomUUID(),
         refresh_expires_at: expiryDate,
         ...(nextVersion ? { app_version: nextVersion } : {}),
+        ...(nextUserAgent ? { user_agent: nextUserAgent } : {}),
       },
     });
 
-    if (nextVersion) {
-      await prisma.users
-        .updateMany({
-          where: { id: session.user },
-          data: { app_version: nextVersion },
-        })
-        .catch(() => {});
-    }
+    await syncUserAppVersion(session.user, nextVersion);
 
     return updated;
   };
@@ -246,16 +251,19 @@ export function useAuth() {
 
     const now = new Date();
     const expiryDate = new Date(now.getTime() + SESSION_EXPIRY_MS);
-    const resolvedVersion =
-      (appVersion && APP_VERSION_PATTERN.test(appVersion.trim()) ? appVersion.trim() : null) ||
-      extractAppVersion(undefined, userAgent);
+    const { headerAppVersion } = getEventClientHeaders();
+    const { detectedVersion: resolvedVersion } = resolveSessionClientUpdate({
+      headerAppVersion,
+      explicitAppVersion: appVersion,
+      requestUserAgent: userAgent,
+    });
 
     const created = await prisma.sessions.create({
       data: {
         id: randomUUID(),
         user,
         device,
-        user_agent: userAgent,
+        user_agent: userAgent.slice(0, 1024),
         app_version: resolvedVersion,
         created_at: now,
         accessed_at: now,
@@ -265,14 +273,7 @@ export function useAuth() {
       },
     });
 
-    if (resolvedVersion) {
-      await prisma.users
-        .updateMany({
-          where: { id: user },
-          data: { app_version: resolvedVersion },
-        })
-        .catch(() => {});
-    }
+    await syncUserAppVersion(user, resolvedVersion ?? undefined);
 
     return created;
   };
@@ -406,7 +407,7 @@ export function useAuth() {
 
   const rotateRefreshToken = async (
     refreshToken: string,
-    options?: { rotate?: boolean }
+    options?: { rotate?: boolean; event?: H3EventCompat }
   ): Promise<{
     success: boolean;
     reason?: string;
@@ -440,6 +441,13 @@ export function useAuth() {
     const now = new Date();
     const expiryDate = new Date(now.getTime() + SESSION_EXPIRY_MS);
     const newRefreshJti = shouldRotate ? randomUUID() : session.refresh_jti;
+    const { headerAppVersion, requestUserAgent } = getEventClientHeaders(options?.event);
+    const { nextVersion, nextUserAgent } = resolveSessionClientUpdate({
+      headerAppVersion,
+      requestUserAgent,
+      storedAppVersion: session.app_version,
+      storedUserAgent: session.user_agent,
+    });
 
     const updated = await prisma.sessions.updateMany({
       where: {
@@ -452,12 +460,16 @@ export function useAuth() {
         expires_at: expiryDate,
         refresh_jti: newRefreshJti,
         refresh_expires_at: expiryDate,
+        ...(nextVersion ? { app_version: nextVersion } : {}),
+        ...(nextUserAgent ? { user_agent: nextUserAgent } : {}),
       },
     });
 
     if (updated.count !== 1) {
       return { success: false, reason: 'refresh_token_reused' };
     }
+
+    await syncUserAppVersion(session.user, nextVersion);
 
     const updatedSession = await getSession(session.id);
     if (!updatedSession) {
@@ -511,7 +523,7 @@ export function useAuth() {
     const refreshToken = getRefreshTokenForEvent(event);
     if (!refreshToken) return null;
 
-    const rotated = await rotateRefreshToken(refreshToken, { rotate: false });
+    const rotated = await rotateRefreshToken(refreshToken, { rotate: false, event });
     if (!rotated.success) {
       console.warn(`[auth] tryRefreshSessionFromEvent failed: ${rotated.reason}`);
       return null;
@@ -530,7 +542,7 @@ export function useAuth() {
       if (!payload) {
         tokenState = 'invalid';
       } else {
-        const session = await getSessionAndBump(payload.sid);
+        const session = await getSessionAndBump(payload.sid, event);
         if (session) {
           return session;
         }
@@ -578,7 +590,7 @@ export function useAuth() {
     if (accessToken) {
       const payload = verifyAccessToken(accessToken);
       if (payload) {
-        const session = await getSessionAndBump(payload.sid);
+        const session = await getSessionAndBump(payload.sid, event);
         if (session) {
           return session;
         }

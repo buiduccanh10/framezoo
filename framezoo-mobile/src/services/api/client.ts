@@ -1,4 +1,5 @@
 import type { AccountWithToken } from '@/types';
+import { version as APP_VERSION } from '../../../package.json';
 
 export class ApiError extends Error {
   readonly status: number;
@@ -31,6 +32,9 @@ export async function apiRequest<T>(
 
   const headers = new Headers(options.headers);
   headers.set('Accept', 'application/json');
+  if (APP_VERSION && !headers.has('X-App-Version')) {
+    headers.set('X-App-Version', APP_VERSION);
+  }
   if (options.body && !headers.has('Content-Type')) {
     headers.set('Content-Type', 'application/json');
   }

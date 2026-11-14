@@ -1,4 +1,5 @@
 import { conf } from "@/setup/config";
+import { APP_VERSION } from "@/setup/constants";
 import { useAuthStore } from "@/stores/auth";
 
 const GUEST_TOKEN_KEY = "fz_guest_token";
@@ -169,6 +170,13 @@ export async function ensureGuestToken(
   return pendingGuestTokenPromise;
 }
 
+function applyAppVersionHeader(headers: Headers): void {
+  const version = APP_VERSION?.trim();
+  if (version && version !== "unknown" && !headers.has("x-app-version")) {
+    headers.set("x-app-version", version);
+  }
+}
+
 export function getBackendAuthHeaders(
   url: string,
   headers?: HeadersInit,
@@ -180,6 +188,8 @@ export function getBackendAuthHeaders(
   if (!isBackendApiRequest(resolvedUrl)) {
     return nextHeaders;
   }
+
+  applyAppVersionHeader(nextHeaders);
 
   const userToken = useAuthStore.getState().account?.token;
   if (userToken) {
@@ -206,6 +216,8 @@ export async function getBackendAuthHeadersAsync(
   if (!isBackendApiRequest(resolvedUrl)) {
     return nextHeaders;
   }
+
+  applyAppVersionHeader(nextHeaders);
 
   const userToken = useAuthStore.getState().account?.token;
   if (userToken) {
