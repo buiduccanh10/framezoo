@@ -200,6 +200,7 @@ export function LandingPage() {
                 ? downloadState.manifest.totalDownloads
                 : null
             }
+            isMetaLoading={downloadState.status === "loading"}
           />
         </div>
         <FeatureSection copy={activeCopy.features} />

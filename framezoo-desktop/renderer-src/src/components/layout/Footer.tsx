@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 
+import { FRAMEZOO_SOCIAL_LINKS, Icon } from "@/components/Icon";
 import { BrandPill } from "@/components/layout/BrandPill";
 import { WideContainer } from "@/components/layout/WideContainer";
 
@@ -14,6 +15,22 @@ export function Footer() {
             <BrandPill />
           </div>
           <p className="mt-4 lg:max-w-[400px]">{t("footer.tagline")}</p>
+          <div className="mt-4 flex flex-wrap items-center gap-4">
+            {FRAMEZOO_SOCIAL_LINKS.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-type-secondary transition-colors hover:text-type-emphasis tabbable rounded"
+                aria-label={item.ariaLabel}
+                title={item.title}
+              >
+                <Icon icon={item.icon} className="text-base" />
+                <span>{item.label}</span>
+              </a>
+            ))}
+          </div>
         </div>
         <div className="md:text-right">
           {/* <h3 className="font-semibold text-type-emphasis">

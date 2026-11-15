@@ -32,9 +32,25 @@ export function DownloadSection({
 
       <div className="landing-download-content landing-scroll-reveal landing-scroll-reveal-delay-one">
         {state.status === "loading" ? (
-          <div className="landing-download-state" role="status">
-            <span className="landing-state-pulse" aria-hidden="true" />
-            {copy.loading}
+          <div
+            className="landing-platforms"
+            role="status"
+            aria-label={copy.loading}
+          >
+            <div className="landing-platform-grid" aria-hidden="true">
+              {Array.from({ length: 4 }, (_, index) => (
+                <div
+                  className="landing-platform-card landing-platform-card-skeleton"
+                  key={`platform-skeleton-${index}`}
+                >
+                  <span className="landing-platform-copy">
+                    <span className="landing-skeleton landing-skeleton-platform-title" />
+                    <span className="landing-skeleton landing-skeleton-platform-sub" />
+                  </span>
+                  <span className="landing-skeleton landing-skeleton-platform-action" />
+                </div>
+              ))}
+            </div>
           </div>
         ) : state.status === "error" ? (
           <div

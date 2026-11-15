@@ -21,6 +21,7 @@ interface HeroSectionProps {
   onHashLinkClick: (event: MouseEvent<HTMLAnchorElement>) => void;
   version: string | null;
   totalDownloads?: number | null;
+  isMetaLoading?: boolean;
 }
 
 export function HeroSection({
@@ -29,6 +30,7 @@ export function HeroSection({
   onHashLinkClick,
   version,
   totalDownloads,
+  isMetaLoading = false,
 }: HeroSectionProps) {
   return (
     <section className="landing-hero" aria-labelledby="hero-title">
@@ -54,7 +56,16 @@ export function HeroSection({
             {copy.secondaryCta}
           </a>
         </div>
-        {version || totalDownloads ? (
+        {isMetaLoading ? (
+          <div
+            className="landing-hero-meta landing-hero-meta-skeleton"
+            aria-hidden="true"
+          >
+            <span className="landing-skeleton landing-hero-meta-skeleton-version" />
+            <span className="landing-hero-meta-dot">•</span>
+            <span className="landing-skeleton landing-hero-meta-skeleton-downloads" />
+          </div>
+        ) : version || totalDownloads ? (
           <div className="landing-hero-meta">
             {version ? (
               <span className="landing-app-version">v{version}</span>
