@@ -25,6 +25,7 @@ STARTUP_WINDOW_PIECES = 4
 # Keep the startup window bounded by piece size, not the full replan cap.
 # A large metadata-time burst can consume bandwidth before the first range.
 STARTUP_PREFETCH_BYTES = STREAM_CHUNK_SIZE
+STARTUP_PLAYBACK_BYTES = 4 * 1024 * 1024
 PREFETCH_DEADLINE_BASE_MS = 50
 PREFETCH_DEADLINE_STEP_MS = 50
 INITIAL_RANGE_HEADER_WAIT_TIMEOUT = 0.5
@@ -60,6 +61,8 @@ TARGET_KICK_RESTORE_DELAY = 0.5
 # After the target stalls this long, demote every other priority-7 piece to
 # hot priority so the stuck piece receives the swarm's full bandwidth.
 TARGET_FOCUS_DELAY = 2.0
+STARTUP_TARGET_KICK_DELAY = 0.4
+STARTUP_TARGET_FOCUS_DELAY = 0.8
 TARGET_STALL_REANNOUNCE_DELAY = 1.0
 REANNOUNCE_COOLDOWN = 5
 # Minimum seconds to wait before declaring client disconnected.

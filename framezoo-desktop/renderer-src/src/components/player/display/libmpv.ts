@@ -358,6 +358,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       event: eventType,
       playerId,
       generation,
+      startAt: initialStartAt,
       elapsedMs:
         loadStartedAt > 0
           ? Math.max(0, Math.round(performance.now() - loadStartedAt))

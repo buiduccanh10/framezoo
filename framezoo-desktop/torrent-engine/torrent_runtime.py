@@ -95,6 +95,13 @@ class TorrentRuntime:
         self._pending_kick_restore: dict[int, float] = {}
         self._focused_file_index: Optional[int] = None
         self._has_streamed_bytes = False
+        self._playhead_streamed_bytes = 0
+        self._was_startup_bounded = False
+        self._startup_window_completed_logged = False
+        self._tail_probe_ready_logged = False
+        self._resume_range_ready_logged = False
+        self._startup_target_pieces: Set[int] = set()
+        self._startup_required_target_pieces: Set[int] = set()
         self._last_stream_start: Optional[int] = None
         self._first_peer_logged = False
         self._first_download_logged = False
@@ -226,11 +233,11 @@ class TorrentRuntime:
                         priorities = [0] * self.info.files().num_files()
                         priorities[self.file_index] = constants.STREAM_IDLE_FILE_PRIORITY
                         self.handle.prioritize_files(priorities)
-                    # Enable sequential download mode so the background piece picker
-                    # advances sequentially from the selected file's playhead instead
-                    # of distributing blocks randomly (rarest-first) across the whole torrent.
-                    self.handle.set_sequential_download(True)
-                    if hasattr(lt, "torrent_flags") and hasattr(lt.torrent_flags, "sequential_download"):
+                    # Disable global sequential download until playback head leaves piece 0
+                    # on resume sessions so pieces 0..N-1 do not compete with header/Cues/target.
+                    enable_seq = (getattr(self, "start_time", 0.0) or 0.0) <= 0.0
+                    self.handle.set_sequential_download(enable_seq)
+                    if enable_seq and hasattr(lt, "torrent_flags") and hasattr(lt.torrent_flags, "sequential_download"):
                         try:
                             self.handle.set_flags(lt.torrent_flags.sequential_download)
                         except Exception:
@@ -792,7 +799,12 @@ class TorrentRuntime:
             else:
                 self._startup_required_tail_pieces = set()
             if target_pieces:
-                required_pieces.update(target_pieces[:required_count])
+                required_targets = set(target_pieces[:required_count])
+                required_pieces.update(required_targets)
+            else:
+                required_targets = set()
+            self._startup_target_pieces = set(target_pieces)
+            self._startup_required_target_pieces = required_targets
 
             if combined_pieces:
                 self._schedule_pieces(
@@ -858,8 +870,9 @@ class TorrentRuntime:
                 priorities = [0] * self.info.files().num_files()
                 priorities[self.file_index] = constants.STREAM_IDLE_FILE_PRIORITY
                 self.handle.prioritize_files(priorities)
-            self.handle.set_sequential_download(True)
-            if hasattr(lt, "torrent_flags") and hasattr(lt.torrent_flags, "sequential_download"):
+            enable_seq = (getattr(self, "start_time", 0.0) or 0.0) <= 0.0
+            self.handle.set_sequential_download(enable_seq)
+            if enable_seq and hasattr(lt, "torrent_flags") and hasattr(lt.torrent_flags, "sequential_download"):
                 try:
                     self.handle.set_flags(lt.torrent_flags.sequential_download)
                 except Exception:
@@ -1150,6 +1163,76 @@ class TorrentRuntime:
                 elapsedMs=self.elapsed_ms(),
             )
 
+    def _startup_window_bytes(self) -> int:
+        try:
+            piece_length = (
+                int(self.info.piece_length())
+                if getattr(self, "info", None) is not None
+                else constants.STREAM_CHUNK_SIZE
+            )
+        except Exception:
+            piece_length = constants.STREAM_CHUNK_SIZE
+        return max(
+            getattr(constants, "STARTUP_PLAYBACK_BYTES", 4 * 1024 * 1024),
+            piece_length * constants.STARTUP_WINDOW_PIECES,
+        )
+
+    def _is_startup_window_active(self, start: Optional[int] = None) -> bool:
+        if getattr(self, "info", None) is None:
+            return not getattr(self, "_has_streamed_bytes", False)
+        if (
+            getattr(self, "_has_streamed_bytes", False)
+            and getattr(self, "_playhead_streamed_bytes", None) is None
+        ):
+            return False
+        window_bytes = self._startup_window_bytes()
+        if (
+            start is not None
+            and (getattr(self, "start_time", 0.0) or 0.0) > 0.0
+            and start < window_bytes
+        ):
+            return True
+        streamed = int(getattr(self, "_playhead_streamed_bytes", 0) or 0)
+        return streamed < window_bytes
+
+    def _startup_progress_fields(self) -> dict[str, Any]:
+        downloaded_bytes = None
+        file_progress_pct = None
+        try:
+            if getattr(self, "handle", None) is not None:
+                if getattr(self, "file_index", None) is not None:
+                    downloaded_bytes = int(
+                        self.handle.file_progress()[self.file_index]
+                    )
+                else:
+                    downloaded_bytes = int(
+                        getattr(self.handle.status(), "total_done", 0)
+                    )
+                if downloaded_bytes is not None and getattr(self, "file_size", 0) > 0:
+                    file_progress_pct = round(
+                        (downloaded_bytes / self.file_size) * 100.0, 2
+                    )
+        except Exception:
+            pass
+        return {
+            "downloadedBytes": downloaded_bytes,
+            "fileProgressPct": file_progress_pct,
+            "streamedBytes": int(getattr(self, "_playhead_streamed_bytes", 0) or 0),
+        }
+
+    def _protected_startup_critical_pieces(self) -> Set[int]:
+        protected = set(
+            getattr(self, "_startup_required_tail_pieces", set())
+        )
+        if (
+            getattr(self, "_playback_focus_piece", None) in (None, 0)
+            and (getattr(self, "start_time", 0.0) or 0.0) > 0.0
+        ):
+            protected.update(
+                getattr(self, "_startup_required_target_pieces", set())
+            )
+        return protected
+
     def _schedule_pieces(
         self,
         prefetch_pieces: list[int],
@@ -1184,11 +1267,7 @@ class TorrentRuntime:
 
                 if piece in required_set:
                     focus_piece = getattr(self, "_focus_piece", None)
-                    protected_tail = getattr(
-                        self,
-                        "_startup_required_tail_pieces",
-                        set(),
-                    )
+                    protected_tail = self._protected_startup_critical_pieces()
                     rank = required_ranks.get(piece, 0)
                     deadline_ms = min(250, rank * 25)
                     if is_sync:
@@ -1203,7 +1282,7 @@ class TorrentRuntime:
                     else:
                         priority = constants.STREAM_PIECE_PRIORITY
                 elif (
-                    not getattr(self, "_has_streamed_bytes", False)
+                    self._is_startup_window_active()
                     and index < constants.STARTUP_WINDOW_PIECES
                 ):
                     priority = constants.STREAM_HOT_PIECE_PRIORITY
@@ -1340,6 +1419,18 @@ class TorrentRuntime:
                 return
             prev_target = getattr(self, "_playback_focus_piece", None)
             self._playback_focus_piece = target_piece
+            if (
+                prev_target != target_piece
+                and getattr(self, "_playhead_streamed_bytes", None) is not None
+            ):
+                self._playhead_streamed_bytes = 0
+            if target_piece > 0:
+                self._startup_target_pieces = set()
+                self._startup_required_target_pieces = set()
+            is_resume_header_probe = (
+                target_piece == 0
+                and (getattr(self, "start_time", 0.0) or 0.0) > 0.0
+            )
             clear_deadlines = getattr(
                 self.handle,
                 "clear_piece_deadlines",
@@ -1358,8 +1449,17 @@ class TorrentRuntime:
             self._piece_deadlines.clear()
             demoted = 0
             protected_tail = getattr(self, "_startup_tail_pieces", set())
+            protected_targets = (
+                getattr(self, "_startup_target_pieces", set())
+                if is_resume_header_probe
+                else set()
+            )
             for piece in list(self._boosted_pieces):
-                if piece == target_piece or piece in protected_tail:
+                if (
+                    piece == target_piece
+                    or piece in protected_tail
+                    or piece in protected_targets
+                ):
                     continue
                 try:
                     if self.handle.have_piece(piece):
@@ -1376,13 +1476,13 @@ class TorrentRuntime:
                     continue
 
             # Switch sequential download mode based on target position:
-            # At piece 0, sequential mode ensures normal linear streaming.
-            # At target_piece > 0, disabling global sequential download prevents
-            # libtorrent from clogging peer pipelines with pieces 0..N-1.
+            # At piece 0 (without resume target), sequential mode ensures normal linear streaming.
+            # On resume header probes or at target_piece > 0, disabling global sequential download
+            # prevents libtorrent from clogging peer pipelines with pieces 0..N-1.
             set_seq = getattr(self.handle, "set_sequential_download", None)
             if callable(set_seq):
                 try:
-                    set_seq(target_piece == 0)
+                    set_seq(target_piece == 0 and not is_resume_header_probe)
                 except Exception:
                     pass
 
@@ -1427,6 +1527,17 @@ class TorrentRuntime:
                         self._set_piece_deadline(piece, 50)
                 except Exception:
                     pass
+            if is_resume_header_probe:
+                for piece in getattr(self, "_startup_required_target_pieces", set()):
+                    try:
+                        if not self.handle.have_piece(piece):
+                            self.handle.piece_priority(
+                                piece,
+                                constants.STREAM_PIECE_PRIORITY,
+                            )
+                            self._set_piece_deadline(piece, 75)
+                    except Exception:
+                        pass
         log_event(
             "playback piece focused",
             sessionId=self.session_id,
@@ -1510,11 +1621,7 @@ class TorrentRuntime:
                 return True
             self._focus_piece = target_piece
             demoted = 0
-            protected_tail = getattr(
-                self,
-                "_startup_required_tail_pieces",
-                set(),
-            )
+            protected_tail = self._protected_startup_critical_pieces()
             for piece, priority in list(self._piece_priorities.items()):
                 if (
                     piece == target_piece
@@ -1683,11 +1790,7 @@ class TorrentRuntime:
                 self._pending_kick_restore[target_piece] = (
                     time.monotonic() + constants.TARGET_KICK_RESTORE_DELAY
                 )
-                for tail_piece in getattr(
-                    self,
-                    "_startup_required_tail_pieces",
-                    set(),
-                ):
+                for tail_piece in self._protected_startup_critical_pieces():
                     if (
                         tail_piece == target_piece
                         or tail_piece in self._pending_kick_restore
@@ -1784,11 +1887,7 @@ class TorrentRuntime:
                     timingPhase="target_piece_escalated",
                     elapsedMs=self.elapsed_ms(),
                 )
-            for tail_piece in getattr(
-                self,
-                "_startup_required_tail_pieces",
-                set(),
-            ):
+            for tail_piece in self._protected_startup_critical_pieces():
                 if tail_piece in pending:
                     continue
                 try:
@@ -1932,14 +2031,35 @@ class TorrentRuntime:
         sync_metadata: Optional[dict[str, Any]] = None,
     ) -> bool:
         is_tail_probe = start > 0 and not track_position and not is_sync
-        is_startup_header_probe = (
-            start < constants.RANGE_PREFETCH_BYTES
-            and not getattr(self, "_has_streamed_bytes", False)
-        )
         startup_bounded = (
             getattr(self, "info", None) is not None
             and not is_sync
-            and is_startup_header_probe
+            and not is_tail_probe
+            and self._is_startup_window_active(start)
+        )
+        use_fast_stall_timers = startup_bounded or (
+            is_tail_probe and bool(getattr(self, "_startup_tail_pieces", None))
+        )
+        focus_delay = (
+            min(
+                constants.TARGET_FOCUS_DELAY,
+                getattr(constants, "STARTUP_TARGET_FOCUS_DELAY", 0.8),
+            )
+            if use_fast_stall_timers
+            else constants.TARGET_FOCUS_DELAY
+        )
+        kick_delay = (
+            min(
+                constants.TARGET_KICK_DELAY,
+                getattr(constants, "STARTUP_TARGET_KICK_DELAY", 0.4),
+            )
+            if use_fast_stall_timers
+            else constants.TARGET_KICK_DELAY
+        )
+        reannounce_delay = (
+            min(constants.TARGET_STALL_REANNOUNCE_DELAY, kick_delay)
+            if use_fast_stall_timers
+            else constants.TARGET_STALL_REANNOUNCE_DELAY
         )
         if is_tail_probe:
             prefetch_length = max(1, end - start + 1)
@@ -2057,10 +2177,12 @@ class TorrentRuntime:
         should_schedule = (
             not all_ready
             or first_required_piece != getattr(self, "_last_scheduled_piece", None)
+            or getattr(self, "_was_startup_bounded", False) != startup_bounded
             or is_sync
         )
         if should_schedule:
             self._last_scheduled_piece = first_required_piece
+            self._was_startup_bounded = startup_bounded
             self._schedule_pieces(
                 all_pieces,
                 required_set,
@@ -2131,6 +2253,35 @@ class TorrentRuntime:
                     elapsedMs=self.elapsed_ms(),
                     **(sync_metadata or {}),
                 )
+                if is_tail_probe and not getattr(
+                    self, "_tail_probe_ready_logged", False
+                ):
+                    self._tail_probe_ready_logged = True
+                    log_event(
+                        "tail probe ready",
+                        sessionId=self.session_id,
+                        start=start,
+                        end=end,
+                        timingPhase="tail_probe_ready",
+                        elapsedMs=self.elapsed_ms(),
+                        **self._startup_progress_fields(),
+                    )
+                if (
+                    track_position
+                    and (getattr(self, "start_time", 0.0) or 0.0) > 0.0
+                    and start >= self._startup_window_bytes()
+                    and not getattr(self, "_resume_range_ready_logged", False)
+                ):
+                    self._resume_range_ready_logged = True
+                    log_event(
+                        "resume range ready",
+                        sessionId=self.session_id,
+                        start=start,
+                        end=end,
+                        timingPhase="resume_range_ready",
+                        elapsedMs=self.elapsed_ms(),
+                        **self._startup_progress_fields(),
+                    )
                 if is_sync and not getattr(
                     self, "_first_sync_bytes_ready_logged", False
                 ):
@@ -2188,8 +2339,7 @@ class TorrentRuntime:
                 stall_seconds = max(0.0, now - stalled_since)
                 if (
                     target_piece is not None
-                    and stall_seconds
-                    >= constants.TARGET_STALL_REANNOUNCE_DELAY
+                    and stall_seconds >= reannounce_delay
                 ):
                     if not target_stall_logged:
                         status = self.handle.status()
@@ -2219,7 +2369,7 @@ class TorrentRuntime:
                     # every other priority-7 piece so the stuck piece owns
                     # the swarm's full bandwidth until it completes.
                     if (
-                        stall_seconds >= constants.TARGET_FOCUS_DELAY
+                        stall_seconds >= focus_delay
                         and not focus_claimed
                     ):
                         focus_claimed = self._activate_target_focus(
@@ -2236,7 +2386,7 @@ class TorrentRuntime:
                     # kicks are safe while it remains stalled.
                     if (
                         target_availability is not None
-                        and stall_seconds >= constants.TARGET_KICK_DELAY
+                        and stall_seconds >= kick_delay
                         and now - last_kick
                         >= constants.TARGET_KICK_INTERVAL
                         and target_blocks_delta == 0
@@ -2592,12 +2742,42 @@ class TorrentRuntime:
                         bytesSent=len(chunk),
                         timingPhase="first_bytes_sent",
                         elapsedMs=self.elapsed_ms(),
+                        **self._startup_progress_fields(),
                     )
                 if track_position:
                     self.mark_stream_playable()
                     with self._piece_priority_lock:
                         self._has_streamed_bytes = True
                         self._last_stream_start = offset
+                        window_bytes = self._startup_window_bytes()
+                        if (
+                            (getattr(self, "start_time", 0.0) or 0.0) <= 0.0
+                            or offset >= window_bytes
+                        ):
+                            prev_streamed = int(
+                                getattr(self, "_playhead_streamed_bytes", 0)
+                                or 0
+                            )
+                            new_streamed = prev_streamed + len(chunk)
+                            self._playhead_streamed_bytes = new_streamed
+                            if (
+                                prev_streamed < window_bytes <= new_streamed
+                                and not getattr(
+                                    self,
+                                    "_startup_window_completed_logged",
+                                    False,
+                                )
+                            ):
+                                self._startup_window_completed_logged = True
+                                log_event(
+                                    "startup window complete",
+                                    sessionId=self.session_id,
+                                    request=request_number,
+                                    offset=offset + len(chunk),
+                                    timingPhase="startup_window_complete",
+                                    elapsedMs=self.elapsed_ms(),
+                                    **self._startup_progress_fields(),
+                                )
                 offset += len(chunk)
                 chunk = None
             log_event(
