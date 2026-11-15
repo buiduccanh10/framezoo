@@ -538,11 +538,17 @@ class LibtorrentEngine:
         torrent_flags = getattr(lt, "torrent_flags", None)
         auto_managed = getattr(torrent_flags, "auto_managed", None)
         paused = getattr(torrent_flags, "paused", None)
+        sequential_download = getattr(torrent_flags, "sequential_download", None)
         if auto_managed is not None:
             try:
                 params.flags &= ~auto_managed
                 if paused is not None:
                     params.flags &= ~paused
+            except Exception:
+                pass
+        if sequential_download is not None:
+            try:
+                params.flags &= ~sequential_download
             except Exception:
                 pass
 

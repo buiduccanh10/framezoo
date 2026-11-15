@@ -111,6 +111,7 @@ class TorrentRuntime:
         self._last_reannounce = 0.0
         self._focus_piece: Optional[int] = None
         self._playback_focus_piece: Optional[int] = None
+        self._active_playback_request_id = 0
         self._startup_tail_pieces: Set[int] = set()
         self._startup_required_tail_pieces: Set[int] = set()
         self._fast_block_lock = threading.Lock()
@@ -143,6 +144,61 @@ class TorrentRuntime:
         except (TypeError, ValueError):
             return 0.0
         return max(0.0, value) if math.isfinite(value) else 0.0
+
+    def _safe_piece_length(self) -> int:
+        info = getattr(self, "info", None)
+        if info is None:
+            return constants.STREAM_CHUNK_SIZE
+        try:
+            length = int(info.piece_length())
+            return length if length > 0 else constants.STREAM_CHUNK_SIZE
+        except Exception:
+            return constants.STREAM_CHUNK_SIZE
+
+    def _file_first_piece(self) -> int:
+        if (
+            getattr(self, "info", None) is None
+            or getattr(self, "file_index", None) is None
+        ):
+            return 0
+        return min(self.map_pieces(0, 1), default=0)
+
+    def _is_playback_request_superseded(
+        self,
+        playback_request_id: Optional[int],
+    ) -> bool:
+        return (
+            playback_request_id is not None
+            and playback_request_id != getattr(self, "_active_playback_request_id", 0)
+        )
+
+    def _set_sequential_mode(self, enable_seq: bool) -> None:
+        handle = getattr(self, "handle", None)
+        if handle is None:
+            return
+        set_seq = getattr(handle, "set_sequential_download", None)
+        if callable(set_seq):
+            try:
+                set_seq(enable_seq)
+            except Exception:
+                pass
+        seq_flag = getattr(
+            getattr(lt, "torrent_flags", None),
+            "sequential_download",
+            None,
+        )
+        if seq_flag is None:
+            return
+        flag_fn = getattr(
+            handle,
+            "set_flags" if enable_seq else "unset_flags",
+            None,
+        )
+        if callable(flag_fn):
+            try:
+                flag_fn(seq_flag)
+            except Exception:
+                pass
 
     def start(self) -> None:
         self.raw_stream_url = self.engine.http_server.register(self)
@@ -236,12 +292,7 @@ class TorrentRuntime:
                     # Disable global sequential download until playback head leaves piece 0
                     # on resume sessions so pieces 0..N-1 do not compete with header/Cues/target.
                     enable_seq = (getattr(self, "start_time", 0.0) or 0.0) <= 0.0
-                    self.handle.set_sequential_download(enable_seq)
-                    if enable_seq and hasattr(lt, "torrent_flags") and hasattr(lt.torrent_flags, "sequential_download"):
-                        try:
-                            self.handle.set_flags(lt.torrent_flags.sequential_download)
-                        except Exception:
-                            pass
+                    self._set_sequential_mode(enable_seq)
                     resume = getattr(self.handle, "resume", None)
                     if callable(resume):
                         try:
@@ -484,8 +535,38 @@ class TorrentRuntime:
             self._piece_deadlines.clear()
             self._pending_kick_restore.clear()
 
+        record = getattr(self, "record", None)
+        other_session_ids = (
+            set(getattr(record, "session_ids", set())) - {self.session_id}
+            if record is not None
+            else set()
+        )
+        other_protected_pieces: Set[int] = set()
+        engine = getattr(self, "engine", None)
+        if other_session_ids and engine is not None:
+            sessions = getattr(engine, "sessions", None) or {}
+            for other_id in other_session_ids:
+                other = sessions.get(other_id)
+                if other is None:
+                    continue
+                other_lock = getattr(other, "_piece_priority_lock", None)
+                if other_lock is not None:
+                    with other_lock:
+                        other_protected_pieces.update(
+                            getattr(other, "_boosted_pieces", set()),
+                        )
+                        for attr in ("_focus_piece", "_playback_focus_piece"):
+                            focus_val = getattr(other, attr, None)
+                            if focus_val is not None:
+                                other_protected_pieces.add(focus_val)
+                else:
+                    other_protected_pieces.update(
+                        getattr(other, "_boosted_pieces", set()),
+                    )
+
+        releasable_pieces = stale_pieces - other_protected_pieces
         clear_deadlines = getattr(self.handle, "clear_piece_deadlines", None)
-        if callable(clear_deadlines):
+        if not other_session_ids and callable(clear_deadlines):
             try:
                 clear_deadlines()
             except Exception:
@@ -493,14 +574,14 @@ class TorrentRuntime:
         else:
             reset_deadline = getattr(self.handle, "reset_piece_deadline", None)
             if callable(reset_deadline):
-                for piece in stale_pieces:
+                for piece in releasable_pieces:
                     try:
                         reset_deadline(piece)
                     except Exception:
                         continue
 
         demoted = 0
-        for piece in stale_pieces:
+        for piece in releasable_pieces:
             try:
                 if self.handle.have_piece(piece) and piece not in stale_kicked:
                     continue
@@ -636,7 +717,10 @@ class TorrentRuntime:
                 self.save_resume_data_sync()
 
     def map_pieces(self, start: int, length: int) -> Set[int]:
-        if self.info is None or self.file_index is None:
+        if (
+            getattr(self, "info", None) is None
+            or getattr(self, "file_index", None) is None
+        ):
             return set()
 
         def mapped_piece(offset: int) -> Optional[int]:
@@ -740,15 +824,16 @@ class TorrentRuntime:
             piece_length = constants.STREAM_CHUNK_SIZE
 
         try:
-            startup_pieces = sorted(
-                self.map_pieces(
-                    0,
-                    max(
-                        constants.STARTUP_PREFETCH_BYTES,
-                        piece_length * constants.STARTUP_WINDOW_PIECES,
-                    ),
-                ),
+            start_time = getattr(self, "start_time", 0.0) or 0.0
+            startup_window = (
+                min(self.file_size, constants.STARTUP_PREFETCH_BYTES)
+                if start_time > 0
+                else max(
+                    constants.STARTUP_PREFETCH_BYTES,
+                    piece_length * constants.STARTUP_WINDOW_PIECES,
+                )
             )
+            startup_pieces = sorted(self.map_pieces(0, startup_window))
             
             # Stremio-like fast start: Fetch head pieces and container tail index (MKV Cues / MP4 moov)
             tail_length = min(
@@ -871,12 +956,7 @@ class TorrentRuntime:
                 priorities[self.file_index] = constants.STREAM_IDLE_FILE_PRIORITY
                 self.handle.prioritize_files(priorities)
             enable_seq = (getattr(self, "start_time", 0.0) or 0.0) <= 0.0
-            self.handle.set_sequential_download(enable_seq)
-            if enable_seq and hasattr(lt, "torrent_flags") and hasattr(lt.torrent_flags, "sequential_download"):
-                try:
-                    self.handle.set_flags(lt.torrent_flags.sequential_download)
-                except Exception:
-                    pass
+            self._set_sequential_mode(enable_seq)
             with self._piece_priority_lock:
                 self._focused_file_index = self.file_index
         except Exception:
@@ -925,17 +1005,8 @@ class TorrentRuntime:
         total: int,
         request_number: int,
     ) -> bool:
-        """Ignore mpv's early EOF probe when tracking the playback cursor."""
-        if request_number > constants.INITIAL_TAIL_PROBE_MAX_REQUESTS:
-            startup_tail_pieces = getattr(self, "_startup_tail_pieces", None)
-            last_stream_start = getattr(self, "_last_stream_start", None) or 0
-            if (
-                not startup_tail_pieces
-                or last_stream_start >= constants.STARTUP_PREFETCH_BYTES
-                or all(self._piece_have(piece) for piece in startup_tail_pieces)
-            ):
-                return False
-        if total <= 1024 * 1024:
+        """Ignore mpv's early or container-index EOF probes when tracking the playback cursor."""
+        if total <= 1024 * 1024 or start <= 0:
             return False
         tail_window = (
             min(max(1024 * 1024, total // 4), constants.RANGE_PREFETCH_BYTES)
@@ -943,7 +1014,39 @@ class TorrentRuntime:
             else constants.RANGE_PREFETCH_BYTES
         )
         tail_start = max(0, total - tail_window)
-        return start > 0 and start >= tail_start
+        if start < tail_start:
+            return False
+        if request_number <= constants.INITIAL_TAIL_PROBE_MAX_REQUESTS:
+            return True
+
+        startup_tail_pieces = getattr(self, "_startup_tail_pieces", None)
+        last_stream_start = getattr(self, "_last_stream_start", None) or 0
+        if startup_tail_pieces and not all(
+            self._piece_have(piece) for piece in startup_tail_pieces
+        ):
+            if (
+                getattr(self, "info", None) is not None
+                and getattr(self, "file_index", None) is not None
+                and bool(set(self.map_pieces(start, 1)) & startup_tail_pieces)
+            ):
+                return True
+            return last_stream_start < constants.STARTUP_PREFETCH_BYTES
+
+        if (
+            getattr(self, "info", None) is not None
+            and getattr(self, "file_index", None) is not None
+        ):
+            eof_probe_cap = min(
+                total,
+                max(constants.STARTUP_PREFETCH_BYTES, self._safe_piece_length() * 2),
+            )
+            prefetch_bytes = self._get_quality_prefetch_window()[0]
+            if (
+                start >= max(1, total - eof_probe_cap)
+                and last_stream_start < start - prefetch_bytes
+            ):
+                return True
+        return False
 
     def range_is_ready(self, start: int, end: int) -> bool:
         pieces = self.map_pieces(start, end - start + 1)
@@ -1412,25 +1515,29 @@ class TorrentRuntime:
         leave only the current head eligible for deadline-driven requests.
         """
         with self._piece_priority_lock:
+            file_first_piece = self._file_first_piece()
+            is_resume_header_probe = (
+                target_piece == file_first_piece
+                and (getattr(self, "start_time", 0.0) or 0.0) > 0.0
+            )
+            prev_target = getattr(self, "_playback_focus_piece", None)
+            if prev_target == target_piece:
+                return
             if (
-                getattr(self, "_playback_focus_piece", None)
-                == target_piece
+                is_resume_header_probe
+                and prev_target is not None
+                and prev_target > file_first_piece
             ):
                 return
-            prev_target = getattr(self, "_playback_focus_piece", None)
             self._playback_focus_piece = target_piece
             if (
                 prev_target != target_piece
                 and getattr(self, "_playhead_streamed_bytes", None) is not None
             ):
                 self._playhead_streamed_bytes = 0
-            if target_piece > 0:
+            if target_piece > file_first_piece:
                 self._startup_target_pieces = set()
                 self._startup_required_target_pieces = set()
-            is_resume_header_probe = (
-                target_piece == 0
-                and (getattr(self, "start_time", 0.0) or 0.0) > 0.0
-            )
             clear_deadlines = getattr(
                 self.handle,
                 "clear_piece_deadlines",
@@ -1454,13 +1561,15 @@ class TorrentRuntime:
                 if is_resume_header_probe
                 else set()
             )
+            keep_boosted = (
+                {target_piece}
+                | set(protected_tail)
+                | set(protected_targets)
+            )
             for piece in list(self._boosted_pieces):
-                if (
-                    piece == target_piece
-                    or piece in protected_tail
-                    or piece in protected_targets
-                ):
+                if piece in keep_boosted:
                     continue
+                self._boosted_pieces.discard(piece)
                 try:
                     if self.handle.have_piece(piece):
                         continue
@@ -1477,26 +1586,27 @@ class TorrentRuntime:
 
             # Switch sequential download mode based on target position:
             # At piece 0 (without resume target), sequential mode ensures normal linear streaming.
-            # On resume header probes or at target_piece > 0, disabling global sequential download
-            # prevents libtorrent from clogging peer pipelines with pieces 0..N-1.
-            set_seq = getattr(self.handle, "set_sequential_download", None)
-            if callable(set_seq):
-                try:
-                    set_seq(target_piece == 0 and not is_resume_header_probe)
-                except Exception:
-                    pass
+            # On resume header probes or at target_piece > file_first_piece, disabling global
+            # sequential download prevents libtorrent from clogging peer pipelines with 0..N-1.
+            self._set_sequential_mode(
+                target_piece == file_first_piece and not is_resume_header_probe,
+            )
 
-            # Suppress uncompleted pieces prior to target_piece (except piece 0 & tail)
+            # Suppress uncompleted pieces prior to target_piece (except file_first_piece & tail)
             # so 100% bandwidth focuses on the seek/resume position.
-            if target_piece > 0 and getattr(self, "info", None) is not None:
-                protected_startup = {0} | protected_tail
+            if (
+                target_piece > file_first_piece
+                and getattr(self, "info", None) is not None
+            ):
+                protected_startup = {file_first_piece} | set(protected_tail)
                 try:
-                    for piece in range(target_piece):
-                        if piece in protected_startup:
+                    for piece in range(file_first_piece, target_piece):
+                        if (
+                            piece in protected_startup
+                            or piece in self._boosted_pieces
+                        ):
                             continue
                         if self.handle.have_piece(piece):
-                            continue
-                        if piece in self._boosted_pieces:
                             continue
                         if self.handle.piece_priority(piece) != 0:
                             self.handle.piece_priority(piece, 0)
@@ -1976,18 +2086,55 @@ class TorrentRuntime:
     def _get_range_prefetch_bytes(self, is_sync: bool) -> int:
         if is_sync:
             return constants.SYNC_RANGE_PREFETCH_BYTES
-        base = constants.RANGE_PREFETCH_BYTES
-        if self._is_high_bitrate_stream():
-            base = constants.HIGH_BITRATE_RANGE_PREFETCH_BYTES
+        base, _ = self._get_quality_prefetch_window()
         return self._apply_profile_prefetch(base)
 
     def _get_max_replan_prefetch_bytes(self, is_sync: bool) -> int:
         if is_sync:
             return constants.SYNC_RANGE_PREFETCH_BYTES
-        base = constants.MAX_REPLAN_PREFETCH_BYTES
-        if self._is_high_bitrate_stream():
-            base = constants.HIGH_BITRATE_MAX_REPLAN_PREFETCH_BYTES
+        _, base = self._get_quality_prefetch_window()
         return self._apply_profile_prefetch(base)
+
+    def _normalized_quality_hint(self) -> str:
+        request = getattr(self, "request", {})
+        if not isinstance(request, dict):
+            return ""
+        return str(request.get("quality", "")).strip().lower()
+
+    def _get_quality_prefetch_window(self) -> tuple[int, int]:
+        """Scale steady-state prefetch by quality tier with file-size guard."""
+        if self._is_high_bitrate_stream():
+            return (
+                constants.HIGH_BITRATE_RANGE_PREFETCH_BYTES,
+                constants.HIGH_BITRATE_MAX_REPLAN_PREFETCH_BYTES,
+            )
+        quality = self._normalized_quality_hint()
+        if quality in {"1080", "1080p", "fhd"}:
+            file_size = getattr(self, "file_size", None)
+            if (
+                file_size is not None
+                and 0 < file_size < constants.COMPACT_FHD_FILE_THRESHOLD_BYTES
+            ):
+                return (
+                    constants.COMPACT_FHD_RANGE_PREFETCH_BYTES,
+                    constants.COMPACT_FHD_MAX_REPLAN_PREFETCH_BYTES,
+                )
+            return (
+                constants.RANGE_PREFETCH_BYTES,
+                constants.MAX_REPLAN_PREFETCH_BYTES,
+            )
+        tiers = (
+            ({"1440", "1440p", "2k", "qhd"}, constants.QHD_RANGE_PREFETCH_BYTES, constants.QHD_MAX_REPLAN_PREFETCH_BYTES),
+            ({"720", "720p", "hd"}, constants.HD_RANGE_PREFETCH_BYTES, constants.HD_MAX_REPLAN_PREFETCH_BYTES),
+            ({"480", "480p", "360", "360p", "sd"}, constants.SD_RANGE_PREFETCH_BYTES, constants.SD_MAX_REPLAN_PREFETCH_BYTES),
+        )
+        for aliases, prefetch_bytes, max_replan_bytes in tiers:
+            if quality in aliases:
+                return (prefetch_bytes, max_replan_bytes)
+        return (
+            constants.RANGE_PREFETCH_BYTES,
+            constants.MAX_REPLAN_PREFETCH_BYTES,
+        )
 
     def _is_high_bitrate_stream(self) -> bool:
         """Use the addon quality hint before falling back to file size.
@@ -1996,13 +2143,7 @@ class TorrentRuntime:
         leaves those streams on the 32 MiB default window and starves the
         next HEVC reference range before libmpv can pause cleanly.
         """
-        request = getattr(self, "request", {})
-        quality = (
-            str(request.get("quality", ""))
-            if isinstance(request, dict)
-            else ""
-        )
-        if quality.strip().lower() in {"4k", "2160p", "uhd"}:
+        if self._normalized_quality_hint() in {"4k", "2160", "2160p", "uhd"}:
             return True
         file_size = getattr(self, "file_size", None)
         return bool(
@@ -2029,7 +2170,12 @@ class TorrentRuntime:
         track_position: bool = True,
         is_sync: bool = False,
         sync_metadata: Optional[dict[str, Any]] = None,
+        playback_request_id: Optional[int] = None,
     ) -> bool:
+        if track_position and self._is_playback_request_superseded(
+            playback_request_id,
+        ):
+            return False
         is_tail_probe = start > 0 and not track_position and not is_sync
         startup_bounded = (
             getattr(self, "info", None) is not None
@@ -2219,6 +2365,25 @@ class TorrentRuntime:
                     time.monotonic() + constants.TARGET_KICK_RESTORE_DELAY
                 )
                 return False
+            if track_position and self._is_playback_request_superseded(
+                playback_request_id,
+            ):
+                log_event(
+                    "range wait superseded",
+                    sessionId=self.session_id,
+                    start=start,
+                    end=end,
+                    playbackRequestId=playback_request_id,
+                    activePlaybackRequestId=getattr(
+                        self,
+                        "_active_playback_request_id",
+                        0,
+                    ),
+                )
+                self._restore_pending_kicks(
+                    time.monotonic() + constants.TARGET_KICK_RESTORE_DELAY
+                )
+                return False
             try:
                 missing_required = [
                     piece
@@ -2304,7 +2469,10 @@ class TorrentRuntime:
 
             blocked_waits += 1
             time.sleep(constants.RANGE_RETRY_INTERVAL)
-            if self.stop_event.is_set():
+            if self.stop_event.is_set() or (
+                track_position
+                and self._is_playback_request_superseded(playback_request_id)
+            ):
                 break
 
             now = time.monotonic()
@@ -2465,6 +2633,7 @@ class TorrentRuntime:
         track_position: bool = True,
         is_sync: bool = False,
         sync_metadata: Optional[dict[str, Any]] = None,
+        playback_request_id: Optional[int] = None,
     ) -> Optional[bytes]:
         end = min(end, self.file_piece_end(start))
         expected_length = end - start + 1
@@ -2481,6 +2650,10 @@ class TorrentRuntime:
             (deadline is None or time.monotonic() < deadline)
             and not self.stop_event.is_set()
         ):
+            if track_position and self._is_playback_request_superseded(
+                playback_request_id,
+            ):
+                return None
             if handler and not is_client_connected(handler, connect_start):
                 log_event(
                     "client disconnected during chunk read",
@@ -2498,6 +2671,7 @@ class TorrentRuntime:
                 track_position=track_position,
                 is_sync=is_sync,
                 sync_metadata=sync_metadata,
+                playback_request_id=playback_request_id,
             ):
                 return None
 
@@ -2632,6 +2806,12 @@ class TorrentRuntime:
             or "application/octet-stream"
         )
         length = max(0, end - start + 1)
+        playback_request_id: Optional[int] = None
+        if not head_only and length > 0 and track_position:
+            with self._piece_priority_lock:
+                next_id = getattr(self, "_active_playback_request_id", 0) + 1
+                self._active_playback_request_id = next_id
+                playback_request_id = next_id
 
         stream = None
         first_chunk: Optional[bytes] = None
@@ -2649,6 +2829,7 @@ class TorrentRuntime:
                 timeout=constants.INITIAL_RANGE_HEADER_WAIT_TIMEOUT,
                 is_sync=is_sync,
                 sync_metadata=sync_metadata,
+                playback_request_id=playback_request_id,
             )
             defer_first_chunk = stream is None or first_chunk is None
 
@@ -2694,6 +2875,7 @@ class TorrentRuntime:
                 timeout=constants.FIRST_RANGE_WAIT_TIMEOUT,
                 is_sync=is_sync,
                 sync_metadata=sync_metadata,
+                playback_request_id=playback_request_id,
             )
             if stream is None or first_chunk is None:
                 log_event(
@@ -2710,6 +2892,11 @@ class TorrentRuntime:
             chunk = first_chunk
             first_bytes_sent = False
             while offset <= end:
+                if track_position and self._is_playback_request_superseded(
+                    playback_request_id,
+                ):
+                    handler.close_connection = True
+                    return
                 if chunk is None:
                     chunk_end = min(
                         end,
@@ -2725,6 +2912,7 @@ class TorrentRuntime:
                         track_position=track_position,
                         is_sync=is_sync,
                         sync_metadata=sync_metadata,
+                        playback_request_id=playback_request_id,
                     )
                     if chunk is None:
                         handler.close_connection = True
@@ -2814,8 +3002,13 @@ class TorrentRuntime:
         timeout: Optional[float] = constants.FIRST_RANGE_WAIT_TIMEOUT,
         is_sync: bool = False,
         sync_metadata: Optional[dict[str, Any]] = None,
+        playback_request_id: Optional[int] = None,
     ) -> Tuple[Optional[Any], Optional[bytes]]:
         """Wait for libtorrent to create and fill the first requested bytes."""
+        if track_position and self._is_playback_request_superseded(
+            playback_request_id,
+        ):
+            return None, None
         chunk_end = min(
             end,
             start + constants.STREAM_CHUNK_SIZE - 1,
@@ -2849,6 +3042,10 @@ class TorrentRuntime:
             (deadline is None or time.monotonic() < deadline)
             and not self.stop_event.is_set()
         ):
+            if track_position and self._is_playback_request_superseded(
+                playback_request_id,
+            ):
+                return None, None
             if handler and not is_client_connected(handler, connect_start):
                 log_event(
                     "client disconnected before first chunk",
@@ -2894,6 +3091,7 @@ class TorrentRuntime:
                 track_position=track_position,
                 is_sync=is_sync,
                 sync_metadata=sync_metadata,
+                playback_request_id=playback_request_id,
             )
             if chunk is not None:
                 return stream, chunk

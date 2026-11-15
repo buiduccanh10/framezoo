@@ -15,6 +15,7 @@ const listeners = new Set<() => void>();
 const pendingStopTimers = new Map<string, ReturnType<typeof setTimeout>>();
 let unsubscribe: (() => void) | null = null;
 const TORRENT_STOP_GRACE_MS = 3_000;
+const TORRENT_REPLACED_STOP_GRACE_MS = 15_000;
 
 const statusSubject = new Subject<TorrentStatus>();
 
@@ -40,6 +41,8 @@ function ensureSubscription() {
 
 export function registerTorrentSession(sessionId: string) {
   ensureSubscription();
+  const previousSessionId =
+    activeSessionId && activeSessionId !== sessionId ? activeSessionId : null;
   const pendingStop = pendingStopTimers.get(sessionId);
   if (pendingStop) {
     clearTimeout(pendingStop);
@@ -48,6 +51,9 @@ export function registerTorrentSession(sessionId: string) {
   activeSessionId = sessionId;
   activeStatus = null;
   publish();
+  if (previousSessionId && !pendingStopTimers.has(previousSessionId)) {
+    scheduleTorrentStop(previousSessionId, TORRENT_REPLACED_STOP_GRACE_MS);
+  }
   void getTorrentStatus(sessionId).then((status) => {
     if (activeSessionId !== sessionId || !status) return;
     activeStatus = status;
@@ -89,7 +95,23 @@ export function clearActiveTorrentSession() {
 }
 
 export async function stopTorrentSession(sessionId?: string) {
-  if (sessionId && sessionId !== activeSessionId) return;
+  if (sessionId) {
+    const pendingStop = pendingStopTimers.get(sessionId);
+    if (pendingStop) {
+      clearTimeout(pendingStop);
+      pendingStopTimers.delete(sessionId);
+    }
+    if (activeSessionId === sessionId) {
+      activeSessionId = null;
+      activeStatus = null;
+      publish();
+    }
+    await stopTorrent(sessionId).catch((error) => {
+      console.warn("Failed to stop torrent session", sessionId, error);
+    });
+    return;
+  }
+
   const currentSessionId = activeSessionId;
   const sessionIds = new Set<string>(Array.from(pendingStopTimers.keys()));
   if (currentSessionId) sessionIds.add(currentSessionId);

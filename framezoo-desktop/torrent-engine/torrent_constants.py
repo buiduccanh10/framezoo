@@ -6,6 +6,15 @@ RANGE_PREFETCH_BYTES = 32 * 1024 * 1024
 # Subtitle sync reads sparse audio windows; bound read-ahead competition.
 SYNC_RANGE_PREFETCH_BYTES = 8 * 1024 * 1024
 MAX_REPLAN_PREFETCH_BYTES = 128 * 1024 * 1024
+SD_RANGE_PREFETCH_BYTES = 12 * 1024 * 1024
+SD_MAX_REPLAN_PREFETCH_BYTES = 48 * 1024 * 1024
+HD_RANGE_PREFETCH_BYTES = 16 * 1024 * 1024
+HD_MAX_REPLAN_PREFETCH_BYTES = 64 * 1024 * 1024
+COMPACT_FHD_FILE_THRESHOLD_BYTES = 2 * 1024 * 1024 * 1024
+COMPACT_FHD_RANGE_PREFETCH_BYTES = 20 * 1024 * 1024
+COMPACT_FHD_MAX_REPLAN_PREFETCH_BYTES = 80 * 1024 * 1024
+QHD_RANGE_PREFETCH_BYTES = 64 * 1024 * 1024
+QHD_MAX_REPLAN_PREFETCH_BYTES = 192 * 1024 * 1024
 # High-bitrate / 4K stream optimizations: scale up prefetch to prevent buffer underrun
 # Fallback for addons that omit a resolution hint. Keep 4K files around
 # 3.7 GiB on the high-bitrate window even when their title is incomplete.

@@ -33,22 +33,20 @@ def emit(message: Dict[str, Any]) -> None:
 
 def is_client_connected(
     handler: BaseHTTPRequestHandler,
-    connect_start: float,
+    connect_start: float = 0.0,
 ) -> bool:
-    """Return False only if the client has clearly closed the connection.
-
-    We apply a grace period (CLIENT_DISCONNECT_GRACE_SECS) so we don't
-    mistakenly kill a request that is still being set up by the client.
-    """
-    if (
-        time.monotonic() - connect_start
-        < constants.CLIENT_DISCONNECT_GRACE_SECS
-    ):
+    """Return False if the client has closed or reset the connection."""
+    del connect_start
+    conn = getattr(handler, "connection", None)
+    if conn is None:
         return True
     try:
-        readable, _, _ = select.select([handler.connection], [], [], 0)
+        readable, _, _ = select.select([conn], [], [], 0)
         if readable:
-            message = handler.connection.recv(1, socket.MSG_PEEK)
+            try:
+                message = conn.recv(1, socket.MSG_PEEK)
+            except (BlockingIOError, InterruptedError):
+                return True
             if not message:
                 return False
     except Exception:

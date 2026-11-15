@@ -106,4 +106,24 @@ describe("torrent playback wait lifecycle", () => {
     vi.advanceTimersByTime(10_000);
     expect(torrentClientMocks.stopTorrent).toHaveBeenCalledTimes(1);
   });
+
+  it("stops displaced sessions during rapid replacement and supports explicit stop by id", async () => {
+    torrentClientMocks.getTorrentStatus.mockResolvedValue(null);
+
+    registerTorrentSession("session-1");
+    registerTorrentSession("session-2");
+    registerTorrentSession("session-3");
+
+    await stopTorrentSession("session-1");
+    expect(torrentClientMocks.stopTorrent).toHaveBeenCalledTimes(1);
+    expect(torrentClientMocks.stopTorrent).toHaveBeenCalledWith("session-1");
+
+    await vi.advanceTimersByTimeAsync(15_000);
+    expect(torrentClientMocks.stopTorrent).toHaveBeenCalledWith("session-2");
+    expect(torrentClientMocks.stopTorrent).toHaveBeenCalledTimes(2);
+
+    await stopTorrentSession();
+    expect(torrentClientMocks.stopTorrent).toHaveBeenCalledWith("session-3");
+    expect(torrentClientMocks.stopTorrent).toHaveBeenCalledTimes(3);
+  });
 });
