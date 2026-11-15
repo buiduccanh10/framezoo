@@ -169,7 +169,9 @@ export function pauseAndWaitForStablePlaybackPosition(
         return;
       }
       if (performance.now() >= deadline) {
-        finish(null);
+        finish(
+          pauseConfirmed && Number.isFinite(currentTime) ? currentTime : null,
+        );
         return;
       }
 

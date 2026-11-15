@@ -537,6 +537,9 @@ struct MpvPlayer {
       }
       native_event->has_bool = true;
       native_event->bool_value = value != 0;
+      if (std::string(name) == "pause") {
+        is_paused.store(native_event->bool_value, std::memory_order_release);
+      }
     } else if (format == MPV_FORMAT_INT64) {
       int64_t value = 0;
       if (api.get_property(handle, name, format, &value) < 0) {
@@ -769,7 +772,7 @@ struct MpvPlayer {
                   "absolute",
                   nullptr,
               };
-              if (command(seek_command) < 0) {
+              if (command_async(seek_command) < 0) {
                 std::fprintf(
                     stderr,
                     "[libmpv-native] initial seek failed after file-loaded "
@@ -1896,12 +1899,26 @@ napi_value command_player(napi_env env, napi_callback_info info) {
   } else if (type == "pause") {
     const bool was_paused =
         player->is_paused.exchange(true, std::memory_order_acq_rel);
-    (void)was_paused;
+    int actual_paused = was_paused ? 1 : 0;
+    if (player->api.get_property && player->handle) {
+      std::lock_guard<std::mutex> lock(player->command_mutex);
+      int probed_paused = actual_paused;
+      if (
+          player->api.get_property(
+              player->handle,
+              "pause",
+              MPV_FORMAT_FLAG,
+              &probed_paused
+          ) >= 0
+      ) {
+        actual_paused = probed_paused;
+      }
+    }
     if (player->set_property_string("pause", "yes") < 0) {
       return throw_error(env, "libmpv command failed");
     }
 #if defined(__APPLE__)
-    if (!was_paused) {
+    if (!was_paused || actual_paused == 0) {
       // With ao=avfoundation, AVSampleBufferAudioRenderer buffers 2-4 seconds ahead in hardware.
       // mpv's pause handler only stops the synchronizer rate without flushing the audio renderer,
       // which causes audio to keep draining for 3-5 seconds. Issuing an exact seek at offset 0
@@ -1910,6 +1927,14 @@ napi_value command_player(napi_env env, napi_callback_info info) {
       player->command_async(flush_cmd);
     }
 #endif
+    auto* pause_event = new NativeEvent();
+    pause_event->player_id = player->id;
+    pause_event->generation = player->generation.load();
+    pause_event->type = "property";
+    pause_event->name = "pause";
+    pause_event->has_bool = true;
+    pause_event->bool_value = true;
+    player->emit(pause_event);
   } else if (type == "system-suspend") {
     player->handle_system_suspend();
   } else if (type == "system-resume") {

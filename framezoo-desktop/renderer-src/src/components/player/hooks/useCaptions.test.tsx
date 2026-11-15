@@ -409,4 +409,23 @@ describe("subtitle sync pause barrier", () => {
     await vi.advanceTimersByTimeAsync(1500);
     await expect(result).resolves.toBeNull();
   });
+
+  it("returns the latest finite time at deadline when pause was confirmed despite progress jitter", async () => {
+    const { display, emit } = makeDisplay();
+    const result = pauseAndWaitForStablePlaybackPosition(
+      display,
+      false,
+      new AbortController().signal,
+    );
+
+    emit("pauseconfirmed", undefined);
+    for (let step = 1; step <= 30; step++) {
+      usePlayerStore.setState((state) => ({
+        progress: { ...state.progress, time: 12.5 + step * 0.2 },
+      }));
+      await vi.advanceTimersByTimeAsync(50);
+    }
+
+    await expect(result).resolves.toBe(12.5 + 30 * 0.2);
+  });
 });

@@ -695,10 +695,10 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         ) {
           return;
         }
-        const loaded = await electronApi?.loadLibMpvSource?.(
-          id,
-          pending.request,
-        );
+        const loaded = await electronApi?.loadLibMpvSource?.(id, {
+          ...pending.request,
+          autoplay: !desiredPaused,
+        });
         if (loaded === false) {
           emit("loading", false);
           emit("error", {
@@ -971,7 +971,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         publishTimePosition(initialResumeTime);
       }
       emit("loading", false);
-      if (!paused) {
+      if (!paused && !desiredPaused) {
         emit("play", undefined);
       }
       return;
@@ -1081,6 +1081,13 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       case "pause":
         if (typeof event.data === "boolean") {
           if (event.data && !desiredPaused && !fileLoaded && !cachePaused) {
+            return;
+          }
+          if (!event.data && desiredPaused && fileLoaded) {
+            paused = true;
+            emit("pause", undefined);
+            syncPipState(true);
+            void sendNativeCommand(playerId, { type: "pause" });
             return;
           }
           const wasPaused = paused;
@@ -1672,14 +1679,31 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     },
     pause() {
       desiredPaused = true;
-      if (pictureInPictureMode === "desktop") {
-        desktopPipShouldResume = false;
-      }
-      if (!playerId) return;
       paused = true;
       emit("pause", undefined);
       syncPipState(true);
-      void sendNativeCommand(playerId, { type: "pause" });
+      if (pictureInPictureMode === "desktop") {
+        desktopPipShouldResume = false;
+      }
+      if (!playerId) {
+        emit("pauseconfirmed", undefined);
+        return;
+      }
+      const currentPlayerId = playerId;
+      void sendNativeCommand(currentPlayerId, { type: "pause" }).then(
+        (confirmed) => {
+          if (
+            confirmed &&
+            !destroyed &&
+            playerId === currentPlayerId &&
+            desiredPaused &&
+            paused
+          ) {
+            emit("pauseconfirmed", undefined);
+          }
+        },
+        () => undefined,
+      );
     },
     setTime(nextTime) {
       if (!playerId) return;
