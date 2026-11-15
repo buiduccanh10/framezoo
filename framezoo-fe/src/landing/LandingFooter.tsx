@@ -1,4 +1,5 @@
 import type { LandingCopy } from "./i18n";
+import { FRAMEZOO_SOCIAL_LINKS } from "./LandingIcon";
 
 interface LandingFooterProps {
   copy: LandingCopy;
@@ -61,6 +62,22 @@ export function LandingFooter({ copy }: LandingFooterProps) {
               >
                 {footer.reportIssue}
               </button>
+              {FRAMEZOO_SOCIAL_LINKS.map(
+                ({ href, label, ariaLabel, title, Icon }) => (
+                  <a
+                    key={href}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="landing-footer-social-link"
+                    aria-label={ariaLabel}
+                    title={title}
+                  >
+                    <Icon className="landing-footer-social-icon" />
+                    <span>{label}</span>
+                  </a>
+                ),
+              )}
             </nav>
           </div>
 

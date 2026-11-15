@@ -3,7 +3,9 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 import { NoUserAvatar, UserAvatar } from "@/components/Avatar";
+import { IconPatch } from "@/components/buttons/IconPatch";
 import { DonateFloatingButton } from "@/components/donate/DonateFloatingButton";
+import { FRAMEZOO_SOCIAL_LINKS } from "@/components/Icon";
 import { LinksDropdown } from "@/components/LinksDropdown";
 import { Lightbar } from "@/components/utils/Lightbar";
 import { useAuth } from "@/hooks/auth/useAuth";
@@ -147,6 +149,24 @@ export function Navigation(props: NavigationProps) {
                       { WebkitAppRegion: "no-drag" } as React.CSSProperties
                     }
                   >
+                    {FRAMEZOO_SOCIAL_LINKS.map((item) => (
+                      <a
+                        key={item.href}
+                        href={item.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="shrink-0 text-xl text-white tabbable rounded-full backdrop-blur-lg flex items-center justify-center overflow-visible"
+                        aria-label={item.ariaLabel}
+                        title={item.title}
+                      >
+                        <IconPatch
+                          icon={item.icon}
+                          clickable
+                          downsized
+                          navigation
+                        />
+                      </a>
+                    ))}
                     <DonateFloatingButton />
                     <LinksDropdown>
                       {loggedIn ? <UserAvatar withName /> : <NoUserAvatar />}

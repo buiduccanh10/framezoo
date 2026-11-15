@@ -39,10 +39,10 @@ import type {
 } from "@/desktop/addons/types";
 import { startTorrent } from "@/desktop/torrentClient";
 import {
-  clearTorrentSession,
   getActiveTorrentSessionId,
   registerTorrentSession,
   scheduleTorrentStop,
+  stopTorrentSession,
   useActiveTorrentStatus,
   waitForTorrentPlayable,
 } from "@/desktop/torrentPlaybackStore";
@@ -439,6 +439,7 @@ export function SourceSelectPart(props: {
       setAddonError(null);
       const previousTorrentSessionId = getActiveTorrentSessionId();
       let sourceSwitchPrepared = false;
+      let startedTorrentSessionId: string | null = null;
 
       try {
         if (stream.kind === "torrent") {
@@ -468,6 +469,7 @@ export function SourceSelectPart(props: {
             startAt,
             duration: savedDuration,
           });
+          startedTorrentSessionId = session.sessionId;
 
           if (operationId !== selectionOperation.current) {
             scheduleTorrentStop(session.sessionId);
@@ -522,13 +524,11 @@ export function SourceSelectPart(props: {
           saveLastStreamPreference(meta, stream, quality);
           onSelected?.();
 
-          // Chromium can issue one more Range request for the old source after
-          // the new source is selected. Keep the old route alive briefly.
           if (
             previousTorrentSessionId &&
             previousTorrentSessionId !== session.sessionId
           ) {
-            scheduleTorrentStop(previousTorrentSessionId);
+            void stopTorrentSession(previousTorrentSessionId);
           }
         } else {
           sourceSwitchPrepared = prepareSourceSwitch();
@@ -563,17 +563,23 @@ export function SourceSelectPart(props: {
           saveLastStreamPreference(meta, stream, quality);
           onSelected?.();
           if (previousTorrentSessionId) {
-            await clearTorrentSession(previousTorrentSessionId);
+            void stopTorrentSession(previousTorrentSessionId);
           }
         }
       } catch (reason) {
         const message =
           reason instanceof Error ? reason.message : "Unable to start stream";
         if (message !== "Torrent session was replaced") {
+          if (startedTorrentSessionId) {
+            void stopTorrentSession(startedTorrentSessionId);
+          }
           if (
             sourceSwitchPrepared &&
             operationId === selectionOperation.current
           ) {
+            if (previousTorrentSessionId) {
+              registerTorrentSession(previousTorrentSessionId);
+            }
             redisplaySource(usePlayerStore.getState().progress.time);
           }
           setAddonError(message);

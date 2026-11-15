@@ -414,6 +414,22 @@ function toPersistedCaption(
   };
 }
 
+const IDLE_SUBTITLE_SYNC_STATE: SubtitleSyncState = {
+  active: false,
+  phase: "idle",
+  progress: 0,
+};
+
+let activeSubtitleSyncCancel: (() => void) | null = null;
+
+export function registerSubtitleSyncCancel(cancel: (() => void) | null) {
+  activeSubtitleSyncCancel = cancel;
+}
+
+export function cancelActiveSubtitleSync() {
+  activeSubtitleSyncCancel?.();
+}
+
 export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
   source: null,
   sourceId: null,
@@ -484,6 +500,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     const isMediaChanged = newMediaKey !== oldMediaKey;
 
     if (isMediaChanged || newStatus === playerStatus.SOURCE_SELECTION) {
+      cancelActiveSubtitleSync();
       store.display?.load({
         source: null,
         startAt: 0,
@@ -508,6 +525,9 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       s.interface.hideNextEpisodeBtn = false;
       s.interface.nextEpisodeAction = null;
       if (newStatus) s.status = newStatus;
+      if (isMediaChanged || newStatus === playerStatus.SOURCE_SELECTION) {
+        s.subtitleSync = { ...IDLE_SUBTITLE_SYNC_STATE };
+      }
       if (isMediaChanged) {
         // Invalidate subtitle selection/load work before the next source is ready.
         s.externalSubtitleRequestId += 1;
@@ -624,6 +644,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     startAt: number,
     options?: { autoplay?: boolean },
   ) {
+    cancelActiveSubtitleSync();
     const store = get();
     const currentMediaKey = getExternalSubtitleMediaKey(store.meta);
     const currentMediaId = getMediaKey(store.meta);
@@ -707,6 +728,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       s.audioTracks = [];
       s.embeddedSubtitleTracksLoaded = false;
       s.currentAudioTrack = null;
+      s.subtitleSync = { ...IDLE_SUBTITLE_SYNC_STATE };
     });
     const nextStore = get();
     const requestId = nextStore.externalSubtitleRequestId;
@@ -739,6 +761,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     const store = get();
     if (!store.source) return false;
 
+    cancelActiveSubtitleSync();
     store.display?.load({
       source: null,
       startAt: 0,
@@ -753,6 +776,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       s.mediaPlaying.hasRenderedFrame = false;
       s.mediaPlaying.isLoading = true;
       s.mediaPlaying.isPlaybackStalled = false;
+      s.subtitleSync = { ...IDLE_SUBTITLE_SYNC_STATE };
     });
 
     return true;
@@ -811,6 +835,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     });
   },
   reset() {
+    cancelActiveSubtitleSync();
     get().clearSkipSegments?.();
     set((s) => {
       s.source = null;

@@ -20,8 +20,10 @@ import { useLanguageStore } from "@/stores/language";
 import {
   Caption,
   CaptionListItem,
+  cancelActiveSubtitleSync,
   getMediaKey,
   isEmbeddedCaption,
+  registerSubtitleSyncCancel,
 } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { useSubtitleStore } from "@/stores/subtitles";
@@ -34,7 +36,6 @@ import {
 
 let autoSelectionRequestId = 0;
 let subtitleAlignmentRequestId = 0;
-let activeSubtitleSyncCancel: (() => void) | null = null;
 let activeAutoSelectionPromise: Promise<boolean> | null = null;
 let activeAutoSelectionRequestId = -1;
 const AUTO_SCORE_MAX_CANDIDATES = 8;
@@ -169,7 +170,9 @@ export function pauseAndWaitForStablePlaybackPosition(
         return;
       }
       if (performance.now() >= deadline) {
-        finish(null);
+        finish(
+          pauseConfirmed && Number.isFinite(currentTime) ? currentTime : null,
+        );
         return;
       }
 
@@ -193,9 +196,7 @@ export type SubtitleSyncOutcome =
   | { status: "cancelled" }
   | { status: "failed"; errorMessage?: string };
 
-export function cancelActiveSubtitleSync() {
-  activeSubtitleSyncCancel?.();
-}
+export { cancelActiveSubtitleSync };
 
 function extractSubtitleSyncErrorMessage(error: unknown): string | undefined {
   const queue: unknown[] = [error];
@@ -296,9 +297,9 @@ export function useCaptions() {
       const requestId = ++subtitleAlignmentRequestId;
       const abortController = new AbortController();
       syncAbortControllerRef.current = abortController;
-      activeSubtitleSyncCancel = () => {
+      registerSubtitleSyncCancel(() => {
         abortController.abort();
-      };
+      });
       const initialState = usePlayerStore.getState();
       const initialSource = initialState.source;
       const wasPlaying =
@@ -540,7 +541,7 @@ export function useCaptions() {
       } finally {
         if (syncAbortControllerRef.current === abortController) {
           syncAbortControllerRef.current = null;
-          activeSubtitleSyncCancel = null;
+          registerSubtitleSyncCancel(null);
         }
         if (requestId === subtitleAlignmentRequestId) {
           const finalState = usePlayerStore.getState();
@@ -551,18 +552,18 @@ export function useCaptions() {
           ) {
             finalState.display.play();
           }
+          setSubtitleSyncState({
+            active: false,
+            phase: "idle",
+            progress: 0,
+            stage: undefined,
+            windows: undefined,
+            capturedCount: undefined,
+            totalWindows: undefined,
+            startedAt: undefined,
+            phaseStartedAt: undefined,
+          });
         }
-        setSubtitleSyncState({
-          active: false,
-          phase: "idle",
-          progress: 0,
-          stage: undefined,
-          windows: undefined,
-          capturedCount: undefined,
-          totalWindows: undefined,
-          startedAt: undefined,
-          phaseStartedAt: undefined,
-        });
       }
     },
     [setCaption, setSecondaryCaption, setSubtitleSyncState],

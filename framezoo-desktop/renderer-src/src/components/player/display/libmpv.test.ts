@@ -2601,4 +2601,99 @@ describe("libmpv display", () => {
       currentQuality: null,
     });
   });
+
+  it("emits pauseconfirmed when pause command resolves even without a redundant native pause event", async () => {
+    const pauseConfirmed: number[] = [];
+
+    (window as any).electronAPI = {
+      createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
+      loadLibMpvSource: vi.fn().mockResolvedValue(true),
+      sendLibMpvCommand: vi.fn().mockResolvedValue(true),
+      onLibMpvEvent: vi.fn().mockReturnValue(() => undefined),
+      onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.on("pauseconfirmed", () => pauseConfirmed.push(1));
+    display.processContainerElement(makeElement());
+    display.load({
+      source: { type: "mp4", url: "http://127.0.0.1/video.mp4" } as Source,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    display.pause();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(pauseConfirmed).toHaveLength(1);
+    display.destroy();
+  });
+
+  it("ignores stale pause=false events after user pause and re-enforces native pause", async () => {
+    let eventListener:
+      | ((event: {
+          playerId: string;
+          generation: number;
+          type: "file-loaded" | "property";
+          name?: string;
+          data?: unknown;
+        }) => void)
+      | undefined;
+    const commands: Array<{ type: string }> = [];
+    const plays: number[] = [];
+    const pauses: number[] = [];
+
+    (window as any).electronAPI = {
+      createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
+      loadLibMpvSource: vi.fn().mockResolvedValue(true),
+      sendLibMpvCommand: vi.fn((_id: string, command: { type: string }) => {
+        commands.push(command);
+        return Promise.resolve(true);
+      }),
+      onLibMpvEvent: vi.fn((listener) => {
+        eventListener = listener;
+        return () => undefined;
+      }),
+      onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.on("play", () => plays.push(1));
+    display.on("pause", () => pauses.push(1));
+    display.processContainerElement(makeElement());
+    display.load({
+      source: { type: "mp4", url: "http://127.0.0.1/video.mp4" } as Source,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    eventListener?.({
+      playerId: "player-1",
+      generation: 1,
+      type: "file-loaded",
+    });
+    const playsBeforePause = plays.length;
+
+    display.pause();
+    commands.length = 0;
+
+    eventListener?.({
+      playerId: "player-1",
+      generation: 1,
+      type: "property",
+      name: "pause",
+      data: false,
+    });
+
+    expect(plays).toHaveLength(playsBeforePause);
+    expect(pauses.length).toBeGreaterThanOrEqual(2);
+    expect(commands).toContainEqual({ type: "pause" });
+    display.destroy();
+  });
 });

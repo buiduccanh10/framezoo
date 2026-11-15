@@ -2351,6 +2351,239 @@ class SidecarStreamTest(unittest.TestCase):
         self.assertEqual(runtime.handle.priorities[641], 7)
         self.assertEqual(runtime.handle.deadlines.get(641), 100)
 
+    def test_startup_bounded_persists_beyond_first_chunk_until_startup_window_complete(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.stop_event = threading.Event()
+        runtime.file_index = 0
+        runtime.file_size = 100 * 1024 * 1024
+        runtime.session_id = "startup-window-persist-test"
+        runtime.start_time = 0.0
+        runtime.torrent_profile = "default"
+        runtime.last_range_key = None
+        runtime._piece_priority_lock = threading.RLock()
+        runtime._boosted_pieces = set()
+        runtime._piece_priorities = {}
+        runtime._piece_deadlines = {}
+        runtime._pending_kick_restore = {}
+        runtime._reannounce_lock = threading.Lock()
+        runtime._last_reannounce = 0.0
+        runtime._last_stream_start = 0
+        runtime._has_streamed_bytes = True
+        runtime._playhead_streamed_bytes = 1024 * 1024
+        runtime._was_startup_bounded = False
+        runtime.info = type(
+            "FakeInfo",
+            (),
+            {"piece_length": lambda _self: 1024 * 1024},
+        )()
+
+        map_lengths = []
+
+        def map_pieces(self, start, length):
+            map_lengths.append((start, length))
+            piece = start // (1024 * 1024)
+            return {piece}
+
+        runtime.map_pieces = MethodType(map_pieces, runtime)
+
+        class ReadyHandle:
+            def have_piece(self, _piece):
+                return True
+
+            def piece_priority(self, _piece, _priority=None):
+                return 1
+
+        runtime.handle = ReadyHandle()
+        runtime._schedule_pieces = lambda *_args, **_kwargs: None
+
+        # After 1 MiB streamed, startup_bounded must stay active (4 MiB window, not 32 MiB)
+        runtime.wait_for_range(1024 * 1024, 1024 * 1024 + 1023, timeout=0.05, track_position=True)
+        self.assertIn((1024 * 1024, 4 * 1024 * 1024), map_lengths)
+        self.assertNotIn((1024 * 1024, constants.RANGE_PREFETCH_BYTES), map_lengths)
+
+        # Once 4 MiB startup window finishes, prefetch expands to RANGE_PREFETCH_BYTES
+        map_lengths.clear()
+        runtime._playhead_streamed_bytes = 4 * 1024 * 1024
+        runtime.wait_for_range(4 * 1024 * 1024, 4 * 1024 * 1024 + 1023, timeout=0.05, track_position=True)
+        self.assertIn((4 * 1024 * 1024, constants.RANGE_PREFETCH_BYTES), map_lengths)
+
+    def test_resume_start_at_protects_target_pieces_on_header_probe_and_bounds_initial_seek(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.stop_event = threading.Event()
+        runtime.session_id = "resume-faststart-test"
+        runtime.start_time = 540.0
+        runtime.duration = 2580.0
+        runtime.file_index = 0
+        runtime.file_size = 100 * 1024 * 1024
+        runtime.torrent_profile = "default"
+        runtime.elapsed_ms = lambda: 0
+        runtime.last_range_key = None
+        runtime._piece_priority_lock = threading.RLock()
+        runtime._boosted_pieces = {0, 1, 20, 21, 98, 99}
+        runtime._piece_priorities = {p: 7 for p in runtime._boosted_pieces}
+        runtime._piece_deadlines = {}
+        runtime._pending_kick_restore = {}
+        runtime._startup_tail_pieces = {98, 99}
+        runtime._startup_required_tail_pieces = {99}
+        runtime._startup_target_pieces = {20, 21, 22, 23}
+        runtime._startup_required_target_pieces = {20, 21}
+        runtime._last_stream_start = None
+        runtime._has_streamed_bytes = True
+        runtime._playhead_streamed_bytes = 0
+        runtime._was_startup_bounded = False
+        runtime.info = type(
+            "FakeInfo",
+            (),
+            {"piece_length": lambda _self: 1024 * 1024},
+        )()
+
+        class FakeHandle:
+            def __init__(self):
+                self.priorities = {i: 1 for i in range(100)}
+                for p in (0, 1, 20, 21, 98, 99):
+                    self.priorities[p] = 7
+                self.deadlines = {}
+                self.sequential = True
+                self.cleared_deadlines = 0
+
+            def have_piece(self, _piece):
+                return False
+
+            def piece_priority(self, piece, *priority):
+                if priority:
+                    self.priorities[piece] = priority[0]
+                    return None
+                return self.priorities.get(piece, 0)
+
+            def set_piece_deadline(self, piece, deadline, flags=0):
+                self.deadlines[piece] = deadline
+
+            def reset_piece_deadline(self, piece):
+                self.deadlines.pop(piece, None)
+
+            def clear_piece_deadlines(self):
+                self.cleared_deadlines += 1
+
+            def set_sequential_download(self, val):
+                self.sequential = val
+
+        runtime.handle = FakeHandle()
+
+        # Focus piece 0 during container header probe on resume must keep target pieces & sequential=False
+        runtime._focus_playback_piece(0)
+        self.assertFalse(runtime.handle.sequential)
+        self.assertEqual(runtime.handle.priorities[20], constants.STREAM_PIECE_PRIORITY)
+        self.assertEqual(runtime.handle.priorities[21], constants.STREAM_PIECE_PRIORITY)
+        self.assertEqual(runtime.handle.deadlines.get(20), 75)
+        self.assertEqual(runtime.handle.deadlines.get(99), 50)
+
+        # After Cues loaded, mpv seeks to 50 MiB (piece 50): startup_bounded applies there
+        map_lengths = []
+
+        def map_pieces(self, start, length):
+            map_lengths.append((start, length))
+            return {start // (1024 * 1024)}
+
+        runtime.map_pieces = MethodType(map_pieces, runtime)
+        runtime.handle.have_piece = lambda piece: piece >= 50
+        runtime.wait_for_range(50 * 1024 * 1024, 50 * 1024 * 1024 + 1023, timeout=0.05, track_position=True)
+
+        self.assertFalse(runtime._startup_target_pieces)
+        self.assertFalse(runtime.handle.sequential)
+        self.assertIn((50 * 1024 * 1024, 4 * 1024 * 1024), map_lengths)
+        self.assertNotIn((50 * 1024 * 1024, constants.RANGE_PREFETCH_BYTES), map_lengths)
+
+        # Once 4 MiB has streamed from the resume offset, window expands to RANGE_PREFETCH_BYTES
+        map_lengths.clear()
+        runtime._playhead_streamed_bytes = 4 * 1024 * 1024
+        runtime.wait_for_range(54 * 1024 * 1024, 54 * 1024 * 1024 + 1023, timeout=0.05, track_position=True)
+        self.assertIn((54 * 1024 * 1024, constants.RANGE_PREFETCH_BYTES), map_lengths)
+
+    def test_startup_bounded_uses_faster_kick_and_focus_delays(self):
+        old_focus_delay = constants.TARGET_FOCUS_DELAY
+        old_kick_delay = constants.TARGET_KICK_DELAY
+        old_reannounce_delay = constants.TARGET_STALL_REANNOUNCE_DELAY
+        try:
+            constants.TARGET_FOCUS_DELAY = 5.0
+            constants.TARGET_KICK_DELAY = 5.0
+            constants.TARGET_STALL_REANNOUNCE_DELAY = 5.0
+
+            runtime = object.__new__(TorrentRuntime)
+            runtime.stop_event = threading.Event()
+            runtime.file_index = 0
+            runtime.file_size = 10 * 1024 * 1024
+            runtime.session_id = "startup-fast-kick-test"
+            runtime.start_time = 0.0
+            runtime.last_range_key = None
+            runtime._piece_priority_lock = threading.RLock()
+            runtime._boosted_pieces = set()
+            runtime._piece_priorities = {0: 7, 1: 7}
+            runtime._piece_deadlines = {}
+            runtime._pending_kick_restore = {}
+            runtime._reannounce_lock = threading.Lock()
+            runtime._last_reannounce = 0.0
+            runtime._has_streamed_bytes = False
+            runtime._playhead_streamed_bytes = 0
+            runtime._was_startup_bounded = False
+            runtime._last_stream_start = 0
+            runtime.elapsed_ms = lambda: 0
+            runtime.info = type(
+                "FakeInfo",
+                (),
+                {"piece_length": lambda _self: 1024 * 1024, "num_pieces": lambda _self: 10},
+            )()
+
+            runtime.map_pieces = MethodType(lambda _self, _s, _l: {0}, runtime)
+            runtime._force_reannounce_if_stalled = MethodType(lambda _self, *_a, **_k: None, runtime)
+
+            kicks = []
+            priorities = {0: 7, 1: 7}
+
+            class StalledStatus:
+                has_metadata = True
+                download_rate = 0
+                total_done = 0
+                pieces = [False] * 10
+                num_peers = 4
+
+            class StalledHandle:
+                def status(self):
+                    return StalledStatus()
+
+                def piece_availability(self):
+                    return [4] * 10
+
+                def have_piece(self, _piece):
+                    return False
+
+                def piece_priority(self, piece, *priority):
+                    if priority:
+                        priorities[piece] = priority[0]
+                        if priority[0] == 0:
+                            kicks.append(("kick", piece))
+                        return None
+                    return priorities.get(piece, 0)
+
+                def set_piece_deadline(self, _piece, _deadline, _flags=0):
+                    return None
+
+                def reset_piece_deadline(self, _piece):
+                    return None
+
+                def clear_piece_deadlines(self):
+                    return None
+
+            runtime.handle = StalledHandle()
+            runtime.wait_for_range(0, 1023, timeout=1.2, track_position=True)
+
+            self.assertGreaterEqual(len(kicks), 1)
+            self.assertEqual(kicks[0], ("kick", 0))
+            self.assertEqual(priorities[1], constants.STREAM_HOT_PIECE_PRIORITY)
+        finally:
+            constants.TARGET_FOCUS_DELAY = old_focus_delay
+            constants.TARGET_KICK_DELAY = old_kick_delay
+            constants.TARGET_STALL_REANNOUNCE_DELAY = old_reannounce_delay
+
 
 
 class TorrentProfileTest(unittest.TestCase):
@@ -2388,6 +2621,34 @@ class TorrentProfileTest(unittest.TestCase):
             runtime._get_max_replan_prefetch_bytes(False),
             constants.HIGH_BITRATE_MAX_REPLAN_PREFETCH_BYTES,
         )
+
+    def test_quality_tiers_scale_prefetch_and_replan_windows(self):
+        gib = 1024 * 1024 * 1024
+        mib = 1024 * 1024
+        cases = [
+            ("480", 500 * mib, constants.SD_RANGE_PREFETCH_BYTES, constants.SD_MAX_REPLAN_PREFETCH_BYTES),
+            ("720", 800 * mib, constants.HD_RANGE_PREFETCH_BYTES, constants.HD_MAX_REPLAN_PREFETCH_BYTES),
+            ("1080", int(1.09 * gib), constants.COMPACT_FHD_RANGE_PREFETCH_BYTES, constants.COMPACT_FHD_MAX_REPLAN_PREFETCH_BYTES),
+            ("1080", int(2.5 * gib), constants.RANGE_PREFETCH_BYTES, constants.MAX_REPLAN_PREFETCH_BYTES),
+            ("1080", int(3.5 * gib), constants.HIGH_BITRATE_RANGE_PREFETCH_BYTES, constants.HIGH_BITRATE_MAX_REPLAN_PREFETCH_BYTES),
+            ("1440", 2 * gib, constants.QHD_RANGE_PREFETCH_BYTES, constants.QHD_MAX_REPLAN_PREFETCH_BYTES),
+            ("4k", 2 * gib, constants.HIGH_BITRATE_RANGE_PREFETCH_BYTES, constants.HIGH_BITRATE_MAX_REPLAN_PREFETCH_BYTES),
+            ("unknown", int(1.5 * gib), constants.RANGE_PREFETCH_BYTES, constants.MAX_REPLAN_PREFETCH_BYTES),
+        ]
+        for quality, file_size, expected_prefetch, expected_replan in cases:
+            with self.subTest(quality=quality, file_size=file_size):
+                runtime = object.__new__(TorrentRuntime)
+                runtime.file_size = file_size
+                runtime.request = {"quality": quality}
+                runtime.torrent_profile = "default"
+                self.assertEqual(
+                    runtime._get_range_prefetch_bytes(False),
+                    expected_prefetch,
+                )
+                self.assertEqual(
+                    runtime._get_max_replan_prefetch_bytes(False),
+                    expected_replan,
+                )
 
 
 class SidecarStorageTest(unittest.TestCase):
@@ -2740,6 +3001,168 @@ class SidecarStorageTest(unittest.TestCase):
         if record.removal_timer:
             record.removal_timer.cancel()
         engine.stop("s2")
+
+    def test_focus_playback_piece_prunes_boosted_head_and_unsets_sequential_flag(self):
+        import torrent_runtime
+
+        runtime = object.__new__(TorrentRuntime)
+        runtime._piece_priority_lock = threading.RLock()
+        runtime._boosted_pieces = {0, 1, 2, 3, 4}
+        runtime._piece_priorities = {p: 7 for p in range(5)}
+        runtime._piece_deadlines = {}
+        runtime._startup_tail_pieces = {98, 99}
+        runtime._startup_required_tail_pieces = {99}
+        runtime._startup_target_pieces = set()
+        runtime._startup_required_target_pieces = set()
+        runtime.start_time = 600.0
+        runtime.file_index = 0
+        runtime.session_id = "focus-prune-head-test"
+        runtime.elapsed_ms = lambda: 0
+        runtime.info = type(
+            "FakeInfo",
+            (),
+            {
+                "piece_length": lambda _self: 1024 * 1024,
+                "map_file": lambda _self, _idx, offset, _len: type(
+                    "FakeSlice",
+                    (),
+                    {"piece": offset // (1024 * 1024)},
+                )(),
+            },
+        )()
+        runtime.file_size = 100 * 1024 * 1024
+
+        class FakeHandle:
+            def __init__(self):
+                self.priorities = {i: 7 if i < 5 else 1 for i in range(100)}
+                self.deadlines = {}
+                self.sequential = True
+                self.unset_flags_calls = []
+
+            def have_piece(self, piece):
+                return piece == 0
+
+            def piece_priority(self, piece, *priority):
+                if priority:
+                    self.priorities[piece] = priority[0]
+                    return None
+                return self.priorities.get(piece, 0)
+
+            def set_piece_deadline(self, piece, deadline, flags=0):
+                self.deadlines[piece] = deadline
+
+            def clear_piece_deadlines(self):
+                self.deadlines.clear()
+
+            def set_sequential_download(self, val):
+                self.sequential = val
+
+            def unset_flags(self, flags):
+                self.unset_flags_calls.append(flags)
+
+        runtime.handle = FakeHandle()
+        runtime._focus_playback_piece(50)
+
+        self.assertFalse(runtime.handle.sequential)
+        self.assertEqual(runtime.handle.priorities[0], 7)
+        for piece in range(1, 50):
+            self.assertEqual(runtime.handle.priorities[piece], 0)
+            self.assertNotIn(piece, runtime._boosted_pieces)
+
+        seq_flag = getattr(
+            getattr(torrent_runtime.lt, "torrent_flags", None),
+            "sequential_download",
+            None,
+        )
+        if seq_flag is not None:
+            self.assertIn(seq_flag, runtime.handle.unset_flags_calls)
+
+    def test_superseded_playback_request_aborts_wait_for_range_without_refocus(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.stop_event = threading.Event()
+        runtime.info = None
+        runtime.file_index = None
+        runtime.file_size = 10 * 1024 * 1024
+        runtime.session_id = "superseded-request-test"
+        runtime._piece_priority_lock = threading.RLock()
+        runtime._boosted_pieces = set()
+        runtime._active_playback_request_id = 2
+
+        refocused = []
+        scheduled = []
+        runtime.maybe_refocus = lambda start: refocused.append(start)
+        runtime._schedule_pieces = lambda *args, **kwargs: scheduled.append(args)
+
+        ready = runtime.wait_for_range(
+            0,
+            1023,
+            timeout=0.5,
+            track_position=True,
+            playback_request_id=1,
+        )
+
+        self.assertFalse(ready)
+        self.assertEqual(refocused, [])
+        self.assertEqual(scheduled, [])
+
+    def test_release_playback_schedule_preserves_other_active_session_on_shared_record(self):
+        from torrent_engine import LibtorrentEngine, TorrentRecord
+
+        class FakeHandle:
+            def __init__(self):
+                self.cleared_deadlines = 0
+                self.reset_deadlines = []
+                self.priorities = {5: 7, 6: 7, 7: 7, 8: 7}
+
+            def info_hash(self):
+                return "77" * 20
+
+            def have_piece(self, _piece):
+                return False
+
+            def clear_piece_deadlines(self):
+                self.cleared_deadlines += 1
+
+            def reset_piece_deadline(self, piece):
+                self.reset_deadlines.append(piece)
+
+            def piece_priority(self, piece, *priority):
+                if priority:
+                    self.priorities[piece] = priority[0]
+                    return None
+                return self.priorities.get(piece, 1)
+
+        engine = LibtorrentEngine()
+        handle = FakeHandle()
+        record = TorrentRecord(
+            engine,
+            "shared-record-key",
+            handle,
+            "/tmp",
+            persistent_cache=False,
+            cache_ready=False,
+            cache_root="/tmp",
+            max_bytes=None,
+            trackers=[],
+        )
+        req = {"sourceId": "s1"}
+        runtime1 = TorrentRuntime(engine, "s1", req, handle, "/tmp", record=record)
+        runtime2 = TorrentRuntime(engine, "s2", req, handle, "/tmp", record=record)
+        engine.sessions["s1"] = runtime1
+        engine.sessions["s2"] = runtime2
+        record.session_ids.update({"s1", "s2"})
+
+        runtime1._boosted_pieces = {5, 6, 7}
+        runtime2._boosted_pieces = {6, 7, 8}
+
+        runtime1.release_playback_schedule()
+
+        self.assertEqual(handle.cleared_deadlines, 0)
+        self.assertEqual(handle.reset_deadlines, [5])
+        self.assertEqual(handle.priorities[5], constants.STREAM_IDLE_FILE_PRIORITY)
+        self.assertEqual(handle.priorities[6], 7)
+        self.assertEqual(handle.priorities[7], 7)
+        self.assertEqual(handle.priorities[8], 7)
 
 
 if __name__ == "__main__":

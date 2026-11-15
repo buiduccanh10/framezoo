@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useSubtitleSyncTelemetry } from "@/components/player/atoms/SubtitleSyncHud";
 import { usePlaybackClock } from "@/components/player/hooks/usePlaybackClock";
 import {
   getSegmentBoundsSeconds,
@@ -32,7 +31,7 @@ export function ProgressBar() {
   const torrentStatus = useActiveTorrentStatus();
   const display = usePlayerStore((s) => s.display);
   const mediaPlaying = usePlayerStore((s) => s.mediaPlaying);
-  const { subtitleSync, percent: syncProgress } = useSubtitleSyncTelemetry();
+  const subtitleSync = usePlayerStore((s) => s.subtitleSync);
   const setDraggingTime = usePlayerStore((s) => s.setDraggingTime);
   const setSeeking = usePlayerStore((s) => s.setSeeking);
   const { isSeeking } = usePlayerStore((s) => s.interface);
@@ -119,11 +118,6 @@ export function ProgressBar() {
     duration,
     torrentStatus?.progress ?? 0,
   );
-  const aiAccent = "rgb(var(--colors-video-context-type-accent) / 1)";
-  const aiProgressFill = "rgb(var(--colors-progress-filled) / 1)";
-  const aiEmphasis = "rgb(var(--colors-type-emphasis) / 1)";
-  const withAlpha = (color: string, alpha: number) =>
-    color.replace("/ 1)", `/ ${alpha})`);
   const timelineSyncMarkers = useMemo(() => {
     if (
       !subtitleSync.active ||
@@ -233,20 +227,11 @@ export function ProgressBar() {
               />
             </div>
 
-            {subtitleSync.active ? (
+            {subtitleSync.active && timelineSyncMarkers.length > 0 ? (
               <div
                 aria-hidden="true"
                 className="pointer-events-none absolute inset-0 z-20 overflow-hidden rounded-sm"
               >
-                <div
-                  className="absolute inset-0 bg-[length:28px_100%] opacity-40 motion-safe:animate-ai-progress-grid"
-                  style={{
-                    backgroundImage: `linear-gradient(90deg, transparent 0%, ${withAlpha(
-                      aiAccent,
-                      0.18,
-                    )} 50%, transparent 100%)`,
-                  }}
-                />
                 {timelineSyncMarkers.map((marker) => (
                   <div
                     key={marker.index}
@@ -266,51 +251,6 @@ export function ProgressBar() {
                     }}
                   />
                 ))}
-                <div
-                  className="absolute inset-y-0 left-0 overflow-hidden rounded-sm transition-[width] duration-300 ease-out"
-                  style={{
-                    width: `${syncProgress}%`,
-                    background: `linear-gradient(90deg, ${withAlpha(
-                      aiProgressFill,
-                      0.35,
-                    )}, ${withAlpha(aiAccent, 0.85)})`,
-                    boxShadow: `0 0 10px ${withAlpha(aiAccent, 0.45)}`,
-                  }}
-                >
-                  <div
-                    className="absolute inset-0 bg-[length:220%_100%] motion-safe:animate-ai-progress-shimmer"
-                    style={{
-                      backgroundImage: `linear-gradient(110deg, transparent 0%, ${withAlpha(
-                        aiEmphasis,
-                        0.04,
-                      )} 35%, ${withAlpha(aiEmphasis, 0.45)} 50%, ${withAlpha(
-                        aiEmphasis,
-                        0.04,
-                      )} 65%, transparent 100%)`,
-                    }}
-                  />
-                </div>
-                <div
-                  className="absolute inset-y-[-120%] w-12 blur-[2px] motion-safe:animate-ai-progress-scan"
-                  style={{
-                    background: `linear-gradient(90deg, transparent, ${withAlpha(
-                      aiEmphasis,
-                      0.7,
-                    )}, ${withAlpha(aiAccent, 0.9)}, transparent)`,
-                  }}
-                />
-                <div
-                  className="absolute inset-y-[-150%] w-px transition-[left] duration-300 ease-out"
-                  style={{ left: `${syncProgress}%` }}
-                >
-                  <div
-                    className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full"
-                    style={{
-                      backgroundColor: aiEmphasis,
-                      boxShadow: `0 0 8px ${withAlpha(aiAccent, 0.9)}`,
-                    }}
-                  />
-                </div>
               </div>
             ) : null}
           </div>

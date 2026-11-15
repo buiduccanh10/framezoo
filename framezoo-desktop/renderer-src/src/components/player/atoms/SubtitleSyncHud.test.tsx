@@ -29,8 +29,10 @@ vi.mock("react-i18next", async (importOriginal) => {
   };
 });
 
+import { PlaybackClockProvider } from "@/components/player/hooks/usePlaybackClock";
 import { usePlayerStore } from "@/stores/player/store";
 
+import { ProgressBar } from "./ProgressBar";
 import { SubtitleSyncHud, deriveSubtitleSyncHudView } from "./SubtitleSyncHud";
 
 describe("deriveSubtitleSyncHudView", () => {
@@ -171,5 +173,70 @@ describe("SubtitleSyncHud", () => {
     expect(cancelButton).not.toBeNull();
     cancelButton?.click();
     expect(hudMocks.cancelActiveSubtitleSync).toHaveBeenCalledTimes(1);
+  });
+
+  it("renders only audio window markers on ProgressBar during subtitle sync without duplicate sync progress fill", async () => {
+    const now = Date.now();
+    usePlayerStore.setState((state) => ({
+      progress: {
+        ...state.progress,
+        duration: 1000,
+        buffered: 0,
+        time: 100,
+      },
+    }));
+    usePlayerStore.getState().setSubtitleSyncState({
+      active: true,
+      phase: "capturing",
+      progress: 0.42,
+      startedAt: now - 1_000,
+      phaseStartedAt: now - 1_000,
+      capturedCount: 1,
+      totalWindows: 2,
+      windows: [
+        {
+          index: 0,
+          startAt: 200,
+          duration: 60,
+          priority: "nearby",
+          status: "captured",
+        },
+        {
+          index: 1,
+          startAt: 500,
+          duration: 60,
+          priority: "buffered",
+          status: "capturing",
+        },
+      ],
+    });
+
+    await act(async () => {
+      root.render(
+        createElement(PlaybackClockProvider, null, createElement(ProgressBar)),
+      );
+    });
+
+    expect(container.querySelector(".animate-ai-progress-grid")).toBeNull();
+    expect(container.querySelector(".animate-ai-progress-shimmer")).toBeNull();
+    expect(container.querySelector(".animate-ai-progress-scan")).toBeNull();
+
+    const capturedMarker = container.querySelector(
+      '[style*="left: 20%"][style*="width: 6%"]',
+    );
+    const capturingMarker = container.querySelector(
+      '[style*="left: 50%"][style*="width: 6%"]',
+    );
+    expect(capturedMarker).not.toBeNull();
+    expect(capturingMarker).not.toBeNull();
+
+    usePlayerStore.setState((state) => ({
+      progress: {
+        ...state.progress,
+        duration: 0,
+        buffered: 0,
+        time: 0,
+      },
+    }));
   });
 });
