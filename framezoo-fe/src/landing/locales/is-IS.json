@@ -52,7 +52,7 @@
     "addonPolicy": "Viðbótarstefna",
     "copyright": "Höfundarréttur og DMCA",
     "privacy": "Persónuverndar- og gagnastefnu",
-    "metadataAttribution": "Lýsigögn eru veitt af opinberum kvikmyndagagnagrunnum (TMDB, IMDb) í upplýsingaskyni.",
+    "metadataAttribution": "Lýsigögn kvikmynda og listaverk nota TMDB API (ekki samþykkt eða vottað af TMDB) og einkunnir í gegnum OMDb API.",
     "reportIssue": "Sendu athugasemdir / skýrslu",
     "rights": "© 2026 Framezoo. Allur réttur áskilinn."
   },
@@ -109,7 +109,7 @@
       "step3Title": "Skref 3: Opnaðu á öruggan hátt í gegnum Finder",
       "step2Title": "Skref 2: Öryggisviðvörun hliðvarðar",
       "subtitle": "Apple Silicon (M1/M2/M3/M4) & Intel Mac",
-      "step2Desc": "Vegna þess að Framezoo er óháður opinn spilari án viðskiptavottorðs fyrir Apple Developer, gæti macOS sýnt: „Framezoo er skemmd og ekki hægt að opna“ eða „Apple getur ekki staðfest þetta forrit“.",
+      "step2Desc": "Vegna þess að Framezoo er sjálfstæður hugbúnaðarspilari án viðskiptavottorðs fyrir Apple Developer, gæti macOS sýnt: „Framezoo er skemmd og ekki hægt að opna“ eða „Apple getur ekki staðfest þetta forrit“.",
       "note": "Þú þarft aðeins að gera þetta hægrismelltu skref við fyrstu ræsingu. Síðari kynningar er hægt að gera venjulega frá Launchpad eða Spotlight.",
       "step3Steps": [
         "Opnaðu Finder og farðu í Applications möppuna þína.",
@@ -176,7 +176,7 @@
     "successDesc": "Þakka þér fyrir álit þitt. Teymið okkar mun fara yfir og leysa málið eins fljótt og auðið er.",
     "submitting": "Sendir inn...",
     "attachmentsLabel": "Skrár",
-    "attachmentsHint": "Myndir/myndbönd · 55 MB samtals að hámarki",
+    "attachmentsHint": "Myndir/myndbönd/PDF (heimild eða höfundarréttarsönnun) · 55 MB samtals að hámarki",
     "attachmentsTooLarge": "Heildarskráarstærð má ekki vera meiri en 55 MB.",
     "contactPlaceholder": "t.d. nafn@example.com eða +84912345678",
     "descLabel": "3. Ítarleg lýsing",
@@ -327,84 +327,84 @@
       },
       "privacy": {
         "title": "Persónuverndarstefna og persónuverndarstefna",
-        "updatedAt": "Uppfært: 4. nóvember 2026 · Lög 91/2025/QH15 og tilskipun 356/2025/ND-CP",
-        "summary": "Þessi stefna lýsir gagnavinnslu í Framezoo skjáborðsforritinu og á opinberum Framezoo netþjónum.",
+        "updatedAt": "Uppfært: 16. nóvember 2026 · Útgáfa 2026-11 · Víetnamlög 91/2025/QH15 & tilskipun 356/2025/ND-CP",
+        "summary": "Þessi stefna lýsir gagnavinnslu á Framezoo Desktop, Farsímum, sjónvarpsforritum og opinberum Framezoo netþjónum.",
         "sections": [
           {
             "bullets": [
-              "Tölvupóstur, staðfestingarkóðar og beiðni um upplýsingar styðja skráningu, innskráningu og reikningsöryggi.",
-              "Skýrslur, villulýsingar og viðhengi berast þjóninum okkar þegar þú sendir inn athugasemdaeyðublaðið.",
-              "Vefsíðan geymir tungumálaval þitt í vafrageymslu."
+              "Gestastilling notar aðeins tilviljunarkennt tækniauðkenni, merkimiða vettvangs og útgáfu forrits til að stjórna textaboði/samstillingarendapunktum.",
+              "Staðfestingarkóðar tölvupósts og beiðnaskrár eru meðhöndlaðar stranglega til að skrá, skrá þig inn og vernda reikninga.",
+              "Fjarmæling miðlara útilokar kvikmyndatitla, TMDB/IMDb auðkenni og persónulegar viðbótaruppsprettur þriðja aðila."
             ],
-            "title": "Gögn á tækinu þínu og netþjónum okkar",
+            "title": "Tækja-, gesta- og reikningsgögn",
             "paragraphs": [
-              "Forritið geymir nokkrar stillingar, skyndiminni og spilunargögn í tækinu þínu. Ef þú býrð til reikning geymir þjónninn líka tölvupóstinn þinn, gælunafn, prófíl, opinberan lykil, upplýsingar um lotu/tæki, samstillt bókamerki, framvindu, áhorfsferil, stillingar og viðbætur, auk dulkóðaðra textaveitulykla ef þú gefur upp þau."
+              "Forritið geymir staðbundnar stillingar, skyndiminni og spilunargögn í tækinu þínu. Þegar þú býrð til reikning (takmarkað við notendur 16 ára eða eldri) geymir þjónninn einnig dulkóðaða tölvupóstinn þinn, gælunafn, prófíl, opinberan lykil, lotur/tæki upplýsingar, samstillt bókamerki, framvindu, áhorfsferil, stillingar, viðbætur, tímastimplaðar samþykkisskrár og dulkóðaða BYOK textaveitu API lykla ef þú vistar þá."
             ],
             "badge": "01"
           },
           {
-            "title": "Tilgangur og ytri þjónusta",
+            "title": "Tilgangur, flutningur yfir landamæri og ytri API",
             "paragraphs": [
-              "Við vinnum úr gögnum til að keyra reikninga, samstilla tæki, veita stuðning, vernda þjónustuna og afhenda eiginleika sem þú velur. Við seljum ekki persónuupplýsingar til auglýsingakerfa."
+              "Við vinnum úr gögnum eingöngu til að reka reikninga, samstilla tæki, veita stuðning, framfylgja lögum og aldrei selja persónuleg gögn."
             ],
             "bullets": [
-              "Staðfestingartölvupóstur fer til póstveitunnar okkar; Hægt er að geyma afrit af gagnagrunni á Supabase þegar öryggisafrit er stillt.",
-              "Sumir þjónustuaðilar eða viðbótarþjónar kunna að vinna úr gögnum utan Víetnam; staðsetning miðlara fer eftir þjónustunni sem þú velur og rekstrarstillingu.",
-              "Google reCAPTCHA gæti verið notað við skráningu; texti fer í Google Translate þegar þú velur þýðingu.",
+              "Tölvupóstveitur fyrir viðskiptastaðfestingar og dulkóðuð öryggisafrit af gagnagrunni kunna að vera utan Víetnam, allt eftir uppsetningu dreifingar.",
+              "Lýsigögn og stig gagnrýnenda eru sótt í gegnum opinbera TMDB og OMDb API; textaleitarfyrirspurn Wyzie, SubSource og OpenSubtitles.com REST API (velur frekar persónulega BYOK lykla þína þegar þeir eru gefnir upp).",
+              "Textaskráaskipti nota hausa án verslunar án opinberrar skyndiminni. Haft er samband við viðbætur frá þriðja aðila beint úr tækinu þínu samkvæmt eigin reglum.",
               "Textaleit og niðurhal, hljóð-/textasamstilling og samfélagsaukningar geta sent beiðnir í gegnum Framezoo netþjóna og viðkomandi ytri þjónustu. Viðbætur frá þriðja aðila hafa sínar eigin reglur."
             ],
             "badge": "02"
           },
           {
-            "title": "Varðveisla og eyðing",
+            "title": "Varðveisla, JSON gagnaútflutningur og eyðing",
             "bullets": [
-              "Staðfestingarkóðar renna út eftir 10 mínútur; útrunnar áskorunarskrár eru fjarlægðar eftir 7 daga. Senda eða misheppnuðu póstfærslur eru fjarlægðar eftir 7 daga.",
-              "Athugasemdir og viðhengi eru geymd aðskilin vegna stuðnings- eða höfundarréttarbeiðna þar til þau eru fjarlægð samkvæmt beiðni eða af þjónustudeild. Eyðing reiknings fjarlægir reikningstengilinn en eyðir ekki skýrslum sjálfkrafa. Þú getur beðið um aðskilda eyðingu í gegnum athugasemdaformið."
+              "OTP áskoranir fyrir staðfestingu renna út eftir 10 mínútur og eru hreinsaðar ásamt úthólfsfærslum í tölvupósti eftir 7 daga.",
+              "Ábendingaskýrslur og tilkynningar um höfundarrétt eru geymdar sérstaklega fyrir endurskoðun á samræmi; Eyðing reiknings aftengir notandaauðkenni þitt."
             ],
             "paragraphs": [
-              "Reiknings- og samstillingargögn haldast á meðan reikningurinn þinn er virkur. Þú getur eytt reikningnum í Stillingar; þjónninn fjarlægir síðan reikningsskrár, bókamerki, framvindu, áhorfsferil, stillingar og lotur. Gömul afrit af gagnagrunni kunna að geyma gögn þar til þeim er snúið; sjálfgefna stillingin heldur 7 nýlegum afritum þegar öryggisafrit er í gangi."
+              "Reiknings- og samstillingargögn eru virk á meðan reikningurinn þinn er til. Þú getur flutt út fullt JSON afrit af persónulegum gögnum þínum eða eytt reikningnum þínum varanlega í Stillingar -> Aðgerðir; snúnings dulkóðuð öryggisafrit geymir allt að 7 nýlegar skyndimyndir."
             ],
             "badge": "03"
           },
           {
-            "title": "Réttindi þín og samband",
+            "title": "Réttindi þín, aldurshlið (>=16) og tengiliður",
             "paragraphs": [
-              "Þú getur beðið um aðgang, leiðréttingu, eyðingu eða takmörkun á gögnum þínum, afturkallað samþykki þar sem vinnsla byggist á samþykki og sent inn kvörtun í gegnum athugasemdaformið á vefsíðu okkar. Vinsamlegast gefðu upp netfang reikningsins svo við getum staðfest beiðnina."
+              "Reikningsskráning er takmörkuð við notendur 16 ára eða eldri samkvæmt lögum Víetnam 91/2025/QH15. Þú getur notað aðgang, JSON-útflutning, leiðréttingu, eyðingu eða afturköllun samþykkis í gegnum Feedback modal eða privacy@framezoo.top / framezoo.top@gmail.com (svaraði innan 24 klukkustunda)."
             ],
             "badge": "04"
           }
         ]
       },
       "copyright": {
-        "updatedAt": "Uppfært: 4. nóvember 2026",
-        "summary": "Opinber fyrirvari um efni og aðferð til að tilkynna og fjarlægja hugverkarétt fyrir Framezoo.",
-        "title": "Höfundarréttur, DMCA og fyrirvari um efni",
+        "updatedAt": "Uppfært: 16. nóvember 2026 · Víetnam IP Law Art. 198b og tilskipun 17/2023",
+        "summary": "Hlutlaus staða milligönguaðila, ferli fyrir tilkynningar og fjarlægingu á bannlista allan sólarhringinn og reglu um endurtekið brot.",
+        "title": "Höfundarréttur, tilkynning og fjarlæging og fyrirvari um efni",
         "sections": [
           {
             "paragraphs": [
-              "Framezoo rekur ekki kvikmyndasafn eða myndstraumsgjafa. Forritið getur fengið aðgang að heimildum sem notendur velja; Netþjónar okkar kunna að miðla texta veitenda og vinna tímabundið úr hljóði og texta fyrir umbeðna samstillingu.",
-              "Hver höfundarréttartilkynning er skoðuð með hliðsjón af innihaldi og raunverulegu hlutverki okkar; skilmálar þessir skapa ekki sjálfvirka undanþágu frá ábyrgð."
+              "Framezoo er hlutlaus miðlunarspilarahugbúnaður svipað og Stremio og Kodi: hann hýsir engar myndbandsskrár, hýsir engar sjálfgefna efniviðbætur eða opinbera rekja spor einhvers, framkvæmir enga umboð fyrir viðbót við netþjóninn og slökkva á útleið P2P sáningu (upload_rate_limit = 0) sjálfgefið.",
+              "Niðurhal texta notar hausa án verslunar án opinberrar skyndiminni á Framezoo netþjónum."
             ],
-            "title": "Milligönguhugbúnaður Safe Harbor",
+            "title": "Hlutlaus milliliðahugbúnaður og sjálfgefinn P2P án sáningar",
             "badge": "01"
           },
           {
             "paragraphs": [
-              "Lýsigögn kvikmynda og þáttaraða (titlar, útgáfudagar, samantektir, einkunnir og kynningarplaköt) sem sýnd eru til upplýsingauppgötvunar eru fengin úr opinberum kvikmyndagagnagrunnum (eins og TMDB, IMDb og TVDB).",
-              "Öll vörumerki, kvikmyndatitlar og listaverk eru áfram eign viðkomandi höfundarréttareigenda."
+              "Kvikmyndatitlar, samantektir, listaverk og einkunnir gagnrýnenda eru sóttar úr opinberum TMDB og OMDb API til upplýsingauppgötvunar.",
+              "Þessi vara notar TMDB API en er ekki samþykkt eða vottuð af TMDB. Öll vörumerki og fjölmiðlalistaverk eru áfram eign viðkomandi eigenda."
             ],
-            "title": "Lýsigögn og listaverk",
+            "title": "Opinber lýsigögn API og TMDB tilvísun",
             "badge": "02"
           },
           {
             "bullets": [
-              "Auðkenni höfundarréttareiganda eða viðurkennds fulltrúa.",
-              "Sönnun á eignarhaldi á höfundarréttarvarða verkinu.",
+              "Fyrirmælum frá lögbærum yfirvöldum er framfylgt á /compliance/blocklist innan 24 klukkustunda; gildar tilkynningar rétthafa innan 72 klst.",
+              "Reikningum með endurteknum brotum sem tengjast staðfestum brotum er lokað með tafarlausri afturköllun á fundi.",
               "Nákvæm slóð eða lýsing á viðkomandi efni svo við getum skoðað og tekið á því innan 24–72 vinnutíma."
             ],
-            "title": "Tilkynninga- og fjarlægingaraðferð",
+            "title": "Tilkynning og fjarlæging (24h/72h SLA) & Reglur um endurtekið brot",
             "paragraphs": [
-              "Framezoo virðir hugverkaréttindi. Ef þú ert höfundarréttareigandi eða viðurkenndur umboðsmaður og telur að eitthvað efni á framezoo.top brjóti í bága við réttindi þín, vinsamlegast sendu tilkynningu í gegnum Report / Feedback rásina okkar, þar á meðal:"
+              "Rétthafar og yfirvöld geta sent inn formlegar tilkynningar (auðkenni rétthafa, sönnun/PDF heimild, sérstakt viðbótarlén / auðkenni fjölmiðla / auðkenni texta og eiðsvarinn yfirlýsingu) í gegnum skýrsluformið eða legal@framezoo.top / framezoo.top@gmail.com."
             ],
             "badge": "03"
           }

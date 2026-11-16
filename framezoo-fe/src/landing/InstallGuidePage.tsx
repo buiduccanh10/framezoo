@@ -256,14 +256,6 @@ export function InstallGuidePage() {
                 ))}
               </ol>
 
-              <div className="install-guide-terminal-tip">
-                <p>
-                  <strong>{guide.macTerminalTip}</strong>{" "}
-                  {guide.macTerminalDesc}
-                </p>
-                <code>xattr -cr /Applications/Framezoo.app</code>
-              </div>
-
               <div className="install-guide-note">
                 <span className="note-icon">ℹ️</span>
                 <p>{guide.mac.note}</p>

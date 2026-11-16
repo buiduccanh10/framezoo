@@ -33,6 +33,28 @@ export function SubtitlesConfigurePage() {
   });
 
   const [showKey, setShowKey] = useState(false);
+  const [subsourceKey, setSubsourceKey] = useState(() => {
+    if (typeof window !== "undefined") {
+      try {
+        return window.localStorage.getItem("framezoo.subsource_api_key") || "";
+      } catch {
+        return "";
+      }
+    }
+    return "";
+  });
+  const [opensubtitlesKey, setOpensubtitlesKey] = useState(() => {
+    if (typeof window !== "undefined") {
+      try {
+        return (
+          window.localStorage.getItem("framezoo.opensubtitles_api_key") || ""
+        );
+      } catch {
+        return "";
+      }
+    }
+    return "";
+  });
   const [copiedManifest, setCopiedManifest] = useState(false);
   const [testStatus, setTestStatus] = useState<
     "idle" | "testing" | "success" | "error"
@@ -84,7 +106,15 @@ export function SubtitlesConfigurePage() {
           if (data.valid) {
             setAccount({ nickname: data.nickname, userId: data.userId });
             setConfigureToken(data.configureToken || "");
-            if (data.currentApiKey) {
+            if (data.credentials) {
+              if (data.credentials.wyzie) setApiKey(data.credentials.wyzie);
+              if (data.credentials.subsource) {
+                setSubsourceKey(data.credentials.subsource);
+              }
+              if (data.credentials.opensubtitles) {
+                setOpensubtitlesKey(data.credentials.opensubtitles);
+              }
+            } else if (data.currentApiKey) {
               setApiKey(data.currentApiKey);
             }
             // Clear the single-use ticket from address bar
@@ -173,8 +203,9 @@ export function SubtitlesConfigurePage() {
 
   const handleOpenFramezoo = async () => {
     if (!configureToken) return;
-    const trimmed = apiKey.trim();
-    if (!trimmed) return;
+    const trimmedWyzie = apiKey.trim();
+    const trimmedSubsource = subsourceKey.trim();
+    const trimmedOpenSubs = opensubtitlesKey.trim();
 
     // 1. If we have a configureToken from Desktop handoff, post to backend to persist to user account
     setIsSavingRemote(true);
@@ -188,7 +219,11 @@ export function SubtitlesConfigurePage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           configureToken,
-          apiKey: trimmed,
+          credentials: {
+            wyzie: trimmedWyzie,
+            subsource: trimmedSubsource,
+            opensubtitles: trimmedOpenSubs,
+          },
         }),
       });
 
@@ -588,6 +623,116 @@ export function SubtitlesConfigurePage() {
                 {testMessage}
               </div>
             )}
+
+            <div
+              style={{
+                marginTop: "12px",
+                paddingTop: "14px",
+                borderTop: "1px solid rgba(255, 225, 210, 0.12)",
+                display: "grid",
+                gap: "12px",
+              }}
+            >
+              <div>
+                <label
+                  style={{
+                    display: "block",
+                    fontSize: "0.85rem",
+                    color: "var(--landing-muted, #a39595)",
+                    marginBottom: "6px",
+                  }}
+                >
+                  {locale === "vi"
+                    ? "SubSource API Key (Tùy chọn — ưu tiên key riêng)"
+                    : "SubSource API Key (Optional — prefers your personal key)"}
+                </label>
+                <input
+                  type={showKey ? "text" : "password"}
+                  value={subsourceKey}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setSubsourceKey(val);
+                    try {
+                      if (val.trim()) {
+                        window.localStorage.setItem(
+                          "framezoo.subsource_api_key",
+                          val.trim(),
+                        );
+                      } else {
+                        window.localStorage.removeItem(
+                          "framezoo.subsource_api_key",
+                        );
+                      }
+                    } catch {
+                      // Storage unavailable
+                    }
+                  }}
+                  placeholder="SubSource API key..."
+                  style={{
+                    width: "100%",
+                    padding: "10px 14px",
+                    borderRadius: "10px",
+                    border: "1px solid rgba(255, 225, 210, 0.2)",
+                    background: "rgba(10, 8, 8, 0.9)",
+                    color: "#fff",
+                    fontSize: "0.95rem",
+                    fontFamily: "monospace",
+                    outline: "none",
+                    boxSizing: "border-box",
+                  }}
+                />
+              </div>
+
+              <div>
+                <label
+                  style={{
+                    display: "block",
+                    fontSize: "0.85rem",
+                    color: "var(--landing-muted, #a39595)",
+                    marginBottom: "6px",
+                  }}
+                >
+                  {locale === "vi"
+                    ? "OpenSubtitles.com REST API v1 Key (Tùy chọn)"
+                    : "OpenSubtitles.com REST API v1 Key (Optional)"}
+                </label>
+                <input
+                  type={showKey ? "text" : "password"}
+                  value={opensubtitlesKey}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setOpensubtitlesKey(val);
+                    try {
+                      if (val.trim()) {
+                        window.localStorage.setItem(
+                          "framezoo.opensubtitles_api_key",
+                          val.trim(),
+                        );
+                      } else {
+                        window.localStorage.removeItem(
+                          "framezoo.opensubtitles_api_key",
+                        );
+                      }
+                    } catch {
+                      // Storage unavailable
+                    }
+                  }}
+                  placeholder="OpenSubtitles.com API key..."
+                  style={{
+                    width: "100%",
+                    padding: "10px 14px",
+                    borderRadius: "10px",
+                    border: "1px solid rgba(255, 225, 210, 0.2)",
+                    background: "rgba(10, 8, 8, 0.9)",
+                    color: "#fff",
+                    fontSize: "0.95rem",
+                    fontFamily: "monospace",
+                    outline: "none",
+                    boxSizing: "border-box",
+                  }}
+                />
+              </div>
+            </div>
           </div>
         </section>
 
@@ -644,13 +789,11 @@ export function SubtitlesConfigurePage() {
             <button
               type="button"
               onClick={handleOpenFramezoo}
-              disabled={!configureToken || isSavingRemote || !apiKey.trim()}
+              disabled={!configureToken || isSavingRemote}
               title={
                 !configureToken
                   ? t.step3.openFramezooDisabledTooltip
-                  : !apiKey.trim()
-                    ? t.step2.messages.empty
-                    : undefined
+                  : undefined
               }
               style={{
                 display: "inline-flex",
@@ -658,28 +801,22 @@ export function SubtitlesConfigurePage() {
                 justifyContent: "center",
                 gap: "8px",
                 padding: "12px 24px",
-                background:
-                  !configureToken || !apiKey.trim()
-                    ? "rgba(228, 79, 79, 0.25)"
-                    : "#e44f4f",
-                color:
-                  !configureToken || !apiKey.trim()
-                    ? "rgba(255, 255, 255, 0.45)"
-                    : "#fff",
+                background: !configureToken
+                  ? "rgba(228, 79, 79, 0.25)"
+                  : "#e44f4f",
+                color: !configureToken ? "rgba(255, 255, 255, 0.45)" : "#fff",
                 borderRadius: "10px",
                 fontWeight: "600",
                 border: "none",
-                cursor:
-                  !configureToken || !apiKey.trim()
-                    ? "not-allowed"
-                    : isSavingRemote
-                      ? "wait"
-                      : "pointer",
+                cursor: !configureToken
+                  ? "not-allowed"
+                  : isSavingRemote
+                    ? "wait"
+                    : "pointer",
                 fontSize: "0.95rem",
-                boxShadow:
-                  !configureToken || !apiKey.trim()
-                    ? "none"
-                    : "0 4px 14px rgba(228, 79, 79, 0.3)",
+                boxShadow: !configureToken
+                  ? "none"
+                  : "0 4px 14px rgba(228, 79, 79, 0.3)",
                 transition: "all 0.2s",
               }}
             >

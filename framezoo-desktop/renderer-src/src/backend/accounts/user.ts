@@ -240,6 +240,20 @@ export async function deleteUser(
   );
 }
 
+export async function exportUserData(
+  url: string,
+  account: AccountWithToken,
+): Promise<Record<string, unknown>> {
+  return withAuthRetry(url, account, (token) =>
+    ofetch<Record<string, unknown>>(`/users/${account.userId}/export`, {
+      method: "GET",
+      credentials: "include",
+      headers: getAuthHeaders(token),
+      baseURL: url,
+    }),
+  );
+}
+
 export async function getBookmarks(url: string, account: AccountWithToken) {
   return withAuthRetry(url, account, (token) =>
     ofetch<BookmarkResponse[]>(`/users/${account.userId}/bookmarks`, {

@@ -347,6 +347,12 @@ private fun RegisterCredentialsStepContent(
         onToggle = { onAction(AuthAction.ToggleLegalAccepted) }
     )
 
+    Text(
+        text = "https://framezoo.top/legal/terms · https://framezoo.top/legal/privacy",
+        color = colors["type.secondary"],
+        fontSize = 11.sp
+    )
+
     TvButton(
         label = t("auth.register.information.next"),
         accent = true,

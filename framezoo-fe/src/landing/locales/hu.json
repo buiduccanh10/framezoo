@@ -53,7 +53,7 @@
     "reportIssue": "Visszajelzés küldése / jelentés",
     "addonPolicy": "Addon szabályzat",
     "legalTitle": "Jogi és szabályzatok",
-    "metadataAttribution": "A metaadatokat nyilvános filmadatbázisok (TMDB, IMDb) biztosítják információs célból.",
+    "metadataAttribution": "A filmek metaadatai és grafikái a TMDB API-t (a TMDB nem hagyja jóvá és nem hitelesítette) és az OMDb API-n keresztüli értékeléseket használják.",
     "rights": "© 2026 Framezoo. Minden jog fenntartva."
   },
   "addonGuide": {
@@ -112,7 +112,7 @@
       "step3Title": "3. lépés: Nyissa meg biztonságosan a Finder segítségével",
       "step1Title": "1. lépés: Húzza az Alkalmazások elemre",
       "step2Title": "2. lépés: A kapuőr biztonsági figyelmeztetése",
-      "step2Desc": "Mivel a Framezoo egy független, nyílt forráskódú lejátszó kereskedelmi Apple Developer tanúsítvány nélkül, a macOS a következőket jelenítheti meg: „A Framezoo sérült, és nem nyitható meg” vagy „Az Apple nem tudja ellenőrizni ezt az alkalmazást”.",
+      "step2Desc": "Mivel a Framezoo egy független szoftverlejátszó, amely nem rendelkezik kereskedelmi Apple Developer tanúsítvánnyal, a macOS a következőket jelenítheti meg: „A Framezoo sérült, és nem nyitható meg” vagy „Az Apple nem tudja ellenőrizni ezt az alkalmazást”.",
       "note": "Csak az első indításkor kell elvégeznie ezt a lépést a jobb gombbal. A későbbi indítások szokásos módon végrehajthatók Launchpad vagy Spotlight segítségével.",
       "step3Steps": [
         "Nyissa meg a Findert, és keresse meg az Alkalmazások mappát.",
@@ -176,7 +176,7 @@
     "successDesc": "Köszönjük visszajelzését. Csapatunk a lehető leghamarabb megvizsgálja és megoldja a problémát.",
     "submitting": "Beküldés...",
     "attachmentsLabel": "Fájlok",
-    "attachmentsHint": "Képek/videók · Maximum 55 MB",
+    "attachmentsHint": "Képek/videók/PDF (engedélyezett vagy szerzői jogi bizonyíték) · Maximum 55 MB",
     "attachmentsTooLarge": "A teljes fájlméret nem haladhatja meg az 55 MB-ot.",
     "errorRequired": "Kérjük, adja meg a címet, a kapcsolatfelvételi adatokat és a probléma leírását.",
     "contactInvalid": "Kérjük, adjon meg egy érvényes e-mail címet vagy telefonszámot, hogy válaszolni tudjunk.",
@@ -328,82 +328,82 @@
         "title": "Adatvédelmi és személyes adatok védelmére vonatkozó szabályzat",
         "sections": [
           {
-            "title": "Adatok az Ön készülékén és a szervereinken",
+            "title": "Eszköz-, vendég- és fiókadatok",
             "paragraphs": [
-              "Az alkalmazás néhány beállítást, gyorsítótárat és lejátszási adatokat tárol az eszközén. Ha létrehoz egy fiókot, a szerver tárolja az Ön e-mail címét, becenevét, profilját, nyilvános kulcsát, munkamenet/eszköz adatait, szinkronizált könyvjelzőket, előrehaladást, megtekintési előzményeket, beállításokat és kiegészítőket, valamint a titkosított feliratszolgáltató kulcsait, ha megadja őket."
+              "Az alkalmazás a helyi beállításokat, gyorsítótárakat és lejátszási adatokat tárolja az eszközén. Amikor létrehoz egy fiókot (16 éves vagy idősebb felhasználókra korlátozva), a szerver tárolja az Ön titkosított e-mail-címét, becenevét, profilját, nyilvános kulcsát, munkameneteit/eszköz-adatait, szinkronizált könyvjelzőit, előrehaladását, megtekintési előzményeit, beállításait, bővítményeit, időbélyegzett hozzájárulási rekordjait és titkosított BYOK feliratszolgáltató API-kulcsait, ha elmenti őket."
             ],
             "bullets": [
-              "Az e-mail, az ellenőrző kódok és a kérés részletei támogatják a regisztrációt, a bejelentkezést és a fiók biztonságát.",
-              "A jelentések, hibaleírások és mellékletek a visszajelzési űrlap elküldésekor jutnak el szerverünkhöz.",
-              "A webhely a választott nyelvet a böngésző tárhelyén tárolja."
+              "A Vendég mód csak véletlenszerű technikai azonosítót, platformcímkét és alkalmazásverziót használ a felirattovábbítási/szinkronizálási végpontok működtetéséhez.",
+              "Az e-mail ellenőrző kódokat és a kérésnaplókat szigorúan a regisztráció, a bejelentkezés és a fiókok védelme érdekében dolgozzuk fel.",
+              "A kiszolgáló telemetriája nem tartalmazza a filmcímeket, a TMDB/IMDb-azonosítókat és a személyes, harmadik féltől származó kiegészítőket."
             ],
             "badge": "01"
           },
           {
-            "title": "Célok és külső szolgáltatások",
+            "title": "Célok, határokon átnyúló átvitel és külső API-k",
             "bullets": [
-              "Az ellenőrző e-mail postaszolgáltatónkhoz érkezik; Az adatbázis biztonsági mentései a Supabase-en tárolhatók, ha a biztonsági mentés be van állítva.",
-              "Egyes szolgáltatók vagy kiegészítő szerverek Vietnamon kívül dolgozhatnak fel adatokat; a szerver helye a választott szolgáltatástól és a működési konfigurációtól függ.",
-              "A regisztráció során a Google reCAPTCHA használható; a felirat szövege a Google Fordítóhoz kerül, amikor kiválasztja a fordítást.",
+              "A tranzakció-ellenőrző e-mail-szolgáltatók és a titkosított adatbázis-mentések a telepítési konfigurációtól függően Vietnamon kívül is tartózkodhatnak.",
+              "A metaadatok és a kritikusok pontszámai a hivatalos TMDB és OMDb API-kon keresztül kerülnek lekérésre; a feliratok keresése a Wyzie, SubSource és OpenSubtitles.com REST API-t keresi (előnyben részesítve a személyes BYOK kulcsokat, ha rendelkezésre állnak).",
+              "A feliratfájl-továbbítók nem bolti fejléceket használnak nyilvános gyorsítótárazás nélkül. A harmadik féltől származó kiegészítőkkel közvetlenül az Ön eszközéről lehet kapcsolatba lépni saját szabályzataik szerint.",
               "A feliratok keresése és letöltése, a hang-/feliratok szinkronizálása és a közösségi kiegészítők kéréseket küldhetnek a Framezoo szerverein és a megfelelő külső szolgáltatásokon keresztül. A harmadik féltől származó kiegészítőknek saját szabályzatuk van."
             ],
             "paragraphs": [
-              "Adatokat dolgozunk fel fiókok futtatásához, eszközök szinkronizálásához, támogatás nyújtásához, a szolgáltatás védelméhez és az Ön által választott funkciók biztosításához. Személyes adatokat nem adunk el hirdetési hálózatoknak."
+              "Az adatokat kizárólag a fiókok üzemeltetése, az eszközök szinkronizálása, a támogatás biztosítása, a jogi megfelelés érvényesítése érdekében dolgozzuk fel, és soha nem adunk el személyes adatokat."
             ],
             "badge": "02"
           },
           {
             "paragraphs": [
-              "A fiók- és szinkronizálási adatok megmaradnak, amíg a fiók aktív. A fiókot a Beállításokban törölheti; a szerver ezután eltávolítja a fiókrekordokat, a könyvjelzőket, az előrehaladást, a megtekintési előzményeket, a beállításokat és a munkameneteket. A régi adatbázis-mentések megőrizhetik az adatokat a forgatásig; az alapértelmezett konfiguráció 7 legutóbbi biztonsági mentést tart meg, amikor a biztonsági mentés fut."
+              "A fiók- és szinkronizálási adatok aktívak maradnak, amíg a fiókja létezik. Exportálhatja személyes adatainak teljes JSON-másolatát, vagy véglegesen törölheti fiókját a Beállítások -> Műveletek menüpontban; a forgó titkosított biztonsági másolatok legfeljebb 7 legutóbbi pillanatképet tárolnak."
             ],
             "bullets": [
-              "Az ellenőrző kódok 10 perc múlva lejárnak; A lejárt kihívást jelentő rekordokat 7 nap elteltével eltávolítjuk. Az elküldött vagy sikertelen leveleket 7 nap elteltével eltávolítjuk.",
-              "A visszajelzéseket és a mellékleteket külön tároljuk támogatási vagy szerzői jogi kérelmek céljából, amíg kérésre vagy a támogatási csapat el nem távolítja azokat. A fióktörlés eltávolítja a fióklinket, de nem törli automatikusan a jelentéseket. Külön kérheti a törlést a Visszajelzés űrlapon keresztül."
+              "Az OTP-ellenőrzési kihívások 10 perc után lejárnak, és 7 nap elteltével törlődnek a kimenő e-mailek rekordjaival együtt.",
+              "A visszajelzési jelentéseket és a szerzői jogi megjegyzéseket a megfelelőségi ellenőrzés céljából külön tároljuk; a fiók törlése megszünteti a felhasználói azonosítót."
             ],
-            "title": "Megtartás és törlés",
+            "title": "Megőrzés, JSON-adatok exportálása és törlése",
             "badge": "03"
           },
           {
-            "title": "Az Ön jogai és kapcsolattartása",
+            "title": "Az Ön jogai, Korhatár (>=16) és kapcsolattartó",
             "paragraphs": [
-              "Kérheti adataihoz való hozzáférést, azok helyesbítését, törlését vagy korlátozását, visszavonhatja hozzájárulását, ha az adatkezelés hozzájáruláson alapul, és panaszt nyújthat be a weboldalunkon található Visszajelzés űrlapon keresztül. Kérjük, adja meg fiókjának e-mail-címét, hogy ellenőrizni tudjuk a kérést."
+              "A fiók regisztrációja a 91/2025/QH15 vietnami törvény értelmében 16 éves vagy annál idősebb felhasználókra korlátozódik. Hozzáférést, JSON-exportálást, javítást, törlést vagy hozzájárulás visszavonását gyakorolhatja a Visszajelzési módban vagy a privacy@framezoo.top / framezoo.top@gmail.com címen (24 órán belül válaszol)."
             ],
             "badge": "04"
           }
         ],
-        "updatedAt": "Frissítve: 2026. november 4. · 91/2025/QH15 törvény és 356/2025/ND-CP rendelet",
-        "summary": "Ez a házirend a Framezoo asztali alkalmazásban és a hivatalos Framezoo szervereken végzett adatfeldolgozást írja le."
+        "updatedAt": "Frissítve: 2026. november 16. · 2026-11-es verzió · 91/2025/QH15 vietnami törvény és 356/2025/ND-CP rendelet",
+        "summary": "Ez a szabályzat leírja az adatfeldolgozást a Framezoo asztali számítógépeken, mobilokon, TV-alkalmazásokon és hivatalos Framezoo-szervereken."
       },
       "copyright": {
-        "updatedAt": "Frissítve: 2026. november 4",
-        "title": "Szerzői jogi, DMCA és tartalomra vonatkozó felelősség kizárása",
-        "summary": "A Framezoo hivatalos tartalmi felelősségkizárása és a szellemi tulajdonra vonatkozó értesítési és eltávolítási eljárás.",
+        "updatedAt": "Frissítve: 2026. november 16. · Vietnami szellemi tulajdonjog 198b és a 17/2023",
+        "title": "Szerzői jog, értesítés, eltávolítás és tartalomra vonatkozó felelősség kizárása",
+        "summary": "Semleges közvetítői státusz, 24 órás/72 órás értesítési és eltávolítási folyamat, valamint az ismétlődő jogsértő szabályzat.",
         "sections": [
           {
             "paragraphs": [
-              "A Framezoo nem üzemeltet filmtárat vagy videofolyam-forrást. Az alkalmazás hozzáférhet a felhasználók által kiválasztott forrásokhoz; szervereink közvetíthetik a szolgáltatói feliratokat, és ideiglenesen feldolgozhatják a hangot és a feliratokat a kért szinkronizáláshoz.",
-              "Minden szerzői jogi megjegyzést megvizsgálunk a tartalom és a tényleges szerepünk alapján; ezek a feltételek nem hoznak létre automatikus felelősségmentességet."
+              "A Framezoo a Stremióhoz és a Kodihoz hasonló semleges médialejátszó szoftver: nem tárol videofájlokat, nem köt össze alapértelmezett tartalom-kiegészítőket vagy nyilvános nyomkövetőket, nem hajt végre szerveroldali addon-proxyt, és alapértelmezés szerint letiltja a kimenő P2P küldést (upload_rate_limit = 0).",
+              "A feliratletöltések áruház nélküli fejléceket használnak, nyilvános gyorsítótár nélkül a Framezoo szervereken."
             ],
-            "title": "Közvetítő szoftver Safe Harbor",
+            "title": "Semleges közvetítő szoftver és alapértelmezett vetés nélküli P2P",
             "badge": "01"
           },
           {
             "paragraphs": [
-              "A tájékoztató jellegű felfedezés céljából megjelenített filmek és sorozatok metaadatai (címek, megjelenési dátumok, szinopszisok, értékelések és promóciós plakátok) nyilvános filmadatbázisokból (például TMDB, IMDb és TVDB) származnak.",
-              "Minden védjegy, filmcím és műalkotás a megfelelő szerzői jogtulajdonosok tulajdona marad."
+              "A filmcímek, szinopszisok, grafikák és kritikusok értékelései a hivatalos TMDB és OMDb API-kból származnak információs felfedezés céljából.",
+              "Ez a termék a TMDB API-t használja, de a TMDB nem támogatja vagy tanúsítja. Minden védjegy és médiamű a megfelelő tulajdonosok tulajdona marad."
             ],
-            "title": "Metaadatok és műalkotások hozzárendelése",
+            "title": "Hivatalos metaadat API-k és TMDB-hozzárendelés",
             "badge": "02"
           },
           {
-            "title": "Értesítési és eltávolítási eljárás",
+            "title": "Értesítés és eltávolítás (24 órás/72 órás SLA) és ismétlődő jogsértői szabályzat",
             "bullets": [
-              "A szerzői jog tulajdonosának vagy meghatalmazott képviselőjének azonosítása.",
-              "A szerzői jog által védett mű tulajdonjogának igazolása.",
+              "Az illetékes hatóságoktól kapott utasítások 24 órán belül érvényesülnek a /compliance/blokklistán; érvényes jogtulajdonos értesítést 72 órán belül.",
+              "Az ellenőrzött jogsértésekkel társított ismétlődő jogsértő fiókokat felfüggesztjük a munkamenet azonnali visszavonásával.",
               "A szóban forgó anyag pontos URL-je vagy leírása, hogy 24–72 munkaórán belül áttekinthessük és kezelhessük."
             ],
             "paragraphs": [
-              "A Framezoo tiszteletben tartja a szellemi tulajdonjogokat. Ha Ön szerzői jog tulajdonosa vagy meghatalmazott ügynöke, és úgy gondolja, hogy a framezoo.top webhelyen található bármely anyag sérti az Ön jogait, kérjük, küldjön értesítést Jelentés/Visszajelzés csatornánkon keresztül, beleértve:"
+              "A jogtulajdonosok és hatóságok hivatalos értesítéseket (jogtulajdonos személyazonossága, bizonyíték/PDF-felhatalmazás, adott addon domain / médiaazonosító / feliratazonosító és eskü alatt tett nyilatkozat) nyújthatnak be a Jelentés űrlapon vagy a legal@framezoo.top / framezoo.top@gmail.com címen."
             ],
             "badge": "03"
           }

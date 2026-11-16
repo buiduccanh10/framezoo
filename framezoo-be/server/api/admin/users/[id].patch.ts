@@ -8,6 +8,8 @@ import { decryptPiiOrNull, encryptPii, hashEmailIndex } from '~/utils/piiCrypto'
 const updateSchema = z.object({
   nickname: z.string().min(1, 'Nickname cannot be empty').max(50, 'Nickname too long').optional(),
   email: z.string().email('Invalid email address').nullable().optional().or(z.literal('')),
+  isSuspended: z.boolean().optional(),
+  suspendedReason: z.string().trim().max(255).nullable().optional(),
 });
 
 export default defineEventHandler(async event => {
@@ -84,6 +86,19 @@ export default defineEventHandler(async event => {
     }
   }
 
+  if (validated.isSuspended !== undefined && validated.isSuspended !== user.is_suspended) {
+    updateData.is_suspended = validated.isSuspended;
+    if (validated.isSuspended) {
+      updateData.suspended_at = new Date();
+      updateData.suspended_reason = validated.suspendedReason ?? user.suspended_reason ?? null;
+    } else {
+      updateData.suspended_at = null;
+      updateData.suspended_reason = null;
+    }
+  } else if (validated.suspendedReason !== undefined && user.is_suspended) {
+    updateData.suspended_reason = validated.suspendedReason;
+  }
+
   if (Object.keys(updateData).length === 0) {
     return {
       user: {
@@ -95,6 +110,9 @@ export default defineEventHandler(async event => {
         permissions: user.permissions,
         profile: user.profile,
         app_version: user.app_version,
+        is_suspended: user.is_suspended,
+        suspended_at: user.suspended_at,
+        suspended_reason: user.suspended_reason,
       },
     };
   }
@@ -111,8 +129,15 @@ export default defineEventHandler(async event => {
       permissions: true,
       profile: true,
       app_version: true,
+      is_suspended: true,
+      suspended_at: true,
+      suspended_reason: true,
     },
   });
+
+  if (updateData.is_suspended === true) {
+    await prisma.sessions.deleteMany({ where: { user: userId } });
+  }
 
   return {
     user: {

@@ -48,12 +48,12 @@ export const normalizeSubtitleDownloadUrls = (
   currentOrigin: string,
 ): StremioSubtitle[] => {
   return subtitles.map(sub => {
-    if (sub.source === 'subsource' && sub.url) {
-      const match = sub.url.match(/\/addon\/subtitles\/download\/subsource\/(.+)$/);
+    if ((sub.source === 'subsource' || sub.source === 'opensubs') && sub.url) {
+      const match = sub.url.match(/\/addon\/subtitles\/download\/(subsource|opensubtitles)\/(.+)$/);
       if (match) {
         return {
           ...sub,
-          url: `${currentOrigin}/addon/subtitles/download/subsource/${match[1]}`,
+          url: `${currentOrigin}/addon/subtitles/download/${match[1]}/${match[2]}`,
         };
       }
     }

@@ -18,6 +18,7 @@
       "configRequiredDesc": "Questo componente aggiuntivo richiede una configurazione (come chiavi API o impostazioni della lingua) prima di poter restituire contenuti. Configuralo nel tuo browser, quindi copia e incolla qui l&#39;URL del manifesto generato.",
       "configRequiredTitle": "Configurazione richiesta",
       "configureAction": "Specificare",
+      "disclaimerNotice": "I componenti aggiuntivi di terze parti sono gestiti in modo indipendente da sviluppatori della community. L'utente è l'unico responsabile della verifica della legalità dei contenuti nella propria giurisdizione; la condivisione P2P è disabilitata per impostazione predefinita.",
       "errorFallback": "Impossibile installare questo componente aggiuntivo.",
       "manageListButton": "Gestisci l'elenco dei componenti aggiuntivi",
       "openConfigurePage": "Apri la pagina di configurazione",
@@ -181,7 +182,7 @@
       "passwordWeak": "La password deve contenere almeno 8 caratteri con lettere e numeri",
       "privacyPolicy": "politica sulla riservatezza",
       "submit": "Creare un account",
-      "legalConsent": "Ho letto e accetto i <terms>Termini di servizio</terms> e l'<privacy>Informativa sulla privacy</privacy>."
+      "legalConsent": "Confermo di avere almeno 16 anni e di aver letto e accettato i <terms>Termini di servizio</terms> e l'<privacy>Informativa sulla privacy</privacy>."
     },
     "trust": {
       "failed": {
@@ -307,6 +308,9 @@
   "footer": {
     "legal": {
       "disclaimer": "Disclaimer",
+      "dmca": "DMCA / Rimozione",
+      "terms": "Termini di servizio",
+      "tmdbAttribution": "I metadati e le locandine dei film sono forniti tramite l'API di TMDB (non approvati né certificati da TMDB).",
       "disclaimerText": "Framezoo non gestisce sorgenti di streaming video. I suoi server possono inoltrare i sottotitoli del fornitore ed elaborare temporaneamente audio e sottotitoli per la sincronizzazione quando si sceglie questa funzione. Il contenuto riprodotto è sotto il tuo controllo."
     },
     "links": {
@@ -484,15 +488,15 @@
     },
     "support": {
       "complete": "completare",
-      "description": "Framezoo è gestito in perdita e abbiamo bisogno di aiuto per mantenerlo senza pubblicità! Se ti piace usare Framezoo, considera la possibilità di fare una donazione per aiutarci a coprire i nostri costi.",
-      "donate": "Donare",
-      "explanation": "Se non stai utilizzando l'estensione o non hai configurato l'API FED, potrebbe essere più difficile trovare contenuti! Vogliamo risolvere questo problema, ma è molto più difficile fornire contenuti senza server costosi. Quindi, per favore, se ti piace usare Framezoo, considera la possibilità di fare una donazione per aiutarci a coprire i nostri costi crescenti.",
+      "description": "Framezoo è un lettore multimediale neutrale e il supporto software volontario contribuisce a mantenerlo senza pubblicità! Si prega di notare che i contributi supportano esclusivamente lo sviluppo del software e non acquistano mai contenuti multimediali o componenti aggiuntivi di terze parti.",
+      "donate": "Supporto allo sviluppo di software",
+      "explanation": "Se non hai configurato i tuoi componenti aggiuntivi di terze parti nel player, i flussi non verranno visualizzati per impostazione predefinita. Framezoo agisce esclusivamente come player tecnico neutrale senza ospitare contenuti. Qualsiasi contributo volontario supporta unicamente lo sviluppo continuo dell'app e dell'infrastruttura.",
       "explanation2": "Se desideri maggiori informazioni, iscriviti al nostro",
       "fluxer": "Flussante",
-      "label": "Finanziamento del progetto: ${{current}} / ${{goal}}",
+      "label": "Supporto di ingegneria del software: ${{current}} / ${{goal}}",
       "moreInfo": "Maggiori informazioni",
       "thankYou": "Grazie per il vostro supporto!",
-      "title": "Framezoo ha bisogno del tuo aiuto!"
+      "title": "Sostieni lo sviluppo del software di Framezoo!"
     },
     "titles": {
       "69": {
@@ -1210,6 +1214,11 @@
           "text": "Questo ti disconnetterà da tutti i dispositivi collegati al tuo account.",
           "title": "Termina tutte le sessioni"
         },
+        "exportData": {
+          "button": "Esporta JSON",
+          "text": "Scarica una copia del tuo profilo account, dei segnalibri, della cronologia delle visualizzazioni, delle impostazioni e del documento di consenso legale (JSON).",
+          "title": "Esportazione dei dati personali"
+        },
         "migration": {
           "button": "Migrazione dell'account",
           "text": "Migra il tuo account su un nuovo server o scarica i tuoi dati.",
@@ -1518,6 +1527,7 @@
     "modalTitle": "Aiutaci a continuare a costruire Framezoo",
     "subtitle": "Ogni contributo ci aiuta a migliorare il lettore, ad espanderci su più piattaforme e a continuare ad ascoltare le vostre idee.",
     "note": "Grazie per l&#39;interesse che dimostrate verso Framezoo e per il supporto che offrite al progetto. Il vostro contributo ci permette di creare un&#39;esperienza migliore per tutti.",
+    "legalDisclaimer": "Supporto volontario allo sviluppo del software: i contributi non danno diritto all'acquisto di film, streaming multimediale o accesso a contenuti aggiuntivi.",
     "scanHint": "Scansiona questo codice QR con l&#39;app della tua banca.",
     "paypalLabel": "PayPal",
     "momoLabel": "Mamma",

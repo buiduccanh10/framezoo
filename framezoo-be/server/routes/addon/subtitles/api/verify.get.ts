@@ -46,13 +46,19 @@ export default defineEventHandler(async event => {
     console.warn('[subtitles:verify] User lookup failed:', err);
   }
 
-  // Retrieve existing custom Wyzie key if already set
+  // Retrieve existing custom provider keys if already set
   let currentApiKey = '';
+  let subsourceApiKey = '';
+  let opensubtitlesApiKey = '';
   try {
-    const savedKey = await getUserProviderCredential(userId);
-    if (savedKey) {
-      currentApiKey = savedKey;
-    }
+    const [wyzieKey, subsourceKey, opensubsKey] = await Promise.all([
+      getUserProviderCredential(userId),
+      getUserProviderCredential(userId, 'subsource'),
+      getUserProviderCredential(userId, 'opensubtitles'),
+    ]);
+    if (wyzieKey) currentApiKey = wyzieKey;
+    if (subsourceKey) subsourceApiKey = subsourceKey;
+    if (opensubsKey) opensubtitlesApiKey = opensubsKey;
   } catch (err) {
     console.warn('[subtitles:verify] Key lookup failed:', err);
   }
@@ -66,6 +72,11 @@ export default defineEventHandler(async event => {
     userId,
     nickname,
     currentApiKey,
+    credentials: {
+      wyzie: currentApiKey,
+      subsource: subsourceApiKey,
+      opensubtitles: opensubtitlesApiKey,
+    },
     configureToken,
   };
 });

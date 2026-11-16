@@ -17,13 +17,13 @@ async function ensureMetricsInitialized() {
 }
 
 const metricsProviderSchema = z.object({
-  tmdbId: z.string(),
-  type: z.string(),
-  title: z.string(),
+  tmdbId: z.string().optional(),
+  type: z.string().optional(),
+  title: z.string().optional(),
   seasonId: z.string().optional(),
   episodeId: z.string().optional(),
   status: z.string(),
-  providerId: z.string(),
+  providerId: z.string().optional(),
   embedId: z.string().optional(),
   errorMessage: z.string().optional(),
   fullError: z.string().optional(),

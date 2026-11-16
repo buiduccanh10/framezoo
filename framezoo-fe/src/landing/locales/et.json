@@ -54,7 +54,7 @@
     "addonPolicy": "Lisapoliitika",
     "legalTitle": "Õigusaktid ja eeskirjad",
     "privacy": "Privaatsus- ja andmepoliitika",
-    "metadataAttribution": "Metaandmeid pakuvad teavitamise eesmärgil avalikud filmide andmebaasid (TMDB, IMDb)."
+    "metadataAttribution": "Filmi metaandmed ja kunstiteosed kasutavad TMDB API-d (TMDB ei ole heaks kiitnud ega sertifitseerinud) ja OMDb API kaudu antud hinnanguid."
   },
   "addonGuide": {
     "description": "Lisand on väike HTTP-teenus. Esitage manifest ja vajalikud vahendid; Framezoo tegeleb ülejäänuga.",
@@ -111,7 +111,7 @@
       "subtitle": "Apple Silicon (M1/M2/M3/M4) ja Intel Mac",
       "step3Title": "3. samm: avage Finderi kaudu ohutult",
       "step2Title": "2. samm: väravavahi turvahoiatus",
-      "step2Desc": "Kuna Framezoo on sõltumatu avatud lähtekoodiga pleier, millel pole kaubanduslikku Apple'i arendaja sertifikaati, võib macOS näidata: \"Framezoo on kahjustatud ja seda ei saa avada\" või \"Apple ei saa seda rakendust kinnitada\".",
+      "step2Desc": "Kuna Framezoo on sõltumatu tarkvarapleier, millel pole Apple'i arendaja sertifikaati, võib macOS näidata: \"Framezoo on kahjustatud ja seda ei saa avada\" või \"Apple ei saa seda rakendust kinnitada\".",
       "title": "macOS-i installijuhend",
       "step3Steps": [
         "Avage Finder ja liikuge kausta Rakendused.",
@@ -177,7 +177,7 @@
     "submitting": "Esitamine...",
     "attachmentsLabel": "Failid",
     "attachmentsTooLarge": "Faili kogumaht ei tohi ületada 55 MB.",
-    "attachmentsHint": "Pildid/videod · Maksimaalselt 55 MB",
+    "attachmentsHint": "Pildid/videod/PDF (volituse või autoriõigusega tõend) · Maksimaalselt 55 MB",
     "contactPlaceholder": "nt. nimi@example.com või +84912345678",
     "descLabel": "3. Üksikasjalik kirjeldus",
     "contactLabel": "2. E-post või telefoninumber",
@@ -326,89 +326,89 @@
         "summary": "Enne konto loomist või Framezoo töölauarakenduse kasutamist lugege need tingimused ja privaatsuspoliitika läbi."
       },
       "privacy": {
-        "updatedAt": "Värskendatud: 4. november 2026 · Seadus 91/2025/QH15 ja dekreet 356/2025/ND-CP",
-        "summary": "See reegel kirjeldab andmetöötlust Framezoo töölauarakenduses ja ametlikes Framezoo serverites.",
+        "updatedAt": "Värskendatud: 16. november 2026 · Versioon 2026-11 · Vietnami seadus 91/2025/QH15 ja dekreet 356/2025/ND-CP",
+        "summary": "See reegel kirjeldab andmetöötlust Framezoo töölaua-, mobiili-, telerakendustes ja ametlikes Framezoo serverites.",
         "title": "Privaatsus ja isikuandmete kaitse eeskirjad",
         "sections": [
           {
-            "title": "Andmed teie seadmes ja meie serverites",
+            "title": "Seadme, külalise ja konto andmed",
             "paragraphs": [
-              "Rakendus salvestab mõned seaded, vahemälu ja taasesituse andmed teie seadmesse. Kui loote konto, salvestab server ka teie e-posti aadressi, hüüdnime, profiili, avaliku võtme, seansi/seadme üksikasjad, sünkroonitud järjehoidjad, edenemise, vaatamiste ajaloo, seaded ja lisandmoodulid ning krüptitud subtiitrite pakkuja võtmed, kui need esitate."
+              "Rakendus salvestab teie seadmesse kohalikud sätted, vahemälud ja taasesitusandmed. Kui loote konto (piiratud 16-aastastele või vanematele kasutajatele), salvestab server ka teie krüptitud meili, hüüdnime, profiili, avaliku võtme, seansside/seadme üksikasjad, sünkroonitud järjehoidjad, edenemise, vaatamiste ajaloo, seaded, lisandmoodulid, ajatempliga nõusolekukirjed ja krüptitud BYOK-i subtiitrite pakkuja API-võtmed, kui need salvestate."
             ],
             "bullets": [
-              "Meilid, kinnituskoodid ja päringu üksikasjad toetavad registreerimist, sisselogimist ja konto turvalisust.",
-              "Aruanded, vigade kirjeldused ja manused jõuavad meie serverisse, kui saadate tagasisidevormi.",
-              "Veebisait salvestab teie keelevaliku brauseri salvestusruumi."
+              "Külalisrežiim kasutab subtiitrite edastamise/sünkroonimise lõpp-punktide käitamiseks ainult juhuslikku tehnilist identifikaatorit, platvormi silti ja rakenduse versiooni.",
+              "Meili kinnituskoode ja taotluste logisid töödeldakse rangelt selleks, et registreerida, sisse logida ja kontosid kaitsta.",
+              "Serveri telemeetria välistab filmide pealkirjad, TMDB/IMDb ID-d ja isiklikud kolmanda osapoole lisandmoodulid."
             ],
             "badge": "01"
           },
           {
             "paragraphs": [
-              "Töötleme andmeid kontode käitamiseks, seadmete sünkroonimiseks, toe pakkumiseks, teenuse kaitsmiseks ja teie valitud funktsioonide pakkumiseks. Me ei müü isikuandmeid reklaamivõrgustikele."
+              "Töötleme andmeid ainult selleks, et hallata kontosid, sünkroonida seadmeid, pakkuda tuge, jõustada seaduste järgimist ja mitte kunagi müüa isikuandmeid."
             ],
-            "title": "Eesmärgid ja välisteenused",
+            "title": "Eesmärgid, piiriülene ülekanne ja välised API-d",
             "bullets": [
-              "Kinnitusmeil saadetakse meie meiliteenuse pakkujale; andmebaasi varukoopiaid võidakse Supabase'is salvestada, kui varundamine on konfigureeritud.",
-              "Mõned teenusepakkujad või lisaserverid võivad töödelda andmeid väljaspool Vietnami; serveri asukoht sõltub teie valitud teenusest ja töökonfiguratsioonist.",
-              "Registreerimisel võib kasutada Google reCAPTCHA-d; tõlke valimisel läheb subtiitrite tekst Google'i tõlkesse.",
+              "Tehingute kinnitamise meiliteenuse pakkujad ja krüptitud andmebaasi varukoopiad võivad asuda väljaspool Vietnami, olenevalt juurutamise konfiguratsioonist.",
+              "Metaandmete ja kriitikute hinded hangitakse ametlike TMDB ja OMDb API-de kaudu; subtiitrite otsingud teevad päringu Wyzie, SubSource ja OpenSubtitles.com REST API kaudu (eelistades teie isiklikke BYOK-klahve, kui need on olemas).",
+              "Subtiitrite failiedastused kasutavad poe-päiseid ilma avaliku vahemällu salvestamiseta. Kolmandate osapoolte lisandmoodulitega võetakse ühendust otse teie seadmest nende enda eeskirjade alusel.",
               "Subtiitrite otsingud ja allalaadimised, heli/subtiitrite sünkroonimine ja kogukonna lisandmoodulid võivad saata päringuid Framezoo serverite ja asjakohaste välisteenuste kaudu. Kolmandate osapoolte lisandmoodulitel on oma eeskirjad."
             ],
             "badge": "02"
           },
           {
-            "title": "Säilitamine ja kustutamine",
+            "title": "Säilitamine, JSON-i andmete eksportimine ja kustutamine",
             "bullets": [
-              "Kinnituskoodid aeguvad 10 minuti pärast; aegunud väljakutse kirjed eemaldatakse 7 päeva pärast. Saadetud või ebaõnnestunud kirjad eemaldatakse 7 päeva pärast.",
-              "Tagasiside ja manuseid hoitakse eraldi tugi- või autoriõiguste taotluste jaoks, kuni need taotluse korral või tugimeeskonna poolt eemaldatakse. Konto kustutamine eemaldab konto lingi, kuid ei kustuta aruandeid automaatselt. Eraldi kustutamist saate taotleda tagasiside vormi kaudu."
+              "Kinnitamise OTP väljakutsed aeguvad 10 minuti pärast ja need kustutatakse koos e-posti väljuvate kirjadega 7 päeva pärast.",
+              "Tagasisidearuanded ja autoriõiguste teatised säilitatakse vastavusauditi jaoks eraldi; konto kustutamine tühistab teie kasutajatunnuse linkimise."
             ],
             "paragraphs": [
-              "Konto ja sünkroonimisandmed jäävad alles, kuni teie konto on aktiivne. Konto saate kustutada menüüs Seaded; seejärel eemaldab server kontokirjed, järjehoidjad, edenemise, vaatamiste ajaloo, seaded ja seansid. Vanad andmebaasi varukoopiad võivad andmeid säilitada kuni pööramiseni; vaikekonfiguratsioon säilitab varundamise ajal 7 hiljutist varukoopiat."
+              "Konto ja sünkroonimisandmed jäävad aktiivseks, kuni teie konto on olemas. Saate eksportida oma isikuandmete täieliku JSON-koopia või kustutada oma konto jäädavalt menüüs Seaded -> Toimingud; pöörlevad krüptitud varukoopiad säilitavad kuni 7 hiljutist hetktõmmist."
             ],
             "badge": "03"
           },
           {
-            "title": "Teie õigused ja kontakt",
+            "title": "Teie õigused, vanusevärav (>=16) ja kontakt",
             "paragraphs": [
-              "Võite taotleda oma andmetele juurdepääsu, nende parandamist, kustutamist või piiramist, nõusoleku tagasi võtta, kui töötlemine põhineb nõusolekul, ja esitada kaebuse meie veebisaidil oleva tagasiside vormi kaudu. Esitage oma konto e-posti aadress, et saaksime taotlust kinnitada."
+              "Vastavalt Vietnami seadusele 91/2025/QH15 on konto registreerimine piiratud 16-aastastele või vanematele kasutajatele. Saate kasutada juurdepääsu, JSON-i eksporti, parandamist, kustutamist või nõusoleku tagasivõtmist tagasiside modaali või privacy@framezoo.top / framezoo.top@gmail.com kaudu (vastas 24 tunni jooksul)."
             ],
             "badge": "04"
           }
         ]
       },
       "copyright": {
-        "updatedAt": "Värskendatud: 4. november 2026",
-        "title": "Autoriõigus, DMCA ja sisu lahtiütlus",
+        "updatedAt": "Värskendatud: 16. november 2026 · Vietnami intellektuaalomandi seaduse art. 198b ja dekreet 17/2023",
+        "title": "Autoriõigus, teatis, eemaldamine ja sisu lahtiütlus",
         "sections": [
           {
-            "title": "Vahendajatarkvara Safe Harbor",
+            "title": "Neutraalne vahendajatarkvara ja vaikimisi külvamata P2P",
             "paragraphs": [
-              "Framezoo ei kasuta filmiteeki ega videovoo allikat. Rakendus pääseb juurde kasutajate valitud allikatele; meie serverid võivad taotletud sünkroonimiseks edastada pakkuja subtiitreid ning ajutiselt töödelda heli ja subtiitreid.",
-              "Iga autoriõiguse teatis vaadatakse läbi sisu ja meie tegeliku rolli suhtes; need tingimused ei loo automaatset vastutusest vabastamist."
+              "Framezoo on Stremio ja Kodiga sarnane neutraalne meediumipleieri tarkvara: see ei hosti videofaile, ei koonda vaikimisi sisu lisandmooduleid ega avalikke jälgijaid, ei kasuta serveripoolset lisandmooduli puhverserverit ja keelab vaikimisi väljamineva P2P külvi (upload_rate_limit = 0).",
+              "Subtiitrite allalaadimisel kasutatakse poeväliseid päiseid ilma avaliku vahemäluta Framezoo serverites."
             ],
             "badge": "01"
           },
           {
             "paragraphs": [
-              "Informatiivse avastamise eesmärgil kuvatavad filmide ja sarjade metaandmed (pealkirjad, väljalaskekuupäevad, kokkuvõtted, hinnangud ja reklaamplakatid) pärinevad avalikest filmide andmebaasidest (nt TMDB, IMDb ja TVDB).",
-              "Kõik kaubamärgid, filmide pealkirjad ja kunstiteosed jäävad nende vastavate autoriõiguste omanike omandisse."
+              "Filmide pealkirjad, kokkuvõtted, kunstiteosed ja kriitikute hinnangud hangitakse teabe leidmiseks ametlikest TMDB ja OMDb API-dest.",
+              "See toode kasutab TMDB API-d, kuid TMDB pole seda heaks kiitnud ega sertifitseerinud. Kõik kaubamärgid ja meediakunstiteosed jäävad nende vastavate omanike omandisse."
             ],
-            "title": "Metaandmete ja kunstiteose omistamine",
+            "title": "Ametlikud metaandmete API-d ja TMDB omistamine",
             "badge": "02"
           },
           {
-            "title": "Teavitamise ja eemaldamise protseduur",
+            "title": "Teavitamise ja eemaldamise (24h/72h SLA) ja korduvate rikkujate eeskirjad",
             "paragraphs": [
-              "Framezoo austab intellektuaalomandi õigusi. Kui olete autoriõiguste omanik või volitatud esindaja ja arvate, et mis tahes saidil framezoo.top materjal rikub teie õigusi, saatke teade meie aruande-/tagasisidekanali kaudu, sealhulgas:"
+              "Õiguste omanikud ja ametiasutused võivad esitada ametlikke teatisi (õiguste omaniku identiteet, tõend/PDF-i volitus, konkreetne lisadomeen / meedia ID / subtiitrite ID ja vande all antud avaldus) aruandevormi kaudu või aadressil legal@framezoo.top / framezoo.top@gmail.com."
             ],
             "bullets": [
-              "Autoriõiguse omaniku või volitatud esindaja identifitseerimine.",
-              "Autoriõigustega kaitstud teose omandiõigust tõendav dokument.",
+              "Pädevate asutuste korraldused jõustatakse /compliance/blocklistis 24 tunni jooksul; kehtivad õiguste omaniku teated 72 tunni jooksul.",
+              "Kinnitatud rikkumistega seotud korduvate rikkujate kontod peatatakse kohese seansi tühistamisega.",
               "Kõnealuse materjali täpne URL või kirjeldus, et saaksime selle üle vaadata ja lahendada 24–72 töötunni jooksul."
             ],
             "badge": "03"
           }
         ],
-        "summary": "Framezoo ametlik sisu lahtiütlus ja intellektuaalomandi teatamise ja eemaldamise protseduur."
+        "summary": "Neutraalne vahendaja staatus, 24-tunnine/72-tunnine teavitus- ja eemaldamisloendi protsess ning korduva rikkuja eeskiri."
       },
       "addon-policy": {
         "summary": "Ohutus- ja vastavusstandardid Framezoo avatud HTTP/JSON lisandmooduli ökosüsteemi jaoks.",

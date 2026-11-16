@@ -18,6 +18,7 @@
       "configRequiredDesc": "Addon này yêu cầu cấu hình (như API key hoặc ngôn ngữ) trước khi sử dụng. Vui lòng mở trang cấu hình trên trình duyệt, sau đó copy và dán URL manifest đã tạo vào đây.",
       "configRequiredTitle": "Yêu cầu cấu hình trước",
       "configureAction": "Cấu hình",
+      "disclaimerNotice": "Các addon bên thứ ba do cộng đồng phát triển độc lập. Bạn hoàn toàn chịu trách nhiệm kiểm tra tính hợp pháp của nguồn nội dung; cơ chế chia sẻ ngược P2P (seeding) mặc định được tắt.",
       "errorFallback": "Không thể cài đặt tiện ích mở rộng này",
       "manageListButton": "Quản lý danh sách Addons",
       "openConfigurePage": "Mở trang cấu hình",
@@ -181,7 +182,7 @@
       "passwordWeak": "Mật khẩu phải có ít nhất 8 ký tự gồm cả chữ và số",
       "privacyPolicy": "Chính sách bảo mật",
       "submit": "Tạo tài khoản",
-      "legalConsent": "Tôi đã đọc và đồng ý với <terms>Điều khoản sử dụng</terms> và <privacy>Chính sách bảo mật</privacy>."
+      "legalConsent": "Tôi xác nhận đủ từ 16 tuổi trở lên, đã đọc và đồng ý với <terms>Điều khoản sử dụng</terms> và <privacy>Chính sách bảo mật</privacy>."
     },
     "trust": {
       "failed": {
@@ -306,7 +307,10 @@
   },
   "footer": {
     "legal": {
-      "disclaimer": "Tuyên bố miễn trừ trách nhiệm",
+      "disclaimer": "Miễn trừ trách nhiệm",
+      "dmca": "Báo cáo bản quyền (DMCA)",
+      "terms": "Điều khoản sử dụng",
+      "tmdbAttribution": "Dữ liệu phim & poster sử dụng TMDB API (sản phẩm này không được TMDB xác nhận hay chứng nhận).",
       "disclaimerText": "Framezoo không vận hành nguồn phát video. Máy chủ có thể chuyển tiếp phụ đề từ nhà cung cấp và xử lý tạm thời âm thanh, phụ đề để đồng bộ khi bạn chọn tính năng này. Bạn kiểm soát nội dung mình phát."
     },
     "links": {
@@ -484,15 +488,15 @@
     },
     "support": {
       "complete": "hoàn thành",
-      "description": "Framezoo hoạt động không vì lợi nhuận, và chúng tôi cần sự giúp đỡ để duy trì ứng dụng không có quảng cáo! Nếu bạn thích sử dụng Framezoo, vui lòng cân nhắc quyên góp để giúp chúng tôi trang trải chi phí.",
-      "donate": "Quyên góp",
-      "explanation": "Nếu bạn không sử dụng tiện ích mở rộng hoặc không thiết lập FED API, việc tìm kiếm nội dung có thể khó khăn hơn! Chúng tôi muốn khắc phục điều này, nhưng việc cung cấp nội dung mà không có máy chủ đắt tiền là rất khó khăn. Vì vậy, nếu bạn thích sử dụng Framezoo, vui lòng cân nhắc quyên góp để giúp chúng tôi trang trải các chi phí đang tăng lên.",
+      "description": "Framezoo là trình phát đa phương tiện trung lập, và chúng tôi cần sự đồng hành để duy trì phần mềm không quảng cáo! Nếu bạn yêu thích Framezoo, vui lòng cân nhắc ủng hộ phát triển phần mềm kỹ thuật thuần túy.",
+      "donate": "Ủng hộ phát triển phần mềm",
+      "explanation": "Nếu bạn chưa cài đặt tiện ích mở rộng bên thứ ba trong trình phát, danh sách nguồn phát sẽ không hiển thị sẵn nội dung! Framezoo chỉ đóng vai trò trình phát trung gian và không lưu trữ hay cung cấp nội dung. Mọi sự ủng hộ của bạn là tự nguyện để giúp chúng tôi duy trì hạ tầng kỹ thuật và không quảng cáo.",
       "explanation2": "Nếu bạn muốn biết thêm thông tin, vui lòng tham gia ",
       "fluxer": "thông lượng",
-      "label": "Kinh phí dự án: ${{current}} / ${{goal}}",
+      "label": "Kinh phí phát triển phần mềm: ${{current}} / ${{goal}}",
       "moreInfo": "Thêm thông tin",
       "thankYou": "Cảm ơn sự ủng hộ của bạn!",
-      "title": "Framezoo cần sự giúp đỡ của bạn!"
+      "title": "Ủng hộ phát triển phần mềm Framezoo!"
     },
     "titles": {
       "69": {
@@ -1210,6 +1214,11 @@
           "text": "Điều này sẽ đăng xuất bạn khỏi tất cả các thiết bị được liên kết với tài khoản của bạn.",
           "title": "Kết thúc tất cả các phiên"
         },
+        "exportData": {
+          "button": "Xuất dữ liệu (JSON)",
+          "text": "Tải về bản sao hồ sơ, dấu trang, lịch sử xem, cài đặt và nhật ký đồng ý điều khoản của bạn.",
+          "title": "Xuất dữ liệu cá nhân"
+        },
         "migration": {
           "button": "Di chuyển tài khoản",
           "text": "Di chuyển tài khoản của bạn sang máy chủ mới hoặc tải xuống dữ liệu của bạn.",
@@ -1518,6 +1527,7 @@
     "modalTitle": "Cùng Framezoo phát triển lâu dài",
     "subtitle": "Mỗi sự ủng hộ giúp chúng tôi tiếp tục hoàn thiện trình phát, mở rộng ứng dụng trên nhiều nền tảng và lắng nghe ý kiến của bạn.",
     "note": "Xin chân thành cảm ơn bạn đã quan tâm và đồng hành. Sự ủng hộ của bạn là động lực để Framezoo phát triển bền vững hơn.",
+    "legalDisclaimer": "Khoản ủng hộ tự nguyện cho việc phát triển phần mềm kỹ thuật thuần túy — không phải phí mua bán phim, luồng phát hay quyền truy cập addon.",
     "scanHint": "Quét mã QR bằng ứng dụng ngân hàng để gửi lời ủng hộ.",
     "paypalLabel": "PayPal",
     "momoLabel": "MoMo",

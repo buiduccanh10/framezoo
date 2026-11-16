@@ -10,6 +10,7 @@ import {
 import { LandingFooter, triggerLandingFeedback } from "./LandingFooter";
 import { LandingLanguageSelector } from "./LandingLanguageSelector";
 import { LandingParticles } from "./LandingParticles";
+import { LEGAL_OPERATOR } from "./legalOperator";
 import { applyPageSeo } from "./seo";
 import "./landing.css";
 
@@ -30,8 +31,10 @@ export function getLegalTabFromPathname(pathname: string): LegalTabId | null {
   if (
     normalized === "/legal/copyright" ||
     normalized === "/legal/dmca" ||
+    normalized === "/legal/disclaimer" ||
     normalized === "/copyright" ||
-    normalized === "/dmca"
+    normalized === "/dmca" ||
+    normalized === "/disclaimer"
   ) {
     return "copyright";
   }
@@ -160,6 +163,51 @@ export function LegalPage({
             <p className="legal-document-summary">{activeDocument.summary}</p>
           </header>
 
+          <div
+            className="legal-section-block"
+            style={{
+              marginBottom: "1.5rem",
+              padding: "1rem 1.25rem",
+              borderRadius: "0.75rem",
+              background: "rgba(255, 255, 255, 0.03)",
+              border: "1px solid var(--landing-line)",
+              fontSize: "0.9rem",
+              lineHeight: 1.65,
+            }}
+          >
+            <strong style={{ display: "block", marginBottom: "0.35rem" }}>
+              {locale === "vi"
+                ? "Chủ thể vận hành & Đầu mối tiếp nhận pháp lý (Việt Nam)"
+                : "Operator & Official Legal / Privacy Contact"}
+            </strong>
+            <div>
+              {locale === "vi" ? "Chủ thể: " : "Operator: "}
+              <strong>{LEGAL_OPERATOR.operatorName}</strong>
+            </div>
+            <div>
+              {locale === "vi" ? "Địa chỉ liên hệ: " : "Address: "}
+              {LEGAL_OPERATOR.operatorAddress}
+            </div>
+            <div>
+              Email:{" "}
+              <a
+                href={`mailto:${LEGAL_OPERATOR.contactEmail}`}
+                style={{ textDecoration: "underline" }}
+              >
+                {LEGAL_OPERATOR.contactEmail}
+              </a>{" "}
+              ({LEGAL_OPERATOR.legalRoutingEmail} /{" "}
+              {LEGAL_OPERATOR.privacyRoutingEmail}) ·{" "}
+              {locale === "vi" ? "SĐT: " : "Phone: "}
+              <a
+                href={`tel:${LEGAL_OPERATOR.phone}`}
+                style={{ textDecoration: "underline" }}
+              >
+                {LEGAL_OPERATOR.phone}
+              </a>
+            </div>
+          </div>
+
           <div className="legal-document-sections">
             {activeDocument.sections.map((section) => (
               <section key={section.badge} className="legal-section-block">
@@ -191,7 +239,15 @@ export function LegalPage({
             <button
               type="button"
               className="landing-button landing-button-primary"
-              onClick={triggerLandingFeedback}
+              onClick={() =>
+                triggerLandingFeedback(
+                  activeTab === "copyright"
+                    ? "copyright"
+                    : activeTab === "privacy"
+                      ? "privacy"
+                      : "bug",
+                )
+              }
             >
               {catalog.reportCtaButton}
             </button>

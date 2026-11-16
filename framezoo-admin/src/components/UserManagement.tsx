@@ -268,6 +268,9 @@ function UserTableRow({
           <div className="user-copy">
             <div className="user-name-line">
               <strong>{user.nickname}</strong>
+              {user.is_suspended ? (
+                <span className="status-badge status-pending">Đình chỉ</span>
+              ) : null}
               {user.email ? (
                 <span className="masked-email" title="Email được ẩn một phần">
                   {maskEmail(user.email)}
@@ -542,6 +545,16 @@ function Overview({
           </Info>
           <Info label="Namespace">{detail.user.namespace || "—"}</Info>
           <Info label="Ngày tạo">{formatDateTime(detail.user.created_at)}</Info>
+          <Info label="Trạng thái">
+            {detail.user.is_suspended
+              ? `Đình chỉ${detail.user.suspended_reason ? ` (${detail.user.suspended_reason})` : ""}`
+              : "Hoạt động"}
+          </Info>
+          <Info label="Đồng ý ToS / Privacy">
+            {detail.user.terms_version && detail.user.privacy_version
+              ? `ToS ${detail.user.terms_version} · Privacy ${detail.user.privacy_version}${detail.user.age_confirmed ? " · >=16 tuổi" : ""}`
+              : "Chưa ghi nhận"}
+          </Info>
         </dl>
       </div>
       <div className="detail-block">
@@ -699,6 +712,35 @@ function EditUserModal({
               placeholder="name@example.com"
             />
           </label>
+          <label
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 8,
+            }}
+          >
+            <input
+              type="checkbox"
+              checked={state.editSuspended}
+              onChange={(event) => state.setEditSuspended(event.target.checked)}
+              style={{ width: "auto" }}
+            />
+            Đình chỉ tài khoản (chặn đăng nhập &amp; thu hồi phiên ngay)
+          </label>
+          {state.editSuspended ? (
+            <label>
+              Lý do đình chỉ (hiển thị khi user đăng nhập)
+              <input
+                maxLength={255}
+                value={state.editSuspendedReason}
+                onChange={(event) =>
+                  state.setEditSuspendedReason(event.target.value)
+                }
+                placeholder="vd: Vi phạm bản quyền lặp lại (Điều 198b Luật SHTT)"
+              />
+            </label>
+          ) : null}
           <div className="modal-footer">
             <button
               className="button button-secondary"

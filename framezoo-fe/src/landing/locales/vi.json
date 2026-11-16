@@ -88,7 +88,7 @@
     "addonPolicy": "Chính sách Addon",
     "reportIssue": "Gửi phản hồi / Báo cáo",
     "rights": "© 2026 Framezoo. Bảo lưu mọi quyền.",
-    "metadataAttribution": "Thông tin metadata phim được tổng hợp từ các cơ sở dữ liệu công khai (TMDB, IMDb) nhằm mục đích tra cứu."
+    "metadataAttribution": "Dữ liệu phim & poster sử dụng TMDB API (sản phẩm này không được TMDB xác nhận hay chứng nhận) cùng điểm đánh giá từ OMDb API."
   },
   "addonGuide": {
     "description": "Addon là một dịch vụ HTTP nhỏ gọn. Bạn chỉ cần cung cấp manifest và các tài nguyên cần thiết; Framezoo sẽ xử lý phần còn lại.",
@@ -205,7 +205,7 @@
     "cancel": "Hủy",
     "submit": "Gửi phản hồi",
     "attachmentsLabel": "Files đính kèm",
-    "attachmentsHint": "Ảnh/video · tổng tối đa 55 MB",
+    "attachmentsHint": "Ảnh/video/PDF (giấy tờ ủy quyền hoặc bản quyền) · tổng tối đa 55 MB",
     "attachmentsTooLarge": "Tổng dung lượng files không được vượt quá 55 MB.",
     "submitting": "Đang gửi...",
     "close": "Đóng"
@@ -334,85 +334,83 @@
       },
       "privacy": {
         "title": "Chính sách bảo mật & Bảo vệ dữ liệu cá nhân",
-        "updatedAt": "Cập nhật: 04/11/2026 · Luật 91/2025/QH15 & NĐ 356/2025/NĐ-CP",
-        "summary": "Chính sách này mô tả dữ liệu được xử lý khi bạn dùng ứng dụng Framezoo trên máy tính và máy chủ Framezoo chính thức.",
+        "updatedAt": "Cập nhật: 16/11/2026 · Phiên bản 2026-11 · Luật 91/2025/QH15 & NĐ 356/2025/NĐ-CP",
+        "summary": "Chính sách này mô tả dữ liệu được xử lý khi bạn dùng ứng dụng Framezoo trên máy tính, di động, TV và máy chủ Framezoo chính thức.",
         "sections": [
           {
             "badge": "01",
-            "title": "Dữ liệu trên thiết bị và máy chủ",
+            "title": "Dữ liệu trên thiết bị, khách (Guest) và tài khoản",
             "paragraphs": [
-              "Ứng dụng lưu một phần cài đặt, bộ nhớ đệm và dữ liệu phát trên thiết bị. Khi bạn tạo tài khoản, máy chủ còn lưu email, tên hiển thị, hồ sơ, khóa công khai, thông tin phiên/thiết bị, dữ liệu đồng bộ như dấu trang, tiến độ xem, lịch sử xem, cài đặt và Addon, cùng khóa nhà cung cấp phụ đề được mã hóa nếu bạn nhập khóa."
+              "Ứng dụng lưu cài đặt giao diện, lịch sử cục bộ và bộ nhớ đệm trên thiết bị. Khi tạo tài khoản (chỉ dành cho người từ đủ 16 tuổi trở lên), máy chủ lưu email mã hóa, biệt danh, hồ sơ, khóa công khai, phiên đăng nhập/thiết bị, dữ liệu đồng bộ (dấu trang, tiến độ, lịch sử, cài đặt/addon), bản ghi xác nhận đồng ý điều khoản và khóa API phụ đề mã hóa nếu bạn tự nhập."
             ],
             "bullets": [
-              "Email, mã xác minh và thông tin kỹ thuật của yêu cầu được dùng để đăng ký, đăng nhập và bảo vệ tài khoản.",
-              "Phản hồi, mô tả lỗi và tệp đính kèm được gửi tới máy chủ khi bạn chủ động gửi biểu mẫu.",
-              "Tùy chọn ngôn ngữ trên website được lưu trong bộ nhớ trình duyệt."
+              "Chế độ Khách (Guest) chỉ ghi nhận mã phiên kỹ thuật ngẫu nhiên, nền tảng thiết bị và phiên bản ứng dụng để vận hành dịch vụ phụ đề/đồng bộ.",
+              "Email, mã OTP xác minh và nhật ký kỹ thuật chỉ phục vụ đăng ký, đăng nhập và bảo vệ an toàn tài khoản.",
+              "Hệ thống đo lường từ chối thu thập tên phim, TMDB/IMDb ID hoặc addon nguồn bên thứ ba gắn với cá nhân bạn."
             ]
           },
           {
             "badge": "02",
-            "title": "Mục đích và dịch vụ bên thứ ba",
+            "title": "Mục đích, chuyển dữ liệu ra nước ngoài và bên thứ ba",
             "paragraphs": [
-              "Chúng tôi xử lý dữ liệu để vận hành tài khoản, đồng bộ giữa thiết bị, hỗ trợ người dùng, bảo vệ dịch vụ và cung cấp tính năng bạn chọn. Chúng tôi không bán dữ liệu cá nhân cho mạng quảng cáo."
+              "Chúng tôi xử lý dữ liệu để vận hành tài khoản, đồng bộ đa thiết bị, hỗ trợ kỹ thuật, tuân thủ pháp luật và không bán dữ liệu cá nhân."
             ],
             "bullets": [
-              "Email xác minh được chuyển tới nhà cung cấp dịch vụ gửi thư; bản sao lưu cơ sở dữ liệu có thể được lưu trên Supabase khi dịch vụ sao lưu được cấu hình.",
-              "Một số nhà cung cấp dịch vụ hoặc máy chủ Addon có thể xử lý dữ liệu bên ngoài Việt Nam; vị trí máy chủ tùy thuộc dịch vụ bạn chọn và cấu hình vận hành.",
-              "Google reCAPTCHA có thể được dùng ở màn hình đăng ký; nội dung phụ đề được gửi tới Google Translate khi bạn chọn dịch.",
-              "Khi bạn tìm hoặc tải phụ đề, dùng đồng bộ âm thanh/phụ đề, hay bật Addon cộng đồng, dữ liệu yêu cầu có thể đi qua máy chủ Framezoo và dịch vụ bên ngoài tương ứng. Addon của bên thứ ba có chính sách riêng."
+              "Dịch vụ gửi email xác minh (SMTP) và sao lưu cơ sở dữ liệu được mã hóa có thể đặt tại máy chủ bên ngoài Việt Nam tùy cấu hình hạ tầng.",
+              "Dữ liệu tra cứu phim & điểm đánh giá gọi qua API chính thức của TMDB và OMDb; tìm kiếm phụ đề kết nối tới Wyzie, SubSource và OpenSubtitles.com REST API (ưu tiên khóa API cá nhân của bạn hoặc khóa thương mại dự phòng).",
+              "Các tệp phụ đề tải qua máy chủ trung gian áp dụng chính sách không lưu cache công khai (no-store). Addon bên thứ ba do bạn tự cài được kết nối trực tiếp từ thiết bị người dùng tới máy chủ addon tương ứng theo chính sách riêng của addon đó."
             ]
           },
           {
             "badge": "03",
-            "title": "Thời gian lưu và xóa dữ liệu",
+            "title": "Thời gian lưu, xuất dữ liệu & xóa dữ liệu",
             "paragraphs": [
-              "Dữ liệu tài khoản và đồng bộ được lưu khi tài khoản hoạt động. Bạn có thể xóa tài khoản trong Cài đặt; các bản ghi tài khoản, dấu trang, tiến độ, lịch sử xem, cài đặt và phiên đăng nhập trên máy chủ sẽ bị xóa. Bản sao lưu cũ có thể còn dữ liệu đến khi được luân chuyển; cấu hình mặc định giữ 7 bản sao lưu gần nhất khi sao lưu hoạt động."
+              "Dữ liệu được lưu khi tài khoản còn hoạt động. Bạn có thể tự Xuất dữ liệu cá nhân (JSON) hoặc Xóa vĩnh viễn tài khoản ngay trong mục Cài đặt -> Hành động; bản sao lưu cơ sở dữ liệu tự động luân chuyển tối đa 7 bản gần nhất."
             ],
             "bullets": [
-              "Mã xác minh hết hiệu lực sau 10 phút; bản ghi xác minh đã hết hạn được dọn sau 7 ngày. Bản ghi thư đã gửi hoặc gửi lỗi được dọn sau 7 ngày.",
-              "Phản hồi và tệp đính kèm được lưu riêng để xử lý hỗ trợ hoặc yêu cầu bản quyền cho đến khi được xóa theo yêu cầu hoặc do bộ phận hỗ trợ xóa. Xóa tài khoản sẽ gỡ liên kết tài khoản, nhưng không tự xóa phản hồi. Bạn có thể yêu cầu xóa phản hồi riêng qua biểu mẫu Phản hồi."
+              "Mã xác minh OTP hết hiệu lực sau 10 phút và tự động xóa sau 7 ngày cùng nhật ký gửi thư.",
+              "Hồ sơ phản hồi / khiếu nại bản quyền được lưu riêng để đáp ứng nghĩa vụ giải trình pháp lý và bảo vệ quyền sở hữu trí tuệ; việc xóa tài khoản sẽ hủy liên kết tài khoản và bạn có thể yêu cầu xóa phản hồi riêng."
             ]
           },
           {
             "badge": "04",
-            "title": "Quyền của bạn và liên hệ",
+            "title": "Quyền của chủ thể dữ liệu cá nhân & Giới hạn độ tuổi",
             "paragraphs": [
-              "Bạn có thể yêu cầu xem, chỉnh sửa, xóa hoặc hạn chế xử lý dữ liệu, rút lại đồng ý nếu hoạt động xử lý dựa trên đồng ý, và gửi khiếu nại qua biểu mẫu Phản hồi trên website. Vui lòng cung cấp email tài khoản để chúng tôi xác minh yêu cầu."
+              "Dịch vụ tài khoản Framezoo dành cho người từ đủ 16 tuổi trở lên theo Điều 20 Luật Bảo vệ dữ liệu cá nhân 91/2025/QH15. Bạn có quyền truy cập, xuất bản sao (JSON), chỉnh sửa, xóa, rút lại sự đồng ý hoặc gửi khiếu nại qua biểu mẫu Phản hồi hoặc email privacy@framezoo.top / framezoo.top@gmail.com (cam kết phản hồi trong 24 giờ)."
             ]
           }
         ]
       },
       "copyright": {
-        "title": "Bản quyền, DMCA & Miễn trừ trách nhiệm nội dung",
-        "updatedAt": "Cập nhật: 04/11/2026",
-        "summary": "Tuyên bố miễn trừ trách nhiệm nội dung và quy trình tiếp nhận thông báo liên quan đến quyền sở hữu trí tuệ.",
+        "title": "Bản quyền, Notice & Takedown & Miễn trừ trách nhiệm",
+        "updatedAt": "Cập nhật: 16/11/2026 · Điều 198b Luật SHTT & NĐ 17/2023/NĐ-CP",
+        "summary": "Tuyên bố vai trò trung gian kỹ thuật, quy trình Thông báo & Gỡ bỏ (Notice & Takedown) trong 24h–72h và chính sách tài khoản vi phạm lặp lại.",
         "sections": [
           {
             "badge": "01",
-            "title": "Miễn trừ trách nhiệm đối với công cụ phần mềm trung gian",
+            "title": "Phần mềm trình phát trung gian trung lập & P2P",
             "paragraphs": [
-              "Framezoo không vận hành kho phim hoặc nguồn phát video. Ứng dụng có thể truy xuất nguồn do người dùng chọn; máy chủ có thể chuyển tiếp phụ đề từ nhà cung cấp và xử lý tạm thời âm thanh/phụ đề để đồng bộ theo yêu cầu của người dùng.",
-              "Mỗi yêu cầu bản quyền sẽ được xem xét theo nội dung và vai trò thực tế của dịch vụ; điều khoản này không tự tạo quyền miễn trừ trách nhiệm."
+              "Framezoo là phần mềm kỹ thuật trung lập thuần túy, tương tự Stremio và Kodi: không lưu trữ tệp phim, không cung cấp nguồn phát mặc định, không cài sẵn scraper hay tracker công cộng và tắt hoàn toàn cơ chế chia sẻ ngược P2P (upload_rate_limit = 0) theo mặc định.",
+              "Ứng dụng không proxy luồng video hoặc lưu đệm công khai tệp phụ đề từ bên thứ ba trên máy chủ."
             ]
           },
           {
             "badge": "02",
-            "title": "Nguồn thông tin Metadata & Hình ảnh minh họa",
+            "title": "Nguồn Metadata chính thức & TMDB Attribution",
             "paragraphs": [
-              "Các thông tin tra cứu về phim (tên phim, năm phát hành, tóm tắt nội dung, điểm số, poster minh họa) hiển thị trên giao diện được trích xuất tự động từ các cơ sở dữ liệu điện ảnh mở (như TMDB, IMDb, TVDB) theo phạm vi sử dụng hợp lý nhằm mục đích thông tin và danh mục.",
-              "Nhãn hiệu, tên phim và hình ảnh đại diện thuộc quyền sở hữu của các nhà sản xuất và chủ sở hữu bản quyền tương ứng."
+              "Thông tin tra cứu, tóm tắt, poster và điểm đánh giá được truy xuất qua API hợp lệ của TMDB và OMDb nhằm mục đích danh mục và tra cứu thông tin.",
+              "Sản phẩm này sử dụng TMDB API nhưng không được TMDB xác nhận hay chứng nhận (\"This product uses the TMDB API but is not endorsed or certified by TMDB\"). Nhãn hiệu và hình ảnh thuộc về chủ sở hữu quyền tương ứng."
             ]
           },
           {
             "badge": "03",
-            "title": "Quy trình Thông báo & Gỡ bỏ (Notice & Takedown)",
+            "title": "Quy trình Thông báo & Gỡ bỏ (SLA 24h / 72h) & Repeat Infringer",
             "paragraphs": [
-              "Framezoo tôn trọng quyền tác giả và quyền liên quan của các tổ chức, cá nhân. Nếu bạn là chủ sở hữu quyền hợp pháp và nhận thấy bất kỳ nội dung hiển thị trên website framezoo.top xâm phạm quyền sở hữu trí tuệ của mình, vui lòng gửi yêu cầu kèm theo:"
+              "Chủ thể quyền hoặc cơ quan có thẩm quyền có thể gửi thông báo vi phạm (gồm tên chủ thể quyền, bằng chứng/PDF ủy quyền, URL addon / ID tác phẩm / ID phụ đề và cam kết trung thực) qua biểu mẫu Khiếu nại Bản quyền hoặc email legal@framezoo.top / framezoo.top@gmail.com."
             ],
             "bullets": [
-              "Thông tin định danh chủ sở hữu bản quyền hoặc đại diện được ủy quyền hợp pháp.",
-              "Bằng chứng xác nhận quyền sở hữu hợp pháp đối với tác phẩm liên quan.",
-              "Đường dẫn URL cụ thể hoặc mô tả chi tiết thành phần cần kiểm tra/gỡ bỏ."
+              "Gỡ bỏ liên kết/phụ đề/addon vi phạm khỏi blocklist hệ thống (/compliance/blocklist) trong tối đa 24 giờ đối với yêu cầu của cơ quan nhà nước hoặc 72 giờ làm việc đối với thông báo hợp lệ từ chủ thể quyền.",
+              "Áp dụng chính sách chấm dứt và đình chỉ tài khoản đối với trường hợp vi phạm bản quyền nhiều lần (Repeat Infringer Policy)."
             ]
           }
         ]

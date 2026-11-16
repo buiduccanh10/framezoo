@@ -54,7 +54,7 @@
     "addonPolicy": "Add-onbeleid",
     "privacy": "Privacy- en gegevensbeleid",
     "rights": "© 2026 Framezoo. Alle rechten voorbehouden.",
-    "metadataAttribution": "Metagegevens worden ter informatie verstrekt door openbare filmdatabases (TMDB, IMDb)."
+    "metadataAttribution": "Metagegevens en illustraties van films gebruiken de TMDB API (niet goedgekeurd of gecertificeerd door TMDB) en beoordelingen via de OMDb API."
   },
   "addonGuide": {
     "manifestDescription": "Metadata vertellen de app wie uw add-on is, welke bronnen deze ondersteunt en waar het pictogram zich bevindt.",
@@ -110,7 +110,7 @@
         "Selecteer \"Openen\" in het contextmenu.",
         "Klik in het bevestigingsvenster op \"Toch openen\" of \"Openen\"."
       ],
-      "step2Desc": "Omdat Framezoo een onafhankelijke open-source speler is zonder commercieel Apple Developer-certificaat, kan macOS de volgende melding geven: \"Framezoo is beschadigd en kan niet worden geopend\" of \"Apple kan deze app niet verifiëren\".",
+      "step2Desc": "Omdat Framezoo een onafhankelijke softwarespeler is zonder commercieel Apple Developer-certificaat, kan macOS de volgende melding geven: \"Framezoo is beschadigd en kan niet worden geopend\" of \"Apple kan deze app niet verifiëren\".",
       "step1Title": "Stap 1: Sleep naar Toepassingen",
       "subtitle": "Apple Silicon (M1/M2/M3/M4) en Intel Mac",
       "step3Title": "Stap 3: Open veilig via Finder",
@@ -177,7 +177,7 @@
     "submit": "Geef feedback",
     "attachmentsLabel": "Bestanden",
     "attachmentsTooLarge": "De totale bestandsgrootte mag niet groter zijn dan 55 MB.",
-    "attachmentsHint": "Afbeeldingen/video's · Maximaal 55 MB totaal",
+    "attachmentsHint": "Afbeeldingen/video's/PDF (autorisatie of copyright-bewijs) · Maximaal 55 MB totaal",
     "contactInvalid": "Voer een geldig e-mailadres of telefoonnummer in, zodat we kunnen antwoorden.",
     "errorRequired": "Vul de titel, contactgegevens en beschrijving van het probleem in.",
     "contactLabel": "2. E-mailadres of telefoonnummer",
@@ -331,83 +331,83 @@
       },
       "privacy": {
         "title": "Privacy- en persoonsgegevensbeschermingsbeleid",
-        "updatedAt": "Bijgewerkt: 4 november 2026 · Wet 91/2025/QH15 &amp; Besluit 356/2025/ND-CP",
-        "summary": "Dit beleid beschrijft de gegevensverwerking in de Framezoo desktopapplicatie en op officiële Framezoo-servers.",
+        "updatedAt": "Bijgewerkt: 16 november 2026 · Versie 2026-11 · Vietnamwet 91/2025/QH15 & Decreet 356/2025/ND-CP",
+        "summary": "Dit beleid beschrijft de gegevensverwerking via Framezoo Desktop, Mobile, TV-apps en officiële Framezoo-servers.",
         "sections": [
           {
-            "title": "Gegevens op uw apparaat en onze servers",
+            "title": "Apparaat-, gast- en accountgegevens",
             "paragraphs": [
-              "De applicatie slaat bepaalde instellingen, cache en afspeelgegevens op uw apparaat op. Als u een account aanmaakt, slaat de server ook uw e-mailadres, gebruikersnaam, profiel, openbare sleutel, sessie-/apparaatgegevens, gesynchroniseerde bladwijzers, voortgang, kijkgeschiedenis, instellingen en add-ons op, evenals versleutelde sleutels van ondertitelproviders als u deze verstrekt."
+              "De app slaat lokale instellingen, caches en afspeelgegevens op uw apparaat op. Wanneer u een account aanmaakt (beperkt tot gebruikers van 16 jaar of ouder), slaat de server ook uw gecodeerde e-mail, bijnaam, profiel, openbare sleutel, sessie-/apparaatgegevens, gesynchroniseerde bladwijzers, voortgang, kijkgeschiedenis, instellingen, add-ons, toestemmingsrecords met tijdstempel en gecodeerde API-sleutels van de BYOK-ondertitelprovider op als u deze opslaat."
             ],
             "bullets": [
-              "E-mailadressen, verificatiecodes en aanvraaggegevens ondersteunen de registratie, het inloggen en de accountbeveiliging.",
-              "Rapporten, bugbeschrijvingen en bijlagen komen op onze server terecht wanneer u het feedbackformulier indient.",
-              "De website slaat uw taalkeuze op in het geheugen van uw browser."
+              "De gastmodus gebruikt alleen een willekeurige technische identificatie, platformlabel en app-versie om eindpunten voor ondertiteling/synchronisatie te bedienen.",
+              "E-mailverificatiecodes en verzoeklogboeken worden strikt verwerkt om accounts te registreren, aan te melden en te beschermen.",
+              "Servertelemetrie sluit filmtitels, TMDB/IMDb-ID's en persoonlijke add-onbronnen van derden uit."
             ],
             "badge": "01"
           },
           {
-            "title": "Doelstellingen en externe diensten",
+            "title": "Doeleinden, grensoverschrijdende overdracht en externe API's",
             "paragraphs": [
-              "We verwerken gegevens om accounts te beheren, apparaten te synchroniseren, ondersteuning te bieden, de service te beschermen en de door u gekozen functies te leveren. We verkopen geen persoonsgegevens aan advertentienetwerken."
+              "We verwerken gegevens uitsluitend om accounts te beheren, apparaten te synchroniseren, ondersteuning te bieden, wettelijke naleving af te dwingen en nooit persoonlijke gegevens te verkopen."
             ],
             "bullets": [
-              "De verificatiemail wordt naar onze e-mailprovider gestuurd; databasebackups kunnen op Supabase worden opgeslagen als back-up is geconfigureerd.",
-              "Sommige serviceproviders of add-on servers verwerken mogelijk gegevens buiten Vietnam; de serverlocatie is afhankelijk van de gekozen service en de configuratie van het besturingssysteem.",
-              "Tijdens de registratie kan Google reCAPTCHA worden gebruikt; de ondertiteltekst wordt naar Google Translate verzonden wanneer u voor vertaling kiest.",
+              "E-mailproviders voor transactionele verificatie en gecodeerde databaseback-ups kunnen zich buiten Vietnam bevinden, afhankelijk van de implementatieconfiguratie.",
+              "Metadata en criticiscores worden opgehaald via officiële TMDB- en OMDb-API's; zoekopdrachten voor ondertitels zoeken naar Wyzie, SubSource en OpenSubtitles.com REST API (bij voorkeur uw persoonlijke BYOK-sleutels indien verstrekt).",
+              "Ondertitelingsbestandsrelays gebruiken no-store headers zonder openbare caching. Er wordt rechtstreeks contact opgenomen met add-ons van derden vanaf uw apparaat, onder hun eigen beleid.",
               "Zoeken en downloaden van ondertitels, synchronisatie van audio en ondertitels, en community-add-ons kunnen verzoeken versturen via Framezoo-servers en de relevante externe services. Add-ons van derden hanteren hun eigen beleid."
             ],
             "badge": "02"
           },
           {
-            "title": "Bewaren en verwijderen",
+            "title": "Bewaren, exporteren en verwijderen van JSON-gegevens",
             "paragraphs": [
-              "Account- en synchronisatiegegevens blijven behouden zolang uw account actief is. U kunt het account verwijderen via de instellingen; de server verwijdert dan accountgegevens, bladwijzers, voortgang, kijkgeschiedenis, instellingen en sessies. Oude databaseback-ups kunnen gegevens bewaren tot de rotatie; de ​​standaardconfiguratie bewaart 7 recente back-ups wanneer een back-up wordt uitgevoerd."
+              "Account- en synchronisatiegegevens blijven actief zolang uw account bestaat. U kunt een volledige JSON-kopie van uw persoonlijke gegevens exporteren of uw account permanent verwijderen via Instellingen -> Acties; roterende gecodeerde back-ups behouden maximaal 7 recente snapshots."
             ],
             "bullets": [
-              "Verificatiecodes verlopen na 10 minuten; verlopen verificatiegegevens worden na 7 dagen verwijderd. Gegevens over verzonden of mislukte e-mails worden na 7 dagen verwijderd.",
-              "Feedback en bijlagen worden apart bewaard voor ondersteunings- of auteursrechtverzoeken totdat ze op verzoek of door het ondersteuningsteam worden verwijderd. Bij het verwijderen van een account wordt de accountkoppeling verwijderd, maar rapporten worden niet automatisch verwijderd. U kunt een aparte verwijdering aanvragen via het feedbackformulier."
+              "Verificatie-OTP-uitdagingen verlopen na 10 minuten en worden na 7 dagen samen met de e-mailuitboxrecords verwijderd.",
+              "Feedbackrapporten en copyrightkennisgevingen blijven afzonderlijk opgeslagen voor nalevingscontrole; Door het verwijderen van een account wordt uw gebruikers-ID ontkoppeld."
             ],
             "badge": "03"
           },
           {
-            "title": "Uw rechten en contactgegevens",
+            "title": "Uw rechten, leeftijdscontrole (>=16) en contact",
             "paragraphs": [
-              "U kunt via het feedbackformulier op onze website inzage, correctie, verwijdering of beperking van uw gegevens aanvragen, uw toestemming intrekken (indien de verwerking op toestemming is gebaseerd) en een klacht indienen. Vermeld hierbij uw account-e-mailadres zodat we uw verzoek kunnen verifiëren."
+              "Accountregistratie is beperkt tot gebruikers van 16 jaar of ouder onder Vietnamwet 91/2025/QH15. U kunt toegang uitoefenen, JSON-export, correctie, verwijdering of intrekking van toestemming uitoefenen via de Feedbackmodal of privacy@framezoo.top / framezoo.top@gmail.com (binnen 24 uur gereageerd)."
             ],
             "badge": "04"
           }
         ]
       },
       "copyright": {
-        "title": "Auteursrecht, DMCA &amp; Disclaimer inzake inhoud",
-        "updatedAt": "Bijgewerkt: 4 november 2026",
-        "summary": "Officiële disclaimer en procedure voor kennisgeving en verwijdering van intellectueel eigendom voor Framezoo.",
+        "title": "Copyright, kennisgeving en verwijdering en disclaimer over inhoud",
+        "updatedAt": "Bijgewerkt: 16 november 2026 · Vietnam IE-recht Art. 198b en besluit 17/2023",
+        "summary": "Neutrale tussenpersoonstatus, 24u/72u Notice & Takedown-blokkeerlijstproces en beleid inzake herhaalde inbreuken.",
         "sections": [
           {
-            "title": "Safe Harbor-regeling voor software tussenpersonen",
+            "title": "Neutrale intermediaire software en standaard no-seeding P2P",
             "paragraphs": [
-              "Framezoo beheert geen filmbibliotheek of videostreamingbron. De applicatie heeft toegang tot door gebruikers gekozen bronnen; onze servers kunnen ondertitels van providers doorgeven en audio en ondertitels tijdelijk verwerken voor de gevraagde synchronisatie.",
-              "Elke auteursrechtvermelding wordt getoetst aan de inhoud en onze feitelijke rol; deze voorwaarden leiden niet automatisch tot een vrijstelling van aansprakelijkheid."
+              "Framezoo is neutrale mediaspelersoftware vergelijkbaar met Stremio en Kodi: het host geen videobestanden, bundelt geen standaard inhoudsadd-ons of openbare trackers, voert geen server-side add-on-proxying uit en schakelt standaard uitgaande P2P-zaaiing uit (upload_rate_limit = 0).",
+              "Ondertiteldownloads gebruiken no-store-headers zonder openbare caching op Framezoo-servers."
             ],
             "badge": "01"
           },
           {
-            "title": "Metadata en toeschrijving van afbeeldingen",
+            "title": "Officiële metadata-API's en TMDB-toeschrijving",
             "paragraphs": [
-              "Metadata van films en series (titels, releasedatums, synopsis, beoordelingen en promotiemateriaal) die worden weergegeven voor informatieve doeleinden, zijn afkomstig uit openbare filmdatabases (zoals TMDB, IMDb en TVDB).",
-              "Alle handelsmerken, filmtitels en afbeeldingen blijven eigendom van de respectievelijke auteursrechthebbenden."
+              "Filmtitels, synopses, illustraties en beoordelingen van critici worden opgehaald uit officiële TMDB- en OMDb-API's voor informatieve ontdekking.",
+              "Dit product maakt gebruik van de TMDB API, maar is niet goedgekeurd of gecertificeerd door TMDB. Alle handelsmerken en mediakunstwerken blijven eigendom van hun respectievelijke eigenaren."
             ],
             "badge": "02"
           },
           {
-            "title": "Kennisgevings- en verwijderingsprocedure",
+            "title": "Kennisgeving en verwijdering (24u/72u SLA) en beleid inzake herhaalde inbreuken",
             "paragraphs": [
-              "Framezoo respecteert intellectuele eigendomsrechten. Als u de eigenaar bent van auteursrechten of een gemachtigde vertegenwoordiger en van mening bent dat materiaal op framezoo.top inbreuk maakt op uw rechten, kunt u een melding indienen via ons rapport-/feedbackkanaal, met vermelding van:"
+              "Rechthebbenden en autoriteiten kunnen formele kennisgevingen indienen (identiteit van de eigenaar van de rechten, bewijs/PDF-autorisatie, specifiek add-on-domein / media-ID / ondertitel-ID en beëdigde verklaring) via het rapportformulier of legal@framezoo.top / framezoo.top@gmail.com."
             ],
             "bullets": [
-              "Identificatie van de auteursrechthebbende of diens gemachtigde vertegenwoordiger.",
-              "Bewijs van eigendom van het auteursrechtelijk beschermde werk.",
+              "Bevelen van bevoegde autoriteiten worden binnen 24 uur ten uitvoer gelegd op /compliance/blocklist; geldige kennisgevingen van de rechthebbende binnen 72 uur.",
+              "Accounts van herhaaldelijke overtreders die verband houden met geverifieerde overtredingen worden opgeschort, waarbij de sessie onmiddellijk wordt ingetrokken.",
               "De exacte URL of beschrijving van het betreffende materiaal, zodat we het binnen 24-72 werkuren kunnen bekijken en beantwoorden."
             ],
             "badge": "03"

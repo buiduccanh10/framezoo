@@ -43,6 +43,8 @@ export function useUserManagement(
   const [userToEdit, setUserToEdit] = useState<AdminUserItem | null>(null);
   const [editNickname, setEditNickname] = useState("");
   const [editEmail, setEditEmail] = useState("");
+  const [editSuspended, setEditSuspended] = useState(false);
+  const [editSuspendedReason, setEditSuspendedReason] = useState("");
   const [editLoading, setEditLoading] = useState(false);
   const [userToDelete, setUserToDelete] = useState<AdminUserItem | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
@@ -123,6 +125,8 @@ export function useUserManagement(
     setUserToEdit(user);
     setEditNickname(user.nickname);
     setEditEmail(user.email || "");
+    setEditSuspended(Boolean(user.is_suspended));
+    setEditSuspendedReason(user.suspended_reason || "");
   };
   const saveEdit = async (event: FormEvent) => {
     event.preventDefault();
@@ -132,6 +136,8 @@ export function useUserManagement(
       const user = await api.updateUser(userToEdit.id, {
         nickname: editNickname.trim(),
         email: editEmail.trim() || null,
+        isSuspended: editSuspended,
+        suspendedReason: editSuspended ? editSuspendedReason.trim() || null : null,
       });
       showMessage(`Đã cập nhật người dùng ${user.nickname}`);
       setUserToEdit(null);
@@ -226,6 +232,8 @@ export function useUserManagement(
     userToEdit,
     editNickname,
     editEmail,
+    editSuspended,
+    editSuspendedReason,
     editLoading,
     userToDelete,
     deleteLoading,
@@ -239,6 +247,8 @@ export function useUserManagement(
     setDetailTab,
     setEditNickname,
     setEditEmail,
+    setEditSuspended,
+    setEditSuspendedReason,
     setUserToEdit,
     setUserToDelete,
     setUserToRevoke,

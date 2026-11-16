@@ -53,7 +53,7 @@
     "copyright": "Avtorske pravice in DMCA",
     "disclaimer": "Framezoo je nevtralna programska oprema za predvajanje medijev in ne gosti, shranjuje, distribuira ali nadzoruje nobenih predstavnostnih datotek ali dodatkov tretjih oseb. Uporabniki so izključno odgovorni za dodatke in vsebino, do katere dostopajo v skladu z lokalno zakonodajo.",
     "addonPolicy": "Politika dodatkov",
-    "metadataAttribution": "Metapodatke zagotavljajo javne zbirke podatkov o filmih (TMDB, IMDb) v informativne namene.",
+    "metadataAttribution": "Filmski metapodatki in umetniška dela uporabljajo TMDB API (ki ga TMDB ni odobril ali certificiral) in ocene prek OMDb API.",
     "rights": "© 2026 Framezoo. Vse pravice pridržane."
   },
   "addonGuide": {
@@ -111,7 +111,7 @@
       "step1Title": "1. korak: povlecite do Aplikacije",
       "subtitle": "Apple Silicon (M1/M2/M3/M4) & Intel Mac",
       "title": "Navodila za namestitev macOS",
-      "step2Desc": "Ker je Framezoo neodvisen odprtokodni predvajalnik brez komercialnega potrdila Apple Developer, lahko macOS prikaže: »Framezoo je poškodovan in ga ni mogoče odpreti« ali »Apple ne more preveriti te aplikacije«.",
+      "step2Desc": "Ker je Framezoo neodvisen predvajalnik programske opreme brez komercialnega potrdila Apple Developer, lahko macOS prikaže: »Framezoo je poškodovan in ga ni mogoče odpreti« ali »Apple ne more preveriti te aplikacije«.",
       "step3Title": "3. korak: Varno odprite prek Finderja",
       "step3Steps": [
         "Odprite Finder in se pomaknite do mape z aplikacijami.",
@@ -177,7 +177,7 @@
     "submitting": "Pošiljanje ...",
     "attachmentsLabel": "Datoteke",
     "attachmentsTooLarge": "Skupna velikost datoteke ne sme presegati 55 MB.",
-    "attachmentsHint": "Slike/videoposnetki · Skupno največ 55 MB",
+    "attachmentsHint": "Slike/videoposnetki/PDF (pooblastilo ali dokazilo o avtorskih pravicah) · Skupno največ 55 MB",
     "contactPlaceholder": "npr. ime@example.com ali +84912345678",
     "contactInvalid": "Vnesite veljaven e-poštni naslov ali telefonsko številko, da vam lahko odgovorimo.",
     "errorRequired": "Vnesite naslov, kontaktne podatke in opis težave.",
@@ -331,83 +331,83 @@
       },
       "privacy": {
         "title": "Politika zasebnosti in varstva osebnih podatkov",
-        "updatedAt": "Posodobljeno: 4. november 2026 · Zakon 91/2025/QH15 in Odlok 356/2025/ND-CP",
-        "summary": "Ta politika opisuje obdelavo podatkov v namizni aplikaciji Framezoo in na uradnih strežnikih Framezoo.",
+        "updatedAt": "Posodobljeno: 16. november 2026 · Različica 2026-11 · Vietnamski zakon 91/2025/QH15 & Odlok 356/2025/ND-CP",
+        "summary": "Ta pravilnik opisuje obdelavo podatkov v namiznih, mobilnih in televizijskih aplikacijah Framezoo in uradnih strežnikih Framezoo.",
         "sections": [
           {
-            "title": "Podatki na vaši napravi in ​​naših strežnikih",
+            "title": "Podatki o napravi, gostu in računu",
             "paragraphs": [
-              "Aplikacija shrani nekatere nastavitve, predpomnilnik in podatke o predvajanju v vaši napravi. Če ustvarite račun, strežnik shrani tudi vaš e-poštni naslov, vzdevek, profil, javni ključ, podrobnosti o seji/napravi, sinhronizirane zaznamke, napredek, zgodovino ogledov, nastavitve in dodatke ter šifrirane ključe ponudnika podnapisov, če jih posredujete."
+              "Aplikacija shranjuje lokalne nastavitve, predpomnilnike in podatke o predvajanju v vaši napravi. Ko ustvarite račun (omejen na uporabnike, stare 16 let ali več), strežnik shrani tudi vašo šifrirano e-pošto, vzdevek, profil, javni ključ, podrobnosti o sejah/napravi, sinhronizirane zaznamke, napredek, zgodovino ogledov, nastavitve, dodatke, zapise soglasja s časovnim žigom in šifrirane ključe API ponudnika podnapisov BYOK, če jih shranite."
             ],
             "bullets": [
-              "E-pošta, potrditvene kode in podrobnosti zahteve podpirajo registracijo, prijavo in varnost računa.",
-              "Poročila, opisi napak in priloge prispejo na naš strežnik, ko oddate obrazec za povratne informacije.",
-              "Spletno mesto shrani vašo izbiro jezika v pomnilnik brskalnika."
+              "Način za goste uporablja samo naključni tehnični identifikator, oznako platforme in različico aplikacije za upravljanje končnih točk prenosa/sinhronizacije podnapisov.",
+              "Kode za preverjanje e-pošte in dnevniki zahtev se obdelujejo izključno za registracijo, prijavo in zaščito računov.",
+              "Telemetrija strežnika izključuje naslove filmov, ID-je TMDB/IMDb in osebne vire dodatkov tretjih oseb."
             ],
             "badge": "01"
           },
           {
-            "title": "Nameni in zunanje storitve",
+            "title": "Nameni, čezmejni prenos in zunanji API-ji",
             "paragraphs": [
-              "Podatke obdelujemo za upravljanje računov, sinhronizacijo naprav, zagotavljanje podpore, zaščito storitve in zagotavljanje funkcij, ki jih izberete. Osebnih podatkov ne prodajamo oglaševalskim omrežjem."
+              "Podatke obdelujemo izključno za upravljanje računov, sinhronizacijo naprav, zagotavljanje podpore, uveljavljanje zakonske skladnosti in nikoli ne prodajamo osebnih podatkov."
             ],
             "bullets": [
-              "Potrditveno e-poštno sporočilo se pošlje našemu ponudniku e-pošte; varnostne kopije baze podatkov se lahko shranijo v Supabase, ko je varnostno kopiranje konfigurirano.",
-              "Nekateri ponudniki storitev ali dodatni strežniki lahko obdelujejo podatke zunaj Vietnama; lokacija strežnika je odvisna od izbrane storitve in konfiguracije delovanja.",
-              "Med registracijo lahko uporabite Google reCAPTCHA; ko izberete prevajanje, se besedilo podnapisov prenese v Google Prevajalnik.",
+              "Ponudniki elektronske pošte za preverjanje transakcij in varnostne kopije šifriranih baz podatkov so morda zunaj Vietnama, odvisno od konfiguracije uvedbe.",
+              "Metapodatki in ocene kritikov so pridobljeni prek uradnih API-jev TMDB in OMDb; iskanje podnapisov poizveduje po API-ju REST Wyzie, SubSource in OpenSubtitles.com (prednost imajo vaši osebni ključi BYOK, če so na voljo).",
+              "Releji datotek s podnapisi uporabljajo glave brez shranjevanja brez javnega predpomnjenja. Z dodatki tretjih oseb vzpostavite stik neposredno iz vaše naprave v skladu z njihovimi lastnimi pravilniki.",
               "Iskanje in prenos podnapisov, sinhronizacija zvoka/podnapisov in dodatki skupnosti lahko pošiljajo zahteve prek strežnikov Framezoo in ustreznih zunanjih storitev. Dodatki drugih ponudnikov imajo svoje pravilnike."
             ],
             "badge": "02"
           },
           {
-            "title": "Hramba in izbris",
+            "title": "Zadrževanje, izvoz in brisanje podatkov JSON",
             "paragraphs": [
-              "Podatki o računu in sinhronizaciji ostanejo shranjeni, dokler je vaš račun aktiven. Račun lahko izbrišete v nastavitvah; strežnik nato odstrani zapise računa, zaznamke, napredek, zgodovino ogledov, nastavitve in seje. Stare varnostne kopije baze podatkov lahko hranijo podatke do rotacije; privzeta konfiguracija hrani 7 nedavnih varnostnih kopij, ko se izvaja varnostno kopiranje."
+              "Račun in podatki o sinhronizaciji ostanejo aktivni, dokler vaš račun obstaja. Izvozite lahko celotno kopijo JSON vaših osebnih podatkov ali trajno izbrišete svoj račun v Nastavitve -> Dejanja; rotirajoče šifrirane varnostne kopije ohranijo do 7 nedavnih posnetkov."
             ],
             "bullets": [
-              "Kode za preverjanje potečejo po 10 minutah; zapisi o potečenih izzivih se odstranijo po 7 dneh. Zapisi o poslani ali neuspešni pošti se odstranijo po 7 dneh.",
-              "Povratne informacije in priloge se hranijo ločeno za potrebe podpore ali zahtev glede avtorskih pravic, dokler jih ekipa za podporo ne odstrani na zahtevo ali jih ne odstrani. Z brisanjem računa se odstrani povezava do računa, vendar poročila ne izbrišejo samodejno. Ločeno brisanje lahko zahtevate prek obrazca za povratne informacije."
+              "Izzivi OTP za preverjanje potečejo po 10 minutah in se po 7 dneh izbrišejo skupaj z zapisi pošiljanja e-pošte.",
+              "Poročila s povratnimi informacijami in obvestila o avtorskih pravicah ostanejo shranjena ločeno za revizijo skladnosti; izbris računa prekine povezavo vašega ID-ja uporabnika."
             ],
             "badge": "03"
           },
           {
-            "title": "Vaše pravice in stik",
+            "title": "Vaše pravice, starostna omejitev (>=16) in stik",
             "paragraphs": [
-              "Zahtevate lahko dostop do svojih podatkov, njihov popravek, izbris ali omejitev, prekličete soglasje, kadar obdelava zahteva soglasje, in vložite pritožbo prek obrazca za povratne informacije na naši spletni strani. Prosimo, navedite svoj e-poštni naslov, da lahko preverimo zahtevo."
+              "Registracija računa je v skladu z vietnamskim zakonom 91/2025/QH15 omejena na uporabnike, stare 16 let ali več. Dostop, izvoz JSON, popravek, izbris ali umik soglasja lahko izvajate prek načina povratne informacije ali privacy@framezoo.top / framezoo.top@gmail.com (odgovor v 24 urah)."
             ],
             "badge": "04"
           }
         ]
       },
       "copyright": {
-        "title": "Avtorske pravice, DMCA in omejitev odgovornosti za vsebino",
-        "updatedAt": "Posodobljeno: 4. november 2026",
-        "summary": "Uradna izjava o omejitvi odgovornosti za vsebino in postopek obveščanja o intelektualni lastnini ter odstranitve vsebine za Framezoo.",
+        "title": "Avtorske pravice, obvestilo in odstranitev ter zavrnitev odgovornosti za vsebino",
+        "updatedAt": "Posodobljeno: 16. november 2026 · Vietnamsko pravo intelektualne lastnine, čl. 198b & Odlok 17/2023",
+        "summary": "Status nevtralnega posrednika, 24-urni postopek obveščanja in odstranitve s seznama blokiranih in pravilnik o ponavljajočih se kršiteljih.",
         "sections": [
           {
-            "title": "Varni pristan posredniške programske opreme",
+            "title": "Nevtralna posredniška programska oprema in privzeti P2P brez sejanja",
             "paragraphs": [
-              "Framezoo ne upravlja knjižnice filmov ali vira video toka. Aplikacija lahko dostopa do virov, ki jih izberejo uporabniki; naši strežniki lahko posredujejo podnapise ponudnikov in začasno obdelujejo zvok in podnapise za zahtevano sinhronizacijo.",
-              "Vsako obvestilo o avtorskih pravicah se pregleda glede na vsebino in našo dejansko vlogo; ti pogoji ne ustvarjajo samodejne izjeme od odgovornosti."
+              "Framezoo je nevtralna programska oprema za večpredstavnostne predvajalnike, podobna Stremio in Kodi: ne gosti nobenih video datotek, ne združuje nobenih privzetih vsebinskih dodatkov ali javnih sledilnikov, ne izvaja proxyja dodatkov na strani strežnika in privzeto onemogoči odhodno sejanje P2P (upload_rate_limit = 0).",
+              "Prenosi podnapisov uporabljajo glave brez shranjevanja brez javnega predpomnjenja na strežnikih Framezoo."
             ],
             "badge": "01"
           },
           {
-            "title": "Pripis metapodatkov in umetniškega dela",
+            "title": "Uradni API-ji za metapodatke in pripis TMDB",
             "paragraphs": [
-              "Metapodatki filmov in serij (naslovi, datumi izida, sinopsisi, ocene in promocijski plakati), prikazani za informativno iskanje, izvirajo iz javnih filmskih baz podatkov (kot so TMDB, IMDb in TVDB).",
-              "Vse blagovne znamke, naslovi filmov in umetniška dela ostanejo last njihovih lastnikov avtorskih pravic."
+              "Naslovi filmov, sinopsisi, umetniška dela in ocene kritikov so pridobljeni iz uradnih API-jev TMDB in OMDb za odkrivanje informacij.",
+              "Ta izdelek uporablja API TMDB, vendar ga TMDB ne podpira ali certificira. Vse blagovne znamke in medijska umetniška dela ostanejo last njihovih lastnikov."
             ],
             "badge": "02"
           },
           {
-            "title": "Postopek obveščanja in odstranitve",
+            "title": "Obvestilo in odstranitev (24-urna/72-urna pogodba o ravni storitev) in pravilnik o ponavljajočih se kršiteljih",
             "paragraphs": [
-              "Framezoo spoštuje pravice intelektualne lastnine. Če ste lastnik avtorskih pravic ali pooblaščeni zastopnik in menite, da katero koli gradivo na framezoo.top krši vaše pravice, prosimo, da prek našega kanala za prijavo/povratne informacije oddate obvestilo, ki vključuje:"
+              "Imetniki pravic in organi lahko posredujejo uradna obvestila (identiteto lastnika pravic, pooblastilo dokazila/PDF, posebno domeno dodatka/medijski ID/ID podnapisov in zapriseženo izjavo) prek obrazca za poročilo ali legal@framezoo.top / framezoo.top@gmail.com."
             ],
             "bullets": [
-              "Identifikacija imetnika avtorskih pravic ali pooblaščenega zastopnika.",
-              "Dokazilo o lastništvu avtorsko zaščitenega dela.",
+              "Ukazi pristojnih organov so uveljavljeni na /compliance/blocklist v 24 urah; veljavna obvestila imetnikov pravic v 72 urah.",
+              "Računi ponavljajočih se kršiteljev, povezani s preverjenimi kršitvami, so začasno ustavljeni s takojšnjim preklicem seje.",
               "Natančen URL ali opis zadevnega gradiva, da ga lahko pregledamo in obravnavamo v 24–72 delovnih urah."
             ],
             "badge": "03"

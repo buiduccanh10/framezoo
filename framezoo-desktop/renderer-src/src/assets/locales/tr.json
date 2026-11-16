@@ -18,6 +18,7 @@
       "configRequiredDesc": "Bu eklentinin içerik döndürebilmesi için önce yapılandırma (API anahtarları veya dil ayarları gibi) gereklidir. Lütfen tarayıcınızda yapılandırın, ardından oluşturulan manifest URL&#39;sini buraya kopyalayıp yapıştırın.",
       "configRequiredTitle": "Yapılandırma Gerekli",
       "configureAction": "Yapılandır",
+      "disclaimerNotice": "Üçüncü taraf eklentiler, topluluk geliştiricileri tarafından bağımsız olarak işletilmektedir. İçeriğin kendi yargı bölgenizde yasal olup olmadığını doğrulamak tamamen sizin sorumluluğunuzdadır; P2P paylaşımı varsayılan olarak devre dışıdır.",
       "errorFallback": "Bu eklenti yüklenemiyor.",
       "manageListButton": "Eklenti listesini yönet",
       "openConfigurePage": "Yapılandırma Sayfasını Aç",
@@ -181,7 +182,7 @@
       "passwordWeak": "Şifre harf ve rakamlardan oluşan en az 8 karakterden oluşmalıdır",
       "privacyPolicy": "Gizlilik Politikası",
       "submit": "Hesap oluşturmak",
-      "legalConsent": "<terms>Hizmet Şartları</terms> ve <privacy>Gizlilik Politikası</privacy>'nı okudum ve kabul ediyorum."
+      "legalConsent": "En az 16 yaşında olduğumu ve <terms>Hizmet Şartları</terms> ve <privacy>Gizlilik Politikası</privacy>'nı okuyup kabul ettiğimi onaylıyorum."
     },
     "trust": {
       "failed": {
@@ -306,7 +307,10 @@
   },
   "footer": {
     "legal": {
-      "disclaimer": "Sorumluluk Reddi",
+      "disclaimer": "Yasal Uyarı",
+      "dmca": "DMCA / Kaldırma Talebi",
+      "terms": "Hizmet Şartları",
+      "tmdbAttribution": "Film meta verileri ve posterleri TMDB API'si tarafından sağlanmaktadır (TMDB tarafından onaylanmamış veya sertifikalandırılmamıştır).",
       "disclaimerText": "Framezoo video akış kaynaklarını işletmez. Sunucuları, bu özelliği seçtiğinizde sağlayıcı altyazılarını iletebilir ve senkronizasyon için ses ve altyazıları geçici olarak işleyebilir. Oynattığınız içeriği siz kontrol edersiniz."
     },
     "links": {
@@ -484,15 +488,15 @@
     },
     "support": {
       "complete": "tamamlamak",
-      "description": "Framezoo zararına çalışıyor ve onu reklamsız tutmak için yardıma ihtiyacımız var! Framezoo kullanmaktan hoşlanıyorsanız lütfen masraflarımızı karşılamamıza yardımcı olmak için bağış yapmayı düşünün.",
-      "donate": "Bağış yapmak",
-      "explanation": "Uzantıyı kullanmıyorsanız veya FED API kurulumunuz yoksa içerik bulmanız daha zor olabilir! Bunu düzeltmek istiyoruz ancak pahalı sunucular olmadan içerik sağlamak çok daha zor. Bu nedenle lütfen Framezoo kullanmaktan hoşlanıyorsanız, artan maliyetlerimizi karşılamamıza yardımcı olmak için lütfen bağış yapmayı düşünün.",
+      "description": "Framezoo tarafsız bir medya oynatıcısıdır ve gönüllü yazılım desteği, reklamsız kalmasına yardımcı olur! Lütfen katkıların yalnızca yazılım mühendisliğini desteklediğini ve asla medya içeriği veya üçüncü taraf eklentileri satın almak için kullanılmadığını unutmayın.",
+      "donate": "Yazılım geliştirme desteği",
+      "explanation": "Oynatıcıda kendi üçüncü taraf eklentilerinizi yapılandırmadıysanız, yayınlar varsayılan olarak görünmeyecektir. Framezoo yalnızca içerik barındırmayan tarafsız bir teknik oynatıcı olarak işlev görür. Gönüllü katkılar yalnızca devam eden uygulama mühendisliği ve altyapısını destekler.",
       "explanation2": "Daha fazla bilgi istiyorsanız lütfen aramıza katılın",
       "fluxer": "Fluxer",
-      "label": "Proje Finansmanı: ${{current}} / ${{goal}}",
+      "label": "Yazılım Mühendisliği Desteği: ${{current}} / ${{goal}}",
       "moreInfo": "Daha fazla bilgi",
       "thankYou": "Desteğiniz için teşekkür ederiz!",
-      "title": "Framezoo yardımınıza ihtiyaç duyuyor!"
+      "title": "Framezoo yazılım geliştirme çalışmalarını destekleyin!"
     },
     "titles": {
       "69": {
@@ -1210,6 +1214,11 @@
           "text": "Bu işlem, hesabınıza bağlı tüm cihazlardan çıkış yapmanızı sağlar.",
           "title": "Tüm Oturumları Sonlandır"
         },
+        "exportData": {
+          "button": "JSON'u Dışa Aktar",
+          "text": "Hesap profilinizin, yer işaretlerinizin, izleme geçmişinizin, ayarlarınızın ve yasal onay kaydınızın bir kopyasını (JSON) indirin.",
+          "title": "Kişisel Verileri Dışa Aktar"
+        },
         "migration": {
           "button": "Hesabı taşı",
           "text": "Hesabınızı yeni bir sunucuya taşıyın veya verilerinizi indirin.",
@@ -1518,6 +1527,7 @@
     "modalTitle": "BRAND_0__ markasını geliştirmeye devam etmemize yardımcı olun.",
     "subtitle": "Her katkı, oynatıcıyı geliştirmemize, daha fazla platforma yayılmamıza ve fikirlerinizi dinlemeye devam etmemize yardımcı oluyor.",
     "note": "Framezoo&#39;a önem verdiğiniz ve arkasındaki çalışmaları desteklediğiniz için teşekkür ederiz. Katkınız, herkes için daha iyi bir deneyim oluşturmamıza daha fazla olanak sağlıyor.",
+    "legalDisclaimer": "Yalnızca gönüllü yazılım geliştirme desteği içindir; katkılar film, medya akışı veya eklenti erişimi satın almak için kullanılmaz.",
     "scanHint": "Bankacılık uygulamanızla bu QR kodunu tarayın.",
     "paypalLabel": "PayPal",
     "momoLabel": "Anne",

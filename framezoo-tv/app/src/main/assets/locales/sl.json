@@ -18,6 +18,7 @@
       "configRequiredDesc": "Ta dodatek zahteva konfiguracijo (kot so ključi API ali jezikovne nastavitve), preden lahko vrne vsebino. Konfigurirajte ga v brskalniku, nato pa kopirajte in prilepite ustvarjeni URL manifesta sem.",
       "configRequiredTitle": "Zahtevana konfiguracija",
       "configureAction": "Konfiguriraj",
+      "disclaimerNotice": "Dodatke tretjih oseb neodvisno upravljajo razvijalci skupnosti. Za preverjanje zakonitosti vsebine v vaši jurisdikciji ste izključno odgovorni vi; P2P sejanje je privzeto onemogočeno.",
       "errorFallback": "Tega dodatka ni mogoče namestiti.",
       "manageListButton": "Upravljanje seznama dodatkov",
       "openConfigurePage": "Odpri konfiguracijsko stran",
@@ -181,7 +182,7 @@
       "passwordWeak": "Geslo mora imeti vsaj 8 znakov s črkami in številkami",
       "privacyPolicy": "Pravilnik o zasebnosti",
       "submit": "Ustvari račun",
-      "legalConsent": "Prebral/a sem in se strinjam s <terms>Pogoji storitve</terms> in <privacy>Pravilnikom o zasebnosti</privacy>."
+      "legalConsent": "Potrjujem, da sem star/a vsaj 16 let in da sem prebral/a ter se strinjam s <terms>Pogoji storitve</terms> in <privacy>Pravilnikom o zasebnosti</privacy>."
     },
     "trust": {
       "failed": {
@@ -306,7 +307,10 @@
   },
   "footer": {
     "legal": {
-      "disclaimer": "Opozorilo",
+      "disclaimer": "Izjava o omejitvi odgovornosti",
+      "dmca": "DMCA / Odstranitev",
+      "terms": "Pogoji storitve",
+      "tmdbAttribution": "Metapodatke in plakate filmov zagotavlja TMDB API (TMDB jih ne podpira ali certificira).",
       "disclaimerText": "Framezoo ne upravlja virov video toka. Njegovi strežniki lahko posredujejo podnapise ponudnika in začasno obdelujejo zvok in podnapise za sinhronizacijo, ko izberete to funkcijo. Vsebino, ki jo predvajate, nadzorujete sami."
     },
     "links": {
@@ -484,15 +488,15 @@
     },
     "support": {
       "complete": "popolna",
-      "description": "Framezoo posluje z izgubo in potrebujemo pomoč, da ostane brez oglasov! Če uživate v uporabi Framezoo, razmislite o donaciji, da nam pomagate pokriti naše stroške.",
-      "donate": "Donirajte",
-      "explanation": "Če ne uporabljate razširitve ali nimate nastavljenega FED API-ja, bo morda težje najti vsebino! To želimo popraviti, vendar je veliko težje zagotoviti vsebino brez dragih strežnikov. Če radi uporabljate Framezoo, vas prosimo, da razmislite o donaciji in nam tako pomagate pokriti naše naraščajoče stroške.",
+      "description": "Framezoo je nevtralen predvajalnik medijev, prostovoljna podpora programske opreme pa pomaga, da je brez oglasov! Upoštevajte, da prispevki strogo podpirajo čisto programsko inženirstvo in nikoli ne kupujejo medijskih vsebin ali dodatkov tretjih oseb.",
+      "donate": "Podpora razvoju programske opreme",
+      "explanation": "Če v predvajalniku niste konfigurirali lastnih dodatkov tretjih oseb, se pretočni prenosi ne bodo privzeto prikazali. Framezoo deluje izključno kot nevtralen tehnični predvajalnik brez gostovanja vsebine. Vsak prostovoljni prispevek podpira le tekoče inženirstvo in infrastrukturo aplikacij.",
       "explanation2": "Če želite več informacij, se nam pridružite",
       "fluxer": "Fluxer",
-      "label": "Financiranje projekta: ${{current}} / ${{goal}}",
+      "label": "Podpora za programsko inženirstvo: ${{current}} / ${{goal}}",
       "moreInfo": "Več informacij",
       "thankYou": "Hvala za vašo podporo!",
-      "title": "Framezoo potrebuje vašo pomoč!"
+      "title": "Podprite razvoj programske opreme Framezoo!"
     },
     "titles": {
       "69": {
@@ -1210,12 +1214,24 @@
           "text": "To vas bo odjavilo z vseh naprav, povezanih z vašim računom.",
           "title": "Zaključi vse seje"
         },
+        "exportData": {
+          "button": "Izvozi JSON",
+          "text": "Prenesite kopijo profila računa, zaznamkov, zgodovine ogledov, nastavitev in zapisa o pravni privolitvi (JSON).",
+          "title": "Izvoz osebnih podatkov"
+        },
         "migration": {
           "button": "Preseli račun",
           "text": "Preselite svoj račun na nov strežnik ali prenesite svoje podatke.",
           "title": "Selitev računa"
         },
-        "title": "Ukazi"
+        "title": "Ukazi",
+        "export": {
+          "button": "Izvoz podatkov JSON",
+          "error": "Izvoz osebnih podatkov ni uspel. prosim poskusite ponovno",
+          "success": "Izvoz osebnih podatkov v",
+          "text": "Prenesite kopijo svojega računa, sinhroniziranih nastavitev in poslanih poročil (skladnost z varstvom podatkov).",
+          "title": "Izvoz osebnih podatkov"
+        }
       },
       "devices": {
         "deviceNameLabel": "Ime naprave",
@@ -1445,7 +1461,14 @@
       "clearCacheError": "Čiščenje predpomnilnika ni uspelo. prosim poskusite znova",
       "spaceLeftOnDevice": "({{space}} prostora na vaši napravi)"
     },
-    "unsaved": "Imate neshranjene spremembe"
+    "unsaved": "Imate neshranjene spremembe",
+    "legal": {
+      "title": "Pravno, avtorsko in operatersko razkritje",
+      "operator": "Operator: Bui Duc Canh (Independent Developer, Framezoo Project) — Phao Dai Lang, Lang Ward, Hanoi, Vietnam",
+      "contact": "Legal / DMCA / Privacy Contact: framezoo.top@gmail.com (or legal@framezoo.top) · Tel: +84 984908816",
+      "links": "https://framezoo.top/legal/terms · /legal/privacy · /legal/dmca · /legal/about",
+      "disclaimer": "Framezoo je nevtralen medijski predvajalnik in ne gosti niti ne združuje medijske vsebine ali dodatkov tretjih oseb. Metapodatki in ocene uporabljajo API-je TMDB in OMDb, zato ta izdelek ni odobren ali certificiran s strani TMDB."
+    }
   },
   "tmdb": {
     "genres": {
@@ -1518,6 +1541,7 @@
     "modalTitle": "Pomagajte nam graditi __BLAGOVNO ZNAMKO_0__",
     "subtitle": "Vsak prispevek nam pomaga izboljšati predvajalnik, ga razširiti na več platform in še naprej prisluhniti vašim idejam.",
     "note": "Hvala, ker vam je mar za Framezoo in podpirate delo, ki stoji za njo. Vaš prispevek nam daje več prostora za izgradnjo boljše izkušnje za vse.",
+    "legalDisclaimer": "Samo prostovoljna podpora za razvoj programske opreme – prispevki ne kupujejo filmov, pretočnih medijev ali dostopa do dodatkov.",
     "scanHint": "Skenirajte to QR kodo s svojo bančno aplikacijo.",
     "paypalLabel": "PayPal",
     "momoLabel": "Mama",

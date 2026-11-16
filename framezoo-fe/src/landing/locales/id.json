@@ -54,7 +54,7 @@
     "addonPolicy": "Kebijakan Tambahan",
     "disclaimer": "Framezoo adalah perangkat lunak pemutar media netral dan tidak menghosting, menyimpan, mendistribusikan, atau mengontrol file media atau tambahan pihak ketiga apa pun. Pengguna sepenuhnya bertanggung jawab atas add-on dan konten yang mereka akses sesuai dengan hukum setempat.",
     "reportIssue": "Kirim Masukan / Laporan",
-    "metadataAttribution": "Metadata disediakan oleh database film publik (TMDB, IMDb) untuk tujuan informasi."
+    "metadataAttribution": "Metadata & karya seni film menggunakan API TMDB (tidak didukung atau disertifikasi oleh TMDB) dan diberi peringkat melalui API OMDb."
   },
   "addonGuide": {
     "eyebrow": "PROTOKOL / PANDUAN TAMBAHAN",
@@ -116,7 +116,7 @@
       ],
       "step1Desc": "Buka file .dmg yang diunduh dan seret ikon Framezoo ke folder Aplikasi.",
       "note": "Anda hanya perlu melakukan langkah klik kanan ini pada peluncuran pertama. Peluncuran selanjutnya dapat dilakukan secara normal dari Launchpad atau Spotlight.",
-      "step2Desc": "Karena Framezoo adalah pemutar sumber terbuka independen tanpa sertifikat Pengembang Apple komersial, macOS mungkin menampilkan: \"Framezoo rusak dan tidak dapat dibuka\" atau \"Apple tidak dapat memverifikasi aplikasi ini\"."
+      "step2Desc": "Karena Framezoo adalah pemutar perangkat lunak independen tanpa sertifikat Pengembang Apple komersial, macOS mungkin menampilkan: \"Framezoo rusak dan tidak dapat dibuka\" atau \"Apple tidak dapat memverifikasi aplikasi ini\"."
     },
     "title": "Panduan Instalasi & Peluncuran Framezoo",
     "downloadApp": "Unduh Framezoo.dll",
@@ -176,7 +176,7 @@
     "descPlaceholder": "Jelaskan masalah spesifik atau langkah-langkah untuk mereproduksinya...",
     "successDesc": "Terima kasih atas tanggapan Anda. Tim kami akan meninjau dan menyelesaikan masalah ini sesegera mungkin.",
     "attachmentsLabel": "File",
-    "attachmentsHint": "Gambar/video · Total maksimum 55 MB",
+    "attachmentsHint": "Gambar/video/PDF (bukti otorisasi atau hak cipta) · Total maksimum 55 MB",
     "attachmentsTooLarge": "Total ukuran file tidak boleh melebihi 55 MB.",
     "contactPlaceholder": "misalnya nama@example.com atau +84912345678",
     "descLabel": "3. Deskripsi rinci",
@@ -325,49 +325,49 @@
         "summary": "Harap baca ketentuan ini dan kebijakan privasi sebelum membuat akun atau menggunakan aplikasi desktop Framezoo."
       },
       "privacy": {
-        "updatedAt": "Diperbarui: 4 November 2026 · UU 91/2025/QH15 & SK 356/2025/ND-CP",
-        "summary": "Kebijakan ini menjelaskan pemrosesan data di aplikasi desktop Framezoo dan di server resmi Framezoo.",
+        "updatedAt": "Diperbarui: 16 November 2026 · Versi 2026-11 · Hukum Vietnam 91/2025/QH15 & Keputusan 356/2025/ND-CP",
+        "summary": "Kebijakan ini menjelaskan pemrosesan data di seluruh Framezoo Desktop, Seluler, aplikasi TV, dan server resmi Framezoo.",
         "sections": [
           {
             "paragraphs": [
-              "Aplikasi ini menyimpan beberapa pengaturan, cache, dan data pemutaran pada perangkat Anda. Jika Anda membuat akun, server juga menyimpan email, nama panggilan, profil, kunci publik, detail sesi/perangkat, bookmark yang disinkronkan, kemajuan, riwayat tontonan, pengaturan, dan tambahan, ditambah kunci penyedia subtitle terenkripsi jika Anda memberikannya."
+              "Aplikasi ini menyimpan pengaturan lokal, cache, dan data pemutaran di perangkat Anda. Saat Anda membuat akun (terbatas untuk pengguna berusia 16 tahun ke atas), server juga menyimpan email terenkripsi, nama panggilan, profil, kunci publik, detail sesi/perangkat, bookmark yang disinkronkan, kemajuan, riwayat tontonan, pengaturan, add-on, catatan izin dengan stempel waktu, dan kunci API penyedia subtitle BYOK terenkripsi jika Anda menyimpannya."
             ],
             "bullets": [
-              "Email, kode verifikasi, dan detail permintaan mendukung pendaftaran, masuk, dan keamanan akun.",
-              "Laporan, deskripsi bug, dan lampiran sampai ke server kami saat Anda mengirimkan formulir Masukan.",
-              "Situs web menyimpan pilihan bahasa Anda di penyimpanan browser."
+              "Mode tamu hanya menggunakan pengidentifikasi teknis acak, label platform, dan versi aplikasi untuk mengoperasikan titik akhir relai/sinkronisasi subtitle.",
+              "Kode verifikasi email dan log permintaan diproses secara ketat untuk mendaftar, masuk, dan melindungi akun.",
+              "Telemetri server tidak termasuk judul film, ID TMDB/IMDb, dan sumber tambahan pihak ketiga pribadi."
             ],
-            "title": "Data di perangkat Anda dan server kami",
+            "title": "Data Perangkat, Tamu & Akun",
             "badge": "01"
           },
           {
-            "title": "Tujuan dan layanan eksternal",
+            "title": "Tujuan, Transfer Lintas Batas & API Eksternal",
             "bullets": [
-              "Email verifikasi masuk ke penyedia email kami; cadangan basis data dapat disimpan di Supabase ketika cadangan dikonfigurasi.",
-              "Beberapa penyedia layanan atau server tambahan mungkin memproses data di luar Vietnam; lokasi server tergantung pada layanan yang Anda pilih dan konfigurasi operasi.",
-              "Google reCAPTCHA dapat digunakan saat pendaftaran; teks subtitle masuk ke Google Terjemahan saat Anda memilih terjemahan.",
+              "Penyedia email verifikasi transaksional dan cadangan basis data terenkripsi mungkin berada di luar Vietnam tergantung pada konfigurasi penerapan.",
+              "Skor metadata & kritik diambil melalui API TMDB dan OMDb resmi; kueri pencarian subtitle Wyzie, SubSource, dan OpenSubtitles.com REST API (lebih memilih kunci BYOK pribadi Anda bila disediakan).",
+              "Relai file subtitle menggunakan header tanpa penyimpanan tanpa cache publik. Add-on pihak ketiga dihubungi langsung dari perangkat Anda berdasarkan kebijakan mereka sendiri.",
               "Pencarian dan pengunduhan subtitle, sinkronisasi audio/subtitle, dan add-on komunitas dapat mengirimkan permintaan melalui server Framezoo dan layanan eksternal yang relevan. Add-on pihak ketiga memiliki kebijakannya sendiri."
             ],
             "paragraphs": [
-              "Kami memproses data untuk menjalankan akun, menyinkronkan perangkat, memberikan dukungan, melindungi layanan, dan memberikan fitur yang Anda pilih. Kami tidak menjual data pribadi ke jaringan periklanan."
+              "Kami memproses data semata-mata untuk mengoperasikan akun, menyinkronkan perangkat, memberikan dukungan, menegakkan kepatuhan hukum, dan tidak pernah menjual data pribadi."
             ],
             "badge": "02"
           },
           {
-            "title": "Retensi dan penghapusan",
+            "title": "Retensi, Ekspor & Penghapusan Data JSON",
             "bullets": [
-              "Kode verifikasi kedaluwarsa setelah 10 menit; catatan tantangan yang kedaluwarsa akan dihapus setelah 7 hari. Catatan email yang terkirim atau gagal akan dihapus setelah 7 hari.",
-              "Masukan dan lampiran disimpan secara terpisah untuk permintaan dukungan atau hak cipta hingga dihapus berdasarkan permintaan atau oleh tim dukungan. Penghapusan akun akan menghapus tautan akun namun tidak menghapus laporan secara otomatis. Anda dapat meminta penghapusan terpisah melalui formulir Masukan."
+              "Tantangan OTP verifikasi akan habis masa berlakunya setelah 10 menit dan dihapus bersama dengan data kotak keluar email setelah 7 hari.",
+              "Laporan masukan dan pemberitahuan hak cipta tetap disimpan secara terpisah untuk audit kepatuhan; penghapusan akun akan membatalkan tautan ID pengguna Anda."
             ],
             "paragraphs": [
-              "Data akun dan sinkronisasi tetap ada selama akun Anda aktif. Anda dapat menghapus akun di Pengaturan; server kemudian menghapus catatan akun, bookmark, kemajuan, riwayat tontonan, pengaturan, dan sesi. Cadangan basis data lama mungkin menyimpan data hingga rotasi; konfigurasi default menyimpan 7 cadangan terbaru saat cadangan sedang berjalan."
+              "Data akun dan sinkronisasi tetap aktif selama akun Anda ada. Anda dapat mengekspor salinan JSON lengkap dari data pribadi Anda atau menghapus akun Anda secara permanen di dalam Pengaturan -> Tindakan; memutar cadangan terenkripsi mempertahankan hingga 7 snapshot terbaru."
             ],
             "badge": "03"
           },
           {
-            "title": "Hak dan kontak Anda",
+            "title": "Hak Anda, Batas Usia (>=16) & Kontak",
             "paragraphs": [
-              "Anda dapat meminta akses, koreksi, penghapusan, atau pembatasan data Anda, menarik persetujuan jika pemrosesan bergantung pada persetujuan, dan mengajukan keluhan melalui formulir Masukan di situs web kami. Harap berikan email akun Anda sehingga kami dapat memverifikasi permintaan tersebut."
+              "Pendaftaran akun dibatasi untuk pengguna berusia 16 tahun ke atas berdasarkan Hukum Vietnam 91/2025/QH15. Anda dapat melakukan akses, ekspor JSON, koreksi, penghapusan, atau penarikan persetujuan melalui modal Umpan Balik atau privacy@framezoo.top / framezoo.top@gmail.com (ditanggapi dalam waktu 24 jam)."
             ],
             "badge": "04"
           }
@@ -375,39 +375,39 @@
         "title": "Kebijakan Privasi & Perlindungan Data Pribadi"
       },
       "copyright": {
-        "title": "Hak Cipta, DMCA & Penafian Konten",
-        "updatedAt": "Diperbarui: 4 November 2026",
+        "title": "Hak Cipta, Pemberitahuan & Penghapusan & Penafian Konten",
+        "updatedAt": "Diperbarui: 16 November 2026 · Seni Hukum Kekayaan Intelektual Vietnam. 198b & SK 17/2023",
         "sections": [
           {
-            "title": "Safe Harbor Perangkat Lunak Perantara",
+            "title": "Perangkat Lunak Perantara Netral & P2P Tanpa Pembibitan Default",
             "paragraphs": [
-              "Framezoo tidak mengoperasikan perpustakaan film atau sumber streaming video. Aplikasi dapat mengakses sumber yang dipilih oleh pengguna; server kami mungkin menyampaikan subtitle penyedia dan memproses audio dan subtitle untuk sementara untuk sinkronisasi yang diminta.",
-              "Setiap pemberitahuan hak cipta ditinjau berdasarkan konten dan peran kami yang sebenarnya; ketentuan ini tidak menciptakan pengecualian tanggung jawab otomatis."
+              "Framezoo adalah perangkat lunak pemutar media netral yang mirip dengan Stremio dan Kodi: ia tidak menghosting file video, tidak menggabungkan add-on konten default atau pelacak publik, tidak melakukan proksi add-on sisi server, dan menonaktifkan penyemaian P2P keluar (upload_rate_limit = 0) secara default.",
+              "Pengunduhan subtitle menggunakan header tanpa penyimpanan tanpa cache publik di server Framezoo."
             ],
             "badge": "01"
           },
           {
-            "title": "Atribusi Metadata & Karya Seni",
+            "title": "API Metadata Resmi & Atribusi TMDB",
             "paragraphs": [
-              "Metadata film dan serial (judul, tanggal rilis, sinopsis, rating, dan poster promosi) yang ditampilkan untuk penemuan informasi bersumber dari database film publik (seperti TMDB, IMDb, dan TVDB).",
-              "Semua merek dagang, judul film, dan karya seni tetap menjadi milik pemilik hak cipta masing-masing."
+              "Judul film, sinopsis, karya seni, dan peringkat kritikus diambil dari API resmi TMDB dan OMDb untuk penemuan informasi.",
+              "Produk ini menggunakan API TMDB tetapi tidak didukung atau disertifikasi oleh TMDB. Semua merek dagang dan karya seni media tetap menjadi milik pemiliknya masing-masing."
             ],
             "badge": "02"
           },
           {
-            "title": "Prosedur Pemberitahuan & Penghapusan",
+            "title": "Pemberitahuan & Penghapusan (SLA 24 jam/72 jam) & Kebijakan Pelanggar Berulang",
             "bullets": [
-              "Identifikasi pemilik hak cipta atau perwakilan resmi.",
-              "Bukti kepemilikan atas karya berhak cipta.",
+              "Perintah dari otoritas yang berwenang diberlakukan pada /kepatuhan/daftar blokir dalam waktu 24 jam; pemberitahuan pemegang hak yang sah dalam waktu 72 jam.",
+              "Akun Pelanggar Berulang yang terkait dengan pelanggaran terverifikasi akan ditangguhkan dengan pencabutan sesi segera.",
               "URL atau deskripsi yang tepat dari materi yang dipermasalahkan sehingga kami dapat meninjau dan menanganinya dalam waktu 24–72 jam kerja."
             ],
             "paragraphs": [
-              "Framezoo menghormati hak kekayaan intelektual. Jika Anda adalah pemilik hak cipta atau agen resmi dan yakin materi apa pun di framezoo.top melanggar hak Anda, silakan kirimkan pemberitahuan melalui saluran Laporan / Masukan kami termasuk:"
+              "Pemegang hak dan otoritas dapat menyampaikan pemberitahuan resmi (identitas pemilik hak, bukti/otorisasi PDF, domain addon khusus/ID media/ID subjudul, dan pernyataan tersumpah) melalui formulir Laporan atau legal@framezoo.top / framezoo.top@gmail.com."
             ],
             "badge": "03"
           }
         ],
-        "summary": "Penafian konten resmi dan prosedur pemberitahuan dan penghapusan kekayaan intelektual untuk Framezoo."
+        "summary": "Status perantara netral, proses daftar blokir Pemberitahuan & Penghapusan 24 jam/72 jam, dan kebijakan Pelanggar Berulang."
       },
       "addon-policy": {
         "title": "Kebijakan Addon & Pedoman Komunitas",

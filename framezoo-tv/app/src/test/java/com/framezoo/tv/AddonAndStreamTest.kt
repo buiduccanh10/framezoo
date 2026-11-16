@@ -1,6 +1,9 @@
 package com.framezoo.tv
 
 import com.framezoo.tv.api.Addons
+import com.framezoo.tv.api.ComplianceBlocklist
+import com.framezoo.tv.api.isAddonDomainBlocked
+import com.framezoo.tv.api.isMediaBlockedByTakedown
 import com.framezoo.tv.model.Addon
 import com.framezoo.tv.model.Stream
 import com.framezoo.tv.player.hexInfoHashToUrlEncodedBytes
@@ -64,7 +67,7 @@ class AddonAndStreamTest {
     fun testCompactPeersAndInfoHashEncoding() {
         val encoded = hexInfoHashToUrlEncodedBytes("abcdef1234567890abcdef1234567890abcdef12")
         assertEquals("%ab%cd%ef%12%34%56%78%90%ab%cd%ef%12%34%56%78%90%ab%cd%ef%12", encoded)
-        assertTrue(Addons.DEFAULT_TRACKERS.size >= 40)
+        assertTrue(Addons.DEFAULT_TRACKERS.isEmpty())
 
         // Build compact bencode payload: d8:intervali1800e5:peers6:<1.2.3.4:6881>e
         val prefix = "d8:intervali1800e5:peers6:".toByteArray(Charsets.ISO_8859_1)
@@ -73,5 +76,21 @@ class AddonAndStreamTest {
         val payload = prefix + peerBytes + suffix
         val peers = parseCompactPeersFromBencode(payload)
         assertEquals(listOf("1.2.3.4" to 6881), peers)
+    }
+
+    @Test
+    fun testComplianceBlocklistMatchers() {
+        val blocked = ComplianceBlocklist(
+            addonDomains = setOf("bad-addon.example"),
+            tmdbIds = setOf("tv:999", "movie:123"),
+            imdbIds = setOf("tt7654321"),
+            infohashes = setOf("abcdef1234567890abcdef1234567890abcdef12")
+        )
+        assertTrue(isAddonDomainBlocked("https://sub.bad-addon.example/manifest.json", blocked.addonDomains))
+        assertTrue(!isAddonDomainBlocked("https://good-addon.example/manifest.json", blocked.addonDomains))
+        assertTrue(isMediaBlockedByTakedown("123", null, "movie", blocked))
+        assertTrue(isMediaBlockedByTakedown("999", null, "show", blocked))
+        assertTrue(isMediaBlockedByTakedown("555", "tt7654321", "movie", blocked))
+        assertTrue(!isMediaBlockedByTakedown("999", null, "movie", blocked))
     }
 }

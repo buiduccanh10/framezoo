@@ -101,6 +101,14 @@ export async function register(
         signature: signChallenge(keys.secretKey, challenge.challenge),
       },
       device: 'Framezoo',
+      legalConsent: {
+        acceptedTerms: true,
+        acceptedPrivacy: true,
+        ageConfirmed: true,
+        termsVersion: '2026-11',
+        privacyVersion: '2026-11',
+        platform: 'mobile',
+      },
     }),
   });
 

@@ -13,6 +13,10 @@ import { Icons } from "@/components/Icon";
 import { IconPill } from "@/components/layout/IconPill";
 import { Paragraph } from "@/components/text/Paragraph";
 import { Title } from "@/components/text/Title";
+import {
+  fetchComplianceBlocklist,
+  isMediaBlocked,
+} from "@/desktop/addons/blocklist";
 import { ErrorContainer, ErrorLayout } from "@/pages/layouts/ErrorLayout";
 import { conf } from "@/setup/config";
 
@@ -56,6 +60,11 @@ export function MetaPart(props: MetaPartProps) {
     if (!data) return null;
 
     if (isDisallowedMedia(data.id, data.type)) throw new Error("legal");
+
+    const blocklist = await fetchComplianceBlocklist().catch(() => null);
+    if (blocklist && isMediaBlocked(data.id, data.type, blocklist.tmdbIds)) {
+      throw new Error("legal");
+    }
 
     let meta: AsyncReturnType<typeof getMetaFromId> = null;
     try {

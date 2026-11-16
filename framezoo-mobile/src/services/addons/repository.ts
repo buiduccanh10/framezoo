@@ -14,6 +14,7 @@ import {
   hasAddonResource,
   normalizeAddonManifestUrl,
 } from './protocol';
+import { fetchComplianceBlocklist, isAddonDomainBlocked } from './blocklist';
 import { mobileStorage } from '../storage/storage';
 import { useAuthStore } from '@/state/auth/store';
 import { updateSettings } from '../settings';
@@ -133,8 +134,20 @@ export const addonRepository = {
     return addons;
   },
   async syncAndMigrate(remoteAddons?: InstalledAddon[]) {
-    const local = await this.list();
-    const remote = Array.isArray(remoteAddons) ? remoteAddons : [];
+    const blocklist = await fetchComplianceBlocklist().catch(() => null);
+    const keepAllowed = (list: InstalledAddon[]) =>
+      blocklist && blocklist.addonDomains.length > 0
+        ? list.filter(
+            (item) =>
+              !isAddonDomainBlocked(
+                item.manifestUrl || item.baseUrl || '',
+                blocklist.addonDomains,
+              ),
+          )
+        : list;
+
+    const local = keepAllowed(await this.list());
+    const remote = keepAllowed(Array.isArray(remoteAddons) ? remoteAddons : []);
 
     const map = new Map<string, InstalledAddon>();
     for (const addon of remote) {
@@ -172,6 +185,10 @@ export const addonRepository = {
   },
   async install(input: string) {
     const manifestUrl = normalizeAddonManifestUrl(input);
+    const blocklist = await fetchComplianceBlocklist();
+    if (isAddonDomainBlocked(manifestUrl, blocklist.addonDomains)) {
+      throw new Error('This addon domain has been blocked due to a copyright/legal takedown notice.');
+    }
     const manifest = await addonRuntime.loadManifest(manifestUrl);
     const addons = await this.list();
     const next = [

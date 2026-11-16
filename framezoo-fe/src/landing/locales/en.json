@@ -115,7 +115,7 @@
     "addonPolicy": "Addon Policy",
     "reportIssue": "Send Feedback / Report",
     "rights": "© 2026 Framezoo. All rights reserved.",
-    "metadataAttribution": "Metadata is provided by public movie databases (TMDB, IMDb) for informational purposes."
+    "metadataAttribution": "Film metadata & artwork use the TMDB API (not endorsed or certified by TMDB) and ratings via OMDb API."
   },
   "deepLink": {
     "opening": "Opening Framezoo...",
@@ -148,7 +148,7 @@
       "step1Title": "Step 1: Drag to Applications",
       "step1Desc": "Open the downloaded .dmg file and drag the Framezoo icon into the Applications folder.",
       "step2Title": "Step 2: Gatekeeper security warning",
-      "step2Desc": "Because Framezoo is an independent open-source player without a commercial Apple Developer certificate, macOS may show: \"Framezoo is damaged and can't be opened\" or \"Apple cannot verify this app\".",
+      "step2Desc": "Because Framezoo is an independent software player without a commercial Apple Developer certificate, macOS may show: \"Framezoo is damaged and can't be opened\" or \"Apple cannot verify this app\".",
       "step3Title": "Step 3: Open safely via Finder",
       "step3Steps": [
         "Open Finder and navigate to your Applications folder.",
@@ -205,7 +205,7 @@
     "cancel": "Cancel",
     "submit": "Submit feedback",
     "attachmentsLabel": "Files",
-    "attachmentsHint": "Images/videos · 55 MB total maximum",
+    "attachmentsHint": "Images/videos/PDF (authorization or copyright proof) · 55 MB total maximum",
     "attachmentsTooLarge": "The total file size must not exceed 55 MB.",
     "submitting": "Submitting...",
     "close": "Close"
@@ -334,85 +334,83 @@
       },
       "privacy": {
         "title": "Privacy & Personal Data Protection Policy",
-        "updatedAt": "Updated: 4 November 2026 · Law 91/2025/QH15 & Decree 356/2025/ND-CP",
-        "summary": "This policy describes data processing in the Framezoo desktop application and on official Framezoo servers.",
+        "updatedAt": "Updated: 16 November 2026 · Version 2026-11 · Vietnam Law 91/2025/QH15 & Decree 356/2025/ND-CP",
+        "summary": "This policy describes data processing across Framezoo Desktop, Mobile, TV apps and official Framezoo servers.",
         "sections": [
           {
             "badge": "01",
-            "title": "Data on your device and our servers",
+            "title": "Device, Guest & Account Data",
             "paragraphs": [
-              "The application stores some settings, cache, and playback data on your device. If you create an account, the server also stores your email, nickname, profile, public key, session/device details, synchronized bookmarks, progress, watch history, settings, and addons, plus encrypted subtitle provider keys if you provide them."
+              "The app stores local settings, caches, and playback data on your device. When you create an account (restricted to users aged 16 or older), the server also stores your encrypted email, nickname, profile, public key, sessions/device details, synced bookmarks, progress, watch history, settings, addons, timestamped consent records, and encrypted BYOK subtitle provider API keys if you save them."
             ],
             "bullets": [
-              "Email, verification codes, and request details support registration, sign-in, and account security.",
-              "Reports, bug descriptions, and attachments reach our server when you submit the Feedback form.",
-              "The website stores your language choice in browser storage."
+              "Guest mode uses only a random technical identifier, platform label, and app version to operate subtitle relay/sync endpoints.",
+              "Email verification codes and request logs are processed strictly to register, sign in, and protect accounts.",
+              "Server telemetry excludes movie titles, TMDB/IMDb IDs, and personal third-party addon sources."
             ]
           },
           {
             "badge": "02",
-            "title": "Purposes and external services",
+            "title": "Purposes, Cross-Border Transfer & External APIs",
             "paragraphs": [
-              "We process data to run accounts, sync devices, provide support, protect the service, and deliver features you choose. We do not sell personal data to advertising networks."
+              "We process data solely to operate accounts, sync devices, provide support, enforce legal compliance, and never sell personal data."
             ],
             "bullets": [
-              "Verification email goes to our mail provider; database backups may be stored on Supabase when backup is configured.",
-              "Some service providers or addon servers may process data outside Vietnam; server location depends on the service you choose and the operating configuration.",
-              "Google reCAPTCHA may be used during registration; subtitle text goes to Google Translate when you choose translation.",
-              "Subtitle searches and downloads, audio/subtitle synchronization, and community addons may send requests through Framezoo servers and the relevant external services. Third-party addons have their own policies."
+              "Transactional verification email providers and encrypted database backups may reside outside Vietnam depending on deployment configuration.",
+              "Metadata & critic scores are fetched via official TMDB and OMDb APIs; subtitle searches query Wyzie, SubSource, and OpenSubtitles.com REST API (preferring your personal BYOK keys when provided).",
+              "Subtitle file relays use no-store headers without public caching. Third-party addons are contacted directly from your device under their own policies."
             ]
           },
           {
             "badge": "03",
-            "title": "Retention and deletion",
+            "title": "Retention, JSON Data Export & Deletion",
             "paragraphs": [
-              "Account and sync data stay while your account is active. You can delete the account in Settings; the server then removes account records, bookmarks, progress, watch history, settings, and sessions. Old database backups may retain data until rotation; the default configuration keeps 7 recent backups when backup is running."
+              "Account and sync data stay active while your account exists. You can export a full JSON copy of your personal data or permanently delete your account inside Settings -> Actions; rotating encrypted backups retain up to 7 recent snapshots."
             ],
             "bullets": [
-              "Verification codes expire after 10 minutes; expired challenge records are removed after 7 days. Sent or failed mail records are removed after 7 days.",
-              "Feedback and attachments are kept separately for support or copyright requests until they are removed on request or by the support team. Account deletion removes the account link but does not automatically delete reports. You can request separate deletion through the Feedback form."
+              "Verification OTP challenges expire after 10 minutes and are purged along with email outbox records after 7 days.",
+              "Feedback reports and copyright notices remain stored separately for compliance auditing; account deletion unlinks your user ID."
             ]
           },
           {
             "badge": "04",
-            "title": "Your rights and contact",
+            "title": "Your Rights, Age Gate (>=16) & Contact",
             "paragraphs": [
-              "You may request access, correction, deletion, or restriction of your data, withdraw consent where processing relies on consent, and submit a complaint through the Feedback form on our website. Please provide your account email so we can verify the request."
+              "Account registration is limited to users aged 16 or older under Vietnam Law 91/2025/QH15. You may exercise access, JSON export, correction, deletion, or consent withdrawal via the Feedback modal or privacy@framezoo.top / framezoo.top@gmail.com (responded within 24 hours)."
             ]
           }
         ]
       },
       "copyright": {
-        "title": "Copyright, DMCA & Content Disclaimer",
-        "updatedAt": "Updated: 4 November 2026",
-        "summary": "Official content disclaimer and intellectual property notice-and-takedown procedure for Framezoo.",
+        "title": "Copyright, Notice & Takedown & Content Disclaimer",
+        "updatedAt": "Updated: 16 November 2026 · Vietnam IP Law Art. 198b & Decree 17/2023",
+        "summary": "Neutral intermediary status, 24h/72h Notice & Takedown blocklist process, and Repeat Infringer policy.",
         "sections": [
           {
             "badge": "01",
-            "title": "Intermediary Software Safe Harbor",
+            "title": "Neutral Intermediary Software & Default No-Seeding P2P",
             "paragraphs": [
-              "Framezoo does not operate a movie library or video stream source. The application can access sources chosen by users; our servers may relay provider subtitles and temporarily process audio and subtitles for requested synchronization.",
-              "Each copyright notice is reviewed against the content and our actual role; these terms do not create an automatic liability exemption."
+              "Framezoo is neutral media player software similar to Stremio and Kodi: it hosts no video files, bundles no default content addons or public trackers, performs no server-side addon proxying, and disables outbound P2P seeding (upload_rate_limit = 0) by default.",
+              "Subtitle downloads use no-store headers without public caching on Framezoo servers."
             ]
           },
           {
             "badge": "02",
-            "title": "Metadata & Artwork Attribution",
+            "title": "Official Metadata APIs & TMDB Attribution",
             "paragraphs": [
-              "Movie and series metadata (titles, release dates, synopses, ratings, and promotional posters) displayed for informational discovery are sourced from public movie databases (such as TMDB, IMDb, and TVDB).",
-              "All trademarks, movie titles, and artwork remain the property of their respective copyright owners."
+              "Movie titles, synopses, artwork, and critic ratings are retrieved from official TMDB and OMDb APIs for informational discovery.",
+              "This product uses the TMDB API but is not endorsed or certified by TMDB. All trademarks and media artwork remain property of their respective owners."
             ]
           },
           {
             "badge": "03",
-            "title": "Notice & Takedown Procedure",
+            "title": "Notice & Takedown (24h/72h SLA) & Repeat Infringer Policy",
             "paragraphs": [
-              "Framezoo respects intellectual property rights. If you are a copyright owner or authorized agent and believe any material on framezoo.top infringes your rights, please submit a notice via our Report / Feedback channel including:"
+              "Rights holders and authorities may submit formal notices (rights owner identity, proof/PDF authorization, specific addon domain / media ID / subtitle ID, and sworn statement) via the Report form or legal@framezoo.top / framezoo.top@gmail.com."
             ],
             "bullets": [
-              "Identification of the copyright owner or authorized representative.",
-              "Proof of ownership of the copyrighted work.",
-              "The exact URL or description of the material in question so we can review and address it within 24–72 business hours."
+              "Orders from competent authorities are enforced on /compliance/blocklist within 24 hours; valid rights holder notices within 72 hours.",
+              "Repeat Infringer accounts associated with verified violations are suspended with immediate session revocation."
             ]
           }
         ]

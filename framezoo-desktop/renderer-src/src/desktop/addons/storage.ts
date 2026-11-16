@@ -4,6 +4,7 @@ import { useAuthStore } from "@/stores/auth";
 import { resolvePublicUrl } from "@/utils/publicUrl";
 import { queryClient } from "@/utils/queryClient";
 
+import { fetchComplianceBlocklist, isDomainInBlocklist } from "./blocklist";
 import type { InstalledAddon } from "./types";
 
 const STORAGE_KEY = "framezoo.desktop.addons.v1";
@@ -279,10 +280,22 @@ export async function syncAndMigrateAddons(
   const account = useAuthStore.getState().account;
   const backendUrl = getActiveBackendUrl();
 
-  const safeServerAddons = Array.isArray(serverAddons)
-    ? getCustomAddons(serverAddons)
-    : [];
-  const localCustom = getCustomAddons();
+  const blocklist = await fetchComplianceBlocklist().catch(() => null);
+  const filterBlocked = (list: InstalledAddon[]) =>
+    blocklist && blocklist.addonDomains.length > 0
+      ? list.filter(
+          (item) =>
+            !isDomainInBlocklist(
+              item.manifestUrl || item.baseUrl || "",
+              blocklist.addonDomains,
+            ),
+        )
+      : list;
+
+  const safeServerAddons = filterBlocked(
+    Array.isArray(serverAddons) ? getCustomAddons(serverAddons) : [],
+  );
+  const localCustom = filterBlocked(getCustomAddons());
 
   const merged = mergeAddonLists(localCustom, safeServerAddons);
 

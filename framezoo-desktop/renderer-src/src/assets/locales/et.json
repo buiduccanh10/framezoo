@@ -18,6 +18,7 @@
       "configRequiredDesc": "See lisandmoodul vajab enne sisu tagastamist konfigureerimist (nt API-võtmed või keeleseaded). Palun konfigureerige see oma brauseris ja seejärel kopeerige genereeritud manifesti URL siia.",
       "configRequiredTitle": "Konfiguratsioon on nõutav",
       "configureAction": "Konfigureeri",
+      "disclaimerNotice": "Kolmandate osapoolte lisandmooduleid haldavad iseseisvalt kogukonna arendajad. Teie vastutate ainuisikuliselt sisu seaduslikkuse kontrollimise eest oma jurisdiktsioonis; P2P-külv on vaikimisi keelatud.",
       "errorFallback": "Seda lisandmoodulit ei saa installida.",
       "manageListButton": "Halda lisandmoodulite loendit",
       "openConfigurePage": "Ava konfiguratsioonileht",
@@ -181,7 +182,7 @@
       "passwordWeak": "Parool peab koosnema vähemalt 8 tähemärgist koos tähtede ja numbritega",
       "privacyPolicy": "Privaatsuspoliitika",
       "submit": "Loo konto",
-      "legalConsent": "Olen lugenud ja nõustun <terms>teenuse tingimuste</terms> ja <privacy>privaatsuspoliitikaga</privacy>."
+      "legalConsent": "Kinnitan, et olen vähemalt 16-aastane ning olen lugenud ja nõustun <terms>teenuse tingimuste</terms> ja <privacy>privaatsuspoliitikaga</privacy>."
     },
     "trust": {
       "failed": {
@@ -306,7 +307,10 @@
   },
   "footer": {
     "legal": {
-      "disclaimer": "Lahtiütlemine",
+      "disclaimer": "Lahtiütlus",
+      "dmca": "DMCA / Eemaldamine",
+      "terms": "Teenusetingimused",
+      "tmdbAttribution": "Filmide metaandmed ja plakatid on saadaval TMDB API kaudu (TMDB ei ole neid heaks kiitnud ega sertifitseerinud).",
       "disclaimerText": "Framezoo ei halda videovooge. Selle serverid võivad edastada pakkuja subtiitreid ning ajutiselt töödelda heli ja subtiitreid sünkroonimiseks, kui te selle funktsiooni valite. Teie kontrollite esitatavat sisu."
     },
     "links": {
@@ -484,15 +488,15 @@
     },
     "support": {
       "complete": "täielik",
-      "description": "Framezoo töötab kahjumiga ja me vajame abi, et see oleks reklaamivaba! Kui teile meeldib Framezoo kasutamine, kaaluge annetamist, et aidata meil kulusid katta.",
-      "donate": "Anneta",
-      "explanation": "Kui te laiendust ei kasuta või FED API-d pole seadistatud, võib sisu leidmine olla raskem! Tahame seda parandada, kuid ilma kallite serveriteta on sisu pakkuda palju raskem. Seega, kui teile meeldib Framezoo kasutamine, kaaluge annetamist, et aidata meil katta meie kasvavaid kulusid.",
+      "description": "Framezoo on neutraalne meediapleier ja vabatahtlik tarkvaratugi aitab sellel reklaamivaba olla! Pange tähele, et kaastööd toetavad rangelt puhast tarkvaratehnikat ja ei osta kunagi meediasisu ega kolmandate osapoolte lisandmooduleid.",
+      "donate": "Tarkvaraarenduse tugi",
+      "explanation": "Kui te pole pleieris oma kolmanda osapoole lisandmooduleid seadistanud, siis voogedastusi vaikimisi ei kuvata. Framezoo tegutseb üksnes neutraalse tehnilise mängijana, ilma sisu majutamata. Igasugune vabatahtlik panus toetab ainult käimasolevat rakenduste inseneritööd ja infrastruktuuri.",
       "explanation2": "Kui soovite lisateavet, liituge meiega",
       "fluxer": "Fluxer",
-      "label": "Projekti rahastamine: ${{current}} / ${{goal}}",
+      "label": "Tarkvaratehnika tugi: ${{current}} / ${{goal}}",
       "moreInfo": "Rohkem infot",
       "thankYou": "Täname teid toetuse eest!",
-      "title": "Framezoo vajab teie abi!"
+      "title": "Toeta Framezoo tarkvaraarendust!"
     },
     "titles": {
       "69": {
@@ -1210,6 +1214,11 @@
           "text": "See logib teid välja kõikidest seadmetest, mis on seotud teie kontoga.",
           "title": "Lõpeta kõik sessioonid"
         },
+        "exportData": {
+          "button": "Ekspordi JSON",
+          "text": "Laadige alla oma konto profiili, järjehoidjate, vaatamiste ajaloo, sätete ja juriidilise nõusoleku dokumendi (JSON) koopia.",
+          "title": "Isikuandmete eksport"
+        },
         "migration": {
           "button": "Konto üleviimine",
           "text": "Viige oma konto üle uude serverisse või laadige oma andmed alla.",
@@ -1518,6 +1527,7 @@
     "modalTitle": "Aita meil Framezoo brändi edasi arendada",
     "subtitle": "Iga panus aitab meil mängijat täiustada, laieneda rohkematele platvormidele ja kuulata teie ideid.",
     "note": "Täname teid Framezoo eest hoolitsemise ja selle taga oleva töö toetamise eest. Teie panus annab meile rohkem võimalusi kõigile parema kogemuse loomiseks.",
+    "legalDisclaimer": "Ainult vabatahtlik tarkvaraarenduse toetus – annetuste eest ei saa osta filme, meediavooge ega lisandmooduleid.",
     "scanHint": "Skannige see QR-kood oma pangarakendusega.",
     "paypalLabel": "PayPal",
     "momoLabel": "Ema",

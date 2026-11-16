@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAsyncFn } from "react-use";
 
-import { deleteUser } from "@/backend/accounts/user";
+import { deleteUser, exportUserData } from "@/backend/accounts/user";
 import { Button } from "@/components/buttons/Button";
 import { SolidSettingsCard } from "@/components/layout/SettingsCard";
 import { Modal, ModalCard, useModal } from "@/components/overlays/Modal";
@@ -28,13 +28,29 @@ export function AccountActionsPart() {
     deleteModal.hide();
   }, [logout, account, url, deleteModal.hide]);
 
+  const [exportResult, exportExec] = useAsyncFn(async () => {
+    if (!account || !url) return;
+    const payload = await exportUserData(url, account);
+    const blob = new Blob([JSON.stringify(payload, null, 2)], {
+      type: "application/json",
+    });
+    const blobUrl = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = blobUrl;
+    link.download = `framezoo-personal-data-${account.userId}.json`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(blobUrl);
+  }, [account, url]);
+
   if (!account) return null;
 
   return (
     <div>
       <Heading2 border>{t("settings.account.actions.title")}</Heading2>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Account Migration Card */}
         <SolidSettingsCard
           paddingClass="px-6 py-8"
@@ -74,6 +90,36 @@ export function AccountActionsPart() {
           <div className="mt-6 flex justify-center">
             <Button theme="danger" onClick={signOutAllDevices}>
               {t("settings.account.actions.logoutAllDevices.button")}
+            </Button>
+          </div>
+        </SolidSettingsCard>
+
+        {/* Export Personal Data Card (Vietnam Law 91/2025) */}
+        <SolidSettingsCard
+          paddingClass="px-6 py-8"
+          className="flex flex-col h-full"
+        >
+          <div className="flex-grow">
+            <Heading3>
+              {t(
+                "settings.account.actions.exportData.title",
+                "Export Personal Data",
+              )}
+            </Heading3>
+            <p className="text-type-text mt-3">
+              {t(
+                "settings.account.actions.exportData.text",
+                "Download a copy of your account profile, bookmarks, watch history, settings, and legal consent record (JSON).",
+              )}
+            </p>
+          </div>
+          <div className="mt-6 flex justify-center">
+            <Button
+              theme="secondary"
+              loading={exportResult.loading}
+              onClick={exportExec}
+            >
+              {t("settings.account.actions.exportData.button", "Export JSON")}
             </Button>
           </div>
         </SolidSettingsCard>

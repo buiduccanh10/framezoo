@@ -18,6 +18,7 @@
       "configRequiredDesc": "Tämä lisäosa vaatii määrityksiä (kuten API-avaimet tai kieliasetukset) ennen kuin se voi palauttaa sisältöä. Määritä se selaimessasi ja kopioi ja liitä sitten luotu manifest-URL tähän.",
       "configRequiredTitle": "Konfiguraatio vaaditaan",
       "configureAction": "Määritä",
+      "disclaimerNotice": "Kolmannen osapuolen lisäosat ovat yhteisön kehittäjien itsenäisesti ylläpitämiä. Olet yksin vastuussa sisällön laillisuuden tarkistamisesta omalla lainkäyttöalueellasi; P2P-seed on oletuksena poistettu käytöstä.",
       "errorFallback": "Tätä lisäosaa ei voi asentaa.",
       "manageListButton": "Hallinnoi lisäosien luetteloa",
       "openConfigurePage": "Avaa määrityssivu",
@@ -181,7 +182,7 @@
       "passwordWeak": "Salasanassa on oltava vähintään 8 merkkiä kirjaimilla ja numeroilla",
       "privacyPolicy": "Tietosuojakäytäntö",
       "submit": "Luo tili",
-      "legalConsent": "Olen lukenut ja hyväksyn <terms>Käyttöehdot</terms> ja <privacy>Tietosuojakäytännön</privacy>."
+      "legalConsent": "Vahvistan olevani vähintään 16-vuotias ja lukenut ja hyväksyn <terms>Käyttöehdot</terms> ja <privacy>Tietosuojakäytännön</privacy>."
     },
     "trust": {
       "failed": {
@@ -307,6 +308,9 @@
   "footer": {
     "legal": {
       "disclaimer": "Vastuuvapauslauseke",
+      "dmca": "DMCA / Poistopyyntö",
+      "terms": "Palveluehdot",
+      "tmdbAttribution": "Elokuvan metatiedot ja julisteet tarjoaa TMDB API (TMDB ei ole hyväksynyt tai sertifioinut).",
       "disclaimerText": "Framezoo ei hallinnoi videoiden suoratoistolähteitä. Sen palvelimet saattavat välittää palveluntarjoajien tekstityksiä ja käsitellä ääntä ja tekstityksiä tilapäisesti synkronointia varten, kun valitset kyseisen ominaisuuden. Sinä hallitset toistettavaa sisältöä."
     },
     "links": {
@@ -484,15 +488,15 @@
     },
     "support": {
       "complete": "täydellinen",
-      "description": "Framezoo toimii tappiolla, ja tarvitsemme apua pitääksemme sen ilman mainoksia! Jos pidät Framezoo käytöstä, harkitse lahjoittamista kulujen kattamiseksi.",
-      "donate": "Lahjoittaa",
-      "explanation": "Jos et käytä laajennusta tai FED-sovellusliittymää ei ole määritetty, sisällön löytäminen voi olla vaikeampaa! Haluamme korjata tämän, mutta sisällön tarjoaminen ilman kalliita palvelimia on paljon vaikeampaa. Joten jos pidät Framezoo käytöstä, harkitse lahjoittamista, jotta voimme kattaa kasvavat kustannukset.",
+      "description": "Framezoo on neutraali mediasoitin, ja vapaaehtoinen ohjelmistotuki auttaa pitämään sen mainoksettomana! Huomaa, että lahjoitukset tukevat ainoastaan ​​ohjelmistokehitystä eivätkä koskaan osta mediasisältöä tai kolmannen osapuolen lisäosia.",
+      "donate": "Tue ohjelmistokehitystä",
+      "explanation": "Jos et ole määrittänyt omia kolmannen osapuolen lisäosia soittimeen, suoratoistot eivät näy oletuksena. Framezoo toimii ainoastaan ​​puolueettomana teknisenä toimijana ilman sisällön ylläpitoa. Kaikki vapaaehtoinen osallistuminen tukee vain jatkuvaa sovelluskehitystä ja infrastruktuuria.",
       "explanation2": "Jos haluat lisätietoja, liity joukkoomme",
       "fluxer": "Fluxer",
-      "label": "Projektin rahoitus: ${{current}} / ${{goal}}",
+      "label": "Ohjelmistokehityksen tuki: ${{current}} / ${{goal}}",
       "moreInfo": "Lisätietoja",
       "thankYou": "Kiitos tuestanne!",
-      "title": "Framezoo tarvitsee apuasi!"
+      "title": "Tue Framezoo ohjelmistokehitystä!"
     },
     "titles": {
       "69": {
@@ -1210,12 +1214,24 @@
           "text": "Tämä kirjaa sinut ulos kaikista tiliisi linkitetyistä laitteista.",
           "title": "Lopeta kaikki istunnot"
         },
+        "exportData": {
+          "button": "Vie JSON",
+          "text": "Lataa kopio tiliprofiilistasi, kirjanmerkeistäsi, katseluhistoriastasi, asetuksistasi ja lakisääteisestä suostumuksestasi (JSON).",
+          "title": "Vie henkilötietoja"
+        },
         "migration": {
           "button": "Siirrä tili",
           "text": "Siirrä tilisi uudelle palvelimelle tai lataa tietosi.",
           "title": "Tilin siirto"
         },
-        "title": "Toiminnot"
+        "title": "Toiminnot",
+        "export": {
+          "button": "Vie JSON-tiedot",
+          "error": "Henkilötietojen vienti epäonnistui. Yritä uudelleen.",
+          "success": "Henkilötiedot vietiin osoitteeseen",
+          "text": "Lataa kopio tilistäsi, synkronoiduista asetuksista ja lähetetyistä raporteista (tietosuojan noudattaminen).",
+          "title": "Vie henkilötietoja"
+        }
       },
       "devices": {
         "deviceNameLabel": "Laitteen nimi",
@@ -1445,7 +1461,14 @@
       "clearCacheError": "Välimuistin tyhjennys epäonnistui. Yritä uudelleen.",
       "spaceLeftOnDevice": "({{space}} tilaa jäljellä laitteellasi)"
     },
-    "unsaved": "Sinulla on tallentamattomia muutoksia..."
+    "unsaved": "Sinulla on tallentamattomia muutoksia...",
+    "legal": {
+      "title": "Oikeudellinen, tekijänoikeus ja operaattorin paljastaminen",
+      "operator": "Operator: Bui Duc Canh (Independent Developer, Framezoo Project) — Phao Dai Lang, Lang Ward, Hanoi, Vietnam",
+      "contact": "Legal / DMCA / Privacy Contact: framezoo.top@gmail.com (or legal@framezoo.top) · Tel: +84 984908816",
+      "links": "https://framezoo.top/legal/terms · /legal/privacy · /legal/dmca · /legal/about",
+      "disclaimer": "Framezoo on neutraali mediasoitin, eikä se isännöi tai niputa kolmannen osapuolen mediasisältöä tai lisäosia. Metadata ja luokitukset käyttävät TMDB- ja OMDb-sovellusliittymiä, eikä TMDB ole tukenut tai sertifioinut tätä tuotetta."
+    }
   },
   "tmdb": {
     "genres": {
@@ -1518,6 +1541,7 @@
     "modalTitle": "Auta meitä jatkamaan Framezoo:n rakentamista",
     "subtitle": "Jokainen panos auttaa meitä parantamaan soitinta, laajentamaan sitä useammille alustoille ja kuuntelemaan ideoitasi.",
     "note": "Kiitos, että välität Framezoo -brändistä ja tuet sen taustalla olevaa työtä. Panoksesi antaa meille enemmän tilaa rakentaa parempi kokemus kaikille.",
+    "legalDisclaimer": "Vain vapaaehtoista ohjelmistokehitystukea – lahjoituksilla ei voi ostaa elokuvia, mediastriimejä tai lisäosien käyttöoikeuksia.",
     "scanHint": "Skannaa tämä QR-koodi pankkisovelluksellasi.",
     "paypalLabel": "PayPal",
     "momoLabel": "Äiti",

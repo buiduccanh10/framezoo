@@ -18,6 +18,7 @@
       "configRequiredDesc": "Detta tillägg kräver konfiguration (som API-nycklar eller språkinställningar) innan det kan returnera innehåll. Konfigurera det i din webbläsare och kopiera och klistra sedan in den genererade manifest-URL:en här.",
       "configRequiredTitle": "Konfiguration krävs",
       "configureAction": "Konfigurera",
+      "disclaimerNotice": "Tredjepartstillägg drivs oberoende av community-utvecklare. Du är ensam ansvarig för att verifiera innehållets laglighet i din jurisdiktion; P2P-seeding är inaktiverat som standard.",
       "errorFallback": "Det går inte att installera detta tillägg.",
       "manageListButton": "Hantera tilläggslista",
       "openConfigurePage": "Öppna konfigurationssidan",
@@ -181,7 +182,7 @@
       "passwordWeak": "Lösenordet måste bestå av minst 8 tecken med bokstäver och siffror",
       "privacyPolicy": "Integritetspolicy",
       "submit": "Skapa konto",
-      "legalConsent": "Jag har läst och godkänner <terms>Användarvillkoren</terms> och <privacy>Integritetspolicyn</privacy>."
+      "legalConsent": "Jag bekräftar att jag är minst 16 år gammal och har läst och godkänner <terms>Användarvillkoren</terms> och <privacy>Integritetspolicyn</privacy>."
     },
     "trust": {
       "failed": {
@@ -306,7 +307,10 @@
   },
   "footer": {
     "legal": {
-      "disclaimer": "Friskriver sig från ansvar",
+      "disclaimer": "Ansvarsfriskrivning",
+      "dmca": "DMCA / Borttagning",
+      "terms": "Användarvillkor",
+      "tmdbAttribution": "Filmmetadata och affischer tillhandahålls av TMDB API (ej godkänt eller certifierat av TMDB).",
       "disclaimerText": "Framezoo hanterar inte videoströmningskällor. Dess servrar kan vidarebefordra leverantörens undertexter och tillfälligt bearbeta ljud och undertexter för synkronisering när du väljer den funktionen. Du styr vilket innehåll du spelar upp."
     },
     "links": {
@@ -484,15 +488,15 @@
     },
     "support": {
       "complete": "komplett",
-      "description": "Framezoo drivs med förlust och vi behöver hjälp med att hålla det annonsfritt! Om du gillar att använda Framezoo, överväg att donera för att hjälpa oss att täcka våra kostnader.",
-      "donate": "Donera",
-      "explanation": "Om du inte använder tillägget eller inte har FED API konfigurerat kan det vara svårare att hitta innehåll! Vi vill fixa detta, men det är mycket svårare att tillhandahålla innehåll utan dyra servrar. Så snälla, om du gillar att använda Framezoo, överväg att donera för att hjälpa oss att täcka våra växande kostnader.",
+      "description": "Framezoo är en neutral mediaspelare, och frivilligt programvarusupport hjälper till att hålla den reklamfri! Observera att bidrag strikt stöder ren programvaruutveckling och aldrig köper medieinnehåll eller tillägg från tredje part.",
+      "donate": "Stödja mjukvaruutveckling",
+      "explanation": "Om du inte har konfigurerat dina egna tredjepartstillägg i spelaren visas inte strömmar som standard. Framezoo fungerar enbart som en neutral teknisk spelare utan att vara värd för innehåll. Alla frivilliga bidrag stöder endast löpande apputveckling och infrastruktur.",
       "explanation2": "Om du vill ha mer information, vänligen gå med i vår",
       "fluxer": "Fluxer",
-      "label": "Projektfinansiering: ${{current}} / ${{goal}}",
+      "label": "Programvaruutvecklingssupport: ${{current}} / ${{goal}}",
       "moreInfo": "Mer info",
       "thankYou": "Tack för ditt stöd!",
-      "title": "Framezoo behöver din hjälp!"
+      "title": "Stöd Framezoo mjukvaruutveckling!"
     },
     "titles": {
       "69": {
@@ -1210,12 +1214,24 @@
           "text": "Detta loggar ut dig från alla enheter kopplade till ditt konto.",
           "title": "Avsluta alla sessioner"
         },
+        "exportData": {
+          "button": "Exportera JSON",
+          "text": "Ladda ner en kopia av din kontoprofil, bokmärken, visningshistorik, inställningar och JSON-logg.",
+          "title": "Exportera personuppgifter"
+        },
         "migration": {
           "button": "Migrera konto",
           "text": "Migrera ditt konto till en ny server eller ladda ner din data.",
           "title": "Kontomigrering"
         },
-        "title": "Åtgärder"
+        "title": "Åtgärder",
+        "export": {
+          "button": "Export JSON Data",
+          "error": "Det gick inte att exportera personuppgifter. Försök igen.",
+          "success": "Exporterade personuppgifter till",
+          "text": "Ladda ner en kopia av ditt konto, synkroniserade inställningar och inskickade rapporter (efterlevnad av dataskydd).",
+          "title": "Exportera personuppgifter"
+        }
       },
       "devices": {
         "deviceNameLabel": "Enhetens namn",
@@ -1445,7 +1461,14 @@
       "clearCacheError": "Det gick inte att rensa cacheminnet. Försök igen.",
       "spaceLeftOnDevice": "({{space}} utrymme kvar på din enhet)"
     },
-    "unsaved": "Du har osparade ändringar"
+    "unsaved": "Du har osparade ändringar",
+    "legal": {
+      "title": "Juridisk information, upphovsrätt och operatörsupplysning",
+      "operator": "Operator: Bui Duc Canh (Independent Developer, Framezoo Project) — Phao Dai Lang, Lang Ward, Hanoi, Vietnam",
+      "contact": "Legal / DMCA / Privacy Contact: framezoo.top@gmail.com (or legal@framezoo.top) · Tel: +84 984908816",
+      "links": "https://framezoo.top/legal/terms · /legal/privacy · /legal/dmca · /legal/about",
+      "disclaimer": "Framezoo är en neutral mediaspelare och varken värdar eller paketerar medieinnehåll eller tillägg från tredje part. Metadata och betyg använder TMDB och OMDb API:er, och den här produkten är inte godkänd eller certifierad av TMDB."
+    }
   },
   "tmdb": {
     "genres": {
@@ -1518,6 +1541,7 @@
     "modalTitle": "Hjälp oss att fortsätta bygga Framezoo",
     "subtitle": "Varje bidrag hjälper oss att förbättra spelaren, expandera till fler plattformar och fortsätta lyssna på era idéer.",
     "note": "Tack för att du bryr dig om Framezoo och stöder arbetet bakom det. Ditt bidrag ger oss mer utrymme att bygga en bättre upplevelse för alla.",
+    "legalDisclaimer": "Endast frivilligt stöd för mjukvaruutveckling — bidrag köper inte filmer, medieströmmar eller åtkomst till tillägg.",
     "scanHint": "Skanna den här QR-koden med din bankapp.",
     "paypalLabel": "PayPal",
     "momoLabel": "Mamma",

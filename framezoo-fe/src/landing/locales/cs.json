@@ -54,7 +54,7 @@
     "resourcesTitle": "Zdroje a podpora",
     "rights": "© 2026 Framezoo. Všechna práva vyhrazena.",
     "reportIssue": "Odeslat zpětnou vazbu / zprávu",
-    "metadataAttribution": "Metadata poskytují veřejné filmové databáze (TMDB, IMDb) pro informační účely."
+    "metadataAttribution": "Filmová metadata a umělecká díla používají TMDB API (nepodporované ani certifikované TMDB) a hodnocení prostřednictvím OMDb API."
   },
   "addonGuide": {
     "description": "Addon je malá služba HTTP. Podávejte manifest a zdroje, které potřebujete; Framezoo se postará o zbytek.",
@@ -118,7 +118,7 @@
         "Z kontextové nabídky vyberte \"Otevřít\".",
         "V potvrzovacím dialogu klikněte na „Přesto otevřít“ nebo „Otevřít“."
       ],
-      "step2Desc": "Protože Framezoo je nezávislý přehrávač s otevřeným zdrojovým kódem bez komerčního certifikátu Apple Developer, macOS může zobrazovat: „Framezoo je poškozený a nelze jej otevřít“ nebo „Apple nemůže ověřit tuto aplikaci“.",
+      "step2Desc": "Protože Framezoo je nezávislý softwarový přehrávač bez komerčního certifikátu Apple Developer, macOS může zobrazovat: „Framezoo je poškozen a nelze jej otevřít“ nebo „Apple nemůže ověřit tuto aplikaci“.",
       "note": "Tento krok musíte provést pouze kliknutím pravým tlačítkem při prvním spuštění. Následné spouštění lze provést normálně z Launchpadu nebo Spotlightu."
     },
     "win": {
@@ -177,7 +177,7 @@
     "successDesc": "děkujeme za vaši zpětnou vazbu. Náš tým problém co nejdříve zkontroluje a vyřeší.",
     "attachmentsLabel": "Soubory",
     "attachmentsTooLarge": "Celková velikost souboru nesmí přesáhnout 55 MB.",
-    "attachmentsHint": "Obrázky/videa · Celková maximální velikost 55 MB",
+    "attachmentsHint": "Obrázky/videa/PDF (autorizace nebo ověření autorských práv) · Maximálně 55 MB",
     "descLabel": "3. Podrobný popis",
     "contactInvalid": "Zadejte prosím platnou e-mailovou adresu nebo telefonní číslo, abychom vám mohli odpovědět.",
     "errorRequired": "Vyplňte prosím název, kontaktní údaje a popis problému.",
@@ -330,85 +330,85 @@
         "sections": [
           {
             "bullets": [
-              "E-mail, ověřovací kódy a podrobnosti požadavků podporují registraci, přihlášení a zabezpečení účtu.",
-              "Zprávy, popisy chyb a přílohy se dostanou na náš server, když odešlete formulář zpětné vazby.",
-              "Webová stránka ukládá vaši volbu jazyka do úložiště prohlížeče."
+              "Režim hosta používá pouze náhodný technický identifikátor, štítek platformy a verzi aplikace k ovládání koncových bodů přenosu titulků/synchronizace.",
+              "E-mailové ověřovací kódy a protokoly požadavků jsou zpracovávány výhradně za účelem registrace, přihlášení a ochrany účtů.",
+              "Telemetrie serveru nezahrnuje názvy filmů, ID TMDB/IMDb a osobní zdroje doplňků třetích stran."
             ],
-            "title": "Data na vašem zařízení a našich serverech",
+            "title": "Data zařízení, hosta a účtu",
             "paragraphs": [
-              "Aplikace ukládá některá nastavení, mezipaměť a data přehrávání do vašeho zařízení. Pokud si vytvoříte účet, server také uloží váš e-mail, přezdívku, profil, veřejný klíč, podrobnosti o relaci/zařízení, synchronizované záložky, průběh, historii sledování, nastavení a doplňky plus šifrované klíče poskytovatele titulků, pokud je poskytnete."
+              "Aplikace ukládá místní nastavení, mezipaměti a data přehrávání na vašem zařízení. Když si vytvoříte účet (pouze pro uživatele ve věku 16 let nebo starší), server také uloží váš zašifrovaný e-mail, přezdívku, profil, veřejný klíč, podrobnosti o relacích/zařízení, synchronizované záložky, průběh, historii sledování, nastavení, doplňky, záznamy o souhlasu s časovým razítkem a šifrované klíče API poskytovatele titulků BYOK, pokud je uložíte."
             ],
             "badge": "01"
           },
           {
-            "title": "Účely a externí služby",
+            "title": "Účely, přeshraniční přenos a externí API",
             "paragraphs": [
-              "Zpracováváme data, abychom mohli provozovat účty, synchronizovat zařízení, poskytovat podporu, chránit službu a poskytovat funkce, které si vyberete. Osobní údaje neprodáváme reklamním sítím."
+              "Údaje zpracováváme výhradně za účelem provozování účtů, synchronizace zařízení, poskytování podpory, dodržování právních předpisů a nikdy neprodáváme osobní údaje."
             ],
             "bullets": [
-              "Ověřovací e-mail přijde našemu poskytovateli pošty; zálohy databáze mohou být uloženy na Supabase, když je zálohování nakonfigurováno.",
-              "Někteří poskytovatelé služeb nebo doplňkové servery mohou zpracovávat data mimo Vietnam; umístění serveru závisí na zvolené službě a provozní konfiguraci.",
-              "Během registrace lze použít službu Google reCAPTCHA; Když zvolíte překlad, text titulků přejde do Překladače Google.",
+              "Poskytovatelé transakčního ověřovacího e-mailu a šifrované zálohy databází mohou sídlit mimo Vietnam v závislosti na konfiguraci nasazení.",
+              "Metadata a skóre kritiky se získávají prostřednictvím oficiálních rozhraní API TMDB a OMDb; titulky vyhledají dotaz Wyzie, SubSource a OpenSubtitles.com REST API (upřednostňuje vaše osobní klíče BYOK, pokud jsou k dispozici).",
+              "Přenosy souborů titulků používají hlavičky bez ukládání do mezipaměti bez veřejné mezipaměti. Doplňky třetích stran jsou kontaktovány přímo z vašeho zařízení podle jejich vlastních zásad.",
               "Vyhledávání a stahování titulků, synchronizace zvuku/titulků a komunitní doplňky mohou odesílat požadavky prostřednictvím serverů Framezoo a příslušných externích služeb. Doplňky třetích stran mají své vlastní zásady."
             ],
             "badge": "02"
           },
           {
-            "title": "Uchování a vymazání",
+            "title": "Uchovávání, export a mazání dat JSON",
             "bullets": [
-              "Platnost ověřovacích kódů vyprší po 10 minutách; záznamy o výzvě s vypršenou platností jsou odstraněny po 7 dnech. Záznamy odeslané nebo neúspěšné pošty jsou odstraněny po 7 dnech.",
-              "Zpětná vazba a přílohy jsou uchovávány odděleně pro účely podpory nebo žádostí o autorská práva, dokud je na požádání nebo tým podpory neodstraní. Smazáním účtu se odstraní propojení účtu, ale automaticky se neodstraní přehledy. O samostatné smazání můžete požádat prostřednictvím formuláře zpětné vazby."
+              "Výzvy ověření OTP vyprší po 10 minutách a jsou vymazány spolu se záznamy e-mailové schránky k odeslání po 7 dnech.",
+              "Zprávy o zpětné vazbě a upozornění na autorská práva zůstávají uloženy odděleně pro účely auditu souladu; smazání účtu odpojí vaše uživatelské ID."
             ],
             "paragraphs": [
-              "Data účtu a synchronizace zůstávají, dokud je váš účet aktivní. Účet můžete smazat v Nastavení; server poté odstraní záznamy účtu, záložky, průběh, historii sledování, nastavení a relace. Staré zálohy databáze mohou uchovávat data až do rotace; výchozí konfigurace uchovává 7 posledních záloh, když je zálohování spuštěno."
+              "Účet a data synchronizace zůstávají aktivní, dokud váš účet existuje. Můžete exportovat úplnou kopii svých osobních údajů JSON nebo trvale smazat svůj účet v Nastavení -> Akce; rotující šifrované zálohy uchovávají až 7 posledních snímků."
             ],
             "badge": "03"
           },
           {
-            "title": "Vaše práva a kontakt",
+            "title": "Vaše práva, věková hranice (>=16) a kontakt",
             "paragraphs": [
-              "Můžete požádat o přístup, opravu, vymazání nebo omezení svých údajů, odvolat souhlas, pokud zpracování závisí na souhlasu, a podat stížnost prostřednictvím formuláře zpětné vazby na našem webu. Uveďte prosím e-mail svého účtu, abychom mohli žádost ověřit."
+              "Registrace účtu je omezena na uživatele starší 16 let podle vietnamského zákona 91/2025/QH15. Přístup, export JSON, opravu, odstranění nebo odvolání souhlasu můžete uplatnit prostřednictvím zpětné vazby nebo privacy@framezoo.top / framezoo.top@gmail.com (odpověď do 24 hodin)."
             ],
             "badge": "04"
           }
         ],
-        "summary": "Tato zásada popisuje zpracování dat v desktopové aplikaci Framezoo a na oficiálních serverech Framezoo.",
-        "updatedAt": "Aktualizováno: 4. listopadu 2026 · Zákon 91/2025/QH15 a vyhláška 356/2025/ND-CP"
+        "summary": "Tyto zásady popisují zpracování dat napříč Framezoo Desktop, Mobile, TV aplikacemi a oficiálními servery Framezoo.",
+        "updatedAt": "Aktualizováno: 16. listopadu 2026 · Verze 2026-11 · Vietnamský zákon 91/2025/QH15 a vyhláška 356/2025/ND-CP"
       },
       "copyright": {
-        "updatedAt": "Aktualizováno: 4. listopadu 2026",
+        "updatedAt": "Aktualizováno: 16. listopadu 2026 · Vietnamské právo duševního vlastnictví, čl. 198b & vyhláška 17/2023",
         "sections": [
           {
-            "title": "Zprostředkující software Safe Harbor",
+            "title": "Neutrální zprostředkovatelský software a výchozí P2P bez nasazování",
             "paragraphs": [
-              "Framezoo neprovozuje filmovou knihovnu ani zdroj video streamu. Aplikace může přistupovat ke zdrojům vybraným uživateli; naše servery mohou předávat titulky poskytovatele a dočasně zpracovávat zvuk a titulky pro požadovanou synchronizaci.",
-              "Každé oznámení o autorských právech je posuzováno s ohledem na obsah a naši skutečnou roli; tyto podmínky nevytvářejí automatickou výjimku z odpovědnosti."
+              "Framezoo je neutrální software pro přehrávače médií podobný Stremio a Kodi: nehostí žádné video soubory, nesbalí žádné výchozí doplňky obsahu ani veřejné sledovače, neprovádí žádné proxy serverové addony a ve výchozím nastavení zakazuje odchozí P2P seeding (upload_rate_limit = 0).",
+              "Stahování titulků používá hlavičky bez úložiště bez veřejného ukládání do mezipaměti na serverech Framezoo."
             ],
             "badge": "01"
           },
           {
-            "title": "Metadata a přiřazení uměleckého díla",
+            "title": "Oficiální rozhraní API metadat a atribuce TMDB",
             "paragraphs": [
-              "Metadata filmů a seriálů (názvy, data vydání, synopse, hodnocení a propagační plakáty) zobrazovaná pro informační účely pocházejí z veřejných filmových databází (jako jsou TMDB, IMDb a TVDB).",
-              "Všechny ochranné známky, názvy filmů a umělecká díla zůstávají majetkem příslušných vlastníků autorských práv."
+              "Názvy filmů, synopse, umělecká díla a hodnocení kritiků jsou získávány z oficiálních TMDB a OMDb API pro informační objev.",
+              "Tento produkt používá TMDB API, ale není schválen ani certifikován TMDB. Všechny ochranné známky a umělecká díla médií zůstávají majetkem příslušných vlastníků."
             ],
             "badge": "02"
           },
           {
             "bullets": [
-              "Identifikace vlastníka autorských práv nebo oprávněného zástupce.",
-              "Doklad o vlastnictví díla chráněného autorským právem.",
+              "Příkazy od příslušných orgánů jsou vymáhány na /compliance/blocklist do 24 hodin; platná oznámení držitele práv do 72 hodin.",
+              "Účty opakujících se porušení práv spojené s ověřenými porušeními jsou pozastaveny s okamžitým zrušením relace.",
               "Přesná adresa URL nebo popis příslušného materiálu, abychom jej mohli zkontrolovat a vyřešit během 24–72 pracovních hodin."
             ],
-            "title": "Oznámení a postup odstranění",
+            "title": "Oznámení a zastavení šíření (24h/72h SLA) a zásady opakovaného porušování",
             "paragraphs": [
-              "Framezoo respektuje práva duševního vlastnictví. Pokud jste vlastníkem autorských práv nebo oprávněným zástupcem a domníváte se, že jakýkoli materiál na webu framezoo.top porušuje vaše práva, odešlete oznámení prostřednictvím našeho kanálu Zpráva / Zpětná vazba včetně:"
+              "Držitelé práv a úřady mohou podat formální oznámení (totožnost vlastníka práv, doklad/autorizaci PDF, konkrétní doménu addonu / ID média / ID titulků a čestné prohlášení) prostřednictvím formuláře zprávy nebo legal@framezoo.top / framezoo.top@gmail.com."
             ],
             "badge": "03"
           }
         ],
-        "title": "Copyright, DMCA a vyloučení odpovědnosti za obsah",
-        "summary": "Oficiální prohlášení o vyloučení odpovědnosti za obsah a postup oznámení a zastavení šíření pro Framezoo."
+        "title": "Autorská práva, upozornění a zastavení šíření a vyloučení odpovědnosti za obsah",
+        "summary": "Neutrální status zprostředkovatele, proces oznámení a zastavení šíření 24 hodin/72 hodin blokovaný proces a zásady opakovaného porušování práv."
       },
       "addon-policy": {
         "title": "Zásady doplňků a pokyny pro komunitu",

@@ -392,6 +392,9 @@ public:
 		params.settings.set_bool(lt::settings_pack::announce_to_all_trackers, true);
 		params.settings.set_bool(lt::settings_pack::announce_to_all_tiers, true);
 		params.settings.set_bool(lt::settings_pack::allow_multiple_connections_per_ip, true);
+		// Neutral playback only: disable outbound P2P seeding by default.
+		params.settings.set_int(lt::settings_pack::unchoke_slots_limit, 0);
+		params.settings.set_int(lt::settings_pack::upload_rate_limit, 1);
 		session = std::make_unique<lt::session>(std::move(params));
 		alerts = std::thread([this] { alert_loop(); });
 	}

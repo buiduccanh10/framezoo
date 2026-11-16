@@ -41,10 +41,15 @@ export default defineCachedEventHandler(
         parsed.data.language,
       );
     } catch (error) {
-      console.error('[IMDb] Failed to scrape IMDb:', error);
+      const statusCode =
+        error && typeof error === 'object' && 'statusCode' in error && typeof error.statusCode === 'number'
+          ? error.statusCode
+          : 502;
+      console.error('[IMDb] Failed to fetch IMDb data from OMDb:', error);
       throw createError({
-        statusCode: 502,
-        statusMessage: 'Failed to fetch IMDb data',
+        statusCode,
+        statusMessage:
+          statusCode === 503 ? 'OMDB_API_KEY is not configured on server' : 'Failed to fetch IMDb data',
       });
     }
   },

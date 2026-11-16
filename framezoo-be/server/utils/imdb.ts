@@ -1,4 +1,10 @@
-import { fetchTextWithAwsWaf } from './aws-waf';
+import {
+  fetchOmdbJson,
+  parseOmdbInteger,
+  parseOmdbList,
+  parseOmdbNumber,
+  type OmdbTitleResponse,
+} from './omdb';
 
 export interface IMDbMetadata {
   title?: string;
@@ -34,162 +40,99 @@ export interface IMDbMetadata {
   episode_votes?: number;
 }
 
-const imdbLanguageMap: Record<string, string> = {
-  "en-US": "en-US",
-  "es-ES": "es-ES",
-  "fr-FR": "fr-FR",
-  "de-DE": "de-DE",
-  "it-IT": "it-IT",
-  "pt-PT": "pt-PT",
-  "ru-RU": "ru-RU",
-  "ja-JP": "ja-JP",
-  "zh-CN": "zh-CN",
-  "ko-KR": "ko-KR",
-  "ar-SA": "ar-SA",
-  "hi-IN": "hi-IN",
-  "el-GR": "el-GR",
-};
+function mapOmdbToImdbMetadata(
+  imdbId: string,
+  titleData: OmdbTitleResponse,
+  episodeData?: OmdbTitleResponse,
+  season?: number,
+  episode?: number
+): IMDbMetadata {
+  const yearMatch = titleData.Year?.match(/^(\d{4})(?:[–-](\d{4}))?/);
+  const year = yearMatch ? Number.parseInt(yearMatch[1], 10) : null;
+  const endYear = yearMatch?.[2] ? Number.parseInt(yearMatch[2], 10) : null;
 
-const months = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
+  let day: number | null = null;
+  let month: number | null = null;
+  let formattedDate: string | undefined;
+  if (titleData.Released && titleData.Released !== 'N/A') {
+    const parsedDate = new Date(titleData.Released);
+    if (!Number.isNaN(parsedDate.getTime())) {
+      day = parsedDate.getUTCDate();
+      month = parsedDate.getUTCMonth() + 1;
+      formattedDate = titleData.Released;
+    }
+  }
 
-function getImdbLanguageCode(language?: string): string {
-  if (!language) return "en-US";
-  return imdbLanguageMap[language] || "en-US";
+  const runtime = parseOmdbInteger(titleData.Runtime);
+  const imdbRating = parseOmdbNumber(titleData.imdbRating);
+  const votes = parseOmdbInteger(titleData.imdbVotes);
+
+  const metadata: IMDbMetadata = {
+    title: titleData.Title && titleData.Title !== 'N/A' ? titleData.Title : undefined,
+    original_title: titleData.Title && titleData.Title !== 'N/A' ? titleData.Title : undefined,
+    title_type: titleData.Type && titleData.Type !== 'N/A' ? titleData.Type : undefined,
+    year,
+    end_year: endYear,
+    day,
+    month,
+    date: formattedDate,
+    runtime,
+    age_rating: titleData.Rated && titleData.Rated !== 'N/A' ? titleData.Rated : undefined,
+    imdb_rating: imdbRating,
+    votes,
+    plot: titleData.Plot && titleData.Plot !== 'N/A' ? titleData.Plot : undefined,
+    poster_url: titleData.Poster && titleData.Poster !== 'N/A' ? titleData.Poster : undefined,
+    url: `https://www.imdb.com/title/${imdbId}/`,
+    genre: parseOmdbList(titleData.Genre),
+    cast: parseOmdbList(titleData.Actors),
+    directors: parseOmdbList(titleData.Director),
+    writers: parseOmdbList(titleData.Writer),
+    countries: parseOmdbList(titleData.Country),
+    languages: parseOmdbList(titleData.Language),
+  };
+
+  if (season != null && episode != null) {
+    metadata.season = season;
+    metadata.episode = episode;
+    if (episodeData && episodeData.Response === 'True') {
+      if (episodeData.Title && episodeData.Title !== 'N/A') {
+        metadata.episode_title = episodeData.Title;
+      }
+      if (episodeData.Plot && episodeData.Plot !== 'N/A') {
+        metadata.episode_plot = episodeData.Plot;
+      }
+      const epRating = parseOmdbNumber(episodeData.imdbRating);
+      if (epRating != null) metadata.episode_rating = epRating;
+      const epVotes = parseOmdbInteger(episodeData.imdbVotes);
+      if (epVotes != null) metadata.episode_votes = epVotes;
+    }
+  }
+
+  return metadata;
 }
-
-const IMDB_USER_AGENT =
-  'Mozilla/5.0 (iPhone; CPU iPhone OS 18_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Mobile/15E148 Safari/604.1';
 
 export async function scrapeIMDb(
   imdbId: string,
   season?: number,
   episode?: number,
-  language?: string,
+  _language?: string
 ): Promise<IMDbMetadata> {
-  const imdbLanguage = getImdbLanguageCode(language);
+  const cleanImdbId = imdbId.trim();
+  const titleData = await fetchOmdbJson({ i: cleanImdbId, plot: 'full' });
 
-  let imdbUrl = `https://www.imdb.com/title/${imdbId}/`;
-  if (season && episode) {
-    imdbUrl += `episodes?season=${season}`;
+  if (titleData.Response === 'False') {
+    throw new Error(titleData.Error || `IMDb record ${cleanImdbId} not found in OMDb`);
   }
 
-  const separator = imdbUrl.includes("?") ? "&" : "?";
-  imdbUrl += `${separator}locale=${imdbLanguage}`;
-
-  const html = await fetchTextWithAwsWaf(imdbUrl, {
-    Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-    'Accept-Language': imdbLanguage,
-    'User-Agent': IMDB_USER_AGENT,
-  });
-  const jsonMatch = html.match(
-    /<script id="__NEXT_DATA__" type="application\/json">(.*?)<\/script>/,
-  );
-  if (!jsonMatch) {
-    throw new Error("Could not find IMDb data on the page");
+  let episodeData: OmdbTitleResponse | undefined;
+  if (season != null && episode != null) {
+    episodeData = await fetchOmdbJson({
+      i: cleanImdbId,
+      Season: season,
+      Episode: episode,
+      plot: 'full',
+    }).catch(() => undefined);
   }
 
-  const data = JSON.parse(jsonMatch[1]);
-  const metadata: IMDbMetadata = {
-    title: "",
-    original_title: "",
-    title_type: "",
-    year: null,
-    end_year: null,
-    day: null,
-    month: null,
-    date: "",
-    runtime: null,
-    age_rating: "",
-    imdb_rating: null,
-    votes: null,
-    plot: "",
-    poster_url: "",
-    trailer_url: "",
-    url: imdbUrl,
-    genre: [],
-    cast: [],
-    directors: [],
-    writers: [],
-    keywords: [],
-    countries: [],
-    languages: [],
-    locations: [],
-    season,
-    episode,
-  };
-
-  try {
-    const aboveTheFold = data.props.pageProps.aboveTheFoldData;
-    const mainColumn = data.props.pageProps.mainColumnData;
-
-    metadata.title = aboveTheFold.titleText?.text || "";
-    metadata.original_title = aboveTheFold.originalTitleText?.text || "";
-    metadata.title_type = aboveTheFold.titleType?.text || "";
-    metadata.age_rating = aboveTheFold.certificate?.rating || "";
-    metadata.year = aboveTheFold.releaseYear?.year || null;
-    metadata.end_year = aboveTheFold.releaseYear?.endYear || null;
-    metadata.day = aboveTheFold.releaseDate?.day || null;
-    metadata.month = aboveTheFold.releaseDate?.month || null;
-
-    if (metadata.month && metadata.day && metadata.year) {
-      metadata.date = `${months[metadata.month - 1]} ${metadata.day}, ${metadata.year}`;
-    }
-
-    metadata.runtime = aboveTheFold.runtime?.seconds || null;
-    metadata.plot = aboveTheFold.plot?.plotText?.plainText || "";
-    metadata.imdb_rating = aboveTheFold.ratingsSummary?.aggregateRating || null;
-    metadata.votes = aboveTheFold.ratingsSummary?.voteCount || null;
-    metadata.poster_url = aboveTheFold.primaryImage?.url || "";
-    const trailerNode = aboveTheFold.primaryVideos?.edges?.[0]?.node;
-    metadata.trailer_url = trailerNode?.playbackURLs?.[0]?.url || "";
-    metadata.trailer_thumbnail = trailerNode?.thumbnail?.url || "";
-
-    metadata.genre = aboveTheFold.genres?.genres?.map((genre: any) => genre.text) || [];
-    metadata.cast =
-      aboveTheFold.castPageTitle?.edges?.map((edge: any) => edge.node.name.nameText.text) || [];
-    metadata.directors =
-      aboveTheFold.directorsPageTitle?.[0]?.credits?.map((credit: any) => credit.name.nameText.text) ||
-      [];
-    metadata.writers =
-      mainColumn.writers?.[0]?.credits?.map((credit: any) => credit.name.nameText.text) || [];
-    metadata.keywords = aboveTheFold.keywords?.edges?.map((edge: any) => edge.node.text) || [];
-    metadata.countries =
-      mainColumn.countriesOfOrigin?.countries?.map((country: any) => country.text) || [];
-    metadata.languages =
-      mainColumn.spokenLanguages?.spokenLanguages?.map((spokenLanguage: any) => spokenLanguage.text) ||
-      [];
-    metadata.locations =
-      mainColumn.filmingLocations?.edges?.map((edge: any) => edge.node.text) || [];
-
-    if (season && episode) {
-      const episodeData = data.props.pageProps.mainColumnData.episodes?.edges?.find(
-        (entry: any) => entry.node.episodeNumber === episode,
-      );
-
-      if (episodeData) {
-        metadata.episode_title = episodeData.node.titleText?.text || "";
-        metadata.episode_plot = episodeData.node.plot?.plotText?.plainText || "";
-        metadata.episode_rating = episodeData.node.ratingsSummary?.aggregateRating || null;
-        metadata.episode_votes = episodeData.node.ratingsSummary?.voteCount || null;
-      }
-    }
-  } catch (error) {
-    console.error("Error parsing IMDb data:", error);
-    throw error;
-  }
-
-  return metadata;
+  return mapOmdbToImdbMetadata(cleanImdbId, titleData, episodeData, season, episode);
 }

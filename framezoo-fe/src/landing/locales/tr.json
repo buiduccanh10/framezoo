@@ -54,7 +54,7 @@
     "privacy": "Gizlilik ve Veri Politikası",
     "copyright": "Telif hakkı ve DMCA",
     "rights": "© 2026 Framezoo. Her hakkı saklıdır.",
-    "metadataAttribution": "Meta veriler, halka açık film veritabanları (TMDB, IMDb) tarafından bilgilendirme amaçlı sağlanmaktadır."
+    "metadataAttribution": "Film meta verileri ve çizimleri TMDB API'sini (TMDB tarafından onaylanmamış veya onaylanmamış) ve OMDb API aracılığıyla derecelendirmeleri kullanır."
   },
   "addonGuide": {
     "eyebrow": "ADDON PROTOKOLÜ / KILAVUZU",
@@ -115,7 +115,7 @@
       "step1Title": "1. Adım: Uygulamalara Sürükleyin",
       "step2Title": "Adım 2: Gatekeeper güvenlik uyarısı",
       "note": "Bu sağ tıklama adımını yalnızca ilk başlatmada yapmanız gerekir. Sonraki başlatmalar normal şekilde Launchpad veya Spotlight'tan yapılabilir.",
-      "step2Desc": "Framezoo, ticari bir Apple Geliştirici sertifikası olmayan bağımsız bir açık kaynaklı oynatıcı olduğundan, macOS şunu gösterebilir: \"Framezoo hasarlı ve açılamıyor\" veya \"Apple bu uygulamayı doğrulayamıyor\"."
+      "step2Desc": "Framezoo, ticari bir Apple Geliştirici sertifikası olmayan bağımsız bir yazılım oynatıcısı olduğundan, macOS şunu gösterebilir: \"Framezoo hasarlı ve açılamıyor\" veya \"Apple bu uygulamayı doğrulayamıyor\"."
     },
     "downloadApp": "Framezoo'yu indirin",
     "macTab": "MacOS için",
@@ -177,7 +177,7 @@
     "successDesc": "Geri bildiriminiz için teşekkür ederiz. Ekibimiz sorunu en kısa sürede inceleyip çözecektir.",
     "attachmentsLabel": "Dosyalar",
     "attachmentsTooLarge": "Toplam dosya boyutu 55 MB'ı geçmemelidir.",
-    "attachmentsHint": "Resimler/videolar · toplam maksimum 55 MB",
+    "attachmentsHint": "Resimler/videolar/PDF (yetki veya telif hakkı kanıtı) · Toplam maksimum 55 MB",
     "errorRequired": "Lütfen başlığı, iletişim bilgilerini ve sorun açıklamasını girin.",
     "contactInvalid": "Yanıt verebilmemiz için lütfen geçerli bir e-posta adresi veya telefon numarası girin.",
     "contactPlaceholder": "örneğin name@example.com veya +84912345678",
@@ -331,83 +331,83 @@
       },
       "privacy": {
         "title": "Gizlilik ve Kişisel Veri Koruma Politikası",
-        "updatedAt": "Güncellendi: 4 Kasım 2026 · 91/2025/QH15 sayılı Kanun ve 356/2025/ND-CP sayılı Kararname",
-        "summary": "Bu politika, Framezoo masaüstü uygulamasında ve resmi Framezoo sunucularında veri işleme süreçlerini açıklamaktadır.",
+        "updatedAt": "Güncellenme Tarihi: 16 Kasım 2026 · Sürüm 2026-11 · Vietnam Kanunu 91/2025/QH15 ve Kararname 356/2025/ND-CP",
+        "summary": "Bu politika, Framezoo Masaüstü, Mobil, TV uygulamaları ve resmi Framezoo sunucuları arasındaki veri işlemeyi açıklamaktadır.",
         "sections": [
           {
-            "title": "Cihazınızdaki ve sunucularımızdaki veriler",
+            "title": "Cihaz, Misafir ve Hesap Verileri",
             "paragraphs": [
-              "Uygulama, bazı ayarları, önbelleği ve oynatma verilerini cihazınızda saklar. Bir hesap oluşturursanız, sunucu ayrıca e-postanızı, takma adınızı, profilinizi, genel anahtarınızı, oturum/cihaz ayrıntılarınızı, senkronize edilmiş yer işaretlerinizi, ilerlemenizi, izleme geçmişinizi, ayarlarınızı ve eklentilerinizi, ayrıca sağladığınız takdirde şifrelenmiş altyazı sağlayıcı anahtarlarını da saklar."
+              "Uygulama, yerel ayarları, önbellekleri ve oynatma verilerini cihazınızda saklar. Bir hesap oluşturduğunuzda (16 yaş ve üzeri kullanıcılarla sınırlıdır), sunucu ayrıca şifrelenmiş e-postanızı, takma adınızı, profilinizi, genel anahtarınızı, oturum/cihaz ayrıntılarınızı, senkronize edilmiş yer işaretlerinizi, ilerleme durumunuzu, izleme geçmişinizi, ayarlarınızı, eklentilerinizi, zaman damgalı izin kayıtlarınızı ve kaydederseniz şifrelenmiş BYOK altyazı sağlayıcı API anahtarlarınızı da saklar."
             ],
             "bullets": [
-              "E-posta, doğrulama kodları ve talep detayları kayıt, oturum açma ve hesap güvenliğini destekler.",
-              "Geri bildirim formunu gönderdiğinizde raporlar, hata açıklamaları ve ekler sunucumuza ulaşır.",
-              "Web sitesi dil seçiminizi tarayıcınızın depolama alanına kaydeder."
+              "Konuk modu, altyazı aktarma/senkronizasyon uç noktalarını çalıştırmak için yalnızca rastgele bir teknik tanımlayıcı, platform etiketi ve uygulama sürümünü kullanır.",
+              "E-posta doğrulama kodları ve istek günlükleri, kesinlikle kayıt olmak, oturum açmak ve hesapları korumak için işlenir.",
+              "Sunucu telemetrisi film başlıklarını, TMDB/IMDb kimliklerini ve kişisel üçüncü taraf eklenti kaynaklarını hariç tutar."
             ],
             "badge": "01"
           },
           {
-            "title": "Amaçlar ve dış hizmetler",
+            "title": "Amaçlar, Sınır Ötesi Transfer ve Harici API'ler",
             "paragraphs": [
-              "Hesapları yönetmek, cihazları senkronize etmek, destek sağlamak, hizmeti korumak ve seçtiğiniz özellikleri sunmak için verileri işliyoruz. Kişisel verilerinizi reklam ağlarına satmıyoruz."
+              "Verileri yalnızca hesapları işletmek, cihazları senkronize etmek, destek sağlamak, yasal uyumluluğu uygulamak için işleriz ve asla kişisel verileri satmazız."
             ],
             "bullets": [
-              "Doğrulama e-postası posta sağlayıcımıza gönderilir; yedekleme yapılandırıldığında veritabanı yedekleri Supabase&#39;te saklanabilir.",
-              "Bazı servis sağlayıcılar veya ek sunucular verileri Vietnam dışında işleyebilir; sunucu konumu, seçtiğiniz hizmete ve işletim yapılandırmasına bağlıdır.",
-              "Kayıt sırasında Google reCAPTCHA kullanılabilir; çeviri seçeneğini tercih ettiğinizde altyazı metni Google Translate&#39;e gönderilir.",
+              "İşlemsel doğrulama e-posta sağlayıcıları ve şifrelenmiş veritabanı yedekleri, dağıtım yapılandırmasına bağlı olarak Vietnam dışında bulunabilir.",
+              "Meta veriler ve eleştirmen puanları, resmi TMDB ve OMDb API'leri aracılığıyla alınır; altyazı arama sorgusu Wyzie, SubSource ve OpenSubtitles.com REST API (sağlandığında kişisel BYOK anahtarlarınızı tercih eder).",
+              "Altyazı dosyası geçişleri, genel önbelleğe alma olmadan depolanmayan üstbilgileri kullanır. Üçüncü taraf eklentilerle, kendi politikaları kapsamında doğrudan cihazınızdan iletişime geçilir.",
               "Altyazı aramaları ve indirmeleri, ses/altyazı senkronizasyonu ve topluluk eklentileri, Framezoo sunucuları ve ilgili harici hizmetler aracılığıyla istek gönderebilir. Üçüncü taraf eklentilerin kendi politikaları vardır."
             ],
             "badge": "02"
           },
           {
-            "title": "Saklama ve silme",
+            "title": "Saklama, JSON Verilerini Dışa Aktarma ve Silme",
             "paragraphs": [
-              "Hesabınız aktif olduğu sürece hesap ve senkronizasyon verileri saklanır. Hesabı Ayarlar&#39;dan silebilirsiniz; sunucu daha sonra hesap kayıtlarını, yer işaretlerini, ilerleme durumunu, izleme geçmişini, ayarları ve oturumları siler. Eski veritabanı yedekleri, veritabanı döndürülene kadar verileri saklayabilir; varsayılan yapılandırma, yedekleme çalışırken son 7 yedeği saklar."
+              "Hesap ve senkronizasyon verileri, hesabınız mevcut olduğu sürece etkin kalır. Kişisel verilerinizin tam JSON kopyasını dışa aktarabilir veya Ayarlar -> Eylemler bölümünden hesabınızı kalıcı olarak silebilirsiniz; dönüşümlü şifrelenmiş yedeklemeler en fazla 7 güncel anlık görüntüyü korur."
             ],
             "bullets": [
-              "Doğrulama kodları 10 dakika sonra geçerliliğini yitirir; süresi dolmuş doğrulama kayıtları 7 gün sonra silinir. Gönderilen veya başarısız olan posta kayıtları 7 gün sonra silinir.",
-              "Geri bildirimler ve ekler, destek veya telif hakkı talepleri için ayrı olarak saklanır ve talep üzerine veya destek ekibi tarafından silinene kadar orada kalır. Hesap silme işlemi hesap bağlantısını kaldırır ancak raporları otomatik olarak silmez. Ayrı silme talebinizi Geri Bildirim formu aracılığıyla yapabilirsiniz."
+              "Doğrulama OTP sorgulamalarının süresi 10 dakika sonra dolar ve 7 gün sonra e-posta giden kutusu kayıtlarıyla birlikte silinir.",
+              "Geri bildirim raporları ve telif hakkı bildirimleri, uyumluluk denetimi için ayrı olarak saklanır; hesabın silinmesi kullanıcı kimliğinizin bağlantısını kaldırır."
             ],
             "badge": "03"
           },
           {
-            "title": "Haklarınız ve iletişim bilgileriniz",
+            "title": "Haklarınız, Yaş Sınırı (>=16) ve İletişim",
             "paragraphs": [
-              "Verilerinize erişim, düzeltme, silme veya kısıtlama talebinde bulunabilir, işlemenin rızaya dayalı olduğu durumlarda rızanızı geri çekebilir ve web sitemizdeki Geri Bildirim formu aracılığıyla şikayette bulunabilirsiniz. Talebinizi doğrulayabilmemiz için lütfen hesap e-postanızı belirtin."
+              "Hesap kaydı, 91/2025/QH15 sayılı Vietnam Yasası uyarınca 16 yaş ve üzeri kullanıcılarla sınırlıdır. Geribildirim yöntemi veya gizlilik@framezoo.top / çerçevezoo.top@gmail.com (24 saat içinde yanıtlanır) aracılığıyla erişim, JSON dışa aktarımı, düzeltme, silme veya onayın geri alınması işlemlerini gerçekleştirebilirsiniz."
             ],
             "badge": "04"
           }
         ]
       },
       "copyright": {
-        "title": "Telif Hakkı, DMCA ve İçerik Feragatnamesi",
-        "updatedAt": "Güncellendi: 4 Kasım 2026",
-        "summary": "Framezoo için resmi içerik uyarısı ve fikri mülkiyet bildirimi ve kaldırma prosedürü.",
+        "title": "Telif Hakkı, Bildirim ve Yayından Kaldırma ve İçerik Sorumluluk Reddi",
+        "updatedAt": "Güncellenme Tarihi: 16 Kasım 2026 · Vietnam Fikri Mülkiyet Hukuku Md. 198b & 17/2023 sayılı Karar",
+        "summary": "Tarafsız aracı durumu, 24 saat/72 saat Bildirim ve Yayından Kaldırma engellenenler listesi süreci ve Tekrarlanan İhlalci politikası.",
         "sections": [
           {
-            "title": "Aracı Yazılım Güvenli Limanı",
+            "title": "Nötr Aracı Yazılım ve Varsayılan Tohumlamasız P2P",
             "paragraphs": [
-              "Framezoo bir film kütüphanesi veya video akış kaynağı işletmemektedir. Uygulama, kullanıcılar tarafından seçilen kaynaklara erişebilir; sunucularımız sağlayıcı altyazılarını iletebilir ve istenen senkronizasyon için ses ve altyazıları geçici olarak işleyebilir.",
-              "Her telif hakkı bildirimi, içeriğe ve gerçek rolümüze göre incelenir; bu şartlar otomatik olarak sorumluluktan muafiyet sağlamaz."
+              "Framezoo, Stremio ve Kodi'ye benzer tarafsız bir medya oynatıcı yazılımıdır: video dosyası barındırmaz, varsayılan içerik eklentileri veya genel izleyicileri paketlemez, sunucu tarafı eklenti proxy'si gerçekleştirmez ve varsayılan olarak giden P2P tohumlamayı devre dışı bırakır (upload_rate_limit = 0).",
+              "Altyazı indirmeleri, Framezoo sunucularında genel önbelleğe alma olmadan, mağaza dışı başlıklar kullanır."
             ],
             "badge": "01"
           },
           {
-            "title": "Meta Veriler ve Sanat Eseri Atıfı",
+            "title": "Resmi Meta Veri API'leri ve TMDB İlişkilendirmesi",
             "paragraphs": [
-              "Bilgi edinme amacıyla görüntülenen film ve dizi meta verileri (başlıklar, yayın tarihleri, özetler, derecelendirmeler ve tanıtım afişleri), halka açık film veritabanlarından (TMDB, IMDb ve TVDB gibi) alınmaktadır.",
-              "Tüm ticari markalar, film başlıkları ve görseller, ilgili telif hakkı sahiplerinin mülkiyetindedir."
+              "Film başlıkları, özetler, çizimler ve eleştirmen puanları, bilgi amaçlı keşif amacıyla resmi TMDB ve OMDb API'lerinden alınır.",
+              "Bu ürün TMDB API'sini kullanır ancak TMDB tarafından onaylanmaz veya onaylanmaz. Tüm ticari markalar ve medya eserleri ilgili sahiplerinin mülkiyetinde kalır."
             ],
             "badge": "02"
           },
           {
-            "title": "Bildirim ve Kaldırma Prosedürü",
+            "title": "Bildirim ve Yayından Kaldırma (24 saat/72 saat HDS) ve Tekrarlanan İhlal Politikası",
             "paragraphs": [
-              "Framezoo fikri mülkiyet haklarına saygı duyar. Eğer telif hakkı sahibi veya yetkili temsilcisiyseniz ve framezoo.top adresindeki herhangi bir materyalin haklarınızı ihlal ettiğine inanıyorsanız, lütfen Rapor / Geri Bildirim kanalımız aracılığıyla aşağıdaki bilgileri içeren bir bildirim gönderin:"
+              "Hak sahipleri ve yetkililer, Rapor formu veya legal@framezoo.top /framezoo.top@gmail.com aracılığıyla resmi bildirimleri (hak sahibi kimliği, kanıt/PDF yetkilendirmesi, belirli eklenti alanı/medya kimliği/altyazı kimliği ve yeminli beyan) gönderebilir."
             ],
             "bullets": [
-              "Telif hakkı sahibinin veya yetkili temsilcisinin kimliği.",
-              "Telif hakkıyla korunan eserin sahipliğinin kanıtı.",
+              "Yetkili makamlardan gelen emirler /uyumluluk/engelleme listesinde 24 saat içinde uygulanır; geçerli hak sahibi 72 saat içinde bildirimde bulunur.",
+              "Doğrulanmış ihlallerle ilişkili Tekrarlayan İhlalci hesapları, oturumun derhal iptal edilmesiyle askıya alınır.",
               "Söz konusu materyalin tam URL&#39;sini veya açıklamasını bize iletin, böylece 24-72 iş saati içinde inceleyip çözüm üretebilelim."
             ],
             "badge": "03"

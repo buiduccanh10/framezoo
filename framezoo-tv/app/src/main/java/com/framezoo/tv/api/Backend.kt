@@ -282,6 +282,16 @@ class Backend(private val store: SecureStore) {
             .put("nickname", nickname.trim())
             .put("email", email.trim())
             .put("profile", profileJson)
+            .put(
+                "legalConsent",
+                JSONObject()
+                    .put("acceptedTerms", true)
+                    .put("acceptedPrivacy", true)
+                    .put("ageConfirmed", true)
+                    .put("termsVersion", "2026-11")
+                    .put("privacyVersion", "2026-11")
+                    .put("platform", "tv")
+            )
         if (!otpChallengeId.isNullOrBlank() && !otpCode.isNullOrBlank()) {
             body.put("emailOtp", JSONObject().put("challengeId", otpChallengeId).put("code", otpCode.trim()))
         }
@@ -361,6 +371,14 @@ class Backend(private val store: SecureStore) {
         request("/users/${encode(id)}", "DELETE", auth = true)
         store.clearSession()
     }
+
+    suspend fun exportAccountData(): JSONObject? {
+        val id = store.userId ?: return null
+        return request("/users/${encode(id)}/export", auth = true) as? JSONObject
+    }
+
+    suspend fun complianceBlocklist(): JSONObject =
+        request("/compliance/blocklist", auth = false, skipGuestToken = true) as? JSONObject ?: JSONObject()
 
     suspend fun getSessions(): List<DeviceSession> {
         val id = store.userId ?: return emptyList()

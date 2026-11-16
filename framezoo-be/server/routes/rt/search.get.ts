@@ -27,10 +27,17 @@ export default defineCachedEventHandler(
     try {
       return await scrapeRottenTomatoes(parsed.data.title, parsed.data.year);
     } catch (error) {
-      console.error('[RT] Failed to scrape Rotten Tomatoes:', error);
+      const statusCode =
+        error && typeof error === 'object' && 'statusCode' in error && typeof error.statusCode === 'number'
+          ? error.statusCode
+          : 502;
+      console.error('[RT] Failed to fetch Rotten Tomatoes score from OMDb:', error);
       throw createError({
-        statusCode: 502,
-        statusMessage: 'Failed to fetch Rotten Tomatoes data',
+        statusCode,
+        statusMessage:
+          statusCode === 503
+            ? 'OMDB_API_KEY is not configured on server'
+            : 'Failed to fetch Rotten Tomatoes data',
       });
     }
   },

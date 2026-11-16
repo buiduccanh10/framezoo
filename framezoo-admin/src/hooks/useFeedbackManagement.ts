@@ -3,6 +3,13 @@ import { adminApi, getApiError } from "../lib/api";
 import type { FeedbackItem, ListPagination } from "../types";
 
 type FeedbackFilter = "all" | "pending" | "resolved";
+type FeedbackCategoryFilter =
+  | "all"
+  | "copyright"
+  | "privacy"
+  | "bug"
+  | "feature"
+  | "other";
 
 const EMPTY_PAGINATION: ListPagination = {
   page: 1,
@@ -17,10 +24,19 @@ export function useFeedbackManagement(
 ) {
   const [items, setItems] = useState<FeedbackItem[]>([]);
   const [pagination, setPagination] = useState(EMPTY_PAGINATION);
-  const [stats, setStats] = useState({ total: 0, pending: 0, resolved: 0 });
+  const [stats, setStats] = useState<{
+    total: number;
+    pending: number;
+    resolved: number;
+    pendingCopyright?: number;
+    pendingPrivacy?: number;
+    overdueCompliance?: number;
+  }>({ total: 0, pending: 0, resolved: 0 });
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<FeedbackFilter>("all");
+  const [categoryFilter, setCategoryFilter] =
+    useState<FeedbackCategoryFilter>("all");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [selected, setSelected] = useState<FeedbackItem | null>(null);
@@ -34,6 +50,7 @@ export function useFeedbackManagement(
       targetSearch = search,
       targetFilter = filter,
       targetLimit = limit,
+      targetCategory = categoryFilter,
     ) => {
       setLoading(true);
       setError("");
@@ -43,6 +60,7 @@ export function useFeedbackManagement(
           targetLimit,
           targetSearch,
           targetFilter,
+          targetCategory,
         );
         setItems(result.items);
         setPagination(result.pagination);
@@ -62,16 +80,16 @@ export function useFeedbackManagement(
         setLoading(false);
       }
     },
-    [filter, limit, onPendingChange, page, search],
+    [categoryFilter, filter, limit, onPendingChange, page, search],
   );
 
   useEffect(() => {
     const timer = window.setTimeout(
-      () => void load(page, search, filter, limit),
+      () => void load(page, search, filter, limit, categoryFilter),
       search ? 220 : 0,
     );
     return () => window.clearTimeout(timer);
-  }, [filter, limit, load, page, search]);
+  }, [categoryFilter, filter, limit, load, page, search]);
 
   const setSearchAndReset = (value: string) => {
     setSearch(value);
@@ -80,6 +98,11 @@ export function useFeedbackManagement(
 
   const setFilterAndReset = (value: FeedbackFilter) => {
     setFilter(value);
+    setPage(1);
+  };
+
+  const setCategoryFilterAndReset = (value: FeedbackCategoryFilter) => {
+    setCategoryFilter(value);
     setPage(1);
   };
 
@@ -138,6 +161,7 @@ export function useFeedbackManagement(
     loading,
     search,
     filter,
+    categoryFilter,
     page,
     limit,
     selected,
@@ -146,6 +170,7 @@ export function useFeedbackManagement(
     error,
     setSearch: setSearchAndReset,
     setFilter: setFilterAndReset,
+    setCategoryFilter: setCategoryFilterAndReset,
     setPage,
     setLimit: setLimitAndReset,
     setSelected,

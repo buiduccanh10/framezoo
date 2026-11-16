@@ -5,9 +5,15 @@ interface LandingFooterProps {
   copy: LandingCopy;
 }
 
-export function triggerLandingFeedback() {
+export function triggerLandingFeedback(
+  category?: "bug" | "feature" | "copyright" | "privacy" | "other",
+) {
   if (typeof window !== "undefined") {
-    window.dispatchEvent(new CustomEvent("open-landing-feedback"));
+    window.dispatchEvent(
+      new CustomEvent("open-landing-feedback", {
+        detail: category ? { category } : undefined,
+      }),
+    );
   }
 }
 
@@ -58,7 +64,7 @@ export function LandingFooter({ copy }: LandingFooterProps) {
               <button
                 type="button"
                 className="landing-footer-link-button"
-                onClick={triggerLandingFeedback}
+                onClick={() => triggerLandingFeedback()}
               >
                 {footer.reportIssue}
               </button>

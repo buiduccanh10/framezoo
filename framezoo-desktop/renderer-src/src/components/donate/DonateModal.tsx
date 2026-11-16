@@ -68,6 +68,12 @@ export function DonateModal({ id = "donate" }: { id?: string }) {
               "Thank you for caring about Framezoo and supporting the work behind it. Your contribution gives us more room to build a better experience for everyone.",
             )}
           </p>
+          <p className="mt-2 text-xs text-type-secondary">
+            {t(
+              "donate.legalDisclaimer",
+              "Voluntary software development support only — contributions do not purchase movies, media streams, or addon access.",
+            )}
+          </p>
 
           <p className="donate-modal-scan-hint">
             {t("donate.scanHint", "Scan this QR code with your banking app.")}

@@ -13,6 +13,13 @@ interface AdminUserRow {
   profile: Prisma.JsonValue;
   effective_app_version: string | null;
   active_sessions: number;
+  is_suspended: boolean;
+  suspended_at: Date | null;
+  suspended_reason: string | null;
+  terms_version: string | null;
+  privacy_version: string | null;
+  consented_at: Date | null;
+  age_confirmed: boolean;
 }
 
 interface AdminStatsRow {
@@ -77,6 +84,13 @@ export default defineEventHandler(async event => {
         u.created_at,
         u.permissions,
         u.profile,
+        u.is_suspended,
+        u.suspended_at,
+        u.suspended_reason,
+        u.terms_version,
+        u.privacy_version,
+        u.consented_at,
+        u.age_confirmed,
         COALESCE(sa.latest_session_version, NULLIF(u.app_version, '')) AS effective_app_version,
         CASE
           WHEN u.last_logged_in IS NULL THEN sa.max_accessed_at
@@ -122,6 +136,13 @@ export default defineEventHandler(async event => {
         last_active,
         permissions,
         profile,
+        is_suspended,
+        suspended_at,
+        suspended_reason,
+        terms_version,
+        privacy_version,
+        consented_at,
+        age_confirmed,
         effective_app_version,
         active_sessions
       FROM user_view
@@ -143,6 +164,13 @@ export default defineEventHandler(async event => {
     last_logged_in: u.last_active,
     permissions: u.permissions,
     profile: u.profile,
+    is_suspended: u.is_suspended,
+    suspended_at: u.suspended_at,
+    suspended_reason: u.suspended_reason,
+    terms_version: u.terms_version,
+    privacy_version: u.privacy_version,
+    consented_at: u.consented_at,
+    age_confirmed: u.age_confirmed,
     app_version: u.effective_app_version || null,
     counts: {
       sessions: u.active_sessions,

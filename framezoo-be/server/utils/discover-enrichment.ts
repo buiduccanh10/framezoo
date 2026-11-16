@@ -1,5 +1,3 @@
-import { $fetch } from 'ofetch';
-
 import { tmdb } from '~/utils/tmdb';
 
 const DEFAULT_LANGUAGE = 'en-US';
@@ -347,7 +345,7 @@ const buildProviderFeed = async (kind: string) => {
   return config.mediaType === 'movie' ? listResponse(ids) : listResponse([], ids);
 };
 
-const fallbackCuratedLists = async (): Promise<EnrichmentCuratedList[]> => {
+export const fallbackCuratedLists = async (): Promise<EnrichmentCuratedList[]> => {
   const [
     christmasIds,
     narrativeIds,
@@ -410,7 +408,7 @@ const fallbackCuratedLists = async (): Promise<EnrichmentCuratedList[]> => {
       count: Math.min(christmasIds.length, DEFAULT_PAGE_SIZE),
     },
     {
-      listName: 'Letterboxd Top 250 Narrative Feature Films',
+      listName: 'Top Rated Feature Films',
       listSlug: 'narrative',
       tmdbIds: narrativeIds.slice(0, DEFAULT_PAGE_SIZE),
       count: Math.min(narrativeIds.length, DEFAULT_PAGE_SIZE),
@@ -475,37 +473,7 @@ export async function getEnrichmentFeed(kind: string) {
   }
 }
 
-export async function getCuratedEnrichmentLists(event: any) {
-  try {
-    const requestUrl = getRequestURL(event);
-    const response = await $fetch<any>('/letterboxd', {
-      baseURL: requestUrl.origin,
-    });
-
-    const lists = (response?.lists || [])
-      .filter((list: any) => Array.isArray(list?.tmdbMovies) && list.tmdbMovies.length > 0)
-      .slice(0, 8)
-      .map((list: any) => ({
-        listName: list.listName,
-        listSlug:
-          list.listName
-            ?.toLowerCase()
-            .replace(/[^a-z0-9]+/g, '-')
-            .replace(/^-+|-+$/g, '') || 'list',
-        tmdbIds: uniqueIds(
-          (list.tmdbMovies || []).map((movie: any) => Number(movie?.id) || null)
-        ).slice(0, DEFAULT_PAGE_SIZE),
-        count: Math.min(list.tmdbMovies?.length || 0, DEFAULT_PAGE_SIZE),
-      }))
-      .filter((list: EnrichmentCuratedList) => list.tmdbIds.length > 0);
-
-    if (lists.length > 0) {
-      return lists;
-    }
-  } catch (error) {
-    console.warn('[Discover Enrichment] Letterboxd curated lists unavailable, using TMDB fallback.', error);
-  }
-
+export async function getCuratedEnrichmentLists(_event?: any) {
   return fallbackCuratedLists();
 }
 

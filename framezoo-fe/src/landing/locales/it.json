@@ -53,7 +53,7 @@
     "addonPolicy": "Politica sui componenti aggiuntivi",
     "copyright": "Diritto d'autore e DMCA",
     "disclaimer": "Framezoo è un software di riproduzione multimediale neutro e non ospita, archivia, distribuisce o controlla file multimediali o componenti aggiuntivi di terze parti. Gli utenti sono gli unici responsabili dei componenti aggiuntivi e dei contenuti a cui accedono in conformità con le leggi locali.",
-    "metadataAttribution": "I metadati sono forniti dai database di film pubblici (TMDB, IMDb) a scopo informativo.",
+    "metadataAttribution": "I metadati e le illustrazioni dei film utilizzano l'API TMDB (non approvata o certificata da TMDB) e le classificazioni tramite l'API OMDb.",
     "rights": "© 2026 Framezoo. Tutti i diritti riservati."
   },
   "addonGuide": {
@@ -114,7 +114,7 @@
         "Seleziona \"Apri\" dal menu contestuale.",
         "Nella finestra di dialogo di conferma, fai clic su \"Apri comunque\" o \"Apri\"."
       ],
-      "step2Desc": "Poiché Framezoo è un lettore open source indipendente senza un certificato commerciale Apple Developer, macOS potrebbe mostrare: \"Framezoo è danneggiato e non può essere aperto\" o \"Apple non può verificare questa app\".",
+      "step2Desc": "Poiché Framezoo è un lettore software indipendente senza un certificato commerciale Apple Developer, macOS potrebbe mostrare: \"Framezoo è danneggiato e non può essere aperto\" o \"Apple non può verificare questa app\".",
       "step1Title": "Passaggio 1: trascina su Applicazioni",
       "step3Title": "Passaggio 3: apri in sicurezza tramite Finder",
       "subtitle": "Apple Silicon (M1/M2/M3/M4) e Intel Mac",
@@ -176,7 +176,7 @@
     "successDesc": "Grazie per il tuo feedback Il nostro team esaminerà e risolverà il problema il prima possibile.",
     "submit": "Invia feedback",
     "attachmentsLabel": "File",
-    "attachmentsHint": "Immagini/video · Massimo 55 MB totali",
+    "attachmentsHint": "Immagini/video/PDF (autorizzazione o prova di copyright) · 55 MB massimo totale",
     "attachmentsTooLarge": "La dimensione totale del file non deve superare i 55 MB.",
     "contactLabel": "2. E-mail o numero di telefono",
     "descLabel": "3. Descrizione dettagliata",
@@ -325,89 +325,89 @@
         "summary": "Si prega di leggere questi termini e l'informativa sulla privacy prima di creare un account o utilizzare l'applicazione desktop Framezoo."
       },
       "privacy": {
-        "updatedAt": "Aggiornato: 4 novembre 2026 · Legge 91/2025/QH15 e Decreto 356/2025/ND-CP",
+        "updatedAt": "Aggiornato: 16 novembre 2026 · Versione 2026-11 · Legge Vietnam 91/2025/QH15 e Decreto 356/2025/ND-CP",
         "title": "Politica sulla privacy e sulla protezione dei dati personali",
         "sections": [
           {
             "bullets": [
-              "L'e-mail, i codici di verifica e i dettagli della richiesta supportano la registrazione, l'accesso e la sicurezza dell'account.",
-              "Segnalazioni, descrizioni di bug e allegati raggiungono il nostro server quando invii il modulo di feedback.",
-              "Il sito Web memorizza la scelta della lingua nella memoria del browser."
+              "La modalità ospite utilizza solo un identificatore tecnico casuale, un'etichetta della piattaforma e una versione dell'app per gestire gli endpoint di inoltro/sincronizzazione dei sottotitoli.",
+              "I codici di verifica e-mail e i registri delle richieste vengono elaborati rigorosamente per registrare, accedere e proteggere gli account.",
+              "La telemetria del server esclude titoli di film, ID TMDB/IMDb e fonti di componenti aggiuntivi personali di terze parti."
             ],
             "paragraphs": [
-              "L'applicazione memorizza alcune impostazioni, cache e dati di riproduzione sul tuo dispositivo. Se crei un account, il server memorizza anche la tua email, nickname, profilo, chiave pubblica, dettagli della sessione/dispositivo, segnalibri sincronizzati, progressi, cronologia visualizzazioni, impostazioni e componenti aggiuntivi, oltre alle chiavi crittografate del fornitore dei sottotitoli se le fornisci."
+              "L'app memorizza impostazioni locali, cache e dati di riproduzione sul tuo dispositivo. Quando crei un account (limitato a utenti di età pari o superiore a 16 anni), il server memorizza anche e-mail crittografate, nickname, profilo, chiave pubblica, dettagli su sessioni/dispositivo, segnalibri sincronizzati, progressi, cronologia visualizzazioni, impostazioni, componenti aggiuntivi, record di consenso con timestamp e chiavi API crittografate del fornitore di sottotitoli BYOK se le salvi."
             ],
-            "title": "Dati sul tuo dispositivo e sui nostri server",
+            "title": "Dati del dispositivo, dell'ospite e dell'account",
             "badge": "01"
           },
           {
             "bullets": [
-              "L'e-mail di verifica va al nostro provider di posta; i backup del database possono essere archiviati su Supabase quando il backup è configurato.",
-              "Alcuni fornitori di servizi o server aggiuntivi potrebbero elaborare dati al di fuori del Vietnam; la posizione del server dipende dal servizio scelto e dalla configurazione operativa.",
-              "Durante la registrazione potrebbe essere utilizzato Google reCAPTCHA; il testo dei sottotitoli va a Google Translate quando scegli la traduzione.",
+              "I provider di posta elettronica di verifica transazionale e i backup di database crittografati potrebbero risiedere al di fuori del Vietnam a seconda della configurazione di distribuzione.",
+              "Metadati e punteggi critici vengono recuperati tramite le API ufficiali TMDB e OMDb; le ricerche dei sottotitoli eseguono query su Wyzie, SubSource e API REST di OpenSubtitles.com (preferendo le chiavi BYOK personali quando fornite).",
+              "I relè dei file dei sottotitoli utilizzano intestazioni no-store senza memorizzazione nella cache pubblica. I componenti aggiuntivi di terze parti vengono contattati direttamente dal tuo dispositivo in base alle rispettive politiche.",
               "Le ricerche e i download dei sottotitoli, la sincronizzazione di audio/sottotitoli e i componenti aggiuntivi della community possono inviare richieste tramite i server Framezoo e i relativi servizi esterni. I componenti aggiuntivi di terze parti hanno le proprie politiche."
             ],
             "paragraphs": [
-              "Elaboriamo i dati per gestire account, sincronizzare dispositivi, fornire supporto, proteggere il servizio e fornire le funzionalità scelte dall'utente. Non vendiamo dati personali a reti pubblicitarie."
+              "Elaboriamo i dati esclusivamente per gestire account, sincronizzare dispositivi, fornire supporto, far rispettare la conformità legale e non vendere mai dati personali."
             ],
-            "title": "Finalità e servizi esterni",
+            "title": "Finalità, trasferimento transfrontaliero e API esterne",
             "badge": "02"
           },
           {
-            "title": "Conservazione e cancellazione",
+            "title": "Conservazione, esportazione ed eliminazione dei dati JSON",
             "bullets": [
-              "I codici di verifica scadono dopo 10 minuti; i record di sfida scaduti vengono rimossi dopo 7 giorni. I record di posta inviati o non riusciti vengono rimossi dopo 7 giorni.",
-              "Feedback e allegati vengono conservati separatamente per richieste di supporto o copyright finché non vengono rimossi su richiesta o dal team di supporto. L'eliminazione dell'account rimuove il collegamento all'account ma non elimina automaticamente i report. Puoi richiedere la cancellazione separata tramite il modulo di feedback."
+              "Le sfide OTP di verifica scadono dopo 10 minuti e vengono eliminate insieme ai record della posta in uscita dopo 7 giorni.",
+              "I rapporti di feedback e gli avvisi sul copyright rimangono archiviati separatamente per il controllo di conformità; la cancellazione dell'account scollega il tuo ID utente."
             ],
             "paragraphs": [
-              "I dati dell'account e della sincronizzazione rimangono finché il tuo account è attivo. Puoi eliminare l'account in Impostazioni; il server rimuove quindi record dell'account, segnalibri, progressi, cronologia visualizzazioni, impostazioni e sessioni. I vecchi backup del database possono conservare i dati fino alla rotazione; la configurazione predefinita mantiene 7 backup recenti quando il backup è in esecuzione."
+              "L'account e i dati di sincronizzazione rimangono attivi finché il tuo account esiste. Puoi esportare una copia JSON completa dei tuoi dati personali o eliminare definitivamente il tuo account in Impostazioni -> Azioni; i backup crittografati a rotazione conservano fino a 7 istantanee recenti."
             ],
             "badge": "03"
           },
           {
-            "title": "I tuoi diritti e contatti",
+            "title": "I tuoi diritti, limiti di età (>=16) e contatti",
             "paragraphs": [
-              "Puoi richiedere l'accesso, la correzione, la cancellazione o la limitazione dei tuoi dati, revocare il consenso laddove il trattamento si basa sul consenso e inviare un reclamo tramite il modulo di feedback sul nostro sito web. Fornisci l'e-mail del tuo account in modo che possiamo verificare la richiesta."
+              "La registrazione dell'account è limitata agli utenti di età pari o superiore a 16 anni ai sensi della legge vietnamita 91/2025/QH15. È possibile esercitare l'accesso, l'esportazione JSON, la correzione, la cancellazione o il ritiro del consenso tramite la modalità di feedback o privacy@framezoo.top / framezoo.top@gmail.com (risposta entro 24 ore)."
             ],
             "badge": "04"
           }
         ],
-        "summary": "Questa politica descrive l'elaborazione dei dati nell'applicazione desktop Framezoo e sui server Framezoo ufficiali."
+        "summary": "Questa politica descrive l'elaborazione dei dati su Framezoo Desktop, Mobile, app TV e server Framezoo ufficiali."
       },
       "copyright": {
-        "updatedAt": "Aggiornato: 4 novembre 2026",
-        "title": "Copyright, DMCA e dichiarazione di non responsabilità sui contenuti",
+        "updatedAt": "Aggiornato: 16 novembre 2026 · Legge sulla proprietà intellettuale del Vietnam, art. 198b e Decreto 17/2023",
+        "title": "Copyright, avviso, rimozione e dichiarazione di non responsabilità sui contenuti",
         "sections": [
           {
-            "title": "Software intermediario Safe Harbor",
+            "title": "Software intermediario neutro e P2P predefinito senza seeding",
             "paragraphs": [
-              "Framezoo non gestisce una libreria di film o una sorgente di streaming video. L'applicazione può accedere alle fonti scelte dagli utenti; i nostri server possono inoltrare i sottotitoli del fornitore ed elaborare temporaneamente audio e sottotitoli per la sincronizzazione richiesta.",
-              "Ogni avviso di copyright viene esaminato rispetto al contenuto e al nostro ruolo effettivo; questi termini non creano un'esenzione automatica dalla responsabilità."
+              "Framezoo è un software di riproduzione multimediale neutro simile a Stremio e Kodi: non ospita file video, non raggruppa componenti aggiuntivi di contenuto predefiniti o tracker pubblici, non esegue proxy di componenti aggiuntivi lato server e disabilita il seeding P2P in uscita (upload_rate_limit = 0) per impostazione predefinita.",
+              "I download dei sottotitoli utilizzano intestazioni no-store senza memorizzazione nella cache pubblica sui server Framezoo."
             ],
             "badge": "01"
           },
           {
             "paragraphs": [
-              "I metadati di film e serie (titoli, date di uscita, sinossi, valutazioni e poster promozionali) visualizzati a scopo informativo provengono da database di film pubblici (come TMDB, IMDb e TVDB).",
-              "Tutti i marchi, i titoli dei film e le opere d'arte rimangono di proprietà dei rispettivi titolari del copyright."
+              "Titoli di film, sinossi, illustrazioni e valutazioni della critica vengono recuperati dalle API ufficiali TMDB e OMDb per la scoperta informativa.",
+              "Questo prodotto utilizza l'API TMDB ma non è approvato o certificato da TMDB. Tutti i marchi e le opere d'arte multimediali rimangono di proprietà dei rispettivi proprietari."
             ],
-            "title": "Metadati e attribuzione delle opere d'arte",
+            "title": "API ufficiali dei metadati e attribuzione TMDB",
             "badge": "02"
           },
           {
             "bullets": [
-              "Identificazione del proprietario del copyright o del rappresentante autorizzato.",
-              "Prova della proprietà dell'opera protetta da copyright.",
+              "Gli ordini delle autorità competenti vengono eseguiti su /compliance/blocklist entro 24 ore; avvisi validi del titolare dei diritti entro 72 ore.",
+              "Gli account di trasgressori recidivi associati a violazioni verificate vengono sospesi con revoca immediata della sessione.",
               "L'URL esatto o la descrizione del materiale in questione in modo da poterlo esaminare e risolvere entro 24-72 ore lavorative."
             ],
             "paragraphs": [
-              "Framezoo rispetta i diritti di proprietà intellettuale. Se sei un proprietario di copyright o un agente autorizzato e ritieni che qualsiasi materiale su framezoo.top violi i tuoi diritti, invia una notifica tramite il nostro canale Segnala/Feedback includendo:"
+              "I titolari dei diritti e le autorità possono inviare comunicazioni formali (identità del proprietario dei diritti, prova/autorizzazione PDF, dominio aggiuntivo specifico/ID supporto/ID sottotitoli e dichiarazione giurata) tramite il modulo di segnalazione o legal@framezoo.top / framezoo.top@gmail.com."
             ],
-            "title": "Procedura di notifica e rimozione",
+            "title": "Notifica e rimozione (SLA 24 ore/72 ore) e politica per violazione recidiva",
             "badge": "03"
           }
         ],
-        "summary": "Dichiarazione di non responsabilità ufficiale sui contenuti e procedura di notifica e rimozione della proprietà intellettuale per Framezoo."
+        "summary": "Stato di intermediario neutrale, processo di notifica e rimozione della blocklist 24 ore su 24 e 72 ore su 24 e politica contro i trasgressori recidivi."
       },
       "addon-policy": {
         "title": "Politica sui componenti aggiuntivi e linee guida della community",

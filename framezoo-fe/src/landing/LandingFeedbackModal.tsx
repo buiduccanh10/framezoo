@@ -17,10 +17,14 @@ function isValidContact(value: string) {
   return PHONE_CONTACT_REGEX.test(trimmed.replace(/[\s().-]/g, ""));
 }
 
+export type LandingFeedbackCategory =
+  "bug" | "feature" | "copyright" | "privacy" | "other";
+
 interface LandingFeedbackModalProps {
   isOpen: boolean;
   onClose: () => void;
   copy?: LandingCopy["feedback"];
+  initialCategory?: LandingFeedbackCategory;
 }
 
 const defaultFeedbackCopy: LandingCopy["feedback"] = {
@@ -57,10 +61,16 @@ export function LandingFeedbackModal({
   isOpen,
   onClose,
   copy = defaultFeedbackCopy,
+  initialCategory = "bug",
 }: LandingFeedbackModalProps) {
+  const [category, setCategory] =
+    useState<LandingFeedbackCategory>(initialCategory);
   const [title, setTitle] = useState("");
   const [contact, setContact] = useState("");
   const [description, setDescription] = useState("");
+  const [targetUrlOrId, setTargetUrlOrId] = useState("");
+  const [rightsOwnerName, setRightsOwnerName] = useState("");
+  const [swornStatement, setSwornStatement] = useState(false);
   const [attachments, setAttachments] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -70,15 +80,21 @@ export function LandingFeedbackModal({
 
   useEffect(() => {
     if (!isOpen) {
+      setCategory(initialCategory);
       setTitle("");
       setContact("");
       setDescription("");
+      setTargetUrlOrId("");
+      setRightsOwnerName("");
+      setSwornStatement(false);
       setAttachments([]);
       setError(null);
       setSuccess(false);
       setLoading(false);
       return;
     }
+
+    setCategory(initialCategory);
 
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -93,7 +109,7 @@ export function LandingFeedbackModal({
       document.body.style.overflow = originalOverflow;
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isOpen, onClose]);
+  }, [initialCategory, isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -106,6 +122,20 @@ export function LandingFeedbackModal({
     if (!isValidContact(contact)) {
       setError(fbCopy.contactInvalid);
       return;
+    }
+    if (category === "copyright") {
+      if (!targetUrlOrId.trim() || !rightsOwnerName.trim()) {
+        setError(
+          "Vui lòng nhập đầy đủ URL/ID nội dung vi phạm và tên chủ thể quyền sở hữu trí tuệ.",
+        );
+        return;
+      }
+      if (!swornStatement) {
+        setError(
+          "Vui lòng đánh dấu cam kết thông tin khiếu nại bản quyền là trung thực.",
+        );
+        return;
+      }
     }
 
     setLoading(true);
@@ -133,9 +163,15 @@ export function LandingFeedbackModal({
       }
 
       const formData = new FormData();
+      formData.append("category", category);
       formData.append("title", title.trim());
       formData.append("contact", contact.trim());
       formData.append("description", description.trim());
+      if (category === "copyright") {
+        formData.append("targetUrlOrId", targetUrlOrId.trim());
+        formData.append("rightsOwnerName", rightsOwnerName.trim());
+        formData.append("swornStatement", String(swornStatement));
+      }
       attachments.forEach((file) => formData.append("files", file));
 
       const response = await fetch(endpoint, {
@@ -314,6 +350,136 @@ export function LandingFeedbackModal({
                     color: "var(--landing-muted)",
                   }}
                 >
+                  Phân loại yêu cầu <span style={{ color: "#ef4444" }}>*</span>
+                </label>
+                <select
+                  value={category}
+                  onChange={(e) =>
+                    setCategory(e.target.value as LandingFeedbackCategory)
+                  }
+                  disabled={loading}
+                  style={{
+                    width: "100%",
+                    padding: "0.625rem 0.875rem",
+                    borderRadius: "0.625rem",
+                    background: "rgba(20, 14, 14, 0.95)",
+                    border: "1px solid var(--landing-line)",
+                    color: "var(--color-ink)",
+                    fontSize: "0.875rem",
+                    outline: "none",
+                  }}
+                >
+                  <option value="bug">Báo lỗi kỹ thuật</option>
+                  <option value="feature">Đề xuất tính năng</option>
+                  <option value="copyright">
+                    Khiếu nại Bản quyền / DMCA (SLA 24h–72h)
+                  </option>
+                  <option value="privacy">
+                    Yêu cầu Dữ liệu cá nhân (Luật 91/2025)
+                  </option>
+                  <option value="other">Liên hệ khác</option>
+                </select>
+              </div>
+
+              {category === "copyright" && (
+                <>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "0.375rem",
+                    }}
+                  >
+                    <label
+                      style={{
+                        fontSize: "0.75rem",
+                        fontWeight: 600,
+                        textTransform: "uppercase",
+                        letterSpacing: "0.05em",
+                        color: "var(--landing-muted)",
+                      }}
+                    >
+                      Chủ thể quyền / Đại diện hợp pháp{" "}
+                      <span style={{ color: "#ef4444" }}>*</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={rightsOwnerName}
+                      onChange={(e) => setRightsOwnerName(e.target.value)}
+                      placeholder="Họ tên / Tên tổ chức chủ sở hữu quyền..."
+                      maxLength={255}
+                      disabled={loading}
+                      required
+                      style={{
+                        width: "100%",
+                        padding: "0.625rem 0.875rem",
+                        borderRadius: "0.625rem",
+                        background: "rgba(255, 255, 255, 0.05)",
+                        border: "1px solid var(--landing-line)",
+                        color: "var(--color-ink)",
+                        fontSize: "0.875rem",
+                        outline: "none",
+                      }}
+                    />
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "0.375rem",
+                    }}
+                  >
+                    <label
+                      style={{
+                        fontSize: "0.75rem",
+                        fontWeight: 600,
+                        textTransform: "uppercase",
+                        letterSpacing: "0.05em",
+                        color: "var(--landing-muted)",
+                      }}
+                    >
+                      URL Addon, ID Phụ đề hoặc ID Tác phẩm{" "}
+                      <span style={{ color: "#ef4444" }}>*</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={targetUrlOrId}
+                      onChange={(e) => setTargetUrlOrId(e.target.value)}
+                      placeholder="vd: bad-addon.example.com hoặc subsource:12345 hoặc tt0137523"
+                      maxLength={500}
+                      disabled={loading}
+                      required
+                      style={{
+                        width: "100%",
+                        padding: "0.625rem 0.875rem",
+                        borderRadius: "0.625rem",
+                        background: "rgba(255, 255, 255, 0.05)",
+                        border: "1px solid var(--landing-line)",
+                        color: "var(--color-ink)",
+                        fontSize: "0.875rem",
+                        outline: "none",
+                      }}
+                    />
+                  </div>
+                </>
+              )}
+
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0.375rem",
+                }}
+              >
+                <label
+                  style={{
+                    fontSize: "0.75rem",
+                    fontWeight: 600,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.05em",
+                    color: "var(--landing-muted)",
+                  }}
+                >
                   {fbCopy.titleLabel}{" "}
                   <span style={{ color: "#ef4444" }}>*</span>
                 </label>
@@ -398,7 +564,7 @@ export function LandingFeedbackModal({
                 </label>
                 <input
                   type="file"
-                  accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/quicktime,video/webm"
+                  accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/quicktime,video/webm,application/pdf"
                   multiple
                   onChange={(event) => handleAttachments(event.target.files)}
                   disabled={loading}
@@ -468,6 +634,33 @@ export function LandingFeedbackModal({
                   }}
                 />
               </div>
+
+              {category === "copyright" && (
+                <label
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: "0.5rem",
+                    fontSize: "0.8125rem",
+                    color: "var(--landing-muted)",
+                    cursor: "pointer",
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={swornStatement}
+                    onChange={(e) => setSwornStatement(e.target.checked)}
+                    disabled={loading}
+                    required
+                    style={{ marginTop: "0.2rem" }}
+                  />
+                  <span>
+                    Tôi cam kết thông tin và bằng chứng bản quyền (kèm giấy tờ
+                    PDF nếu có) là trung thực, chính xác và tôi là chủ thể quyền
+                    hoặc đại diện được ủy quyền hợp pháp.
+                  </span>
+                </label>
+              )}
 
               <div
                 style={{

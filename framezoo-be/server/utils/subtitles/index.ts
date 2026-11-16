@@ -132,17 +132,21 @@ export async function searchAllSubtitles(
   options?: {
     wyzieApiKey?: string;
     subsourceApiKey?: string;
+    opensubtitlesApiKey?: string;
     subsourceDownloadBaseUrl?: string;
+    opensubtitlesDownloadBaseUrl?: string;
     preferredLanguages?: string[];
   }
 ): Promise<StremioSubtitle[]> {
-  const downloadBaseUrl =
+  const subsourceDownloadBase =
     options?.subsourceDownloadBaseUrl || '/addon/subtitles/download/subsource';
+  const opensubtitlesDownloadBase =
+    options?.opensubtitlesDownloadBaseUrl || '/addon/subtitles/download/opensubtitles';
 
   const results = await Promise.allSettled([
-    fetchSubsourceSubtitlesList(context, options?.subsourceApiKey, downloadBaseUrl),
+    fetchSubsourceSubtitlesList(context, options?.subsourceApiKey, subsourceDownloadBase),
     fetchWyzieSubtitles(context, options?.wyzieApiKey, options?.preferredLanguages),
-    fetchOpenSubtitles(context),
+    fetchOpenSubtitles(context, options?.opensubtitlesApiKey, opensubtitlesDownloadBase),
     fetchVdrkSubtitles(context),
   ]);
 

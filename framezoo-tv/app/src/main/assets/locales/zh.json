@@ -18,6 +18,7 @@
       "configRequiredDesc": "此插件需要配置（例如 API 密钥或语言设置）才能返回内容。请在浏览器中进行配置，然后将生成的清单 URL 复制粘贴到此处。",
       "configRequiredTitle": "需要配置",
       "configureAction": "配置",
+      "disclaimerNotice": "第三方插件由社区开发者独立运营。您需自行负责验证您所在司法管辖区内内容的合法性；P2P 下载功能默认禁用。",
       "errorFallback": "无法安装此插件。",
       "manageListButton": "管理插件列表",
       "openConfigurePage": "打开配置页面",
@@ -181,7 +182,7 @@
       "passwordWeak": "密码必须至少8位，包含字母和数字",
       "privacyPolicy": "隐私政策",
       "submit": "创建账户",
-      "legalConsent": "我已阅读并同意<terms>服务条款</terms>和<privacy>隐私政策</privacy>。"
+      "legalConsent": "我确认我已年满 16 岁，并且已阅读并同意 <terms>服务条款</terms> 和 <privacy>隐私政策</privacy>。"
     },
     "trust": {
       "failed": {
@@ -307,6 +308,9 @@
   "footer": {
     "legal": {
       "disclaimer": "免责声明",
+      "dmca": "DMCA/下架",
+      "terms": "服务条款",
+      "tmdbAttribution": "电影元数据和海报由 TMDB API 提供（未经 TMDB 认可或认证）。",
       "disclaimerText": "Framezoo 不运营视频流源。其服务器可能会转发字幕提供商的字幕，并在您选择该功能时临时处理音频和字幕以实现同步。您可以控制自己播放的内容。"
     },
     "links": {
@@ -484,15 +488,15 @@
     },
     "support": {
       "complete": "完全的",
-      "description": "Framezoo 处于亏损状态，我们需要帮助以使其保持无广告！如果您喜欢使用 Framezoo，请考虑捐赠以帮助我们支付费用。",
-      "donate": "捐",
-      "explanation": "如果您不使用该扩展程序或未设置 FED API，则可能会更难找到内容！我们希望解决这个问题，但如果没有昂贵的服务器，提供内容会困难得多。因此，如果您喜欢使用 Framezoo，请考虑捐款来帮助我们支付不断增长的成本。",
+      "description": "Framezoo 是一款中立的媒体播放器，您的自愿软件支持有助于我们保持其无广告状态！请注意，您的捐助仅用于纯粹的软件开发，绝不会用于购买媒体内容或第三方插件。",
+      "donate": "支持软件开发",
+      "explanation": "如果您尚未在播放器中配置第三方插件，则默认情况下不会显示流媒体。Framezoo 仅作为中立的技术播放器，不托管任何内容。任何自愿捐款仅用于支持应用程序的持续开发和基础设施建设。",
       "explanation2": "如果您想了解更多信息，请加入我们",
       "fluxer": "助焊剂",
-      "label": "项目资金：${{current}} / ${{goal}}",
+      "label": "软件工程支持：${{current}} / ${{goal}}",
       "moreInfo": "更多信息",
       "thankYou": "感谢您的支持！",
-      "title": "Framezoo 需要您的帮助！"
+      "title": "支持Framezoo软件开发！"
     },
     "titles": {
       "69": {
@@ -1210,12 +1214,24 @@
           "text": "这将会登出所有与您的账户关联的设备。",
           "title": "结束所有会话"
         },
+        "exportData": {
+          "button": "导出 JSON",
+          "text": "下载您的帐户个人资料、书签、观看历史记录、设置和法律同意记录（JSON）的副本。",
+          "title": "导出个人数据"
+        },
         "migration": {
           "button": "迁移账户",
           "text": "将账户迁移到新服务器或下载数据。",
           "title": "账户迁移"
         },
-        "title": "操作"
+        "title": "操作",
+        "export": {
+          "button": "Export JSON Data",
+          "error": "Failed to export personal data. Please try again.",
+          "success": "Exported personal data to",
+          "text": "Download a copy of your account, synced settings, and submitted reports (Data Protection compliance).",
+          "title": "Export Personal Data"
+        }
       },
       "devices": {
         "deviceNameLabel": "设备名称",
@@ -1445,7 +1461,14 @@
       "clearCacheError": "清除缓存失败。请再试一次。",
       "spaceLeftOnDevice": "（设备上剩余的{{space}}空间）"
     },
-    "unsaved": "您有未保存的更改…"
+    "unsaved": "您有未保存的更改…",
+    "legal": {
+      "title": "Legal, Copyright & Operator Disclosure",
+      "operator": "Operator: Bui Duc Canh (Independent Developer, Framezoo Project) — Phao Dai Lang, Lang Ward, Hanoi, Vietnam",
+      "contact": "Legal / DMCA / Privacy Contact: framezoo.top@gmail.com (or legal@framezoo.top) · Tel: +84 984908816",
+      "links": "https://framezoo.top/legal/terms · /legal/privacy · /legal/dmca · /legal/about",
+      "disclaimer": "Framezoo is a neutral media player and neither hosts nor bundles third-party media content or addons. Metadata and ratings use TMDB and OMDb APIs, and this product is not endorsed or certified by TMDB."
+    }
   },
   "tmdb": {
     "genres": {
@@ -1518,6 +1541,7 @@
     "modalTitle": "请帮助我们继续打造Framezoo",
     "subtitle": "您的每一份贡献都能帮助我们改进游戏，扩展到更多平台，并让我们继续倾听您的想法。",
     "note": "感谢您关注Framezoo并支持我们所做的工作。您的贡献让我们有更多空间为所有人打造更好的体验。",
+    "legalDisclaimer": "仅提供自愿软件开发支持——捐款不用于购买电影、媒体流或插件访问权限。",
     "scanHint": "使用您的银行应用程序扫描此二维码。",
     "paypalLabel": "PayPal",
     "momoLabel": "妈妈",

@@ -54,7 +54,7 @@
     "privacy": "Politique de confidentialité et de données",
     "disclaimer": "Framezoo est un logiciel de lecteur multimédia neutre et n'héberge, ne stocke, ne distribue ni ne contrôle aucun fichier multimédia ou module complémentaire tiers. Les utilisateurs sont seuls responsables des modules complémentaires et du contenu auxquels ils accèdent conformément aux lois locales.",
     "rights": "© 2026 Framezoo. Tous droits réservés.",
-    "metadataAttribution": "Les métadonnées sont fournies par des bases de données publiques de films (TMDB, IMDb) à des fins d'information."
+    "metadataAttribution": "Les métadonnées et les illustrations du film utilisent l'API TMDB (non approuvée ou certifiée par TMDB) et les évaluations via l'API OMDb."
   },
   "addonGuide": {
     "manifestDescription": "Les métadonnées indiquent à l'application qui est votre module complémentaire, quelles ressources il prend en charge et où se trouve son icône.",
@@ -110,7 +110,7 @@
       "step1Title": "Étape 1 : Faites glisser vers les applications",
       "subtitle": "Apple Silicon (M1/M2/M3/M4) et Mac Intel",
       "step1Desc": "Ouvrez le fichier .dmg téléchargé et faites glisser l'icône Framezoo dans le dossier Applications.",
-      "step2Desc": "Étant donné que Framezoo est un lecteur open source indépendant sans certificat de développeur Apple commercial, macOS peut afficher : « Framezoo est endommagé et ne peut pas être ouvert » ou « Apple ne peut pas vérifier cette application ».",
+      "step2Desc": "Étant donné que Framezoo est un lecteur logiciel indépendant sans certificat de développeur Apple commercial, macOS peut afficher : « Framezoo est endommagé et ne peut pas être ouvert » ou « Apple ne peut pas vérifier cette application ».",
       "step3Steps": [
         "Ouvrez le Finder et accédez à votre dossier Applications.",
         "Faites un clic droit (ou Ctrl-clic) sur Framezoo.app.",
@@ -176,7 +176,7 @@
     "submitting": "Soumission...",
     "successDesc": "Merci pour vos commentaires. Notre équipe examinera et résoudra le problème dans les plus brefs délais.",
     "attachmentsLabel": "Fichiers",
-    "attachmentsHint": "Images/vidéos · 55 Mo maximum au total",
+    "attachmentsHint": "Images/vidéos/PDF (autorisation ou preuve de droit d'auteur) · 55 Mo maximum au total",
     "attachmentsTooLarge": "La taille totale du fichier ne doit pas dépasser 55 Mo.",
     "contactLabel": "2. Email ou numéro de téléphone",
     "contactPlaceholder": "par ex. nom@exemple.com ou +84912345678",
@@ -325,49 +325,49 @@
         ]
       },
       "privacy": {
-        "updatedAt": "Mise à jour : 4 novembre 2026 · Loi 91/2025/QH15 et décret 356/2025/ND-CP",
-        "summary": "Cette politique décrit le traitement des données dans l'application de bureau Framezoo et sur les serveurs officiels Framezoo.",
+        "updatedAt": "Mise à jour : 16 novembre 2026 · Version 2026-11 · Loi vietnamienne 91/2025/QH15 et décret 356/2025/ND-CP",
+        "summary": "Cette politique décrit le traitement des données sur Framezoo Desktop, Mobile, les applications TV et les serveurs Framezoo officiels.",
         "sections": [
           {
             "paragraphs": [
-              "L'application stocke certains paramètres, cache et données de lecture sur votre appareil. Si vous créez un compte, le serveur stocke également votre e-mail, votre pseudo, votre profil, votre clé publique, les détails de votre session/appareil, vos favoris synchronisés, votre progression, votre historique de surveillance, vos paramètres et vos modules complémentaires, ainsi que les clés cryptées du fournisseur de sous-titres si vous les fournissez."
+              "L'application stocke les paramètres locaux, les caches et les données de lecture sur votre appareil. Lorsque vous créez un compte (réservé aux utilisateurs âgés de 16 ans ou plus), le serveur stocke également votre courrier électronique crypté, votre pseudo, votre profil, votre clé publique, les détails de vos sessions/appareils, vos favoris synchronisés, votre progression, votre historique de surveillance, vos paramètres, vos modules complémentaires, vos enregistrements de consentement horodatés et les clés API cryptées du fournisseur de sous-titres BYOK si vous les enregistrez."
             ],
             "bullets": [
-              "Les e-mails, les codes de vérification et les détails de la demande prennent en charge l'enregistrement, la connexion et la sécurité du compte.",
-              "Les rapports, descriptions de bogues et pièces jointes parviennent à notre serveur lorsque vous soumettez le formulaire de commentaires.",
-              "Le site Web stocke votre choix de langue dans la mémoire du navigateur."
+              "Le mode Invité utilise uniquement un identifiant technique aléatoire, une étiquette de plate-forme et une version de l'application pour faire fonctionner les points de terminaison de relais/synchronisation des sous-titres.",
+              "Les codes de vérification des e-mails et les journaux de demandes sont traités strictement pour enregistrer, vous connecter et protéger les comptes.",
+              "La télémétrie du serveur exclut les titres de films, les identifiants TMDB/IMDb et les sources complémentaires personnelles tierces."
             ],
-            "title": "Données sur votre appareil et nos serveurs",
+            "title": "Données sur l'appareil, l'invité et le compte",
             "badge": "01"
           },
           {
             "paragraphs": [
-              "Nous traitons les données pour gérer les comptes, synchroniser les appareils, fournir une assistance, protéger le service et fournir les fonctionnalités que vous choisissez. Nous ne vendons pas de données personnelles à des réseaux publicitaires."
+              "Nous traitons les données uniquement pour gérer des comptes, synchroniser des appareils, fournir une assistance, faire respecter la conformité légale et ne jamais vendre de données personnelles."
             ],
             "bullets": [
-              "L'e-mail de vérification est envoyé à notre fournisseur de messagerie ; les sauvegardes de base de données peuvent être stockées sur Supabase lorsque la sauvegarde est configurée.",
-              "Certains fournisseurs de services ou serveurs complémentaires peuvent traiter des données en dehors du Vietnam ; L'emplacement du serveur dépend du service que vous choisissez et de la configuration d'exploitation.",
-              "Google reCAPTCHA peut être utilisé lors de l'inscription ; le texte des sous-titres est envoyé à Google Translate lorsque vous choisissez la traduction.",
+              "Les fournisseurs de courrier électronique de vérification transactionnelle et les sauvegardes de bases de données cryptées peuvent résider en dehors du Vietnam en fonction de la configuration du déploiement.",
+              "Les métadonnées et les scores critiques sont récupérés via les API officielles TMDB et OMDb ; les recherches de sous-titres interrogent l'API REST Wyzie, SubSource et OpenSubtitles.com (en préférant vos clés BYOK personnelles lorsqu'elles sont fournies).",
+              "Les relais de fichiers de sous-titres utilisent des en-têtes sans stockage sans mise en cache publique. Les modules complémentaires tiers sont contactés directement depuis votre appareil selon leurs propres politiques.",
               "Les recherches et téléchargements de sous-titres, la synchronisation audio/sous-titres et les modules complémentaires de la communauté peuvent envoyer des demandes via les serveurs Framezoo et les services externes concernés. Les modules complémentaires tiers ont leurs propres politiques."
             ],
-            "title": "Finalités et services externes",
+            "title": "Finalités, transfert transfrontalier et API externes",
             "badge": "02"
           },
           {
-            "title": "Conservation et suppression",
+            "title": "Rétention, exportation et suppression de données JSON",
             "bullets": [
-              "Les codes de vérification expirent après 10 minutes ; Les enregistrements de défi expirés sont supprimés après 7 jours. Les enregistrements de courrier envoyés ou ayant échoué sont supprimés après 7 jours.",
-              "Les commentaires et les pièces jointes sont conservés séparément pour les demandes d'assistance ou de droits d'auteur jusqu'à ce qu'ils soient supprimés sur demande ou par l'équipe d'assistance. La suppression du compte supprime le lien avec le compte mais ne supprime pas automatiquement les rapports. Vous pouvez demander une suppression séparée via le formulaire de commentaires."
+              "Les défis de vérification OTP expirent après 10 minutes et sont purgés avec les enregistrements de la boîte d'envoi de courrier électronique après 7 jours.",
+              "Les rapports de commentaires et les avis de droits d'auteur restent stockés séparément pour l'audit de conformité ; la suppression du compte dissocie votre identifiant utilisateur."
             ],
             "paragraphs": [
-              "Les données de compte et de synchronisation restent pendant que votre compte est actif. Vous pouvez supprimer le compte dans Paramètres ; le serveur supprime ensuite les enregistrements de compte, les signets, la progression, l'historique de surveillance, les paramètres et les sessions. Les anciennes sauvegardes de bases de données peuvent conserver les données jusqu'à la rotation ; la configuration par défaut conserve 7 sauvegardes récentes lorsque la sauvegarde est en cours d'exécution."
+              "Les données de compte et de synchronisation restent actives tant que votre compte existe. Vous pouvez exporter une copie JSON complète de vos données personnelles ou supprimer définitivement votre compte dans Paramètres -> Actions ; les sauvegardes chiffrées en rotation conservent jusqu'à 7 instantanés récents."
             ],
             "badge": "03"
           },
           {
-            "title": "Vos droits et contact",
+            "title": "Vos droits, limite d'âge (>=16) et contact",
             "paragraphs": [
-              "Vous pouvez demander l'accès, la correction, la suppression ou la restriction de vos données, retirer votre consentement lorsque le traitement repose sur le consentement et soumettre une plainte via le formulaire de commentaires sur notre site Web. Veuillez fournir l'adresse e-mail de votre compte afin que nous puissions vérifier la demande."
+              "L'enregistrement d'un compte est limité aux utilisateurs âgés de 16 ans ou plus en vertu de la loi vietnamienne 91/2025/QH15. Vous pouvez exercer l'accès, l'exportation JSON, la correction, la suppression ou le retrait du consentement via le modal Feedback ou Privacy@framezoo.top / framezoo.top@gmail.com (réponse dans les 24 heures)."
             ],
             "badge": "04"
           }
@@ -375,35 +375,35 @@
         "title": "Politique de confidentialité et de protection des données personnelles"
       },
       "copyright": {
-        "updatedAt": "Mise à jour : 4 novembre 2026",
-        "summary": "Avis de non-responsabilité officiel concernant le contenu et procédure de notification et de retrait de propriété intellectuelle pour Framezoo.",
-        "title": "Droits d'auteur, DMCA et clause de non-responsabilité relative au contenu",
+        "updatedAt": "Mise à jour : 16 novembre 2026 · Loi vietnamienne sur la propriété intellectuelle, art. 198b et décret 17/2023",
+        "summary": "Statut d'intermédiaire neutre, processus de liste de blocage de notification et de retrait 24h/72h et politique de contrefaçon répétée.",
+        "title": "Droits d'auteur, avis, retrait et clause de non-responsabilité concernant le contenu",
         "sections": [
           {
-            "title": "Safe Harbor pour les logiciels intermédiaires",
+            "title": "Logiciel intermédiaire neutre et P2P sans amorçage par défaut",
             "paragraphs": [
-              "Framezoo n'exploite pas de bibliothèque de films ni de source de flux vidéo. L'application peut accéder aux sources choisies par les utilisateurs ; nos serveurs peuvent relayer les sous-titres du fournisseur et traiter temporairement l'audio et les sous-titres pour la synchronisation demandée.",
-              "Chaque avis de droit d'auteur est examiné par rapport au contenu et à notre rôle réel ; ces conditions ne créent pas une exonération automatique de responsabilité."
+              "Framezoo est un logiciel de lecture multimédia neutre similaire à Stremio et Kodi : il n'héberge aucun fichier vidéo, ne regroupe aucun module complémentaire de contenu par défaut ni tracker public, n'effectue aucun proxy de module complémentaire côté serveur et désactive l'amorçage P2P sortant (upload_rate_limit = 0) par défaut.",
+              "Les téléchargements de sous-titres utilisent des en-têtes sans magasin sans mise en cache publique sur les serveurs Framezoo."
             ],
             "badge": "01"
           },
           {
             "paragraphs": [
-              "Les métadonnées des films et des séries (titres, dates de sortie, synopsis, classements et affiches promotionnelles) affichées à des fins de découverte d'informations proviennent de bases de données de films publiques (telles que TMDB, IMDb et TVDB).",
-              "Toutes les marques déposées, titres de films et illustrations restent la propriété de leurs propriétaires respectifs des droits d'auteur."
+              "Les titres de films, les synopsis, les illustrations et les notes des critiques sont récupérés à partir des API officielles TMDB et OMDb à des fins de découverte d'informations.",
+              "Ce produit utilise l'API TMDB mais n'est ni approuvé ni certifié par TMDB. Toutes les marques déposées et illustrations médiatiques restent la propriété de leurs propriétaires respectifs."
             ],
-            "title": "Attribution des métadonnées et des illustrations",
+            "title": "API de métadonnées officielles et attribution TMDB",
             "badge": "02"
           },
           {
-            "title": "Procédure de notification et de retrait",
+            "title": "Avis et retrait (SLA 24h/72h) et politique de contrefaçon répétée",
             "bullets": [
-              "Identification du titulaire du droit d'auteur ou du représentant autorisé.",
-              "Preuve de propriété de l'œuvre protégée par le droit d'auteur.",
+              "Les ordres des autorités compétentes sont exécutés sur /compliance/blocklist dans les 24 heures ; avis valides des titulaires de droits dans les 72 heures.",
+              "Les comptes de contrevenants répétés associés à des violations vérifiées sont suspendus avec révocation immédiate de la session.",
               "L'URL ou la description exacte du matériel en question afin que nous puissions l'examiner et le traiter dans les 24 à 72 heures ouvrables."
             ],
             "paragraphs": [
-              "Framezoo respecte les droits de propriété intellectuelle. Si vous êtes titulaire de droits d'auteur ou agent autorisé et pensez qu'un élément présent sur framezoo.top porte atteinte à vos droits, veuillez soumettre un avis via notre canal Rapport/Commentaires comprenant :"
+              "Les titulaires de droits et les autorités peuvent soumettre des mises en demeure (identité du titulaire des droits, preuve/autorisation PDF, domaine complémentaire spécifique/ID de média/ID de sous-titre et déclaration sur l'honneur) via le formulaire de rapport ou legal@framezoo.top / framezoo.top@gmail.com."
             ],
             "badge": "03"
           }

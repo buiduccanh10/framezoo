@@ -27,6 +27,13 @@ export default defineEventHandler(async event => {
       profile: true,
       namespace: true,
       app_version: true,
+      is_suspended: true,
+      suspended_at: true,
+      suspended_reason: true,
+      terms_version: true,
+      privacy_version: true,
+      consented_at: true,
+      age_confirmed: true,
     },
   });
 
@@ -97,6 +104,13 @@ export default defineEventHandler(async event => {
       profile: user.profile,
       namespace: user.namespace,
       app_version: currentVersion,
+      is_suspended: user.is_suspended,
+      suspended_at: user.suspended_at,
+      suspended_reason: user.suspended_reason,
+      terms_version: user.terms_version,
+      privacy_version: user.privacy_version,
+      consented_at: user.consented_at,
+      age_confirmed: user.age_confirmed,
     },
     settings: userSettings,
     sessions: activeSessions.map(s => ({

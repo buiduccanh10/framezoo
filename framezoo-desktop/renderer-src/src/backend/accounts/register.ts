@@ -50,6 +50,15 @@ export interface RegisterResponse {
   oauth?: OAuthTokenResponse;
 }
 
+export interface LegalConsentInput {
+  acceptedTerms: true;
+  acceptedPrivacy: true;
+  ageConfirmed: true;
+  termsVersion: string;
+  privacyVersion: string;
+  platform: "web" | "desktop" | "mobile" | "tv";
+}
+
 export interface RegisterInput {
   publicKey: string;
   challenge: {
@@ -68,6 +77,7 @@ export interface RegisterInput {
     challengeId: string;
     code: string;
   };
+  legalConsent: LegalConsentInput;
 }
 
 export async function registerAccount(

@@ -18,6 +18,7 @@
       "configRequiredDesc": "Tento doplněk vyžaduje konfiguraci (například klíče API nebo nastavení jazyka), než bude moci vrátit obsah. Nakonfigurujte jej prosím ve svém prohlížeči a poté zkopírujte a vložte vygenerovanou URL manifestu sem.",
       "configRequiredTitle": "Požadovaná konfigurace",
       "configureAction": "Konfigurovat",
+      "disclaimerNotice": "Doplňky třetích stran jsou nezávisle provozovány vývojáři z komunity. Za ověření legality obsahu ve vaší jurisdikci nesete výhradní odpovědnost vy; P2P seeding je ve výchozím nastavení zakázán.",
       "errorFallback": "Tento doplněk nelze nainstalovat.",
       "manageListButton": "Správa seznamu doplňků",
       "openConfigurePage": "Otevřít konfigurační stránku",
@@ -181,7 +182,7 @@
       "passwordWeak": "Heslo musí mít alespoň 8 znaků s písmeny a číslicemi",
       "privacyPolicy": "Zásady ochrany osobních údajů",
       "submit": "Vytvořit účet",
-      "legalConsent": "Přečetl(a) jsem si a souhlasím s <terms>Podmínkami služby</terms> a <privacy>Zásadami ochrany osobních údajů</privacy>."
+      "legalConsent": "Potvrzuji, že mi je alespoň 16 let, že jsem si přečetl/a a souhlasím s <terms>Podmínkami služby</terms> a <privacy>Zásadami ochrany osobních údajů</privacy>."
     },
     "trust": {
       "failed": {
@@ -306,7 +307,10 @@
   },
   "footer": {
     "legal": {
-      "disclaimer": "Zřeknutí odpovědnosti",
+      "disclaimer": "Zřeknutí se odpovědnosti",
+      "dmca": "DMCA / Zastavení šíření",
+      "terms": "Podmínky služby",
+      "tmdbAttribution": "Metadata a plakáty filmů jsou poskytovány rozhraním TMDB API (není schváleno ani certifikováno společností TMDB).",
       "disclaimerText": "Framezoo neprovozuje zdroje video streamu. Jeho servery mohou přenášet titulky poskytovatelů a dočasně zpracovávat zvuk a titulky pro synchronizaci, pokud si tuto funkci vyberete. Obsah, který přehráváte, máte pod kontrolou."
     },
     "links": {
@@ -484,15 +488,15 @@
     },
     "support": {
       "complete": "kompletní",
-      "description": "Framezoo běží se ztrátou a my potřebujeme pomoc, aby byl bez reklam! Pokud rádi používáte Framezoo, zvažte prosím dar, který nám pomůže pokrýt naše náklady.",
-      "donate": "Darovat",
-      "explanation": "Pokud rozšíření nepoužíváte nebo nemáte nastavené FED API, může být obtížnější najít obsah! Chceme to napravit, ale poskytovat obsah bez drahých serverů je mnohem těžší. Pokud tedy rádi používáte Framezoo, zvažte prosím darování, které nám pomůže pokrýt naše rostoucí náklady.",
+      "description": "Framezoo je neutrální přehrávač médií a dobrovolná softwarová podpora pomáhá udržet jej bez reklam! Upozorňujeme, že příspěvky striktně podporují čisté softwarové inženýrství a nikdy nekupují mediální obsah ani doplňky třetích stran.",
+      "donate": "Podpora vývoje softwaru",
+      "explanation": "Pokud jste si v přehrávači nenakonfigurovali vlastní doplňky třetích stran, streamy se ve výchozím nastavení nezobrazí. Framezoo vystupuje výhradně jako neutrální technický přehrávač bez hostování obsahu. Jakýkoli dobrovolný příspěvek podporuje pouze průběžné vývojové práce a infrastrukturu aplikace.",
       "explanation2": "Pokud chcete více informací, přidejte se k nám",
       "fluxer": "Fluxer",
-      "label": "Financování projektu: ${{current}} / ${{goal}}",
+      "label": "Podpora softwarového inženýrství: ${{current}} / ${{goal}}",
       "moreInfo": "Více informací",
       "thankYou": "Děkujeme za vaši podporu!",
-      "title": "Framezoo potřebuje vaši pomoc!"
+      "title": "Podpořte vývoj softwaru Framezoo!"
     },
     "titles": {
       "69": {
@@ -1210,6 +1214,11 @@
           "text": "Toto vás odhlásí ze všech zařízení připojených k vašemu účtu.",
           "title": "Ukončit všechny relace"
         },
+        "exportData": {
+          "button": "Exportovat JSON",
+          "text": "Stáhněte si kopii profilu účtu, záložek, historie sledování, nastavení a záznamu o právním souhlasu (JSON).",
+          "title": "Export osobních údajů"
+        },
         "migration": {
           "button": "Migrovat účet",
           "text": "Migrujte svůj účet na nový server nebo si stáhněte data.",
@@ -1518,6 +1527,7 @@
     "modalTitle": "Pomozte nám dále budovat Framezoo",
     "subtitle": "Každý příspěvek nám pomáhá vylepšovat přehrávač, rozšiřovat ho na více platforem a neustále naslouchat vašim nápadům.",
     "note": "Děkujeme, že vám záleží na Framezoo a podporujete práci, která za ní stojí. Váš příspěvek nám dává více prostoru k vybudování lepšího zážitku pro všechny.",
+    "legalDisclaimer": "Pouze dobrovolná podpora vývoje softwaru – příspěvky nekupují filmy, mediální streamy ani přístup k doplňkům.",
     "scanHint": "Naskenujte tento QR kód pomocí své bankovní aplikace.",
     "paypalLabel": "PayPal",
     "momoLabel": "Maminka",

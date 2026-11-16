@@ -6,12 +6,23 @@ import { FRAMEZOO_SOCIAL_LINKS, MessageSquareIcon } from "./LandingIcon";
 
 export function LandingFloatFeedback() {
   const [isOpen, setIsOpen] = useState(false);
+  const [requestedCategory, setRequestedCategory] = useState<
+    "bug" | "feature" | "copyright" | "privacy" | "other"
+  >("bug");
   const locale = useLandingLocale();
   const copy = getLandingCopy(locale);
   const feedbackCopy = copy.feedback;
 
   useEffect(() => {
-    const handleOpen = () => setIsOpen(true);
+    const handleOpen = (event: Event) => {
+      const detail = (
+        event as CustomEvent<{
+          category?: "bug" | "feature" | "copyright" | "privacy" | "other";
+        }>
+      )?.detail;
+      setRequestedCategory(detail?.category || "bug");
+      setIsOpen(true);
+    };
     window.addEventListener("open-landing-feedback", handleOpen);
     return () => {
       window.removeEventListener("open-landing-feedback", handleOpen);
@@ -24,7 +35,10 @@ export function LandingFloatFeedback() {
         <button
           type="button"
           className="landing-float-feedback"
-          onClick={() => setIsOpen(true)}
+          onClick={() => {
+            setRequestedCategory("bug");
+            setIsOpen(true);
+          }}
           aria-label={feedbackCopy?.button ?? "Feedback"}
           title={feedbackCopy?.modalTitle ?? "Send us your feedback"}
         >
@@ -51,6 +65,7 @@ export function LandingFloatFeedback() {
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         copy={feedbackCopy}
+        initialCategory={requestedCategory}
       />
     </>
   );

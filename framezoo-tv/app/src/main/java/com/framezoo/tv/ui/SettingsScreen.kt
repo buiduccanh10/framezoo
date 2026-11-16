@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -51,7 +52,10 @@ import com.framezoo.tv.model.UserIcon
 import com.framezoo.tv.model.parseHexColor
 import com.framezoo.tv.ui.features.auth.IconPickerTab
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
 
 private enum class SettingsCategory(val searchKeywords: String) {
     ACCOUNT("account profile nickname email password otp sessions delete logout tài khoản hồ sơ mật khẩu"),
@@ -925,11 +929,14 @@ private fun ConnectionsSection(state: FrameZooState) {
 @Composable
 private fun AccountSection(state: FrameZooState) {
     val colors = LocalFrameZooColors.current
+    val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val userId = state.userId
 
     var nicknameInput by remember(state.userNickname) { mutableStateOf(state.userNickname.orEmpty()) }
     var savingProfile by remember { mutableStateOf(false) }
+    var exportingData by remember { mutableStateOf(false) }
+    var exportMessage by remember { mutableStateOf<String?>(null) }
     var accountMessage by remember { mutableStateOf<String?>(null) }
 
     var showProfileEditModal by remember { mutableStateOf(false) }
@@ -1309,6 +1316,90 @@ private fun AccountSection(state: FrameZooState) {
                         }
                     }
                 }
+            }
+            item {
+                SettingsCardContainer {
+                    Text(
+                        text = t("settings.account.actions.export.title"),
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = colors["type.emphasis"]
+                    )
+                    Text(
+                        text = t("settings.account.actions.export.text"),
+                        fontSize = 14.sp,
+                        color = colors["type.secondary"]
+                    )
+                    if (!exportMessage.isNullOrBlank()) {
+                        Text(
+                            text = exportMessage!!,
+                            color = colors["type.logo"],
+                            fontSize = 13.sp
+                        )
+                    }
+                    val exportSuccessPrefix = t("settings.account.actions.export.success")
+                    val exportErrorFallback = t("settings.account.actions.export.error")
+                    TvButton(
+                        label = if (exportingData) "..." else t("settings.account.actions.export.button"),
+                        navigation = true
+                    ) {
+                        if (!exportingData) {
+                            scope.launch {
+                                exportingData = true
+                                try {
+                                    val exported = state.backend.exportAccountData()
+                                    if (exported != null) {
+                                        val safeId = userId.replace(Regex("[^A-Za-z0-9._-]"), "_")
+                                        val file = File(context.filesDir, "framezoo-personal-data-$safeId.json")
+                                        withContext(Dispatchers.IO) {
+                                            file.writeText(exported.toString(2), Charsets.UTF_8)
+                                        }
+                                        exportMessage = "$exportSuccessPrefix: ${file.absolutePath}"
+                                    } else {
+                                        exportMessage = exportErrorFallback
+                                    }
+                                } catch (e: CancellationException) {
+                                    throw e
+                                } catch (e: Exception) {
+                                    exportMessage = e.message ?: exportErrorFallback
+                                } finally {
+                                    exportingData = false
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        item {
+            SettingsCardContainer {
+                Text(
+                    text = t("settings.legal.title"),
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = colors["type.emphasis"]
+                )
+                Text(
+                    text = t("settings.legal.operator"),
+                    fontSize = 13.sp,
+                    color = colors["type.secondary"]
+                )
+                Text(
+                    text = t("settings.legal.contact"),
+                    fontSize = 13.sp,
+                    color = colors["type.secondary"]
+                )
+                Text(
+                    text = t("settings.legal.links"),
+                    fontSize = 13.sp,
+                    color = colors["type.logo"]
+                )
+                Text(
+                    text = t("settings.legal.disclaimer"),
+                    fontSize = 12.sp,
+                    color = colors["type.secondary"]
+                )
             }
         }
     }

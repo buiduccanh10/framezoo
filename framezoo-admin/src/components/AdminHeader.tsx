@@ -1,5 +1,6 @@
 import {
   Activity,
+  Ban,
   HardDrive,
   LockKeyhole,
   LogOut,
@@ -11,11 +12,12 @@ import {
 } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 
-export type AdminTab = "users" | "guests" | "feedbacks" | "backups";
+export type AdminTab = "users" | "guests" | "feedbacks" | "takedowns" | "backups";
 
 interface AdminShellProps {
   activeTab: AdminTab;
   pendingFeedbacks: number;
+  activeTakedowns?: number;
   totalUsers: number;
   activeGuests24h: number;
   onTabChange: (tab: AdminTab) => void;
@@ -33,8 +35,12 @@ const SECTION_META: Record<AdminTab, { title: string; subtitle: string }> = {
     subtitle: "Thiết bị chưa đăng nhập hoạt động 6h, 24h, 7 ngày & 30 ngày",
   },
   feedbacks: {
-    title: "Phản hồi người dùng",
-    subtitle: "Hàng đợi hỗ trợ & tệp đính kèm",
+    title: "Phản hồi & Khiếu nại",
+    subtitle: "Hỗ trợ kỹ thuật, DMCA (SLA 24h/72h) & yêu cầu dữ liệu",
+  },
+  takedowns: {
+    title: "Gỡ bỏ vi phạm",
+    subtitle: "Blocklist Notice & Takedown công khai cho client",
   },
   backups: {
     title: "Sao lưu cơ sở dữ liệu",
@@ -45,6 +51,7 @@ const SECTION_META: Record<AdminTab, { title: string; subtitle: string }> = {
 export function AdminShell({
   activeTab,
   pendingFeedbacks,
+  activeTakedowns = 0,
   totalUsers,
   activeGuests24h,
   onTabChange,
@@ -79,9 +86,16 @@ export function AdminShell({
     },
     {
       id: "feedbacks" as const,
-      label: "Phản hồi",
+      label: "Phản hồi / DMCA",
       icon: MessageSquare,
       count: pendingFeedbacks,
+      badgeTone: "amber",
+    },
+    {
+      id: "takedowns" as const,
+      label: "Takedowns",
+      icon: Ban,
+      count: activeTakedowns,
       badgeTone: "amber",
     },
     {

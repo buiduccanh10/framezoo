@@ -18,6 +18,7 @@
       "configRequiredDesc": "Deze add-on vereist configuratie (zoals API-sleutels of taalinstellingen) voordat deze inhoud kan weergeven. Configureer de add-on in uw browser en kopieer en plak vervolgens de gegenereerde manifest-URL hier.",
       "configRequiredTitle": "Configuratie vereist",
       "configureAction": "Configure",
+      "disclaimerNotice": "Add-ons van derden worden onafhankelijk beheerd door community-ontwikkelaars. U bent zelf verantwoordelijk voor het controleren van de wettigheid van de inhoud in uw rechtsgebied; P2P-seeding is standaard uitgeschakeld.",
       "errorFallback": "Kan deze add-on niet installeren.",
       "manageListButton": "Beheer add-onlijst",
       "openConfigurePage": "Open de configuratiepagina",
@@ -181,7 +182,7 @@
       "passwordWeak": "Het wachtwoord moet minimaal 8 tekens lang zijn, met letters en cijfers",
       "privacyPolicy": "Privacybeleid",
       "submit": "Account aanmaken",
-      "legalConsent": "Ik heb de <terms>Servicevoorwaarden</terms> en het <privacy>Privacybeleid</privacy> gelezen en ga hiermee akkoord."
+      "legalConsent": "Ik bevestig dat ik ten minste 16 jaar oud ben en dat ik de Servicevoorwaarden (PH1) en het Privacybeleid (PH3) heb gelezen en hiermee akkoord ga."
     },
     "trust": {
       "failed": {
@@ -306,7 +307,10 @@
   },
   "footer": {
     "legal": {
-      "disclaimer": "Disclaimer",
+      "disclaimer": "Vrijwaring",
+      "dmca": "DMCA / Verwijdering",
+      "terms": "Gebruiksvoorwaarden",
+      "tmdbAttribution": "Filmmetadata en -posters worden geleverd via de TMDB API (niet goedgekeurd of gecertificeerd door TMDB).",
       "disclaimerText": "Framezoo beheert geen videostreambronnen. De servers kunnen ondertitels van providers doorgeven en audio en ondertitels tijdelijk synchroniseren wanneer u die functie inschakelt. U bepaalt zelf welke inhoud u afspeelt."
     },
     "links": {
@@ -484,15 +488,15 @@
     },
     "support": {
       "complete": "compleet",
-      "description": "Framezoo draait met verlies en we hebben hulp nodig om het advertentievrij te houden! Als u Framezoo graag gebruikt, overweeg dan om een ​​donatie te doen om ons te helpen onze kosten te dekken.",
-      "donate": "Doneer",
-      "explanation": "Als u de extensie niet gebruikt of de FED API niet heeft ingesteld, kan het moeilijker zijn om inhoud te vinden! We willen dit oplossen, maar het is een stuk moeilijker om inhoud aan te bieden zonder dure servers. Dus alsjeblieft, als je Framezoo graag gebruikt, overweeg dan om een ​​donatie te doen om ons te helpen onze groeikosten te dekken.",
+      "description": "Framezoo is een neutrale mediaspeler en vrijwillige softwareondersteuning helpt hem reclamevrij te houden! Houd er rekening mee dat bijdragen uitsluitend worden gebruikt voor softwareontwikkeling en nooit voor de aanschaf van mediacontent of add-ons van derden.",
+      "donate": "Ondersteuning van softwareontwikkeling",
+      "explanation": "Als je geen eigen add-ons van derden in de speler hebt geconfigureerd, worden streams standaard niet weergegeven. Framezoo fungeert uitsluitend als een neutrale technische speler zonder content te hosten. Vrijwillige bijdragen ondersteunen alleen de doorlopende ontwikkeling en infrastructuur van de app.",
       "explanation2": "Als je meer informatie wilt, sluit je dan aan bij onze",
       "fluxer": "Fluxer",
-      "label": "Projectfinanciering: ${{current}} / ${{goal}}",
+      "label": "Software Engineering Support: ${{current}} / ${{goal}}",
       "moreInfo": "Meer informatie",
       "thankYou": "Bedankt voor uw steun!",
-      "title": "Framezoo heeft jouw hulp nodig!"
+      "title": "Steun de softwareontwikkeling van Framezoo!"
     },
     "titles": {
       "69": {
@@ -1210,12 +1214,24 @@
           "text": "Dit zal je afmelden van alle apparaten die gekoppeld zijn aan je account.",
           "title": "Eindig alle sessies"
         },
+        "exportData": {
+          "button": "Exporteer JSON",
+          "text": "Download een kopie van uw accountprofiel, bladwijzers, kijkgeschiedenis, instellingen en toestemmingsverklaring (JSON).",
+          "title": "Persoonsgegevens exporteren"
+        },
         "migration": {
           "button": "Account overzetten",
           "text": "Zet je account over naar een nieuwe server of download je gegevens.",
           "title": "Accountmigratie"
         },
-        "title": "Acties"
+        "title": "Acties",
+        "export": {
+          "button": "JSON-gegevens exporteren",
+          "error": "Kan persoonlijke gegevens niet exporteren. Probeer het opnieuw.",
+          "success": "Persoonlijke gegevens geëxporteerd naar",
+          "text": "Download een kopie van uw account, gesynchroniseerde instellingen en ingediende rapporten (naleving van gegevensbescherming).",
+          "title": "Persoonlijke gegevens exporteren"
+        }
       },
       "devices": {
         "deviceNameLabel": "Apparaatnaam",
@@ -1445,7 +1461,14 @@
       "clearCacheError": "Kan de cache niet wissen. Probeer het opnieuw.",
       "spaceLeftOnDevice": "({{space}} vrije ruimte op uw apparaat)"
     },
-    "unsaved": "U heeft niet-opgeslagen wijzigingen"
+    "unsaved": "U heeft niet-opgeslagen wijzigingen",
+    "legal": {
+      "title": "Juridische bekendmaking, auteursrecht en openbaarmaking van exploitanten",
+      "operator": "Operator: Bui Duc Canh (Independent Developer, Framezoo Project) — Phao Dai Lang, Lang Ward, Hanoi, Vietnam",
+      "contact": "Legal / DMCA / Privacy Contact: framezoo.top@gmail.com (or legal@framezoo.top) · Tel: +84 984908816",
+      "links": "https://framezoo.top/legal/terms · /legal/privacy · /legal/dmca · /legal/about",
+      "disclaimer": "Framezoo is een neutrale mediaspeler en host of bundelt geen media-inhoud of add-ons van derden. Metagegevens en beoordelingen maken gebruik van TMDB- en OMDb-API's, en dit product is niet goedgekeurd of gecertificeerd door TMDB."
+    }
   },
   "tmdb": {
     "genres": {
@@ -1518,6 +1541,7 @@
     "modalTitle": "Help ons Framezoo verder op te bouwen",
     "subtitle": "Elke bijdrage helpt ons de speler te verbeteren, uit te breiden naar meer platformen en naar uw ideeën te blijven luisteren.",
     "note": "Bedankt voor je betrokkenheid bij Framezoo en je steun aan het werk erachter. Jouw bijdrage geeft ons meer ruimte om een ​​betere ervaring voor iedereen te creëren.",
+    "legalDisclaimer": "Vrijwillige ondersteuning van softwareontwikkeling — bijdragen geven geen recht op films, mediastreams of toegang tot add-ons.",
     "scanHint": "Scan deze QR-code met uw bankapp.",
     "paypalLabel": "PayPal",
     "momoLabel": "Mama",

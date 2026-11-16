@@ -1,13 +1,24 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AdminShell, type AdminTab } from "./components/AdminHeader";
 import { BackupManagement } from "./components/BackupManagement";
 import { FeedbackManagement } from "./components/FeedbackManagement";
 import { GuestManagement } from "./components/GuestManagement";
 import { LoginScreen } from "./components/LoginScreen";
+import { TakedownManagement } from "./components/TakedownManagement";
 import { UserManagement } from "./components/UserManagement";
 import { adminApi } from "./lib/api";
 import { useAdminAuth } from "./hooks/useAdminAuth";
 import { useToast } from "./hooks/useToast";
+import type { FeedbackItem, TakedownTargetType } from "./types";
+
+function inferTakedownTargetType(raw: string): TakedownTargetType {
+  const value = raw.trim();
+  if (/^tt\d+/i.test(value)) return "imdb_id";
+  if (/^(?:movie:|tv:|series:)?\d+$/i.test(value)) return "tmdb_id";
+  if (/^[a-f0-9]{40}$/i.test(value)) return "infohash";
+  if (/^(subsource|opensubs|wyzie):/i.test(value)) return "subtitle_id";
+  return "addon_domain";
+}
 
 function App() {
   const { authState, loginError, isLoggingIn, login, logout } = useAdminAuth();
@@ -16,6 +27,14 @@ function App() {
   const [totalUsers, setTotalUsers] = useState(0);
   const [activeGuests24h, setActiveGuests24h] = useState(0);
   const [pendingFeedbacks, setPendingFeedbacks] = useState(0);
+  const [activeTakedowns, setActiveTakedowns] = useState(0);
+  const [takedownPrefill, setTakedownPrefill] = useState<{
+    targetType: TakedownTargetType;
+    pattern: string;
+    reason: string;
+    rightsHolder?: string;
+    referenceId?: string;
+  } | null>(null);
 
   useEffect(() => {
     if (authState !== "authenticated") return;
@@ -32,10 +51,30 @@ function App() {
         if (!cancelled) setActiveGuests24h(result.stats.counts.h24);
       })
       .catch(() => {});
+    void adminApi
+      .listTakedowns({ active: "true" })
+      .then((result) => {
+        if (!cancelled) setActiveTakedowns(result.stats?.active ?? 0);
+      })
+      .catch(() => {});
     return () => {
       cancelled = true;
     };
   }, [authState]);
+
+  const handleCreateTakedownFromFeedback = useCallback((item: FeedbackItem) => {
+    const rawTarget = item.target_url_or_id || "";
+    setTakedownPrefill({
+      targetType: inferTakedownTargetType(rawTarget),
+      pattern: rawTarget,
+      reason: `DMCA #${item.id}: ${item.title}`,
+      rightsHolder: item.rights_owner_name || undefined,
+      referenceId: item.id,
+    });
+    setActiveTab("takedowns");
+  }, []);
+
+  const clearTakedownPrefill = useCallback(() => setTakedownPrefill(null), []);
 
   const handleLogout = async () => {
     if (!(await logout())) {
@@ -67,9 +106,15 @@ function App() {
     <AdminShell
       activeTab={activeTab}
       pendingFeedbacks={pendingFeedbacks}
+      activeTakedowns={activeTakedowns}
       totalUsers={totalUsers}
       activeGuests24h={activeGuests24h}
-      onTabChange={setActiveTab}
+      onTabChange={(nextTab) => {
+        if (nextTab !== "takedowns" && takedownPrefill) {
+          clearTakedownPrefill();
+        }
+        setActiveTab(nextTab);
+      }}
       onLogout={() => void handleLogout()}
     >
       {activeTab === "users" ? (
@@ -90,6 +135,15 @@ function App() {
         <FeedbackManagement
           onMessage={showMessage}
           onPendingChange={setPendingFeedbacks}
+          onCreateTakedown={handleCreateTakedownFromFeedback}
+        />
+      ) : null}
+      {activeTab === "takedowns" ? (
+        <TakedownManagement
+          key={takedownPrefill?.referenceId || "default"}
+          onMessage={showMessage}
+          onActiveCountChange={setActiveTakedowns}
+          prefill={takedownPrefill}
         />
       ) : null}
       {activeTab === "backups" ? (

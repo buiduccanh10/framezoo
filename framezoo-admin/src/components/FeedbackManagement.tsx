@@ -1,7 +1,9 @@
 import {
+  Ban,
   Check,
   Copy,
   Eye,
+  FileText,
   Image,
   Loader2,
   Mail,
@@ -16,15 +18,26 @@ import { useEffect } from "react";
 import { ConfirmModal } from "./ConfirmModal";
 import { Pagination } from "./Pagination";
 import { useFeedbackManagement } from "../hooks/useFeedbackManagement";
+import type { FeedbackItem } from "../types";
 
 interface FeedbackManagementProps {
   onMessage: (message: string) => void;
   onPendingChange: (count: number) => void;
+  onCreateTakedown?: (item: FeedbackItem) => void;
 }
+
+const CATEGORY_LABELS: Record<string, string> = {
+  bug: "Lỗi kỹ thuật",
+  feature: "Đề xuất tính năng",
+  copyright: "Bản quyền (DMCA)",
+  privacy: "Dữ liệu cá nhân",
+  other: "Khác",
+};
 
 export function FeedbackManagement({
   onMessage,
   onPendingChange,
+  onCreateTakedown,
 }: FeedbackManagementProps) {
   const feedback = useFeedbackManagement(onMessage, onPendingChange);
 
@@ -70,7 +83,7 @@ export function FeedbackManagement({
         </button>
       </div>
 
-      <div className="metric-grid metric-grid-three">
+      <div className="metric-grid metric-grid-four">
         <Metric
           label="Tổng phản hồi"
           value={feedback.stats.total}
@@ -82,6 +95,14 @@ export function FeedbackManagement({
           tone="amber"
         />
         <Metric label="Đã xử lý" value={feedback.stats.resolved} tone="green" />
+        <Metric
+          label="DMCA / Quá hạn SLA"
+          value={
+            (feedback.stats.pendingCopyright || 0) +
+            (feedback.stats.overdueCompliance || 0)
+          }
+          tone="amber"
+        />
       </div>
 
       <div className="toolbar">
@@ -104,6 +125,28 @@ export function FeedbackManagement({
             </button>
           ) : null}
         </label>
+        <select
+          value={feedback.categoryFilter}
+          onChange={(event) =>
+            feedback.setCategoryFilter(
+              event.target.value as
+                | "all"
+                | "copyright"
+                | "privacy"
+                | "bug"
+                | "feature"
+                | "other",
+            )
+          }
+          aria-label="Lọc theo danh mục"
+        >
+          <option value="all">Tất cả danh mục</option>
+          <option value="copyright">Bản quyền (DMCA)</option>
+          <option value="privacy">Dữ liệu cá nhân</option>
+          <option value="bug">Lỗi kỹ thuật</option>
+          <option value="feature">Đề xuất tính năng</option>
+          <option value="other">Khác</option>
+        </select>
         <div className="segmented" role="group" aria-label="Lọc feedback">
           {(["all", "pending", "resolved"] as const).map((value) => (
             <button
@@ -147,6 +190,17 @@ export function FeedbackManagement({
                     <div className="feedback-title-row">
                       <h2>{item.title}</h2>
                       <StatusBadge pending={pending} />
+                      {item.category ? (
+                        <span className="person-chip">
+                          {CATEGORY_LABELS[item.category] || item.category}
+                        </span>
+                      ) : null}
+                      {pending && item.sla_due_at ? (
+                        <span className="person-chip">
+                          SLA:{" "}
+                          {new Date(item.sla_due_at).toLocaleString("vi-VN")}
+                        </span>
+                      ) : null}
                       <span className="person-chip">
                         <User size={12} aria-hidden="true" />{" "}
                         {item.user?.nickname || "Khách"}
@@ -286,7 +340,55 @@ export function FeedbackManagement({
                 {new Date(feedback.selected.created_at).toLocaleString("vi-VN")}
               </time>
             </div>
-            <div className="detail-copy">{feedback.selected.description}</div>
+            <div className="detail-copy">
+              {feedback.selected.target_url_or_id ||
+              feedback.selected.rights_owner_name ||
+              feedback.selected.sla_due_at ? (
+                <div
+                  style={{
+                    marginBottom: 12,
+                    padding: 10,
+                    borderRadius: 8,
+                    background: "rgba(255,255,255,0.04)",
+                    fontSize: "0.85rem",
+                  }}
+                >
+                  {feedback.selected.category ? (
+                    <div>
+                      <strong>Loại:</strong>{" "}
+                      {CATEGORY_LABELS[feedback.selected.category] ||
+                        feedback.selected.category}
+                    </div>
+                  ) : null}
+                  {feedback.selected.rights_owner_name ? (
+                    <div>
+                      <strong>Chủ thể quyền / Người đại diện:</strong>{" "}
+                      {feedback.selected.rights_owner_name}
+                    </div>
+                  ) : null}
+                  {feedback.selected.target_url_or_id ? (
+                    <div>
+                      <strong>Đối tượng bị báo cáo:</strong>{" "}
+                      <code>{feedback.selected.target_url_or_id}</code>
+                    </div>
+                  ) : null}
+                  {feedback.selected.sworn_statement ? (
+                    <div>
+                      <strong>Cam kết trung thực:</strong> Đã xác nhận
+                    </div>
+                  ) : null}
+                  {feedback.selected.sla_due_at ? (
+                    <div>
+                      <strong>Hạn xử lý SLA:</strong>{" "}
+                      {new Date(feedback.selected.sla_due_at).toLocaleString(
+                        "vi-VN",
+                      )}
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
+              {feedback.selected.description}
+            </div>
             {feedback.selected.attachments.length > 0 ? (
               <div className="feedback-attachments">
                 <h3>Tệp đính kèm</h3>
@@ -308,6 +410,11 @@ export function FeedbackManagement({
                           aria-label={attachment.name}
                           onClick={(event) => event.stopPropagation()}
                         />
+                      ) : attachment.kind === "document" ? (
+                        <div className="empty-state" style={{ minHeight: 96 }}>
+                          <FileText size={24} />
+                          <span>PDF</span>
+                        </div>
                       ) : (
                         <img
                           src={attachment.url}
@@ -329,6 +436,20 @@ export function FeedbackManagement({
               >
                 Đóng
               </button>
+              {feedback.selected.category === "copyright" &&
+              onCreateTakedown ? (
+                <button
+                  className="button button-secondary"
+                  type="button"
+                  onClick={() => {
+                    const selected = feedback.selected!;
+                    feedback.setSelected(null);
+                    onCreateTakedown(selected);
+                  }}
+                >
+                  <Ban size={15} /> Chuyển sang Takedown
+                </button>
+              ) : null}
               <button
                 className="button button-danger"
                 type="button"

@@ -18,6 +18,7 @@
       "configRequiredDesc": "Ez a kiegészítő konfigurációt igényel (például API-kulcsok vagy nyelvi beállítások), mielőtt tartalmat tudna visszaadni. Kérjük, konfigurálja a böngészőjében, majd másolja ki és illessze be ide a létrehozott manifest URL-t.",
       "configRequiredTitle": "Konfiguráció szükséges",
       "configureAction": "Konfigurálás",
+      "disclaimerNotice": "A harmadik féltől származó kiegészítőket közösségi fejlesztők üzemeltetik függetlenül. Kizárólag te vagy felelős a tartalom jogszerűségének ellenőrzéséért az adott joghatóságban; a P2P seed alapértelmezés szerint le van tiltva.",
       "errorFallback": "Nem sikerült telepíteni ezt a kiegészítőt.",
       "manageListButton": "Kiegészítőlista kezelése",
       "openConfigurePage": "Konfigurációs oldal megnyitása",
@@ -181,7 +182,7 @@
       "passwordWeak": "A jelszónak legalább 8 karakterből kell állnia betűkkel és számokkal",
       "privacyPolicy": "Adatvédelmi irányelvek",
       "submit": "Fiók létrehozása",
-      "legalConsent": "Elolvastam és elfogadom a <terms>Szolgáltatási feltételeket</terms> és az <privacy>Adatvédelmi irányelveket</privacy>."
+      "legalConsent": "Megerősítem, hogy legalább 16 éves vagyok, elolvastam és elfogadom a <terms>Szolgáltatási feltételeket</terms> és az <privacy>Adatvédelmi irányelveket</privacy>."
     },
     "trust": {
       "failed": {
@@ -306,7 +307,10 @@
   },
   "footer": {
     "legal": {
-      "disclaimer": "Figyelmeztetés",
+      "disclaimer": "Jogi nyilatkozat",
+      "dmca": "DMCA / Eltávolítás",
+      "terms": "Szolgáltatási feltételek",
+      "tmdbAttribution": "A film metaadatait és posztereit a TMDB API biztosítja (a TMDB nem hagyta jóvá vagy hitelesítette).",
       "disclaimerText": "A Framezoo nem kezel videostream forrásokat. Előfordulhat, hogy a szerverei feliratokat továbbítanak, és ideiglenesen feldolgozzák a hangot és a feliratokat a szinkronizáláshoz, amikor ezt a funkciót választja. Ön szabályozza a lejátszott tartalmat."
     },
     "links": {
@@ -484,15 +488,15 @@
     },
     "support": {
       "complete": "teljes",
-      "description": "Az Framezoo veszteségesen működik, és segítségre van szükségünk, hogy hirdetésmentes legyen! Ha élvezi az Framezoo használatát, kérjük, fontolja meg az adományozást, hogy segítsen nekünk költségeinket fedezni.",
-      "donate": "Adományoz",
-      "explanation": "Ha nem használja a bővítményt, vagy nincs beállítva a FED API, akkor nehezebb lehet tartalmat találni! Ezt szeretnénk javítani, de sokkal nehezebb drága szerverek nélkül tartalmat szolgáltatni. Ezért kérjük, ha élvezi az Framezoo használatát, fontolja meg az adományozást, hogy segítsen nekünk fedezni növekvő költségeinket.",
+      "description": "A Framezoo egy semleges médialejátszó, és az önkéntes szoftvertámogatás segít abban, hogy hirdetésmentes maradjon! Kérjük, vegye figyelembe, hogy a hozzájárulások szigorúan a szoftverfejlesztést támogatják, és soha nem vásárolnak médiatartalmakat vagy harmadik féltől származó kiegészítőket.",
+      "donate": "Szoftverfejlesztés támogatása",
+      "explanation": "Ha nem konfiguráltad a saját, harmadik féltől származó kiegészítőidet a lejátszóban, a streamek alapértelmezés szerint nem jelennek meg. A Framezoo kizárólag semleges technikai lejátszóként működik, tartalom tárhelye nélkül. Minden önkéntes hozzájárulás kizárólag a folyamatos alkalmazásfejlesztést és infrastruktúrát támogatja.",
       "explanation2": "Ha további információra van szüksége, kérjük, csatlakozzon hozzánk",
       "fluxer": "Fluxer",
-      "label": "Projektfinanszírozás: ${{current}} / ${{goal}}",
+      "label": "Szoftverfejlesztési támogatás: ${{current}} / ${{goal}}",
       "moreInfo": "További információ",
       "thankYou": "Köszönjük a támogatást!",
-      "title": "A Framezoo segítségedre van szükség!"
+      "title": "Támogasd a Framezoo szoftverfejlesztést!"
     },
     "titles": {
       "69": {
@@ -1210,12 +1214,24 @@
           "text": "Ez ki fog léptetni minden eszközről, ami a fiókodhoz kötődik.",
           "title": "Kiléptetés minden eszközről"
         },
+        "exportData": {
+          "button": "JSON exportálása",
+          "text": "Töltsd le fiókod profiljának, könyvjelzőidnek, megtekintési előzményeidnek, beállításaidnak és jogi beleegyezési nyilatkozatodnak (JSON) másolatát.",
+          "title": "Személyes adatok exportálása"
+        },
         "migration": {
           "button": "Fiók átvitele",
           "text": "Vidd át a fiókodaz egy új szerverre, vagy töltsd le adataidat.",
           "title": "Fiók átvitele"
         },
-        "title": "Lehetőségek"
+        "title": "Lehetőségek",
+        "export": {
+          "button": "JSON-adatok exportálása",
+          "error": "Nem sikerült exportálni a személyes adatokat. Kérjük, próbálja újra.",
+          "success": "Személyes adatok exportálva ide",
+          "text": "Töltse le fiókja, szinkronizált beállításai és elküldött jelentései másolatát (Adatvédelmi megfelelőség).",
+          "title": "Személyes adatok exportálása"
+        }
       },
       "devices": {
         "deviceNameLabel": "Eszköz neve",
@@ -1445,7 +1461,14 @@
       "clearCacheError": "Nem sikerült törölni a gyorsítótárat. Kérjük, próbálja újra.",
       "spaceLeftOnDevice": "({{space}} szabad hely az eszközödön)"
     },
-    "unsaved": "Mentetlen változtatásaid vannak..."
+    "unsaved": "Mentetlen változtatásaid vannak...",
+    "legal": {
+      "title": "Jogi, szerzői jogi és üzemeltetői közzététel",
+      "operator": "Operator: Bui Duc Canh (Independent Developer, Framezoo Project) — Phao Dai Lang, Lang Ward, Hanoi, Vietnam",
+      "contact": "Legal / DMCA / Privacy Contact: framezoo.top@gmail.com (or legal@framezoo.top) · Tel: +84 984908816",
+      "links": "https://framezoo.top/legal/terms · /legal/privacy · /legal/dmca · /legal/about",
+      "disclaimer": "A Framezoo egy semleges médialejátszó, amely nem tárolja és nem köti össze harmadik féltől származó médiatartalmat vagy kiegészítőket. A metaadatok és az értékelések TMDB és OMDb API-kat használnak, és ezt a terméket a TMDB nem támogatja vagy tanúsítja."
+    }
   },
   "tmdb": {
     "genres": {
@@ -1518,6 +1541,7 @@
     "modalTitle": "Segíts nekünk tovább építeni a Framezoo márkát",
     "subtitle": "Minden hozzájárulás segít nekünk fejleszteni a lejátszót, több platformra terjeszkedni, és folyamatosan meghallgatni az ötleteiteket.",
     "note": "Köszönjük, hogy törődsz a Framezoo márkával és támogatod a mögötte álló munkát. Hozzájárulásod teret enged nekünk, hogy jobb élményt teremtsünk mindenki számára.",
+    "legalDisclaimer": "Kizárólag önkéntes szoftverfejlesztési támogatás – a hozzájárulások nem jogosítanak fel filmek, médiastreamek vagy kiegészítők elérésének megvásárlására.",
     "scanHint": "Olvasd be ezt a QR-kódot a banki alkalmazásoddal.",
     "paypalLabel": "PayPal",
     "momoLabel": "Anya",

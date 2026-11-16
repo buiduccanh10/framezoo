@@ -4,21 +4,19 @@
 
 1. DÀNH CHO MACOS (FOR macOS USERS)
 --------------------------------------------------------------------------------
-Do Framezoo là ứng dụng độc lập mã nguồn mở chưa mua chứng chỉ Apple Developer
-thương mại hàng năm, macOS Gatekeeper có thể hiện thông báo:
+Do Framezoo là ứng dụng độc lập phát hành trực tiếp ngoài Mac App Store (chưa ký
+chứng chỉ Apple Developer thương mại), macOS Gatekeeper có thể hiện thông báo:
 "Framezoo is damaged and can't be opened" hoặc "Apple cannot verify this app".
 
-CÁCH MỞ AN TOÀN QUA FINDER (KHUYÊN DÙNG):
-  1. Kéo Framezoo vào thư mục Applications (Ứng dụng).
+CÁCH MỞ AN TOÀN QUA FINDER:
+  1. Chỉ tải bản phát hành chính thức từ https://framezoo.top/guide/install
+     và kéo Framezoo vào thư mục Applications (Ứng dụng). Không dùng `xattr -cr`
+     hoặc ký lại ứng dụng để bỏ qua kiểm tra toàn vẹn.
   2. Mở Finder -> Thư mục Applications.
   3. CLICK CHUỘT PHẢI (hoặc giữ phím Control + Click) vào Framezoo.app.
   4. Chọn "Open" (Mở) trong menu chuột phải.
   5. Chọn "Open" hoặc "Open Anyway" trong hộp thoại xác nhận.
   (Bạn chỉ cần làm thao tác chuột phải này trong lần đầu tiên mở ứng dụng).
-
-CÁCH MỞ BẰNG TERMINAL (NẾU VẪN BỊ CHẶN):
-  Mở ứng dụng Terminal và copy câu lệnh sau rồi nhấn Enter:
-  xattr -cr /Applications/Framezoo.app
 
 Xem hướng dẫn chi tiết & hình ảnh minh họa tại:
 https://framezoo.top/guide/install#mac
@@ -34,8 +32,9 @@ CÁCH CÀI ĐẶT:
   2. Click vào nút "Run anyway" (Vẫn chạy) ở góc dưới bên phải.
   3. Quá trình cài đặt Framezoo sẽ tự động hoàn tất.
 
-Lưu ý: Ứng dụng an toàn 100%, mã nguồn mở, không chứa mã độc. Cảnh báo này xuất
-hiện do phần mềm mới phát hành và chưa tích lũy chứng chỉ số Microsoft EV.
+Lưu ý: Ứng dụng phát hành chính thức bởi nhà phát triển Framezoo và được kiểm
+tra trước khi phát hành. Cảnh báo này xuất hiện do phần mềm mới phát hành và
+chưa tích lũy chứng chỉ số Microsoft EV.
 
 Xem hướng dẫn chi tiết & hình ảnh minh họa tại:
 https://framezoo.top/guide/install#windows

@@ -18,6 +18,7 @@
       "configRequiredDesc": "Dieses Add-on benötigt Konfigurationen (z. B. API-Schlüssel oder Spracheinstellungen), bevor es Inhalte zurückgeben kann. Bitte konfigurieren Sie es in Ihrem Browser und kopieren Sie anschließend die generierte Manifest-URL hierher.",
       "configRequiredTitle": "Konfiguration erforderlich",
       "configureAction": "Konfigurieren",
+      "disclaimerNotice": "Add-ons von Drittanbietern werden unabhängig von Community-Entwicklern betrieben. Sie sind allein dafür verantwortlich, die Rechtmäßigkeit der Inhalte in Ihrem Land zu überprüfen; P2P-Seeding ist standardmäßig deaktiviert.",
       "errorFallback": "Dieses Add-on kann nicht installiert werden.",
       "manageListButton": "Add-on-Liste verwalten",
       "openConfigurePage": "Konfigurationsseite öffnen",
@@ -181,7 +182,7 @@
       "passwordWeak": "Das Passwort muss mindestens 8 Zeichen lang sein und Buchstaben und Zahlen enthalten",
       "privacyPolicy": "Datenschutzrichtlinie",
       "submit": "Benutzerkonto erstellen",
-      "legalConsent": "Ich habe die Nutzungsbedingungen (<terms>Terms of Service</terms>) und die Datenschutzrichtlinie (<privacy>Privacy Policy</privacy>) gelesen und stimme ihnen zu."
+      "legalConsent": "Ich bestätige, dass ich mindestens 16 Jahre alt bin und die Nutzungsbedingungen und die Datenschutzrichtlinie gelesen habe und ihnen zustimme."
     },
     "trust": {
       "failed": {
@@ -306,7 +307,10 @@
   },
   "footer": {
     "legal": {
-      "disclaimer": "Hewis",
+      "disclaimer": "Haftungsausschluss",
+      "dmca": "DMCA / Entfernung",
+      "terms": "Nutzungsbedingungen",
+      "tmdbAttribution": "Filmmetadaten und Poster werden von der TMDB-API bereitgestellt (nicht von TMDB unterstützt oder zertifiziert).",
       "disclaimerText": "Framezoo betreibt keine Videostream-Quellen. Die Server können Untertitel von Anbietern weiterleiten und Audio und Untertitel vorübergehend zur Synchronisierung verarbeiten, wenn Sie diese Funktion auswählen. Sie bestimmen, welche Inhalte Sie abspielen."
     },
     "links": {
@@ -484,15 +488,15 @@
     },
     "support": {
       "complete": "vollständig",
-      "description": "Framezoo wird mit Verlust betrieben und wir brauchen Hilfe, um es werbefrei zu halten! Wenn Sie Framezoo gerne nutzen, denken Sie bitte über eine Spende nach, um uns bei der Deckung unserer Kosten zu helfen.",
-      "donate": "Spenden",
-      "explanation": "Wenn Sie die Erweiterung nicht verwenden oder die FED-API nicht eingerichtet haben, kann es schwieriger sein, Inhalte zu finden! Wir möchten das beheben, aber ohne teure Server ist es viel schwieriger, Inhalte bereitzustellen. Wenn Sie also gerne Framezoo nutzen, denken Sie bitte über eine Spende nach, um uns bei der Deckung unserer wachsenden Kosten zu helfen.",
+      "description": "Framezoo ist ein neutraler Mediaplayer, und freiwillige Softwareunterstützung trägt dazu bei, dass er werbefrei bleibt! Bitte beachten Sie, dass Spenden ausschließlich der Softwareentwicklung zugutekommen und niemals zum Kauf von Medieninhalten oder Add-ons von Drittanbietern verwendet werden.",
+      "donate": "Unterstützung der Softwareentwicklung",
+      "explanation": "Wenn Sie keine eigenen Drittanbieter-Add-ons im Player konfiguriert haben, werden Streams standardmäßig nicht angezeigt. Framezoo fungiert ausschließlich als neutraler technischer Player und hostet keine Inhalte. Freiwillige Beiträge unterstützen ausschließlich die laufende App-Entwicklung und Infrastruktur.",
       "explanation2": "Wenn Sie weitere Informationen wünschen, nehmen Sie bitte an unserem teil",
       "fluxer": "Fluxer",
-      "label": "Projektfinanzierung: ${{current}} / ${{goal}}",
+      "label": "Softwareentwicklungsunterstützung: ${{current}} / ${{goal}}",
       "moreInfo": "Weitere Informationen",
       "thankYou": "Vielen Dank für Ihre Unterstützung!",
-      "title": "Framezoo braucht Ihre Hilfe!"
+      "title": "Unterstützen Sie die Softwareentwicklung von Framezoo!"
     },
     "titles": {
       "69": {
@@ -1210,6 +1214,11 @@
           "text": "Das werd all dini Grät abmälde wo met dim Account verbonde si.",
           "title": "Alli Grät abmälde"
         },
+        "exportData": {
+          "button": "JSON exportieren",
+          "text": "Laden Sie eine Kopie Ihres Kontoprofils, Ihrer Lesezeichen, Ihres Wiedergabeverlaufs, Ihrer Einstellungen und Ihres Einwilligungsdokuments (JSON) herunter.",
+          "title": "Exportieren Sie personenbezogene Daten"
+        },
         "migration": {
           "button": "Öberträg de Account",
           "text": "Öberträg din Account zu eme neue Server oder lad dini Date abe.",
@@ -1518,6 +1527,7 @@
     "modalTitle": "Hilf uns, die Marke Framezoo weiter auszubauen.",
     "subtitle": "Jeder Beitrag hilft uns, den Player zu verbessern, auf weitere Plattformen zu expandieren und weiterhin auf Ihre Ideen einzugehen.",
     "note": "Vielen Dank, dass Ihnen Framezoo am Herzen liegt und Sie die dahinterstehende Arbeit unterstützen. Ihr Beitrag gibt uns die Möglichkeit, ein noch besseres Erlebnis für alle zu schaffen.",
+    "legalDisclaimer": "Es handelt sich ausschließlich um freiwillige Unterstützung der Softwareentwicklung – Beiträge berechtigen nicht zum Kauf von Filmen, Medienstreams oder zum Zugriff auf Zusatzinhalte.",
     "scanHint": "Scannen Sie diesen QR-Code mit Ihrer Banking-App.",
     "paypalLabel": "PayPal",
     "momoLabel": "Mama",

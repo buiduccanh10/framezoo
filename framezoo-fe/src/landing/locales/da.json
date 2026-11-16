@@ -54,7 +54,7 @@
     "copyright": "Copyright & DMCA",
     "privacy": "Privatlivs- og datapolitik",
     "rights": "© 2026 Framezoo. Alle rettigheder forbeholdes.",
-    "metadataAttribution": "Metadata leveres af offentlige filmdatabaser (TMDB, IMDb) til informationsformål."
+    "metadataAttribution": "Filmmetadata og kunstværker bruger TMDB API (ikke godkendt eller certificeret af TMDB) og vurderinger via OMDb API."
   },
   "addonGuide": {
     "title": "Byg en tilføjelse uden at deltage i app-processen.",
@@ -114,7 +114,7 @@
         "Klik på \"Åbn alligevel\" eller \"Åbn\" i bekræftelsesdialogboksen."
       ],
       "step2Title": "Trin 2: Gatekeeper sikkerhedsadvarsel",
-      "step2Desc": "Fordi Framezoo er en uafhængig open source-afspiller uden et kommercielt Apple-udviklercertifikat, kan macOS vise: \"Framezoo er beskadiget og kan ikke åbnes\" eller \"Apple kan ikke bekræfte denne app\".",
+      "step2Desc": "Fordi Framezoo er en uafhængig softwareafspiller uden et kommercielt Apple Developer-certifikat, kan macOS vise: \"Framezoo er beskadiget og kan ikke åbnes\" eller \"Apple kan ikke bekræfte denne app\".",
       "note": "Du behøver kun at gøre dette højreklik-trin ved første lancering. Efterfølgende lanceringer kan udføres normalt fra Launchpad eller Spotlight."
     },
     "title": "Framezoo installations- og startvejledning",
@@ -177,7 +177,7 @@
     "submit": "Send feedback",
     "attachmentsLabel": "Filer",
     "attachmentsTooLarge": "Den samlede filstørrelse må ikke overstige 55 MB.",
-    "attachmentsHint": "Billeder/videoer · 55 MB i alt maksimum",
+    "attachmentsHint": "Billeder/videoer/PDF (autorisation eller copyright-bevis) · 55 MB totalt maksimum",
     "contactInvalid": "Indtast venligst en gyldig e-mailadresse eller telefonnummer, så vi kan svare.",
     "errorRequired": "Udfyld venligst titel, kontaktoplysninger og problembeskrivelse.",
     "contactPlaceholder": "f.eks. navn@eksempel.com eller +84912345678",
@@ -327,85 +327,85 @@
         "summary": "Læs venligst disse vilkår og privatlivspolitikken, før du opretter en konto eller bruger Framezoo desktop-applikationen."
       },
       "privacy": {
-        "updatedAt": "Opdateret: 4. november 2026 · Lov 91/2025/QH15 & Dekret 356/2025/ND-CP",
+        "updatedAt": "Opdateret: 16. november 2026 · Version 2026-11 · Vietnam lov 91/2025/QH15 & Dekret 356/2025/ND-CP",
         "title": "Privatlivs- og persondatabeskyttelsespolitik",
-        "summary": "Denne politik beskriver databehandling i Framezoo desktop-applikationen og på officielle Framezoo-servere.",
+        "summary": "Denne politik beskriver databehandling på tværs af Framezoo Desktop, Mobile, TV-apps og officielle Framezoo-servere.",
         "sections": [
           {
             "bullets": [
-              "E-mail, bekræftelseskoder og anmodningsdetaljer understøtter registrering, login og kontosikkerhed.",
-              "Rapporter, fejlbeskrivelser og vedhæftede filer når vores server, når du indsender feedbackformularen.",
-              "Hjemmesiden gemmer dit sprogvalg i browserlageret."
+              "Gæstetilstand bruger kun en tilfældig teknisk identifikator, platformetiket og appversion til at betjene undertekstrelæ/synkroniseringsslutpunkter.",
+              "E-mailbekræftelseskoder og anmodningslogfiler behandles strengt for at registrere, logge ind og beskytte konti.",
+              "Servertelemetri udelukker filmtitler, TMDB/IMDb ID'er og personlige tredjeparts tilføjelseskilder."
             ],
             "paragraphs": [
-              "Applikationen gemmer nogle indstillinger, cache og afspilningsdata på din enhed. Hvis du opretter en konto, gemmer serveren også din e-mail, kaldenavn, profil, offentlige nøgle, session/enhedsdetaljer, synkroniserede bogmærker, fremskridt, afspilningshistorik, indstillinger og tilføjelser, plus krypterede undertekstudbydernøgler, hvis du giver dem."
+              "Appen gemmer lokale indstillinger, caches og afspilningsdata på din enhed. Når du opretter en konto (begrænset til brugere på 16 år eller ældre), gemmer serveren også din krypterede e-mail, kaldenavn, profil, offentlige nøgle, sessioner/enhedsdetaljer, synkroniserede bogmærker, fremskridt, afspilningshistorik, indstillinger, tilføjelser, tidsstemplede samtykkeregistreringer og krypterede BYOK undertekstudbyder API-nøgler, hvis du gemmer dem."
             ],
-            "title": "Data på din enhed og vores servere",
+            "title": "Enheds-, gæste- og kontodata",
             "badge": "01"
           },
           {
             "bullets": [
-              "Bekræftelsesmail sendes til vores mailudbyder; database backups kan gemmes på Supabase, når backup er konfigureret.",
-              "Nogle tjenesteudbydere eller tilføjelsesservere kan behandle data uden for Vietnam; serverplacering afhænger af den tjeneste, du vælger, og driftskonfigurationen.",
-              "Google reCAPTCHA kan bruges under registreringen; underteksttekst går til Google Oversæt, når du vælger oversættelse.",
+              "E-mail-udbydere af transaktionsbekræftelse og krypterede databasebackups kan ligge uden for Vietnam afhængigt af implementeringskonfigurationen.",
+              "Metadata og kritikerresultater hentes via officielle TMDB og OMDb API'er; undertekstsøgninger forespørger Wyzie, SubSource og OpenSubtitles.com REST API (foretrækker dine personlige BYOK-nøgler, når de leveres).",
+              "Undertekstfilrelæer bruger no-store headers uden offentlig caching. Tredjeparts tilføjelser kontaktes direkte fra din enhed under deres egne politikker.",
               "Undertekstsøgninger og downloads, synkronisering af lyd/undertekster og fællesskabstilføjelser kan sende anmodninger gennem Framezoo-servere og de relevante eksterne tjenester. Tredjeparts tilføjelser har deres egne politikker."
             ],
             "paragraphs": [
-              "Vi behandler data for at køre konti, synkronisere enheder, yde support, beskytte tjenesten og levere funktioner, du vælger. Vi sælger ikke personlige data til annoncenetværk."
+              "Vi behandler data udelukkende for at drive konti, synkronisere enheder, yde support, håndhæve lovoverholdelse og aldrig sælge personlige data."
             ],
-            "title": "Formål og eksterne tjenester",
+            "title": "Formål, grænseoverskridende overførsel og eksterne API'er",
             "badge": "02"
           },
           {
-            "title": "Fastholdelse og sletning",
+            "title": "Opbevaring, JSON-dataeksport og sletning",
             "paragraphs": [
-              "Konto- og synkroniseringsdata forbliver, mens din konto er aktiv. Du kan slette kontoen i Indstillinger; serveren fjerner derefter kontoregistreringer, bogmærker, fremskridt, afspilningshistorik, indstillinger og sessioner. Gamle database backups kan beholde data indtil rotation; standardkonfigurationen beholder 7 seneste sikkerhedskopier, når backup kører."
+              "Konto- og synkroniseringsdata forbliver aktive, mens din konto eksisterer. Du kan eksportere en fuld JSON-kopi af dine personlige data eller permanent slette din konto i Indstillinger -> Handlinger; roterende krypterede sikkerhedskopier bevarer op til 7 seneste snapshots."
             ],
             "bullets": [
-              "Bekræftelseskoder udløber efter 10 minutter; udløbne udfordringsregistre fjernes efter 7 dage. Sendte eller mislykkede postposter fjernes efter 7 dage.",
-              "Feedback og vedhæftede filer opbevares separat for support- eller copyright-anmodninger, indtil de fjernes efter anmodning eller af supportteamet. Sletning af konto fjerner kontolinket, men sletter ikke automatisk rapporter. Du kan anmode om separat sletning via feedbackformularen."
+              "Bekræftelse OTP-udfordringer udløber efter 10 minutter og slettes sammen med e-mail-udbakkeposter efter 7 dage.",
+              "Feedback reports and copyright notices remain stored separately for compliance auditing; kontosletning fjerner linket til dit bruger-id."
             ],
             "badge": "03"
           },
           {
-            "title": "Dine rettigheder og kontakt",
+            "title": "Dine rettigheder, aldersport (>=16) & kontakt",
             "paragraphs": [
-              "Du kan anmode om adgang, rettelse, sletning eller begrænsning af dine data, trække samtykke tilbage, hvor behandlingen er afhængig af samtykke, og indsende en klage via feedbackformularen på vores hjemmeside. Angiv venligst din konto-e-mail, så vi kan bekræfte anmodningen."
+              "Kontoregistrering er begrænset til brugere på 16 år eller ældre i henhold til Vietnam-loven 91/2025/QH15. Du kan udøve adgang, JSON-eksport, rettelse, sletning eller tilbagetrækning af samtykke via Feedback-modal eller privacy@framezoo.top / framezoo.top@gmail.com (besvaret inden for 24 timer)."
             ],
             "badge": "04"
           }
         ]
       },
       "copyright": {
-        "updatedAt": "Opdateret: 4. november 2026",
-        "title": "Copyright, DMCA og indholdsansvarsfraskrivelse",
-        "summary": "Officiel ansvarsfraskrivelse for indhold og procedure for meddelelse om og fjernelse af intellektuel ejendom for Framezoo.",
+        "updatedAt": "Opdateret: 16. november 2026 · Vietnam IP Law Art. 198b & dekret 17/2023",
+        "title": "Copyright, meddelelse og fjernelse og indholdsfraskrivelse",
+        "summary": "Neutral mellemmandsstatus, 24/72 timers meddelelses- og fjernelsesblokeringsproces og politik for gentagen krænkelse.",
         "sections": [
           {
             "paragraphs": [
-              "Framezoo driver ikke et filmbibliotek eller en videostreamkilde. Applikationen kan få adgang til kilder valgt af brugere; vores servere kan videresende udbyderens undertekster og midlertidigt behandle lyd og undertekster til anmodet synkronisering.",
-              "Hver ophavsretsmeddelelse gennemgås i forhold til indholdet og vores faktiske rolle; disse vilkår skaber ikke en automatisk ansvarsfritagelse."
+              "Framezoo er neutral medieafspillersoftware, der ligner Stremio og Kodi: den hoster ingen videofiler, bundter ingen standardindholdstilføjelser eller offentlige trackere, udfører ingen server-side addon-proxy og deaktiverer udgående P2P-seed (upload_rate_limit = 0) som standard.",
+              "Undertekstdownloads bruger headers uden butik uden offentlig caching på Framezoo-servere."
             ],
-            "title": "Formidlende Software Safe Harbor",
+            "title": "Neutral mellemliggende software og standard P2P uden seeding",
             "badge": "01"
           },
           {
-            "title": "Metadata og tilskrivning af kunstværker",
+            "title": "Officielle Metadata API'er og TMDB Attribution",
             "paragraphs": [
-              "Film- og seriemetadata (titler, udgivelsesdatoer, synopser, vurderinger og reklameplakater), der vises til informationssøgning, er hentet fra offentlige filmdatabaser (såsom TMDB, IMDb og TVDB).",
-              "Alle varemærker, filmtitler og kunstværker forbliver deres respektive copyright-ejeres ejendom."
+              "Filmtitler, synopser, kunstværker og kritikervurderinger hentes fra officielle TMDB- og OMDb-API'er til informationssøgning.",
+              "Dette produkt bruger TMDB API, men er ikke godkendt eller certificeret af TMDB. Alle varemærker og mediekunst forbliver deres respektive ejeres ejendom."
             ],
             "badge": "02"
           },
           {
-            "title": "Meddelelses- og fjernelsesprocedure",
+            "title": "Meddelelse og fjernelse (24/72 timers SLA) & Politik for gentagen krænkelse",
             "bullets": [
-              "Identifikation af ejeren af ​​ophavsretten eller den autoriserede repræsentant.",
-              "Bevis for ejerskab af det ophavsretligt beskyttede værk.",
+              "Ordrer fra kompetente myndigheder håndhæves på /compliance/blocklist inden for 24 timer; gyldige rettighedshavermeddelelser inden for 72 timer.",
+              "Konti, der krænker gentagelser, der er forbundet med bekræftede overtrædelser, suspenderes med øjeblikkelig tilbagekaldelse af session.",
               "Den nøjagtige URL eller beskrivelse af det pågældende materiale, så vi kan gennemgå og behandle det inden for 24-72 arbejdstimer."
             ],
             "paragraphs": [
-              "Framezoo respekterer intellektuelle ejendomsrettigheder. Hvis du er ophavsretsejer eller autoriseret agent og mener, at noget materiale på framezoo.top krænker dine rettigheder, bedes du indsende en meddelelse via vores rapport-/feedback-kanal, herunder:"
+              "Rettighedsindehavere og myndigheder kan indsende formelle meddelelser (rettighedsejeridentitet, bevis/PDF-autorisation, specifikt tilføjelsesdomæne/medie-id/undertekst-id og edsvoren erklæring) via rapportformularen eller legal@framezoo.top / framezoo.top@gmail.com."
             ],
             "badge": "03"
           }

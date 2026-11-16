@@ -14,7 +14,7 @@ const CLAMAV_HOST =
   (process.env.NODE_ENV === 'production' ? 'clamav' : '');
 const CLAMAV_TIMEOUT_MS = 120_000;
 
-const FILE_SPECS: Record<string, { extension: string; kind: 'image' | 'video' }> = {
+const FILE_SPECS: Record<string, { extension: string; kind: 'image' | 'video' | 'document' }> = {
   'image/jpeg': { extension: 'jpg', kind: 'image' },
   'image/png': { extension: 'png', kind: 'image' },
   'image/webp': { extension: 'webp', kind: 'image' },
@@ -22,13 +22,14 @@ const FILE_SPECS: Record<string, { extension: string; kind: 'image' | 'video' }>
   'video/mp4': { extension: 'mp4', kind: 'video' },
   'video/quicktime': { extension: 'mov', kind: 'video' },
   'video/webm': { extension: 'webm', kind: 'video' },
+  'application/pdf': { extension: 'pdf', kind: 'document' },
 };
 
 export interface FeedbackAttachment {
   key: string;
   name: string;
   type: string;
-  kind: 'image' | 'video';
+  kind: 'image' | 'video' | 'document';
   size: number;
   path: string;
 }
@@ -75,6 +76,7 @@ const hasFileSignature = (type: string, data: Uint8Array) => {
     );
   if (type === 'video/mp4' || type === 'video/quicktime')
     return data.length >= 12 && ascii(data, 4, 8) === 'ftyp';
+  if (type === 'application/pdf') return data.length >= 10 && ascii(data, 0, 5) === '%PDF-';
   return false;
 };
 
@@ -117,6 +119,10 @@ const hasSafeContainer = (type: string, data: Uint8Array) => {
     }
     return offset === buffer.length;
   }
+  if (type === 'application/pdf') {
+    const tail = buffer.subarray(Math.max(0, buffer.length - 1024));
+    return tail.includes('%%EOF');
+  }
   return true;
 };
 
@@ -140,7 +146,7 @@ export const validateFeedbackFileParts = (parts: FeedbackFilePart[]) => {
   for (const part of parts) {
     if (!getFileSpec(part)) {
       throw new Error(
-        'Chỉ hỗ trợ file ảnh hoặc video hợp lệ (JPEG, PNG, WebP, GIF, MP4, MOV, WebM)'
+        'Chỉ hỗ trợ file ảnh, video hoặc PDF hợp lệ (JPEG, PNG, WebP, GIF, MP4, MOV, WebM, PDF)'
       );
     }
   }
@@ -238,7 +244,9 @@ export const parseFeedbackAttachments = (value: unknown): FeedbackAttachment[] =
     return (
       typeof attachment.key === 'string' &&
       typeof attachment.name === 'string' &&
-      (attachment.kind === 'image' || attachment.kind === 'video') &&
+      (attachment.kind === 'image' ||
+        attachment.kind === 'video' ||
+        attachment.kind === 'document') &&
       typeof attachment.type === 'string' &&
       typeof attachment.size === 'number' &&
       typeof attachment.path === 'string'
