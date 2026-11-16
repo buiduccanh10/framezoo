@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 
 import {
+  type NativeSubtitleProviderId,
   createSubtitlesTicket,
   getSubtitlesApiKeyStatus,
 } from "@/backend/addons/subtitles";
@@ -18,6 +19,12 @@ import { useToastStore } from "@/stores/interface/toast";
 import { bumpExternalSubtitleCredentialScope } from "@/utils/externalSubtitles/scope";
 import { queryClient } from "@/utils/queryClient";
 
+const PROVIDER_LABELS: Record<NativeSubtitleProviderId, string> = {
+  wyzie: "Wyzie",
+  subsource: "SubSource",
+  opensubtitles: "OpenSubtitles.com",
+};
+
 export function useNativeSubtitlesConfig() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -25,10 +32,14 @@ export function useNativeSubtitlesConfig() {
   const account = useAuthStore((s) => s.account);
 
   const [hasNativeCustomKey, setHasNativeCustomKey] = useState<boolean>(false);
+  const [configuredNativeProviders, setConfiguredNativeProviders] = useState<
+    string[]
+  >([]);
 
   const checkNativeStatus = useCallback(async () => {
     if (!account) {
       setHasNativeCustomKey(false);
+      setConfiguredNativeProviders([]);
       return;
     }
     const backend = getActiveBackendUrl();
@@ -38,6 +49,12 @@ export function useNativeSubtitlesConfig() {
     try {
       const data = await getSubtitlesApiKeyStatus(backendBase, account);
       setHasNativeCustomKey(Boolean(data.hasCustomKey));
+      const activeProviders = (
+        Object.keys(PROVIDER_LABELS) as NativeSubtitleProviderId[]
+      )
+        .filter((id) => Boolean(data.providers?.[id]))
+        .map((id) => PROVIDER_LABELS[id]);
+      setConfiguredNativeProviders(activeProviders);
     } catch {
       // Ignore network errors
     }
@@ -147,6 +164,7 @@ export function useNativeSubtitlesConfig() {
 
   return {
     hasNativeCustomKey,
+    configuredNativeProviders,
     checkNativeStatus,
     openNativeSubtitlesConfigure,
   };

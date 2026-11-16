@@ -49,7 +49,7 @@ const routes = [
     output: "addon/subtitles/configure/index.html",
     title: "Configure Framezoo Subtitles | Framezoo",
     description:
-      "Configure your personal Wyzie Subtitles API Key to enjoy fast, multi-source subtitles without shared rate limits.",
+      "Configure optional personal API keys (Wyzie, SubSource, OpenSubtitles.com) for Framezoo Subtitles.",
     noindex: true,
   },
   {

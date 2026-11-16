@@ -30,6 +30,15 @@ export default defineEventHandler(async event => {
     });
   }
 
+  if (user.is_suspended) {
+    throw createError({
+      statusCode: 403,
+      message: user.suspended_reason
+        ? `Account suspended: ${user.suspended_reason}`
+        : 'Account has been suspended',
+    });
+  }
+
   const challenge = useChallenge();
   const challengeCode = await challenge.createChallengeCode('login', 'mnemonic');
 

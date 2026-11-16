@@ -5,6 +5,8 @@ import type {
   GuestListResponse,
   GuestPlatformFilter,
   GuestWindow,
+  TakedownRuleItem,
+  TakedownTargetType,
   UserDetailData,
   UserPagination,
   UserStats,
@@ -39,17 +41,26 @@ interface UserListResponse {
   stats: UserStats;
 }
 
+interface FeedbackStatsSummary {
+  total: number;
+  pending: number;
+  resolved: number;
+  pendingCopyright?: number;
+  pendingPrivacy?: number;
+  overdueCompliance?: number;
+}
+
 interface FeedbackListResponse {
   success: boolean;
   feedbacks: FeedbackItem[];
   pagination: ListPagination;
-  stats: { total: number; pending: number; resolved: number };
+  stats: FeedbackStatsSummary;
 }
 
 export interface FeedbackList {
   items: FeedbackItem[];
   pagination: ListPagination;
-  stats: { total: number; pending: number; resolved: number };
+  stats: FeedbackStatsSummary;
 }
 
 export interface BackupFileList {
@@ -164,6 +175,7 @@ export const adminApi = {
     limit = 10,
     search = "",
     status: "all" | "pending" | "resolved" = "all",
+    category = "all",
   ) {
     const { data } = await adminHttp.get<FeedbackListResponse>("/feedback", {
       params: {
@@ -171,6 +183,7 @@ export const adminApi = {
         limit,
         search: search || undefined,
         status: status === "all" ? undefined : status,
+        category: category === "all" ? undefined : category,
       },
     });
     return {
@@ -208,13 +221,76 @@ export const adminApi = {
 
   async updateUser(
     id: string,
-    input: { nickname: string; email: string | null },
+    input: {
+      nickname?: string;
+      email?: string | null;
+      isSuspended?: boolean;
+      suspendedReason?: string | null;
+    },
   ) {
     const { data } = await adminHttp.patch<{ user: AdminUserItem }>(
       `/admin/users/${encodeURIComponent(id)}`,
       input,
     );
     return data.user;
+  },
+
+  async listTakedowns(params?: {
+    targetType?: string;
+    active?: "all" | "true" | "false";
+    search?: string;
+  }) {
+    const { data } = await adminHttp.get<{
+      success: boolean;
+      rules: TakedownRuleItem[];
+      stats: { total: number; active: number };
+    }>("/admin/takedowns", {
+      params: {
+        targetType:
+          params?.targetType && params.targetType !== "all"
+            ? params.targetType
+            : undefined,
+        active:
+          params?.active && params.active !== "all" ? params.active : undefined,
+        search: params?.search || undefined,
+      },
+    });
+    return data;
+  },
+
+  async createTakedown(input: {
+    targetType: TakedownTargetType;
+    pattern: string;
+    reason: string;
+    rightsHolder?: string | null;
+    referenceId?: string | null;
+    active?: boolean;
+  }) {
+    const { data } = await adminHttp.post<{
+      success: boolean;
+      rule: TakedownRuleItem;
+    }>("/admin/takedowns", input);
+    return data.rule;
+  },
+
+  async updateTakedown(
+    id: string,
+    input: {
+      active?: boolean;
+      reason?: string;
+      rightsHolder?: string | null;
+      referenceId?: string | null;
+    },
+  ) {
+    const { data } = await adminHttp.patch<{
+      success: boolean;
+      rule: TakedownRuleItem;
+    }>(`/admin/takedowns/${encodeURIComponent(id)}`, input);
+    return data.rule;
+  },
+
+  async deleteTakedown(id: string) {
+    await adminHttp.delete(`/admin/takedowns/${encodeURIComponent(id)}`);
   },
 
   async deleteUser(id: string) {

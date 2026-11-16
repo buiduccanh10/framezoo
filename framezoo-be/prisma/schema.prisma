@@ -90,19 +90,27 @@ model user_provider_credentials {
 }
 
 model users {
-  id             String    @id
-  public_key     String
-  namespace      String    @db.VarChar(255)
-  created_at     DateTime  @db.Timestamptz(0)
-  last_logged_in DateTime? @db.Timestamptz(0)
-  permissions    String[]
-  profile        Json
-  ratings        Json      @default("[]")
-  nickname       String    @unique @db.VarChar(255)
+  id                String    @id
+  public_key        String
+  namespace         String    @db.VarChar(255)
+  created_at        DateTime  @db.Timestamptz(0)
+  last_logged_in    DateTime? @db.Timestamptz(0)
+  permissions       String[]
+  profile           Json
+  ratings           Json      @default("[]")
+  nickname          String    @unique @db.VarChar(255)
   email             String?   @db.Text
   email_hash        String?   @unique @db.VarChar(64)
   email_verified_at DateTime? @db.Timestamptz(0)
   app_version       String?   @db.VarChar(64)
+  terms_version     String?   @db.VarChar(32)
+  privacy_version   String?   @db.VarChar(32)
+  consented_at      DateTime? @db.Timestamptz(0)
+  consent_platform  String?   @db.VarChar(32)
+  age_confirmed     Boolean   @default(false)
+  is_suspended      Boolean   @default(false)
+  suspended_at      DateTime? @db.Timestamptz(0)
+  suspended_reason  String?   @db.VarChar(255)
 }
 
 model email_otp_challenges {
@@ -182,20 +190,41 @@ model watch_history {
 }
 
 model feedbacks {
-  id           String   @id @db.Uuid
-  title        String   @db.VarChar(255)
-  description  String   @db.Text
-  contact      String?  @db.Text
-  contact_hash String?  @db.VarChar(64)
-  status       String   @default("pending") @db.VarChar(50)
-  user_id      String?  @db.VarChar(255)
-  attachments  Json     @default("[]")
-  created_at   DateTime @default(now()) @db.Timestamptz(0)
-  updated_at   DateTime @default(now()) @db.Timestamptz(0)
+  id                String    @id @db.Uuid
+  title             String    @db.VarChar(255)
+  description       String    @db.Text
+  contact           String?   @db.Text
+  contact_hash      String?   @db.VarChar(64)
+  status            String    @default("pending") @db.VarChar(50)
+  category          String    @default("bug") @db.VarChar(32)
+  target_url_or_id  String?   @db.VarChar(500)
+  rights_owner_name String?   @db.VarChar(255)
+  sworn_statement   Boolean   @default(false)
+  sla_due_at        DateTime? @db.Timestamptz(0)
+  resolved_at       DateTime? @db.Timestamptz(0)
+  user_id           String?   @db.VarChar(255)
+  attachments       Json      @default("[]")
+  created_at        DateTime  @default(now()) @db.Timestamptz(0)
+  updated_at        DateTime  @default(now()) @db.Timestamptz(0)
 
   @@index([status], map: "feedbacks_status_idx")
+  @@index([category], map: "feedbacks_category_idx")
   @@index([created_at(sort: Desc)], map: "feedbacks_created_at_idx")
   @@index([contact_hash], map: "feedbacks_contact_hash_idx")
+}
+
+model takedown_rules {
+  id            String   @id @default(uuid()) @db.Uuid
+  target_type   String   @db.VarChar(32)
+  pattern       String   @db.VarChar(500)
+  reason        String   @db.Text
+  rights_holder String?  @db.VarChar(255)
+  reference_id  String?  @db.VarChar(255)
+  active        Boolean  @default(true)
+  created_at    DateTime @default(now()) @db.Timestamptz(0)
+  created_by    String?  @db.VarChar(255)
+
+  @@index([target_type, active], map: "takedown_rules_type_active_idx")
 }
 
 model guests {

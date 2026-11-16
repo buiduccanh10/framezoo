@@ -3,10 +3,13 @@ import { ofetch } from "ofetch";
 import { getAuthHeaders, withAuthRetry } from "@/backend/accounts/auth";
 import { AccountWithToken } from "@/stores/auth";
 
+export type NativeSubtitleProviderId = "wyzie" | "subsource" | "opensubtitles";
+
 export interface SubtitlesStatusResponse {
   configured: boolean;
   hasCustomKey: boolean;
   provider: string | null;
+  providers?: Partial<Record<NativeSubtitleProviderId, boolean>>;
 }
 
 export interface SubtitlesTicketResponse {

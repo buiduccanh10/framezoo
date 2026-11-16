@@ -18,6 +18,7 @@
       "configRequiredDesc": "Denne tilføjelse kræver konfiguration (f.eks. API-nøgler eller sprogindstillinger), før den kan returnere indhold. Konfigurer den i din browser, og kopier og indsæt derefter den genererede manifest-URL her.",
       "configRequiredTitle": "Konfiguration påkrævet",
       "configureAction": "Konfigurér",
+      "disclaimerNotice": "Tredjepartsudvidelser drives uafhængigt af community-udviklere. Du er eneansvarlig for at verificere indholdets lovlighed i din jurisdiktion; P2P-seeding er som standard deaktiveret.",
       "errorFallback": "Kan ikke installere denne tilføjelse.",
       "manageListButton": "Administrer tilføjelsesliste",
       "openConfigurePage": "Åbn konfigurationsside",
@@ -38,6 +39,7 @@
       "configureCustomKeyActive": "Din nøgle er blevet konfigureret (klik for at ændre)",
       "configureRequiredAction": "Konfigurer denne tilføjelse (påkrævet)",
       "customKeyActiveDesc": "Brug af din personlige Wyzie API-nøgle",
+      "customKeyActiveProviders": "Brug af din personlige API-nøgle til undertekster ({{providers}})",
       "customKeyConfiguredBadge": "Din nøgle er blevet konfigureret",
       "description": "Tilføjelser er valgfrie. Denne app samler, anbefaler eller hoster ikke nogen tilføjelse.",
       "disabled": "Handicappet",
@@ -181,7 +183,7 @@
       "passwordWeak": "Adgangskoden skal være på mindst 8 tegn med bogstaver og tal",
       "privacyPolicy": "Privatlivspolitik",
       "submit": "Opret konto",
-      "legalConsent": "Jeg har læst og accepterer <terms>Servicevilkårene</terms> og <privacy>Privatlivspolitikken</privacy>."
+      "legalConsent": "Jeg bekræfter, at jeg er mindst 16 år gammel og har læst og accepterer <terms>Servicevilkårene</terms> og <privacy>Privatlivspolitikken</privacy>."
     },
     "trust": {
       "failed": {
@@ -306,7 +308,10 @@
   },
   "footer": {
     "legal": {
-      "disclaimer": "Ansvarsfraskrivelse ",
+      "disclaimer": "Ansvarsfraskrivelse",
+      "dmca": "DMCA / Fjernelse",
+      "terms": "Servicevilkår",
+      "tmdbAttribution": "Filmmetadata og plakater leveres af TMDB API (ikke godkendt eller certificeret af TMDB).",
       "disclaimerText": "Framezoo bruger ikke videostreamingkilder. Dens servere kan videresende udbyderundertekster og midlertidigt behandle lyd og undertekster til synkronisering, når du vælger denne funktion. Du styrer det indhold, du afspiller."
     },
     "links": {
@@ -484,15 +489,15 @@
     },
     "support": {
       "complete": "komplet",
-      "description": "Framezoo kører med tab, og vi har brug for hjælp til at holde det annoncefrit! Hvis du kan lide at bruge Framezoo, så overvej at donere for at hjælpe os med at dække vores omkostninger.",
-      "donate": "Doner",
-      "explanation": "Hvis du ikke bruger udvidelsen eller ikke har FED API sat op, kan det være sværere at finde indhold! Vi vil gerne løse dette, men det er meget sværere at levere indhold uden dyre servere. Så venligst, hvis du kan lide at bruge Framezoo, bedes du overveje at donere for at hjælpe os med at dække vores voksende omkostninger.",
+      "description": "Framezoo er en neutral medieafspiller, og frivillig softwaresupport hjælper med at holde den reklamefri! Bemærk venligst, at bidrag udelukkende støtter softwareudvikling og aldrig køber medieindhold eller tredjepartsudvidelser.",
+      "donate": "Støtte til softwareudvikling",
+      "explanation": "Hvis du ikke har konfigureret dine egne tredjepartsudvidelser i afspilleren, vises streams ikke som standard. Framezoo fungerer udelukkende som en neutral teknisk afspiller uden at hoste indhold. Ethvert frivilligt bidrag understøtter kun løbende app-udvikling og infrastruktur.",
       "explanation2": "Hvis du ønsker mere information, så tilmeld dig vores",
       "fluxer": "Fluxer",
-      "label": "Projektfinansiering: ${{current}} / ${{goal}}",
+      "label": "Softwareudviklingssupport: ${{current}} / ${{goal}}",
       "moreInfo": "Mere info",
       "thankYou": "Tak for din støtte!",
-      "title": "Framezoo har brug for din hjælp!"
+      "title": "Støt Framezoo softwareudvikling!"
     },
     "titles": {
       "69": {
@@ -1210,6 +1215,11 @@
           "text": "Dette vil logge dig ud fra alle enheder, der er tilknyttet din konto.",
           "title": "Afslut alle sessioner"
         },
+        "exportData": {
+          "button": "Eksportér JSON",
+          "text": "Download en kopi af din kontoprofil, bogmærker, afspilningshistorik, indstillinger og JSON-registrering (juridisk samtykke).",
+          "title": "Eksportér personoplysninger"
+        },
         "migration": {
           "button": "Migrer konto",
           "text": "Migrer din konto til en ny server eller download dine data.",
@@ -1518,6 +1528,7 @@
     "modalTitle": "Hjælp os med at fortsætte med at bygge Framezoo",
     "subtitle": "Hvert bidrag hjælper os med at forbedre afspilleren, udvide til flere platforme og blive ved med at lytte til dine idéer.",
     "note": "Tak fordi du bekymrer dig om Framezoo og støtter arbejdet bag det. Dit bidrag giver os mere plads til at skabe en bedre oplevelse for alle.",
+    "legalDisclaimer": "Kun frivillig softwareudviklingsstøtte — bidrag køber ikke film, mediestreams eller adgang til tilføjelser.",
     "scanHint": "Scan denne QR-kode med din bankapp.",
     "paypalLabel": "PayPal",
     "momoLabel": "Mor",

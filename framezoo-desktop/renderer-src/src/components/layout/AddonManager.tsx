@@ -175,6 +175,13 @@ export function AddonManager({
               </button>
             </div>
 
+            <div className="mb-3 rounded-xl border border-dropdown-border/70 bg-dropdown-contentBackground/70 px-3 py-2 text-xs leading-relaxed text-dropdown-text">
+              {t(
+                "addons.manager.disclaimerNotice",
+                "Third-party addons are independently operated by community developers. You are solely responsible for verifying content legality in your jurisdiction; P2P seeding is disabled by default.",
+              )}
+            </div>
+
             <div className="flex gap-2.5">
               <input
                 value={url}

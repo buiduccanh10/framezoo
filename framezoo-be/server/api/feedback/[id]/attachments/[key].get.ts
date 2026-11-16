@@ -24,12 +24,13 @@ export default defineEventHandler(async event => {
     throw createError({ statusCode: 404, message: 'Attachment not found' });
   }
 
+  const disposition = attachment.kind === 'document' ? 'attachment' : 'inline';
   setResponseHeader(event, 'Content-Type', attachment.type);
   setResponseHeader(event, 'Content-Length', buffer.length);
   setResponseHeader(
     event,
     'Content-Disposition',
-    `inline; filename="${encodeURIComponent(attachment.name)}"`
+    `${disposition}; filename="${encodeURIComponent(attachment.name)}"`
   );
   setResponseHeader(event, 'Cache-Control', 'private, no-store');
   setResponseHeader(event, 'X-Content-Type-Options', 'nosniff');

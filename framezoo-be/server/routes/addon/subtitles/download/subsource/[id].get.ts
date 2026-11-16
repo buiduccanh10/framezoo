@@ -1,28 +1,12 @@
 import { setHeader } from 'h3';
 
+import { prepareSubtitleDownload } from '~/utils/subtitles/downloadHelper';
+
 export default defineEventHandler(async event => {
-  const params = event.context.params as { id?: string } | undefined;
-  const subtitleId = params?.id?.replace(/\.(srt|vtt|zip|json)$/, '').trim();
-
-  if (!subtitleId) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: 'Bad Request',
-      message: 'Missing subtitle id',
-    });
-  }
-
   const config = useRuntimeConfig();
-  const apiKey =
-    ((config.subsourceApiKey as string | undefined) || process.env.SUBSOURCE_API_KEY || '').trim();
-
-  if (!apiKey) {
-    throw createError({
-      statusCode: 500,
-      statusMessage: 'Internal Server Error',
-      message: 'SubSource API key is not configured on server',
-    });
-  }
+  const serverKey =
+    (config.subsourceApiKey as string | undefined) || process.env.SUBSOURCE_API_KEY || '';
+  const { subtitleId, apiKey } = await prepareSubtitleDownload(event, 'subsource', serverKey);
 
   const targetUrl = `https://api.subsource.net/api/v1/subtitles/${encodeURIComponent(subtitleId)}/download`;
 
@@ -36,7 +20,7 @@ export default defineEventHandler(async event => {
       },
       signal: AbortSignal.timeout(15_000),
     });
-  } catch (err: unknown) {
+  } catch {
     throw createError({
       statusCode: 502,
       statusMessage: 'Bad Gateway',
@@ -56,7 +40,7 @@ export default defineEventHandler(async event => {
   const contentType = response.headers.get('content-type') || 'application/octet-stream';
 
   setHeader(event, 'Content-Type', contentType);
-  setHeader(event, 'Cache-Control', 'public, max-age=86400, stale-while-revalidate=604800');
+  setHeader(event, 'Cache-Control', 'private, no-store');
 
   return new Response(buffer, { status: 200 });
 });

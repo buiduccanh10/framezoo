@@ -65,6 +65,14 @@ export interface RegistrationData {
     challengeId: string;
     code: string;
   };
+  legalConsent?: {
+    acceptedTerms: true;
+    acceptedPrivacy: true;
+    ageConfirmed: true;
+    termsVersion: string;
+    privacyVersion: string;
+    platform: "web" | "desktop" | "mobile" | "tv";
+  };
 }
 
 export interface LoginData {
@@ -256,6 +264,15 @@ export function useAuth() {
         );
         const signature = await signChallenge(keys, challenge);
         const clientDeviceName = await getClientDeviceName();
+        const defaultConsent = {
+          acceptedTerms: true as const,
+          acceptedPrivacy: true as const,
+          ageConfirmed: true as const,
+          termsVersion: "2026-11",
+          privacyVersion: "2026-11",
+          platform: (window.__FRAMEZOO_DESKTOP__ ? "desktop" : "web") as
+            "desktop" | "web",
+        };
         const registerResult = await registerAccount(backendUrl, {
           challenge: {
             code: challenge,
@@ -266,6 +283,7 @@ export function useAuth() {
           email: registerData.userData.email,
           device: await encryptData(clientDeviceName, keys.seed),
           profile: registerData.userData.profile,
+          legalConsent: registerData.legalConsent ?? defaultConsent,
           ...(registerData.emailOtp ? { emailOtp: registerData.emailOtp } : {}),
         });
 
@@ -303,6 +321,15 @@ export function useAuth() {
           email: registerData.userData.email,
           device: await encryptData(clientDeviceName, keys.seed),
           profile: registerData.userData.profile,
+          legalConsent: registerData.legalConsent ?? {
+            acceptedTerms: true as const,
+            acceptedPrivacy: true as const,
+            ageConfirmed: true as const,
+            termsVersion: "2026-11",
+            privacyVersion: "2026-11",
+            platform: (window.__FRAMEZOO_DESKTOP__ ? "desktop" : "web") as
+              "desktop" | "web",
+          },
           ...(registerData.emailOtp ? { emailOtp: registerData.emailOtp } : {}),
         });
 

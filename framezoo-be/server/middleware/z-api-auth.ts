@@ -26,7 +26,8 @@ export default defineEventHandler(async event => {
     path.startsWith('/api/backup') ||
     path.startsWith('/api/feedback') ||
     path.startsWith('/api/admin') ||
-    path === '/addon/subtitles/api/save'
+    path === '/addon/subtitles/api/save' ||
+    path === '/addon/subtitles/api/test'
   ) {
     return;
   }

@@ -40,8 +40,8 @@ export type Metrics = {
   user: Counter<'namespace'>;
   captchaSolves: Counter<'success'>;
   providerHostnames: Counter<'hostname'>;
-  providerStatuses: Counter<'provider_id' | 'status'>;
-  watchMetrics: Counter<'title' | 'tmdb_full_id' | 'provider_id' | 'success'>;
+  providerStatuses: Counter<'status'>;
+  watchMetrics: Counter<'success'>;
   toolMetrics: Counter<'tool'>;
   httpRequestDuration: Histogram<'method' | 'route' | 'status_code'>;
   httpRequestSummary: Summary<'method' | 'route' | 'status_code'>;
@@ -88,13 +88,13 @@ async function createMetrics(registry: Registry, interval: string): Promise<Metr
     providerStatuses: new Counter({
       name: `mw_provider_status_count${suffix}`,
       help: `Number of provider requests by status (${interval})`,
-      labelNames: ['provider_id', 'status'],
+      labelNames: ['status'],
       registers: [registry]
     }),
     watchMetrics: new Counter({
       name: `mw_media_watch_count${suffix}`,
       help: `Number of media watch events (${interval})`,
-      labelNames: ['title', 'tmdb_full_id', 'provider_id', 'success'],
+      labelNames: ['success'],
       registers: [registry]
     }),
     toolMetrics: new Counter({
@@ -273,10 +273,16 @@ export async function setupMetrics(interval: 'default' | 'daily' | 'weekly' | 'm
                   metrics.providerHostnames.inc(value.labels, value.value);
                   break;
                 case 'mw_provider_status_count':
-                  metrics.providerStatuses.inc(value.labels, value.value);
+                  metrics.providerStatuses.inc(
+                    { status: String(value.labels?.status ?? 'unknown') },
+                    value.value
+                  );
                   break;
                 case 'mw_media_watch_count':
-                  metrics.watchMetrics.inc(value.labels, value.value);
+                  metrics.watchMetrics.inc(
+                    { success: String(value.labels?.success ?? 'false') },
+                    value.value
+                  );
                   break;
                 case 'mw_provider_tool_count':
                   metrics.toolMetrics.inc(value.labels, value.value);
@@ -396,11 +402,9 @@ export function recordProviderMetrics(items: any[], hostname: string, tool?: str
     // Record hostname once per request
     metrics.providerHostnames.inc({ hostname });
 
-    // Record status metrics for each item
+    // Record status metrics for each item (aggregate only; no provider IDs or content metadata).
     items.forEach(item => {
-      // Record provider status
       metrics.providerStatuses.inc({
-        provider_id: item.embedId ?? item.providerId,
         status: item.status,
       });
     });
@@ -411,12 +415,9 @@ export function recordProviderMetrics(items: any[], hostname: string, tool?: str
     const lastSuccessfulItem = items.find(v => v.status === 'success');
     const lastItem = itemList[0];
 
-    // Record watch metrics only for the last item
+    // Record aggregate watch outcome without titles, IDs, or external provider identifiers.
     if (lastItem) {
       metrics.watchMetrics.inc({
-        tmdb_full_id: lastItem.type + '-' + lastItem.tmdbId,
-        provider_id: lastSuccessfulItem?.providerId ?? lastItem.providerId,
-        title: lastItem.title,
         success: (!!lastSuccessfulItem).toString(),
       });
     }

@@ -52,7 +52,7 @@
     "privacy": "Política de privadesa i dades",
     "copyright": "Copyright i DMCA",
     "legalTitle": "Legal i Polítiques",
-    "metadataAttribution": "Les bases de dades públiques de pel·lícules (TMDB, IMDb) proporcionen metadades amb finalitats informatives.",
+    "metadataAttribution": "Les metadades i les obres d'art de la pel·lícula utilitzen l'API de TMDB (no aprovada ni certificada per TMDB) i puntuacions mitjançant l'API d'OMDb.",
     "reportIssue": "Enviar comentaris/informes",
     "rights": "© 2026 Framezoo. Tots els drets reservats."
   },
@@ -115,7 +115,7 @@
         "Al diàleg de confirmació, feu clic a \"Obre de totes maneres\" o \"Obre\"."
       ],
       "step3Title": "Pas 3: obriu amb seguretat mitjançant el Finder",
-      "step2Desc": "Com que Framezoo és un reproductor independent de codi obert sense un certificat comercial de desenvolupador d'Apple, macOS pot mostrar: \"Framezoo està malmès i no es pot obrir\" o \"Apple no pot verificar aquesta aplicació\".",
+      "step2Desc": "Com que Framezoo és un reproductor de programari independent sense un certificat comercial de desenvolupador d'Apple, macOS pot mostrar: \"Framezoo està malmès i no es pot obrir\" o \"Apple no pot verificar aquesta aplicació\".",
       "step1Desc": "Obriu el fitxer .dmg descarregat i arrossegueu la icona de Framezoo a la carpeta Aplicacions.",
       "note": "Només heu de fer aquest pas amb el botó dret al primer llançament. Els llançaments posteriors es poden fer normalment des de Launchpad o Spotlight."
     },
@@ -177,7 +177,7 @@
     "successDesc": "Gràcies pels teus comentaris. El nostre equip revisarà i resoldrà el problema tan aviat com sigui possible.",
     "attachmentsLabel": "Fitxers",
     "attachmentsTooLarge": "La mida total del fitxer no ha de superar els 55 MB.",
-    "attachmentsHint": "Imatges/vídeos · 55 MB total màxim",
+    "attachmentsHint": "Imatges/vídeos/PDF (prova d'autorització o copyright) · 55 MB totals màxim",
     "descLabel": "3. Descripció detallada",
     "contactInvalid": "Introduïu una adreça electrònica o un número de telèfon vàlid perquè puguem respondre.",
     "contactPlaceholder": "p. ex. nom@example.com o +84912345678",
@@ -229,7 +229,8 @@
     "pageTitle": "Configura els subtítols de Framezoo | Framezoo",
     "hero": {
       "title": "Configura els subtítols de Framezoo",
-      "description": "Configureu la vostra clau de l'API Wyzie personal per obtenir subtítols més ràpids i evitar els límits de tarifa compartida de la comunitat."
+      "description": "Configureu la vostra clau de l'API Wyzie personal per obtenir subtítols més ràpids i evitar els límits de tarifa compartida de la comunitat.",
+      "multiDescription": "Configureu les claus API personals opcionals (BYOK) perquè els proveïdors de subtítols de Framezoo utilitzin els vostres propis límits de tarifa."
     },
     "account": {
       "verifying": "S'està verificant el bitllet del compte des de l'aplicació d'escriptori...",
@@ -264,7 +265,10 @@
         "invalid": "La clau de l'API no és vàlida o ha caducat.",
         "rateLimit": "La clau d'API ha superat els límits de velocitat.",
         "serverError": "El servidor Wyzie ha retornat HTTP {{status}}.",
-        "networkError": "Error de xarxa en connectar-se a sub.wyzie.io. Comproveu la vostra connexió."
+        "networkError": "Error de xarxa en connectar-se a sub.wyzie.io. Comproveu la vostra connexió.",
+        "verifyingProvider": "S'està verificant amb {{provider}}...",
+        "serverErrorProvider": "{{provider}} ha retornat HTTP {{status}}.",
+        "networkErrorProvider": "No s'ha pogut arribar al servei de verificació {{provider}}. Si us plau, torna-ho a provar."
       },
       "clearButton": "Esborra clau"
     },
@@ -276,7 +280,33 @@
       "noticeText": "La vostra clau API s'emmagatzema de manera segura al vostre dispositiu. Només es reenvia per cercar i recuperar subtítols de pel·lícules i sèries. Podeu actualitzar-lo o eliminar-lo en qualsevol moment.",
       "openFramezoo": "Obriu Framezoo",
       "openFramezooDisabledTooltip": "Requereix l'obertura des de Framezoo Desktop mentre s'ha iniciat sessió",
-      "notConnectedNotice": "Nota: no esteu connectat amb un bitllet de compte de Framezoo. Per sincronitzar directament amb \"Obre Framezoo\", obriu aquesta pàgina des de la vostra aplicació d'escriptori Framezoo mentre esteu connectat. En cas contrari, copieu l'URL del manifest a continuació per utilitzar-lo."
+      "notConnectedNotice": "Nota: no esteu connectat amb un bitllet de compte de Framezoo. Per sincronitzar directament amb \"Obre Framezoo\", obriu aquesta pàgina des de la vostra aplicació d'escriptori Framezoo mentre esteu connectat. En cas contrari, copieu l'URL del manifest a continuació per utilitzar-lo.",
+      "privacyLinkLabel": "Política de privadesa",
+      "takedownLinkLabel": "Política de drets d'autor i DMCA"
+    },
+    "providersStep": {
+      "optionalBadge": "Opcional",
+      "title": "Claus de l'API del proveïdor de subtítols",
+      "description": "Totes les claus següents són opcionals. Quan es proporciona, Framezoo prefereix la vostra clau personal sobre els valors predeterminats compartits. El granit incorporat no requereix cap clau.",
+      "manifestHint": "Copia l'URL del manifest actualment només reenvia la clau Wyzie per als URL de Stremio no autenticats; connecteu el vostre compte de Framezoo per sincronitzar totes les claus del proveïdor.",
+      "getKeyButton": "Obteniu la clau de l'API"
+    },
+    "providers": {
+      "wyzie": {
+        "name": "Wyzie",
+        "placeholder": "Enganxa la clau de l'API Wyzie...",
+        "portalHint": "Genereu o bescanvieu una clau API personal gratuïta a la botiga Wyzie."
+      },
+      "subsource": {
+        "name": "Subfont",
+        "portalHint": "Inicieu la sessió a SubSource, obriu Compte Dashboard → pestanya API i creeu una clau.",
+        "placeholder": "Enganxa la clau de l'API de subfont..."
+      },
+      "opensubtitles": {
+        "portalHint": "Inicieu la sessió a OpenSubtitles.com, obriu API Consumers i creeu una clau de l'API REST v1.",
+        "name": "OpenSubtitles.com",
+        "placeholder": "Enganxa la clau de l'API REST v1 d'OpenSubtitles.com..."
+      }
     }
   },
   "legal": {
@@ -327,88 +357,88 @@
       },
       "privacy": {
         "title": "Política de Privacitat i Protecció de Dades Personals",
-        "updatedAt": "Actualitzat: 4 de novembre de 2026 · Llei 91/2025/QH15 i Decret 356/2025/ND-CP",
-        "summary": "Aquesta política descriu el processament de dades a l'aplicació d'escriptori Framezoo i als servidors oficials de Framezoo.",
+        "updatedAt": "Actualitzat: 16 de novembre de 2026 · Versió 2026-11 · Llei de Vietnam 91/2025/QH15 i Decret 356/2025/ND-CP",
+        "summary": "Aquesta política descriu el processament de dades a Framezoo Desktop, Mobile, TV i servidors oficials de Framezoo.",
         "sections": [
           {
             "bullets": [
-              "El correu electrònic, els codis de verificació i els detalls de la sol·licitud admeten el registre, l'inici de sessió i la seguretat del compte.",
-              "Els informes, les descripcions d'errors i els fitxers adjunts arriben al nostre servidor quan envieu el formulari de comentaris.",
-              "El lloc web emmagatzema la vostra elecció d'idioma a l'emmagatzematge del navegador."
+              "El mode de convidat només utilitza un identificador tècnic aleatori, una etiqueta de plataforma i una versió de l'aplicació per operar els punts de connexió/sincronització de subtítols.",
+              "Els codis de verificació de correu electrònic i els registres de sol·licituds es processen estrictament per registrar-se, iniciar sessió i protegir els comptes.",
+              "La telemetria del servidor exclou els títols de pel·lícules, els identificadors de TMDB/IMDb i les fonts de complements personals de tercers."
             ],
-            "title": "Dades del vostre dispositiu i dels nostres servidors",
+            "title": "Dades del dispositiu, del convidat i del compte",
             "paragraphs": [
-              "L'aplicació emmagatzema algunes dades de configuració, memòria cau i reproducció al dispositiu. Si creeu un compte, el servidor també emmagatzema el vostre correu electrònic, àlies, perfil, clau pública, detalls de sessió/dispositiu, adreces d'interès sincronitzades, progrés, historial de visualitzacions, configuració i complements, a més de claus xifrades del proveïdor de subtítols si les proporcioneu."
+              "L'aplicació emmagatzema configuració local, memòria cau i dades de reproducció al dispositiu. Quan creeu un compte (restringit a usuaris de 16 anys o més), el servidor també emmagatzema el vostre correu electrònic xifrat, àlies, perfil, clau pública, sessions/detalls del dispositiu, adreces d'interès sincronitzades, progrés, historial de visualitzacions, configuració, complements, registres de consentiment marcats de temps i claus API encriptades del proveïdor de subtítols BYOK si les deseu."
             ],
             "badge": "01"
           },
           {
-            "title": "Finalitats i serveis externs",
+            "title": "Propòsits, transferència transfronterera i API externes",
             "bullets": [
-              "El correu electrònic de verificació va al nostre proveïdor de correu; Les còpies de seguretat de la base de dades es poden emmagatzemar a Supabase quan es configura la còpia de seguretat.",
-              "Alguns proveïdors de serveis o servidors addicionals poden processar dades fora de Vietnam; La ubicació del servidor depèn del servei que trieu i de la configuració operativa.",
-              "Google reCAPTCHA es pot utilitzar durant el registre; el text dels subtítols va a Google Translate quan trieu la traducció.",
+              "Els proveïdors de correu electrònic de verificació transaccional i les còpies de seguretat de bases de dades xifrades poden residir fora de Vietnam, depenent de la configuració del desplegament.",
+              "Les metadades i les puntuacions crítiques s'obtenen mitjançant les API oficials de TMDB i OMDb; Les cerques de subtítols consulten Wyzie, SubSource i l'API REST d'OpenSubtitles.com (preferint les teves claus BYOK personals quan es proporcionin).",
+              "Els retransmissions de fitxers de subtítols utilitzen capçaleres sense emmagatzematge sense memòria cau pública. Els complements de tercers es contacten directament des del vostre dispositiu segons les seves pròpies polítiques.",
               "Les cerques i descàrregues de subtítols, la sincronització d'àudio/subtítols i els complements de la comunitat poden enviar sol·licituds a través dels servidors de Framezoo i dels serveis externs pertinents. Els complements de tercers tenen les seves pròpies polítiques."
             ],
             "paragraphs": [
-              "Processem dades per executar comptes, sincronitzar dispositius, oferir assistència, protegir el servei i oferir les funcions que trieu. No venem dades personals a xarxes publicitàries."
+              "Tractem les dades únicament per operar comptes, sincronitzar dispositius, oferir assistència, complir la llei i no vendre mai dades personals."
             ],
             "badge": "02"
           },
           {
-            "title": "Retenció i supressió",
+            "title": "Retenció, exportació i supressió de dades JSON",
             "bullets": [
-              "Els codis de verificació caduquen al cap de 10 minuts; els registres de desafiament caducats s'eliminen al cap de 7 dies. Els registres de correu enviat o fallit s'eliminen al cap de 7 dies.",
-              "Els comentaris i els fitxers adjunts es guarden per separat per a les sol·licituds de suport o de drets d'autor fins que s'eliminen a petició o per l'equip d'assistència. La supressió del compte elimina l'enllaç del compte, però no suprimeix automàticament els informes. Podeu sol·licitar la supressió per separat mitjançant el formulari de comentaris."
+              "Els desafiaments OTP de verificació caduquen al cap de 10 minuts i es purguen juntament amb els registres de la bústia de sortida del correu electrònic al cap de 7 dies.",
+              "Els informes de comentaris i els avisos de drets d'autor es mantenen emmagatzemats per separat per a l'auditoria de compliment; la supressió del compte desenllaça el vostre ID d'usuari."
             ],
             "paragraphs": [
-              "Les dades del compte i de sincronització es mantenen mentre el vostre compte està actiu. Podeu suprimir el compte a Configuració; aleshores, el servidor elimina els registres del compte, les adreces d'interès, el progrés, l'historial de visualitzacions, la configuració i les sessions. Les còpies de seguretat de bases de dades antigues poden conservar les dades fins a la rotació; la configuració predeterminada manté 7 còpies de seguretat recents quan s'executa la còpia de seguretat."
+              "Les dades del compte i de sincronització romanen actives mentre el vostre compte existeix. Podeu exportar una còpia JSON completa de les vostres dades personals o suprimir permanentment el vostre compte a Configuració -> Accions; les còpies de seguretat xifrades rotatives conserven fins a 7 instantànies recents."
             ],
             "badge": "03"
           },
           {
             "paragraphs": [
-              "Podeu sol·licitar l'accés, la correcció, la supressió o la restricció de les vostres dades, retirar el consentiment quan el processament es basa en el consentiment i presentar una queixa a través del formulari de comentaris del nostre lloc web. Proporcioneu el correu electrònic del vostre compte perquè puguem verificar la sol·licitud."
+              "El registre del compte està limitat als usuaris de 16 anys o més segons la Llei del Vietnam 91/2025/QH15. Podeu exercir l'accés, l'exportació JSON, la correcció, la supressió o la retirada del consentiment mitjançant el modal de comentaris o privacy@framezoo.top / framezoo.top@gmail.com (respon en 24 hores)."
             ],
-            "title": "Els teus drets i contacte",
+            "title": "Els vostres drets, edat (>=16) i contacte",
             "badge": "04"
           }
         ]
       },
       "copyright": {
-        "updatedAt": "Actualitzat: 4 de novembre de 2026",
-        "title": "Copyright, DMCA i exempció de responsabilitat de contingut",
+        "updatedAt": "Actualitzat: 16 de novembre de 2026 · Llei de propietat intel·lectual del Vietnam. 198b i Decret 17/2023",
+        "title": "Copyright, avís i retirada i exempció de responsabilitat de contingut",
         "sections": [
           {
-            "title": "Programari intermediari Safe Harbor",
+            "title": "Programari intermediari neutral i P2P sense sembra per defecte",
             "paragraphs": [
-              "Framezoo no opera cap biblioteca de pel·lícules ni font de flux de vídeo. L'aplicació pot accedir a fonts escollides pels usuaris; els nostres servidors poden retransmetre subtítols del proveïdor i processar temporalment àudio i subtítols per a la sincronització sol·licitada.",
-              "Cada avís de copyright es revisa en funció del contingut i del nostre paper real; aquests termes no creen una exempció automàtica de responsabilitat."
+              "Framezoo és un programari de reproductor multimèdia neutre similar a Stremio i Kodi: no allotja fitxers de vídeo, no inclou complements de contingut predeterminats ni rastrejadors públics, no realitza cap proxy de complements del servidor i desactiva la sembra P2P de sortida (upload_rate_limit = 0) de manera predeterminada.",
+              "Les descàrregues de subtítols utilitzen capçaleres sense botiga sense memòria cau pública als servidors de Framezoo."
             ],
             "badge": "01"
           },
           {
-            "title": "Metadades i atribució d'obres d'art",
+            "title": "API de metadades oficials i atribució de TMDB",
             "paragraphs": [
-              "Les metadades de pel·lícules i sèries (títols, dates de llançament, sinopsis, classificacions i pòsters promocionals) que es mostren per a la descoberta informativa provenen de bases de dades públiques de pel·lícules (com ara TMDB, IMDb i TVDB).",
-              "Totes les marques comercials, títols de pel·lícules i obres d'art segueixen sent propietat dels seus respectius propietaris de drets d'autor."
+              "Els títols de pel·lícules, les sinopsis, les obres d'art i les valoracions de la crítica es recuperen de les API oficials de TMDB i OMDb per a la descoberta informativa.",
+              "Aquest producte utilitza l'API de TMDB, però no està aprovat ni certificat per TMDB. Totes les marques comercials i les obres d'art multimèdia segueixen sent propietat dels seus respectius propietaris."
             ],
             "badge": "02"
           },
           {
-            "title": "Avís i procediment de retirada",
+            "title": "Avís i retirada (SLA 24 h/72 h) i política d'infracció reiterada",
             "paragraphs": [
-              "Framezoo respecta els drets de propietat intel·lectual. Si sou propietari dels drets d'autor o agent autoritzat i creieu que qualsevol material de framezoo.top infringeix els vostres drets, envieu un avís a través del nostre canal d'informes/Comentaris que inclou:"
+              "Els titulars dels drets i les autoritats poden enviar notificacions formals (identitat del propietari dels drets, autorització de prova/PDF, domini específic del complement/identificador de suport/identificador de subtítols i declaració jurada) mitjançant el formulari d'informe o legal@framezoo.top / framezoo.top@gmail.com."
             ],
             "bullets": [
-              "Identificació del propietari dels drets d'autor o representant autoritzat.",
-              "Prova de la propietat de l'obra amb drets d'autor.",
+              "Les ordres de les autoritats competents s'apliquen a /compliance/blocklist en un termini de 24 hores; avisos vàlids al titular dels drets en un termini de 72 hores.",
+              "Els comptes d'infractores reiterats associats a infraccions verificades se suspenen amb la revocació immediata de la sessió.",
               "L'URL exacte o la descripció del material en qüestió perquè puguem revisar-lo i abordar-lo en un termini de 24 a 72 hores laborables."
             ],
             "badge": "03"
           }
         ],
-        "summary": "Exempció de responsabilitat de contingut oficial i procediment d'avís i retirada de propietat intel·lectual per a Framezoo."
+        "summary": "Estat d'intermediari neutral, procés de llista de bloqueig d'avís i retirada les 24 h/72 h i política d'infracció reiterada."
       },
       "addon-policy": {
         "summary": "Estàndards de seguretat i compliment per a l'ecosistema de complements HTTP/JSON obert a Framezoo.",

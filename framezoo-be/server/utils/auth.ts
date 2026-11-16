@@ -182,6 +182,12 @@ export function useAuth() {
     if (!session) return null;
     if (new Date(session.expires_at) < new Date()) return null;
 
+    const owner = await prisma.users.findUnique({
+      where: { id: session.user },
+      select: { is_suspended: true },
+    });
+    if (!owner || owner.is_suspended) return null;
+
     return session;
   };
 

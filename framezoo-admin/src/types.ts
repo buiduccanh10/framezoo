@@ -4,12 +4,25 @@ export interface FeedbackUser {
   email?: string | null;
 }
 
+export type FeedbackCategory =
+  | "bug"
+  | "feature"
+  | "copyright"
+  | "privacy"
+  | "other";
+
 export interface FeedbackItem {
   id: string;
   title: string;
   description: string;
   contact: string | null;
   status: "pending" | "resolved" | string;
+  category?: FeedbackCategory | string;
+  target_url_or_id?: string | null;
+  rights_owner_name?: string | null;
+  sworn_statement?: boolean;
+  sla_due_at?: string | null;
+  resolved_at?: string | null;
   user_id: string | null;
   user: FeedbackUser | null;
   attachments: FeedbackAttachment[];
@@ -21,9 +34,28 @@ export interface FeedbackAttachment {
   key: string;
   name: string;
   type: string;
-  kind: "image" | "video";
+  kind: "image" | "video" | "document";
   size: number;
   url: string;
+}
+
+export type TakedownTargetType =
+  | "addon_domain"
+  | "tmdb_id"
+  | "imdb_id"
+  | "subtitle_id"
+  | "infohash";
+
+export interface TakedownRuleItem {
+  id: string;
+  target_type: TakedownTargetType | string;
+  pattern: string;
+  reason: string;
+  rights_holder: string | null;
+  reference_id: string | null;
+  active: boolean;
+  created_at: string;
+  created_by: string | null;
 }
 
 export interface UserProfile {
@@ -45,6 +77,13 @@ export interface AdminUserItem {
   permissions: string[];
   profile?: UserProfile;
   app_version: string | null;
+  is_suspended?: boolean;
+  suspended_at?: string | null;
+  suspended_reason?: string | null;
+  terms_version?: string | null;
+  privacy_version?: string | null;
+  consented_at?: string | null;
+  age_confirmed?: boolean;
   counts: UserCounts;
 }
 
@@ -77,6 +116,13 @@ export interface UserDetailData {
     profile?: UserProfile;
     namespace?: string;
     app_version: string | null;
+    is_suspended?: boolean;
+    suspended_at?: string | null;
+    suspended_reason?: string | null;
+    terms_version?: string | null;
+    privacy_version?: string | null;
+    consented_at?: string | null;
+    age_confirmed?: boolean;
   };
   settings: UserSettingsDetail | null;
   sessions: UserSessionItem[];

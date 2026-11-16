@@ -18,6 +18,7 @@
       "configRequiredDesc": "Aquest complement requereix configuració (com ara claus d&#39;API o configuració d&#39;idioma) abans de poder retornar contingut. Configureu-lo al vostre navegador i, a continuació, copieu i enganxeu aquí l&#39;URL del manifest generat.",
       "configRequiredTitle": "Configuració requerida",
       "configureAction": "Configura",
+      "disclaimerNotice": "Els complements de tercers són gestionats de manera independent per desenvolupadors de la comunitat. Sou l'únic responsable de verificar la legalitat del contingut a la vostra jurisdicció; la sembra P2P està desactivada per defecte.",
       "errorFallback": "No es pot instal·lar aquest complement.",
       "manageListButton": "Gestioneu la llista de complements",
       "openConfigurePage": "Obre la pàgina de configuració",
@@ -38,6 +39,7 @@
       "configureCustomKeyActive": "La teva clau s'ha configurat (feu clic per canviar-la)",
       "configureRequiredAction": "Configura aquest complement (obligatori)",
       "customKeyActiveDesc": "Utilitzant la teva clau API personal de Wyzie",
+      "customKeyActiveProviders": "Utilitzant la teva clau API de subtítols personal ({{providers}})",
       "customKeyConfiguredBadge": "La teva clau s'ha configurat",
       "description": "Els complements són opcionals. Aquesta aplicació no agrupa, recomana ni allotja cap complement.",
       "disabled": "Inhabilitat",
@@ -181,7 +183,7 @@
       "passwordWeak": "La contrasenya ha de tenir com a mínim 8 caràcters amb lletres i números",
       "privacyPolicy": "Política de privacitat",
       "submit": "Crea un compte",
-      "legalConsent": "He llegit i accepto les <terms>Condicions del servei</terms> i la <privacy>Política de privadesa</privacy>."
+      "legalConsent": "Confirmo que tinc com a mínim 16 anys i que he llegit i accepto les <terms>Condicions del servei</terms> i la <privacy>Política de privadesa</privacy>."
     },
     "trust": {
       "failed": {
@@ -306,7 +308,10 @@
   },
   "footer": {
     "legal": {
-      "disclaimer": "Exempció de responsabilitat",
+      "disclaimer": "Avís legal",
+      "dmca": "DMCA / Retirada",
+      "terms": "Condicions del servei",
+      "tmdbAttribution": "Les metadades i els pòsters de les pel·lícules són proporcionats per l'API de TMDB (no avalats ni certificats per TMDB).",
       "disclaimerText": "Framezoo no gestiona fonts de transmissió de vídeo. Els seus servidors poden retransmetre subtítols del proveïdor i processar temporalment l'àudio i els subtítols per a la sincronització quan trieu aquesta funció. Vós controleu el contingut que reproduïu."
     },
     "links": {
@@ -484,15 +489,15 @@
     },
     "support": {
       "complete": "completa",
-      "description": "Framezoo s'executa amb pèrdues i necessitem ajuda per mantenir-lo sense anuncis! Si us agrada utilitzar Framezoo, considereu fer una donació per ajudar-nos a cobrir els nostres costos.",
-      "donate": "Donar",
-      "explanation": "Si no feu servir l'extensió o no teniu l'API FED configurada, pot ser que sigui més difícil trobar contingut! Volem solucionar-ho, però és molt més difícil oferir contingut sense servidors cars. Així que si us plau, si us agrada utilitzar Framezoo, considereu fer una donació per ajudar-nos a cobrir els nostres costos creixents.",
+      "description": "Framezoo és un reproductor multimèdia neutral, i el suport voluntari del programari ajuda a mantenir-lo lliure d'anuncis! Tingueu en compte que les contribucions donen suport estrictament a l'enginyeria de programari pura i no compreu mai contingut multimèdia ni complements de tercers.",
+      "donate": "Suport al desenvolupament de programari",
+      "explanation": "Si no heu configurat els vostres propis complements de tercers al reproductor, els fluxos no apareixeran per defecte. Framezoo actua únicament com a actor tècnic neutral sense allotjar contingut. Qualsevol contribució voluntària només dóna suport a l'enginyeria i la infraestructura de l'aplicació.",
       "explanation2": "Si vols més informació, uneix-te al nostre",
       "fluxer": "Fluxer",
-      "label": "Finançament del projecte: ${{current}} / ${{goal}}",
+      "label": "Suport d'enginyeria de programari: ${{current}} / ${{goal}}",
       "moreInfo": "Més informació",
       "thankYou": "Gràcies pel vostre suport!",
-      "title": "Framezoo necessita la teva ajuda!"
+      "title": "Doneu suport al desenvolupament de programari Framezoo!"
     },
     "titles": {
       "69": {
@@ -1210,6 +1215,11 @@
           "text": "Això us tancarà la sessió de tots els dispositius enllaçats al vostre compte.",
           "title": "Finalitzar totes les sessions"
         },
+        "exportData": {
+          "button": "Exporta JSON",
+          "text": "Baixa una còpia del perfil del teu compte, els marcadors, l'historial de visualitzacions, la configuració i el registre de consentiment legal (JSON).",
+          "title": "Exportar dades personals"
+        },
         "migration": {
           "button": "Migra el compte",
           "text": "Migra el teu compte a un servidor nou o baixa les teves dades.",
@@ -1518,6 +1528,7 @@
     "modalTitle": "Ajuda&#39;ns a seguir construint Framezoo",
     "subtitle": "Cada contribució ens ajuda a millorar el reproductor, expandir-nos a més plataformes i seguir escoltant les vostres idees.",
     "note": "Gràcies per preocupar-te per Framezoo i donar suport a la feina que hi ha al darrere. La teva contribució ens dóna més marge per construir una millor experiència per a tothom.",
+    "legalDisclaimer": "Només suport voluntari per al desenvolupament de programari: les contribucions no compren pel·lícules, transmissions multimèdia ni accés a complements.",
     "scanHint": "Escaneja aquest codi QR amb la teva aplicació bancària.",
     "paypalLabel": "PayPal",
     "momoLabel": "Mare",

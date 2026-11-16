@@ -1,0 +1,28 @@
+Framezoo Proprietary Commercial Software License (EULA)
+========================================================
+
+Copyright (c) 2026 Bùi Đức Cảnh (Independent Developer, Framezoo Project)
+Pháo Đài Láng, P. Láng, Thành phố Hà Nội, Việt Nam
+Legal & DMCA Contact: framezoo.top@gmail.com | legal@framezoo.top | +84 984 908 816
+Website: https://framezoo.top
+
+1. Ownership and Reservation of Rights
+This software, including its source code, compiled binaries, user interfaces, assets, documentation, and trademarks ("Framezoo"), is the proprietary intellectual property of Bùi Đức Cảnh ("Operator"), except where governed by separate open-source or third-party license terms identified in `THIRD_PARTY_NOTICES.md` and `framezoo-be/LICENSE`. All rights not expressly granted are reserved.
+
+2. Grant of License (End User)
+Subject to your compliance with the Framezoo Terms of Service (`https://framezoo.top/legal/terms`) and applicable law, Operator grants you a limited, revocable, non-exclusive, non-transferable, non-sublicensable license to download, install, and run official Framezoo client software strictly as a neutral technical media player for lawful personal use.
+
+3. Restrictions
+Except to the extent expressly permitted by mandatory applicable law or an overriding open-source license governing a specific third-party or upstream component (see `THIRD_PARTY_NOTICES.md`), you may NOT:
+- Copy, redistribute, resell, rent, lease, sublicense, or commercially exploit Framezoo software or accounts without prior written authorization from the Operator.
+- Remove, alter, or obscure proprietary notices, attribution notices (including TMDB/OMDb notices), or compliance blocklist protections.
+- Use Framezoo trademarks, logos, or branding to falsely imply endorsement or to bundle unauthorized third-party streaming sources or copyrighted media.
+
+4. Neutral Intermediary Disclaimer
+Framezoo is solely a technical player and metadata/sync client. It does not host, upload, index, cache, or distribute copyrighted movies, series, torrents, or unauthorized streams. Any third-party addons configured by a user are solely operated by their respective third parties, and Operator reserves the right to enforce DMCA/IP takedown blocklists (`https://framezoo.top/legal/dmca`).
+
+5. Third-Party Components & APIs
+Use of open-source components, native media libraries (including LGPL-licensed FFmpeg/libmpv builds with GPL components disabled), fonts, and third-party APIs (TMDB, OMDb, subtitle APIs) is subject to the notices and terms listed in `THIRD_PARTY_NOTICES.md` and `framezoo-tv/native/DEPENDENCIES.md`. Certain backend components in `framezoo-be/` remain subject to GNU GPL v3 as preserved in `framezoo-be/LICENSE`.
+
+6. Disclaimer of Warranties & Limitation of Liability
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT, TO THE MAXIMUM EXTENT PERMITTED BY VIETNAMESE AND APPLICABLE LAW.

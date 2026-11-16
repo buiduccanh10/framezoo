@@ -33,18 +33,49 @@ export function Footer() {
           </div>
         </div>
         <div className="md:text-right">
-          {/* <h3 className="font-semibold text-type-emphasis">
-            {t("footer.legal.disclaimer")}
-          </h3> */}
-          <p className="mt-3">{t("footer.legal.disclaimerText")}</p>
-          <a
-            href="https://framezoo.top/legal/privacy"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-2 inline-block text-type-link underline hover:text-type-linkHover"
-          >
-            {t("auth.register.privacyPolicy")}
-          </a>
+          <p className="mt-3 text-sm text-type-secondary">
+            {t("footer.legal.disclaimerText")}
+          </p>
+          <p className="mt-2 text-xs text-type-secondary/80">
+            {t(
+              "footer.legal.tmdbAttribution",
+              "Film metadata & posters are provided by TMDB API (not endorsed or certified by TMDB).",
+            )}
+          </p>
+          <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5 text-sm md:justify-end">
+            <a
+              href="https://framezoo.top/legal/terms"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-type-link underline hover:text-type-linkHover"
+            >
+              {t("footer.legal.terms", "Terms of Service")}
+            </a>
+            <a
+              href="https://framezoo.top/legal/privacy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-type-link underline hover:text-type-linkHover"
+            >
+              {t("auth.register.privacyPolicy")}
+            </a>
+            <a
+              href="https://framezoo.top/legal/dmca"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-type-link underline hover:text-type-linkHover"
+            >
+              {t("footer.legal.dmca", "DMCA / Takedown")}
+            </a>
+            <a
+              href="https://framezoo.top/legal/disclaimer"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-type-link underline hover:text-type-linkHover"
+            >
+              {t("footer.legal.disclaimer", "Disclaimer")}
+            </a>
+          </div>
         </div>
       </WideContainer>
     </footer>

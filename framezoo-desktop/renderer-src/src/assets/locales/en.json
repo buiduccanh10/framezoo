@@ -18,6 +18,7 @@
       "configRequiredDesc": "This addon requires configuration (such as API keys or language settings) before it can return content. Please configure it in your browser, then copy and paste the generated manifest URL here.",
       "configRequiredTitle": "Configuration Required",
       "configureAction": "Configure",
+      "disclaimerNotice": "Third-party addons are independently operated by community developers. You are solely responsible for verifying content legality in your jurisdiction; P2P seeding is disabled by default.",
       "errorFallback": "Unable to install this addon.",
       "manageListButton": "Manage addon list",
       "openConfigurePage": "Open Configuration Page",
@@ -37,7 +38,8 @@
       "configureAddon": "Configure this addon",
       "configureCustomKeyActive": "Your key has been configured (click to change)",
       "configureRequiredAction": "Configure this addon (Required)",
-      "customKeyActiveDesc": "Using your personal Wyzie API key",
+      "customKeyActiveDesc": "Using your personal subtitle API key",
+      "customKeyActiveProviders": "Using your personal subtitle API key ({{providers}})",
       "customKeyConfiguredBadge": "Your key has been configured",
       "description": "Addons are optional. This app does not bundle, recommend, or host any addon.",
       "disabled": "Disabled",
@@ -181,7 +183,7 @@
       "passwordWeak": "Password must be at least 8 characters with letters and numbers",
       "privacyPolicy": "Privacy Policy",
       "submit": "Create account",
-      "legalConsent": "I have read and agree to the <terms>Terms of Service</terms> and <privacy>Privacy Policy</privacy>."
+      "legalConsent": "I confirm I am at least 16 years old and have read and agree to the <terms>Terms of Service</terms> and <privacy>Privacy Policy</privacy>."
     },
     "trust": {
       "failed": {
@@ -306,7 +308,10 @@
   },
   "footer": {
     "legal": {
-      "disclaimer": "Disclaimer ",
+      "disclaimer": "Disclaimer",
+      "dmca": "DMCA / Takedown",
+      "terms": "Terms of Service",
+      "tmdbAttribution": "Film metadata & posters are provided by TMDB API (not endorsed or certified by TMDB).",
       "disclaimerText": "Framezoo does not operate video stream sources. Its servers may relay provider subtitles and temporarily process audio and subtitles for sync when you choose that feature. You control the content you play."
     },
     "links": {
@@ -484,15 +489,15 @@
     },
     "support": {
       "complete": "complete",
-      "description": "Framezoo is run at a loss, and we need help to keep it ad free! If you enjoy using Framezoo, please consider donating to help us cover our costs.",
-      "donate": "Donate",
-      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using Framezoo, please consider donating to help us cover our growing costs.",
+      "description": "Framezoo is a neutral media player, and voluntary software support helps keep it ad-free! Please note contributions strictly support pure software engineering and never purchase media content or third-party addons.",
+      "donate": "Support software development",
+      "explanation": "If you haven't configured your own third-party addons in the player, streams will not appear by default. Framezoo acts solely as a neutral technical player without hosting content. Any voluntary contribution supports ongoing app engineering and infrastructure only.",
       "explanation2": "If you want more info, please join our ",
       "fluxer": "Fluxer",
-      "label": "Project Funding: ${{current}} / ${{goal}}",
+      "label": "Software Engineering Support: ${{current}} / ${{goal}}",
       "moreInfo": "More info",
       "thankYou": "Thank you for your support!",
-      "title": "Framezoo needs your help!"
+      "title": "Support Framezoo software development!"
     },
     "titles": {
       "69": {
@@ -1210,6 +1215,11 @@
           "text": "This will sign you out from all devices linked to your account.",
           "title": "End All Sessions"
         },
+        "exportData": {
+          "button": "Export JSON",
+          "text": "Download a copy of your account profile, bookmarks, watch history, settings, and legal consent record (JSON).",
+          "title": "Export Personal Data"
+        },
         "migration": {
           "button": "Migrate account",
           "text": "Migrate your account to a new server or download your data.",
@@ -1518,6 +1528,7 @@
     "modalTitle": "Help us keep building Framezoo",
     "subtitle": "Every contribution helps us improve the player, expand to more platforms, and keep listening to your ideas.",
     "note": "Thank you for caring about Framezoo and supporting the work behind it. Your contribution gives us more room to build a better experience for everyone.",
+    "legalDisclaimer": "Voluntary software development support only — contributions do not purchase movies, media streams, or addon access.",
     "scanHint": "Scan this QR code with your banking app.",
     "paypalLabel": "PayPal",
     "momoLabel": "MoMo",

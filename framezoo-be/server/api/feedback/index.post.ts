@@ -10,6 +10,7 @@ import { randomUUID } from 'crypto';
 import { prisma } from '~/utils/prisma';
 import { useAuth } from '~/utils/auth';
 import { touchGuestActivityFromEvent } from '~/utils/guestTracking';
+import { computeFeedbackSlaDueAt, normalizeFeedbackCategory } from '~/utils/legalConstants';
 import { encryptPii, hashContactIndex } from '~/utils/piiCrypto';
 import {
   MAX_FEEDBACK_FILE_BYTES,
@@ -35,20 +36,26 @@ export default defineEventHandler(async event => {
   let title: string | undefined;
   let description: string | undefined;
   let contact: string | null;
+  let rawCategory: unknown;
+  let targetUrlOrId: string | null;
+  let rightsOwnerName: string | null;
+  let swornStatement: boolean;
   let fileParts: { filename?: string; type?: string; data: Uint8Array }[] = [];
 
   if (contentType.toLowerCase().startsWith('multipart/form-data')) {
     const parts = await readMultipartFormData(event);
-    const titlePart = parts?.find(part => part.name === 'title' && !part.filename);
-    const descriptionPart = parts?.find(part => part.name === 'description' && !part.filename);
-    const contactPart = parts?.find(part => part.name === 'contact' && !part.filename);
-    title = titlePart ? Buffer.from(titlePart.data).toString('utf8').trim() : undefined;
-    description = descriptionPart
-      ? Buffer.from(descriptionPart.data).toString('utf8').trim()
-      : undefined;
-    contact = normalizeFeedbackContact(
-      contactPart ? Buffer.from(contactPart.data).toString('utf8') : undefined
-    );
+    const getTextField = (name: string) => {
+      const part = parts?.find(item => item.name === name && !item.filename);
+      return part ? Buffer.from(part.data).toString('utf8').trim() : undefined;
+    };
+    title = getTextField('title');
+    description = getTextField('description');
+    contact = normalizeFeedbackContact(getTextField('contact'));
+    rawCategory = getTextField('category');
+    targetUrlOrId = getTextField('targetUrlOrId')?.slice(0, 500) || null;
+    rightsOwnerName = getTextField('rightsOwnerName')?.slice(0, 255) || null;
+    const rawSworn = getTextField('swornStatement');
+    swornStatement = rawSworn === 'true' || rawSworn === '1';
     fileParts = (parts || [])
       .filter(
         part =>
@@ -63,10 +70,50 @@ export default defineEventHandler(async event => {
       throw createError({ statusCode: message.includes('vượt quá') ? 413 : 400, message });
     }
   } else {
-    const body = await readBody<{ title?: string; description?: string; contact?: string }>(event);
+    const body = await readBody<{
+      title?: string;
+      description?: string;
+      contact?: string;
+      category?: string;
+      targetUrlOrId?: string;
+      rightsOwnerName?: string;
+      swornStatement?: boolean;
+    }>(event);
     title = body?.title?.trim();
     description = body?.description?.trim();
     contact = normalizeFeedbackContact(body?.contact);
+    rawCategory = body?.category;
+    targetUrlOrId =
+      typeof body?.targetUrlOrId === 'string' && body.targetUrlOrId.trim()
+        ? body.targetUrlOrId.trim().slice(0, 500)
+        : null;
+    rightsOwnerName =
+      typeof body?.rightsOwnerName === 'string' && body.rightsOwnerName.trim()
+        ? body.rightsOwnerName.trim().slice(0, 255)
+        : null;
+    swornStatement = body?.swornStatement === true;
+  }
+
+  const category = normalizeFeedbackCategory(rawCategory);
+  if (category === 'copyright') {
+    if (!targetUrlOrId) {
+      throw createError({
+        statusCode: 400,
+        message: 'Vui lòng cung cấp URL addon hoặc ID tác phẩm cần gỡ bỏ',
+      });
+    }
+    if (!rightsOwnerName) {
+      throw createError({
+        statusCode: 400,
+        message: 'Vui lòng cung cấp tên chủ thể quyền sở hữu trí tuệ hoặc đại diện hợp pháp',
+      });
+    }
+    if (!swornStatement) {
+      throw createError({
+        statusCode: 400,
+        message: 'Vui lòng xác nhận cam kết thông tin khiếu nại bản quyền là trung thực',
+      });
+    }
   }
 
   if (!title || !description) {
@@ -155,6 +202,8 @@ export default defineEventHandler(async event => {
     });
   }
 
+  const slaDueAt = computeFeedbackSlaDueAt(category);
+
   try {
     const feedback = await prisma.feedbacks.create({
       data: {
@@ -164,6 +213,11 @@ export default defineEventHandler(async event => {
         contact: contact ? encryptPii(contact) : null,
         contact_hash: contact ? hashContactIndex(contact) : null,
         status: 'pending',
+        category,
+        target_url_or_id: targetUrlOrId,
+        rights_owner_name: rightsOwnerName,
+        sworn_statement: swornStatement,
+        sla_due_at: slaDueAt,
         user_id: userId,
         attachments,
       },

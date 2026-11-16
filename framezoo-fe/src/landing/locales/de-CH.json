@@ -54,7 +54,7 @@
     "addonPolicy": "Add-on-Richtlinie",
     "reportIssue": "Feedback/Bericht senden",
     "rights": "© 2026 Framezoo. Alle Rechte vorbehalten.",
-    "metadataAttribution": "Metadaten werden von öffentlichen Filmdatenbanken (TMDB, IMDb) zu Informationszwecken bereitgestellt."
+    "metadataAttribution": "Filmmetadaten und Grafiken nutzen die TMDB-API (nicht von TMDB unterstützt oder zertifiziert) und Bewertungen über die OMDb-API."
   },
   "addonGuide": {
     "manifestTitle": "Beginnen Sie mit manifest.json",
@@ -116,7 +116,7 @@
         "Wählen Sie im Kontextmenü „Öffnen“.",
         "Klicken Sie im Bestätigungsdialog auf „Trotzdem öffnen“ oder „Öffnen“."
       ],
-      "step2Desc": "Da Framezoo ein unabhängiger Open-Source-Player ohne kommerzielles Apple-Entwicklerzertifikat ist, zeigt macOS möglicherweise Folgendes an: „Framezoo ist beschädigt und kann nicht geöffnet werden“ oder „Apple kann diese App nicht überprüfen“.",
+      "step2Desc": "Da es sich bei Framezoo um einen unabhängigen Softwareplayer ohne kommerzielles Apple-Entwicklerzertifikat handelt, zeigt macOS möglicherweise Folgendes an: „Framezoo ist beschädigt und kann nicht geöffnet werden“ oder „Apple kann diese App nicht überprüfen“.",
       "step3Title": "Schritt 3: Sicher über den Finder öffnen",
       "note": "Sie müssen diesen Rechtsklick-Schritt nur beim ersten Start ausführen. Nachfolgende Starts können normal über Launchpad oder Spotlight erfolgen."
     },
@@ -176,7 +176,7 @@
     "submitting": "Einreichen...",
     "submit": "Feedback abgeben",
     "attachmentsLabel": "Dateien",
-    "attachmentsHint": "Bilder/Videos · Maximal 55 MB insgesamt",
+    "attachmentsHint": "Bilder/Videos/PDF (Autorisierung oder Urheberrechtsnachweis) · Maximal 55 MB insgesamt",
     "attachmentsTooLarge": "Die Gesamtdateigröße darf 55 MB nicht überschreiten.",
     "contactLabel": "2. E-Mail oder Telefonnummer",
     "contactPlaceholder": "z.B. name@example.com oder +84912345678",
@@ -229,7 +229,8 @@
     "pageTitle": "Framezoo-Untertitel konfigurieren | Framezoo",
     "hero": {
       "title": "Konfigurieren Sie Framezoo-Untertitel",
-      "description": "Richten Sie Ihren persönlichen Wyzie-API-Schlüssel ein, um schnellere Untertitel zu erhalten und gemeinsam genutzte Community-Ratenbeschränkungen zu umgehen."
+      "description": "Richten Sie Ihren persönlichen Wyzie-API-Schlüssel ein, um schnellere Untertitel zu erhalten und gemeinsam genutzte Community-Ratenbeschränkungen zu umgehen.",
+      "multiDescription": "Konfigurieren Sie optionale persönliche API-Schlüssel (BYOK) für Framezoo-Untertitelanbieter, um Ihre eigenen Ratenbeschränkungen zu verwenden."
     },
     "account": {
       "verifying": "Kontoticket wird über die Desktop-App überprüft...",
@@ -265,7 +266,10 @@
         "invalid": "Der API-Schlüssel ist ungültig oder abgelaufen.",
         "serverError": "Der Wyzie-Server hat HTTP {{status}} zurückgegeben.",
         "rateLimit": "Der API-Schlüssel hat die Ratengrenzen überschritten.",
-        "networkError": "Netzwerkfehler beim Herstellen der Verbindung zu sub.wyzie.io. Bitte überprüfen Sie Ihre Verbindung."
+        "networkError": "Netzwerkfehler beim Herstellen der Verbindung zu sub.wyzie.io. Bitte überprüfen Sie Ihre Verbindung.",
+        "verifyingProvider": "Verifizierung mit {{provider}}...",
+        "networkErrorProvider": "Der Verifizierungsdienst {{provider}} konnte nicht erreicht werden. Bitte versuchen Sie es erneut.",
+        "serverErrorProvider": "{{provider}} hat HTTP {{status}} zurückgegeben."
       }
     },
     "step3": {
@@ -276,7 +280,33 @@
       "noticeLabel": "Beachten:",
       "copied": "Kopiert!",
       "copyManifest": "Manifest-URL kopieren",
-      "noticeText": "Ihr API-Schlüssel wird sicher auf Ihrem Gerät gespeichert. Die Weiterleitung erfolgt ausschließlich zum Suchen und Abrufen von Untertiteln für Filme und Serien. Sie können es jederzeit aktualisieren oder entfernen."
+      "noticeText": "Ihr API-Schlüssel wird sicher auf Ihrem Gerät gespeichert. Die Weiterleitung erfolgt ausschließlich zum Suchen und Abrufen von Untertiteln für Filme und Serien. Sie können es jederzeit aktualisieren oder entfernen.",
+      "privacyLinkLabel": "Datenschutzrichtlinie",
+      "takedownLinkLabel": "Urheberrechts- und DMCA-Richtlinie"
+    },
+    "providersStep": {
+      "description": "Alle unten aufgeführten Schlüssel sind optional. Sofern bereitgestellt, bevorzugt Framezoo Ihren persönlichen Schlüssel gegenüber gemeinsamen Standardwerten. Für den Einbau in Granit ist kein Schlüssel erforderlich.",
+      "title": "API-Schlüssel für Untertitelanbieter",
+      "optionalBadge": "Optional",
+      "manifestHint": "„Manifest-URL kopieren“ leitet derzeit nur den Wyzie-Schlüssel für nicht authentifizierte Stremio-URLs weiter; Verbinden Sie Ihr Framezoo-Konto, um alle Anbieterschlüssel zu synchronisieren.",
+      "getKeyButton": "Holen Sie sich den API-Schlüssel"
+    },
+    "providers": {
+      "wyzie": {
+        "portalHint": "Generieren oder lösen Sie einen kostenlosen persönlichen API-Schlüssel im Wyzie Store ein.",
+        "placeholder": "Wyzie-API-Schlüssel einfügen...",
+        "name": "Wyzie"
+      },
+      "subsource": {
+        "name": "Unterquelle",
+        "portalHint": "Melden Sie sich bei SubSource an, öffnen Sie die Registerkarte „Konto-Dashboard“ → „API“ und erstellen Sie einen Schlüssel.",
+        "placeholder": "SubSource-API-Schlüssel einfügen..."
+      },
+      "opensubtitles": {
+        "name": "OpenSubtitles.com",
+        "portalHint": "Melden Sie sich bei OpenSubtitles.com an, öffnen Sie API Consumers und erstellen Sie einen REST API v1-Schlüssel.",
+        "placeholder": "OpenSubtitles.com REST API v1-Schlüssel einfügen ..."
+      }
     }
   },
   "legal": {
@@ -330,85 +360,85 @@
         ]
       },
       "privacy": {
-        "updatedAt": "Aktualisiert: 4. November 2026 · Gesetz 91/2025/QH15 und Dekret 356/2025/ND-CP",
+        "updatedAt": "Aktualisiert: 16. November 2026 · Version 2026-11 · Vietnamesisches Gesetz 91/2025/QH15 und Dekret 356/2025/ND-CP",
         "title": "Datenschutz- und Datenschutzrichtlinie",
         "sections": [
           {
-            "title": "Daten auf Ihrem Gerät und unseren Servern",
+            "title": "Geräte-, Gast- und Kontodaten",
             "paragraphs": [
-              "Die Anwendung speichert einige Einstellungen, Cache und Wiedergabedaten auf Ihrem Gerät. Wenn Sie ein Konto erstellen, speichert der Server auch Ihre E-Mail-Adresse, Ihren Spitznamen, Ihr Profil, Ihren öffentlichen Schlüssel, Sitzungs-/Gerätedetails, synchronisierte Lesezeichen, Fortschritt, Wiedergabeverlauf, Einstellungen und Add-ons sowie verschlüsselte Untertitelanbieterschlüssel, sofern Sie diese bereitstellen."
+              "Die App speichert lokale Einstellungen, Caches und Wiedergabedaten auf Ihrem Gerät. Wenn Sie ein Konto erstellen (beschränkt auf Benutzer ab 16 Jahren), speichert der Server auch Ihre verschlüsselte E-Mail, Ihren Spitznamen, Ihr Profil, Ihren öffentlichen Schlüssel, Ihre Sitzungs-/Gerätedetails, Ihre synchronisierten Lesezeichen, Ihren Fortschritt, Ihren Wiedergabeverlauf, Ihre Einstellungen, Add-ons, mit Zeitstempel versehenen Einwilligungsdatensätze und verschlüsselten API-Schlüssel des BYOK-Untertitelanbieters, sofern Sie diese speichern."
             ],
             "bullets": [
-              "E-Mail, Bestätigungscodes und Anfragedetails unterstützen die Registrierung, Anmeldung und Kontosicherheit.",
-              "Berichte, Fehlerbeschreibungen und Anhänge erreichen unseren Server, wenn Sie das Feedback-Formular absenden.",
-              "Die Website speichert Ihre Sprachauswahl im Browserspeicher."
+              "Der Gastmodus verwendet nur eine zufällige technische Kennung, Plattformbezeichnung und App-Version, um Untertitel-Relay-/Synchronisierungsendpunkte zu betreiben.",
+              "E-Mail-Bestätigungscodes und Anforderungsprotokolle werden ausschließlich zur Registrierung, Anmeldung und zum Schutz von Konten verarbeitet.",
+              "Die Servertelemetrie schließt Filmtitel, TMDB/IMDb-IDs und persönliche Add-on-Quellen von Drittanbietern aus."
             ],
             "badge": "01"
           },
           {
-            "title": "Zwecke und externe Dienstleistungen",
+            "title": "Zwecke, grenzüberschreitende Übertragung und externe APIs",
             "paragraphs": [
-              "Wir verarbeiten Daten, um Konten zu führen, Geräte zu synchronisieren, Support bereitzustellen, den Dienst zu schützen und von Ihnen ausgewählte Funktionen bereitzustellen. Wir verkaufen keine personenbezogenen Daten an Werbenetzwerke."
+              "Wir verarbeiten Daten ausschließlich zum Betrieb von Konten, zur Synchronisierung von Geräten, zur Bereitstellung von Support, zur Durchsetzung der Einhaltung gesetzlicher Vorschriften und verkaufen niemals personenbezogene Daten."
             ],
             "bullets": [
-              "Die Bestätigungs-E-Mail geht an unseren E-Mail-Anbieter. Datenbanksicherungen können auf Supabase gespeichert werden, wenn die Sicherung konfiguriert ist.",
-              "Einige Dienstanbieter oder Add-on-Server verarbeiten möglicherweise Daten außerhalb Vietnams. Der Standort des Servers hängt vom gewählten Dienst und der Betriebskonfiguration ab.",
-              "Bei der Registrierung kann Google reCAPTCHA verwendet werden; Untertiteltext geht an Google Translate, wenn Sie die Übersetzung auswählen.",
+              "Je nach Bereitstellungskonfiguration können E-Mail-Anbieter zur Transaktionsüberprüfung und verschlüsselte Datenbanksicherungen außerhalb Vietnams ansässig sein.",
+              "Metadaten und Kritikerbewertungen werden über offizielle TMDB- und OMDb-APIs abgerufen; Untertitelsuchen fragen Wyzie, SubSource und die REST-API von OpenSubtitles.com ab (bevorzugt Ihre persönlichen BYOK-Schlüssel, sofern angegeben).",
+              "Untertiteldatei-Relays verwenden No-Store-Header ohne öffentliches Caching. Add-ons von Drittanbietern werden gemäß ihren eigenen Richtlinien direkt von Ihrem Gerät aus kontaktiert.",
               "Untertitelsuchen und -downloads, Audio-/Untertitelsynchronisierung und Community-Add-ons können Anfragen über Framezoo-Server und die entsprechenden externen Dienste senden. Add-ons von Drittanbietern haben ihre eigenen Richtlinien."
             ],
             "badge": "02"
           },
           {
             "bullets": [
-              "Bestätigungscodes verfallen nach 10 Minuten; Abgelaufene Challenge-Datensätze werden nach 7 Tagen entfernt. Gesendete oder fehlgeschlagene E-Mail-Datensätze werden nach 7 Tagen entfernt.",
-              "Feedback und Anhänge werden für Support- oder Urheberrechtsanfragen getrennt aufbewahrt, bis sie auf Anfrage oder durch das Support-Team entfernt werden. Durch das Löschen des Kontos wird die Kontoverknüpfung entfernt, Berichte werden jedoch nicht automatisch gelöscht. Sie können eine gesonderte Löschung über das Feedback-Formular beantragen."
+              "Überprüfungs-OTP-Herausforderungen laufen nach 10 Minuten ab und werden zusammen mit den E-Mail-Postausgangsdatensätzen nach 7 Tagen gelöscht.",
+              "Feedbackberichte und Urheberrechtshinweise bleiben für Compliance-Prüfungen getrennt gespeichert; Durch die Kontolöschung wird die Verknüpfung mit Ihrer Benutzer-ID aufgehoben."
             ],
-            "title": "Aufbewahrung und Löschung",
+            "title": "Aufbewahrung, JSON-Datenexport und -löschung",
             "paragraphs": [
-              "Konto- und Synchronisierungsdaten bleiben erhalten, solange Ihr Konto aktiv ist. Sie können das Konto in den Einstellungen löschen; Der Server entfernt dann Kontodatensätze, Lesezeichen, Fortschritt, Wiedergabeverlauf, Einstellungen und Sitzungen. Alte Datenbanksicherungen behalten möglicherweise Daten bis zur Rotation; Die Standardkonfiguration behält 7 aktuelle Sicherungen bei, wenn die Sicherung ausgeführt wird."
+              "Konto- und Synchronisierungsdaten bleiben aktiv, solange Ihr Konto besteht. Sie können eine vollständige JSON-Kopie Ihrer persönlichen Daten exportieren oder Ihr Konto unter Einstellungen -> Aktionen dauerhaft löschen; Rotierende verschlüsselte Backups behalten bis zu 7 aktuelle Snapshots."
             ],
             "badge": "03"
           },
           {
-            "title": "Ihre Rechte und Kontakt",
+            "title": "Ihre Rechte, Altersgrenze (>=16) und Kontakt",
             "paragraphs": [
-              "Sie können den Zugriff, die Berichtigung, Löschung oder Einschränkung Ihrer Daten beantragen, Ihre Einwilligung widerrufen, wenn die Verarbeitung auf einer Einwilligung beruht, und über das Feedback-Formular auf unserer Website eine Beschwerde einreichen. Bitte geben Sie die E-Mail-Adresse Ihres Kontos an, damit wir die Anfrage überprüfen können."
+              "Die Kontoregistrierung ist gemäß dem vietnamesischen Gesetz 91/2025/QH15 auf Benutzer ab 16 Jahren beschränkt. Sie können den Zugriff, den JSON-Export, die Korrektur, das Löschen oder den Widerruf Ihrer Einwilligung über das Feedback-Modal oder über Privacy@framezoo.top/framezoo.top@gmail.com (Antwort innerhalb von 24 Stunden) ausüben."
             ],
             "badge": "04"
           }
         ],
-        "summary": "Diese Richtlinie beschreibt die Datenverarbeitung in der Framezoo-Desktopanwendung und auf offiziellen Framezoo-Servern."
+        "summary": "Diese Richtlinie beschreibt die Datenverarbeitung über Framezoo Desktop, Mobile, TV-Apps und offizielle Framezoo-Server hinweg."
       },
       "copyright": {
-        "summary": "Offizieller Haftungsausschluss für Inhalte und Verfahren zur Meldung und Entfernung von geistigem Eigentum für Framezoo.",
-        "title": "Urheberrecht, DMCA und Haftungsausschluss für Inhalte",
-        "updatedAt": "Aktualisiert: 4. November 2026",
+        "summary": "Neutraler Vermittlerstatus, 24-Stunden-/72-Stunden-Benachrichtigungs- und Deaktivierungs-Sperrlistenprozess und Richtlinie für wiederholte Rechtsverletzungen.",
+        "title": "Haftungsausschluss zum Urheberrecht, zu Hinweisen und zur Löschung von Inhalten",
+        "updatedAt": "Aktualisiert: 16. November 2026 · Vietnam IP Law Art. 198b & Dekret 17/2023",
         "sections": [
           {
-            "title": "Safe Harbor für Zwischensoftware",
+            "title": "Neutrale Vermittlersoftware und standardmäßiges No-Seeding-P2P",
             "paragraphs": [
-              "Framezoo betreibt keine Filmbibliothek oder Videostream-Quelle. Die Anwendung kann auf von Benutzern ausgewählte Quellen zugreifen. Unsere Server können Untertitel des Anbieters weiterleiten und vorübergehend Audio und Untertitel für die angeforderte Synchronisierung verarbeiten.",
-              "Jeder Urheberrechtsvermerk wird anhand des Inhalts und unserer tatsächlichen Rolle überprüft; Diese Bedingungen begründen keinen automatischen Haftungsausschluss."
+              "Framezoo ist eine neutrale Mediaplayer-Software, die Stremio und Kodi ähnelt: Sie hostet keine Videodateien, bündelt keine Standard-Inhalts-Add-ons oder öffentlichen Tracker, führt kein serverseitiges Add-on-Proxying durch und deaktiviert standardmäßig das ausgehende P2P-Seeding (upload_rate_limit = 0).",
+              "Untertitel-Downloads verwenden No-Store-Header ohne öffentliches Caching auf Framezoo-Servern."
             ],
             "badge": "01"
           },
           {
-            "title": "Zuordnung von Metadaten und Kunstwerken",
+            "title": "Offizielle Metadaten-APIs und TMDB-Namensnennung",
             "paragraphs": [
-              "Metadaten zu Filmen und Serien (Titel, Veröffentlichungsdaten, Synopsen, Bewertungen und Werbeplakate), die zur Informationssuche angezeigt werden, stammen aus öffentlichen Filmdatenbanken (wie TMDB, IMDb und TVDB).",
-              "Alle Marken, Filmtitel und Grafiken bleiben Eigentum ihrer jeweiligen Urheberrechtsinhaber."
+              "Filmtitel, Synopsen, Grafiken und Kritikerbewertungen werden zur Informationssuche von den offiziellen TMDB- und OMDb-APIs abgerufen.",
+              "Dieses Produkt verwendet die TMDB-API, ist jedoch nicht von TMDB unterstützt oder zertifiziert. Alle Marken und Mediengrafiken bleiben Eigentum ihrer jeweiligen Inhaber."
             ],
             "badge": "02"
           },
           {
-            "title": "Hinweis- und Löschverfahren",
+            "title": "Benachrichtigung und Beseitigung (24-Stunden-/72-Stunden-SLA) und Richtlinie für wiederholte Rechtsverletzungen",
             "bullets": [
-              "Identifizierung des Urheberrechtsinhabers oder bevollmächtigten Vertreters.",
-              "Eigentumsnachweis des urheberrechtlich geschützten Werks.",
+              "Anordnungen von zuständigen Behörden werden innerhalb von 24 Stunden auf /compliance/blocklist durchgesetzt; gültige Rechteinhabermitteilungen innerhalb von 72 Stunden.",
+              "Konten von Wiederholungstätern, die mit bestätigten Verstößen in Zusammenhang stehen, werden mit sofortiger Sperrung der Sitzung gesperrt.",
               "Die genaue URL oder Beschreibung des betreffenden Materials, damit wir es innerhalb von 24–72 Geschäftsstunden überprüfen und bearbeiten können."
             ],
             "paragraphs": [
-              "Framezoo respektiert die Rechte an geistigem Eigentum. Wenn Sie Urheberrechtsinhaber oder autorisierter Vertreter sind und glauben, dass Material auf Framezoo.top Ihre Rechte verletzt, senden Sie bitte eine Mitteilung über unseren Melde-/Feedback-Kanal, einschließlich:"
+              "Rechteinhaber und Behörden können formelle Mitteilungen (Identität des Rechteinhabers, Nachweis/PDF-Autorisierung, spezifische Add-on-Domain/Medien-ID/Untertitel-ID und eidesstattliche Erklärung) über das Meldeformular oder legal@framezoo.top/framezoo.top@gmail.com einreichen."
             ],
             "badge": "03"
           }

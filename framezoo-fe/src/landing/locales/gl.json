@@ -54,7 +54,7 @@
     "terms": "Condicións de servizo",
     "addonPolicy": "Política de complementos",
     "rights": "© 2026 Framezoo. Todos os dereitos reservados.",
-    "metadataAttribution": "Os metadatos son proporcionados polas bases de datos de películas públicas (TMDB, IMDb) con fins informativos."
+    "metadataAttribution": "Os metadatos e as obras de arte do filme usan a API de TMDB (non avalada nin certificada por TMDB) e as clasificacións a través da API de OMDb."
   },
   "addonGuide": {
     "title": "Crea un complemento sen unirte ao proceso da aplicación.",
@@ -112,7 +112,7 @@
       "subtitle": "Apple Silicon (M1/M2/M3/M4) e Intel Mac",
       "step3Title": "Paso 3: Abre con seguridade a través do Finder",
       "title": "Guía de instalación de macOS",
-      "step2Desc": "Como Framezoo é un reprodutor independente de código aberto sen un certificado comercial de programador de Apple, macOS pode mostrar: \"Framezoo está danado e non se pode abrir\" ou \"Apple non pode verificar esta aplicación\".",
+      "step2Desc": "Como Framezoo é un reprodutor de software independente sen un certificado comercial de programador de Apple, macOS pode mostrar: \"Framezoo está danado e non se pode abrir\" ou \"Apple non pode verificar esta aplicación\".",
       "step3Steps": [
         "Abre o Finder e desprázate ata o teu cartafol Aplicacións.",
         "Fai clic co botón dereito do rato (ou prema Control-clic) en Framezoo.app.",
@@ -176,7 +176,7 @@
     "successTitle": "Comentarios enviados correctamente!",
     "successDesc": "Grazas polos teus comentarios. O noso equipo revisará e resolverá o problema o antes posible.",
     "attachmentsLabel": "Arquivos",
-    "attachmentsHint": "Imaxes/vídeos · 55 MB en total como máximo",
+    "attachmentsHint": "Imaxes/vídeos/PDF (proba de autorización ou copyright) · 55 MB en total como máximo",
     "attachmentsTooLarge": "O tamaño total do ficheiro non debe superar os 55 MB.",
     "contactPlaceholder": "p.ex. nome@example.com ou +84912345678",
     "descLabel": "3. Descrición detallada",
@@ -228,7 +228,8 @@
   "subtitlesConfigure": {
     "hero": {
       "title": "Configura os subtítulos de Framezoo",
-      "description": "Configura a túa clave de API Wyzie persoal para obter subtítulos máis rápidos e evitar os límites de tarifas da comunidade compartida."
+      "description": "Configura a túa clave de API Wyzie persoal para obter subtítulos máis rápidos e evitar os límites de tarifas da comunidade compartida.",
+      "multiDescription": "Configure as claves de API persoais opcionais (BYOK) para que os provedores de Framezoo Subtitles utilicen os seus propios límites de tarifa."
     },
     "account": {
       "verifying": "Verificando o ticket da conta desde a aplicación de escritorio...",
@@ -265,7 +266,10 @@
         "verifying": "Verificando con Wyzie...",
         "networkError": "Erro de rede ao conectarse a sub.wyzie.io. Comproba a túa conexión.",
         "rateLimit": "A clave API superou os límites de velocidade.",
-        "invalid": "A clave API non é válida ou caducou."
+        "invalid": "A clave API non é válida ou caducou.",
+        "serverErrorProvider": "{{provider}} devolveu HTTP {{status}}.",
+        "networkErrorProvider": "Non se puido contactar co servizo de verificación {{provider}}. Téntao de novo.",
+        "verifyingProvider": "Verificando con {{provider}}..."
       }
     },
     "step3": {
@@ -276,7 +280,33 @@
       "copyManifest": "Copiar o URL do manifesto",
       "notConnectedNotice": "Nota: non estás conectado cun ticket de conta de Framezoo. Para sincronizar directamente con \"Abrir Framezoo\", abre esta páxina desde a aplicación de escritorio de Framezoo mentres estás conectado. Se non, copia o URL do manifesto a continuación para usalo.",
       "noticeText": "A túa clave API almacénase de forma segura no teu dispositivo. Envíase só para buscar e recuperar subtítulos de películas e series. Podes actualizalo ou eliminalo en calquera momento.",
-      "noticeLabel": "Aviso:"
+      "noticeLabel": "Aviso:",
+      "privacyLinkLabel": "Política de privacidade",
+      "takedownLinkLabel": "Política de copyright e DMCA"
+    },
+    "providersStep": {
+      "optionalBadge": "Opcional",
+      "getKeyButton": "Obter a clave API",
+      "manifestHint": "Copiar URL do manifesto actualmente envía só a clave Wyzie para os URL de Stremio non autenticados; conecta a túa conta de Framezoo para sincronizar todas as claves do provedor.",
+      "description": "Todas as claves a continuación son opcionais. Cando se proporciona, Framezoo prefire a túa chave persoal sobre os valores predeterminados compartidos. O granito incorporado non require ningunha chave.",
+      "title": "Chaves da API do provedor de subtítulos"
+    },
+    "providers": {
+      "wyzie": {
+        "name": "Wyzie",
+        "portalHint": "Xera ou troca unha clave de API persoal gratuíta na tenda Wyzie.",
+        "placeholder": "Pegar a clave da API de Wyzie..."
+      },
+      "opensubtitles": {
+        "portalHint": "Inicia sesión en OpenSubtitles.com, abre API Consumers e crea unha clave da API REST v1.",
+        "name": "OpenSubtitles.com",
+        "placeholder": "Pega a chave da API REST v1 de OpenSubtitles.com..."
+      },
+      "subsource": {
+        "portalHint": "Inicia sesión en SubSource, abre Panel de control da conta → pestana API e crea unha clave.",
+        "placeholder": "Pegar a chave da API de subfonte...",
+        "name": "Subfonte"
+      }
     }
   },
   "legal": {
@@ -329,87 +359,87 @@
       "privacy": {
         "sections": [
           {
-            "title": "Datos no teu dispositivo e nos nosos servidores",
+            "title": "Datos do dispositivo, convidado e conta",
             "paragraphs": [
-              "A aplicación almacena algúns axustes, caché e datos de reprodución no teu dispositivo. Se creas unha conta, o servidor tamén almacena o teu correo electrónico, alcume, perfil, clave pública, detalles da sesión/dispositivo, marcadores sincronizados, progreso, historial de visualización, configuración e complementos, ademais de claves cifradas do provedor de subtítulos se as proporcionas."
+              "A aplicación almacena configuracións locais, cachés e datos de reprodución no teu dispositivo. Cando creas unha conta (restrinxida a usuarios de 16 ou máis anos), o servidor tamén almacena o teu correo electrónico cifrado, alcume, perfil, clave pública, detalles de sesións/dispositivos, marcadores sincronizados, progreso, historial de visualización, configuración, complementos, rexistros de consentimento marcados de tempo e claves API cifradas do provedor de subtítulos BYOK se as gardas."
             ],
             "bullets": [
-              "O correo electrónico, os códigos de verificación e os detalles da solicitude admiten o rexistro, o inicio de sesión e a seguridade da conta.",
-              "Os informes, as descricións de erros e os anexos chegan ao noso servidor cando envías o formulario de comentarios.",
-              "O sitio web almacena a túa elección de idioma no almacenamento do navegador."
+              "O modo de convidado só utiliza un identificador técnico aleatorio, unha etiqueta de plataforma e unha versión da aplicación para operar os puntos finais de retransmisión/sincronización de subtítulos.",
+              "Os códigos de verificación de correo electrónico e os rexistros de solicitudes procesanse estrictamente para rexistrarse, iniciar sesión e protexer as contas.",
+              "A telemetría do servidor exclúe os títulos de películas, os ID de TMDB/IMDb e as fontes de complementos persoais de terceiros."
             ],
             "badge": "01"
           },
           {
-            "title": "Finalidades e servizos externos",
+            "title": "Propósitos, transferencia transfronteiriza e API externas",
             "bullets": [
-              "O correo electrónico de verificación vai ao noso provedor de correo; As copias de seguridade da base de datos pódense almacenar en Supabase cando se configura a copia de seguridade.",
-              "Algúns provedores de servizos ou servidores de complementos poden procesar datos fóra de Vietnam; a localización do servidor depende do servizo que escolla e da configuración operativa.",
-              "Google reCAPTCHA pódese usar durante o rexistro; o texto dos subtítulos vai a Google Translate cando escollas a tradución.",
+              "Os provedores de correo electrónico de verificación transaccional e as copias de seguranza de bases de datos cifradas poden residir fóra de Vietnam, dependendo da configuración da implantación.",
+              "Os metadatos e as puntuacións críticas obtéñense a través das API oficiais de TMDB e OMDb; As buscas de subtítulos consultan a Wyzie, SubSource e a API REST de OpenSubtitles.com (preferindo as túas claves BYOK persoais cando se proporcionen).",
+              "Os relés de ficheiros de subtítulos usan cabeceiras sen almacenar sen almacenamento en caché público. Os complementos de terceiros son contactados directamente desde o teu dispositivo baixo as súas propias políticas.",
               "As buscas e descargas de subtítulos, a sincronización de audio/subtítulos e os complementos da comunidade poden enviar solicitudes a través dos servidores de Framezoo e dos servizos externos pertinentes. Os complementos de terceiros teñen as súas propias políticas."
             ],
             "paragraphs": [
-              "Procesamos datos para executar contas, sincronizar dispositivos, proporcionar asistencia, protexer o servizo e ofrecer as funcións que escollas. Non vendemos datos persoais a redes de publicidade."
+              "Procesamos datos unicamente para operar contas, sincronizar dispositivos, proporcionar soporte, facer cumprir o cumprimento legal e nunca vender datos persoais."
             ],
             "badge": "02"
           },
           {
             "bullets": [
-              "Os códigos de verificación caducan despois de 10 minutos; os rexistros de desafío caducados elimínanse despois de 7 días. Os rexistros de correos enviados ou errados elimínanse despois de 7 días.",
-              "Os comentarios e os anexos gárdanse por separado para as solicitudes de asistencia ou dereitos de autor ata que sexan eliminados por solicitude ou polo equipo de asistencia. A eliminación da conta elimina a ligazón da conta pero non elimina automaticamente os informes. Podes solicitar a eliminación por separado a través do formulario de comentarios."
+              "Os desafíos de verificación OTP caducan despois de 10 minutos e elimínanse xunto cos rexistros da caixa de saída de correo electrónico despois de 7 días.",
+              "Os informes de comentarios e os avisos de copyright permanecen almacenados por separado para a auditoría do cumprimento; a eliminación da conta desliga o teu ID de usuario."
             ],
             "paragraphs": [
-              "Os datos da conta e da sincronización permanecen mentres a túa conta está activa. Podes eliminar a conta en Configuración; entón o servidor elimina os rexistros da conta, os marcadores, o progreso, o historial de visualización, a configuración e as sesións. As copias de seguridade das bases de datos antigas poden conservar os datos ata a rotación; a configuración predeterminada mantén 7 copias de seguridade recentes cando se está a executar."
+              "Os datos da conta e da sincronización permanecen activos mentres exista a túa conta. Podes exportar unha copia JSON completa dos teus datos persoais ou eliminar permanentemente a túa conta en Configuración -> Accións; as copias de seguridade cifradas rotativas conservan ata 7 instantáneas recentes."
             ],
-            "title": "Retención e eliminación",
+            "title": "Retención, exportación e eliminación de datos JSON",
             "badge": "03"
           },
           {
             "paragraphs": [
-              "Pode solicitar acceso, corrección, eliminación ou restrición dos seus datos, retirar o consentimento cando o procesamento depende do consentimento e presentar unha reclamación a través do formulario de comentarios do noso sitio web. Fornece o correo electrónico da túa conta para que poidamos verificar a solicitude."
+              "O rexistro da conta está limitado aos usuarios de 16 ou máis anos segundo a Lei 91/2025/QH15 de Vietnam. Podes exercer o acceso, exportación JSON, corrección, eliminación ou retirada do consentimento mediante o modal de Comentarios ou privacy@framezoo.top / framezoo.top@gmail.com (resposta nun prazo de 24 horas)."
             ],
-            "title": "Os teus dereitos e contacto",
+            "title": "Os teus dereitos, porta de idade (>=16) e contacto",
             "badge": "04"
           }
         ],
         "title": "Política de privacidade e protección de datos persoais",
-        "updatedAt": "Actualizado: 4 de novembro de 2026 · Lei 91/2025/QH15 e Decreto 356/2025/ND-CP",
-        "summary": "Esta política describe o procesamento de datos na aplicación de escritorio Framezoo e nos servidores oficiais de Framezoo."
+        "updatedAt": "Actualizado: 16 de novembro de 2026 · Versión 2026-11 · Lei 91/2025/QH15 de Vietnam e Decreto 356/2025/ND-CP",
+        "summary": "Esta política describe o procesamento de datos en Framezoo Desktop, Mobile, aplicacións de TV e servidores oficiais de Framezoo."
       },
       "copyright": {
-        "updatedAt": "Actualizado: 4 de novembro de 2026",
+        "updatedAt": "Actualizado: 16 de novembro de 2026 · Art. 198b e Decreto 17/2023",
         "sections": [
           {
             "paragraphs": [
-              "Framezoo non opera unha biblioteca de películas nin unha fonte de fluxo de vídeo. A aplicación pode acceder ás fontes escollidas polos usuarios; os nosos servidores poden transmitir subtítulos do provedor e procesar temporalmente audio e subtítulos para a sincronización solicitada.",
-              "Cada aviso de copyright é revisado en función do contido e do noso papel real; estes termos non crean unha exención automática de responsabilidade."
+              "Framezoo é un software de reprodutor multimedia neutro semellante a Stremio e Kodi: non aloxa ficheiros de vídeo, non inclúe complementos de contido predeterminado nin rastreadores públicos, non realiza ningún proxy de complementos no servidor e desactiva o seeding P2P de saída (upload_rate_limit = 0) por defecto.",
+              "As descargas de subtítulos usan cabeceiras sen tendas sen caché pública nos servidores de Framezoo."
             ],
-            "title": "Software intermediario Safe Harbor",
+            "title": "Software intermediario neutral e P2P sen sementes predeterminados",
             "badge": "01"
           },
           {
             "paragraphs": [
-              "Os metadatos de películas e series (títulos, datas de lanzamento, sinopsis, clasificacións e carteis promocionais) que se amosan para o descubrimento informativo proceden de bases de datos de películas públicas (como TMDB, IMDb e TVDB).",
-              "Todas as marcas comerciais, títulos de películas e obras de arte seguen sendo propiedade dos seus respectivos propietarios de dereitos de autor."
+              "Os títulos de películas, as sinopsis, as obras de arte e as valoracións dos críticos obtéñense das API oficiais de TMDB e OMDb para obter información.",
+              "Este produto usa a API de TMDB pero non está avalado nin certificado por TMDB. Todas as marcas comerciais e as obras de arte multimedia seguen sendo propiedade dos seus respectivos propietarios."
             ],
-            "title": "Atribución de metadatos e obras de arte",
+            "title": "API de metadatos oficiais e atribución de TMDB",
             "badge": "02"
           },
           {
-            "title": "Aviso e procedemento de retirada",
+            "title": "Aviso e retirada (SLA 24h/72h) e Política de infraccións reiteradas",
             "bullets": [
-              "Identificación do propietario dos dereitos de autor ou representante autorizado.",
-              "Proba de propiedade da obra protexida por dereitos de autor.",
+              "As ordes das autoridades competentes aplícanse en /compliance/blocklist nun prazo de 24 horas; avisos válidos do titular dos dereitos dentro de 72 horas.",
+              "As contas de infractores reiterados asociadas con infraccións verificadas suspéndense coa revogación inmediata da sesión.",
               "O URL exacto ou a descrición do material en cuestión para que poidamos revisalo e abordalo nun prazo de 24 a 72 horas laborables."
             ],
             "paragraphs": [
-              "Framezoo respecta os dereitos de propiedade intelectual. Se es propietario dos dereitos de autor ou axente autorizado e cres que calquera material de framezoo.top infrinxe os teus dereitos, envía un aviso a través da nosa canle de informes/comentarios, incluíndo:"
+              "Os titulares dos dereitos e as autoridades poden enviar notificacións formais (identidade do propietario dos dereitos, autorización de proba/PDF, ID de dominio específico de complemento/ID de medios/ID de subtítulos e declaración xurada) a través do formulario de informe ou a legal@framezoo.top / framezoo.top@gmail.com."
             ],
             "badge": "03"
           }
         ],
-        "summary": "Exención de responsabilidade de contido oficial e procedemento de notificación e retirada de propiedade intelectual para Framezoo.",
-        "title": "Descargo de responsabilidade sobre copyright, DMCA e contido"
+        "summary": "Estado de intermediario neutral, proceso de lista de bloqueo de aviso e retirada 24 horas/72 horas e política de infractores reiterados.",
+        "title": "Copyright, aviso e retirada e exención de responsabilidade de contido"
       },
       "addon-policy": {
         "title": "Política de complementos e directrices da comunidade",

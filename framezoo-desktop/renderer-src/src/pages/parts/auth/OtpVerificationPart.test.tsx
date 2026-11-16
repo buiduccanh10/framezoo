@@ -87,4 +87,39 @@ describe("OtpVerificationPart", () => {
       "Can't find the email? Please check your spam or junk folder.",
     );
   });
+
+  it("counts down expiration and resend timers every second without resetting", () => {
+    vi.useFakeTimers();
+    try {
+      act(() => {
+        root.render(
+          <I18nextProvider i18n={i18n}>
+            <OtpVerificationPart
+              title="Confirm password change"
+              description="Enter code"
+              challenge={{
+                challengeId: "countdown-challenge",
+                expiresIn: 600,
+                resendAfter: 60,
+              }}
+              onVerify={vi.fn()}
+              onResend={vi.fn()}
+            />
+          </I18nextProvider>,
+        );
+      });
+
+      expect(container.textContent).toContain("Code expires in 10:00");
+      expect(container.textContent).toContain("Resend available in 60s");
+
+      act(() => {
+        vi.advanceTimersByTime(3000);
+      });
+
+      expect(container.textContent).toContain("Code expires in 9:57");
+      expect(container.textContent).toContain("Resend available in 57s");
+    } finally {
+      vi.useRealTimers();
+    }
+  });
 });

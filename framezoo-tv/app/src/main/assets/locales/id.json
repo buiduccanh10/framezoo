@@ -18,6 +18,7 @@
       "configRequiredDesc": "Addon ini memerlukan konfigurasi (seperti kunci API atau pengaturan bahasa) sebelum dapat menampilkan konten. Silakan konfigurasikan di browser Anda, lalu salin dan tempel URL manifest yang dihasilkan di sini.",
       "configRequiredTitle": "Konfigurasi Diperlukan",
       "configureAction": "Konfigurasi",
+      "disclaimerNotice": "Add-on pihak ketiga dioperasikan secara independen oleh pengembang komunitas. Anda sepenuhnya bertanggung jawab untuk memverifikasi legalitas konten di wilayah hukum Anda; P2P seeding dinonaktifkan secara default.",
       "errorFallback": "Tidak dapat memasang addon ini.",
       "manageListButton": "Kelola daftar tambahan",
       "openConfigurePage": "Buka Halaman Konfigurasi",
@@ -181,7 +182,7 @@
       "passwordWeak": "Kata sandi minimal harus 8 karakter dengan huruf dan angka",
       "privacyPolicy": "Kebijakan Privasi",
       "submit": "Buat akun",
-      "legalConsent": "Saya telah membaca dan menyetujui <terms>Ketentuan Layanan</terms> dan <privacy>Kebijakan Privasi</privacy>."
+      "legalConsent": "Saya menyatakan bahwa saya berusia minimal 16 tahun dan telah membaca serta menyetujui <terms>Ketentuan Layanan</terms> dan <privacy>Kebijakan Privasi</privacy>."
     },
     "trust": {
       "failed": {
@@ -306,7 +307,10 @@
   },
   "footer": {
     "legal": {
-      "disclaimer": "Sanggahan",
+      "disclaimer": "Penafian",
+      "dmca": "DMCA / Penghapusan Konten",
+      "terms": "Ketentuan Layanan",
+      "tmdbAttribution": "Metadata film & poster disediakan oleh API TMDB (tidak didukung atau disertifikasi oleh TMDB).",
       "disclaimerText": "Framezoo tidak mengoperasikan sumber streaming video. Servernya dapat meneruskan subtitle penyedia dan memproses audio serta subtitle untuk sementara agar sinkron saat Anda memilih fitur tersebut. Anda mengontrol konten yang Anda putar."
     },
     "links": {
@@ -484,15 +488,15 @@
     },
     "support": {
       "complete": "menyelesaikan",
-      "description": "Framezoo dijalankan dalam keadaan bingung, dan kami membutuhkan bantuan untuk menjaganya tetap bebas iklan! Jika Anda senang menggunakan Framezoo, mohon pertimbangkan untuk berdonasi untuk membantu kami menutupi biaya kami.",
-      "donate": "Menyumbangkan",
-      "explanation": "Jika Anda tidak menggunakan ekstensi atau belum menyiapkan FED API, mungkin akan lebih sulit menemukan konten! Kami ingin memperbaikinya, tetapi menyediakan konten tanpa server yang mahal jauh lebih sulit. Jadi mohon, jika Anda senang menggunakan Framezoo, mohon pertimbangkan untuk berdonasi untuk membantu kami menutupi biaya kami yang terus meningkat.",
+      "description": "Framezoo adalah pemutar media netral, dan dukungan perangkat lunak sukarela membantu menjaganya agar tetap bebas iklan! Harap dicatat bahwa kontribusi hanya mendukung rekayasa perangkat lunak murni dan tidak pernah membeli konten media atau add-on pihak ketiga.",
+      "donate": "Mendukung pengembangan perangkat lunak",
+      "explanation": "Jika Anda belum mengkonfigurasi add-on pihak ketiga Anda sendiri di pemutar, streaming tidak akan muncul secara default. Framezoo bertindak semata-mata sebagai pemutar teknis netral tanpa menampung konten. Kontribusi sukarela apa pun hanya mendukung pengembangan aplikasi dan infrastruktur yang berkelanjutan.",
       "explanation2": "Jika Anda ingin info lebih lanjut, silakan bergabung dengan kami",
       "fluxer": "fluks",
-      "label": "Pendanaan Proyek: ${{current}} / ${{goal}}",
+      "label": "Dukungan Rekayasa Perangkat Lunak: ${{current}} / ${{goal}}",
       "moreInfo": "Informasi lebih lanjut",
       "thankYou": "Terima kasih atas dukungan Anda!",
-      "title": "Framezoo membutuhkan bantuan Anda!"
+      "title": "Dukung pengembangan perangkat lunak Framezoo!"
     },
     "titles": {
       "69": {
@@ -1210,12 +1214,24 @@
           "text": "Ini akan mengeluarkan anda dari semua perangkat yang terhubung dengan akun anda.",
           "title": "Akhiri Semua Sesi"
         },
+        "exportData": {
+          "button": "Ekspor JSON",
+          "text": "Unduh salinan profil akun Anda, bookmark, riwayat tontonan, pengaturan, dan catatan persetujuan hukum (JSON).",
+          "title": "Ekspor Data Pribadi"
+        },
         "migration": {
           "button": "Migrasi akun",
           "text": "Migrasikan akun Anda ke server baru atau unduh data Anda.",
           "title": "Migrasi akun"
         },
-        "title": "Tindakan"
+        "title": "Tindakan",
+        "export": {
+          "button": "Ekspor Data JSON",
+          "error": "Gagal mengekspor data pribadi. Silakan coba lagi.",
+          "success": "Mengekspor data pribadi ke",
+          "text": "Unduh salinan akun Anda, pengaturan yang disinkronkan, dan laporan yang dikirimkan (kepatuhan Perlindungan Data).",
+          "title": "Ekspor Data Pribadi"
+        }
       },
       "devices": {
         "deviceNameLabel": "Nama perangkat",
@@ -1445,7 +1461,14 @@
       "clearCacheError": "Gagal menghapus cache. Silakan coba lagi.",
       "spaceLeftOnDevice": "(Ruang penyimpanan __PH__0__ tersisa di perangkat Anda)"
     },
-    "unsaved": "Anda memiliki perubahan yang belum disimpan"
+    "unsaved": "Anda memiliki perubahan yang belum disimpan",
+    "legal": {
+      "title": "Pengungkapan Hukum, Hak Cipta & Operator",
+      "operator": "Operator: Bui Duc Canh (Independent Developer, Framezoo Project) — Phao Dai Lang, Lang Ward, Hanoi, Vietnam",
+      "contact": "Legal / DMCA / Privacy Contact: framezoo.top@gmail.com (or legal@framezoo.top) · Tel: +84 984908816",
+      "links": "https://framezoo.top/legal/terms · /legal/privacy · /legal/dmca · /legal/about",
+      "disclaimer": "Framezoo adalah pemutar media netral dan tidak menghosting atau menggabungkan konten atau tambahan media pihak ketiga. Metadata dan peringkat menggunakan API TMDB dan OMDb, dan produk ini tidak didukung atau disertifikasi oleh TMDB."
+    }
   },
   "tmdb": {
     "genres": {
@@ -1518,6 +1541,7 @@
     "modalTitle": "Bantu kami terus membangun __BRAND__",
     "subtitle": "Setiap kontribusi membantu kami meningkatkan pemutar media, memperluas ke lebih banyak platform, dan terus mendengarkan ide-ide Anda.",
     "note": "Terima kasih atas kepedulian Anda terhadap Framezoo dan dukungan Anda terhadap pekerjaan di baliknya. Kontribusi Anda memberi kami lebih banyak ruang untuk membangun pengalaman yang lebih baik bagi semua orang.",
+    "legalDisclaimer": "Dukungan pengembangan perangkat lunak bersifat sukarela saja — kontribusi tidak termasuk pembelian film, streaming media, atau akses add-on.",
     "scanHint": "Pindai kode QR ini dengan aplikasi perbankan Anda.",
     "paypalLabel": "PayPal",
     "momoLabel": "Mama",

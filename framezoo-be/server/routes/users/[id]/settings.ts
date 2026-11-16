@@ -2,6 +2,7 @@ import { useAuth } from '~/utils/auth';
 import { z } from 'zod';
 import { scopedLogger } from '~/utils/logger';
 import { prisma } from '~/utils/prisma';
+import { filterBlockedAddonsForUser } from '~/utils/takedown';
 
 const log = scopedLogger('user-settings');
 
@@ -54,6 +55,10 @@ export default defineEventHandler(async event => {
         where: { id: userId },
       });
 
+      const { addons: safeAddons } = await filterBlockedAddonsForUser(
+        Array.isArray(settings?.addons) ? settings.addons : []
+      );
+
       return {
         id: userId,
         applicationTheme: settings?.application_theme || null,
@@ -63,7 +68,7 @@ export default defineEventHandler(async event => {
         enableAutoplay: settings?.enable_autoplay ?? true,
         enableSkipCredits: settings?.enable_skip_credits ?? false,
         proxyTmdb: settings?.proxy_tmdb ?? false,
-        addons: (settings?.addons as any[]) || [],
+        addons: safeAddons,
         nativeSubtitlesEnabled: settings?.native_subtitles_enabled ?? true,
       };
     } catch (error) {
@@ -87,6 +92,9 @@ export default defineEventHandler(async event => {
       });
 
       const validatedBody = userSettingsSchema.parse(body);
+      const { addons: sanitizedAddons } = await filterBlockedAddonsForUser(
+        validatedBody.addons || []
+      );
 
       const createData = {
         application_theme: validatedBody.applicationTheme ?? null,
@@ -96,7 +104,7 @@ export default defineEventHandler(async event => {
         enable_autoplay: validatedBody.enableAutoplay,
         enable_skip_credits: validatedBody.enableSkipCredits,
         proxy_tmdb: validatedBody.proxyTmdb,
-        addons: validatedBody.addons || [],
+        addons: sanitizedAddons,
         native_subtitles_enabled: validatedBody.nativeSubtitlesEnabled,
       };
 

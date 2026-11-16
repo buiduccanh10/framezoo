@@ -18,6 +18,7 @@
       "configRequiredDesc": "Þessi viðbót krefst stillinga (eins og API-lykla eða tungumálastillinga) áður en hún getur skilað efni. Vinsamlegast stilltu hana í vafranum þínum og afritaðu og límdu síðan myndaða slóðina á upplýsingaskrána hér.",
       "configRequiredTitle": "Nauðsynleg stilling",
       "configureAction": "Stilla",
+      "disclaimerNotice": "Viðbætur frá þriðja aðila eru reknar sjálfstætt af forriturum samfélagsins. Þú berð eingöngu ábyrgð á að staðfesta lögmæti efnis í þínu lögsagnarumdæmi; P2P sáning er sjálfkrafa óvirk.",
       "errorFallback": "Ekki er hægt að setja upp þessa viðbót.",
       "manageListButton": "Stjórna viðbótarlista",
       "openConfigurePage": "Opna stillingasíðu",
@@ -38,6 +39,7 @@
       "configureCustomKeyActive": "Lykillinn þinn hefur verið stilltur (smelltu til að breyta)",
       "configureRequiredAction": "Stilla þessa viðbót (Nauðsynlegt)",
       "customKeyActiveDesc": "Að nota persónulegan Wyzie API lykilinn þinn",
+      "customKeyActiveProviders": "Að nota persónulegan lykil fyrir textaskil ({{providers}})",
       "customKeyConfiguredBadge": "Lykillinn þinn hefur verið stilltur",
       "description": "Viðbætur eru valfrjálsar. Þetta app hefur ekki búnt, mælir með eða hýsir neina viðbót.",
       "disabled": "Öryrkjar",
@@ -181,7 +183,7 @@
       "passwordWeak": "Lykilorð verður að vera að minnsta kosti 8 stafir með bókstöfum og tölustöfum",
       "privacyPolicy": "Persónuverndarstefna",
       "submit": "Stofna reikning",
-      "legalConsent": "Ég hef lesið og samþykki <terms>Þjónustuskilmála</terms> og <privacy>Persónuverndarstefnu</privacy>."
+      "legalConsent": "Ég staðfesti að ég er að minnsta kosti 16 ára gamall og hef lesið og samþykki <terms>Þjónustuskilmálana</terms> og <privacy>Persónuverndarstefnuna</privacy>."
     },
     "trust": {
       "failed": {
@@ -307,6 +309,9 @@
   "footer": {
     "legal": {
       "disclaimer": "Fyrirvari",
+      "dmca": "DMCA / Fjarlæging",
+      "terms": "Þjónustuskilmálar",
+      "tmdbAttribution": "Lýsigögn kvikmynda og veggspjöld eru veitt af TMDB API (ekki samþykkt eða vottað af TMDB).",
       "disclaimerText": "Framezoo notar ekki myndstrauma. Þjónar þess kunna að senda texta frá veitendum og vinna tímabundið úr hljóði og textum til samstillingar þegar þú velur þann eiginleika. Þú stjórnar því hvaða efni þú spilar."
     },
     "links": {
@@ -484,15 +489,15 @@
     },
     "support": {
       "complete": "lokið",
-      "description": "Framezoo er rekið með tapi og við þurfum hjálp til að halda því án auglýsinga! Ef þér finnst gaman að nota Framezoo skaltu íhuga að gefa til að hjálpa okkur að standa straum af kostnaði okkar.",
-      "donate": "Gefðu",
-      "explanation": "Ef þú ert ekki að nota viðbótina eða ert ekki með FED API uppsett, gæti verið erfiðara að finna efni! Við viljum laga þetta, en það er miklu erfiðara að útvega efni án dýrra netþjóna. Svo vinsamlegast, ef þú hefur gaman af því að nota Framezoo, vinsamlegast íhugaðu að gefa til að hjálpa okkur að standa straum af vaxandi kostnaði okkar.",
+      "description": "Framezoo er hlutlaus margmiðlunarspilari og sjálfboðinn hugbúnaðarstuðningur hjálpar til við að halda honum auglýsingalausum! Vinsamlegast athugið að framlög styðja eingöngu hugbúnaðarverkfræði og kaupið aldrei margmiðlunarefni eða viðbætur frá þriðja aðila.",
+      "donate": "Stuðningur við hugbúnaðarþróun",
+      "explanation": "Ef þú hefur ekki stillt þínar eigin viðbætur frá þriðja aðila í spilaranum, munu straumar ekki birtast sjálfkrafa. Framezoo virkar eingöngu sem hlutlaus tæknilegur spilari án þess að hýsa efni. Öll sjálfboðaliðaframlög styðja aðeins við áframhaldandi forritagerð og innviði.",
       "explanation2": "Ef þú vilt frekari upplýsingar, vinsamlegast vertu með í okkar",
       "fluxer": "Fluxer",
-      "label": "Verkefnafjármögnun: ${{current}} / ${{goal}}",
+      "label": "Hugbúnaðarverkfræðiaðstoð: ${{current}} / ${{goal}}",
       "moreInfo": "Frekari upplýsingar",
       "thankYou": "Þakka þér fyrir stuðninginn!",
-      "title": "Framezoo þarf hjálp þína!"
+      "title": "Styðjið Framezoo hugbúnaðarþróun!"
     },
     "titles": {
       "69": {
@@ -1210,6 +1215,11 @@
           "text": "Þetta mun útskrifa þig af öllum tækjum sem tengd eru reikningnum þínum.",
           "title": "Enda allar sesjónir"
         },
+        "exportData": {
+          "button": "Flytja út JSON",
+          "text": "Sæktu afrit af reikningsprófílnum þínum, bókamerkjum, áhorfsferli, stillingum og samþykkisskrá (JSON).",
+          "title": "Flytja út persónuupplýsingar"
+        },
         "migration": {
           "button": "Flytja reikning",
           "text": "Flyttu reikninginn þinn yfir á nýjan netþjón eða halaðu niður gögnunum þínum.",
@@ -1518,6 +1528,7 @@
     "modalTitle": "Hjálpaðu okkur að halda áfram að byggja upp Framezoo",
     "subtitle": "Sérhvert framlag hjálpar okkur að bæta spilara, stækka hann á fleiri vettvanga og halda áfram að hlusta á hugmyndir ykkar.",
     "note": "Þakka þér fyrir að láta þig varða Framezoo og styðja vinnuna sem liggur að baki því. Framlag þitt gefur okkur meira svigrúm til að byggja upp betri upplifun fyrir alla.",
+    "legalDisclaimer": "Aðeins sjálfboðaliðastyrkur til hugbúnaðarþróunar — framlög kaupa ekki kvikmyndir, margmiðlunarstreymi eða aðgang að viðbótum.",
     "scanHint": "Skannaðu þennan QR kóða með bankaforritinu þínu.",
     "paypalLabel": "PayPal",
     "momoLabel": "Mamma",

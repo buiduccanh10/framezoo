@@ -2,6 +2,7 @@ import { defineEventHandler, getQuery } from 'h3';
 import { prisma } from '~/utils/prisma';
 import { requireAdmin } from '~/utils/admin';
 import { parseFeedbackAttachments } from '~/utils/feedback-storage';
+import { FEEDBACK_CATEGORIES } from '~/utils/legalConstants';
 import { decryptPiiOrNull, hashContactIndex, hashEmailIndex } from '~/utils/piiCrypto';
 
 export default defineEventHandler(async event => {
@@ -13,6 +14,10 @@ export default defineEventHandler(async event => {
   const limit = Math.min(100, Math.max(1, parseInt(String(query.limit || '10'), 10) || 10));
   const status =
     query.status === 'pending' || query.status === 'resolved' ? query.status : undefined;
+  const rawCategory = typeof query.category === 'string' ? query.category.trim().toLowerCase() : '';
+  const category = (FEEDBACK_CATEGORIES as readonly string[]).includes(rawCategory)
+    ? rawCategory
+    : undefined;
   const matchingUsers = search
     ? await prisma.users.findMany({
         where: {
@@ -28,6 +33,7 @@ export default defineEventHandler(async event => {
     : [];
   const where: any = {};
   if (status) where.status = status;
+  if (category) where.category = category;
   if (search) {
     where.OR = [
       { title: { contains: search, mode: 'insensitive' } },
@@ -37,18 +43,25 @@ export default defineEventHandler(async event => {
     ];
   }
   const statsWhere = search && where.OR ? { OR: where.OR } : {};
+  const now = new Date();
 
-  const [total, pending, resolved, feedbacks] = await Promise.all([
-    prisma.feedbacks.count({ where }),
-    prisma.feedbacks.count({ where: { ...statsWhere, status: 'pending' } }),
-    prisma.feedbacks.count({ where: { ...statsWhere, status: 'resolved' } }),
-    prisma.feedbacks.findMany({
-      where,
-      orderBy: { created_at: 'desc' },
-      skip: (page - 1) * limit,
-      take: limit,
-    }),
-  ]);
+  const [total, pending, resolved, pendingCopyright, pendingPrivacy, overdueCompliance, feedbacks] =
+    await Promise.all([
+      prisma.feedbacks.count({ where }),
+      prisma.feedbacks.count({ where: { ...statsWhere, status: 'pending' } }),
+      prisma.feedbacks.count({ where: { ...statsWhere, status: 'resolved' } }),
+      prisma.feedbacks.count({ where: { ...statsWhere, status: 'pending', category: 'copyright' } }),
+      prisma.feedbacks.count({ where: { ...statsWhere, status: 'pending', category: 'privacy' } }),
+      prisma.feedbacks.count({
+        where: { ...statsWhere, status: 'pending', sla_due_at: { lt: now } },
+      }),
+      prisma.feedbacks.findMany({
+        where,
+        orderBy: [{ sla_due_at: 'asc' }, { created_at: 'desc' }],
+        skip: (page - 1) * limit,
+        take: limit,
+      }),
+    ]);
 
   const userIds = [
     ...new Set(
@@ -84,6 +97,12 @@ export default defineEventHandler(async event => {
       description: f.description,
       contact: decryptPiiOrNull(f.contact),
       status: f.status,
+      category: f.category,
+      target_url_or_id: f.target_url_or_id,
+      rights_owner_name: f.rights_owner_name,
+      sworn_statement: f.sworn_statement,
+      sla_due_at: f.sla_due_at,
+      resolved_at: f.resolved_at,
       user_id: f.user_id,
       user: user
         ? {
@@ -109,6 +128,13 @@ export default defineEventHandler(async event => {
     success: true,
     feedbacks: items,
     pagination: { page, limit, total, totalPages: Math.ceil(total / limit) || 1 },
-    stats: { total, pending, resolved },
+    stats: {
+      total,
+      pending,
+      resolved,
+      pendingCopyright,
+      pendingPrivacy,
+      overdueCompliance,
+    },
   };
 });

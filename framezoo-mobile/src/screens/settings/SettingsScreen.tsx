@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
+import { Alert, Linking, Share, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { persistAuth, persistBackendUrl, persistPreferences } from '@/app/bootstrap';
-import { getSessions, deleteAccount, removeSession, updateAccount, updateSession, type MobileSession } from '@/services/account';
+import { getSessions, deleteAccount, exportAccountData, removeSession, updateAccount, updateSession, type MobileSession } from '@/services/account';
 import { getSettings, updateSettings } from '@/services/settings';
 import { addonRepository } from '@/services/addons';
 import { AppText, Button, ErrorState, LoadingState, Screen, TextInput } from '@/components/primitives';
@@ -308,6 +308,19 @@ export function SettingsScreen() {
     ]);
   }
 
+  function exportCurrentAccountData() {
+    if (!account || !backendUrl) return;
+    void exportAccountData(backendUrl, account)
+      .then((payload) =>
+        Share.share({
+          title: `framezoo-personal-data-${account.userId}.json`,
+          message: JSON.stringify(payload, null, 2),
+        }),
+      )
+      .then(() => setNotice('Personal data export ready.'))
+      .catch((cause) => setError(cause instanceof Error ? cause.message : 'Could not export personal data.'));
+  }
+
   function signOutAllDevices() {
     if (!account || !backendUrl) return;
     void Promise.all(
@@ -404,6 +417,7 @@ export function SettingsScreen() {
             </SettingsCard>
 
             <SettingsCard title="Account actions" icon="settings">
+              <Button label="Export personal data (JSON)" onPress={exportCurrentAccountData} variant="secondary" />
               <Button label="Log out" onPress={logout} variant="danger" />
               <Button label="Migration" onPress={() => navigation.navigate('Migration')} variant="secondary" />
               <Button label="Delete account" onPress={deleteCurrentAccount} variant="danger" />
@@ -543,6 +557,18 @@ export function SettingsScreen() {
         </SettingsCard>
         <SettingsCard title="Addon manager" description="Install catalog, metadata, stream or subtitle manifests." icon="addons">
           <Button label="Manage addons" onPress={() => navigation.navigate('Addons')} />
+        </SettingsCard>
+      </SettingsSection>
+
+      <SettingsSection icon="settings" title="Legal & Attribution" description="Neutral player policies and copyright takedown notice channel.">
+        <SettingsCard title="Documents & Privacy" description="Operated independently by Bùi Đức Cảnh · Legal contact: framezoo.top@gmail.com · 0984908816" icon="settings">
+          <Button compact label="Terms of Service" onPress={() => Linking.openURL('https://framezoo.top/legal/terms').catch(() => undefined)} variant="secondary" />
+          <Button compact label="Privacy Policy (Law 91/2025)" onPress={() => Linking.openURL('https://framezoo.top/legal/privacy').catch(() => undefined)} variant="secondary" />
+          <Button compact label="Copyright / Notice & Takedown" onPress={() => Linking.openURL('https://framezoo.top/legal/dmca').catch(() => undefined)} variant="secondary" />
+          <Button compact label="Addon Policy" onPress={() => Linking.openURL('https://framezoo.top/legal/addon-policy').catch(() => undefined)} variant="secondary" />
+          <AppText variant="caption">
+            This product uses the TMDB API but is not endorsed or certified by TMDB.
+          </AppText>
         </SettingsCard>
       </SettingsSection>
 

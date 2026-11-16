@@ -54,7 +54,7 @@
     "reportIssue": "Skicka feedback/rapportera",
     "disclaimer": "Framezoo är en neutral mediaspelare och är inte värd för, lagrar, distribuerar eller kontrollerar några mediefiler eller tredjepartstillägg. Användare är ensamt ansvariga för de tillägg och innehåll de får tillgång till i enlighet med lokala lagar.",
     "privacy": "Integritets- och datapolicy",
-    "metadataAttribution": "Metadata tillhandahålls av offentliga filmdatabaser (TMDB, IMDb) i informationssyfte."
+    "metadataAttribution": "Filmmetadata och konstverk använder TMDB API (inte godkänt eller certifierat av TMDB) och betyg via OMDb API."
   },
   "addonGuide": {
     "manifestTitle": "Börja med manifest.json",
@@ -115,7 +115,7 @@
       ],
       "step3Title": "Steg 3: Öppna säkert via Finder",
       "step1Desc": "Öppna den nedladdade .dmg-filen och dra Framezoo-ikonen till mappen Applications.",
-      "step2Desc": "Eftersom Framezoo är en oberoende spelare med öppen källkod utan ett kommersiellt Apple Developer-certifikat kan macOS visa: \"Framezoo är skadad och kan inte öppnas\" eller \"Apple kan inte verifiera den här appen\".",
+      "step2Desc": "Eftersom Framezoo är en oberoende mjukvaruspelare utan ett kommersiellt Apple Developer-certifikat kan macOS visa: \"Framezoo är skadad och kan inte öppnas\" eller \"Apple kan inte verifiera den här appen\".",
       "note": "Du behöver bara göra det här högerklickssteget vid första lanseringen. Efterföljande lanseringar kan göras normalt från Launchpad eller Spotlight."
     },
     "winTab": "För Windows",
@@ -177,7 +177,7 @@
     "submitting": "Skickar...",
     "attachmentsLabel": "Filer",
     "attachmentsTooLarge": "Den totala filstorleken får inte överstiga 55 MB.",
-    "attachmentsHint": "Bilder/videor · 55 MB totalt max",
+    "attachmentsHint": "Bilder/videor/PDF (auktorisations- eller copyrightbevis) · 55 MB totalt max",
     "errorRequired": "Vänligen fyll i titel, kontaktinformation och problembeskrivning.",
     "descLabel": "3. Detaljerad beskrivning",
     "contactPlaceholder": "till exempel name@example.com eller +84912345678",
@@ -228,7 +228,8 @@
   "subtitlesConfigure": {
     "hero": {
       "title": "Konfigurera Framezoo-undertexter",
-      "description": "Konfigurera din personliga Wyzie API-nyckel för att få snabbare undertexter och kringgå delade gränser för gemenskapsavgifter."
+      "description": "Konfigurera din personliga Wyzie API-nyckel för att få snabbare undertexter och kringgå delade gränser för gemenskapsavgifter.",
+      "multiDescription": "Konfigurera valfria personliga API-nycklar (BYOK) för Framezoo Subtitles-leverantörer för att använda dina egna hastighetsgränser."
     },
     "account": {
       "configuringFor": "Konfigurera för konto:",
@@ -263,7 +264,10 @@
         "rateLimit": "API-nyckeln har överskridit hastighetsgränserna.",
         "networkError": "Nätverksfel vid anslutning till sub.wyzie.io. Kontrollera din anslutning.",
         "invalid": "API-nyckeln är ogiltig eller har löpt ut.",
-        "serverError": "Wyzie-servern returnerade HTTP {{status}}."
+        "serverError": "Wyzie-servern returnerade HTTP {{status}}.",
+        "verifyingProvider": "Verifierar med {{provider}}...",
+        "serverErrorProvider": "{{provider}} returnerade HTTP {{status}}.",
+        "networkErrorProvider": "Det gick inte att nå {{provider}} verifieringstjänsten. Försök igen."
       },
       "placeholder": "Klistra in din Wyzie API-nyckel här...",
       "clearButton": "Rensa nyckel"
@@ -276,7 +280,33 @@
       "noticeText": "Din API-nyckel lagras säkert på din enhet. Den vidarebefordras endast för att söka och hämta undertexter för filmer och serier. Du kan uppdatera eller ta bort den när som helst.",
       "copied": "Kopierade!",
       "copyManifest": "Kopiera Manifest URL",
-      "notConnectedNotice": "Obs: Du är inte ansluten till en Framezoo-kontobiljett. För att synkronisera direkt med 'Open Framezoo', öppna den här sidan från din Framezoo Desktop-app medan du är inloggad. Annars kopierar du Manifest-URL-adressen nedan för att använda den."
+      "notConnectedNotice": "Obs: Du är inte ansluten till en Framezoo-kontobiljett. För att synkronisera direkt med 'Open Framezoo', öppna den här sidan från din Framezoo Desktop-app medan du är inloggad. Annars kopierar du Manifest-URL-adressen nedan för att använda den.",
+      "privacyLinkLabel": "Sekretesspolicy",
+      "takedownLinkLabel": "Copyright & DMCA-policy"
+    },
+    "providersStep": {
+      "optionalBadge": "Frivillig",
+      "title": "API-nycklar för undertextleverantör",
+      "getKeyButton": "Hämta API-nyckel",
+      "description": "Alla nycklar nedan är valfria. När den tillhandahålls föredrar Framezoo din personliga nyckel framför delade standardinställningar. Inbyggd granit kräver ingen nyckel.",
+      "manifestHint": "Copy Manifest URL vidarebefordrar för närvarande endast Wyzie-nyckeln för oautentiserade Stremio-URL:er; anslut ditt Framezoo-konto för att synkronisera alla leverantörsnycklar."
+    },
+    "providers": {
+      "subsource": {
+        "portalHint": "Logga in på SubSource, öppna Account Dashboard → API-fliken och skapa en nyckel.",
+        "name": "Underkälla",
+        "placeholder": "Klistra in SubSource API Key..."
+      },
+      "wyzie": {
+        "portalHint": "Generera eller lös in en gratis personlig API-nyckel i Wyzie Store.",
+        "placeholder": "Klistra in Wyzie API-nyckel...",
+        "name": "Wyzie"
+      },
+      "opensubtitles": {
+        "portalHint": "Logga in på OpenSubtitles.com, öppna API Consumers och skapa en REST API v1-nyckel.",
+        "name": "OpenSubtitles.com",
+        "placeholder": "Klistra in OpenSubtitles.com REST API v1 Key..."
+      }
     }
   },
   "legal": {
@@ -331,83 +361,83 @@
       },
       "privacy": {
         "title": "Integritets- och dataskyddspolicy",
-        "updatedAt": "Uppdaterad: 4 november 2026 · Lag 91/2025/QH15 och dekret 356/2025/ND-CP",
-        "summary": "Denna policy beskriver databehandling i Framezoo-skrivbordsapplikationen och på officiella Framezoo-servrar.",
+        "updatedAt": "Uppdaterad: 16 november 2026 · Version 2026-11 · Vietnam Law 91/2025/QH15 & Decree 356/2025/ND-CP",
+        "summary": "Denna policy beskriver databehandling över Framezoo Desktop, Mobile, TV-appar och officiella Framezoo-servrar.",
         "sections": [
           {
-            "title": "Data på din enhet och våra servrar",
+            "title": "Enhets-, gäst- och kontodata",
             "paragraphs": [
-              "Applikationen lagrar viss inställnings-, cache- och uppspelningsdata på din enhet. Om du skapar ett konto lagrar servern även din e-postadress, ditt smeknamn, din profil, din offentliga nyckel, dina sessions-/enhetsuppgifter, dina synkroniserade bokmärken, dina framsteg, din visningshistorik, dina inställningar och dina tillägg, plus dina krypterade nycklar till undertextleverantörer om du anger dem."
+              "Appen lagrar lokala inställningar, cachar och uppspelningsdata på din enhet. När du skapar ett konto (begränsat till användare som är 16 år eller äldre) lagrar servern även din krypterade e-post, smeknamn, profil, offentliga nyckel, sessioner/enhetsdetaljer, synkroniserade bokmärken, framsteg, visningshistorik, inställningar, tillägg, tidsstämplade samtyckesposter och krypterade API-nycklar från BYOK undertextleverantör om du sparar dem."
             ],
             "bullets": [
-              "E-postadress, verifieringskoder och förfrågningsuppgifter stöder registrering, inloggning och kontosäkerhet.",
-              "Rapporter, felbeskrivningar och bilagor når vår server när du skickar in feedbackformuläret.",
-              "Webbplatsen lagrar ditt språkval i webbläsarens lagring."
+              "Gästläget använder endast en slumpmässig teknisk identifierare, plattformsetikett och appversion för att driva undertextrelä/synkroniseringsslutpunkter.",
+              "E-postverifieringskoder och förfrågningsloggar behandlas strikt för att registrera, logga in och skydda konton.",
+              "Servertelemetri utesluter filmtitlar, TMDB/IMDb-ID:n och personliga tilläggskällor från tredje part."
             ],
             "badge": "01"
           },
           {
-            "title": "Syfte och externa tjänster",
+            "title": "Syfte, gränsöverskridande överföring och externa API:er",
             "paragraphs": [
-              "Vi behandlar data för att hantera konton, synkronisera enheter, tillhandahålla support, skydda tjänsten och leverera funktioner du väljer. Vi säljer inte personuppgifter till annonsnätverk."
+              "Vi behandlar data enbart för att driva konton, synkronisera enheter, tillhandahålla support, upprätthålla laglig efterlevnad och aldrig sälja personuppgifter."
             ],
             "bullets": [
-              "Verifieringsmejlet går till vår e-postleverantör; säkerhetskopior av databasen kan lagras på Supabase när säkerhetskopiering är konfigurerad.",
-              "Vissa tjänsteleverantörer eller tilläggsservrar kan behandla data utanför Vietnam; serverplatsen beror på vilken tjänst du väljer och operativsystemkonfigurationen.",
-              "Google reCAPTCHA kan användas under registreringen; undertexten skickas till Google Translate när du väljer översättning.",
+              "E-postleverantörer för transaktionsverifiering och krypterade databassäkerhetskopior kan finnas utanför Vietnam beroende på distributionskonfigurationen.",
+              "Metadata och kritikerpoäng hämtas via officiella TMDB och OMDb API:er; undertextsökningar frågar Wyzie, SubSource och OpenSubtitles.com REST API (föredrar dina personliga BYOK-nycklar när de tillhandahålls).",
+              "Undertextfilreläer använder no-store headers utan offentlig cachning. Tredjepartstillägg kontaktas direkt från din enhet enligt deras egna policyer.",
               "Sökningar och nedladdningar av undertexter, synkronisering av ljud/undertexter och community-tillägg kan skicka förfrågningar via Framezoo-servrar och relevanta externa tjänster. Tillägg från tredje part har sina egna policyer."
             ],
             "badge": "02"
           },
           {
-            "title": "Lagring och radering",
+            "title": "Retention, JSON-dataexport och radering",
             "paragraphs": [
-              "Konto- och synkroniseringsdata sparas medan ditt konto är aktivt. Du kan ta bort kontot i Inställningar; servern tar då bort kontoposter, bokmärken, framsteg, visningshistorik, inställningar och sessioner. Gamla säkerhetskopior av databasen kan behålla data tills rotation; standardkonfigurationen behåller 7 senaste säkerhetskopior när säkerhetskopiering körs."
+              "Konto- och synkroniseringsdata förblir aktiva medan ditt konto finns. Du kan exportera en fullständig JSON-kopia av dina personuppgifter eller permanent radera ditt konto i Inställningar -> Åtgärder; roterande krypterade säkerhetskopior behåller upp till 7 senaste ögonblicksbilder."
             ],
             "bullets": [
-              "Verifieringskoder upphör att gälla efter 10 minuter; utgångna utmaningsposter tas bort efter 7 dagar. Poster för skickade eller misslyckade e-postmeddelanden tas bort efter 7 dagar.",
-              "Feedback och bilagor sparas separat för support- eller upphovsrättsförfrågningar tills de tas bort på begäran eller av supportteamet. Borttagning av konto tar bort kontolänken men raderar inte automatiskt rapporter. Du kan begära separat borttagning via feedbackformuläret."
+              "Verifiering OTP-utmaningar löper ut efter 10 minuter och rensas tillsammans med e-postutkorgsposter efter 7 dagar.",
+              "Feedbackrapporter och upphovsrättsmeddelanden lagras separat för granskning av efterlevnad; radering av konto tar bort länken till ditt användar-ID."
             ],
             "badge": "03"
           },
           {
-            "title": "Dina rättigheter och kontaktuppgifter",
+            "title": "Dina rättigheter, åldersgräns (>=16) & kontakt",
             "paragraphs": [
-              "Du kan begära åtkomst till, korrigering, radering eller begränsning av dina uppgifter, återkalla samtycke där behandlingen förutsätter samtycke och skicka in ett klagomål via feedbackformuläret på vår webbplats. Vänligen ange din e-postadress så att vi kan verifiera begäran."
+              "Kontoregistrering är begränsad till användare som är 16 år eller äldre enligt Vietnams lag 91/2025/QH15. Du kan utöva åtkomst, JSON-export, korrigering, radering eller återkallande av samtycke via Feedback-modal eller privacy@framezoo.top / framezoo.top@gmail.com (svarade inom 24 timmar)."
             ],
             "badge": "04"
           }
         ]
       },
       "copyright": {
-        "title": "Upphovsrätt, DMCA och innehållsfriskrivning",
-        "updatedAt": "Uppdaterad: 4 november 2026",
-        "summary": "Officiell ansvarsfriskrivning gällande innehåll och procedur för meddelande om immateriella rättigheter samt borttagning för Framezoo.",
+        "title": "Upphovsrätt, meddelande och borttagning och innehållsfriskrivning",
+        "updatedAt": "Uppdaterad: 16 november 2026 · Vietnam IP Law Art. 198b & förordning 17/2023",
+        "summary": "Neutral mellanhandsstatus, 24h/72h Notice & Takedown blocklistprocess och policy för upprepad intrång.",
         "sections": [
           {
-            "title": "Safe Harbor för mellanhandsprogramvara",
+            "title": "Neutral mellanhandsprogramvara och standard P2P utan sådd",
             "paragraphs": [
-              "Framezoo driver inte ett filmbibliotek eller en videoströmkälla. Applikationen kan komma åt källor som valts av användare; våra servrar kan vidarebefordra leverantörers undertexter och tillfälligt bearbeta ljud och undertexter för begärd synkronisering.",
-              "Varje upphovsrättsmeddelande granskas mot innehållet och vår faktiska roll; dessa villkor skapar inte ett automatiskt undantag från ansvar."
+              "Framezoo är neutral mediaspelare programvara som liknar Stremio och Kodi: den är värd för inga videofiler, paketerar inga standardinnehållstillägg eller offentliga spårare, utför ingen server-side addon proxy och inaktiverar utgående P2P-sådd (upload_rate_limit = 0) som standard.",
+              "Nedladdning av undertexter använder no-store headers utan offentlig cachning på Framezoo-servrar."
             ],
             "badge": "01"
           },
           {
-            "title": "Metadata och konstverkstillskrivning",
+            "title": "Officiella API:er för metadata och TMDB-tillskrivning",
             "paragraphs": [
-              "Metadata för filmer och serier (titlar, utgivningsdatum, sammanfattningar, betyg och reklamaffischer) som visas för informationssökning kommer från offentliga filmdatabaser (som TMDB, IMDb och TVDB).",
-              "Alla varumärken, filmtitlar och konstverk förblir respektive upphovsrättsinnehavares egendom."
+              "Filmtitlar, synopser, konstverk och kritikerbetyg hämtas från officiella TMDB- och OMDb-API:er för informationsupptäckt.",
+              "Denna produkt använder TMDB API men är inte godkänd eller certifierad av TMDB. Alla varumärken och mediakonstverk förblir sina respektive ägares egendom."
             ],
             "badge": "02"
           },
           {
-            "title": "Meddelande- och borttagningsförfarande",
+            "title": "Meddelande och borttagning (24h/72h SLA) & Policy för upprepad intrång",
             "paragraphs": [
-              "Framezoo respekterar immateriella rättigheter. Om du är upphovsrättsinnehavare eller auktoriserad representant och anser att något material på framezoo.top gör intrång i dina rättigheter, vänligen skicka in ett meddelande via vår rapport-/feedbackkanal inklusive:"
+              "Rättighetsinnehavare och myndigheter kan skicka formella meddelanden (rättighetsägarens identitet, bevis/PDF-auktorisering, specifik addon-domän/media-ID/ undertext-ID och edsvurit uttalande) via rapportformuläret eller legal@framezoo.top / framezoo.top@gmail.com."
             ],
             "bullets": [
-              "Identifiering av upphovsrättsinnehavaren eller auktoriserad representant.",
-              "Bevis på äganderätt till det upphovsrättsskyddade verket.",
+              "Beställningar från behöriga myndigheter verkställs på /compliance/blocklist inom 24 timmar; giltiga meddelanden från rättighetshavaren inom 72 timmar.",
+              "Konton med upprepade intrång som är kopplade till verifierade överträdelser stängs av med omedelbar återkallelse av sessionen.",
               "Den exakta webbadressen eller beskrivningen av materialet i fråga så att vi kan granska och åtgärda det inom 24–72 arbetstimmar."
             ],
             "badge": "03"

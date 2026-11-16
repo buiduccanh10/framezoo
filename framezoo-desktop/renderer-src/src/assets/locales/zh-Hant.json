@@ -18,6 +18,7 @@
       "configRequiredDesc": "此外掛程式需要配置（例如 API 金鑰或語言設定）才能傳回內容。請在瀏覽器中進行配置，然後將產生的清單 URL 複製並貼上到此處。",
       "configRequiredTitle": "需要配置",
       "configureAction": "配置",
+      "disclaimerNotice": "第三方插件由社群開發者獨立營運。您需自行負責驗證您所在司法管轄區內內容的合法性；P2P 下載功能預設為停用。",
       "errorFallback": "無法安裝此外掛程式。",
       "manageListButton": "管理外掛程式列表",
       "openConfigurePage": "開啟配置頁面",
@@ -38,6 +39,7 @@
       "configureCustomKeyActive": "您的金鑰已配置（點擊變更）",
       "configureRequiredAction": "配置此外掛程式（必需）",
       "customKeyActiveDesc": "使用您的個人 Wyzie API 金鑰",
+      "customKeyActiveProviders": "使用您的個人字幕 API 金鑰 ({{providers}})",
       "customKeyConfiguredBadge": "您的金鑰已配置完成",
       "description": "插件是可選的。此應用程式不捆綁、推薦或託管任何插件。",
       "disabled": "殘障人士",
@@ -181,7 +183,7 @@
       "passwordWeak": "密碼必須至少8位，包含字母和數字",
       "privacyPolicy": "隱私權政策",
       "submit": "建立帳戶",
-      "legalConsent": "我已閱讀並同意<terms>服務條款</terms>和<privacy>隱私權政策</privacy>。"
+      "legalConsent": "我確認我已年滿 16 歲，並且已閱讀並同意 <terms>服務條款</terms> 和 <privacy>隱私權政策</privacy>。"
     },
     "trust": {
       "failed": {
@@ -307,6 +309,9 @@
   "footer": {
     "legal": {
       "disclaimer": "免責聲明",
+      "dmca": "DMCA/下架",
+      "terms": "服務條款",
+      "tmdbAttribution": "電影元資料和海報由 TMDB API 提供（未經 TMDB 認可或認證）。",
       "disclaimerText": "Framezoo 不營運視訊串流來源。其伺服器可能會轉發字幕提供者的字幕，並在您選擇該功能時臨時處理音訊和字幕以實現同步。您可以控制自己播放的內容。"
     },
     "links": {
@@ -484,15 +489,15 @@
     },
     "support": {
       "complete": "完全的",
-      "description": "Framezoo 處於虧損狀態，我們需要幫助以保持無廣告！如果您喜歡使用 Framezoo，請考慮捐贈以幫助我們支付費用。",
-      "donate": "捐",
-      "explanation": "如果您不使用該擴充功能或未設定 FED API，則可能會更難找到內容！我們希望解決這個問題，但如果沒有昂貴的伺服器，提供內容會困難得多。因此，如果您喜歡使用 Framezoo，請考慮捐款來幫助我們支付不斷增長的成本。",
+      "description": "Framezoo 是一款中立的媒體播放器，您的自願軟體支援有助於我們保持其無廣告狀態！請注意，您的捐款僅用於純粹的軟體開發，絕不會用於購買媒體內容或第三方外掛程式。",
+      "donate": "支援軟體開發",
+      "explanation": "如果您尚未在播放器中配置第三方插件，則預設不會顯示串流媒體。 Framezoo 僅作為中立的技術播放器，不託管任何內容。任何自願捐款僅用於支持應用程式的持續開發和基礎設施建設。",
       "explanation2": "如果您想了解更多信息，請加入我們",
       "fluxer": "助焊劑",
-      "label": "專案經費：${{current}} / ${{goal}}",
+      "label": "軟體工程支援：${{current}} / ${{goal}}",
       "moreInfo": "更多資訊",
       "thankYou": "感謝您的支持！",
-      "title": "Framezoo 需要您的幫助！"
+      "title": "支援Framezoo軟體開發！"
     },
     "titles": {
       "69": {
@@ -1210,6 +1215,11 @@
           "text": "這將會登出所有與您的帳戶連結的裝置。",
           "title": "結束所有會話"
         },
+        "exportData": {
+          "button": "導出 JSON",
+          "text": "下載您的帳戶個人資料、書籤、觀看歷史記錄、設定和法律同意記錄（JSON）的副本。",
+          "title": "匯出個人數據"
+        },
         "migration": {
           "button": "遷移帳戶",
           "text": "將您的帳戶遷移到新伺服器或下載您的資料。",
@@ -1518,6 +1528,7 @@
     "modalTitle": "請幫助我們繼續打造Framezoo",
     "subtitle": "您的每項貢獻都能幫助我們改進遊戲，擴展到更多平台，並讓我們繼續傾聽您的想法。",
     "note": "感謝您關注Framezoo並支持我們所做的工作。您的貢獻讓我們有更多空間為所有人打造更好的體驗。",
+    "legalDisclaimer": "僅提供自願軟體開發支援－捐款不用於購買電影、媒體串流或外掛程式存取權限。",
     "scanHint": "使用您的銀行應用程式掃描此二維碼。",
     "paypalLabel": "PayPal",
     "momoLabel": "媽媽",

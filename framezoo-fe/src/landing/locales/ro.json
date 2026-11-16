@@ -53,7 +53,7 @@
     "resourcesTitle": "Resurse și suport",
     "copyright": "Drepturi de autor și DMCA",
     "reportIssue": "Trimiteți feedback/raport",
-    "metadataAttribution": "Metadatele sunt furnizate de bazele de date publice de filme (TMDB, IMDb) în scop informativ.",
+    "metadataAttribution": "Metadatele și lucrările de artă ale filmului folosesc API-ul TMDB (neaprobat sau certificat de TMDB) și evaluările prin API-ul OMDb.",
     "rights": "© 2026 Framezoo. Toate drepturile rezervate."
   },
   "addonGuide": {
@@ -110,7 +110,7 @@
       "subtitle": "Apple Silicon (M1/M2/M3/M4) și Intel Mac",
       "step2Title": "Pasul 2: Avertisment de securitate Gatekeeper",
       "step3Title": "Pasul 3: Deschideți în siguranță prin Finder",
-      "step2Desc": "Deoarece Framezoo este un player open-source independent, fără un certificat de dezvoltator Apple comercial, macOS poate afișa: „Framezoo este deteriorat și nu poate fi deschis” sau „Apple nu poate verifica această aplicație”.",
+      "step2Desc": "Deoarece Framezoo este un player software independent fără un certificat de dezvoltator Apple comercial, macOS poate afișa: „Framezoo este deteriorat și nu poate fi deschis” sau „Apple nu poate verifica această aplicație”.",
       "note": "Trebuie doar să faceți acest pas cu clic dreapta la prima lansare. Lansările ulterioare se pot face în mod normal din Launchpad sau Spotlight.",
       "step3Steps": [
         "Deschideți Finder și navigați la folderul Aplicații.",
@@ -176,7 +176,7 @@
     "successTitle": "Feedback trimis cu succes!",
     "close": "Aproape",
     "attachmentsLabel": "Fișiere",
-    "attachmentsHint": "Imagini/videoclipuri · 55 MB total maxim",
+    "attachmentsHint": "Imagini/videoclipuri/PDF (autorizare sau dovada drepturilor de autor) · 55 MB total maxim",
     "attachmentsTooLarge": "Dimensiunea totală a fișierului nu trebuie să depășească 55 MB.",
     "contactInvalid": "Vă rugăm să introduceți o adresă de e-mail sau un număr de telefon valide pentru a vă putea răspunde.",
     "errorRequired": "Vă rugăm să completați titlul, informațiile de contact și descrierea problemei.",
@@ -228,7 +228,8 @@
   "subtitlesConfigure": {
     "hero": {
       "description": "Configurați-vă cheia API Wyzie personală pentru a obține subtitrări mai rapide și pentru a ocoli limitele ratelor comunității partajate.",
-      "title": "Configurați subtitrări Framezoo"
+      "title": "Configurați subtitrări Framezoo",
+      "multiDescription": "Configurați cheile API personale opționale (BYOK) pentru furnizorii de subtitrări Framezoo pentru a vă folosi propriile limite de rată."
     },
     "account": {
       "configuringFor": "Configurare pentru cont:",
@@ -263,7 +264,10 @@
         "rateLimit": "Cheia API a depășit limitele de rată.",
         "networkError": "Eroare de rețea la conectarea la sub.wyzie.io. Vă rugăm să vă verificați conexiunea.",
         "invalid": "Cheia API este nevalidă sau a expirat.",
-        "serverError": "Serverul Wyzie a returnat HTTP {{status}}."
+        "serverError": "Serverul Wyzie a returnat HTTP {{status}}.",
+        "verifyingProvider": "Se verifică cu {{provider}}...",
+        "serverErrorProvider": "{{provider}} a returnat HTTP {{status}}.",
+        "networkErrorProvider": "Nu s-a putut accesa serviciul de verificare {{provider}}. Vă rugăm să încercați din nou."
       },
       "clearButton": "Tasta de golire",
       "testButton": "Testați cheia API"
@@ -276,7 +280,33 @@
       "openFramezooDisabledTooltip": "Necesită deschiderea de pe Framezoo Desktop când sunteți autentificat",
       "copyManifest": "Copiați adresa URL a manifestului",
       "notConnectedNotice": "Notă: nu sunteți conectat cu un bilet de cont Framezoo. Pentru a sincroniza direct cu „Open Framezoo”, deschideți această pagină din aplicația Framezoo Desktop când sunteți conectat. În caz contrar, copiați adresa URL a manifestului de mai jos pentru a o utiliza.",
-      "noticeText": "Cheia dvs. API este stocată în siguranță pe dispozitivul dvs. Este redirecționat numai pentru a căuta și a prelua subtitrări pentru filme și seriale. Îl puteți actualiza sau elimina oricând."
+      "noticeText": "Cheia dvs. API este stocată în siguranță pe dispozitivul dvs. Este redirecționat numai pentru a căuta și a prelua subtitrări pentru filme și seriale. Îl puteți actualiza sau elimina oricând.",
+      "privacyLinkLabel": "Politica de confidențialitate",
+      "takedownLinkLabel": "Politica privind drepturile de autor și DMCA"
+    },
+    "providersStep": {
+      "optionalBadge": "Opțional",
+      "getKeyButton": "Obțineți cheia API",
+      "manifestHint": "Copy Manifest URL redirecționează în prezent numai cheia Wyzie pentru URL-uri Stremio neautentificate; conectați-vă contul Framezoo pentru a sincroniza toate cheile furnizorului.",
+      "description": "Toate cheile de mai jos sunt opționale. Când este furnizat, Framezoo preferă cheia dvs. personală în locul setărilor implicite partajate. Granitul încorporat nu necesită cheie.",
+      "title": "Cheile API pentru furnizorul de subtitrări"
+    },
+    "providers": {
+      "wyzie": {
+        "name": "Wyzie",
+        "portalHint": "Generați sau valorificați o cheie API personală gratuită în Magazinul Wyzie.",
+        "placeholder": "Lipiți cheia API Wyzie..."
+      },
+      "subsource": {
+        "name": "Subsursă",
+        "portalHint": "Conectați-vă la SubSource, deschideți Tabloul de bord al contului → fila API și creați o cheie.",
+        "placeholder": "Lipiți cheia API SubSource..."
+      },
+      "opensubtitles": {
+        "name": "OpenSubtitles.com",
+        "placeholder": "Lipiți cheia OpenSubtitles.com REST API v1...",
+        "portalHint": "Conectați-vă pe OpenSubtitles.com, deschideți API Consumers și creați o cheie REST API v1."
+      }
     }
   },
   "legal": {
@@ -331,83 +361,83 @@
       },
       "privacy": {
         "title": "Politica de confidențialitate și protecție a datelor cu caracter personal",
-        "updatedAt": "Actualizat: 4 noiembrie 2026 · Legea 91/2025/QH15 și Decretul 356/2025/ND-CP",
-        "summary": "Această politică descrie prelucrarea datelor în aplicația desktop Framezoo și pe serverele oficiale Framezoo.",
+        "updatedAt": "Actualizat: 16 noiembrie 2026 · Versiunea 2026-11 · Legea din Vietnam 91/2025/QH15 și Decretul 356/2025/ND-CP",
+        "summary": "Această politică descrie procesarea datelor în cadrul Framezoo Desktop, Mobile, aplicații TV și servere oficiale Framezoo.",
         "sections": [
           {
-            "title": "Datele de pe dispozitivul dvs. și de pe serverele noastre",
+            "title": "Date despre dispozitiv, invitat și cont",
             "paragraphs": [
-              "Aplicația stochează anumite setări, memorie cache și date de redare pe dispozitivul dvs. Dacă vă creați un cont, serverul stochează și adresa de e-mail, porecla, profilul, cheia publică, detaliile sesiunii/dispozitivului, marcajele sincronizate, progresul, istoricul vizionărilor, setările și suplimentele, plus chei criptate ale furnizorului de subtitrări, dacă le furnizați."
+              "Aplicația stochează setări locale, cache și date de redare pe dispozitiv. Când creați un cont (restricționat la utilizatori cu vârsta de 16 ani sau mai mult), serverul stochează, de asemenea, e-mailul criptat, porecla, profilul, cheia publică, detaliile sesiunilor/dispozitivului, marcajele sincronizate, progresul, istoricul vizionărilor, setările, suplimentele, înregistrările de consimțământ marcate de timp și cheile API criptate ale furnizorului de subtitrare BYOK, dacă le salvați."
             ],
             "bullets": [
-              "E-mailul, codurile de verificare și detaliile solicitării ajută la înregistrare, conectare și securitatea contului.",
-              "Rapoartele, descrierile erorilor și atașamentele ajung pe serverul nostru atunci când trimiteți formularul de feedback.",
-              "Site-ul web stochează limba aleasă de dvs. în memoria browserului."
+              "Modul invitat utilizează doar un identificator tehnic aleatoriu, o etichetă de platformă și o versiune de aplicație pentru a opera punctele finale de retransmisie/sincronizare a subtitrarilor.",
+              "Codurile de verificare prin e-mail și jurnalele de solicitări sunt procesate strict pentru a se înregistra, autentifica și proteja conturile.",
+              "Telemetria serverului exclude titlurile filmelor, ID-urile TMDB/IMDb și sursele de suplimente personale terță parte."
             ],
             "badge": "01"
           },
           {
-            "title": "Scopuri și servicii externe",
+            "title": "Scopuri, transfer transfrontalier și API-uri externe",
             "paragraphs": [
-              "Prelucrăm date pentru a administra conturi, a sincroniza dispozitive, a oferi asistență, a proteja serviciul și a livra funcțiile pe care le alegeți. Nu vindem date cu caracter personal rețelelor de publicitate."
+              "Prelucrăm datele numai pentru a opera conturi, pentru a sincroniza dispozitive, pentru a oferi asistență, pentru a impune conformitatea legală și pentru a nu vinde niciodată date personale."
             ],
             "bullets": [
-              "E-mailul de verificare ajunge la furnizorul nostru de e-mail; copiile de rezervă ale bazei de date pot fi stocate pe Supabase atunci când este configurată copia de rezervă.",
-              "Este posibil ca unii furnizori de servicii sau servere suplimentare să proceseze date în afara Vietnamului; locația serverului depinde de serviciul ales și de configurația de operare.",
-              "Google reCAPTCHA poate fi utilizat în timpul înregistrării; textul subtitrării merge la Google Translate atunci când alegeți traducerea.",
+              "Furnizorii de e-mail de verificare tranzacțională și copiile de siguranță ale bazei de date criptate pot locui în afara Vietnamului, în funcție de configurația de implementare.",
+              "Metadatele și scorurile critice sunt preluate prin intermediul API-urilor oficiale TMDB și OMDb; interogarea căutărilor de subtitrări Wyzie, SubSource și OpenSubtitles.com REST API (preferând cheile dvs. personale BYOK atunci când sunt furnizate).",
+              "Releele fișierelor de subtitrare folosesc antete fără stocare fără cache publică. Suplimentele terță parte sunt contactate direct de pe dispozitivul dvs. conform propriilor politici.",
               "Căutările și descărcările de subtitrări, sincronizarea audio/subtitrări și suplimentele comunității pot trimite solicitări prin serverele Framezoo și serviciile externe relevante. Suplimentele terțe au propriile politici."
             ],
             "badge": "02"
           },
           {
-            "title": "Păstrare și ștergere",
+            "title": "Păstrarea, exportul și ștergerea datelor JSON",
             "paragraphs": [
-              "Datele contului și cele sincronizate rămân în timp ce contul este activ. Puteți șterge contul din Setări; serverul elimină apoi înregistrările contului, marcajele, progresul, istoricul vizionărilor, setările și sesiunile. Copiile de rezervă vechi ale bazei de date pot păstra datele până la rotire; configurația implicită păstrează 7 copii de rezervă recente atunci când rulează backup-ul."
+              "Datele privind contul și sincronizarea rămân active cât timp există contul dvs. Puteți exporta o copie JSON completă a datelor dvs. personale sau puteți șterge definitiv contul din Setări -> Acțiuni; backup-urile criptate rotative păstrează până la 7 instantanee recente."
             ],
             "bullets": [
-              "Codurile de verificare expiră după 10 minute; înregistrările de verificare expirate sunt eliminate după 7 zile. Înregistrările de e-mail trimise sau nereușite sunt eliminate după 7 zile.",
-              "Feedback-ul și atașamentele sunt păstrate separat pentru solicitări de asistență sau drepturi de autor până când sunt eliminate la cerere sau de către echipa de asistență. Ștergerea contului elimină linkul contului, dar nu șterge automat rapoartele. Puteți solicita ștergerea separată prin intermediul formularului de feedback."
+              "Provocările OTP de verificare expiră după 10 minute și sunt eliminate împreună cu înregistrările din căsuța de e-mail de expediere după 7 zile.",
+              "Rapoartele de feedback și notificările privind drepturile de autor rămân stocate separat pentru auditarea conformității; ștergerea contului vă deconectează ID-ul de utilizator."
             ],
             "badge": "03"
           },
           {
-            "title": "Drepturile dumneavoastră și datele de contact",
+            "title": "Drepturile tale, Poarta Vârstei (>=16) și Contact",
             "paragraphs": [
-              "Puteți solicita accesul, corectarea, ștergerea sau restricționarea datelor dvs., puteți retrage consimțământul în cazul în care prelucrarea se bazează pe consimțământ și puteți depune o reclamație prin intermediul formularului de feedback de pe site-ul nostru web. Vă rugăm să furnizați adresa de e-mail a contului dvs. pentru a putea verifica solicitarea."
+              "Înregistrarea contului este limitată la utilizatorii cu vârsta de 16 ani sau mai mult, conform Legii Vietnam 91/2025/QH15. Puteți exercita accesul, exportul JSON, corectarea, ștergerea sau retragerea consimțământului prin intermediul modalului Feedback sau privacy@framezoo.top / framezoo.top@gmail.com (răspuns în 24 de ore)."
             ],
             "badge": "04"
           }
         ]
       },
       "copyright": {
-        "title": "Drepturi de autor, DMCA și declinare a responsabilității privind conținutul",
-        "updatedAt": "Actualizat: 4 noiembrie 2026",
-        "summary": "Declinarea oficială a responsabilității privind conținutul și procedura de notificare și eliminare a proprietății intelectuale pentru Framezoo.",
+        "title": "Drepturi de autor, notificare și eliminare și declinare a răspunderii pentru conținut",
+        "updatedAt": "Actualizat: 16 noiembrie 2026 · Legea IP din Vietnam art. 198b & Decretul 17/2023",
+        "summary": "Stare de intermediar neutru, proces de lista de blocare a notificarii și eliminarea 24 de ore pe 24/72 de ore și politica privind încălcarea repetată.",
         "sections": [
           {
-            "title": "Harbor sigur pentru software intermediar",
+            "title": "Software intermediar neutru și P2P fără însămânțare implicit",
             "paragraphs": [
-              "Framezoo nu operează o bibliotecă de filme sau o sursă de flux video. Aplicația poate accesa sursele alese de utilizatori; serverele noastre pot transmite subtitrări de la furnizori și pot procesa temporar audio și subtitrări pentru sincronizarea solicitată.",
-              "Fiecare notificare privind drepturile de autor este analizată în raport cu conținutul și rolul nostru real; acești termeni nu creează o exonerare automată de răspundere."
+              "Framezoo este un software de redare media neutru, similar cu Stremio și Kodi: nu găzduiește fișiere video, nu include suplimente de conținut implicite sau trackere publice, nu efectuează proxy de supliment pe partea de server și dezactivează în mod implicit seedingul P2P de ieșire (upload_rate_limit = 0).",
+              "Descărcările de subtitrări folosesc antete fără stocare fără cache publică pe serverele Framezoo."
             ],
             "badge": "01"
           },
           {
-            "title": "Metadate și atribuirea operelor de artă",
+            "title": "API-uri oficiale de metadate și atribuire TMDB",
             "paragraphs": [
-              "Metadatele filmelor și serialelor (titluri, date de lansare, sinopsele, ratingurile și posterele promoționale) afișate în scop informativ provin din baze de date publice de filme (cum ar fi TMDB, IMDb și TVDB).",
-              "Toate mărcile comerciale, titlurile filmelor și lucrările de artă rămân proprietatea deținătorilor respectivi ai drepturilor de autor."
+              "Titlurile filmelor, rezumatele, lucrările de artă și evaluările criticilor sunt preluate din API-urile oficiale TMDB și OMDb pentru descoperire informațională.",
+              "Acest produs folosește API-ul TMDB, dar nu este aprobat sau certificat de TMDB. Toate mărcile comerciale și lucrările de artă media rămân proprietatea proprietarilor respectivi."
             ],
             "badge": "02"
           },
           {
-            "title": "Procedura de notificare și eliminare",
+            "title": "Notificare și eliminare (24h/72h SLA) și Politica privind încălcarea repetată",
             "paragraphs": [
-              "Framezoo respectă drepturile de proprietate intelectuală. Dacă sunteți deținătorul drepturilor de autor sau un agent autorizat și considerați că orice material de pe framezoo.top vă încalcă drepturile, vă rugăm să trimiteți o notificare prin intermediul canalului nostru de Raportare / Feedback, inclusiv:"
+              "Deținătorii de drepturi și autoritățile pot trimite notificări formale (identitatea proprietarului drepturilor, autorizația de dovadă/PDF, domeniu specific de supliment / ID media / ID subtitrare și declarație sub jurământ) prin formularul de raportare sau legal@framezoo.top / framezoo.top@gmail.com."
             ],
             "bullets": [
-              "Identificarea titularului drepturilor de autor sau a reprezentantului autorizat.",
-              "Dovada dreptului de proprietate asupra operei protejate prin drepturi de autor.",
+              "Ordinele de la autoritățile competente sunt puse în aplicare pe /conformitate/lista de blocare în termen de 24 de ore; notificări valabile ale titularului de drepturi în termen de 72 de ore.",
+              "Conturile pentru încălcarea repetată asociate cu încălcările verificate sunt suspendate cu revocarea imediată a sesiunii.",
               "URL-ul exact sau descrierea materialului în cauză, astfel încât să îl putem examina și rezolva în termen de 24-72 de ore lucrătoare."
             ],
             "badge": "03"

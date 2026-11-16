@@ -54,7 +54,7 @@
     "copyright": "Tekijänoikeus ja DMCA",
     "reportIssue": "Lähetä palautetta / Raportti",
     "rights": "© 2026 Framezoo. Kaikki oikeudet pidätetään.",
-    "metadataAttribution": "Metadata tarjotaan julkisista elokuvatietokannoista (TMDB, IMDb) tiedoksi."
+    "metadataAttribution": "Elokuvan metatiedot ja kuvitus käyttävät TMDB-sovellusliittymää (TMDB ei ole tukenut tai sertifioinut) ja luokituksia OMDb API:n kautta."
   },
   "addonGuide": {
     "manifestTitle": "Aloita tiedostosta manifest.json",
@@ -111,7 +111,7 @@
       "subtitle": "Apple Silicon (M1/M2/M3/M4) ja Intel Mac",
       "step3Title": "Vaihe 3: Avaa turvallisesti Finderin kautta",
       "step1Desc": "Avaa ladattu .dmg-tiedosto ja vedä Framezoo-kuvake Ohjelmat-kansioon.",
-      "step2Desc": "Koska Framezoo on itsenäinen avoimen lähdekoodin soitin ilman kaupallista Apple Developer -varmennetta, macOS saattaa näyttää: \"Framezoo on vaurioitunut eikä sitä voi avata\" tai \"Apple ei voi vahvistaa tätä sovellusta\".",
+      "step2Desc": "Koska Framezoo on itsenäinen ohjelmistosoitin ilman kaupallista Apple Developer -sertifikaattia, macOS saattaa näyttää: \"Framezoo on vaurioitunut eikä sitä voi avata\" tai \"Apple ei voi vahvistaa tätä sovellusta\".",
       "note": "Sinun tarvitsee vain napsauttaa tätä hiiren kakkospainikkeella ensimmäisen käynnistyksen yhteydessä. Myöhemmät käynnistykset voidaan tehdä normaalisti Launchpadista tai Spotlightista.",
       "step3Steps": [
         "Avaa Finder ja siirry Sovellukset-kansioosi.",
@@ -176,7 +176,7 @@
     "successDesc": "Kiitos palautteestasi. Tiimimme tarkistaa ja ratkaisee ongelman mahdollisimman pian.",
     "submit": "Lähetä palautetta",
     "attachmentsLabel": "Tiedostot",
-    "attachmentsHint": "Kuvat/videot · Enimmäiskoko 55 Mt",
+    "attachmentsHint": "Kuvat/videot/PDF (valtuutus tai tekijänoikeussuoja) · Enimmäiskoko 55 Mt",
     "attachmentsTooLarge": "Tiedoston kokonaiskoko ei saa ylittää 55 megatavua.",
     "contactPlaceholder": "esim. nimi@esimerkki.fi tai +84912345678",
     "contactInvalid": "Anna kelvollinen sähköpostiosoite tai puhelinnumero, jotta voimme vastata.",
@@ -239,7 +239,8 @@
     },
     "hero": {
       "title": "Määritä Framezoo-tekstitykset",
-      "description": "Määritä henkilökohtainen Wyzie API Key saadaksesi nopeammat tekstitykset ja ohittaaksesi jaetut yhteisön rajat."
+      "description": "Määritä henkilökohtainen Wyzie API Key saadaksesi nopeammat tekstitykset ja ohittaaksesi jaetut yhteisön rajat.",
+      "multiDescription": "Määritä valinnaiset henkilökohtaiset API-avaimet (BYOK) Framezoo Subtitles -palveluntarjoajille käyttämään omia nopeusrajoituksiasi."
     },
     "pageTitle": "Configure Framezoo Tekstitykset | Framezoo",
     "step1": {
@@ -263,7 +264,10 @@
         "invalid": "API-avain on virheellinen tai vanhentunut.",
         "rateLimit": "API-avain on ylittänyt nopeusrajoitukset.",
         "serverError": "Wyzie-palvelin palautti HTTP {{status}}.",
-        "networkError": "Verkkovirhe muodostettaessa yhteyttä osoitteeseen sub.wyzie.io. Tarkista yhteys."
+        "networkError": "Verkkovirhe muodostettaessa yhteyttä osoitteeseen sub.wyzie.io. Tarkista yhteys.",
+        "verifyingProvider": "Vahvistetaan sovelluksella {{provider}}...",
+        "networkErrorProvider": "Ei saatu yhteyttä {{provider}} vahvistuspalveluun. Yritä uudelleen.",
+        "serverErrorProvider": "{{provider}} palautti HTTP:n {{status}}."
       },
       "clearButton": "Tyhjennä avain",
       "placeholder": "Liitä Wyzie API-avain tähän..."
@@ -276,7 +280,33 @@
       "noticeLabel": "Huomautus:",
       "openFramezooDisabledTooltip": "Vaatii avaamisen Framezoo Desktopista sisäänkirjautuneena",
       "noticeText": "API-avaimesi on tallennettu turvallisesti laitteellesi. Se välitetään vain elokuvien ja sarjojen tekstitysten etsimiseen ja hakemiseen. Voit päivittää tai poistaa sen milloin tahansa.",
-      "notConnectedNotice": "Huomautus: Sinua ei ole yhdistetty Framezoo-tilin lippuun. Jos haluat synkronoida suoraan Open Framezoo -sovelluksen kanssa, avaa tämä sivu Framezoo Desktop -sovelluksesta ollessasi kirjautuneena sisään. Muussa tapauksessa kopioi alla oleva manifestin URL-osoite käyttääksesi sitä."
+      "notConnectedNotice": "Huomautus: Sinua ei ole yhdistetty Framezoo-tilin lippuun. Jos haluat synkronoida suoraan Open Framezoo -sovelluksen kanssa, avaa tämä sivu Framezoo Desktop -sovelluksesta ollessasi kirjautuneena sisään. Muussa tapauksessa kopioi alla oleva manifestin URL-osoite käyttääksesi sitä.",
+      "privacyLinkLabel": "Tietosuojakäytäntö",
+      "takedownLinkLabel": "Tekijänoikeus- ja DMCA-käytäntö"
+    },
+    "providersStep": {
+      "optionalBadge": "Valinnainen",
+      "getKeyButton": "Hanki API-avain",
+      "manifestHint": "Kopioi manifestin URL-osoite välittää tällä hetkellä vain Wyzie-avaimen todentamattomille Stremio-URL-osoitteille. yhdistä Framezoo-tilisi synkronoidaksesi kaikki palveluntarjoajan avaimet.",
+      "title": "Tekstityksen tarjoajan API-avaimet",
+      "description": "Kaikki alla olevat näppäimet ovat valinnaisia. Kun Framezoo on saatavilla, se suosii henkilökohtaista avaimesi jaettujen oletusasetusten sijaan. Sisäänrakennettu graniitti ei vaadi avainta."
+    },
+    "providers": {
+      "wyzie": {
+        "name": "Wyzie",
+        "portalHint": "Luo tai lunasta ilmainen henkilökohtainen API-avain Wyzie Storessa.",
+        "placeholder": "Liitä Wyzie API-avain..."
+      },
+      "subsource": {
+        "portalHint": "Kirjaudu sisään SubSourceen, avaa Account Dashboard → API-välilehti ja luo avain.",
+        "placeholder": "Liitä alilähdesovellusliittymäavain...",
+        "name": "Alilähde"
+      },
+      "opensubtitles": {
+        "portalHint": "Kirjaudu sisään osoitteessa OpenSubtitles.com, avaa API Consumers ja luo REST API v1 -avain.",
+        "placeholder": "Liitä OpenSubtitles.com REST API v1 -avain...",
+        "name": "OpenSubtitles.com"
+      }
     }
   },
   "legal": {
@@ -330,82 +360,82 @@
         "title": "Yksityisyys ja henkilötietojen suojakäytäntö",
         "sections": [
           {
-            "title": "Tiedot laitteestasi ja palvelimiltamme",
+            "title": "Laite-, vieras- ja tilitiedot",
             "bullets": [
-              "Sähköposti, vahvistuskoodit ja pyyntötiedot tukevat rekisteröintiä, sisäänkirjautumista ja tilin suojausta.",
-              "Raportit, virhekuvaukset ja liitteet saapuvat palvelimellemme, kun lähetät palautelomakkeen.",
-              "Sivusto tallentaa valitsemasi kielen selaimen tallennustilaan."
+              "Vierastila käyttää vain satunnaista teknistä tunnistetta, alustan tunnistetta ja sovellusversiota tekstityksen välitys-/synkronointipäätepisteiden ohjaamiseen.",
+              "Sähköpostin vahvistuskoodeja ja pyyntölokeja käsitellään tiukasti rekisteröitymistä, sisäänkirjautumista ja tilien suojaamista varten.",
+              "Palvelimen telemetria ei sisällä elokuvien nimiä, TMDB/IMDb-tunnuksia ja henkilökohtaisia ​​kolmannen osapuolen lisäosien lähteitä."
             ],
             "paragraphs": [
-              "Sovellus tallentaa joitain asetuksia, välimuistia ja toistotietoja laitteellesi. Jos luot tilin, palvelin tallentaa myös sähköpostisi, lempinimesi, profiilisi, julkisen avaimesi, istunnon/laitteen tiedot, synkronoidut kirjanmerkit, edistymisesi, katseluhistoriasi, asetukset ja lisäosat sekä salatut tekstityksen tarjoajan avaimet, jos annat ne."
+              "Sovellus tallentaa paikalliset asetukset, välimuistit ja toistotiedot laitteellesi. Kun luot tilin (rajoitettu 16-vuotiaille tai sitä vanhemmille käyttäjille), palvelin tallentaa myös salatun sähköpostisi, lempinimesi, profiilisi, julkisen avaimesi, istunnot/laitetiedot, synkronoidut kirjanmerkit, edistymisesi, katseluhistorian, asetukset, lisäosat, aikaleimatut suostumustietueet ja salatut BYOK-tekstityksen tarjoajan API-avaimet, jos tallennat ne."
             ],
             "badge": "01"
           },
           {
             "bullets": [
-              "Vahvistussähköposti lähetetään sähköpostintarjoajallemme. tietokannan varmuuskopiot voidaan tallentaa Supabaseen, kun varmuuskopiointi on määritetty.",
-              "Jotkut palveluntarjoajat tai lisäpalvelimet voivat käsitellä tietoja Vietnamin ulkopuolella; palvelimen sijainti riippuu valitsemastasi palvelusta ja käyttökokoonpanosta.",
-              "Googlen reCAPTCHAa voidaan käyttää rekisteröinnin aikana; tekstitys siirtyy Google-kääntäjään, kun valitset käännöksen.",
+              "Tapahtumavahvistussähköpostipalveluntarjoajat ja salatut tietokannan varmuuskopiot voivat sijaita Vietnamin ulkopuolella käyttöönottokokoonpanosta riippuen.",
+              "Metatiedot ja kriitikot noudetaan virallisten TMDB- ja OMDb-sovellusliittymien kautta; tekstityshaku kyselyllä Wyzie, SubSource ja OpenSubtitles.com REST API (ensisijaisesti henkilökohtaisia ​​BYOK-avaimia, jos ne ovat saatavilla).",
+              "Tekstitystiedostojen välittäjät käyttävät no-store-otsikoita ilman julkista välimuistia. Kolmannen osapuolen lisäosiin otetaan yhteyttä suoraan laitteeltasi omien käytäntöjensä mukaisesti.",
               "Tekstityshaut ja -lataukset, äänen/tekstityksen synkronointi ja yhteisön lisäosat voivat lähettää pyyntöjä Framezoo-palvelimien ja asiaankuuluvien ulkoisten palveluiden kautta. Kolmannen osapuolen lisäosilla on omat käytäntönsä."
             ],
             "paragraphs": [
-              "Käsittelemme tietoja tilien suorittamiseksi, laitteiden synkronoimiseksi, tuen tarjoamiseksi, palvelun suojaamiseksi ja valitsemiesi ominaisuuksien toimittamiseksi. Emme myy henkilötietoja mainosverkostoille."
+              "Käsittelemme tietoja vain käyttääksemme tilejä, synkronoidaksemme laitteita, tarjotaksemme tukea, valvoaksemme lain noudattamista emmekä koskaan myy henkilötietoja."
             ],
-            "title": "Käyttötarkoitukset ja ulkopuoliset palvelut",
+            "title": "Tarkoitukset, rajat ylittävä siirto ja ulkoiset sovellusliittymät",
             "badge": "02"
           },
           {
-            "title": "Säilytys ja poistaminen",
+            "title": "Säilytys, JSON-tietojen vienti ja poistaminen",
             "bullets": [
-              "Vahvistuskoodit vanhenevat 10 minuutin kuluttua. vanhentuneet altistustietueet poistetaan 7 päivän kuluttua. Lähetetyt tai epäonnistuneet viestit poistetaan 7 päivän kuluttua.",
-              "Palaute ja liitteet säilytetään erikseen tuki- tai tekijänoikeuspyyntöjä varten, kunnes ne poistetaan pyynnöstä tai tukitiimin toimesta. Tilin poistaminen poistaa tililinkin, mutta ei automaattisesti poista raportteja. Voit pyytää erillistä poistamista Palaute-lomakkeen kautta."
+              "Vahvistuksen OTP-haasteet vanhenevat 10 minuutin kuluttua ja tyhjennetään yhdessä lähtevien sähköpostien tietueiden kanssa 7 päivän kuluttua.",
+              "Palauteraportit ja tekijänoikeusilmoitukset säilytetään erikseen vaatimustenmukaisuuden tarkastamista varten. tilin poistaminen poistaa käyttäjätunnuksesi linkin."
             ],
             "paragraphs": [
-              "Tili- ja synkronointitiedot säilyvät, kun tilisi on aktiivinen. Voit poistaa tilin asetuksista; palvelin poistaa sitten tilitietueet, kirjanmerkit, edistymisen, katseluhistorian, asetukset ja istunnot. Vanhat tietokannan varmuuskopiot voivat säilyttää tiedot kiertoon asti; oletuskokoonpano säilyttää 7 viimeisintä varmuuskopiota, kun varmuuskopiointi on käynnissä."
+              "Tili- ja synkronointitiedot pysyvät aktiivisina niin kauan kuin tilisi on olemassa. Voit viedä täydellisen JSON-kopion henkilötiedoistasi tai poistaa tilisi pysyvästi kohdassa Asetukset -> Toiminnot; pyörivät salatut varmuuskopiot säilyttävät jopa 7 viimeisintä tilannekuvaa."
             ],
             "badge": "03"
           },
           {
             "paragraphs": [
-              "Voit pyytää pääsyä tietoihisi, oikaisua, poistamista tai rajoittamista, peruuttaa suostumuksesi, jos käsittely perustuu suostumukseen, ja lähettää valituksen verkkosivuillamme olevan Palautelomakkeen kautta. Anna tilisi sähköpostiosoite, jotta voimme vahvistaa pyynnön."
+              "Tilin rekisteröinti on rajoitettu vähintään 16-vuotiaille käyttäjille Vietnamin lain 91/2025/QH15 mukaisesti. Voit käyttää käyttöoikeuksia, viedä JSON-tiedostoja, korjata, poistaa tai peruuttaa suostumuksen Palautemodaalin tai privacy@framezoo.top / framezoo.top@gmail.com kautta (vastattiin 24 tunnin sisällä)."
             ],
-            "title": "Oikeutesi ja yhteystietosi",
+            "title": "Sinun oikeutesi, ikäportti (>=16) ja yhteystietosi",
             "badge": "04"
           }
         ],
-        "updatedAt": "Päivitetty: 4. marraskuuta 2026 · Laki 91/2025/QH15 ja asetus 356/2025/ND-CP",
-        "summary": "Tämä käytäntö kuvaa tietojen käsittelyä Framezoo-työpöytäsovelluksessa ja virallisilla Framezoo-palvelimilla."
+        "updatedAt": "Päivitetty: 16. marraskuuta 2026 · Versio 2026-11 · Vietnamin laki 91/2025/QH15 ja asetus 356/2025/ND-CP",
+        "summary": "Tämä käytäntö kuvaa tietojen käsittelyä Framezoo Desktop-, Mobile-, TV-sovelluksissa ja virallisissa Framezoo-palvelimissa."
       },
       "copyright": {
-        "updatedAt": "Päivitetty: 4.11.2026",
-        "summary": "Virallinen sisällön vastuuvapauslauseke ja immateriaalioikeuksien ilmoitus- ja poistomenettely Framezoolle.",
-        "title": "Tekijänoikeus, DMCA ja sisällön vastuuvapauslauseke",
+        "updatedAt": "Päivitetty: 16. marraskuuta 2026 · Vietnamin IP-lain art. 198b ja asetus 17/2023",
+        "summary": "Neutraali välittäjästatus, 24h/72h Notice & Takedown estolistaprosessi ja Toista loukkauskäytäntö.",
+        "title": "Tekijänoikeus, ilmoitus, poistaminen ja sisällön vastuuvapauslauseke",
         "sections": [
           {
             "paragraphs": [
-              "Framezoo ei käytä elokuvakirjastoa tai videovirtalähdettä. Sovellus voi käyttää käyttäjien valitsemia lähteitä; palvelimemme voivat välittää palveluntarjoajan tekstityksiä ja väliaikaisesti käsitellä ääntä ja tekstityksiä pyydettyä synkronointia varten.",
-              "Jokainen tekijänoikeusilmoitus tarkistetaan sisällön ja todellisen roolimme perusteella. nämä ehdot eivät luo automaattista vastuuvapautta."
+              "Framezoo on neutraali mediasoitinohjelmisto, joka on samanlainen kuin Stremio ja Kodi: se ei isännöi videotiedostoja, ei niputa oletussisältölisäosia tai julkisia seurantalaitteita, ei suorita palvelinpuolen lisäosien välityspalvelinta ja poistaa oletuksena pois lähtevän P2P-siementämisen (upload_rate_limit = 0).",
+              "Tekstityslataukset käyttävät no-store-otsikoita ilman julkista välimuistia Framezoo-palvelimilla."
             ],
-            "title": "Välittäjäohjelmisto Safe Harbor",
+            "title": "Neutraali välitysohjelmisto ja oletus ei-kylvö P2P",
             "badge": "01"
           },
           {
             "paragraphs": [
-              "Elokuvien ja sarjojen metatiedot (nimikkeet, julkaisupäivät, synopsit, luokitukset ja mainosjulisteet), jotka näytetään tiedoksi, ovat peräisin julkisista elokuvatietokannoista (kuten TMDB, IMDb ja TVDB).",
-              "Kaikki tavaramerkit, elokuvien nimet ja taideteokset ovat vastaavien tekijänoikeuksien omistajiensa omaisuutta."
+              "Elokuvien nimet, synopsit, taideteokset ja kriitikkojen luokitukset haetaan virallisista TMDB- ja OMDb-sovellusliittymistä tiedon löytämiseksi.",
+              "Tämä tuote käyttää TMDB API:ta, mutta TMDB ei ole hyväksynyt tai sertifioinut sitä. Kaikki tavaramerkit ja mediataideteokset ovat omistajiensa omaisuutta."
             ],
-            "title": "Metatietojen ja kuvien nimeäminen",
+            "title": "Viralliset metatietojen sovellusliittymät ja TMDB-attribuutio",
             "badge": "02"
           },
           {
             "bullets": [
-              "Tekijänoikeuden omistajan tai valtuutetun edustajan tunniste.",
-              "Todiste tekijänoikeudella suojatun teoksen omistajuudesta.",
+              "Toimivaltaisten viranomaisten määräykset pannaan täytäntöön /compliance/blocklist -listalla 24 tunnin kuluessa; voimassaolevat oikeudenhaltijan ilmoitukset 72 tunnin kuluessa.",
+              "Vahvistettuihin rikkomuksiin liittyvät toistuvien loukkaajien tilit jäädytetään ja istunto peruutetaan välittömästi.",
               "Kyseisen materiaalin tarkka URL-osoite tai kuvaus, jotta voimme tarkistaa sen ja käsitellä sitä 24–72 arkitunnin kuluessa."
             ],
-            "title": "Ilmoitus- ja poistomenettely",
+            "title": "Ilmoitus ja poisto (24h/72h SLA) ja toistuva loukkauskäytäntö",
             "paragraphs": [
-              "Framezoo kunnioittaa immateriaalioikeuksia. Jos olet tekijänoikeuksien omistaja tai valtuutettu edustaja ja uskot, että jokin framezoo.top-sivustolla oleva materiaali loukkaa oikeuksiasi, lähetä ilmoitus raportti-/palautekanavamme kautta, mukaan lukien:"
+              "Oikeuksien haltijat ja viranomaiset voivat lähettää muodollisia ilmoituksia (oikeuksien omistajan henkilöllisyys, todiste/PDF-valtuutus, erityinen lisäverkkotunnus / mediatunnus / tekstityksen tunnus ja valaehtoinen lausunto) ilmoituslomakkeella tai legal@framezoo.top / framezoo.top@gmail.com."
             ],
             "badge": "03"
           }

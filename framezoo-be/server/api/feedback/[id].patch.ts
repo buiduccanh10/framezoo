@@ -40,6 +40,7 @@ export default defineEventHandler(async event => {
     where: { id },
     data: {
       status,
+      resolved_at: status === 'resolved' ? new Date() : null,
       updated_at: new Date(),
     },
   });

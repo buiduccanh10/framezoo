@@ -464,5 +464,18 @@ class TorrentDiscoveryTest(unittest.TestCase):
         self.assertEqual(runtime.snapshot()["peersDiscovered"], 2)
         self.assertEqual(runtime.snapshot()["peersInjected"], 2)
 
+    def test_no_default_trackers_bundled(self):
+        self.assertEqual(discovery.constants.DEFAULT_TRACKERS, ())
+
+    def test_libtorrent_no_seeding_defaults(self):
+        import os
+        engine_path = os.path.join(os.path.dirname(__file__), "torrent_engine.py")
+        with open(engine_path, "r", encoding="utf-8") as fh:
+            src = fh.read()
+        self.assertIn('"unchoke_slots_limit": 0', src)
+        self.assertIn('"active_seeds": 0', src)
+        self.assertIn('"seeding_outgoing_connections": False', src)
+        self.assertNotIn('"upload_rate_limit": 1', src)
+
 if __name__ == "__main__":
     unittest.main()

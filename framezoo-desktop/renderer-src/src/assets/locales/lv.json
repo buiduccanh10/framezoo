@@ -18,6 +18,7 @@
       "configRequiredDesc": "Šim papildinājumam ir nepieciešama konfigurācija (piemēram, API atslēgas vai valodas iestatījumi), pirms tas var atgriezt saturu. Lūdzu, konfigurējiet to savā pārlūkprogrammā un pēc tam nokopējiet un ielīmējiet ģenerēto manifesta URL šeit.",
       "configRequiredTitle": "Nepieciešama konfigurācija",
       "configureAction": "Konfigurēt",
+      "disclaimerNotice": "Trešo pušu papildinājumus neatkarīgi pārvalda kopienas izstrādātāji. Jūs esat pilnībā atbildīgs par satura likumības pārbaudi savā jurisdikcijā; P2P sēšana pēc noklusējuma ir atspējota.",
       "errorFallback": "Nevar instalēt šo papildinājumu.",
       "manageListButton": "Pārvaldīt papildinājumu sarakstu",
       "openConfigurePage": "Atvērt konfigurācijas lapu",
@@ -38,6 +39,7 @@
       "configureCustomKeyActive": "Jūsu atslēga ir konfigurēta (noklikšķiniet, lai mainītu)",
       "configureRequiredAction": "Konfigurēt šo papildinājumu (obligāti)",
       "customKeyActiveDesc": "Izmantojot savu personīgo Wyzie API atslēgu",
+      "customKeyActiveProviders": "Izmantojot savu personīgo subtitru API atslēgu ({{providers}})",
       "customKeyConfiguredBadge": "Jūsu atslēga ir konfigurēta",
       "description": "Papildinājumi nav obligāti. Šī lietotne neapvieno, neiesaka vai mitina nevienu papildinājumu.",
       "disabled": "Atspējots",
@@ -181,7 +183,7 @@
       "passwordWeak": "Parolei jābūt vismaz 8 rakstzīmēm ar burtiem un cipariem",
       "privacyPolicy": "Privātuma politika",
       "submit": "Izveidot kontu",
-      "legalConsent": "Esmu izlasījis(-usi) un piekrītu <terms>Pakalpojumu sniegšanas noteikumiem</terms> un <privacy>Privātuma politikai</privacy>."
+      "legalConsent": "Es apstiprinu, ka man ir vismaz 16 gadi, un esmu izlasījis(-usi) un piekrītu <terms>Pakalpojumu sniegšanas noteikumiem</terms> un <privacy>Privātuma politikai</privacy>."
     },
     "trust": {
       "failed": {
@@ -307,6 +309,9 @@
   "footer": {
     "legal": {
       "disclaimer": "Atruna",
+      "dmca": "DMCA / Noņemšana",
+      "terms": "Pakalpojumu sniegšanas noteikumi",
+      "tmdbAttribution": "Filmu metadatus un plakātus nodrošina TMDB API (TMDB tos nav apstiprinājusi vai sertificējusi).",
       "disclaimerText": "Framezoo nepārvalda video straumēšanas avotus. Tā serveri var pārsūtīt pakalpojumu sniedzēju subtitrus un īslaicīgi apstrādāt audio un subtitrus sinhronizācijai, kad izvēlaties šo funkciju. Jūs kontrolējat saturu, ko atskaņojat."
     },
     "links": {
@@ -484,15 +489,15 @@
     },
     "support": {
       "complete": "pabeigts",
-      "description": "Framezoo darbojas ar zaudējumiem, un mums ir vajadzīga palīdzība, lai to saglabātu bez reklāmām! Ja jums patīk lietot Framezoo, lūdzu, apsveriet iespēju ziedot, lai palīdzētu mums segt mūsu izmaksas.",
-      "donate": "Ziedot",
-      "explanation": "Ja neizmantojat paplašinājumu vai neesat iestatījis FED API, saturu var būt grūtāk atrast! Mēs vēlamies to novērst, taču ir daudz grūtāk nodrošināt saturu bez dārgiem serveriem. Tāpēc, lūdzu, ja jums patīk lietot Framezoo, lūdzu, apsveriet iespēju ziedot, lai palīdzētu mums segt mūsu pieaugošās izmaksas.",
+      "description": "Framezoo ir neitrāls multivides atskaņotājs, un brīvprātīgs programmatūras atbalsts palīdz to nodrošināt bez reklāmām! Lūdzu, ņemiet vērā, ka ziedojumi stingri atbalsta tīru programmatūras inženieriju un nekad neiegādājas multivides saturu vai trešo pušu pievienojumprogrammas.",
+      "donate": "Atbalstiet programmatūras izstrādi",
+      "explanation": "Ja atskaņotājā neesat konfigurējis savus trešo pušu papildinājumus, straumes pēc noklusējuma netiks rādītas. Framezoo darbojas tikai kā neitrāls tehniskais atskaņotājs, nemitinot saturu. Jebkurš brīvprātīgs ieguldījums atbalsta tikai pastāvīgu lietotņu izstrādi un infrastruktūru.",
       "explanation2": "Ja vēlaties uzzināt vairāk, lūdzu, pievienojieties mūsu komandai",
       "fluxer": "Fluxer",
-      "label": "Projekta finansējums: ${{current}} / ${{goal}}",
+      "label": "Programmatūras inženierijas atbalsts: ${{current}} / ${{goal}}",
       "moreInfo": "Vairāk informācijas",
       "thankYou": "Paldies par atbalstu!",
-      "title": "Framezoo nepieciešama jūsu palīdzība!"
+      "title": "Atbalsti Framezoo programmatūras izstrādi!"
     },
     "titles": {
       "69": {
@@ -1210,6 +1215,11 @@
           "text": "Šī darbība izrakstīs jūs no visiem ierīcēm, kas saistītas ar jūsu kontu.",
           "title": "Beigt visas sesijas"
         },
+        "exportData": {
+          "button": "Eksportēt JSON",
+          "text": "Lejupielādējiet sava konta profila, grāmatzīmju, skatīšanās vēstures, iestatījumu un juridiskās piekrišanas ieraksta (JSON) kopiju.",
+          "title": "Eksportēt personas datus"
+        },
         "migration": {
           "button": "Migrēt kontu",
           "text": "Migrējiet savu kontu uz jaunu serveri vai lejupielādējiet savus datus.",
@@ -1518,6 +1528,7 @@
     "modalTitle": "Palīdziet mums turpināt veidot Framezoo",
     "subtitle": "Katrs ieguldījums palīdz mums uzlabot atskaņotāju, paplašināties uz vairāk platformām un uzklausīt jūsu idejas.",
     "note": "Paldies, ka rūpējaties par Framezoo un atbalstāt tā pamatā esošo darbu. Jūsu ieguldījums dod mums vairāk iespēju veidot labāku pieredzi ikvienam.",
+    "legalDisclaimer": "Tikai brīvprātīgs programmatūras izstrādes atbalsts — ziedojumi neļauj iegādāties filmas, multivides straumes vai piekļuvi papildinājumiem.",
     "scanHint": "Noskenējiet šo QR kodu, izmantojot savu bankas lietotni.",
     "paypalLabel": "PayPal",
     "momoLabel": "Mamma",

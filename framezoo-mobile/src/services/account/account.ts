@@ -71,3 +71,11 @@ export function deleteAccount(baseUrl: string, account: AccountWithToken) {
     { method: 'DELETE', account },
   );
 }
+
+export function exportAccountData(baseUrl: string, account: AccountWithToken) {
+  return apiRequest<Record<string, unknown>>(
+    baseUrl,
+    `/users/${encodeURIComponent(account.userId)}/export`,
+    { method: 'GET', account },
+  );
+}

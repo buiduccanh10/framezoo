@@ -56,7 +56,9 @@ export default defineNitroConfig({
     cryptoSecret: process.env.CRYPTO_SECRET,
     tmdbApiKey: process.env.TMDB_API_KEY,
     tidbApiKey: process.env.TIDB_API_KEY,
+    omdbApiKey: process.env.OMDB_API_KEY,
     wyzieApiKey: process.env.WYZIE_API_KEY,
     subsourceApiKey: process.env.SUBSOURCE_API_KEY,
+    opensubtitlesApiKey: process.env.OPENSUBTITLES_API_KEY,
   },
 });

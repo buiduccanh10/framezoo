@@ -8,6 +8,21 @@ import { verifyOtp } from '~/utils/emailOtp';
 import { sendEmail } from '~/utils/email';
 import { throwOtpHttpError } from '~/utils/otpHttp';
 
+const legalConsentSchema = z.object({
+  acceptedTerms: z.literal(true, {
+    errorMap: () => ({ message: 'Terms of Service acceptance is required' }),
+  }),
+  acceptedPrivacy: z.literal(true, {
+    errorMap: () => ({ message: 'Privacy Policy acceptance is required' }),
+  }),
+  ageConfirmed: z.literal(true, {
+    errorMap: () => ({ message: 'You must confirm you are at least 16 years old' }),
+  }),
+  termsVersion: z.string().trim().min(1).max(32),
+  privacyVersion: z.string().trim().min(1).max(32),
+  platform: z.enum(['web', 'desktop', 'mobile', 'tv']),
+});
+
 const completeSchema = z.object({
   publicKey: z.string(),
   challenge: z.object({
@@ -27,6 +42,7 @@ const completeSchema = z.object({
     challengeId: z.string().uuid(),
     code: z.string().regex(/^\d{6}$/),
   }),
+  legalConsent: legalConsentSchema,
 });
 
 export default defineEventHandler(async event => {
@@ -108,6 +124,7 @@ export default defineEventHandler(async event => {
   let user;
   try {
     user = await prisma.$transaction(async tx => {
+      // shortcut: latest legal consent lives on users row; extract an append-only consent_logs table if legal versions need audit history.
       const createdUser = await tx.users.create({
         data: {
           id: userId,
@@ -121,6 +138,11 @@ export default defineEventHandler(async event => {
           email_verified_at: now,
           permissions: [],
           profile: input.profile,
+          terms_version: input.legalConsent.termsVersion,
+          privacy_version: input.legalConsent.privacyVersion,
+          consented_at: now,
+          consent_platform: input.legalConsent.platform,
+          age_confirmed: true,
         },
       });
 

@@ -53,7 +53,7 @@
     "privacy": "Privātuma un datu politika",
     "resourcesTitle": "Resursi un atbalsts",
     "disclaimer": "Framezoo ir neitrāla multivides atskaņotāja programmatūra, un tajā netiek mitināti, uzglabāti, neizplatīti vai kontrolēti multivides faili vai trešās puses papildinājumi. Lietotāji ir pilnībā atbildīgi par papildinājumiem un saturu, kam viņi piekļūst saskaņā ar vietējiem likumiem.",
-    "metadataAttribution": "Informācijas nolūkos metadatus nodrošina publiskās filmu datu bāzes (TMDB, IMDb).",
+    "metadataAttribution": "Filmu metadatos un mākslas darbos tiek izmantota TMDB API (nav apstiprināta vai sertificēta TMDB) un vērtējumi, izmantojot OMDb API.",
     "rights": "© 2026 Framezoo. Visas tiesības paturētas."
   },
   "addonGuide": {
@@ -111,7 +111,7 @@
       "step1Desc": "Atveriet lejupielādēto .dmg failu un velciet Framezoo ikonu uz mapi Programmas.",
       "title": "macOS instalēšanas rokasgrāmata",
       "subtitle": "Apple Silicon (M1/M2/M3/M4) un Intel Mac",
-      "step2Desc": "Tā kā Framezoo ir neatkarīgs atvērtā pirmkoda atskaņotājs bez komerciāla Apple izstrādātāja sertifikāta, macOS var parādīt: \"Framezoo ir bojāts un to nevar atvērt\" vai \"Apple nevar verificēt šo lietotni\".",
+      "step2Desc": "Tā kā Framezoo ir neatkarīgs programmatūras atskaņotājs bez komerciāla Apple izstrādātāja sertifikāta, macOS var parādīt: \"Framezoo ir bojāts un to nevar atvērt\" vai \"Apple nevar verificēt šo lietotni\".",
       "step3Title": "3. darbība. Atveriet droši, izmantojot Finder",
       "step3Steps": [
         "Atveriet Finder un dodieties uz mapi Programmas.",
@@ -176,7 +176,7 @@
     "successDesc": "Paldies par atsauksmēm. Mūsu komanda izskatīs un atrisinās problēmu, cik drīz vien iespējams.",
     "submitting": "Notiek iesniegšana...",
     "attachmentsLabel": "Faili",
-    "attachmentsHint": "Attēli/video · Maksimālais kopējais apjoms 55 MB",
+    "attachmentsHint": "Attēli/video/PDF (atļaujas vai autortiesību pierādījums) · Kopējais maksimālais apjoms 55 MB",
     "attachmentsTooLarge": "Kopējais faila lielums nedrīkst pārsniegt 55 MB.",
     "errorRequired": "Lūdzu, aizpildiet nosaukumu, kontaktinformāciju un problēmas aprakstu.",
     "descLabel": "3. Detalizēts apraksts",
@@ -228,7 +228,8 @@
   "subtitlesConfigure": {
     "hero": {
       "description": "Iestatiet savu personīgo Wyzie API atslēgu, lai iegūtu ātrākus subtitrus un apietu koplietojamo kopienas tarifu ierobežojumus.",
-      "title": "Konfigurējiet Framezoo subtitrus"
+      "title": "Konfigurējiet Framezoo subtitrus",
+      "multiDescription": "Konfigurējiet izvēles personīgās API atslēgas (BYOK) Framezoo subtitru nodrošinātājiem, lai izmantotu savus ātruma ierobežojumus."
     },
     "account": {
       "configuringFor": "Konta konfigurēšana:",
@@ -265,7 +266,10 @@
         "empty": "Pirms testēšanas, lūdzu, ievadiet API atslēgu.",
         "serverError": "Wyzie serveris atgrieza HTTP {{status}}.",
         "verifying": "Pārbauda ar Wyzie...",
-        "networkError": "Tīkla kļūda, veidojot savienojumu ar sub.wyzie.io. Lūdzu, pārbaudiet savienojumu."
+        "networkError": "Tīkla kļūda, veidojot savienojumu ar sub.wyzie.io. Lūdzu, pārbaudiet savienojumu.",
+        "serverErrorProvider": "{{provider}} atgrieza HTTP {{status}}.",
+        "networkErrorProvider": "Nevarēja sasniegt {{provider}} verifikācijas pakalpojumu. Lūdzu, mēģiniet vēlreiz.",
+        "verifyingProvider": "Notiek pārbaude ar {{provider}}..."
       }
     },
     "step3": {
@@ -276,7 +280,33 @@
       "notConnectedNotice": "Piezīme. Jūs neesat saistīts ar Framezoo konta biļeti. Lai sinhronizētu tieši ar 'Open Framezoo', atveriet šo lapu no Framezoo Desktop lietotnes, kad esat pieteicies. Pretējā gadījumā kopējiet tālāk norādīto manifesta URL, lai to izmantotu.",
       "noticeLabel": "Paziņojums:",
       "copied": "Kopēts!",
-      "noticeText": "Jūsu API atslēga tiek droši saglabāta jūsu ierīcē. Tas tiek pārsūtīts tikai, lai meklētu un izgūtu filmu un seriālu subtitrus. Jebkurā laikā varat to atjaunināt vai noņemt."
+      "noticeText": "Jūsu API atslēga tiek droši saglabāta jūsu ierīcē. Tas tiek pārsūtīts tikai, lai meklētu un izgūtu filmu un seriālu subtitrus. Jebkurā laikā varat to atjaunināt vai noņemt.",
+      "privacyLinkLabel": "Privātuma politika",
+      "takedownLinkLabel": "Autortiesību un DMCA politika"
+    },
+    "providersStep": {
+      "optionalBadge": "Pēc izvēles",
+      "getKeyButton": "Iegūstiet API atslēgu",
+      "title": "Subtitru nodrošinātāja API atslēgas",
+      "description": "Visas tālāk norādītās atslēgas nav obligātas. Ja tas ir nodrošināts, Framezoo dod priekšroku jūsu personiskajai atslēgai, nevis koplietotajiem noklusējuma iestatījumiem. Iebūvētajam granītam nav nepieciešama atslēga.",
+      "manifestHint": "Kopēt manifesta URL pašlaik pārsūta tikai Wyzie atslēgu neautentificētiem Stremio URL; savienojiet savu Framezoo kontu, lai sinhronizētu visas nodrošinātāja atslēgas."
+    },
+    "providers": {
+      "wyzie": {
+        "portalHint": "Ģenerējiet vai izpērciet bezmaksas personīgo API atslēgu Wyzie veikalā.",
+        "placeholder": "Ielīmēt Wyzie API atslēgu...",
+        "name": "Vaizija"
+      },
+      "subsource": {
+        "placeholder": "Ielīmēt apakšavota API atslēgu...",
+        "portalHint": "Pierakstieties apakšavotā, atveriet konta informācijas paneli → cilni API un izveidojiet atslēgu.",
+        "name": "Apakšavots"
+      },
+      "opensubtitles": {
+        "portalHint": "Pierakstieties vietnē OpenSubtitles.com, atveriet API Consumers un izveidojiet REST API v1 atslēgu.",
+        "placeholder": "Ielīmēt OpenSubtitles.com REST API v1 atslēgu...",
+        "name": "OpenSubtitles.com"
+      }
     }
   },
   "legal": {
@@ -331,83 +361,83 @@
       },
       "privacy": {
         "title": "Privātuma un personas datu aizsardzības politika",
-        "updatedAt": "Atjaunināts: 2026. gada 4. novembris · Likums 91/2025/QH15 un Dekrēts 356/2025/ND-CP",
-        "summary": "Šī politika apraksta datu apstrādi Framezoo darbvirsmas lietojumprogrammā un oficiālajos Framezoo serveros.",
+        "updatedAt": "Atjaunināts: 2026. gada 16. novembris · Versija 2026-11 · Vjetnamas likums 91/2025/QH15 un dekrēts 356/2025/ND-CP",
+        "summary": "Šī politika apraksta datu apstrādi Framezoo Desktop, Mobile, TV lietotnēs un oficiālajos Framezoo serveros.",
         "sections": [
           {
-            "title": "Dati jūsu ierīcē un mūsu serveros",
+            "title": "Ierīces, viesa un konta dati",
             "paragraphs": [
-              "Lietotne jūsu ierīcē saglabā dažus iestatījumus, kešatmiņu un atskaņošanas datus. Ja izveidojat kontu, serveris saglabā arī jūsu e-pastu, segvārdu, profilu, publisko atslēgu, sesijas/ierīces informāciju, sinhronizētās grāmatzīmes, progresu, skatīšanās vēsturi, iestatījumus un papildinājumus, kā arī šifrētas subtitru nodrošinātāja atslēgas, ja tās sniedzat."
+              "Programma saglabā vietējos iestatījumus, kešatmiņu un atskaņošanas datus jūsu ierīcē. Kad izveidojat kontu (attiecas tikai uz 16 gadus veciem lietotājiem), serveris saglabā arī jūsu šifrēto e-pastu, segvārdu, profilu, publisko atslēgu, sesijas/ierīces informāciju, sinhronizētās grāmatzīmes, norisi, skatīšanās vēsturi, iestatījumus, papildinājumus, piekrišanas ierakstus ar laikspiedolu un šifrētās BYOK subtitru nodrošinātāja API atslēgas, ja tās saglabājat."
             ],
             "bullets": [
-              "E-pasts, verifikācijas kodi un pieprasījuma informācija atbalsta reģistrāciju, pieteikšanos un konta drošību.",
-              "Ziņojumi, kļūdu apraksti un pielikumi nonāk mūsu serverī, kad iesniedzat atsauksmju veidlapu.",
-              "Tīmekļa vietne saglabā jūsu valodas izvēli pārlūkprogrammas atmiņā."
+              "Viesa režīmā tiek izmantots tikai nejaušs tehniskais identifikators, platformas etiķete un lietotnes versija, lai darbinātu subtitru pārraides/sinhronizācijas galapunktus.",
+              "E-pasta verifikācijas kodi un pieprasījumu žurnāli tiek stingri apstrādāti, lai reģistrētos, pierakstītos un aizsargātu kontus.",
+              "Servera telemetrija neietver filmu nosaukumus, TMDB/IMDb ID un personīgos trešo pušu papildinājumu avotus."
             ],
             "badge": "01"
           },
           {
-            "title": "Mērķi un ārējie pakalpojumi",
+            "title": "Mērķi, pārrobežu pārsūtīšana un ārējās API",
             "paragraphs": [
-              "Mēs apstrādājam datus, lai pārvaldītu kontus, sinhronizētu ierīces, sniegtu atbalstu, aizsargātu pakalpojumu un nodrošinātu jūsu izvēlētās funkcijas. Mēs nepārdodam personas datus reklāmas tīkliem."
+              "Mēs apstrādājam datus tikai, lai pārvaldītu kontus, sinhronizētu ierīces, sniegtu atbalstu, nodrošinātu tiesisko atbilstību un nekad nepārdotu personas datus."
             ],
             "bullets": [
-              "Verifikācijas e-pasts tiek nosūtīts mūsu pasta pakalpojumu sniedzējam; datubāzes dublējumkopijas var tikt saglabātas Supabase, ja dublēšana ir konfigurēta.",
-              "Daži pakalpojumu sniedzēji vai pievienojumprogrammu serveri var apstrādāt datus ārpus Vjetnamas; servera atrašanās vieta ir atkarīga no jūsu izvēlētā pakalpojuma un darbības konfigurācijas.",
-              "Reģistrācijas laikā var izmantot Google reCAPTCHA; izvēloties tulkojumu, subtitru teksts tiek nosūtīts uz Google Translate.",
+              "Atkarībā no izvietošanas konfigurācijas darījumu verifikācijas e-pasta pakalpojumu sniedzēji un šifrētas datu bāzes dublējumkopijas var atrasties ārpus Vjetnamas.",
+              "Metadatu un kritiķu rezultāti tiek iegūti, izmantojot oficiālās TMDB un OMDb API; subtitru meklēšanas vaicājums Wyzie, SubSource un OpenSubtitles.com REST API (dodot priekšroku jūsu personīgajām BYOK atslēgām, ja tādas ir).",
+              "Subtitru failu releji izmanto galvenes bez veikala bez publiskas kešatmiņas. Ar trešo pušu papildinājumiem sazinās tieši no jūsu ierīces saskaņā ar to politikām.",
               "Subtitru meklēšana un lejupielāde, audio/subtitru sinhronizācija un kopienas papildinājumi var sūtīt pieprasījumus, izmantojot Framezoo serverus un attiecīgos ārējos pakalpojumus. Trešo pušu papildinājumiem ir savas politikas."
             ],
             "badge": "02"
           },
           {
-            "title": "Saglabāšana un dzēšana",
+            "title": "Saglabāšana, JSON datu eksportēšana un dzēšana",
             "paragraphs": [
-              "Konta un sinhronizācijas dati tiek saglabāti, kamēr jūsu konts ir aktīvs. Kontu var dzēst iestatījumos; pēc tam serveris noņem konta ierakstus, grāmatzīmes, progresu, skatīšanās vēsturi, iestatījumus un sesijas. Vecās datubāzes dublējumos dati var tikt saglabāti līdz rotācijai; noklusējuma konfigurācija saglabā 7 nesenās dublējumus, kad darbojas dublēšana."
+              "Konta un sinhronizācijas dati paliek aktīvi, kamēr jūsu konts pastāv. Varat eksportēt pilnu savu personas datu JSON kopiju vai neatgriezeniski izdzēst savu kontu sadaļā Iestatījumi -> Darbības; rotējošās šifrētās dublējumkopijas saglabā līdz pat 7 jaunākajiem momentuzņēmumiem."
             ],
             "bullets": [
-              "Verifikācijas kodu derīguma termiņš beidzas pēc 10 minūtēm; derīguma termiņa beigušies pārbaudes ieraksti tiek noņemti pēc 7 dienām. Nosūtīto vai neveiksmīgo e-pasta ziņojumu ieraksti tiek noņemti pēc 7 dienām.",
-              "Atsauksmes un pielikumi tiek glabāti atsevišķi atbalsta vai autortiesību pieprasījumiem, līdz tie tiek noņemti pēc pieprasījuma vai atbalsta komandas. Konta dzēšana noņem konta saiti, bet automātiski neizdzēš pārskatus. Varat pieprasīt atsevišķu dzēšanu, izmantojot atsauksmju veidlapu."
+              "Verifikācijas OTP izaicinājumi beidzas pēc 10 minūtēm un tiek dzēsti kopā ar e-pasta izsūtnes ierakstiem pēc 7 dienām.",
+              "Atsauksmju ziņojumi un autortiesību paziņojumi tiek glabāti atsevišķi atbilstības auditam; konta dzēšana atsaista jūsu lietotāja ID."
             ],
             "badge": "03"
           },
           {
-            "title": "Jūsu tiesības un kontaktinformācija",
+            "title": "Jūsu tiesības, vecuma ierobežojums (>=16) un kontaktpersona",
             "paragraphs": [
-              "Jūs varat pieprasīt piekļuvi saviem datiem, to labošanu, dzēšanu vai ierobežošanu, atsaukt piekrišanu, ja apstrāde balstās uz piekrišanu, un iesniegt sūdzību, izmantojot atsauksmju veidlapu mūsu tīmekļa vietnē. Lūdzu, norādiet sava konta e-pasta adresi, lai mēs varētu pārbaudīt pieprasījumu."
+              "Saskaņā ar Vjetnamas likumu 91/2025/QH15 kontu var reģistrēt tikai lietotāji, kas ir sasnieguši 16 gadu vecumu. Varat izmantot piekļuvi, eksportēt JSON, labot, dzēst vai atsaukt piekrišanu, izmantojot atsauksmju modālu vai privacy@framezoo.top / framezoo.top@gmail.com (atbildēts 24 stundu laikā)."
             ],
             "badge": "04"
           }
         ]
       },
       "copyright": {
-        "title": "Autortiesību, DMCA un satura atruna",
-        "updatedAt": "Atjaunināts: 2026. gada 4. novembrī",
-        "summary": "Oficiālā satura atruna un intelektuālā īpašuma paziņojumu un noņemšanas procedūra pakalpojumam Framezoo.",
+        "title": "Autortiesības, paziņojumi un noņemšana un satura atruna",
+        "updatedAt": "Atjaunināts: 2026. gada 16. novembris · Vjetnamas intelektuālā īpašuma tiesību 3. pants. 198b un Dekrēts 17/2023",
+        "summary": "Neitrāls starpnieka statuss, 24 h/72 h paziņošanas un noņemšanas bloķēšanas saraksta process un atkārtota pārkāpēja politika.",
         "sections": [
           {
-            "title": "Starpniecības programmatūras drošā osta",
+            "title": "Neitrāla starpnieka programmatūra un noklusējuma P2P bezsējas",
             "paragraphs": [
-              "Framezoo nepārvalda filmu bibliotēku vai video straumes avotu. Lietojumprogramma var piekļūt lietotāju izvēlētiem avotiem; mūsu serveri var pārsūtīt pakalpojumu sniedzēju subtitrus un īslaicīgi apstrādāt audio un subtitrus pieprasītajai sinhronizācijai.",
-              "Katrs autortiesību paziņojums tiek pārskatīts, ņemot vērā saturu un mūsu faktisko lomu; šie noteikumi nerada automātisku atbrīvojumu no atbildības."
+              "Framezoo ir neitrāla multivides atskaņotāja programmatūra, kas ir līdzīga Stremio un Kodi: tajā netiek mitināti video faili, netiek apvienoti noklusējuma satura papildinājumi vai publiskie izsekotāji, netiek veikta servera puses papildinājumu starpniekserveri un pēc noklusējuma atspējo izejošo P2P sēšanu (upload_rate_limit = 0).",
+              "Subtitru lejupielādēšanai tiek izmantotas galvenes bez veikala bez publiskas kešatmiņas Framezoo serveros."
             ],
             "badge": "01"
           },
           {
-            "title": "Metadati un mākslas darbu attiecināšana",
+            "title": "Oficiālās metadatu API un TMDB attiecinājums",
             "paragraphs": [
-              "Filmu un seriālu metadati (nosaukumi, izlaišanas datumi, anotācijas, vērtējumi un reklāmas plakāti), kas tiek rādīti informatīvai atrašanai, ir iegūti no publiskām filmu datubāzēm (piemēram, TMDB, IMDb un TVDB).",
-              "Visas preču zīmes, filmu nosaukumi un mākslas darbi paliek to attiecīgo autortiesību īpašnieku īpašumā."
+              "Filmu nosaukumi, kopsavilkumi, mākslas darbi un kritiķu vērtējumi tiek izgūti no oficiālajām TMDB un OMDb API informācijas atklāšanai.",
+              "Šis produkts izmanto TMDB API, taču TMDB to nav apstiprinājis vai sertificēts. Visas preču zīmes un mediju mākslas darbi paliek to attiecīgo īpašnieku īpašums."
             ],
             "badge": "02"
           },
           {
-            "title": "Paziņošanas un noņemšanas procedūra",
+            "title": "Paziņojums un noņemšana (24 h/72 h SLA) un atkārtota pārkāpuma politika",
             "paragraphs": [
-              "Framezoo ievēro intelektuālā īpašuma tiesības. Ja esat autortiesību īpašnieks vai pilnvarots pārstāvis un uzskatāt, ka kāds materiāls vietnē framezoo.top pārkāpj jūsu tiesības, lūdzu, iesniedziet paziņojumu, izmantojot mūsu ziņošanas/atsauksmju kanālu, tostarp:"
+              "Tiesību īpašnieki un iestādes var iesniegt oficiālus paziņojumus (tiesību īpašnieka identitāti, pierādījumu/PDF pilnvarojumu, īpašu papildinājuma domēnu / multivides ID / subtitru ID un zvērinātu paziņojumu), izmantojot ziņojuma veidlapu vai legal@framezoo.top / framezoo.top@gmail.com."
             ],
             "bullets": [
-              "Autortiesību īpašnieka vai pilnvarotā pārstāvja identifikācija.",
-              "Autortiesību aizsargātā darba īpašumtiesību apliecinājums.",
+              "Kompetento iestāžu rīkojumi tiek izpildīti /compliance/blocklist 24 stundu laikā; derīgus tiesību īpašnieka paziņojumus 72 stundu laikā.",
+              "Atkārtotu pārkāpēju konti, kas saistīti ar pārbaudītiem pārkāpumiem, tiek apturēti ar tūlītēju sesijas atsaukšanu.",
               "Precīzs attiecīgā materiāla URL vai apraksts, lai mēs varētu to pārskatīt un risināt 24–72 darba stundu laikā."
             ],
             "badge": "03"

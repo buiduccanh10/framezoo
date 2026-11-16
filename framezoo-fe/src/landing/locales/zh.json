@@ -54,7 +54,7 @@
     "privacy": "隐私和数据政策",
     "reportIssue": "发送反馈/报告",
     "rights": "© 2026 Framezoo。版权所有。",
-    "metadataAttribution": "元数据由公共电影数据库（TMDB、IMDb）提供，仅供参考。"
+    "metadataAttribution": "电影元数据和艺术作品使用 TMDB API（未经 TMDB 认可或认证）并通过 OMDb API 进行评级。"
   },
   "addonGuide": {
     "description": "插件是一个小型 HTTP 服务。提供清单和您需要的资源； Framezoo 处理剩下的事情。",
@@ -109,7 +109,7 @@
       "step3Title": "第 3 步：通过 Finder 安全打开",
       "step1Title": "第 1 步：拖至应用程序",
       "step2Title": "第2步：Gatekeeper安全警告",
-      "step2Desc": "由于 Framezoo 是一个独立的开源播放器，没有商业 Apple 开发者证书，因此 macOS 可能会显示：“Framezoo 已损坏，无法打开”或“Apple 无法验证此应用程序”。",
+      "step2Desc": "由于 Framezoo 是一款独立的软件播放器，没有商业 Apple 开发者证书，因此 macOS 可能会显示：“Framezoo 已损坏且无法打开”或“Apple 无法验证此应用程序”。",
       "step1Desc": "打开下载的 .dmg 文件并将 Framezoo 图标拖到“应用程序”文件夹中。",
       "step3Steps": [
         "打开 Finder 并导航至您的应用程序文件夹。",
@@ -176,7 +176,7 @@
     "successDesc": "感谢您的反馈。我们的团队将尽快审查并解决该问题。",
     "successTitle": "反馈发送成功！",
     "attachmentsLabel": "文件",
-    "attachmentsHint": "图片/视频 · 总计最大 55 MB",
+    "attachmentsHint": "图片/视频/PDF（授权或版权证明）· 总计最大 55 MB",
     "attachmentsTooLarge": "文件总大小不得超过 55 MB。",
     "contactPlaceholder": "例如name@example.com 或 +84912345678",
     "errorRequired": "请填写标题、联系方式、问题描述。",
@@ -277,83 +277,83 @@
       },
       "privacy": {
         "title": "隐私及个人数据保护政策",
-        "updatedAt": "更新日期：2026年11月4日 · 第91/2025/QH15号法律和第356/2025/ND-CP号法令",
-        "summary": "本政策描述了 Framezoo 桌面应用程序和 Framezoo 官方服务器上的数据处理。",
+        "updatedAt": "更新日期：2026 年 11 月 16 日 · 版本 2026-11 · 越南法律 91/2025/QH15 和法令 356/2025/ND-CP",
+        "summary": "本政策描述了跨 Framezoo 桌面、移动、电视应用程序和官方 Framezoo 服务器的数据处理。",
         "sections": [
           {
-            "title": "您设备上的数据以及我们服务器上的数据",
+            "title": "设备、访客和帐户数据",
             "paragraphs": [
-              "该应用程序会在您的设备上存储一些设置、缓存和播放数据。如果您创建了帐户，服务器还会存储您的电子邮件地址、昵称、个人资料、公钥、会话/设备详细信息、同步书签、进度、观看历史记录、设置和插件，以及您提供的加密字幕提供商密钥。"
+              "该应用程序在您的设备上存储本地设置、缓存和播放数据。当您创建帐户（仅限 16 岁或以上的用户）时，服务器还会存储您的加密电子邮件、昵称、个人资料、公钥、会话/设备详细信息、同步书签、进度、观看历史记录、设置、插件、带时间戳的同意记录以及加密的 BYOK 字幕提供商 API 密钥（如果您保存）。"
             ],
             "bullets": [
-              "电子邮件、验证码和请求详情支持注册、登录和帐户安全。",
-              "当您提交反馈表单时，报告、错误描述和附件将发送到我们的服务器。",
-              "网站会将您选择的语言存储在浏览器存储器中。"
+              "访客模式仅使用随机技术标识符、平台标签和应用程序版本来操作字幕中继/同步端点。",
+              "电子邮件验证码和请求日志经过严格处理，以注册、登录和保护帐户。",
+              "服务器遥测不包括电影标题、TMDB/IMDb ID 和个人第三方插件源。"
             ],
             "badge": "01"
           },
           {
-            "title": "目的和外部服务",
+            "title": "用途、跨境转账和外部 API",
             "paragraphs": [
-              "我们处理数据以运行账户、同步设备、提供支持、保护服务并提供您选择的功能。我们不会将个人数据出售给广告网络。"
+              "我们处理数据的目的只是为了操作帐户、同步设备、提供支持、强制遵守法律，并且绝不会出售个人数据。"
             ],
             "bullets": [
-              "验证邮件将发送至我们的邮件服务提供商；配置备份后，数据库备份可能会存储在 Supabase 上。",
-              "某些服务提供商或附加服务器可能会在越南境外处理数据；服务器位置取决于您选择的服务和运行配置。",
-              "注册时可能会使用 Google reCAPTCHA；选择翻译时，字幕文本将发送到 Google 翻译。",
+              "交易验证电子邮件提供商和加密数据库备份可能位于越南境外，具体取决于部署配置。",
+              "元数据和评论家分数通过官方 TMDB 和 OMDb API 获取；字幕搜索查询 Wyzie、SubSource 和 OpenSubtitles.com REST API（首选您的个人 BYOK 密钥（如果提供））。",
+              "字幕文件中继使用无存储标头，无需公共缓存。第三方插件根据其自己的政策直接从您的设备联系。",
               "字幕搜索和下载、音字幕同步以及社区插件可能会通过 Framezoo 服务器和相关外部服务发送请求。第三方插件有其自身的政策。"
             ],
             "badge": "02"
           },
           {
-            "title": "保留和删除",
+            "title": "保留、JSON 数据导出和删除",
             "paragraphs": [
-              "账户和同步数据会在您的账户处于活动状态时保留。您可以在“设置”中删除账户；服务器随后会删除账户记录、书签、进度、观看历史记录、设置和会话。旧的数据库备份可能会保留数据直至轮换；默认配置会在备份运行时保留最近 7 个备份。"
+              "当您的帐户存在时，帐户和同步数据保持活动状态。您可以在“设置”->“操作”中导出个人数据的完整 JSON 副本或永久删除您的帐户；轮换加密备份最多保留 7 个最近的快照。"
             ],
             "bullets": [
-              "验证码会在 10 分钟后过期；过期的验证记录会在 7 天后删除。已发送或发送失败的邮件记录会在 7 天后删除。",
-              "反馈和附件会单独保存，用于支持或版权请求，直到您提出请求或由支持团队删除为止。删除帐户会移除帐户链接，但不会自动删除报告。您可以通过反馈表单请求单独删除。"
+              "验证 OTP 质询将在 10 分钟后过期，并在 7 天后与电子邮件发件箱记录一起清除。",
+              "反馈报告和版权声明分开存储，以供合规审核；帐户删除会取消您的用户 ID 的链接。"
             ],
             "badge": "03"
           },
           {
-            "title": "您的权利和联系方式",
+            "title": "您的权利、年龄限制 (>=16) 和联系方式",
             "paragraphs": [
-              "您可以请求访问、更正、删除或限制处理您的数据，撤回基于同意的处理同意，并通过我们网站上的反馈表单提交投诉。请提供您的账户邮箱地址，以便我们验证您的请求。"
+              "根据越南法律 91/2025/QH15，帐户注册仅限 16 岁或以上的用户。您可以通过反馈模式或privacy@framezoo.top/framezoo.top@gmail.com（在24小时内回复）行使访问权、JSON导出、更正、删除或撤回同意。"
             ],
             "badge": "04"
           }
         ]
       },
       "copyright": {
-        "title": "版权、DMCA 和内容免责声明",
-        "updatedAt": "更新日期：2026年11月4日",
-        "summary": "Framezoo 的官方内容免责声明和知识产权通知与移除程序。",
+        "title": "版权、通知、删除和内容免责声明",
+        "updatedAt": "更新日期：2026 年 11 月 16 日 · 越南知识产权法第 16 条198b 和法令 17/2023",
+        "summary": "中立中介地位、24 小时/72 小时通知和删除黑名单流程以及重复侵权政策。",
         "sections": [
           {
-            "title": "中介软件安全港",
+            "title": "中立中介软件&默认无播种P2P",
             "paragraphs": [
-              "Framezoo 不运营电影库或视频流源。该应用程序可以访问用户选择的资源；我们的服务器可能会转发字幕提供商的字幕，并临时处理音频和字幕以实现所需的同步。",
-              "我们会根据内容和我们的实际角色对每份版权声明进行审核；这些条款并不构成自动免责。"
+              "Framezoo 是类似于 Stremio 和 Kodi 的中立媒体播放器软件：它不托管视频文件，不捆绑默认内容插件或公共跟踪器，不执行服务器端插件代理，并且默认禁用出站 P2P 播种 (upload_rate_limit = 0)。",
+              "字幕下载使用无存储标头，无需在 Framezoo 服务器上进行公共缓存。"
             ],
             "badge": "01"
           },
           {
-            "title": "元数据和艺术作品归属",
+            "title": "官方元数据 API 和 TMDB 归属",
             "paragraphs": [
-              "电影和剧集的元数据（标题、上映日期、剧情简介、评分和宣传海报）用于信息发现，这些元数据来源于公共电影数据库（例如 TMDB、IMDb 和 TVDB）。",
-              "所有商标、电影名称和艺术作品均为其各自版权所有者的财产。"
+              "电影标题、剧情简介、插图和评论家评级是从官方 TMDB 和 OMDb API 中检索的，以进行信息发现。",
+              "本产品使用 TMDB API，但未经 TMDB 认可或认证。所有商标和媒体艺术品仍属于其各自所有者的财产。"
             ],
             "badge": "02"
           },
           {
-            "title": "通知和撤下程序",
+            "title": "通知和删除（24 小时/72 小时 SLA）和重复侵权政策",
             "paragraphs": [
-              "Framezoo尊重知识产权。如果您是版权所有者或授权代理人，并且认为framezoo.top上的任何内容侵犯了您的权利，请通过我们的举报/反馈渠道提交通知，包括："
+              "权利持有人和当局可以通过报告表或 legal@framezoo.top /framezoo.top@gmail.com 提交正式通知（权利所有者身份、证明/PDF 授权、特定插件域/媒体 ID/字幕 ID 和宣誓声明）。"
             ],
             "bullets": [
-              "版权所有者或其授权代表的身份信息。",
-              "拥有版权作品的证明。",
+              "Orders from competent authorities are enforced on /compliance/blocklist within 24 hours; 72 小时内发出有效的权利持有人通知。",
+              "与经核实的违规行为相关的重复侵权帐户将被暂停，并立即撤销会话。",
               "请提供相关资料的确切网址或描述，以便我们能在 24-72 个工作小时内进行审核和处理。"
             ],
             "badge": "03"
@@ -410,7 +410,8 @@
     },
     "hero": {
       "description": "设置您的个人 Wyzie API 密钥以获得更快的字幕并绕过共享社区速率限制。",
-      "title": "配置 Framezoo 字幕"
+      "title": "配置 Framezoo 字幕",
+      "multiDescription": "为 Framezoo 字幕提供商配置可选的个人 API 密钥 (BYOK)，以使用您自己的速率限制。"
     },
     "pageTitle": "配置 Framezoo 字幕 |框架动物园",
     "step1": {
@@ -435,7 +436,10 @@
         "empty": "请在测试前输入 API 密钥。",
         "rateLimit": "API 密钥已超出速率限制。",
         "networkError": "连接到 sub.wyzie.io 时出现网络错误。请检查您的连接。",
-        "serverError": "Wyzie 服务器返回 HTTP {{status}}。"
+        "serverError": "Wyzie 服务器返回 HTTP {{status}}。",
+        "verifyingProvider": "正在使用 {{provider}} 进行验证...",
+        "serverErrorProvider": "{{provider}} 返回 HTTP {{status}}。",
+        "networkErrorProvider": "无法连接 {{provider}} 验证服务。请再试一次。"
       },
       "clearButton": "清除键"
     },
@@ -447,7 +451,33 @@
       "openFramezoo": "开放框架动物园",
       "copyManifest": "复制清单 URL",
       "noticeText": "您的 API 密钥安全地存储在您的设备上。它仅被转发以搜索和检索电影和电视剧的字幕。您可以随时更新或删除它。",
-      "notConnectedNotice": "注意：您尚未连接 Framezoo 帐户票证。要直接与“打开 Framezoo”同步，请在登录后从 Framezoo 桌面应用程序打开此页面。否则，请复制下面的清单 URL 来使用它。"
+      "notConnectedNotice": "注意：您尚未连接 Framezoo 帐户票证。要直接与“打开 Framezoo”同步，请在登录后从 Framezoo 桌面应用程序打开此页面。否则，请复制下面的清单 URL 来使用它。",
+      "privacyLinkLabel": "隐私政策",
+      "takedownLinkLabel": "版权和 DMCA 政策"
+    },
+    "providersStep": {
+      "optionalBadge": "选修的",
+      "getKeyButton": "获取API密钥",
+      "manifestHint": "复制清单 URL 目前仅转发未经身份验证的 Stremio URL 的 Wyzie 密钥；连接您的 Framezoo 帐户以同步所有提供商密钥。",
+      "description": "下面的所有键都是可选的。当提供时，Framezoo 更喜欢您的个人密钥而不是共享默认值。内置花岗岩不需要钥匙。",
+      "title": "字幕提供商 API 密钥"
+    },
+    "providers": {
+      "wyzie": {
+        "portalHint": "在 Wyzie 商店上生成或兑换免费的个人 API 密钥。",
+        "name": "威齐",
+        "placeholder": "粘贴 Wyzie API 密钥..."
+      },
+      "subsource": {
+        "name": "子源",
+        "placeholder": "粘贴子源 API 密钥...",
+        "portalHint": "登录 SubSource，打开 Account Dashboard → API 选项卡，然后创建密钥。"
+      },
+      "opensubtitles": {
+        "name": "OpenSubtitles.com",
+        "placeholder": "粘贴 OpenSubtitles.com REST API v1 密钥...",
+        "portalHint": "登录 OpenSubtitles.com，打开 API Consumers，然后创建 REST API v1 密钥。"
+      }
     }
   }
 }

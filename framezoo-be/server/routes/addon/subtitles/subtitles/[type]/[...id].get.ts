@@ -11,6 +11,11 @@ import {
   searchAllSubtitles,
 } from '~/utils/subtitles';
 import { getUserProviderCredential } from '~/utils/providerCredentials';
+import {
+  checkSubtitleTargetBlocked,
+  getActiveTakedownBlocklist,
+  isSubtitleIdBlocked,
+} from '~/utils/takedown';
 
 export default defineEventHandler(async event => {
   const params = event.context.params as { type?: string; id?: string | string[] } | undefined;
@@ -38,6 +43,7 @@ export default defineEventHandler(async event => {
   const proto = getRequestHeader(event, 'x-forwarded-proto') || 'http';
   const origin = `${proto}://${host}`;
   const subsourceDownloadBaseUrl = `${origin}/addon/subtitles/download/subsource`;
+  const opensubtitlesDownloadBaseUrl = `${origin}/addon/subtitles/download/opensubtitles`;
 
   const query = getQuery(event);
   const cacheControlHeader = getRequestHeader(event, 'cache-control') || '';
@@ -51,7 +57,17 @@ export default defineEventHandler(async event => {
 
   const config = useRuntimeConfig();
   const serverWyzieApiKey =
-    (config.wyzieApiKey || process.env.WYZIE_API_KEY || '').trim() || undefined;
+    ((config.wyzieApiKey as string | undefined) || process.env.WYZIE_API_KEY || '').trim() ||
+    undefined;
+  const serverSubsourceApiKey =
+    ((config.subsourceApiKey as string | undefined) || process.env.SUBSOURCE_API_KEY || '').trim() ||
+    undefined;
+  const serverOpenSubtitlesApiKey =
+    (
+      (config.opensubtitlesApiKey as string | undefined) ||
+      process.env.OPENSUBTITLES_API_KEY ||
+      ''
+    ).trim() || undefined;
 
   // Query keys are for unauthenticated Stremio URLs. An authenticated native
   // request must use its account key or the server fallback.
@@ -72,12 +88,20 @@ export default defineEventHandler(async event => {
   }
 
   let userWyzieKey: string | undefined;
+  let userSubsourceKey: string | undefined;
+  let userOpenSubtitlesKey: string | undefined;
   if (authSession?.user) {
     try {
       const savedKey = await getUserProviderCredential(authSession.user);
       if (savedKey?.trim()) userWyzieKey = savedKey.trim();
+      const [savedSubsource, savedOpenSubs] = await Promise.all([
+        getUserProviderCredential(authSession.user, 'subsource'),
+        getUserProviderCredential(authSession.user, 'opensubtitles'),
+      ]);
+      if (savedSubsource?.trim()) userSubsourceKey = savedSubsource.trim();
+      if (savedOpenSubs?.trim()) userOpenSubtitlesKey = savedOpenSubs.trim();
     } catch (error) {
-      console.warn('[subtitles:credentials] Failed to load user Wyzie key:', error);
+      console.warn('[subtitles:credentials] Failed to load user subtitle keys:', error);
       throw createError({
         statusCode: 503,
         statusMessage: 'Service Unavailable',
@@ -88,24 +112,21 @@ export default defineEventHandler(async event => {
 
   const wyzieApiKey =
     userWyzieKey || (!authSession?.user ? queryWyzieKey : undefined) || serverWyzieApiKey;
-  const credentialSource = userWyzieKey
+  const subsourceApiKey = userSubsourceKey || serverSubsourceApiKey;
+  const opensubtitlesApiKey = userOpenSubtitlesKey || serverOpenSubtitlesApiKey;
+
+  const hasUserKey = Boolean(userWyzieKey || userSubsourceKey || userOpenSubtitlesKey);
+  const credentialSource = hasUserKey
     ? 'user'
     : !authSession?.user && queryWyzieKey
       ? 'query'
       : 'server';
   const credentialScope =
     credentialSource === 'user'
-      ? `user:${hashSubtitleCredential(`${authSession.user}:${userWyzieKey}`)}`
+      ? `user:${hashSubtitleCredential(`${authSession.user}:${wyzieApiKey || ''}:${subsourceApiKey || ''}:${opensubtitlesApiKey || ''}`)}`
       : credentialSource === 'query'
         ? `query:${hashSubtitleCredential(queryWyzieKey ?? '')}`
-        : `server:${hashSubtitleCredential(serverWyzieApiKey ?? 'missing')}`;
-
-  const subsourceApiKey =
-    (
-      (config.subsourceApiKey as string | undefined) ||
-      process.env.SUBSOURCE_API_KEY ||
-      ''
-    ).trim() || undefined;
+        : `server:${hashSubtitleCredential(`${serverWyzieApiKey ?? 'missing'}:${serverSubsourceApiKey ?? 'missing'}:${serverOpenSubtitlesApiKey ?? 'missing'}`)}`;
 
   const acceptLanguage = getRequestHeader(event, 'accept-language') || '';
   const preferredLanguages: string[] = [];
@@ -140,6 +161,26 @@ export default defineEventHandler(async event => {
       ? 'public, max-age=300, stale-while-revalidate=3600'
       : 'private, no-store';
 
+  const baseId = cleanId.split(':')[0] || cleanId;
+  const directBlocked = await checkSubtitleTargetBlocked({
+    imdbId: baseId.startsWith('tt') ? baseId : undefined,
+    tmdbId: baseId.startsWith('tmdb:')
+      ? baseId.replace('tmdb:', '')
+      : /^\d+$/.test(baseId)
+        ? baseId
+        : undefined,
+    mediaType: type,
+  });
+  if (directBlocked) {
+    setHeader(event, 'Content-Type', 'application/json');
+    setHeader(event, 'Cache-Control', 'private, no-store');
+    return { subtitles: [] };
+  }
+
+  const blocklist = await getActiveTakedownBlocklist();
+  const filterBlockedSubtitles = (items: Awaited<ReturnType<typeof searchAllSubtitles>>) =>
+    items.filter(sub => !isSubtitleIdBlocked(sub.id, blocklist.subtitleIds));
+
   // Credential scope is resolved before reading shared cache or joining an
   // in-flight search. This prevents cross-user/provider-key result reuse.
   if (!isForceRefresh) {
@@ -151,18 +192,31 @@ export default defineEventHandler(async event => {
       setHeader(event, 'Vary', 'Authorization, Cookie, Accept-Language');
 
       return {
-        subtitles: normalizeSubtitleDownloadUrls(cachedSubtitles, origin),
+        subtitles: normalizeSubtitleDownloadUrls(filterBlockedSubtitles(cachedSubtitles), origin),
       };
     }
   }
 
   // Deduplicate in-flight upstream search requests for the same media key
+  const context = await resolveSubtitleContext(type, idStr);
+  const resolvedBlocked = await checkSubtitleTargetBlocked({
+    imdbId: context.imdbId,
+    tmdbId: context.tmdbId,
+    mediaType: type,
+  });
+  if (resolvedBlocked) {
+    setHeader(event, 'Content-Type', 'application/json');
+    setHeader(event, 'Cache-Control', 'private, no-store');
+    return { subtitles: [] };
+  }
+
   const subtitles = await executeWithInFlightDeduplication(cacheKey, async () => {
-    const context = await resolveSubtitleContext(type, idStr);
     return await searchAllSubtitles(context, {
       wyzieApiKey,
       subsourceApiKey,
+      opensubtitlesApiKey,
       subsourceDownloadBaseUrl,
+      opensubtitlesDownloadBaseUrl,
       preferredLanguages: searchLanguages,
     });
   });
@@ -176,6 +230,6 @@ export default defineEventHandler(async event => {
   setHeader(event, 'Vary', 'Authorization, Cookie, Accept-Language');
 
   return {
-    subtitles: normalizeSubtitleDownloadUrls(subtitles, origin),
+    subtitles: normalizeSubtitleDownloadUrls(filterBlockedSubtitles(subtitles), origin),
   };
 });

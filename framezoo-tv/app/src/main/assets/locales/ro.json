@@ -18,6 +18,7 @@
       "configRequiredDesc": "Acest addon necesită configurare (cum ar fi chei API sau setări de limbă) înainte de a putea returna conținut. Configurați-l în browser, apoi copiați și lipiți adresa URL a manifestului generat aici.",
       "configRequiredTitle": "Configurație necesară",
       "configureAction": "Configurați",
+      "disclaimerNotice": "Suplimentele terțe sunt operate independent de dezvoltatorii comunității. Ești singurul responsabil pentru verificarea legalității conținutului în jurisdicția ta; Seeding-ul P2P este dezactivat în mod implicit.",
       "errorFallback": "Imposibil de instalat acest addon.",
       "manageListButton": "Gestionați lista de suplimente",
       "openConfigurePage": "Deschideți pagina de configurare",
@@ -181,7 +182,7 @@
       "passwordWeak": "Parola trebuie să aibă cel puțin 8 caractere cu litere și cifre",
       "privacyPolicy": "Politica de confidențialitate",
       "submit": "Creează cont",
-      "legalConsent": "Am citit și sunt de acord cu <terms>Termenii și condițiile</terms> și <privacy>Politica de confidențialitate</privacy>."
+      "legalConsent": "Confirm că am cel puțin 16 ani și am citit și sunt de acord cu <terms>Termenii și condițiile</terms> și <privacy>Politica de confidențialitate</privacy>."
     },
     "trust": {
       "failed": {
@@ -306,7 +307,10 @@
   },
   "footer": {
     "legal": {
-      "disclaimer": "Declinare a răspunderii",
+      "disclaimer": "Declinare de responsabilitate",
+      "dmca": "DMCA / Eliminare",
+      "terms": "Termeni și condiții",
+      "tmdbAttribution": "Metadatele și posterele filmelor sunt furnizate de API-ul TMDB (nefiind aprobate sau certificate de TMDB).",
       "disclaimerText": "Framezoo nu operează surse de flux video. Serverele sale pot transmite subtitrări de la furnizor și pot procesa temporar sunetul și subtitrările pentru sincronizare atunci când alegeți funcția respectivă. Dvs. controlați conținutul pe care îl redați."
     },
     "links": {
@@ -484,15 +488,15 @@
     },
     "support": {
       "complete": "complet",
-      "description": "Framezoo este rulat cu pierdere și avem nevoie de ajutor pentru a-l menține fără reclame! Dacă vă place să utilizați Framezoo, vă rugăm să luați în considerare donarea pentru a ne ajuta să ne acoperim costurile.",
-      "donate": "Dona",
-      "explanation": "Dacă nu utilizați extensia sau nu aveți configurat FED API, poate fi mai greu să găsiți conținut! Vrem să remediem acest lucru, dar este mult mai greu să oferim conținut fără servere scumpe. Așa că, dacă vă place să utilizați Framezoo, vă rugăm să luați în considerare donarea pentru a ne ajuta să ne acoperim costurile în creștere.",
+      "description": "Framezoo este un player media neutru, iar suportul software voluntar ajută la menținerea acestuia fără reclame! Vă rugăm să rețineți că contribuțiile susțin strict ingineria software pură și nu achiziționați niciodată conținut media sau suplimente de la terți.",
+      "donate": "Suport pentru dezvoltarea de software",
+      "explanation": "Dacă nu ați configurat propriile suplimente terțe în player, stream-urile nu vor apărea în mod implicit. Framezoo acționează exclusiv ca un jucător tehnic neutru, fără a găzdui conținut. Orice contribuție voluntară susține doar ingineria și infrastructura aplicației.",
       "explanation2": "Dacă doriți mai multe informații, vă rugăm să vă alăturați",
       "fluxer": "Fluxer",
-      "label": "Finanțarea proiectului: ${{current}} / ${{goal}}",
+      "label": "Suport pentru inginerie software: ${{current}} / ${{goal}}",
       "moreInfo": "Mai multe informații",
       "thankYou": "Vă mulțumim pentru susținere!",
-      "title": "Framezoo are nevoie de ajutorul tău!"
+      "title": "Sprijiniți dezvoltarea de software Framezoo!"
     },
     "titles": {
       "69": {
@@ -1210,12 +1214,24 @@
           "text": "Aceasta te va deconecta de pe toate dispozitivele asociate contului tău.",
           "title": "Încheie toate sesiunele"
         },
+        "exportData": {
+          "button": "Export JSON",
+          "text": "Descarcă o copie a profilului contului tău, a marcajelor, a istoricului vizionărilor, a setărilor și a înregistrării consimțământului legal (JSON).",
+          "title": "Exportați datele personale"
+        },
         "migration": {
           "button": "Migrați contul",
           "text": "Migrați-vă contul pe un nou server sau descărcați datele.",
           "title": "Migrarea contului"
         },
-        "title": "Acțiuni"
+        "title": "Acțiuni",
+        "export": {
+          "button": "Exportați date JSON",
+          "error": "Nu s-au putut exporta datele personale. Vă rugăm să încercați din nou.",
+          "success": "Date personale exportate către",
+          "text": "Descărcați o copie a contului dvs., a setărilor sincronizate și a rapoartelor trimise (conformitate cu protecția datelor).",
+          "title": "Exportați date personale"
+        }
       },
       "devices": {
         "deviceNameLabel": "Numele dispozitivului",
@@ -1445,7 +1461,14 @@
       "clearCacheError": "Nu s-a șters memoria cache. Vă rugăm să încercați din nou.",
       "spaceLeftOnDevice": "({{space}} spațiu rămas pe dispozitiv)"
     },
-    "unsaved": "Aveți modificări nesalvate"
+    "unsaved": "Aveți modificări nesalvate",
+    "legal": {
+      "title": "Dezvăluire juridică, drepturi de autor și operator",
+      "operator": "Operator: Bui Duc Canh (Independent Developer, Framezoo Project) — Phao Dai Lang, Lang Ward, Hanoi, Vietnam",
+      "contact": "Legal / DMCA / Privacy Contact: framezoo.top@gmail.com (or legal@framezoo.top) · Tel: +84 984908816",
+      "links": "https://framezoo.top/legal/terms · /legal/privacy · /legal/dmca · /legal/about",
+      "disclaimer": "Framezoo este un player media neutru și nici nu găzduiește, nici nu include conținut media terță parte sau suplimente. Metadatele și evaluările folosesc API-urile TMDB și OMDb, iar acest produs nu este aprobat sau certificat de TMDB."
+    }
   },
   "tmdb": {
     "genres": {
@@ -1518,6 +1541,7 @@
     "modalTitle": "Ajută-ne să continuăm să construim Framezoo",
     "subtitle": "Fiecare contribuție ne ajută să îmbunătățim playerul, să ne extindem pe mai multe platforme și să fim atenți la ideile voastre.",
     "note": "Îți mulțumim că îți pasă de Framezoo și că susții munca din spatele acesteia. Contribuția ta ne oferă mai mult spațiu pentru a construi o experiență mai bună pentru toată lumea.",
+    "legalDisclaimer": "Doar suport voluntar pentru dezvoltarea de software — contribuțiile nu achiziționează filme, fluxuri media sau acces la suplimente.",
     "scanHint": "Scanează acest cod QR cu aplicația ta bancară.",
     "paypalLabel": "PayPal",
     "momoLabel": "Mamă",

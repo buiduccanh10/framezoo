@@ -13,66 +13,120 @@ import java.net.URI
 import java.net.URL
 import java.net.URLEncoder
 
+internal data class ComplianceBlocklist(
+    val addonDomains: Set<String> = emptySet(),
+    val tmdbIds: Set<String> = emptySet(),
+    val imdbIds: Set<String> = emptySet(),
+    val infohashes: Set<String> = emptySet()
+)
+
+internal fun extractDomainHost(raw: String?): String? {
+    val trimmed = raw?.trim()?.lowercase().orEmpty()
+    if (trimmed.isEmpty()) return null
+    val withScheme = if (trimmed.contains("://")) trimmed else "https://$trimmed"
+    return runCatching {
+        URI(withScheme).host?.lowercase()?.trimEnd('.')?.takeIf { it.isNotEmpty() }
+    }.getOrNull()
+}
+
+internal fun isAddonDomainBlocked(urlOrHost: String?, blockedDomains: Set<String>): Boolean {
+    if (urlOrHost.isNullOrBlank() || blockedDomains.isEmpty()) return false
+    val host = extractDomainHost(urlOrHost) ?: return false
+    return blockedDomains.any { pattern ->
+        val clean = pattern.trim().lowercase().removePrefix("*.")
+        clean.isNotEmpty() && (host == clean || host.endsWith(".$clean"))
+    }
+}
+
+internal fun isMediaBlockedByTakedown(
+    tmdbId: String?,
+    imdbId: String?,
+    mediaType: String?,
+    blocklist: ComplianceBlocklist
+): Boolean {
+    if (!imdbId.isNullOrBlank() && blocklist.imdbIds.isNotEmpty()) {
+        val cleanImdb = imdbId.trim().lowercase().substringBefore(':')
+        if (cleanImdb.isNotEmpty() && cleanImdb in blocklist.imdbIds) return true
+    }
+    if (!tmdbId.isNullOrBlank() && blocklist.tmdbIds.isNotEmpty()) {
+        val raw = tmdbId.trim().lowercase()
+        val bareId = raw.replace(Regex("^(movie|tv|series):"), "")
+        val typeKey = when (mediaType?.lowercase()) {
+            "show", "series", "tv" -> "tv"
+            "movie" -> "movie"
+            else -> null
+        }
+        val candidates = buildSet {
+            add(raw)
+            add(bareId)
+            if (typeKey == "tv") {
+                add("tv:$bareId")
+                add("series:$bareId")
+            } else if (typeKey == "movie") {
+                add("movie:$bareId")
+            } else {
+                add("movie:$bareId")
+                add("tv:$bareId")
+                add("series:$bareId")
+            }
+        }
+        if (candidates.any { it in blocklist.tmdbIds }) return true
+    }
+    return false
+}
+
 class Addons(context: Context, private val backend: Backend, private val store: SecureStore) {
     companion object {
         const val NATIVE_SUBTITLE_ADDON_ID = "community.framezoo.subtitles"
-        val DEFAULT_TRACKERS = listOf(
-            "http://tracker.dler.org:6969/announce",
-            "http://tracker.opentrackr.org:1337/announce",
-            "https://tracker.opentrackr.org:443/announce",
-            "http://zer0day.ch:1337/announce",
-            "http://tracker.qu.ax:6969/announce",
-            "http://tracker.auctor.tv:6969/announce",
-            "http://tracker.ducks.party:1984/announce",
-            "http://bittorrent-tracker.e-n-c-r-y-p-t.net:1337/announce",
-            "http://t.overflow.biz:6969/announce",
-            "http://open.tracker.cl:1337/announce",
-            "http://tracker.tryhackx.org:6969/announce",
-            "https://tracker.zhuqiy.com:443/announce",
-            "http://tracker.renfei.net:8080/announce",
-            "https://tracker.pmman.tech:443/announce",
-            "https://ht.therarbg.to:443/announce",
-            "udp://zer0day.ch:1337/announce",
-            "udp://tracker.publictracker.xyz:6969/announce",
-            "udp://tracker.opentrackr.org:1337/announce",
-            "udp://tracker.openbittorrent.com:6969/announce",
-            "udp://open.demonii.com:1337/announce",
-            "udp://open.stealth.si:80/announce",
-            "udp://udp.tracker.projectk.org:23333/announce",
-            "udp://tracker.tryhackx.org:6969/announce",
-            "udp://tracker.torrent.eu.org:451/announce",
-            "udp://tracker.theoks.net:6969/announce",
-            "udp://tracker.startwork.cv:1337/announce",
-            "udp://tracker.qu.ax:6969/announce",
-            "udp://tracker.dler.org:6969/announce",
-            "udp://tracker.auctor.tv:6969/announce",
-            "udp://tracker-udp.gbitt.info:80/announce",
-            "udp://torrentclub.online:54123/announce",
-            "udp://torrentclub.online:1984/announce",
-            "udp://t.overflow.biz:6969/announce",
-            "udp://explodie.org:6969/announce",
-            "udp://bittorrent-tracker.e-n-c-r-y-p-t.net:1337/announce",
-            "udp://tracker.plx.im:6969/announce",
-            "udp://tracker.nyaa.vc:6969/announce",
-            "udp://tracker.iperson.xyz:6969/announce",
-            "udp://tracker.gmi.gd:6969/announce",
-            "udp://tracker.fnix.net:6969/announce",
-            "udp://tracker.flatuslifir.is:6969/announce",
-            "udp://tracker.ducks.party:1984/announce",
-            "udp://tracker.bluefrog.pw:2710/announce",
-            "https://tracker.yemekyedim.com:443/announce",
-            "https://tracker.bt4g.com:443/announce",
-            "https://tr.zukizuki.org:443/announce",
-            "http://tracker810.xyz:11450/announce",
-            "udp://opentor.net:6969",
-            "http://bt.t-ru.org/ann?magnet",
-            "http://bt2.t-ru.org/ann?magnet",
-            "http://bt4.t-ru.org/ann?magnet"
-        )
+        // Neutral player compliance: do not bundle third-party trackers; peers/trackers come only from user addons or magnets.
+        val DEFAULT_TRACKERS: List<String> = emptyList()
+        private const val BLOCKLIST_TTL_MS = 300_000L
     }
 
     private val prefs = context.getSharedPreferences("framezoo_tv_addons", Context.MODE_PRIVATE)
+    @Volatile private var cachedBlocklist: ComplianceBlocklist? = null
+    @Volatile private var blocklistExpiresAt: Long = 0L
     private fun encode(value: String) = URLEncoder.encode(value, "UTF-8")
+
+    private fun parseBlocklist(raw: JSONObject): ComplianceBlocklist {
+        fun JSONObject.toLowerSet(key: String): Set<String> {
+            val arr = optJSONArray(key) ?: return emptySet()
+            return buildSet {
+                for (i in 0 until arr.length()) {
+                    arr.optString(i).trim().lowercase().takeIf { it.isNotEmpty() }?.let(::add)
+                }
+            }
+        }
+        return ComplianceBlocklist(
+            addonDomains = raw.toLowerSet("addonDomains"),
+            tmdbIds = raw.toLowerSet("tmdbIds"),
+            imdbIds = raw.toLowerSet("imdbIds"),
+            infohashes = raw.toLowerSet("infohashes")
+        )
+    }
+
+    internal suspend fun getBlocklist(forceRefresh: Boolean = false): ComplianceBlocklist {
+        val now = System.currentTimeMillis()
+        if (!forceRefresh) {
+            cachedBlocklist?.takeIf { now < blocklistExpiresAt }?.let { return it }
+        }
+        val fetched = runCatching { backend.complianceBlocklist() }.getOrNull()
+        if (fetched != null) {
+            prefs.edit().putString("compliance_blocklist", fetched.toString()).apply()
+            return parseBlocklist(fetched).also {
+                cachedBlocklist = it
+                blocklistExpiresAt = now + BLOCKLIST_TTL_MS
+            }
+        }
+        cachedBlocklist?.let { return it }
+        val fallback = prefs.getString("compliance_blocklist", null)
+            ?.let { runCatching { JSONObject(it) }.getOrNull() }
+            ?.let(::parseBlocklist)
+            ?: ComplianceBlocklist()
+        cachedBlocklist = fallback
+        blocklistExpiresAt = now + 60_000L
+        return fallback
+    }
 
     fun getNativeSubtitlesAddon(): Addon {
         val rawBackend = store.backendUrl.trimEnd('/')
@@ -152,13 +206,20 @@ class Addons(context: Context, private val backend: Backend, private val store: 
 
     suspend fun list(): List<Addon> {
         val nativeAddon = getNativeSubtitlesAddon()
+        val blocklist = getBlocklist()
         val local = local()
         val merged = linkedMapOf<String, JSONObject>()
         if (store.userId != null) try {
             val remote = backend.settings().optJSONArray("addons") ?: JSONArray()
-            for (i in 0 until remote.length()) remote.optJSONObject(i)?.let { merged[it.optString("manifestUrl")] = it }
+            for (i in 0 until remote.length()) remote.optJSONObject(i)?.let {
+                val url = it.optString("manifestUrl")
+                if (!isAddonDomainBlocked(url, blocklist.addonDomains)) merged[url] = it
+            }
         } catch (_: Exception) { }
-        for (i in 0 until local.length()) local.optJSONObject(i)?.let { merged[it.optString("manifestUrl")] = it }
+        for (i in 0 until local.length()) local.optJSONObject(i)?.let {
+            val url = it.optString("manifestUrl")
+            if (!isAddonDomainBlocked(url, blocklist.addonDomains)) merged[url] = it
+        }
         prefs.edit().putString("installed", JSONArray(merged.values).toString()).apply()
         val userAddons = merged.values.mapNotNull { raw ->
             val manifestUrl = raw.optString("manifestUrl")
@@ -178,6 +239,10 @@ class Addons(context: Context, private val backend: Backend, private val store: 
         val uri = URI(input.trim())
         require(uri.scheme == "https" || uri.scheme == "http") { "URL phải dùng HTTP(S)" }
         val manifestUrl = if (uri.path.endsWith("manifest.json")) uri.toString() else uri.toString().trimEnd('/') + "/manifest.json"
+        val blocklist = getBlocklist(forceRefresh = true)
+        require(!isAddonDomainBlocked(manifestUrl, blocklist.addonDomains)) {
+            "Nguồn addon này đã bị chặn theo yêu cầu gỡ bỏ bản quyền."
+        }
         val manifest = json(manifestUrl)
         require(manifest.optString("id").isNotBlank() && manifest.optString("name").isNotBlank()) { "Manifest thiếu id hoặc name" }
         val next = local()
@@ -287,13 +352,19 @@ class Addons(context: Context, private val backend: Backend, private val store: 
             backdrop = raw.optString("background", item.backdrop.orEmpty()).ifBlank { null }, description = raw.optString("description", item.description)) to episodes
     }
 
-    suspend fun streamsForAddon(addon: Addon, item: Media, episode: Episode?): List<Stream> {
+    suspend fun streamsForAddon(
+        addon: Addon,
+        item: Media,
+        episode: Episode?,
+        blockedHashes: Set<String> = emptySet()
+    ): List<Stream> {
         val id = mediaId(item, episode)
         val result = mutableListOf<Stream>()
         val raw = json(endpoint(addon, "stream", if (item.type == "show") "series" else "movie", id)).optJSONArray("streams") ?: JSONArray()
         for (i in 0 until raw.length()) {
             val value = raw.optJSONObject(i) ?: continue
             val hash = value.optString("infoHash").takeIf { it.matches(Regex("(?i)[0-9a-f]{40}|[a-z2-7]{32}")) }
+            if (hash != null && hash.lowercase() in blockedHashes) continue
             val trackers = value.optJSONArray("sources") ?: JSONArray()
             val streamTrackers = (0 until trackers.length()).mapNotNull { index ->
                 val src = trackers.optString(index).trim()
@@ -307,6 +378,8 @@ class Addons(context: Context, private val backend: Backend, private val store: 
             }
             val url = value.optString("url").ifBlank { magnet ?: "" }
             if (runCatching { URI(url).scheme?.lowercase() }.getOrNull() !in setOf("http", "https", "magnet")) continue
+            val magnetHash = Regex("btih:([0-9a-f]{40}|[a-z2-7]{32})", RegexOption.IGNORE_CASE).find(url)?.groupValues?.getOrNull(1)?.lowercase()
+            if (magnetHash != null && magnetHash in blockedHashes) continue
             val hints = value.optJSONObject("behaviorHints") ?: JSONObject()
             val requestHeaders = hints.optJSONObject("proxyHeaders")?.optJSONObject("request") ?: JSONObject()
             val headers = requestHeaders.keys().asSequence().associateWith { requestHeaders.optString(it) }
@@ -348,9 +421,13 @@ class Addons(context: Context, private val backend: Backend, private val store: 
     }
 
     suspend fun streams(item: Media, episode: Episode?): List<Stream> {
+        val blocklist = getBlocklist()
+        if (isMediaBlockedByTakedown(item.id, item.imdbId, item.type, blocklist)) {
+            return emptyList()
+        }
         val result = mutableListOf<Stream>()
         for (addon in list().filter { it.enabled && "stream" in it.resources }) try {
-            result += streamsForAddon(addon, item, episode)
+            result += streamsForAddon(addon, item, episode, blocklist.infohashes)
         } catch (_: Exception) { }
         return result
     }

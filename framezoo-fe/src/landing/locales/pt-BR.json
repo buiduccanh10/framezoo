@@ -54,7 +54,7 @@
     "rights": "© 2026 Framezoo. Todos os direitos reservados.",
     "reportIssue": "Enviar feedback/relatório",
     "addonPolicy": "Política de complementos",
-    "metadataAttribution": "Os metadados são fornecidos por bancos de dados públicos de filmes (TMDB, IMDb) para fins informativos."
+    "metadataAttribution": "Os metadados e arte do filme usam a API TMDB (não endossada ou certificada pelo TMDB) e classificações via API OMDb."
   },
   "addonGuide": {
     "eyebrow": "PROTOCOLO / GUIA ADDON",
@@ -114,7 +114,7 @@
         "Na caixa de diálogo de confirmação, clique em \"Abrir mesmo assim\" ou \"Abrir\"."
       ],
       "step1Desc": "Abra o arquivo .dmg baixado e arraste o ícone do Framezoo para a pasta Aplicativos.",
-      "step2Desc": "Como o Framezoo é um player independente de código aberto sem um certificado comercial de desenvolvedor da Apple, o macOS pode mostrar: \"O Framezoo está danificado e não pode ser aberto\" ou \"A Apple não pode verificar este aplicativo\".",
+      "step2Desc": "Como o Framezoo é um reprodutor de software independente sem um certificado comercial de desenvolvedor da Apple, o macOS pode mostrar: \"O Framezoo está danificado e não pode ser aberto\" ou \"A Apple não pode verificar este aplicativo\".",
       "note": "Você só precisa executar esta etapa do clique com o botão direito na primeira inicialização. Os lançamentos subsequentes podem ser feitos normalmente no Launchpad ou Spotlight."
     },
     "macTab": "Para macOS",
@@ -177,7 +177,7 @@
     "successDesc": "Obrigado pelo seu feedback. Nossa equipe analisará e resolverá o problema o mais rápido possível.",
     "attachmentsLabel": "Arquivos",
     "attachmentsTooLarge": "O tamanho total do arquivo não deve exceder 55 MB.",
-    "attachmentsHint": "Imagens/vídeos · Máximo de 55 MB no total",
+    "attachmentsHint": "Imagens/vídeos/PDF (autorização ou prova de direitos autorais) · Máximo de 55 MB no total",
     "contactPlaceholder": "por exemplo nome@exemplo.com ou +84912345678",
     "contactInvalid": "Por favor, insira um endereço de e-mail ou número de telefone válido para que possamos responder.",
     "errorRequired": "Preencha o título, informações de contato e descrição do problema.",
@@ -239,7 +239,8 @@
     },
     "hero": {
       "title": "Configurar legendas Framezoo",
-      "description": "Configure sua chave de API Wyzie pessoal para obter legendas mais rápidas e contornar os limites de taxa da comunidade compartilhada."
+      "description": "Configure sua chave de API Wyzie pessoal para obter legendas mais rápidas e contornar os limites de taxa da comunidade compartilhada.",
+      "multiDescription": "Configure chaves de API pessoais opcionais (BYOK) para que os provedores de legendas do Framezoo usem seus próprios limites de taxa."
     },
     "pageTitle": "Configurar legendas Framezoo | Quadrozoo",
     "step1": {
@@ -265,7 +266,10 @@
         "invalid": "A chave de API é inválida ou expirou.",
         "networkError": "Erro de rede ao conectar-se a sub.wyzie.io. Por favor, verifique sua conexão.",
         "valid": "A chave de API é válida e está funcionando!",
-        "serverError": "O servidor Wyzie retornou HTTP {{status}}."
+        "serverError": "O servidor Wyzie retornou HTTP {{status}}.",
+        "serverErrorProvider": "{{provider}} retornou HTTP {{status}}.",
+        "networkErrorProvider": "Could not reach {{provider}} verification service. Por favor, tente novamente.",
+        "verifyingProvider": "Verificando com {{provider}}..."
       }
     },
     "step3": {
@@ -276,7 +280,33 @@
       "title": "Instalar e aplicar",
       "openFramezooDisabledTooltip": "Requer abertura no Framezoo Desktop enquanto estiver logado",
       "notConnectedNotice": "Obs: Você não está conectado com um ticket de conta Framezoo. Para sincronizar diretamente com o 'Open Framezoo', abra esta página em seu aplicativo Framezoo Desktop enquanto estiver conectado. Caso contrário, copie o URL do manifesto abaixo para usá-lo.",
-      "noticeText": "Sua chave API é armazenada com segurança em seu dispositivo. Ele é encaminhado apenas para buscar e recuperar legendas de filmes e séries. Você pode atualizá-lo ou removê-lo a qualquer momento."
+      "noticeText": "Sua chave API é armazenada com segurança em seu dispositivo. Ele é encaminhado apenas para buscar e recuperar legendas de filmes e séries. Você pode atualizá-lo ou removê-lo a qualquer momento.",
+      "privacyLinkLabel": "política de Privacidade",
+      "takedownLinkLabel": "Política de direitos autorais e DMCA"
+    },
+    "providersStep": {
+      "optionalBadge": "Opcional",
+      "getKeyButton": "Obtenha a chave API",
+      "manifestHint": "Copiar URL do Manifesto atualmente encaminha apenas a chave Wyzie para URLs Stremio não autenticados; conecte sua conta Framezoo para sincronizar todas as chaves do provedor.",
+      "title": "Chaves de API do provedor de legendas",
+      "description": "Todas as chaves abaixo são opcionais. Quando fornecida, o Framezoo prefere sua chave pessoal aos padrões compartilhados. Granito embutido não requer chave."
+    },
+    "providers": {
+      "wyzie": {
+        "name": "Wyzie",
+        "portalHint": "Gere ou resgate uma chave de API pessoal gratuita na Wyzie Store.",
+        "placeholder": "Colar a chave da API Wyzie..."
+      },
+      "opensubtitles": {
+        "name": "OpenSubtitles. com",
+        "portalHint": "Faça login em OpenSubtitles.com, abra Consumidores de API e crie uma chave REST API v1.",
+        "placeholder": "Colar a chave da API REST v1 do OpenSubtitles.com..."
+      },
+      "subsource": {
+        "placeholder": "Colar a chave da API SubSource...",
+        "portalHint": "Faça login no SubSource, abra Painel da conta → guia API e crie uma chave.",
+        "name": "Subfonte"
+      }
     }
   },
   "legal": {
@@ -331,83 +361,83 @@
       },
       "privacy": {
         "title": "Política de Privacidade e Proteção de Dados Pessoais",
-        "updatedAt": "Atualizado em: 4 de novembro de 2026 · Lei 91/2025/QH15 e Decreto 356/2025/ND-CP",
-        "summary": "Esta política descreve o processamento de dados no aplicativo Framezoo para desktop e nos servidores oficiais do Framezoo.",
+        "updatedAt": "Atualizado: 16 de novembro de 2026 · Versão 2026-11 · Lei do Vietnã 91/2025/QH15 e Decreto 356/2025/ND-CP",
+        "summary": "Esta política descreve o processamento de dados em aplicativos Framezoo Desktop, Mobile, TV e servidores oficiais Framezoo.",
         "sections": [
           {
-            "title": "Dados no seu dispositivo e nos nossos servidores",
+            "title": "Dados do dispositivo, convidado e conta",
             "paragraphs": [
-              "O aplicativo armazena algumas configurações, cache e dados de reprodução no seu dispositivo. Se você criar uma conta, o servidor também armazenará seu e-mail, apelido, perfil, chave pública, detalhes da sessão/dispositivo, favoritos sincronizados, progresso, histórico de visualização, configurações e complementos, além de chaves criptografadas do provedor de legendas, caso você as forneça."
+              "O aplicativo armazena configurações locais, caches e dados de reprodução no seu dispositivo. Quando você cria uma conta (restrita a usuários com 16 anos ou mais), o servidor também armazena seu e-mail criptografado, apelido, perfil, chave pública, detalhes de sessões/dispositivos, marcadores sincronizados, progresso, histórico de exibição, configurações, complementos, registros de consentimento com carimbo de data e hora e chaves API criptografadas do provedor de legendas BYOK, caso você os salve."
             ],
             "bullets": [
-              "E-mails, códigos de verificação e detalhes da solicitação auxiliam no registro, login e segurança da conta.",
-              "Ao submeter o formulário de feedback, os relatórios, descrições de erros e anexos chegam ao nosso servidor.",
-              "O site armazena sua escolha de idioma no armazenamento do navegador."
+              "O modo visitante usa apenas um identificador técnico aleatório, rótulo de plataforma e versão do aplicativo para operar pontos de extremidade de retransmissão/sincronização de legendas.",
+              "Os códigos de verificação de e-mail e os registros de solicitação são processados ​​estritamente para registrar, fazer login e proteger contas.",
+              "A telemetria do servidor exclui títulos de filmes, IDs TMDB/IMDb e fontes adicionais pessoais de terceiros."
             ],
             "badge": "01"
           },
           {
-            "title": "Finalidades e serviços externos",
+            "title": "Finalidades, transferência transfronteiriça e APIs externas",
             "paragraphs": [
-              "Processamos dados para gerenciar contas, sincronizar dispositivos, fornecer suporte, proteger o serviço e disponibilizar os recursos que você escolher. Não vendemos dados pessoais para redes de publicidade."
+              "Processamos dados apenas para operar contas, sincronizar dispositivos, fornecer suporte, impor conformidade legal e nunca vender dados pessoais."
             ],
             "bullets": [
-              "O e-mail de verificação é enviado ao nosso provedor de e-mail; os backups do banco de dados podem ser armazenados no Supabase quando o backup estiver configurado.",
-              "Alguns provedores de serviços ou servidores adicionais podem processar dados fora do Vietnã; a localização do servidor depende do serviço escolhido e da configuração operacional.",
-              "O Google reCAPTCHA pode ser usado durante o cadastro; o texto das legendas é traduzido pelo Google Tradutor quando você escolhe a opção de tradução.",
+              "Provedores de e-mail de verificação transacional e backups de bancos de dados criptografados podem residir fora do Vietnã, dependendo da configuração da implantação.",
+              "Metadados e pontuações críticas são obtidos por meio de APIs oficiais TMDB e OMDb; pesquisas de legendas consultam Wyzie, SubSource e OpenSubtitles.com REST API (preferindo suas chaves BYOK pessoais quando fornecidas).",
+              "As retransmissões de arquivos de legenda usam cabeçalhos sem armazenamento sem cache público. Os complementos de terceiros são contatados diretamente do seu dispositivo de acordo com suas próprias políticas.",
               "A busca e o download de legendas, a sincronização de áudio/legenda e os complementos da comunidade podem enviar solicitações através dos servidores do Framezoo e dos serviços externos relevantes. Complementos de terceiros têm suas próprias políticas."
             ],
             "badge": "02"
           },
           {
-            "title": "Retenção e exclusão",
+            "title": "Retenção, exportação e exclusão de dados JSON",
             "paragraphs": [
-              "Os dados da conta e de sincronização permanecem enquanto sua conta estiver ativa. Você pode excluir a conta em Configurações; o servidor removerá os registros da conta, favoritos, progresso, histórico de visualização, configurações e sessões. Os backups antigos do banco de dados podem reter dados até a rotação; a configuração padrão mantém os 7 backups mais recentes quando o backup está em execução."
+              "Os dados da conta e da sincronização permanecem ativos enquanto sua conta existir. Você pode exportar uma cópia JSON completa de seus dados pessoais ou excluir permanentemente sua conta em Configurações -> Ações; backups criptografados rotativos retêm até 7 instantâneos recentes."
             ],
             "bullets": [
-              "Os códigos de verificação expiram após 10 minutos; os registros de desafios expirados são removidos após 7 dias. Os registros de e-mails enviados ou com falha na entrega são removidos após 7 dias.",
-              "O feedback e os anexos são mantidos separadamente para solicitações de suporte ou de direitos autorais até que sejam removidos mediante solicitação ou pela equipe de suporte. A exclusão da conta remove o vínculo com a conta, mas não exclui automaticamente os relatórios. Você pode solicitar a exclusão separadamente por meio do formulário de feedback."
+              "Os desafios de verificação OTP expiram após 10 minutos e são eliminados junto com os registros da caixa de saída de e-mail após 7 dias.",
+              "Os relatórios de feedback e os avisos de direitos autorais permanecem armazenados separadamente para auditoria de conformidade; a exclusão da conta desvincula seu ID de usuário."
             ],
             "badge": "03"
           },
           {
-            "title": "Seus direitos e contato",
+            "title": "Seus direitos, limite de idade (>=16) e contato",
             "paragraphs": [
-              "Você pode solicitar acesso, correção, exclusão ou restrição dos seus dados, revogar o consentimento quando o processamento depender dele e enviar uma reclamação através do formulário de feedback em nosso site. Por favor, informe o e-mail da sua conta para que possamos verificar a solicitação."
+              "O registro da conta é limitado a usuários com 16 anos ou mais de acordo com a Lei 91/2025/QH15 do Vietnã. Você poderá exercer acesso, exportação JSON, correção, exclusão ou retirada de consentimento através do modal Feedback ou privacidade@framezoo.top / framezoo.top@gmail.com (respondido em até 24 horas)."
             ],
             "badge": "04"
           }
         ]
       },
       "copyright": {
-        "title": "Direitos autorais, DMCA e isenção de responsabilidade de conteúdo",
-        "updatedAt": "Atualizado em: 4 de novembro de 2026",
-        "summary": "Aviso legal oficial sobre conteúdo e procedimento de notificação e remoção de conteúdo relacionado à propriedade intelectual para o Framezoo.",
+        "title": "Direitos autorais, aviso e remoção e isenção de responsabilidade de conteúdo",
+        "updatedAt": "Atualizado: 16 de novembro de 2026 · Lei de PI do Vietnã Art. 198b e Decreto 17/2023",
+        "summary": "Status de intermediário neutro, processo de lista de bloqueio de notificação e remoção 24h/72h e política de reincidência de infratores.",
         "sections": [
           {
-            "title": "Porto Seguro para Software Intermediário",
+            "title": "Software intermediário neutro e P2P sem propagação padrão",
             "paragraphs": [
-              "O Framezoo não opera uma biblioteca de filmes nem uma fonte de streaming de vídeo. O aplicativo pode acessar fontes escolhidas pelos usuários; nossos servidores podem retransmitir legendas fornecidas pelo usuário e processar temporariamente áudio e legendas para a sincronização solicitada.",
-              "Cada aviso de direitos autorais é analisado em relação ao conteúdo e ao nosso papel real; estes termos não criam uma isenção automática de responsabilidade."
+              "Framezoo é um software reprodutor de mídia neutro semelhante ao Stremio e Kodi: ele não hospeda arquivos de vídeo, não agrupa complementos de conteúdo padrão ou rastreadores públicos, não executa proxy de complemento no servidor e desativa a propagação P2P de saída (upload_rate_limit = 0) por padrão.",
+              "Os downloads de legendas usam cabeçalhos sem armazenamento sem cache público nos servidores Framezoo."
             ],
             "badge": "01"
           },
           {
-            "title": "Metadados e atribuição de obras de arte",
+            "title": "APIs oficiais de metadados e atribuição TMDB",
             "paragraphs": [
-              "Os metadados de filmes e séries (títulos, datas de lançamento, sinopses, classificações e pôsteres promocionais) exibidos para fins de busca de informações são provenientes de bancos de dados públicos de filmes (como TMDB, IMDb e TVDB).",
-              "Todas as marcas registradas, títulos de filmes e ilustrações permanecem propriedade de seus respectivos detentores de direitos autorais."
+              "Títulos de filmes, sinopses, obras de arte e avaliações críticas são recuperados das APIs oficiais TMDB e OMDb para descoberta de informações.",
+              "Este produto usa a API TMDB, mas não é endossado ou certificado pelo TMDB. Todas as marcas registradas e obras de arte de mídia permanecem propriedade de seus respectivos proprietários."
             ],
             "badge": "02"
           },
           {
-            "title": "Procedimento de Notificação e Remoção",
+            "title": "Notificação e remoção (SLA 24h/72h) e política de infração reincidente",
             "paragraphs": [
-              "A Framezoo respeita os direitos de propriedade intelectual. Se você é o proprietário dos direitos autorais ou um agente autorizado e acredita que algum material em framezoo.top infringe seus direitos, envie uma notificação através do nosso canal de Denúncia/Feedback, incluindo:"
+              "Os detentores de direitos e as autoridades podem enviar notificações formais (identidade do proprietário dos direitos, prova/autorização em PDF, domínio adicional específico/ID de mídia/ID de legenda e declaração juramentada) por meio do formulário de relatório ou legal@framezoo.top / framezoo.top@gmail.com."
             ],
             "bullets": [
-              "Identificação do titular dos direitos autorais ou de seu representante autorizado.",
-              "Comprovante de titularidade da obra protegida por direitos autorais.",
+              "As ordens das autoridades competentes são executadas em /compliance/blocklist dentro de 24 horas; avisos válidos aos detentores de direitos dentro de 72 horas.",
+              "As contas de infratores reincidentes associadas a violações verificadas são suspensas com revogação imediata da sessão.",
               "A URL exata ou a descrição do material em questão para que possamos analisá-lo e respondê-lo dentro de 24 a 72 horas úteis."
             ],
             "badge": "03"
