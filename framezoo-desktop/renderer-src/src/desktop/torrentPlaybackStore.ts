@@ -1,6 +1,4 @@
 import { useSyncExternalStore } from "react";
-import { Subject, asyncScheduler } from "rxjs";
-import { throttleTime } from "rxjs/operators";
 
 import {
   getTorrentStatus,
@@ -16,27 +14,70 @@ const pendingStopTimers = new Map<string, ReturnType<typeof setTimeout>>();
 let unsubscribe: (() => void) | null = null;
 const TORRENT_STOP_GRACE_MS = 3_000;
 const TORRENT_REPLACED_STOP_GRACE_MS = 15_000;
+const STATUS_THROTTLE_MS = 500;
 
-const statusSubject = new Subject<TorrentStatus>();
-
-// Throttle updates to UI at most once every 500ms, but always deliver the first and last
-statusSubject
-  .pipe(throttleTime(500, asyncScheduler, { leading: true, trailing: true }))
-  .subscribe((status) => {
-    activeStatus = status;
-    publish();
-  });
+let pendingStatus: TorrentStatus | null = null;
+let throttleTimer: ReturnType<typeof setTimeout> | null = null;
+let lastPublishedAt = 0;
 
 function publish() {
   for (const listener of listeners) listener();
 }
 
+function resetStatusThrottle() {
+  if (throttleTimer) {
+    clearTimeout(throttleTimer);
+    throttleTimer = null;
+  }
+  pendingStatus = null;
+  lastPublishedAt = 0;
+}
+
+function isUrgentStatus(status: TorrentStatus): boolean {
+  return (
+    status.streamType !== activeStatus?.streamType ||
+    status.state !== activeStatus?.state ||
+    Boolean(status.error) !== Boolean(activeStatus?.error)
+  );
+}
+
+function commitStatus(status: TorrentStatus) {
+  activeStatus = status;
+  lastPublishedAt = Date.now();
+  publish();
+}
+
+function handleIncomingStatus(status: TorrentStatus) {
+  if (status.sessionId !== activeSessionId) return;
+  const elapsed = Date.now() - lastPublishedAt;
+  if (isUrgentStatus(status) || elapsed >= STATUS_THROTTLE_MS) {
+    if (throttleTimer) {
+      clearTimeout(throttleTimer);
+      throttleTimer = null;
+    }
+    pendingStatus = null;
+    commitStatus(status);
+    return;
+  }
+  pendingStatus = status;
+  if (!throttleTimer) {
+    throttleTimer = setTimeout(
+      () => {
+        throttleTimer = null;
+        const next = pendingStatus;
+        pendingStatus = null;
+        if (next && next.sessionId === activeSessionId) {
+          commitStatus(next);
+        }
+      },
+      Math.max(0, STATUS_THROTTLE_MS - elapsed),
+    );
+  }
+}
+
 function ensureSubscription() {
   if (unsubscribe) return;
-  unsubscribe = subscribeTorrentStatus((status) => {
-    if (status.sessionId !== activeSessionId) return;
-    statusSubject.next(status);
-  });
+  unsubscribe = subscribeTorrentStatus(handleIncomingStatus);
 }
 
 export function registerTorrentSession(sessionId: string) {
@@ -50,6 +91,7 @@ export function registerTorrentSession(sessionId: string) {
   }
   activeSessionId = sessionId;
   activeStatus = null;
+  resetStatusThrottle();
   publish();
   if (previousSessionId && !pendingStopTimers.has(previousSessionId)) {
     scheduleTorrentStop(previousSessionId, TORRENT_REPLACED_STOP_GRACE_MS);
@@ -82,6 +124,7 @@ export async function clearTorrentSession(sessionId?: string) {
   const currentSessionId = activeSessionId;
   activeSessionId = null;
   activeStatus = null;
+  resetStatusThrottle();
   publish();
   if (currentSessionId) scheduleTorrentStop(currentSessionId);
 }
@@ -90,6 +133,7 @@ export function clearActiveTorrentSession() {
   const currentSessionId = activeSessionId;
   activeSessionId = null;
   activeStatus = null;
+  resetStatusThrottle();
   publish();
   if (currentSessionId) scheduleTorrentStop(currentSessionId);
 }
@@ -104,6 +148,7 @@ export async function stopTorrentSession(sessionId?: string) {
     if (activeSessionId === sessionId) {
       activeSessionId = null;
       activeStatus = null;
+      resetStatusThrottle();
       publish();
     }
     await stopTorrent(sessionId).catch((error) => {
@@ -117,6 +162,7 @@ export async function stopTorrentSession(sessionId?: string) {
   if (currentSessionId) sessionIds.add(currentSessionId);
   activeSessionId = null;
   activeStatus = null;
+  resetStatusThrottle();
   publish();
 
   for (const id of sessionIds) {
@@ -188,6 +234,7 @@ export function waitForTorrentPlayable(
     unsubscribeWait = subscribeActiveTorrentStatus(() => {
       inspect(activeStatus);
     });
+    inspect(activeStatus);
     void getTorrentStatus(sessionId)
       .then(inspect)
       .catch((error) => {

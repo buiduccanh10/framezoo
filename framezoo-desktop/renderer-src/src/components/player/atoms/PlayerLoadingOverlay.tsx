@@ -204,7 +204,7 @@ export function PlayerLoadingOverlayView(props: PlayerLoadingOverlayViewProps) {
     [t],
   );
   const backgroundImage = props.backdrop;
-  const showBackdropImage = props.show && props.showBackdrop === true;
+  const showBackdropImage = props.showBackdrop === true;
   const [shouldRender, setShouldRender] = useState(props.show);
   const [isVisible, setIsVisible] = useState(props.show);
   const [hideLogo, setHideLogo] = useState(false);

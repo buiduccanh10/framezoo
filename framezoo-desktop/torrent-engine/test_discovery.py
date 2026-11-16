@@ -549,5 +549,39 @@ class TorrentDiscoveryTest(unittest.TestCase):
         self.assertIn('"seeding_outgoing_connections": False', src)
         self.assertNotIn('"upload_rate_limit": 1', src)
 
+    def test_cycle_harvests_peer_info_tuples_and_injects_peer_addresses(self):
+        class FakeHandle:
+            def __init__(self):
+                self.connected = []
+
+            def status(self):
+                return SimpleNamespace(num_peers=0, total_done=0, total_wanted=100)
+
+            def get_peer_info(self):
+                return [SimpleNamespace(ip=("203.0.113.10", 51413))]
+
+            def connect_peer(self, address, _source):
+                self.connected.append(address)
+
+            def force_dht_announce(self):
+                return None
+
+        handle = FakeHandle()
+        runtime = discovery.TorrentDiscovery(
+            SimpleNamespace(dht_get_peers=lambda _ih: None),
+            handle,
+            lt.sha1_hash(bytes.fromhex("06" * 20)),
+            [],
+            b"-FZ0001-" + b"0" * 12,
+            6881,
+        )
+        runtime._run_cycle()
+
+        self.assertEqual(handle.connected, [("203.0.113.10", 51413)])
+        snapshot = runtime.snapshot()
+        self.assertEqual(snapshot["peersDiscovered"], 1)
+        self.assertEqual(snapshot["peersInjected"], 1)
+
+
 if __name__ == "__main__":
     unittest.main()

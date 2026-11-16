@@ -155,6 +155,13 @@ class TorrentRuntime:
         except Exception:
             return constants.STREAM_CHUNK_SIZE
 
+    def _is_large_piece_torrent(self) -> bool:
+        return self._safe_piece_length() >= getattr(
+            constants,
+            "LARGE_PIECE_THRESHOLD_BYTES",
+            8 * 1024 * 1024,
+        )
+
     def _file_first_piece(self) -> int:
         if (
             getattr(self, "info", None) is None
@@ -283,7 +290,20 @@ class TorrentRuntime:
                             fileName=self.file_path,
                             error=str(error),
                         )
-                    if getattr(self, "record", None) is not None:
+                    if self._is_large_piece_torrent():
+                        if getattr(self, "record", None) is not None:
+                            self.record.last_file_index = self.file_index
+                        try:
+                            set_download_limit = getattr(
+                                self.handle, "set_download_limit", None
+                            )
+                            if callable(set_download_limit):
+                                set_download_limit(0)
+                        except Exception:
+                            pass
+                        with self._piece_priority_lock:
+                            self._focused_file_index = self.file_index
+                    elif getattr(self, "record", None) is not None:
                         self.record.update_file_priorities()
                     else:
                         priorities = [0] * self.info.files().num_files()
@@ -828,26 +848,40 @@ class TorrentRuntime:
 
         try:
             start_time = getattr(self, "start_time", 0.0) or 0.0
-            startup_window = (
-                min(self.file_size, constants.STARTUP_PREFETCH_BYTES)
-                if start_time > 0
-                else max(
+            if start_time > 0:
+                startup_window = min(self.file_size, constants.STARTUP_PREFETCH_BYTES)
+            elif piece_length >= getattr(
+                constants, "LARGE_PIECE_THRESHOLD_BYTES", 8 * 1024 * 1024
+            ):
+                startup_window = min(self.file_size, self._startup_window_bytes())
+            else:
+                startup_window = max(
                     constants.STARTUP_PREFETCH_BYTES,
                     piece_length * constants.STARTUP_WINDOW_PIECES,
                 )
-            )
             startup_pieces = sorted(self.map_pieces(0, startup_window))
-            
+
             # Stremio-like fast start: Fetch head pieces and container tail index (MKV Cues / MP4 moov)
-            tail_length = min(
-                self.file_size,
-                max(
-                    piece_length * 2,
+            if piece_length >= getattr(
+                constants, "LARGE_PIECE_THRESHOLD_BYTES", 8 * 1024 * 1024
+            ):
+                tail_length = min(
+                    self.file_size,
                     getattr(constants, "STARTUP_TAIL_PREFETCH_BYTES", 8 * 1024 * 1024),
-                ),
-            )
-            if self.file_size > piece_length:
-                tail_length = min(tail_length, max(piece_length, self.file_size // 2))
+                )
+            else:
+                tail_length = min(
+                    self.file_size,
+                    max(
+                        piece_length * 2,
+                        getattr(constants, "STARTUP_TAIL_PREFETCH_BYTES", 8 * 1024 * 1024),
+                    ),
+                )
+                if self.file_size > piece_length:
+                    tail_length = min(
+                        tail_length,
+                        max(piece_length, self.file_size // 2),
+                    )
             tail_start = max(0, self.file_size - tail_length)
             tail_pieces = sorted(self.map_pieces(tail_start, tail_length))
             self._startup_tail_pieces = set(tail_pieces)
@@ -864,10 +898,7 @@ class TorrentRuntime:
                 target_pieces = sorted(
                     self.map_pieces(
                         target_byte,
-                        max(
-                            constants.STARTUP_PREFETCH_BYTES,
-                            piece_length * constants.STARTUP_WINDOW_PIECES,
-                        ),
+                        self._startup_window_bytes(),
                     )
                 )
 
@@ -895,6 +926,54 @@ class TorrentRuntime:
             self._startup_required_target_pieces = required_targets
 
             if combined_pieces:
+                if piece_length >= getattr(
+                    constants, "LARGE_PIECE_THRESHOLD_BYTES", 8 * 1024 * 1024
+                ):
+                    keep_set = set(combined_pieces)
+                    file_pieces = self.map_pieces(0, self.file_size)
+                    prioritize_vec = getattr(
+                        self.handle, "prioritize_pieces", None
+                    )
+                    get_prios = getattr(
+                        self.handle, "get_piece_priorities", None
+                    )
+                    if callable(prioritize_vec) and callable(get_prios):
+                        try:
+                            num_pieces = int(self.info.num_pieces())
+                            prios = [0] * num_pieces
+                            # Preserve priorities for any concurrent sibling sessions sharing this record.
+                            record = getattr(self, "record", None)
+                            engine = getattr(self, "engine", None)
+                            if record is not None and engine is not None:
+                                for sid in list(getattr(record, "session_ids", ())):
+                                    sibling = engine.sessions.get(sid)
+                                    if (
+                                        sibling is not None
+                                        and sibling is not self
+                                        and getattr(sibling, "file_index", None)
+                                        is not None
+                                    ):
+                                        for piece in getattr(
+                                            sibling, "_boosted_pieces", ()
+                                        ):
+                                            if 0 <= piece < num_pieces:
+                                                prios[piece] = (
+                                                    constants.STREAM_HOT_PIECE_PRIORITY
+                                                )
+                            for piece in keep_set:
+                                if 0 <= piece < num_pieces:
+                                    prios[piece] = constants.STREAM_PIECE_PRIORITY
+                            prioritize_vec(prios)
+                        except Exception:
+                            pass
+                    else:
+                        for piece in file_pieces:
+                            if piece not in keep_set:
+                                try:
+                                    if not self.handle.have_piece(piece):
+                                        self.handle.piece_priority(piece, 0)
+                                except Exception:
+                                    pass
                 self._schedule_pieces(
                     combined_pieces,
                     required_pieces,
@@ -952,12 +1031,13 @@ class TorrentRuntime:
             if getattr(self, "_focused_file_index", None) == self.file_index:
                 return
         try:
-            if getattr(self, "record", None) is not None:
-                self.record.update_file_priorities()
-            else:
-                priorities = [0] * self.info.files().num_files()
-                priorities[self.file_index] = constants.STREAM_IDLE_FILE_PRIORITY
-                self.handle.prioritize_files(priorities)
+            if not self._is_large_piece_torrent():
+                if getattr(self, "record", None) is not None:
+                    self.record.update_file_priorities()
+                else:
+                    priorities = [0] * self.info.files().num_files()
+                    priorities[self.file_index] = constants.STREAM_IDLE_FILE_PRIORITY
+                    self.handle.prioritize_files(priorities)
             enable_seq = (getattr(self, "start_time", 0.0) or 0.0) <= 0.0
             self._set_sequential_mode(enable_seq)
             with self._piece_priority_lock:
@@ -1056,9 +1136,11 @@ class TorrentRuntime:
         if not pieces:
             return False
         try:
-            return all(self.handle.have_piece(piece) for piece in pieces)
+            if all(self.handle.have_piece(piece) for piece in pieces):
+                return True
         except RuntimeError:
             return False
+        return self._range_blocks_are_finished(start, end)
 
     def _required_range_blocks(
         self,
@@ -1094,13 +1176,16 @@ class TorrentRuntime:
         required: Set[tuple[int, int]] = set()
         for piece in range(first_piece, last_piece + 1):
             piece_start = piece * piece_length
+            piece_end = piece_start + piece_length - 1
+            local_first = max(first_global, piece_start)
+            local_last = min(last_global, piece_end)
             block_start = max(
                 0,
-                (first_global - piece_start) // block_size,
+                (local_first - piece_start) // block_size,
             )
             block_end = max(
                 0,
-                (last_global - piece_start) // block_size,
+                (local_last - piece_start) // block_size,
             )
             required.update(
                 (piece, block)
@@ -1108,10 +1193,62 @@ class TorrentRuntime:
             )
         return required
 
+    def _disk_flushed_blocks(
+        self,
+        pieces: Set[int],
+    ) -> tuple[Set[tuple[int, int]], bool]:
+        """Return blocks written to disk (state == 3) and whether RAM cache needs flush."""
+        if not pieces:
+            return set(), False
+        get_queue = getattr(self.handle, "get_download_queue", None)
+        if not callable(get_queue):
+            return set(), False
+        try:
+            queue = get_queue()
+        except Exception:
+            return set(), False
+        flushed: Set[tuple[int, int]] = set()
+        needs_flush = False
+        for entry in queue:
+            try:
+                piece_index = int(entry.get("piece_index", -1))
+            except Exception:
+                continue
+            if piece_index not in pieces:
+                continue
+            for block_index, block in enumerate(entry.get("blocks", ())):
+                try:
+                    state = int(block.get("state", 0))
+                except Exception:
+                    continue
+                if state == 3:
+                    flushed.add((piece_index, block_index))
+                elif state == 2:
+                    needs_flush = True
+        return flushed, needs_flush
+
     def _range_blocks_are_finished(self, start: int, end: int) -> bool:
         required = self._required_range_blocks(start, end)
         if not required:
             return False
+        pieces = {piece for piece, _ in required}
+        have_pieces: Set[int] = set()
+        have_piece_fn = getattr(self.handle, "have_piece", None)
+        if callable(have_piece_fn):
+            try:
+                have_pieces = {piece for piece in pieces if have_piece_fn(piece)}
+            except Exception:
+                return False
+        remaining = {item for item in required if item[0] not in have_pieces}
+        if not remaining:
+            return True
+        if callable(getattr(self.handle, "get_download_queue", None)):
+            remaining_pieces = {piece for piece, _ in remaining}
+            flushed, needs_flush = self._disk_flushed_blocks(remaining_pieces)
+            if needs_flush:
+                self.flush_piece_cache()
+                flushed, _ = self._disk_flushed_blocks(remaining_pieces)
+            return remaining.issubset(flushed)
         engine = getattr(self, "engine", None)
         get_finished = getattr(engine, "finished_blocks_for", None)
         if callable(get_finished):
@@ -1124,7 +1261,7 @@ class TorrentRuntime:
         else:
             with fast_lock:
                 finished.update(getattr(self, "_fast_blocks", set()))
-        return required.issubset(finished)
+        return remaining.issubset(finished)
 
     def _fast_peer_endpoints(self, pieces: Set[int]) -> list[Endpoint]:
         try:
@@ -1278,6 +1415,10 @@ class TorrentRuntime:
             )
         except Exception:
             piece_length = constants.STREAM_CHUNK_SIZE
+        if piece_length >= getattr(
+            constants, "LARGE_PIECE_THRESHOLD_BYTES", 8 * 1024 * 1024
+        ):
+            return getattr(constants, "STARTUP_PLAYBACK_BYTES", 4 * 1024 * 1024)
         return max(
             getattr(constants, "STARTUP_PLAYBACK_BYTES", 4 * 1024 * 1024),
             piece_length * constants.STARTUP_WINDOW_PIECES,
@@ -1399,11 +1540,12 @@ class TorrentRuntime:
                     priority = constants.STREAM_WARM_PIECE_PRIORITY
                     deadline_ms = None
                 try:
-                    self.handle.piece_priority(piece, priority)
                     if deadline_ms is None:
                         if piece in getattr(self, "_piece_deadlines", {}):
                             self._reset_piece_deadline(piece)
+                        self.handle.piece_priority(piece, priority)
                     else:
+                        self.handle.piece_priority(piece, priority)
                         self._set_piece_deadline(
                             piece,
                             max(0, deadline_ms),
@@ -1558,7 +1700,14 @@ class TorrentRuntime:
             )
             self._piece_deadlines.clear()
             demoted = 0
-            protected_tail = getattr(self, "_startup_tail_pieces", set())
+            tail_already_served = bool(
+                getattr(self, "_tail_probe_ready_logged", False)
+            )
+            protected_tail = (
+                set()
+                if (target_piece > file_first_piece and tail_already_served)
+                else getattr(self, "_startup_tail_pieces", set())
+            )
             protected_targets = (
                 getattr(self, "_startup_target_pieces", set())
                 if is_resume_header_probe
@@ -1576,13 +1725,20 @@ class TorrentRuntime:
                 try:
                     if self.handle.have_piece(piece):
                         continue
+                    demote_prio = (
+                        0
+                        if (
+                            tail_already_served
+                            and target_piece > file_first_piece
+                            and piece in getattr(self, "_startup_tail_pieces", set())
+                        )
+                        else constants.STREAM_IDLE_FILE_PRIORITY
+                    )
                     self.handle.piece_priority(
                         piece,
-                        constants.STREAM_IDLE_FILE_PRIORITY,
+                        demote_prio,
                     )
-                    self._piece_priorities[piece] = (
-                        constants.STREAM_IDLE_FILE_PRIORITY
-                    )
+                    self._piece_priorities[piece] = demote_prio
                     demoted += 1
                 except Exception:
                     continue
@@ -1629,7 +1785,11 @@ class TorrentRuntime:
                     pass
 
             # Re-assert deadlines and priority for uncompleted startup tail pieces
-            required_tail = getattr(self, "_startup_required_tail_pieces", set())
+            required_tail = (
+                set()
+                if (target_piece > file_first_piece and tail_already_served)
+                else getattr(self, "_startup_required_tail_pieces", set())
+            )
             for piece in required_tail:
                 try:
                     if not self.handle.have_piece(piece):
@@ -1790,7 +1950,16 @@ class TorrentRuntime:
             num_pieces = int(self.info.num_pieces())
         except Exception:
             return
-        for piece in range(num_pieces):
+        file_scoped = getattr(self, "file_index", None) is not None
+        candidates: list[int] = []
+        if file_scoped and getattr(self, "file_size", 0) > 0:
+            try:
+                candidates = sorted(self.map_pieces(0, self.file_size))
+            except Exception:
+                candidates = []
+        if not candidates:
+            candidates = list(range(num_pieces))
+        for piece in candidates:
             if piece == target_piece:
                 continue
             try:
@@ -1798,6 +1967,7 @@ class TorrentRuntime:
                     continue
             except RuntimeError:
                 return
+            orig_prio = self._piece_priority(piece) if file_scoped else None
             try:
                 # flags=0 (no alert_when_available): avoid read_piece_alert
                 self.handle.set_piece_deadline(piece, 10000, 0)
@@ -1807,6 +1977,11 @@ class TorrentRuntime:
             if callable(reset_deadline):
                 try:
                     reset_deadline(piece)
+                except Exception:
+                    pass
+            if file_scoped and orig_prio is not None:
+                try:
+                    self.handle.piece_priority(piece, orig_prio)
                 except Exception:
                     pass
             return
@@ -1830,22 +2005,82 @@ class TorrentRuntime:
             return False
         return min(target_blocks) > 0
 
+    def _piece_blocks_finished_count(
+        self,
+        target_piece: Optional[int],
+        piece_blocks: Optional[Set[int]] = None,
+    ) -> int:
+        if target_piece is None:
+            return 0
+        queue_count = 0
+        get_queue = getattr(self.handle, "get_download_queue", None)
+        if callable(get_queue):
+            try:
+                for entry in get_queue():
+                    if int(entry.get("piece_index", -1)) == target_piece:
+                        queue_count = sum(
+                            1
+                            for idx, block in enumerate(entry.get("blocks", ()))
+                            if (piece_blocks is None or idx in piece_blocks)
+                            and int(block.get("state", 0)) >= 2
+                        )
+                        break
+            except Exception:
+                queue_count = 0
+        engine = getattr(self, "engine", None)
+        get_finished = getattr(engine, "finished_blocks_for", None)
+        alert_count = 0
+        if callable(get_finished):
+            try:
+                finished = get_finished(self.handle)
+                alert_count = sum(
+                    1
+                    for piece, block in finished
+                    if piece == target_piece
+                    and (piece_blocks is None or block in piece_blocks)
+                )
+            except Exception:
+                alert_count = 0
+        return max(queue_count, alert_count)
+
     def _target_piece_finished_blocks(
         self,
         target_piece: Optional[int],
     ) -> int:
         """Count blocks written for target_piece so active downloads are not kicked."""
+        return self._piece_blocks_finished_count(target_piece)
+
+    def _required_target_blocks_finished(
+        self,
+        target_piece: int,
+        required_blocks: Set[tuple[int, int]],
+    ) -> int:
+        """Count state >= 2/finished blocks for block-0-aligned sub-ranges."""
+        piece_blocks = {b for p, b in required_blocks if p == target_piece}
+        if not piece_blocks:
+            return self._target_piece_finished_blocks(target_piece)
+        return self._piece_blocks_finished_count(target_piece, piece_blocks)
+
+    def _target_piece_has_pending_requests(
+        self,
+        target_piece: Optional[int],
+    ) -> bool:
+        """True when libtorrent currently has active wire requests for target_piece."""
         if target_piece is None:
-            return 0
-        engine = getattr(self, "engine", None)
-        get_finished = getattr(engine, "finished_blocks_for", None)
-        if not callable(get_finished):
-            return 0
+            return False
+        get_queue = getattr(self.handle, "get_download_queue", None)
+        if not callable(get_queue):
+            return False
         try:
-            finished = get_finished(self.handle)
+            for entry in get_queue():
+                if int(entry.get("piece_index", -1)) == target_piece:
+                    return any(
+                        int(block.get("state", 0)) >= 1
+                        for block in entry.get("blocks", ())
+                    )
         except Exception:
-            return 0
-        return sum(1 for piece, _ in finished if piece == target_piece)
+            return False
+        return False
 
     def _kick_target_piece(self, target_piece: Optional[int]) -> None:
         """Cancel a stalled target piece so its blocks are re-requested.
@@ -2174,6 +2409,7 @@ class TorrentRuntime:
         is_sync: bool = False,
         sync_metadata: Optional[dict[str, Any]] = None,
         playback_request_id: Optional[int] = None,
+        require_verified: bool = False,
     ) -> bool:
         if track_position and self._is_playback_request_superseded(
             playback_request_id,
@@ -2213,13 +2449,9 @@ class TorrentRuntime:
         if is_tail_probe:
             prefetch_length = max(1, end - start + 1)
         elif startup_bounded:
-            try:
-                piece_length = int(self.info.piece_length())
-            except Exception:
-                piece_length = constants.STREAM_CHUNK_SIZE
             prefetch_length = max(
                 end - start + 1,
-                piece_length * constants.STARTUP_WINDOW_PIECES,
+                self._startup_window_bytes(),
             )
         else:
             prefetch_length = max(
@@ -2235,7 +2467,15 @@ class TorrentRuntime:
         first_required_piece = min(required_pieces) if required_pieces else None
         last_required_piece = max(required_pieces) if required_pieces else None
         try:
-            all_ready = all(self.handle.have_piece(p) for p in required_pieces) if required_pieces else True
+            all_ready = (
+                (
+                    all(self.handle.have_piece(p) for p in required_pieces)
+                    if require_verified
+                    else self.range_is_ready(start, end)
+                )
+                if required_pieces
+                else True
+            )
         except RuntimeError:
             all_ready = False
 
@@ -2341,6 +2581,105 @@ class TorrentRuntime:
             )
             self._start_fast_block_fetch(start, end)
 
+        tail_paused_pieces: dict[int, int] = {}
+        tail_focused = (
+            is_tail_probe
+            and not all_ready
+            and bool(required_pieces)
+        )
+        if tail_focused:
+            required_tail_set = set(required_pieces)
+            self._set_sequential_mode(False)
+            with self._piece_priority_lock:
+                for piece in list(getattr(self, "_boosted_pieces", set())):
+                    if piece in required_tail_set or self._piece_have(piece):
+                        continue
+                    prev_prio = self._piece_priority(piece)
+                    if prev_prio and prev_prio > 0:
+                        tail_paused_pieces[piece] = prev_prio
+                        try:
+                            self._reset_piece_deadline(piece)
+                            self.handle.piece_priority(piece, 0)
+                        except Exception:
+                            pass
+                for index, piece in enumerate(required_pieces):
+                    try:
+                        if not self.handle.have_piece(piece):
+                            self.handle.piece_priority(
+                                piece,
+                                constants.STREAM_PIECE_PRIORITY,
+                            )
+                            self._set_piece_deadline(piece, index * 25)
+                    except Exception:
+                        pass
+
+        try:
+            return self._wait_for_range_loop(
+                start=start,
+                end=end,
+                deadline=deadline,
+                handler=handler,
+                connect_start=connect_start,
+                track_position=track_position,
+                is_sync=is_sync,
+                sync_metadata=sync_metadata,
+                playback_request_id=playback_request_id,
+                require_verified=require_verified,
+                required_pieces=required_pieces,
+                required_set=required_set,
+                first_required_piece=first_required_piece,
+                prefetch_length=prefetch_length,
+                is_tail_probe=is_tail_probe,
+                startup_bounded=startup_bounded,
+                focus_delay=focus_delay,
+                kick_delay=kick_delay,
+                reannounce_delay=reannounce_delay,
+            )
+        finally:
+            if tail_focused:
+                focus_piece = getattr(self, "_playback_focus_piece", None)
+                with self._piece_priority_lock:
+                    for piece, prev_prio in tail_paused_pieces.items():
+                        if (
+                            focus_piece is not None
+                            and focus_piece > self._file_first_piece()
+                            and piece < focus_piece
+                        ):
+                            continue
+                        try:
+                            if not self.handle.have_piece(piece):
+                                self.handle.piece_priority(piece, prev_prio)
+                                self._set_piece_deadline(piece, 0)
+                        except Exception:
+                            pass
+                self._set_sequential_mode(
+                    (getattr(self, "start_time", 0.0) or 0.0) <= 0.0
+                    and focus_piece in (None, self._file_first_piece())
+                )
+
+    def _wait_for_range_loop(
+        self,
+        *,
+        start: int,
+        end: int,
+        deadline: Optional[float],
+        handler: Optional[BaseHTTPRequestHandler],
+        connect_start: float,
+        track_position: bool,
+        is_sync: bool,
+        sync_metadata: Optional[dict[str, Any]],
+        playback_request_id: Optional[int],
+        require_verified: bool,
+        required_pieces: list[int],
+        required_set: Set[int],
+        first_required_piece: Optional[int],
+        prefetch_length: int,
+        is_tail_probe: bool,
+        startup_bounded: bool,
+        focus_delay: float,
+        kick_delay: float,
+        reannounce_delay: float,
+    ) -> bool:
         blocked_waits = 0
         blocked_replan_count = 0
         last_blocked_replan = 0.0
@@ -2353,6 +2692,12 @@ class TorrentRuntime:
         stalled_target_blocks = 0
         stalled_since = time.monotonic()
         target_stall_logged = False
+        large_piece = self._is_large_piece_torrent()
+        head_aligned_required_blocks = (
+            self._required_range_blocks(start, end)
+            if (large_piece and not require_verified)
+            else set()
+        )
         while (
             (deadline is None or time.monotonic() < deadline)
             and not self.stop_event.is_set()
@@ -2403,7 +2748,12 @@ class TorrentRuntime:
                 and first_required_piece not in missing_required
             ):
                 self._log_first_piece_ready(first_required_piece)
-            if not missing_required:
+            partial_ready = (
+                not require_verified
+                and bool(missing_required)
+                and self._range_blocks_are_finished(start, end)
+            )
+            if not missing_required or partial_ready:
                 if stalled_target_piece is not None:
                     self._release_target_focus(stalled_target_piece)
                 self._restore_pending_kicks(
@@ -2416,7 +2766,7 @@ class TorrentRuntime:
                     end=end,
                     requiredPieces=len(required_pieces),
                     trackPosition=track_position,
-                    partialPiece=False,
+                    partialPiece=partial_ready,
                     timingPhase="range_ready",
                     elapsedMs=self.elapsed_ms(),
                     **(sync_metadata or {}),
@@ -2484,9 +2834,24 @@ class TorrentRuntime:
                 last_blocked_replan = now
                 blocked_replan_count += 1
                 target_piece = missing_required[0] if missing_required else None
-                target_blocks_done = self._target_piece_finished_blocks(
-                    target_piece,
-                )
+                if (
+                    target_piece is not None
+                    and head_aligned_required_blocks
+                    and not self._range_target_piece_has_prefix(
+                        start,
+                        end,
+                        target_piece,
+                    )
+                    and any(p == target_piece for p, _ in head_aligned_required_blocks)
+                ):
+                    target_blocks_done = self._required_target_blocks_finished(
+                        target_piece,
+                        head_aligned_required_blocks,
+                    )
+                else:
+                    target_blocks_done = self._target_piece_finished_blocks(
+                        target_piece,
+                    )
                 target_blocks_delta = max(
                     0,
                     target_blocks_done - stalled_target_blocks,
@@ -2561,11 +2926,20 @@ class TorrentRuntime:
                         and now - last_kick
                         >= constants.TARGET_KICK_INTERVAL
                         and target_blocks_delta == 0
+                        and not (
+                            stall_seconds < 2.0
+                            and int(getattr(status, "download_rate", 0) or 0) > 0
+                            and self._target_piece_has_pending_requests(
+                                target_piece,
+                            )
+                        )
                     ):
                         self._kick_target_piece(target_piece)
                         last_kick = now
                 if is_tail_probe or startup_bounded:
                     replan_cap = prefetch_length
+                elif large_piece:
+                    replan_cap = max(1, end - start + 1)
                 else:
                     replan_cap = (
                         max(
@@ -2686,11 +3060,42 @@ class TorrentRuntime:
                     if len(chunk) >= 16384
                     else (chunk == b"\x00" * len(chunk))
                 )
-                if has_sparse_zeros and retries_with_zeros < max_zero_retries:
-                    retries_with_zeros += 1
-                    self.flush_piece_cache()
-                    time.sleep(constants.RANGE_RETRY_INTERVAL)
-                    continue
+                if has_sparse_zeros:
+                    pieces = self.map_pieces(start, len(chunk))
+                    verified = False
+                    if pieces:
+                        try:
+                            verified = all(
+                                self.handle.have_piece(piece)
+                                for piece in pieces
+                            )
+                        except RuntimeError:
+                            verified = False
+                    if not verified:
+                        if retries_with_zeros < max_zero_retries:
+                            retries_with_zeros += 1
+                            self.flush_piece_cache()
+                            time.sleep(constants.RANGE_RETRY_INTERVAL)
+                            continue
+                        remaining_timeout = (
+                            max(0.1, deadline - time.monotonic())
+                            if deadline is not None
+                            else timeout
+                        )
+                        if not self.wait_for_range(
+                            start,
+                            end,
+                            timeout=remaining_timeout,
+                            handler=handler,
+                            connect_start=connect_start,
+                            track_position=track_position,
+                            is_sync=is_sync,
+                            sync_metadata=sync_metadata,
+                            playback_request_id=playback_request_id,
+                            require_verified=True,
+                        ):
+                            return None
+                        continue
 
                 return chunk
 

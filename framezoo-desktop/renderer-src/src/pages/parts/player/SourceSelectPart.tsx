@@ -287,6 +287,10 @@ export function SourceSelectPart(props: {
   const isPickerVisible = mode === "full" || autoSelectionResolved;
 
   useEffect(() => {
+    void fetchComplianceBlocklist().catch(() => {});
+  }, []);
+
+  useEffect(() => {
     onPickerVisibilityChange?.(isPickerVisible);
     return () => {
       onPickerVisibilityChange?.(false);

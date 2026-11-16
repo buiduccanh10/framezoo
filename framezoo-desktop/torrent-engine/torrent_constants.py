@@ -31,6 +31,7 @@ STREAM_PIECE_PRIORITY = 7
 STREAM_HOT_PIECE_PRIORITY = 4
 STREAM_WARM_PIECE_PRIORITY = 2
 STARTUP_WINDOW_PIECES = 4
+LARGE_PIECE_THRESHOLD_BYTES = 8 * 1024 * 1024
 # Keep the startup window bounded by piece size, not the full replan cap.
 # A large metadata-time burst can consume bandwidth before the first range.
 STARTUP_PREFETCH_BYTES = STREAM_CHUNK_SIZE
@@ -70,8 +71,8 @@ TARGET_KICK_RESTORE_DELAY = 0.5
 # After the target stalls this long, demote every other priority-7 piece to
 # hot priority so the stuck piece receives the swarm's full bandwidth.
 TARGET_FOCUS_DELAY = 2.0
-STARTUP_TARGET_KICK_DELAY = 0.4
-STARTUP_TARGET_FOCUS_DELAY = 0.8
+STARTUP_TARGET_KICK_DELAY = 0.7
+STARTUP_TARGET_FOCUS_DELAY = 0.25
 TARGET_STALL_REANNOUNCE_DELAY = 1.0
 REANNOUNCE_COOLDOWN = 5
 # Minimum seconds to wait before declaring client disconnected.
@@ -95,7 +96,7 @@ DISCOVERY_MIN_PEERS = 40
 DISCOVERY_MAX_PEERS = 150
 DISCOVERY_PEER_RETRY_SECONDS = 5.0
 DISCOVERY_COOL_OFF_SECONDS = 30.0
-DISCOVERY_BACKOFF_SECONDS = (0.0, 5.0, 15.0, 30.0, 60.0)
+DISCOVERY_BACKOFF_SECONDS = (0.0, 2.0, 5.0, 15.0, 30.0, 60.0)
 DHT_BOOTSTRAP_NODES = (
     ("router.bittorrent.com", 6881),
     ("router.utorrent.com", 6881),
