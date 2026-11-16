@@ -415,9 +415,9 @@
         "summary": "Neutral mellanhandsstatus, 24h/72h Notice & Takedown blocklistprocess och policy för upprepad intrång.",
         "sections": [
           {
-            "title": "Neutral mellanhandsprogramvara och standard P2P utan sådd",
+            "title": "Mediaspelare och P2P",
             "paragraphs": [
-              "Framezoo är neutral mediaspelare programvara som liknar Stremio och Kodi: den är värd för inga videofiler, paketerar inga standardinnehållstillägg eller offentliga spårare, utför ingen server-side addon proxy och inaktiverar utgående P2P-sådd (upload_rate_limit = 0) som standard.",
+              "Framezoo är en mediaspelare som inte är värd för några videofiler och paketerar inga standardinnehållstillägg. Dess torrentmotor använder offentliga spårare som standard; dessa tjänster får din IP-adress och torrentens info-hash. Motorn är konfigurerad för att begränsa utgående P2P-delning.",
               "Nedladdning av undertexter använder no-store headers utan offentlig cachning på Framezoo-servrar."
             ],
             "badge": "01"

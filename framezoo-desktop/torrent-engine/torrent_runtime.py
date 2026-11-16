@@ -700,6 +700,9 @@ class TorrentRuntime:
         resume_saves = 0
         while not self.stop_event.is_set():
             try:
+                refresh_network = getattr(self.engine, "refresh_network", None)
+                if callable(refresh_network):
+                    refresh_network()
                 emit({"type": "status", "status": self.current_status()})
             except Exception:
                 return

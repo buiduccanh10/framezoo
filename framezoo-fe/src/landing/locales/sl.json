@@ -415,9 +415,9 @@
         "summary": "Status nevtralnega posrednika, 24-urni postopek obveščanja in odstranitve s seznama blokiranih in pravilnik o ponavljajočih se kršiteljih.",
         "sections": [
           {
-            "title": "Nevtralna posredniška programska oprema in privzeti P2P brez sejanja",
+            "title": "Medijski predvajalnik & P2P",
             "paragraphs": [
-              "Framezoo je nevtralna programska oprema za večpredstavnostne predvajalnike, podobna Stremio in Kodi: ne gosti nobenih video datotek, ne združuje nobenih privzetih vsebinskih dodatkov ali javnih sledilnikov, ne izvaja proxyja dodatkov na strani strežnika in privzeto onemogoči odhodno sejanje P2P (upload_rate_limit = 0).",
+              "Framezoo je medijski predvajalnik, ki ne gosti video datotek in ne združuje privzetih vsebinskih dodatkov. Njegov torrent motor privzeto uporablja javne sledilnike; te storitve prejmejo vaš naslov IP in zgoščeno vrednost podatkov o torrentu. Mehanizem je konfiguriran za omejevanje odhodne skupne rabe P2P.",
               "Prenosi podnapisov uporabljajo glave brez shranjevanja brez javnega predpomnjenja na strežnikih Framezoo."
             ],
             "badge": "01"

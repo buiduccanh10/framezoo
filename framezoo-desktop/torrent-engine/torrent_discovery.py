@@ -498,11 +498,15 @@ class TorrentDiscovery:
             left = None
             downloaded = 0
 
+        try:
+            listen_port = int(self.session.listen_port()) or self.listen_port
+        except (AttributeError, RuntimeError, TypeError, ValueError):
+            listen_port = self.listen_port
         return announce_http_tracker(
             tracker,
             self.info_hash.to_bytes(),
             self.peer_id,
-            self.listen_port,
+            listen_port,
             downloaded=downloaded,
             left=left,
             timeout=constants.TRACKER_REQUEST_TIMEOUT,

@@ -409,9 +409,9 @@
         "title": "Copyright, aviso, eliminación y descargo de responsabilidad de contenido",
         "sections": [
           {
-            "title": "Software intermediario neutral y P2P predeterminado sin inicialización",
+            "title": "Reproductor multimedia y P2P",
             "paragraphs": [
-              "Framezoo es un software de reproducción multimedia neutral similar a Stremio y Kodi: no aloja archivos de video, no incluye complementos de contenido predeterminados ni rastreadores públicos, no realiza proxy de complementos del lado del servidor y deshabilita la siembra P2P saliente (upload_rate_limit = 0) de forma predeterminada.",
+              "Framezoo es un reproductor multimedia que no aloja archivos de vídeo ni incluye complementos de contenido predeterminados. Su motor de torrents utiliza rastreadores públicos de forma predeterminada; Estos servicios reciben su dirección IP y el hash de información del torrent. El motor está configurado para limitar el intercambio P2P saliente.",
               "Las descargas de subtítulos utilizan encabezados sin almacenamiento en caché público en los servidores de Framezoo."
             ],
             "badge": "01"

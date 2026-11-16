@@ -415,9 +415,9 @@
         "summary": "Neutrale tussenpersoonstatus, 24u/72u Notice & Takedown-blokkeerlijstproces en beleid inzake herhaalde inbreuken.",
         "sections": [
           {
-            "title": "Neutrale intermediaire software en standaard no-seeding P2P",
+            "title": "Mediaspeler en P2P",
             "paragraphs": [
-              "Framezoo is neutrale mediaspelersoftware vergelijkbaar met Stremio en Kodi: het host geen videobestanden, bundelt geen standaard inhoudsadd-ons of openbare trackers, voert geen server-side add-on-proxying uit en schakelt standaard uitgaande P2P-zaaiing uit (upload_rate_limit = 0).",
+              "Framezoo is een mediaspeler die geen videobestanden host en geen standaard inhoudsadd-ons bundelt. De torrent-engine gebruikt standaard openbare trackers; deze services ontvangen uw IP-adres en de info-hash van de torrent. De engine is geconfigureerd om het uitgaande P2P-delen te beperken.",
               "Ondertiteldownloads gebruiken no-store-headers zonder openbare caching op Framezoo-servers."
             ],
             "badge": "01"

@@ -87,6 +87,74 @@ describe("LibMpvController display sleep prevention", () => {
     expect(powerSaveBlocker.stop).toHaveBeenCalledTimes(2);
   });
 
+  it("increases the rebuffer target for repeated stalls and resets after stability or a new source", () => {
+    let now = 100_000;
+    const clock = vi.spyOn(Date, "now").mockImplementation(() => now);
+    const controller = new LibMpvController();
+    const addon: any = {
+      createPlayer: vi.fn(() => "adaptive-player"),
+      loadPlayer: vi.fn(), commandPlayer: vi.fn(), destroyPlayer: vi.fn(),
+    };
+    (controller as any).addon = addon;
+    (controller as any).mainWindow = {
+      isDestroyed: () => false, getContentSize: () => [800, 600],
+      getNativeWindowHandle: () => Buffer.from("fake-handle"), on: vi.fn(),
+      webContents: { isDestroyed: () => false, send: vi.fn() },
+    };
+    const id = controller.create({ x: 0, y: 0, width: 800, height: 600 })!;
+    const source = { url: "http://127.0.0.1/stream", type: "file" as const, startAt: 0, autoplay: true, isTorrent: true };
+    const emit = (type: string, name?: string, data?: unknown) =>
+      (controller as any).handleNativeEvent({ playerId: id, generation: (controller as any).players.get(id).generation, type, name, data });
+    try {
+      controller.load(id, source);
+      emit("property", "paused-for-cache", true); // Initial buffering is not a stall.
+      emit("property", "paused-for-cache", false);
+      emit("file-loaded");
+      emit("property", "paused-for-cache", true);
+      emit("property", "paused-for-cache", true); // Duplicate event.
+      emit("property", "paused-for-cache", false);
+      now += 5000;
+      emit("property", "paused-for-cache", true);
+      emit("property", "paused-for-cache", false);
+      now += 5000;
+      emit("property", "paused-for-cache", true);
+      expect(addon.commandPlayer.mock.calls.map((call: any[]) => call[1].seconds)).toEqual([0.5, 1, 2]);
+      emit("property", "paused-for-cache", false);
+      now += 5000;
+      emit("property", "paused-for-cache", true);
+      emit("property", "paused-for-cache", false);
+      now += 5000;
+      emit("property", "paused-for-cache", true);
+      expect(addon.commandPlayer.mock.calls.at(-1)[1].seconds).toBe(4);
+      emit("property", "paused-for-cache", false);
+      emit("property", "demuxer-cache-duration", 29);
+      expect(addon.commandPlayer.mock.calls.at(-1)[1].seconds).toBe(4);
+      emit("property", "demuxer-cache-duration", 30);
+      expect(addon.commandPlayer.mock.calls.at(-1)[1].seconds).toBe(0.5);
+      emit("property", "paused-for-cache", true);
+      emit("property", "paused-for-cache", false);
+      now += 5000;
+      emit("property", "paused-for-cache", true);
+      expect(addon.commandPlayer.mock.calls.at(-1)[1].seconds).toBe(1);
+      emit("property", "paused-for-cache", false);
+      emit("property", "seeking", true);
+      expect(addon.commandPlayer.mock.calls.at(-1)[1].seconds).toBe(0.5);
+      emit("property", "paused-for-cache", true);
+      emit("property", "paused-for-cache", false);
+      emit("property", "seeking", false);
+      now += 31_000;
+      emit("property", "paused-for-cache", true);
+      expect(addon.commandPlayer.mock.calls.at(-1)[1].seconds).toBe(0.5);
+      controller.load(id, source);
+      emit("file-loaded");
+      emit("property", "paused-for-cache", true);
+      expect(addon.commandPlayer.mock.calls.at(-1)[1].seconds).toBe(0.5);
+    } finally {
+      controller.destroy(id);
+      clock.mockRestore();
+    }
+  });
+
   it("keeps screen awake during torrent buffer stalls (paused-for-cache)", () => {
     const controller = new LibMpvController();
     const fakeAddon: any = {

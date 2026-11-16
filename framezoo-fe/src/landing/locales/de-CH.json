@@ -415,9 +415,9 @@
         "updatedAt": "Aktualisiert: 16. November 2026 · Vietnam IP Law Art. 198b & Dekret 17/2023",
         "sections": [
           {
-            "title": "Neutrale Vermittlersoftware und standardmäßiges No-Seeding-P2P",
+            "title": "Mediaplayer und P2P",
             "paragraphs": [
-              "Framezoo ist eine neutrale Mediaplayer-Software, die Stremio und Kodi ähnelt: Sie hostet keine Videodateien, bündelt keine Standard-Inhalts-Add-ons oder öffentlichen Tracker, führt kein serverseitiges Add-on-Proxying durch und deaktiviert standardmäßig das ausgehende P2P-Seeding (upload_rate_limit = 0).",
+              "Framezoo ist ein Mediaplayer, der keine Videodateien hostet und keine Standardinhalts-Add-ons bündelt. Die Torrent-Engine verwendet standardmäßig öffentliche Tracker. Diese Dienste erhalten Ihre IP-Adresse und den Info-Hash des Torrents. Die Engine ist so konfiguriert, dass die ausgehende P2P-Freigabe eingeschränkt wird.",
               "Untertitel-Downloads verwenden No-Store-Header ohne öffentliches Caching auf Framezoo-Servern."
             ],
             "badge": "01"

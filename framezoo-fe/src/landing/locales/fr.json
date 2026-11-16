@@ -410,9 +410,9 @@
         "title": "Droits d'auteur, avis, retrait et clause de non-responsabilité concernant le contenu",
         "sections": [
           {
-            "title": "Logiciel intermédiaire neutre et P2P sans amorçage par défaut",
+            "title": "Lecteur multimédia et P2P",
             "paragraphs": [
-              "Framezoo est un logiciel de lecture multimédia neutre similaire à Stremio et Kodi : il n'héberge aucun fichier vidéo, ne regroupe aucun module complémentaire de contenu par défaut ni tracker public, n'effectue aucun proxy de module complémentaire côté serveur et désactive l'amorçage P2P sortant (upload_rate_limit = 0) par défaut.",
+              "Framezoo est un lecteur multimédia qui n'héberge aucun fichier vidéo et ne regroupe aucun module complémentaire de contenu par défaut. Son moteur torrent utilise par défaut des trackers publics ; ces services reçoivent votre adresse IP et le hachage des informations du torrent. Le moteur est configuré pour limiter le partage P2P sortant.",
               "Les téléchargements de sous-titres utilisent des en-têtes sans magasin sans mise en cache publique sur les serveurs Framezoo."
             ],
             "badge": "01"

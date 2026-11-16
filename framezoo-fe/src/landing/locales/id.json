@@ -409,9 +409,9 @@
         "updatedAt": "Diperbarui: 16 November 2026 · Seni Hukum Kekayaan Intelektual Vietnam. 198b & SK 17/2023",
         "sections": [
           {
-            "title": "Perangkat Lunak Perantara Netral & P2P Tanpa Pembibitan Default",
+            "title": "Pemutar Media & P2P",
             "paragraphs": [
-              "Framezoo adalah perangkat lunak pemutar media netral yang mirip dengan Stremio dan Kodi: ia tidak menghosting file video, tidak menggabungkan add-on konten default atau pelacak publik, tidak melakukan proksi add-on sisi server, dan menonaktifkan penyemaian P2P keluar (upload_rate_limit = 0) secara default.",
+              "Framezoo adalah pemutar media yang tidak menghosting file video dan tidak menggabungkan tambahan konten default. Mesin torrentnya menggunakan pelacak publik secara default; layanan ini menerima alamat IP Anda dan hash info torrent. Mesin dikonfigurasi untuk membatasi berbagi P2P keluar.",
               "Pengunduhan subtitle menggunakan header tanpa penyimpanan tanpa cache publik di server Framezoo."
             ],
             "badge": "01"
