@@ -1,5 +1,7 @@
 import { normalizeLanguageCode } from './languages';
+import { resolveServerSubtitleApiKey } from './serverKeys';
 import type { StremioSubtitle, SubtitleSearchContext } from './types';
+import type { SubtitleProviderFetchOptions } from './wyzie';
 
 const SUBSOURCE_API_BASE_URL = 'https://api.subsource.net/api/v1';
 const SUBSOURCE_SEASON_API_BASE_URL = 'https://api.subsource.net/v1';
@@ -150,10 +152,26 @@ function extractSlugFromMovieRecord(movie: SubsourceMovieRecord): string | null 
   return segments[segments.length - 1] ?? null;
 }
 
+async function fetchSubsourceJson(
+  url: string,
+  headers: Record<string, string>,
+  fetchFn: typeof fetch
+): Promise<Response> {
+  const response = await fetchFn(url, {
+    signal: AbortSignal.timeout(10_000),
+    headers,
+  });
+  if (!response.ok && (response.status === 429 || response.status >= 500)) {
+    throw new Error(`SubSource API returned HTTP ${response.status}`);
+  }
+  return response;
+}
+
 async function searchSubsourceMovie(
   imdbId: string,
   season: number | undefined,
-  apiKey: string
+  apiKey: string,
+  fetchFn: typeof fetch
 ): Promise<SubsourceMovieRecord[]> {
   const params = new URLSearchParams({
     searchType: 'imdb',
@@ -162,14 +180,15 @@ async function searchSubsourceMovie(
 
   if (season != null) params.set('season', String(season));
 
-  const response = await fetch(`${SUBSOURCE_API_BASE_URL}/movies/search?${params.toString()}`, {
-    signal: AbortSignal.timeout(10_000),
-    headers: {
+  const response = await fetchSubsourceJson(
+    `${SUBSOURCE_API_BASE_URL}/movies/search?${params.toString()}`,
+    {
       accept: 'application/json',
       'x-api-key': apiKey,
       'api-key': apiKey,
     },
-  });
+    fetchFn
+  );
 
   if (!response.ok) {
     return [];
@@ -182,7 +201,8 @@ async function searchSubsourceMovie(
 async function searchSubsourceMovieByText(
   query: string,
   season: number | undefined,
-  apiKey: string
+  apiKey: string,
+  fetchFn: typeof fetch
 ): Promise<SubsourceMovieRecord[]> {
   const params = new URLSearchParams({
     searchType: 'text',
@@ -190,14 +210,15 @@ async function searchSubsourceMovieByText(
   });
   if (season != null) params.set('season', String(season));
 
-  const response = await fetch(`${SUBSOURCE_API_BASE_URL}/movies/search?${params.toString()}`, {
-    signal: AbortSignal.timeout(10_000),
-    headers: {
+  const response = await fetchSubsourceJson(
+    `${SUBSOURCE_API_BASE_URL}/movies/search?${params.toString()}`,
+    {
       accept: 'application/json',
       'x-api-key': apiKey,
       'api-key': apiKey,
     },
-  });
+    fetchFn
+  );
 
   if (!response.ok) {
     return [];
@@ -209,7 +230,8 @@ async function searchSubsourceMovieByText(
 
 async function fetchSubsourceMovieLookup(
   context: SubtitleSearchContext,
-  apiKey: string
+  apiKey: string,
+  fetchFn: typeof fetch
 ): Promise<SubsourceMovieLookup | null> {
   const { imdbId, title, releaseYear, season } = context;
   const candidateSeasons = season == null ? [undefined] : [season, undefined];
@@ -227,7 +249,7 @@ async function fetchSubsourceMovieLookup(
 
   if (imdbId) {
     for (const currentSeason of candidateSeasons) {
-      const movies = await searchSubsourceMovie(imdbId, currentSeason, apiKey);
+      const movies = await searchSubsourceMovie(imdbId, currentSeason, apiKey, fetchFn);
       const lookup = resolveMovieLookup(movies);
       if (lookup) return lookup;
     }
@@ -239,7 +261,7 @@ async function fetchSubsourceMovieLookup(
 
     for (const query of queries) {
       for (const currentSeason of candidateSeasons) {
-        const movies = await searchSubsourceMovieByText(query, currentSeason, apiKey);
+        const movies = await searchSubsourceMovieByText(query, currentSeason, apiKey, fetchFn);
         const lookup = resolveMovieLookup(movies);
         if (lookup) return lookup;
       }
@@ -251,7 +273,8 @@ async function fetchSubsourceMovieLookup(
 
 async function fetchSubsourceSubtitles(
   movieId: string,
-  apiKey: string
+  apiKey: string,
+  fetchFn: typeof fetch
 ): Promise<SubsourceSubtitleRecord[]> {
   const params = new URLSearchParams({
     movieId,
@@ -266,17 +289,11 @@ async function fetchSubsourceSubtitles(
   };
 
   const baseUrl = `${SUBSOURCE_API_BASE_URL}/subtitles?${params.toString()}`;
-  let response = await fetch(baseUrl, {
-    signal: AbortSignal.timeout(10_000),
-    headers,
-  });
+  let response = await fetchSubsourceJson(baseUrl, headers, fetchFn);
 
   if (response.status === 404) {
     const fallbackUrl = `${SUBSOURCE_API_BASE_URL}/search?${params.toString()}`;
-    response = await fetch(fallbackUrl, {
-      signal: AbortSignal.timeout(10_000),
-      headers,
-    });
+    response = await fetchSubsourceJson(fallbackUrl, headers, fetchFn);
   }
 
   if (!response.ok) {
@@ -289,9 +306,10 @@ async function fetchSubsourceSubtitles(
 
 async function fetchSubsourceSeasonSubtitles(
   slug: string,
-  season: number
+  season: number,
+  fetchFn: typeof fetch
 ): Promise<SubsourceSubtitleRecord[]> {
-  const response = await fetch(
+  const response = await fetchFn(
     `${SUBSOURCE_SEASON_API_BASE_URL}/subtitles/${slug}/season-${season}?sort_by_date=false`,
     {
       signal: AbortSignal.timeout(10_000),
@@ -354,20 +372,23 @@ function filterSubtitlesForEpisode(
 export async function fetchSubsourceSubtitlesList(
   context: SubtitleSearchContext,
   apiKey?: string,
-  downloadBaseUrl = '/addon/subtitles/download/subsource'
+  downloadBaseUrl = '/addon/subtitles/download/subsource',
+  options?: SubtitleProviderFetchOptions
 ): Promise<StremioSubtitle[]> {
-  const key = apiKey || process.env.SUBSOURCE_API_KEY;
+  const key = apiKey?.trim() || resolveServerSubtitleApiKey('subsource');
   if (!key) {
     return [];
   }
 
+  const fetchFn = options?.fetchFn ?? fetch;
+
   try {
-    const movieLookup = await fetchSubsourceMovieLookup(context, key);
+    const movieLookup = await fetchSubsourceMovieLookup(context, key, fetchFn);
     if (!movieLookup) {
       return [];
     }
 
-    const rawSubtitles = await fetchSubsourceSubtitles(movieLookup.movieId, key);
+    const rawSubtitles = await fetchSubsourceSubtitles(movieLookup.movieId, key, fetchFn);
     let subtitlesForMapping = rawSubtitles;
 
     if (context.season != null && context.episode != null) {
@@ -377,7 +398,8 @@ export async function fetchSubsourceSubtitlesList(
         try {
           seasonScopedSubtitles = await fetchSubsourceSeasonSubtitles(
             movieLookup.slug,
-            context.season
+            context.season,
+            fetchFn
           );
         } catch {
           // Fallback to raw subtitles
@@ -430,6 +452,7 @@ export async function fetchSubsourceSubtitlesList(
     return subtitles;
   } catch (error) {
     console.warn('[subtitles:subsource] search failed:', error);
+    options?.onError?.();
     return [];
   }
 }

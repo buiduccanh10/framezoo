@@ -4,6 +4,9 @@ import { fileURLToPath } from 'node:url';
 config({
   path: fileURLToPath(new URL('../.env', import.meta.url)),
 });
+config({
+  path: fileURLToPath(new URL('.env', import.meta.url)),
+});
 import { version } from './server/utils/config';
 //https://nitro.unjs.io/config
 const createRedisStorage = (defaultHost: string) => ({
@@ -59,8 +62,9 @@ export default defineNitroConfig({
     tmdbApiKey: process.env.TMDB_API_KEY,
     tidbApiKey: process.env.TIDB_API_KEY,
     omdbApiKey: process.env.OMDB_API_KEY,
-    wyzieApiKey: process.env.WYZIE_API_KEY,
-    subsourceApiKey: process.env.SUBSOURCE_API_KEY,
-    opensubtitlesApiKey: process.env.OPENSUBTITLES_API_KEY,
+    // Keep empty at build time so NITRO_* overrides work without baking secrets or empty strings over process.env.
+    wyzieApiKey: '',
+    subsourceApiKey: '',
+    opensubtitlesApiKey: '',
   },
 });

@@ -1,11 +1,10 @@
 import { setHeader } from 'h3';
 
+import { resolveServerSubtitleApiKey } from '~/utils/subtitles';
 import { prepareSubtitleDownload } from '~/utils/subtitles/downloadHelper';
 
 export default defineEventHandler(async event => {
-  const config = useRuntimeConfig();
-  const serverKey =
-    (config.subsourceApiKey as string | undefined) || process.env.SUBSOURCE_API_KEY || '';
+  const serverKey = resolveServerSubtitleApiKey('subsource', event) || '';
   const { subtitleId, apiKey } = await prepareSubtitleDownload(event, 'subsource', serverKey);
 
   const targetUrl = `https://api.subsource.net/api/v1/subtitles/${encodeURIComponent(subtitleId)}/download`;

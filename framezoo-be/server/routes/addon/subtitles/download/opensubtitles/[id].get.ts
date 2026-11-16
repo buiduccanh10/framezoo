@@ -1,5 +1,6 @@
 import { createError, setHeader } from 'h3';
 
+import { resolveServerSubtitleApiKey } from '~/utils/subtitles';
 import { prepareSubtitleDownload } from '~/utils/subtitles/downloadHelper';
 
 interface OpenSubtitlesDownloadResponse {
@@ -7,14 +8,8 @@ interface OpenSubtitlesDownloadResponse {
 }
 
 export default defineEventHandler(async event => {
-  const config = useRuntimeConfig();
-  const serverKey =
-    (config.opensubtitlesApiKey as string | undefined) || process.env.OPENSUBTITLES_API_KEY || '';
-  const { subtitleId, apiKey } = await prepareSubtitleDownload(
-    event,
-    'opensubtitles',
-    serverKey
-  );
+  const serverKey = resolveServerSubtitleApiKey('opensubtitles', event) || '';
+  const { subtitleId, apiKey } = await prepareSubtitleDownload(event, 'opensubtitles', serverKey);
 
   const fileId = Number.parseInt(subtitleId, 10);
   if (!Number.isFinite(fileId) || fileId <= 0) {

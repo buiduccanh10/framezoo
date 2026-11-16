@@ -10,6 +10,7 @@ import { fetchWyzieSubtitles } from './wyzie';
 export * from './types';
 export * from './languages';
 export * from './cache';
+export * from './serverKeys';
 
 const SOURCE_PRIORITY: Record<string, number> = {
   subsource: 0,
@@ -136,24 +137,39 @@ export async function searchAllSubtitles(
     subsourceDownloadBaseUrl?: string;
     opensubtitlesDownloadBaseUrl?: string;
     preferredLanguages?: string[];
+    onProviderError?: (provider: 'subsource' | 'wyzie' | 'opensubs' | 'granite') => void;
+    fetchFn?: typeof fetch;
   }
 ): Promise<StremioSubtitle[]> {
   const subsourceDownloadBase =
     options?.subsourceDownloadBaseUrl || '/addon/subtitles/download/subsource';
   const opensubtitlesDownloadBase =
     options?.opensubtitlesDownloadBaseUrl || '/addon/subtitles/download/opensubtitles';
+  const providerList = ['subsource', 'wyzie', 'opensubs', 'granite'] as const;
 
   const results = await Promise.allSettled([
-    fetchSubsourceSubtitlesList(context, options?.subsourceApiKey, subsourceDownloadBase),
-    fetchWyzieSubtitles(context, options?.wyzieApiKey, options?.preferredLanguages),
-    fetchOpenSubtitles(context, options?.opensubtitlesApiKey, opensubtitlesDownloadBase),
-    fetchVdrkSubtitles(context),
+    fetchSubsourceSubtitlesList(context, options?.subsourceApiKey, subsourceDownloadBase, {
+      onError: () => options?.onProviderError?.('subsource'),
+      fetchFn: options?.fetchFn,
+    }),
+    fetchWyzieSubtitles(context, options?.wyzieApiKey, options?.preferredLanguages, {
+      onError: () => options?.onProviderError?.('wyzie'),
+      fetchFn: options?.fetchFn,
+    }),
+    fetchOpenSubtitles(context, options?.opensubtitlesApiKey, opensubtitlesDownloadBase, {
+      onError: () => options?.onProviderError?.('opensubs'),
+      fetchFn: options?.fetchFn,
+    }),
+    fetchVdrkSubtitles(context, {
+      onError: () => options?.onProviderError?.('granite'),
+      fetchFn: options?.fetchFn,
+    }),
   ]);
 
   const allSubtitles: StremioSubtitle[] = [];
   const seenUrls = new Set<string>();
 
-  for (const res of results) {
+  results.forEach((res, idx) => {
     if (res.status === 'fulfilled') {
       for (const sub of res.value) {
         if (!sub.url) continue;
@@ -161,8 +177,10 @@ export async function searchAllSubtitles(
         seenUrls.add(sub.url);
         allSubtitles.push(sub);
       }
+    } else {
+      options?.onProviderError?.(providerList[idx]);
     }
-  }
+  });
 
   // Sort by provider priority, then language, then label
   allSubtitles.sort((a, b) => {

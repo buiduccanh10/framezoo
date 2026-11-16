@@ -1,5 +1,7 @@
 import { normalizeLanguageCode } from './languages';
+import { resolveServerSubtitleApiKey } from './serverKeys';
 import type { StremioSubtitle, SubtitleSearchContext } from './types';
+import type { SubtitleProviderFetchOptions } from './wyzie';
 
 interface OpenSubtitlesV1File {
   file_id?: number;
@@ -21,38 +23,30 @@ interface OpenSubtitlesV1Response {
   data?: OpenSubtitlesV1Item[];
 }
 
-function resolveOpenSubtitlesServerKey(): string | undefined {
-  try {
-    if (typeof useRuntimeConfig === 'function') {
-      const config = useRuntimeConfig();
-      const key = String(config?.opensubtitlesApiKey || '').trim();
-      if (key) return key;
-    }
-  } catch {
-    // Allow direct execution in unit tests.
-  }
-  const envKey = String(process.env.OPENSUBTITLES_API_KEY || '').trim();
-  return envKey || undefined;
-}
-
 export async function fetchOpenSubtitles(
   context: SubtitleSearchContext,
   apiKey?: string,
-  downloadBaseUrl = '/addon/subtitles/download/opensubtitles'
+  downloadBaseUrl = '/addon/subtitles/download/opensubtitles',
+  options?: SubtitleProviderFetchOptions
 ): Promise<StremioSubtitle[]> {
-  const key = (apiKey || resolveOpenSubtitlesServerKey() || '').trim();
+  const key = apiKey?.trim() || resolveServerSubtitleApiKey('opensubtitles');
   if (!key) {
     return [];
   }
 
-  const { imdbId, season, episode } = context;
-  if (!imdbId || !imdbId.startsWith('tt')) {
+  const { imdbId, tmdbId, season, episode } = context;
+  const hasImdb = Boolean(imdbId && imdbId.startsWith('tt'));
+  if (!hasImdb && !tmdbId) {
     return [];
   }
 
-  const numericImdbId = imdbId.slice(2).replace(/^0+/, '') || imdbId.slice(2);
   const url = new URL('https://api.opensubtitles.com/api/v1/subtitles');
-  url.searchParams.set('imdb_id', numericImdbId);
+  if (hasImdb && imdbId) {
+    const numericImdbId = imdbId.slice(2).replace(/^0+/, '') || imdbId.slice(2);
+    url.searchParams.set('imdb_id', numericImdbId);
+  } else if (tmdbId) {
+    url.searchParams.set('tmdb_id', String(tmdbId));
+  }
   if (season != null && episode != null) {
     url.searchParams.set('type', 'episode');
     url.searchParams.set('season_number', String(season));
@@ -62,7 +56,8 @@ export async function fetchOpenSubtitles(
   }
 
   try {
-    const response = await fetch(url.toString(), {
+    const fetchFn = options?.fetchFn ?? fetch;
+    const response = await fetchFn(url.toString(), {
       signal: AbortSignal.timeout(12_000),
       headers: {
         'Api-Key': key,
@@ -72,6 +67,10 @@ export async function fetchOpenSubtitles(
     });
 
     if (!response.ok) {
+      console.warn(`[subtitles:opensubtitles] OpenSubtitles API returned HTTP ${response.status}`);
+      if (response.status === 429 || response.status >= 500) {
+        options?.onError?.();
+      }
       return [];
     }
 
@@ -91,8 +90,7 @@ export async function fetchOpenSubtitles(
 
       seenFileIds.add(file.file_id);
       const downloadUrl = `${downloadBaseUrl}/${file.file_id}`;
-      const label =
-        attrs?.release || file.file_name || `${langCode.toUpperCase()} • OpenSubtitles`;
+      const label = attrs?.release || file.file_name || `${langCode.toUpperCase()} • OpenSubtitles`;
       const id = `opensubs:${file.file_id}:${langCode}`;
 
       subtitles.push({
@@ -109,6 +107,7 @@ export async function fetchOpenSubtitles(
     return subtitles;
   } catch (error) {
     console.warn('[subtitles:opensubtitles] v1 search failed:', error);
+    options?.onError?.();
     return [];
   }
 }

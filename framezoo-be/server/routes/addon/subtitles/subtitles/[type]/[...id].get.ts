@@ -1,12 +1,14 @@
 import { getQuery, getRequestHeader, setHeader } from 'h3';
 
 import {
+  EMPTY_SUBTITLE_CACHE_TTL,
   executeWithInFlightDeduplication,
   getCachedSubtitles,
   getSubtitleCacheKey,
   getSubtitleTtl,
   hashSubtitleCredential,
   normalizeSubtitleDownloadUrls,
+  resolveServerSubtitleApiKey,
   resolveSubtitleContext,
   searchAllSubtitles,
 } from '~/utils/subtitles';
@@ -55,13 +57,9 @@ export default defineEventHandler(async event => {
     cacheControlHeader.includes('no-cache') ||
     pragmaHeader.includes('no-cache');
 
-  const config = useRuntimeConfig();
-  const env = process.env;
-  const cfgKey = (key: unknown, fallback: string | undefined): string | undefined =>
-    (typeof key === 'string' ? key : fallback || '').trim() || undefined;
-  const serverWyzieApiKey = cfgKey(config.wyzieApiKey, env.WYZIE_API_KEY);
-  const serverSubsourceApiKey = cfgKey(config.subsourceApiKey, env.SUBSOURCE_API_KEY);
-  const serverOpenSubtitlesApiKey = cfgKey(config.opensubtitlesApiKey, env.OPENSUBTITLES_API_KEY);
+  const serverWyzieApiKey = resolveServerSubtitleApiKey('wyzie', event);
+  const serverSubsourceApiKey = resolveServerSubtitleApiKey('subsource', event);
+  const serverOpenSubtitlesApiKey = resolveServerSubtitleApiKey('opensubtitles', event);
 
   // Query keys are for unauthenticated Stremio URLs. An authenticated native
   // request must use its account key or the server fallback.
@@ -71,7 +69,8 @@ export default defineEventHandler(async event => {
   let authSession;
   try {
     authSession =
-      event.context.session || (await useAuth().getOptionalCurrentSessionForEvent(event));
+      event.context.session ||
+      (event.context.isGuest ? null : await useAuth().getOptionalCurrentSessionForEvent(event));
   } catch (error) {
     console.warn('[subtitles:auth] Failed to resolve request session:', error);
     throw createError({
@@ -119,7 +118,7 @@ export default defineEventHandler(async event => {
     credentialSource === 'user'
       ? `user:${hashSubtitleCredential(`${authSession.user}:${wyzieApiKey || ''}:${subsourceApiKey || ''}:${opensubtitlesApiKey || ''}`)}`
       : credentialSource === 'query'
-        ? `query:${hashSubtitleCredential(queryWyzieKey ?? '')}`
+        ? `query:${hashSubtitleCredential(`${queryWyzieKey ?? ''}:${serverSubsourceApiKey ?? 'missing'}:${serverOpenSubtitlesApiKey ?? 'missing'}`)}`
         : `server:${hashSubtitleCredential(`${serverWyzieApiKey ?? 'missing'}:${serverSubsourceApiKey ?? 'missing'}:${serverOpenSubtitlesApiKey ?? 'missing'}`)}`;
 
   const acceptLanguage = getRequestHeader(event, 'accept-language') || '';
@@ -221,19 +220,30 @@ export default defineEventHandler(async event => {
   }
 
   const searchContext = context;
-  const runSearch = (): ReturnType<typeof searchAllSubtitles> =>
-    searchAllSubtitles(searchContext, {
+  let ranSearch = false;
+  let hadProviderFailure = false;
+  const runSearch = (): ReturnType<typeof searchAllSubtitles> => {
+    ranSearch = true;
+    return searchAllSubtitles(searchContext, {
       wyzieApiKey,
       subsourceApiKey,
       opensubtitlesApiKey,
       subsourceDownloadBaseUrl,
       opensubtitlesDownloadBaseUrl,
       preferredLanguages: searchLanguages,
+      onProviderError: () => {
+        hadProviderFailure = true;
+      },
     });
+  };
   const subtitles = await executeWithInFlightDeduplication(cacheKey, runSearch);
 
-  const ttl = getSubtitleTtl(type, subtitles.length);
-  await setCachedSubtitles(cacheKey, subtitles, ttl);
+  if (ranSearch) {
+    const ttl = hadProviderFailure
+      ? EMPTY_SUBTITLE_CACHE_TTL
+      : getSubtitleTtl(type, subtitles.length);
+    await setCachedSubtitles(cacheKey, subtitles, ttl);
+  }
 
   setHeader(event, 'Content-Type', 'application/json');
   setHeader(event, 'X-Cache', 'MISS');
