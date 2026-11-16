@@ -14,7 +14,13 @@ import {
   hasAddonResource,
   normalizeAddonManifestUrl,
 } from './protocol';
-import { fetchComplianceBlocklist, isAddonDomainBlocked } from './blocklist';
+import {
+  fetchComplianceBlocklist,
+  isAddonDomainBlocked,
+  isInfohashBlocked,
+  isMediaIdBlocked,
+  isSubtitleIdBlocked,
+} from './blocklist';
 import { mobileStorage } from '../storage/storage';
 import { useAuthStore } from '@/state/auth/store';
 import { updateSettings } from '../settings';
@@ -215,8 +221,16 @@ export const addonRepository = {
     type: string,
     catalogId: string,
   ): Promise<{ items: AddonCatalogItem[]; failures: AddonStreamLoadError[] }> {
+    const blocklist = await fetchComplianceBlocklist().catch(() => null);
     const addons = (await this.list()).filter(
-      (addon) => addon.enabled && hasAddonResource(addon.manifest, 'catalog'),
+      (addon) =>
+        addon.enabled &&
+        hasAddonResource(addon.manifest, 'catalog') &&
+        (!blocklist ||
+          !isAddonDomainBlocked(
+            addon.manifestUrl || addon.baseUrl || '',
+            blocklist.addonDomains,
+          )),
     );
     const results = await Promise.allSettled(
       addons.map(async (addon) => {
@@ -228,6 +242,11 @@ export const addonRepository = {
         });
         return (response.body.metas ?? [])
           .filter((item) => Boolean(item.id && item.name))
+          .filter(
+            (item) =>
+              !blocklist ||
+              !isMediaIdBlocked(item.id, item.type ?? type, blocklist),
+          )
           .map((item) => ({
             id: item.id as string,
             type: item.type ?? type,
@@ -246,8 +265,19 @@ export const addonRepository = {
     };
   },
   async loadMeta(type: string, id: string): Promise<AddonMeta[]> {
+    const blocklist = await fetchComplianceBlocklist().catch(() => null);
+    if (blocklist && isMediaIdBlocked(id, type, blocklist)) {
+      return [];
+    }
     const addons = (await this.list()).filter(
-      (addon) => addon.enabled && hasAddonResource(addon.manifest, 'meta'),
+      (addon) =>
+        addon.enabled &&
+        hasAddonResource(addon.manifest, 'meta') &&
+        (!blocklist ||
+          !isAddonDomainBlocked(
+            addon.manifestUrl || addon.baseUrl || '',
+            blocklist.addonDomains,
+          )),
     );
     const results = await Promise.allSettled(
       addons.map(async (addon) => {
@@ -265,8 +295,19 @@ export const addonRepository = {
     );
   },
   async loadSubtitles(type: string, id: string): Promise<AddonSubtitle[]> {
+    const blocklist = await fetchComplianceBlocklist().catch(() => null);
+    if (blocklist && isMediaIdBlocked(id, type, blocklist)) {
+      return [];
+    }
     const addons = (await this.list()).filter(
-      (addon) => addon.enabled && hasAddonResource(addon.manifest, 'subtitles'),
+      (addon) =>
+        addon.enabled &&
+        hasAddonResource(addon.manifest, 'subtitles') &&
+        (!blocklist ||
+          !isAddonDomainBlocked(
+            addon.manifestUrl || addon.baseUrl || '',
+            blocklist.addonDomains,
+          )),
     );
     const results = await Promise.allSettled(
       addons.map(async (addon) => {
@@ -278,6 +319,11 @@ export const addonRepository = {
         });
         return (response.body.subtitles ?? [])
           .filter((subtitle) => Boolean(subtitle.id && subtitle.url))
+          .filter(
+            (subtitle) =>
+              !blocklist ||
+              !isSubtitleIdBlocked(subtitle.id, blocklist.subtitleIds),
+          )
           .map((subtitle) => ({
             id: subtitle.id as string,
             url: subtitle.url as string,
@@ -295,8 +341,19 @@ export const addonRepository = {
   async loadStreams(
     media: { type: 'movie' | 'series'; id: string; season?: number; episode?: number },
   ) {
+    const blocklist = await fetchComplianceBlocklist().catch(() => null);
+    if (blocklist && isMediaIdBlocked(media.id, media.type, blocklist)) {
+      return [];
+    }
     const addons = (await this.list()).filter(
-      (addon) => addon.enabled && hasAddonResource(addon.manifest, 'stream'),
+      (addon) =>
+        addon.enabled &&
+        hasAddonResource(addon.manifest, 'stream') &&
+        (!blocklist ||
+          !isAddonDomainBlocked(
+            addon.manifestUrl || addon.baseUrl || '',
+            blocklist.addonDomains,
+          )),
     );
     const id =
       media.type === 'series' && media.season !== undefined && media.episode !== undefined
@@ -309,7 +366,17 @@ export const addonRepository = {
           resource: 'stream',
           type: media.type,
           id,
-      }).then((response) => normalizeStreams(addon, response.body)),
+      }).then((response) =>
+          normalizeStreams(addon, response.body).filter(
+            (stream) =>
+              !blocklist ||
+              !isInfohashBlocked(
+                stream.infoHash,
+                stream.url,
+                blocklist.infohashes,
+              ),
+          ),
+        ),
       ),
     );
     return results.flatMap((result) => (result.status === 'fulfilled' ? result.value : []));

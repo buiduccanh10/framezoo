@@ -1,3 +1,4 @@
+import { AppPreviewShowcase } from "./AppPreviewShowcase";
 import type { LandingCopy } from "./i18n";
 
 interface FeatureSectionProps {
@@ -117,10 +118,9 @@ export function FeatureSection({ copy, variant = "all" }: FeatureSectionProps) {
         <div className="landing-product-showcase landing-scroll-reveal">
           <article className="landing-showcase-row landing-showcase-row-primary">
             <figure className="landing-showcase-image landing-showcase-image-detail">
-              <img
-                src="/embed-preview.png"
-                alt={copy.showcasePrimaryAlt}
-                loading="lazy"
+              <AppPreviewShowcase
+                variant="detail"
+                ariaLabel={copy.showcasePrimaryAlt}
               />
             </figure>
             <div className="landing-showcase-copy">
@@ -134,10 +134,9 @@ export function FeatureSection({ copy, variant = "all" }: FeatureSectionProps) {
               <p>{copy.showcaseSecondaryDescription}</p>
             </div>
             <figure className="landing-showcase-image landing-showcase-image-discovery">
-              <img
-                src="/embed-preview-1.png"
-                alt={copy.showcaseSecondaryAlt}
-                loading="lazy"
+              <AppPreviewShowcase
+                variant="discovery"
+                ariaLabel={copy.showcaseSecondaryAlt}
               />
             </figure>
           </article>

@@ -35,6 +35,8 @@ export default defineNitroConfig({
     '0 0 1 * *': ['jobs:clear-metrics:monthly'],
     // Daily backup at 3 AM
     '0 3 * * *': ['backup:daily', 'jobs:cleanup-email'],
+    // Daily guest retention cleanup at 4 AM
+    '0 4 * * *': ['jobs:cleanup-guests'],
   },
   storage: {
     cache: createRedisStorage('redis'),

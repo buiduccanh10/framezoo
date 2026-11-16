@@ -19,12 +19,21 @@ setInterval(() => {
   }
 }, 60_000).unref?.();
 
-const getPositiveInt = (value: string | undefined, fallback: number) => {
+interface RateLimitConfig {
+  scope: string;
+  windowMs: number;
+  maxRequests: number;
+}
+
+const RATE_LIMIT_LUA =
+  'local count = redis.call("INCR", KEYS[1]); if count == 1 then redis.call("PEXPIRE", KEYS[1], ARGV[1]); end; return count;';
+
+const getPositiveInt = (value: string | undefined, fallback: number): number => {
   const parsed = Number(value);
   return Number.isFinite(parsed) && parsed > 0 ? Math.floor(parsed) : fallback;
 };
 
-const getRateLimitConfig = (path: string) => {
+const getRateLimitConfig = (path: string): RateLimitConfig => {
   if (path === '/api/backup/login' || path.startsWith('/api/backup/login?')) {
     return {
       scope: 'admin-login',
@@ -70,7 +79,7 @@ const getRateLimitConfig = (path: string) => {
   };
 };
 
-const getRedisClient = () => {
+const getRedisClient = (): Redis => {
   if (redisClient) return redisClient;
 
   const redisUrl =
@@ -86,21 +95,16 @@ const getRedisClient = () => {
   return redisClient;
 };
 
-const incrementRedisCounter = async (key: string, ttlMs: number) => {
+const incrementRedisCounter = async (key: string, ttlMs: number): Promise<number> => {
   if (Date.now() < redisDisabledUntil) {
     throw new Error('Redis rate limit temporarily disabled');
   }
 
-  const result = await getRedisClient().eval(
-    'local count = redis.call("INCR", KEYS[1]); if count == 1 then redis.call("PEXPIRE", KEYS[1], ARGV[1]); end; return count;',
-    1,
-    key,
-    String(ttlMs)
-  );
+  const result = await getRedisClient().eval(RATE_LIMIT_LUA, 1, key, String(ttlMs));
   return Number(result);
 };
 
-const incrementMemoryCounter = (key: string, windowMs: number) => {
+const incrementMemoryCounter = (key: string, windowMs: number): number => {
   const now = Date.now();
   const entry = memoryCache.get(key);
   const count = entry && entry.expiry > now ? entry.count + 1 : 1;
@@ -142,6 +146,22 @@ export default defineEventHandler(async event => {
     const failedClient = redisClient;
     redisClient = null;
     failedClient?.disconnect();
+
+    const failClosed = String(process.env.RATE_LIMIT_FAIL_CLOSED).toLowerCase() === 'true';
+    const isSensitivePath =
+      scope !== 'api' ||
+      path.startsWith('/auth') ||
+      path.startsWith('/api/auth') ||
+      path.startsWith('/api/admin') ||
+      path.startsWith('/api/backup') ||
+      path.startsWith('/api/feedback');
+    if (failClosed && isSensitivePath) {
+      throw createError({
+        statusCode: 503,
+        statusMessage: 'Service Unavailable',
+        message: 'Rate limiter unavailable',
+      });
+    }
 
     count = incrementMemoryCounter(cacheKey, windowMs);
   }

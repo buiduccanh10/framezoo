@@ -2,6 +2,12 @@ import { isHearingImpairedCaption } from "@/components/player/utils/captions";
 import { conf } from "@/setup/config";
 import type { CaptionListItem } from "@/stores/player/slices/source";
 
+import {
+  fetchComplianceBlocklist,
+  isAddonMediaBlocked,
+  isDomainInBlocklist,
+  isSubtitleIdBlocked,
+} from "./blocklist";
 import { fetchAddonJson } from "./client";
 import { hasResource } from "./manifest";
 import type { InstalledAddon, StremioSubtitle } from "./types";
@@ -273,6 +279,18 @@ export async function loadAddonSubtitles(
     preferredLanguages?: string[];
   },
 ): Promise<CaptionListItem[]> {
+  const blocklist = await fetchComplianceBlocklist().catch(() => null);
+  if (
+    blocklist &&
+    (isDomainInBlocklist(
+      addon.manifestUrl || addon.baseUrl,
+      blocklist.addonDomains,
+    ) ||
+      isAddonMediaBlocked(id, type, blocklist))
+  ) {
+    return [];
+  }
+
   let baseUrl = addon.baseUrl || "";
   if (!baseUrl.startsWith("http://") && !baseUrl.startsWith("https://")) {
     const config = conf();
@@ -334,7 +352,14 @@ export async function loadAddonSubtitles(
     ? response
     : (response?.subtitles ?? []);
 
-  return rawSubs
+  const filteredSubs =
+    blocklist && blocklist.subtitleIds.length > 0
+      ? rawSubs.filter(
+          (sub) => !isSubtitleIdBlocked(sub.id, blocklist.subtitleIds),
+        )
+      : rawSubs;
+
+  return filteredSubs
     .map((sub, i) => normalizeAddonSubtitle(addon, sub, i))
     .filter((item): item is CaptionListItem => item !== null);
 }

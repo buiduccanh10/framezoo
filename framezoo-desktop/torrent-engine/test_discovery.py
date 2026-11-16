@@ -464,11 +464,8 @@ class TorrentDiscoveryTest(unittest.TestCase):
         self.assertEqual(runtime.snapshot()["peersDiscovered"], 2)
         self.assertEqual(runtime.snapshot()["peersInjected"], 2)
 
-    def test_default_trackers_include_http_fallback(self):
-        trackers = discovery.normalize_trackers(discovery.constants.DEFAULT_TRACKERS)
-        self.assertEqual(len(trackers), len(discovery.constants.DEFAULT_TRACKERS))
-        self.assertIn("http://tracker.qu.ax:6969/announce", trackers)
-        self.assertIn("https://tracker.opentrackr.org:443/announce", trackers)
+    def test_no_default_trackers_bundled(self):
+        self.assertEqual(discovery.constants.DEFAULT_TRACKERS, ())
 
     def test_network_change_rebinds_and_reactivates_active_swarm(self):
         from torrent_engine import LibtorrentEngine

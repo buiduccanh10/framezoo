@@ -410,9 +410,9 @@
         "title": "Autoriõigus, teatis, eemaldamine ja sisu lahtiütlus",
         "sections": [
           {
-            "title": "Meediumipleier ja P2P",
+            "title": "Neutraalne vahendajatarkvara ja vaikimisi külvamata P2P",
             "paragraphs": [
-              "Framezoo on meediumipleier, mis ei majuta ühtegi videofaili ega koonda vaikesisu lisandmooduleid. Selle torrentmootor kasutab vaikimisi avalikke jälgijaid; need teenused saavad teie IP-aadressi ja torrenti teaberäsi. Mootor on konfigureeritud piirama väljaminevat P2P-jagamist.",
+              "Framezoo on Stremio ja Kodiga sarnane neutraalne meediumipleieri tarkvara: see ei hosti videofaile, ei koonda vaikimisi sisu lisandmooduleid ega avalikke jälgijaid, ei kasuta serveripoolset lisandmooduli puhverserverit ja keelab vaikimisi väljamineva P2P külvi (unchoke_slots_limit = 0, active_seeds = 0).",
               "Subtiitrite allalaadimisel kasutatakse poeväliseid päiseid ilma avaliku vahemäluta Framezoo serverites."
             ],
             "badge": "01"

@@ -412,10 +412,10 @@
         "sections": [
           {
             "paragraphs": [
-              "Framezoo er margmiðlunarspilari sem hýsir engar myndbandsskrár og inniheldur engar sjálfgefnar efniviðbætur. Straumvélin hennar notar sjálfgefið opinbera rekja spor einhvers; þessar þjónustur fá IP töluna þína og upplýsingahash straumsins. Vélin er stillt til að takmarka P2P samnýtingu á útleið.",
+              "Framezoo er hlutlaus miðlunarspilarahugbúnaður svipað og Stremio og Kodi: hann hýsir engar myndbandsskrár, hýsir engar sjálfgefna efniviðbætur eða opinbera rekja spor einhvers, framkvæmir enga umboð fyrir viðbót við netþjóninn og slökkva á útleið P2P sáningu (unchoke_slots_limit = 0, active_seeds = 0) sjálfgefið.",
               "Niðurhal texta notar hausa án verslunar án opinberrar skyndiminni á Framezoo netþjónum."
             ],
-            "title": "Fjölmiðlaspilari og P2P",
+            "title": "Hlutlaus milliliðahugbúnaður og sjálfgefinn P2P án sáningar",
             "badge": "01"
           },
           {

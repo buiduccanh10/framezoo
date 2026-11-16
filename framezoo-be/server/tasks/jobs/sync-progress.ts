@@ -1,5 +1,26 @@
 import { randomUUID } from 'crypto';
+import { scopedLogger } from '~/utils/logger';
 import { shouldSaveProgress } from '~/utils/progress';
+
+const log = scopedLogger('sync-progress');
+
+interface ProgressQueueItem {
+  tmdbId: string;
+  userId: string;
+  seasonId: string | null;
+  episodeId: string | null;
+  seasonNumber?: number | null;
+  episodeNumber?: number | null;
+  duration: number;
+  watched: number;
+  meta: {
+    type?: string;
+    [key: string]: unknown;
+  };
+  updatedAt: string | number;
+}
+
+type PrismaProgressMeta = Parameters<typeof prisma.progress_items.create>[0]['data']['meta'];
 
 export default defineTask({
   meta: {
@@ -15,9 +36,9 @@ export default defineTask({
         return { result: 'success', synced: 0 };
       }
 
-      const itemsToProcess = [];
+      const itemsToProcess: Array<{ key: string; data: ProgressQueueItem }> = [];
       for (const key of keys) {
-        const data = await storage.getItem(key);
+        const data = await storage.getItem<ProgressQueueItem>(key);
         if (data) {
           itemsToProcess.push({ key, data });
         }
@@ -37,9 +58,21 @@ export default defineTask({
           watched,
           meta,
           updatedAt,
-        } = data as any;
+        } = data;
         const normSeasonId = seasonId === 'none' ? null : seasonId;
         const normEpisodeId = episodeId === 'none' ? null : episodeId;
+
+        let userExists: { id: string } | null = null;
+        if (userId) {
+          userExists = await prisma.users.findUnique({
+            where: { id: userId },
+            select: { id: true },
+          });
+        }
+        if (!userExists) {
+          await storage.removeItem(key);
+          continue;
+        }
 
         const now = new Date(updatedAt);
 
@@ -54,21 +87,23 @@ export default defineTask({
           },
         });
 
-        const shouldSave = await shouldSaveProgress(
+        const metaType = meta.type || 'show';
+        const saveArgs = [
           userId,
           tmdbId,
-          meta.type || 'show',
+          metaType,
           duration,
           watched,
           normSeasonId,
-          normEpisodeId
-        );
+          normEpisodeId,
+        ] as const;
+        const shouldSave = await shouldSaveProgress(...saveArgs);
 
         if (shouldSave) {
           const dbData = {
             duration: BigInt(duration),
             watched: BigInt(watched),
-            meta,
+            meta: meta as PrismaProgressMeta,
             updated_at: now,
             ...(seasonNumber !== undefined ? { season_number: seasonNumber ?? null } : {}),
             ...(episodeNumber !== undefined ? { episode_number: episodeNumber ?? null } : {}),
@@ -99,15 +134,11 @@ export default defineTask({
         await storage.removeItem(key);
       }
 
-      console.log(
-        `[sync-progress] Successfully processed ${keys.length} items, synced ${syncedCount} to DB.`
-      );
+      log.info(`Successfully processed ${keys.length} items, synced ${syncedCount} to DB.`);
       return { result: 'success', processed: keys.length, synced: syncedCount };
-    } catch (err: any) {
-      console.warn(
-        '[sync-progress] Skipping sync: Redis cache is unavailable or stream is not writeable.',
-        err?.message || err
-      );
+    } catch (err: unknown) {
+      const reason = err instanceof Error ? err.message : String(err);
+      console.warn('[sync-progress] Skipping sync: Redis cache is unavailable:', reason);
       return { result: 'skipped', reason: 'Redis unavailable' };
     }
   },

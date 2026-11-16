@@ -17,6 +17,7 @@ internal data class ComplianceBlocklist(
     val addonDomains: Set<String> = emptySet(),
     val tmdbIds: Set<String> = emptySet(),
     val imdbIds: Set<String> = emptySet(),
+    val subtitleIds: Set<String> = emptySet(),
     val infohashes: Set<String> = emptySet()
 )
 
@@ -75,6 +76,51 @@ internal fun isMediaBlockedByTakedown(
     return false
 }
 
+internal fun isSubtitleIdBlocked(subtitleId: String?, blockedSubtitleIds: Set<String>): Boolean {
+    if (subtitleId.isNullOrBlank() || blockedSubtitleIds.isEmpty()) return false
+    val normalized = subtitleId.trim().lowercase()
+    if (normalized.isEmpty()) return false
+
+    val segments = normalized.split(':')
+    val inputProvider = if (segments.size >= 2) segments[0] else null
+    val bareNumericId = if (inputProvider == "wyzie" && segments.size >= 3 && segments[2].isNotEmpty()) {
+        segments[2]
+    } else if (segments.size >= 2) {
+        segments[1]
+    } else {
+        normalized
+    }
+
+    return blockedSubtitleIds.any { rawPattern ->
+        val pattern = rawPattern.trim().lowercase()
+        if (pattern.isEmpty()) return@any false
+        if (pattern == normalized) return@any true
+        if (bareNumericId.isNotEmpty() && pattern == bareNumericId) return@any true
+        if ((pattern.startsWith("http://") || pattern.startsWith("https://")) && normalized.endsWith(":$pattern")) {
+            return@any true
+        }
+        val entrySegments = pattern.split(':')
+        val entryProvider = if (entrySegments.size >= 2) entrySegments[0] else null
+        if (entryProvider != null && inputProvider != null && entryProvider == inputProvider) {
+            if (normalized.startsWith("$pattern:") || pattern.startsWith("$normalized:")) {
+                return@any true
+            }
+        }
+        pattern == "subsource:$bareNumericId"
+    }
+}
+
+internal fun isInfohashBlocked(infoHash: String?, url: String?, blockedHashes: Set<String>): Boolean {
+    if (blockedHashes.isEmpty()) return false
+    val direct = infoHash?.trim()?.removePrefix("urn:btih:")?.lowercase()?.takeIf { it.isNotEmpty() }
+    val fromUrl = url?.let {
+        Regex("btih:([0-9a-f]{40}|[a-z2-7]{32})", RegexOption.IGNORE_CASE)
+            .find(it)?.groupValues?.getOrNull(1)?.lowercase()
+    }
+    val hash = direct ?: fromUrl ?: return false
+    return hash in blockedHashes
+}
+
 class Addons(context: Context, private val backend: Backend, private val store: SecureStore) {
     companion object {
         const val NATIVE_SUBTITLE_ADDON_ID = "community.framezoo.subtitles"
@@ -101,6 +147,7 @@ class Addons(context: Context, private val backend: Backend, private val store: 
             addonDomains = raw.toLowerSet("addonDomains"),
             tmdbIds = raw.toLowerSet("tmdbIds"),
             imdbIds = raw.toLowerSet("imdbIds"),
+            subtitleIds = raw.toLowerSet("subtitleIds"),
             infohashes = raw.toLowerSet("infohashes")
         )
     }
@@ -328,19 +375,28 @@ class Addons(context: Context, private val backend: Backend, private val store: 
 
     suspend fun catalogPage(manifestUrl: String, type: String, id: String, skip: Int): List<Media> {
         require(type in setOf("movie", "series") && id.isNotBlank() && skip >= 0)
+        val blocklist = getBlocklist()
+        if (isAddonDomainBlocked(manifestUrl, blocklist.addonDomains)) return emptyList()
         val root = URI(manifestUrl).resolve(".")
         val metas = json(root.resolve(addonCatalogPath(type, id, skip)).toString()).optJSONArray("metas") ?: JSONArray()
         return (0 until metas.length()).mapNotNull { metas.optJSONObject(it) }.mapNotNull { meta ->
             val mediaId = meta.optString("id").takeIf { it.isNotBlank() } ?: return@mapNotNull null
-            Media(mediaId, if (type == "series") "show" else "movie", meta.optString("name", "Untitled"),
+            val media = Media(mediaId, if (type == "series") "show" else "movie", meta.optString("name", "Untitled"),
                 meta.optString("poster").ifBlank { null }, meta.optString("background").ifBlank { null },
                 meta.optString("description"), meta.optString("releaseInfo").take(4),
                 mediaId.takeIf { it.startsWith("tt") }, manifestUrl, releaseQuality = releaseQualityLabel(meta.optString("releaseInfo")))
+            if (isMediaBlockedByTakedown(media.id, media.imdbId, media.type, blocklist)) null else media
         }.distinctBy { it.id }
     }
 
     suspend fun details(item: Media): Pair<Media, List<Episode>> {
         val manifestUrl = item.addonManifest ?: return item to emptyList()
+        val blocklist = getBlocklist()
+        if (isAddonDomainBlocked(manifestUrl, blocklist.addonDomains) ||
+            isMediaBlockedByTakedown(item.id, item.imdbId, item.type, blocklist)
+        ) {
+            return item to emptyList()
+        }
         val type = if (item.type == "show") "series" else "movie"
         val raw = json(endpoint(Addon(manifestUrl, "", "", emptySet()), "meta", type, item.id)).optJSONObject("meta") ?: return item to emptyList()
         val videos = raw.optJSONArray("videos") ?: JSONArray()
@@ -358,13 +414,20 @@ class Addons(context: Context, private val backend: Backend, private val store: 
         episode: Episode?,
         blockedHashes: Set<String> = emptySet()
     ): List<Stream> {
+        val blocklist = getBlocklist()
+        if (isAddonDomainBlocked(addon.manifestUrl, blocklist.addonDomains) ||
+            isMediaBlockedByTakedown(item.id, item.imdbId, item.type, blocklist)
+        ) {
+            return emptyList()
+        }
+        val effectiveBlockedHashes = blockedHashes + blocklist.infohashes
         val id = mediaId(item, episode)
         val result = mutableListOf<Stream>()
         val raw = json(endpoint(addon, "stream", if (item.type == "show") "series" else "movie", id)).optJSONArray("streams") ?: JSONArray()
         for (i in 0 until raw.length()) {
             val value = raw.optJSONObject(i) ?: continue
             val hash = value.optString("infoHash").takeIf { it.matches(Regex("(?i)[0-9a-f]{40}|[a-z2-7]{32}")) }
-            if (hash != null && hash.lowercase() in blockedHashes) continue
+            if (hash != null && hash.lowercase() in effectiveBlockedHashes) continue
             val trackers = value.optJSONArray("sources") ?: JSONArray()
             val streamTrackers = (0 until trackers.length()).mapNotNull { index ->
                 val src = trackers.optString(index).trim()
@@ -378,8 +441,7 @@ class Addons(context: Context, private val backend: Backend, private val store: 
             }
             val url = value.optString("url").ifBlank { magnet ?: "" }
             if (runCatching { URI(url).scheme?.lowercase() }.getOrNull() !in setOf("http", "https", "magnet")) continue
-            val magnetHash = Regex("btih:([0-9a-f]{40}|[a-z2-7]{32})", RegexOption.IGNORE_CASE).find(url)?.groupValues?.getOrNull(1)?.lowercase()
-            if (magnetHash != null && magnetHash in blockedHashes) continue
+            if (isInfohashBlocked(hash, url, effectiveBlockedHashes)) continue
             val hints = value.optJSONObject("behaviorHints") ?: JSONObject()
             val requestHeaders = hints.optJSONObject("proxyHeaders")?.optJSONObject("request") ?: JSONObject()
             val headers = requestHeaders.keys().asSequence().associateWith { requestHeaders.optString(it) }
@@ -398,6 +460,8 @@ class Addons(context: Context, private val backend: Backend, private val store: 
                 filename = hints.optString("filename").ifBlank { null },
                 headers = headers,
                 subtitles = (0 until subs.length()).mapNotNull { subs.optJSONObject(it) }.mapNotNull {
+                    val subId = it.optString("id")
+                    if (isSubtitleIdBlocked(subId, blocklist.subtitleIds)) return@mapNotNull null
                     it.optString("url").takeIf(String::isNotBlank)?.let { subUrl ->
                         Subtitle(
                             language = it.optString("lang", it.optString("language", "und")),
@@ -433,11 +497,19 @@ class Addons(context: Context, private val backend: Backend, private val store: 
     }
 
     suspend fun subtitles(item: Media, episode: Episode?): List<Subtitle> {
+        val blocklist = getBlocklist()
+        if (isMediaBlockedByTakedown(item.id, item.imdbId, item.type, blocklist)) {
+            return emptyList()
+        }
         val result = mutableListOf<Subtitle>()
-        for (addon in list().filter { it.enabled && "subtitles" in it.resources }) try {
+        for (addon in list().filter {
+            it.enabled && "subtitles" in it.resources && !isAddonDomainBlocked(it.manifestUrl, blocklist.addonDomains)
+        }) try {
             val raw = json(endpoint(addon, "subtitles", if (item.type == "show") "series" else "movie", mediaId(item, episode)))
                 .optJSONArray("subtitles") ?: JSONArray()
             for (i in 0 until raw.length()) raw.optJSONObject(i)?.let {
+                val subId = it.optString("id")
+                if (isSubtitleIdBlocked(subId, blocklist.subtitleIds)) return@let
                 val url = it.optString("url")
                 if (url.isNotBlank()) result += Subtitle(
                     language = it.optString("lang", it.optString("language", "und")),

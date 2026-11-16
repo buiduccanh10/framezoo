@@ -15,7 +15,12 @@ import {
   resolveOmdbApiKey,
 } from '../server/utils/omdb.ts';
 import {
+  extractBlockedTmdbPathTarget,
   filterBlockedAddons,
+  filterCuratedListsByTakedown,
+  filterDiscoverPayloadByTakedown,
+  filterEnrichmentFeedByTakedown,
+  filterTmdbPayloadByTakedown,
   isDomainBlocked,
   isImdbBlocked,
   isSubtitleIdBlocked,
@@ -46,7 +51,68 @@ test('takedown matchers block exact hosts, subdomains, media ids, and addons', (
 
   assert.equal(isSubtitleIdBlocked('subsource:99123:vi', ['99123']), true);
   assert.equal(isSubtitleIdBlocked('subsource:99123:vi', ['subsource:99123']), true);
+  assert.equal(isSubtitleIdBlocked('subsource:99123', ['subsource:99123:vi']), true);
+  assert.equal(isSubtitleIdBlocked('opensubs:555', ['opensubs:555:en']), true);
+  assert.equal(isSubtitleIdBlocked('wyzie:opensubs:777:en:https://sub.wyzie.io/a.srt', ['wyzie:opensubs:777']), true);
+  assert.equal(isSubtitleIdBlocked('granite:vi:https://sub.vdrk.site/x.vtt', ['https://sub.vdrk.site/x.vtt']), true);
   assert.equal(isSubtitleIdBlocked('wyzie:111:en', ['subsource:99123']), false);
+
+  assert.deepEqual(extractBlockedTmdbPathTarget('movie/550/credits'), {
+    mediaType: 'movie',
+    tmdbId: '550',
+  });
+  assert.deepEqual(extractBlockedTmdbPathTarget('find/tt0137523'), {
+    imdbId: 'tt0137523',
+  });
+
+  const tmdbBlocklist = { tmdbIds: ['movie:550', 'tv:1399'], imdbIds: ['tt9999999'] };
+  const filteredList = filterTmdbPayloadByTakedown(
+    {
+      results: [
+        { id: 550, media_type: 'movie', title: 'Blocked' },
+        { id: 603, media_type: 'movie', title: 'Allowed' },
+        { id: 700, media_type: 'movie', imdb_id: 'tt9999999', title: 'ImdbBlocked' },
+      ],
+    },
+    tmdbBlocklist
+  );
+  assert.deepEqual(
+    filteredList.results.map(item => item.id),
+    [603]
+  );
+  assert.equal(
+    filterTmdbPayloadByTakedown({ id: 550, title: 'Blocked' }, tmdbBlocklist, 'movie'),
+    null
+  );
+
+  const filteredDiscover = filterDiscoverPayloadByTakedown(
+    {
+      popular: { movies: [{ id: 550 }, { id: 603 }], shows: [{ id: 1399 }, { id: 100 }] },
+      top10: { movies: [{ id: 550 }], shows: [{ id: 100 }] },
+    },
+    tmdbBlocklist
+  );
+  assert.deepEqual(filteredDiscover.popular.movies, [{ id: 603 }]);
+  assert.deepEqual(filteredDiscover.popular.shows, [{ id: 100 }]);
+  assert.deepEqual(filteredDiscover.top10.movies, []);
+
+  assert.deepEqual(
+    filterEnrichmentFeedByTakedown(
+      { movie_tmdb_ids: [550, 603], tv_tmdb_ids: [1399, 100], count: 4 },
+      tmdbBlocklist.tmdbIds
+    ),
+    { movie_tmdb_ids: [603], tv_tmdb_ids: [100], count: 2 }
+  );
+  assert.deepEqual(
+    filterCuratedListsByTakedown(
+      [
+        { listName: 'A', listSlug: 'a', tmdbIds: [550, 603], count: 2 },
+        { listName: 'B', listSlug: 'b', tmdbIds: [550], count: 1 },
+      ],
+      tmdbBlocklist.tmdbIds
+    ),
+    [{ listName: 'A', listSlug: 'a', tmdbIds: [603], count: 1 }]
+  );
 
   const { addons, removedCount } = filterBlockedAddons(
     [

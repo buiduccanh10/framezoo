@@ -65,7 +65,26 @@ export function groupTakedownRules(rules: TakedownRuleLike[]): TakedownBlocklist
   };
 }
 
-export function isDomainBlocked(urlOrHost: string | null | undefined, blockedDomains: string[]): boolean {
+type OptStr = string | null | undefined;
+type OptId = string | number | null | undefined;
+type MediaKind = 'movie' | 'tv';
+type MediaKindOrSeries = MediaKind | 'series';
+type IdBlocklist = Pick<TakedownBlocklist, 'tmdbIds' | 'imdbIds'>;
+type MediaRecord = Record<string, unknown>;
+type OptRecord = MediaRecord | null | undefined;
+type DiscoverSection = { movies?: MediaRecord[]; shows?: MediaRecord[] };
+type Discover = {
+  popular?: DiscoverSection;
+  topRated?: DiscoverSection;
+  nowPlaying?: DiscoverSection;
+  top10?: DiscoverSection;
+  latesttv?: { shows?: MediaRecord[] };
+};
+type Feed = { movie_tmdb_ids: number[]; tv_tmdb_ids: number[]; count: number };
+type Curated = { tmdbIds: number[]; count: number };
+type AddonResult<T> = { addons: T[]; removedCount: number };
+
+export function isDomainBlocked(urlOrHost: OptStr, blockedDomains: string[]): boolean {
   if (!urlOrHost || blockedDomains.length === 0) return false;
   const host = extractDomainHost(urlOrHost);
   if (!host) return false;
@@ -77,31 +96,27 @@ export function isDomainBlocked(urlOrHost: string | null | undefined, blockedDom
   });
 }
 
-export function isTmdbBlocked(
-  tmdbId: string | number | null | undefined,
-  blockedTmdbIds: string[],
-  mediaType?: 'movie' | 'tv' | 'series'
-): boolean {
-  if (tmdbId == null || blockedTmdbIds.length === 0) return false;
+export function isTmdbBlocked(tmdbId: OptId, blocked: string[], kind?: MediaKindOrSeries): boolean {
+  if (tmdbId == null || blocked.length === 0) return false;
   const raw = String(tmdbId).trim().toLowerCase();
   if (!raw) return false;
 
   const bareId = raw.replace(/^(movie|tv|series):/, '');
   const candidates = new Set([raw, bareId]);
-  if (mediaType) {
-    candidates.add(`${mediaType}:${bareId}`);
-    if (mediaType === 'series') candidates.add(`tv:${bareId}`);
-    if (mediaType === 'tv') candidates.add(`series:${bareId}`);
+  if (kind) {
+    candidates.add(`${kind}:${bareId}`);
+    if (kind === 'series') candidates.add(`tv:${bareId}`);
+    if (kind === 'tv') candidates.add(`series:${bareId}`);
   } else {
     candidates.add(`movie:${bareId}`);
     candidates.add(`tv:${bareId}`);
     candidates.add(`series:${bareId}`);
   }
 
-  return blockedTmdbIds.some(entry => candidates.has(entry.trim().toLowerCase()));
+  return blocked.some(entry => candidates.has(entry.trim().toLowerCase()));
 }
 
-export function isImdbBlocked(imdbId: string | null | undefined, blockedImdbIds: string[]): boolean {
+export function isImdbBlocked(imdbId: OptStr, blockedImdbIds: string[]): boolean {
   if (!imdbId || blockedImdbIds.length === 0) return false;
   const clean = imdbId.trim().toLowerCase().split(':')[0];
   if (!clean) return false;
@@ -109,30 +124,166 @@ export function isImdbBlocked(imdbId: string | null | undefined, blockedImdbIds:
   return blockedImdbIds.some(entry => entry.trim().toLowerCase() === clean);
 }
 
-export function isSubtitleIdBlocked(
-  subtitleId: string | null | undefined,
-  blockedSubtitleIds: string[]
-): boolean {
+export function isSubtitleIdBlocked(subtitleId: OptStr, blockedSubtitleIds: string[]): boolean {
   if (!subtitleId || blockedSubtitleIds.length === 0) return false;
   const normalized = subtitleId.trim().toLowerCase();
   if (!normalized) return false;
 
-  // Match either exact composite id (`subsource:123:vi`), URL substring, or numeric provider id (`123`).
+  // Match composite ids (`subsource:123:vi`, `opensubs:456:en`, `wyzie:opensubtitles:789:en:...`),
+  // download prefixes (`subsource:123`, `opensubs:456`), URLs, or numeric provider ids (`123`).
   const segments = normalized.split(':');
-  const bareNumericId = segments.length >= 2 ? segments[1] : normalized;
+  const inputProvider = segments.length >= 2 ? segments[0] : null;
+  const bareNumericId =
+    inputProvider === 'wyzie' && segments.length >= 3 && segments[2]
+      ? segments[2]
+      : segments.length >= 2
+        ? segments[1]
+        : normalized;
 
   return blockedSubtitleIds.some(entry => {
     const pattern = entry.trim().toLowerCase();
     if (!pattern) return false;
-    if (pattern === normalized || pattern === bareNumericId) return true;
+    if (pattern === normalized) return true;
+    if (bareNumericId && pattern === bareNumericId) return true;
+    if (/^https?:\/\//.test(pattern) && normalized.endsWith(`:${pattern}`)) return true;
+
+    const entrySegments = pattern.split(':');
+    const entryProvider = entrySegments.length >= 2 ? entrySegments[0] : null;
+    if (entryProvider && inputProvider && entryProvider === inputProvider) {
+      if (normalized.startsWith(`${pattern}:`) || pattern.startsWith(`${normalized}:`)) {
+        return true;
+      }
+    }
     return pattern === `subsource:${bareNumericId}`;
   });
 }
 
-export function filterBlockedAddons<T>(
-  addons: T[],
-  blockedDomains: string[]
-): { addons: T[]; removedCount: number } {
+export function extractBlockedTmdbPathTarget(path: string): {
+  mediaType?: MediaKind;
+  tmdbId?: string;
+  imdbId?: string;
+} {
+  const clean = path.replace(/^\/+|\/+$/g, '');
+  const movieMatch = clean.match(/^movie\/(\d+)(?:\/|$)/i);
+  if (movieMatch) return { mediaType: 'movie', tmdbId: movieMatch[1] };
+
+  const tvMatch = clean.match(/^tv\/(\d+)(?:\/|$)/i);
+  if (tvMatch) return { mediaType: 'tv', tmdbId: tvMatch[1] };
+
+  const findMatch = clean.match(/^find\/(tt\d+)(?:\/|$)/i);
+  if (findMatch) return { imdbId: findMatch[1] };
+
+  const prefixMatch = clean.match(/^(trending|discover|search)\/(movie|tv)(?:\/|$)/i);
+  if (prefixMatch) {
+    return { mediaType: prefixMatch[2].toLowerCase() === 'tv' ? 'tv' : 'movie' };
+  }
+  return {};
+}
+
+export function isTmdbItemBlocked(item: OptRecord, bl: IdBlocklist, kind?: MediaKind): boolean {
+  if (!item || typeof item !== 'object') return false;
+  const rawType = typeof item.media_type === 'string' ? item.media_type.toLowerCase() : '';
+  const itemType: MediaKind | undefined =
+    rawType === 'tv' || rawType === 'series' || rawType === 'show'
+      ? 'tv'
+      : rawType === 'movie'
+        ? 'movie'
+        : kind;
+
+  const rawId = item.id;
+  if (
+    (typeof rawId === 'number' || typeof rawId === 'string') &&
+    isTmdbBlocked(rawId, bl.tmdbIds, itemType)
+  ) {
+    return true;
+  }
+
+  const externalIds =
+    item.external_ids && typeof item.external_ids === 'object'
+      ? (item.external_ids as MediaRecord)
+      : null;
+  const imdbId =
+    (typeof item.imdb_id === 'string' && item.imdb_id) ||
+    (typeof externalIds?.imdb_id === 'string' && externalIds.imdb_id) ||
+    null;
+
+  return isImdbBlocked(imdbId, bl.imdbIds);
+}
+
+export function filterTmdbPayloadByTakedown<T>(p: T, bl: IdBlocklist, kind?: MediaKind): T | null {
+  if (!p || typeof p !== 'object') return p;
+  if (bl.tmdbIds.length === 0 && bl.imdbIds.length === 0) return p;
+
+  const keepItem = (entry: unknown, fallbackKind?: MediaKind): boolean =>
+    !isTmdbItemBlocked(entry as MediaRecord, bl, fallbackKind);
+
+  const record = p as MediaRecord;
+  if (Array.isArray(record.results)) {
+    const filtered = record.results.filter(entry => keepItem(entry, kind));
+    return { ...record, results: filtered } as T;
+  }
+
+  if (Array.isArray(record.movie_results) || Array.isArray(record.tv_results)) {
+    const next: MediaRecord = { ...record };
+    if (Array.isArray(record.movie_results)) {
+      next.movie_results = record.movie_results.filter(entry => keepItem(entry, 'movie'));
+    }
+    if (Array.isArray(record.tv_results)) {
+      next.tv_results = record.tv_results.filter(entry => keepItem(entry, 'tv'));
+    }
+    return next as T;
+  }
+
+  if ('id' in record && isTmdbItemBlocked(record, bl, kind)) {
+    return null;
+  }
+
+  return p;
+}
+
+export function filterDiscoverPayloadByTakedown<T extends Discover>(p: T, bl: IdBlocklist): T {
+  if (bl.tmdbIds.length === 0 && bl.imdbIds.length === 0) return p;
+  const keepMovies = (items: MediaRecord[] = []): MediaRecord[] =>
+    items.filter(item => !isTmdbItemBlocked(item, bl, 'movie'));
+  const keepShows = (items: MediaRecord[] = []): MediaRecord[] =>
+    items.filter(item => !isTmdbItemBlocked(item, bl, 'tv'));
+  const filterSection = (section: DiscoverSection): DiscoverSection => ({
+    movies: keepMovies(section.movies),
+    shows: keepShows(section.shows),
+  });
+
+  const next: Discover = { ...p };
+  if (p.popular) next.popular = filterSection(p.popular);
+  if (p.topRated) next.topRated = filterSection(p.topRated);
+  if (p.nowPlaying) next.nowPlaying = filterSection(p.nowPlaying);
+  if (p.top10) next.top10 = filterSection(p.top10);
+  if (p.latesttv) next.latesttv = { shows: keepShows(p.latesttv.shows) };
+  return next as T;
+}
+
+export function filterEnrichmentFeedByTakedown<T extends Feed>(feed: T, ids: string[]): T {
+  if (ids.length === 0) return feed;
+  const movies = feed.movie_tmdb_ids.filter(id => !isTmdbBlocked(id, ids, 'movie'));
+  const tvs = feed.tv_tmdb_ids.filter(id => !isTmdbBlocked(id, ids, 'tv'));
+  return {
+    ...feed,
+    movie_tmdb_ids: movies,
+    tv_tmdb_ids: tvs,
+    count: new Set([...movies, ...tvs]).size,
+  };
+}
+
+export function filterCuratedListsByTakedown<T extends Curated>(lists: T[], ids: string[]): T[] {
+  if (ids.length === 0) return lists;
+  return lists
+    .map(list => {
+      const tmdbIds = list.tmdbIds.filter(id => !isTmdbBlocked(id, ids, 'movie'));
+      return { ...list, tmdbIds, count: tmdbIds.length };
+    })
+    .filter(list => list.tmdbIds.length > 0);
+}
+
+export function filterBlockedAddons<T>(addons: T[], blockedDomains: string[]): AddonResult<T> {
   if (!Array.isArray(addons) || blockedDomains.length === 0) {
     return { addons: Array.isArray(addons) ? addons : [], removedCount: 0 };
   }

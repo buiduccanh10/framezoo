@@ -3,7 +3,9 @@ package com.framezoo.tv
 import com.framezoo.tv.api.Addons
 import com.framezoo.tv.api.ComplianceBlocklist
 import com.framezoo.tv.api.isAddonDomainBlocked
+import com.framezoo.tv.api.isInfohashBlocked
 import com.framezoo.tv.api.isMediaBlockedByTakedown
+import com.framezoo.tv.api.isSubtitleIdBlocked
 import com.framezoo.tv.model.Addon
 import com.framezoo.tv.model.Stream
 import com.framezoo.tv.player.hexInfoHashToUrlEncodedBytes
@@ -84,6 +86,7 @@ class AddonAndStreamTest {
             addonDomains = setOf("bad-addon.example"),
             tmdbIds = setOf("tv:999", "movie:123"),
             imdbIds = setOf("tt7654321"),
+            subtitleIds = setOf("subsource:99123", "opensubs:555:en"),
             infohashes = setOf("abcdef1234567890abcdef1234567890abcdef12")
         )
         assertTrue(isAddonDomainBlocked("https://sub.bad-addon.example/manifest.json", blocked.addonDomains))
@@ -92,5 +95,15 @@ class AddonAndStreamTest {
         assertTrue(isMediaBlockedByTakedown("999", null, "show", blocked))
         assertTrue(isMediaBlockedByTakedown("555", "tt7654321", "movie", blocked))
         assertTrue(!isMediaBlockedByTakedown("999", null, "movie", blocked))
+        assertTrue(isSubtitleIdBlocked("subsource:99123:vi", blocked.subtitleIds))
+        assertTrue(isSubtitleIdBlocked("opensubs:555", blocked.subtitleIds))
+        assertTrue(!isSubtitleIdBlocked("wyzie:111:en", blocked.subtitleIds))
+        assertTrue(
+            isInfohashBlocked(
+                null,
+                "magnet:?xt=urn:btih:ABCDEF1234567890ABCDEF1234567890ABCDEF12",
+                blocked.infohashes
+            )
+        )
     }
 }

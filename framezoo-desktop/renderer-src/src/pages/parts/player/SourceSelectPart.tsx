@@ -12,6 +12,12 @@ import { Menu } from "@/components/player/internals/ContextMenu";
 import { SelectableLink } from "@/components/player/internals/ContextMenu/Links";
 import { LazyImage } from "@/components/utils/Image";
 import { AddonLogo } from "@/desktop/addons/AddonLogo";
+import {
+  fetchComplianceBlocklist,
+  isImdbBlocked,
+  isInfohashBlocked,
+  isMediaBlocked,
+} from "@/desktop/addons/blocklist";
 import { loadAddonStreams } from "@/desktop/addons/client";
 import { hasResource, supportsType } from "@/desktop/addons/manifest";
 import {
@@ -442,6 +448,22 @@ export function SourceSelectPart(props: {
       let startedTorrentSessionId: string | null = null;
 
       try {
+        const blocklist = await fetchComplianceBlocklist().catch(() => null);
+        if (
+          blocklist &&
+          (isMediaBlocked(meta.tmdbId, meta.type, blocklist.tmdbIds) ||
+            isImdbBlocked(meta.imdbId, blocklist.imdbIds) ||
+            isInfohashBlocked(
+              stream.infoHash,
+              blocklist.infohashes,
+              stream.url,
+            ))
+        ) {
+          throw new Error(
+            "This source has been blocked following a legal or copyright notice.",
+          );
+        }
+
         if (stream.kind === "torrent") {
           sourceSwitchPrepared = prepareSourceSwitch();
           const wasStartFromBeginning = shouldStartFromBeginning;

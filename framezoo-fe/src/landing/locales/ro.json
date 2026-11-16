@@ -415,9 +415,9 @@
         "summary": "Stare de intermediar neutru, proces de lista de blocare a notificarii și eliminarea 24 de ore pe 24/72 de ore și politica privind încălcarea repetată.",
         "sections": [
           {
-            "title": "Media Player și P2P",
+            "title": "Software intermediar neutru și P2P fără însămânțare implicit",
             "paragraphs": [
-              "Framezoo este un player media care nu găzduiește fișiere video și nu include suplimente de conținut implicite. Motorul său torrent utilizează în mod implicit trackere publice; aceste servicii primesc adresa dumneavoastră IP și hash-ul de informații al torrentului. Motorul este configurat să limiteze partajarea P2P la ieșire.",
+              "Framezoo este un software de redare media neutru, similar cu Stremio și Kodi: nu găzduiește fișiere video, nu include suplimente de conținut implicite sau trackere publice, nu efectuează proxy de supliment pe partea de server și dezactivează în mod implicit seedingul P2P de ieșire (unchoke_slots_limit = 0, active_seeds = 0).",
               "Descărcările de subtitrări folosesc antete fără stocare fără cache publică pe serverele Framezoo."
             ],
             "badge": "01"

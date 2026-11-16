@@ -5,12 +5,21 @@ import { DetailedMeta } from "@/backend/metadata/getmeta";
 import { usePlayer } from "@/components/player/hooks/usePlayer";
 import { usePlayerMeta } from "@/components/player/hooks/usePlayerMeta";
 import {
+  fetchComplianceBlocklist,
+  isImdbBlocked,
+  isMediaBlocked,
+} from "@/desktop/addons/blocklist";
+import {
   clearTorrentSession,
   stopTorrentSession,
   useActiveTorrentStatus,
 } from "@/desktop/torrentPlaybackStore";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
-import { MetaPart } from "@/pages/parts/player/MetaPart";
+import {
+  MetaLegalBlockedError,
+  MetaPart,
+  isDisallowedMedia,
+} from "@/pages/parts/player/MetaPart";
 import { PlayerPart } from "@/pages/parts/player/PlayerPart";
 import { ResumePart } from "@/pages/parts/player/ResumePart";
 import { SourceSelectPart } from "@/pages/parts/player/SourceSelectPart";
@@ -223,20 +232,52 @@ export function RealPlayerView() {
   );
 
   const initializedMetaRef = useRef<string | null>(null);
+  const [preloadedLegalBlocked, setPreloadedLegalBlocked] = useState(false);
 
   useEffect(() => {
-    if (!preloadedMeta) return;
+    if (!preloadedMeta) {
+      setPreloadedLegalBlocked(false);
+      return;
+    }
 
     const metaKey = `${preloadedMeta.type}:${preloadedMeta.tmdbId}:${preloadedMeta.season?.tmdbId}:${preloadedMeta.episode?.tmdbId}`;
     if (initializedMetaRef.current === metaKey) return;
     initializedMetaRef.current = metaKey;
 
-    setPlayerStoreMeta(
-      preloadedMeta,
-      shouldShowResumeScreen(preloadedMeta)
-        ? playerStatus.RESUME
-        : playerStatus.SOURCE_SELECTION,
-    );
+    let cancelled = false;
+    const verifyAndApplyPreloadedMeta = async () => {
+      if (isDisallowedMedia(preloadedMeta.tmdbId, preloadedMeta.type)) {
+        if (!cancelled) setPreloadedLegalBlocked(true);
+        return;
+      }
+      const blocklist = await fetchComplianceBlocklist().catch(() => null);
+      if (cancelled) return;
+      if (
+        blocklist &&
+        (isMediaBlocked(
+          preloadedMeta.tmdbId,
+          preloadedMeta.type,
+          blocklist.tmdbIds,
+        ) ||
+          isImdbBlocked(preloadedMeta.imdbId, blocklist.imdbIds))
+      ) {
+        setPreloadedLegalBlocked(true);
+        return;
+      }
+
+      setPreloadedLegalBlocked(false);
+      setPlayerStoreMeta(
+        preloadedMeta,
+        shouldShowResumeScreen(preloadedMeta)
+          ? playerStatus.RESUME
+          : playerStatus.SOURCE_SELECTION,
+      );
+    };
+
+    void verifyAndApplyPreloadedMeta();
+    return () => {
+      cancelled = true;
+    };
   }, [preloadedMeta, setPlayerStoreMeta, shouldShowResumeScreen]);
 
   const handleMetaReceived = useCallback(
@@ -281,17 +322,20 @@ export function RealPlayerView() {
       hideControls={isShowingSourcePicker && isManualPickerVisible}
     >
       {status !== playerStatus.PLAYING ? <BlurEllipsis /> : null}
-      {status === playerStatus.IDLE && !preloadedMeta ? (
+      {preloadedLegalBlocked ? <MetaLegalBlockedError /> : null}
+      {!preloadedLegalBlocked &&
+      status === playerStatus.IDLE &&
+      !preloadedMeta ? (
         <MetaPart onGetMeta={handleMetaReceived} />
       ) : null}
-      {status === playerStatus.RESUME ? (
+      {!preloadedLegalBlocked && status === playerStatus.RESUME ? (
         <ResumePart
           onResume={handleResume}
           onRestart={handleRestart}
           onMetaChange={metaChange}
         />
       ) : null}
-      {isShowingSourcePicker && playerMeta ? (
+      {!preloadedLegalBlocked && isShowingSourcePicker && playerMeta ? (
         <SourceSelectPart
           meta={playerMeta}
           // Keep the fallback picker inside the player layout. "full" is

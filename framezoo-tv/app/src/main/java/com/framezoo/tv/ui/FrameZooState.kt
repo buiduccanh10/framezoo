@@ -10,6 +10,8 @@ import androidx.compose.runtime.setValue
 import com.framezoo.tv.api.Addons
 import com.framezoo.tv.api.Backend
 import com.framezoo.tv.api.buildBackendSettingsJson
+import com.framezoo.tv.api.isAddonDomainBlocked
+import com.framezoo.tv.api.isMediaBlockedByTakedown
 import com.framezoo.tv.api.parseBackendSettingsJson
 import com.framezoo.tv.model.Addon
 import com.framezoo.tv.model.BookmarkDetails
@@ -642,10 +644,29 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         sourcesJob?.cancel()
         sourcesJob = scope.launch {
             try {
+                val blocklist = addons.getBlocklist()
+                if (isMediaBlockedByTakedown(item.id, item.imdbId, item.type, blocklist)) {
+                    if (generation == sourcesGeneration) {
+                        sourcesLoading = false
+                        addonLoading = emptySet()
+                        error = "Nội dung này không khả dụng theo yêu cầu bản quyền / pháp lý."
+                    }
+                    return@launch
+                }
                 if (installed.isEmpty()) installed = addons.list()
-                val eligible = installed.filter { it.enabled && "stream" in it.resources }
+                val eligible = installed.filter {
+                    it.enabled && "stream" in it.resources && !isAddonDomainBlocked(it.manifestUrl, blocklist.addonDomains)
+                }
                 addonLoading = eligible.map { it.id }.toSet()
                 val (detail, seasonList) = backend.details(item)
+                if (isMediaBlockedByTakedown(detail.id, detail.imdbId, detail.type, blocklist)) {
+                    if (generation == sourcesGeneration) {
+                        sourcesLoading = false
+                        addonLoading = emptySet()
+                        error = "Nội dung này không khả dụng theo yêu cầu bản quyền / pháp lý."
+                    }
+                    return@launch
+                }
                 selected = detail
                 seasons = seasonList
                 val resolvedTarget = if (item.type == "show") {
@@ -670,7 +691,7 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
                     val addonDeferreds = eligible.map { addon ->
                         async {
                             try {
-                                val list = addons.streamsForAddon(addon, detail, resolvedTarget)
+                                val list = addons.streamsForAddon(addon, detail, resolvedTarget, blocklist.infohashes)
                                 if (generation != sourcesGeneration) return@async
                                 addonStreams = addonStreams + (addon.id to list)
                                 sources = addonStreams.values.flatten()
@@ -725,15 +746,26 @@ internal class FrameZooState(context: Context, private val scope: CoroutineScope
         sourcesJob?.cancel()
         sourcesJob = scope.launch {
             try {
+                val blocklist = addons.getBlocklist()
+                if (isMediaBlockedByTakedown(item.id, item.imdbId, item.type, blocklist)) {
+                    if (generation == sourcesGeneration) {
+                        sourcesLoading = false
+                        addonLoading = emptySet()
+                        error = "Nội dung này không khả dụng theo yêu cầu bản quyền / pháp lý."
+                    }
+                    return@launch
+                }
                 if (installed.isEmpty()) installed = addons.list()
-                val eligible = installed.filter { it.enabled && "stream" in it.resources }
+                val eligible = installed.filter {
+                    it.enabled && "stream" in it.resources && !isAddonDomainBlocked(it.manifestUrl, blocklist.addonDomains)
+                }
                 addonLoading = eligible.map { it.id }.toSet()
                 coroutineScope {
                     val subDeferred = async { runCatching { addons.subtitles(item, target) }.getOrDefault(emptyList()) }
                     val addonDeferreds = eligible.map { addon ->
                         async {
                             try {
-                                val list = addons.streamsForAddon(addon, item, target)
+                                val list = addons.streamsForAddon(addon, item, target, blocklist.infohashes)
                                 if (generation != sourcesGeneration) return@async
                                 addonStreams = addonStreams + (addon.id to list)
                                 sources = addonStreams.values.flatten()

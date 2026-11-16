@@ -419,9 +419,9 @@
         "sections": [
           {
             "badge": "01",
-            "title": "Media Player & P2P",
+            "title": "Neutral Intermediary Software & Default No-Seeding P2P",
             "paragraphs": [
-              "Framezoo is a media player that hosts no video files and bundles no default content addons. Its torrent engine uses public trackers by default; these services receive your IP address and the torrent's info hash. The engine is configured to limit outbound P2P sharing.",
+              "Framezoo is neutral media player software similar to Stremio and Kodi: it hosts no video files, bundles no default content addons or public trackers, performs no server-side addon proxying, and disables outbound P2P seeding (unchoke_slots_limit = 0, active_seeds = 0) by default.",
               "Subtitle downloads use no-store headers without public caching on Framezoo servers."
             ]
           },
