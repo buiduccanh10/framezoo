@@ -229,7 +229,8 @@
     "pageTitle": "Configura els subtítols de Framezoo | Framezoo",
     "hero": {
       "title": "Configura els subtítols de Framezoo",
-      "description": "Configureu la vostra clau de l'API Wyzie personal per obtenir subtítols més ràpids i evitar els límits de tarifa compartida de la comunitat."
+      "description": "Configureu la vostra clau de l'API Wyzie personal per obtenir subtítols més ràpids i evitar els límits de tarifa compartida de la comunitat.",
+      "multiDescription": "Configureu les claus API personals opcionals (BYOK) perquè els proveïdors de subtítols de Framezoo utilitzin els vostres propis límits de tarifa."
     },
     "account": {
       "verifying": "S'està verificant el bitllet del compte des de l'aplicació d'escriptori...",
@@ -264,7 +265,10 @@
         "invalid": "La clau de l'API no és vàlida o ha caducat.",
         "rateLimit": "La clau d'API ha superat els límits de velocitat.",
         "serverError": "El servidor Wyzie ha retornat HTTP {{status}}.",
-        "networkError": "Error de xarxa en connectar-se a sub.wyzie.io. Comproveu la vostra connexió."
+        "networkError": "Error de xarxa en connectar-se a sub.wyzie.io. Comproveu la vostra connexió.",
+        "verifyingProvider": "S'està verificant amb {{provider}}...",
+        "serverErrorProvider": "{{provider}} ha retornat HTTP {{status}}.",
+        "networkErrorProvider": "No s'ha pogut arribar al servei de verificació {{provider}}. Si us plau, torna-ho a provar."
       },
       "clearButton": "Esborra clau"
     },
@@ -276,7 +280,33 @@
       "noticeText": "La vostra clau API s'emmagatzema de manera segura al vostre dispositiu. Només es reenvia per cercar i recuperar subtítols de pel·lícules i sèries. Podeu actualitzar-lo o eliminar-lo en qualsevol moment.",
       "openFramezoo": "Obriu Framezoo",
       "openFramezooDisabledTooltip": "Requereix l'obertura des de Framezoo Desktop mentre s'ha iniciat sessió",
-      "notConnectedNotice": "Nota: no esteu connectat amb un bitllet de compte de Framezoo. Per sincronitzar directament amb \"Obre Framezoo\", obriu aquesta pàgina des de la vostra aplicació d'escriptori Framezoo mentre esteu connectat. En cas contrari, copieu l'URL del manifest a continuació per utilitzar-lo."
+      "notConnectedNotice": "Nota: no esteu connectat amb un bitllet de compte de Framezoo. Per sincronitzar directament amb \"Obre Framezoo\", obriu aquesta pàgina des de la vostra aplicació d'escriptori Framezoo mentre esteu connectat. En cas contrari, copieu l'URL del manifest a continuació per utilitzar-lo.",
+      "privacyLinkLabel": "Política de privadesa",
+      "takedownLinkLabel": "Política de drets d'autor i DMCA"
+    },
+    "providersStep": {
+      "optionalBadge": "Opcional",
+      "title": "Claus de l'API del proveïdor de subtítols",
+      "description": "Totes les claus següents són opcionals. Quan es proporciona, Framezoo prefereix la vostra clau personal sobre els valors predeterminats compartits. El granit incorporat no requereix cap clau.",
+      "manifestHint": "Copia l'URL del manifest actualment només reenvia la clau Wyzie per als URL de Stremio no autenticats; connecteu el vostre compte de Framezoo per sincronitzar totes les claus del proveïdor.",
+      "getKeyButton": "Obteniu la clau de l'API"
+    },
+    "providers": {
+      "wyzie": {
+        "name": "Wyzie",
+        "placeholder": "Enganxa la clau de l'API Wyzie...",
+        "portalHint": "Genereu o bescanvieu una clau API personal gratuïta a la botiga Wyzie."
+      },
+      "subsource": {
+        "name": "Subfont",
+        "portalHint": "Inicieu la sessió a SubSource, obriu Compte Dashboard → pestanya API i creeu una clau.",
+        "placeholder": "Enganxa la clau de l'API de subfont..."
+      },
+      "opensubtitles": {
+        "portalHint": "Inicieu la sessió a OpenSubtitles.com, obriu API Consumers i creeu una clau de l'API REST v1.",
+        "name": "OpenSubtitles.com",
+        "placeholder": "Enganxa la clau de l'API REST v1 d'OpenSubtitles.com..."
+      }
     }
   },
   "legal": {

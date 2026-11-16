@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "ඔබගේ යතුර වින්‍යාස කර ඇත (වෙනස් කිරීමට ක්ලික් කරන්න)",
       "configureRequiredAction": "මෙම ඇඩෝනය වින්‍යාස කරන්න (අවශ්‍යයි)",
       "customKeyActiveDesc": "ඔබගේ පුද්ගලික Wyzie API යතුර භාවිතා කිරීම",
+      "customKeyActiveProviders": "ඔබගේ පුද්ගලික උපසිරැසි API යතුර ({{providers}}) භාවිතා කරමින්",
       "customKeyConfiguredBadge": "ඔබගේ යතුර වින්‍යාස කර ඇත.",
       "description": "ඇඩෝන විකල්ප වේ. මෙම යෙදුම කිසිදු ඇඩෝනයක් බණ්ඩල් කිරීම, නිර්දේශ කිරීම හෝ සත්කාරකත්වය නොදක්වයි.",
       "disabled": "ආබාධිතයි",

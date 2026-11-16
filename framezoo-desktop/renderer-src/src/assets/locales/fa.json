@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "کلید شما پیکربندی شده است (برای تغییر کلیک کنید)",
       "configureRequiredAction": "پیکربندی این افزونه (الزامی)",
       "customKeyActiveDesc": "استفاده از کلید API شخصی Wyzie شما",
+      "customKeyActiveProviders": "استفاده از کلید API زیرنویس شخصی شما ({{providers}})",
       "customKeyConfiguredBadge": "کلید شما پیکربندی شده است",
       "description": "افزونه ها اختیاری هستند. این برنامه هیچ افزونه ای را بسته، توصیه یا میزبانی نمی کند.",
       "disabled": "از کار افتاده است",

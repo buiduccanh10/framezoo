@@ -228,7 +228,8 @@
   "subtitlesConfigure": {
     "hero": {
       "title": "Configura os subtítulos de Framezoo",
-      "description": "Configura a túa clave de API Wyzie persoal para obter subtítulos máis rápidos e evitar os límites de tarifas da comunidade compartida."
+      "description": "Configura a túa clave de API Wyzie persoal para obter subtítulos máis rápidos e evitar os límites de tarifas da comunidade compartida.",
+      "multiDescription": "Configure as claves de API persoais opcionais (BYOK) para que os provedores de Framezoo Subtitles utilicen os seus propios límites de tarifa."
     },
     "account": {
       "verifying": "Verificando o ticket da conta desde a aplicación de escritorio...",
@@ -265,7 +266,10 @@
         "verifying": "Verificando con Wyzie...",
         "networkError": "Erro de rede ao conectarse a sub.wyzie.io. Comproba a túa conexión.",
         "rateLimit": "A clave API superou os límites de velocidade.",
-        "invalid": "A clave API non é válida ou caducou."
+        "invalid": "A clave API non é válida ou caducou.",
+        "serverErrorProvider": "{{provider}} devolveu HTTP {{status}}.",
+        "networkErrorProvider": "Non se puido contactar co servizo de verificación {{provider}}. Téntao de novo.",
+        "verifyingProvider": "Verificando con {{provider}}..."
       }
     },
     "step3": {
@@ -276,7 +280,33 @@
       "copyManifest": "Copiar o URL do manifesto",
       "notConnectedNotice": "Nota: non estás conectado cun ticket de conta de Framezoo. Para sincronizar directamente con \"Abrir Framezoo\", abre esta páxina desde a aplicación de escritorio de Framezoo mentres estás conectado. Se non, copia o URL do manifesto a continuación para usalo.",
       "noticeText": "A túa clave API almacénase de forma segura no teu dispositivo. Envíase só para buscar e recuperar subtítulos de películas e series. Podes actualizalo ou eliminalo en calquera momento.",
-      "noticeLabel": "Aviso:"
+      "noticeLabel": "Aviso:",
+      "privacyLinkLabel": "Política de privacidade",
+      "takedownLinkLabel": "Política de copyright e DMCA"
+    },
+    "providersStep": {
+      "optionalBadge": "Opcional",
+      "getKeyButton": "Obter a clave API",
+      "manifestHint": "Copiar URL do manifesto actualmente envía só a clave Wyzie para os URL de Stremio non autenticados; conecta a túa conta de Framezoo para sincronizar todas as claves do provedor.",
+      "description": "Todas as claves a continuación son opcionais. Cando se proporciona, Framezoo prefire a túa chave persoal sobre os valores predeterminados compartidos. O granito incorporado non require ningunha chave.",
+      "title": "Chaves da API do provedor de subtítulos"
+    },
+    "providers": {
+      "wyzie": {
+        "name": "Wyzie",
+        "portalHint": "Xera ou troca unha clave de API persoal gratuíta na tenda Wyzie.",
+        "placeholder": "Pegar a clave da API de Wyzie..."
+      },
+      "opensubtitles": {
+        "portalHint": "Inicia sesión en OpenSubtitles.com, abre API Consumers e crea unha clave da API REST v1.",
+        "name": "OpenSubtitles.com",
+        "placeholder": "Pega a chave da API REST v1 de OpenSubtitles.com..."
+      },
+      "subsource": {
+        "portalHint": "Inicia sesión en SubSource, abre Panel de control da conta → pestana API e crea unha clave.",
+        "placeholder": "Pegar a chave da API de subfonte...",
+        "name": "Subfonte"
+      }
     }
   },
   "legal": {

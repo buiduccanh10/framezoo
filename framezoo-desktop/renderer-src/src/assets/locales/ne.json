@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "तपाईंको कुञ्जी कन्फिगर गरिएको छ (परिवर्तन गर्न क्लिक गर्नुहोस्)",
       "configureRequiredAction": "यो एडअन कन्फिगर गर्नुहोस् (आवश्यक)",
       "customKeyActiveDesc": "तपाईंको व्यक्तिगत Wyzie API कुञ्जी प्रयोग गर्दै",
+      "customKeyActiveProviders": "तपाईंको व्यक्तिगत उपशीर्षक API कुञ्जी ({{providers}}) प्रयोग गर्दै",
       "customKeyConfiguredBadge": "तपाईंको कुञ्जी कन्फिगर गरिएको छ।",
       "description": "Addons वैकल्पिक छन्। यो एपले कुनै पनि एडअनलाई बन्डल, सिफारिस वा होस्ट गर्दैन।",
       "disabled": "असक्षम",

@@ -239,7 +239,8 @@
     },
     "hero": {
       "title": "Määritä Framezoo-tekstitykset",
-      "description": "Määritä henkilökohtainen Wyzie API Key saadaksesi nopeammat tekstitykset ja ohittaaksesi jaetut yhteisön rajat."
+      "description": "Määritä henkilökohtainen Wyzie API Key saadaksesi nopeammat tekstitykset ja ohittaaksesi jaetut yhteisön rajat.",
+      "multiDescription": "Määritä valinnaiset henkilökohtaiset API-avaimet (BYOK) Framezoo Subtitles -palveluntarjoajille käyttämään omia nopeusrajoituksiasi."
     },
     "pageTitle": "Configure Framezoo Tekstitykset | Framezoo",
     "step1": {
@@ -263,7 +264,10 @@
         "invalid": "API-avain on virheellinen tai vanhentunut.",
         "rateLimit": "API-avain on ylittänyt nopeusrajoitukset.",
         "serverError": "Wyzie-palvelin palautti HTTP {{status}}.",
-        "networkError": "Verkkovirhe muodostettaessa yhteyttä osoitteeseen sub.wyzie.io. Tarkista yhteys."
+        "networkError": "Verkkovirhe muodostettaessa yhteyttä osoitteeseen sub.wyzie.io. Tarkista yhteys.",
+        "verifyingProvider": "Vahvistetaan sovelluksella {{provider}}...",
+        "networkErrorProvider": "Ei saatu yhteyttä {{provider}} vahvistuspalveluun. Yritä uudelleen.",
+        "serverErrorProvider": "{{provider}} palautti HTTP:n {{status}}."
       },
       "clearButton": "Tyhjennä avain",
       "placeholder": "Liitä Wyzie API-avain tähän..."
@@ -276,7 +280,33 @@
       "noticeLabel": "Huomautus:",
       "openFramezooDisabledTooltip": "Vaatii avaamisen Framezoo Desktopista sisäänkirjautuneena",
       "noticeText": "API-avaimesi on tallennettu turvallisesti laitteellesi. Se välitetään vain elokuvien ja sarjojen tekstitysten etsimiseen ja hakemiseen. Voit päivittää tai poistaa sen milloin tahansa.",
-      "notConnectedNotice": "Huomautus: Sinua ei ole yhdistetty Framezoo-tilin lippuun. Jos haluat synkronoida suoraan Open Framezoo -sovelluksen kanssa, avaa tämä sivu Framezoo Desktop -sovelluksesta ollessasi kirjautuneena sisään. Muussa tapauksessa kopioi alla oleva manifestin URL-osoite käyttääksesi sitä."
+      "notConnectedNotice": "Huomautus: Sinua ei ole yhdistetty Framezoo-tilin lippuun. Jos haluat synkronoida suoraan Open Framezoo -sovelluksen kanssa, avaa tämä sivu Framezoo Desktop -sovelluksesta ollessasi kirjautuneena sisään. Muussa tapauksessa kopioi alla oleva manifestin URL-osoite käyttääksesi sitä.",
+      "privacyLinkLabel": "Tietosuojakäytäntö",
+      "takedownLinkLabel": "Tekijänoikeus- ja DMCA-käytäntö"
+    },
+    "providersStep": {
+      "optionalBadge": "Valinnainen",
+      "getKeyButton": "Hanki API-avain",
+      "manifestHint": "Kopioi manifestin URL-osoite välittää tällä hetkellä vain Wyzie-avaimen todentamattomille Stremio-URL-osoitteille. yhdistä Framezoo-tilisi synkronoidaksesi kaikki palveluntarjoajan avaimet.",
+      "title": "Tekstityksen tarjoajan API-avaimet",
+      "description": "Kaikki alla olevat näppäimet ovat valinnaisia. Kun Framezoo on saatavilla, se suosii henkilökohtaista avaimesi jaettujen oletusasetusten sijaan. Sisäänrakennettu graniitti ei vaadi avainta."
+    },
+    "providers": {
+      "wyzie": {
+        "name": "Wyzie",
+        "portalHint": "Luo tai lunasta ilmainen henkilökohtainen API-avain Wyzie Storessa.",
+        "placeholder": "Liitä Wyzie API-avain..."
+      },
+      "subsource": {
+        "portalHint": "Kirjaudu sisään SubSourceen, avaa Account Dashboard → API-välilehti ja luo avain.",
+        "placeholder": "Liitä alilähdesovellusliittymäavain...",
+        "name": "Alilähde"
+      },
+      "opensubtitles": {
+        "portalHint": "Kirjaudu sisään osoitteessa OpenSubtitles.com, avaa API Consumers ja luo REST API v1 -avain.",
+        "placeholder": "Liitä OpenSubtitles.com REST API v1 -avain...",
+        "name": "OpenSubtitles.com"
+      }
     }
   },
   "legal": {

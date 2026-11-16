@@ -239,7 +239,8 @@
     },
     "hero": {
       "title": "زیرنویس Framezoo را پیکربندی کنید",
-      "description": "کلید Wyzie API شخصی خود را تنظیم کنید تا زیرنویس‌های سریع‌تری دریافت کنید و محدودیت‌های نرخ اشتراک‌گذاری شده انجمن را دور بزنید."
+      "description": "کلید Wyzie API شخصی خود را تنظیم کنید تا زیرنویس‌های سریع‌تری دریافت کنید و محدودیت‌های نرخ اشتراک‌گذاری شده انجمن را دور بزنید.",
+      "multiDescription": "کلیدهای API شخصی اختیاری (BYOK) را برای ارائه دهندگان Framezoo Subtitles پیکربندی کنید تا از محدودیت های نرخ خود استفاده کنند."
     },
     "pageTitle": "پیکربندی زیرنویس Framezoo | فریمزو",
     "step1": {
@@ -262,7 +263,10 @@
         "serverError": "سرور Wyzie HTTP {{status}} را برگرداند.",
         "invalid": "کلید API نامعتبر است یا منقضی شده است.",
         "rateLimit": "کلید API از محدودیت‌های نرخ فراتر رفته است.",
-        "networkError": "خطای شبکه در اتصال به sub.wyzie.io. لطفا اتصال خود را بررسی کنید."
+        "networkError": "خطای شبکه در اتصال به sub.wyzie.io. لطفا اتصال خود را بررسی کنید.",
+        "verifyingProvider": "در حال تأیید با {{provider}}...",
+        "networkErrorProvider": "دسترسی به سرویس تأیید {{provider}} امکان‌پذیر نیست. لطفا دوباره امتحان کنید.",
+        "serverErrorProvider": "{{provider}} HTTP {{status}} را برگرداند."
       },
       "title": "کلید Wyzie API را وارد کنید",
       "testButton": "تست کلید API",
@@ -276,7 +280,33 @@
       "copyManifest": "URL مانیفست را کپی کنید",
       "noticeText": "کلید API شما به طور ایمن در دستگاه شما ذخیره می شود. فقط برای جستجو و بازیابی زیرنویس فیلم ها و سریال ها فوروارد می شود. می‌توانید هر زمان که خواستید آن را به‌روزرسانی یا حذف کنید.",
       "openFramezooDisabledTooltip": "نیاز به باز کردن از Framezoo Desktop هنگام ورود به سیستم دارد",
-      "notConnectedNotice": "توجه: شما با بلیط حساب Framezoo متصل نیستید. برای همگام‌سازی مستقیم با «Open Framezoo»، در حالی که وارد سیستم شده‌اید، این صفحه را از برنامه Framezoo Desktop خود باز کنید. در غیر این صورت، URL Manifest را در زیر کپی کنید تا از آن استفاده کنید."
+      "notConnectedNotice": "توجه: شما با بلیط حساب Framezoo متصل نیستید. برای همگام‌سازی مستقیم با «Open Framezoo»، در حالی که وارد سیستم شده‌اید، این صفحه را از برنامه Framezoo Desktop خود باز کنید. در غیر این صورت، URL Manifest را در زیر کپی کنید تا از آن استفاده کنید.",
+      "privacyLinkLabel": "سیاست حفظ حریم خصوصی",
+      "takedownLinkLabel": "خط مشی کپی رایت و DMCA"
+    },
+    "providersStep": {
+      "optionalBadge": "اختیاری",
+      "getKeyButton": "کلید API را دریافت کنید",
+      "manifestHint": "URL Manifest کپی در حال حاضر فقط کلید Wyzie را برای URLهای Stremio احراز هویت نشده ارسال می کند. حساب Framezoo خود را برای همگام سازی همه کلیدهای ارائه دهنده متصل کنید.",
+      "title": "کلیدهای API ارائه دهنده زیرنویس",
+      "description": "همه کلیدهای زیر اختیاری هستند. در صورت ارائه، Framezoo کلید شخصی شما را به پیش فرض های مشترک ترجیح می دهد. گرانیت توکار نیازی به کلید ندارد."
+    },
+    "providers": {
+      "subsource": {
+        "name": "منبع فرعی",
+        "portalHint": "در SubSource وارد شوید، داشبورد حساب → تب API را باز کنید و یک کلید ایجاد کنید.",
+        "placeholder": "چسباندن کلید زیر منبع API..."
+      },
+      "wyzie": {
+        "name": "ویزی",
+        "placeholder": "جای‌گذاری کلید Wyzie API...",
+        "portalHint": "یک کلید API شخصی رایگان در فروشگاه Wyzie ایجاد کنید یا از آن استفاده کنید."
+      },
+      "opensubtitles": {
+        "name": "OpenSubtitles.com",
+        "portalHint": "در OpenSubtitles.com وارد شوید، API Consumers را باز کنید و یک کلید REST API v1 ایجاد کنید.",
+        "placeholder": "جای‌گذاری کلید OpenSubtitles.com REST API v1..."
+      }
     }
   },
   "legal": {

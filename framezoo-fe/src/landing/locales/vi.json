@@ -228,7 +228,8 @@
     "pageTitle": "Cấu hình Phụ đề Framezoo Subtitles | Framezoo",
     "hero": {
       "title": "Cấu hình Phụ đề Framezoo",
-      "description": "Tùy biến nguồn phụ đề Wyzie cá nhân để tải phụ đề nhanh chóng, không lo dính hạn mức chung của hệ thống."
+      "description": "Tùy biến nguồn phụ đề Wyzie cá nhân để tải phụ đề nhanh chóng, không lo dính hạn mức chung của hệ thống.",
+      "multiDescription": "Cấu hình khóa API cá nhân (tùy chọn) cho từng nhà cung cấp phụ đề của Framezoo Subtitles để dùng hạn mức riêng của bạn."
     },
     "account": {
       "verifying": "Đang xác thực thông tin tài khoản từ Desktop App...",
@@ -240,6 +241,31 @@
       "saveSuccess": "Đã lưu thành công vào tài khoản của bạn! Desktop App sẽ tự động dùng key này khi xem phim.",
       "saveFailed": "Lưu thất bại.",
       "saveNetworkError": "Lỗi mạng khi lưu vào tài khoản."
+    },
+    "providersStep": {
+      "step": "1",
+      "title": "Khóa API nhà cung cấp phụ đề",
+      "description": "Mọi khóa dưới đây đều là tùy chọn. Khi nhập, hệ thống ưu tiên khóa cá nhân thay cho khóa dùng chung. Nguồn Granite tích hợp không cần khóa API.",
+      "optionalBadge": "Tùy chọn",
+      "getKeyButton": "Lấy API Key",
+      "manifestHint": "Nút Sao chép URL kê khai hiện chỉ gắn khóa Wyzie cho Stremio chưa đăng nhập; hãy mở từ tài khoản Framezoo để đồng bộ cả 3 nhà cung cấp."
+    },
+    "providers": {
+      "wyzie": {
+        "name": "Wyzie",
+        "portalHint": "Tạo hoặc đổi mã kích hoạt API Key cá nhân miễn phí trên Wyzie Store.",
+        "placeholder": "Dán Wyzie API Key..."
+      },
+      "subsource": {
+        "name": "Nguồn phụ",
+        "portalHint": "Đăng nhập SubSource, vào Account Dashboard → tab API để tạo khóa API.",
+        "placeholder": "Dán SubSource API Key..."
+      },
+      "opensubtitles": {
+        "name": "OpenSubtitles.com",
+        "portalHint": "Đăng nhập OpenSubtitles.com, mở mục API Consumers để tạo khóa REST API v1.",
+        "placeholder": "Dán khóa OpenSubtitles.com REST API v1..."
+      }
     },
     "step1": {
       "step": "1",
@@ -262,15 +288,18 @@
       "messages": {
         "empty": "Vui lòng nhập API Key trước khi kiểm tra.",
         "verifying": "Đang kiểm tra kết nối Wyzie...",
+        "verifyingProvider": "Đang kiểm tra kết nối {{provider}}...",
         "valid": "API Key hợp lệ và hoạt động tốt!",
         "invalid": "API Key không hợp lệ hoặc đã hết hạn.",
         "rateLimit": "API Key đã chạm giới hạn yêu cầu (Rate Limit).",
         "serverError": "Lỗi máy chủ Wyzie (HTTP {{status}}).",
-        "networkError": "Không thể kết nối tới sub.wyzie.io. Vui lòng kiểm tra lại mạng hoặc thử lại sau."
+        "serverErrorProvider": "{{provider}} trả về lỗi HTTP {{status}}.",
+        "networkError": "Không thể kết nối tới sub.wyzie.io. Vui lòng kiểm tra lại mạng hoặc thử lại sau.",
+        "networkErrorProvider": "Không thể kết nối dịch vụ kiểm tra {{provider}}. Vui lòng thử lại."
       }
     },
     "step3": {
-      "step": "3",
+      "step": "2",
       "title": "Cài đặt & Áp dụng",
       "openFramezoo": "Mở Framezoo",
       "openFramezooDisabledTooltip": "Cần mở từ Framezoo Desktop sau khi đã đăng nhập",
@@ -278,8 +307,10 @@
       "or": "hoặc",
       "copyManifest": "Sao chép URL kê khai",
       "copied": "Đã sao chép!",
-      "noticeLabel": "Lưu ý:",
-      "noticeText": "API Key được lưu trên trình duyệt của bạn. Khi sử dụng Framezoo Desktop hoặc Stremio, key này sẽ được chuyển tiếp an toàn để tìm kiếm phụ đề. Bạn có thể thay đổi hoặc xóa bất kỳ lúc nào."
+      "noticeLabel": "Lưu ý Bảo mật & Pháp lý:",
+      "noticeText": "Khóa API được lưu cục bộ trên trình duyệt hoặc mã hóa (AES-256-GCM) trong tài khoản Framezoo khi bạn lưu. Khóa chỉ được chuyển tiếp tới API chính thức của Wyzie, SubSource và OpenSubtitles.com REST API v1 với chính sách private, no-store (không cache công khai) và tuân thủ điều khoản từng nhà cung cấp cùng",
+      "privacyLinkLabel": "Chính sách bảo mật",
+      "takedownLinkLabel": "Chính sách Bản quyền & DMCA"
     }
   },
   "legal": {

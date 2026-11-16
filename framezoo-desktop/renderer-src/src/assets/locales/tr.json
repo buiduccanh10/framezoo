@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "Anahtarınız yapılandırıldı (değiştirmek için tıklayın)",
       "configureRequiredAction": "Bu eklentiyi yapılandırın (Zorunlu)",
       "customKeyActiveDesc": "Kişisel Wyzie API anahtarınızı kullanarak",
+      "customKeyActiveProviders": "Kişisel altyazı API anahtarınızı ({{providers}}) kullanarak",
       "customKeyConfiguredBadge": "Anahtarınız yapılandırıldı.",
       "description": "Eklentiler isteğe bağlıdır. Bu uygulama herhangi bir eklentiyi paketlemez, önermez veya barındırmaz.",
       "disabled": "Engelli",

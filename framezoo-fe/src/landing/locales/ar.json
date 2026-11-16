@@ -240,7 +240,8 @@
     },
     "hero": {
       "title": "تكوين ترجمات Framezoo",
-      "description": "قم بإعداد مفتاح Wyzie API الشخصي الخاص بك للحصول على ترجمات أسرع وتجاوز حدود معدل المجتمع المشترك."
+      "description": "قم بإعداد مفتاح Wyzie API الشخصي الخاص بك للحصول على ترجمات أسرع وتجاوز حدود معدل المجتمع المشترك.",
+      "multiDescription": "قم بتكوين مفاتيح API الشخصية الاختيارية (BYOK) لموفري ترجمات Framezoo لاستخدام حدود الأسعار الخاصة بك."
     },
     "step1": {
       "title": "احصل على مفتاح Wyzie API المجاني",
@@ -265,7 +266,10 @@
         "invalid": "مفتاح API غير صالح أو منتهي الصلاحية.",
         "rateLimit": "لقد تجاوز مفتاح API حدود المعدل.",
         "serverError": "أعاد خادم Wyzie HTTP {{status}}.",
-        "networkError": "خطأ في الشبكة أثناء الاتصال بـ sub.wyzie.io. يرجى التحقق من الاتصال الخاص بك."
+        "networkError": "خطأ في الشبكة أثناء الاتصال بـ sub.wyzie.io. يرجى التحقق من الاتصال الخاص بك.",
+        "serverErrorProvider": "قام {{provider}} بإرجاع HTTP {{status}}.",
+        "verifyingProvider": "جارٍ التحقق باستخدام {{provider}}...",
+        "networkErrorProvider": "تعذر الوصول إلى خدمة التحقق {{provider}}. يرجى المحاولة مرة أخرى."
       }
     },
     "step3": {
@@ -276,7 +280,33 @@
       "noticeText": "يتم تخزين مفتاح API الخاص بك بأمان على جهازك. يتم إعادة توجيهه فقط للبحث واسترجاع ترجمات الأفلام والمسلسلات. ويمكنك تحديثه أو إزالته في أي وقت.",
       "openFramezoo": "افتح Framezoo",
       "notConnectedNotice": "ملاحظة: أنت غير متصل بتذكرة حساب Framezoo. للمزامنة مباشرة مع \"Open Framezoo\"، افتح هذه الصفحة من تطبيق Framezoo Desktop أثناء تسجيل الدخول. بخلاف ذلك، انسخ عنوان URL للبيان أدناه لاستخدامه.",
-      "openFramezooDisabledTooltip": "يتطلب الفتح من Framezoo Desktop أثناء تسجيل الدخول"
+      "openFramezooDisabledTooltip": "يتطلب الفتح من Framezoo Desktop أثناء تسجيل الدخول",
+      "privacyLinkLabel": "سياسة الخصوصية",
+      "takedownLinkLabel": "حقوق الطبع والنشر وسياسة قانون الألفية الجديدة لحقوق طبع ونشر المواد الرقمية"
+    },
+    "providersStep": {
+      "optionalBadge": "خياري",
+      "title": "مفاتيح API لموفر الترجمة",
+      "manifestHint": "يقوم نسخ عنوان URL للبيان حاليًا بإعادة توجيه مفتاح Wyzie فقط لعناوين URL الخاصة بـ Stremio غير المصادق عليها؛ قم بتوصيل حساب Framezoo الخاص بك لمزامنة جميع مفاتيح الموفر.",
+      "description": "جميع المفاتيح أدناه اختيارية. عند توفيره، يفضل Framezoo مفتاحك الشخصي على الإعدادات الافتراضية المشتركة. الجرانيت المدمج لا يتطلب مفتاحًا.",
+      "getKeyButton": "احصل على مفتاح API"
+    },
+    "providers": {
+      "wyzie": {
+        "name": "ويزي",
+        "placeholder": "لصق مفتاح Wyzie API...",
+        "portalHint": "قم بإنشاء أو استرداد مفتاح API شخصي مجاني على متجر Wyzie."
+      },
+      "subsource": {
+        "name": "مصدر فرعي",
+        "placeholder": "لصق مفتاح واجهة برمجة تطبيقات المصدر الفرعي...",
+        "portalHint": "قم بتسجيل الدخول إلى SubSource، وافتح Account Dashboard → علامة التبويب API، وقم بإنشاء مفتاح."
+      },
+      "opensubtitles": {
+        "name": "OpenSubtitles.com",
+        "placeholder": "قم بلصق مفتاح OpenSubtitles.com REST API v1...",
+        "portalHint": "قم بتسجيل الدخول على OpenSubtitles.com، وافتح API Consumers، وقم بإنشاء مفتاح REST API v1."
+      }
     }
   },
   "legal": {

@@ -239,7 +239,8 @@
     },
     "hero": {
       "title": "Framezoo Altyazılarını Yapılandırma",
-      "description": "Daha hızlı altyazılara ulaşmak ve paylaşılan topluluk oranı sınırlarını aşmak için kişisel Wyzie API Anahtarınızı kurun."
+      "description": "Daha hızlı altyazılara ulaşmak ve paylaşılan topluluk oranı sınırlarını aşmak için kişisel Wyzie API Anahtarınızı kurun.",
+      "multiDescription": "Framezoo Altyazı sağlayıcılarının kendi hız sınırlarınızı kullanması için isteğe bağlı kişisel API anahtarlarını (BYOK) yapılandırın."
     },
     "pageTitle": "Framezoo Altyazılarını Yapılandırma | Çerçeve Hayvanat Bahçesi",
     "step1": {
@@ -261,7 +262,10 @@
         "serverError": "Wyzie sunucusu HTTP {{status}} döndürdü.",
         "invalid": "API Anahtarı geçersiz veya süresi dolmuş.",
         "networkError": "Sub.wyzie.io'ya bağlanırken ağ hatası. Lütfen bağlantınızı kontrol edin.",
-        "rateLimit": "API Anahtarı hız sınırlarını aştı."
+        "rateLimit": "API Anahtarı hız sınırlarını aştı.",
+        "networkErrorProvider": "{{provider}} doğrulama hizmetine ulaşılamadı. Lütfen tekrar deneyin.",
+        "serverErrorProvider": "{{provider}}, HTTP {{status}} değerini döndürdü.",
+        "verifyingProvider": "{{provider}} ile doğrulanıyor..."
       },
       "title": "Wyzie API Anahtarını Girin",
       "testButton": "API Anahtarını Test Et",
@@ -276,7 +280,33 @@
       "openFramezoo": "Framezoo'yu aç",
       "noticeText": "API Anahtarınız cihazınızda güvenle saklanır. Yalnızca film ve dizilerin altyazılarını aramak ve almak için iletilir. İstediğiniz zaman güncelleyebilir veya kaldırabilirsiniz.",
       "openFramezooDisabledTooltip": "Oturum açtığınızda Framezoo Masaüstünden açılması gerekir",
-      "notConnectedNotice": "Not: Framezoo hesap biletiyle bağlı değilsiniz. Doğrudan 'Framezoo'yu Aç' ile senkronizasyon yapmak için, oturum açmışken bu sayfayı Framezoo Masaüstü uygulamanızdan açın. Aksi takdirde, kullanmak için aşağıdaki Manifest URL'sini kopyalayın."
+      "notConnectedNotice": "Not: Framezoo hesap biletiyle bağlı değilsiniz. Doğrudan 'Framezoo'yu Aç' ile senkronizasyon yapmak için, oturum açmışken bu sayfayı Framezoo Masaüstü uygulamanızdan açın. Aksi takdirde, kullanmak için aşağıdaki Manifest URL'sini kopyalayın.",
+      "privacyLinkLabel": "Gizlilik Politikası",
+      "takedownLinkLabel": "Telif Hakkı ve DMCA Politikası"
+    },
+    "providersStep": {
+      "optionalBadge": "İsteğe bağlı",
+      "title": "Altyazı Sağlayıcı API Anahtarları",
+      "manifestHint": "Bildirim URL'sini Kopyala şu anda yalnızca kimliği doğrulanmamış Stremio URL'leri için Wyzie anahtarını iletmektedir; Tüm sağlayıcı anahtarlarını senkronize etmek için Framezoo hesabınızı bağlayın.",
+      "description": "Aşağıdaki tüm tuşlar isteğe bağlıdır. Sağlandığında, Framezoo kişisel anahtarınızı paylaşılan varsayılanlara tercih eder. Yerleşik Granit anahtar gerektirmez.",
+      "getKeyButton": "API Anahtarını Alın"
+    },
+    "providers": {
+      "wyzie": {
+        "name": "Wyzie",
+        "portalHint": "Wyzie Mağazasında ücretsiz bir kişisel API anahtarı oluşturun veya kullanın.",
+        "placeholder": "Wyzie API Anahtarını yapıştırın..."
+      },
+      "subsource": {
+        "portalHint": "SubSource'ta oturum açın, Hesap Kontrol Paneli → API sekmesini açın ve bir anahtar oluşturun.",
+        "name": "Alt Kaynak",
+        "placeholder": "Alt Kaynak API Anahtarını Yapıştır..."
+      },
+      "opensubtitles": {
+        "portalHint": "OpenSubtitles.com'da oturum açın, API Consumers'ı açın ve bir REST API v1 anahtarı oluşturun.",
+        "placeholder": "OpenSubtitles.com REST API v1 Anahtarını yapıştırın...",
+        "name": "OpenSubtitles.com"
+      }
     }
   },
   "legal": {

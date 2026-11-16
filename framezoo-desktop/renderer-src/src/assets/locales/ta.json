@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "உங்கள் சாவி உள்ளமைக்கப்பட்டுள்ளது (மாற்றுவதற்குச் சொடுக்கவும்)",
       "configureRequiredAction": "இந்த துணை நிரலை உள்ளமைக்கவும் (தேவை)",
       "customKeyActiveDesc": "உங்கள் தனிப்பட்ட Wyzie API விசையைப் பயன்படுத்துதல்",
+      "customKeyActiveProviders": "உங்கள் தனிப்பட்ட வசன API விசையைப் ({{providers}}) பயன்படுத்துதல்",
       "customKeyConfiguredBadge": "உங்கள் சாவி உள்ளமைக்கப்பட்டுள்ளது",
       "description": "துணை நிரல் விருப்பமானது. இந்த ஆப்ஸ் எந்த addonஐயும் தொகுக்கவோ, பரிந்துரைக்கவோ அல்லது ஹோஸ்ட் செய்யவோ இல்லை.",
       "disabled": "முடக்கப்பட்டது",

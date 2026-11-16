@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "Twój klucz został skonfigurowany (kliknij, aby zmienić)",
       "configureRequiredAction": "Skonfiguruj ten dodatek (wymagane)",
       "customKeyActiveDesc": "Korzystanie z osobistego klucza API Wyzie",
+      "customKeyActiveProviders": "Korzystanie z osobistego klucza API napisów ({{providers}})",
       "customKeyConfiguredBadge": "Twój klucz został skonfigurowany",
       "description": "Dodatki są opcjonalne. Ta aplikacja nie łączy, nie poleca ani nie hostuje żadnych dodatków.",
       "disabled": "Wyłączony",

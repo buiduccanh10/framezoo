@@ -228,7 +228,8 @@
   "subtitlesConfigure": {
     "hero": {
       "title": "កំណត់រចនាសម្ព័ន្ធចំណងជើងរង Framezoo",
-      "description": "ដំឡើង Wyzie API Key ផ្ទាល់ខ្លួនរបស់អ្នក ដើម្បីទទួលបានចំណងជើងរងលឿនជាងមុន និងរំលងដែនកំណត់អត្រាសហគមន៍ដែលបានចែករំលែក។"
+      "description": "ដំឡើង Wyzie API Key ផ្ទាល់ខ្លួនរបស់អ្នក ដើម្បីទទួលបានចំណងជើងរងលឿនជាងមុន និងរំលងដែនកំណត់អត្រាសហគមន៍ដែលបានចែករំលែក។",
+      "multiDescription": "កំណត់រចនាសម្ព័ន្ធសោ API ផ្ទាល់ខ្លួនស្រេចចិត្ត (BYOK) សម្រាប់អ្នកផ្តល់សេវាចំណងជើងរង Framezoo ដើម្បីប្រើដែនកំណត់អត្រាផ្ទាល់ខ្លួនរបស់អ្នក។"
     },
     "account": {
       "verifying": "ផ្ទៀងផ្ទាត់សំបុត្រគណនីពីកម្មវិធី Desktop...",
@@ -261,7 +262,10 @@
         "invalid": "API Key មិនត្រឹមត្រូវ ឬផុតកំណត់។",
         "networkError": "កំហុសបណ្តាញភ្ជាប់ទៅ sub.wyzie.io ។ សូមពិនិត្យមើលការតភ្ជាប់របស់អ្នក។",
         "rateLimit": "API Key មានអត្រាលើសកម្រិតកំណត់។",
-        "serverError": "ម៉ាស៊ីនមេ Wyzie ត្រឡប់ HTTP {{status}} ។"
+        "serverError": "ម៉ាស៊ីនមេ Wyzie ត្រឡប់ HTTP {{status}} ។",
+        "serverErrorProvider": "{{provider}} ត្រឡប់ HTTP {{status}} ។",
+        "verifyingProvider": "ផ្ទៀងផ្ទាត់ជាមួយ {{provider}}...",
+        "networkErrorProvider": "មិនអាចទៅដល់សេវាផ្ទៀងផ្ទាត់ {{provider}} បានទេ។ សូមព្យាយាមម្តងទៀត។"
       },
       "testButton": "សាកល្បង API Key",
       "title": "បញ្ចូល Wyzie API Key",
@@ -276,7 +280,33 @@
       "openFramezooDisabledTooltip": "តម្រូវឱ្យបើកពី Framezoo Desktop ពេលចូល",
       "notConnectedNotice": "ចំណាំ៖ អ្នកមិនត្រូវបានភ្ជាប់ជាមួយសំបុត្រគណនី Framezoo ទេ។ ដើម្បីធ្វើសមកាលកម្មដោយផ្ទាល់ជាមួយ 'Open Framezoo' សូមបើកទំព័រនេះពីកម្មវិធី Framezoo Desktop របស់អ្នក ខណៈពេលចូល។ បើមិនដូច្នេះទេ សូមចម្លង URL Manifest ខាងក្រោមដើម្បីប្រើវា។",
       "noticeText": "API Key របស់អ្នកត្រូវបានរក្សាទុកដោយសុវត្ថិភាពនៅលើឧបករណ៍របស់អ្នក។ វាត្រូវបានបញ្ជូនបន្តដើម្បីស្វែងរក និងទាញយកចំណងជើងរងសម្រាប់ភាពយន្ត និងស៊េរីប៉ុណ្ណោះ។ អ្នកអាចអាប់ដេត ឬលុបវាចេញបានគ្រប់ពេល។",
-      "copied": "ចម្លង!"
+      "copied": "ចម្លង!",
+      "privacyLinkLabel": "គោលការណ៍ឯកជនភាព",
+      "takedownLinkLabel": "គោលការណ៍រក្សាសិទ្ធិ និង DMCA"
+    },
+    "providersStep": {
+      "optionalBadge": "ស្រេចចិត្ត",
+      "getKeyButton": "ទទួលបាន API Key",
+      "title": "សោ API អ្នកផ្តល់ចំណងជើងរង",
+      "manifestHint": "ចម្លង Manifest URL បច្ចុប្បន្នបញ្ជូនតែគន្លឹះ Wyzie សម្រាប់ URLs Stremio ដែលមិនបានផ្ទៀងផ្ទាត់។ ភ្ជាប់គណនី Framezoo របស់អ្នកដើម្បីធ្វើសមកាលកម្មសោអ្នកផ្តល់សេវាទាំងអស់។",
+      "description": "គ្រាប់ចុចទាំងអស់ខាងក្រោមគឺស្រេចចិត្ត។ នៅពេលផ្តល់ជូន Framezoo ចូលចិត្តសោផ្ទាល់ខ្លួនរបស់អ្នកជាងការចែករំលែកលំនាំដើម។ ថ្មក្រានីតដែលភ្ជាប់មកជាមួយមិនត្រូវការសោ។"
+    },
+    "providers": {
+      "subsource": {
+        "name": "ប្រភពរង",
+        "placeholder": "បិទភ្ជាប់ SubSource API Key...",
+        "portalHint": "ចូលនៅលើ SubSource បើកគណនី Dashboard → ផ្ទាំង API ហើយបង្កើតកូនសោមួយ។"
+      },
+      "wyzie": {
+        "placeholder": "បិទភ្ជាប់ Wyzie API Key...",
+        "name": "វីហ្សី",
+        "portalHint": "បង្កើត ឬប្តូរយកសោ API ផ្ទាល់ខ្លួនដោយឥតគិតថ្លៃនៅលើ Wyzie Store ។"
+      },
+      "opensubtitles": {
+        "name": "OpenSubtitles.com",
+        "portalHint": "ចូលនៅលើ OpenSubtitles.com បើក API Consumers និងបង្កើត REST API v1 key។",
+        "placeholder": "បិទភ្ជាប់ OpenSubtitles.com REST API v1 Key..."
+      }
     }
   },
   "legal": {

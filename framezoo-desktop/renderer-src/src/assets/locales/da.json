@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "Din nøgle er blevet konfigureret (klik for at ændre)",
       "configureRequiredAction": "Konfigurer denne tilføjelse (påkrævet)",
       "customKeyActiveDesc": "Brug af din personlige Wyzie API-nøgle",
+      "customKeyActiveProviders": "Brug af din personlige API-nøgle til undertekster ({{providers}})",
       "customKeyConfiguredBadge": "Din nøgle er blevet konfigureret",
       "description": "Tilføjelser er valgfrie. Denne app samler, anbefaler eller hoster ikke nogen tilføjelse.",
       "disabled": "Handicappet",

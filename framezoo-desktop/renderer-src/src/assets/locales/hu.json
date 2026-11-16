@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "A kulcs konfigurálva lett (kattintson a módosításhoz)",
       "configureRequiredAction": "Konfigurálja ezt a kiegészítőt (Kötelező)",
       "customKeyActiveDesc": "Személyes Wyzie API-kulcs használata",
+      "customKeyActiveProviders": "Személyes felirat API-kulcs ({{providers}}) használata",
       "customKeyConfiguredBadge": "A kulcs konfigurálva lett",
       "description": "A kiegészítők nem kötelezőek. Ez az alkalmazás nem köt össze, ajánl vagy fogad semmilyen kiegészítőt.",
       "disabled": "Letiltva",

@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "آپ کی کلید ترتیب دی گئی ہے (تبدیل کرنے کے لیے کلک کریں)",
       "configureRequiredAction": "اس ایڈون کو کنفیگر کریں (ضروری)",
       "customKeyActiveDesc": "اپنی ذاتی Wyzie API کلید استعمال کرنا",
+      "customKeyActiveProviders": "اپنی ذاتی سب ٹائٹل API کلید کا استعمال کرنا ({{providers}})",
       "customKeyConfiguredBadge": "آپ کی کلید ترتیب دی گئی ہے۔",
       "description": "ایڈونز اختیاری ہیں۔ یہ ایپ کسی بھی ایڈون کو بنڈل، تجویز یا میزبانی نہیں کرتی ہے۔",
       "disabled": "معذور",

@@ -228,7 +228,8 @@
   "subtitlesConfigure": {
     "hero": {
       "title": "Konfigurera Framezoo-undertexter",
-      "description": "Konfigurera din personliga Wyzie API-nyckel för att få snabbare undertexter och kringgå delade gränser för gemenskapsavgifter."
+      "description": "Konfigurera din personliga Wyzie API-nyckel för att få snabbare undertexter och kringgå delade gränser för gemenskapsavgifter.",
+      "multiDescription": "Konfigurera valfria personliga API-nycklar (BYOK) för Framezoo Subtitles-leverantörer för att använda dina egna hastighetsgränser."
     },
     "account": {
       "configuringFor": "Konfigurera för konto:",
@@ -263,7 +264,10 @@
         "rateLimit": "API-nyckeln har överskridit hastighetsgränserna.",
         "networkError": "Nätverksfel vid anslutning till sub.wyzie.io. Kontrollera din anslutning.",
         "invalid": "API-nyckeln är ogiltig eller har löpt ut.",
-        "serverError": "Wyzie-servern returnerade HTTP {{status}}."
+        "serverError": "Wyzie-servern returnerade HTTP {{status}}.",
+        "verifyingProvider": "Verifierar med {{provider}}...",
+        "serverErrorProvider": "{{provider}} returnerade HTTP {{status}}.",
+        "networkErrorProvider": "Det gick inte att nå {{provider}} verifieringstjänsten. Försök igen."
       },
       "placeholder": "Klistra in din Wyzie API-nyckel här...",
       "clearButton": "Rensa nyckel"
@@ -276,7 +280,33 @@
       "noticeText": "Din API-nyckel lagras säkert på din enhet. Den vidarebefordras endast för att söka och hämta undertexter för filmer och serier. Du kan uppdatera eller ta bort den när som helst.",
       "copied": "Kopierade!",
       "copyManifest": "Kopiera Manifest URL",
-      "notConnectedNotice": "Obs: Du är inte ansluten till en Framezoo-kontobiljett. För att synkronisera direkt med 'Open Framezoo', öppna den här sidan från din Framezoo Desktop-app medan du är inloggad. Annars kopierar du Manifest-URL-adressen nedan för att använda den."
+      "notConnectedNotice": "Obs: Du är inte ansluten till en Framezoo-kontobiljett. För att synkronisera direkt med 'Open Framezoo', öppna den här sidan från din Framezoo Desktop-app medan du är inloggad. Annars kopierar du Manifest-URL-adressen nedan för att använda den.",
+      "privacyLinkLabel": "Sekretesspolicy",
+      "takedownLinkLabel": "Copyright & DMCA-policy"
+    },
+    "providersStep": {
+      "optionalBadge": "Frivillig",
+      "title": "API-nycklar för undertextleverantör",
+      "getKeyButton": "Hämta API-nyckel",
+      "description": "Alla nycklar nedan är valfria. När den tillhandahålls föredrar Framezoo din personliga nyckel framför delade standardinställningar. Inbyggd granit kräver ingen nyckel.",
+      "manifestHint": "Copy Manifest URL vidarebefordrar för närvarande endast Wyzie-nyckeln för oautentiserade Stremio-URL:er; anslut ditt Framezoo-konto för att synkronisera alla leverantörsnycklar."
+    },
+    "providers": {
+      "subsource": {
+        "portalHint": "Logga in på SubSource, öppna Account Dashboard → API-fliken och skapa en nyckel.",
+        "name": "Underkälla",
+        "placeholder": "Klistra in SubSource API Key..."
+      },
+      "wyzie": {
+        "portalHint": "Generera eller lös in en gratis personlig API-nyckel i Wyzie Store.",
+        "placeholder": "Klistra in Wyzie API-nyckel...",
+        "name": "Wyzie"
+      },
+      "opensubtitles": {
+        "portalHint": "Logga in på OpenSubtitles.com, öppna API Consumers och skapa en REST API v1-nyckel.",
+        "name": "OpenSubtitles.com",
+        "placeholder": "Klistra in OpenSubtitles.com REST API v1 Key..."
+      }
     }
   },
   "legal": {

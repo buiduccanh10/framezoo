@@ -228,7 +228,8 @@
   "subtitlesConfigure": {
     "hero": {
       "description": "Settu upp persónulega Wyzie API lykilinn þinn til að fá hraðari texta og komast framhjá gjaldtakmörkum samfélagsins.",
-      "title": "Stilla Framezoo texta"
+      "title": "Stilla Framezoo texta",
+      "multiDescription": "Stilltu valfrjálsa persónulega API lykla (BYOK) fyrir Framezoo textaveitur til að nota þín eigin gjaldtakmörk."
     },
     "account": {
       "configuringFor": "Stillir fyrir reikning:",
@@ -261,7 +262,10 @@
         "valid": "API lykill er í gildi og virkar!",
         "verifying": "Staðfestir með Wyzie...",
         "networkError": "Netvilla við að tengjast sub.wyzie.io. Vinsamlegast athugaðu tenginguna þína.",
-        "serverError": "Wyzie þjónn skilaði HTTP {{status}}."
+        "serverError": "Wyzie þjónn skilaði HTTP {{status}}.",
+        "networkErrorProvider": "Ekki tókst að ná í {{provider}} staðfestingarþjónustu. Vinsamlegast reyndu aftur.",
+        "serverErrorProvider": "{{provider}} skilaði HTTP {{status}}.",
+        "verifyingProvider": "Staðfestir með {{provider}}..."
       },
       "placeholder": "Límdu Wyzie API lykilinn þinn hér...",
       "testButton": "Prófaðu API lykil",
@@ -276,7 +280,33 @@
       "noticeText": "API lykillinn þinn er geymdur á öruggan hátt í tækinu þínu. Það er aðeins framsent til að leita og sækja texta fyrir kvikmyndir og seríur. Þú getur uppfært eða fjarlægt það hvenær sem er.",
       "noticeLabel": "Tilkynning:",
       "copied": "Afritað!",
-      "copyManifest": "Afritaðu vefslóð yfirlýsingarinnar"
+      "copyManifest": "Afritaðu vefslóð yfirlýsingarinnar",
+      "privacyLinkLabel": "Persónuverndarstefna",
+      "takedownLinkLabel": "Höfundarréttur og DMCA stefna"
+    },
+    "providersStep": {
+      "optionalBadge": "Valfrjálst",
+      "title": "API lyklar fyrir textaveitu",
+      "manifestHint": "Copy Manifest URL sendir sem stendur aðeins Wyzie lykilinn fyrir óstaðfestar Stremio vefslóðir; tengdu Framezoo reikningnum þínum til að samstilla alla lykla þjónustuveitunnar.",
+      "getKeyButton": "Fáðu API lykil",
+      "description": "Allir lyklar hér að neðan eru valfrjálsir. Þegar Framezoo er veittur kýs hann persónulega lykilinn þinn fram yfir sameiginlegar sjálfgefnar stillingar. Innbyggt granít þarf engan lykil."
+    },
+    "providers": {
+      "wyzie": {
+        "name": "Wyzie",
+        "placeholder": "Límdu Wyzie API lykil...",
+        "portalHint": "Búðu til eða innleystu ókeypis persónulegan API lykil í Wyzie Store."
+      },
+      "opensubtitles": {
+        "placeholder": "Límdu OpenSubtitles.com REST API v1 lykil...",
+        "portalHint": "Skráðu þig inn á OpenSubtitles.com, opnaðu API Consumers og búðu til REST API v1 lykil.",
+        "name": "OpenSubtitles.com"
+      },
+      "subsource": {
+        "portalHint": "Skráðu þig inn á SubSource, opnaðu Account Dashboard → API flipann og búðu til lykil.",
+        "name": "Undirheimild",
+        "placeholder": "Límdu SubSource API lykil..."
+      }
     }
   },
   "legal": {

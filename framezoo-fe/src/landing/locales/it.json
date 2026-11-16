@@ -239,7 +239,8 @@
     },
     "hero": {
       "title": "Configura i sottotitoli Framezoo",
-      "description": "Configura la tua chiave API Wyzie personale per ottenere sottotitoli più veloci e aggirare i limiti di velocità della community condivisa."
+      "description": "Configura la tua chiave API Wyzie personale per ottenere sottotitoli più veloci e aggirare i limiti di velocità della community condivisa.",
+      "multiDescription": "Configura chiavi API personali opzionali (BYOK) per i fornitori di sottotitoli Framezoo per utilizzare i tuoi limiti di velocità."
     },
     "pageTitle": "Configura i sottotitoli Framezoo | Framezoo",
     "step1": {
@@ -265,7 +266,10 @@
         "invalid": "La chiave API non è valida o è scaduta.",
         "serverError": "Il server Wyzie ha restituito HTTP {{status}}.",
         "verifying": "Verifica con Wyzie...",
-        "networkError": "Errore di rete durante la connessione a sub.wyzie.io. Per favore controlla la tua connessione."
+        "networkError": "Errore di rete durante la connessione a sub.wyzie.io. Per favore controlla la tua connessione.",
+        "serverErrorProvider": "{{provider}} ha restituito HTTP {{status}}.",
+        "verifyingProvider": "Verifica con {{provider}}...",
+        "networkErrorProvider": "Impossibile raggiungere il servizio di verifica {{provider}}. Per favore riprova."
       }
     },
     "step3": {
@@ -276,7 +280,33 @@
       "noticeLabel": "Avviso:",
       "notConnectedNotice": "Nota: non sei connesso a un ticket dell'account Framezoo. Per eseguire la sincronizzazione direttamente con \"Apri Framezoo\", apri questa pagina dall'app Framezoo Desktop dopo aver effettuato l'accesso. Altrimenti, copia l'URL manifest di seguito per utilizzarlo.",
       "noticeText": "La tua chiave API è archiviata in modo sicuro sul tuo dispositivo. Viene inoltrato solo per cercare e recuperare i sottotitoli per film e serie. Puoi aggiornarlo o rimuoverlo in qualsiasi momento.",
-      "copyManifest": "Copia l'URL manifest"
+      "copyManifest": "Copia l'URL manifest",
+      "privacyLinkLabel": "politica sulla riservatezza",
+      "takedownLinkLabel": "Politica sul diritto d'autore e DMCA"
+    },
+    "providersStep": {
+      "optionalBadge": "Opzionale",
+      "getKeyButton": "Ottieni la chiave API",
+      "title": "Chiavi API del fornitore di sottotitoli",
+      "description": "Tutti i tasti seguenti sono facoltativi. Quando fornita, Framezoo preferisce la tua chiave personale rispetto a quelle predefinite condivise. Il granito incorporato non richiede chiave.",
+      "manifestHint": "Copia URL manifest attualmente inoltra solo la chiave Wyzie per gli URL Stremio non autenticati; collega il tuo account Framezoo per sincronizzare tutte le chiavi del provider."
+    },
+    "providers": {
+      "wyzie": {
+        "name": "Wyzie",
+        "placeholder": "Incolla la chiave API Wyzie...",
+        "portalHint": "Genera o riscatta una chiave API personale gratuita sul Wyzie Store."
+      },
+      "opensubtitles": {
+        "name": "OpenSubtitles.com",
+        "placeholder": "Incolla la chiave API REST v1 di OpenSubtitles.com...",
+        "portalHint": "Accedi su OpenSubtitles.com, apri API Consumers e crea una chiave API REST v1."
+      },
+      "subsource": {
+        "name": "Sottofonte",
+        "portalHint": "Accedi a SubSource, apri Account Dashboard → scheda API e crea una chiave.",
+        "placeholder": "Incolla la chiave API della sorgente secondaria..."
+      }
     }
   },
   "legal": {

@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "המפתח שלך הוגדר (לחץ כדי לשנות)",
       "configureRequiredAction": "הגדר תוסף זה (נדרש)",
       "customKeyActiveDesc": "שימוש במפתח ה-API האישי שלך ב-Wyzie",
+      "customKeyActiveProviders": "שימוש במפתח ה-API האישי שלך לכתוביות ({{providers}})",
       "customKeyConfiguredBadge": "המפתח שלך הוגדר",
       "description": "תוספות הן אופציונליות. אפליקציה זו אינה מאגדת, ממליצה או מארחת תוסף כלשהו.",
       "disabled": "נָכֶה",

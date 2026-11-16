@@ -228,7 +228,8 @@
   "subtitlesConfigure": {
     "hero": {
       "description": "Nastavite svoj osebni ključ API-ja Wyzie, da dobite hitrejše podnapise in obidete skupne omejitve skupne stopnje.",
-      "title": "Konfigurirajte podnapise Framezoo"
+      "title": "Konfigurirajte podnapise Framezoo",
+      "multiDescription": "Konfigurirajte izbirne osebne ključe API (BYOK) za ponudnike podnapisov Framezoo, da bodo uporabljali vaše lastne omejitve hitrosti."
     },
     "pageTitle": "Konfigurirajte podnapise Framezoo | Framezoo",
     "account": {
@@ -263,7 +264,10 @@
         "rateLimit": "Ključ API je presegel omejitve hitrosti.",
         "invalid": "Ključ API je neveljaven ali je potekel.",
         "serverError": "Strežnik Wyzie je vrnil HTTP {{status}}.",
-        "networkError": "Omrežna napaka pri povezovanju s sub.wyzie.io. Preverite svojo povezavo."
+        "networkError": "Omrežna napaka pri povezovanju s sub.wyzie.io. Preverite svojo povezavo.",
+        "serverErrorProvider": "{{provider}} je vrnil HTTP {{status}}.",
+        "networkErrorProvider": "Storitve za preverjanje {{provider}} ni bilo mogoče doseči. prosim poskusite ponovno",
+        "verifyingProvider": "Preverjanje z {{provider}} ..."
       },
       "testing": "Preverjanje ...",
       "clearButton": "Tipka za brisanje"
@@ -276,7 +280,33 @@
       "copyManifest": "Kopiraj URL manifesta",
       "noticeText": "Vaš API ključ je varno shranjen v vaši napravi. Posreduje se samo za iskanje in pridobivanje podnapisov za filme in serije. Kadar koli ga lahko posodobite ali odstranite.",
       "copied": "Kopirano!",
-      "noticeLabel": "Obvestilo:"
+      "noticeLabel": "Obvestilo:",
+      "privacyLinkLabel": "Politika zasebnosti",
+      "takedownLinkLabel": "Pravilnik o avtorskih pravicah in DMCA"
+    },
+    "providersStep": {
+      "optionalBadge": "Neobvezno",
+      "title": "Ključi API ponudnika podnapisov",
+      "manifestHint": "Kopiraj manifestni URL trenutno posreduje samo ključ Wyzie za nepreverjene URL-je Stremio; povežite svoj račun Framezoo za sinhronizacijo vseh ključev ponudnika.",
+      "description": "Vsi spodnji ključi so neobvezni. Če je na voljo, ima Framezoo vaš osebni ključ raje kot privzete nastavitve v skupni rabi. Vgrajeni granit ne potrebuje ključa.",
+      "getKeyButton": "Pridobite ključ API"
+    },
+    "providers": {
+      "wyzie": {
+        "name": "Wyzie",
+        "portalHint": "Ustvarite ali izkoristite brezplačen osebni ključ API v trgovini Wyzie.",
+        "placeholder": "Prilepi ključ API Wyzie ..."
+      },
+      "subsource": {
+        "placeholder": "Prilepi ključ API SubSource ...",
+        "name": "Podvir",
+        "portalHint": "Prijavite se v SubSource, odprite nadzorno ploščo računa → zavihek API in ustvarite ključ."
+      },
+      "opensubtitles": {
+        "name": "OpenSubtitles.com",
+        "placeholder": "Prilepite ključ OpenSubtitles.com REST API v1 ...",
+        "portalHint": "Prijavite se na OpenSubtitles.com, odprite API Consumers in ustvarite ključ REST API v1."
+      }
     }
   },
   "legal": {

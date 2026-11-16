@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "Sua chave foi configurada (clique para alterar)",
       "configureRequiredAction": "Configure este complemento (Obrigatório)",
       "customKeyActiveDesc": "Usando sua chave de API pessoal do Wyzie",
+      "customKeyActiveProviders": "Usando sua chave pessoal da API de legendas ({{providers}})",
       "customKeyConfiguredBadge": "Sua chave foi configurada.",
       "description": "Os complementos são opcionais. Este aplicativo não agrupa, recomenda ou hospeda nenhum complemento.",
       "disabled": "Desabilitado",

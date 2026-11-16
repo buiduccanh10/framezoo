@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "Ihr Schlüssel wurde konfiguriert (zum Ändern klicken).",
       "configureRequiredAction": "Dieses Add-on konfigurieren (erforderlich)",
       "customKeyActiveDesc": "Verwendung Ihres persönlichen Wyzie-API-Schlüssels",
+      "customKeyActiveProviders": "Verwendung Ihres persönlichen Untertitel-API-Schlüssels ({{providers}})",
       "customKeyConfiguredBadge": "Ihr Schlüssel wurde konfiguriert",
       "description": "Add-ons sind optional. Diese App bündelt, empfiehlt oder hostet kein Add-on.",
       "disabled": "Deaktiviert",

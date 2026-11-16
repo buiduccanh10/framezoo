@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { type CSSProperties, useEffect, useRef, useState } from "react";
 
 import {
   type LandingLocale,
@@ -10,57 +10,140 @@ import { ArrowUpRightIcon } from "./LandingIcon";
 import { LandingLanguageSelector } from "./LandingLanguageSelector";
 import { LandingParticles } from "./LandingParticles";
 
-const WYZIE_REDEEM_URL = "https://store.wyzie.io/redeem";
-const BASE_MANIFEST_URL = "https://framezoo.top/addon/subtitles/manifest.json";
+type SubtitleProviderId = "wyzie" | "subsource" | "opensubtitles";
+type TestStatus = "idle" | "testing" | "success" | "error";
+
+interface ProviderMeta {
+  id: SubtitleProviderId;
+  storageKey: string;
+  portalUrl: string;
+}
+
+interface ProviderTestState {
+  status: TestStatus;
+  message: string;
+}
+
+export const SUBTITLE_PROVIDERS: readonly ProviderMeta[] = [
+  {
+    id: "wyzie",
+    storageKey: "framezoo.wyzie_api_key",
+    portalUrl: "https://store.wyzie.io/redeem",
+  },
+  {
+    id: "subsource",
+    storageKey: "framezoo.subsource_api_key",
+    portalUrl: "https://subsource.net/api-docs",
+  },
+  {
+    id: "opensubtitles",
+    storageKey: "framezoo.opensubtitles_api_key",
+    portalUrl: "https://www.opensubtitles.com/consumers",
+  },
+];
+
+const INITIAL_SHOW_KEYS: Record<SubtitleProviderId, boolean> = {
+  wyzie: false,
+  subsource: false,
+  opensubtitles: false,
+};
+
+const INITIAL_TEST_STATES: Record<SubtitleProviderId, ProviderTestState> = {
+  wyzie: { status: "idle", message: "" },
+  subsource: { status: "idle", message: "" },
+  opensubtitles: { status: "idle", message: "" },
+};
+
+const cardStyle: CSSProperties = {
+  background: "rgba(25, 18, 18, 0.8)",
+  border: "1px solid rgba(255, 225, 210, 0.12)",
+  borderRadius: "16px",
+  padding: "24px",
+  marginBottom: "24px",
+};
+
+const stepBadgeStyle: CSSProperties = {
+  display: "inline-flex",
+  alignItems: "center",
+  justifyContent: "center",
+  width: "28px",
+  height: "28px",
+  borderRadius: "50%",
+  background: "#e44f4f",
+  color: "#fff",
+  fontWeight: "bold",
+  fontSize: "14px",
+  flexShrink: 0,
+};
+
+const providerBlockStyle: CSSProperties = {
+  padding: "16px",
+  borderRadius: "12px",
+  background: "rgba(12, 9, 9, 0.55)",
+  border: "1px solid rgba(255, 225, 210, 0.1)",
+  display: "flex",
+  flexDirection: "column",
+  gap: "10px",
+};
+
+const inputStyle: CSSProperties = {
+  width: "100%",
+  padding: "11px 56px 11px 14px",
+  borderRadius: "10px",
+  border: "1px solid rgba(255, 225, 210, 0.2)",
+  background: "rgba(10, 8, 8, 0.9)",
+  color: "#fff",
+  fontSize: "0.95rem",
+  fontFamily: "monospace",
+  outline: "none",
+  boxSizing: "border-box",
+};
+
+function readInitialKeys(): Record<SubtitleProviderId, string> {
+  const result: Record<SubtitleProviderId, string> = {
+    wyzie: "",
+    subsource: "",
+    opensubtitles: "",
+  };
+  if (typeof window === "undefined") return result;
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const paramWyzie = (
+    urlParams.get("key") ||
+    urlParams.get("wyzie_key") ||
+    ""
+  ).trim();
+
+  for (const provider of SUBTITLE_PROVIDERS) {
+    if (provider.id === "wyzie" && paramWyzie) {
+      result.wyzie = paramWyzie;
+      continue;
+    }
+    try {
+      result[provider.id] =
+        window.localStorage.getItem(provider.storageKey) || "";
+    } catch {
+      // Storage unavailable
+    }
+  }
+  return result;
+}
 
 export function SubtitlesConfigurePage() {
   const [locale, setLocale] = useState<LandingLocale>(getInitialLandingLocale);
   const copy = getLandingCopy(locale);
   const t = copy.subtitlesConfigure;
 
-  const [apiKey, setApiKey] = useState(() => {
-    if (typeof window !== "undefined") {
-      const urlParams = new URLSearchParams(window.location.search);
-      const paramKey = urlParams.get("key") || urlParams.get("wyzie_key") || "";
-      if (paramKey) return paramKey.trim();
-      try {
-        return window.localStorage.getItem("framezoo.wyzie_api_key") || "";
-      } catch {
-        return "";
-      }
-    }
-    return "";
-  });
+  const [keys, setKeys] =
+    useState<Record<SubtitleProviderId, string>>(readInitialKeys);
+  const [showKeys, setShowKeys] =
+    useState<Record<SubtitleProviderId, boolean>>(INITIAL_SHOW_KEYS);
+  const [testStates, setTestStates] =
+    useState<Record<SubtitleProviderId, ProviderTestState>>(
+      INITIAL_TEST_STATES,
+    );
 
-  const [showKey, setShowKey] = useState(false);
-  const [subsourceKey, setSubsourceKey] = useState(() => {
-    if (typeof window !== "undefined") {
-      try {
-        return window.localStorage.getItem("framezoo.subsource_api_key") || "";
-      } catch {
-        return "";
-      }
-    }
-    return "";
-  });
-  const [opensubtitlesKey, setOpensubtitlesKey] = useState(() => {
-    if (typeof window !== "undefined") {
-      try {
-        return (
-          window.localStorage.getItem("framezoo.opensubtitles_api_key") || ""
-        );
-      } catch {
-        return "";
-      }
-    }
-    return "";
-  });
   const [copiedManifest, setCopiedManifest] = useState(false);
-  const [testStatus, setTestStatus] = useState<
-    "idle" | "testing" | "success" | "error"
-  >("idle");
-  const [testMessage, setTestMessage] = useState("");
-
   const [account, setAccount] = useState<{
     nickname: string;
     userId: string;
@@ -78,13 +161,8 @@ export function SubtitlesConfigurePage() {
     document.title = t.pageTitle;
   }, [t.pageTitle]);
 
-  // Handle one-time ticket verification from Desktop App handoff
-  const getApiUrl = (endpoint: string) => {
-    // The public frontend proxies /addon/* to the backend in both Vite and prod.
-    // Keep ticket/session calls same-origin so a stale backend build URL cannot
-    // send the one-time ticket to a different host.
-    return endpoint;
-  };
+  // Same-origin endpoints ensure /addon/* proxies cleanly in both Vite dev and prod nginx.
+  const getApiUrl = (endpoint: string) => endpoint;
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -106,18 +184,13 @@ export function SubtitlesConfigurePage() {
           if (data.valid) {
             setAccount({ nickname: data.nickname, userId: data.userId });
             setConfigureToken(data.configureToken || "");
-            if (data.credentials) {
-              if (data.credentials.wyzie) setApiKey(data.credentials.wyzie);
-              if (data.credentials.subsource) {
-                setSubsourceKey(data.credentials.subsource);
-              }
-              if (data.credentials.opensubtitles) {
-                setOpensubtitlesKey(data.credentials.opensubtitles);
-              }
-            } else if (data.currentApiKey) {
-              setApiKey(data.currentApiKey);
-            }
-            // Clear the single-use ticket from address bar
+            setKeys((prev) => ({
+              wyzie:
+                data.credentials?.wyzie || data.currentApiKey || prev.wyzie,
+              subsource: data.credentials?.subsource || prev.subsource,
+              opensubtitles:
+                data.credentials?.opensubtitles || prev.opensubtitles,
+            }));
             window.history.replaceState({}, "", window.location.pathname);
           }
         }
@@ -129,63 +202,154 @@ export function SubtitlesConfigurePage() {
     })();
   }, []);
 
-  const handleSaveLocal = (newKey: string) => {
-    const trimmed = newKey.trim();
-    setApiKey(trimmed);
+  const handleKeyChange = (provider: ProviderMeta, rawValue: string) => {
+    const trimmed = rawValue.trim();
+    setKeys((prev) => ({ ...prev, [provider.id]: rawValue }));
     try {
       if (trimmed) {
-        window.localStorage.setItem("framezoo.wyzie_api_key", trimmed);
+        window.localStorage.setItem(provider.storageKey, trimmed);
       } else {
-        window.localStorage.removeItem("framezoo.wyzie_api_key");
+        window.localStorage.removeItem(provider.storageKey);
       }
     } catch {
-      // Ignore in private storage
+      // Storage unavailable
     }
-    setTestStatus("idle");
-    setTestMessage("");
+    setTestStates((prev) => ({
+      ...prev,
+      [provider.id]: { status: "idle", message: "" },
+    }));
   };
 
-  const handleTestKey = async () => {
-    const trimmed = apiKey.trim();
+  const handleTestKey = async (providerId: SubtitleProviderId) => {
+    const trimmed = keys[providerId].trim();
+    const providerName = t.providers[providerId].name;
+
     if (!trimmed) {
-      setTestStatus("error");
-      setTestMessage(t.step2.messages.empty);
+      setTestStates((prev) => ({
+        ...prev,
+        [providerId]: { status: "error", message: t.step2.messages.empty },
+      }));
       return;
     }
 
-    setTestStatus("testing");
-    setTestMessage(t.step2.messages.verifying);
+    setTestStates((prev) => ({
+      ...prev,
+      [providerId]: {
+        status: "testing",
+        message: t.step2.messages.verifyingProvider.replace(
+          "{{provider}}",
+          providerName,
+        ),
+      },
+    }));
+
+    const setResult = (status: TestStatus, message: string) => {
+      setTestStates((prev) => ({
+        ...prev,
+        [providerId]: { status, message },
+      }));
+    };
 
     try {
-      // Test search request with a well-known IMDb ID (tt1877830 - Men in Black 3)
-      const testUrl = `https://sub.wyzie.io/search?id=tt1877830&key=${encodeURIComponent(trimmed)}`;
-      const response = await fetch(testUrl, {
-        signal: AbortSignal.timeout(8000),
+      const response = await fetch(getApiUrl("/addon/subtitles/api/test"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        signal: AbortSignal.timeout(10000),
+        body: JSON.stringify({ provider: providerId, apiKey: trimmed }),
       });
 
       if (response.ok) {
-        setTestStatus("success");
-        setTestMessage(`✓ ${t.step2.messages.valid}`);
-      } else if (response.status === 401 || response.status === 403) {
-        setTestStatus("error");
-        setTestMessage(`✕ ${t.step2.messages.invalid}`);
-      } else if (response.status === 429) {
-        setTestStatus("error");
-        setTestMessage(`✕ ${t.step2.messages.rateLimit}`);
+        const data = (await response.json()) as {
+          valid?: boolean;
+          status?: string;
+          httpStatus?: number;
+        };
+        if (data.valid) {
+          setResult("success", `✓ ${t.step2.messages.valid}`);
+          return;
+        }
+        if (data.status === "invalid") {
+          setResult("error", `✕ ${t.step2.messages.invalid}`);
+          return;
+        }
+        if (data.status === "rate_limit") {
+          setResult("error", `✕ ${t.step2.messages.rateLimit}`);
+          return;
+        }
+        if (data.status === "error" && data.httpStatus) {
+          setResult(
+            "error",
+            `✕ ${t.step2.messages.serverErrorProvider
+              .replace("{{provider}}", providerName)
+              .replace("{{status}}", String(data.httpStatus))}`,
+          );
+          return;
+        }
+        setResult(
+          "error",
+          `✕ ${t.step2.messages.networkErrorProvider.replace(
+            "{{provider}}",
+            providerName,
+          )}`,
+        );
+        return;
+      }
+
+      if (providerId !== "wyzie") {
+        setResult(
+          "error",
+          `✕ ${t.step2.messages.serverErrorProvider
+            .replace("{{provider}}", providerName)
+            .replace("{{status}}", String(response.status))}`,
+        );
+        return;
+      }
+    } catch {
+      if (providerId !== "wyzie") {
+        setResult(
+          "error",
+          `✕ ${t.step2.messages.networkErrorProvider.replace(
+            "{{provider}}",
+            providerName,
+          )}`,
+        );
+        return;
+      }
+    }
+
+    // Fallback for standalone frontend dev when backend proxy is unavailable (Wyzie allows browser CORS).
+    try {
+      const wyzieRes = await fetch(
+        `https://sub.wyzie.io/search?id=tt1877830&key=${encodeURIComponent(trimmed)}`,
+        { signal: AbortSignal.timeout(8000) },
+      );
+      if (wyzieRes.ok) {
+        setResult("success", `✓ ${t.step2.messages.valid}`);
+      } else if (wyzieRes.status === 401 || wyzieRes.status === 403) {
+        setResult("error", `✕ ${t.step2.messages.invalid}`);
+      } else if (wyzieRes.status === 429) {
+        setResult("error", `✕ ${t.step2.messages.rateLimit}`);
       } else {
-        setTestStatus("error");
-        setTestMessage(
-          `✕ ${t.step2.messages.serverError.replace("{{status}}", String(response.status))}`,
+        setResult(
+          "error",
+          `✕ ${t.step2.messages.serverErrorProvider
+            .replace("{{provider}}", providerName)
+            .replace("{{status}}", String(wyzieRes.status))}`,
         );
       }
     } catch {
-      setTestStatus("error");
-      setTestMessage(`✕ ${t.step2.messages.networkError}`);
+      setResult(
+        "error",
+        `✕ ${t.step2.messages.networkErrorProvider.replace(
+          "{{provider}}",
+          providerName,
+        )}`,
+      );
     }
   };
 
   const getManifestUrl = () => {
-    const trimmed = apiKey.trim();
+    const trimmed = keys.wyzie.trim();
     const origin =
       typeof window !== "undefined" && window.location.origin
         ? window.location.origin
@@ -195,19 +359,9 @@ export function SubtitlesConfigurePage() {
     return `${base}?key=${encodeURIComponent(trimmed)}`;
   };
 
-  const getDesktopDeepLink = (status?: "success" | "failed") => {
-    return status
-      ? `framezoo://addons?subtitles_configured=${status}`
-      : "framezoo://addons";
-  };
-
   const handleOpenFramezoo = async () => {
     if (!configureToken) return;
-    const trimmedWyzie = apiKey.trim();
-    const trimmedSubsource = subsourceKey.trim();
-    const trimmedOpenSubs = opensubtitlesKey.trim();
 
-    // 1. If we have a configureToken from Desktop handoff, post to backend to persist to user account
     setIsSavingRemote(true);
     setSaveRemoteStatus("idle");
     setSaveRemoteMessage("");
@@ -220,9 +374,9 @@ export function SubtitlesConfigurePage() {
         body: JSON.stringify({
           configureToken,
           credentials: {
-            wyzie: trimmedWyzie,
-            subsource: trimmedSubsource,
-            opensubtitles: trimmedOpenSubs,
+            wyzie: keys.wyzie.trim(),
+            subsource: keys.subsource.trim(),
+            opensubtitles: keys.opensubtitles.trim(),
           },
         }),
       });
@@ -243,9 +397,7 @@ export function SubtitlesConfigurePage() {
       setIsSavingRemote(false);
     }
 
-    // 2. Trigger desktop deep link to bring Framezoo to foreground
-    const deepLink = getDesktopDeepLink(isSuccess ? "success" : "failed");
-    window.location.href = deepLink;
+    window.location.href = `framezoo://addons?subtitles_configured=${isSuccess ? "success" : "failed"}`;
   };
 
   const handleCopyManifest = async () => {
@@ -254,9 +406,13 @@ export function SubtitlesConfigurePage() {
       setCopiedManifest(true);
       setTimeout(() => setCopiedManifest(false), 2500);
     } catch {
-      // Fallback
+      // Clipboard unavailable
     }
   };
+
+  const hasNonWyzieKeys = Boolean(
+    keys.subsource.trim() || keys.opensubtitles.trim(),
+  );
 
   return (
     <div className="landing-shell">
@@ -290,7 +446,6 @@ export function SubtitlesConfigurePage() {
         className="container configure-addon-page"
         style={{ maxWidth: "800px", margin: "40px auto", padding: "0 20px" }}
       >
-        {/* Title Header */}
         <section
           className="configure-hero"
           style={{ textAlign: "center", marginBottom: "32px" }}
@@ -329,11 +484,10 @@ export function SubtitlesConfigurePage() {
               margin: "0 auto",
             }}
           >
-            {t.hero.description}
+            {t.hero.multiDescription}
           </p>
         </section>
 
-        {/* Account Handoff Status */}
         {isVerifyingTicket && (
           <div
             style={{
@@ -366,11 +520,9 @@ export function SubtitlesConfigurePage() {
               fontSize: "0.95rem",
             }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <span>
-                {t.account.configuringFor} <strong>{account.nickname}</strong>
-              </span>
-            </div>
+            <span>
+              {t.account.configuringFor} <strong>{account.nickname}</strong>
+            </span>
             <span
               style={{
                 fontSize: "0.8rem",
@@ -384,104 +536,244 @@ export function SubtitlesConfigurePage() {
           </div>
         )}
 
-        {/* Step 1: Guide */}
-        <section
-          className="configure-card"
-          style={{
-            background: "rgba(25, 18, 18, 0.8)",
-            border: "1px solid rgba(255, 225, 210, 0.12)",
-            borderRadius: "16px",
-            padding: "24px",
-            marginBottom: "24px",
-          }}
-        >
+        {/* Step 1: Uniform Subtitle Provider Keys */}
+        <section className="configure-card" style={cardStyle}>
           <div
             style={{
               display: "flex",
               alignItems: "center",
               gap: "10px",
-              marginBottom: "16px",
+              marginBottom: "10px",
             }}
           >
-            <span
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: "28px",
-                height: "28px",
-                borderRadius: "50%",
-                background: "#e44f4f",
-                color: "#fff",
-                fontWeight: "bold",
-                fontSize: "14px",
-              }}
-            >
-              {t.step1.step}
-            </span>
+            <span style={stepBadgeStyle}>{t.providersStep.step}</span>
             <h2 style={{ fontSize: "1.2rem", fontWeight: "600", margin: 0 }}>
-              {t.step1.title}
+              {t.providersStep.title}
             </h2>
           </div>
 
           <p
             style={{
               color: "var(--landing-muted, #a39595)",
-              fontSize: "0.95rem",
-              lineHeight: "1.6",
-              marginBottom: "16px",
+              fontSize: "0.92rem",
+              lineHeight: "1.55",
+              margin: "0 0 18px",
             }}
           >
-            {t.step1.description}
+            {t.providersStep.description}
           </p>
 
-          <a
-            href={WYZIE_REDEEM_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "8px",
-              background: "rgba(228, 79, 79, 0.15)",
-              color: "#ff6b6b",
-              border: "1px solid rgba(228, 79, 79, 0.4)",
-              borderRadius: "10px",
-              padding: "10px 18px",
-              fontWeight: "500",
-              textDecoration: "none",
-              transition: "all 0.2s",
-            }}
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "14px" }}
           >
-            <span>{t.step1.openStore}</span>
-            <ArrowUpRightIcon />
-          </a>
+            {SUBTITLE_PROVIDERS.map((provider) => {
+              const providerCopy = t.providers[provider.id];
+              const value = keys[provider.id];
+              const trimmed = value.trim();
+              const isShown = showKeys[provider.id];
+              const testState = testStates[provider.id];
 
-          <ol
-            style={{
-              marginTop: "16px",
-              paddingLeft: "20px",
-              color: "var(--landing-muted, #a39595)",
-              fontSize: "0.9rem",
-              lineHeight: "1.6",
-            }}
-          >
-            <li>{t.step1.step1}</li>
-            <li>{t.step1.step2}</li>
-            <li>{t.step1.step3}</li>
-          </ol>
+              return (
+                <div
+                  key={provider.id}
+                  data-provider-card={provider.id}
+                  style={providerBlockStyle}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      flexWrap: "wrap",
+                      gap: "10px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                      }}
+                    >
+                      <label
+                        htmlFor={`subtitle-key-${provider.id}`}
+                        style={{ fontSize: "1rem", fontWeight: "600" }}
+                      >
+                        {providerCopy.name}
+                      </label>
+                      <span
+                        style={{
+                          fontSize: "0.75rem",
+                          padding: "2px 8px",
+                          borderRadius: "999px",
+                          background: "rgba(255, 255, 255, 0.08)",
+                          color: "var(--landing-muted, #a39595)",
+                        }}
+                      >
+                        {t.providersStep.optionalBadge}
+                      </span>
+                    </div>
+
+                    <a
+                      href={provider.portalUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "6px",
+                        background: "rgba(228, 79, 79, 0.14)",
+                        color: "#ff8585",
+                        border: "1px solid rgba(228, 79, 79, 0.35)",
+                        borderRadius: "8px",
+                        padding: "6px 12px",
+                        fontSize: "0.84rem",
+                        fontWeight: "500",
+                        textDecoration: "none",
+                      }}
+                    >
+                      <span>{t.providersStep.getKeyButton}</span>
+                      <ArrowUpRightIcon />
+                    </a>
+                  </div>
+
+                  <p
+                    style={{
+                      margin: 0,
+                      fontSize: "0.86rem",
+                      color: "var(--landing-muted, #a39595)",
+                      lineHeight: "1.45",
+                    }}
+                  >
+                    {providerCopy.portalHint}
+                  </p>
+
+                  <div style={{ position: "relative", width: "100%" }}>
+                    <input
+                      id={`subtitle-key-${provider.id}`}
+                      type={isShown ? "text" : "password"}
+                      value={value}
+                      onChange={(e) =>
+                        handleKeyChange(provider, e.target.value)
+                      }
+                      placeholder={providerCopy.placeholder}
+                      autoComplete="off"
+                      spellCheck={false}
+                      style={inputStyle}
+                    />
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setShowKeys((prev) => ({
+                          ...prev,
+                          [provider.id]: !prev[provider.id],
+                        }))
+                      }
+                      style={{
+                        position: "absolute",
+                        right: "12px",
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        background: "none",
+                        border: "none",
+                        color: "var(--landing-muted, #a39595)",
+                        cursor: "pointer",
+                        fontSize: "0.82rem",
+                        padding: "4px",
+                      }}
+                    >
+                      {isShown ? t.step2.hide : t.step2.show}
+                    </button>
+                  </div>
+
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      flexWrap: "wrap",
+                      gap: "10px",
+                    }}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => void handleTestKey(provider.id)}
+                      disabled={testState.status === "testing" || !trimmed}
+                      style={{
+                        padding: "7px 14px",
+                        borderRadius: "8px",
+                        background: trimmed
+                          ? "rgba(255, 255, 255, 0.1)"
+                          : "rgba(255, 255, 255, 0.05)",
+                        border: "1px solid rgba(255, 255, 255, 0.18)",
+                        color: trimmed ? "#fff" : "rgba(255, 255, 255, 0.4)",
+                        cursor: trimmed ? "pointer" : "not-allowed",
+                        fontSize: "0.85rem",
+                        fontWeight: "500",
+                      }}
+                    >
+                      {testState.status === "testing"
+                        ? t.step2.testing
+                        : t.step2.testButton}
+                    </button>
+
+                    {trimmed && (
+                      <button
+                        type="button"
+                        onClick={() => handleKeyChange(provider, "")}
+                        style={{
+                          padding: "7px 12px",
+                          borderRadius: "8px",
+                          background: "none",
+                          border: "none",
+                          color: "rgba(255, 120, 120, 0.85)",
+                          cursor: "pointer",
+                          fontSize: "0.84rem",
+                        }}
+                      >
+                        {t.step2.clearButton}
+                      </button>
+                    )}
+
+                    {testState.message && (
+                      <span
+                        style={{
+                          fontSize: "0.84rem",
+                          padding: "5px 10px",
+                          borderRadius: "6px",
+                          background:
+                            testState.status === "success"
+                              ? "rgba(46, 133, 64, 0.2)"
+                              : testState.status === "testing"
+                                ? "rgba(255, 255, 255, 0.06)"
+                                : "rgba(180, 40, 40, 0.2)",
+                          border:
+                            testState.status === "success"
+                              ? "1px solid rgba(46, 133, 64, 0.4)"
+                              : testState.status === "testing"
+                                ? "1px solid rgba(255, 255, 255, 0.14)"
+                                : "1px solid rgba(180, 40, 40, 0.4)",
+                          color:
+                            testState.status === "success"
+                              ? "#86efac"
+                              : testState.status === "testing"
+                                ? "var(--landing-muted, #a39595)"
+                                : "#fca5a5",
+                        }}
+                      >
+                        {testState.message}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </section>
 
-        {/* Step 2: Input API Key */}
+        {/* Step 2: Install & Apply */}
         <section
           className="configure-card"
-          style={{
-            background: "rgba(25, 18, 18, 0.8)",
-            border: "1px solid rgba(255, 225, 210, 0.12)",
-            borderRadius: "16px",
-            padding: "24px",
-            marginBottom: "24px",
-          }}
+          style={{ ...cardStyle, marginBottom: "32px" }}
         >
           <div
             style={{
@@ -491,286 +783,7 @@ export function SubtitlesConfigurePage() {
               marginBottom: "16px",
             }}
           >
-            <span
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: "28px",
-                height: "28px",
-                borderRadius: "50%",
-                background: "#e44f4f",
-                color: "#fff",
-                fontWeight: "bold",
-                fontSize: "14px",
-              }}
-            >
-              {t.step2.step}
-            </span>
-            <h2 style={{ fontSize: "1.2rem", fontWeight: "600", margin: 0 }}>
-              {t.step2.title}
-            </h2>
-          </div>
-
-          <div
-            style={{ display: "flex", flexDirection: "column", gap: "12px" }}
-          >
-            <div style={{ position: "relative", width: "100%" }}>
-              <input
-                type={showKey ? "text" : "password"}
-                value={apiKey}
-                onChange={(e) => handleSaveLocal(e.target.value)}
-                placeholder={t.step2.placeholder}
-                style={{
-                  width: "100%",
-                  padding: "12px 48px 12px 16px",
-                  borderRadius: "10px",
-                  border: "1px solid rgba(255, 225, 210, 0.2)",
-                  background: "rgba(10, 8, 8, 0.9)",
-                  color: "#fff",
-                  fontSize: "1rem",
-                  fontFamily: "monospace",
-                  outline: "none",
-                  boxSizing: "border-box",
-                }}
-              />
-              <button
-                type="button"
-                onClick={() => setShowKey(!showKey)}
-                style={{
-                  position: "absolute",
-                  right: "12px",
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  background: "none",
-                  border: "none",
-                  color: "var(--landing-muted, #a39595)",
-                  cursor: "pointer",
-                  fontSize: "0.85rem",
-                  padding: "4px",
-                }}
-              >
-                {showKey ? t.step2.hide : t.step2.show}
-              </button>
-            </div>
-
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "12px",
-                marginTop: "4px",
-              }}
-            >
-              <button
-                type="button"
-                onClick={handleTestKey}
-                disabled={testStatus === "testing" || !apiKey.trim()}
-                style={{
-                  padding: "8px 18px",
-                  borderRadius: "8px",
-                  background: apiKey.trim()
-                    ? "rgba(255, 255, 255, 0.1)"
-                    : "rgba(255, 255, 255, 0.05)",
-                  border: "1px solid rgba(255, 255, 255, 0.2)",
-                  color: apiKey.trim() ? "#fff" : "rgba(255, 255, 255, 0.4)",
-                  cursor: apiKey.trim() ? "pointer" : "not-allowed",
-                  fontSize: "0.9rem",
-                  fontWeight: "500",
-                }}
-              >
-                {testStatus === "testing"
-                  ? t.step2.testing
-                  : t.step2.testButton}
-              </button>
-
-              {apiKey.trim() && (
-                <button
-                  type="button"
-                  onClick={() => handleSaveLocal("")}
-                  style={{
-                    padding: "8px 14px",
-                    borderRadius: "8px",
-                    background: "none",
-                    border: "none",
-                    color: "rgba(255, 120, 120, 0.8)",
-                    cursor: "pointer",
-                    fontSize: "0.85rem",
-                  }}
-                >
-                  {t.step2.clearButton}
-                </button>
-              )}
-            </div>
-
-            {testMessage && (
-              <div
-                style={{
-                  padding: "10px 14px",
-                  borderRadius: "8px",
-                  fontSize: "0.9rem",
-                  background:
-                    testStatus === "success"
-                      ? "rgba(46, 133, 64, 0.2)"
-                      : "rgba(180, 40, 40, 0.2)",
-                  border:
-                    testStatus === "success"
-                      ? "1px solid rgba(46, 133, 64, 0.4)"
-                      : "1px solid rgba(180, 40, 40, 0.4)",
-                  color: testStatus === "success" ? "#86efac" : "#fca5a5",
-                }}
-              >
-                {testMessage}
-              </div>
-            )}
-
-            <div
-              style={{
-                marginTop: "12px",
-                paddingTop: "14px",
-                borderTop: "1px solid rgba(255, 225, 210, 0.12)",
-                display: "grid",
-                gap: "12px",
-              }}
-            >
-              <div>
-                <label
-                  style={{
-                    display: "block",
-                    fontSize: "0.85rem",
-                    color: "var(--landing-muted, #a39595)",
-                    marginBottom: "6px",
-                  }}
-                >
-                  {locale === "vi"
-                    ? "SubSource API Key (Tùy chọn — ưu tiên key riêng)"
-                    : "SubSource API Key (Optional — prefers your personal key)"}
-                </label>
-                <input
-                  type={showKey ? "text" : "password"}
-                  value={subsourceKey}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    setSubsourceKey(val);
-                    try {
-                      if (val.trim()) {
-                        window.localStorage.setItem(
-                          "framezoo.subsource_api_key",
-                          val.trim(),
-                        );
-                      } else {
-                        window.localStorage.removeItem(
-                          "framezoo.subsource_api_key",
-                        );
-                      }
-                    } catch {
-                      // Storage unavailable
-                    }
-                  }}
-                  placeholder="SubSource API key..."
-                  style={{
-                    width: "100%",
-                    padding: "10px 14px",
-                    borderRadius: "10px",
-                    border: "1px solid rgba(255, 225, 210, 0.2)",
-                    background: "rgba(10, 8, 8, 0.9)",
-                    color: "#fff",
-                    fontSize: "0.95rem",
-                    fontFamily: "monospace",
-                    outline: "none",
-                    boxSizing: "border-box",
-                  }}
-                />
-              </div>
-
-              <div>
-                <label
-                  style={{
-                    display: "block",
-                    fontSize: "0.85rem",
-                    color: "var(--landing-muted, #a39595)",
-                    marginBottom: "6px",
-                  }}
-                >
-                  {locale === "vi"
-                    ? "OpenSubtitles.com REST API v1 Key (Tùy chọn)"
-                    : "OpenSubtitles.com REST API v1 Key (Optional)"}
-                </label>
-                <input
-                  type={showKey ? "text" : "password"}
-                  value={opensubtitlesKey}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    setOpensubtitlesKey(val);
-                    try {
-                      if (val.trim()) {
-                        window.localStorage.setItem(
-                          "framezoo.opensubtitles_api_key",
-                          val.trim(),
-                        );
-                      } else {
-                        window.localStorage.removeItem(
-                          "framezoo.opensubtitles_api_key",
-                        );
-                      }
-                    } catch {
-                      // Storage unavailable
-                    }
-                  }}
-                  placeholder="OpenSubtitles.com API key..."
-                  style={{
-                    width: "100%",
-                    padding: "10px 14px",
-                    borderRadius: "10px",
-                    border: "1px solid rgba(255, 225, 210, 0.2)",
-                    background: "rgba(10, 8, 8, 0.9)",
-                    color: "#fff",
-                    fontSize: "0.95rem",
-                    fontFamily: "monospace",
-                    outline: "none",
-                    boxSizing: "border-box",
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Step 3: Install & Apply */}
-        <section
-          className="configure-card"
-          style={{
-            background: "rgba(25, 18, 18, 0.8)",
-            border: "1px solid rgba(255, 225, 210, 0.12)",
-            borderRadius: "16px",
-            padding: "24px",
-            marginBottom: "32px",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "10px",
-              marginBottom: "16px",
-            }}
-          >
-            <span
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: "28px",
-                height: "28px",
-                borderRadius: "50%",
-                background: "#e44f4f",
-                color: "#fff",
-                fontWeight: "bold",
-                fontSize: "14px",
-              }}
-            >
-              {t.step3.step}
-            </span>
+            <span style={stepBadgeStyle}>{t.step3.step}</span>
             <h2 style={{ fontSize: "1.2rem", fontWeight: "600", margin: 0 }}>
               {t.step3.title}
             </h2>
@@ -785,7 +798,6 @@ export function SubtitlesConfigurePage() {
               gap: "14px",
             }}
           >
-            {/* Option 1: Open Framezoo */}
             <button
               type="button"
               onClick={handleOpenFramezoo}
@@ -825,7 +837,6 @@ export function SubtitlesConfigurePage() {
               </span>
             </button>
 
-            {/* Separator: or */}
             <span
               style={{
                 color: "var(--landing-muted, #a39595)",
@@ -838,7 +849,6 @@ export function SubtitlesConfigurePage() {
               {t.step3.or}
             </span>
 
-            {/* Option 2: Copy Manifest URL */}
             <button
               type="button"
               onClick={handleCopyManifest}
@@ -879,6 +889,7 @@ export function SubtitlesConfigurePage() {
               }}
             >
               {t.step3.notConnectedNotice}
+              {hasNonWyzieKeys ? ` ${t.providersStep.manifestHint}` : ""}
             </div>
           )}
 
@@ -923,10 +934,24 @@ export function SubtitlesConfigurePage() {
               border: "1px dashed rgba(255, 255, 255, 0.1)",
               color: "var(--landing-muted, #a39595)",
               fontSize: "0.85rem",
-              lineHeight: "1.5",
+              lineHeight: "1.55",
             }}
           >
-            <strong>{t.step3.noticeLabel}</strong> {t.step3.noticeText}
+            <strong>{t.step3.noticeLabel}</strong> {t.step3.noticeText}{" "}
+            <a
+              href="/legal/privacy"
+              style={{ color: "#e2e8f0", textDecoration: "underline" }}
+            >
+              {t.step3.privacyLinkLabel}
+            </a>{" "}
+            &amp;{" "}
+            <a
+              href="/legal/dmca"
+              style={{ color: "#e2e8f0", textDecoration: "underline" }}
+            >
+              {t.step3.takedownLinkLabel}
+            </a>
+            .
           </div>
         </section>
       </main>

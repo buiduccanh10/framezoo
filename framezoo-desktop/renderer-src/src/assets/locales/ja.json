@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "キーが設定されました（クリックして変更）",
       "configureRequiredAction": "このアドオンを設定する（必須）",
       "customKeyActiveDesc": "個人のWyzie APIキーを使用する",
+      "customKeyActiveProviders": "個人用字幕APIキー（{{providers}}）を使用します。",
       "customKeyConfiguredBadge": "キーが設定されました",
       "description": "アドオンはオプションです。このアプリはアドオンをバンドルしたり、推奨したり、ホストしたりするものではありません。",
       "disabled": "無効",

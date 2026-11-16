@@ -13,8 +13,16 @@ COPY framezoo-mobile/package.json ./framezoo-mobile/package.json
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile --filter framezoo-fe...
 
 ARG BACKEND_URL
+ARG VITE_LEGAL_OPERATOR_NAME
+ARG VITE_LEGAL_OPERATOR_ADDRESS
+ARG VITE_LEGAL_EMAIL
+ARG VITE_LEGAL_PHONE
 
 ENV VITE_BACKEND_URL=${BACKEND_URL}
+ENV VITE_LEGAL_OPERATOR_NAME=${VITE_LEGAL_OPERATOR_NAME}
+ENV VITE_LEGAL_OPERATOR_ADDRESS=${VITE_LEGAL_OPERATOR_ADDRESS}
+ENV VITE_LEGAL_EMAIL=${VITE_LEGAL_EMAIL}
+ENV VITE_LEGAL_PHONE=${VITE_LEGAL_PHONE}
 
 COPY framezoo-desktop/renderer-src/src/components/Icon.tsx ./framezoo-desktop/renderer-src/src/components/Icon.tsx
 COPY framezoo-fe ./framezoo-fe

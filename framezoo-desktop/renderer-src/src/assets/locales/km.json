@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "សោរបស់អ្នកត្រូវបានកំណត់រចនាសម្ព័ន្ធហើយ (ចុចដើម្បីផ្លាស់ប្តូរ)",
       "configureRequiredAction": "កំណត់រចនាសម្ព័ន្ធកម្មវិធីបន្ថែមនេះ (តម្រូវឲ្យមាន)",
       "customKeyActiveDesc": "ការប្រើប្រាស់សោ API Wyzie ផ្ទាល់ខ្លួនរបស់អ្នក",
+      "customKeyActiveProviders": "កំពុងប្រើប្រាស់សោ API ចំណងជើងរងផ្ទាល់ខ្លួនរបស់អ្នក ({{providers}})",
       "customKeyConfiguredBadge": "សោរបស់អ្នកត្រូវបានកំណត់រចនាសម្ព័ន្ធហើយ",
       "description": "Addons គឺស្រេចចិត្ត។ កម្មវិធីនេះមិនបាច់ ណែនាំ ឬបង្ហោះ addon ណាមួយទេ។",
       "disabled": "ពិការ",

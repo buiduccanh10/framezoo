@@ -55,6 +55,14 @@ const getRateLimitConfig = (path: string) => {
     };
   }
 
+  if (path === '/addon/subtitles/api/test') {
+    return {
+      scope: 'subtitle-key-test',
+      windowMs: 60_000,
+      maxRequests: 20,
+    };
+  }
+
   return {
     scope: 'api',
     windowMs: getPositiveInt(process.env.RATE_LIMIT_WINDOW_MS, 60_000),

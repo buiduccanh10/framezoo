@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "Вашият ключ е конфигуриран (щракнете, за да промените)",
       "configureRequiredAction": "Конфигурирайте това допълнение (Задължително)",
       "customKeyActiveDesc": "Използване на вашия личен Wyzie API ключ",
+      "customKeyActiveProviders": "Използване на вашия личен API ключ за субтитри ({{providers}})",
       "customKeyConfiguredBadge": "Вашият ключ е конфигуриран",
       "description": "Добавките не са задължителни. Това приложение не включва, препоръчва или хоства добавки.",
       "disabled": "Забранено",

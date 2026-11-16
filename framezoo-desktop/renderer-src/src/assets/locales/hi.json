@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "आपकी कुंजी कॉन्फ़िगर कर दी गई है (बदलने के लिए क्लिक करें)",
       "configureRequiredAction": "इस ऐडऑन को कॉन्फ़िगर करें (अनिवार्य)",
       "customKeyActiveDesc": "अपनी व्यक्तिगत Wyzie API कुंजी का उपयोग करना",
+      "customKeyActiveProviders": "अपने व्यक्तिगत उपशीर्षक एपीआई कुंजी ({{providers}}) का उपयोग करके",
       "customKeyConfiguredBadge": "आपकी कुंजी कॉन्फ़िगर कर दी गई है।",
       "description": "ऐडऑन वैकल्पिक हैं. यह ऐप किसी भी ऐडऑन को बंडल, अनुशंसित या होस्ट नहीं करता है।",
       "disabled": "अक्षम",

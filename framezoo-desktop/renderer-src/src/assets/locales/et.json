@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "Teie võti on konfigureeritud (klõpsake muutmiseks)",
       "configureRequiredAction": "Lisandmooduli seadistamine (nõutav)",
       "customKeyActiveDesc": "Isikliku Wyzie API-võtme kasutamine",
+      "customKeyActiveProviders": "Kasutades oma isiklikku subtiitrite API-võtit ({{providers}})",
       "customKeyConfiguredBadge": "Teie võti on konfigureeritud",
       "description": "Lisad on valikulised. See rakendus ei koonda, ei soovita ega hosti ühtegi lisandmoodulit.",
       "disabled": "Keelatud",

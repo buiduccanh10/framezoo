@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "Avaimesi on määritetty (klikkaa muuttaaksesi)",
       "configureRequiredAction": "Määritä tämä lisäosa (pakollinen)",
       "customKeyActiveDesc": "Henkilökohtaisen Wyzie API -avaimesi käyttäminen",
+      "customKeyActiveProviders": "Käyttämällä henkilökohtaista tekstitysten API-avainta ({{providers}})",
       "customKeyConfiguredBadge": "Avaimesi on määritetty",
       "description": "Lisäosat ovat valinnaisia. Tämä sovellus ei niputa, suosittele tai isännöi mitään lisäosia.",
       "disabled": "Ei käytössä",

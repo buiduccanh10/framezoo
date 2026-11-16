@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "รหัสของคุณได้รับการตั้งค่าเรียบร้อยแล้ว (คลิกเพื่อเปลี่ยน)",
       "configureRequiredAction": "ตั้งค่าส่วนเสริมนี้ (จำเป็น)",
       "customKeyActiveDesc": "ใช้คีย์ API ส่วนตัวของ Wyzie ของคุณ",
+      "customKeyActiveProviders": "ใช้คีย์ API คำบรรยายส่วนตัวของคุณ ({{providers}})",
       "customKeyConfiguredBadge": "รหัสของคุณได้รับการตั้งค่าเรียบร้อยแล้ว",
       "description": "ส่วนเสริมเป็นทางเลือก แอปนี้ไม่ได้รวมกลุ่ม แนะนำ หรือโฮสต์ส่วนเสริมใดๆ",
       "disabled": "พิการ",

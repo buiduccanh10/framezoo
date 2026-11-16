@@ -239,7 +239,8 @@
     },
     "hero": {
       "title": "Configureer Framezoo-ondertitels",
-      "description": "Stel uw persoonlijke Wyzie API-sleutel in om snellere ondertitels te krijgen en de gedeelde tarieflimieten van de community te omzeilen."
+      "description": "Stel uw persoonlijke Wyzie API-sleutel in om snellere ondertitels te krijgen en de gedeelde tarieflimieten van de community te omzeilen.",
+      "multiDescription": "Configureer optionele persoonlijke API-sleutels (BYOK) voor Framezoo Subtitles-providers om uw eigen tarieflimieten te gebruiken."
     },
     "pageTitle": "Framezoo-ondertitels configureren | Framezoo",
     "step1": {
@@ -265,7 +266,10 @@
         "valid": "API Key is geldig en werkt!",
         "rateLimit": "API-sleutel heeft de snelheidslimieten overschreden.",
         "networkError": "Netwerkfout bij verbinden met sub.wyzie.io. Controleer uw verbinding.",
-        "invalid": "API-sleutel is ongeldig of verlopen."
+        "invalid": "API-sleutel is ongeldig of verlopen.",
+        "serverErrorProvider": "{{provider}} heeft HTTP {{status}} geretourneerd.",
+        "networkErrorProvider": "Kan de verificatieservice {{provider}} niet bereiken. Probeer het opnieuw.",
+        "verifyingProvider": "Verifiëren met {{provider}}..."
       }
     },
     "step3": {
@@ -276,7 +280,33 @@
       "copyManifest": "Kopieer de manifest-URL",
       "noticeText": "Uw API-sleutel wordt veilig opgeslagen op uw apparaat. Het wordt alleen doorgestuurd om ondertitels voor films en series te zoeken en op te halen. Je kunt het op elk gewenst moment bijwerken of verwijderen.",
       "openFramezooDisabledTooltip": "Vereist openen vanuit Framezoo Desktop terwijl u bent ingelogd",
-      "notConnectedNotice": "Let op: U bent niet verbonden met een Framezoo-accountticket. Om rechtstreeks te synchroniseren met 'Open Framezoo', opent u deze pagina vanuit uw Framezoo Desktop-app terwijl u bent ingelogd. Kopieer anders de onderstaande Manifest-URL om deze te gebruiken."
+      "notConnectedNotice": "Let op: U bent niet verbonden met een Framezoo-accountticket. Om rechtstreeks te synchroniseren met 'Open Framezoo', opent u deze pagina vanuit uw Framezoo Desktop-app terwijl u bent ingelogd. Kopieer anders de onderstaande Manifest-URL om deze te gebruiken.",
+      "privacyLinkLabel": "Privacybeleid",
+      "takedownLinkLabel": "Auteursrecht- en DMCA-beleid"
+    },
+    "providersStep": {
+      "optionalBadge": "Optioneel",
+      "title": "API-sleutels van leverancier van ondertitels",
+      "getKeyButton": "API-sleutel verkrijgen",
+      "manifestHint": "Copy Manifest URL stuurt momenteel alleen de Wyzie-sleutel door voor niet-geverifieerde Stremio-URL's; verbind uw Framezoo-account om alle providersleutels te synchroniseren.",
+      "description": "Alle onderstaande sleutels zijn optioneel. Indien verstrekt, geeft Framezoo de voorkeur aan uw persoonlijke sleutel boven gedeelde standaardwaarden. Voor ingebouwd graniet is geen sleutel nodig."
+    },
+    "providers": {
+      "wyzie": {
+        "name": "Wyzie",
+        "portalHint": "Genereer of wissel een gratis persoonlijke API-sleutel in in de Wyzie Store.",
+        "placeholder": "Wyzie API-sleutel plakken..."
+      },
+      "subsource": {
+        "placeholder": "Subbron-API-sleutel plakken...",
+        "name": "Subbron",
+        "portalHint": "Meld u aan bij SubSource, open Account Dashboard → tabblad API en maak een sleutel."
+      },
+      "opensubtitles": {
+        "portalHint": "Meld u aan bij OpenSubtitles.com, open API Consumers en maak een REST API v1-sleutel.",
+        "name": "OpenSubtitles.com",
+        "placeholder": "Plak de OpenSubtitles.com REST API v1-sleutel..."
+      }
     }
   },
   "legal": {

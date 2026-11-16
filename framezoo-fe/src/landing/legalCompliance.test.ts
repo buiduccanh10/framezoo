@@ -10,6 +10,7 @@ import { getLegalTabFromPathname } from "./LegalPage";
 describe("Landing legal compliance & install guide hygiene", () => {
   it("resolves legal routes including disclaimer and dmca aliases", () => {
     expect(getLegalTabFromPathname("/legal/terms")).toBe("terms");
+    expect(getLegalTabFromPathname("/legal/about")).toBe("terms");
     expect(getLegalTabFromPathname("/legal/privacy")).toBe("privacy");
     expect(getLegalTabFromPathname("/legal/dmca")).toBe("copyright");
     expect(getLegalTabFromPathname("/legal/disclaimer")).toBe("copyright");

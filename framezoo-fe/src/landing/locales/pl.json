@@ -228,7 +228,8 @@
   "subtitlesConfigure": {
     "hero": {
       "description": "Skonfiguruj swój osobisty klucz API Wyzie, aby uzyskać szybsze napisy i ominąć wspólne limity stawek społeczności.",
-      "title": "Skonfiguruj napisy Framezoo"
+      "title": "Skonfiguruj napisy Framezoo",
+      "multiDescription": "Skonfiguruj opcjonalne osobiste klucze API (BYOK) dla dostawców napisów Framezoo, aby mogli korzystać z własnych limitów stawek."
     },
     "account": {
       "saveButton": "Zapisz na koncie Framezoo",
@@ -263,7 +264,10 @@
         "serverError": "Serwer Wyzie zwrócił HTTP {{status}}.",
         "rateLimit": "Klucz API przekroczył limity szybkości.",
         "invalid": "Klucz API jest nieprawidłowy lub wygasł.",
-        "networkError": "Błąd sieciowy podczas łączenia się z sub.wyzie.io. Sprawdź swoje połączenie."
+        "networkError": "Błąd sieciowy podczas łączenia się z sub.wyzie.io. Sprawdź swoje połączenie.",
+        "serverErrorProvider": "{{provider}} zwrócił HTTP {{status}}.",
+        "networkErrorProvider": "Nie udało się połączyć z usługą weryfikacji {{provider}}. Spróbuj ponownie.",
+        "verifyingProvider": "Weryfikacja za pomocą {{provider}}..."
       },
       "placeholder": "Wklej tutaj swój klucz API Wyzie...",
       "clearButton": "Wyczyść klucz"
@@ -276,7 +280,33 @@
       "title": "Zainstaluj i zastosuj",
       "noticeText": "Twój klucz API jest bezpiecznie przechowywany na Twoim urządzeniu. Jest przekazywany wyłącznie w celu wyszukiwania i pobierania napisów do filmów i seriali. Możesz go zaktualizować lub usunąć w dowolnym momencie.",
       "notConnectedNotice": "Uwaga: nie masz połączenia z biletem na konto Framezoo. Aby zsynchronizować się bezpośrednio z „Open Framezoo”, otwórz tę stronę w aplikacji komputerowej Framezoo po zalogowaniu. W przeciwnym razie skopiuj adres URL manifestu poniżej, aby z niego skorzystać.",
-      "copyManifest": "Skopiuj adres URL manifestu"
+      "copyManifest": "Skopiuj adres URL manifestu",
+      "privacyLinkLabel": "Polityka prywatności",
+      "takedownLinkLabel": "Polityka dotycząca praw autorskich i ustawy DMCA"
+    },
+    "providersStep": {
+      "optionalBadge": "Fakultatywny",
+      "description": "Wszystkie poniższe klucze są opcjonalne. Jeśli jest podany, Framezoo woli Twój klucz osobisty od udostępnionych ustawień domyślnych. Wbudowany granit nie wymaga klucza.",
+      "title": "Klucze API dostawcy napisów",
+      "getKeyButton": "Uzyskaj klucz API",
+      "manifestHint": "Kopiuj adres URL manifestu obecnie przekazuje tylko klucz Wyzie dla nieuwierzytelnionych adresów URL Stremio; połącz swoje konto Framezoo, aby zsynchronizować wszystkie klucze dostawcy."
+    },
+    "providers": {
+      "wyzie": {
+        "name": "Wyzie",
+        "placeholder": "Wklej klucz API Wyzie...",
+        "portalHint": "Wygeneruj lub wykorzystaj bezpłatny osobisty klucz API w sklepie Wyzie."
+      },
+      "subsource": {
+        "portalHint": "Zaloguj się w SubSource, otwórz Panel Konta → zakładkę API i utwórz klucz.",
+        "placeholder": "Wklej klucz API SubSource...",
+        "name": "Podźródło"
+      },
+      "opensubtitles": {
+        "placeholder": "Wklej klucz OpenSubtitles.com REST API v1...",
+        "name": "OpenSubtitles.com",
+        "portalHint": "Zaloguj się na OpenSubtitles.com, otwórz API Consumers i utwórz klucz REST API v1."
+      }
     }
   },
   "legal": {

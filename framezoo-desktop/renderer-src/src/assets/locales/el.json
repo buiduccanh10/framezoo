@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "Το κλειδί σας έχει διαμορφωθεί (κάντε κλικ για να το αλλάξετε)",
       "configureRequiredAction": "Ρύθμιση παραμέτρων αυτού του πρόσθετου (Απαιτείται)",
       "customKeyActiveDesc": "Χρήση του προσωπικού σας κλειδιού Wyzie API",
+      "customKeyActiveProviders": "Χρήση του προσωπικού σας κλειδιού API υποτίτλων ({{providers}})",
       "customKeyConfiguredBadge": "Το κλειδί σας έχει ρυθμιστεί",
       "description": "Τα πρόσθετα είναι προαιρετικά. Αυτή η εφαρμογή δεν ομαδοποιεί, συνιστά ή φιλοξενεί κανένα πρόσθετο.",
       "disabled": "Ανάπηρος",

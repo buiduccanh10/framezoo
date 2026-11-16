@@ -229,7 +229,8 @@
     "pageTitle": "Framezoo-Untertitel konfigurieren | Framezoo",
     "hero": {
       "title": "Konfigurieren Sie Framezoo-Untertitel",
-      "description": "Richten Sie Ihren persönlichen Wyzie-API-Schlüssel ein, um schnellere Untertitel zu erhalten und gemeinsam genutzte Community-Ratenbeschränkungen zu umgehen."
+      "description": "Richten Sie Ihren persönlichen Wyzie-API-Schlüssel ein, um schnellere Untertitel zu erhalten und gemeinsam genutzte Community-Ratenbeschränkungen zu umgehen.",
+      "multiDescription": "Konfigurieren Sie optionale persönliche API-Schlüssel (BYOK) für Framezoo-Untertitelanbieter, um Ihre eigenen Ratenbeschränkungen zu verwenden."
     },
     "account": {
       "verifying": "Kontoticket wird über die Desktop-App überprüft...",
@@ -265,7 +266,10 @@
         "invalid": "Der API-Schlüssel ist ungültig oder abgelaufen.",
         "serverError": "Der Wyzie-Server hat HTTP {{status}} zurückgegeben.",
         "rateLimit": "Der API-Schlüssel hat die Ratengrenzen überschritten.",
-        "networkError": "Netzwerkfehler beim Herstellen der Verbindung zu sub.wyzie.io. Bitte überprüfen Sie Ihre Verbindung."
+        "networkError": "Netzwerkfehler beim Herstellen der Verbindung zu sub.wyzie.io. Bitte überprüfen Sie Ihre Verbindung.",
+        "verifyingProvider": "Verifizierung mit {{provider}}...",
+        "networkErrorProvider": "Der Verifizierungsdienst {{provider}} konnte nicht erreicht werden. Bitte versuchen Sie es erneut.",
+        "serverErrorProvider": "{{provider}} hat HTTP {{status}} zurückgegeben."
       }
     },
     "step3": {
@@ -276,7 +280,33 @@
       "noticeLabel": "Beachten:",
       "copied": "Kopiert!",
       "copyManifest": "Manifest-URL kopieren",
-      "noticeText": "Ihr API-Schlüssel wird sicher auf Ihrem Gerät gespeichert. Die Weiterleitung erfolgt ausschließlich zum Suchen und Abrufen von Untertiteln für Filme und Serien. Sie können es jederzeit aktualisieren oder entfernen."
+      "noticeText": "Ihr API-Schlüssel wird sicher auf Ihrem Gerät gespeichert. Die Weiterleitung erfolgt ausschließlich zum Suchen und Abrufen von Untertiteln für Filme und Serien. Sie können es jederzeit aktualisieren oder entfernen.",
+      "privacyLinkLabel": "Datenschutzrichtlinie",
+      "takedownLinkLabel": "Urheberrechts- und DMCA-Richtlinie"
+    },
+    "providersStep": {
+      "description": "Alle unten aufgeführten Schlüssel sind optional. Sofern bereitgestellt, bevorzugt Framezoo Ihren persönlichen Schlüssel gegenüber gemeinsamen Standardwerten. Für den Einbau in Granit ist kein Schlüssel erforderlich.",
+      "title": "API-Schlüssel für Untertitelanbieter",
+      "optionalBadge": "Optional",
+      "manifestHint": "„Manifest-URL kopieren“ leitet derzeit nur den Wyzie-Schlüssel für nicht authentifizierte Stremio-URLs weiter; Verbinden Sie Ihr Framezoo-Konto, um alle Anbieterschlüssel zu synchronisieren.",
+      "getKeyButton": "Holen Sie sich den API-Schlüssel"
+    },
+    "providers": {
+      "wyzie": {
+        "portalHint": "Generieren oder lösen Sie einen kostenlosen persönlichen API-Schlüssel im Wyzie Store ein.",
+        "placeholder": "Wyzie-API-Schlüssel einfügen...",
+        "name": "Wyzie"
+      },
+      "subsource": {
+        "name": "Unterquelle",
+        "portalHint": "Melden Sie sich bei SubSource an, öffnen Sie die Registerkarte „Konto-Dashboard“ → „API“ und erstellen Sie einen Schlüssel.",
+        "placeholder": "SubSource-API-Schlüssel einfügen..."
+      },
+      "opensubtitles": {
+        "name": "OpenSubtitles.com",
+        "portalHint": "Melden Sie sich bei OpenSubtitles.com an, öffnen Sie API Consumers und erstellen Sie einen REST API v1-Schlüssel.",
+        "placeholder": "OpenSubtitles.com REST API v1-Schlüssel einfügen ..."
+      }
     }
   },
   "legal": {

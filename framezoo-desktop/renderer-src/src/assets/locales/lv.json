@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "Jūsu atslēga ir konfigurēta (noklikšķiniet, lai mainītu)",
       "configureRequiredAction": "Konfigurēt šo papildinājumu (obligāti)",
       "customKeyActiveDesc": "Izmantojot savu personīgo Wyzie API atslēgu",
+      "customKeyActiveProviders": "Izmantojot savu personīgo subtitru API atslēgu ({{providers}})",
       "customKeyConfiguredBadge": "Jūsu atslēga ir konfigurēta",
       "description": "Papildinājumi nav obligāti. Šī lietotne neapvieno, neiesaka vai mitina nevienu papildinājumu.",
       "disabled": "Atspējots",

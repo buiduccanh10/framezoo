@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "Vaš ključ je bil konfiguriran (kliknite za spremembo)",
       "configureRequiredAction": "Konfiguriraj ta dodatek (obvezno)",
       "customKeyActiveDesc": "Uporaba vašega osebnega ključa Wyzie API",
+      "customKeyActiveProviders": "Uporaba vašega osebnega API ključa za podnapise ({{providers}})",
       "customKeyConfiguredBadge": "Vaš ključ je bil konfiguriran",
       "description": "Dodatki niso obvezni. Ta aplikacija ne združuje, priporoča ali gosti nobenega dodatka.",
       "disabled": "Onemogočen",

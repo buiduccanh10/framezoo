@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "您的密钥已配置（点击更改）",
       "configureRequiredAction": "配置此插件（必需）",
       "customKeyActiveDesc": "使用您的个人 Wyzie API 密钥",
+      "customKeyActiveProviders": "使用您的个人字幕 API 密钥 ({{providers}})",
       "customKeyConfiguredBadge": "您的密钥已配置完成",
       "description": "插件是可选的。此应用程序不捆绑、推荐或托管任何插件。",
       "disabled": "残疾人",

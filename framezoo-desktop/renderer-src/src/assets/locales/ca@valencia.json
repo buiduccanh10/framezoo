@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "La teva clau s'ha configurat (feu clic per canviar-la)",
       "configureRequiredAction": "Configura aquest complement (obligatori)",
       "customKeyActiveDesc": "Utilitzant la teva clau API personal de Wyzie",
+      "customKeyActiveProviders": "Utilitzant la teva clau API de subtítols personal ({{providers}})",
       "customKeyConfiguredBadge": "La teva clau s'ha configurat",
       "description": "Els complements són opcionals. Aquesta aplicació no agrupa, recomana ni allotja cap complement.",
       "disabled": "Inhabilitat",

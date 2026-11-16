@@ -228,7 +228,8 @@
   "subtitlesConfigure": {
     "hero": {
       "description": "Iestatiet savu personīgo Wyzie API atslēgu, lai iegūtu ātrākus subtitrus un apietu koplietojamo kopienas tarifu ierobežojumus.",
-      "title": "Konfigurējiet Framezoo subtitrus"
+      "title": "Konfigurējiet Framezoo subtitrus",
+      "multiDescription": "Konfigurējiet izvēles personīgās API atslēgas (BYOK) Framezoo subtitru nodrošinātājiem, lai izmantotu savus ātruma ierobežojumus."
     },
     "account": {
       "configuringFor": "Konta konfigurēšana:",
@@ -265,7 +266,10 @@
         "empty": "Pirms testēšanas, lūdzu, ievadiet API atslēgu.",
         "serverError": "Wyzie serveris atgrieza HTTP {{status}}.",
         "verifying": "Pārbauda ar Wyzie...",
-        "networkError": "Tīkla kļūda, veidojot savienojumu ar sub.wyzie.io. Lūdzu, pārbaudiet savienojumu."
+        "networkError": "Tīkla kļūda, veidojot savienojumu ar sub.wyzie.io. Lūdzu, pārbaudiet savienojumu.",
+        "serverErrorProvider": "{{provider}} atgrieza HTTP {{status}}.",
+        "networkErrorProvider": "Nevarēja sasniegt {{provider}} verifikācijas pakalpojumu. Lūdzu, mēģiniet vēlreiz.",
+        "verifyingProvider": "Notiek pārbaude ar {{provider}}..."
       }
     },
     "step3": {
@@ -276,7 +280,33 @@
       "notConnectedNotice": "Piezīme. Jūs neesat saistīts ar Framezoo konta biļeti. Lai sinhronizētu tieši ar 'Open Framezoo', atveriet šo lapu no Framezoo Desktop lietotnes, kad esat pieteicies. Pretējā gadījumā kopējiet tālāk norādīto manifesta URL, lai to izmantotu.",
       "noticeLabel": "Paziņojums:",
       "copied": "Kopēts!",
-      "noticeText": "Jūsu API atslēga tiek droši saglabāta jūsu ierīcē. Tas tiek pārsūtīts tikai, lai meklētu un izgūtu filmu un seriālu subtitrus. Jebkurā laikā varat to atjaunināt vai noņemt."
+      "noticeText": "Jūsu API atslēga tiek droši saglabāta jūsu ierīcē. Tas tiek pārsūtīts tikai, lai meklētu un izgūtu filmu un seriālu subtitrus. Jebkurā laikā varat to atjaunināt vai noņemt.",
+      "privacyLinkLabel": "Privātuma politika",
+      "takedownLinkLabel": "Autortiesību un DMCA politika"
+    },
+    "providersStep": {
+      "optionalBadge": "Pēc izvēles",
+      "getKeyButton": "Iegūstiet API atslēgu",
+      "title": "Subtitru nodrošinātāja API atslēgas",
+      "description": "Visas tālāk norādītās atslēgas nav obligātas. Ja tas ir nodrošināts, Framezoo dod priekšroku jūsu personiskajai atslēgai, nevis koplietotajiem noklusējuma iestatījumiem. Iebūvētajam granītam nav nepieciešama atslēga.",
+      "manifestHint": "Kopēt manifesta URL pašlaik pārsūta tikai Wyzie atslēgu neautentificētiem Stremio URL; savienojiet savu Framezoo kontu, lai sinhronizētu visas nodrošinātāja atslēgas."
+    },
+    "providers": {
+      "wyzie": {
+        "portalHint": "Ģenerējiet vai izpērciet bezmaksas personīgo API atslēgu Wyzie veikalā.",
+        "placeholder": "Ielīmēt Wyzie API atslēgu...",
+        "name": "Vaizija"
+      },
+      "subsource": {
+        "placeholder": "Ielīmēt apakšavota API atslēgu...",
+        "portalHint": "Pierakstieties apakšavotā, atveriet konta informācijas paneli → cilni API un izveidojiet atslēgu.",
+        "name": "Apakšavots"
+      },
+      "opensubtitles": {
+        "portalHint": "Pierakstieties vietnē OpenSubtitles.com, atveriet API Consumers un izveidojiet REST API v1 atslēgu.",
+        "placeholder": "Ielīmēt OpenSubtitles.com REST API v1 atslēgu...",
+        "name": "OpenSubtitles.com"
+      }
     }
   },
   "legal": {

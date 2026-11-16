@@ -228,7 +228,8 @@
   "subtitlesConfigure": {
     "hero": {
       "description": "Siapkan Kunci API Wyzie pribadi Anda untuk mendapatkan subtitle yang lebih cepat dan melewati batas kecepatan komunitas bersama.",
-      "title": "Konfigurasikan Subtitle Framezoo"
+      "title": "Konfigurasikan Subtitle Framezoo",
+      "multiDescription": "Konfigurasikan kunci API pribadi opsional (BYOK) untuk penyedia Subtitle Framezoo untuk menggunakan batas tarif Anda sendiri."
     },
     "account": {
       "configuringFor": "Konfigurasi untuk akun:",
@@ -265,7 +266,10 @@
         "serverError": "Server Wyzie mengembalikan HTTP {{status}}.",
         "rateLimit": "Kunci API telah melampaui batas kapasitas.",
         "verifying": "Memverifikasi dengan Wyzie...",
-        "networkError": "Kesalahan jaringan saat menyambung ke sub.wyzie.io. Silakan periksa koneksi Anda."
+        "networkError": "Kesalahan jaringan saat menyambung ke sub.wyzie.io. Silakan periksa koneksi Anda.",
+        "serverErrorProvider": "{{provider}} mengembalikan HTTP {{status}}.",
+        "networkErrorProvider": "Tidak dapat menghubungi layanan verifikasi {{provider}}. Silakan coba lagi.",
+        "verifyingProvider": "Memverifikasi dengan {{provider}}..."
       }
     },
     "step3": {
@@ -276,7 +280,33 @@
       "copyManifest": "Salin URL Manifes",
       "title": "Instal & Terapkan",
       "openFramezoo": "Buka Framezoo",
-      "noticeText": "Kunci API Anda disimpan dengan aman di perangkat Anda. Itu diteruskan hanya untuk mencari dan mengambil subtitle untuk film dan serial. Anda dapat memperbarui atau menghapusnya kapan saja."
+      "noticeText": "Kunci API Anda disimpan dengan aman di perangkat Anda. Itu diteruskan hanya untuk mencari dan mengambil subtitle untuk film dan serial. Anda dapat memperbarui atau menghapusnya kapan saja.",
+      "privacyLinkLabel": "Kebijakan Privasi",
+      "takedownLinkLabel": "Hak Cipta & Kebijakan DMCA"
+    },
+    "providersStep": {
+      "getKeyButton": "Dapatkan Kunci API",
+      "optionalBadge": "Opsional",
+      "manifestHint": "Salin URL Manifes saat ini hanya meneruskan kunci Wyzie untuk URL Stremio yang tidak diautentikasi; sambungkan akun Framezoo Anda untuk menyinkronkan semua kunci penyedia.",
+      "description": "Semua kunci di bawah ini bersifat opsional. Jika disediakan, Framezoo lebih memilih kunci pribadi Anda daripada kunci default bersama. Granit bawaan tidak memerlukan kunci.",
+      "title": "Kunci API Penyedia Subtitle"
+    },
+    "providers": {
+      "wyzie": {
+        "portalHint": "Hasilkan atau tukarkan kunci API pribadi gratis di Wyzie Store.",
+        "name": "Wyzie",
+        "placeholder": "Tempel Kunci API Wyzie..."
+      },
+      "subsource": {
+        "name": "SubSumber",
+        "portalHint": "Masuk ke SubSumber, buka Dasbor Akun → tab API, dan buat kunci.",
+        "placeholder": "Tempelkan Kunci API SubSumber..."
+      },
+      "opensubtitles": {
+        "name": "OpenSubtitles.com",
+        "portalHint": "Masuk ke OpenSubtitles.com, buka API Consumers, dan buat kunci REST API v1.",
+        "placeholder": "Tempel Kunci OpenSubtitles.com REST API v1..."
+      }
     }
   },
   "legal": {

@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "તમારી કી ગોઠવવામાં આવી છે (બદલવા માટે ક્લિક કરો)",
       "configureRequiredAction": "આ એડઓન ગોઠવો (જરૂરી)",
       "customKeyActiveDesc": "તમારી વ્યક્તિગત Wyzie API કીનો ઉપયોગ કરીને",
+      "customKeyActiveProviders": "તમારી વ્યક્તિગત સબટાઈટલ API કી ({{providers}}) નો ઉપયોગ કરીને",
       "customKeyConfiguredBadge": "તમારી કી ગોઠવવામાં આવી છે.",
       "description": "એડઓન્સ વૈકલ્પિક છે. આ એપ્લિકેશન કોઈપણ એડનને બંડલ, ભલામણ અથવા હોસ્ટ કરતી નથી.",
       "disabled": "અક્ષમ",

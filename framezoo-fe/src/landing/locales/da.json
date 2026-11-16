@@ -228,7 +228,8 @@
   "subtitlesConfigure": {
     "hero": {
       "description": "Konfigurer din personlige Wyzie API-nøgle for at få hurtigere undertekster og omgå delte fællesskabshastighedsgrænser.",
-      "title": "Konfigurer Framezoo-undertekster"
+      "title": "Konfigurer Framezoo-undertekster",
+      "multiDescription": "Konfigurer valgfri personlige API-nøgler (BYOK) for Framezoo-undertekstudbydere for at bruge dine egne hastighedsgrænser."
     },
     "pageTitle": "Konfigurer Framezoo Undertekster | Framezoo",
     "account": {
@@ -265,7 +266,10 @@
         "invalid": "API-nøglen er ugyldig eller udløbet.",
         "rateLimit": "API-nøgle har overskredet hastighedsgrænserne.",
         "verifying": "Bekræfter med Wyzie...",
-        "networkError": "Netværksfejl ved forbindelse til sub.wyzie.io. Tjek venligst din forbindelse."
+        "networkError": "Netværksfejl ved forbindelse til sub.wyzie.io. Tjek venligst din forbindelse.",
+        "verifyingProvider": "Bekræfter med {{provider}}...",
+        "serverErrorProvider": "{{provider}} returnerede HTTP {{status}}.",
+        "networkErrorProvider": "Kunne ikke nå {{provider}} bekræftelsestjeneste. Prøv venligst igen."
       }
     },
     "step3": {
@@ -276,7 +280,33 @@
       "openFramezooDisabledTooltip": "Kræver åbning fra Framezoo Desktop, mens du er logget ind",
       "copyManifest": "Kopiér Manifest URL",
       "notConnectedNotice": "Bemærk: Du er ikke forbundet med en Framezoo-kontobillet. For at synkronisere direkte med 'Open Framezoo' skal du åbne denne side fra din Framezoo Desktop-app, mens du er logget ind. Ellers kopier Manifest-URL'en nedenfor for at bruge den.",
-      "noticeText": "Din API-nøgle er opbevaret sikkert på din enhed. Den videresendes kun for at søge og hente undertekster til film og serier. Du kan opdatere eller fjerne den når som helst."
+      "noticeText": "Din API-nøgle er opbevaret sikkert på din enhed. Den videresendes kun for at søge og hente undertekster til film og serier. Du kan opdatere eller fjerne den når som helst.",
+      "privacyLinkLabel": "Privatlivspolitik",
+      "takedownLinkLabel": "Copyright og DMCA-politik"
+    },
+    "providersStep": {
+      "optionalBadge": "Valgfri",
+      "title": "Undertekstudbyder API-nøgler",
+      "manifestHint": "Copy Manifest URL videresender i øjeblikket kun Wyzie-nøglen for ikke-godkendte Stremio URL'er; tilslut din Framezoo-konto for at synkronisere alle udbydernøgler.",
+      "description": "Alle taster nedenfor er valgfrie. Når det er angivet, foretrækker Framezoo din personlige nøgle frem for delte standardindstillinger. Indbygget granit kræver ingen nøgle.",
+      "getKeyButton": "Hent API-nøgle"
+    },
+    "providers": {
+      "wyzie": {
+        "name": "Wyzie",
+        "placeholder": "Indsæt Wyzie API-nøgle...",
+        "portalHint": "Generer eller indløs en gratis personlig API-nøgle i Wyzie Store."
+      },
+      "subsource": {
+        "portalHint": "Log ind på SubSource, åbn Account Dashboard → API-fanen, og opret en nøgle.",
+        "placeholder": "Indsæt underkilde API-nøgle...",
+        "name": "Underkilde"
+      },
+      "opensubtitles": {
+        "placeholder": "Indsæt OpenSubtitles.com REST API v1 nøgle...",
+        "name": "OpenSubtitles.com",
+        "portalHint": "Log ind på OpenSubtitles.com, åbn API Consumers, og opret en REST API v1-nøgle."
+      }
     }
   },
   "legal": {

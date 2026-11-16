@@ -228,7 +228,8 @@
   "subtitlesConfigure": {
     "hero": {
       "description": "더 빠른 자막을 얻고 공유 커뮤니티 요금 제한을 우회하려면 개인 Wyzie API 키를 설정하세요.",
-      "title": "Framezoo 자막 구성"
+      "title": "Framezoo 자막 구성",
+      "multiDescription": "Framezoo 자막 제공업체가 자체 비율 제한을 사용하도록 선택적 개인 API 키(BYOK)를 구성하세요."
     },
     "account": {
       "verifying": "데스크톱 앱에서 계정 티켓을 확인하는 중...",
@@ -265,7 +266,10 @@
         "valid": "API 키가 유효하고 작동 중입니다!",
         "serverError": "Wyzie 서버가 HTTP {{status}}을(를) 반환했습니다.",
         "rateLimit": "API 키가 비율 제한을 초과했습니다.",
-        "networkError": "sub.wyzie.io에 연결하는 동안 네트워크 오류가 발생했습니다. 연결을 확인해주세요."
+        "networkError": "sub.wyzie.io에 연결하는 동안 네트워크 오류가 발생했습니다. 연결을 확인해주세요.",
+        "networkErrorProvider": "{{provider}} 확인 서비스에 연결할 수 없습니다. 다시 시도해 주세요.",
+        "serverErrorProvider": "{{provider}}이(가) HTTP {{status}}을(를) 반환했습니다.",
+        "verifyingProvider": "{{provider}}로 확인 중..."
       }
     },
     "step3": {
@@ -276,7 +280,33 @@
       "noticeLabel": "알아채다:",
       "copyManifest": "매니페스트 URL 복사",
       "noticeText": "귀하의 API 키는 귀하의 기기에 안전하게 저장됩니다. 영화 및 시리즈의 자막을 검색하고 검색하는 경우에만 전달됩니다. 언제든지 업데이트하거나 제거할 수 있습니다.",
-      "notConnectedNotice": "참고: Framezoo 계정 티켓과 연결되어 있지 않습니다. 'Open Framezoo'와 직접 동기화하려면 로그인한 상태에서 Framezoo Desktop 앱에서 이 페이지를 여세요. 그렇지 않은 경우 아래 매니페스트 URL을 복사하여 사용하세요."
+      "notConnectedNotice": "참고: Framezoo 계정 티켓과 연결되어 있지 않습니다. 'Open Framezoo'와 직접 동기화하려면 로그인한 상태에서 Framezoo Desktop 앱에서 이 페이지를 여세요. 그렇지 않은 경우 아래 매니페스트 URL을 복사하여 사용하세요.",
+      "privacyLinkLabel": "개인 정보 보호 정책",
+      "takedownLinkLabel": "저작권 및 DMCA 정책"
+    },
+    "providersStep": {
+      "optionalBadge": "선택 과목",
+      "getKeyButton": "API 키 받기",
+      "manifestHint": "매니페스트 URL 복사는 현재 인증되지 않은 Stremio URL에 대해 Wyzie 키만 전달합니다. 모든 공급자 키를 동기화하려면 Framezoo 계정을 연결하세요.",
+      "description": "아래의 모든 키는 선택 사항입니다. 제공된 경우 Framezoo는 공유 기본값보다 개인 키를 선호합니다. 내장형 화강암에는 열쇠가 필요하지 않습니다.",
+      "title": "자막 제공자 API 키"
+    },
+    "providers": {
+      "wyzie": {
+        "portalHint": "Wyzie Store에서 무료 개인 API 키를 생성하거나 사용하세요.",
+        "name": "위지",
+        "placeholder": "Wyzie API 키 붙여넣기..."
+      },
+      "subsource": {
+        "name": "하위 소스",
+        "portalHint": "SubSource에 로그인하고 Account Dashboard → API 탭을 열고 키를 생성하세요.",
+        "placeholder": "하위 소스 API 키 붙여넣기..."
+      },
+      "opensubtitles": {
+        "name": "OpenSubtitles.com",
+        "portalHint": "OpenSubtitles.com에 로그인하고 API 소비자를 열고 REST API v1 키를 생성하세요.",
+        "placeholder": "OpenSubtitles.com REST API v1 키 붙여넣기..."
+      }
     }
   },
   "legal": {

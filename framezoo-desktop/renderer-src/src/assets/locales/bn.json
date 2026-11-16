@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "আপনার কী কনফিগার করা হয়েছে (পরিবর্তন করতে ক্লিক করুন)",
       "configureRequiredAction": "এই অ্যাডঅনটি কনফিগার করুন (আবশ্যক)",
       "customKeyActiveDesc": "আপনার ব্যক্তিগত Wyzie API কী ব্যবহার করে",
+      "customKeyActiveProviders": "আপনার ব্যক্তিগত সাবটাইটেল এপিআই কী ({{providers}}) ব্যবহার করে",
       "customKeyConfiguredBadge": "আপনার কী কনফিগার করা হয়েছে।",
       "description": "Addons ঐচ্ছিক. এই অ্যাপটি কোনো অ্যাডঅন বান্ডিল, সুপারিশ বা হোস্ট করে না।",
       "disabled": "অক্ষম",

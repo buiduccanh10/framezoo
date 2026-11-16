@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "La tua chiave è stata configurata (clicca per modificare)",
       "configureRequiredAction": "Configura questo componente aggiuntivo (obbligatorio)",
       "customKeyActiveDesc": "Utilizzando la tua chiave API personale Wyzie",
+      "customKeyActiveProviders": "Utilizzando la tua chiave API personale per i sottotitoli ({{providers}})",
       "customKeyConfiguredBadge": "La tua chiave è stata configurata",
       "description": "I componenti aggiuntivi sono facoltativi. Questa app non raggruppa, consiglia o ospita alcun componente aggiuntivo.",
       "disabled": "Disabilitato",

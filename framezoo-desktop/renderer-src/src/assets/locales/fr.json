@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "Votre clé a été configurée (cliquez pour modifier)",
       "configureRequiredAction": "Configurer ce module complémentaire (obligatoire)",
       "customKeyActiveDesc": "En utilisant votre clé API Wyzie personnelle",
+      "customKeyActiveProviders": "Utilisation de votre clé API de sous-titres personnelle ({{providers}})",
       "customKeyConfiguredBadge": "Votre clé a été configurée",
       "description": "Les modules complémentaires sont facultatifs. Cette application ne regroupe, ne recommande ni n'héberge aucun module complémentaire.",
       "disabled": "Désactivé",

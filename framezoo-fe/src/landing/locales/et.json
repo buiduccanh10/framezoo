@@ -239,7 +239,8 @@
     },
     "hero": {
       "title": "Framezoo subtiitrite seadistamine",
-      "description": "Seadistage oma isiklik Wyzie API võti, et saada kiiremaid subtiitreid ja mööda minna jagatud kogukonna määrade piirangutest."
+      "description": "Seadistage oma isiklik Wyzie API võti, et saada kiiremaid subtiitreid ja mööda minna jagatud kogukonna määrade piirangutest.",
+      "multiDescription": "Seadistage Framezoo subtiitrite pakkujate valikulised isiklikud API võtmed (BYOK), et kasutada oma piiranguid."
     },
     "pageTitle": "Framezoo seadistamine Subtiitrid | Framezoo",
     "step1": {
@@ -264,7 +265,10 @@
         "valid": "API võti on kehtiv ja töötab!",
         "verifying": "Wyzie'ga kinnitamine...",
         "serverError": "Wyzie server tagastas HTTP {{status}}.",
-        "networkError": "Võrgutõrge saidiga sub.wyzie.io ühendamisel. Kontrollige ühendust."
+        "networkError": "Võrgutõrge saidiga sub.wyzie.io ühendamisel. Kontrollige ühendust.",
+        "verifyingProvider": "Kinnitamine rakendusega {{provider}}...",
+        "networkErrorProvider": "Kinnitusteenusega {{provider}} ei saanud ühendust. Palun proovi uuesti.",
+        "serverErrorProvider": "{{provider}} tagastas HTTP {{status}}."
       },
       "placeholder": "Kleepige oma Wyzie API võti siia..."
     },
@@ -276,7 +280,33 @@
       "notConnectedNotice": "Märkus. Te ei ole Framezoo kontopiletiga ühendatud. Otse rakendusega „Ava Framezoo” sünkroonimiseks avage see leht oma Framezoo töölauarakendusest, kui olete sisse logitud. Vastasel juhul kopeerige selle kasutamiseks allolev manifesti URL.",
       "copied": "Kopeeritud!",
       "noticeLabel": "Märkus:",
-      "noticeText": "Teie API võti on teie seadmes turvaliselt salvestatud. See edastatakse ainult filmide ja seriaalide subtiitrite otsimiseks ja toomiseks. Saate seda igal ajal värskendada või eemaldada."
+      "noticeText": "Teie API võti on teie seadmes turvaliselt salvestatud. See edastatakse ainult filmide ja seriaalide subtiitrite otsimiseks ja toomiseks. Saate seda igal ajal värskendada või eemaldada.",
+      "privacyLinkLabel": "Privaatsuspoliitika",
+      "takedownLinkLabel": "Autoriõiguse ja DMCA eeskirjad"
+    },
+    "providersStep": {
+      "optionalBadge": "Valikuline",
+      "title": "Subtiitrite pakkuja API võtmed",
+      "manifestHint": "Kopeeri manifesti URL edastab praegu ainult Wyzie võtme autentimata Stremio URL-ide jaoks; kõigi teenusepakkuja võtmete sünkroonimiseks ühendage oma Framezoo konto.",
+      "getKeyButton": "Hankige API võti",
+      "description": "Kõik allolevad klahvid on valikulised. Kui see on ette nähtud, eelistab Framezoo teie isiklikku võtit jagatud vaikeseadetele. Sisseehitatud graniit ei vaja võtit."
+    },
+    "providers": {
+      "wyzie": {
+        "name": "Wyzie",
+        "portalHint": "Looge või lunastage tasuta isiklik API-võti Wyzie poes.",
+        "placeholder": "Kleebi Wyzie API võti..."
+      },
+      "subsource": {
+        "placeholder": "Kleebi alamallika API võti...",
+        "portalHint": "Logige sisse alamallikasse, avage konto juhtpaneel → vahekaart API ja looge võti.",
+        "name": "Alamallikas"
+      },
+      "opensubtitles": {
+        "portalHint": "Logige sisse saidil OpenSubtitles.com, avage API tarbijad ja looge REST API v1 võti.",
+        "name": "OpenSubtitles.com",
+        "placeholder": "Kleebi OpenSubtitles.com REST API v1 võti..."
+      }
     }
   },
   "legal": {

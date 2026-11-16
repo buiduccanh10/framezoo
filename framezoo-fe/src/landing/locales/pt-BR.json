@@ -239,7 +239,8 @@
     },
     "hero": {
       "title": "Configurar legendas Framezoo",
-      "description": "Configure sua chave de API Wyzie pessoal para obter legendas mais rápidas e contornar os limites de taxa da comunidade compartilhada."
+      "description": "Configure sua chave de API Wyzie pessoal para obter legendas mais rápidas e contornar os limites de taxa da comunidade compartilhada.",
+      "multiDescription": "Configure chaves de API pessoais opcionais (BYOK) para que os provedores de legendas do Framezoo usem seus próprios limites de taxa."
     },
     "pageTitle": "Configurar legendas Framezoo | Quadrozoo",
     "step1": {
@@ -265,7 +266,10 @@
         "invalid": "A chave de API é inválida ou expirou.",
         "networkError": "Erro de rede ao conectar-se a sub.wyzie.io. Por favor, verifique sua conexão.",
         "valid": "A chave de API é válida e está funcionando!",
-        "serverError": "O servidor Wyzie retornou HTTP {{status}}."
+        "serverError": "O servidor Wyzie retornou HTTP {{status}}.",
+        "serverErrorProvider": "{{provider}} retornou HTTP {{status}}.",
+        "networkErrorProvider": "Could not reach {{provider}} verification service. Por favor, tente novamente.",
+        "verifyingProvider": "Verificando com {{provider}}..."
       }
     },
     "step3": {
@@ -276,7 +280,33 @@
       "title": "Instalar e aplicar",
       "openFramezooDisabledTooltip": "Requer abertura no Framezoo Desktop enquanto estiver logado",
       "notConnectedNotice": "Obs: Você não está conectado com um ticket de conta Framezoo. Para sincronizar diretamente com o 'Open Framezoo', abra esta página em seu aplicativo Framezoo Desktop enquanto estiver conectado. Caso contrário, copie o URL do manifesto abaixo para usá-lo.",
-      "noticeText": "Sua chave API é armazenada com segurança em seu dispositivo. Ele é encaminhado apenas para buscar e recuperar legendas de filmes e séries. Você pode atualizá-lo ou removê-lo a qualquer momento."
+      "noticeText": "Sua chave API é armazenada com segurança em seu dispositivo. Ele é encaminhado apenas para buscar e recuperar legendas de filmes e séries. Você pode atualizá-lo ou removê-lo a qualquer momento.",
+      "privacyLinkLabel": "política de Privacidade",
+      "takedownLinkLabel": "Política de direitos autorais e DMCA"
+    },
+    "providersStep": {
+      "optionalBadge": "Opcional",
+      "getKeyButton": "Obtenha a chave API",
+      "manifestHint": "Copiar URL do Manifesto atualmente encaminha apenas a chave Wyzie para URLs Stremio não autenticados; conecte sua conta Framezoo para sincronizar todas as chaves do provedor.",
+      "title": "Chaves de API do provedor de legendas",
+      "description": "Todas as chaves abaixo são opcionais. Quando fornecida, o Framezoo prefere sua chave pessoal aos padrões compartilhados. Granito embutido não requer chave."
+    },
+    "providers": {
+      "wyzie": {
+        "name": "Wyzie",
+        "portalHint": "Gere ou resgate uma chave de API pessoal gratuita na Wyzie Store.",
+        "placeholder": "Colar a chave da API Wyzie..."
+      },
+      "opensubtitles": {
+        "name": "OpenSubtitles. com",
+        "portalHint": "Faça login em OpenSubtitles.com, abra Consumidores de API e crie uma chave REST API v1.",
+        "placeholder": "Colar a chave da API REST v1 do OpenSubtitles.com..."
+      },
+      "subsource": {
+        "placeholder": "Colar a chave da API SubSource...",
+        "portalHint": "Faça login no SubSource, abra Painel da conta → guia API e crie uma chave.",
+        "name": "Subfonte"
+      }
     }
   },
   "legal": {

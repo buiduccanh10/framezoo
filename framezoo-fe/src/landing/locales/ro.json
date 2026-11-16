@@ -228,7 +228,8 @@
   "subtitlesConfigure": {
     "hero": {
       "description": "Configurați-vă cheia API Wyzie personală pentru a obține subtitrări mai rapide și pentru a ocoli limitele ratelor comunității partajate.",
-      "title": "Configurați subtitrări Framezoo"
+      "title": "Configurați subtitrări Framezoo",
+      "multiDescription": "Configurați cheile API personale opționale (BYOK) pentru furnizorii de subtitrări Framezoo pentru a vă folosi propriile limite de rată."
     },
     "account": {
       "configuringFor": "Configurare pentru cont:",
@@ -263,7 +264,10 @@
         "rateLimit": "Cheia API a depășit limitele de rată.",
         "networkError": "Eroare de rețea la conectarea la sub.wyzie.io. Vă rugăm să vă verificați conexiunea.",
         "invalid": "Cheia API este nevalidă sau a expirat.",
-        "serverError": "Serverul Wyzie a returnat HTTP {{status}}."
+        "serverError": "Serverul Wyzie a returnat HTTP {{status}}.",
+        "verifyingProvider": "Se verifică cu {{provider}}...",
+        "serverErrorProvider": "{{provider}} a returnat HTTP {{status}}.",
+        "networkErrorProvider": "Nu s-a putut accesa serviciul de verificare {{provider}}. Vă rugăm să încercați din nou."
       },
       "clearButton": "Tasta de golire",
       "testButton": "Testați cheia API"
@@ -276,7 +280,33 @@
       "openFramezooDisabledTooltip": "Necesită deschiderea de pe Framezoo Desktop când sunteți autentificat",
       "copyManifest": "Copiați adresa URL a manifestului",
       "notConnectedNotice": "Notă: nu sunteți conectat cu un bilet de cont Framezoo. Pentru a sincroniza direct cu „Open Framezoo”, deschideți această pagină din aplicația Framezoo Desktop când sunteți conectat. În caz contrar, copiați adresa URL a manifestului de mai jos pentru a o utiliza.",
-      "noticeText": "Cheia dvs. API este stocată în siguranță pe dispozitivul dvs. Este redirecționat numai pentru a căuta și a prelua subtitrări pentru filme și seriale. Îl puteți actualiza sau elimina oricând."
+      "noticeText": "Cheia dvs. API este stocată în siguranță pe dispozitivul dvs. Este redirecționat numai pentru a căuta și a prelua subtitrări pentru filme și seriale. Îl puteți actualiza sau elimina oricând.",
+      "privacyLinkLabel": "Politica de confidențialitate",
+      "takedownLinkLabel": "Politica privind drepturile de autor și DMCA"
+    },
+    "providersStep": {
+      "optionalBadge": "Opțional",
+      "getKeyButton": "Obțineți cheia API",
+      "manifestHint": "Copy Manifest URL redirecționează în prezent numai cheia Wyzie pentru URL-uri Stremio neautentificate; conectați-vă contul Framezoo pentru a sincroniza toate cheile furnizorului.",
+      "description": "Toate cheile de mai jos sunt opționale. Când este furnizat, Framezoo preferă cheia dvs. personală în locul setărilor implicite partajate. Granitul încorporat nu necesită cheie.",
+      "title": "Cheile API pentru furnizorul de subtitrări"
+    },
+    "providers": {
+      "wyzie": {
+        "name": "Wyzie",
+        "portalHint": "Generați sau valorificați o cheie API personală gratuită în Magazinul Wyzie.",
+        "placeholder": "Lipiți cheia API Wyzie..."
+      },
+      "subsource": {
+        "name": "Subsursă",
+        "portalHint": "Conectați-vă la SubSource, deschideți Tabloul de bord al contului → fila API și creați o cheie.",
+        "placeholder": "Lipiți cheia API SubSource..."
+      },
+      "opensubtitles": {
+        "name": "OpenSubtitles.com",
+        "placeholder": "Lipiți cheia OpenSubtitles.com REST API v1...",
+        "portalHint": "Conectați-vă pe OpenSubtitles.com, deschideți API Consumers și creați o cheie REST API v1."
+      }
     }
   },
   "legal": {

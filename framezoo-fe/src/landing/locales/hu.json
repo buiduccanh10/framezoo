@@ -228,7 +228,8 @@
   "subtitlesConfigure": {
     "hero": {
       "title": "Framezoo-feliratok konfigurálása",
-      "description": "Állítsa be személyes Wyzie API-kulcsát, hogy gyorsabb feliratokat kapjon, és megkerülje a megosztott közösségi díjkorlátokat."
+      "description": "Állítsa be személyes Wyzie API-kulcsát, hogy gyorsabb feliratokat kapjon, és megkerülje a megosztott közösségi díjkorlátokat.",
+      "multiDescription": "Állítsa be az opcionális személyes API-kulcsokat (BYOK) a Framezoo-feliratok szolgáltatói számára a saját sebességkorlátozások használatához."
     },
     "account": {
       "verifying": "Fiókjegy ellenőrzése az asztali alkalmazásból...",
@@ -262,7 +263,10 @@
         "empty": "A tesztelés előtt adjon meg egy API-kulcsot.",
         "invalid": "Az API-kulcs érvénytelen vagy lejárt.",
         "networkError": "Hálózati hiba a sub.wyzie.io oldalhoz való csatlakozáskor. Kérjük, ellenőrizze a kapcsolatot.",
-        "serverError": "A Wyzie szerver HTTP {{status}} értéket adott vissza."
+        "serverError": "A Wyzie szerver HTTP {{status}} értéket adott vissza.",
+        "verifyingProvider": "Ellenőrzés a következővel: {{provider}}...",
+        "networkErrorProvider": "Nem sikerült elérni a {{provider}} ellenőrző szolgáltatást. Kérjük, próbálja újra.",
+        "serverErrorProvider": "{{provider}} HTTP {{status}}-t adott vissza."
       },
       "title": "Írja be a Wyzie API kulcsot",
       "testing": "Ellenőrzés...",
@@ -276,7 +280,33 @@
       "notConnectedNotice": "Megjegyzés: Ön nem kapcsolódik Framezoo-fiókjegyhez. A „Framezoo megnyitása” funkcióval való közvetlen szinkronizáláshoz nyissa meg ezt az oldalt a Framezoo Desktop alkalmazásból, miközben bejelentkezett. Ellenkező esetben másolja ki az alábbi Manifest URL-t a használatához.",
       "openFramezoo": "Nyissa meg a Framezoo-t",
       "copyManifest": "Manifest URL másolása",
-      "title": "Telepítés és alkalmazás"
+      "title": "Telepítés és alkalmazás",
+      "privacyLinkLabel": "Adatvédelmi szabályzat",
+      "takedownLinkLabel": "Szerzői jogi és DMCA-szabályzat"
+    },
+    "providersStep": {
+      "optionalBadge": "Választható",
+      "title": "Feliratszolgáltató API kulcsok",
+      "description": "Az alábbi gombok mindegyike opcionális. Ha rendelkezésre áll, a Framezoo előnyben részesíti az Ön személyes kulcsát a megosztott alapértelmezésekkel szemben. A beépített gránithoz nincs szükség kulcsra.",
+      "getKeyButton": "Szerezze be az API-kulcsot",
+      "manifestHint": "A Manifest URL másolása jelenleg csak a Wyzie kulcsot továbbítja a nem hitelesített Stremio URL-ekhez; csatlakoztassa Framezoo-fiókját az összes szolgáltatói kulcs szinkronizálásához."
+    },
+    "providers": {
+      "wyzie": {
+        "placeholder": "Wyzie API-kulcs beillesztése...",
+        "name": "Wyzie",
+        "portalHint": "Ingyenes személyes API-kulcs létrehozása vagy beváltása a Wyzie Store-ban."
+      },
+      "subsource": {
+        "name": "Alforrás",
+        "placeholder": "Alforrás API-kulcs beillesztése...",
+        "portalHint": "Jelentkezzen be az alforrásba, nyissa meg a Fiók irányítópultja → API lapot, és hozzon létre egy kulcsot."
+      },
+      "opensubtitles": {
+        "portalHint": "Jelentkezzen be az OpenSubtitles.com webhelyen, nyissa meg az API Consumers alkalmazást, és hozzon létre egy REST API v1 kulcsot.",
+        "name": "OpenSubtitles.com",
+        "placeholder": "OpenSubtitles.com REST API v1 kulcs beillesztése..."
+      }
     }
   },
   "legal": {

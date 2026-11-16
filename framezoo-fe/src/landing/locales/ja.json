@@ -240,7 +240,8 @@
     "pageTitle": "Framezoo の字幕を設定する |フレームズー",
     "hero": {
       "title": "Framezoo の字幕を構成する",
-      "description": "個人の Wyzie API キーを設定して、より高速な字幕を取得し、共有コミュニティのレート制限を回避します。"
+      "description": "個人の Wyzie API キーを設定して、より高速な字幕を取得し、共有コミュニティのレート制限を回避します。",
+      "multiDescription": "Framezoo 字幕プロバイダーが独自のレート制限を使用できるように、オプションの個人 API キー (BYOK) を構成します。"
     },
     "step1": {
       "title": "無料の Wyzie API キーを取得します",
@@ -262,7 +263,10 @@
         "invalid": "API キーが無効か期限切れです。",
         "rateLimit": "API キーがレート制限を超えています。",
         "serverError": "Wyzie サーバーは HTTP {{status}} を返しました。",
-        "networkError": "sub.wyzie.io への接続中にネットワーク エラーが発生しました。接続を確認してください。"
+        "networkError": "sub.wyzie.io への接続中にネットワーク エラーが発生しました。接続を確認してください。",
+        "serverErrorProvider": "{{provider}} は HTTP {{status}} を返しました。",
+        "networkErrorProvider": "{{provider}} 検証サービスに接続できませんでした。もう一度試してください。",
+        "verifyingProvider": "{{provider}} で確認しています..."
       },
       "testing": "確認中...",
       "testButton": "APIキーをテストする",
@@ -276,7 +280,33 @@
       "noticeText": "API キーはデバイスに安全に保存されます。映画やシリーズの字幕を検索および取得するためにのみ転送されます。いつでも更新または削除できます。",
       "notConnectedNotice": "注: あなたは Framezoo アカウント チケットに接続されていません。 「Open Framezoo」と直接同期するには、ログイン中に Framezoo デスクトップ アプリからこのページを開きます。それ以外の場合は、以下のマニフェスト URL をコピーして使用します。",
       "title": "インストールと適用",
-      "openFramezoo": "フレームズーを開く"
+      "openFramezoo": "フレームズーを開く",
+      "privacyLinkLabel": "プライバシーポリシー",
+      "takedownLinkLabel": "著作権とDMCAポリシー"
+    },
+    "providersStep": {
+      "optionalBadge": "オプション",
+      "description": "以下のキーはすべてオプションです。指定された場合、Framezoo は共有のデフォルトよりも個人キーを優先します。内蔵のGraniteにはキーは必要ありません。",
+      "title": "字幕プロバイダーの API キー",
+      "manifestHint": "現在、マニフェスト URL のコピーは、認証されていない Stremio URL の Wyzie キーのみを転送します。 Framezoo アカウントに接続して、すべてのプロバイダー キーを同期します。",
+      "getKeyButton": "APIキーの取得"
+    },
+    "providers": {
+      "wyzie": {
+        "portalHint": "Wyzie ストアで無料の個人 API キーを生成または引き換えます。",
+        "name": "ワイジー",
+        "placeholder": "Wyzie API キーを貼り付け..."
+      },
+      "subsource": {
+        "portalHint": "SubSource にサインインし、アカウント ダッシュボード → API タブを開き、キーを作成します。",
+        "name": "サブソース",
+        "placeholder": "サブソース API キーを貼り付け..."
+      },
+      "opensubtitles": {
+        "portalHint": "OpenSubtitles.com にサインインし、API Consumers を開き、REST API v1 キーを作成します。",
+        "name": "OpenSubtitles.com",
+        "placeholder": "OpenSubtitles.com REST API v1 キーを貼り付けます..."
+      }
     }
   },
   "legal": {

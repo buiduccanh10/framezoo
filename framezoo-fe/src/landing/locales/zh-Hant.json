@@ -411,7 +411,8 @@
     "pageTitle": "配置 Framezoo 字幕 |框架動物園",
     "hero": {
       "title": "配置 Framezoo 字幕",
-      "description": "設定您的個人 Wyzie API 金鑰以獲得更快的字幕並繞過共享社群速率限制。"
+      "description": "設定您的個人 Wyzie API 金鑰以獲得更快的字幕並繞過共享社群速率限制。",
+      "multiDescription": "為 Framezoo 字幕提供者配置可選的個人 API 金鑰 (BYOK)，以使用您自己的速率限制。"
     },
     "step1": {
       "description": "Wyzie Subtitles 提供了龐大的多語言字幕目錄。您可以在其官方入口網站上產生或兌換您的個人 API 金鑰：",
@@ -436,7 +437,10 @@
         "invalid": "API 金鑰無效或已過期。",
         "rateLimit": "API 金鑰已超出速率限制。",
         "networkError": "連接到 sub.wyzie.io 時發生網路錯誤。請檢查您的連線。",
-        "serverError": "Wyzie 伺服器傳回 HTTP {{status}}。"
+        "serverError": "Wyzie 伺服器傳回 HTTP {{status}}。",
+        "verifyingProvider": "正在使用 {{provider}} 進行驗證...",
+        "serverErrorProvider": "{{provider}} 傳回 HTTP {{status}}。",
+        "networkErrorProvider": "無法連線 {{provider}} 驗證服務。請再試一次。"
       }
     },
     "step3": {
@@ -447,7 +451,33 @@
       "copyManifest": "複製清單 URL",
       "notConnectedNotice": "注意：您尚未連接 Framezoo 帳號票證。若要直接與「開啟 Framezoo」同步，請在登入後從 Framezoo 桌面應用程式開啟此頁面。否則，請複製下面的清單 URL 來使用它。",
       "openFramezooDisabledTooltip": "需要在登入時從 Framezoo Desktop 打開",
-      "noticeText": "您的 API 金鑰安全地儲存在您的裝置上。它僅被轉發以搜尋和檢索電影和電視劇的字幕。您可以隨時更新或刪除它。"
+      "noticeText": "您的 API 金鑰安全地儲存在您的裝置上。它僅被轉發以搜尋和檢索電影和電視劇的字幕。您可以隨時更新或刪除它。",
+      "privacyLinkLabel": "隱私權政策",
+      "takedownLinkLabel": "版權和 DMCA 政策"
+    },
+    "providersStep": {
+      "getKeyButton": "取得API金鑰",
+      "optionalBadge": "選修的",
+      "manifestHint": "複製清單 URL 目前僅轉送未經驗證的 Stremio URL 的 Wyzie 金鑰；連接您的 Framezoo 帳戶以同步所有提供者金鑰。",
+      "title": "字幕提供者 API 金鑰",
+      "description": "下面的所有鍵都是可選的。當提供時，Framezoo 更喜歡您的個人金鑰而不是共用預設值。內置花崗岩不需要鑰匙。"
+    },
+    "providers": {
+      "wyzie": {
+        "name": "威齊",
+        "portalHint": "在 Wyzie 商店上產生或兌換免費的個人 API 金鑰。",
+        "placeholder": "貼上 Wyzie API 金鑰..."
+      },
+      "subsource": {
+        "name": "子來源",
+        "portalHint": "登入 SubSource，開啟 Account Dashboard → API 選項卡，然後建立金鑰。",
+        "placeholder": "貼上子來源 API 金鑰..."
+      },
+      "opensubtitles": {
+        "name": "OpenSubtitles.com",
+        "portalHint": "登入 OpenSubtitles.com，開啟 API Consumers，然後建立 REST API v1 金鑰。",
+        "placeholder": "貼上 OpenSubtitles.com REST API v1 金鑰..."
+      }
     }
   }
 }

@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "Ваш ключ настроен (нажмите, чтобы изменить).",
       "configureRequiredAction": "Настройте это дополнение (обязательно)",
       "customKeyActiveDesc": "Используя ваш личный ключ API Wyzie",
+      "customKeyActiveProviders": "Используйте свой персональный ключ API для субтитров ({{providers}})",
       "customKeyConfiguredBadge": "Ваш ключ настроен.",
       "description": "Аддоны не являются обязательными. Это приложение не включает в себя, не рекомендует и не размещает какие-либо дополнения.",
       "disabled": "Неполноценный",

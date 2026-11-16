@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "Ваш ключ налаштовано (натисніть, щоб змінити)",
       "configureRequiredAction": "Налаштуйте це доповнення (обов&#39;язково)",
       "customKeyActiveDesc": "Використання вашого особистого ключа Wyzie API",
+      "customKeyActiveProviders": "Використання вашого особистого ключа API субтитрів ({{providers}})",
       "customKeyConfiguredBadge": "Ваш ключ налаштовано",
       "description": "Додатки необов’язкові. Ця програма не об’єднує, не рекомендує та не розміщує жодних додатків.",
       "disabled": "Вимкнено",

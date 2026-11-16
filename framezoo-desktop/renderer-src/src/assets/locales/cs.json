@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "Váš klíč byl nakonfigurován (kliknutím jej změníte)",
       "configureRequiredAction": "Nakonfigurujte tento doplněk (Povinné)",
       "customKeyActiveDesc": "Použití vašeho osobního klíče Wyzie API",
+      "customKeyActiveProviders": "Používání vašeho osobního klíče API pro titulky ({{providers}})",
       "customKeyConfiguredBadge": "Váš klíč byl nakonfigurován",
       "description": "Doplňky jsou volitelné. Tato aplikace nesbaluje, nedoporučuje ani nehostuje žádný doplněk.",
       "disabled": "Zakázáno",

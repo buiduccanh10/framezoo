@@ -32,8 +32,11 @@ export function AddonsPage() {
   const [, copyToClipboard] = useCopyToClipboard();
   const showToast = useToastStore((state) => state.showToast);
 
-  const { hasNativeCustomKey, openNativeSubtitlesConfigure } =
-    useNativeSubtitlesConfig();
+  const {
+    hasNativeCustomKey,
+    configuredNativeProviders,
+    openNativeSubtitlesConfigure,
+  } = useNativeSubtitlesConfig();
 
   const handleShareAddon = (manifestUrl: string) => {
     copyToClipboard(manifestUrl);
@@ -173,10 +176,16 @@ export function AddonsPage() {
                           className="shrink-0 text-sm text-emerald-400"
                         />
                         <span>
-                          {t(
-                            "addons.page.customKeyActiveDesc",
-                            "Đang sử dụng API key Wyzie riêng của tài khoản",
-                          )}
+                          {configuredNativeProviders.length > 0
+                            ? t("addons.page.customKeyActiveProviders", {
+                                providers: configuredNativeProviders.join(", "),
+                                defaultValue:
+                                  "Using your personal subtitle API key ({{providers}})",
+                              })
+                            : t(
+                                "addons.page.customKeyActiveDesc",
+                                "Đang sử dụng API key phụ đề riêng của tài khoản",
+                              )}
                         </span>
                       </p>
                     ) : null}

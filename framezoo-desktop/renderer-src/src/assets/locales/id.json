@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "Kunci Anda telah dikonfigurasi (klik untuk mengubah)",
       "configureRequiredAction": "Konfigurasikan add-on ini (Wajib)",
       "customKeyActiveDesc": "Menggunakan kunci API Wyzie pribadi Anda",
+      "customKeyActiveProviders": "Gunakan kunci API subtitle pribadi Anda ({{providers}})",
       "customKeyConfiguredBadge": "Kunci Anda telah dikonfigurasi",
       "description": "Add-on bersifat opsional. Aplikasi ini tidak memaketkan, merekomendasikan, atau menghosting add-on apa pun.",
       "disabled": "Dengan disabilitas",

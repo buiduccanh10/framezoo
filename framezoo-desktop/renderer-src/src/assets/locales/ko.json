@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "사용자 키가 설정되었습니다 (변경하려면 클릭하세요).",
       "configureRequiredAction": "이 추가 기능을 구성하십시오(필수).",
       "customKeyActiveDesc": "개인 Wyzie API 키를 사용하여",
+      "customKeyActiveProviders": "개인 자막 API 키({{providers}})를 사용하세요.",
       "customKeyConfiguredBadge": "키가 설정되었습니다.",
       "description": "애드온은 선택사항입니다. 이 앱은 애드온을 번들로 제공하거나 권장하거나 호스팅하지 않습니다.",
       "disabled": "장애가 있는",

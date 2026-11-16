@@ -228,7 +228,8 @@
   "subtitlesConfigure": {
     "hero": {
       "title": "Configurer les sous-titres Framezoo",
-      "description": "Configurez votre clé API Wyzie personnelle pour obtenir des sous-titres plus rapides et contourner les limites de tarif partagées par la communauté."
+      "description": "Configurez votre clé API Wyzie personnelle pour obtenir des sous-titres plus rapides et contourner les limites de tarif partagées par la communauté.",
+      "multiDescription": "Configurez des clés API personnelles facultatives (BYOK) pour que les fournisseurs de sous-titres Framezoo utilisent vos propres limites de débit."
     },
     "account": {
       "configuringFor": "Configuration du compte :",
@@ -264,7 +265,10 @@
         "invalid": "La clé API n'est pas valide ou a expiré.",
         "networkError": "Erreur réseau lors de la connexion à sub.wyzie.io. Veuillez vérifier votre connexion.",
         "serverError": "Le serveur Wyzie a renvoyé HTTP {{status}}.",
-        "rateLimit": "La clé API a dépassé les limites de débit."
+        "rateLimit": "La clé API a dépassé les limites de débit.",
+        "verifyingProvider": "Vérification avec {{provider}}...",
+        "serverErrorProvider": "{{provider}} a renvoyé HTTP {{status}}.",
+        "networkErrorProvider": "Impossible d'atteindre le service de vérification {{provider}}. Veuillez réessayer."
       },
       "testButton": "Clé API de test"
     },
@@ -276,7 +280,33 @@
       "openFramezooDisabledTooltip": "Nécessite une ouverture depuis Framezoo Desktop lorsque vous êtes connecté",
       "copyManifest": "Copier l'URL du manifeste",
       "noticeText": "Votre clé API est stockée en toute sécurité sur votre appareil. Il est transmis uniquement pour rechercher et récupérer des sous-titres de films et de séries. Vous pouvez le mettre à jour ou le supprimer à tout moment.",
-      "notConnectedNotice": "Remarque : Vous n'êtes pas connecté avec un ticket de compte Framezoo. Pour synchroniser directement avec « Open Framezoo », ouvrez cette page depuis votre application Framezoo Desktop lorsque vous êtes connecté. Sinon, copiez l'URL du manifeste ci-dessous pour l'utiliser."
+      "notConnectedNotice": "Remarque : Vous n'êtes pas connecté avec un ticket de compte Framezoo. Pour synchroniser directement avec « Open Framezoo », ouvrez cette page depuis votre application Framezoo Desktop lorsque vous êtes connecté. Sinon, copiez l'URL du manifeste ci-dessous pour l'utiliser.",
+      "privacyLinkLabel": "politique de confidentialité",
+      "takedownLinkLabel": "Politique de droits d'auteur et DMCA"
+    },
+    "providersStep": {
+      "optionalBadge": "Facultatif",
+      "getKeyButton": "Obtenir la clé API",
+      "manifestHint": "Copier l'URL du manifeste ne transmet actuellement que la clé Wyzie pour les URL Stremio non authentifiées ; connectez votre compte Framezoo pour synchroniser toutes les clés du fournisseur.",
+      "title": "Clés API du fournisseur de sous-titres",
+      "description": "Toutes les clés ci-dessous sont facultatives. Lorsqu'elle est fournie, Framezoo préfère votre clé personnelle aux valeurs par défaut partagées. Le granit intégré ne nécessite aucune clé."
+    },
+    "providers": {
+      "wyzie": {
+        "name": "Wyzie",
+        "portalHint": "Générez ou utilisez une clé API personnelle gratuite sur le Wyzie Store.",
+        "placeholder": "Coller la clé API Wyzie..."
+      },
+      "subsource": {
+        "name": "Sous-source",
+        "portalHint": "Connectez-vous sur SubSource, ouvrez le tableau de bord du compte → onglet API et créez une clé.",
+        "placeholder": "Coller la clé API SubSource..."
+      },
+      "opensubtitles": {
+        "portalHint": "Connectez-vous sur OpenSubtitles.com, ouvrez les consommateurs d'API et créez une clé API REST v1.",
+        "name": "OpenSubtitles.com",
+        "placeholder": "Coller la clé de l'API REST v1 d'OpenSubtitles.com..."
+      }
     }
   },
   "legal": {

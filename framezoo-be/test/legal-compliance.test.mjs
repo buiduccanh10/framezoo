@@ -109,6 +109,10 @@ test('legacy addon proxy, HTML scrapers, and content metrics are removed', () =>
   assert.doesNotMatch(opensubs, /VLSub/);
   assert.doesNotMatch(opensubs, /rest\.opensubtitles\.org/);
 
+  const keyTestUtil = read('server/utils/subtitles/keyTest.ts');
+  assert.match(keyTestUtil, /api\.opensubtitles\.com\/api\/v1/);
+  assert.doesNotMatch(keyTestUtil, /VLSub|opensubtitles\.org/);
+
   const subsourceDownload = read('server/routes/addon/subtitles/download/subsource/[id].get.ts');
   assert.match(subsourceDownload, /private, no-store/);
 

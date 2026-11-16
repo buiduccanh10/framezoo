@@ -228,7 +228,8 @@
   "subtitlesConfigure": {
     "hero": {
       "title": "Configurar legendas Framezoo",
-      "description": "Configure sua chave de API Wyzie pessoal para obter legendas mais rápidas e contornar os limites de taxa da comunidade compartilhada."
+      "description": "Configure sua chave de API Wyzie pessoal para obter legendas mais rápidas e contornar os limites de taxa da comunidade compartilhada.",
+      "multiDescription": "Configure chaves de API pessoais opcionais (BYOK) para que os provedores de legendas do Framezoo usem seus próprios limites de taxa."
     },
     "pageTitle": "Configurar legendas Framezoo | Quadrozoo",
     "account": {
@@ -264,7 +265,10 @@
         "invalid": "A chave de API é inválida ou expirou.",
         "rateLimit": "A chave de API excedeu os limites de taxa.",
         "serverError": "O servidor Wyzie retornou HTTP {{status}}.",
-        "networkError": "Erro de rede ao conectar-se a sub.wyzie.io. Por favor, verifique sua conexão."
+        "networkError": "Erro de rede ao conectar-se a sub.wyzie.io. Por favor, verifique sua conexão.",
+        "serverErrorProvider": "{{provider}} retornou HTTP {{status}}.",
+        "verifyingProvider": "Verificando com {{provider}}...",
+        "networkErrorProvider": "Não foi possível acessar o serviço de verificação {{provider}}. Por favor, tente novamente."
       },
       "clearButton": "Limpar chave"
     },
@@ -276,7 +280,33 @@
       "copied": "Copiado!",
       "noticeLabel": "Perceber:",
       "copyManifest": "Copiar URL do manifesto",
-      "noticeText": "Sua chave API é armazenada com segurança em seu dispositivo. Ele é encaminhado apenas para buscar e recuperar legendas de filmes e séries. Você pode atualizá-lo ou removê-lo a qualquer momento."
+      "noticeText": "Sua chave API é armazenada com segurança em seu dispositivo. Ele é encaminhado apenas para buscar e recuperar legendas de filmes e séries. Você pode atualizá-lo ou removê-lo a qualquer momento.",
+      "privacyLinkLabel": "política de Privacidade",
+      "takedownLinkLabel": "Política de direitos autorais e DMCA"
+    },
+    "providersStep": {
+      "title": "Chaves de API do provedor de legendas",
+      "getKeyButton": "Obtenha a chave API",
+      "manifestHint": "Copiar URL do Manifesto atualmente encaminha apenas a chave Wyzie para URLs Stremio não autenticados; conecte sua conta Framezoo para sincronizar todas as chaves do provedor.",
+      "description": "Todas as chaves abaixo são opcionais. Quando fornecida, o Framezoo prefere sua chave pessoal aos padrões compartilhados. Granito embutido não requer chave.",
+      "optionalBadge": "Opcional"
+    },
+    "providers": {
+      "wyzie": {
+        "name": "Wyzie",
+        "portalHint": "Gere ou resgate uma chave de API pessoal gratuita na Wyzie Store.",
+        "placeholder": "Colar a chave da API Wyzie..."
+      },
+      "subsource": {
+        "portalHint": "Faça login no SubSource, abra Painel da conta → guia API e crie uma chave.",
+        "name": "Subfonte",
+        "placeholder": "Colar a chave da API SubSource..."
+      },
+      "opensubtitles": {
+        "name": "OpenSubtitles. com",
+        "portalHint": "Faça login em OpenSubtitles.com, abra Consumidores de API e crie uma chave REST API v1.",
+        "placeholder": "Colar a chave da API REST v1 do OpenSubtitles.com..."
+      }
     }
   },
   "legal": {

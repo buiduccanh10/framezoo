@@ -2,6 +2,11 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import test from 'node:test';
 
+import {
+  isSubtitleKeyProvider,
+  testSubtitleProviderKey,
+} from '../server/utils/subtitles/keyTest.ts';
+
 const read = relativePath =>
   fs.readFileSync(new URL(`../${relativePath}`, import.meta.url), 'utf8');
 
@@ -58,4 +63,58 @@ test('subtitles search scopes credentials and keeps query keys unauthenticated-o
   const cacheLookup = subtitlesRoute.indexOf('const cachedSubtitles = await getCachedSubtitles');
   assert.ok(credentialLookup >= 0 && credentialLookup < cacheLookup);
   assert.doesNotMatch(subtitlesRoute, /queryWyzieKey \|\| userWyzieKey \|\| serverWyzieApiKey/);
+});
+
+test('subtitle key test probe validates all three providers safely and without caching', async () => {
+  assert.equal(isSubtitleKeyProvider('wyzie'), true);
+  assert.equal(isSubtitleKeyProvider('subsource'), true);
+  assert.equal(isSubtitleKeyProvider('opensubtitles'), true);
+  assert.equal(isSubtitleKeyProvider('granite'), false);
+
+  const emptyResult = await testSubtitleProviderKey('subsource', '   ');
+  assert.deepEqual(emptyResult, { valid: false, status: 'empty' });
+
+  const calls = [];
+  const mockFetch = status => async (url, init) => {
+    calls.push({ url, headers: init?.headers || {} });
+    return new Response('{}', { status });
+  };
+
+  assert.deepEqual(
+    await testSubtitleProviderKey('wyzie', 'wyz_123\r\n', mockFetch(200)),
+    { valid: true, status: 'valid', httpStatus: 200 }
+  );
+  assert.match(calls[0].url, /^https:\/\/sub\.wyzie\.io\/search\?id=tt1877830&key=wyz_123$/);
+
+  assert.deepEqual(
+    await testSubtitleProviderKey('subsource', 'sub_456\t', mockFetch(401)),
+    { valid: false, status: 'invalid', httpStatus: 401 }
+  );
+  assert.equal(
+    calls[1].url,
+    'https://api.subsource.net/api/v1/movies/search?searchType=imdb&imdb=tt1877830'
+  );
+  assert.equal(calls[1].headers['x-api-key'], 'sub_456');
+
+  assert.deepEqual(
+    await testSubtitleProviderKey('opensubtitles', 'os_789', mockFetch(429)),
+    { valid: false, status: 'rate_limit', httpStatus: 429 }
+  );
+  assert.equal(
+    calls[2].url,
+    'https://api.opensubtitles.com/api/v1/subtitles?imdb_id=1877830&type=movie'
+  );
+  assert.equal(calls[2].headers['Api-Key'], 'os_789');
+  assert.equal(calls[2].headers['User-Agent'], 'Framezoo v1.0.0');
+
+  assert.deepEqual(
+    await testSubtitleProviderKey('opensubtitles', 'os_789', async () => {
+      throw new Error('ECONNREFUSED');
+    }),
+    { valid: false, status: 'network_error' }
+  );
+
+  const testRoute = read('server/routes/addon/subtitles/api/test.post.ts');
+  assert.match(testRoute, /private, no-store/);
+  assert.match(testRoute, /isSubtitleKeyProvider/);
 });

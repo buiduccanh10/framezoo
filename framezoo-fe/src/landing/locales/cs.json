@@ -228,7 +228,8 @@
   "subtitlesConfigure": {
     "hero": {
       "description": "Nastavte si svůj osobní klíč Wyzie API, abyste získali rychlejší titulky a obešli sdílené komunitní limity.",
-      "title": "Konfigurace titulků Framezoo"
+      "title": "Konfigurace titulků Framezoo",
+      "multiDescription": "Nakonfigurujte volitelné osobní klíče API (BYOK) pro poskytovatele titulků Framezoo tak, aby používali své vlastní limity."
     },
     "pageTitle": "Konfigurace titulků Framezoo | Framezoo",
     "account": {
@@ -265,7 +266,10 @@
         "valid": "API klíč je platný a funkční!",
         "rateLimit": "Klíč API překročil limity rychlosti.",
         "networkError": "Chyba sítě při připojování k sub.wyzie.io. Zkontrolujte prosím své připojení.",
-        "serverError": "Server Wyzie vrátil HTTP {{status}}."
+        "serverError": "Server Wyzie vrátil HTTP {{status}}.",
+        "verifyingProvider": "Ověřování pomocí {{provider}}...",
+        "serverErrorProvider": "{{provider}} vrátilo HTTP {{status}}.",
+        "networkErrorProvider": "Nelze se spojit s ověřovací službou {{provider}}. Zkuste to prosím znovu."
       }
     },
     "step3": {
@@ -276,7 +280,33 @@
       "openFramezooDisabledTooltip": "Vyžaduje otevření z Framezoo Desktop při přihlášení",
       "openFramezoo": "Otevřete Framezoo",
       "notConnectedNotice": "Poznámka: Nejste spojeni s tiketem účtu Framezoo. Chcete-li synchronizovat přímo s 'Open Framezoo', otevřete tuto stránku z aplikace Framezoo Desktop, když jste přihlášeni. V opačném případě zkopírujte níže uvedenou adresu Manifest, abyste ji mohli použít.",
-      "noticeText": "Váš klíč API je bezpečně uložen ve vašem zařízení. Přeposílá se pouze za účelem vyhledávání a načítání titulků k filmům a seriálům. Můžete jej kdykoli aktualizovat nebo odebrat."
+      "noticeText": "Váš klíč API je bezpečně uložen ve vašem zařízení. Přeposílá se pouze za účelem vyhledávání a načítání titulků k filmům a seriálům. Můžete jej kdykoli aktualizovat nebo odebrat.",
+      "privacyLinkLabel": "Zásady ochrany osobních údajů",
+      "takedownLinkLabel": "Autorská práva a zásady DMCA"
+    },
+    "providersStep": {
+      "optionalBadge": "Volitelný",
+      "title": "Klíče API poskytovatele titulků",
+      "getKeyButton": "Získejte klíč API",
+      "description": "Všechny níže uvedené klíče jsou volitelné. Pokud je k dispozici, Framezoo upřednostňuje váš osobní klíč před sdíleným výchozím nastavením. Vestavěná žula nevyžaduje žádný klíč.",
+      "manifestHint": "Kopírovat adresu URL manifestu aktuálně předává pouze klíč Wyzie pro neověřené adresy URL Stremio; připojte svůj účet Framezoo a synchronizujte všechny klíče poskytovatele."
+    },
+    "providers": {
+      "wyzie": {
+        "name": "Wyzie",
+        "portalHint": "Vygenerujte nebo uplatněte bezplatný osobní klíč API na Wyzie Store.",
+        "placeholder": "Vložit klíč Wyzie API..."
+      },
+      "subsource": {
+        "name": "Podzdroj",
+        "placeholder": "Vložit klíč rozhraní API SubSource...",
+        "portalHint": "Přihlaste se k SubSource, otevřete Account Dashboard → karta API a vytvořte klíč."
+      },
+      "opensubtitles": {
+        "name": "OpenSubtitles.com",
+        "placeholder": "Vložit klíč OpenSubtitles.com REST API v1...",
+        "portalHint": "Přihlaste se na OpenSubtitles.com, otevřete API Consumers a vytvořte klíč REST API v1."
+      }
     }
   },
   "legal": {

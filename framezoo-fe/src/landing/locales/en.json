@@ -228,7 +228,8 @@
     "pageTitle": "Configure Framezoo Subtitles | Framezoo",
     "hero": {
       "title": "Configure Framezoo Subtitles",
-      "description": "Set up your personal Wyzie API Key to get faster subtitles and bypass shared community rate limits."
+      "description": "Set up your personal Wyzie API Key to get faster subtitles and bypass shared community rate limits.",
+      "multiDescription": "Configure optional personal API keys (BYOK) for Framezoo Subtitles providers to use your own rate limits."
     },
     "account": {
       "verifying": "Verifying account ticket from Desktop App...",
@@ -240,6 +241,31 @@
       "saveSuccess": "Successfully saved to your account! Desktop App will now use this key automatically.",
       "saveFailed": "Save failed.",
       "saveNetworkError": "Network error while saving to account."
+    },
+    "providersStep": {
+      "step": "1",
+      "title": "Subtitle Provider API Keys",
+      "description": "All keys below are optional. When provided, Framezoo prefers your personal key over shared defaults. Built-in Granite requires no key.",
+      "optionalBadge": "Optional",
+      "getKeyButton": "Get API Key",
+      "manifestHint": "Copy Manifest URL currently forwards only the Wyzie key for unauthenticated Stremio URLs; connect your Framezoo account to sync all provider keys."
+    },
+    "providers": {
+      "wyzie": {
+        "name": "Wyzie",
+        "portalHint": "Generate or redeem a free personal API key on the Wyzie Store.",
+        "placeholder": "Paste Wyzie API Key..."
+      },
+      "subsource": {
+        "name": "SubSource",
+        "portalHint": "Sign in on SubSource, open Account Dashboard → API tab, and create a key.",
+        "placeholder": "Paste SubSource API Key..."
+      },
+      "opensubtitles": {
+        "name": "OpenSubtitles.com",
+        "portalHint": "Sign in on OpenSubtitles.com, open API Consumers, and create a REST API v1 key.",
+        "placeholder": "Paste OpenSubtitles.com REST API v1 Key..."
+      }
     },
     "step1": {
       "step": "1",
@@ -262,15 +288,18 @@
       "messages": {
         "empty": "Please enter an API Key before testing.",
         "verifying": "Verifying with Wyzie...",
+        "verifyingProvider": "Verifying with {{provider}}...",
         "valid": "API Key is valid and working!",
         "invalid": "API Key is invalid or expired.",
         "rateLimit": "API Key has exceeded rate limits.",
         "serverError": "Wyzie server returned HTTP {{status}}.",
-        "networkError": "Network error connecting to sub.wyzie.io. Please check your connection."
+        "serverErrorProvider": "{{provider}} returned HTTP {{status}}.",
+        "networkError": "Network error connecting to sub.wyzie.io. Please check your connection.",
+        "networkErrorProvider": "Could not reach {{provider}} verification service. Please try again."
       }
     },
     "step3": {
-      "step": "3",
+      "step": "2",
       "title": "Install & Apply",
       "openFramezoo": "Open Framezoo",
       "openFramezooDisabledTooltip": "Requires opening from Framezoo Desktop while logged in",
@@ -278,8 +307,10 @@
       "or": "or",
       "copyManifest": "Copy Manifest URL",
       "copied": "Copied!",
-      "noticeLabel": "Notice:",
-      "noticeText": "Your API Key is stored safely on your device. It is forwarded only to search and retrieve subtitles for movies and series. You can update or remove it anytime."
+      "noticeLabel": "Privacy & Legal Notice:",
+      "noticeText": "Keys are stored locally in your browser or encrypted (AES-256-GCM) on your Framezoo account when saved. They are relayed solely to official Wyzie, SubSource, and OpenSubtitles.com REST API v1 endpoints with private no-store headers (no public caching) and remain subject to each provider's terms, Framezoo's",
+      "privacyLinkLabel": "Privacy Policy",
+      "takedownLinkLabel": "Copyright & DMCA Policy"
     }
   },
   "legal": {

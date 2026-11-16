@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "Uw sleutel is geconfigureerd (klik om te wijzigen)",
       "configureRequiredAction": "Configureer deze add-on (verplicht)",
       "customKeyActiveDesc": "Gebruik uw persoonlijke Wyzie API-sleutel",
+      "customKeyActiveProviders": "Gebruik uw persoonlijke API-sleutel voor ondertiteling ({{providers}})",
       "customKeyConfiguredBadge": "Uw sleutel is geconfigureerd",
       "description": "Add-ons zijn optioneel. Deze app bundelt, beveelt of host geen enkele add-on.",
       "disabled": "Gehandicapt",

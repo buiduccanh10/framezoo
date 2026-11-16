@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "تم ضبط مفتاحك (انقر للتغيير)",
       "configureRequiredAction": "قم بتكوين هذه الإضافة (مطلوب)",
       "customKeyActiveDesc": "باستخدام مفتاح Wyzie API الشخصي الخاص بك",
+      "customKeyActiveProviders": "باستخدام مفتاح API الخاص بك للترجمة ({{providers}})",
       "customKeyConfiguredBadge": "تم إعداد مفتاحك",
       "description": "الإضافات اختيارية. لا يجمع هذا التطبيق أي ملحق أو يوصي به أو يستضيفه.",
       "disabled": "عاجز",

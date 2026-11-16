@@ -228,7 +228,8 @@
   "subtitlesConfigure": {
     "hero": {
       "title": "הגדר כתוביות של Framezoo",
-      "description": "הגדר את מפתח Wyzie API האישי שלך כדי לקבל כתוביות מהירות יותר ולעקוף את מגבלות התעריפים המשותפות של הקהילה."
+      "description": "הגדר את מפתח Wyzie API האישי שלך כדי לקבל כתוביות מהירות יותר ולעקוף את מגבלות התעריפים המשותפות של הקהילה.",
+      "multiDescription": "הגדר מפתחות API אישיים אופציונליים (BYOK) עבור ספקי Framezoo Subtitles כדי להשתמש במגבלות התעריף שלך."
     },
     "account": {
       "configuringFor": "הגדרת תצורה לחשבון:",
@@ -263,7 +264,10 @@
         "networkError": "שגיאת רשת בחיבור ל-sub.wyzie.io. אנא בדוק את החיבור שלך.",
         "valid": "מפתח API תקף ועובד!",
         "empty": "אנא הזן מפתח API לפני הבדיקה.",
-        "rateLimit": "מפתח API חרג ממגבלות התעריף."
+        "rateLimit": "מפתח API חרג ממגבלות התעריף.",
+        "serverErrorProvider": "{{provider}} החזיר HTTP {{status}}.",
+        "verifyingProvider": "מאמת עם {{provider}}...",
+        "networkErrorProvider": "לא ניתן היה להגיע לשירות האימות {{provider}}. אנא נסה שוב."
       },
       "testButton": "בדוק מפתח API",
       "clearButton": "מקש נקה"
@@ -276,7 +280,33 @@
       "title": "התקן והחל",
       "openFramezoo": "פתח את Framezoo",
       "copyManifest": "העתק כתובת אתר של מניפסט",
-      "noticeText": "מפתח ה-API שלך מאוחסן בבטחה במכשיר שלך. זה מועבר רק כדי לחפש ולאחזר כתוביות לסרטים וסדרות. אתה יכול לעדכן או להסיר אותו בכל עת."
+      "noticeText": "מפתח ה-API שלך מאוחסן בבטחה במכשיר שלך. זה מועבר רק כדי לחפש ולאחזר כתוביות לסרטים וסדרות. אתה יכול לעדכן או להסיר אותו בכל עת.",
+      "privacyLinkLabel": "מדיניות פרטיות",
+      "takedownLinkLabel": "זכויות יוצרים ומדיניות DMCA"
+    },
+    "providersStep": {
+      "optionalBadge": "אופציונלי",
+      "manifestHint": "Copy Manifest URL מעביר כעת רק את מפתח Wyzie עבור כתובות Stremio לא מאומתות; חבר את חשבון Framezoo שלך כדי לסנכרן את כל מפתחות הספק.",
+      "description": "כל המקשים למטה הם אופציונליים. כאשר מסופק, Framezoo מעדיף את המפתח האישי שלך על פני ברירות מחדל משותפות. גרניט מובנה אינו דורש מפתח.",
+      "getKeyButton": "קבל מפתח API",
+      "title": "מפתחות API של ספק כתוביות"
+    },
+    "providers": {
+      "wyzie": {
+        "name": "וויזי",
+        "portalHint": "צור או מימוש מפתח API אישי בחינם בחנות Wyzie.",
+        "placeholder": "הדבק את מפתח API של Wyzie..."
+      },
+      "subsource": {
+        "placeholder": "הדבק מפתח ממשק API של מקור משנה...",
+        "name": "מקור משנה",
+        "portalHint": "היכנס במקור משנה, פתח את לוח המחוונים של החשבון ← כרטיסיית API וצור מפתח."
+      },
+      "opensubtitles": {
+        "portalHint": "היכנס ב-OpenSubtitles.com, פתח את API Consumers וצור מפתח REST API v1.",
+        "name": "OpenSubtitles.com",
+        "placeholder": "הדבק מפתח OpenSubtitles.com REST API v1..."
+      }
     }
   },
   "legal": {

@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "Din nyckel har konfigurerats (klicka för att ändra)",
       "configureRequiredAction": "Konfigurera detta tillägg (Obligatoriskt)",
       "customKeyActiveDesc": "Använda din personliga Wyzie API-nyckel",
+      "customKeyActiveProviders": "Använda din personliga API-nyckel för undertexter ({{providers}})",
       "customKeyConfiguredBadge": "Din nyckel har konfigurerats",
       "description": "Tillägg är valfria. Denna app paketerar inte, rekommenderar eller är värd för något tillägg.",
       "disabled": "Inaktiverad",

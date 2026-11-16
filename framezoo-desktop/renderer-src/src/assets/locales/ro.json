@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "Cheia dvs. a fost configurată (faceți clic pentru a modifica)",
       "configureRequiredAction": "Configurați acest addon (obligatoriu)",
       "customKeyActiveDesc": "Folosirea cheii API Wyzie personale",
+      "customKeyActiveProviders": "Folosind cheia API personală pentru subtitrări ({{providers}})",
       "customKeyConfiguredBadge": "Cheia dvs. a fost configurată",
       "description": "Suplimentele sunt opționale. Această aplicație nu include, nu recomandă sau găzduiește niciun supliment.",
       "disabled": "Dezactivat",

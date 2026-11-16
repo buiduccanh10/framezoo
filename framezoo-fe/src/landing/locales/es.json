@@ -239,7 +239,8 @@
     },
     "hero": {
       "title": "Configurar subtítulos de Framezoo",
-      "description": "Configure su clave API Wyzie personal para obtener subtítulos más rápidos y evitar los límites de tarifas compartidos de la comunidad."
+      "description": "Configure su clave API Wyzie personal para obtener subtítulos más rápidos y evitar los límites de tarifas compartidos de la comunidad.",
+      "multiDescription": "Configure claves API personales opcionales (BYOK) para que los proveedores de subtítulos de Framezoo utilicen sus propios límites de velocidad."
     },
     "pageTitle": "Configurar subtítulos de Framezoo | marcozoo",
     "step1": {
@@ -265,7 +266,10 @@
         "rateLimit": "La clave API ha excedido los límites de velocidad.",
         "valid": "¡La clave API es válida y funciona!",
         "serverError": "El servidor Wyzie devolvió HTTP {{status}}.",
-        "invalid": "La clave API no es válida o ha caducado."
+        "invalid": "La clave API no es válida o ha caducado.",
+        "verifyingProvider": "Verificando con {{provider}}...",
+        "networkErrorProvider": "No se pudo comunicar con el servicio de verificación {{provider}}. Por favor inténtalo de nuevo.",
+        "serverErrorProvider": "{{provider}} devolvió HTTP {{status}}."
       }
     },
     "step3": {
@@ -276,7 +280,33 @@
       "openFramezooDisabledTooltip": "Requiere abrir desde Framezoo Desktop mientras está conectado",
       "copyManifest": "Copiar URL del manifiesto",
       "notConnectedNotice": "Nota: No está conectado con un ticket de cuenta de Framezoo. Para sincronizar directamente con 'Open Framezoo', abra esta página desde su aplicación de escritorio Framezoo mientras está conectado. De lo contrario, copie la URL del manifiesto a continuación para usarla.",
-      "noticeText": "Su clave API se almacena de forma segura en su dispositivo. Se reenvía únicamente para buscar y recuperar subtítulos de películas y series. Puedes actualizarlo o eliminarlo en cualquier momento."
+      "noticeText": "Su clave API se almacena de forma segura en su dispositivo. Se reenvía únicamente para buscar y recuperar subtítulos de películas y series. Puedes actualizarlo o eliminarlo en cualquier momento.",
+      "privacyLinkLabel": "política de privacidad",
+      "takedownLinkLabel": "Política de derechos de autor y DMCA"
+    },
+    "providersStep": {
+      "optionalBadge": "Opcional",
+      "title": "Claves API del proveedor de subtítulos",
+      "manifestHint": "Copiar URL del manifiesto actualmente solo reenvía la clave Wyzie para URL de Stremio no autenticadas; conecte su cuenta de Framezoo para sincronizar todas las claves del proveedor.",
+      "description": "Todas las claves siguientes son opcionales. Cuando se proporciona, Framezoo prefiere su clave personal a los valores predeterminados compartidos. Granito incorporado no requiere llave.",
+      "getKeyButton": "Obtener clave API"
+    },
+    "providers": {
+      "wyzie": {
+        "name": "Wyzie",
+        "portalHint": "Genere o canjee una clave API personal gratuita en Wyzie Store.",
+        "placeholder": "Pegue la clave API de Wyzie..."
+      },
+      "subsource": {
+        "name": "Subfuente",
+        "placeholder": "Pegar la clave API de SubSource...",
+        "portalHint": "Inicie sesión en SubSource, abra el Panel de cuenta → pestaña API y cree una clave."
+      },
+      "opensubtitles": {
+        "placeholder": "Pegue la clave API REST v1 de OpenSubtitles.com...",
+        "portalHint": "Inicie sesión en OpenSubtitles.com, abra API Consumers y cree una clave REST API v1.",
+        "name": "OpenSubtitles.com"
+      }
     }
   },
   "legal": {

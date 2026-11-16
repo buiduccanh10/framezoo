@@ -39,6 +39,7 @@
       "configureCustomKeyActive": "ਤੁਹਾਡੀ ਕੁੰਜੀ ਸੰਰਚਿਤ ਕੀਤੀ ਗਈ ਹੈ (ਬਦਲਣ ਲਈ ਕਲਿੱਕ ਕਰੋ)",
       "configureRequiredAction": "ਇਸ ਐਡਆਨ ਨੂੰ ਕੌਂਫਿਗਰ ਕਰੋ (ਲੋੜੀਂਦਾ)",
       "customKeyActiveDesc": "ਤੁਹਾਡੀ ਨਿੱਜੀ Wyzie API ਕੁੰਜੀ ਦੀ ਵਰਤੋਂ ਕਰਨਾ",
+      "customKeyActiveProviders": "ਤੁਹਾਡੀ ਨਿੱਜੀ ਉਪਸਿਰਲੇਖ API ਕੁੰਜੀ ({{providers}}) ਦੀ ਵਰਤੋਂ ਕਰਨਾ",
       "customKeyConfiguredBadge": "ਤੁਹਾਡੀ ਕੁੰਜੀ ਸੰਰਚਿਤ ਕੀਤੀ ਗਈ ਹੈ।",
       "description": "ਐਡਆਨ ਵਿਕਲਪਿਕ ਹਨ। ਇਹ ਐਪ ਕਿਸੇ ਵੀ ਐਡਆਨ ਨੂੰ ਬੰਡਲ, ਸਿਫ਼ਾਰਿਸ਼ ਜਾਂ ਹੋਸਟ ਨਹੀਂ ਕਰਦਾ ਹੈ।",
       "disabled": "ਅਯੋਗ",

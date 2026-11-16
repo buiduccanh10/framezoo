@@ -21,7 +21,9 @@ export function getLegalTabFromPathname(pathname: string): LegalTabId | null {
   if (
     normalized === "/legal" ||
     normalized === "/legal/terms" ||
-    normalized === "/terms"
+    normalized === "/legal/about" ||
+    normalized === "/terms" ||
+    normalized === "/about"
   ) {
     return "terms";
   }
