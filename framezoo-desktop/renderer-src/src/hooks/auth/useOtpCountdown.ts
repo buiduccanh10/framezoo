@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 export function useOtpCountdown(
   initialExpiresIn: number,
@@ -20,21 +20,24 @@ export function useOtpCountdown(
     return () => window.clearInterval(timer);
   }, []);
 
-  const reset = (nextExpiresIn: number, nextResendAfter = 60) => {
+  const reset = useCallback((nextExpiresIn: number, nextResendAfter = 60) => {
     setExpiresIn(nextExpiresIn);
     setResendAfter(nextResendAfter > 0 ? nextResendAfter : 60);
-  };
+  }, []);
 
   const formattedTime = `${Math.floor(expiresIn / 60)}:${String(
     expiresIn % 60,
   ).padStart(2, "0")}`;
 
-  return {
-    expiresIn,
-    resendAfter,
-    isExpired: expiresIn <= 0,
-    canResend: resendAfter <= 0,
-    formattedTime,
-    reset,
-  };
+  return useMemo(
+    () => ({
+      expiresIn,
+      resendAfter,
+      isExpired: expiresIn <= 0,
+      canResend: resendAfter <= 0,
+      formattedTime,
+      reset,
+    }),
+    [expiresIn, resendAfter, formattedTime, reset],
+  );
 }

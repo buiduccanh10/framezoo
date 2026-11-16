@@ -473,7 +473,9 @@ class TorrentDiscoveryTest(unittest.TestCase):
         with open(engine_path, "r", encoding="utf-8") as fh:
             src = fh.read()
         self.assertIn('"unchoke_slots_limit": 0', src)
-        self.assertIn('"upload_rate_limit": 1', src)
+        self.assertIn('"active_seeds": 0', src)
+        self.assertIn('"seeding_outgoing_connections": False', src)
+        self.assertNotIn('"upload_rate_limit": 1', src)
 
 if __name__ == "__main__":
     unittest.main()

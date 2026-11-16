@@ -30,13 +30,27 @@ export function OtpVerificationPart(props: {
   const [code, setCode] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  const countdown = useOtpCountdown(props.challenge.expiresIn, 0);
+  const initialResendAfter =
+    props.challenge.resendAfter > 0 ? props.challenge.resendAfter : 60;
+  const countdown = useOtpCountdown(
+    props.challenge.expiresIn,
+    initialResendAfter,
+  );
+  const { reset: resetCountdown } = countdown;
 
   useEffect(() => {
     setChallengeId(props.challenge.challengeId);
-    countdown.reset(props.challenge.expiresIn, 0);
+    resetCountdown(
+      props.challenge.expiresIn,
+      props.challenge.resendAfter > 0 ? props.challenge.resendAfter : 60,
+    );
     setCode("");
-  }, [props.challenge.challengeId, props.challenge.expiresIn, countdown]);
+  }, [
+    props.challenge.challengeId,
+    props.challenge.expiresIn,
+    props.challenge.resendAfter,
+    resetCountdown,
+  ]);
 
   const [verifyResult, verify] = useAsyncFn(async () => {
     if (code.length !== 6 || countdown.isExpired) return;

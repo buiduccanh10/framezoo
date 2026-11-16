@@ -307,9 +307,10 @@ class LibtorrentEngine:
                 **self._network_settings(),
                 **encryption_settings,
                 "connections_limit": 400,
-                # Neutral playback only: disable outbound P2P seeding/uploading by default.
+                # Neutral playback only: disable outbound P2P seeding without throttling protocol/metadata requests.
                 "unchoke_slots_limit": 0,
-                "upload_rate_limit": 1,
+                "active_seeds": 0,
+                "seeding_outgoing_connections": False,
                 "enable_dht": True,
                 "enable_lsd": True,
                 "enable_upnp": True,
