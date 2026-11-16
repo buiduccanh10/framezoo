@@ -415,9 +415,9 @@
         "summary": "Tarafsız aracı durumu, 24 saat/72 saat Bildirim ve Yayından Kaldırma engellenenler listesi süreci ve Tekrarlanan İhlalci politikası.",
         "sections": [
           {
-            "title": "Medya Oynatıcı ve P2P",
+            "title": "Nötr Aracı Yazılım ve Varsayılan Tohumlamasız P2P",
             "paragraphs": [
-              "Framezoo, hiçbir video dosyasını barındırmayan ve hiçbir varsayılan içerik eklentisini paketlemeyen bir medya oynatıcısıdır. Torrent motoru varsayılan olarak genel izleyicileri kullanır; bu hizmetler IP adresinizi ve torrentin bilgi karmasını alır. Motor, giden P2P paylaşımını sınırlayacak şekilde yapılandırılmıştır.",
+              "Framezoo, Stremio ve Kodi'ye benzer tarafsız bir medya oynatıcı yazılımıdır: video dosyası barındırmaz, varsayılan içerik eklentileri veya genel izleyicileri paketlemez, sunucu tarafı eklenti proxy'si gerçekleştirmez ve varsayılan olarak giden P2P tohumlamayı devre dışı bırakır (unchoke_slots_limit = 0, active_seeds = 0).",
               "Altyazı indirmeleri, Framezoo sunucularında genel önbelleğe alma olmadan, mağaza dışı başlıklar kullanır."
             ],
             "badge": "01"

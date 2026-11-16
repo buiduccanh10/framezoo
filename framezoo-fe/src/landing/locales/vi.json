@@ -421,7 +421,7 @@
             "badge": "01",
             "title": "Phần mềm trình phát trung gian trung lập & P2P",
             "paragraphs": [
-              "Framezoo là phần mềm trình phát, không lưu trữ tệp phim và không cài sẵn addon cung cấp nội dung. Công cụ torrent sử dụng tracker công cộng theo mặc định; các dịch vụ này nhận địa chỉ IP và infoHash của torrent. Công cụ được cấu hình để hạn chế chia sẻ dữ liệu P2P.",
+              "Framezoo là phần mềm kỹ thuật trung lập thuần túy, tương tự Stremio và Kodi: không lưu trữ tệp phim, không cung cấp nguồn phát mặc định, không cài sẵn scraper hay tracker công cộng và tắt hoàn toàn cơ chế chia sẻ ngược P2P (unchoke_slots_limit = 0, active_seeds = 0) theo mặc định.",
               "Ứng dụng không proxy luồng video hoặc lưu đệm công khai tệp phụ đề từ bên thứ ba trên máy chủ."
             ]
           },

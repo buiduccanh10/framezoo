@@ -415,9 +415,9 @@
         "summary": "Status de intermediário neutro, processo de lista de bloqueio de notificação e remoção 24h/72h e política de reincidência de infratores.",
         "sections": [
           {
-            "title": "Reprodutor de mídia e P2P",
+            "title": "Software intermediário neutro e P2P sem propagação padrão",
             "paragraphs": [
-              "Framezoo é um reprodutor de mídia que não hospeda arquivos de vídeo e não inclui complementos de conteúdo padrão. Seu mecanismo de torrent usa rastreadores públicos por padrão; esses serviços recebem seu endereço IP e o hash de informações do torrent. O mecanismo está configurado para limitar o compartilhamento P2P de saída.",
+              "Framezoo é um software reprodutor de mídia neutro semelhante ao Stremio e Kodi: ele não hospeda arquivos de vídeo, não agrupa complementos de conteúdo padrão ou rastreadores públicos, não executa proxy de complemento no servidor e desativa a propagação P2P de saída (unchoke_slots_limit = 0, active_seeds = 0) por padrão.",
               "Os downloads de legendas usam cabeçalhos sem armazenamento sem cache público nos servidores Framezoo."
             ],
             "badge": "01"

@@ -415,9 +415,9 @@
         "summary": "Neitrāls starpnieka statuss, 24 h/72 h paziņošanas un noņemšanas bloķēšanas saraksta process un atkārtota pārkāpēja politika.",
         "sections": [
           {
-            "title": "Multivides atskaņotājs un P2P",
+            "title": "Neitrāla starpnieka programmatūra un noklusējuma P2P bezsējas",
             "paragraphs": [
-              "Framezoo ir multivides atskaņotājs, kurā netiek mitināti video faili un nav iekļauti noklusējuma satura papildinājumi. Tās torrent dzinējs pēc noklusējuma izmanto publiskos izsekotājus; šie pakalpojumi saņem jūsu IP adresi un torrenta informācijas hash. Dzinējs ir konfigurēts, lai ierobežotu izejošo P2P koplietošanu.",
+              "Framezoo ir neitrāla multivides atskaņotāja programmatūra, kas ir līdzīga Stremio un Kodi: tajā netiek mitināti video faili, netiek apvienoti noklusējuma satura papildinājumi vai publiskie izsekotāji, netiek veikta servera puses papildinājumu starpniekserveri un pēc noklusējuma atspējo izejošo P2P sēšanu (unchoke_slots_limit = 0, active_seeds = 0).",
               "Subtitru lejupielādēšanai tiek izmantotas galvenes bez veikala bez publiskas kešatmiņas Framezoo serveros."
             ],
             "badge": "01"

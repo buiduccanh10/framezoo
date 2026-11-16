@@ -411,10 +411,10 @@
         "sections": [
           {
             "paragraphs": [
-              "A Framezoo egy médialejátszó, amely nem tartalmaz videofájlokat, és nem köt össze alapértelmezett tartalom-kiegészítőket. Torrentmotorja alapértelmezés szerint nyilvános nyomkövetőket használ; ezek a szolgáltatások megkapják az Ön IP-címét és a torrent információs kivonatát. A motor úgy van konfigurálva, hogy korlátozza a kimenő P2P megosztást.",
+              "A Framezoo a Stremióhoz és a Kodihoz hasonló semleges médialejátszó szoftver: nem tárol videofájlokat, nem köt össze alapértelmezett tartalom-kiegészítőket vagy nyilvános nyomkövetőket, nem hajt végre szerveroldali addon-proxyt, és alapértelmezés szerint letiltja a kimenő P2P küldést (unchoke_slots_limit = 0, active_seeds = 0).",
               "A feliratletöltések áruház nélküli fejléceket használnak, nyilvános gyorsítótár nélkül a Framezoo szervereken."
             ],
-            "title": "Médialejátszó és P2P",
+            "title": "Semleges közvetítő szoftver és alapértelmezett vetés nélküli P2P",
             "badge": "01"
           },
           {

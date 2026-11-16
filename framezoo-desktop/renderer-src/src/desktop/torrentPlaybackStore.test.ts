@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
   clearTorrentSession,
+  getActiveTorrentStatus,
   registerTorrentSession,
   stopTorrentSession,
   waitForTorrentPlayable,
@@ -53,7 +54,6 @@ describe("torrent playback wait lifecycle", () => {
     torrentClientMocks.getTorrentStatus.mockReset();
     torrentClientMocks.stopTorrent.mockReset();
     torrentClientMocks.stopTorrent.mockResolvedValue(true);
-    torrentClientMocks.listeners.clear();
     await clearTorrentSession();
     vi.runOnlyPendingTimers();
   });
@@ -125,5 +125,41 @@ describe("torrent playback wait lifecycle", () => {
     await stopTorrentSession();
     expect(torrentClientMocks.stopTorrent).toHaveBeenCalledWith("session-3");
     expect(torrentClientMocks.stopTorrent).toHaveBeenCalledTimes(3);
+  });
+
+  it("delivers streamType file immediately even inside 500ms progress throttle window", async () => {
+    torrentClientMocks.getTorrentStatus.mockResolvedValue(null);
+    registerTorrentSession("session-1");
+    const waiting = waitForTorrentPlayable("session-1");
+
+    emitStatus(
+      createStatus({
+        state: "downloading",
+        progress: 0.01,
+        updatedAt: 100,
+      }),
+    );
+    // Another downloading tick within 500ms gets throttled, then urgent "file" arrives
+    emitStatus(
+      createStatus({
+        state: "downloading",
+        progress: 0.02,
+        updatedAt: 150,
+      }),
+    );
+    const playable = createStatus({
+      state: "downloading",
+      streamType: "file",
+      streamUrl: "http://127.0.0.1:4567/torrent/session-1",
+      progress: 0.05,
+      updatedAt: 200,
+    });
+    emitStatus(playable);
+
+    await expect(waiting).resolves.toEqual(playable);
+
+    // Flushing the delayed throttle timer must not overwrite with stale "pending"
+    vi.advanceTimersByTime(600);
+    expect(getActiveTorrentStatus()).toEqual(playable);
   });
 });

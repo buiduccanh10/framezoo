@@ -4,6 +4,9 @@ import { fileURLToPath } from 'node:url';
 config({
   path: fileURLToPath(new URL('../.env', import.meta.url)),
 });
+config({
+  path: fileURLToPath(new URL('.env', import.meta.url)),
+});
 import { version } from './server/utils/config';
 //https://nitro.unjs.io/config
 const createRedisStorage = (defaultHost: string) => ({
@@ -35,6 +38,8 @@ export default defineNitroConfig({
     '0 0 1 * *': ['jobs:clear-metrics:monthly'],
     // Daily backup at 3 AM
     '0 3 * * *': ['backup:daily', 'jobs:cleanup-email'],
+    // Daily guest retention cleanup at 4 AM
+    '0 4 * * *': ['jobs:cleanup-guests'],
   },
   storage: {
     cache: createRedisStorage('redis'),
@@ -57,8 +62,9 @@ export default defineNitroConfig({
     tmdbApiKey: process.env.TMDB_API_KEY,
     tidbApiKey: process.env.TIDB_API_KEY,
     omdbApiKey: process.env.OMDB_API_KEY,
-    wyzieApiKey: process.env.WYZIE_API_KEY,
-    subsourceApiKey: process.env.SUBSOURCE_API_KEY,
-    opensubtitlesApiKey: process.env.OPENSUBTITLES_API_KEY,
+    // Keep empty at build time so NITRO_* overrides work without baking secrets or empty strings over process.env.
+    wyzieApiKey: '',
+    subsourceApiKey: '',
+    opensubtitlesApiKey: '',
   },
 });

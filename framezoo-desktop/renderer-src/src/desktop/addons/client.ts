@@ -6,6 +6,12 @@ import {
 } from "@/utils/backendAuth";
 
 import { getDesktopAddonElectronApi } from "../electron";
+import {
+  fetchComplianceBlocklist,
+  isAddonMediaBlocked,
+  isDomainInBlocklist,
+  isInfohashBlocked,
+} from "./blocklist";
 import { normalizeManifest, normalizeManifestUrl } from "./manifest";
 import type { AddonProtocolRequest } from "./nativeTypes";
 import type {
@@ -235,6 +241,19 @@ export async function loadAddonStreams(
     episode?: number;
   },
 ) {
+  const blocklist = await fetchComplianceBlocklist().catch(() => null);
+  if (blocklist) {
+    if (
+      isDomainInBlocklist(
+        addon.manifestUrl || addon.baseUrl,
+        blocklist.addonDomains,
+      ) ||
+      isAddonMediaBlocked(media.id, media.type, blocklist)
+    ) {
+      return [];
+    }
+  }
+
   const mediaId =
     media.type === "series" && media.season != null && media.episode != null
       ? `${media.id}:${media.season}:${media.episode}`
@@ -259,8 +278,17 @@ export async function loadAddonStreams(
     type: media.type,
     id: mediaId,
   });
-  if (Array.isArray(response)) return response;
-  if (response && Array.isArray(response.streams)) return response.streams;
+  const filterStreams = (items: StremioStream[]) =>
+    blocklist && blocklist.infohashes.length > 0
+      ? items.filter(
+          (item) =>
+            !isInfohashBlocked(item.infoHash, blocklist.infohashes, item.url),
+        )
+      : items;
+  if (Array.isArray(response)) return filterStreams(response);
+  if (response && Array.isArray(response.streams)) {
+    return filterStreams(response.streams);
+  }
 
   throw new Error("Addon returned an invalid stream response");
 }

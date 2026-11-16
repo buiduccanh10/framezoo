@@ -1,12 +1,14 @@
 import { getQuery, getRequestHeader, setHeader } from 'h3';
 
 import {
+  EMPTY_SUBTITLE_CACHE_TTL,
   executeWithInFlightDeduplication,
   getCachedSubtitles,
   getSubtitleCacheKey,
   getSubtitleTtl,
   hashSubtitleCredential,
   normalizeSubtitleDownloadUrls,
+  resolveServerSubtitleApiKey,
   resolveSubtitleContext,
   searchAllSubtitles,
 } from '~/utils/subtitles';
@@ -55,19 +57,9 @@ export default defineEventHandler(async event => {
     cacheControlHeader.includes('no-cache') ||
     pragmaHeader.includes('no-cache');
 
-  const config = useRuntimeConfig();
-  const serverWyzieApiKey =
-    ((config.wyzieApiKey as string | undefined) || process.env.WYZIE_API_KEY || '').trim() ||
-    undefined;
-  const serverSubsourceApiKey =
-    ((config.subsourceApiKey as string | undefined) || process.env.SUBSOURCE_API_KEY || '').trim() ||
-    undefined;
-  const serverOpenSubtitlesApiKey =
-    (
-      (config.opensubtitlesApiKey as string | undefined) ||
-      process.env.OPENSUBTITLES_API_KEY ||
-      ''
-    ).trim() || undefined;
+  const serverWyzieApiKey = resolveServerSubtitleApiKey('wyzie', event);
+  const serverSubsourceApiKey = resolveServerSubtitleApiKey('subsource', event);
+  const serverOpenSubtitlesApiKey = resolveServerSubtitleApiKey('opensubtitles', event);
 
   // Query keys are for unauthenticated Stremio URLs. An authenticated native
   // request must use its account key or the server fallback.
@@ -77,7 +69,8 @@ export default defineEventHandler(async event => {
   let authSession;
   try {
     authSession =
-      event.context.session || (await useAuth().getOptionalCurrentSessionForEvent(event));
+      event.context.session ||
+      (event.context.isGuest ? null : await useAuth().getOptionalCurrentSessionForEvent(event));
   } catch (error) {
     console.warn('[subtitles:auth] Failed to resolve request session:', error);
     throw createError({
@@ -125,7 +118,7 @@ export default defineEventHandler(async event => {
     credentialSource === 'user'
       ? `user:${hashSubtitleCredential(`${authSession.user}:${wyzieApiKey || ''}:${subsourceApiKey || ''}:${opensubtitlesApiKey || ''}`)}`
       : credentialSource === 'query'
-        ? `query:${hashSubtitleCredential(queryWyzieKey ?? '')}`
+        ? `query:${hashSubtitleCredential(`${queryWyzieKey ?? ''}:${serverSubsourceApiKey ?? 'missing'}:${serverOpenSubtitlesApiKey ?? 'missing'}`)}`
         : `server:${hashSubtitleCredential(`${serverWyzieApiKey ?? 'missing'}:${serverSubsourceApiKey ?? 'missing'}:${serverOpenSubtitlesApiKey ?? 'missing'}`)}`;
 
   const acceptLanguage = getRequestHeader(event, 'accept-language') || '';
@@ -150,12 +143,8 @@ export default defineEventHandler(async event => {
   }
 
   const searchLanguages = Array.from(new Set(['vi', 'en', ...preferredLanguages].filter(Boolean)));
-  const cacheKey = getSubtitleCacheKey(
-    type,
-    cleanId,
-    credentialScope,
-    searchLanguages.join(',') || 'all',
-  );
+  const languageKey = searchLanguages.join(',') || 'all';
+  const cacheKey = getSubtitleCacheKey(type, cleanId, credentialScope, languageKey);
   const cacheControl =
     credentialSource === 'server'
       ? 'public, max-age=300, stale-while-revalidate=3600'
@@ -177,9 +166,27 @@ export default defineEventHandler(async event => {
     return { subtitles: [] };
   }
 
+  type SubtitleSearchResult = Awaited<ReturnType<typeof searchAllSubtitles>>;
   const blocklist = await getActiveTakedownBlocklist();
-  const filterBlockedSubtitles = (items: Awaited<ReturnType<typeof searchAllSubtitles>>) =>
+  const filterBlockedSubtitles = (items: SubtitleSearchResult): SubtitleSearchResult =>
     items.filter(sub => !isSubtitleIdBlocked(sub.id, blocklist.subtitleIds));
+
+  // Resolve IMDb <-> TMDB IDs before reading shared cache when media-level takedowns exist,
+  // preventing cached responses from bypassing a rule created under the alternate ID.
+  let context: Awaited<ReturnType<typeof resolveSubtitleContext>> | null = null;
+  if (blocklist.tmdbIds.length > 0 || blocklist.imdbIds.length > 0) {
+    context = await resolveSubtitleContext(type, idStr);
+    const resolvedBlocked = await checkSubtitleTargetBlocked({
+      imdbId: context.imdbId,
+      tmdbId: context.tmdbId,
+      mediaType: type,
+    });
+    if (resolvedBlocked) {
+      setHeader(event, 'Content-Type', 'application/json');
+      setHeader(event, 'Cache-Control', 'private, no-store');
+      return { subtitles: [] };
+    }
+  }
 
   // Credential scope is resolved before reading shared cache or joining an
   // in-flight search. This prevents cross-user/provider-key result reuse.
@@ -198,31 +205,45 @@ export default defineEventHandler(async event => {
   }
 
   // Deduplicate in-flight upstream search requests for the same media key
-  const context = await resolveSubtitleContext(type, idStr);
-  const resolvedBlocked = await checkSubtitleTargetBlocked({
-    imdbId: context.imdbId,
-    tmdbId: context.tmdbId,
-    mediaType: type,
-  });
-  if (resolvedBlocked) {
-    setHeader(event, 'Content-Type', 'application/json');
-    setHeader(event, 'Cache-Control', 'private, no-store');
-    return { subtitles: [] };
+  if (!context) {
+    context = await resolveSubtitleContext(type, idStr);
+    const resolvedBlocked = await checkSubtitleTargetBlocked({
+      imdbId: context.imdbId,
+      tmdbId: context.tmdbId,
+      mediaType: type,
+    });
+    if (resolvedBlocked) {
+      setHeader(event, 'Content-Type', 'application/json');
+      setHeader(event, 'Cache-Control', 'private, no-store');
+      return { subtitles: [] };
+    }
   }
 
-  const subtitles = await executeWithInFlightDeduplication(cacheKey, async () => {
-    return await searchAllSubtitles(context, {
+  const searchContext = context;
+  let ranSearch = false;
+  let hadProviderFailure = false;
+  const runSearch = (): ReturnType<typeof searchAllSubtitles> => {
+    ranSearch = true;
+    return searchAllSubtitles(searchContext, {
       wyzieApiKey,
       subsourceApiKey,
       opensubtitlesApiKey,
       subsourceDownloadBaseUrl,
       opensubtitlesDownloadBaseUrl,
       preferredLanguages: searchLanguages,
+      onProviderError: () => {
+        hadProviderFailure = true;
+      },
     });
-  });
+  };
+  const subtitles = await executeWithInFlightDeduplication(cacheKey, runSearch);
 
-  const ttl = getSubtitleTtl(type, subtitles.length);
-  await setCachedSubtitles(cacheKey, subtitles, ttl);
+  if (ranSearch) {
+    const ttl = hadProviderFailure
+      ? EMPTY_SUBTITLE_CACHE_TTL
+      : getSubtitleTtl(type, subtitles.length);
+    await setCachedSubtitles(cacheKey, subtitles, ttl);
+  }
 
   setHeader(event, 'Content-Type', 'application/json');
   setHeader(event, 'X-Cache', 'MISS');

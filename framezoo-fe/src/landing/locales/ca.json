@@ -410,9 +410,9 @@
         "title": "Copyright, avís i retirada i exempció de responsabilitat de contingut",
         "sections": [
           {
-            "title": "Reproductor multimèdia i P2P",
+            "title": "Programari intermediari neutral i P2P sense sembra per defecte",
             "paragraphs": [
-              "Framezoo és un reproductor multimèdia que no allotja fitxers de vídeo i no inclou complements de contingut predeterminats. El seu motor de torrent utilitza rastrejadors públics per defecte; aquests serveis reben la vostra adreça IP i el hash d'informació del torrent. El motor està configurat per limitar la compartició P2P de sortida.",
+              "Framezoo és un programari de reproductor multimèdia neutre similar a Stremio i Kodi: no allotja fitxers de vídeo, no inclou complements de contingut predeterminats ni rastrejadors públics, no realitza cap proxy de complements del servidor i desactiva la sembra P2P de sortida (unchoke_slots_limit = 0, active_seeds = 0) de manera predeterminada.",
               "Les descàrregues de subtítols utilitzen capçaleres sense botiga sense memòria cau pública als servidors de Framezoo."
             ],
             "badge": "01"

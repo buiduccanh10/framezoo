@@ -15,6 +15,7 @@ import { Paragraph } from "@/components/text/Paragraph";
 import { Title } from "@/components/text/Title";
 import {
   fetchComplianceBlocklist,
+  isImdbBlocked,
   isMediaBlocked,
 } from "@/desktop/addons/blocklist";
 import { ErrorContainer, ErrorLayout } from "@/pages/layouts/ErrorLayout";
@@ -24,11 +25,43 @@ export interface MetaPartProps {
   onGetMeta?: (meta: DetailedMeta, episodeId?: string) => void;
 }
 
-function isDisallowedMedia(id: string, type: MWMediaType): boolean {
+export function isDisallowedMedia(
+  id: string,
+  type: MWMediaType | "movie" | "show",
+): boolean {
+  const acceptedTypes =
+    type === "show" || type === MWMediaType.SERIES
+      ? new Set<string>([MWMediaType.SERIES, "show", "tv"])
+      : new Set<string>([type]);
   const disallowedEntries = conf().DISALLOWED_IDS.map((v) => v.split("-"));
-  if (disallowedEntries.find((entry) => id === entry[1] && type === entry[0]))
-    return true;
-  return false;
+  return Boolean(
+    disallowedEntries.find(
+      (entry) => id === entry[1] && acceptedTypes.has(entry[0]),
+    ),
+  );
+}
+
+export function MetaLegalBlockedError() {
+  const { t } = useTranslation();
+  return (
+    <ErrorLayout>
+      <ErrorContainer>
+        <IconPill icon={Icons.DRAGON}>
+          {t("player.metadata.legal.badge")}
+        </IconPill>
+        <Title>{t("player.metadata.legal.title")}</Title>
+        <Paragraph>{t("player.metadata.legal.text")}</Paragraph>
+        <Button
+          href="/"
+          theme="purple"
+          padding="md:px-12 p-2.5"
+          className="mt-6"
+        >
+          {t("player.metadata.failed.homeButton")}
+        </Button>
+      </ErrorContainer>
+    </ErrorLayout>
+  );
 }
 
 export function MetaPart(props: MetaPartProps) {
@@ -76,6 +109,9 @@ export function MetaPart(props: MetaPartProps) {
       throw err;
     }
     if (!meta) return null;
+    if (blocklist && isImdbBlocked(meta.imdbId, blocklist.imdbIds)) {
+      throw new Error("legal");
+    }
 
     // replace link with new link if youre not already on the right link
     let epId = params.episode;
@@ -126,25 +162,7 @@ export function MetaPart(props: MetaPartProps) {
   }
 
   if (error && error.message === "legal") {
-    return (
-      <ErrorLayout>
-        <ErrorContainer>
-          <IconPill icon={Icons.DRAGON}>
-            {t("player.metadata.legal.badge")}
-          </IconPill>
-          <Title>{t("player.metadata.legal.title")}</Title>
-          <Paragraph>{t("player.metadata.legal.text")}</Paragraph>
-          <Button
-            href="/"
-            theme="purple"
-            padding="md:px-12 p-2.5"
-            className="mt-6"
-          >
-            {t("player.metadata.failed.homeButton")}
-          </Button>
-        </ErrorContainer>
-      </ErrorLayout>
-    );
+    return <MetaLegalBlockedError />;
   }
 
   if (error) {

@@ -2584,6 +2584,68 @@ class SidecarStreamTest(unittest.TestCase):
             constants.TARGET_KICK_DELAY = old_kick_delay
             constants.TARGET_STALL_REANNOUNCE_DELAY = old_reannounce_delay
 
+    def test_download_queue_blocks_require_state_3_on_disk_and_flush_state_2(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.file_size = 8 * 1024 * 1024
+        runtime.file_index = 1
+        runtime.info = type(
+            "Info",
+            (),
+            {
+                "piece_length": lambda _self: 64 * 1024 * 1024,
+                "files": lambda _self: type(
+                    "Files",
+                    (),
+                    {"file_offset": lambda _self, _index: 12 * 1024 * 1024},
+                )(),
+            },
+        )()
+        states = [2, 2, 2, 2]
+        flushes = [0]
+
+        class QueueHandle:
+            def status(self):
+                return type("Status", (), {"block_size": 16 * 1024})()
+
+            def have_piece(self, _piece):
+                return False
+
+            def get_download_queue(self):
+                blocks = [{"state": 3} for _ in range(768)]
+                blocks.extend({"state": s} for s in states)
+                return [{"piece_index": 0, "blocks": blocks}]
+
+            def flush_cache(self):
+                flushes[0] += 1
+                for i in range(len(states)):
+                    states[i] = 3
+
+        runtime.handle = QueueHandle()
+        # state == 2 triggers flush_cache() and immediately sees state == 3 blocks
+        self.assertTrue(runtime._range_blocks_are_finished(0, 64 * 1024 - 1))
+        self.assertEqual(flushes[0], 1)
+
+    def test_read_range_chunk_blocks_unverified_sparse_zeros(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.stop_event = threading.Event()
+        runtime.info = None
+        runtime.file_index = None
+        runtime.file_size = 64 * 1024
+        runtime.file_index = 0
+        runtime.session_id = "sparse-zero-guard-test"
+        runtime.flush_piece_cache = lambda: None
+        runtime.map_pieces = lambda _s, _l: {0}
+        runtime.wait_for_range = lambda *_a, **kwargs: (
+            False if kwargs.get("require_verified") else True
+        )
+        runtime.handle = type("H", (), {"have_piece": lambda _s, _p: False})()
+
+        stream = BytesIO(b"\x00" * 16384 + b"valid" * 100)
+        chunk = runtime.read_range_chunk(
+            stream, 0, 16384 - 1, timeout=0.05, track_position=False
+        )
+        self.assertIsNone(chunk)
+
 
 
 class TorrentProfileTest(unittest.TestCase):
@@ -3163,6 +3225,137 @@ class SidecarStorageTest(unittest.TestCase):
         self.assertEqual(handle.priorities[6], 7)
         self.assertEqual(handle.priorities[7], 7)
         self.assertEqual(handle.priorities[8], 7)
+
+    def test_large_piece_active_session_skips_prioritize_files_until_idle(self):
+        from types import SimpleNamespace
+        from torrent_engine import LibtorrentEngine, TorrentRecord
+
+        class FakeFiles:
+            def num_files(self):
+                return 2
+
+            def file_size(self, _idx):
+                return 64 * 1024 * 1024
+
+        class FakeInfo:
+            def files(self):
+                return FakeFiles()
+
+            def piece_length(self):
+                return 16 * 1024 * 1024
+
+        class FakeHandle:
+            def __init__(self):
+                self.prioritize_files_calls = []
+                self.download_limit = None
+
+            def info_hash(self):
+                return "88" * 20
+
+            def status(self):
+                return SimpleNamespace(has_metadata=True)
+
+            def torrent_file(self):
+                return FakeInfo()
+
+            def file_progress(self):
+                return [0, 0]
+
+            def prioritize_files(self, priorities):
+                self.prioritize_files_calls.append(list(priorities))
+
+            def set_download_limit(self, limit):
+                self.download_limit = limit
+
+        engine = LibtorrentEngine()
+        handle = FakeHandle()
+        record = TorrentRecord(
+            engine,
+            "large-piece-record",
+            handle,
+            "/tmp",
+            persistent_cache=False,
+            cache_ready=False,
+            cache_root="/tmp",
+            max_bytes=None,
+            trackers=[],
+        )
+        runtime = TorrentRuntime(engine, "s1", {"sourceId": "s1"}, handle, "/tmp", record=record)
+        runtime.file_index = 1
+        engine.sessions["s1"] = runtime
+        record.session_ids.add("s1")
+
+        record.update_file_priorities()
+        self.assertEqual(handle.prioritize_files_calls, [])
+        self.assertEqual(record.last_file_index, 1)
+        self.assertEqual(handle.download_limit, 0)
+
+        record.session_ids.clear()
+        record.update_file_priorities()
+        self.assertEqual(handle.prioritize_files_calls, [[0, 1]])
+        self.assertEqual(handle.download_limit, 1)
+
+    def test_post_kick_cancel_restores_zero_priority_and_detects_head_block_stall(self):
+        from types import SimpleNamespace
+
+        runtime = object.__new__(TorrentRuntime)
+        runtime.file_index = 0
+        runtime.file_size = 64 * 1024 * 1024
+        runtime._piece_priority_lock = threading.RLock()
+
+        class FakeFiles:
+            def file_offset(self, _idx):
+                return 0
+
+        class FakeInfo:
+            def num_pieces(self):
+                return 4
+
+            def piece_length(self):
+                return 16 * 1024 * 1024
+
+            def files(self):
+                return FakeFiles()
+
+        class FakeHandle:
+            def __init__(self):
+                self.priorities = {1: 7, 2: 0}
+                self.reset_calls = []
+
+            def status(self):
+                return SimpleNamespace(block_size=16384)
+
+            def have_piece(self, piece):
+                return piece == 0
+
+            def piece_priority(self, piece, *prio):
+                if prio:
+                    self.priorities[piece] = prio[0]
+                    return None
+                return self.priorities.get(piece, 0)
+
+            def set_piece_deadline(self, _piece, _dl, _flags):
+                return None
+
+            def reset_piece_deadline(self, piece):
+                self.reset_calls.append(piece)
+                self.priorities[piece] = 1
+
+            def get_download_queue(self):
+                blocks = [{"state": 0}] * 64 + [{"state": 3}] * 16
+                return [{"piece_index": 1, "blocks": blocks}]
+
+        runtime.info = FakeInfo()
+        runtime.handle = FakeHandle()
+        runtime.map_pieces = lambda _s, _l: {1, 2}
+
+        runtime._post_kick_cancel(1)
+        self.assertEqual(runtime.handle.reset_calls, [2])
+        self.assertEqual(runtime.handle.priorities[2], 0)
+
+        required = runtime._required_range_blocks(16 * 1024 * 1024, 16 * 1024 * 1024 + 32767)
+        self.assertEqual(runtime._required_target_blocks_finished(1, required), 0)
+        self.assertEqual(runtime._target_piece_finished_blocks(1), 16)
 
 
 if __name__ == "__main__":

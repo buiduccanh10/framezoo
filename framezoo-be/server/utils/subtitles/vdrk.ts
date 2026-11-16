@@ -1,5 +1,6 @@
 import { normalizeLanguageCode } from './languages';
 import type { StremioSubtitle, SubtitleSearchContext } from './types';
+import type { SubtitleProviderFetchOptions } from './wyzie';
 
 interface VdrkRawSubtitle {
   file?: string;
@@ -7,7 +8,8 @@ interface VdrkRawSubtitle {
 }
 
 export async function fetchVdrkSubtitles(
-  context: SubtitleSearchContext
+  context: SubtitleSearchContext,
+  options?: SubtitleProviderFetchOptions
 ): Promise<StremioSubtitle[]> {
   const { tmdbId, season, episode } = context;
   if (!tmdbId) return [];
@@ -18,7 +20,8 @@ export async function fetchVdrkSubtitles(
       : `https://sub.vdrk.site/v1/movie/${tmdbId}`;
 
   try {
-    const response = await fetch(url, {
+    const fetchFn = options?.fetchFn ?? fetch;
+    const response = await fetchFn(url, {
       signal: AbortSignal.timeout(10_000),
       headers: {
         Accept: 'application/json',
@@ -26,6 +29,12 @@ export async function fetchVdrkSubtitles(
     });
 
     if (!response.ok) {
+      if (response.status !== 404) {
+        console.warn(`[subtitles:vdrk] VDRK API returned HTTP ${response.status}`);
+      }
+      if (response.status === 429 || response.status >= 500) {
+        options?.onError?.();
+      }
       return [];
     }
 
@@ -67,6 +76,7 @@ export async function fetchVdrkSubtitles(
     return subtitles;
   } catch (error) {
     console.warn('[subtitles:vdrk] search failed:', error);
+    options?.onError?.();
     return [];
   }
 }

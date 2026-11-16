@@ -1,3 +1,9 @@
+import {
+  fetchComplianceBlocklist,
+  isDomainInBlocklist,
+  isImdbBlocked,
+  isMediaBlocked,
+} from "./blocklist";
 import { fetchAddonJson } from "./client";
 import { hasResource } from "./manifest";
 import type { InstalledAddon } from "./types";
@@ -106,6 +112,17 @@ export async function loadAddonCatalog(
   catalogId: string,
   options?: { skip?: number },
 ): Promise<StremioMetaPreview[]> {
+  const blocklist = await fetchComplianceBlocklist().catch(() => null);
+  if (
+    blocklist &&
+    isDomainInBlocklist(
+      addon.manifestUrl || addon.baseUrl,
+      blocklist.addonDomains,
+    )
+  ) {
+    return [];
+  }
+
   const skip = options?.skip;
   const path =
     skip && skip > 0
@@ -132,14 +149,35 @@ export async function loadAddonCatalog(
     catalogId,
   });
 
-  if (Array.isArray(response)) return response as StremioMetaPreview[];
-  if (response && Array.isArray(response.metas)) return response.metas;
+  const rawMetas = Array.isArray(response)
+    ? (response as StremioMetaPreview[])
+    : response && Array.isArray(response.metas)
+      ? response.metas
+      : null;
 
-  console.warn("[desktop-addon] catalog returned unexpected shape", {
-    addonId: addon.manifest.id,
-    response,
+  if (!rawMetas) {
+    console.warn("[desktop-addon] catalog returned unexpected shape", {
+      addonId: addon.manifest.id,
+      response,
+    });
+    return [];
+  }
+
+  if (
+    !blocklist ||
+    (blocklist.tmdbIds.length === 0 && blocklist.imdbIds.length === 0)
+  ) {
+    return rawMetas;
+  }
+
+  return rawMetas.filter((item) => {
+    const identity = getCatalogMediaIdentity(item);
+    if (!identity) return true;
+    if (identity.kind === "tmdb") {
+      return !isMediaBlocked(identity.id, item.type || type, blocklist.tmdbIds);
+    }
+    return !isImdbBlocked(identity.id, blocklist.imdbIds);
   });
-  return [];
 }
 
 /**

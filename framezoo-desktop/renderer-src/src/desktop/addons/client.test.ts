@@ -6,6 +6,7 @@ const mocks = vi.hoisted(() => ({
 
 vi.mock("@/backend/extension/messaging", () => mocks);
 
+import { clearComplianceBlocklistCache } from "./blocklist";
 import { loadAddonManifest, loadAddonStreams } from "./client";
 import { normalizeManifest } from "./manifest";
 
@@ -23,6 +24,7 @@ const addon = normalizeManifest("https://torrentio.strem.fun/manifest.json", {
 });
 
 afterEach(() => {
+  clearComplianceBlocklistCache();
   vi.restoreAllMocks();
   vi.unstubAllGlobals();
   mocks.sendExtensionRequest.mockReset();
@@ -82,6 +84,18 @@ describe("desktop addon client", () => {
     vi.stubGlobal(
       "fetch",
       vi.fn(async (input: RequestInfo | URL) => {
+        if (String(input).endsWith("/compliance/blocklist")) {
+          return new Response(
+            JSON.stringify({
+              addonDomains: [],
+              tmdbIds: [],
+              imdbIds: [],
+              subtitleIds: [],
+              infohashes: [],
+            }),
+            { status: 200, headers: { "content-type": "application/json" } },
+          );
+        }
         expect(String(input)).toBe(
           "https://torrentio.strem.fun/stream/series/tt9288030%3A1%3A1.json",
         );
@@ -157,5 +171,54 @@ describe("desktop addon client", () => {
       },
       15_000,
     );
+  });
+
+  it("filters blocked infohashes and media targets using the compliance blocklist", async () => {
+    vi.stubGlobal("window", {
+      __FRAMEZOO_DESKTOP__: true,
+      electronAPI: {
+        sendExtensionMessage: vi.fn(),
+      },
+    });
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (input: RequestInfo | URL) => {
+        if (String(input).endsWith("/compliance/blocklist")) {
+          return new Response(
+            JSON.stringify({
+              addonDomains: [],
+              tmdbIds: [],
+              imdbIds: ["tt9999999"],
+              subtitleIds: [],
+              infohashes: ["badhash000000000000000000000000000000000"],
+            }),
+            { status: 200, headers: { "content-type": "application/json" } },
+          );
+        }
+        return new Response(
+          JSON.stringify({
+            streams: [
+              { infoHash: "BADHASH000000000000000000000000000000000" },
+              { infoHash: "goodhash00000000000000000000000000000000" },
+            ],
+          }),
+          { status: 200, headers: { "content-type": "application/json" } },
+        );
+      }),
+    );
+
+    const allowedStreams = await loadAddonStreams(addon, {
+      type: "movie",
+      id: "tt1234568",
+    });
+    expect(allowedStreams.map((s) => s.infoHash)).toEqual([
+      "goodhash00000000000000000000000000000000",
+    ]);
+
+    const blockedMediaStreams = await loadAddonStreams(addon, {
+      type: "movie",
+      id: "tt9999999",
+    });
+    expect(blockedMediaStreams).toEqual([]);
   });
 });

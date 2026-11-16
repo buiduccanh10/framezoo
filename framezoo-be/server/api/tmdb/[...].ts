@@ -13,6 +13,13 @@ import {
   TMDB_RETRY_STATUS_CODES,
   TMDB_TIMEOUT_MS,
 } from '~/utils/tmdbConfig';
+import {
+  extractBlockedTmdbPathTarget,
+  filterTmdbPayloadByTakedown,
+  getActiveTakedownBlocklist,
+  isImdbBlocked,
+  isTmdbBlocked,
+} from '~/utils/takedown';
 import { scopedLogger } from '~/utils/logger';
 
 const ONE_HOUR_SECONDS = 60 * 60;
@@ -63,6 +70,9 @@ const resolveTmdbCacheTtl = (path: string): number => {
 const getErrorDetails = (error: unknown): TmdbRequestError =>
   error && typeof error === 'object' ? error : {};
 
+const isTakedownHttpError = (error: unknown): boolean =>
+  typeof error === 'object' && error !== null && 'statusCode' in error && error.statusCode === 451;
+
 export default defineEventHandler(async event => {
   const config = useRuntimeConfig(event);
   const path = event.context.params?._;
@@ -73,6 +83,32 @@ export default defineEventHandler(async event => {
       statusMessage: 'Invalid TMDB path',
     });
   }
+
+  const blocklist = await getActiveTakedownBlocklist();
+  const pathTarget = extractBlockedTmdbPathTarget(path);
+  if (
+    (pathTarget.tmdbId &&
+      isTmdbBlocked(pathTarget.tmdbId, blocklist.tmdbIds, pathTarget.mediaType)) ||
+    (pathTarget.imdbId && isImdbBlocked(pathTarget.imdbId, blocklist.imdbIds))
+  ) {
+    throw createError({
+      statusCode: 451,
+      statusMessage: 'Unavailable For Legal Reasons',
+      message: 'This title is unavailable following a legal or copyright notice.',
+    });
+  }
+
+  const applyTakedownFilter = (payload: StorageValue): StorageValue => {
+    const filtered = filterTmdbPayloadByTakedown(payload, blocklist, pathTarget.mediaType);
+    if (filtered === null) {
+      throw createError({
+        statusCode: 451,
+        statusMessage: 'Unavailable For Legal Reasons',
+        message: 'This title is unavailable following a legal or copyright notice.',
+      });
+    }
+    return filtered;
+  };
 
   const query = getQuery(event);
   const targetUrl = joinURL(TMDB_PRIMARY_BASE_URL, path);
@@ -92,9 +128,12 @@ export default defineEventHandler(async event => {
     const cachedResponse = await storage.getItem(cacheKey);
     if (cachedResponse) {
       logger.info(`Serving from cache: ${path}`);
-      return cachedResponse;
+      return applyTakedownFilter(cachedResponse);
     }
   } catch (err) {
+    if (isTakedownHttpError(err)) {
+      throw err;
+    }
     console.warn('[TMDB Proxy] Cache read error:', err);
   }
   // ---------------------
@@ -160,7 +199,7 @@ export default defineEventHandler(async event => {
       console.warn('[TMDB Proxy] Cache write error:', err);
     }
 
-    return data;
+    return applyTakedownFilter(data);
   };
 
   try {
@@ -184,6 +223,9 @@ export default defineEventHandler(async event => {
     logger.info(`Forwarding fallback: ${joinURL(TMDB_FALLBACK_BASE_URL, path)}`);
     return await fetchFromTmdb(TMDB_FALLBACK_BASE_URL);
   } catch (error) {
+    if (isTakedownHttpError(error)) {
+      throw error;
+    }
     const errorDetails = getErrorDetails(error);
     const upstreamStatus = getTmdbErrorStatus(error);
     const status = isTmdbTimeoutError(error) ? 504 : upstreamStatus || 502;

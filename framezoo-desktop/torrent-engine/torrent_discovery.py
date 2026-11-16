@@ -673,6 +673,16 @@ class TorrentDiscovery:
             with self.lock:
                 self.last_error = str(error)
 
+        self._harvest_peers_from_handle()
+        if (
+            not self.stop_event.is_set()
+            and self._connected_peers() < constants.DISCOVERY_MIN_PEERS
+        ):
+            with self.lock:
+                known_peers = [PeerAddress(h, p) for h, p in self.discovered_peers]
+            if known_peers:
+                self._inject_peers(known_peers)
+
         with self.lock:
             if self.stop_event.is_set():
                 self.phase = "stopped"

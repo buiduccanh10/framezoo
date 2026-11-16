@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import os
 import shutil
 import socket
@@ -165,6 +166,11 @@ class TorrentRecord:
             num_files = info.files().num_files()
             priorities = [0] * num_files
             has_active_session = False
+            large_piece_active = False
+            try:
+                piece_length = int(info.piece_length())
+            except Exception:
+                piece_length = 0
             with self.lock:
                 has_active_session = bool(self.session_ids)
                 for session_id in self.session_ids:
@@ -176,6 +182,10 @@ class TorrentRecord:
                     ):
                         priorities[runtime.file_index] = constants.STREAM_IDLE_FILE_PRIORITY
                         self.last_file_index = runtime.file_index
+                        if piece_length >= getattr(
+                            constants, "LARGE_PIECE_THRESHOLD_BYTES", 8 * 1024 * 1024
+                        ):
+                            large_piece_active = True
                 if not any(priorities) and (
                     self.last_file_index is not None
                     and 0 <= self.last_file_index < num_files
@@ -200,7 +210,11 @@ class TorrentRecord:
                                     break
                     except Exception:
                         pass
-            self.handle.prioritize_files(priorities)
+            # In libtorrent 2.x, prioritize_files() resets all piece priorities
+            # asynchronously after prioritize_pieces() returns. Leave piece-level
+            # scheduling in charge while a large-piece session is active.
+            if not (has_active_session and large_piece_active):
+                self.handle.prioritize_files(priorities)
             set_download_limit = getattr(self.handle, "set_download_limit", None)
             if callable(set_download_limit):
                 set_download_limit(0 if has_active_session else 1)
@@ -267,30 +281,38 @@ class LibtorrentEngine:
         ping_payload = (
             b"d1:ad2:id20:" + self.peer_id[:20] + b"e1:q4:ping1:t2:aa1:y1:qe"
         )
-        for host, port in constants.DHT_BOOTSTRAP_NODES:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            sock.settimeout(1.5)
-            try:
-                sock.sendto(ping_payload, (host, port))
-                data, _ = sock.recvfrom(512)
-                if data:
-                    with self._network_lock:
-                        if self.listen_address != address:
-                            return
-                        apply_settings = getattr(session, "apply_settings", None)
-                        if callable(apply_settings):
-                            apply_settings(
-                                {
-                                    "enable_outgoing_utp": True,
-                                    "enable_incoming_utp": True,
-                                }
-                            )
-                    log_event("udp probe succeeded; utp enabled", host=host, port=port)
-                    return
-            except OSError:
-                continue
-            finally:
-                sock.close()
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        sock.settimeout(1.5)
+        try:
+            sent_any = False
+            for host, port in constants.DHT_BOOTSTRAP_NODES:
+                try:
+                    sock.sendto(ping_payload, (host, port))
+                    sent_any = True
+                except OSError:
+                    continue
+            if not sent_any:
+                log_event("udp probe blocked; keeping tcp-only peer transport")
+                return
+            data, peer_addr = sock.recvfrom(512)
+            if data:
+                with self._network_lock:
+                    if self.listen_address != address:
+                        return
+                    apply_settings = getattr(session, "apply_settings", None)
+                    if callable(apply_settings):
+                        apply_settings(
+                            {
+                                "enable_outgoing_utp": True,
+                                "enable_incoming_utp": True,
+                            }
+                        )
+                log_event("udp probe succeeded; utp enabled", peer=str(peer_addr))
+                return
+        except OSError:
+            pass
+        finally:
+            sock.close()
         log_event("udp probe blocked; keeping tcp-only peer transport")
 
     def refresh_network(self) -> None:
@@ -366,14 +388,14 @@ class LibtorrentEngine:
                 "enable_outgoing_utp": False,
                 "enable_incoming_utp": False,
                 "connection_speed": 500,
-                "request_queue_time": 1,
-                "max_out_request_queue": 1500,
+                "request_queue_time": 3,
+                "max_out_request_queue": 3000,
                 "max_allowed_in_request_queue": 2000,
                 "whole_pieces_threshold": 0,
                 "peer_connect_timeout": 3,
-                "piece_timeout": 3,
+                "piece_timeout": 10,
                 "min_reconnect_time": 2,
-                "max_failcount": 1,
+                "max_failcount": 3,
                 "ignore_limits_on_local_network": False,
                 "aio_threads": 8,
                 "send_buffer_watermark": 4 * 1024 * 1024,
@@ -421,6 +443,7 @@ class LibtorrentEngine:
             except Exception:
                 self.listen_port = 49160
             self._session = session
+            self._load_dht_nodes(session)
             threading.Thread(
                 target=self._probe_udp_and_enable_utp,
                 args=(session, self.listen_address),
@@ -914,7 +937,6 @@ class LibtorrentEngine:
                 a
                 for a in (
                     getattr(lt, "block_finished_alert", None),
-                    getattr(lt, "block_downloading_alert", None),
                 )
                 if a is not None
             )
@@ -946,7 +968,68 @@ class LibtorrentEngine:
                 pass
             return finished
 
+    def _dht_nodes_path(self) -> Optional[str]:
+        try:
+            return os.path.join(get_torrent_data_dir(None), "dht_nodes.json")
+        except Exception:
+            return None
+
+    def _load_dht_nodes(self, session: Any) -> None:
+        add_node = getattr(session, "add_dht_node", None)
+        path = self._dht_nodes_path()
+        if not callable(add_node) or not path or not os.path.exists(path):
+            return
+        try:
+            with open(path, "r", encoding="utf-8") as handle:
+                nodes = json.load(handle)
+            if not isinstance(nodes, list):
+                return
+            for entry in nodes[:128]:
+                if (
+                    isinstance(entry, (list, tuple))
+                    and len(entry) == 2
+                    and isinstance(entry[0], str)
+                    and isinstance(entry[1], int)
+                ):
+                    add_node((entry[0], entry[1]))
+        except Exception:
+            pass
+
+    def _save_dht_nodes(self) -> None:
+        session = self._session
+        path = self._dht_nodes_path()
+        if session is None or not path:
+            return
+        try:
+            flags = getattr(
+                getattr(lt, "save_state_flags_t", None),
+                "save_dht_state",
+                None,
+            )
+            session_state = getattr(session, "session_state", None)
+            if flags is None or not callable(session_state):
+                return
+            dht_state = getattr(session_state(flags), "dht_state", None)
+            raw_nodes = getattr(dht_state, "nodes", None)
+            if not raw_nodes:
+                return
+            nodes = [
+                [str(host), int(port)]
+                for host, port in list(raw_nodes)[:128]
+                if host and port
+            ]
+            if not nodes:
+                return
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            tmp_path = f"{path}.tmp"
+            with open(tmp_path, "w", encoding="utf-8") as handle:
+                json.dump(nodes, handle)
+            os.replace(tmp_path, path)
+        except Exception:
+            pass
+
     def close(self) -> None:
+        self._save_dht_nodes()
         for session_id in list(self.sessions.keys()):
             self.stop(session_id)
         with self.lock:

@@ -33,29 +33,34 @@ describe("Landing legal compliance & install guide hygiene", () => {
     expect(viCopy.legal.tabs.privacy.sections[3].paragraphs[0]).toContain("16");
   });
 
-  it("shows the tracker disclosure in the selected language", () => {
+  it("shows the neutral intermediary P2P disclosure in the selected language", () => {
     for (const [locale, expected] of [
-      ["vi", "tracker công cộng"],
-      ["fr", "trackers publics"],
+      ["vi", "không cài sẵn scraper hay tracker công cộng"],
+      [
+        "fr",
+        "aucun module complémentaire de contenu par défaut ni tracker public",
+      ],
     ]) {
       window.localStorage.setItem("framezoo-landing-locale", locale);
       const html = renderToStaticMarkup(
         createElement(LegalPage, { initialTab: "copyright" }),
       );
       expect(html).toContain(expected);
+      expect(html).toContain("unchoke_slots_limit = 0, active_seeds = 0");
       expect(html).not.toContain("upload_rate_limit = 0");
     }
     window.localStorage.removeItem("framezoo-landing-locale");
   });
 
-  it("keeps the tracker disclosure current in every locale", () => {
+  it("keeps the no-default-trackers and no-seeding disclosure current in every locale", () => {
     for (const locale of LANDING_LOCALES) {
       const paragraph = getLandingCopy(locale.id).legal.tabs.copyright
         .sections[0].paragraphs[0];
       expect(paragraph, locale.id).not.toContain("upload_rate_limit = 0");
-      expect(paragraph, locale.id).toContain("Framezoo");
-      expect(paragraph, locale.id).toContain("IP");
-      expect(paragraph, locale.id).toContain("P2P");
+      expect(paragraph, locale.id).toContain(
+        "unchoke_slots_limit = 0, active_seeds = 0",
+      );
+      expect(paragraph, locale.id).toMatch(/P2P|पी\s*2\s*पी/i);
     }
   });
 

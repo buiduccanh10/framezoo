@@ -415,9 +415,9 @@
         "summary": "Status neutralnego pośrednika, całodobowy proces powiadamiania i usuwania danych oraz zasady dotyczące powtarzających się naruszeń.",
         "sections": [
           {
-            "title": "Odtwarzacz multimedialny i P2P",
+            "title": "Neutralne oprogramowanie pośredniczące i domyślne P2P bez rozsiewania",
             "paragraphs": [
-              "Framezoo to odtwarzacz multimedialny, który nie obsługuje plików wideo i nie zawiera domyślnych dodatków do treści. Jego silnik torrentowy domyślnie korzysta z publicznych modułów śledzących; usługi te otrzymują Twój adres IP i skrót informacyjny torrenta. Silnik jest skonfigurowany tak, aby ograniczać udostępnianie wychodzące P2P.",
+              "Framezoo to neutralny odtwarzacz multimediów, podobny do Stremio i Kodi: nie obsługuje plików wideo, nie zawiera domyślnych dodatków do treści ani publicznych modułów śledzących, nie wykonuje proxy dodatków po stronie serwera i domyślnie wyłącza wysyłanie wychodzącego P2P (unchoke_slots_limit = 0, active_seeds = 0).",
               "Pobieranie napisów wykorzystuje nagłówki typu no-store bez publicznego buforowania na serwerach Framezoo."
             ],
             "badge": "01"

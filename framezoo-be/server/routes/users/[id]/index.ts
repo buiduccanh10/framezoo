@@ -43,7 +43,7 @@ export default defineEventHandler(async event => {
     return {
       id: user.id,
       namespace: user.namespace,
-      nickname: (user as any).nickname,
+      nickname: user.nickname,
       email: decryptPiiOrNull(user.email),
       profile: user.profile,
     };
@@ -65,7 +65,7 @@ export default defineEventHandler(async event => {
 
       const validatedBody = userProfileSchema.parse(body);
 
-      const updateData: any = {};
+      const updateData: z.infer<typeof userProfileSchema> = {};
       if (validatedBody.profile) {
         updateData.profile = validatedBody.profile;
       }
@@ -84,7 +84,7 @@ export default defineEventHandler(async event => {
         id: user.id,
         publicKey: user.public_key,
         namespace: user.namespace,
-        nickname: (user as any).nickname,
+        nickname: user.nickname,
         email: decryptPiiOrNull(user.email),
         profile: user.profile,
         permissions: user.permissions,
@@ -118,6 +118,7 @@ export default defineEventHandler(async event => {
       log.info('Deleting user account', { userId });
 
       await deleteUserAccountData(userId);
+      useAuth().clearSessionCookie(event);
 
       log.info('User account deleted successfully', { userId });
 

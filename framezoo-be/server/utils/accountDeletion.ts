@@ -2,8 +2,8 @@ import { createError } from 'h3';
 import { prisma } from '~/utils/prisma';
 import { decryptPiiOrNull, hashEmailIndex } from '~/utils/piiCrypto';
 
-export const deleteUserAccountData = async (userId: string): Promise<{ nickname: string }> =>
-  prisma.$transaction(async tx => {
+export const deleteUserAccountData = async (userId: string): Promise<{ nickname: string }> => {
+  const result = await prisma.$transaction(async tx => {
     const user = await tx.users.findUnique({
       where: { id: userId },
       select: { nickname: true, email: true, email_hash: true },
@@ -57,3 +57,15 @@ export const deleteUserAccountData = async (userId: string): Promise<{ nickname:
 
     return { nickname: user.nickname };
   });
+
+  try {
+    const storage = useStorage('cache');
+    const queuedKeys = await storage.getKeys(`progress_queue:${userId}:`);
+    await Promise.all(queuedKeys.map(key => storage.removeItem(key)));
+  } catch {
+    // Keep deletion resilient if Redis cache is temporarily unavailable;
+    // sync-progress also checks user existence before writing.
+  }
+
+  return result;
+};

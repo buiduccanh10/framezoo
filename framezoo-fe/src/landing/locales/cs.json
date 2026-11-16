@@ -409,9 +409,9 @@
         "updatedAt": "Aktualizováno: 16. listopadu 2026 · Vietnamské právo duševního vlastnictví, čl. 198b & vyhláška 17/2023",
         "sections": [
           {
-            "title": "Přehrávač médií a P2P",
+            "title": "Neutrální zprostředkovatelský software a výchozí P2P bez nasazování",
             "paragraphs": [
-              "Framezoo je přehrávač médií, který nehostuje žádné video soubory a nesbaluje žádné výchozí doplňky obsahu. Jeho torrent engine standardně používá veřejné trackery; tyto služby obdrží vaši IP adresu a hash informací torrentu. Motor je nakonfigurován tak, aby omezoval odchozí sdílení P2P.",
+              "Framezoo je neutrální software pro přehrávače médií podobný Stremio a Kodi: nehostí žádné video soubory, nesbalí žádné výchozí doplňky obsahu ani veřejné sledovače, neprovádí žádné proxy serverové addony a ve výchozím nastavení zakazuje odchozí P2P seeding (unchoke_slots_limit = 0, active_seeds = 0).",
               "Stahování titulků používá hlavičky bez úložiště bez veřejného ukládání do mezipaměti na serverech Framezoo."
             ],
             "badge": "01"
