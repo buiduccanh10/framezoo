@@ -413,10 +413,10 @@
         "sections": [
           {
             "paragraphs": [
-              "Framezoo on neutraali mediasoitinohjelmisto, joka on samanlainen kuin Stremio ja Kodi: se ei isännöi videotiedostoja, ei niputa oletussisältölisäosia tai julkisia seurantalaitteita, ei suorita palvelinpuolen lisäosien välityspalvelinta ja poistaa oletuksena pois lähtevän P2P-siementämisen (upload_rate_limit = 0).",
+              "Framezoo on mediasoitin, joka ei isännöi videotiedostoja eikä niputa oletussisältölisäosia. Sen torrent-moottori käyttää julkisia seurantalaitteita oletuksena; nämä palvelut vastaanottavat IP-osoitteesi ja torrentin tietotiivisteen. Moottori on määritetty rajoittamaan lähtevää P2P-jakoa.",
               "Tekstityslataukset käyttävät no-store-otsikoita ilman julkista välimuistia Framezoo-palvelimilla."
             ],
-            "title": "Neutraali välitysohjelmisto ja oletus ei-kylvö P2P",
+            "title": "Mediasoitin ja P2P",
             "badge": "01"
           },
           {

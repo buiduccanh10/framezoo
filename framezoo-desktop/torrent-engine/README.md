@@ -21,3 +21,9 @@ publish a Windows ARM64 wheel.
 Set `FRAMEZOO_TORRENT_DATA_DIR` to control the temporary torrent download
 directory. `fileIdx` from Stremio streams is preferred; otherwise the largest
 video file is selected.
+
+For an authorized HTTP proxy, launch the desktop process with `http_proxy` and
+`https_proxy` set to the proxy URL. Set `no_proxy=localhost,127.0.0.1,::1` so
+the local torrent stream stays local. HTTP(S) tracker discovery uses these
+environment variables, and libmpv uses `http_proxy` for HTTP and HTTPS media.
+The proxy does not automatically carry BitTorrent peer connections.

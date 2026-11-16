@@ -125,9 +125,9 @@ export function LegalPage({
 
       <main className="legal-page-main">
         <header className="legal-page-header">
-          <span className="landing-eyebrow">{catalog.eyebrow}</span>
-          <h1>{catalog.pageTitle}</h1>
-          <p>{catalog.pageSubtitle}</p>
+          <span className="landing-eyebrow">{catalog.pageTitle}</span>
+          <h1>{activeDocument.title}</h1>
+          <p>{activeDocument.summary}</p>
 
           <div
             className="legal-page-tabs"
@@ -142,16 +142,29 @@ export function LegalPage({
                 ["addon-policy", activeCopy.footer.addonPolicy],
               ] as const
             ).map(([id, label]) => (
-              <button
+              <a
                 key={id}
-                type="button"
+                href={`/legal/${id}`}
                 role="tab"
                 aria-selected={activeTab === id}
                 className={`legal-page-tab ${activeTab === id ? "is-active" : ""}`}
-                onClick={() => handleSelectTab(id)}
+                style={{ textDecoration: "none" }}
+                onClick={(event) => {
+                  if (
+                    event.metaKey ||
+                    event.ctrlKey ||
+                    event.shiftKey ||
+                    event.altKey ||
+                    event.button !== 0
+                  ) {
+                    return;
+                  }
+                  event.preventDefault();
+                  handleSelectTab(id);
+                }}
               >
                 {label}
-              </button>
+              </a>
             ))}
           </div>
         </header>
@@ -161,8 +174,7 @@ export function LegalPage({
             <span className="legal-document-updated">
               {activeDocument.updatedAt}
             </span>
-            <h2>{activeDocument.title}</h2>
-            <p className="legal-document-summary">{activeDocument.summary}</p>
+            <p className="legal-document-summary">{catalog.pageSubtitle}</p>
           </header>
 
           <div

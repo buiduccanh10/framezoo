@@ -187,6 +187,7 @@ export type LibMpvCommand =
   | { type: "set-volume"; volume: number }
   | { type: "set-mute"; muted: boolean }
   | { type: "set-playback-rate"; rate: number }
+  | { type: "set-cache-pause-wait"; seconds: number }
   | { type: "set-audio-track"; trackId: string }
   | { type: "set-audio-mode"; mode: AudioOutputMode }
   | { type: "set-subtitle-track"; trackId: string }

@@ -83,8 +83,46 @@ CLIENT_DISCONNECT_GRACE_SECS = 10.0
 FILE_OPEN_RETRY_INTERVAL = 0.2
 DEFAULT_MAX_TORRENT_BYTES = 5 * 1024 * 1024 * 1024
 
-# No third-party tracker URLs are bundled; trackers come only from user-installed addons/magnets + DHT/LSD.
-DEFAULT_TRACKERS: tuple[str, ...] = ()
+# Stremio 5.1.30 defaults, plus community endpoints from Framezoo's former list.
+DEFAULT_TRACKERS: tuple[str, ...] = (
+    "udp://tracker.opentrackr.org:1337/announce",
+    "udp://open.stealth.si:80/announce",
+    "udp://tracker.torrent.eu.org:451/announce",
+    "udp://open.demonii.com:1337/announce",
+    "http://tracker.qu.ax:6969/announce",
+    "udp://tracker.skynetcloud.site:6969/announce",
+    "udp://tracker.ducks.party:1984/announce",
+    "udp://tracker-udp.gbitt.info:80/announce",
+    "udp://tracker.tryhackx.org:6969/announce",
+    "udp://tracker.nyaa.vc:6969/announce",
+    "udp://tracker.corpscorp.online:80/announce",
+    "udp://explodie.org:6969/announce",
+    "udp://tracker.bittor.pw:1337/announce",
+    "udp://tracker.gmi.gd:6969/announce",
+    "udp://tracker.dler.org:6969/announce",
+    "udp://tracker2.dler.org:80/announce",
+    "http://tracker.dler.com:6969/announce",
+    "http://tracker.renfei.net:8080/announce",
+    "udp://tracker.farted.net:6969/announce",
+    "udp://tracker.peerfect.org:6969/announce",
+    # Community tracker list checked 2026-11-16; HTTP(S) endpoints returned peers.
+    "http://tracker.dler.org:6969/announce",
+    "http://tracker.opentrackr.org:1337/announce",
+    "https://tracker.opentrackr.org:443/announce",
+    "http://tracker.ducks.party:1984/announce",
+    "http://tracker.tryhackx.org:6969/announce",
+    "http://bittorrent-tracker.e-n-c-r-y-p-t.net:1337/announce",
+    "http://t.overflow.biz:6969/announce",
+    "http://open.tracker.cl:1337/announce",
+    "https://tracker.zhuqiy.com:443/announce",
+    "https://tracker.pmman.tech:443/announce",
+    "https://ht.therarbg.to:443/announce",
+    "udp://tracker.theoks.net:6969/announce",
+    "udp://tracker.qu.ax:6969/announce",
+    "udp://t.overflow.biz:6969/announce",
+    "udp://bittorrent-tracker.e-n-c-r-y-p-t.net:1337/announce",
+    "udp://tracker.bluefrog.pw:2710/announce",
+)
 
 TRACKER_NUMWANT = 50
 TRACKER_REQUEST_TIMEOUT = 3.5

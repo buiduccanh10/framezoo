@@ -151,175 +151,184 @@ export function InstallGuidePage() {
           </div>
         </div>
 
-        {activeTab === "mac" ? (
-          <section className="install-guide-content" id="mac">
-            <div className="install-guide-card">
-              <div className="install-guide-card-header">
-                <span className="install-guide-step-badge">1</span>
-                <div>
-                  <h2>{guide.mac.step1Title}</h2>
-                  <p>{guide.mac.step1Desc}</p>
-                </div>
+        <section
+          className="install-guide-content"
+          id="mac"
+          role="tabpanel"
+          hidden={activeTab !== "mac"}
+          style={activeTab !== "mac" ? { display: "none" } : undefined}
+        >
+          <div className="install-guide-card">
+            <div className="install-guide-card-header">
+              <span className="install-guide-step-badge">1</span>
+              <div>
+                <h2>{guide.mac.step1Title}</h2>
+                <p>{guide.mac.step1Desc}</p>
               </div>
-              <div className="install-guide-mockup mac-dmg-mockup">
-                <div className="mockup-row">
-                  <div className="mockup-item">
-                    <img
-                      src="/framezoo-app-icon.png"
-                      alt="Framezoo"
-                      className="mockup-app-icon"
-                      width="58"
-                      height="58"
+            </div>
+            <div className="install-guide-mockup mac-dmg-mockup">
+              <div className="mockup-row">
+                <div className="mockup-item">
+                  <img
+                    src="/framezoo-app-icon.png"
+                    alt="Framezoo"
+                    className="mockup-app-icon"
+                    width="58"
+                    height="58"
+                  />
+                  <span className="mockup-label">Framezoo</span>
+                </div>
+                <span className="mockup-arrow">➔</span>
+                <div className="mockup-item">
+                  <svg
+                    className="mockup-folder-icon"
+                    width="58"
+                    height="58"
+                    viewBox="0 0 64 64"
+                    fill="none"
+                    aria-label={guide.applicationsFolderAria}
+                  >
+                    <path
+                      d="M6 18C6 14.6863 8.68629 12 12 12H24.5858C26.1771 12 27.7033 12.6321 28.8284 13.7574L32 16.9289C33.1251 18.0542 34.6513 18.6863 36.2426 18.6863H52C55.3137 18.6863 58 21.3726 58 24.6863V48C58 51.3137 55.3137 54 52 54H12C8.68629 54 6 51.3137 6 48V18Z"
+                      fill="url(#folderGradBack)"
                     />
-                    <span className="mockup-label">Framezoo</span>
-                  </div>
-                  <span className="mockup-arrow">➔</span>
-                  <div className="mockup-item">
-                    <svg
-                      className="mockup-folder-icon"
-                      width="58"
-                      height="58"
-                      viewBox="0 0 64 64"
-                      fill="none"
-                      aria-label={guide.applicationsFolderAria}
-                    >
-                      <path
-                        d="M6 18C6 14.6863 8.68629 12 12 12H24.5858C26.1771 12 27.7033 12.6321 28.8284 13.7574L32 16.9289C33.1251 18.0542 34.6513 18.6863 36.2426 18.6863H52C55.3137 18.6863 58 21.3726 58 24.6863V48C58 51.3137 55.3137 54 52 54H12C8.68629 54 6 51.3137 6 48V18Z"
-                        fill="url(#folderGradBack)"
-                      />
-                      <path
-                        d="M4 26C4 22.6863 6.68629 20 10 20H54C57.3137 20 60 22.6863 60 26V48C60 51.3137 57.3137 54 54 54H10C6.68629 54 4 51.3137 4 48V26Z"
-                        fill="url(#folderGradFront)"
-                      />
-                      <defs>
-                        <linearGradient
-                          id="folderGradBack"
-                          x1="6"
-                          y1="12"
-                          x2="58"
-                          y2="54"
-                          gradientUnits="userSpaceOnUse"
-                        >
-                          <stop stopColor="#5AC8FA" />
-                          <stop offset="1" stopColor="#007AFF" />
-                        </linearGradient>
-                        <linearGradient
-                          id="folderGradFront"
-                          x1="4"
-                          y1="20"
-                          x2="60"
-                          y2="54"
-                          gradientUnits="userSpaceOnUse"
-                        >
-                          <stop stopColor="#64D2FF" />
-                          <stop offset="1" stopColor="#0A84FF" />
-                        </linearGradient>
-                      </defs>
-                    </svg>
-                    <span className="mockup-label">Applications</span>
-                  </div>
+                    <path
+                      d="M4 26C4 22.6863 6.68629 20 10 20H54C57.3137 20 60 22.6863 60 26V48C60 51.3137 57.3137 54 54 54H10C6.68629 54 4 51.3137 4 48V26Z"
+                      fill="url(#folderGradFront)"
+                    />
+                    <defs>
+                      <linearGradient
+                        id="folderGradBack"
+                        x1="6"
+                        y1="12"
+                        x2="58"
+                        y2="54"
+                        gradientUnits="userSpaceOnUse"
+                      >
+                        <stop stopColor="#5AC8FA" />
+                        <stop offset="1" stopColor="#007AFF" />
+                      </linearGradient>
+                      <linearGradient
+                        id="folderGradFront"
+                        x1="4"
+                        y1="20"
+                        x2="60"
+                        y2="54"
+                        gradientUnits="userSpaceOnUse"
+                      >
+                        <stop stopColor="#64D2FF" />
+                        <stop offset="1" stopColor="#0A84FF" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                  <span className="mockup-label">Applications</span>
                 </div>
               </div>
             </div>
+          </div>
 
-            <div className="install-guide-card is-warning">
-              <div className="install-guide-card-header">
-                <span className="install-guide-step-badge">⚠️</span>
-                <div>
-                  <h2>{guide.mac.step2Title}</h2>
-                  <p>{guide.mac.step2Desc}</p>
-                </div>
+          <div className="install-guide-card is-warning">
+            <div className="install-guide-card-header">
+              <span className="install-guide-step-badge">⚠️</span>
+              <div>
+                <h2>{guide.mac.step2Title}</h2>
+                <p>{guide.mac.step2Desc}</p>
               </div>
-              <div className="install-guide-dialog-box">
-                <div className="dialog-box-title">{guide.macDialogTitle}</div>
-                <div className="dialog-box-desc">{guide.macDialogDesc}</div>
+            </div>
+            <div className="install-guide-dialog-box">
+              <div className="dialog-box-title">{guide.macDialogTitle}</div>
+              <div className="dialog-box-desc">{guide.macDialogDesc}</div>
+            </div>
+          </div>
+
+          <div className="install-guide-card is-solution">
+            <div className="install-guide-card-header">
+              <span className="install-guide-step-badge">2</span>
+              <div>
+                <h2>{guide.mac.step3Title}</h2>
+                <p className="install-guide-highlight">
+                  {guide.macQuickSolution}
+                </p>
               </div>
             </div>
 
-            <div className="install-guide-card is-solution">
-              <div className="install-guide-card-header">
-                <span className="install-guide-step-badge">2</span>
-                <div>
-                  <h2>{guide.mac.step3Title}</h2>
-                  <p className="install-guide-highlight">
-                    {guide.macQuickSolution}
-                  </p>
-                </div>
-              </div>
+            <ol className="install-guide-steps-list">
+              {guide.mac.step3Steps.map((step, idx) => (
+                <li key={idx} className="install-guide-step-item">
+                  <span className="step-num">{idx + 1}</span>
+                  <span>{step}</span>
+                </li>
+              ))}
+            </ol>
 
-              <ol className="install-guide-steps-list">
-                {guide.mac.step3Steps.map((step, idx) => (
-                  <li key={idx} className="install-guide-step-item">
-                    <span className="step-num">{idx + 1}</span>
-                    <span>{step}</span>
-                  </li>
-                ))}
-              </ol>
-
-              <div className="install-guide-note">
-                <span className="note-icon">ℹ️</span>
-                <p>{guide.mac.note}</p>
+            <div className="install-guide-note">
+              <span className="note-icon">ℹ️</span>
+              <p>{guide.mac.note}</p>
+            </div>
+          </div>
+        </section>
+        <section
+          className="install-guide-content"
+          id="windows"
+          role="tabpanel"
+          hidden={activeTab !== "win"}
+          style={activeTab !== "win" ? { display: "none" } : undefined}
+        >
+          <div className="install-guide-card">
+            <div className="install-guide-card-header">
+              <span className="install-guide-step-badge">1</span>
+              <div>
+                <h2>{guide.win.step1Title}</h2>
+                <p>{guide.win.step1Desc}</p>
               </div>
             </div>
-          </section>
-        ) : (
-          <section className="install-guide-content" id="windows">
-            <div className="install-guide-card">
-              <div className="install-guide-card-header">
-                <span className="install-guide-step-badge">1</span>
-                <div>
-                  <h2>{guide.win.step1Title}</h2>
-                  <p>{guide.win.step1Desc}</p>
-                </div>
+          </div>
+
+          <div className="install-guide-card is-warning">
+            <div className="install-guide-card-header">
+              <span className="install-guide-step-badge">⚠️</span>
+              <div>
+                <h2>{guide.win.step2Title}</h2>
+                <p>{guide.win.step2Desc}</p>
+              </div>
+            </div>
+            <div className="install-guide-dialog-box win-smartscreen-box">
+              <div className="smartscreen-banner">{guide.winDialogTitle}</div>
+              <div className="smartscreen-text">{guide.winDialogDesc}</div>
+              <div className="smartscreen-actions">
+                <span className="smartscreen-link">
+                  <u>{guide.winMoreInfo}</u> {guide.winClickHere}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="install-guide-card is-solution">
+            <div className="install-guide-card-header">
+              <span className="install-guide-step-badge">2</span>
+              <div>
+                <h2>{guide.win.step3Title}</h2>
+                <p className="install-guide-highlight">
+                  {guide.winQuickSolution}
+                </p>
               </div>
             </div>
 
-            <div className="install-guide-card is-warning">
-              <div className="install-guide-card-header">
-                <span className="install-guide-step-badge">⚠️</span>
-                <div>
-                  <h2>{guide.win.step2Title}</h2>
-                  <p>{guide.win.step2Desc}</p>
-                </div>
-              </div>
-              <div className="install-guide-dialog-box win-smartscreen-box">
-                <div className="smartscreen-banner">{guide.winDialogTitle}</div>
-                <div className="smartscreen-text">{guide.winDialogDesc}</div>
-                <div className="smartscreen-actions">
-                  <span className="smartscreen-link">
-                    <u>{guide.winMoreInfo}</u> {guide.winClickHere}
-                  </span>
-                </div>
-              </div>
+            <ol className="install-guide-steps-list">
+              {guide.win.step3Steps.map((step, idx) => (
+                <li key={idx} className="install-guide-step-item">
+                  <span className="step-num">{idx + 1}</span>
+                  <span>{step}</span>
+                </li>
+              ))}
+            </ol>
+
+            <div className="install-guide-note">
+              <span className="note-icon">ℹ️</span>
+              <p>{guide.win.note}</p>
             </div>
-
-            <div className="install-guide-card is-solution">
-              <div className="install-guide-card-header">
-                <span className="install-guide-step-badge">2</span>
-                <div>
-                  <h2>{guide.win.step3Title}</h2>
-                  <p className="install-guide-highlight">
-                    {guide.winQuickSolution}
-                  </p>
-                </div>
-              </div>
-
-              <ol className="install-guide-steps-list">
-                {guide.win.step3Steps.map((step, idx) => (
-                  <li key={idx} className="install-guide-step-item">
-                    <span className="step-num">{idx + 1}</span>
-                    <span>{step}</span>
-                  </li>
-                ))}
-              </ol>
-
-              <div className="install-guide-note">
-                <span className="note-icon">ℹ️</span>
-                <p>{guide.win.note}</p>
-              </div>
-            </div>
-          </section>
-        )}
+          </div>
+        </section>
 
         <div className="install-guide-download-cta">
           <DownloadSection

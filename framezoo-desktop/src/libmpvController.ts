@@ -77,6 +77,10 @@ type PlayerRecord = {
   desiredPaused: boolean;
   pausedForCache: boolean;
   fileLoaded: boolean;
+  seeking: boolean;
+  lastSeekAt: number | null;
+  lastCacheStallAt: number | null;
+  cacheStalls: number;
 };
 
 const DEFAULT_NATIVE_EVENT_TIMEOUT_MS = 120_000;
@@ -823,6 +827,10 @@ export class LibMpvController {
         desiredPaused: true,
         pausedForCache: false,
         fileLoaded: false,
+        seeking: false,
+        lastSeekAt: null,
+        lastCacheStallAt: null,
+        cacheStalls: 0,
       });
       lastPlayerCreateError = null;
       this.broadcastLog("info", "create", {
@@ -928,6 +936,10 @@ export class LibMpvController {
       player.isPaused = request.autoplay === false;
       player.fileLoaded = false;
       player.pausedForCache = false;
+      player.seeking = false;
+      player.lastSeekAt = null;
+      player.lastCacheStallAt = null;
+      player.cacheStalls = 0;
       this.syncNativeMediaPlaybackState();
 
       // A torrent HTTP route can legitimately wait for peers indefinitely.
@@ -1300,9 +1312,33 @@ export class LibMpvController {
           event.data ? "pause" : "play",
           eventData,
         );
-      } else if (event.name === "seeking" && event.data === true) {
-        this.broadcastLog("debug", "seek", eventData);
+      } else if (event.name === "seeking" && typeof event.data === "boolean") {
+        player.seeking = event.data;
+        player.lastSeekAt = Date.now();
+        if (event.data) {
+          if (player.cacheStalls > 1) this.setCachePauseWait(playerId, 0.5);
+          player.cacheStalls = 0;
+          player.lastCacheStallAt = null;
+          this.broadcastLog("debug", "seek", eventData);
+        }
       } else if (event.name === "paused-for-cache") {
+        if (
+          event.data === true && !player.pausedForCache && player.fileLoaded &&
+          !player.desiredPaused && !player.seeking &&
+          (player.lastSeekAt === null || Date.now() - player.lastSeekAt > 3000)
+        ) {
+          const now = Date.now();
+          player.cacheStalls =
+            player.lastCacheStallAt !== null &&
+            now - player.lastCacheStallAt < 30_000
+              ? Math.min(4, player.cacheStalls + 1)
+              : 1;
+          player.lastCacheStallAt = now;
+          this.setCachePauseWait(
+            playerId,
+            Math.min(4, 0.5 * 2 ** (player.cacheStalls - 1)),
+          );
+        }
         if (typeof event.data === "boolean") {
           player.pausedForCache = event.data;
           this.syncNativeMediaPlaybackState();
@@ -1310,6 +1346,14 @@ export class LibMpvController {
         if (event.data === true) {
           this.broadcastLog("debug", "buffering", eventData);
         }
+      } else if (
+        event.name === "demuxer-cache-duration" &&
+        typeof event.data === "number" && event.data >= 30 &&
+        !player.pausedForCache && player.cacheStalls > 1
+      ) {
+        this.setCachePauseWait(playerId, 0.5);
+        player.cacheStalls = 0;
+        player.lastCacheStallAt = null;
       } else if (
         event.name === "duration" ||
         event.name === "track-list" ||
@@ -1349,6 +1393,17 @@ export class LibMpvController {
       this.mainWindow!.webContents.send("desktop:libmpv-event", event);
     } catch (error) {
       console.warn("[libmpv] failed to send native event", error);
+    }
+  }
+
+  private setCachePauseWait(playerId: string, seconds: number): void {
+    try {
+      this.addon?.commandPlayer(playerId, { type: "set-cache-pause-wait", seconds });
+    } catch (error) {
+      this.broadcastLog("warn", "cache_wait_failed", {
+        playerId,
+        message: error instanceof Error ? error.message : String(error),
+      });
     }
   }
 

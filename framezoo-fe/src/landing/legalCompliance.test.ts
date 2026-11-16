@@ -1,11 +1,14 @@
 import fs from "node:fs";
 import path from "node:path";
 
+import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
-import { getLandingCopy } from "./i18n";
+import { LANDING_LOCALES, getLandingCopy } from "./i18n";
+import { InstallGuidePage } from "./InstallGuidePage";
 import { LEGAL_OPERATOR } from "./legalOperator";
-import { getLegalTabFromPathname } from "./LegalPage";
+import { LegalPage, getLegalTabFromPathname } from "./LegalPage";
 
 describe("Landing legal compliance & install guide hygiene", () => {
   it("resolves legal routes including disclaimer and dmca aliases", () => {
@@ -30,6 +33,32 @@ describe("Landing legal compliance & install guide hygiene", () => {
     expect(viCopy.legal.tabs.privacy.sections[3].paragraphs[0]).toContain("16");
   });
 
+  it("shows the tracker disclosure in the selected language", () => {
+    for (const [locale, expected] of [
+      ["vi", "tracker công cộng"],
+      ["fr", "trackers publics"],
+    ]) {
+      window.localStorage.setItem("framezoo-landing-locale", locale);
+      const html = renderToStaticMarkup(
+        createElement(LegalPage, { initialTab: "copyright" }),
+      );
+      expect(html).toContain(expected);
+      expect(html).not.toContain("upload_rate_limit = 0");
+    }
+    window.localStorage.removeItem("framezoo-landing-locale");
+  });
+
+  it("keeps the tracker disclosure current in every locale", () => {
+    for (const locale of LANDING_LOCALES) {
+      const paragraph = getLandingCopy(locale.id).legal.tabs.copyright
+        .sections[0].paragraphs[0];
+      expect(paragraph, locale.id).not.toContain("upload_rate_limit = 0");
+      expect(paragraph, locale.id).toContain("Framezoo");
+      expect(paragraph, locale.id).toContain("IP");
+      expect(paragraph, locale.id).toContain("P2P");
+    }
+  });
+
   it("removes xattr bypass commands and open-source claims from install guide and locales", () => {
     const installGuideSource = fs.readFileSync(
       path.resolve(import.meta.dirname, "InstallGuidePage.tsx"),
@@ -46,5 +75,26 @@ describe("Landing legal compliance & install guide hygiene", () => {
         /open[- ]?source|mã nguồn mở|開源|オープンソース/i,
       );
     }
+  });
+
+  it("renders unique legal H1 headings, crawlable tab links, and both OS guides in SSR", () => {
+    window.localStorage.removeItem("framezoo-landing-locale");
+    const addonHtml = renderToStaticMarkup(
+      createElement(LegalPage, { initialTab: "addon-policy" }),
+    );
+    const termsHtml = renderToStaticMarkup(
+      createElement(LegalPage, { initialTab: "terms" }),
+    );
+    expect(addonHtml).toContain(
+      "<h1>Addon Policy &amp; Community Guidelines</h1>",
+    );
+    expect(termsHtml).toContain("<h1>Terms of Service</h1>");
+    expect(addonHtml).toContain('href="/legal/terms"');
+
+    const guideHtml = renderToStaticMarkup(createElement(InstallGuidePage));
+    expect(guideHtml).toContain('id="mac"');
+    expect(guideHtml).toContain('id="windows"');
+    expect(guideHtml).toContain("Gatekeeper");
+    expect(guideHtml).toContain("SmartScreen");
   });
 });

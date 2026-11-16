@@ -4,7 +4,7 @@ import time
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 sys.path.insert(0, str(Path(__file__).parent))
 
@@ -464,8 +464,83 @@ class TorrentDiscoveryTest(unittest.TestCase):
         self.assertEqual(runtime.snapshot()["peersDiscovered"], 2)
         self.assertEqual(runtime.snapshot()["peersInjected"], 2)
 
-    def test_no_default_trackers_bundled(self):
-        self.assertEqual(discovery.constants.DEFAULT_TRACKERS, ())
+    def test_default_trackers_include_http_fallback(self):
+        trackers = discovery.normalize_trackers(discovery.constants.DEFAULT_TRACKERS)
+        self.assertEqual(len(trackers), len(discovery.constants.DEFAULT_TRACKERS))
+        self.assertIn("http://tracker.qu.ax:6969/announce", trackers)
+        self.assertIn("https://tracker.opentrackr.org:443/announce", trackers)
+
+    def test_network_change_rebinds_and_reactivates_active_swarm(self):
+        from torrent_engine import LibtorrentEngine
+
+        engine = object.__new__(LibtorrentEngine)
+        engine._network_lock = threading.Lock()
+        engine._last_network_check = 0
+        engine.listen_address = "192.0.2.1"
+        engine.lock = threading.RLock()
+        engine._session = SimpleNamespace(apply_settings=Mock())
+        active = SimpleNamespace(session_ids={"playing"}, discovery=Mock())
+        idle = SimpleNamespace(session_ids=set(), discovery=Mock())
+        engine.records = {"active": active, "idle": idle}
+
+        with patch("torrent_engine.time.monotonic", return_value=100), patch(
+            "torrent_engine.get_local_ipv4", return_value="192.0.2.2"
+        ), patch.dict("os.environ", {"FRAMEZOO_TEST_LOOPBACK": "0"}), patch(
+            "torrent_engine.threading.Thread"
+        ) as probe:
+            engine.refresh_network()
+            engine.refresh_network()
+
+        engine._session.apply_settings.assert_called_once_with({
+            "listen_interfaces": "192.0.2.2:49160-49170",
+            "outgoing_interfaces": "192.0.2.2",
+            "enable_outgoing_utp": False,
+            "enable_incoming_utp": False,
+        })
+        active.discovery.reactivate.assert_called_once()
+        idle.discovery.reactivate.assert_not_called()
+        probe.return_value.start.assert_called_once()
+        self.assertEqual(engine.listen_address, "192.0.2.2")
+
+    def test_network_change_keeps_old_address_if_rebind_fails(self):
+        from torrent_engine import LibtorrentEngine
+
+        engine = object.__new__(LibtorrentEngine)
+        engine._network_lock = threading.Lock()
+        engine._last_network_check = 0
+        engine.listen_address = "192.0.2.1"
+        engine._session = SimpleNamespace(apply_settings=Mock(side_effect=RuntimeError("failed")))
+        with patch("torrent_engine.time.monotonic", return_value=100), patch(
+            "torrent_engine.get_local_ipv4", return_value="192.0.2.2"
+        ):
+            engine.refresh_network()
+        self.assertEqual(engine.listen_address, "192.0.2.1")
+
+    def test_http_announce_uses_current_listen_port(self):
+        session = SimpleNamespace(listen_port=lambda: 49169)
+        runtime = discovery.TorrentDiscovery(
+            session, Mock(), lt.sha1_hash(b"0" * 20), [], b"1" * 20, 49160,
+        )
+        with patch.object(discovery, "announce_http_tracker") as announce:
+            runtime._announce_tracker(
+                "http://tracker.example/announce", SimpleNamespace(total_wanted=0),
+            )
+        self.assertEqual(announce.call_args.args[3], 49169)
+
+    def test_udp_response_from_old_network_does_not_enable_utp(self):
+        from torrent_engine import LibtorrentEngine
+
+        engine = object.__new__(LibtorrentEngine)
+        engine._network_lock = threading.Lock()
+        engine.listen_address = "192.0.2.2"
+        engine.peer_id = b"1" * 20
+        session = SimpleNamespace(apply_settings=Mock())
+        sock = Mock()
+        sock.recvfrom.return_value = (b"response", ("192.0.2.1", 6881))
+        with patch("torrent_engine.socket.socket", return_value=sock):
+            engine._probe_udp_and_enable_utp(session, "192.0.2.1")
+        session.apply_settings.assert_not_called()
+        sock.close.assert_called_once()
 
     def test_libtorrent_no_seeding_defaults(self):
         import os

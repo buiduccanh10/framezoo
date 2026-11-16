@@ -1595,7 +1595,8 @@ napi_value create_player(napi_env env, napi_callback_info info) {
   set_mpv_option(
       player.get(),
       "stream-lavf-o",
-      "reconnect=1,reconnect_streamed=1,reconnect_delay_max=5"
+      "reconnect=1,reconnect_streamed=1,reconnect_on_network_error=1,"
+      "reconnect_on_http_error=5xx,reconnect_delay_max=5"
   );
   set_mpv_option(player.get(), "demuxer-lavf-buffersize", "131072");
 
@@ -1970,6 +1971,14 @@ napi_value command_player(napi_env env, napi_callback_info info) {
       return throw_error(env, "libmpv command failed");
     }
   } else if (
+      type == "set-cache-pause-wait" &&
+      get_number(env, argv[1], "seconds", &number)
+  ) {
+    const std::string seconds = std::to_string(std::max(0.5, std::min(4.0, number)));
+    if (player->set_property_string("cache-pause-wait", seconds.c_str()) < 0) {
+      return throw_error(env, "libmpv command failed");
+    }
+  } else if (
       (type == "set-audio-track" || type == "set-subtitle-track" ||
        type == "set-secondary-subtitle-track") &&
       get_string(env, argv[1], "trackId", &value)
@@ -2107,6 +2116,7 @@ napi_value load_player(napi_env env, napi_callback_info info) {
     return throw_error(env, "libmpv pause configuration failed");
   }
   player->is_paused.store(!autoplay, std::memory_order_release);
+  set_mpv_property(player.get(), "cache-pause-wait", "0.5");
   if (
       set_mpv_property(
           player.get(),

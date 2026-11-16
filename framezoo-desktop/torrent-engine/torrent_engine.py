@@ -6,6 +6,7 @@ import socket
 import sys
 import tempfile
 import threading
+import time
 from typing import Any, Dict, Optional, Set
 
 import libtorrent as lt
@@ -242,6 +243,8 @@ class LibtorrentEngine:
         self.peer_id = b"-FZ0001-" + os.urandom(12)
         self.listen_address: Optional[str] = None
         self.listen_port = 6881
+        self._network_lock = threading.Lock()
+        self._last_network_check = time.monotonic()
 
     def _network_settings(self) -> dict[str, Any]:
         address = get_local_ipv4()
@@ -259,7 +262,7 @@ class LibtorrentEngine:
             "listen_interfaces": "0.0.0.0:49160-49170",
         }
 
-    def _probe_udp_and_enable_utp(self, session: Any) -> None:
+    def _probe_udp_and_enable_utp(self, session: Any, address: Optional[str]) -> None:
         """Enable uTP only after confirming outbound UDP is not firewall-dropped."""
         ping_payload = (
             b"d1:ad2:id20:" + self.peer_id[:20] + b"e1:q4:ping1:t2:aa1:y1:qe"
@@ -271,14 +274,17 @@ class LibtorrentEngine:
                 sock.sendto(ping_payload, (host, port))
                 data, _ = sock.recvfrom(512)
                 if data:
-                    apply_settings = getattr(session, "apply_settings", None)
-                    if callable(apply_settings):
-                        apply_settings(
-                            {
-                                "enable_outgoing_utp": True,
-                                "enable_incoming_utp": True,
-                            }
-                        )
+                    with self._network_lock:
+                        if self.listen_address != address:
+                            return
+                        apply_settings = getattr(session, "apply_settings", None)
+                        if callable(apply_settings):
+                            apply_settings(
+                                {
+                                    "enable_outgoing_utp": True,
+                                    "enable_incoming_utp": True,
+                                }
+                            )
                     log_event("udp probe succeeded; utp enabled", host=host, port=port)
                     return
             except OSError:
@@ -286,6 +292,46 @@ class LibtorrentEngine:
             finally:
                 sock.close()
         log_event("udp probe blocked; keeping tcp-only peer transport")
+
+    def refresh_network(self) -> None:
+        if time.monotonic() - self._last_network_check < 10:
+            return
+        with self._network_lock:
+            if time.monotonic() - self._last_network_check < 10:
+                return
+            self._last_network_check = time.monotonic()
+            old_address = self.listen_address
+            settings = self._network_settings()
+            address = self.listen_address
+            if not address or address == old_address or self._session is None:
+                self.listen_address = old_address
+                return
+            try:
+                self._session.apply_settings({
+                    **settings,
+                    "enable_outgoing_utp": False,
+                    "enable_incoming_utp": False,
+                })
+            except Exception as error:
+                self.listen_address = old_address
+                log_event("torrent network update failed", error=str(error))
+                return
+            session = self._session
+            with self.lock:
+                records = list(self.records.values())
+            for record in records:
+                if record.session_ids and record.discovery is not None:
+                    try:
+                        record.discovery.reactivate()
+                    except Exception as error:
+                        log_event("torrent discovery restart failed", error=str(error))
+            threading.Thread(
+                target=self._probe_udp_and_enable_utp,
+                args=(session, address),
+                name="torrent-udp-probe",
+                daemon=True,
+            ).start()
+            log_event("torrent network changed", listenAddress=address)
 
     def _ensure_session(self) -> Any:
         if self._session is not None:
@@ -377,7 +423,7 @@ class LibtorrentEngine:
             self._session = session
             threading.Thread(
                 target=self._probe_udp_and_enable_utp,
-                args=(session,),
+                args=(session, self.listen_address),
                 name="torrent-udp-probe",
                 daemon=True,
             ).start()

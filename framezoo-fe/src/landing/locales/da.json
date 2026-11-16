@@ -413,10 +413,10 @@
         "sections": [
           {
             "paragraphs": [
-              "Framezoo er neutral medieafspillersoftware, der ligner Stremio og Kodi: den hoster ingen videofiler, bundter ingen standardindholdstilføjelser eller offentlige trackere, udfører ingen server-side addon-proxy og deaktiverer udgående P2P-seed (upload_rate_limit = 0) som standard.",
+              "Framezoo er en medieafspiller, der ikke er vært for videofiler og bundter ingen standardindholdstilføjelser. Dens torrent-motor bruger som standard offentlige trackere; disse tjenester modtager din IP-adresse og torrentens info-hash. Motoren er konfigureret til at begrænse udgående P2P-deling.",
               "Undertekstdownloads bruger headers uden butik uden offentlig caching på Framezoo-servere."
             ],
-            "title": "Neutral mellemliggende software og standard P2P uden seeding",
+            "title": "Medieafspiller og P2P",
             "badge": "01"
           },
           {
