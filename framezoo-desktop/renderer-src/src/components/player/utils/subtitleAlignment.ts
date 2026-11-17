@@ -38,6 +38,8 @@ export type SubtitleAlignmentTrack = "primary" | "secondary";
 
 export interface SubtitleAlignmentBatchResponse {
   results: Partial<Record<SubtitleAlignmentTrack, SubtitleAlignmentResponse>>;
+  needsMoreSamples?: boolean;
+  additionalWindows?: number;
   errorMessage?: string;
   warningMessage?: string;
 }
@@ -429,6 +431,60 @@ export function buildAlignmentWindowPlan(
   return plans.slice(0, SUBTITLE_ALIGNMENT_MAX_WINDOWS);
 }
 
+const SUBTITLE_ALIGNMENT_RETRY_ANCHOR_FRACTIONS = Array.from(
+  { length: 19 },
+  (_, index) => (index + 1) / 20,
+);
+const SUBTITLE_ALIGNMENT_RETRY_FALLBACK_OFFSETS_SECONDS = [
+  -360, 360, -480, 480, -600, 600, -720, 720, -840, 840, -960, 960,
+];
+
+function buildRetryAlignmentWindowPlan(
+  existingPlans: AlignmentWindowPlan[],
+  requestedWindows: number,
+  videoDuration: number | undefined,
+  windowDuration: number,
+  subtitleVtts?: string[],
+): AlignmentWindowPlan[] {
+  if (requestedWindows <= 0) return [];
+
+  const maxStart =
+    typeof videoDuration === "number" &&
+    Number.isFinite(videoDuration) &&
+    videoDuration > 0
+      ? Math.max(0, videoDuration - windowDuration)
+      : null;
+  const currentStart = existingPlans[0]?.startAt ?? 0;
+  const dialogueSpans = extractDialogueCueSpans(subtitleVtts);
+  const anchors =
+    maxStart !== null
+      ? SUBTITLE_ALIGNMENT_RETRY_ANCHOR_FRACTIONS.map((fraction) =>
+          Math.round(maxStart * fraction),
+        )
+      : SUBTITLE_ALIGNMENT_RETRY_FALLBACK_OFFSETS_SECONDS.map((offset) =>
+          Math.round(currentStart + offset),
+        );
+
+  const occupiedPlans = [...existingPlans];
+  const retryPlans: AlignmentWindowPlan[] = [];
+  for (const anchor of anchors) {
+    if (retryPlans.length >= requestedWindows) break;
+    const candidate = pickDialogueDenseWindowStart(
+      anchor,
+      occupiedPlans,
+      dialogueSpans,
+      videoDuration,
+      windowDuration,
+    );
+    if (hasWindowOverlap(occupiedPlans, candidate, windowDuration)) continue;
+    const retryPlan = { startAt: candidate, priority: "fallback" as const };
+    retryPlans.push(retryPlan);
+    occupiedPlans.push(retryPlan);
+  }
+
+  return retryPlans;
+}
+
 export type SubtitleAlignmentTelemetryPhase =
   "capturing" | "preparing" | "analyzing";
 
@@ -469,7 +525,7 @@ export async function alignSubtitlesWithCurrentStream(options: {
   onProgress?: (progress: number, phase?: "capturing" | "analyzing") => void;
   onTelemetry?: (telemetry: SubtitleAlignmentProgressTelemetry) => void;
 }): Promise<SubtitleAlignmentBatchResponse> {
-  const windowPlan = buildAlignmentWindowPlan(
+  let windowPlan = buildAlignmentWindowPlan(
     options.startAt,
     options.videoDuration,
     options.buffered,
@@ -505,14 +561,8 @@ export async function alignSubtitlesWithCurrentStream(options: {
     });
   };
   emitTelemetry(0.06, "capturing");
-  const capturedWindows: Array<{
-    audio: Uint8Array;
-    startMs: number;
-  }> = [];
-  const windowStartsMs: number[] = [];
-  const windowDurationsMs: number[] = [];
-
   const capturedAudio = new Array<Uint8Array>(windowPlan.length);
+  const initialWindowCount = windowPlan.length;
   const captureAbortController = new AbortController();
   const abortCaptures = () => {
     captureAbortController.abort();
@@ -523,13 +573,20 @@ export async function alignSubtitlesWithCurrentStream(options: {
   }
   let completedCaptures = 0;
   let nextCaptureIndex = options.isTorrent ? 1 : 0;
-  const processWindow = async (index: number) => {
-    const plan = windowPlan[index]!;
+  const processWindow = async (
+    index: number,
+    plan = windowPlan[index],
+    reportProgress = true,
+  ) => {
+    if (!plan) return;
     if (windowTelemetry[index]) {
       windowTelemetry[index].status = "capturing";
       emitTelemetry(
-        0.06 + (completedCaptures / Math.max(1, windowPlan.length)) * 0.42,
-        "capturing",
+        reportProgress
+          ? 0.06 + (completedCaptures / Math.max(1, initialWindowCount)) * 0.42
+          : 0.64,
+        reportProgress ? "capturing" : "analyzing",
+        reportProgress ? undefined : "vad",
       );
     }
     try {
@@ -569,21 +626,25 @@ export async function alignSubtitlesWithCurrentStream(options: {
       });
     } finally {
       completedCaptures += 1;
-      options.onProgress?.(
-        (completedCaptures / windowPlan.length) * 0.4,
-        "capturing",
-      );
-      emitTelemetry(
-        0.06 + (completedCaptures / windowPlan.length) * 0.42,
-        "capturing",
-      );
+      if (reportProgress) {
+        options.onProgress?.(
+          (completedCaptures / initialWindowCount) * 0.4,
+          "capturing",
+        );
+        emitTelemetry(
+          0.06 + (completedCaptures / initialWindowCount) * 0.42,
+          "capturing",
+        );
+      } else {
+        emitTelemetry(0.7, "analyzing", "vad");
+      }
     }
   };
-  const captureWorker = async () => {
+  const captureWorker = async (reportProgress = true) => {
     try {
       while (nextCaptureIndex < windowPlan.length) {
         const index = nextCaptureIndex++;
-        await processWindow(index);
+        await processWindow(index, undefined, reportProgress);
       }
     } catch (error) {
       captureAbortController.abort();
@@ -616,61 +677,138 @@ export async function alignSubtitlesWithCurrentStream(options: {
 
   emitTelemetry(0.52, "preparing", "upload");
 
-  const timelineWindows = windowPlan
-    .map((plan, index) => ({ index, plan }))
-    .sort((left, right) => left.plan.startAt - right.plan.startAt);
-  for (const { index, plan } of timelineWindows) {
-    const audio = capturedAudio[index];
-    if (audio) {
-      capturedWindows.push({
-        audio,
-        startMs: Math.round(plan.startAt * 1000),
-      });
-      windowStartsMs.push(Math.round(plan.startAt * 1000));
-      windowDurationsMs.push(Math.round(windowDuration * 1000));
-    }
-  }
-
-  if (capturedWindows.length === 0) {
-    throw new Error("Failed to capture any valid audio windows for alignment");
-  }
-
   // ponytail: keep alignment off the renderer thread; reintroduce local inference
   // only behind a Worker with transferable audio buffers.
   // The renderer captures bounded audio windows and applies the server result.
-  const body = new FormData();
-  body.append(
-    "subtitles",
-    JSON.stringify(
-      options.subtitles.map((subtitle) => ({
-        track: subtitle.track,
-        vttData: subtitle.vttData,
-      })),
-    ),
-  );
-  body.append("language", options.language || "en");
-  body.append("windowStartsMs", JSON.stringify(windowStartsMs));
-  body.append("windowDurationsMs", JSON.stringify(windowDurationsMs));
+  const buildAlignmentPayload = (indices?: number[]) => {
+    const capturedWindows: Array<{ audio: Uint8Array; startMs: number }> = [];
+    const windowStartsMs: number[] = [];
+    const windowDurationsMs: number[] = [];
+    const selectedIndices = new Set(
+      indices ?? windowPlan.map((_, index) => index),
+    );
+    const timelineWindows = windowPlan
+      .map((plan, index) => ({ index, plan }))
+      .sort((left, right) => left.plan.startAt - right.plan.startAt);
 
-  for (const [index, window] of capturedWindows.entries()) {
-    appendAudio(body, window.audio, index);
+    for (const { index, plan } of timelineWindows) {
+      if (!selectedIndices.has(index)) continue;
+      const audio = capturedAudio[index];
+      if (!audio) continue;
+      capturedWindows.push({ audio, startMs: Math.round(plan.startAt * 1000) });
+      windowStartsMs.push(Math.round(plan.startAt * 1000));
+      windowDurationsMs.push(Math.round(windowDuration * 1000));
+    }
+
+    if (capturedWindows.length === 0) {
+      throw new Error(
+        "Failed to capture any valid audio windows for alignment",
+      );
+    }
+    return { capturedWindows, windowStartsMs, windowDurationsMs };
+  };
+
+  const submitAlignment = async (progress: number, indices?: number[]) => {
+    const { capturedWindows, windowStartsMs, windowDurationsMs } =
+      buildAlignmentPayload(indices);
+    const body = new FormData();
+    body.append(
+      "subtitles",
+      JSON.stringify(
+        options.subtitles.map((subtitle) => ({
+          track: subtitle.track,
+          vttData: subtitle.vttData,
+        })),
+      ),
+    );
+    body.append("language", options.language || "en");
+    body.append("windowStartsMs", JSON.stringify(windowStartsMs));
+    body.append("windowDurationsMs", JSON.stringify(windowDurationsMs));
+    for (const [index, window] of capturedWindows.entries()) {
+      appendAudio(body, window.audio, index);
+    }
+
+    options.onProgress?.(progress, "analyzing");
+    emitTelemetry(progress, "analyzing", "vad");
+    return await mwFetch<SubtitleAlignmentBatchResponse>(
+      "/api/subtitle-align",
+      {
+        method: "POST",
+        body,
+        baseURL: conf().BACKEND_URL ?? undefined,
+        signal: options.signal,
+        timeout: 300_000,
+      },
+    );
+  };
+
+  let response = await submitAlignment(0.58);
+  const reportedAdditionalWindows = response.additionalWindows;
+  const requestedRetryWindows = Math.min(
+    SUBTITLE_ALIGNMENT_MAX_WINDOWS,
+    response.needsMoreSamples === true
+      ? Math.max(
+          0,
+          typeof reportedAdditionalWindows === "number" &&
+            Number.isFinite(reportedAdditionalWindows)
+            ? Math.floor(reportedAdditionalWindows)
+            : 1,
+        )
+      : 0,
+  );
+  if (requestedRetryWindows > 0) {
+    const retryPlans = buildRetryAlignmentWindowPlan(
+      windowPlan,
+      requestedRetryWindows,
+      options.videoDuration,
+      windowDuration,
+      options.subtitles.map((subtitle) => subtitle.vttData),
+    );
+    if (retryPlans.length > 0) {
+      const retryStartIndex = windowPlan.length;
+      windowPlan = [...windowPlan, ...retryPlans];
+      retryPlans.forEach((retryPlan, index) => {
+        windowTelemetry.push({
+          index: retryStartIndex + index,
+          startAt: retryPlan.startAt,
+          duration: windowDuration,
+          priority: retryPlan.priority,
+          status: "queued",
+        });
+      });
+      const retryIndices = retryPlans.map(
+        (_, index) => retryStartIndex + index,
+      );
+      options.signal?.addEventListener("abort", abortCaptures, { once: true });
+      if (options.signal?.aborted) captureAbortController.abort();
+      try {
+        await Promise.all(
+          Array.from(
+            {
+              length: Math.min(
+                SUBTITLE_ALIGNMENT_CAPTURE_CONCURRENCY,
+                retryPlans.length,
+              ),
+            },
+            () => captureWorker(false),
+          ),
+        );
+        if (buildAlignmentPayload(retryIndices).capturedWindows.length > 0) {
+          response = await submitAlignment(0.76, retryIndices);
+        }
+      } catch (error) {
+        if (options.signal?.aborted) throw error;
+        logSyncTelemetry("alignment_retry_failed", {
+          windowCount: retryPlans.length,
+          error: error instanceof Error ? error.message : String(error),
+        });
+      } finally {
+        options.signal?.removeEventListener("abort", abortCaptures);
+      }
+    }
   }
-
-  options.onProgress?.(0.58, "analyzing");
-  emitTelemetry(0.58, "analyzing", "vad");
-
-  const response = await mwFetch<SubtitleAlignmentBatchResponse>(
-    "/api/subtitle-align",
-    {
-      method: "POST",
-      body,
-      baseURL: conf().BACKEND_URL ?? undefined,
-      signal: options.signal,
-      timeout: 300_000,
-    },
-  );
   logSyncTelemetry("alignment_complete", {
-    windowCount: capturedWindows.length,
+    windowCount: buildAlignmentPayload().capturedWindows.length,
     windowDuration,
   });
   options.onProgress?.(1, "analyzing");

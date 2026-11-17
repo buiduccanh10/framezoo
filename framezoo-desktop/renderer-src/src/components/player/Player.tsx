@@ -7,6 +7,7 @@ export * from "./base/BackLink";
 export * from "./base/LeftSideControls";
 export * from "./base/CenterMobileControls";
 export * from "./base/SubtitleView";
+export * from "./base/PopoutStack";
 export * from "./internals/BookmarkButton";
 export * from "./internals/InfoButton";
 export * from "./internals/SkipEpisodeButton";

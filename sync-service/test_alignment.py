@@ -110,6 +110,72 @@ class AlignmentAlgorithmTests(unittest.TestCase):
         self.assertEqual(align_batch.call_count, 2)
         self.assertTrue(result["results"]["primary"]["aligned"])
         self.assertEqual(result["results"]["primary"]["offsetMs"], -2_150)
+        self.assertEqual(result["additionalWindows"], 0)
+
+    def test_requests_more_samples_for_speechless_alignment_result(self):
+        with patch(
+            "alignment.align_speech_batch",
+            return_value={
+                "results": {
+                    "primary": {
+                        "aligned": False,
+                        "offsetMs": 0,
+                        "confidence": 0,
+                        "speechIntervals": [],
+                        "reason": "no_speech_detected",
+                    }
+                }
+            },
+        ):
+            result = align_speech_windows(
+                [([(0, 500)], 0, 60_000)],
+                [{"track": "primary", "vttData": "WEBVTT"}],
+            )
+
+        self.assertTrue(result["needsMoreSamples"])
+        self.assertEqual(result["additionalWindows"], 1)
+
+    def test_counts_each_window_that_needs_replacement_samples(self):
+        unaligned = {
+            "results": {
+                "primary": {
+                    "aligned": False,
+                    "offsetMs": 0,
+                    "confidence": 0,
+                    "speechIntervals": [],
+                    "reason": "no_speech_detected",
+                }
+            }
+        }
+        with patch("alignment.align_speech_batch", side_effect=[unaligned, unaligned]):
+            result = align_speech_windows(
+                [
+                    ([(0, 500)], 0, 60_000),
+                    ([(60_000, 60_500)], 60_000, 120_000),
+                ],
+                [{"track": "primary", "vttData": "WEBVTT"}],
+            )
+
+        self.assertTrue(result["needsMoreSamples"])
+        self.assertEqual(result["additionalWindows"], 2)
+
+    def test_does_not_request_more_samples_after_alignment(self):
+        with patch(
+            "alignment.align_speech_batch",
+            return_value={
+                "results": {"primary": self.make_aligned_result(-2_000)}
+            },
+        ):
+            result = align_speech_windows(
+                [
+                    ([(0, 4_000)], 0, 60_000),
+                    ([(60_000, 64_000)], 60_000, 120_000),
+                ],
+                [{"track": "primary", "vttData": "WEBVTT"}],
+            )
+
+        self.assertFalse(result["needsMoreSamples"])
+        self.assertEqual(result["additionalWindows"], 0)
 
     def test_audio_windows_transcribe_then_use_the_same_speech_core(self):
         with (
@@ -707,6 +773,28 @@ would you use a place like this?
             delta=750,
         )
 
+    def test_reuses_preprocessed_cues_when_finding_search_centers(self):
+        cues = parse_alignment_cues(
+            """WEBVTT
+
+00:01:50.000 --> 00:01:54.000
+If you were the Bay Harbor Butcher,
+"""
+        )
+
+        with patch(
+            "alignment.filter_alignment_cues",
+            side_effect=AssertionError("preprocessed cues were filtered again"),
+        ):
+            centers = compute_track_search_centers(
+                cues,
+                [(14_000, 18_000)],
+                0,
+                cues_filtered=True,
+            )
+
+        self.assertEqual(centers, [-96_000, 0])
+
     def test_filters_non_speech_sdh_and_music_cues(self):
         vtt = """WEBVTT
 
@@ -985,6 +1073,64 @@ Let's move out.
         self.assertTrue(primary["aligned"])
         self.assertIsNotNone(primary.get("rateRatio"))
         self.assertAlmostEqual(primary["rateRatio"], ratio, delta=0.0003)
+
+    def test_detects_small_linear_drift_below_framerate_threshold(self):
+        ratio = 0.99975
+        offset0 = 1_800
+        centers = (90_000, 480_000, 960_000, 1_440_000, 1_920_000, 2_370_000)
+        jitters = (120, -150, 80, -100, 140, -130)
+        entries = []
+        for center_ms, jitter_ms in zip(centers, jitters):
+            offset = int(round(offset0 + (1.0 - 1.0 / ratio) * center_ms + jitter_ms))
+            result = self.make_aligned_result(offset, 88)
+            result["speechAnchorCount"] = 4
+            result["speechAnchorCoverage"] = 0.6
+            entries.append(
+                {
+                    "startAt": center_ms / 1_000.0,
+                    "midMs": center_ms,
+                    "result": result,
+                }
+            )
+
+        consensus = select_alignment_consensus(entries)
+
+        self.assertTrue(consensus["aligned"])
+        self.assertAlmostEqual(consensus["rateRatio"], ratio, delta=0.00008)
+        self.assertLessEqual(abs(consensus["offsetMs"] - offset0), 150)
+
+        vtt_data, windows = self._build_drifted_vtt_and_windows(
+            [(center_ms, jitter_ms, True) for center_ms, jitter_ms in zip(centers, jitters)],
+            rate_ratio=ratio,
+            offset0_ms=offset0,
+        )
+        primary = align_speech_windows(
+            windows,
+            [{"track": "primary", "vttData": vtt_data}],
+        )["results"]["primary"]
+        self.assertTrue(primary["aligned"])
+        self.assertAlmostEqual(primary["rateRatio"], ratio, delta=0.00008)
+
+    def test_does_not_promote_one_local_offset_to_global_drift(self):
+        centers = (90_000, 480_000, 960_000, 1_440_000, 1_920_000, 2_370_000)
+        offsets = (1_800, 1_800, 1_800, 2_800, 1_800, 1_800)
+        entries = []
+        for center_ms, offset in zip(centers, offsets):
+            result = self.make_aligned_result(offset, 88)
+            result["speechAnchorCount"] = 4
+            result["speechAnchorCoverage"] = 0.6
+            entries.append(
+                {
+                    "startAt": center_ms / 1_000.0,
+                    "midMs": center_ms,
+                    "result": result,
+                }
+            )
+
+        consensus = select_alignment_consensus(entries)
+
+        self.assertTrue(consensus["aligned"])
+        self.assertIsNone(consensus.get("rateRatio"))
 
     def test_two_wide_windows_fit_broadcast_fps_drift(self):
         ratio = 25.0 / 24.0

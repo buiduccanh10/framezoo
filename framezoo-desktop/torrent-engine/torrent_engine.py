@@ -9,6 +9,8 @@ import tempfile
 import threading
 import time
 from typing import Any, Dict, Optional, Set
+from urllib.parse import unquote, urlsplit
+from urllib.request import Request, url2pathname, urlopen
 
 import libtorrent as lt
 
@@ -523,15 +525,23 @@ class LibtorrentEngine:
                 except OSError:
                     resume_data = b""
 
-        magnet = get_magnet(request)
-        magnet_params = lt.parse_magnet_uri(magnet)
-        magnet_trackers = list(getattr(magnet_params, "trackers", []))
+        if torrent_info is None:
+            torrent_info = self._load_torrent_source(request)
+        magnet_params = None
+        magnet_trackers: list[str] = []
+        if torrent_info is None:
+            magnet = get_magnet(request)
+            magnet_params = lt.parse_magnet_uri(magnet)
+            magnet_trackers = list(getattr(magnet_params, "trackers", []))
+        elif request.get("infoHash"):
+            requested_hash = str(request["infoHash"]).lower().replace("urn:btih:", "")
+            if str(torrent_info.info_hash()).lower() != requested_hash:
+                raise ValueError("torrent metadata does not match infoHash")
         cached_trackers = get_torrent_info_trackers(torrent_info)
         params = magnet_params
         if torrent_info is not None:
-            # A cached torrent_info is authoritative. Do not combine it with
-            # magnet params; libtorrent rejects that combination as a hash
-            # mismatch even when both hashes are equal.
+            # Metadata is authoritative. Do not combine it with magnet params;
+            # libtorrent rejects that combination even when hashes match.
             params = lt.add_torrent_params()
             params.ti = torrent_info
         params.save_path = save_path
@@ -692,6 +702,41 @@ class LibtorrentEngine:
             self.records[key] = record
         record.start()
         return record
+
+    @staticmethod
+    def _load_torrent_source(request: Dict[str, Any]) -> Any:
+        """Load a declared .torrent source before falling back to magnet metadata."""
+        value = request.get("url")
+        if not isinstance(value, str) or not value.strip():
+            return None
+        source = value.strip()
+        parsed = urlsplit(source)
+        path = unquote(parsed.path or source).lower()
+        if not path.endswith(".torrent"):
+            return None
+
+        try:
+            if parsed.scheme in ("", "file"):
+                filename = (
+                    url2pathname(unquote(parsed.path))
+                    if parsed.scheme == "file"
+                    else source
+                )
+                with open(filename, "rb") as stream:
+                    payload = stream.read(constants.TORRENT_FILE_MAX_BYTES + 1)
+            elif parsed.scheme in ("http", "https"):
+                with urlopen(
+                    Request(source, headers={"Accept": "application/x-bittorrent"}),
+                    timeout=constants.TORRENT_FILE_TIMEOUT,
+                ) as response:
+                    payload = response.read(constants.TORRENT_FILE_MAX_BYTES + 1)
+            else:
+                return None
+            if len(payload) > constants.TORRENT_FILE_MAX_BYTES:
+                raise ValueError("torrent metadata is too large")
+            return lt.torrent_info(payload)
+        except (OSError, ValueError, RuntimeError) as error:
+            raise ValueError(f"failed to load torrent metadata: {error}") from error
 
     def start(
         self,

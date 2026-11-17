@@ -78,6 +78,87 @@ describe("subtitle alignment client", () => {
     expect(alignmentMocks.mwFetch).toHaveBeenCalledTimes(1);
   });
 
+  it("captures the requested number of replacement windows", async () => {
+    alignmentMocks.mwFetch
+      .mockResolvedValueOnce({
+        results: {
+          primary: {
+            ...baseResult,
+            aligned: false,
+            confidence: 0,
+            reason: "no_speech_detected",
+          },
+        },
+        needsMoreSamples: true,
+        additionalWindows: 2,
+      })
+      .mockResolvedValueOnce({ results: { primary: baseResult } });
+
+    const progressEvents: Array<{
+      progress: number;
+      phase?: "capturing" | "analyzing";
+    }> = [];
+    const result = await alignSubtitlesWithCurrentStream({
+      sourceUrl: "https://example.test/video.m3u8",
+      startAt: 600,
+      language: "en",
+      subtitles: [{ track: "primary", vttData: "WEBVTT" }],
+      videoDuration: 3600,
+      buffered: 3600,
+      onProgress: (progress, phase) => progressEvents.push({ progress, phase }),
+    });
+
+    expect(alignmentMocks.mwFetch).toHaveBeenCalledTimes(2);
+    expect(
+      [
+        ...(alignmentMocks.mwFetch.mock.calls[0][1].body as FormData).entries(),
+      ].filter(([name]) => name === "audio"),
+    ).toHaveLength(6);
+    expect(
+      [
+        ...(alignmentMocks.mwFetch.mock.calls[1][1].body as FormData).entries(),
+      ].filter(([name]) => name === "audio"),
+    ).toHaveLength(2);
+    const getWindowStarts = (callIndex: number) => {
+      const entries = [
+        ...(
+          alignmentMocks.mwFetch.mock.calls[callIndex][1].body as FormData
+        ).entries(),
+      ];
+      return JSON.parse(
+        entries.find(([name]) => name === "windowStartsMs")?.[1] as string,
+      ) as number[];
+    };
+    const firstWindowStarts = getWindowStarts(0);
+    const retryWindowStarts = getWindowStarts(1);
+    expect(retryWindowStarts).toHaveLength(2);
+    for (const retryStart of retryWindowStarts) {
+      expect(
+        firstWindowStarts.every(
+          (firstStart) =>
+            Math.abs(retryStart - firstStart) >=
+            SUBTITLE_ALIGNMENT_AUDIO_WINDOW_SECONDS * 1000,
+        ),
+      ).toBe(true);
+    }
+    expect(alignmentMocks.extractAudioWindow).toHaveBeenCalledTimes(8);
+    expect(result.results.primary).toEqual(baseResult);
+    const firstAnalyzingIndex = progressEvents.findIndex(
+      (event) => event.phase === "analyzing",
+    );
+    expect(firstAnalyzingIndex).toBeGreaterThan(0);
+    expect(
+      progressEvents
+        .slice(firstAnalyzingIndex)
+        .every((event) => event.phase === "analyzing"),
+    ).toBe(true);
+    for (let index = 1; index < progressEvents.length; index += 1) {
+      expect(progressEvents[index].progress).toBeGreaterThanOrEqual(
+        progressEvents[index - 1].progress,
+      );
+    }
+  });
+
   it("keeps full timeline evidence when a later playback position is synced", async () => {
     await alignSubtitlesWithCurrentStream({
       sourceUrl: "https://example.test/video.m3u8",

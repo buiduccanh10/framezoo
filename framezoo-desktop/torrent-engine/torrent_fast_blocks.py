@@ -3,6 +3,7 @@ from __future__ import annotations
 import ast
 import socket
 import struct
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Dict, Iterable, Optional, Set, Tuple
 
 Block = Tuple[int, int]
@@ -173,22 +174,37 @@ def fetch_blocks_from_peers(
 ) -> Dict[Block, bytes]:
     remaining = set(blocks)
     received: Dict[Block, bytes] = {}
-    for endpoint in endpoints:
-        if not remaining:
-            break
-        try:
-            fetched = fetch_blocks_from_peer(
-                endpoint,
-                info_hash,
-                peer_id,
-                remaining,
-                piece_length,
-                block_size,
-                total_size,
-                timeout=timeout,
-            )
-        except (ConnectionError, OSError, TimeoutError, ValueError):
-            continue
-        received.update(fetched)
-        remaining.difference_update(fetched)
+    candidates = list(dict.fromkeys(endpoints))
+    if not candidates:
+        return received
+
+    # Tracker responses contain stale peers. Probe them concurrently so one
+    # dead endpoint cannot delay a live peer behind it.
+    executor = ThreadPoolExecutor(max_workers=min(8, len(candidates)))
+    futures = {
+        executor.submit(
+            fetch_blocks_from_peer,
+            endpoint,
+            info_hash,
+            peer_id,
+            set(remaining),
+            piece_length,
+            block_size,
+            total_size,
+            timeout,
+        ): endpoint
+        for endpoint in candidates
+    }
+    try:
+        for future in as_completed(futures):
+            try:
+                fetched = future.result()
+            except (ConnectionError, OSError, TimeoutError, ValueError):
+                continue
+            received.update(fetched)
+            remaining.difference_update(fetched)
+            if not remaining:
+                break
+    finally:
+        executor.shutdown(wait=False, cancel_futures=True)
     return received

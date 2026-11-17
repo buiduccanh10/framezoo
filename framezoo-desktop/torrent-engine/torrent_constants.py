@@ -85,6 +85,8 @@ REANNOUNCE_COOLDOWN = 5
 CLIENT_DISCONNECT_GRACE_SECS = 10.0
 FILE_OPEN_RETRY_INTERVAL = 0.2
 DEFAULT_MAX_TORRENT_BYTES = 5 * 1024 * 1024 * 1024
+TORRENT_FILE_MAX_BYTES = 16 * 1024 * 1024
+TORRENT_FILE_TIMEOUT = 10
 
 # Stremio-compatible public trackers. HTTP(S) entries keep discovery working
 # when a corporate network drops UDP/DHT traffic.

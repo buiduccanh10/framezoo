@@ -472,7 +472,9 @@ export function KeyboardEvents() {
         if (volumeDebounce.current) clearTimeout(volumeDebounce.current);
         volumeDebounce.current = setTimeout(() => {
           dataRef.current.setShowVolume(false);
-          dataRef.current.setCurrentOverlay(null);
+          if (useOverlayStack.getState().currentOverlay === "volume") {
+            dataRef.current.setCurrentOverlay(null);
+          }
         }, 3e3);
       }
       if (isVolumeUp) {
@@ -557,7 +559,9 @@ export function KeyboardEvents() {
         if (subtitleDebounce.current) clearTimeout(subtitleDebounce.current);
         subtitleDebounce.current = setTimeout(() => {
           dataRef.current.setShowDelayIndicator(false);
-          dataRef.current.setCurrentOverlay(null);
+          if (useOverlayStack.getState().currentOverlay === "subtitle") {
+            dataRef.current.setCurrentOverlay(null);
+          }
         }, 3000);
         return;
       }
@@ -579,7 +583,9 @@ export function KeyboardEvents() {
         if (subtitleDebounce.current) clearTimeout(subtitleDebounce.current);
         subtitleDebounce.current = setTimeout(() => {
           dataRef.current.setShowDelayIndicator(false);
-          dataRef.current.setCurrentOverlay(null);
+          if (useOverlayStack.getState().currentOverlay === "subtitle") {
+            dataRef.current.setCurrentOverlay(null);
+          }
         }, 3000);
         return;
       }

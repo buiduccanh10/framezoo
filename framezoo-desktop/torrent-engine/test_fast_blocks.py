@@ -1,15 +1,40 @@
 import socket
 import struct
 import threading
+import time
 import unittest
+from types import SimpleNamespace
+from unittest.mock import patch
 
 from torrent_fast_blocks import (
     fetch_blocks_from_peer,
+    fetch_blocks_from_peers,
     normalize_endpoint,
 )
 
 
 class FastBlockProtocolTest(unittest.TestCase):
+    def test_fast_probe_keeps_discovered_peers_when_connected_list_is_full(self):
+        from torrent_runtime import TorrentRuntime
+
+        runtime = object.__new__(TorrentRuntime)
+        runtime.handle = SimpleNamespace(
+            get_peer_info=lambda: [
+                SimpleNamespace(ip=("192.0.2.1", port), pieces=None)
+                for port in range(8)
+            ],
+        )
+        runtime.record = SimpleNamespace(
+            discovery=SimpleNamespace(
+                discovered_peers={("198.51.100.20", 6881)},
+            ),
+        )
+
+        endpoints = runtime._fast_peer_endpoints({0})
+
+        self.assertIn(("198.51.100.20", 6881), endpoints)
+        self.assertEqual(len(endpoints), 8)
+
     def test_normalizes_libtorrent_endpoint_shapes(self):
         self.assertEqual(
             normalize_endpoint(("127.0.0.1", 6881)),
@@ -100,6 +125,32 @@ class FastBlockProtocolTest(unittest.TestCase):
             server.close()
             thread.join(timeout=2)
         self.assertEqual(result, payloads)
+
+    def test_peer_probe_does_not_wait_for_stale_endpoint(self):
+        blocks = {(0, 0)}
+        expected = {(0, 0): b"ok"}
+
+        def fake_fetch(endpoint, *_args, **_kwargs):
+            if endpoint[1] == 1:
+                time.sleep(0.3)
+                return {}
+            return expected
+
+        started = time.monotonic()
+        with patch("torrent_fast_blocks.fetch_blocks_from_peer", fake_fetch):
+            result = fetch_blocks_from_peers(
+                [("192.0.2.1", 1), ("192.0.2.2", 2)],
+                b"01234567890123456789",
+                b"-FZTEST-" + b"012345678901",
+                blocks,
+                64 * 1024,
+                16 * 1024,
+                64 * 1024,
+                timeout=1,
+            )
+
+        self.assertEqual(result, expected)
+        self.assertLess(time.monotonic() - started, 0.2)
 
     @staticmethod
     def _recv_exact(connection, length):

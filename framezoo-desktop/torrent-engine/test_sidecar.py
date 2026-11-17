@@ -412,6 +412,31 @@ class SidecarStreamTest(unittest.TestCase):
             ],
         )
 
+    def test_fast_blocks_include_tracker_peers_not_yet_connected(self):
+        runtime = object.__new__(TorrentRuntime)
+
+        class Handle:
+            def get_peer_info(self):
+                return []
+
+        runtime.handle = Handle()
+        runtime.record = type(
+            "Record",
+            (),
+            {
+                "discovery": type(
+                    "Discovery",
+                    (),
+                    {"discovered_peers": {("198.51.100.7", 51413)}},
+                )(),
+            },
+        )()
+
+        self.assertEqual(
+            runtime._fast_peer_endpoints({1}),
+            [("198.51.100.7", 51413)],
+        )
+
     def test_sends_headers_after_first_piece_is_available(self):
         runtime = object.__new__(TorrentRuntime)
         runtime.stop_event = threading.Event()

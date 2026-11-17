@@ -269,6 +269,8 @@ export const useSubtitleStore = create(
     {
       name: "__MW::subtitles",
       version: 5,
+      partialize: ({ showDelayIndicator: _showDelayIndicator, ...state }) =>
+        state,
       migrate: (persistedState: unknown, version: number) => {
         if (!persistedState || typeof persistedState !== "object") {
           return persistedState;
@@ -323,7 +325,11 @@ export const useSubtitleStore = create(
 
         return state;
       },
-      merge: (persisted, current) => merge({}, current, persisted),
+      merge: (persisted, current) => {
+        const merged = merge({}, current, persisted);
+        merged.showDelayIndicator = false;
+        return merged;
+      },
     },
   ),
 );
