@@ -47,6 +47,8 @@ class TorrentRuntime:
         self.save_path = save_path
         self.persistent_cache = persistent_cache
         self.record = record
+        # A cold magnet has no resume state to validate; cached playback does.
+        self._wait_for_file_check = bool(getattr(record, "cache_ready", False))
         self.torrent_profile = (
             torrent_profile
             if torrent_profile in {"default", "soft", "fast", "ultra-fast"}
@@ -263,9 +265,14 @@ class TorrentRuntime:
             )
             if status.has_metadata:
                 handle_state = getattr(status, "state", None)
-                if handle_state in checking_states and (
-                    deadline is None or time.monotonic() + 0.1 < deadline
+                if (
+                    self._wait_for_file_check
+                    and handle_state in checking_states
+                    and (
+                        deadline is None or time.monotonic() + 0.1 < deadline
+                    )
                 ):
+                    # shortcut: cold metadata can schedule immediately; cached resume waits for file validation.
                     time.sleep(0.05)
                     continue
                 with self._metadata_lock:
@@ -1284,9 +1291,9 @@ class TorrentRuntime:
         try:
             peers = self.handle.get_peer_info()
         except Exception:
-            return []
+            peers = []
 
-        endpoints: list[Endpoint] = []
+        connected: list[Endpoint] = []
         seen: Set[Endpoint] = set()
         for peer in peers:
             endpoint = normalize_endpoint(getattr(peer, "ip", None))
@@ -1300,6 +1307,23 @@ class TorrentRuntime:
                 ):
                     continue
             seen.add(endpoint)
+            connected.append(endpoint)
+
+        discovered: list[Endpoint] = []
+        discovery = getattr(getattr(self, "record", None), "discovery", None)
+        for peer in getattr(discovery, "discovered_peers", ()):
+            endpoint = normalize_endpoint(peer)
+            if endpoint is None or endpoint in discovered:
+                continue
+            discovered.append(endpoint)
+
+        # Keep tracker peers in the first probe batch. A full libtorrent peer
+        # list can consist of stale endpoints while discovery already found a
+        # reachable peer.
+        endpoints: list[Endpoint] = []
+        for endpoint in connected[:4] + discovered + connected[4:]:
+            if endpoint in endpoints:
+                continue
             endpoints.append(endpoint)
             if len(endpoints) >= 8:
                 break

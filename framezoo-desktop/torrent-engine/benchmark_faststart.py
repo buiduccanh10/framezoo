@@ -183,6 +183,49 @@ def start_seeder(
     return thread
 
 
+def run_with_fresh_swarm(
+    root: Path,
+    torrent_path: Path,
+    tracker: LocalTracker,
+    client: Any,
+    label: str,
+) -> dict[str, Any]:
+    """Run one client without reusing warm peer connections from another."""
+    swarm_root = root / label
+    stop_events = [threading.Event(), threading.Event()]
+    ready_events = [threading.Event(), threading.Event()]
+    seeder_results: list[dict[str, int]] = [{}, {}]
+    seeder_threads: list[threading.Thread] = []
+    try:
+        for index in range(2):
+            seeder_dir = swarm_root / f"seeder-{index}"
+            shutil.copytree(
+                root / "seed" / "shared-piece-fixture",
+                seeder_dir / "shared-piece-fixture",
+            )
+            seeder_threads.append(
+                start_seeder(
+                    torrent_path,
+                    seeder_dir,
+                    ready_events[index],
+                    stop_events[index],
+                    seeder_results[index],
+                )
+            )
+        if not all(event.wait(10) for event in ready_events):
+            raise RuntimeError("seeders did not start")
+        tracker.peers = [
+            ("127.0.0.1", seeder_results[index]["port"])
+            for index in range(2)
+        ]
+        return client(seeder_results[0]["port"])
+    finally:
+        for event in stop_events:
+            event.set()
+        for thread in seeder_threads:
+            thread.join(timeout=5)
+
+
 def read_stream(url: str) -> dict[str, Any]:
     started = time.monotonic()
     request = Request(url, headers={"Range": f"bytes=0-{READ_SIZE - 1}"})
@@ -220,8 +263,12 @@ def run_framezoo(
     engine = LibtorrentEngine()
     request = {
         "url": (
-            f"magnet:?xt=urn:btih:{info_hash}"
-            f"&tr={quote(tracker_url, safe='')}"
+            (
+                f"magnet:?xt=urn:btih:{info_hash}"
+                f"&tr={quote(tracker_url, safe='')}"
+            )
+            if os.environ.get("FRAMEZOO_BENCHMARK_MAGNET") == "1"
+            else str(torrent_path)
         ),
         "infoHash": info_hash,
         "fileIdx": 1,
@@ -321,44 +368,30 @@ def main() -> None:
     try:
         for trial in range(1, TRIALS + 1):
             root = Path(tempfile.mkdtemp(prefix="framezoo-benchmark-"))
-            seed_dir = root / "seed"
-            stop_events = [threading.Event(), threading.Event()]
-            ready_events = [threading.Event(), threading.Event()]
-            seeder_results: list[dict[str, int]] = [{}, {}]
             try:
                 torrent_path, info_hash = make_fixture(root, tracker.url)
-                for index in range(2):
-                    seeder_dir = root / f"seeder-{index}"
-                    shutil.copytree(
-                        seed_dir / "shared-piece-fixture",
-                        seeder_dir / "shared-piece-fixture",
-                    )
-                seeder_threads = [
-                    start_seeder(
-                        torrent_path,
-                        root / f"seeder-{index}",
-                        ready_events[index],
-                        stop_events[index],
-                        seeder_results[index],
-                    )
-                    for index in range(2)
-                ]
-                if not all(event.wait(10) for event in ready_events):
-                    raise RuntimeError("seeders did not start")
-                tracker.peers = [
-                    ("127.0.0.1", seeder_results[index]["port"])
-                    for index in range(2)
-                ]
-                framezoo = run_framezoo(
+                framezoo = run_with_fresh_swarm(
+                    root,
                     torrent_path,
-                    info_hash,
-                    tracker.url,
-                    seeder_results[0]["port"],
-                    root / "framezoo-cache",
+                    tracker,
+                    lambda port: run_framezoo(
+                        torrent_path,
+                        info_hash,
+                        tracker.url,
+                        port,
+                        root / "framezoo-cache",
+                    ),
+                    "framezoo",
                 )
-                stremio = run_stremio(torrent_path, info_hash)
+                stremio = run_with_fresh_swarm(
+                    root,
+                    torrent_path,
+                    tracker,
+                    lambda _port: run_stremio(torrent_path, info_hash),
+                    "stremio",
+                )
                 expected_hash = hashlib.sha256(
-                    (seed_dir / "shared-piece-fixture" / "episode.mkv")
+                    (root / "seed" / "shared-piece-fixture" / "episode.mkv")
                     .read_bytes()[:READ_SIZE],
                 ).hexdigest()
                 for result in (framezoo, stremio):
@@ -375,10 +408,6 @@ def main() -> None:
                 print_result("  Framezoo", framezoo)
                 print_result("  Stremio  ", stremio)
             finally:
-                for event in stop_events:
-                    event.set()
-                for thread in seeder_threads if "seeder_threads" in locals() else []:
-                    thread.join(timeout=5)
                 shutil.rmtree(root, ignore_errors=True)
     finally:
         tracker.shutdown()
