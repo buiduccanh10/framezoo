@@ -110,6 +110,72 @@ class AlignmentAlgorithmTests(unittest.TestCase):
         self.assertEqual(align_batch.call_count, 2)
         self.assertTrue(result["results"]["primary"]["aligned"])
         self.assertEqual(result["results"]["primary"]["offsetMs"], -2_150)
+        self.assertEqual(result["additionalWindows"], 0)
+
+    def test_requests_more_samples_for_speechless_alignment_result(self):
+        with patch(
+            "alignment.align_speech_batch",
+            return_value={
+                "results": {
+                    "primary": {
+                        "aligned": False,
+                        "offsetMs": 0,
+                        "confidence": 0,
+                        "speechIntervals": [],
+                        "reason": "no_speech_detected",
+                    }
+                }
+            },
+        ):
+            result = align_speech_windows(
+                [([(0, 500)], 0, 60_000)],
+                [{"track": "primary", "vttData": "WEBVTT"}],
+            )
+
+        self.assertTrue(result["needsMoreSamples"])
+        self.assertEqual(result["additionalWindows"], 1)
+
+    def test_counts_each_window_that_needs_replacement_samples(self):
+        unaligned = {
+            "results": {
+                "primary": {
+                    "aligned": False,
+                    "offsetMs": 0,
+                    "confidence": 0,
+                    "speechIntervals": [],
+                    "reason": "no_speech_detected",
+                }
+            }
+        }
+        with patch("alignment.align_speech_batch", side_effect=[unaligned, unaligned]):
+            result = align_speech_windows(
+                [
+                    ([(0, 500)], 0, 60_000),
+                    ([(60_000, 60_500)], 60_000, 120_000),
+                ],
+                [{"track": "primary", "vttData": "WEBVTT"}],
+            )
+
+        self.assertTrue(result["needsMoreSamples"])
+        self.assertEqual(result["additionalWindows"], 2)
+
+    def test_does_not_request_more_samples_after_alignment(self):
+        with patch(
+            "alignment.align_speech_batch",
+            return_value={
+                "results": {"primary": self.make_aligned_result(-2_000)}
+            },
+        ):
+            result = align_speech_windows(
+                [
+                    ([(0, 4_000)], 0, 60_000),
+                    ([(60_000, 64_000)], 60_000, 120_000),
+                ],
+                [{"track": "primary", "vttData": "WEBVTT"}],
+            )
+
+        self.assertFalse(result["needsMoreSamples"])
+        self.assertEqual(result["additionalWindows"], 0)
 
     def test_audio_windows_transcribe_then_use_the_same_speech_core(self):
         with (

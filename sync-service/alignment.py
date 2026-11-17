@@ -32,6 +32,16 @@ MIN_ALIGNMENT_SPEECH_DURATION_MS = 1_000
 MAX_ALIGNMENT_OFFSET_MS = 45_000
 MAX_PLAUSIBLE_ALIGNMENT_OFFSET_MS = 360_000
 MAX_POOLED_WINDOW_SPAN_MS = 600_000
+RETRYABLE_ALIGNMENT_REASONS = frozenset(
+    {
+        "no_speech_detected",
+        "insufficient_speech_in_window",
+        "insufficient_speech_anchors",
+        "insufficient_consensus",
+        "ambiguous_alignment",
+        "low_alignment_confidence",
+    }
+)
 SEARCH_RANGE_MS = MAX_ALIGNMENT_OFFSET_MS
 SEARCH_STEP_MS = 250
 REFINE_RANGE_MS = 750
@@ -1723,6 +1733,32 @@ def _has_speech_evidence(result: dict[str, Any]) -> bool:
     )
 
 
+def _needs_more_alignment_samples(results: dict[str, Any]) -> bool:
+    return any(
+        result.get("aligned") is not True
+        and result.get("reason") in RETRYABLE_ALIGNMENT_REASONS
+        for result in results.values()
+    )
+
+
+def _count_retryable_alignment_windows(
+    entries_by_track: dict[str, list[dict[str, Any]]],
+    window_count: int,
+) -> int:
+    return sum(
+        any(
+            index >= len(entries)
+            or (
+                entries[index]["result"].get("aligned") is not True
+                and entries[index]["result"].get("reason")
+                in RETRYABLE_ALIGNMENT_REASONS
+            )
+            for entries in entries_by_track.values()
+        )
+        for index in range(window_count)
+    )
+
+
 def _build_unaligned_consensus_result(
     candidates: list[dict[str, Any]],
     reason: str,
@@ -2800,7 +2836,18 @@ def align_speech_windows(
 
         final_results[track] = consensus
 
-    return {"results": final_results}
+    needs_more_samples = _needs_more_alignment_samples(final_results)
+    retry_window_count = _count_retryable_alignment_windows(
+        entries_by_track,
+        len(windows),
+    )
+    if needs_more_samples and retry_window_count == 0:
+        retry_window_count = 1
+    return {
+        "results": final_results,
+        "needsMoreSamples": needs_more_samples,
+        "additionalWindows": retry_window_count,
+    }
 
 
 def align_vtt_windows(
