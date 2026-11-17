@@ -1,10 +1,32 @@
-import { AppPreviewShowcase } from "./AppPreviewShowcase";
 import type { LandingCopy } from "./i18n";
 
 interface FeatureSectionProps {
   copy: LandingCopy["features"];
   variant?: "all" | "experience" | "ecosystem";
 }
+
+const SHOWCASE_ITEMS = [
+  {
+    key: "detail",
+    rowClassName: "landing-showcase-row-primary",
+    figureClassName: "landing-showcase-image-detail",
+    gifSrc: "/Snapzy_Recording_2026-11-17_22-40-18.gif",
+    mediaFirst: true,
+    altKey: "showcasePrimaryAlt",
+    titleKey: "showcaseTitle",
+    descriptionKey: "showcaseDescription",
+  },
+  {
+    key: "discovery",
+    rowClassName: "landing-showcase-row-secondary",
+    figureClassName: "landing-showcase-image-discovery",
+    gifSrc: "/Snapzy_Recording_2026-11-17_22-41-21.gif",
+    mediaFirst: false,
+    altKey: "showcaseSecondaryAlt",
+    titleKey: "showcaseSecondaryTitle",
+    descriptionKey: "showcaseSecondaryDescription",
+  },
+] as const;
 
 export function FeatureSection({ copy, variant = "all" }: FeatureSectionProps) {
   const showExperience = variant !== "ecosystem";
@@ -116,30 +138,47 @@ export function FeatureSection({ copy, variant = "all" }: FeatureSectionProps) {
 
       {showShowcase && (
         <div className="landing-product-showcase landing-scroll-reveal">
-          <article className="landing-showcase-row landing-showcase-row-primary">
-            <figure className="landing-showcase-image landing-showcase-image-detail">
-              <AppPreviewShowcase
-                variant="detail"
-                ariaLabel={copy.showcasePrimaryAlt}
-              />
-            </figure>
-            <div className="landing-showcase-copy">
-              <h2>{copy.showcaseTitle}</h2>
-              <p>{copy.showcaseDescription}</p>
-            </div>
-          </article>
-          <article className="landing-showcase-row landing-showcase-row-secondary">
-            <div className="landing-showcase-copy">
-              <h2>{copy.showcaseSecondaryTitle}</h2>
-              <p>{copy.showcaseSecondaryDescription}</p>
-            </div>
-            <figure className="landing-showcase-image landing-showcase-image-discovery">
-              <AppPreviewShowcase
-                variant="discovery"
-                ariaLabel={copy.showcaseSecondaryAlt}
-              />
-            </figure>
-          </article>
+          {SHOWCASE_ITEMS.map((item) => {
+            const media = (
+              <figure
+                className={`landing-showcase-image ${item.figureClassName}`}
+              >
+                <img
+                  src={item.gifSrc}
+                  alt={copy[item.altKey]}
+                  width={959}
+                  height={588}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </figure>
+            );
+            const details = (
+              <div className="landing-showcase-copy">
+                <h2>{copy[item.titleKey]}</h2>
+                <p>{copy[item.descriptionKey]}</p>
+              </div>
+            );
+
+            return (
+              <article
+                key={item.key}
+                className={`landing-showcase-row ${item.rowClassName}`}
+              >
+                {item.mediaFirst ? (
+                  <>
+                    {media}
+                    {details}
+                  </>
+                ) : (
+                  <>
+                    {details}
+                    {media}
+                  </>
+                )}
+              </article>
+            );
+          })}
         </div>
       )}
     </section>
