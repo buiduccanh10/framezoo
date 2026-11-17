@@ -1219,6 +1219,7 @@ def compute_track_search_centers(
     audio_start_ms: int,
     additional_hints: list[int] | None = None,
     max_offset_ms: int = MAX_PLAUSIBLE_ALIGNMENT_OFFSET_MS,
+    cues_filtered: bool = False,
 ) -> list[int]:
     centers: set[int] = {0}
     if additional_hints:
@@ -1227,7 +1228,7 @@ def compute_track_search_centers(
                 centers.add(hint)
 
     if cues and speech_intervals:
-        candidate_cues = filter_alignment_cues(cues)
+        candidate_cues = cues if cues_filtered else filter_alignment_cues(cues)
         if not candidate_cues:
             return sorted(centers)
         speech_first_ms = speech_intervals[0][0]
@@ -1582,6 +1583,7 @@ def align_speech_batch(
             speech_intervals,
             audio_start_ms,
             additional_hints=fft_hints or None,
+            cues_filtered=True,
         )
         try:
             res = result_from_speech(
@@ -1623,6 +1625,7 @@ def align_speech_batch(
                     speech_intervals,
                     audio_start_ms,
                     additional_hints=[guided_offset],
+                    cues_filtered=True,
                 )
                 try:
                     rescued = result_from_speech(
@@ -2660,6 +2663,7 @@ def align_speech_windows(
                         merged_speech,
                         audio_start_ms,
                         additional_hints=aligned_hints,
+                        cues_filtered=True,
                     )
                     try:
                         re_res = result_from_speech(
@@ -2775,6 +2779,7 @@ def align_speech_windows(
                         pooled_speech,
                         min_start_ms,
                         additional_hints=pooled_hints or None,
+                        cues_filtered=True,
                     )
                     try:
                         pooled_res = result_from_speech(

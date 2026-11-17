@@ -707,6 +707,28 @@ would you use a place like this?
             delta=750,
         )
 
+    def test_reuses_preprocessed_cues_when_finding_search_centers(self):
+        cues = parse_alignment_cues(
+            """WEBVTT
+
+00:01:50.000 --> 00:01:54.000
+If you were the Bay Harbor Butcher,
+"""
+        )
+
+        with patch(
+            "alignment.filter_alignment_cues",
+            side_effect=AssertionError("preprocessed cues were filtered again"),
+        ):
+            centers = compute_track_search_centers(
+                cues,
+                [(14_000, 18_000)],
+                0,
+                cues_filtered=True,
+            )
+
+        self.assertEqual(centers, [-96_000, 0])
+
     def test_filters_non_speech_sdh_and_music_cues(self):
         vtt = """WEBVTT
 
