@@ -1387,7 +1387,10 @@
       "thumbnail": "Hasilkan thumbnail",
       "thumbnailDescription": "Seringkali, video tidak memiliki thumbnail. Anda dapat mengaktifkan pengaturan ini untuk membuatnya dengan cepat, tetapi pengaturan ini dapat membuat video Anda lebih lambat.",
       "thumbnailLabel": "Hasilkan thumbnail",
-      "title": "Preferensi"
+      "title": "Preferensi",
+      "autoUpdate": "Pembaruan otomatis",
+      "autoUpdateDescription": "Unduh pembaruan di latar belakang saat komputer Anda tidak digunakan, lalu mulai ulang untuk menerapkannya.",
+      "autoUpdateLabel": "Pembaruan otomatis"
     },
     "reset": "Mengatur ulang",
     "save": "Simpan",

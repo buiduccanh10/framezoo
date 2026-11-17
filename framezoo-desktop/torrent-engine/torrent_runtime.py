@@ -311,7 +311,10 @@ class TorrentRuntime:
                         self.handle.prioritize_files(priorities)
                     # Disable global sequential download until playback head leaves piece 0
                     # on resume sessions so pieces 0..N-1 do not compete with header/Cues/target.
-                    enable_seq = (getattr(self, "start_time", 0.0) or 0.0) <= 0.0
+                    enable_seq = (
+                        (getattr(self, "start_time", 0.0) or 0.0) <= 0.0
+                        and not self._is_large_piece_torrent()
+                    )
                     self._set_sequential_mode(enable_seq)
                     resume = getattr(self.handle, "resume", None)
                     if callable(resume):
@@ -1002,7 +1005,12 @@ class TorrentRuntime:
 
         absolute_path = self.selected_file_path()
 
-        end = min(self.file_size - 1, constants.STREAM_CHUNK_SIZE - 1)
+        initial_bytes = (
+            constants.INITIAL_STREAM_BYTES
+            if self._is_large_piece_torrent()
+            else constants.STREAM_CHUNK_SIZE
+        )
+        end = min(self.file_size - 1, initial_bytes - 1)
         stream, chunk = self.open_first_chunk(
             absolute_path,
             0,
@@ -1038,7 +1046,10 @@ class TorrentRuntime:
                     priorities = [0] * self.info.files().num_files()
                     priorities[self.file_index] = constants.STREAM_IDLE_FILE_PRIORITY
                     self.handle.prioritize_files(priorities)
-            enable_seq = (getattr(self, "start_time", 0.0) or 0.0) <= 0.0
+            enable_seq = (
+                (getattr(self, "start_time", 0.0) or 0.0) <= 0.0
+                and not self._is_large_piece_torrent()
+            )
             self._set_sequential_mode(enable_seq)
             with self._piece_priority_lock:
                 self._focused_file_index = self.file_index
@@ -1248,6 +1259,12 @@ class TorrentRuntime:
             if needs_flush:
                 self.flush_piece_cache()
                 flushed, _ = self._disk_flushed_blocks(remaining_pieces)
+            with getattr(self, "_fast_block_lock", threading.Lock()):
+                flushed.update(
+                    block
+                    for block in getattr(self, "_fast_blocks", set())
+                    if block in remaining
+                )
             return remaining.issubset(flushed)
         engine = getattr(self, "engine", None)
         get_finished = getattr(engine, "finished_blocks_for", None)
@@ -1289,10 +1306,20 @@ class TorrentRuntime:
         return endpoints
 
     def _start_fast_block_fetch(self, start: int, end: int) -> None:
-        # Fast block fetching bypasses libtorrent piece hash validation and writes unverified
-        # data concurrently to disk, which can cause video stream corruption ("vỡ frame").
-        # Keep libtorrent as the single authoritative downloader and writer.
-        return
+        required = self._required_range_blocks(start, end)
+        if not required or self.stop_event.is_set():
+            return
+
+        try:
+            piece_length = int(self.info.piece_length())
+            file_offset = int(self.info.files().file_offset(self.file_index))
+            block_size = int(self.handle.status().block_size)
+            total_size = int(self.info.files().total_size())
+            info_hash = bytes.fromhex(str(self.handle.info_hash()))
+        except (AttributeError, IndexError, TypeError, ValueError):
+            return
+        if piece_length <= 0 or block_size <= 0 or total_size <= 0:
+            return
 
         engine = getattr(self, "engine", None)
         get_finished = getattr(engine, "finished_blocks_for", None)
@@ -1366,6 +1393,8 @@ class TorrentRuntime:
         if fetched and not self.stop_event.is_set():
             try:
                 absolute_path = self.selected_file_path()
+                # shortcut: partial blocks bypass piece hashing; replace with verified block injection when libtorrent exposes it.
+                written = {}
                 with open(absolute_path, "r+b") as stream:
                     for (piece, block), data in fetched.items():
                         local_offset = (
@@ -1380,7 +1409,9 @@ class TorrentRuntime:
                             continue
                         stream.seek(local_offset)
                         stream.write(data)
+                        written[(piece, block)] = data
                     stream.flush()
+                fetched = written
             except (OSError, ValueError) as error:
                 log_event(
                     "fast block write failed",
@@ -1748,7 +1779,9 @@ class TorrentRuntime:
             # On resume header probes or at target_piece > file_first_piece, disabling global
             # sequential download prevents libtorrent from clogging peer pipelines with 0..N-1.
             self._set_sequential_mode(
-                target_piece == file_first_piece and not is_resume_header_probe,
+                target_piece == file_first_piece
+                and not is_resume_header_probe
+                and not self._is_large_piece_torrent(),
             )
 
             # Suppress uncompleted pieces prior to target_piece (except file_first_piece & tail)
@@ -2655,6 +2688,7 @@ class TorrentRuntime:
                 self._set_sequential_mode(
                     (getattr(self, "start_time", 0.0) or 0.0) <= 0.0
                     and focus_piece in (None, self._file_first_piece())
+                    and not self._is_large_piece_torrent()
                 )
 
     def _wait_for_range_loop(

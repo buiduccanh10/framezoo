@@ -1387,7 +1387,10 @@
       "thumbnail": "サムネイルの生成",
       "thumbnailDescription": "ほとんどの場合、ビデオにはサムネイルがありません。この設定を有効にしてオンザフライで生成できますが、ビデオの速度が遅くなる可能性があります。",
       "thumbnailLabel": "サムネイルの生成",
-      "title": "設定"
+      "title": "設定",
+      "autoUpdate": "自動更新",
+      "autoUpdateDescription": "コンピューターがアイドル状態のときにバックグラウンドでアップデートをダウンロードし、再起動して適用します。",
+      "autoUpdateLabel": "自動更新"
     },
     "reset": "リセット",
     "save": "保存",

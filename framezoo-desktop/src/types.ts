@@ -111,6 +111,7 @@ export type DesktopAppUpdateState = {
 
 export type CreateDesktopAppUpdaterOptions = {
   appName: string;
+  autoDownloadWhenIdle?: () => boolean;
   beforeInstall?: () => Promise<void> | void;
   checkIntervalMs: number;
   onStateChange?: (state: DesktopAppUpdateState) => void;

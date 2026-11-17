@@ -1387,7 +1387,10 @@
       "thumbnail": "Genera miniatures",
       "thumbnailDescription": "La majoria de vegades, els vídeos no tenen miniatures. Podeu activar aquesta configuració per generar-los sobre la marxa, però poden fer que el vostre vídeo sigui més lent.",
       "thumbnailLabel": "Genera miniatures",
-      "title": "Preferències"
+      "title": "Preferències",
+      "autoUpdate": "Actualització automàtica",
+      "autoUpdateDescription": "Baixeu les actualitzacions en segon pla quan l&#39;ordinador estigui inactiu i, a continuació, reinicieu-lo per aplicar-les.",
+      "autoUpdateLabel": "Actualització automàtica"
     },
     "reset": "Restableix",
     "save": "Desa",

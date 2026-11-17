@@ -1387,7 +1387,10 @@
       "thumbnail": "Tạo hình thu nhỏ",
       "thumbnailDescription": "Hầu hết các video không có hình thu nhỏ. Bạn có thể bật cài đặt này để tạo chúng ngay lập tức nhưng chúng có thể làm video của bạn chạy chậm hơn.",
       "thumbnailLabel": "Tạo hình thu nhỏ",
-      "title": "Tùy chọn"
+      "title": "Tùy chọn",
+      "autoUpdate": "Tự động cập nhật",
+      "autoUpdateDescription": "Tải xuống các bản cập nhật trong nền khi máy tính của bạn ở trạng thái rảnh rỗi, sau đó khởi động lại để áp dụng chúng.",
+      "autoUpdateLabel": "Tự động cập nhật"
     },
     "reset": "Đặt lại",
     "save": "Lưu",

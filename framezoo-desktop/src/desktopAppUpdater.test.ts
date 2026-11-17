@@ -241,4 +241,39 @@ describe("createDesktopAppUpdater - pre-download update checks", () => {
       updater.dispose();
     }
   });
+
+  it("waits for an idle machine before auto-downloading", async () => {
+    let isIdle = false;
+    const updater = createDesktopAppUpdater({
+      appName: "Framezoo",
+      checkIntervalMs: 60000,
+      releaseOwner: "framezoo",
+      releaseRepo: "framezoo",
+      autoDownloadWhenIdle: () => isIdle,
+    });
+
+    mockAutoUpdater.checkForUpdates.mockImplementation(async () => {
+      mockAutoUpdater.emit("update-available", { version: "2.1.8" });
+      return { updateInfo: { version: "2.1.8" } };
+    });
+    mockAutoUpdater.downloadUpdate.mockResolvedValue(true);
+
+    const originalPlatform = process.platform;
+    Object.defineProperty(process, "platform", { value: "win32" });
+
+    try {
+      updater.initialize();
+      await updater.checkForUpdate();
+      expect(mockAutoUpdater.downloadUpdate).not.toHaveBeenCalled();
+
+      isIdle = true;
+      updater.setAutoUpdateEnabled(true);
+      await vi.waitFor(() => {
+        expect(mockAutoUpdater.downloadUpdate).toHaveBeenCalled();
+      });
+    } finally {
+      Object.defineProperty(process, "platform", { value: originalPlatform });
+      updater.dispose();
+    }
+  });
 });

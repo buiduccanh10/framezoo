@@ -20,6 +20,7 @@ export interface DesktopUpdateElectronApi {
     autoDownloadNewerVersion?: boolean;
   }): Promise<boolean>;
   installAppUpdate(): Promise<boolean>;
+  setAutoUpdateEnabled(enabled: boolean): Promise<boolean>;
   onAppUpdateState(
     listener: (state: DesktopAppUpdateState) => void,
   ): () => void;
@@ -72,6 +73,7 @@ declare global {
         autoDownloadNewerVersion?: boolean;
       }) => Promise<boolean>;
       installAppUpdate?: () => Promise<boolean>;
+      setAutoUpdateEnabled?: (enabled: boolean) => Promise<boolean>;
       setLocale?: (locale: string) => void;
       onAppUpdateState?: (
         listener: (state: DesktopAppUpdateState) => void,

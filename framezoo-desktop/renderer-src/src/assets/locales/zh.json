@@ -1387,7 +1387,10 @@
       "thumbnail": "生成缩略图",
       "thumbnailDescription": "大多数时候，视频没有缩略图。您可以启用此设置以在视频播放时动态生成它们，但此选项可能会拖慢视频速度。",
       "thumbnailLabel": "生成缩略图",
-      "title": "偏好设置"
+      "title": "偏好设置",
+      "autoUpdate": "自动更新",
+      "autoUpdateDescription": "在电脑空闲时后台下载更新，然后重启电脑应用更新。",
+      "autoUpdateLabel": "自动更新"
     },
     "reset": "重设",
     "save": "保存",

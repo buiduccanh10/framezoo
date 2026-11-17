@@ -1387,7 +1387,10 @@
       "thumbnail": "Ģenerēt sīktēlus",
       "thumbnailDescription": "Lielāko daļu laika videoklipiem nav sīktēlu. Varat iespējot šo iestatījumu, lai tos ģenerētu lidojuma laikā, taču tie var padarīt jūsu videoklipu lēnāku.",
       "thumbnailLabel": "Ģenerēt sīktēlus",
-      "title": "Preferences"
+      "title": "Preferences",
+      "autoUpdate": "Automātiska atjaunināšana",
+      "autoUpdateDescription": "Lejupielādējiet atjauninājumus fonā, kad dators ir dīkstāvē, un pēc tam restartējiet to, lai tie tiktu lietoti.",
+      "autoUpdateLabel": "Automātiska atjaunināšana"
     },
     "reset": "Restartēt",
     "save": "Saglabāt",

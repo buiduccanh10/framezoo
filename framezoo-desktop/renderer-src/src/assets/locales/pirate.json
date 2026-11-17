@@ -1348,7 +1348,10 @@
       "thumbnail": "Generate thumbnails",
       "thumbnailDescription": "Most o' the time, videos don't 'ave thumbnails. Ye can enable this settin' t' generate 'em on the trip but they can make yer video slower.",
       "thumbnailLabel": "Generate thumbnails",
-      "title": "Preferences"
+      "title": "Preferences",
+      "autoUpdate": "Auto update",
+      "autoUpdateDescription": "Download updates in the background when your computer is idle, then restart to apply them.",
+      "autoUpdateLabel": "Auto update"
     },
     "reset": "Reset",
     "save": "Save",

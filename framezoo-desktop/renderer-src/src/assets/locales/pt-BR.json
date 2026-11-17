@@ -1387,7 +1387,10 @@
       "thumbnail": "Gerar miniaturas",
       "thumbnailDescription": "Na maior parte do tempo, os vídeos não possuem miniaturas. Você pode ativar esta configuração para gerá-las dinamicamente, mas elas podem tornar seu vídeo mais lento.",
       "thumbnailLabel": "Gerar miniaturas",
-      "title": "Preferências"
+      "title": "Preferências",
+      "autoUpdate": "Atualização automática",
+      "autoUpdateDescription": "Baixe as atualizações em segundo plano quando o computador estiver ocioso e reinicie-o para aplicá-las.",
+      "autoUpdateLabel": "Atualização automática"
     },
     "reset": "Redefinir",
     "save": "Salvar",

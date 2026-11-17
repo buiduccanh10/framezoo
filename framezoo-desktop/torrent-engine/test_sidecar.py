@@ -44,6 +44,30 @@ class SidecarStreamTest(unittest.TestCase):
 
         self.assertEqual(runtime.stream_type, "file")
 
+    def test_large_piece_stream_opens_after_small_initial_chunk(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.session_id = "torrent-large-piece-initial-chunk-test"
+        runtime.stream_type = "pending"
+        runtime.file_size = 16 * 1024 * 1024
+        runtime.file_path = "episode.mkv"
+        runtime.file_index = 0
+        runtime.info = type(
+            "Info",
+            (),
+            {"piece_length": lambda _self: 16 * 1024 * 1024},
+        )()
+        runtime.save_path = tempfile.gettempdir()
+        requested = []
+
+        def open_first_chunk(self, _path, _start, end, **_kwargs):
+            requested.append(end)
+            return BytesIO(b"header"), b"header"
+
+        runtime.open_first_chunk = MethodType(open_first_chunk, runtime)
+        runtime.wait_for_initial_chunk()
+
+        self.assertEqual(requested, [constants.INITIAL_STREAM_BYTES - 1])
+
     def test_sync_flag_reaches_first_chunk_priority(self):
         runtime = object.__new__(TorrentRuntime)
         runtime.stop_event = threading.Event()
@@ -2048,6 +2072,36 @@ class SidecarStreamTest(unittest.TestCase):
         )
         self.assertEqual(runtime.handle.sequential_calls, 1)
         self.assertTrue(runtime.handle.sequential_enabled)
+
+    def test_focus_file_disables_sequential_for_large_piece_torrent(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime._piece_priority_lock = threading.RLock()
+        runtime._focused_file_index = None
+        runtime.file_index = 1
+
+        class FakeFiles:
+            def num_files(self):
+                return 2
+
+        class FakeInfo:
+            def files(self):
+                return FakeFiles()
+
+            def piece_length(self):
+                return 16 * 1024 * 1024
+
+        class FakeHandle:
+            def __init__(self):
+                self.sequential = None
+
+            def set_sequential_download(self, enabled):
+                self.sequential = enabled
+
+        runtime.info = FakeInfo()
+        runtime.handle = FakeHandle()
+        runtime.focus_file()
+
+        self.assertFalse(runtime.handle.sequential)
 
     def test_ignores_initial_tail_probe_for_playback_cursor(self):
         runtime = object.__new__(TorrentRuntime)

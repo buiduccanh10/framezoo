@@ -1348,7 +1348,10 @@
       "thumbnail": "ᚷᛖᚾᛖᚱᚨᛏᛖ ᚦᚢᛗᛒᚾᚨᛁᛚᛊ",
       "thumbnailDescription": "ᛗᛟᛊᛏ ᛟᚠ ᚦᛖ ᛏᛁᛗᛖ, ᚢᛁᛞᛖᛟᛊ ᛞᛟᚾ×ᛏ ᚺᚨᚢᛖ ᚦᚢᛗᛒᚾᚨᛁᛚᛊ. ᛁᛟᚢ ᚲᚨᚾ ᛖᚾᚨᛒᛚᛖ ᚦᛁᛊ ᛊᛖᛏᛏᛁᛜ ᛏᛟ ᚷᛖᚾᛖᚱᚨᛏᛖ ᚦᛖᛗ ᛟᚾ ᚦᛖ ᚠᛚᛁ ᛒᚢᛏ ᚦᛖᛁ ᚲᚨᚾ ᛗᚨᚲᛖ ᛁᛟᚢᚱ ᚢᛁᛞᛖᛟ ᛊᛚᛟᚹᛖᚱ.",
       "thumbnailLabel": "ᚷᛖᚾᛖᚱᚨᛏᛖ ᚦᚢᛗᛒᚾᚨᛁᛚᛊ",
-      "title": "ᛈᚱᛖᚠᛖᚱᛖᚾᚲᛖᛊ"
+      "title": "ᛈᚱᛖᚠᛖᚱᛖᚾᚲᛖᛊ",
+      "autoUpdate": "Auto update",
+      "autoUpdateDescription": "Download updates in the background when your computer is idle, then restart to apply them.",
+      "autoUpdateLabel": "Auto update"
     },
     "reset": "ᚱᛖᛊᛖᛏ",
     "save": "ᛊᚨᚢᛖ",
