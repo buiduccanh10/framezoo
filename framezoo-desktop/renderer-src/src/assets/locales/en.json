@@ -311,7 +311,6 @@
       "disclaimer": "Disclaimer",
       "dmca": "DMCA / Takedown",
       "terms": "Terms of Service",
-      "tmdbAttribution": "Film metadata & posters are provided by TMDB API (not endorsed or certified by TMDB).",
       "disclaimerText": "Framezoo does not operate video stream sources. Its servers may relay provider subtitles and temporarily process audio and subtitles for sync when you choose that feature. You control the content you play."
     },
     "links": {
@@ -485,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Search results"
+      "sectionTitle": "Search results",
+      "aiSectionTitle": "AI search results",
+      "aiPlaceholder": "Describe what you want to watch (plot, mood, genre, country...)",
+      "switchToNormal": "Switch to standard search",
+      "switchToAi": "Switch to AI natural language search",
+      "aiRateLimited": "Too many AI searches right now. Please wait a moment and try again.",
+      "aiGuide": {
+        "title": "Try natural-language search by plot, similar titles, mood, or era:",
+        "plotLabel": "Plot",
+        "plotQuery": "movie about a man with short-term memory loss who tattoos clues to find his wife's killer",
+        "similarLabel": "Similar to",
+        "similarQuery": "Korean psychological thriller with a plot twist like Parasite",
+        "moodLabel": "Mood",
+        "moodQuery": "emotional time-travel anime that makes you cry",
+        "eraLabel": "Country & era",
+        "eraQuery": "90s Hong Kong action comedy"
+      }
     },
     "support": {
       "complete": "complete",
@@ -672,7 +687,8 @@
       "items": {
         "bookmarks": "Bookmarked media",
         "progress": "Watch progress",
-        "settings": "Settings & Preferences"
+        "settings": "Settings & Preferences",
+        "watchHistory": "Watch history"
       },
       "uploadDescription": "Data to upload:"
     },

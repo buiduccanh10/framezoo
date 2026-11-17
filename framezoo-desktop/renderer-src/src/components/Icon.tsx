@@ -3,6 +3,7 @@ import { memo } from "react";
 
 export enum Icons {
   SEARCH = "search",
+  AI_SPARKLES = "ai_sparkles",
   BOOKMARK = "bookmark",
   BOOKMARK_OUTLINE = "bookmark_outline",
   CLOCK = "clock",
@@ -113,6 +114,7 @@ export interface IconProps {
 
 const iconList: Record<Icons, string> = {
   search: `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 512 512"><!--!Font Awesome Free v7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376C296.3 401.1 253.9 416 208 416 93.1 416 0 322.9 0 208S93.1 0 208 0 416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/></svg>`,
+  ai_sparkles: `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor"><path d="M9.8 2.6a.6.6 0 0 1 1.13 0l1.28 3.63a5.4 5.4 0 0 0 3.3 3.3l3.63 1.28a.6.6 0 0 1 0 1.13l-3.63 1.28a5.4 5.4 0 0 0-3.3 3.3l-1.28 3.63a.6.6 0 0 1-1.13 0L8.52 16.52a5.4 5.4 0 0 0-3.3-3.3L1.59 11.94a.6.6 0 0 1 0-1.13l3.63-1.28a5.4 5.4 0 0 0 3.3-3.3L9.8 2.6Zm8.55 12.75a.45.45 0 0 1 .85 0l.61 1.73a2.6 2.6 0 0 0 1.56 1.56l1.73.61a.45.45 0 0 1 0 .85l-1.73.61a2.6 2.6 0 0 0-1.56 1.56l-.61 1.73a.45.45 0 0 1-.85 0l-.61-1.73a2.6 2.6 0 0 0-1.56-1.56l-1.73-.61a.45.45 0 0 1 0-.85l1.73-.61a2.6 2.6 0 0 0 1.56-1.56l.61-1.73Z"/></svg>`,
   bookmark: `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 384 512"><!--! Font Awesome Pro 6.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path fill="currentColor" d="M384 48V512l-192-112L0 512V48C0 21.5 21.5 0 48 0h288C362.5 0 384 21.5 384 48z"/></svg>`,
   clock: `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path fill="currentColor" d="M256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0C397.4 0 512 114.6 512 256C512 397.4 397.4 512 256 512zM232 256C232 264 236 271.5 242.7 275.1L338.7 339.1C349.7 347.3 364.6 344.3 371.1 333.3C379.3 322.3 376.3 307.4 365.3 300L280 243.2V120C280 106.7 269.3 96 255.1 96C242.7 96 231.1 106.7 231.1 120L232 256z"/></svg>`,
   clock_outline: `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 512 512"><!--!Font Awesome Free v7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M464 256a208 208 0 1 1 -416 0 208 208 0 1 1 416 0zM0 256a256 256 0 1 0 512 0 256 256 0 1 0 -512 0zM232 120l0 136c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2 280 120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"/></svg>`,

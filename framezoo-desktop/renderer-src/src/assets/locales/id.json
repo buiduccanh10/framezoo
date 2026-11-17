@@ -311,7 +311,6 @@
       "disclaimer": "Penafian",
       "dmca": "DMCA / Penghapusan Konten",
       "terms": "Ketentuan Layanan",
-      "tmdbAttribution": "Metadata film & poster disediakan oleh API TMDB (tidak didukung atau disertifikasi oleh TMDB).",
       "disclaimerText": "Framezoo tidak mengoperasikan sumber streaming video. Servernya dapat meneruskan subtitle penyedia dan memproses audio serta subtitle untuk sementara agar sinkron saat Anda memilih fitur tersebut. Anda mengontrol konten yang Anda putar."
     },
     "links": {
@@ -485,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Hasil pencarian"
+      "sectionTitle": "Hasil pencarian",
+      "aiSectionTitle": "Hasil pencarian AI",
+      "aiPlaceholder": "Jelaskan apa yang ingin Anda tonton (alur cerita, suasana, genre, negara...).",
+      "switchToNormal": "Beralih ke pencarian standar",
+      "switchToAi": "Beralihlah ke pencarian bahasa alami berbasis AI.",
+      "aiRateLimited": "Saat ini terlalu banyak pencarian AI. Mohon tunggu sebentar dan coba lagi.",
+      "aiGuide": {
+        "title": "Cobalah pencarian bahasa alami berdasarkan alur cerita, judul serupa, suasana, atau era:",
+        "plotLabel": "Merencanakan",
+        "plotQuery": "Film tentang seorang pria yang menderita gangguan ingatan jangka pendek yang membuat tato berisi petunjuk untuk menemukan pembunuh istrinya.",
+        "similarLabel": "Mirip dengan",
+        "similarQuery": "Film thriller psikologis Korea dengan alur cerita yang penuh kejutan seperti Parasite.",
+        "moodLabel": "Suasana hati",
+        "moodQuery": "Anime perjalanan waktu yang emosional dan bikin kamu menangis.",
+        "eraLabel": "Negara & era",
+        "eraQuery": "Komedi aksi Hong Kong tahun 90-an"
+      }
     },
     "support": {
       "complete": "menyelesaikan",
@@ -672,7 +687,8 @@
       "items": {
         "bookmarks": "Media yang ditandai",
         "progress": "Perhatikan kemajuannya",
-        "settings": "Pengaturan & Preferensi"
+        "settings": "Pengaturan & Preferensi",
+        "watchHistory": "Riwayat tontonan"
       },
       "uploadDescription": "Data yang akan diunggah:"
     },
@@ -1359,6 +1375,9 @@
       "autoplay": "Putar otomatis",
       "autoplayDescription": "Memutar episode berikutnya secara otomatis dalam sebuah serial setelah mencapai akhir.",
       "autoplayLabel": "Putar otomatis",
+      "autoUpdate": "Pembaruan otomatis",
+      "autoUpdateDescription": "Unduh pembaruan di latar belakang saat komputer Anda tidak digunakan, lalu mulai ulang untuk menerapkannya.",
+      "autoUpdateLabel": "Pembaruan otomatis",
       "autoResumeOnPlaybackError": "Lanjutkan otomatis pada kesalahan pemutaran",
       "autoResumeOnPlaybackErrorDescription": "Secara otomatis melanjutkan pencarian sumber lain ketika sumber saat ini gagal selama pemutaran. Jika dinonaktifkan, Anda akan melihat layar kesalahan dengan opsi melanjutkan manual.",
       "autoResumeOnPlaybackErrorLabel": "Lanjutkan otomatis pada kesalahan pemutaran",
@@ -1387,10 +1406,7 @@
       "thumbnail": "Hasilkan thumbnail",
       "thumbnailDescription": "Seringkali, video tidak memiliki thumbnail. Anda dapat mengaktifkan pengaturan ini untuk membuatnya dengan cepat, tetapi pengaturan ini dapat membuat video Anda lebih lambat.",
       "thumbnailLabel": "Hasilkan thumbnail",
-      "title": "Preferensi",
-      "autoUpdate": "Pembaruan otomatis",
-      "autoUpdateDescription": "Unduh pembaruan di latar belakang saat komputer Anda tidak digunakan, lalu mulai ulang untuk menerapkannya.",
-      "autoUpdateLabel": "Pembaruan otomatis"
+      "title": "Preferensi"
     },
     "reset": "Mengatur ulang",
     "save": "Simpan",

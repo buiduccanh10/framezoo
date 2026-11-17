@@ -311,7 +311,6 @@
       "disclaimer": "免責聲明",
       "dmca": "DMCA/下架",
       "terms": "服務條款",
-      "tmdbAttribution": "電影元資料和海報由 TMDB API 提供（未經 TMDB 認可或認證）。",
       "disclaimerText": "Framezoo 不營運視訊串流來源。其伺服器可能會轉發字幕提供者的字幕，並在您選擇該功能時臨時處理音訊和字幕以實現同步。您可以控制自己播放的內容。"
     },
     "links": {
@@ -485,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "搜索結果"
+      "sectionTitle": "搜索結果",
+      "aiSectionTitle": "人工智慧搜尋結果",
+      "aiPlaceholder": "描述一下你想看的影片（劇情、氣氛、類型、國家…）",
+      "switchToNormal": "切換到標準搜尋",
+      "switchToAi": "切換到人工智慧自然語言搜尋",
+      "aiRateLimited": "目前AI搜尋量過大，請稍等片刻後再試。",
+      "aiGuide": {
+        "title": "嘗試按劇情、相似標題、氛圍或年代進行自然語言搜尋：",
+        "plotLabel": "陰謀",
+        "plotQuery": "一部講述患有短期記憶喪失症的男子透過刺青來尋找殺害妻子兇手的電影。",
+        "similarLabel": "類似",
+        "similarQuery": "韓國心理驚悚片，劇情反轉類似《寄生上流》。",
+        "moodLabel": "情緒",
+        "moodQuery": "催淚的感人穿越動畫",
+        "eraLabel": "國家與時代",
+        "eraQuery": "90年代香港動作喜劇"
+      }
     },
     "support": {
       "complete": "完全的",
@@ -672,7 +687,8 @@
       "items": {
         "bookmarks": "已加書籤的媒體",
         "progress": "觀看進度",
-        "settings": "設定和首選項"
+        "settings": "設定和首選項",
+        "watchHistory": "觀看歷史記錄"
       },
       "uploadDescription": "待上傳數據："
     },
@@ -1359,6 +1375,9 @@
       "autoplay": "自動播放",
       "autoplayDescription": "到達結尾後自動播放系列中的下一集。使用者可以使用瀏覽器擴充功能、自訂代理程式或預設設定（如果主機允許）啟用。",
       "autoplayLabel": "自動播放",
+      "autoUpdate": "自動更新",
+      "autoUpdateDescription": "在電腦空閒時後台下載更新，然後重新啟動電腦應用程式更新。",
+      "autoUpdateLabel": "自動更新",
       "autoResumeOnPlaybackError": "播放錯誤時自動恢復",
       "autoResumeOnPlaybackErrorDescription": "播放過程中目前來源失敗時自動繼續搜尋其他來源。如果停用，您將看到一個帶有手動恢復選項的錯誤畫面。",
       "autoResumeOnPlaybackErrorLabel": "播放錯誤時自動恢復",
@@ -1387,10 +1406,7 @@
       "thumbnail": "生成縮圖",
       "thumbnailDescription": "大多數時候，視頻沒有縮圖。您可以啟用此設置以即時生成它們，但它們會使您的視頻變慢。",
       "thumbnailLabel": "生成縮圖",
-      "title": "偏好設定",
-      "autoUpdate": "自動更新",
-      "autoUpdateDescription": "在電腦空閒時後台下載更新，然後重新啟動電腦應用程式更新。",
-      "autoUpdateLabel": "自動更新"
+      "title": "偏好設定"
     },
     "reset": "重置",
     "save": "保存",

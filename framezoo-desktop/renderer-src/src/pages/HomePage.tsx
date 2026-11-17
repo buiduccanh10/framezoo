@@ -21,7 +21,7 @@ export function HomePage() {
   const { t } = useTranslation();
   const [showBg, setShowBg] = useState<boolean>(false);
   const searchParams = useSearchQuery();
-  const [search] = searchParams;
+  const [search, , , aiMode] = searchParams;
   const { showModal } = useOverlayStack();
   const [filterCountry, setFilterCountry] = useState("");
   const [filterYear, setFilterYear] = useState("");
@@ -99,6 +99,7 @@ export function HomePage() {
         <WideContainer>
           <SearchListPart
             searchQuery={search}
+            aiMode={aiMode}
             onShowDetails={handleShowDetails}
             filterCountry={filterCountry}
             filterYear={filterYear}

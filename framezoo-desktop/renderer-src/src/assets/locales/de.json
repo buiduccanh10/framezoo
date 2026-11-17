@@ -311,7 +311,6 @@
       "disclaimer": "Haftungsausschluss",
       "dmca": "DMCA / Entfernung",
       "terms": "Nutzungsbedingungen",
-      "tmdbAttribution": "Filmmetadaten und Poster werden von der TMDB-API bereitgestellt (nicht von TMDB unterstützt oder zertifiziert).",
       "disclaimerText": "Framezoo betreibt keine Videostream-Quellen. Die Server können Untertitel von Anbietern weiterleiten und Audio und Untertitel vorübergehend zur Synchronisierung verarbeiten, wenn Sie diese Funktion auswählen. Sie bestimmen, welche Inhalte Sie abspielen."
     },
     "links": {
@@ -485,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Suchergebnisse"
+      "sectionTitle": "Suchergebnisse",
+      "aiSectionTitle": "KI-Suchergebnisse",
+      "aiPlaceholder": "Beschreiben Sie, was Sie sehen möchten (Handlung, Stimmung, Genre, Land...).",
+      "switchToNormal": "Zur Standardsuche wechseln",
+      "switchToAi": "Wechseln Sie zur KI-gestützten natürlichen Sprachsuche",
+      "aiRateLimited": "Derzeit werden zu viele Suchanfragen von der KI ausgeführt. Bitte warten Sie einen Moment und versuchen Sie es erneut.",
+      "aiGuide": {
+        "title": "Versuchen Sie die Suche in natürlicher Sprache anhand von Handlung, ähnlichen Titeln, Stimmung oder Epoche:",
+        "plotLabel": "Handlung",
+        "plotQuery": "Film über einen Mann mit Kurzzeitgedächtnisverlust, der sich Hinweise tätowiert, um den Mörder seiner Frau zu finden.",
+        "similarLabel": "Ähnlich",
+        "similarQuery": "Koreanischer Psychothriller mit einer Handlungswendung wie in Parasite",
+        "moodLabel": "Stimmung",
+        "moodQuery": "Ein emotionaler Zeitreise-Anime, der dich zum Weinen bringt",
+        "eraLabel": "Land und Epoche",
+        "eraQuery": "Hongkong-Actionkomödie der 90er Jahre"
+      }
     },
     "support": {
       "complete": "vollständig",
@@ -672,7 +687,8 @@
       "items": {
         "bookmarks": "Mit Lesezeichen versehene Medien",
         "progress": "Beobachten Sie den Fortschritt",
-        "settings": "Einstellungen und Präferenzen"
+        "settings": "Einstellungen und Präferenzen",
+        "watchHistory": "Watch History"
       },
       "uploadDescription": "Daten zum Hochladen:"
     },
@@ -1359,6 +1375,9 @@
       "autoplay": "Automatische Wiedergabe",
       "autoplayDescription": "Nach Erreichen des Serienendes wird automatisch die nächste Folge abgespielt.",
       "autoplayLabel": "Automatische Wiedergabe",
+      "autoUpdate": "Automatische Aktualisierung",
+      "autoUpdateDescription": "Laden Sie Updates im Hintergrund herunter, wenn Ihr Computer im Leerlauf ist, und starten Sie ihn anschließend neu, um sie anzuwenden.",
+      "autoUpdateLabel": "Automatische Aktualisierung",
       "autoResumeOnPlaybackError": "Automatische Fortsetzung bei Wiedergabefehler",
       "autoResumeOnPlaybackErrorDescription": "Automatische Suche nach anderen Quellen fortsetzen, wenn die aktuelle Quelle während der Wiedergabe ausfällt. Wenn diese Option deaktiviert ist, wird ein Fehlerbildschirm mit einer manuellen Fortsetzungsoption angezeigt.",
       "autoResumeOnPlaybackErrorLabel": "Automatische Fortsetzung bei Wiedergabefehler",
@@ -1387,10 +1406,7 @@
       "thumbnail": "Miniaturansichten generieren",
       "thumbnailDescription": "Meistens haben Videos keine Miniaturansicht. Du kannst diese Einstellung anmachen, um sie automatisch zu generieren, aber sie können dein Video langsamer machen.",
       "thumbnailLabel": "Miniaturansichten generieren",
-      "title": "Einstellungen",
-      "autoUpdate": "Automatische Aktualisierung",
-      "autoUpdateDescription": "Laden Sie Updates im Hintergrund herunter, wenn Ihr Computer im Leerlauf ist, und starten Sie ihn anschließend neu, um sie anzuwenden.",
-      "autoUpdateLabel": "Automatische Aktualisierung"
+      "title": "Einstellungen"
     },
     "reset": "Zurücksetzen",
     "save": "Speichern",

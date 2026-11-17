@@ -311,7 +311,6 @@
       "disclaimer": "Miễn trừ trách nhiệm",
       "dmca": "Báo cáo bản quyền (DMCA)",
       "terms": "Điều khoản sử dụng",
-      "tmdbAttribution": "Dữ liệu phim & poster sử dụng TMDB API (sản phẩm này không được TMDB xác nhận hay chứng nhận).",
       "disclaimerText": "Framezoo không vận hành nguồn phát video. Máy chủ có thể chuyển tiếp phụ đề từ nhà cung cấp và xử lý tạm thời âm thanh, phụ đề để đồng bộ khi bạn chọn tính năng này. Bạn kiểm soát nội dung mình phát."
     },
     "links": {
@@ -485,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Kết quả tìm kiếm"
+      "sectionTitle": "Kết quả tìm kiếm",
+      "aiSectionTitle": "Kết quả tìm kiếm AI",
+      "aiPlaceholder": "Mô tả phim muốn tìm (cốt truyện, tâm trạng, thể loại, quốc gia...)",
+      "switchToNormal": "Chuyển sang tìm kiếm thường",
+      "switchToAi": "Chuyển sang tìm kiếm AI theo ngôn ngữ tự nhiên",
+      "aiRateLimited": "Bạn đang tìm kiếm AI quá nhanh. Vui lòng đợi một lát rồi thử lại.",
+      "aiGuide": {
+        "title": "Gợi ý tìm bằng AI — thử mô tả cốt truyện, phim tương tự, tâm trạng hoặc thể loại:",
+        "plotLabel": "Cốt truyện",
+        "plotQuery": "phim anh chàng mất trí nhớ ngắn hạn phải xăm lên người để truy tìm kẻ giết vợ",
+        "similarLabel": "Tương tự",
+        "similarQuery": "phim tâm lý Hàn Quốc có plot twist giống Parasite",
+        "moodLabel": "Tâm trạng",
+        "moodQuery": "anime du hành thời gian buồn và cảm động",
+        "eraLabel": "Quốc gia & thời kỳ",
+        "eraQuery": "phim hài hành động Hồng Kông thập niên 90"
+      }
     },
     "support": {
       "complete": "hoàn thành",
@@ -672,7 +687,8 @@
       "items": {
         "bookmarks": "Phương tiện đã đánh dấu",
         "progress": "Tiến trình xem",
-        "settings": "Cài đặt & Tùy chọn"
+        "settings": "Cài đặt & Tùy chọn",
+        "watchHistory": "Lịch sử xem"
       },
       "uploadDescription": "Dữ liệu để tải lên:"
     },
@@ -1359,6 +1375,9 @@
       "autoplay": "Tự động phát",
       "autoplayDescription": "Tự động phát tập tiếp theo trong một loạt phim sau khi kết thúc, nếu máy chủ cho phép tự động phát.",
       "autoplayLabel": "Tự động phát",
+      "autoUpdate": "Tự động cập nhật",
+      "autoUpdateDescription": "Tải xuống các bản cập nhật trong nền khi máy tính của bạn ở trạng thái rảnh rỗi, sau đó khởi động lại để áp dụng chúng.",
+      "autoUpdateLabel": "Tự động cập nhật",
       "autoResumeOnPlaybackError": "Tự động tiếp tục khi lỗi phát lại",
       "autoResumeOnPlaybackErrorDescription": "Tự động tiếp tục tìm kiếm các nguồn khác khi nguồn hiện tại thất bại trong quá trình phát lại. Nếu bị tắt, bạn sẽ thấy màn hình lỗi với tùy chọn tiếp tục thủ công.",
       "autoResumeOnPlaybackErrorLabel": "Tự động tiếp tục khi lỗi phát lại",
@@ -1387,10 +1406,7 @@
       "thumbnail": "Tạo hình thu nhỏ",
       "thumbnailDescription": "Hầu hết các video không có hình thu nhỏ. Bạn có thể bật cài đặt này để tạo chúng ngay lập tức nhưng chúng có thể làm video của bạn chạy chậm hơn.",
       "thumbnailLabel": "Tạo hình thu nhỏ",
-      "title": "Tùy chọn",
-      "autoUpdate": "Tự động cập nhật",
-      "autoUpdateDescription": "Tải xuống các bản cập nhật trong nền khi máy tính của bạn ở trạng thái rảnh rỗi, sau đó khởi động lại để áp dụng chúng.",
-      "autoUpdateLabel": "Tự động cập nhật"
+      "title": "Tùy chọn"
     },
     "reset": "Đặt lại",
     "save": "Lưu",

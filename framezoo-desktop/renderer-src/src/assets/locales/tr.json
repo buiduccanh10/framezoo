@@ -311,7 +311,6 @@
       "disclaimer": "Yasal Uyarı",
       "dmca": "DMCA / Kaldırma Talebi",
       "terms": "Hizmet Şartları",
-      "tmdbAttribution": "Film meta verileri ve posterleri TMDB API'si tarafından sağlanmaktadır (TMDB tarafından onaylanmamış veya sertifikalandırılmamıştır).",
       "disclaimerText": "Framezoo video akış kaynaklarını işletmez. Sunucuları, bu özelliği seçtiğinizde sağlayıcı altyazılarını iletebilir ve senkronizasyon için ses ve altyazıları geçici olarak işleyebilir. Oynattığınız içeriği siz kontrol edersiniz."
     },
     "links": {
@@ -485,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Arama sonuçları"
+      "sectionTitle": "Arama sonuçları",
+      "aiSectionTitle": "Yapay zeka arama sonuçları",
+      "aiPlaceholder": "İzlemek istediğiniz şeyi tarif edin (konu, atmosfer, tür, ülke...).",
+      "switchToNormal": "Standart aramaya geç",
+      "switchToAi": "Yapay zekâ doğal dil aramasına geçin",
+      "aiRateLimited": "Şu anda çok fazla yapay zeka araması yapılıyor. Lütfen bir dakika bekleyin ve tekrar deneyin.",
+      "aiGuide": {
+        "title": "Konu, benzer başlıklar, ruh hali veya döneme göre doğal dil araması yapmayı deneyin:",
+        "plotLabel": "Komplo",
+        "plotQuery": "Kısa süreli hafıza kaybı yaşayan bir adamın, karısının katilini bulmak için ipuçlarını dövmelerle işlemesini konu alan film.",
+        "similarLabel": "Benzer şekilde",
+        "similarQuery": "Parazit gibi sürprizli bir olay örgüsüne sahip Kore yapımı psikolojik gerilim filmi.",
+        "moodLabel": "Mod",
+        "moodQuery": "Sizi ağlatacak duygusal zaman yolculuğu animesi.",
+        "eraLabel": "Ülke ve dönem",
+        "eraQuery": "90'lar Hong Kong aksiyon komedisi"
+      }
     },
     "support": {
       "complete": "tamamlamak",
@@ -672,7 +687,8 @@
       "items": {
         "bookmarks": "Favorilere eklenen medya",
         "progress": "İlerlemeyi izle",
-        "settings": "Ayarlar ve Tercihler"
+        "settings": "Ayarlar ve Tercihler",
+        "watchHistory": "Geçmişi izleyin"
       },
       "uploadDescription": "Yüklenecek veriler:"
     },
@@ -1359,6 +1375,9 @@
       "autoplay": "Otomatik oynatma",
       "autoplayDescription": "Sona ulaştıktan sonra serideki bir sonraki bölümü otomatik olarak oynatır.",
       "autoplayLabel": "Otomatik oynatma",
+      "autoUpdate": "Otomatik güncelleme",
+      "autoUpdateDescription": "Bilgisayarınız boştayken güncellemeleri arka planda indirin, ardından uygulamak için yeniden başlatın.",
+      "autoUpdateLabel": "Otomatik güncelleme",
       "autoResumeOnPlaybackError": "Oynatma hatasında otomatik devam etme",
       "autoResumeOnPlaybackErrorDescription": "Geçerli kaynak oynatma sırasında başarısız olduğunda diğer kaynakları aramaya otomatik olarak devam edin. Devre dışı bırakılırsa manuel devam etme seçeneğinin bulunduğu bir hata ekranı görürsünüz.",
       "autoResumeOnPlaybackErrorLabel": "Oynatma hatasında otomatik devam etme",
@@ -1387,10 +1406,7 @@
       "thumbnail": "Küçük resimler oluştur",
       "thumbnailDescription": "Çoğu video için ön izleme görseli bulunmaz. Bu ayarı etkinleştirerek anında oluşturulmasını sağlayabilirsiniz, ancak bu videonuzu yavaşlatabilir.",
       "thumbnailLabel": "Küçük resim oluştur",
-      "title": "Ayarlar",
-      "autoUpdate": "Otomatik güncelleme",
-      "autoUpdateDescription": "Bilgisayarınız boştayken güncellemeleri arka planda indirin, ardından uygulamak için yeniden başlatın.",
-      "autoUpdateLabel": "Otomatik güncelleme"
+      "title": "Ayarlar"
     },
     "reset": "Sıfırla",
     "save": "Kaydet",

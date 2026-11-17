@@ -311,7 +311,6 @@
       "disclaimer": "Ansvarsfraskrivelse",
       "dmca": "DMCA / Fjernelse",
       "terms": "Servicevilkår",
-      "tmdbAttribution": "Filmmetadata og plakater leveres af TMDB API (ikke godkendt eller certificeret af TMDB).",
       "disclaimerText": "Framezoo bruger ikke videostreamingkilder. Dens servere kan videresende udbyderundertekster og midlertidigt behandle lyd og undertekster til synkronisering, når du vælger denne funktion. Du styrer det indhold, du afspiller."
     },
     "links": {
@@ -485,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Søgeresultater"
+      "sectionTitle": "Søgeresultater",
+      "aiSectionTitle": "AI-søgeresultater",
+      "aiPlaceholder": "Beskriv hvad du vil se (plot, stemning, genre, country...)",
+      "switchToNormal": "Skift til standardsøgning",
+      "switchToAi": "Skift til AI-søgning i naturligt sprog",
+      "aiRateLimited": "For mange AI-søgninger lige nu. Vent et øjeblik, og prøv igen.",
+      "aiGuide": {
+        "title": "Prøv søgning i naturligt sprog efter plot, lignende titler, stemning eller æra:",
+        "plotLabel": "Grund",
+        "plotQuery": "En film om en mand med korttidshukommelsestab, der tatoverer spor for at finde sin kones morder.",
+        "similarLabel": "Ligner",
+        "similarQuery": "Koreansk psykologisk thriller med et plottwist som Parasite",
+        "moodLabel": "Humør",
+        "moodQuery": "følelsesladet tidsrejse-anime, der får dig til at græde",
+        "eraLabel": "Land og æra",
+        "eraQuery": "90'ernes Hong Kong-actionkomedie"
+      }
     },
     "support": {
       "complete": "komplet",
@@ -672,7 +687,8 @@
       "items": {
         "bookmarks": "Bogmærkede medier",
         "progress": "Se fremskridt",
-        "settings": "Indstillinger og præferencer"
+        "settings": "Indstillinger og præferencer",
+        "watchHistory": "Se historik"
       },
       "uploadDescription": "Data, der skal uploades:"
     },
@@ -1359,6 +1375,9 @@
       "autoplay": "Autoplay",
       "autoplayDescription": "Afspil automatisk den næste episode i en serie, når den er slut.",
       "autoplayLabel": "Autoplay",
+      "autoUpdate": "Automatisk opdatering",
+      "autoUpdateDescription": "Download opdateringer i baggrunden, når din computer er inaktiv, og genstart derefter for at implementere dem.",
+      "autoUpdateLabel": "Automatisk opdatering",
       "autoResumeOnPlaybackError": "Automatisk genoptagelse ved afspilningsfejl",
       "autoResumeOnPlaybackErrorDescription": "Fortsæt automatisk med at søge efter andre kilder, når den aktuelle kilde fejler under afspilning. Hvis den er deaktiveret, vil du se en fejlskærm med mulighed for manuel genoptagelse.",
       "autoResumeOnPlaybackErrorLabel": "Automatisk genoptagelse ved afspilningsfejl",
@@ -1387,10 +1406,7 @@
       "thumbnail": "Generer miniaturebilleder",
       "thumbnailDescription": "Det meste af tiden har videoer ikke miniaturebilleder. Du kan aktivere denne indstilling for at generere dem undervejs, men de kan gøre din video mere langsom.",
       "thumbnailLabel": "Generer miniaturebilleder",
-      "title": "Præferencer",
-      "autoUpdate": "Automatisk opdatering",
-      "autoUpdateDescription": "Download opdateringer i baggrunden, når din computer er inaktiv, og genstart derefter for at implementere dem.",
-      "autoUpdateLabel": "Automatisk opdatering"
+      "title": "Præferencer"
     },
     "reset": "Nulstil",
     "save": "Gem",

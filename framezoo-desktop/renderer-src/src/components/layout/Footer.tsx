@@ -36,12 +36,6 @@ export function Footer() {
           <p className="mt-3 text-sm text-type-secondary">
             {t("footer.legal.disclaimerText")}
           </p>
-          <p className="mt-2 text-xs text-type-secondary/80">
-            {t(
-              "footer.legal.tmdbAttribution",
-              "Film metadata & posters are provided by TMDB API (not endorsed or certified by TMDB).",
-            )}
-          </p>
           <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5 text-sm md:justify-end">
             <a
               href="https://framezoo.top/legal/terms"

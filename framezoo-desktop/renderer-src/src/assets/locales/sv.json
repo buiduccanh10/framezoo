@@ -311,7 +311,6 @@
       "disclaimer": "Ansvarsfriskrivning",
       "dmca": "DMCA / Borttagning",
       "terms": "Användarvillkor",
-      "tmdbAttribution": "Filmmetadata och affischer tillhandahålls av TMDB API (ej godkänt eller certifierat av TMDB).",
       "disclaimerText": "Framezoo hanterar inte videoströmningskällor. Dess servrar kan vidarebefordra leverantörens undertexter och tillfälligt bearbeta ljud och undertexter för synkronisering när du väljer den funktionen. Du styr vilket innehåll du spelar upp."
     },
     "links": {
@@ -485,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Sökresultat"
+      "sectionTitle": "Sökresultat",
+      "aiSectionTitle": "AI-sökresultat",
+      "aiPlaceholder": "Beskriv vad du vill titta på (handling, stämning, genre, land...)",
+      "switchToNormal": "Växla till standardsökning",
+      "switchToAi": "Växla till AI-sökning i naturligt språk",
+      "aiRateLimited": "För många AI-sökningar just nu. Vänta en stund och försök igen.",
+      "aiGuide": {
+        "title": "Prova sökning i naturligt språk efter handling, liknande titlar, stämning eller era:",
+        "plotLabel": "Tomt",
+        "plotQuery": "en film om en man med korttidsminnesförlust som tatuerar ledtrådar för att hitta sin frus mördare.",
+        "similarLabel": "Liknande till",
+        "similarQuery": "Koreansk psykologisk thriller med en twist som Parasite",
+        "moodLabel": "Humör",
+        "moodQuery": "känslomässig tidsreseanime som får dig att gråta",
+        "eraLabel": "Land och era",
+        "eraQuery": "90-talets actionkomedi från Hongkong"
+      }
     },
     "support": {
       "complete": "komplett",
@@ -672,7 +687,8 @@
       "items": {
         "bookmarks": "Bokmärkt media",
         "progress": "Se framstegen",
-        "settings": "Inställningar och inställningar"
+        "settings": "Inställningar och inställningar",
+        "watchHistory": "Titningshistorik"
       },
       "uploadDescription": "Data att ladda upp:"
     },
@@ -1359,6 +1375,9 @@
       "autoplay": "Autouppspelning",
       "autoplayDescription": "Spela automatiskt nästa avsnitt i en serie efter att ha nått slutet.",
       "autoplayLabel": "Autouppspelning",
+      "autoUpdate": "Automatisk uppdatering",
+      "autoUpdateDescription": "Ladda ner uppdateringar i bakgrunden när datorn är inaktiv och starta sedan om den för att installera dem.",
+      "autoUpdateLabel": "Automatisk uppdatering",
       "autoResumeOnPlaybackError": "Återuppta automatiskt vid uppspelningsfel",
       "autoResumeOnPlaybackErrorDescription": "Fortsätt automatiskt att söka efter andra källor när den aktuella källan misslyckas under uppspelning. Om det är inaktiverat ser du en felskärm med ett alternativ för manuellt återuppta.",
       "autoResumeOnPlaybackErrorLabel": "Återuppta automatiskt vid uppspelningsfel",
@@ -1387,10 +1406,7 @@
       "thumbnail": "Skapa miniatyrer",
       "thumbnailDescription": "För det mesta har videor inga miniatyrer. Du kan aktivera den här inställningen för att generera dem i farten men de kan göra din video långsammare.",
       "thumbnailLabel": "Skapa miniatyrer",
-      "title": "Inställningar",
-      "autoUpdate": "Automatisk uppdatering",
-      "autoUpdateDescription": "Ladda ner uppdateringar i bakgrunden när datorn är inaktiv och starta sedan om den för att installera dem.",
-      "autoUpdateLabel": "Automatisk uppdatering"
+      "title": "Inställningar"
     },
     "reset": "Återställ",
     "save": "Spara",

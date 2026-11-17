@@ -311,7 +311,6 @@
       "disclaimer": "Atruna",
       "dmca": "DMCA / Noņemšana",
       "terms": "Pakalpojumu sniegšanas noteikumi",
-      "tmdbAttribution": "Filmu metadatus un plakātus nodrošina TMDB API (TMDB tos nav apstiprinājusi vai sertificējusi).",
       "disclaimerText": "Framezoo nepārvalda video straumēšanas avotus. Tā serveri var pārsūtīt pakalpojumu sniedzēju subtitrus un īslaicīgi apstrādāt audio un subtitrus sinhronizācijai, kad izvēlaties šo funkciju. Jūs kontrolējat saturu, ko atskaņojat."
     },
     "links": {
@@ -485,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Meklējuma rezultāti"
+      "sectionTitle": "Meklējuma rezultāti",
+      "aiSectionTitle": "Mākslīgā intelekta meklēšanas rezultāti",
+      "aiPlaceholder": "Aprakstiet, ko vēlaties skatīties (sižets, noskaņojums, žanrs, valsts...)",
+      "switchToNormal": "Pārslēgties uz standarta meklēšanu",
+      "switchToAi": "Pārslēgties uz mākslīgā intelekta dabiskās valodas meklēšanu",
+      "aiRateLimited": "Šobrīd ir pārāk daudz mākslīgā intelekta meklējumu. Lūdzu, uzgaidiet brīdi un mēģiniet vēlreiz.",
+      "aiGuide": {
+        "title": "Izmēģiniet dabiskās valodas meklēšanu pēc sižeta, līdzīgiem nosaukumiem, noskaņas vai laikmeta:",
+        "plotLabel": "Sižets",
+        "plotQuery": "Filma par vīrieti ar īslaicīgu atmiņas zudumu, kurš tetovē pavedienus, lai atrastu savas sievas slepkavu",
+        "similarLabel": "Līdzīgi kā",
+        "similarQuery": "Korejiešu psiholoģiskais trilleris ar sižeta pavērsienu, kas līdzīgs filmai \"Parazīts\".",
+        "moodLabel": "Garastāvoklis",
+        "moodQuery": "emocionāla laika ceļojumu anime, kas liek raudāt",
+        "eraLabel": "Valsts un laikmets",
+        "eraQuery": "90. gadu Honkongas asa sižeta komēdija"
+      }
     },
     "support": {
       "complete": "pabeigts",
@@ -672,7 +687,8 @@
       "items": {
         "bookmarks": "Grāmatzīmes multivide",
         "progress": "Skatieties progresu",
-        "settings": "Iestatījumi un preferences"
+        "settings": "Iestatījumi un preferences",
+        "watchHistory": "Skatīšanās vēsture"
       },
       "uploadDescription": "Augšupielādējamie dati:"
     },
@@ -1359,6 +1375,9 @@
       "autoplay": "Automātiskā atskaņošana",
       "autoplayDescription": "Automātiski atskaņojiet nākamo sērijas sēriju pēc beigām.",
       "autoplayLabel": "Automātiskā atskaņošana",
+      "autoUpdate": "Automātiska atjaunināšana",
+      "autoUpdateDescription": "Lejupielādējiet atjauninājumus fonā, kad dators ir dīkstāvē, un pēc tam restartējiet to, lai tie tiktu lietoti.",
+      "autoUpdateLabel": "Automātiska atjaunināšana",
       "autoResumeOnPlaybackError": "Automātiski atsākt atskaņošanas kļūdu",
       "autoResumeOnPlaybackErrorDescription": "Automātiski turpiniet meklēt citus avotus, ja atskaņošanas laikā neizdodas pašreizējais avots. Ja tas ir atspējots, tiks parādīts kļūdas ekrāns ar manuālas atsākšanas opciju.",
       "autoResumeOnPlaybackErrorLabel": "Automātiski atsākt atskaņošanas kļūdu",
@@ -1387,10 +1406,7 @@
       "thumbnail": "Ģenerēt sīktēlus",
       "thumbnailDescription": "Lielāko daļu laika videoklipiem nav sīktēlu. Varat iespējot šo iestatījumu, lai tos ģenerētu lidojuma laikā, taču tie var padarīt jūsu videoklipu lēnāku.",
       "thumbnailLabel": "Ģenerēt sīktēlus",
-      "title": "Preferences",
-      "autoUpdate": "Automātiska atjaunināšana",
-      "autoUpdateDescription": "Lejupielādējiet atjauninājumus fonā, kad dators ir dīkstāvē, un pēc tam restartējiet to, lai tie tiktu lietoti.",
-      "autoUpdateLabel": "Automātiska atjaunināšana"
+      "title": "Preferences"
     },
     "reset": "Restartēt",
     "save": "Saglabāt",

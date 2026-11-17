@@ -311,7 +311,6 @@
       "disclaimer": "Avís legal",
       "dmca": "DMCA / Retirada",
       "terms": "Condicions del servei",
-      "tmdbAttribution": "Les metadades i els pòsters de les pel·lícules són proporcionats per l'API de TMDB (no avalats ni certificats per TMDB).",
       "disclaimerText": "Framezoo no gestiona fonts de transmissió de vídeo. Els seus servidors poden retransmetre subtítols del proveïdor i processar temporalment l'àudio i els subtítols per a la sincronització quan trieu aquesta funció. Vós controleu el contingut que reproduïu."
     },
     "links": {
@@ -485,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Resultats de la cerca"
+      "sectionTitle": "Resultats de la cerca",
+      "aiSectionTitle": "Resultats de cerca d'IA",
+      "aiPlaceholder": "Descriu què vols veure (argument, ambient, gènere, país...)",
+      "switchToNormal": "Canvia a la cerca estàndard",
+      "switchToAi": "Canvia a la cerca en llenguatge natural per IA",
+      "aiRateLimited": "Hi ha massa cerques amb IA ara mateix. Espereu un moment i torneu-ho a provar.",
+      "aiGuide": {
+        "title": "Prova la cerca en llenguatge natural per trama, títols similars, estat d'ànim o època:",
+        "plotLabel": "Trama",
+        "plotQuery": "Pel·lícula sobre un home amb pèrdua de memòria a curt termini que tatua pistes per trobar l'assassí de la seva dona",
+        "similarLabel": "Similar a",
+        "similarQuery": "Thriller psicològic coreà amb un gir argumental com Paràsits",
+        "moodLabel": "Estat d'ànim",
+        "moodQuery": "Anime emotiu de viatges en el temps que et fa plorar",
+        "eraLabel": "País i època",
+        "eraQuery": "Comèdia d'acció dels anys 90 a Hong Kong"
+      }
     },
     "support": {
       "complete": "completa",
@@ -672,7 +687,8 @@
       "items": {
         "bookmarks": "Mitjans marcats",
         "progress": "Observa el progrés",
-        "settings": "Configuració i preferències"
+        "settings": "Configuració i preferències",
+        "watchHistory": "Historial de visualitzacions"
       },
       "uploadDescription": "Dades a carregar:"
     },
@@ -1359,6 +1375,9 @@
       "autoplay": "Reproducció automàtica",
       "autoplayDescription": "Reprodueix automàticament el següent episodi d'una sèrie després d'arribar al final.",
       "autoplayLabel": "Reproducció automàtica",
+      "autoUpdate": "Actualització automàtica",
+      "autoUpdateDescription": "Baixeu les actualitzacions en segon pla quan l&#39;ordinador estigui inactiu i, a continuació, reinicieu-lo per aplicar-les.",
+      "autoUpdateLabel": "Actualització automàtica",
       "autoResumeOnPlaybackError": "Reprèn automàticament en cas d'error de reproducció",
       "autoResumeOnPlaybackErrorDescription": "Continueu cercant altres fonts automàticament quan la font actual falla durant la reproducció. Si està desactivat, veureu una pantalla d'error amb una opció de reinici manual.",
       "autoResumeOnPlaybackErrorLabel": "Reprèn automàticament en cas d'error de reproducció",
@@ -1387,10 +1406,7 @@
       "thumbnail": "Genera miniatures",
       "thumbnailDescription": "La majoria de vegades, els vídeos no tenen miniatures. Podeu activar aquesta configuració per generar-los sobre la marxa, però poden fer que el vostre vídeo sigui més lent.",
       "thumbnailLabel": "Genera miniatures",
-      "title": "Preferències",
-      "autoUpdate": "Actualització automàtica",
-      "autoUpdateDescription": "Baixeu les actualitzacions en segon pla quan l&#39;ordinador estigui inactiu i, a continuació, reinicieu-lo per aplicar-les.",
-      "autoUpdateLabel": "Actualització automàtica"
+      "title": "Preferències"
     },
     "reset": "Restableix",
     "save": "Desa",

@@ -311,7 +311,6 @@
       "disclaimer": "Zastrzeżenie",
       "dmca": "DMCA / usunięcie",
       "terms": "Warunki korzystania z usługi",
-      "tmdbAttribution": "Metadane dotyczące filmów i plakaty dostarczane są przez API TMDB (nie są zatwierdzone ani certyfikowane przez TMDB).",
       "disclaimerText": "Framezoo nie obsługuje strumieniowych źródeł wideo. Jego serwery mogą przekazywać napisy od dostawcy i tymczasowo przetwarzać dźwięk i napisy w celu synchronizacji, gdy wybierzesz tę funkcję. Masz kontrolę nad odtwarzaną zawartością."
     },
     "links": {
@@ -485,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Wyniki wyszukiwania"
+      "sectionTitle": "Wyniki wyszukiwania",
+      "aiSectionTitle": "Wyniki wyszukiwania AI",
+      "aiPlaceholder": "Opisz, co chcesz obejrzeć (fabuła, nastrój, gatunek, kraj...)",
+      "switchToNormal": "Przełącz na wyszukiwanie standardowe",
+      "switchToAi": "Przejdź na wyszukiwanie w języku naturalnym za pomocą sztucznej inteligencji",
+      "aiRateLimited": "Zbyt wiele wyszukiwań AI. Poczekaj chwilę i spróbuj ponownie.",
+      "aiGuide": {
+        "title": "Wypróbuj wyszukiwanie w języku naturalnym według fabuły, podobnych tytułów, nastroju lub epoki:",
+        "plotLabel": "Działka",
+        "plotQuery": "film o mężczyźnie z utratą pamięci krótkotrwałej, który tatuuje wskazówki, aby znaleźć zabójcę swojej żony",
+        "similarLabel": "Podobnie jak",
+        "similarQuery": "Koreański thriller psychologiczny z zaskakującym zwrotem akcji, jak w filmie „Parasite”",
+        "moodLabel": "Nastrój",
+        "moodQuery": "emocjonalne anime o podróżach w czasie, które doprowadza Cię do łez",
+        "eraLabel": "Kraj i epoka",
+        "eraQuery": "Komedia akcji z Hongkongu z lat 90."
+      }
     },
     "support": {
       "complete": "kompletny",
@@ -672,7 +687,8 @@
       "items": {
         "bookmarks": "Media z zakładkami",
         "progress": "Obserwuj postęp",
-        "settings": "Ustawienia i preferencje"
+        "settings": "Ustawienia i preferencje",
+        "watchHistory": "Obejrzyj historię"
       },
       "uploadDescription": "Dane do przesłania:"
     },
@@ -1359,6 +1375,9 @@
       "autoplay": "Autoodtwarzanie",
       "autoplayDescription": "Automatycznie odtwórz następny odcinek zbliżając się do końca obecnego.",
       "autoplayLabel": "Autoodtwarzanie",
+      "autoUpdate": "Automatyczna aktualizacja",
+      "autoUpdateDescription": "Pobierz aktualizacje w tle, gdy komputer jest bezczynny, a następnie uruchom ponownie, aby je zastosować.",
+      "autoUpdateLabel": "Automatyczna aktualizacja",
       "autoResumeOnPlaybackError": "Automatyczne wznowienie po błędzie odtwarzania",
       "autoResumeOnPlaybackErrorDescription": "Automatycznie kontynuuj wyszukiwanie innych źródeł, jeśli bieżące źródło ulegnie awarii podczas odtwarzania. Jeśli ta opcja jest wyłączona, pojawi się ekran błędu z opcją ręcznego wznowienia.",
       "autoResumeOnPlaybackErrorLabel": "Automatyczne wznowienie po błędzie odtwarzania",
@@ -1387,10 +1406,7 @@
       "thumbnail": "Generuj miniatury",
       "thumbnailDescription": "W większości przypadków filmy nie mają miniatur. Możesz włączyć to ustawienie, aby generować je na bieżąco, ale może to spowolnić wideo.",
       "thumbnailLabel": "Generuj miniatury",
-      "title": "Preferencje",
-      "autoUpdate": "Automatyczna aktualizacja",
-      "autoUpdateDescription": "Pobierz aktualizacje w tle, gdy komputer jest bezczynny, a następnie uruchom ponownie, aby je zastosować.",
-      "autoUpdateLabel": "Automatyczna aktualizacja"
+      "title": "Preferencje"
     },
     "reset": "Nastawić",
     "save": "Zapisz",

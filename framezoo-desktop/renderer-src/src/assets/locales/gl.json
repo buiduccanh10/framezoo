@@ -311,7 +311,6 @@
       "disclaimer": "Aviso legal",
       "dmca": "DMCA / Retirada",
       "terms": "Condicións de servizo",
-      "tmdbAttribution": "Os metadatos e os carteis das películas son proporcionados pola API de TMDB (non están avalados nin certificados por TMDB).",
       "disclaimerText": "Framezoo non opera fontes de transmisión de vídeo. Os seus servidores poden retransmitir subtítulos do provedor e procesar temporalmente o audio e os subtítulos para a sincronización cando escolla esa función. Vostede controla o contido que reproduce."
     },
     "links": {
@@ -485,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Resultados da busca"
+      "sectionTitle": "Resultados da busca",
+      "aiSectionTitle": "Resultados de busca de IA",
+      "aiPlaceholder": "Describe o que queres ver (argumento, ambiente, xénero, país...)",
+      "switchToNormal": "Cambiar á busca estándar",
+      "switchToAi": "Cambiar á busca en linguaxe natural con IA",
+      "aiRateLimited": "Demasiadas buscas con IA agora mesmo. Agarde un momento e inténteo de novo.",
+      "aiGuide": {
+        "title": "Proba a busca en linguaxe natural por trama, títulos semellantes, estado de ánimo ou época:",
+        "plotLabel": "Trama",
+        "plotQuery": "Unha película sobre un home con perda de memoria a curto prazo que tatua pistas para atopar ao asasino da súa muller.",
+        "similarLabel": "Semellante a",
+        "similarQuery": "Thriller psicolóxico coreano cun xiro argumental como Parasite",
+        "moodLabel": "Estado de ánimo",
+        "moodQuery": "Un anime de viaxes no tempo emotivas que che fai chorar",
+        "eraLabel": "País e época",
+        "eraQuery": "Comedia de acción de Hong Kong dos anos 90"
+      }
     },
     "support": {
       "complete": "completo",
@@ -672,7 +687,8 @@
       "items": {
         "bookmarks": "Medios marcados",
         "progress": "Observa o progreso",
-        "settings": "Configuración e preferencias"
+        "settings": "Configuración e preferencias",
+        "watchHistory": "Historial de reprodución"
       },
       "uploadDescription": "Datos para cargar:"
     },
@@ -1359,6 +1375,9 @@
       "autoplay": "Reprodución automática",
       "autoplayDescription": "Reproduce automaticamente o seguinte episodio dunha serie despois de chegar ao final.",
       "autoplayLabel": "Reprodución automática",
+      "autoUpdate": "Actualización automática",
+      "autoUpdateDescription": "Descarga as actualizacións en segundo plano cando o computador estea inactivo e, a seguir, reinicia para aplicalas.",
+      "autoUpdateLabel": "Actualización automática",
       "autoResumeOnPlaybackError": "Reanudación automática ante un erro de reprodución",
       "autoResumeOnPlaybackErrorDescription": "Continúa buscando automaticamente outras fontes cando a fonte actual falla durante a reprodución. Se está desactivado, verá unha pantalla de erro cunha opción de currículo manual.",
       "autoResumeOnPlaybackErrorLabel": "Reanudación automática ante un erro de reprodución",
@@ -1387,10 +1406,7 @@
       "thumbnail": "Xerar miniaturas",
       "thumbnailDescription": "Na maioría das veces, os videos non teñen miniaturas. Podes activar esta configuración para xeralas ao momento, pero podes realentizar o video.",
       "thumbnailLabel": "Xerar miniaturas",
-      "title": "Preferencias",
-      "autoUpdate": "Actualización automática",
-      "autoUpdateDescription": "Descarga as actualizacións en segundo plano cando o computador estea inactivo e, a seguir, reinicia para aplicalas.",
-      "autoUpdateLabel": "Actualización automática"
+      "title": "Preferencias"
     },
     "reset": "Reinicio",
     "save": "Gardar",

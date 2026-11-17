@@ -1,0 +1,17 @@
+{
+  "name": "framezoo-ai-gateway",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Cloudflare Workers AI gateway for Framezoo natural-language movie & TV search",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "secret:set": "wrangler secret put GATEWAY_SECRET",
+    "tail": "wrangler tail",
+    "test": "node --test test/worker.test.mjs"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}

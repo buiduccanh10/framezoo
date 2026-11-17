@@ -311,7 +311,6 @@
       "disclaimer": "Lahtiütlus",
       "dmca": "DMCA / Eemaldamine",
       "terms": "Teenusetingimused",
-      "tmdbAttribution": "Filmide metaandmed ja plakatid on saadaval TMDB API kaudu (TMDB ei ole neid heaks kiitnud ega sertifitseerinud).",
       "disclaimerText": "Framezoo ei halda videovooge. Selle serverid võivad edastada pakkuja subtiitreid ning ajutiselt töödelda heli ja subtiitreid sünkroonimiseks, kui te selle funktsiooni valite. Teie kontrollite esitatavat sisu."
     },
     "links": {
@@ -485,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Otsingutulemused"
+      "sectionTitle": "Otsingutulemused",
+      "aiSectionTitle": "Tehisintellekti otsingutulemused",
+      "aiPlaceholder": "Kirjelda, mida sa vaadata tahad (süžee, meeleolu, žanr, riik...)",
+      "switchToNormal": "Lülitu tavalisele otsingule",
+      "switchToAi": "Lülitu tehisintellekti loomuliku keele otsingule",
+      "aiRateLimited": "Liiga palju tehisintellekti otsinguid praegu. Palun oota hetk ja proovi uuesti.",
+      "aiGuide": {
+        "title": "Proovige loomuliku keele otsingut süžee, sarnaste pealkirjade, meeleolu või ajastu järgi:",
+        "plotLabel": "Krunt",
+        "plotQuery": "Film lühiajalise mälukaotusega mehest, kes tätoveerib vihjeid oma naise tapja leidmiseks",
+        "similarLabel": "Sarnane",
+        "similarQuery": "Korea psühholoogiline põnevik, mille süžee on keerdkäik nagu \"Parasiit\" sarjas.",
+        "moodLabel": "Meeleolu",
+        "moodQuery": "emotsionaalne ajareisi anime, mis paneb sind nutma",
+        "eraLabel": "Riik ja ajastu",
+        "eraQuery": "90ndate Hongkongi märulikomöödia"
+      }
     },
     "support": {
       "complete": "täielik",
@@ -672,7 +687,8 @@
       "items": {
         "bookmarks": "Järjehoidjatega meedia",
         "progress": "Jälgige edenemist",
-        "settings": "Seaded ja eelistused"
+        "settings": "Seaded ja eelistused",
+        "watchHistory": "Vaatamise ajalugu"
       },
       "uploadDescription": "Üleslaaditavad andmed:"
     },
@@ -1359,6 +1375,9 @@
       "autoplay": "Automaatne esitus",
       "autoplayDescription": "Pärast lõppu jõudmist esitage seeria järgmine jagu automaatselt.",
       "autoplayLabel": "Automaatne esitus",
+      "autoUpdate": "Automaatne värskendamine",
+      "autoUpdateDescription": "Laadige värskendused taustal alla, kui arvuti on jõudeolekus, ja seejärel taaskäivitage need rakendamiseks.",
+      "autoUpdateLabel": "Automaatne värskendamine",
       "autoResumeOnPlaybackError": "Automaatne jätkamine taasesituse vea korral",
       "autoResumeOnPlaybackErrorDescription": "Jätkake automaatselt teiste allikate otsimist, kui praegune allikas esitamise ajal ebaõnnestub. Kui see on keelatud, näete veaekraani käsitsi jätkamise valikuga.",
       "autoResumeOnPlaybackErrorLabel": "Automaatne jätkamine taasesituse vea korral",
@@ -1387,10 +1406,7 @@
       "thumbnail": "Genereeri pisipilte",
       "thumbnailDescription": "Enamasti pole videodel pisipilte. Selle sätte lubamisega genereeritakse pispildid vaatamise ajal, kuid need võivad teie video aeglasemaks muuta.",
       "thumbnailLabel": "Genereeri pisipilte",
-      "title": "Eelistused",
-      "autoUpdate": "Automaatne värskendamine",
-      "autoUpdateDescription": "Laadige värskendused taustal alla, kui arvuti on jõudeolekus, ja seejärel taaskäivitage need rakendamiseks.",
-      "autoUpdateLabel": "Automaatne värskendamine"
+      "title": "Eelistused"
     },
     "reset": "Lähtesta",
     "save": "Salvesta",

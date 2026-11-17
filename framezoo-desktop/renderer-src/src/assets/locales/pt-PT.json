@@ -311,7 +311,6 @@
       "disclaimer": "Isenção de responsabilidade",
       "dmca": "DMCA / Remoção",
       "terms": "Termos de Serviço",
-      "tmdbAttribution": "Os metadados e pôsteres dos filmes são fornecidos pela API do TMDB (não endossados ​​ou certificados pelo TMDB).",
       "disclaimerText": "A Framezoo não opera fontes de streaming de vídeo. Seus servidores podem retransmitir legendas do provedor e processar temporariamente áudio e legendas para sincronização quando você seleciona esse recurso. Você controla o conteúdo que reproduz."
     },
     "links": {
@@ -485,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Resultados da pesquisa"
+      "sectionTitle": "Resultados da pesquisa",
+      "aiSectionTitle": "resultados de pesquisa de IA",
+      "aiPlaceholder": "Descreva o que você quer assistir (enredo, clima, gênero, país...)",
+      "switchToNormal": "Alternar para a pesquisa padrão",
+      "switchToAi": "Mude para a pesquisa em linguagem natural com IA",
+      "aiRateLimited": "Há muitas buscas de IA em andamento. Aguarde um momento e tente novamente.",
+      "aiGuide": {
+        "title": "Experimente a busca em linguagem natural por enredo, títulos semelhantes, clima ou época:",
+        "plotLabel": "Trama",
+        "plotQuery": "Filme sobre um homem com perda de memória recente que tatua pistas para encontrar o assassino de sua esposa.",
+        "similarLabel": "Semelhante a",
+        "similarQuery": "Thriller psicológico coreano com uma reviravolta na trama, semelhante a Parasita.",
+        "moodLabel": "Humor",
+        "moodQuery": "Anime emocionante de viagem no tempo que te fará chorar",
+        "eraLabel": "País e época",
+        "eraQuery": "Comédia de ação de Hong Kong dos anos 90"
+      }
     },
     "support": {
       "complete": "completo",
@@ -672,7 +687,8 @@
       "items": {
         "bookmarks": "Mídia marcada",
         "progress": "Observe o progresso",
-        "settings": "Configurações e preferências"
+        "settings": "Configurações e preferências",
+        "watchHistory": "Histórico de visualização"
       },
       "uploadDescription": "Dados para carregar:"
     },
@@ -1359,6 +1375,9 @@
       "autoplay": "Reprodução automática",
       "autoplayDescription": "Reproduza automaticamente o próximo episódio de uma série após chegar ao final.",
       "autoplayLabel": "Reprodução automática",
+      "autoUpdate": "Atualização automática",
+      "autoUpdateDescription": "Baixe as atualizações em segundo plano quando o computador estiver ocioso e reinicie-o para aplicá-las.",
+      "autoUpdateLabel": "Atualização automática",
       "autoResumeOnPlaybackError": "Retomada automática em caso de erro de reprodução",
       "autoResumeOnPlaybackErrorDescription": "Continue procurando automaticamente outras fontes quando a fonte atual falhar durante a reprodução. Se desativado, você verá uma tela de erro com uma opção de retomada manual.",
       "autoResumeOnPlaybackErrorLabel": "Retomada automática em caso de erro de reprodução",
@@ -1387,10 +1406,7 @@
       "thumbnail": "Gerar miniaturas",
       "thumbnailDescription": "Na maioria das vezes, os vídeos não possuem miniaturas. Você pode ativar esta configuração para gerá-los dinamicamente, mas eles podem tornar seu vídeo mais lento.",
       "thumbnailLabel": "Gerar miniaturas",
-      "title": "Preferências",
-      "autoUpdate": "Atualização automática",
-      "autoUpdateDescription": "Baixe as atualizações em segundo plano quando o computador estiver ocioso e reinicie-o para aplicá-las.",
-      "autoUpdateLabel": "Atualização automática"
+      "title": "Preferências"
     },
     "reset": "Repor",
     "save": "Guardar",

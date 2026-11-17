@@ -311,7 +311,6 @@
       "disclaimer": "Declinare de responsabilitate",
       "dmca": "DMCA / Eliminare",
       "terms": "Termeni și condiții",
-      "tmdbAttribution": "Metadatele și posterele filmelor sunt furnizate de API-ul TMDB (nefiind aprobate sau certificate de TMDB).",
       "disclaimerText": "Framezoo nu operează surse de flux video. Serverele sale pot transmite subtitrări de la furnizor și pot procesa temporar sunetul și subtitrările pentru sincronizare atunci când alegeți funcția respectivă. Dvs. controlați conținutul pe care îl redați."
     },
     "links": {
@@ -485,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Rezultate de căutare"
+      "sectionTitle": "Rezultate de căutare",
+      "aiSectionTitle": "Rezultate de căutare prin inteligență artificială",
+      "aiPlaceholder": "Descrie ce vrei să vizionezi (intriga, atmosfera, genul, țara...)",
+      "switchToNormal": "Comutare la căutarea standard",
+      "switchToAi": "Treceți la căutarea în limbaj natural cu inteligență artificială",
+      "aiRateLimited": "Prea multe căutări cu inteligență artificială în acest moment. Vă rugăm să așteptați un moment și să încercați din nou.",
+      "aiGuide": {
+        "title": "Încercați căutarea în limbaj natural după intrigă, titluri similare, stare de spirit sau epocă:",
+        "plotLabel": "Complot",
+        "plotQuery": "un film despre un bărbat cu pierderi de memorie pe termen scurt care tatuează indicii pentru a-l găsi pe ucigașul soției sale",
+        "similarLabel": "Similar cu",
+        "similarQuery": "Thriller psihologic coreean cu o răsturnare de situație precum Parasite",
+        "moodLabel": "Stare de spirit",
+        "moodQuery": "Anime emoționant despre călătorii în timp care te face să plângi",
+        "eraLabel": "Țară și epocă",
+        "eraQuery": "Comedie de acțiune din Hong Kong, anii '90"
+      }
     },
     "support": {
       "complete": "complet",
@@ -672,7 +687,8 @@
       "items": {
         "bookmarks": "Media marcate",
         "progress": "Urmărește progresul",
-        "settings": "Setări și preferințe"
+        "settings": "Setări și preferințe",
+        "watchHistory": "Istoricul vizionărilor"
       },
       "uploadDescription": "Date de încărcat:"
     },
@@ -1359,6 +1375,9 @@
       "autoplay": "Redare automată",
       "autoplayDescription": "Redați automat următorul episod dintr-o serie după ce ajungeți la final.",
       "autoplayLabel": "Redare automată",
+      "autoUpdate": "Actualizare automată",
+      "autoUpdateDescription": "Descărcați actualizările în fundal când computerul este inactiv, apoi reporniți pentru a le aplica.",
+      "autoUpdateLabel": "Actualizare automată",
       "autoResumeOnPlaybackError": "Reluare automată la eroare de redare",
       "autoResumeOnPlaybackErrorDescription": "Continuați automat căutarea altor surse atunci când sursa curentă eșuează în timpul redării. Dacă este dezactivată, veți vedea un ecran de eroare cu o opțiune de reluare manuală.",
       "autoResumeOnPlaybackErrorLabel": "Reluare automată la eroare de redare",
@@ -1387,10 +1406,7 @@
       "thumbnail": "Generați pictograme",
       "thumbnailDescription": "De cele mai multe ori videoclipurile nu au pictograme. Puteți activa această setare pentru a le genera din mers, dar vă pot încetini videoclipul.",
       "thumbnailLabel": "Generați pictograme",
-      "title": "Preferințe",
-      "autoUpdate": "Actualizare automată",
-      "autoUpdateDescription": "Descărcați actualizările în fundal când computerul este inactiv, apoi reporniți pentru a le aplica.",
-      "autoUpdateLabel": "Actualizare automată"
+      "title": "Preferințe"
     },
     "reset": "Resetare",
     "save": "Salvează",

@@ -311,7 +311,6 @@
       "disclaimer": "Clause de non-responsabilité",
       "dmca": "DMCA / Retrait",
       "terms": "Conditions d'utilisation",
-      "tmdbAttribution": "Les métadonnées et les affiches des films sont fournies par l'API TMDB (non approuvées ni certifiées par TMDB).",
       "disclaimerText": "Framezoo ne traite pas les flux vidéo. Ses serveurs peuvent relayer les sous-titres du fournisseur et traiter temporairement l'audio et les sous-titres pour la synchronisation lorsque vous activez cette fonction. Vous contrôlez le contenu que vous regardez."
     },
     "links": {
@@ -485,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Résultats de la recherche"
+      "sectionTitle": "Résultats de la recherche",
+      "aiSectionTitle": "Résultats de recherche IA",
+      "aiPlaceholder": "Décrivez ce que vous souhaitez regarder (intrigue, ambiance, genre, pays...)",
+      "switchToNormal": "Passer à la recherche standard",
+      "switchToAi": "Passez à la recherche en langage naturel par IA",
+      "aiRateLimited": "Trop de recherches IA sont en cours. Veuillez patienter un instant et réessayer.",
+      "aiGuide": {
+        "title": "Essayez la recherche en langage naturel par intrigue, titres similaires, ambiance ou époque :",
+        "plotLabel": "Parcelle",
+        "plotQuery": "Film sur un homme souffrant de pertes de mémoire à court terme qui se tatoue des indices pour retrouver l'assassin de sa femme",
+        "similarLabel": "Similaire à",
+        "similarQuery": "Thriller psychologique coréen avec un rebondissement scénaristique à la Parasite",
+        "moodLabel": "Humeur",
+        "moodQuery": "Un anime émouvant sur le voyage dans le temps qui vous fera pleurer",
+        "eraLabel": "Pays et époque",
+        "eraQuery": "Comédie d'action hongkongaise des années 90"
+      }
     },
     "support": {
       "complete": "complet",
@@ -672,7 +687,8 @@
       "items": {
         "bookmarks": "Médias favoris",
         "progress": "Regarder les progrès",
-        "settings": "Paramètres et préférences"
+        "settings": "Paramètres et préférences",
+        "watchHistory": "Historique des visionnages"
       },
       "uploadDescription": "Données à télécharger :"
     },
@@ -1359,6 +1375,9 @@
       "autoplay": "Lecture automatique",
       "autoplayDescription": "Permet de lire automatiquement le prochain épisode d’une série une fois l’épisode actuel terminé.",
       "autoplayLabel": "Lecture automatique",
+      "autoUpdate": "Mise à jour automatique",
+      "autoUpdateDescription": "Téléchargez les mises à jour en arrière-plan lorsque votre ordinateur est inactif, puis redémarrez-le pour les appliquer.",
+      "autoUpdateLabel": "Mise à jour automatique",
       "autoResumeOnPlaybackError": "Reprise automatique en cas d'erreur de lecture",
       "autoResumeOnPlaybackErrorDescription": "Continuez automatiquement la recherche d'autres sources lorsque la source actuelle échoue pendant la lecture. S'il est désactivé, vous verrez un écran d'erreur avec une option de reprise manuelle.",
       "autoResumeOnPlaybackErrorLabel": "Reprise automatique en cas d'erreur de lecture",
@@ -1387,10 +1406,7 @@
       "thumbnail": "Générer les miniatures",
       "thumbnailDescription": "La plupart du temps, les vidéos n'ont pas de miniatures. Vous pouvez activer ce paramètre pour les générer à la volée, mais ils peuvent ralentir votre vidéo.",
       "thumbnailLabel": "Générer les miniatures",
-      "title": "Préférences",
-      "autoUpdate": "Mise à jour automatique",
-      "autoUpdateDescription": "Téléchargez les mises à jour en arrière-plan lorsque votre ordinateur est inactif, puis redémarrez-le pour les appliquer.",
-      "autoUpdateLabel": "Mise à jour automatique"
+      "title": "Préférences"
     },
     "reset": "Réinitialiser",
     "save": "Sauvegarder",

@@ -707,3 +707,31 @@ img.loaded:not(.no-fade) {
 img[complete]:not(.no-fade):not([src=""]) {
   opacity: 1;
 }
+
+@keyframes ai-border-spin {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.ai-search-border-beam {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 220%;
+  aspect-ratio: 1 / 1;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg 205deg,
+    rgba(var(--colors-type-logo) / 0.95) 275deg,
+    rgba(var(--colors-global-accentA) / 0.85) 318deg,
+    rgba(var(--colors-type-logo) / 0.45) 342deg,
+    transparent 360deg
+  );
+  animation: ai-border-spin 3.2s linear infinite;
+  will-change: transform;
+}

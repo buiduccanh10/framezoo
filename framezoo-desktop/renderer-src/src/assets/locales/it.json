@@ -311,7 +311,6 @@
       "disclaimer": "Disclaimer",
       "dmca": "DMCA / Rimozione",
       "terms": "Termini di servizio",
-      "tmdbAttribution": "I metadati e le locandine dei film sono forniti tramite l'API di TMDB (non approvati né certificati da TMDB).",
       "disclaimerText": "Framezoo non gestisce sorgenti di streaming video. I suoi server possono inoltrare i sottotitoli del fornitore ed elaborare temporaneamente audio e sottotitoli per la sincronizzazione quando si sceglie questa funzione. Il contenuto riprodotto è sotto il tuo controllo."
     },
     "links": {
@@ -485,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Risultati di ricerca"
+      "sectionTitle": "Risultati di ricerca",
+      "aiSectionTitle": "Risultati della ricerca basata sull'intelligenza artificiale",
+      "aiPlaceholder": "Descrivi cosa vorresti guardare (trama, atmosfera, genere, paese...).",
+      "switchToNormal": "Passa alla ricerca standard",
+      "switchToAi": "Passa alla ricerca in linguaggio naturale basata sull'intelligenza artificiale",
+      "aiRateLimited": "Troppe ricerche basate sull'intelligenza artificiale in corso. Attendi qualche istante e riprova.",
+      "aiGuide": {
+        "title": "Prova a effettuare una ricerca in linguaggio naturale per trama, titoli simili, atmosfera o epoca:",
+        "plotLabel": "Complotto",
+        "plotQuery": "Film su un uomo affetto da amnesia a breve termine che si tatua degli indizi per trovare l'assassino di sua moglie.",
+        "similarLabel": "Corrispondenza",
+        "similarQuery": "Thriller psicologico coreano con colpi di scena in stile Parasite",
+        "moodLabel": "Umore",
+        "moodQuery": "Un anime emozionante sui viaggi nel tempo che ti farà piangere.",
+        "eraLabel": "Paese ed epoca",
+        "eraQuery": "Commedia d'azione di Hong Kong degli anni '90"
+      }
     },
     "support": {
       "complete": "completare",
@@ -672,7 +687,8 @@
       "items": {
         "bookmarks": "Supporti contrassegnati con segnalibri",
         "progress": "Guarda i progressi",
-        "settings": "Impostazioni e preferenze"
+        "settings": "Impostazioni e preferenze",
+        "watchHistory": "Cronologia degli orologi"
       },
       "uploadDescription": "Dati da caricare:"
     },
@@ -1359,6 +1375,9 @@
       "autoplay": "Riproduzione automatica",
       "autoplayDescription": "Riproduci automaticamente l'episodio successivo di una serie dopo aver raggiunto la fine.",
       "autoplayLabel": "Riproduzione automatica",
+      "autoUpdate": "Aggiornamento automatico",
+      "autoUpdateDescription": "Scarica gli aggiornamenti in background quando il computer è inattivo, quindi riavvialo per applicarli.",
+      "autoUpdateLabel": "Aggiornamento automatico",
       "autoResumeOnPlaybackError": "Ripresa automatica in caso di errore di riproduzione",
       "autoResumeOnPlaybackErrorDescription": "Continua automaticamente la ricerca di altre fonti quando la fonte corrente fallisce durante la riproduzione. Se disabilitato, vedrai una schermata di errore con un'opzione di ripristino manuale.",
       "autoResumeOnPlaybackErrorLabel": "Ripresa automatica in caso di errore di riproduzione",
@@ -1387,10 +1406,7 @@
       "thumbnail": "Genera miniature",
       "thumbnailDescription": "Nella maggior parte dei casi, i video non hanno miniature. Puoi abilitare questa impostazione per generarli al volo, ma possono rallentare il tuo video.",
       "thumbnailLabel": "Genera miniature",
-      "title": "Preferenze",
-      "autoUpdate": "Aggiornamento automatico",
-      "autoUpdateDescription": "Scarica gli aggiornamenti in background quando il computer è inattivo, quindi riavvialo per applicarli.",
-      "autoUpdateLabel": "Aggiornamento automatico"
+      "title": "Preferenze"
     },
     "reset": "Ripristina",
     "save": "Salva",
