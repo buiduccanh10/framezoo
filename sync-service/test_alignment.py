@@ -986,6 +986,64 @@ Let's move out.
         self.assertIsNotNone(primary.get("rateRatio"))
         self.assertAlmostEqual(primary["rateRatio"], ratio, delta=0.0003)
 
+    def test_detects_small_linear_drift_below_framerate_threshold(self):
+        ratio = 0.99975
+        offset0 = 1_800
+        centers = (90_000, 480_000, 960_000, 1_440_000, 1_920_000, 2_370_000)
+        jitters = (120, -150, 80, -100, 140, -130)
+        entries = []
+        for center_ms, jitter_ms in zip(centers, jitters):
+            offset = int(round(offset0 + (1.0 - 1.0 / ratio) * center_ms + jitter_ms))
+            result = self.make_aligned_result(offset, 88)
+            result["speechAnchorCount"] = 4
+            result["speechAnchorCoverage"] = 0.6
+            entries.append(
+                {
+                    "startAt": center_ms / 1_000.0,
+                    "midMs": center_ms,
+                    "result": result,
+                }
+            )
+
+        consensus = select_alignment_consensus(entries)
+
+        self.assertTrue(consensus["aligned"])
+        self.assertAlmostEqual(consensus["rateRatio"], ratio, delta=0.00008)
+        self.assertLessEqual(abs(consensus["offsetMs"] - offset0), 150)
+
+        vtt_data, windows = self._build_drifted_vtt_and_windows(
+            [(center_ms, jitter_ms, True) for center_ms, jitter_ms in zip(centers, jitters)],
+            rate_ratio=ratio,
+            offset0_ms=offset0,
+        )
+        primary = align_speech_windows(
+            windows,
+            [{"track": "primary", "vttData": vtt_data}],
+        )["results"]["primary"]
+        self.assertTrue(primary["aligned"])
+        self.assertAlmostEqual(primary["rateRatio"], ratio, delta=0.00008)
+
+    def test_does_not_promote_one_local_offset_to_global_drift(self):
+        centers = (90_000, 480_000, 960_000, 1_440_000, 1_920_000, 2_370_000)
+        offsets = (1_800, 1_800, 1_800, 2_800, 1_800, 1_800)
+        entries = []
+        for center_ms, offset in zip(centers, offsets):
+            result = self.make_aligned_result(offset, 88)
+            result["speechAnchorCount"] = 4
+            result["speechAnchorCoverage"] = 0.6
+            entries.append(
+                {
+                    "startAt": center_ms / 1_000.0,
+                    "midMs": center_ms,
+                    "result": result,
+                }
+            )
+
+        consensus = select_alignment_consensus(entries)
+
+        self.assertTrue(consensus["aligned"])
+        self.assertIsNone(consensus.get("rateRatio"))
+
     def test_two_wide_windows_fit_broadcast_fps_drift(self):
         ratio = 25.0 / 24.0
         offset0 = -1_000

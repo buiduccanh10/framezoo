@@ -52,6 +52,15 @@ SPEECH_ANCHOR_END_WEIGHT = 0.35
 SPEECH_ANCHOR_EARLY_START_PENALTY_WEIGHT = 0.15
 MIN_RATE_RATIO = 0.95
 MAX_RATE_RATIO = 1.05
+# Small drift needs stronger evidence than broadcast-FPS drift because a few
+# hundred milliseconds of per-window matching jitter can look linear.
+MIN_SMALL_DRIFT_RATE_DELTA = 0.00005
+MIN_SMALL_DRIFT_INLIERS = 4
+MIN_SMALL_DRIFT_SPAN_MS = 600_000
+MIN_SMALL_DRIFT_ENDPOINT_DELTA_MS = 350
+MAX_SMALL_DRIFT_RESIDUAL_MS = 450
+MIN_SMALL_DRIFT_RMSE_GAIN_MS = 50
+MIN_SMALL_DRIFT_R2 = 0.35
 _TRANSCRIPTION_LOCK = threading.Lock()
 
 
@@ -1747,6 +1756,169 @@ def _weighted_linear_fit(
     return slope, intercept
 
 
+def _has_consistent_drift_direction(
+    points: list[tuple[float, float, float, float, dict[str, Any]]],
+    slope: float,
+    minimum_match_ratio: float = 0.75,
+) -> bool:
+    if len(points) < 3:
+        return False
+    direction = 1 if slope > 1.0 else -1
+    direction_matches = 0
+    direction_checks = 0
+    sorted_points = sorted(points, key=lambda point: point[1])
+    for previous, current in zip(sorted_points, sorted_points[1:]):
+        delta = current[2] - previous[2]
+        if abs(delta) < 50:
+            continue
+        direction_checks += 1
+        if (1 if delta > 0 else -1) == direction:
+            direction_matches += 1
+    required_checks = max(2, min(3, len(sorted_points) - 1))
+    return (
+        direction_checks >= required_checks
+        and direction_matches / direction_checks >= minimum_match_ratio
+    )
+
+
+def _fit_small_linear_drift(
+    points: list[tuple[float, float, float, float, dict[str, Any]]],
+) -> dict[str, Any] | None:
+    """Fit sub-second cumulative drift without mistaking window jitter for drift."""
+    if len(points) < MIN_SMALL_DRIFT_INLIERS:
+        return None
+
+    sorted_points = sorted(points, key=lambda point: point[1])
+    min_inliers = max(
+        MIN_SMALL_DRIFT_INLIERS,
+        int(np.ceil(len(sorted_points) * 0.75)),
+    )
+    best: tuple[tuple[int, float, float], dict[str, Any]] | None = None
+
+    for i, first in enumerate(sorted_points[:-1]):
+        for last in sorted_points[i + 1 :]:
+            if last[1] - first[1] < MIN_SMALL_DRIFT_SPAN_MS:
+                continue
+            x_span = last[0] - first[0]
+            if x_span <= 0:
+                continue
+            candidate_slope = (last[1] - first[1]) / x_span
+            if not (MIN_RATE_RATIO <= candidate_slope <= MAX_RATE_RATIO):
+                continue
+            if abs(candidate_slope - 1.0) < MIN_SMALL_DRIFT_RATE_DELTA:
+                continue
+            candidate_intercept = first[1] - candidate_slope * first[0]
+            candidate_inliers = [
+                point
+                for point in sorted_points
+                if abs(
+                    point[1]
+                    - (candidate_slope * point[0] + candidate_intercept)
+                )
+                <= MAX_SMALL_DRIFT_RESIDUAL_MS
+            ]
+            if len(candidate_inliers) < min_inliers:
+                continue
+
+            fit = _weighted_linear_fit(
+                [point[0] for point in candidate_inliers],
+                [point[1] for point in candidate_inliers],
+                [point[3] for point in candidate_inliers],
+            )
+            if fit is None:
+                continue
+            slope, intercept = fit
+            if (
+                not (MIN_RATE_RATIO <= slope <= MAX_RATE_RATIO)
+                or abs(slope - 1.0) < MIN_SMALL_DRIFT_RATE_DELTA
+            ):
+                continue
+
+            inliers = [
+                point
+                for point in sorted_points
+                if abs(point[1] - (slope * point[0] + intercept))
+                <= MAX_SMALL_DRIFT_RESIDUAL_MS
+            ]
+            if len(inliers) < min_inliers:
+                continue
+            inliers.sort(key=lambda point: point[1])
+
+            predicted_drift_ms = abs(
+                (slope - 1.0) * (inliers[-1][0] - inliers[0][0])
+            )
+            if predicted_drift_ms < MIN_SMALL_DRIFT_ENDPOINT_DELTA_MS:
+                continue
+
+            weights = [point[3] for point in inliers]
+            weight_sum = sum(weights)
+            offset_values = [point[2] for point in inliers]
+            offset_mean = sum(
+                weight * offset
+                for weight, offset in zip(weights, offset_values)
+            ) / weight_sum
+            constant_rmse = float(
+                np.sqrt(
+                    sum(
+                        weight * (offset - offset_mean) ** 2
+                        for weight, offset in zip(weights, offset_values)
+                    )
+                    / weight_sum
+                )
+            )
+            linear_residuals = [
+                point[1] - (slope * point[0] + intercept)
+                for point in inliers
+            ]
+            linear_rmse = float(
+                np.sqrt(
+                    sum(
+                        weight * residual**2
+                        for weight, residual in zip(weights, linear_residuals)
+                    )
+                    / weight_sum
+                )
+            )
+            if (
+                max(abs(residual) for residual in linear_residuals)
+                > MAX_SMALL_DRIFT_RESIDUAL_MS
+                or constant_rmse - linear_rmse < MIN_SMALL_DRIFT_RMSE_GAIN_MS
+            ):
+                continue
+
+            offset_variance = sum(
+                weight * (offset - offset_mean) ** 2
+                for weight, offset in zip(weights, offset_values)
+            )
+            if offset_variance <= 1e-6:
+                continue
+            offset_r2 = 1.0 - sum(
+                weight * residual**2
+                for weight, residual in zip(weights, linear_residuals)
+            ) / offset_variance
+            if offset_r2 < MIN_SMALL_DRIFT_R2:
+                continue
+
+            if not _has_consistent_drift_direction(inliers, slope, 0.60):
+                continue
+
+            average_confidence = round(sum(weights) / len(inliers))
+            representative = max(inliers, key=lambda point: point[3])[4]["result"]
+            result = {
+                **representative,
+                "aligned": True,
+                "offsetMs": int(round(intercept)),
+                "rateRatio": round(float(slope), 6),
+                "confidence": average_confidence,
+                "reason": None,
+            }
+            rank = (len(inliers), predicted_drift_ms, -linear_rmse)
+            if best is None or rank > best[0]:
+                best = (rank, result)
+
+    return best[1] if best is not None else None
+
+
 def _fit_framerate_drift(
     valid_entries: list[dict[str, Any]],
 ) -> dict[str, Any] | None:
@@ -1763,7 +1935,9 @@ def _fit_framerate_drift(
         conf = max(1.0, float(entry["result"].get("confidence", 60)))
         points.append((t_s, t_v, offset_ms, conf, entry))
 
-    min_required_inliers = max(3, int(np.ceil(len(points) * 0.5)))
+    # A drift model must explain most windows; a short local timing jump is
+    # handled by the piecewise path instead of being promoted to global rate.
+    min_required_inliers = max(4, int(np.ceil(len(points) * 0.75)))
     best_model: dict[str, Any] | None = None
 
     if len(points) >= 3:
@@ -1813,6 +1987,8 @@ def _fit_framerate_drift(
                     len(inliers) < min_required_inliers
                     or (inliers[-1][1] - inliers[0][1]) < 180_000
                 ):
+                    continue
+                if not _has_consistent_drift_direction(inliers, slope):
                     continue
 
                 # Snap cleanly to broadcast FPS ratio when within 0.04% and errors stay <= 750ms
@@ -1923,7 +2099,10 @@ def _fit_framerate_drift(
                     "reason": None,
                 }
 
-    return best_model["result"] if best_model is not None else None
+    if best_model is not None:
+        return best_model["result"]
+
+    return _fit_small_linear_drift(points)
 
 
 def select_alignment_consensus(
