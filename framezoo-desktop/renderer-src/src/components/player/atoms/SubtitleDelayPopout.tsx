@@ -3,14 +3,12 @@ import { useTranslation } from "react-i18next";
 import { Icon, Icons } from "@/components/Icon";
 import { Flare } from "@/components/utils/Flare";
 import { Transition } from "@/components/utils/Transition";
-import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { usePlayerStore } from "@/stores/player/store";
 import { useSubtitleStore } from "@/stores/subtitles";
 
 export function SubtitleDelayPopout() {
   const { t } = useTranslation();
   const showDelayIndicator = useSubtitleStore((s) => s.showDelayIndicator);
-  const currentOverlay = useOverlayStack((s) => s.currentOverlay);
   const activeSubtitleTrack = usePlayerStore((s) => s.caption.activeTrack);
   const primaryDelay = useSubtitleStore((s) => s.primaryDelay);
   const secondaryDelay = useSubtitleStore((s) => s.secondaryDelay);
@@ -20,8 +18,8 @@ export function SubtitleDelayPopout() {
   return (
     <Transition
       animation="slide-down"
-      show={showDelayIndicator && currentOverlay === "subtitle"}
-      className="absolute inset-x-0 top-4 flex justify-center pointer-events-none"
+      show={showDelayIndicator}
+      className="flex w-full justify-center pointer-events-none"
     >
       <Flare.Base className="hover:flare-enabled pointer-events-auto bg-video-context-background pl-4 pr-6 py-3 group w-72 h-full rounded-lg transition-colors text-video-context-type-main">
         <Flare.Light

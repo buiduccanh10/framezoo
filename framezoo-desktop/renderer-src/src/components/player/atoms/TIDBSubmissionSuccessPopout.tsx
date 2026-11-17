@@ -23,7 +23,12 @@ export function TIDBSubmissionSuccessPopout() {
 
       // Auto-dismiss after 3 seconds (same as volume popout)
       timeoutRef.current = setTimeout(() => {
-        setCurrentOverlay(null);
+        if (
+          useOverlayStack.getState().currentOverlay ===
+          "tidb-submission-success"
+        ) {
+          setCurrentOverlay(null);
+        }
       }, 3e3);
     }
 
@@ -39,7 +44,7 @@ export function TIDBSubmissionSuccessPopout() {
     <Transition
       animation="slide-down"
       show={currentOverlay === "tidb-submission-success"}
-      className="absolute inset-x-0 top-4 flex justify-center pointer-events-none"
+      className="flex w-full justify-center pointer-events-none"
     >
       <Flare.Base className="hover:flare-enabled pointer-events-auto bg-video-context-background pl-4 pr-6 py-3 group w-80 h-full rounded-lg transition-colors text-video-context-type-main">
         <Flare.Light

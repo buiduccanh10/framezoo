@@ -3,7 +3,6 @@ import { t } from "i18next";
 import { Icon, Icons } from "@/components/Icon";
 import { Flare } from "@/components/utils/Flare";
 import { Transition } from "@/components/utils/Transition";
-import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { usePlayerStore } from "@/stores/player/store";
 
 export function SpeedChangedPopout() {
@@ -11,14 +10,13 @@ export function SpeedChangedPopout() {
   const showSpeedIndicator = usePlayerStore(
     (s) => s.interface.showSpeedIndicator,
   );
-  const currentOverlay = useOverlayStack((s) => s.currentOverlay);
   const playbackRate = usePlayerStore((s) => s.mediaPlaying.playbackRate);
 
   return (
     <Transition
       animation="slide-down"
-      show={showSpeedIndicator && currentOverlay === "speed"}
-      className="absolute inset-x-0 top-4 flex justify-center pointer-events-none"
+      show={showSpeedIndicator}
+      className="flex w-full justify-center pointer-events-none"
     >
       <Flare.Base className="hover:flare-enabled pointer-events-auto bg-video-context-background pl-4 pr-6 py-3 group w-20 h-full rounded-lg transition-colors text-video-context-type-main">
         <Flare.Light

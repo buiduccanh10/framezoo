@@ -478,10 +478,12 @@ export function PlayerPart(props: PlayerPartProps) {
             </div>
           </Player.BottomControls>
 
-          <Player.VolumeChangedPopout />
-          <Player.SubtitleDelayPopout />
-          <Player.SpeedChangedPopout />
-          <Player.TIDBSubmissionSuccessPopout />
+          <Player.PopoutStack controlsShown={showTargets}>
+            <Player.VolumeChangedPopout />
+            <Player.SubtitleDelayPopout />
+            <Player.SpeedChangedPopout />
+            <Player.TIDBSubmissionSuccessPopout />
+          </Player.PopoutStack>
 
           <Player.NextEpisodeButton
             controlsShowing={showTargets}

@@ -297,7 +297,9 @@ export function VideoClickTarget(props: { showingControls: boolean }) {
 
         speedIndicatorTimeoutRef.current = setTimeout(() => {
           setShowSpeedIndicator(false);
-          setCurrentOverlay(null);
+          if (useOverlayStack.getState().currentOverlay === "speed") {
+            setCurrentOverlay(null);
+          }
           speedIndicatorTimeoutRef.current = null;
         }, 1500);
       } else {
@@ -340,7 +342,9 @@ export function VideoClickTarget(props: { showingControls: boolean }) {
 
       speedIndicatorTimeoutRef.current = setTimeout(() => {
         setShowSpeedIndicator(false);
-        setCurrentOverlay(null);
+        if (useOverlayStack.getState().currentOverlay === "speed") {
+          setCurrentOverlay(null);
+        }
         speedIndicatorTimeoutRef.current = null;
       }, 1500);
     }
