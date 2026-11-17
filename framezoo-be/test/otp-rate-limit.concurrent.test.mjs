@@ -1,7 +1,28 @@
 import assert from 'node:assert/strict';
 import { createHash, randomUUID } from 'node:crypto';
+import fs from 'node:fs';
+import { registerHooks } from 'node:module';
+import process from 'node:process';
 import test from 'node:test';
 import Redis from 'ioredis';
+
+if (typeof registerHooks === 'function') {
+  registerHooks({
+    resolve(specifier, context, nextResolve) {
+      if (
+        (specifier.startsWith('./') || specifier.startsWith('../')) &&
+        !/\.[a-z]+$/i.test(specifier) &&
+        context.parentURL?.startsWith('file:')
+      ) {
+        const candidate = new URL(`${specifier}.ts`, context.parentURL);
+        if (fs.existsSync(candidate)) {
+          return { url: candidate.href, shortCircuit: true };
+        }
+      }
+      return nextResolve(specifier, context);
+    },
+  });
+}
 
 const redisUrl = process.env.TEST_REDIS_URL;
 

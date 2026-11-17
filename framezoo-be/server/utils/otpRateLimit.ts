@@ -1,5 +1,6 @@
 import { createHash } from 'node:crypto';
-import Redis from 'ioredis';
+import type Redis from 'ioredis';
+import { createFailFastRedis } from './rateLimitRedis';
 
 type RateLimitInput = {
   email: string;
@@ -36,43 +37,10 @@ end
 return {1, 0}
 `;
 
-const getRedis = () => {
-  const redisUrl =
-    process.env.REDIS_URL ||
-    `redis://${process.env.REDIS_HOST || 'localhost'}:${process.env.REDIS_PORT || '6379'}`;
-  return new Redis(redisUrl, {
-    lazyConnect: true,
-    maxRetriesPerRequest: 1,
-    enableOfflineQueue: false,
-    retryStrategy: () => null,
-  });
-};
+const otpRedis = createFailFastRedis();
 
-let redis: Redis | null = null;
-let redisConnectPromise: Promise<void> | null = null;
-
-const getClient = () => {
-  if (!redis) {
-    redis = getRedis();
-    redis.on('error', () => {});
-  }
-  return redis;
-};
-
-const ensureConnected = async (client: Redis) => {
-  if (client.status === 'ready') return;
-  if (!redisConnectPromise) {
-    redisConnectPromise = client.connect().finally(() => {
-      redisConnectPromise = null;
-    });
-  }
-  await redisConnectPromise;
-};
-
-export const closeOtpRateLimit = () => {
-  redis?.disconnect();
-  redis = null;
-  redisConnectPromise = null;
+export const closeOtpRateLimit = (): void => {
+  otpRedis.reset();
 };
 
 const getPositiveInt = (value: string | undefined, fallback: number) => {
@@ -109,9 +77,9 @@ export async function enforceOtpRateLimit(input: RateLimitInput): Promise<RateLi
     );
   }
 
+  let client: Redis | undefined;
   try {
-    const client = getClient();
-    await ensureConnected(client);
+    client = await otpRedis.getConnectedClient();
     const result = (await client.eval(script, keys.length, ...keys, ...args)) as [number, number];
     const allowed = Number(result[0]) === 1;
     return {
@@ -119,7 +87,7 @@ export async function enforceOtpRateLimit(input: RateLimitInput): Promise<RateLi
       retryAfterSeconds: Math.max(1, Math.ceil(Number(result[1] || 0) / 1000)),
     };
   } catch (error) {
-    closeOtpRateLimit();
+    if (client) otpRedis.reset(client);
     throw new Error('OTP_RATE_LIMIT_UNAVAILABLE', { cause: error });
   }
 }
