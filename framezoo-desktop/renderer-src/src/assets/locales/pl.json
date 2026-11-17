@@ -484,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Wyniki wyszukiwania"
+      "sectionTitle": "Wyniki wyszukiwania",
+      "aiSectionTitle": "Wyniki wyszukiwania AI",
+      "aiPlaceholder": "Opisz, co chcesz obejrzeć (fabuła, nastrój, gatunek, kraj...)",
+      "switchToNormal": "Przełącz na wyszukiwanie standardowe",
+      "switchToAi": "Przejdź na wyszukiwanie w języku naturalnym za pomocą sztucznej inteligencji",
+      "aiRateLimited": "Zbyt wiele wyszukiwań AI. Poczekaj chwilę i spróbuj ponownie.",
+      "aiGuide": {
+        "title": "Wypróbuj wyszukiwanie w języku naturalnym według fabuły, podobnych tytułów, nastroju lub epoki:",
+        "plotLabel": "Działka",
+        "plotQuery": "film o mężczyźnie z utratą pamięci krótkotrwałej, który tatuuje wskazówki, aby znaleźć zabójcę swojej żony",
+        "similarLabel": "Podobnie jak",
+        "similarQuery": "Koreański thriller psychologiczny z zaskakującym zwrotem akcji, jak w filmie „Parasite”",
+        "moodLabel": "Nastrój",
+        "moodQuery": "emocjonalne anime o podróżach w czasie, które doprowadza Cię do łez",
+        "eraLabel": "Kraj i epoka",
+        "eraQuery": "Komedia akcji z Hongkongu z lat 90."
+      }
     },
     "support": {
       "complete": "kompletny",

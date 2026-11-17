@@ -484,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Zoekresultaten"
+      "sectionTitle": "Zoekresultaten",
+      "aiSectionTitle": "AI-zoekresultaten",
+      "aiPlaceholder": "Beschrijf wat je wilt kijken (verhaal, sfeer, genre, land...).",
+      "switchToNormal": "Schakel over naar standaard zoeken",
+      "switchToAi": "Schakel over naar AI-gestuurd zoeken in natuurlijke taal.",
+      "aiRateLimited": "Er worden momenteel te veel AI-zoekopdrachten uitgevoerd. Wacht even en probeer het later opnieuw.",
+      "aiGuide": {
+        "title": "Probeer eens te zoeken met behulp van natuurlijke taal op basis van plot, vergelijkbare titels, sfeer of tijdperk:",
+        "plotLabel": "Verhaallijn",
+        "plotQuery": "Een film over een man met kortetermijngeheugenverlies die aanwijzingen tatoeëert om de moordenaar van zijn vrouw te vinden.",
+        "similarLabel": "Vergelijkbaar met",
+        "similarQuery": "Koreaanse psychologische thriller met een plotwending zoals in Parasite.",
+        "moodLabel": "Stemming",
+        "moodQuery": "Een emotionele anime over tijdreizen die je tot tranen toe roert.",
+        "eraLabel": "Land en tijdperk",
+        "eraQuery": "Actiekomedie uit Hongkong uit de jaren 90"
+      }
     },
     "support": {
       "complete": "compleet",

@@ -484,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Resultados da busca"
+      "sectionTitle": "Resultados da busca",
+      "aiSectionTitle": "Resultados de busca de IA",
+      "aiPlaceholder": "Describe o que queres ver (argumento, ambiente, xénero, país...)",
+      "switchToNormal": "Cambiar á busca estándar",
+      "switchToAi": "Cambiar á busca en linguaxe natural con IA",
+      "aiRateLimited": "Demasiadas buscas con IA agora mesmo. Agarde un momento e inténteo de novo.",
+      "aiGuide": {
+        "title": "Proba a busca en linguaxe natural por trama, títulos semellantes, estado de ánimo ou época:",
+        "plotLabel": "Trama",
+        "plotQuery": "Unha película sobre un home con perda de memoria a curto prazo que tatua pistas para atopar ao asasino da súa muller.",
+        "similarLabel": "Semellante a",
+        "similarQuery": "Thriller psicolóxico coreano cun xiro argumental como Parasite",
+        "moodLabel": "Estado de ánimo",
+        "moodQuery": "Un anime de viaxes no tempo emotivas que che fai chorar",
+        "eraLabel": "País e época",
+        "eraQuery": "Comedia de acción de Hong Kong dos anos 90"
+      }
     },
     "support": {
       "complete": "completo",

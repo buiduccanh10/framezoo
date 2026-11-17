@@ -484,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Výsledky vyhledávání"
+      "sectionTitle": "Výsledky vyhledávání",
+      "aiSectionTitle": "Výsledky vyhledávání s umělou inteligencí",
+      "aiPlaceholder": "Popište, co chcete sledovat (děj, nálada, žánr, země...)",
+      "switchToNormal": "Přepnout na standardní vyhledávání",
+      "switchToAi": "Přepnout na vyhledávání v přirozeném jazyce s využitím umělé inteligence",
+      "aiRateLimited": "Příliš mnoho vyhledávání pomocí umělé inteligence. Počkejte chvíli a zkuste to znovu.",
+      "aiGuide": {
+        "title": "Zkuste vyhledávání v přirozeném jazyce podle zápletky, podobných názvů, nálady nebo éry:",
+        "plotLabel": "Spiknutí",
+        "plotQuery": "film o muži s krátkodobou ztrátou paměti, který si tetuje stopy, aby našel vraha své ženy",
+        "similarLabel": "Podobné jako",
+        "similarQuery": "Korejský psychologický thriller se zápletkou podobnou filmu Parazit",
+        "moodLabel": "Nálada",
+        "moodQuery": "emotivní anime s cestováním v čase, které vás donutí plakat",
+        "eraLabel": "Země a éra",
+        "eraQuery": "Hongkongská akční komedie z 90. let"
+      }
     },
     "support": {
       "complete": "kompletní",

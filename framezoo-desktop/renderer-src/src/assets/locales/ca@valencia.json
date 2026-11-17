@@ -484,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Resultats de la cerca"
+      "sectionTitle": "Resultats de la cerca",
+      "aiSectionTitle": "Resultats de cerca d'IA",
+      "aiPlaceholder": "Descriu què vols veure (argument, ambient, gènere, país...)",
+      "switchToNormal": "Canvia a la cerca estàndard",
+      "switchToAi": "Canvia a la cerca en llenguatge natural per IA",
+      "aiRateLimited": "Hi ha massa cerques amb IA ara mateix. Espereu un moment i torneu-ho a provar.",
+      "aiGuide": {
+        "title": "Prova la cerca en llenguatge natural per trama, títols similars, estat d'ànim o època:",
+        "plotLabel": "Trama",
+        "plotQuery": "Pel·lícula sobre un home amb pèrdua de memòria a curt termini que tatua pistes per trobar l'assassí de la seva dona",
+        "similarLabel": "Similar a",
+        "similarQuery": "Thriller psicològic coreà amb un gir argumental com Paràsits",
+        "moodLabel": "Estat d'ànim",
+        "moodQuery": "Anime emotiu de viatges en el temps que et fa plorar",
+        "eraLabel": "País i època",
+        "eraQuery": "Comèdia d'acció dels anys 90 a Hong Kong"
+      }
     },
     "support": {
       "complete": "completa",

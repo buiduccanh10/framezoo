@@ -484,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Leitar niðurstöður"
+      "sectionTitle": "Leitar niðurstöður",
+      "aiSectionTitle": "Leitarniðurstöður gervigreindar",
+      "aiPlaceholder": "Lýstu því sem þú vilt horfa á (söguþráður, stemning, tegund, land...)",
+      "switchToNormal": "Skipta yfir í staðlaða leit",
+      "switchToAi": "Skipta yfir í leit að náttúrulegu tungumáli með gervigreind",
+      "aiRateLimited": "Of margar gervigreindarleitir núna. Vinsamlegast bíðið andartak og reynið aftur.",
+      "aiGuide": {
+        "title": "Prófaðu leit á náttúrulegu máli eftir söguþræði, svipuðum titlum, stemningu eða tímabili:",
+        "plotLabel": "Söguþráður",
+        "plotQuery": "Mynd um mann með skammtímaminnisskerðingu sem húðflúrar vísbendingar til að finna morðingja konu sinnar.",
+        "similarLabel": "Líkt og",
+        "similarQuery": "Kóresk sálfræðitryllir með söguþráð eins og Parasite",
+        "moodLabel": "Stemning",
+        "moodQuery": "Tilfinningaþrungin tímaferðalags-anime sem fær þig til að gráta",
+        "eraLabel": "Land og tímabil",
+        "eraQuery": "Hasargamanmynd frá Hong Kong frá níunda áratugnum"
+      }
     },
     "support": {
       "complete": "lokið",

@@ -5,6 +5,7 @@ import { isValidInternalApiRequest } from '~/utils/internalApi';
 const isPublicApiRequest = (path: string, method: string) => {
   // Subtitle alignment uses only submitted audio/caption data; guest or user token required.
   if (method === 'POST' && path === '/api/subtitle-align') return true;
+  if (method === 'POST' && path === '/api/ai/search') return true;
   if (method !== 'GET') return false;
   if (path === '/api/skip-segments') return true;
   if (path.startsWith('/addon/subtitles/')) return true;

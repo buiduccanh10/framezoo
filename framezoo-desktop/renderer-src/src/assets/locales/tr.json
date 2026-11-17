@@ -484,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Arama sonuçları"
+      "sectionTitle": "Arama sonuçları",
+      "aiSectionTitle": "Yapay zeka arama sonuçları",
+      "aiPlaceholder": "İzlemek istediğiniz şeyi tarif edin (konu, atmosfer, tür, ülke...).",
+      "switchToNormal": "Standart aramaya geç",
+      "switchToAi": "Yapay zekâ doğal dil aramasına geçin",
+      "aiRateLimited": "Şu anda çok fazla yapay zeka araması yapılıyor. Lütfen bir dakika bekleyin ve tekrar deneyin.",
+      "aiGuide": {
+        "title": "Konu, benzer başlıklar, ruh hali veya döneme göre doğal dil araması yapmayı deneyin:",
+        "plotLabel": "Komplo",
+        "plotQuery": "Kısa süreli hafıza kaybı yaşayan bir adamın, karısının katilini bulmak için ipuçlarını dövmelerle işlemesini konu alan film.",
+        "similarLabel": "Benzer şekilde",
+        "similarQuery": "Parazit gibi sürprizli bir olay örgüsüne sahip Kore yapımı psikolojik gerilim filmi.",
+        "moodLabel": "Mod",
+        "moodQuery": "Sizi ağlatacak duygusal zaman yolculuğu animesi.",
+        "eraLabel": "Ülke ve dönem",
+        "eraQuery": "90'lar Hong Kong aksiyon komedisi"
+      }
     },
     "support": {
       "complete": "tamamlamak",

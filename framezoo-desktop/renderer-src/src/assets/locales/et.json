@@ -484,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Otsingutulemused"
+      "sectionTitle": "Otsingutulemused",
+      "aiSectionTitle": "Tehisintellekti otsingutulemused",
+      "aiPlaceholder": "Kirjelda, mida sa vaadata tahad (süžee, meeleolu, žanr, riik...)",
+      "switchToNormal": "Lülitu tavalisele otsingule",
+      "switchToAi": "Lülitu tehisintellekti loomuliku keele otsingule",
+      "aiRateLimited": "Liiga palju tehisintellekti otsinguid praegu. Palun oota hetk ja proovi uuesti.",
+      "aiGuide": {
+        "title": "Proovige loomuliku keele otsingut süžee, sarnaste pealkirjade, meeleolu või ajastu järgi:",
+        "plotLabel": "Krunt",
+        "plotQuery": "Film lühiajalise mälukaotusega mehest, kes tätoveerib vihjeid oma naise tapja leidmiseks",
+        "similarLabel": "Sarnane",
+        "similarQuery": "Korea psühholoogiline põnevik, mille süžee on keerdkäik nagu \"Parasiit\" sarjas.",
+        "moodLabel": "Meeleolu",
+        "moodQuery": "emotsionaalne ajareisi anime, mis paneb sind nutma",
+        "eraLabel": "Riik ja ajastu",
+        "eraQuery": "90ndate Hongkongi märulikomöödia"
+      }
     },
     "support": {
       "complete": "täielik",

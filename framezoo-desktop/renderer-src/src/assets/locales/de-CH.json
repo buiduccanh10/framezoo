@@ -484,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Suechergebniss"
+      "sectionTitle": "Suechergebniss",
+      "aiSectionTitle": "KI-Suchergebnisse",
+      "aiPlaceholder": "Beschreiben Sie, was Sie sehen möchten (Handlung, Stimmung, Genre, Land...).",
+      "switchToNormal": "Zur Standardsuche wechseln",
+      "switchToAi": "Wechseln Sie zur KI-gestützten natürlichen Sprachsuche",
+      "aiRateLimited": "Derzeit werden zu viele Suchanfragen von der KI ausgeführt. Bitte warten Sie einen Moment und versuchen Sie es erneut.",
+      "aiGuide": {
+        "title": "Versuchen Sie die Suche in natürlicher Sprache anhand von Handlung, ähnlichen Titeln, Stimmung oder Epoche:",
+        "plotLabel": "Handlung",
+        "plotQuery": "Film über einen Mann mit Kurzzeitgedächtnisverlust, der sich Hinweise tätowiert, um den Mörder seiner Frau zu finden.",
+        "similarLabel": "Ähnlich",
+        "similarQuery": "Koreanischer Psychothriller mit einer Handlungswendung wie in Parasite",
+        "moodLabel": "Stimmung",
+        "moodQuery": "Ein emotionaler Zeitreise-Anime, der dich zum Weinen bringt",
+        "eraLabel": "Land und Epoche",
+        "eraQuery": "Hongkong-Actionkomödie der 90er Jahre"
+      }
     },
     "support": {
       "complete": "vollständig",

@@ -484,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Rezultati iskanja"
+      "sectionTitle": "Rezultati iskanja",
+      "aiSectionTitle": "Rezultati iskanja z umetno inteligenco",
+      "aiPlaceholder": "Opišite, kaj želite gledati (zaplet, razpoloženje, žanr, država ...)",
+      "switchToNormal": "Preklopi na standardno iskanje",
+      "switchToAi": "Preklopi na iskanje v naravnem jeziku z umetno inteligenco",
+      "aiRateLimited": "Trenutno preveč iskanj z umetno inteligenco. Počakajte trenutek in poskusite znova.",
+      "aiGuide": {
+        "title": "Poskusite iskanje v naravnem jeziku po zapletu, podobnih naslovih, razpoloženju ali obdobju:",
+        "plotLabel": "Zaplet",
+        "plotQuery": "Film o moškem s kratkotrajno izgubo spomina, ki si tetovira namige, da bi našel morilca svoje žene",
+        "similarLabel": "Podobno kot",
+        "similarQuery": "Korejski psihološki triler z zapletom, podobnim Parazitu",
+        "moodLabel": "Razpoloženje",
+        "moodQuery": "Čustveni anime s potovanjem skozi čas, ki te spravi v jok",
+        "eraLabel": "Država in doba",
+        "eraQuery": "Akcijska komedija iz Hongkonga iz 90-ih"
+      }
     },
     "support": {
       "complete": "popolna",

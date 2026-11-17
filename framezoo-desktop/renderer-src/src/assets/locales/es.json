@@ -484,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Resultados de búsqueda"
+      "sectionTitle": "Resultados de búsqueda",
+      "aiSectionTitle": "resultados de búsqueda de IA",
+      "aiPlaceholder": "Describe qué quieres ver (argumento, ambiente, género, país...).",
+      "switchToNormal": "Cambiar a búsqueda estándar",
+      "switchToAi": "Cambiar a la búsqueda en lenguaje natural mediante IA",
+      "aiRateLimited": "Hay demasiadas búsquedas con IA en este momento. Por favor, espere un momento e inténtelo de nuevo.",
+      "aiGuide": {
+        "title": "Prueba la búsqueda en lenguaje natural por argumento, títulos similares, ambiente o época:",
+        "plotLabel": "Trama",
+        "plotQuery": "Película sobre un hombre con pérdida de memoria a corto plazo que se tatúa pistas para encontrar al asesino de su esposa.",
+        "similarLabel": "Similar a",
+        "similarQuery": "Thriller psicológico coreano con un giro argumental similar a Parasite.",
+        "moodLabel": "Ánimo",
+        "moodQuery": "Anime emotivo de viajes en el tiempo que te hará llorar",
+        "eraLabel": "País y época",
+        "eraQuery": "Comedia de acción de Hong Kong de los 90"
+      }
     },
     "support": {
       "complete": "completo",

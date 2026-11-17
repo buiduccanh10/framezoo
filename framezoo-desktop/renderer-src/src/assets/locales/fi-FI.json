@@ -484,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Hakutulokset"
+      "sectionTitle": "Hakutulokset",
+      "aiSectionTitle": "Tekoälyn hakutulokset",
+      "aiPlaceholder": "Kuvaile, mitä haluat katsoa (juoni, tunnelma, genre, maa...)",
+      "switchToNormal": "Vaihda normaaliin hakuun",
+      "switchToAi": "Vaihda tekoälyn luonnollisen kielen hakuun",
+      "aiRateLimited": "Liikaa tekoälyhakuja juuri nyt. Odota hetki ja yritä uudelleen.",
+      "aiGuide": {
+        "title": "Kokeile luonnollisen kielen hakua juonen, samankaltaisten nimikkeiden, tunnelman tai aikakauden mukaan:",
+        "plotLabel": "Juoni",
+        "plotQuery": "Elokuva lyhytkestoisen muistin heikkenemisestä kärsivästä miehestä, joka tatuoi vihjeitä löytääkseen vaimonsa murhaajan",
+        "similarLabel": "Samankaltainen kuin",
+        "similarQuery": "Korealainen psykologinen trilleri, jonka juonenkäänne on kuin Parasite",
+        "moodLabel": "Mieliala",
+        "moodQuery": "Tunteellinen aikamatka-anime, joka saa sinut itkemään",
+        "eraLabel": "Maa ja aikakausi",
+        "eraQuery": "90-luvun hongkongilainen toimintakomedia"
+      }
     },
     "support": {
       "complete": "täydellinen",

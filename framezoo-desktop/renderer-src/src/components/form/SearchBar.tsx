@@ -1,5 +1,6 @@
 import c from "classnames";
 import { forwardRef, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Flare } from "@/components/utils/Flare";
 
@@ -14,18 +15,23 @@ export interface SearchBarProps {
   isSticky?: boolean;
   isInFeatured?: boolean;
   hideTooltip?: boolean;
+  aiMode?: boolean;
+  onAiModeChange?: (enabled: boolean) => void;
   className?: string;
   style?: React.CSSProperties;
 }
 
 export const SearchBarInput = forwardRef<HTMLInputElement, SearchBarProps>(
   (props, ref) => {
+    const { t } = useTranslation();
     const [focused, setFocused] = useState(false);
     const [lightTheme, setLightTheme] = useState(
       Boolean(props.isInFeatured) && window.scrollY < 600,
     );
     const containerRef = useRef<HTMLDivElement>(null!);
     const [showTooltip, setShowTooltip] = useState(false);
+    const showAiSwitch = Boolean(props.onAiModeChange);
+    const isAiMode = showAiSwitch && Boolean(props.aiMode);
 
     function setSearch(value: string) {
       props.onChange(value, true);
@@ -62,45 +68,133 @@ export const SearchBarInput = forwardRef<HTMLInputElement, SearchBarProps>(
       >
         <Flare.Base
           className={c({
-            "hover:flare-enabled group flex flex-col rounded-[28px] transition-colors sm:flex-row sm:items-center relative backdrop-blur-sm": true,
+            "group flex flex-col rounded-[28px] transition-colors sm:flex-row sm:items-center relative backdrop-blur-sm": true,
+            "hover:flare-enabled": !isAiMode,
             "transition-colors duration-300": true,
             "bg-search-background/50": !focused && lightTheme,
             "bg-search-background":
               focused || props.isSticky || !props.isInFeatured,
           })}
         >
-          <Flare.Light
-            flareSize={400}
-            enabled={focused}
-            className="rounded-[28px]"
-            backgroundClass={c({
-              "transition-colors": true,
-              "bg-search-background": !focused,
-              "bg-search-focused": focused,
-            })}
-          />
-          <Flare.Child className="flex flex-1 flex-col">
+          {isAiMode ? (
             <div
-              className={c(
-                "absolute bottom-0 left-5 top-0 flex max-h-14 items-center text-search-icon cursor-pointer z-10",
-                "transition-colors duration-300",
-                props.isInFeatured
-                  ? lightTheme
-                    ? "text-white/50"
-                    : ""
-                  : "text-search-icon",
-              )}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                setShowTooltip(!showTooltip);
-                if (ref && typeof ref !== "function" && ref.current) {
-                  ref.current.focus();
-                }
-              }}
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 overflow-hidden rounded-[28px]"
             >
-              <Icon icon={Icons.SEARCH} />
+              <div
+                className={c(
+                  "ai-search-border-beam transition-opacity duration-300",
+                  focused ? "opacity-100" : "opacity-65 group-hover:opacity-95",
+                )}
+              />
+              <div
+                className={c(
+                  "absolute inset-[1.5px] rounded-[26.5px] transition-colors duration-300",
+                  focused ? "bg-search-focused" : "bg-search-background",
+                )}
+              />
             </div>
+          ) : (
+            <Flare.Light
+              flareSize={400}
+              enabled={focused}
+              className="rounded-[28px]"
+              backgroundClass={c({
+                "transition-colors": true,
+                "bg-search-background": !focused,
+                "bg-search-focused": focused,
+              })}
+            />
+          )}
+          <Flare.Child className="flex flex-1 flex-col">
+            {showAiSwitch ? (
+              <div
+                className="absolute bottom-0 left-2.5 top-0 flex max-h-14 items-center z-10"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="flex items-center gap-0.5 rounded-full bg-white/5 p-1 border border-white/10">
+                  <button
+                    type="button"
+                    aria-label={t("home.search.switchToNormal", {
+                      defaultValue: "Switch to standard search",
+                    })}
+                    title={t("home.search.switchToNormal", {
+                      defaultValue: "Switch to standard search",
+                    })}
+                    aria-pressed={!isAiMode}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (isAiMode) {
+                        props.onAiModeChange?.(false);
+                      } else {
+                        setShowTooltip(!showTooltip);
+                      }
+                      if (ref && typeof ref !== "function" && ref.current) {
+                        ref.current.focus();
+                      }
+                    }}
+                    className={c(
+                      "flex h-8 w-8 items-center justify-center rounded-full transition-colors duration-200",
+                      !isAiMode
+                        ? "bg-type-logo/20 text-type-logo shadow-sm"
+                        : "text-white/60 hover:text-white/90",
+                    )}
+                  >
+                    <Icon icon={Icons.SEARCH} className="text-sm" />
+                  </button>
+                  <button
+                    type="button"
+                    aria-label={t("home.search.switchToAi", {
+                      defaultValue: "Switch to AI natural language search",
+                    })}
+                    title={t("home.search.switchToAi", {
+                      defaultValue: "Switch to AI natural language search",
+                    })}
+                    aria-pressed={isAiMode}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setShowTooltip(false);
+                      props.onAiModeChange?.(true);
+                      if (ref && typeof ref !== "function" && ref.current) {
+                        ref.current.focus();
+                      }
+                    }}
+                    className={c(
+                      "flex h-8 w-8 items-center justify-center rounded-full transition-colors duration-200",
+                      isAiMode
+                        ? "bg-type-logo/20 text-type-logo shadow-sm"
+                        : "text-white/60 hover:text-white/90",
+                    )}
+                  >
+                    <Icon icon={Icons.AI_SPARKLES} className="text-sm" />
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div
+                className={c(
+                  "absolute bottom-0 left-5 top-0 flex max-h-14 items-center text-search-icon cursor-pointer z-10",
+                  "transition-colors duration-300",
+                  props.isInFeatured
+                    ? lightTheme
+                      ? "text-white/50"
+                      : ""
+                    : "text-search-icon",
+                )}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setShowTooltip(!showTooltip);
+                  if (ref && typeof ref !== "function" && ref.current) {
+                    ref.current.focus();
+                  }
+                }}
+              >
+                <Icon icon={Icons.SEARCH} />
+              </div>
+            )}
 
             <TextInputControl
               ref={ref}
@@ -112,7 +206,8 @@ export const SearchBarInput = forwardRef<HTMLInputElement, SearchBarProps>(
               onChange={(val) => setSearch(val)}
               value={props.value}
               className={c(
-                "w-full flex-1 bg-transparent px-4 py-4 pl-12 !text-search-text focus:outline-none sm:py-4 sm:pr-2 transition-colors duration-300",
+                "w-full flex-1 bg-transparent px-4 py-4 !text-search-text focus:outline-none sm:py-4 sm:pr-12 transition-colors duration-300",
+                showAiSwitch ? "pl-[6rem]" : "pl-12",
                 "transition-colors duration-300",
                 props.isInFeatured
                   ? lightTheme

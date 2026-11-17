@@ -1,16 +1,22 @@
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { Subject, from, of } from "rxjs";
+import { Subject, from, of, timer } from "rxjs";
 import {
   catchError,
-  debounceTime,
+  debounce,
+  map as rxMap,
   startWith,
   switchMap,
   tap,
 } from "rxjs/operators";
 
-import { enrichSearchResults, searchForMedia } from "@/backend/metadata/search";
+import {
+  type AiSearchIntentSummary,
+  enrichSearchResults,
+  searchForMedia,
+  searchForMediaWithAi,
+} from "@/backend/metadata/search";
 import { ActionPillButton } from "@/components/buttons/ActionPillButton";
 import { IconPatch } from "@/components/buttons/IconPatch";
 import { Dropdown, OptionItem } from "@/components/form/Dropdown";
@@ -28,7 +34,11 @@ function normalizeCountryCode(value?: string) {
   return value?.trim().toUpperCase() ?? "";
 }
 
-function SearchSuffix(props: { failed?: boolean; results?: number }) {
+function SearchSuffix(props: {
+  failed?: boolean;
+  errorMessage?: string;
+  results?: number;
+}) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const icon: Icons = props.failed ? Icons.WARNING : Icons.EYE_SLASH;
@@ -64,7 +74,7 @@ function SearchSuffix(props: { failed?: boolean; results?: number }) {
       {/* Error result */}
       {props.failed ? (
         <div>
-          <p>{t("home.search.failed")}</p>
+          <p>{props.errorMessage || t("home.search.failed")}</p>
         </div>
       ) : null}
     </div>
@@ -73,6 +83,7 @@ function SearchSuffix(props: { failed?: boolean; results?: number }) {
 
 export function SearchListPart({
   searchQuery,
+  aiMode = false,
   onShowDetails,
   filterCountry,
   filterYear,
@@ -85,6 +96,7 @@ export function SearchListPart({
   selectedYearOption,
 }: {
   searchQuery: string;
+  aiMode?: boolean;
   onShowDetails?: (media: MediaItem) => void;
   filterCountry?: string;
   filterYear?: string;
@@ -99,6 +111,7 @@ export function SearchListPart({
   const { t } = useTranslation();
 
   const [results, setResults] = useState<MediaItem[]>([]);
+  const [aiIntent, setAiIntent] = useState<AiSearchIntentSummary | null>(null);
   const [selectedGenreId, setSelectedGenreId] =
     useState<string>(ALL_GENRES_FILTER_ID);
   const { genres: movieGenres } = useDiscoverOptions("movie");
@@ -159,7 +172,9 @@ export function SearchListPart({
   const [error, setError] = useState<Error | null>(null);
 
   // Create a persistent Subject for the search query stream
-  const [searchSubject] = useState(() => new Subject<string>());
+  const [searchSubject] = useState(
+    () => new Subject<{ query: string; aiMode: boolean }>(),
+  );
 
   useEffect(() => {
     const sub = searchSubject
@@ -168,28 +183,67 @@ export function SearchListPart({
           setLoading(true);
           setError(null);
         }),
-        debounceTime(300),
-        switchMap((query) => {
-          if (!query) {
+        debounce((payload) => timer(payload.aiMode ? 750 : 300)),
+        switchMap(({ query, aiMode: useAi }) => {
+          const trimmed = query.trim();
+          if (!trimmed || (useAi && trimmed.length < 2)) {
             setLoading(false);
-            return of([]);
+            return of<{
+              items: MediaItem[];
+              intent: AiSearchIntentSummary | null;
+            }>({ items: [], intent: null });
           }
+
+          if (useAi) {
+            return from(searchForMediaWithAi({ searchQuery: trimmed })).pipe(
+              switchMap((aiResult) => {
+                if (!aiResult.items.length) {
+                  return of({ items: [], intent: aiResult.intent });
+                }
+                return from(
+                  enrichSearchResults(
+                    { searchQuery: `ai:${trimmed}` },
+                    aiResult.items,
+                  ),
+                ).pipe(
+                  rxMap((items) => ({ items, intent: aiResult.intent })),
+                  startWith({
+                    items: aiResult.items,
+                    intent: aiResult.intent,
+                  }),
+                );
+              }),
+              catchError((err) => {
+                setError(
+                  err instanceof Error ? err : new Error("Search failed"),
+                );
+                return of({ items: [], intent: null });
+              }),
+            );
+          }
+
           return from(searchForMedia({ searchQuery: query })).pipe(
             switchMap((rawResults) => {
-              if (!rawResults || rawResults.length === 0) return of([]);
+              if (!rawResults || rawResults.length === 0) {
+                return of({ items: [], intent: null });
+              }
               return from(
                 enrichSearchResults({ searchQuery: query }, rawResults),
-              ).pipe(startWith(rawResults));
+              ).pipe(
+                rxMap((items) => ({ items, intent: null })),
+                startWith({ items: rawResults, intent: null }),
+              );
             }),
             catchError((err) => {
               setError(err instanceof Error ? err : new Error("Search failed"));
-              return of([]);
+              return of({ items: [], intent: null });
             }),
           );
         }),
       )
-      .subscribe((finalResults) => {
-        setResults(finalResults);
+      .subscribe(({ items, intent }) => {
+        setResults(items);
+        setAiIntent(intent);
         setLoading(false);
       });
 
@@ -199,12 +253,12 @@ export function SearchListPart({
   }, [searchSubject]);
 
   useEffect(() => {
-    searchSubject.next(searchQuery);
-  }, [searchQuery, searchSubject]);
+    searchSubject.next({ query: searchQuery, aiMode });
+  }, [searchQuery, aiMode, searchSubject]);
 
   useEffect(() => {
     setSelectedGenreId(ALL_GENRES_FILTER_ID);
-  }, [searchQuery]);
+  }, [searchQuery, aiMode]);
 
   useEffect(() => {
     if (
@@ -215,16 +269,55 @@ export function SearchListPart({
     }
   }, [genreFilterOptions, selectedGenreId]);
 
+  const errorStatus =
+    (error as { statusCode?: number; status?: number } | null)?.statusCode ??
+    (error as { status?: number } | null)?.status;
+  const errorMessage =
+    errorStatus === 429
+      ? t("home.search.aiRateLimited", {
+          defaultValue:
+            "Too many AI searches right now. Please wait a moment and try again.",
+        })
+      : undefined;
+
   if (loading) return <SearchLoadingPart />;
-  if (error) return <SearchSuffix failed />;
+  if (error) return <SearchSuffix failed errorMessage={errorMessage} />;
   if (!results) return null;
 
   return (
     <div>
       <SectionHeading
-        title={t("home.search.sectionTitle")}
-        icon={Icons.SEARCH}
+        title={
+          aiMode
+            ? t("home.search.aiSectionTitle", {
+                defaultValue: "AI search results",
+              })
+            : t("home.search.sectionTitle")
+        }
+        icon={aiMode ? Icons.AI_SPARKLES : Icons.SEARCH}
       />
+
+      {aiMode && aiIntent?.summary ? (
+        <div className="mb-4 flex flex-wrap items-center gap-2 text-xs text-type-secondary">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-pill-background/60 px-3 py-1 text-type-text">
+            <Icon icon={Icons.AI_SPARKLES} className="text-[11px]" />
+            <span>{aiIntent.summary}</span>
+          </span>
+          {aiIntent.originCountries.map((code) => (
+            <span
+              key={code}
+              className="rounded-full bg-pill-background/40 px-2.5 py-1"
+            >
+              {code}
+            </span>
+          ))}
+          {aiIntent.yearFrom !== null || aiIntent.yearTo !== null ? (
+            <span className="rounded-full bg-pill-background/40 px-2.5 py-1">
+              {aiIntent.yearFrom ?? "..."} – {aiIntent.yearTo ?? "..."}
+            </span>
+          ) : null}
+        </div>
+      ) : null}
 
       <div className="mb-5">
         <div className="relative flex items-center">

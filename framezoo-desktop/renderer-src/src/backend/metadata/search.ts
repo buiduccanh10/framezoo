@@ -1,3 +1,5 @@
+import { mwFetch } from "@/backend/helpers/fetch";
+import { conf } from "@/setup/config";
 import { useLanguageStore } from "@/stores/language";
 import { SimpleCache } from "@/utils/cache";
 import { getTmdbLanguageCode } from "@/utils/language";
@@ -11,8 +13,29 @@ import {
   getMediaPoster,
   searchMedia,
 } from "./tmdb";
-import { TMDBContentTypes } from "./types/tmdb";
-import type { TMDBMovieData, TMDBShowData } from "./types/tmdb";
+import {
+  TMDBContentTypes,
+  type TMDBMovieData,
+  type TMDBMovieSearchResult,
+  type TMDBShowData,
+  type TMDBShowSearchResult,
+} from "./types/tmdb";
+
+export interface AiSearchIntentSummary {
+  intent: string;
+  mediaType: string;
+  summary: string;
+  genres: string[];
+  originCountries: string[];
+  yearFrom: number | null;
+  yearTo: number | null;
+  candidateTitles: string[];
+}
+
+export interface AiSearchResult {
+  intent: AiSearchIntentSummary;
+  items: MediaItem[];
+}
 
 export interface MWQuery {
   searchQuery: string;
@@ -34,6 +57,16 @@ cache.setCompare((a, b) => {
   );
 });
 cache.initialize();
+
+const aiCache = new SimpleCache<SearchCacheKey, AiSearchResult>();
+aiCache.setCompare((a, b) => {
+  return (
+    a.version === b.version &&
+    a.searchQuery.trim().toLowerCase() === b.searchQuery.trim().toLowerCase() &&
+    a.language === b.language
+  );
+});
+aiCache.initialize();
 
 // detect "tmdb:123456" or "tmdb:123456:movie" or "tmdb:123456:tv"
 const tmdbIdPattern = /^tmdb:(\d+)(?::(movie|tv))?$/i;
@@ -178,4 +211,65 @@ export async function enrichSearchResults(
 
   cache.set(cacheKey, enrichedResults, 3600);
   return enrichedResults;
+}
+
+export async function searchForMediaWithAi(
+  query: MWQuery,
+): Promise<AiSearchResult> {
+  const searchQuery = query.searchQuery.trim();
+  const language = getTmdbLanguageCode(useLanguageStore.getState().language);
+  const cacheKey: SearchCacheKey = {
+    searchQuery,
+    language,
+    version: SEARCH_CACHE_VERSION,
+  };
+
+  if (aiCache.has(cacheKey)) {
+    return aiCache.get(cacheKey) as AiSearchResult;
+  }
+
+  const backendUrl = conf().BACKEND_URL;
+  if (!backendUrl) {
+    throw new Error("Backend URL is not configured");
+  }
+
+  type AiSearchApiItem = (TMDBMovieSearchResult | TMDBShowSearchResult) & {
+    media_type: TMDBContentTypes;
+  };
+  interface AiSearchApiResponse {
+    ok: boolean;
+    intent: AiSearchIntentSummary;
+    results?: AiSearchApiItem[];
+  }
+
+  const response: AiSearchApiResponse = await mwFetch<AiSearchApiResponse>(
+    "/api/ai/search",
+    {
+      baseURL: backendUrl,
+      method: "POST",
+      body: {
+        query: searchQuery,
+        language,
+        mediaType: "all",
+      },
+    },
+  );
+
+  const items = (response.results ?? []).map((v: AiSearchApiItem) => {
+    const formattedResult = formatTMDBSearchResult(v, v.media_type);
+    const mediaItem = formatTMDBMetaToMediaItem(formattedResult);
+    return {
+      ...mediaItem,
+      genreIds: v.genre_ids,
+      originCountryCodes: getCountryCodesFromSearchResult(v),
+    };
+  });
+
+  const result: AiSearchResult = {
+    intent: response.intent,
+    items,
+  };
+
+  aiCache.set(cacheKey, result, 1800);
+  return result;
 }

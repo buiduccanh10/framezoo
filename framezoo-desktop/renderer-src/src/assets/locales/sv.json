@@ -484,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Sökresultat"
+      "sectionTitle": "Sökresultat",
+      "aiSectionTitle": "AI-sökresultat",
+      "aiPlaceholder": "Beskriv vad du vill titta på (handling, stämning, genre, land...)",
+      "switchToNormal": "Växla till standardsökning",
+      "switchToAi": "Växla till AI-sökning i naturligt språk",
+      "aiRateLimited": "För många AI-sökningar just nu. Vänta en stund och försök igen.",
+      "aiGuide": {
+        "title": "Prova sökning i naturligt språk efter handling, liknande titlar, stämning eller era:",
+        "plotLabel": "Tomt",
+        "plotQuery": "en film om en man med korttidsminnesförlust som tatuerar ledtrådar för att hitta sin frus mördare.",
+        "similarLabel": "Liknande till",
+        "similarQuery": "Koreansk psykologisk thriller med en twist som Parasite",
+        "moodLabel": "Humör",
+        "moodQuery": "känslomässig tidsreseanime som får dig att gråta",
+        "eraLabel": "Land och era",
+        "eraQuery": "90-talets actionkomedi från Hongkong"
+      }
     },
     "support": {
       "complete": "komplett",

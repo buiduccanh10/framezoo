@@ -34,7 +34,7 @@ const getPositiveInt = (value: string | undefined, fallback: number): number => 
   return Number.isFinite(parsed) && parsed > 0 ? Math.floor(parsed) : fallback;
 };
 
-const getRateLimitConfig = (path: string): RateLimitConfig => {
+export const getRateLimitConfig = (path: string): RateLimitConfig => {
   if (path === '/api/backup/login' || path.startsWith('/api/backup/login?')) {
     return {
       scope: 'admin-login',
@@ -62,6 +62,14 @@ const getRateLimitConfig = (path: string): RateLimitConfig => {
       scope: 'subtitle-align',
       windowMs: getPositiveInt(process.env.RATE_LIMIT_SUBTITLE_ALIGN_WINDOW_MS, 60_000),
       maxRequests: getPositiveInt(process.env.RATE_LIMIT_SUBTITLE_ALIGN_MAX_REQUESTS, 20),
+    };
+  }
+
+  if (path === '/api/ai/search' || path.startsWith('/api/ai/search?')) {
+    return {
+      scope: 'ai-search',
+      windowMs: getPositiveInt(process.env.RATE_LIMIT_AI_SEARCH_WINDOW_MS, 60_000),
+      maxRequests: getPositiveInt(process.env.RATE_LIMIT_AI_SEARCH_MAX_REQUESTS, 15),
     };
   }
 

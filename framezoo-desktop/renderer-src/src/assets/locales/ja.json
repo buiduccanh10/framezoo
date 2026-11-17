@@ -484,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "検索結果"
+      "sectionTitle": "検索結果",
+      "aiSectionTitle": "AI検索結果",
+      "aiPlaceholder": "見たい作品について説明してください（あらすじ、雰囲気、ジャンル、国など）。",
+      "switchToNormal": "標準検索に切り替える",
+      "switchToAi": "AI自然言語検索に切り替える",
+      "aiRateLimited": "現在、AIによる検索が集中しています。しばらくお待ちいただき、もう一度お試しください。",
+      "aiGuide": {
+        "title": "あらすじ、類似タイトル、雰囲気、時代など、自然言語による検索をお試しください。",
+        "plotLabel": "プロット",
+        "plotQuery": "短期記憶喪失の男が妻の殺人犯を見つける手がかりをタトゥーで刻む映画",
+        "similarLabel": "に似ている",
+        "similarQuery": "パラサイトのようなどんでん返しのある韓国の心理スリラー",
+        "moodLabel": "気分",
+        "moodQuery": "感動して泣けるタイムトラベルアニメ",
+        "eraLabel": "国と時代",
+        "eraQuery": "90年代香港アクションコメディ"
+      }
     },
     "support": {
       "complete": "完了",

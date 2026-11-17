@@ -484,7 +484,23 @@
           "UwU"
         ]
       },
-      "sectionTitle": "Keresési eredmények"
+      "sectionTitle": "Keresési eredmények",
+      "aiSectionTitle": "AI keresési eredmények",
+      "aiPlaceholder": "Írd le, mit szeretnél nézni (cselekmény, hangulat, műfaj, ország...)",
+      "switchToNormal": "Váltás normál keresésre",
+      "switchToAi": "Váltás mesterséges intelligencia által generált természetes nyelvi keresésre",
+      "aiRateLimited": "Túl sok mesterséges intelligencia keresés jelenleg. Kérjük, várjon egy pillanatot, és próbálja újra.",
+      "aiGuide": {
+        "title": "Próbálja ki a természetes nyelvű keresést cselekmény, hasonló címek, hangulat vagy korszak alapján:",
+        "plotLabel": "Telek",
+        "plotQuery": "Film egy rövid távú memóriazavarral küzdő férfiról, aki tetoválásokkal próbálja megtalálni felesége gyilkosát.",
+        "similarLabel": "Hasonló a következőhöz:",
+        "similarQuery": "Koreai pszichológiai thriller, olyan csavarral, mint a Parazit",
+        "moodLabel": "Hangulat",
+        "moodQuery": "érzelmes időutazós anime, amitől megríkatsz",
+        "eraLabel": "Ország és korszak",
+        "eraQuery": "90-es évekbeli hongkongi akcióvígjáték"
+      }
     },
     "support": {
       "complete": "teljes",

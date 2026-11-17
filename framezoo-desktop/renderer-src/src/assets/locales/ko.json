@@ -484,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "검색 결과"
+      "sectionTitle": "검색 결과",
+      "aiSectionTitle": "AI 검색 결과",
+      "aiPlaceholder": "보고 싶은 영화에 대해 설명해 주세요 (줄거리, 분위기, 장르, 국가 등).",
+      "switchToNormal": "표준 검색으로 전환",
+      "switchToAi": "AI 자연어 검색으로 전환하세요",
+      "aiRateLimited": "현재 AI 검색이 너무 많습니다. 잠시 기다렸다가 다시 시도해 주세요.",
+      "aiGuide": {
+        "title": "줄거리, 유사 제목, 분위기 또는 시대적 배경을 기준으로 자연어 검색을 시도해 보세요.",
+        "plotLabel": "구성",
+        "plotQuery": "단기 기억상실증에 걸린 남자가 아내의 살인범을 찾기 위해 단서를 문신으로 새기는 영화",
+        "similarLabel": "~와 유사한",
+        "similarQuery": "기생충처럼 반전이 있는 한국 심리 스릴러",
+        "moodLabel": "분위기",
+        "moodQuery": "눈물 나게 만드는 감동적인 시간 여행 애니메이션",
+        "eraLabel": "국가 및 시대",
+        "eraQuery": "90년대 홍콩 액션 코미디"
+      }
     },
     "support": {
       "complete": "완벽한",

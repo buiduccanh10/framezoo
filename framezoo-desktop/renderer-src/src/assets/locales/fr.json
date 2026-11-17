@@ -484,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Résultats de la recherche"
+      "sectionTitle": "Résultats de la recherche",
+      "aiSectionTitle": "Résultats de recherche IA",
+      "aiPlaceholder": "Décrivez ce que vous souhaitez regarder (intrigue, ambiance, genre, pays...)",
+      "switchToNormal": "Passer à la recherche standard",
+      "switchToAi": "Passez à la recherche en langage naturel par IA",
+      "aiRateLimited": "Trop de recherches IA sont en cours. Veuillez patienter un instant et réessayer.",
+      "aiGuide": {
+        "title": "Essayez la recherche en langage naturel par intrigue, titres similaires, ambiance ou époque :",
+        "plotLabel": "Parcelle",
+        "plotQuery": "Film sur un homme souffrant de pertes de mémoire à court terme qui se tatoue des indices pour retrouver l'assassin de sa femme",
+        "similarLabel": "Similaire à",
+        "similarQuery": "Thriller psychologique coréen avec un rebondissement scénaristique à la Parasite",
+        "moodLabel": "Humeur",
+        "moodQuery": "Un anime émouvant sur le voyage dans le temps qui vous fera pleurer",
+        "eraLabel": "Pays et époque",
+        "eraQuery": "Comédie d'action hongkongaise des années 90"
+      }
     },
     "support": {
       "complete": "complet",

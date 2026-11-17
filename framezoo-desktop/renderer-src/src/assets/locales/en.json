@@ -484,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Search results"
+      "sectionTitle": "Search results",
+      "aiSectionTitle": "AI search results",
+      "aiPlaceholder": "Describe what you want to watch (plot, mood, genre, country...)",
+      "switchToNormal": "Switch to standard search",
+      "switchToAi": "Switch to AI natural language search",
+      "aiRateLimited": "Too many AI searches right now. Please wait a moment and try again.",
+      "aiGuide": {
+        "title": "Try natural-language search by plot, similar titles, mood, or era:",
+        "plotLabel": "Plot",
+        "plotQuery": "movie about a man with short-term memory loss who tattoos clues to find his wife's killer",
+        "similarLabel": "Similar to",
+        "similarQuery": "Korean psychological thriller with a plot twist like Parasite",
+        "moodLabel": "Mood",
+        "moodQuery": "emotional time-travel anime that makes you cry",
+        "eraLabel": "Country & era",
+        "eraQuery": "90s Hong Kong action comedy"
+      }
     },
     "support": {
       "complete": "complete",

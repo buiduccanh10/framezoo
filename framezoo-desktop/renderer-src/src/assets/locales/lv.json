@@ -484,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Meklējuma rezultāti"
+      "sectionTitle": "Meklējuma rezultāti",
+      "aiSectionTitle": "Mākslīgā intelekta meklēšanas rezultāti",
+      "aiPlaceholder": "Aprakstiet, ko vēlaties skatīties (sižets, noskaņojums, žanrs, valsts...)",
+      "switchToNormal": "Pārslēgties uz standarta meklēšanu",
+      "switchToAi": "Pārslēgties uz mākslīgā intelekta dabiskās valodas meklēšanu",
+      "aiRateLimited": "Šobrīd ir pārāk daudz mākslīgā intelekta meklējumu. Lūdzu, uzgaidiet brīdi un mēģiniet vēlreiz.",
+      "aiGuide": {
+        "title": "Izmēģiniet dabiskās valodas meklēšanu pēc sižeta, līdzīgiem nosaukumiem, noskaņas vai laikmeta:",
+        "plotLabel": "Sižets",
+        "plotQuery": "Filma par vīrieti ar īslaicīgu atmiņas zudumu, kurš tetovē pavedienus, lai atrastu savas sievas slepkavu",
+        "similarLabel": "Līdzīgi kā",
+        "similarQuery": "Korejiešu psiholoģiskais trilleris ar sižeta pavērsienu, kas līdzīgs filmai \"Parazīts\".",
+        "moodLabel": "Garastāvoklis",
+        "moodQuery": "emocionāla laika ceļojumu anime, kas liek raudāt",
+        "eraLabel": "Valsts un laikmets",
+        "eraQuery": "90. gadu Honkongas asa sižeta komēdija"
+      }
     },
     "support": {
       "complete": "pabeigts",

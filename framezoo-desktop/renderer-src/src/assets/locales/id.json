@@ -484,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Hasil pencarian"
+      "sectionTitle": "Hasil pencarian",
+      "aiSectionTitle": "Hasil pencarian AI",
+      "aiPlaceholder": "Jelaskan apa yang ingin Anda tonton (alur cerita, suasana, genre, negara...).",
+      "switchToNormal": "Beralih ke pencarian standar",
+      "switchToAi": "Beralihlah ke pencarian bahasa alami berbasis AI.",
+      "aiRateLimited": "Saat ini terlalu banyak pencarian AI. Mohon tunggu sebentar dan coba lagi.",
+      "aiGuide": {
+        "title": "Cobalah pencarian bahasa alami berdasarkan alur cerita, judul serupa, suasana, atau era:",
+        "plotLabel": "Merencanakan",
+        "plotQuery": "Film tentang seorang pria yang menderita gangguan ingatan jangka pendek yang membuat tato berisi petunjuk untuk menemukan pembunuh istrinya.",
+        "similarLabel": "Mirip dengan",
+        "similarQuery": "Film thriller psikologis Korea dengan alur cerita yang penuh kejutan seperti Parasite.",
+        "moodLabel": "Suasana hati",
+        "moodQuery": "Anime perjalanan waktu yang emosional dan bikin kamu menangis.",
+        "eraLabel": "Negara & era",
+        "eraQuery": "Komedi aksi Hong Kong tahun 90-an"
+      }
     },
     "support": {
       "complete": "menyelesaikan",

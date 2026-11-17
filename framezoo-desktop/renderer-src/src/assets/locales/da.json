@@ -484,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Søgeresultater"
+      "sectionTitle": "Søgeresultater",
+      "aiSectionTitle": "AI-søgeresultater",
+      "aiPlaceholder": "Beskriv hvad du vil se (plot, stemning, genre, country...)",
+      "switchToNormal": "Skift til standardsøgning",
+      "switchToAi": "Skift til AI-søgning i naturligt sprog",
+      "aiRateLimited": "For mange AI-søgninger lige nu. Vent et øjeblik, og prøv igen.",
+      "aiGuide": {
+        "title": "Prøv søgning i naturligt sprog efter plot, lignende titler, stemning eller æra:",
+        "plotLabel": "Grund",
+        "plotQuery": "En film om en mand med korttidshukommelsestab, der tatoverer spor for at finde sin kones morder.",
+        "similarLabel": "Ligner",
+        "similarQuery": "Koreansk psykologisk thriller med et plottwist som Parasite",
+        "moodLabel": "Humør",
+        "moodQuery": "følelsesladet tidsrejse-anime, der får dig til at græde",
+        "eraLabel": "Land og æra",
+        "eraQuery": "90'ernes Hong Kong-actionkomedie"
+      }
     },
     "support": {
       "complete": "komplet",

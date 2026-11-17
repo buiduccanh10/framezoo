@@ -1,0 +1,21 @@
+name = "framezoo-ai-gateway"
+main = "src/worker.mjs"
+compatibility_date = "2025-03-05"
+
+[observability.logs]
+enabled = true
+
+[ai]
+binding = "AI"
+
+[vars]
+# Verified P/P winner: ~4.6s, ~39.5 neurons/request, exact Vietnamese plot-to-title & clean English TMDB keywords.
+AI_MODEL = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
+# Fast/cheap emergency fallback (~8 neurons/request, ~1.2s).
+AI_FAST_MODEL = "@cf/meta/llama-3.1-8b-instruct-fp8-fast"
+AI_ACCURATE_MODEL = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
+# Edge cache TTL in seconds for identical normalized queries (0 to disable).
+CACHE_TTL_SECONDS = "1800"
+
+# Required secret (do NOT put real secrets here):
+#   npx wrangler secret put GATEWAY_SECRET

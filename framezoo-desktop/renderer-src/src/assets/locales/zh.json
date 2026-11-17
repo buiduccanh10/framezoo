@@ -484,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "搜索结果"
+      "sectionTitle": "搜索结果",
+      "aiSectionTitle": "人工智能搜索结果",
+      "aiPlaceholder": "描述一下你想看的影片（剧情、氛围、类型、国家……）",
+      "switchToNormal": "切换到标准搜索",
+      "switchToAi": "切换到人工智能自然语言搜索",
+      "aiRateLimited": "目前AI搜索量过大，请稍等片刻后再试。",
+      "aiGuide": {
+        "title": "尝试按剧情、相似标题、氛围或年代进行自然语言搜索：",
+        "plotLabel": "阴谋",
+        "plotQuery": "一部讲述患有短期记忆丧失症的男子通过纹身来寻找杀害妻子凶手的电影。",
+        "similarLabel": "类似于",
+        "similarQuery": "韩国心理惊悚片，剧情反转类似《寄生虫》。",
+        "moodLabel": "情绪",
+        "moodQuery": "催泪的感人穿越动画",
+        "eraLabel": "国家与时代",
+        "eraQuery": "90年代香港动作喜剧"
+      }
     },
     "support": {
       "complete": "完全的",

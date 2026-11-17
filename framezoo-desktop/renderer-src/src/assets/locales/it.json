@@ -484,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Risultati di ricerca"
+      "sectionTitle": "Risultati di ricerca",
+      "aiSectionTitle": "Risultati della ricerca basata sull'intelligenza artificiale",
+      "aiPlaceholder": "Descrivi cosa vorresti guardare (trama, atmosfera, genere, paese...).",
+      "switchToNormal": "Passa alla ricerca standard",
+      "switchToAi": "Passa alla ricerca in linguaggio naturale basata sull'intelligenza artificiale",
+      "aiRateLimited": "Troppe ricerche basate sull'intelligenza artificiale in corso. Attendi qualche istante e riprova.",
+      "aiGuide": {
+        "title": "Prova a effettuare una ricerca in linguaggio naturale per trama, titoli simili, atmosfera o epoca:",
+        "plotLabel": "Complotto",
+        "plotQuery": "Film su un uomo affetto da amnesia a breve termine che si tatua degli indizi per trovare l'assassino di sua moglie.",
+        "similarLabel": "Corrispondenza",
+        "similarQuery": "Thriller psicologico coreano con colpi di scena in stile Parasite",
+        "moodLabel": "Umore",
+        "moodQuery": "Un anime emozionante sui viaggi nel tempo che ti farà piangere.",
+        "eraLabel": "Paese ed epoca",
+        "eraQuery": "Commedia d'azione di Hong Kong degli anni '90"
+      }
     },
     "support": {
       "complete": "completare",

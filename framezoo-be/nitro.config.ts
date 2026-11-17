@@ -66,5 +66,7 @@ export default defineNitroConfig({
     wyzieApiKey: '',
     subsourceApiKey: '',
     opensubtitlesApiKey: '',
+    aiGatewayUrl: '',
+    aiGatewaySecret: '',
   },
 });

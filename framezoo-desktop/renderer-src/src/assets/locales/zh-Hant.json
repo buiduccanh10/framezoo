@@ -484,7 +484,23 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "搜索結果"
+      "sectionTitle": "搜索結果",
+      "aiSectionTitle": "人工智慧搜尋結果",
+      "aiPlaceholder": "描述一下你想看的影片（劇情、氣氛、類型、國家…）",
+      "switchToNormal": "切換到標準搜尋",
+      "switchToAi": "切換到人工智慧自然語言搜尋",
+      "aiRateLimited": "目前AI搜尋量過大，請稍等片刻後再試。",
+      "aiGuide": {
+        "title": "嘗試按劇情、相似標題、氛圍或年代進行自然語言搜尋：",
+        "plotLabel": "陰謀",
+        "plotQuery": "一部講述患有短期記憶喪失症的男子透過刺青來尋找殺害妻子兇手的電影。",
+        "similarLabel": "類似",
+        "similarQuery": "韓國心理驚悚片，劇情反轉類似《寄生上流》。",
+        "moodLabel": "情緒",
+        "moodQuery": "催淚的感人穿越動畫",
+        "eraLabel": "國家與時代",
+        "eraQuery": "90年代香港動作喜劇"
+      }
     },
     "support": {
       "complete": "完全的",
