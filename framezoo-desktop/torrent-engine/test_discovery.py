@@ -464,8 +464,14 @@ class TorrentDiscoveryTest(unittest.TestCase):
         self.assertEqual(runtime.snapshot()["peersDiscovered"], 2)
         self.assertEqual(runtime.snapshot()["peersInjected"], 2)
 
-    def test_no_default_trackers_bundled(self):
-        self.assertEqual(discovery.constants.DEFAULT_TRACKERS, ())
+    def test_default_trackers_include_http_fallback(self):
+        trackers = discovery.normalize_trackers(discovery.constants.DEFAULT_TRACKERS)
+        self.assertEqual(len(trackers), len(discovery.constants.DEFAULT_TRACKERS))
+        self.assertIn("http://tracker.qu.ax:6969/announce", trackers)
+        self.assertIn("https://tracker.opentrackr.org:443/announce", trackers)
+        self.assertIn("udp://open.tracker.cl:1337/announce", trackers)
+        self.assertIn("udp://exodus.desync.com:6969/announce", trackers)
+        self.assertIn("http://tracker2.dler.org:80/announce", trackers)
 
     def test_network_change_rebinds_and_reactivates_active_swarm(self):
         from torrent_engine import LibtorrentEngine
@@ -523,6 +529,29 @@ class TorrentDiscoveryTest(unittest.TestCase):
                 "http://tracker.example/announce", SimpleNamespace(total_wanted=0),
             )
         self.assertEqual(announce.call_args.args[3], 49169)
+
+    def test_peerless_discovery_relaxes_single_interface_binding(self):
+        session = SimpleNamespace(apply_settings=Mock())
+        handle = SimpleNamespace(
+            status=lambda: SimpleNamespace(num_peers=0),
+            force_reannounce=Mock(),
+        )
+        runtime = discovery.TorrentDiscovery(
+            session,
+            handle,
+            lt.sha1_hash(b"2" * 20),
+            [],
+            b"1" * 20,
+            49160,
+        )
+        runtime.discovered_peers.add(("203.0.113.10", 6881))
+
+        self.assertTrue(runtime._relax_network_binding_if_peerless())
+        session.apply_settings.assert_called_once_with({
+            "listen_interfaces": "0.0.0.0:49160-49170",
+            "outgoing_interfaces": "",
+        })
+        handle.force_reannounce.assert_called_once_with()
 
     def test_udp_response_from_old_network_does_not_enable_utp(self):
         from torrent_engine import LibtorrentEngine

@@ -302,6 +302,7 @@ class TorrentDiscovery:
         self.retry_index = 0
         self.last_error: Optional[str] = None
         self.dht_running = False
+        self.network_binding_relaxed = False
         self.thread = threading.Thread(
             target=self._run,
             name="torrent-discovery",
@@ -526,7 +527,7 @@ class TorrentDiscovery:
 
         # Do not pin discovery to the first stale tracker response forever.
         # Rotate the bounded injection budget across the complete response so
-        # later cycles can try endpoints beyond the first 150 entries.
+        # later cycles can try endpoints beyond the first 200 entries.
         with self.lock:
             offset = self.peer_rotation % len(candidates)
             self.peer_rotation = (
@@ -574,6 +575,42 @@ class TorrentDiscovery:
             return max(0, int(getattr(status, "num_peers", 0)))
         except Exception:
             return 0
+
+    def _relax_network_binding_if_peerless(self) -> bool:
+        """Retry peer sockets on every NIC when discovery found endpoints."""
+        with self.lock:
+            if self.network_binding_relaxed or not self.discovered_peers:
+                return False
+        if self._connected_peers() > 0:
+            return False
+        apply_settings = getattr(self.session, "apply_settings", None)
+        if not callable(apply_settings):
+            return False
+        try:
+            apply_settings(
+                {
+                    "listen_interfaces": "0.0.0.0:49160-49170",
+                    "outgoing_interfaces": "",
+                },
+            )
+        except Exception as error:
+            with self.lock:
+                self.last_error = str(error)
+            return False
+        with self.lock:
+            self.network_binding_relaxed = True
+        force_reannounce = getattr(self.handle, "force_reannounce", None)
+        if callable(force_reannounce):
+            try:
+                force_reannounce()
+            except Exception:
+                pass
+        log_event(
+            "torrent network binding relaxed",
+            peersDiscovered=len(self.discovered_peers),
+            connectedPeers=self._connected_peers(),
+        )
+        return True
 
     def _wait_for_peer_deficit(self) -> bool:
         """Match peer-search: pause while the swarm has enough peers.
@@ -682,6 +719,7 @@ class TorrentDiscovery:
                 known_peers = [PeerAddress(h, p) for h, p in self.discovered_peers]
             if known_peers:
                 self._inject_peers(known_peers)
+        self._relax_network_binding_if_peerless()
 
         with self.lock:
             if self.stop_event.is_set():

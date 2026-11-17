@@ -115,7 +115,15 @@ class TorrentRecord:
         except Exception:
             pass
         try:
-            self.handle.set_sequential_download(True)
+            info = self.handle.torrent_file()
+            piece_length = int(info.piece_length()) if info is not None else 0
+            self.handle.set_sequential_download(
+                piece_length < getattr(
+                    constants,
+                    "LARGE_PIECE_THRESHOLD_BYTES",
+                    8 * 1024 * 1024,
+                ),
+            )
         except Exception:
             pass
         self.update_file_priorities()
