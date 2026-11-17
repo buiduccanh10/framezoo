@@ -566,9 +566,6 @@ export function SettingsScreen() {
           <Button compact label="Privacy Policy (Law 91/2025)" onPress={() => Linking.openURL('https://framezoo.top/legal/privacy').catch(() => undefined)} variant="secondary" />
           <Button compact label="Copyright / Notice & Takedown" onPress={() => Linking.openURL('https://framezoo.top/legal/dmca').catch(() => undefined)} variant="secondary" />
           <Button compact label="Addon Policy" onPress={() => Linking.openURL('https://framezoo.top/legal/addon-policy').catch(() => undefined)} variant="secondary" />
-          <AppText variant="caption">
-            This product uses the TMDB API but is not endorsed or certified by TMDB.
-          </AppText>
         </SettingsCard>
       </SettingsSection>
 
