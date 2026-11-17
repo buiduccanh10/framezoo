@@ -1,5 +1,6 @@
-import Redis from 'ioredis';
+import { createError, defineEventHandler, getRequestIP, setHeader } from 'h3';
 import { isValidInternalApiRequest } from '~/utils/internalApi';
+import { createFailFastRedis } from '~/utils/rateLimitRedis';
 
 interface MemoryCacheEntry {
   count: number;
@@ -7,7 +8,7 @@ interface MemoryCacheEntry {
 }
 
 const memoryCache = new Map<string, MemoryCacheEntry>();
-let redisClient: Redis | null = null;
+const rateLimitRedis = createFailFastRedis();
 let redisDisabledUntil = 0;
 
 setInterval(() => {
@@ -79,28 +80,13 @@ const getRateLimitConfig = (path: string): RateLimitConfig => {
   };
 };
 
-const getRedisClient = (): Redis => {
-  if (redisClient) return redisClient;
-
-  const redisUrl =
-    process.env.REDIS_URL ||
-    `redis://${process.env.REDIS_HOST || 'localhost'}:${process.env.REDIS_PORT || '6379'}`;
-  redisClient = new Redis(redisUrl, {
-    lazyConnect: true,
-    maxRetriesPerRequest: 1,
-    enableOfflineQueue: false,
-    retryStrategy: () => null,
-  });
-  redisClient.on('error', () => {});
-  return redisClient;
-};
-
 const incrementRedisCounter = async (key: string, ttlMs: number): Promise<number> => {
   if (Date.now() < redisDisabledUntil) {
     throw new Error('Redis rate limit temporarily disabled');
   }
 
-  const result = await getRedisClient().eval(RATE_LIMIT_LUA, 1, key, String(ttlMs));
+  const client = await rateLimitRedis.getConnectedClient();
+  const result = await client.eval(RATE_LIMIT_LUA, 1, key, String(ttlMs));
   return Number(result);
 };
 
@@ -143,9 +129,7 @@ export default defineEventHandler(async event => {
     count = await incrementRedisCounter(cacheKey, windowMs);
   } catch {
     redisDisabledUntil = Date.now() + 10_000;
-    const failedClient = redisClient;
-    redisClient = null;
-    failedClient?.disconnect();
+    rateLimitRedis.reset();
 
     const failClosed = String(process.env.RATE_LIMIT_FAIL_CLOSED).toLowerCase() === 'true';
     const isSensitivePath =
