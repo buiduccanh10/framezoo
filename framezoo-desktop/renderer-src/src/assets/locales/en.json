@@ -672,7 +672,8 @@
       "items": {
         "bookmarks": "Bookmarked media",
         "progress": "Watch progress",
-        "settings": "Settings & Preferences"
+        "settings": "Settings & Preferences",
+        "watchHistory": "Watch history"
       },
       "uploadDescription": "Data to upload:"
     },

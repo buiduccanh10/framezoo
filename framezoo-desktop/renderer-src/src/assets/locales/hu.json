@@ -672,7 +672,8 @@
       "items": {
         "bookmarks": "Könyvjelzővel ellátott média",
         "progress": "Figyelje a haladást",
-        "settings": "Beállítások és beállítások"
+        "settings": "Beállítások és beállítások",
+        "watchHistory": "Nézési előzmények"
       },
       "uploadDescription": "Feltöltendő adatok:"
     },
@@ -1359,6 +1360,9 @@
       "autoplay": "Autómatikus lejátszás",
       "autoplayDescription": "Automatikusan lejátsza a következő részt, amikor a mostani véget ért.",
       "autoplayLabel": "Automatikus lejátszás",
+      "autoUpdate": "Automatikus frissítés",
+      "autoUpdateDescription": "Töltse le a frissítéseket a háttérben, amikor a számítógép tétlen, majd indítsa újra a frissítéseket az alkalmazásukhoz.",
+      "autoUpdateLabel": "Automatikus frissítés",
       "autoResumeOnPlaybackError": "Automatikus folytatás lejátszáskor hiba",
       "autoResumeOnPlaybackErrorDescription": "Automatikusan folytassa a többi forrás keresését, ha az aktuális forrás lejátszás közben meghiúsul. Ha le van tiltva, hibaképernyő jelenik meg kézi folytatási lehetőséggel.",
       "autoResumeOnPlaybackErrorLabel": "Automatikus folytatás lejátszáskor hiba",
@@ -1387,10 +1391,7 @@
       "thumbnail": "Indexképek generálása",
       "thumbnailDescription": "A legtöbb esetben a videóknak nincs indexképe. Engedélyezheted ezt, hogy legeneráld őket menet közben, de belassíthatják a videódat.",
       "thumbnailLabel": "Indexképek generálása",
-      "title": "Preferenciák",
-      "autoUpdate": "Automatikus frissítés",
-      "autoUpdateDescription": "Töltse le a frissítéseket a háttérben, amikor a számítógép tétlen, majd indítsa újra a frissítéseket az alkalmazásukhoz.",
-      "autoUpdateLabel": "Automatikus frissítés"
+      "title": "Preferenciák"
     },
     "reset": "Alaphelyzetbe állítás",
     "save": "Mentés",

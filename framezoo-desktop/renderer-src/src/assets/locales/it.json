@@ -672,7 +672,8 @@
       "items": {
         "bookmarks": "Supporti contrassegnati con segnalibri",
         "progress": "Guarda i progressi",
-        "settings": "Impostazioni e preferenze"
+        "settings": "Impostazioni e preferenze",
+        "watchHistory": "Cronologia degli orologi"
       },
       "uploadDescription": "Dati da caricare:"
     },
@@ -1359,6 +1360,9 @@
       "autoplay": "Riproduzione automatica",
       "autoplayDescription": "Riproduci automaticamente l'episodio successivo di una serie dopo aver raggiunto la fine.",
       "autoplayLabel": "Riproduzione automatica",
+      "autoUpdate": "Aggiornamento automatico",
+      "autoUpdateDescription": "Scarica gli aggiornamenti in background quando il computer è inattivo, quindi riavvialo per applicarli.",
+      "autoUpdateLabel": "Aggiornamento automatico",
       "autoResumeOnPlaybackError": "Ripresa automatica in caso di errore di riproduzione",
       "autoResumeOnPlaybackErrorDescription": "Continua automaticamente la ricerca di altre fonti quando la fonte corrente fallisce durante la riproduzione. Se disabilitato, vedrai una schermata di errore con un'opzione di ripristino manuale.",
       "autoResumeOnPlaybackErrorLabel": "Ripresa automatica in caso di errore di riproduzione",
@@ -1387,10 +1391,7 @@
       "thumbnail": "Genera miniature",
       "thumbnailDescription": "Nella maggior parte dei casi, i video non hanno miniature. Puoi abilitare questa impostazione per generarli al volo, ma possono rallentare il tuo video.",
       "thumbnailLabel": "Genera miniature",
-      "title": "Preferenze",
-      "autoUpdate": "Aggiornamento automatico",
-      "autoUpdateDescription": "Scarica gli aggiornamenti in background quando il computer è inattivo, quindi riavvialo per applicarli.",
-      "autoUpdateLabel": "Aggiornamento automatico"
+      "title": "Preferenze"
     },
     "reset": "Ripristina",
     "save": "Salva",

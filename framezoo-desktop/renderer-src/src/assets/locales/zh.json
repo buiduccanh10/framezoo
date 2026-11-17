@@ -672,7 +672,8 @@
       "items": {
         "bookmarks": "已添加书签的媒体",
         "progress": "观看进度",
-        "settings": "设置和首选项"
+        "settings": "设置和首选项",
+        "watchHistory": "观看历史记录"
       },
       "uploadDescription": "待上传数据："
     },
@@ -1359,6 +1360,9 @@
       "autoplay": "自动播放",
       "autoplayDescription": "在系列节目（剧集）束后自动播放下一集。如果主机允许，用户可以使用浏览器扩展、自定义代理或默认设置启用。",
       "autoplayLabel": "自动播放",
+      "autoUpdate": "自动更新",
+      "autoUpdateDescription": "在电脑空闲时后台下载更新，然后重启电脑应用更新。",
+      "autoUpdateLabel": "自动更新",
       "autoResumeOnPlaybackError": "播放错误时自动恢复",
       "autoResumeOnPlaybackErrorDescription": "播放过程中当前源失败时自动继续搜索其他源。如果禁用，您将看到一个带有手动恢复选项的错误屏幕。",
       "autoResumeOnPlaybackErrorLabel": "播放错误时自动恢复",
@@ -1387,10 +1391,7 @@
       "thumbnail": "生成缩略图",
       "thumbnailDescription": "大多数时候，视频没有缩略图。您可以启用此设置以在视频播放时动态生成它们，但此选项可能会拖慢视频速度。",
       "thumbnailLabel": "生成缩略图",
-      "title": "偏好设置",
-      "autoUpdate": "自动更新",
-      "autoUpdateDescription": "在电脑空闲时后台下载更新，然后重启电脑应用更新。",
-      "autoUpdateLabel": "自动更新"
+      "title": "偏好设置"
     },
     "reset": "重设",
     "save": "保存",

@@ -672,7 +672,8 @@
       "items": {
         "bookmarks": "Favorilere eklenen medya",
         "progress": "İlerlemeyi izle",
-        "settings": "Ayarlar ve Tercihler"
+        "settings": "Ayarlar ve Tercihler",
+        "watchHistory": "Geçmişi izleyin"
       },
       "uploadDescription": "Yüklenecek veriler:"
     },
@@ -1359,6 +1360,9 @@
       "autoplay": "Otomatik oynatma",
       "autoplayDescription": "Sona ulaştıktan sonra serideki bir sonraki bölümü otomatik olarak oynatır.",
       "autoplayLabel": "Otomatik oynatma",
+      "autoUpdate": "Otomatik güncelleme",
+      "autoUpdateDescription": "Bilgisayarınız boştayken güncellemeleri arka planda indirin, ardından uygulamak için yeniden başlatın.",
+      "autoUpdateLabel": "Otomatik güncelleme",
       "autoResumeOnPlaybackError": "Oynatma hatasında otomatik devam etme",
       "autoResumeOnPlaybackErrorDescription": "Geçerli kaynak oynatma sırasında başarısız olduğunda diğer kaynakları aramaya otomatik olarak devam edin. Devre dışı bırakılırsa manuel devam etme seçeneğinin bulunduğu bir hata ekranı görürsünüz.",
       "autoResumeOnPlaybackErrorLabel": "Oynatma hatasında otomatik devam etme",
@@ -1387,10 +1391,7 @@
       "thumbnail": "Küçük resimler oluştur",
       "thumbnailDescription": "Çoğu video için ön izleme görseli bulunmaz. Bu ayarı etkinleştirerek anında oluşturulmasını sağlayabilirsiniz, ancak bu videonuzu yavaşlatabilir.",
       "thumbnailLabel": "Küçük resim oluştur",
-      "title": "Ayarlar",
-      "autoUpdate": "Otomatik güncelleme",
-      "autoUpdateDescription": "Bilgisayarınız boştayken güncellemeleri arka planda indirin, ardından uygulamak için yeniden başlatın.",
-      "autoUpdateLabel": "Otomatik güncelleme"
+      "title": "Ayarlar"
     },
     "reset": "Sıfırla",
     "save": "Kaydet",

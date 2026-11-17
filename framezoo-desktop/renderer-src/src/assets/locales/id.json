@@ -672,7 +672,8 @@
       "items": {
         "bookmarks": "Media yang ditandai",
         "progress": "Perhatikan kemajuannya",
-        "settings": "Pengaturan & Preferensi"
+        "settings": "Pengaturan & Preferensi",
+        "watchHistory": "Riwayat tontonan"
       },
       "uploadDescription": "Data yang akan diunggah:"
     },
@@ -1359,6 +1360,9 @@
       "autoplay": "Putar otomatis",
       "autoplayDescription": "Memutar episode berikutnya secara otomatis dalam sebuah serial setelah mencapai akhir.",
       "autoplayLabel": "Putar otomatis",
+      "autoUpdate": "Pembaruan otomatis",
+      "autoUpdateDescription": "Unduh pembaruan di latar belakang saat komputer Anda tidak digunakan, lalu mulai ulang untuk menerapkannya.",
+      "autoUpdateLabel": "Pembaruan otomatis",
       "autoResumeOnPlaybackError": "Lanjutkan otomatis pada kesalahan pemutaran",
       "autoResumeOnPlaybackErrorDescription": "Secara otomatis melanjutkan pencarian sumber lain ketika sumber saat ini gagal selama pemutaran. Jika dinonaktifkan, Anda akan melihat layar kesalahan dengan opsi melanjutkan manual.",
       "autoResumeOnPlaybackErrorLabel": "Lanjutkan otomatis pada kesalahan pemutaran",
@@ -1387,10 +1391,7 @@
       "thumbnail": "Hasilkan thumbnail",
       "thumbnailDescription": "Seringkali, video tidak memiliki thumbnail. Anda dapat mengaktifkan pengaturan ini untuk membuatnya dengan cepat, tetapi pengaturan ini dapat membuat video Anda lebih lambat.",
       "thumbnailLabel": "Hasilkan thumbnail",
-      "title": "Preferensi",
-      "autoUpdate": "Pembaruan otomatis",
-      "autoUpdateDescription": "Unduh pembaruan di latar belakang saat komputer Anda tidak digunakan, lalu mulai ulang untuk menerapkannya.",
-      "autoUpdateLabel": "Pembaruan otomatis"
+      "title": "Preferensi"
     },
     "reset": "Mengatur ulang",
     "save": "Simpan",

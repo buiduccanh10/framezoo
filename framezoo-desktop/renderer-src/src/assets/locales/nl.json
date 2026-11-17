@@ -672,7 +672,8 @@
       "items": {
         "bookmarks": "Media met bladwijzer",
         "progress": "Bekijk de voortgang",
-        "settings": "Instellingen en voorkeuren"
+        "settings": "Instellingen en voorkeuren",
+        "watchHistory": "Bekijk de geschiedenis"
       },
       "uploadDescription": "Gegevens om te uploaden:"
     },
@@ -1359,6 +1360,9 @@
       "autoplay": "Automatisch afspelen",
       "autoplayDescription": "Speel automatisch de volgende aflevering in een serie af nadat het einde is bereikt.",
       "autoplayLabel": "Automatisch afspelen",
+      "autoUpdate": "Automatische update",
+      "autoUpdateDescription": "Download updates op de achtergrond wanneer uw computer inactief is en start hem vervolgens opnieuw op om ze toe te passen.",
+      "autoUpdateLabel": "Automatische update",
       "autoResumeOnPlaybackError": "Automatisch hervatten bij afspeelfout",
       "autoResumeOnPlaybackErrorDescription": "Ga automatisch verder met zoeken naar andere bronnen wanneer de huidige bron uitvalt tijdens het afspelen. Indien uitgeschakeld, ziet u een foutscherm met een optie voor handmatig hervatten.",
       "autoResumeOnPlaybackErrorLabel": "Automatisch hervatten bij afspeelfout",
@@ -1387,10 +1391,7 @@
       "thumbnail": "Genereer miniaturen",
       "thumbnailDescription": "Meestal hebben video's geen miniaturen. Je kunt deze instelling inschakelen om ze dynamisch te genereren, maar dit kan je video vertragen.",
       "thumbnailLabel": "Genereer miniaturen",
-      "title": "Voorkeuren",
-      "autoUpdate": "Automatische update",
-      "autoUpdateDescription": "Download updates op de achtergrond wanneer uw computer inactief is en start hem vervolgens opnieuw op om ze toe te passen.",
-      "autoUpdateLabel": "Automatische update"
+      "title": "Voorkeuren"
     },
     "reset": "Resetten",
     "save": "Wijzigingen opslaan",

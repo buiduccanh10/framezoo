@@ -672,7 +672,8 @@
       "items": {
         "bookmarks": "Mit Lesezeichen versehene Medien",
         "progress": "Beobachten Sie den Fortschritt",
-        "settings": "Einstellungen und Präferenzen"
+        "settings": "Einstellungen und Präferenzen",
+        "watchHistory": "Watch History"
       },
       "uploadDescription": "Daten zum Hochladen:"
     },
@@ -1359,6 +1360,9 @@
       "autoplay": "Autoplay",
       "autoplayDescription": "Spelt automatisch die nöchscht Episode inere Serie ab, sobald s‘Endo erreicht esch.",
       "autoplayLabel": "Autoplay",
+      "autoUpdate": "Automatische Aktualisierung",
+      "autoUpdateDescription": "Laden Sie Updates im Hintergrund herunter, wenn Ihr Computer im Leerlauf ist, und starten Sie ihn anschließend neu, um sie anzuwenden.",
+      "autoUpdateLabel": "Automatische Aktualisierung",
       "autoResumeOnPlaybackError": "Automatische Fortsetzung bei Wiedergabefehler",
       "autoResumeOnPlaybackErrorDescription": "Automatische Suche nach anderen Quellen fortsetzen, wenn die aktuelle Quelle während der Wiedergabe ausfällt. Wenn diese Option deaktiviert ist, wird ein Fehlerbildschirm mit einer manuellen Fortsetzungsoption angezeigt.",
       "autoResumeOnPlaybackErrorLabel": "Automatische Fortsetzung bei Wiedergabefehler",
@@ -1387,10 +1391,7 @@
       "thumbnail": "Miniaturbeld generiere",
       "thumbnailDescription": "Meistens hei d’Videos kei Vorschaubilder. Du chasch die Option aktiviere, zum sie spontan generiere lo, aber das cha s’Video langsamer mache.",
       "thumbnailLabel": "Miniaturasecht generiere",
-      "title": "Präferenzen",
-      "autoUpdate": "Automatische Aktualisierung",
-      "autoUpdateDescription": "Laden Sie Updates im Hintergrund herunter, wenn Ihr Computer im Leerlauf ist, und starten Sie ihn anschließend neu, um sie anzuwenden.",
-      "autoUpdateLabel": "Automatische Aktualisierung"
+      "title": "Präferenzen"
     },
     "reset": "Zurogsetze",
     "save": "Spichere",

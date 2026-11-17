@@ -672,7 +672,8 @@
       "items": {
         "bookmarks": "Phương tiện đã đánh dấu",
         "progress": "Tiến trình xem",
-        "settings": "Cài đặt & Tùy chọn"
+        "settings": "Cài đặt & Tùy chọn",
+        "watchHistory": "Lịch sử xem"
       },
       "uploadDescription": "Dữ liệu để tải lên:"
     },
@@ -1359,6 +1360,9 @@
       "autoplay": "Tự động phát",
       "autoplayDescription": "Tự động phát tập tiếp theo trong một loạt phim sau khi kết thúc, nếu máy chủ cho phép tự động phát.",
       "autoplayLabel": "Tự động phát",
+      "autoUpdate": "Tự động cập nhật",
+      "autoUpdateDescription": "Tải xuống các bản cập nhật trong nền khi máy tính của bạn ở trạng thái rảnh rỗi, sau đó khởi động lại để áp dụng chúng.",
+      "autoUpdateLabel": "Tự động cập nhật",
       "autoResumeOnPlaybackError": "Tự động tiếp tục khi lỗi phát lại",
       "autoResumeOnPlaybackErrorDescription": "Tự động tiếp tục tìm kiếm các nguồn khác khi nguồn hiện tại thất bại trong quá trình phát lại. Nếu bị tắt, bạn sẽ thấy màn hình lỗi với tùy chọn tiếp tục thủ công.",
       "autoResumeOnPlaybackErrorLabel": "Tự động tiếp tục khi lỗi phát lại",
@@ -1387,10 +1391,7 @@
       "thumbnail": "Tạo hình thu nhỏ",
       "thumbnailDescription": "Hầu hết các video không có hình thu nhỏ. Bạn có thể bật cài đặt này để tạo chúng ngay lập tức nhưng chúng có thể làm video của bạn chạy chậm hơn.",
       "thumbnailLabel": "Tạo hình thu nhỏ",
-      "title": "Tùy chọn",
-      "autoUpdate": "Tự động cập nhật",
-      "autoUpdateDescription": "Tải xuống các bản cập nhật trong nền khi máy tính của bạn ở trạng thái rảnh rỗi, sau đó khởi động lại để áp dụng chúng.",
-      "autoUpdateLabel": "Tự động cập nhật"
+      "title": "Tùy chọn"
     },
     "reset": "Đặt lại",
     "save": "Lưu",

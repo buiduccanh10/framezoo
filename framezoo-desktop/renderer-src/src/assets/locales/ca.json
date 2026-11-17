@@ -672,7 +672,8 @@
       "items": {
         "bookmarks": "Mitjans marcats",
         "progress": "Observa el progrés",
-        "settings": "Configuració i preferències"
+        "settings": "Configuració i preferències",
+        "watchHistory": "Historial de visualitzacions"
       },
       "uploadDescription": "Dades a carregar:"
     },
@@ -1359,6 +1360,9 @@
       "autoplay": "Reproducció automàtica",
       "autoplayDescription": "Reprodueix automàticament el següent episodi d'una sèrie després d'arribar al final.",
       "autoplayLabel": "Reproducció automàtica",
+      "autoUpdate": "Actualització automàtica",
+      "autoUpdateDescription": "Baixeu les actualitzacions en segon pla quan l&#39;ordinador estigui inactiu i, a continuació, reinicieu-lo per aplicar-les.",
+      "autoUpdateLabel": "Actualització automàtica",
       "autoResumeOnPlaybackError": "Reprèn automàticament en cas d'error de reproducció",
       "autoResumeOnPlaybackErrorDescription": "Continueu cercant altres fonts automàticament quan la font actual falla durant la reproducció. Si està desactivat, veureu una pantalla d'error amb una opció de reinici manual.",
       "autoResumeOnPlaybackErrorLabel": "Reprèn automàticament en cas d'error de reproducció",
@@ -1387,10 +1391,7 @@
       "thumbnail": "Genera miniatures",
       "thumbnailDescription": "Majoritàriament, els vídeos no tenen miniatures. Podeu activar aquesta opció per a generar-les sobre la marxa, però poden alentir el vídeo.",
       "thumbnailLabel": "Genera miniatures",
-      "title": "Configuració",
-      "autoUpdate": "Actualització automàtica",
-      "autoUpdateDescription": "Baixeu les actualitzacions en segon pla quan l&#39;ordinador estigui inactiu i, a continuació, reinicieu-lo per aplicar-les.",
-      "autoUpdateLabel": "Actualització automàtica"
+      "title": "Configuració"
     },
     "reset": "Restableix",
     "save": "Desa",

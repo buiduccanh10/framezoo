@@ -672,7 +672,8 @@
       "items": {
         "bookmarks": "Bogmærkede medier",
         "progress": "Se fremskridt",
-        "settings": "Indstillinger og præferencer"
+        "settings": "Indstillinger og præferencer",
+        "watchHistory": "Se historik"
       },
       "uploadDescription": "Data, der skal uploades:"
     },
@@ -1359,6 +1360,9 @@
       "autoplay": "Autoplay",
       "autoplayDescription": "Afspil automatisk den næste episode i en serie, når den er slut.",
       "autoplayLabel": "Autoplay",
+      "autoUpdate": "Automatisk opdatering",
+      "autoUpdateDescription": "Download opdateringer i baggrunden, når din computer er inaktiv, og genstart derefter for at implementere dem.",
+      "autoUpdateLabel": "Automatisk opdatering",
       "autoResumeOnPlaybackError": "Automatisk genoptagelse ved afspilningsfejl",
       "autoResumeOnPlaybackErrorDescription": "Fortsæt automatisk med at søge efter andre kilder, når den aktuelle kilde fejler under afspilning. Hvis den er deaktiveret, vil du se en fejlskærm med mulighed for manuel genoptagelse.",
       "autoResumeOnPlaybackErrorLabel": "Automatisk genoptagelse ved afspilningsfejl",
@@ -1387,10 +1391,7 @@
       "thumbnail": "Generer miniaturebilleder",
       "thumbnailDescription": "Det meste af tiden har videoer ikke miniaturebilleder. Du kan aktivere denne indstilling for at generere dem undervejs, men de kan gøre din video mere langsom.",
       "thumbnailLabel": "Generer miniaturebilleder",
-      "title": "Præferencer",
-      "autoUpdate": "Automatisk opdatering",
-      "autoUpdateDescription": "Download opdateringer i baggrunden, når din computer er inaktiv, og genstart derefter for at implementere dem.",
-      "autoUpdateLabel": "Automatisk opdatering"
+      "title": "Præferencer"
     },
     "reset": "Nulstil",
     "save": "Gem",

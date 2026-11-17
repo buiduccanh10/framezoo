@@ -672,7 +672,8 @@
       "items": {
         "bookmarks": "Medios marcados",
         "progress": "Observa o progreso",
-        "settings": "Configuración e preferencias"
+        "settings": "Configuración e preferencias",
+        "watchHistory": "Historial de reprodución"
       },
       "uploadDescription": "Datos para cargar:"
     },
@@ -1359,6 +1360,9 @@
       "autoplay": "Reprodución automática",
       "autoplayDescription": "Reproduce automaticamente o seguinte episodio dunha serie despois de chegar ao final.",
       "autoplayLabel": "Reprodución automática",
+      "autoUpdate": "Actualización automática",
+      "autoUpdateDescription": "Descarga as actualizacións en segundo plano cando o computador estea inactivo e, a seguir, reinicia para aplicalas.",
+      "autoUpdateLabel": "Actualización automática",
       "autoResumeOnPlaybackError": "Reanudación automática ante un erro de reprodución",
       "autoResumeOnPlaybackErrorDescription": "Continúa buscando automaticamente outras fontes cando a fonte actual falla durante a reprodución. Se está desactivado, verá unha pantalla de erro cunha opción de currículo manual.",
       "autoResumeOnPlaybackErrorLabel": "Reanudación automática ante un erro de reprodución",
@@ -1387,10 +1391,7 @@
       "thumbnail": "Xerar miniaturas",
       "thumbnailDescription": "Na maioría das veces, os videos non teñen miniaturas. Podes activar esta configuración para xeralas ao momento, pero podes realentizar o video.",
       "thumbnailLabel": "Xerar miniaturas",
-      "title": "Preferencias",
-      "autoUpdate": "Actualización automática",
-      "autoUpdateDescription": "Descarga as actualizacións en segundo plano cando o computador estea inactivo e, a seguir, reinicia para aplicalas.",
-      "autoUpdateLabel": "Actualización automática"
+      "title": "Preferencias"
     },
     "reset": "Reinicio",
     "save": "Gardar",

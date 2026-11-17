@@ -672,7 +672,8 @@
       "items": {
         "bookmarks": "Média se záložkou",
         "progress": "Sledujte pokrok",
-        "settings": "Nastavení a předvolby"
+        "settings": "Nastavení a předvolby",
+        "watchHistory": "Historie sledování"
       },
       "uploadDescription": "Data k nahrání:"
     },
@@ -1359,6 +1360,9 @@
       "autoplay": "Automatické přehrávání",
       "autoplayDescription": "Automaticky přehrát další epizodu v sérii po dosažení konce.",
       "autoplayLabel": "Automatické přehrávání",
+      "autoUpdate": "Automatická aktualizace",
+      "autoUpdateDescription": "Stahujte aktualizace na pozadí, když je počítač nečinný, a poté je restartujte, aby se aktivovaly.",
+      "autoUpdateLabel": "Automatická aktualizace",
       "autoResumeOnPlaybackError": "Automatické obnovení při chybě přehrávání",
       "autoResumeOnPlaybackErrorDescription": "Automaticky pokračovat v hledání dalších zdrojů, když aktuální zdroj během přehrávání selže. Pokud je zakázáno, zobrazí se chybová obrazovka s možností ručního obnovení.",
       "autoResumeOnPlaybackErrorLabel": "Automatické obnovení při chybě přehrávání",
@@ -1387,10 +1391,7 @@
       "thumbnail": "Generovat miniatury",
       "thumbnailDescription": "Videa většinou nemají miniatury. Toto nastavení můžete povolit, ale mohou zpomalit vaše video.",
       "thumbnailLabel": "Generovat miniatury",
-      "title": "Preference",
-      "autoUpdate": "Automatická aktualizace",
-      "autoUpdateDescription": "Stahujte aktualizace na pozadí, když je počítač nečinný, a poté je restartujte, aby se aktivovaly.",
-      "autoUpdateLabel": "Automatická aktualizace"
+      "title": "Preference"
     },
     "reset": "Resetovat",
     "save": "Uložit",

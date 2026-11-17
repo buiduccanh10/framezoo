@@ -672,7 +672,8 @@
       "items": {
         "bookmarks": "Bókamerkt miðill",
         "progress": "Fylgstu með framförum",
-        "settings": "Stillingar og kjörstillingar"
+        "settings": "Stillingar og kjörstillingar",
+        "watchHistory": "Áhorfsferill"
       },
       "uploadDescription": "Gögn til að hlaða upp:"
     },
@@ -1359,6 +1360,9 @@
       "autoplay": "Sjálfvirk spilun",
       "autoplayDescription": "Spilaðu næsta þátt í röð sjálfkrafa eftir að lokinni er náð.",
       "autoplayLabel": "Sjálfvirk spilun",
+      "autoUpdate": "Sjálfvirk uppfærsla",
+      "autoUpdateDescription": "Hlaða niður uppfærslum í bakgrunni þegar tölvan er óvirk og endurræstu hana síðan til að virkja þær.",
+      "autoUpdateLabel": "Sjálfvirk uppfærsla",
       "autoResumeOnPlaybackError": "Sjálfvirk áframhald við spilunarvillu",
       "autoResumeOnPlaybackErrorDescription": "Haltu sjálfkrafa áfram að leita að öðrum heimildum þegar núverandi uppspretta bilar meðan á spilun stendur. Ef það er óvirkt muntu sjá villuskjá með handvirkum endurupptökuvalkosti.",
       "autoResumeOnPlaybackErrorLabel": "Sjálfvirk áframhald við spilunarvillu",
@@ -1387,10 +1391,7 @@
       "thumbnail": "Búa til smámyndir",
       "thumbnailDescription": "Oftast, hafa myndbönd ekki smámyndir. Þú getur látið þessa stillingu gera þær en það gæti gert myndbandið þitt hægara.",
       "thumbnailLabel": "Gera smámyndir",
-      "title": "Valstillingar",
-      "autoUpdate": "Sjálfvirk uppfærsla",
-      "autoUpdateDescription": "Hlaða niður uppfærslum í bakgrunni þegar tölvan er óvirk og endurræstu hana síðan til að virkja þær.",
-      "autoUpdateLabel": "Sjálfvirk uppfærsla"
+      "title": "Valstillingar"
     },
     "reset": "Endurstilla",
     "save": "Vista",

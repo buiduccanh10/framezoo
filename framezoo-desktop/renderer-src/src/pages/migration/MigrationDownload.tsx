@@ -6,7 +6,7 @@ import { Button } from "@/components/buttons/Button";
 import { Icon, Icons } from "@/components/Icon";
 import { SettingsCard } from "@/components/layout/SettingsCard";
 import { Stepper } from "@/components/layout/Stepper";
-import { CenterContainer } from "@/components/layout/ThinContainer";
+import { BiggerCenterContainer } from "@/components/layout/ThinContainer";
 import { Divider } from "@/components/utils/Divider";
 import { Heading2, Paragraph } from "@/components/utils/Text";
 import { getCustomAddons } from "@/desktop/addons/store";
@@ -130,14 +130,14 @@ export function MigrationDownloadPage() {
   return (
     <MinimalPageLayout>
       <PageTitle subpage k="global.pages.migration" />
-      <CenterContainer>
+      <BiggerCenterContainer>
         <div>
           <Stepper steps={2} current={2} className="mb-12" />
           <Heading2 className="!text-4xl">
             {t("migration.download.title")}
           </Heading2>
-          <div className="space-y-6 max-w-3xl mx-auto">
-            <Paragraph className="text-lg max-w-md">
+          <div className="space-y-6">
+            <Paragraph className="text-lg max-w-xl">
               {t("migration.download.description")}
             </Paragraph>
 
@@ -146,11 +146,11 @@ export function MigrationDownloadPage() {
                 <h3 className="font-bold text-white text-lg">
                   {t("migration.preview.downloadDescription")}
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <div className="p-4 bg-settings-card-altBackground rounded-lg border border-settings-card-border/40">
-                    <div className="flex items-center gap-2 text-type-link">
-                      <Icon icon={Icons.CLOCK} className="text-xl" />
-                      <span className="font-medium text-white">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="p-4 bg-settings-card-altBackground rounded-lg border border-settings-card-border/40 flex flex-col justify-between">
+                    <div className="flex items-center gap-2.5 text-type-link">
+                      <Icon icon={Icons.CLOCK} className="text-xl shrink-0" />
+                      <span className="font-medium text-white leading-snug">
                         {t("migration.preview.items.progress")}
                       </span>
                     </div>
@@ -159,10 +159,13 @@ export function MigrationDownloadPage() {
                     </div>
                   </div>
 
-                  <div className="p-4 bg-settings-card-altBackground rounded-lg border border-settings-card-border/40">
-                    <div className="flex items-center gap-2 text-type-link">
-                      <Icon icon={Icons.BOOKMARK} className="text-xl" />
-                      <span className="font-medium text-white">
+                  <div className="p-4 bg-settings-card-altBackground rounded-lg border border-settings-card-border/40 flex flex-col justify-between">
+                    <div className="flex items-center gap-2.5 text-type-link">
+                      <Icon
+                        icon={Icons.BOOKMARK}
+                        className="text-xl shrink-0"
+                      />
+                      <span className="font-medium text-white leading-snug">
                         {t("migration.preview.items.bookmarks")}
                       </span>
                     </div>
@@ -174,11 +177,14 @@ export function MigrationDownloadPage() {
                     </div>
                   </div>
 
-                  <div className="p-4 bg-settings-card-altBackground rounded-lg border border-settings-card-border/40">
-                    <div className="flex items-center gap-2 text-type-link">
-                      <Icon icon={Icons.CLOCK} className="text-xl" />
-                      <span className="font-medium text-white">
-                        {t("migration.preview.items.progress")}
+                  <div className="p-4 bg-settings-card-altBackground rounded-lg border border-settings-card-border/40 flex flex-col justify-between">
+                    <div className="flex items-center gap-2.5 text-type-link">
+                      <Icon icon={Icons.CLOCK} className="text-xl shrink-0" />
+                      <span className="font-medium text-white leading-snug">
+                        {t(
+                          "migration.preview.items.watchHistory",
+                          "Watch History",
+                        )}
                       </span>
                     </div>
                     <div className="text-xl font-bold mt-2 text-white">
@@ -189,10 +195,13 @@ export function MigrationDownloadPage() {
                     </div>
                   </div>
 
-                  <div className="p-4 bg-settings-card-altBackground rounded-lg border border-settings-card-border/40">
-                    <div className="flex items-center gap-2 text-type-link">
-                      <Icon icon={Icons.SETTINGS} className="text-xl" />
-                      <span className="font-medium text-white">
+                  <div className="p-4 bg-settings-card-altBackground rounded-lg border border-settings-card-border/40 flex flex-col justify-between">
+                    <div className="flex items-center gap-2.5 text-type-link">
+                      <Icon
+                        icon={Icons.SETTINGS}
+                        className="text-xl shrink-0"
+                      />
+                      <span className="font-medium text-white leading-snug">
                         {t("migration.preview.items.settings")}
                       </span>
                     </div>
@@ -236,7 +245,7 @@ export function MigrationDownloadPage() {
             )}
           </div>
         </div>
-      </CenterContainer>
+      </BiggerCenterContainer>
     </MinimalPageLayout>
   );
 }

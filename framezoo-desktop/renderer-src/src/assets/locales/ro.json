@@ -672,7 +672,8 @@
       "items": {
         "bookmarks": "Media marcate",
         "progress": "Urmărește progresul",
-        "settings": "Setări și preferințe"
+        "settings": "Setări și preferințe",
+        "watchHistory": "Istoricul vizionărilor"
       },
       "uploadDescription": "Date de încărcat:"
     },
@@ -1359,6 +1360,9 @@
       "autoplay": "Redare automată",
       "autoplayDescription": "Redați automat următorul episod dintr-o serie după ce ajungeți la final.",
       "autoplayLabel": "Redare automată",
+      "autoUpdate": "Actualizare automată",
+      "autoUpdateDescription": "Descărcați actualizările în fundal când computerul este inactiv, apoi reporniți pentru a le aplica.",
+      "autoUpdateLabel": "Actualizare automată",
       "autoResumeOnPlaybackError": "Reluare automată la eroare de redare",
       "autoResumeOnPlaybackErrorDescription": "Continuați automat căutarea altor surse atunci când sursa curentă eșuează în timpul redării. Dacă este dezactivată, veți vedea un ecran de eroare cu o opțiune de reluare manuală.",
       "autoResumeOnPlaybackErrorLabel": "Reluare automată la eroare de redare",
@@ -1387,10 +1391,7 @@
       "thumbnail": "Generați pictograme",
       "thumbnailDescription": "De cele mai multe ori videoclipurile nu au pictograme. Puteți activa această setare pentru a le genera din mers, dar vă pot încetini videoclipul.",
       "thumbnailLabel": "Generați pictograme",
-      "title": "Preferințe",
-      "autoUpdate": "Actualizare automată",
-      "autoUpdateDescription": "Descărcați actualizările în fundal când computerul este inactiv, apoi reporniți pentru a le aplica.",
-      "autoUpdateLabel": "Actualizare automată"
+      "title": "Preferințe"
     },
     "reset": "Resetare",
     "save": "Salvează",

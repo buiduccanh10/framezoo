@@ -672,7 +672,8 @@
       "items": {
         "bookmarks": "Kirjanmerkkeihin merkitty media",
         "progress": "Katso edistymistä",
-        "settings": "Asetukset ja asetukset"
+        "settings": "Asetukset ja asetukset",
+        "watchHistory": "Katseluhistoria"
       },
       "uploadDescription": "Ladattavat tiedot:"
     },
@@ -1359,6 +1360,9 @@
       "autoplay": "Automaattinen toisto",
       "autoplayDescription": "Toista automaattisesti sarjan seuraava jakso sen päätyttyä.",
       "autoplayLabel": "Automaattinen toisto",
+      "autoUpdate": "Automaattinen päivitys",
+      "autoUpdateDescription": "Lataa päivitykset taustalla, kun tietokone on käyttämättömänä, ja käynnistä se sitten uudelleen, jotta ne otetaan käyttöön.",
+      "autoUpdateLabel": "Automaattinen päivitys",
       "autoResumeOnPlaybackError": "Toiston automaattinen jatkaminen virhe",
       "autoResumeOnPlaybackErrorDescription": "Jatka automaattisesti muiden lähteiden etsimistä, kun nykyinen lähde epäonnistuu toiston aikana. Jos se ei ole käytössä, näet virhenäytön, jossa on manuaalinen jatkamisvaihtoehto.",
       "autoResumeOnPlaybackErrorLabel": "Toiston automaattinen jatkaminen virhe",
@@ -1387,10 +1391,7 @@
       "thumbnail": "Luo pikkukuvia",
       "thumbnailDescription": "Useimmiten videoissa ei ole pikkukuvia. Voit ottaa tämän asetuksen käyttöön luodaksesi niitä lennossa, mutta ne voivat hidastaa videotasi.",
       "thumbnailLabel": "Luo pikkukuvia",
-      "title": "Asetukset",
-      "autoUpdate": "Automaattinen päivitys",
-      "autoUpdateDescription": "Lataa päivitykset taustalla, kun tietokone on käyttämättömänä, ja käynnistä se sitten uudelleen, jotta ne otetaan käyttöön.",
-      "autoUpdateLabel": "Automaattinen päivitys"
+      "title": "Asetukset"
     },
     "reset": "Nollaa",
     "save": "Tallentaa",

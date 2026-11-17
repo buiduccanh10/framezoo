@@ -672,7 +672,8 @@
       "items": {
         "bookmarks": "Grāmatzīmes multivide",
         "progress": "Skatieties progresu",
-        "settings": "Iestatījumi un preferences"
+        "settings": "Iestatījumi un preferences",
+        "watchHistory": "Skatīšanās vēsture"
       },
       "uploadDescription": "Augšupielādējamie dati:"
     },
@@ -1359,6 +1360,9 @@
       "autoplay": "Automātiskā atskaņošana",
       "autoplayDescription": "Automātiski atskaņojiet nākamo sērijas sēriju pēc beigām.",
       "autoplayLabel": "Automātiskā atskaņošana",
+      "autoUpdate": "Automātiska atjaunināšana",
+      "autoUpdateDescription": "Lejupielādējiet atjauninājumus fonā, kad dators ir dīkstāvē, un pēc tam restartējiet to, lai tie tiktu lietoti.",
+      "autoUpdateLabel": "Automātiska atjaunināšana",
       "autoResumeOnPlaybackError": "Automātiski atsākt atskaņošanas kļūdu",
       "autoResumeOnPlaybackErrorDescription": "Automātiski turpiniet meklēt citus avotus, ja atskaņošanas laikā neizdodas pašreizējais avots. Ja tas ir atspējots, tiks parādīts kļūdas ekrāns ar manuālas atsākšanas opciju.",
       "autoResumeOnPlaybackErrorLabel": "Automātiski atsākt atskaņošanas kļūdu",
@@ -1387,10 +1391,7 @@
       "thumbnail": "Ģenerēt sīktēlus",
       "thumbnailDescription": "Lielāko daļu laika videoklipiem nav sīktēlu. Varat iespējot šo iestatījumu, lai tos ģenerētu lidojuma laikā, taču tie var padarīt jūsu videoklipu lēnāku.",
       "thumbnailLabel": "Ģenerēt sīktēlus",
-      "title": "Preferences",
-      "autoUpdate": "Automātiska atjaunināšana",
-      "autoUpdateDescription": "Lejupielādējiet atjauninājumus fonā, kad dators ir dīkstāvē, un pēc tam restartējiet to, lai tie tiktu lietoti.",
-      "autoUpdateLabel": "Automātiska atjaunināšana"
+      "title": "Preferences"
     },
     "reset": "Restartēt",
     "save": "Saglabāt",

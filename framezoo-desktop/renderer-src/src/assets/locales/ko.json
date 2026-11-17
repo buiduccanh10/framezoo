@@ -672,7 +672,8 @@
       "items": {
         "bookmarks": "북마크된 미디어",
         "progress": "진행 상황 보기",
-        "settings": "설정 및 기본 설정"
+        "settings": "설정 및 기본 설정",
+        "watchHistory": "시계 역사"
       },
       "uploadDescription": "업로드할 데이터:"
     },
@@ -1359,6 +1360,9 @@
       "autoplay": "자동재생",
       "autoplayDescription": "시리즈가 끝나면 자동으로 다음 에피소드를 재생합니다.",
       "autoplayLabel": "자동재생",
+      "autoUpdate": "자동 업데이트",
+      "autoUpdateDescription": "컴퓨터가 유휴 상태일 때 백그라운드에서 업데이트를 다운로드한 다음, 다시 시작하여 적용하세요.",
+      "autoUpdateLabel": "자동 업데이트",
       "autoResumeOnPlaybackError": "재생 오류 시 자동 재개",
       "autoResumeOnPlaybackErrorDescription": "재생 중에 현재 소스에 오류가 발생하면 자동으로 다른 소스를 계속 검색합니다. 비활성화된 경우 수동 재개 옵션이 포함된 오류 화면이 표시됩니다.",
       "autoResumeOnPlaybackErrorLabel": "재생 오류 시 자동 재개",
@@ -1387,10 +1391,7 @@
       "thumbnail": "썸네일 생성",
       "thumbnailDescription": "대부분의 영상들은 섬네일을 가지고 있지 않습니다. 사용자가 직접 영상의 섬네일을 생성할 수 있지만, 잦은 버퍼링을 일으킬 수 있습니다.",
       "thumbnailLabel": "섬네일 생성",
-      "title": "환경 설정",
-      "autoUpdate": "자동 업데이트",
-      "autoUpdateDescription": "컴퓨터가 유휴 상태일 때 백그라운드에서 업데이트를 다운로드한 다음, 다시 시작하여 적용하세요.",
-      "autoUpdateLabel": "자동 업데이트"
+      "title": "환경 설정"
     },
     "reset": "초기화",
     "save": "저장",

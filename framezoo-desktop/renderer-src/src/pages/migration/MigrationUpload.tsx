@@ -16,7 +16,7 @@ import { Button } from "@/components/buttons/Button";
 import { Icon, Icons } from "@/components/Icon";
 import { SettingsCard } from "@/components/layout/SettingsCard";
 import { Stepper } from "@/components/layout/Stepper";
-import { CenterContainer } from "@/components/layout/ThinContainer";
+import { BiggerCenterContainer } from "@/components/layout/ThinContainer";
 import { Divider } from "@/components/utils/Divider";
 import { Heading2, Paragraph } from "@/components/utils/Text";
 import { syncAndMigrateAddons } from "@/desktop/addons/store";
@@ -448,13 +448,13 @@ export function MigrationUploadPage() {
   return (
     <MinimalPageLayout>
       <PageTitle k="migration.upload.title" subpage />
-      <CenterContainer>
+      <BiggerCenterContainer>
         <div>
           <Stepper current={2} steps={2} className="mb-12" />
           <Heading2 className="!text-4xl !mt-0">
             {t("migration.upload.title")}
           </Heading2>
-          <Paragraph className="text-lg max-w-md mb-6">
+          <Paragraph className="text-lg max-w-xl mb-6">
             {t("migration.upload.description")}
           </Paragraph>
 
@@ -463,7 +463,7 @@ export function MigrationUploadPage() {
               <h3 className="font-bold text-white text-lg">
                 {t("migration.preview.uploadDescription")}
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 <div className="flex flex-col items-center text-center p-4 bg-settings-card-altBackground rounded-lg border border-settings-card-border/40">
                   <Icon
                     icon={Icons.CLOCK}
@@ -561,11 +561,17 @@ export function MigrationUploadPage() {
               </Heading2>
               <Divider marginClass="my-6 px-8 box-content -mx-8" />
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="p-4 bg-settings-card-altBackground rounded-lg border border-settings-card-border/40">
-                  <div className="flex items-center gap-2 text-type-link">
-                    <Icon icon={Icons.CLOCK} className="text-xl" />
-                    <span className="font-medium text-white">
+              <div
+                className={`grid grid-cols-1 sm:grid-cols-2 gap-4 ${
+                  uploadedData.addons !== undefined
+                    ? "lg:grid-cols-4"
+                    : "lg:grid-cols-3"
+                }`}
+              >
+                <div className="p-4 bg-settings-card-altBackground rounded-lg border border-settings-card-border/40 flex flex-col justify-between">
+                  <div className="flex items-center gap-2.5 text-type-link">
+                    <Icon icon={Icons.CLOCK} className="text-xl shrink-0" />
+                    <span className="font-medium text-white leading-snug">
                       {t("migration.preview.items.progress")}
                     </span>
                   </div>
@@ -576,10 +582,10 @@ export function MigrationUploadPage() {
                   </div>
                 </div>
 
-                <div className="p-4 bg-settings-card-altBackground rounded-lg border border-settings-card-border/40">
-                  <div className="flex items-center gap-2 text-type-link">
-                    <Icon icon={Icons.BOOKMARK} className="text-xl" />
-                    <span className="font-medium text-white">
+                <div className="p-4 bg-settings-card-altBackground rounded-lg border border-settings-card-border/40 flex flex-col justify-between">
+                  <div className="flex items-center gap-2.5 text-type-link">
+                    <Icon icon={Icons.BOOKMARK} className="text-xl shrink-0" />
+                    <span className="font-medium text-white leading-snug">
                       {t("migration.preview.items.bookmarks")}
                     </span>
                   </div>
@@ -590,10 +596,10 @@ export function MigrationUploadPage() {
                   </div>
                 </div>
 
-                <div className="p-4 bg-settings-card-altBackground rounded-lg border border-settings-card-border/40">
-                  <div className="flex items-center gap-2 text-type-link">
-                    <Icon icon={Icons.CLOCK} className="text-xl" />
-                    <span className="font-medium text-white">
+                <div className="p-4 bg-settings-card-altBackground rounded-lg border border-settings-card-border/40 flex flex-col justify-between">
+                  <div className="flex items-center gap-2.5 text-type-link">
+                    <Icon icon={Icons.CLOCK} className="text-xl shrink-0" />
+                    <span className="font-medium text-white leading-snug">
                       {t(
                         "migration.preview.items.watchHistory",
                         "Watch History",
@@ -608,10 +614,15 @@ export function MigrationUploadPage() {
                 </div>
 
                 {uploadedData.addons !== undefined && (
-                  <div className="p-4 bg-settings-card-altBackground rounded-lg border border-settings-card-border/40">
-                    <div className="flex items-center gap-2 text-type-link">
-                      <Icon icon={Icons.EXTENSION} className="text-xl" />
-                      <span className="font-medium text-white">Addons</span>
+                  <div className="p-4 bg-settings-card-altBackground rounded-lg border border-settings-card-border/40 flex flex-col justify-between">
+                    <div className="flex items-center gap-2.5 text-type-link">
+                      <Icon
+                        icon={Icons.EXTENSION}
+                        className="text-xl shrink-0"
+                      />
+                      <span className="font-medium text-white leading-snug">
+                        Addons
+                      </span>
                     </div>
                     <div className="text-xl font-bold mt-2 text-white">
                       {uploadedData.addons.length}
@@ -671,7 +682,7 @@ export function MigrationUploadPage() {
             )}
           </div>
         </div>
-      </CenterContainer>
+      </BiggerCenterContainer>
     </MinimalPageLayout>
   );
 }

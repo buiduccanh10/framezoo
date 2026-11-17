@@ -672,7 +672,8 @@
       "items": {
         "bookmarks": "Mediji z zaznamki",
         "progress": "Oglejte si napredek",
-        "settings": "Nastavitve in nastavitve"
+        "settings": "Nastavitve in nastavitve",
+        "watchHistory": "Zgodovina ogledov"
       },
       "uploadDescription": "Podatki za nalaganje:"
     },
@@ -1359,6 +1360,9 @@
       "autoplay": "Samodejno predvajanje",
       "autoplayDescription": "Samodejno predvajanje naslednje epizode v seriji, ko dosežete konec.",
       "autoplayLabel": "Samodejno predvajanje",
+      "autoUpdate": "Samodejna posodobitev",
+      "autoUpdateDescription": "Prenesite posodobitve v ozadju, ko je računalnik nedejaven, nato pa jih znova zaženite, da jih uporabite.",
+      "autoUpdateLabel": "Samodejna posodobitev",
       "autoResumeOnPlaybackError": "Samodejno nadaljevanje ob napaki pri predvajanju",
       "autoResumeOnPlaybackErrorDescription": "Samodejno nadaljevanje iskanja drugih virov, ko trenutni vir med predvajanjem odpove. Če je onemogočeno, boste videli zaslon z napako z možnostjo ročnega nadaljevanja.",
       "autoResumeOnPlaybackErrorLabel": "Samodejno nadaljevanje ob napaki pri predvajanju",
@@ -1387,10 +1391,7 @@
       "thumbnail": "Naloži predoglede",
       "thumbnailDescription": "Videoposnetki večinoma nimajo predogledov. To nastavitev lahko omogočite in jih ustvarite sproti, vendar lahko zaradi tega videoposnetek postane počasnejši.",
       "thumbnailLabel": "Naloži predoglede",
-      "title": "Nastavitve",
-      "autoUpdate": "Samodejna posodobitev",
-      "autoUpdateDescription": "Prenesite posodobitve v ozadju, ko je računalnik nedejaven, nato pa jih znova zaženite, da jih uporabite.",
-      "autoUpdateLabel": "Samodejna posodobitev"
+      "title": "Nastavitve"
     },
     "reset": "Ponastavi",
     "save": "Shrani",
