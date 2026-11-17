@@ -202,6 +202,11 @@ function App() {
   const torrentMaxSize = usePreferencesStore((s) => s.torrentMaxSize);
   const torrentCacheRoot = usePreferencesStore((s) => s.torrentCacheRoot);
   const torrentProfile = usePreferencesStore((s) => s.torrentProfile);
+  const autoUpdateEnabled = usePreferencesStore((s) => s.autoUpdateEnabled);
+  useEffect(() => {
+    void window.electronAPI?.setAutoUpdateEnabled?.(autoUpdateEnabled);
+  }, [autoUpdateEnabled]);
+
   useEffect(() => {
     if (window.electronAPI?.setTorrentSettings) {
       const maxBytes =

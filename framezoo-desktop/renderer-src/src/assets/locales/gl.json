@@ -1387,7 +1387,10 @@
       "thumbnail": "Xerar miniaturas",
       "thumbnailDescription": "Na maioría das veces, os videos non teñen miniaturas. Podes activar esta configuración para xeralas ao momento, pero podes realentizar o video.",
       "thumbnailLabel": "Xerar miniaturas",
-      "title": "Preferencias"
+      "title": "Preferencias",
+      "autoUpdate": "Actualización automática",
+      "autoUpdateDescription": "Descarga as actualizacións en segundo plano cando o computador estea inactivo e, a seguir, reinicia para aplicalas.",
+      "autoUpdateLabel": "Actualización automática"
     },
     "reset": "Reinicio",
     "save": "Gardar",

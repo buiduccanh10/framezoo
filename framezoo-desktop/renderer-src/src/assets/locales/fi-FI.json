@@ -1387,7 +1387,10 @@
       "thumbnail": "Luo pikkukuvia",
       "thumbnailDescription": "Useimmiten videoissa ei ole pikkukuvia. Voit ottaa tämän asetuksen käyttöön luodaksesi niitä lennossa, mutta ne voivat hidastaa videotasi.",
       "thumbnailLabel": "Luo pikkukuvia",
-      "title": "Asetukset"
+      "title": "Asetukset",
+      "autoUpdate": "Automaattinen päivitys",
+      "autoUpdateDescription": "Lataa päivitykset taustalla, kun tietokone on käyttämättömänä, ja käynnistä se sitten uudelleen, jotta ne otetaan käyttöön.",
+      "autoUpdateLabel": "Automaattinen päivitys"
     },
     "reset": "Nollaa",
     "save": "Tallentaa",

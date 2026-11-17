@@ -10,6 +10,7 @@ import { SortableList } from "@/components/form/SortableList";
 import { SettingsCard } from "@/components/layout/SettingsCard";
 import { Heading1 } from "@/components/utils/Text";
 import { useInstalledAddons } from "@/desktop/addons/store";
+import { useIsDesktopApp } from "@/hooks/useIsDesktopApp";
 import { appLanguageOptions } from "@/setup/i18n";
 import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { DEFAULT_HOME_SECTIONS } from "@/stores/preferences";
@@ -69,10 +70,13 @@ export function PreferencesPart(props: {
   setEnableSkipCredits: (v: boolean) => void;
   enableAutoSkipSegments: boolean;
   setEnableAutoSkipSegments: (v: boolean) => void;
+  autoUpdateEnabled: boolean;
+  setAutoUpdateEnabled: (v: boolean) => void;
   homeSectionOrder: string[];
   setHomeSectionOrder: (v: string[]) => void;
 }) {
   const { t } = useTranslation();
+  const isDesktopApp = useIsDesktopApp();
   const { showModal } = useOverlayStack();
   const addons = useInstalledAddons();
   const sorted = sortLangCodes(appLanguageOptions.map((item) => item.code));
@@ -251,6 +255,21 @@ export function PreferencesPart(props: {
               {t("settings.preferences.keyboardShortcutsLabel")}
             </Button>
           </PreferenceCard>
+
+          {isDesktopApp && (
+            <PreferenceCard
+              title={t("settings.preferences.autoUpdate")}
+              description={t("settings.preferences.autoUpdateDescription")}
+            >
+              <PreferenceToggleRow
+                enabled={props.autoUpdateEnabled}
+                label={t("settings.preferences.autoUpdateLabel")}
+                onClick={() =>
+                  props.setAutoUpdateEnabled(!props.autoUpdateEnabled)
+                }
+              />
+            </PreferenceCard>
+          )}
 
           <PreferenceCard
             title={t(

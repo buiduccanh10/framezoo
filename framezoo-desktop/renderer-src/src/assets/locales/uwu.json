@@ -1348,7 +1348,10 @@
       "thumbnail": "Genyewate thumbnyaiws",
       "thumbnailDescription": "Most of the x3 time, videos ^w^ don't have thumbnyaiws. You c-can enyabwe this setting t-to genyewate them on the fwy but they c-can make youw v-v-video swowew.",
       "thumbnailLabel": "Genyewate thumbnyaiws",
-      "title": "Pwefewences"
+      "title": "Pwefewences",
+      "autoUpdate": "Auto update",
+      "autoUpdateDescription": "Download updates in the background when your computer is idle, then restart to apply them.",
+      "autoUpdateLabel": "Auto update"
     },
     "reset": "Weset",
     "save": "Save",

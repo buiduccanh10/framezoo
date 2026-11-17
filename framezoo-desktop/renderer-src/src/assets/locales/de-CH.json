@@ -1387,7 +1387,10 @@
       "thumbnail": "Miniaturbeld generiere",
       "thumbnailDescription": "Meistens hei d’Videos kei Vorschaubilder. Du chasch die Option aktiviere, zum sie spontan generiere lo, aber das cha s’Video langsamer mache.",
       "thumbnailLabel": "Miniaturasecht generiere",
-      "title": "Präferenzen"
+      "title": "Präferenzen",
+      "autoUpdate": "Automatische Aktualisierung",
+      "autoUpdateDescription": "Laden Sie Updates im Hintergrund herunter, wenn Ihr Computer im Leerlauf ist, und starten Sie ihn anschließend neu, um sie anzuwenden.",
+      "autoUpdateLabel": "Automatische Aktualisierung"
     },
     "reset": "Zurogsetze",
     "save": "Spichere",

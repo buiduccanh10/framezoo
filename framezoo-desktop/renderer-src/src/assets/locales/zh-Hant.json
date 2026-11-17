@@ -1387,7 +1387,10 @@
       "thumbnail": "生成縮圖",
       "thumbnailDescription": "大多數時候，視頻沒有縮圖。您可以啟用此設置以即時生成它們，但它們會使您的視頻變慢。",
       "thumbnailLabel": "生成縮圖",
-      "title": "偏好設定"
+      "title": "偏好設定",
+      "autoUpdate": "自動更新",
+      "autoUpdateDescription": "在電腦空閒時後台下載更新，然後重新啟動電腦應用程式更新。",
+      "autoUpdateLabel": "自動更新"
     },
     "reset": "重置",
     "save": "保存",

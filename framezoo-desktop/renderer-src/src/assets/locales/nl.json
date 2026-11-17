@@ -1387,7 +1387,10 @@
       "thumbnail": "Genereer miniaturen",
       "thumbnailDescription": "Meestal hebben video's geen miniaturen. Je kunt deze instelling inschakelen om ze dynamisch te genereren, maar dit kan je video vertragen.",
       "thumbnailLabel": "Genereer miniaturen",
-      "title": "Voorkeuren"
+      "title": "Voorkeuren",
+      "autoUpdate": "Automatische update",
+      "autoUpdateDescription": "Download updates op de achtergrond wanneer uw computer inactief is en start hem vervolgens opnieuw op om ze toe te passen.",
+      "autoUpdateLabel": "Automatische update"
     },
     "reset": "Resetten",
     "save": "Wijzigingen opslaan",

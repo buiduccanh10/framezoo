@@ -1387,7 +1387,10 @@
       "thumbnail": "Generați pictograme",
       "thumbnailDescription": "De cele mai multe ori videoclipurile nu au pictograme. Puteți activa această setare pentru a le genera din mers, dar vă pot încetini videoclipul.",
       "thumbnailLabel": "Generați pictograme",
-      "title": "Preferințe"
+      "title": "Preferințe",
+      "autoUpdate": "Actualizare automată",
+      "autoUpdateDescription": "Descărcați actualizările în fundal când computerul este inactiv, apoi reporniți pentru a le aplica.",
+      "autoUpdateLabel": "Actualizare automată"
     },
     "reset": "Resetare",
     "save": "Salvează",

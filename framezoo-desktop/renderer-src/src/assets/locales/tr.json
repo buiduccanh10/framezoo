@@ -1387,7 +1387,10 @@
       "thumbnail": "Küçük resimler oluştur",
       "thumbnailDescription": "Çoğu video için ön izleme görseli bulunmaz. Bu ayarı etkinleştirerek anında oluşturulmasını sağlayabilirsiniz, ancak bu videonuzu yavaşlatabilir.",
       "thumbnailLabel": "Küçük resim oluştur",
-      "title": "Ayarlar"
+      "title": "Ayarlar",
+      "autoUpdate": "Otomatik güncelleme",
+      "autoUpdateDescription": "Bilgisayarınız boştayken güncellemeleri arka planda indirin, ardından uygulamak için yeniden başlatın.",
+      "autoUpdateLabel": "Otomatik güncelleme"
     },
     "reset": "Sıfırla",
     "save": "Kaydet",

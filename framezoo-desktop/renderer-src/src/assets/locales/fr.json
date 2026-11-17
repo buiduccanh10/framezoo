@@ -1387,7 +1387,10 @@
       "thumbnail": "Générer les miniatures",
       "thumbnailDescription": "La plupart du temps, les vidéos n'ont pas de miniatures. Vous pouvez activer ce paramètre pour les générer à la volée, mais ils peuvent ralentir votre vidéo.",
       "thumbnailLabel": "Générer les miniatures",
-      "title": "Préférences"
+      "title": "Préférences",
+      "autoUpdate": "Mise à jour automatique",
+      "autoUpdateDescription": "Téléchargez les mises à jour en arrière-plan lorsque votre ordinateur est inactif, puis redémarrez-le pour les appliquer.",
+      "autoUpdateLabel": "Mise à jour automatique"
     },
     "reset": "Réinitialiser",
     "save": "Sauvegarder",

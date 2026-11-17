@@ -1387,7 +1387,10 @@
       "thumbnail": "Búa til smámyndir",
       "thumbnailDescription": "Oftast, hafa myndbönd ekki smámyndir. Þú getur látið þessa stillingu gera þær en það gæti gert myndbandið þitt hægara.",
       "thumbnailLabel": "Gera smámyndir",
-      "title": "Valstillingar"
+      "title": "Valstillingar",
+      "autoUpdate": "Sjálfvirk uppfærsla",
+      "autoUpdateDescription": "Hlaða niður uppfærslum í bakgrunni þegar tölvan er óvirk og endurræstu hana síðan til að virkja þær.",
+      "autoUpdateLabel": "Sjálfvirk uppfærsla"
     },
     "reset": "Endurstilla",
     "save": "Vista",

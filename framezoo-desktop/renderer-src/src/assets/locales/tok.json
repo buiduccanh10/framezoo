@@ -1348,7 +1348,10 @@
       "thumbnail": "o pali e sitelen awen",
       "thumbnailDescription": "tenpo mute la, sitelen tawa li jo ala e sitelen awen. sina wile e sitelen lili pi lukin wan la o lon e ni. taso, ni li ken suli ike e tenpo sitelen sina",
       "thumbnailLabel": "o pali e sitelen awen",
-      "title": "wile"
+      "title": "wile",
+      "autoUpdate": "Auto update",
+      "autoUpdateDescription": "Download updates in the background when your computer is idle, then restart to apply them.",
+      "autoUpdateLabel": "Auto update"
     },
     "reset": "o weka e ante",
     "save": "o ante",

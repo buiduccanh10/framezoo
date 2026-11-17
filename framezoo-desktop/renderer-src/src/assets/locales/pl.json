@@ -1387,7 +1387,10 @@
       "thumbnail": "Generuj miniatury",
       "thumbnailDescription": "W większości przypadków filmy nie mają miniatur. Możesz włączyć to ustawienie, aby generować je na bieżąco, ale może to spowolnić wideo.",
       "thumbnailLabel": "Generuj miniatury",
-      "title": "Preferencje"
+      "title": "Preferencje",
+      "autoUpdate": "Automatyczna aktualizacja",
+      "autoUpdateDescription": "Pobierz aktualizacje w tle, gdy komputer jest bezczynny, a następnie uruchom ponownie, aby je zastosować.",
+      "autoUpdateLabel": "Automatyczna aktualizacja"
     },
     "reset": "Nastawić",
     "save": "Zapisz",

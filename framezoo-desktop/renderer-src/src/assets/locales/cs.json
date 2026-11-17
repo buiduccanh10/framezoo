@@ -1387,7 +1387,10 @@
       "thumbnail": "Generovat miniatury",
       "thumbnailDescription": "Videa většinou nemají miniatury. Toto nastavení můžete povolit, ale mohou zpomalit vaše video.",
       "thumbnailLabel": "Generovat miniatury",
-      "title": "Preference"
+      "title": "Preference",
+      "autoUpdate": "Automatická aktualizace",
+      "autoUpdateDescription": "Stahujte aktualizace na pozadí, když je počítač nečinný, a poté je restartujte, aby se aktivovaly.",
+      "autoUpdateLabel": "Automatická aktualizace"
     },
     "reset": "Resetovat",
     "save": "Uložit",

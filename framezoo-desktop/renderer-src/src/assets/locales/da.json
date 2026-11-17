@@ -1387,7 +1387,10 @@
       "thumbnail": "Generer miniaturebilleder",
       "thumbnailDescription": "Det meste af tiden har videoer ikke miniaturebilleder. Du kan aktivere denne indstilling for at generere dem undervejs, men de kan gøre din video mere langsom.",
       "thumbnailLabel": "Generer miniaturebilleder",
-      "title": "Præferencer"
+      "title": "Præferencer",
+      "autoUpdate": "Automatisk opdatering",
+      "autoUpdateDescription": "Download opdateringer i baggrunden, når din computer er inaktiv, og genstart derefter for at implementere dem.",
+      "autoUpdateLabel": "Automatisk opdatering"
     },
     "reset": "Nulstil",
     "save": "Gem",

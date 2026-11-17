@@ -1387,7 +1387,10 @@
       "thumbnail": "Genereeri pisipilte",
       "thumbnailDescription": "Enamasti pole videodel pisipilte. Selle sätte lubamisega genereeritakse pispildid vaatamise ajal, kuid need võivad teie video aeglasemaks muuta.",
       "thumbnailLabel": "Genereeri pisipilte",
-      "title": "Eelistused"
+      "title": "Eelistused",
+      "autoUpdate": "Automaatne värskendamine",
+      "autoUpdateDescription": "Laadige värskendused taustal alla, kui arvuti on jõudeolekus, ja seejärel taaskäivitage need rakendamiseks.",
+      "autoUpdateLabel": "Automaatne värskendamine"
     },
     "reset": "Lähtesta",
     "save": "Salvesta",

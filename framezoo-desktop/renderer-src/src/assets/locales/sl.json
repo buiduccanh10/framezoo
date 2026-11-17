@@ -1387,7 +1387,10 @@
       "thumbnail": "Naloži predoglede",
       "thumbnailDescription": "Videoposnetki večinoma nimajo predogledov. To nastavitev lahko omogočite in jih ustvarite sproti, vendar lahko zaradi tega videoposnetek postane počasnejši.",
       "thumbnailLabel": "Naloži predoglede",
-      "title": "Nastavitve"
+      "title": "Nastavitve",
+      "autoUpdate": "Samodejna posodobitev",
+      "autoUpdateDescription": "Prenesite posodobitve v ozadju, ko je računalnik nedejaven, nato pa jih znova zaženite, da jih uporabite.",
+      "autoUpdateLabel": "Samodejna posodobitev"
     },
     "reset": "Ponastavi",
     "save": "Shrani",

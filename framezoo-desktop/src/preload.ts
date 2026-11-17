@@ -79,6 +79,9 @@ contextBridge.exposeInMainWorld("electronAPI", {
   installAppUpdate() {
     return ipcRenderer.invoke("desktop:app-update-install");
   },
+  setAutoUpdateEnabled(enabled: boolean) {
+    return ipcRenderer.invoke("desktop:app-update-set-auto", enabled);
+  },
   setLocale(locale: string) {
     ipcRenderer.send("desktop:set-locale", locale);
   },

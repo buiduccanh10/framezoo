@@ -1387,7 +1387,10 @@
       "thumbnail": "썸네일 생성",
       "thumbnailDescription": "대부분의 영상들은 섬네일을 가지고 있지 않습니다. 사용자가 직접 영상의 섬네일을 생성할 수 있지만, 잦은 버퍼링을 일으킬 수 있습니다.",
       "thumbnailLabel": "섬네일 생성",
-      "title": "환경 설정"
+      "title": "환경 설정",
+      "autoUpdate": "자동 업데이트",
+      "autoUpdateDescription": "컴퓨터가 유휴 상태일 때 백그라운드에서 업데이트를 다운로드한 다음, 다시 시작하여 적용하세요.",
+      "autoUpdateLabel": "자동 업데이트"
     },
     "reset": "초기화",
     "save": "저장",

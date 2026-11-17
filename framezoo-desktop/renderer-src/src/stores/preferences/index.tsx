@@ -30,6 +30,7 @@ export interface PreferencesStore {
   enableTrailerAudio: boolean;
   enableSkipCredits: boolean;
   enableAutoSkipSegments: boolean;
+  autoUpdateEnabled: boolean;
   proxyTmdb: boolean;
   febboxKey: string | null;
   febboxUseMp4: boolean;
@@ -51,6 +52,7 @@ export interface PreferencesStore {
   setEnableTrailerAudio(v: boolean): void;
   setEnableSkipCredits(v: boolean): void;
   setEnableAutoSkipSegments(v: boolean): void;
+  setAutoUpdateEnabled(v: boolean): void;
   setProxyTmdb(v: boolean): void;
   setFebboxKey(v: string | null): void;
   setFebboxUseMp4(v: boolean): void;
@@ -76,6 +78,7 @@ export const usePreferencesStore = create(
       enableTrailerAudio: false,
       enableSkipCredits: false,
       enableAutoSkipSegments: false,
+      autoUpdateEnabled: true,
       proxyTmdb: false,
       febboxKey: null,
       febboxUseMp4: false,
@@ -119,6 +122,11 @@ export const usePreferencesStore = create(
       setEnableAutoSkipSegments(v) {
         set((s) => {
           s.enableAutoSkipSegments = v;
+        });
+      },
+      setAutoUpdateEnabled(v) {
+        set((s) => {
+          s.autoUpdateEnabled = v;
         });
       },
       setProxyTmdb(v) {

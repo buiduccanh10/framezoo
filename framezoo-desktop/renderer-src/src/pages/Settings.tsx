@@ -430,6 +430,10 @@ export function SettingsPage() {
   const setEnableAutoSkipSegments = usePreferencesStore(
     (s) => s.setEnableAutoSkipSegments,
   );
+  const autoUpdateEnabled = usePreferencesStore((s) => s.autoUpdateEnabled);
+  const setAutoUpdateEnabled = usePreferencesStore(
+    (s) => s.setAutoUpdateEnabled,
+  );
 
   const proxyTmdb = usePreferencesStore((s) => s.proxyTmdb);
   const setProxyTmdb = usePreferencesStore((s) => s.setProxyTmdb);
@@ -732,6 +736,8 @@ export function SettingsPage() {
                 setEnableSkipCredits={state.enableSkipCredits.set}
                 enableAutoSkipSegments={state.enableAutoSkipSegments.state}
                 setEnableAutoSkipSegments={state.enableAutoSkipSegments.set}
+                autoUpdateEnabled={autoUpdateEnabled}
+                setAutoUpdateEnabled={setAutoUpdateEnabled}
                 homeSectionOrder={state.homeSectionOrder.state}
                 setHomeSectionOrder={state.homeSectionOrder.set}
               />

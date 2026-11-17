@@ -119,7 +119,9 @@ export function createDesktopAppUpdater(
   const tempFilePrefix = options.appName.replace(/\s+/g, "") || "DesktopApp";
   let hasInitialized = false;
   let updateInterval: NodeJS.Timeout | null = null;
+  let autoDownloadRetryTimer: NodeJS.Timeout | null = null;
   let state: DesktopAppUpdateState = { ...INITIAL_DESKTOP_APP_UPDATE_STATE };
+  let autoUpdateEnabled = true;
 
   let isCheckingBeforeDownload = false;
 
@@ -143,6 +145,30 @@ export function createDesktopAppUpdater(
     options.onStateChange?.({ ...state });
   }
 
+  function clearAutoDownloadRetry() {
+    if (!autoDownloadRetryTimer) return;
+    clearTimeout(autoDownloadRetryTimer);
+    autoDownloadRetryTimer = null;
+  }
+
+  function scheduleAutoDownloadRetry() {
+    if (autoDownloadRetryTimer || !autoUpdateEnabled) return;
+    autoDownloadRetryTimer = setTimeout(() => {
+      autoDownloadRetryTimer = null;
+      void maybeAutoDownload();
+    }, 60_000);
+  }
+
+  async function maybeAutoDownload() {
+    if (!autoUpdateEnabled || state.status !== "available") return false;
+    if (options.autoDownloadWhenIdle && !options.autoDownloadWhenIdle()) {
+      scheduleAutoDownloadRetry();
+      return false;
+    }
+    clearAutoDownloadRetry();
+    return downloadUpdate({ autoDownloadNewerVersion: true });
+  }
+
   async function checkForUpdate() {
     if (!app.isPackaged || !isSupported()) return false;
     if (state.status === "downloading" || state.status === "downloaded")
@@ -156,6 +182,7 @@ export function createDesktopAppUpdater(
 
     try {
       await autoUpdater.checkForUpdates();
+      void maybeAutoDownload();
       const currentStatus = getState().status;
       return (
         currentStatus === "available" ||
@@ -452,7 +479,7 @@ echo "Update finished successfully at $(date)"
     }
 
     autoUpdater.autoDownload = false;
-    autoUpdater.autoInstallOnAppQuit = false;
+    autoUpdater.autoInstallOnAppQuit = true;
     autoUpdater.setFeedURL({
       provider: "generic",
       url: getFeedUrl(),
@@ -490,6 +517,7 @@ echo "Update finished successfully at $(date)"
     });
 
     autoUpdater.on("update-not-available", () => {
+      clearAutoDownloadRetry();
       setState({
         status: "idle",
         updateToken: null,
@@ -540,9 +568,18 @@ echo "Update finished successfully at $(date)"
   }
 
   function dispose() {
-    if (!updateInterval) return;
-    clearInterval(updateInterval);
-    updateInterval = null;
+    if (updateInterval) {
+      clearInterval(updateInterval);
+      updateInterval = null;
+    }
+    clearAutoDownloadRetry();
+  }
+
+  function setAutoUpdateEnabled(enabled: boolean) {
+    autoUpdateEnabled = enabled;
+    if (!enabled) clearAutoDownloadRetry();
+    autoUpdater.autoInstallOnAppQuit = enabled;
+    if (enabled) void maybeAutoDownload();
   }
 
   return {
@@ -552,5 +589,7 @@ echo "Update finished successfully at $(date)"
     getState,
     initialize,
     installUpdate,
+    isAutoUpdateEnabled: () => autoUpdateEnabled,
+    setAutoUpdateEnabled,
   };
 }

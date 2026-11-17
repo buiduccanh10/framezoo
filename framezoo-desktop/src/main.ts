@@ -897,6 +897,14 @@ async function showDesktopMessageBox(options: ShowDesktopMessageBoxOptions) {
 
 const desktopAppUpdater = createDesktopAppUpdater({
   appName: APP_NAME,
+  autoDownloadWhenIdle: () => {
+    // shortcut: idle time is the portable low-load signal; add network/CPU telemetry when needed.
+    try {
+      return powerMonitor.getSystemIdleState(60) === "idle";
+    } catch {
+      return true;
+    }
+  },
   beforeInstall: async () => {
     try {
       libmpvController.destroyAll("updater:before-install");
@@ -1917,6 +1925,16 @@ function registerIpcHandlers() {
     return desktopAppUpdater.installUpdate();
   });
 
+  ipcMain.handle(
+    "desktop:app-update-set-auto",
+    async (event, enabled: unknown) => {
+      requireTrustedRendererSender(event);
+      if (typeof enabled !== "boolean") return false;
+      desktopAppUpdater.setAutoUpdateEnabled(enabled);
+      return true;
+    },
+  );
+
   ipcMain.on("desktop:set-locale", (event, locale: string) => {
     requireTrustedRendererSender(event);
     if (typeof locale === "string" && locale.trim()) {
@@ -2498,6 +2516,16 @@ app.on("window-all-closed", () => {
 let isQuitting = false;
 app.on("before-quit", (event) => {
   if (isQuitting || (global as any).isUpdating) return;
+
+  if (
+    desktopAppUpdater.isAutoUpdateEnabled() &&
+    desktopAppUpdater.getState().status === "downloaded"
+  ) {
+    event.preventDefault();
+    void desktopAppUpdater.installUpdate();
+    return;
+  }
+
   event.preventDefault();
   isQuitting = true;
 

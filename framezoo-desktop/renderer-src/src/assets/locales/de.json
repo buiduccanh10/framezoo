@@ -1387,7 +1387,10 @@
       "thumbnail": "Miniaturansichten generieren",
       "thumbnailDescription": "Meistens haben Videos keine Miniaturansicht. Du kannst diese Einstellung anmachen, um sie automatisch zu generieren, aber sie können dein Video langsamer machen.",
       "thumbnailLabel": "Miniaturansichten generieren",
-      "title": "Einstellungen"
+      "title": "Einstellungen",
+      "autoUpdate": "Automatische Aktualisierung",
+      "autoUpdateDescription": "Laden Sie Updates im Hintergrund herunter, wenn Ihr Computer im Leerlauf ist, und starten Sie ihn anschließend neu, um sie anzuwenden.",
+      "autoUpdateLabel": "Automatische Aktualisierung"
     },
     "reset": "Zurücksetzen",
     "save": "Speichern",

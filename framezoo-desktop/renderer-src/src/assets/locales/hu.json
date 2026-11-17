@@ -1387,7 +1387,10 @@
       "thumbnail": "Indexképek generálása",
       "thumbnailDescription": "A legtöbb esetben a videóknak nincs indexképe. Engedélyezheted ezt, hogy legeneráld őket menet közben, de belassíthatják a videódat.",
       "thumbnailLabel": "Indexképek generálása",
-      "title": "Preferenciák"
+      "title": "Preferenciák",
+      "autoUpdate": "Automatikus frissítés",
+      "autoUpdateDescription": "Töltse le a frissítéseket a háttérben, amikor a számítógép tétlen, majd indítsa újra a frissítéseket az alkalmazásukhoz.",
+      "autoUpdateLabel": "Automatikus frissítés"
     },
     "reset": "Alaphelyzetbe állítás",
     "save": "Mentés",
