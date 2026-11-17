@@ -1,7 +1,9 @@
 import { type LandingLocale, getLandingCopy } from "./i18n";
 
 const SITE_URL = "https://framezoo.top";
-const SOCIAL_IMAGE_URL = `${SITE_URL}/embed-preview-1.png`;
+const SOCIAL_IMAGE_URL = `${SITE_URL}/og-preview.jpg`;
+const SOCIAL_IMAGE_WIDTH = "1024";
+const SOCIAL_IMAGE_HEIGHT = "595";
 const DEFAULT_SEO_TITLE = "Framezoo - Fast & Smooth Video Streaming";
 const DEFAULT_SEO_DESCRIPTION =
   "Framezoo is a high-speed video streaming player designed to be smooth, intuitive, and easy to use. Explore rich movie metadata, sync subtitles with video streams without limits, and load subtitles from multiple sources.";
@@ -106,8 +108,8 @@ export function applyPageSeo(
   setMeta("property", "og:description", metadata.description);
   setMeta("property", "og:url", canonical);
   setMeta("property", "og:image", SOCIAL_IMAGE_URL);
-  setMeta("property", "og:image:width", "1200");
-  setMeta("property", "og:image:height", "782");
+  setMeta("property", "og:image:width", SOCIAL_IMAGE_WIDTH);
+  setMeta("property", "og:image:height", SOCIAL_IMAGE_HEIGHT);
   setMeta("property", "og:image:alt", "Framezoo player");
   setMeta(
     "property",

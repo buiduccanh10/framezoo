@@ -27,16 +27,16 @@ describe("landing SEO", () => {
     expect(
       document.querySelector<HTMLMetaElement>('meta[name="thumbnail"]')
         ?.content,
-    ).toBe("https://framezoo.top/embed-preview-1.png");
+    ).toBe("https://framezoo.top/og-preview.jpg");
     expect(
       document.querySelector<HTMLMetaElement>('meta[property="og:image:width"]')
         ?.content,
-    ).toBe("1200");
+    ).toBe("1024");
     expect(
       document.querySelector<HTMLMetaElement>(
         'meta[property="og:image:height"]',
       )?.content,
-    ).toBe("782");
+    ).toBe("595");
     expect(
       document.querySelector<HTMLMetaElement>('meta[property="og:locale"]')
         ?.content,
