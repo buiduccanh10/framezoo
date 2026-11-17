@@ -358,13 +358,17 @@
 }
 
 .landing-language-options {
-  z-index: 20;
+  --landing-text: var(--color-ink);
+  --landing-muted: var(--color-ink-2);
+  --landing-accent: var(--color-accent);
+  z-index: 200;
   display: grid;
   width: min(250px, calc(100vw - 32px));
   max-height: min(360px, calc(100dvh - 96px));
   gap: 4px;
   padding: 6px;
   overflow-y: auto;
+  font-family: var(--font-body);
   touch-action: pan-y;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
@@ -373,6 +377,8 @@
   border-radius: 12px;
   box-shadow: 0 18px 48px rgba(0, 0, 0, 0.36);
   backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  outline: none;
   scrollbar-color: rgba(255, 225, 210, 0.45) transparent;
   scrollbar-width: thin;
 }

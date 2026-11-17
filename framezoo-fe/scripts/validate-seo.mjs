@@ -19,11 +19,11 @@ const requiredSnippets = [
   '<html lang="en">',
   "<title>Framezoo - Fast & Smooth Video Streaming</title>",
   'name="robots" content="index,follow,max-image-preview:large"',
-  'name="thumbnail" content="https://framezoo.top/embed-preview-1.png"',
+  'name="thumbnail" content="https://framezoo.top/og-preview.jpg"',
   'rel="canonical" href="https://framezoo.top/"',
   'property="og:image"',
-  'property="og:image:width" content="1200"',
-  'property="og:image:height" content="782"',
+  'property="og:image:width" content="1024"',
+  'property="og:image:height" content="595"',
   'name="twitter:card"',
 ];
 

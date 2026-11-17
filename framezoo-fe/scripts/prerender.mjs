@@ -151,9 +151,9 @@ function applyRouteSeo(html, route) {
         },
         primaryImageOfPage: {
           "@type": "ImageObject",
-          url: `${siteUrl}/embed-preview-1.png`,
-          width: 1200,
-          height: 782,
+          url: `${siteUrl}/og-preview.jpg`,
+          width: 1024,
+          height: 595,
         },
       },
       {
