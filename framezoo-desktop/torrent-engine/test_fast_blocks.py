@@ -33,7 +33,7 @@ class FastBlockProtocolTest(unittest.TestCase):
         endpoints = runtime._fast_peer_endpoints({0})
 
         self.assertIn(("198.51.100.20", 6881), endpoints)
-        self.assertEqual(len(endpoints), 8)
+        self.assertEqual(len(endpoints), 9)
 
     def test_normalizes_libtorrent_endpoint_shapes(self):
         self.assertEqual(
@@ -126,6 +126,59 @@ class FastBlockProtocolTest(unittest.TestCase):
             thread.join(timeout=2)
         self.assertEqual(result, payloads)
 
+    def test_fetch_keeps_blocks_before_peer_closes(self):
+        info_hash = b"01234567890123456789"
+        peer_id = b"-FZTEST-" + b"012345678901"
+        piece_length = 64 * 1024
+        block_size = 16 * 1024
+        blocks = {(0, 0), (0, 1)}
+        ready = threading.Event()
+        client, server = socket.socketpair()
+
+        def serve_partial():
+            try:
+                ready.set()
+                server.settimeout(2)
+                handshake = self._recv_exact(server, 68)
+                server.sendall(
+                    bytes([19])
+                    + b"BitTorrent protocol"
+                    + b"\x00" * 8
+                    + handshake[28:48]
+                    + b"-FZSEED-" + b"012345678901",
+                )
+                self.assertEqual(self._recv_exact(server, 5), b"\x00\x00\x00\x01\x02")
+                server.sendall(b"\x00\x00\x00\x01\x01")
+                for _ in blocks:
+                    length = struct.unpack(">I", self._recv_exact(server, 4))[0]
+                    self._recv_exact(server, length)
+                data = b"a" * block_size
+                server.sendall(
+                    struct.pack(">IBII", 9 + len(data), 7, 0, 0) + data,
+                )
+            finally:
+                server.close()
+
+        thread = threading.Thread(target=serve_partial, daemon=True)
+        thread.start()
+        self.assertTrue(ready.wait(2))
+        try:
+            with patch("torrent_fast_blocks.socket.create_connection", return_value=client):
+                result = fetch_blocks_from_peer(
+                    ("127.0.0.1", 1),
+                    info_hash,
+                    peer_id,
+                    blocks,
+                    piece_length,
+                    block_size,
+                    piece_length,
+                )
+        finally:
+            client.close()
+            thread.join(timeout=2)
+
+        self.assertEqual(result, {(0, 0): b"a" * block_size})
+
     def test_peer_probe_does_not_wait_for_stale_endpoint(self):
         blocks = {(0, 0)}
         expected = {(0, 0): b"ok"}
@@ -152,7 +205,7 @@ class FastBlockProtocolTest(unittest.TestCase):
         self.assertEqual(result, expected)
         self.assertLess(time.monotonic() - started, 0.2)
 
-    def test_peer_probe_partitions_multiple_blocks(self):
+    def test_peer_probe_fans_out_startup_blocks(self):
         blocks = {(0, index) for index in range(4)}
         calls = []
 
@@ -172,7 +225,8 @@ class FastBlockProtocolTest(unittest.TestCase):
             )
 
         self.assertEqual(result, {block: bytes([block[1]]) for block in blocks})
-        self.assertEqual(sorted(len(assigned) for _, assigned in calls), [2, 2])
+        self.assertTrue(calls)
+        self.assertEqual(len(calls[0][1]), 4)
 
     @staticmethod
     def _recv_exact(connection, length):

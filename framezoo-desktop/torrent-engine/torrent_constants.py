@@ -38,6 +38,9 @@ LARGE_PIECE_THRESHOLD_BYTES = 8 * 1024 * 1024
 # A large metadata-time burst can consume bandwidth before the first range.
 STARTUP_PREFETCH_BYTES = STREAM_CHUNK_SIZE
 STARTUP_PLAYBACK_BYTES = 4 * 1024 * 1024
+# Stremio splits large real pieces into 512 KiB virtual pieces. Fetch the
+# remaining virtual window after the first 64 KiB is playable.
+STARTUP_VIRTUAL_PIECE_BYTES = 512 * 1024
 PREFETCH_DEADLINE_BASE_MS = 50
 PREFETCH_DEADLINE_STEP_MS = 50
 INITIAL_RANGE_HEADER_WAIT_TIMEOUT = 0.5

@@ -599,12 +599,21 @@ class TorrentDiscovery:
             return False
         with self.lock:
             self.network_binding_relaxed = True
+            # The first tracker batch was queued on the old interface. Retry
+            # it immediately after widening the bind, instead of waiting for
+            # the normal stale-peer cooldown.
+            self.peer_last_attempt_at.clear()
+            known_peers = [
+                PeerAddress(host, port)
+                for host, port in self.discovered_peers
+            ]
         force_reannounce = getattr(self.handle, "force_reannounce", None)
         if callable(force_reannounce):
             try:
                 force_reannounce()
             except Exception:
                 pass
+        self._inject_peers(known_peers)
         log_event(
             "torrent network binding relaxed",
             peersDiscovered=len(self.discovered_peers),

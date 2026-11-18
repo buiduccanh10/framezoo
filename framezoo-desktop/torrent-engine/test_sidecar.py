@@ -9,6 +9,7 @@ from io import BytesIO
 from pathlib import Path
 from types import MethodType
 from types import ModuleType
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).parent))
 os.environ.setdefault("FRAMEZOO_TEST_LOOPBACK", "1")
@@ -94,6 +95,56 @@ class SidecarStreamTest(unittest.TestCase):
                     50 * 1024 * 1024 + constants.INITIAL_STREAM_BYTES - 1,
                 ),
             ],
+        )
+
+    def test_large_piece_fast_head_queues_virtual_prefetch(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.session_id = "virtual-prefetch-test"
+        runtime.session_started_at = time.monotonic()
+        runtime.stop_event = threading.Event()
+        runtime._fast_block_lock = threading.Lock()
+        runtime._fast_blocks = set()
+        runtime._fast_blocks_inflight = set()
+        runtime._fast_block_retry_at = {}
+        runtime._startup_fast_head_blocks = {(0, 0)}
+        runtime._startup_fast_head_end = 64 * 1024 - 1
+        runtime._startup_fast_prefetch_started = False
+        runtime._fast_peer_id = b"-FZFB01-" + b"0" * 12
+        runtime.file_size = 2 * 1024 * 1024
+        runtime.file_index = 0
+        runtime.info = type(
+            "Info",
+            (),
+            {"piece_length": lambda _self: 16 * 1024 * 1024},
+        )()
+        media = tempfile.NamedTemporaryFile()
+        media.write(b"\x00" * runtime.file_size)
+        media.flush()
+        runtime.selected_file_path = lambda: media.name
+        requested = []
+        runtime._start_fast_block_fetch = MethodType(
+            lambda self, start, end: requested.append((start, end)),
+            runtime,
+        )
+
+        with patch(
+            "torrent_runtime.fetch_blocks_from_peers",
+            return_value={(0, 0): b"a" * (16 * 1024)},
+        ):
+            runtime._fetch_fast_blocks(
+                {(0, 0)},
+                [],
+                b"0" * 20,
+                16 * 1024 * 1024,
+                0,
+                16 * 1024,
+                2 * 1024 * 1024,
+            )
+
+        media.close()
+        self.assertEqual(
+            requested,
+            [(64 * 1024, constants.STARTUP_VIRTUAL_PIECE_BYTES - 1)],
         )
 
     def test_sync_flag_reaches_first_chunk_priority(self):

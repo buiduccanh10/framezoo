@@ -344,10 +344,9 @@ class TorrentDiscoveryTest(unittest.TestCase):
         with patch.object(discovery, "announce_http_tracker", side_effect=announce):
             runtime._run_cycle()
 
-        self.assertEqual(
-            handle.connected,
-            [("127.0.0.1", 6881), ("127.0.0.2", 6882)],
-        )
+        self.assertEqual(len(handle.connected), 4)
+        self.assertEqual(handle.connected.count(("127.0.0.1", 6881)), 2)
+        self.assertEqual(handle.connected.count(("127.0.0.2", 6882)), 2)
         self.assertEqual(runtime.snapshot()["trackersAttempted"], 2)
         self.assertEqual(runtime.snapshot()["trackersSucceeded"], 2)
         self.assertEqual(runtime.snapshot()["peersDiscovered"], 2)

@@ -120,6 +120,9 @@ class TorrentRuntime:
         self._fast_blocks: Set[tuple[int, int]] = set()
         self._fast_blocks_inflight: Set[tuple[int, int]] = set()
         self._fast_block_retry_at: dict[tuple[int, int], float] = {}
+        self._startup_fast_head_blocks: Set[tuple[int, int]] = set()
+        self._startup_fast_head_end = -1
+        self._startup_fast_prefetch_started = False
         self._fast_peer_id = b"-FZFB01-" + os.urandom(12)
         self.status_thread = threading.Thread(
             target=self.publish_status,
@@ -1049,6 +1052,12 @@ class TorrentRuntime:
             else constants.STREAM_CHUNK_SIZE
         )
         initial_end = min(self.file_size - 1, initial_bytes - 1)
+        if self._is_large_piece_torrent():
+            self._startup_fast_head_end = initial_end
+            self._startup_fast_head_blocks = self._required_range_blocks(
+                0,
+                initial_end,
+            )
         self._start_fast_block_fetch(0, initial_end)
         if self.start_time <= 0 or self.duration <= 0:
             return
@@ -1345,11 +1354,13 @@ class TorrentRuntime:
         # list can consist of stale endpoints while discovery already found a
         # reachable peer.
         endpoints: list[Endpoint] = []
-        for endpoint in connected[:4] + discovered + connected[4:]:
+        for endpoint in connected[:8] + discovered + connected[8:]:
             if endpoint in endpoints:
                 continue
             endpoints.append(endpoint)
-            if len(endpoints) >= 8:
+            # Stremio keeps a wider connection set during startup. A larger
+            # probe fan-out lets a reachable peer win over stale tracker data.
+            if len(endpoints) >= 16:
                 break
         return endpoints
 
@@ -1476,6 +1487,18 @@ class TorrentRuntime:
                 self._fast_block_retry_at[block] = retry_at
             for block in fetched:
                 self._fast_block_retry_at.pop(block, None)
+            start_virtual_prefetch = bool(
+                fetched
+                and self._is_large_piece_torrent()
+                and not getattr(self, "_startup_fast_prefetch_started", False)
+                and getattr(
+                    self,
+                    "_startup_fast_head_blocks",
+                    set(),
+                ).intersection(fetched)
+            )
+            if start_virtual_prefetch:
+                self._startup_fast_prefetch_started = True
         if fetched:
             log_event(
                 "fast blocks ready",
@@ -1484,6 +1507,22 @@ class TorrentRuntime:
                 timingPhase="fast_block_ready",
                 elapsedMs=self.elapsed_ms(),
             )
+        if start_virtual_prefetch:
+            virtual_end = min(
+                self.file_size - 1,
+                getattr(
+                    constants,
+                    "STARTUP_VIRTUAL_PIECE_BYTES",
+                    512 * 1024,
+                )
+                - 1,
+            )
+            head_end = getattr(self, "_startup_fast_head_end", -1)
+            if virtual_end > head_end:
+                self._start_fast_block_fetch(
+                    head_end + 1,
+                    virtual_end,
+                )
 
     def _startup_window_bytes(self) -> int:
         try:

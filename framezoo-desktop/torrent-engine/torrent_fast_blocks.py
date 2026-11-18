@@ -112,7 +112,10 @@ def fetch_blocks_from_peer(
             + info_hash
             + peer_id,
         )
-        handshake = _recv_exact(stream, 68)
+        try:
+            handshake = _recv_exact(stream, 68)
+        except (ConnectionError, OSError, TimeoutError):
+            return received
         if (
             handshake[0] != len(_PROTOCOL)
             or handshake[1:20] != _PROTOCOL
@@ -123,7 +126,10 @@ def fetch_blocks_from_peer(
         stream.sendall(_INTERESTED)
         unchoked = False
         while not unchoked:
-            message_id, payload = _recv_message(stream)
+            try:
+                message_id, payload = _recv_message(stream)
+            except (ConnectionError, OSError, TimeoutError):
+                return received
             if message_id == 0:
                 raise ConnectionError("peer choked fast block request")
             if message_id == 1:
@@ -140,7 +146,12 @@ def fetch_blocks_from_peer(
         )
         pending = set(requested)
         while pending:
-            message_id, payload = _recv_message(stream)
+            try:
+                message_id, payload = _recv_message(stream)
+            except (ConnectionError, OSError, TimeoutError):
+                # Keep blocks received before a stale peer closes. The next
+                # probe round will request only the missing blocks.
+                return received
             if message_id is None:
                 continue
             if message_id == 0:
@@ -180,6 +191,9 @@ def fetch_blocks_from_peers(
 
     # Tracker responses contain stale peers. Probe them concurrently so one
     # dead endpoint cannot delay a live peer behind it.
+    # Fan out the small startup window to every candidate. This mirrors
+    # Stremio's endgame requests: the first reachable peer supplies each block
+    # while stale endpoints continue in the background.
     # shortcut: two probe rounds; later retries stay in the normal range loop.
     for attempt in range(2):
         if not remaining:
@@ -187,7 +201,10 @@ def fetch_blocks_from_peers(
         batches: Dict[Endpoint, Set[Block]] = {
             endpoint: set() for endpoint in candidates
         }
-        if attempt or len(remaining) < len(candidates):
+        if attempt == 0:
+            for endpoint in candidates:
+                batches[endpoint] = set(remaining)
+        elif len(remaining) < len(candidates):
             # Keep a one-block probe redundant; it is cheaper than waiting for
             # a stale endpoint when there is no work to split.
             for endpoint in candidates:
@@ -195,7 +212,7 @@ def fetch_blocks_from_peers(
         else:
             for index, block in enumerate(sorted(remaining)):
                 batches[candidates[index % len(candidates)]].add(block)
-        executor = ThreadPoolExecutor(max_workers=min(8, len(candidates)))
+        executor = ThreadPoolExecutor(max_workers=min(16, len(candidates)))
         futures = {
             executor.submit(
                 fetch_blocks_from_peer,
