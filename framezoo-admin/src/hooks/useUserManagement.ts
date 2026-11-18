@@ -31,7 +31,7 @@ export function useUserManagement(
   const [pagination, setPagination] = useState(EMPTY_PAGINATION);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
-  const [sort, setSort] = useState("created_desc");
+  const [sort, setSort] = useState("login_desc");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);

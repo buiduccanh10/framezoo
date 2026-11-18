@@ -15,7 +15,7 @@ from urllib.request import Request, url2pathname, urlopen
 import libtorrent as lt
 
 import torrent_constants as constants
-from torrent_discovery import TorrentDiscovery, get_local_ipv4
+from torrent_discovery import TorrentDiscovery, get_local_ipv4, get_local_ipv4s
 from torrent_http import TorrentHttpServer, log_event
 from torrent_runtime import TorrentRuntime
 from torrent_utils import (
@@ -277,10 +277,13 @@ class LibtorrentEngine:
             return {
                 "listen_interfaces": f"{address or '127.0.0.1'}:49160-49170,127.0.0.1:49160-49170",
             }
-        if address:
+        addresses = get_local_ipv4s(address)
+        if addresses:
             return {
-                "listen_interfaces": f"{address}:49160-49170",
-                "outgoing_interfaces": address,
+                "listen_interfaces": ",".join(
+                    f"{value}:49160-49170" for value in addresses
+                ),
+                "outgoing_interfaces": ",".join(addresses),
             }
         return {
             "listen_interfaces": "0.0.0.0:49160-49170",
@@ -384,7 +387,9 @@ class LibtorrentEngine:
             settings = {
                 **self._network_settings(),
                 **encryption_settings,
-                "connections_limit": 400,
+                # Match Stremio's bounded swarm. Hundreds of dead tracker
+                # endpoints can occupy slots and delay a reachable peer.
+                "connections_limit": 55,
                 # Neutral playback only: disable outbound P2P seeding without throttling protocol/metadata requests.
                 "unchoke_slots_limit": 0,
                 "active_seeds": 0,
@@ -393,8 +398,8 @@ class LibtorrentEngine:
                 "enable_lsd": True,
                 "enable_upnp": True,
                 "enable_natpmp": True,
-                # Start with TCP-only so corporate firewalls that silently drop
-                # UDP do not stall outbound peer connection slots on uTP timeouts.
+                # Start TCP-only. Stremio's working path does the same; the
+                # UDP probe below enables uTP only when it is reachable.
                 "enable_outgoing_utp": False,
                 "enable_incoming_utp": False,
                 "connection_speed": 500,

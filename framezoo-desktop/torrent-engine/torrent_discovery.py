@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import ipaddress
+import re
 import socket
+import subprocess
 import threading
 import time
 from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
@@ -256,6 +258,34 @@ def get_local_ipv4() -> Optional[str]:
     except OSError:
         return None
     return None
+
+
+def get_local_ipv4s(primary: Optional[str] = None) -> list[str]:
+    """List usable local IPv4s so peer sockets can use VPN and secondary NICs."""
+    addresses: list[str] = []
+    primary = primary or get_local_ipv4()
+    if primary:
+        addresses.append(primary)
+    # shortcut: ifconfig covers macOS/Linux; unavailable tools keep the primary route.
+    try:
+        output = subprocess.run(
+            ["ifconfig"],
+            check=False,
+            capture_output=True,
+            text=True,
+            timeout=1,
+        ).stdout
+    except (OSError, subprocess.SubprocessError):
+        output = ""
+    for value in re.findall(r"^\s+inet\s+(\d+(?:\.\d+){3})\b", output, re.MULTILINE):
+        try:
+            address = ipaddress.ip_address(value)
+        except ValueError:
+            continue
+        if address.is_loopback or value in addresses:
+            continue
+        addresses.append(value)
+    return addresses
 
 
 class TorrentDiscovery:
@@ -586,25 +616,42 @@ class TorrentDiscovery:
         apply_settings = getattr(self.session, "apply_settings", None)
         if not callable(apply_settings):
             return False
+        addresses = get_local_ipv4s()
+        if len(addresses) > 1:
+            network_settings = {
+                "listen_interfaces": ",".join(
+                    f"{address}:49160-49170" for address in addresses
+                ),
+                "outgoing_interfaces": ",".join(addresses),
+            }
+        else:
+            network_settings = {
+                "listen_interfaces": "0.0.0.0:49160-49170",
+                "outgoing_interfaces": "",
+            }
         try:
-            apply_settings(
-                {
-                    "listen_interfaces": "0.0.0.0:49160-49170",
-                    "outgoing_interfaces": "",
-                },
-            )
+            apply_settings(network_settings)
         except Exception as error:
             with self.lock:
                 self.last_error = str(error)
             return False
         with self.lock:
             self.network_binding_relaxed = True
+            # The first tracker batch was queued on the old interface. Retry
+            # it immediately after widening the bind, instead of waiting for
+            # the normal stale-peer cooldown.
+            self.peer_last_attempt_at.clear()
+            known_peers = [
+                PeerAddress(host, port)
+                for host, port in self.discovered_peers
+            ]
         force_reannounce = getattr(self.handle, "force_reannounce", None)
         if callable(force_reannounce):
             try:
                 force_reannounce()
             except Exception:
                 pass
+        self._inject_peers(known_peers)
         log_event(
             "torrent network binding relaxed",
             peersDiscovered=len(self.discovered_peers),
@@ -629,6 +676,19 @@ class TorrentDiscovery:
                 return False
         return False
 
+    def _request_dht_peers(self) -> None:
+        """Start DHT lookup without waiting for tracker HTTP timeouts."""
+        try:
+            force_dht = getattr(self.handle, "force_dht_announce", None)
+            if callable(force_dht):
+                force_dht()
+            dht_get_peers = getattr(self.session, "dht_get_peers", None)
+            if callable(dht_get_peers):
+                dht_get_peers(self.info_hash)
+        except Exception as error:
+            with self.lock:
+                self.last_error = str(error)
+
     def _run_cycle(self) -> None:
         self._harvest_peers_from_handle()
         try:
@@ -640,6 +700,10 @@ class TorrentDiscovery:
             trackers = list(self.trackers)
             self.phase = "discovering"
             self.last_discovery_at = time.time()
+
+        # Stremio starts DHT and tracker searches together. A slow or blocked
+        # HTTP tracker must not postpone the only remaining peer source.
+        self._request_dht_peers()
 
         http_trackers = [
             tracker
@@ -684,6 +748,11 @@ class TorrentDiscovery:
                             if len(batch) > 10:
                                 batch.sort(key=lambda peer: peer.port == 6881)
                             self._inject_peers(batch)
+                            # Apply the all-interface fallback as soon as the
+                            # first tracker returns peers; waiting for the
+                            # complete tracker fan-out can leave corporate
+                            # networks peerless for several seconds.
+                            self._relax_network_binding_if_peerless()
                         elif result.error and result.error != "native tracker":
                             with self.lock:
                                 self.last_error = result.error
@@ -696,19 +765,6 @@ class TorrentDiscovery:
 
         if self.stop_event.is_set():
             return
-
-        try:
-            if self.stop_event.is_set():
-                return
-            force_dht = getattr(self.handle, "force_dht_announce", None)
-            if callable(force_dht):
-                force_dht()
-            dht_get_peers = getattr(self.session, "dht_get_peers", None)
-            if callable(dht_get_peers):
-                dht_get_peers(self.info_hash)
-        except Exception as error:
-            with self.lock:
-                self.last_error = str(error)
 
         self._harvest_peers_from_handle()
         if (

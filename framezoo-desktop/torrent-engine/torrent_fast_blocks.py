@@ -3,8 +3,9 @@ from __future__ import annotations
 import ast
 import socket
 import struct
+import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from typing import Dict, Iterable, Optional, Set, Tuple
+from typing import Callable, Dict, Iterable, Optional, Set, Tuple
 
 Block = Tuple[int, int]
 Endpoint = Tuple[str, int]
@@ -40,9 +41,13 @@ def normalize_endpoint(value: object) -> Optional[Endpoint]:
         return None
 
 
-def _recv_exact(stream: socket.socket, length: int) -> bytes:
+def _recv_exact(stream: socket.socket, length: int, deadline: float) -> bytes:
     data = bytearray()
     while len(data) < length:
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            raise TimeoutError("peer probe timed out")
+        stream.settimeout(remaining)
         chunk = stream.recv(length - len(data))
         if not chunk:
             raise ConnectionError("peer closed connection")
@@ -50,13 +55,13 @@ def _recv_exact(stream: socket.socket, length: int) -> bytes:
     return bytes(data)
 
 
-def _recv_message(stream: socket.socket) -> Tuple[Optional[int], bytes]:
-    length = struct.unpack(">I", _recv_exact(stream, 4))[0]
+def _recv_message(stream: socket.socket, deadline: float) -> Tuple[Optional[int], bytes]:
+    length = struct.unpack(">I", _recv_exact(stream, 4, deadline))[0]
     if length == 0:
         return None, b""
     if length > _MAX_MESSAGE_BYTES:
         raise ValueError("peer message is too large")
-    payload = _recv_exact(stream, length)
+    payload = _recv_exact(stream, length, deadline)
     return payload[0], payload[1:]
 
 
@@ -68,7 +73,7 @@ def _send_block_requests(
     total_size: int,
 ) -> Dict[Block, int]:
     requested: Dict[Block, int] = {}
-    for piece, block in blocks:
+    for piece, block in sorted(blocks):
         global_offset = piece * piece_length + block * block_size
         length = min(block_size, total_size - global_offset)
         if length <= 0:
@@ -96,6 +101,7 @@ def fetch_blocks_from_peer(
     block_size: int,
     total_size: int,
     timeout: float = 2.0,
+    on_block: Optional[Callable[[Block, bytes], None]] = None,
 ) -> Dict[Block, bytes]:
     if not blocks:
         return {}
@@ -103,16 +109,25 @@ def fetch_blocks_from_peer(
         raise ValueError("invalid BitTorrent handshake identifiers")
 
     received: Dict[Block, bytes] = {}
+    deadline = time.monotonic() + timeout
     with socket.create_connection(endpoint, timeout=timeout) as stream:
         stream.settimeout(timeout)
+        try:
+            stream.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+        except OSError:
+            pass
         stream.sendall(
             bytes([len(_PROTOCOL)])
             + _PROTOCOL
             + b"\x00" * 8
             + info_hash
-            + peer_id,
+            + peer_id
+            + _INTERESTED,
         )
-        handshake = _recv_exact(stream, 68)
+        try:
+            handshake = _recv_exact(stream, 68, deadline)
+        except (ConnectionError, OSError, TimeoutError):
+            return received
         if (
             handshake[0] != len(_PROTOCOL)
             or handshake[1:20] != _PROTOCOL
@@ -120,45 +135,84 @@ def fetch_blocks_from_peer(
         ):
             raise ConnectionError("peer handshake mismatch")
 
-        stream.sendall(_INTERESTED)
+        requested: Dict[Block, int] = {}
+        pending = set(blocks)
+        outstanding: Set[Block] = set()
+
+        def request_blocks(candidates: Set[Block]) -> None:
+            selected = candidates & pending
+            if not selected:
+                return
+            sent = _send_block_requests(
+                stream,
+                selected,
+                piece_length,
+                block_size,
+                total_size,
+            )
+            requested.update(sent)
+            pending.difference_update(sent)
+            outstanding.update(sent)
+
         unchoked = False
-        while not unchoked:
-            message_id, payload = _recv_message(stream)
+        while not unchoked and (pending or outstanding):
+            try:
+                message_id, payload = _recv_message(stream, deadline)
+            except (ConnectionError, OSError, TimeoutError):
+                return received
             if message_id == 0:
-                raise ConnectionError("peer choked fast block request")
+                if not outstanding:
+                    raise ConnectionError("peer choked fast block request")
+                return received
             if message_id == 1:
                 unchoked = True
+                request_blocks(set(pending))
+            elif message_id == 17 and len(payload) >= 4:
+                allowed_piece = struct.unpack(">I", payload[:4])[0]
+                request_blocks(
+                    {block for block in pending if block[0] == allowed_piece},
+                )
             elif message_id == 16:
-                raise ConnectionError("peer rejected fast block request")
+                return received
+            elif message_id == 7 and len(payload) >= 8:
+                piece, begin = struct.unpack(">II", payload[:8])
+                block = (piece, begin // block_size)
+                if begin % block_size == 0 and block in outstanding:
+                    data = payload[8:]
+                    if len(data) != requested[block]:
+                        raise ValueError("peer returned an unexpected block length")
+                    received[block] = data
+                    if on_block:
+                        on_block(block, data)
+                    outstanding.remove(block)
 
-        requested = _send_block_requests(
-            stream,
-            blocks,
-            piece_length,
-            block_size,
-            total_size,
-        )
-        pending = set(requested)
-        while pending:
-            message_id, payload = _recv_message(stream)
+        while outstanding:
+            try:
+                message_id, payload = _recv_message(stream, deadline)
+            except (ConnectionError, OSError, TimeoutError):
+                # Keep blocks received before a stale peer closes. The next
+                # probe round will request only the missing blocks.
+                return received
             if message_id is None:
                 continue
             if message_id == 0:
-                raise ConnectionError("peer choked during fast block request")
+                return received
             if message_id == 16:
-                raise ConnectionError("peer rejected fast block request")
+                return received
             if message_id != 7 or len(payload) < 8:
                 continue
 
             piece, begin = struct.unpack(">II", payload[:8])
             block = (piece, begin // block_size)
-            if block not in pending:
+            if begin % block_size or block not in outstanding:
                 continue
             data = payload[8:]
             if len(data) != requested[block]:
                 raise ValueError("peer returned an unexpected block length")
             received[block] = data
-            pending.remove(block)
+            if on_block:
+                on_block(block, data)
+            outstanding.remove(block)
     return received
 
 
@@ -171,6 +225,7 @@ def fetch_blocks_from_peers(
     block_size: int,
     total_size: int,
     timeout: float = 2.0,
+    on_block: Optional[Callable[[Block, bytes], None]] = None,
 ) -> Dict[Block, bytes]:
     remaining = set(blocks)
     received: Dict[Block, bytes] = {}
@@ -180,31 +235,56 @@ def fetch_blocks_from_peers(
 
     # Tracker responses contain stale peers. Probe them concurrently so one
     # dead endpoint cannot delay a live peer behind it.
-    executor = ThreadPoolExecutor(max_workers=min(8, len(candidates)))
-    futures = {
-        executor.submit(
-            fetch_blocks_from_peer,
-            endpoint,
-            info_hash,
-            peer_id,
-            set(remaining),
-            piece_length,
-            block_size,
-            total_size,
-            timeout,
-        ): endpoint
-        for endpoint in candidates
-    }
-    try:
-        for future in as_completed(futures):
-            try:
-                fetched = future.result()
-            except (ConnectionError, OSError, TimeoutError, ValueError):
-                continue
-            received.update(fetched)
-            remaining.difference_update(fetched)
-            if not remaining:
-                break
-    finally:
-        executor.shutdown(wait=False, cancel_futures=True)
+    # Fan out the small startup window to every candidate. This mirrors
+    # Stremio's endgame requests: the first reachable peer supplies each block
+    # while stale endpoints continue in the background.
+    # shortcut: two probe rounds; later retries stay in the normal range loop.
+    for attempt in range(2):
+        if not remaining:
+            break
+        batches: Dict[Endpoint, Set[Block]] = {
+            endpoint: set() for endpoint in candidates
+        }
+        if attempt == 0:
+            for endpoint in candidates:
+                batches[endpoint] = set(remaining)
+        elif len(remaining) < len(candidates):
+            # Keep a one-block probe redundant; it is cheaper than waiting for
+            # a stale endpoint when there is no work to split.
+            for endpoint in candidates:
+                batches[endpoint] = set(remaining)
+        else:
+            for index, block in enumerate(sorted(remaining)):
+                batches[candidates[index % len(candidates)]].add(block)
+        executor = ThreadPoolExecutor(max_workers=min(16, len(candidates)))
+        futures = {
+            executor.submit(
+                fetch_blocks_from_peer,
+                endpoint,
+                info_hash,
+                peer_id,
+                batches[endpoint],
+                piece_length,
+                block_size,
+                total_size,
+                timeout,
+                on_block,
+            ): endpoint
+            for endpoint in candidates
+            if batches[endpoint]
+        }
+        try:
+            for future in as_completed(futures):
+                try:
+                    fetched = future.result()
+                except (ConnectionError, OSError, TimeoutError, ValueError):
+                    continue
+                received.update(fetched)
+                remaining.difference_update(fetched)
+                if not remaining:
+                    break
+        finally:
+            executor.shutdown(wait=False, cancel_futures=True)
+        if attempt == 0 and not received:
+            break
     return received

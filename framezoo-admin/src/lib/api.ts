@@ -205,7 +205,7 @@ export const adminApi = {
     await adminHttp.delete(`/feedback/${encodeURIComponent(id)}`);
   },
 
-  async listUsers(page = 1, search = "", sort = "created_desc", limit = 10) {
+  async listUsers(page = 1, search = "", sort = "login_desc", limit = 10) {
     const { data } = await adminHttp.get<UserListResponse>("/admin/users", {
       params: { page, limit, search: search || undefined, sort },
     });

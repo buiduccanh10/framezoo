@@ -15,7 +15,8 @@ strictPeerDependencies: false
 auditConfig:
   ignoreGhsas:
     - GHSA-gcqx-w48m-w2h4
-
+    # Temporary: no patched picomatch release for CVE-2026-112366; remove after upstream fix.
+    - GHSA-fc5q-39xc-vjpf
 allowBuilds:
   "@parcel/watcher": true
   "@prisma/client": true

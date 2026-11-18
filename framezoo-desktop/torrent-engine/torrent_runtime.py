@@ -117,9 +117,12 @@ class TorrentRuntime:
         self._startup_tail_pieces: Set[int] = set()
         self._startup_required_tail_pieces: Set[int] = set()
         self._fast_block_lock = threading.Lock()
-        self._fast_blocks: Set[tuple[int, int]] = set()
+        self._fast_blocks: dict[tuple[int, int], bytes] = {}
         self._fast_blocks_inflight: Set[tuple[int, int]] = set()
         self._fast_block_retry_at: dict[tuple[int, int], float] = {}
+        self._startup_fast_head_blocks: Set[tuple[int, int]] = set()
+        self._startup_fast_head_end = -1
+        self._startup_fast_prefetch_started = False
         self._fast_peer_id = b"-FZFB01-" + os.urandom(12)
         self.status_thread = threading.Thread(
             target=self.publish_status,
@@ -329,10 +332,6 @@ class TorrentRuntime:
                             resume()
                         except Exception:
                             pass
-                    # Do not expose the stream to libmpv until the container
-                    # head is readable. Otherwise initial resume seeks can
-                    # race the first HTTP response and playback may present
-                    # offset zero while the UI already shows saved progress.
                     self.prime_startup_ranges()
                     record = getattr(self, "record", None)
                     discovery = getattr(record, "discovery", None)
@@ -342,15 +341,19 @@ class TorrentRuntime:
                                 discovery.reactivate()
                         except Exception:
                             pass
-                    self.wait_for_initial_chunk()
-                    self.metadata_ready.set()
+                    # Start wire probes before libmpv opens the route. Priority
+                    # alone does not request partial blocks from tracker peers.
+                    self.prime_startup_fast_blocks()
+                    # Expose the blocking range route immediately. libmpv can
+                    # open it while the first blocks are still arriving.
                     self.stream_type = "file"
+                    self.metadata_ready.set()
                     try:
                         emit({"type": "status", "status": self.current_status()})
                     except Exception:
                         pass
                     log_event(
-                        "stream ready",
+                        "stream route ready",
                         sessionId=self.session_id,
                         fileName=self.file_path.rsplit("/", 1)[-1],
                         fileSize=self.file_size,
@@ -921,12 +924,10 @@ class TorrentRuntime:
             required_pieces = set()
             if startup_pieces:
                 required_pieces.update(startup_pieces[:required_count])
-            if tail_pieces:
-                required_tail = set(tail_pieces[-required_count:])
-                required_pieces.update(required_tail)
-                self._startup_required_tail_pieces = required_tail
-            else:
-                self._startup_required_tail_pieces = set()
+            # Keep the container tail warm, but let the first playback range
+            # own startup bandwidth. A real tail probe promotes these pieces
+            # through wait_for_range() when the demuxer asks for them.
+            self._startup_required_tail_pieces = set()
             if target_pieces:
                 required_targets = set(target_pieces[:required_count])
                 required_pieces.update(required_targets)
@@ -989,6 +990,20 @@ class TorrentRuntime:
                     required_pieces,
                     reason="startup-prefetch",
                 )
+                # Resume playback seeks after the container is opened. Do not
+                # leave that target behind the byte-zero head in the deadline
+                # queue; both are needed, but the target must be requested now.
+                if start_time > 0 and required_targets:
+                    for piece in required_targets:
+                        try:
+                            if not self.handle.have_piece(piece):
+                                self.handle.piece_priority(
+                                    piece,
+                                    constants.STREAM_PIECE_PRIORITY,
+                                )
+                                self._set_piece_deadline(piece, 0)
+                        except Exception:
+                            continue
 
             log_event(
                 "startup prefetch",
@@ -1037,6 +1052,36 @@ class TorrentRuntime:
             firstChunkBytes=len(chunk),
             timingPhase="stream_ready",
             elapsedMs=self.elapsed_ms(),
+        )
+
+    def prime_startup_fast_blocks(self) -> None:
+        """Fetch the first range and resume target while metadata is settling."""
+        if getattr(self, "handle", None) is None or self.file_size <= 0:
+            return
+        initial_bytes = (
+            constants.INITIAL_STREAM_BYTES
+            if self._is_large_piece_torrent()
+            else constants.STREAM_CHUNK_SIZE
+        )
+        initial_end = min(self.file_size - 1, initial_bytes - 1)
+        if self._is_large_piece_torrent():
+            self._startup_fast_head_end = initial_end
+            self._startup_fast_head_blocks = self._required_range_blocks(
+                0,
+                initial_end,
+            )
+        self._start_fast_block_fetch(0, initial_end)
+        if self.start_time <= 0 or self.duration <= 0:
+            return
+        target_byte = int(
+            (min(self.start_time, self.duration) / self.duration) * self.file_size
+        )
+        self._start_fast_block_fetch(
+            target_byte,
+            min(
+                self.file_size - 1,
+                target_byte + constants.INITIAL_STREAM_BYTES - 1,
+            ),
         )
 
     def focus_file(self) -> None:
@@ -1245,7 +1290,7 @@ class TorrentRuntime:
                     needs_flush = True
         return flushed, needs_flush
 
-    def _range_blocks_are_finished(self, start: int, end: int) -> bool:
+    def _range_blocks_are_finished(self, start: int, end: int, cached_blocks: Optional[Set[tuple[int, int]]] = None) -> bool:
         required = self._required_range_blocks(start, end)
         if not required:
             return False
@@ -1269,7 +1314,7 @@ class TorrentRuntime:
             with getattr(self, "_fast_block_lock", threading.Lock()):
                 flushed.update(
                     block
-                    for block in getattr(self, "_fast_blocks", set())
+                    for block in (cached_blocks if cached_blocks is not None else getattr(self, "_fast_blocks", set()))
                     if block in remaining
                 )
             return remaining.issubset(flushed)
@@ -1281,10 +1326,10 @@ class TorrentRuntime:
             finished = set(getattr(self, "_finished_blocks", set()))
         fast_lock = getattr(self, "_fast_block_lock", None)
         if fast_lock is None:
-            finished.update(getattr(self, "_fast_blocks", set()))
+            finished.update(cached_blocks if cached_blocks is not None else getattr(self, "_fast_blocks", set()))
         else:
             with fast_lock:
-                finished.update(getattr(self, "_fast_blocks", set()))
+                finished.update(cached_blocks if cached_blocks is not None else getattr(self, "_fast_blocks", set()))
         return remaining.issubset(finished)
 
     def _fast_peer_endpoints(self, pieces: Set[int]) -> list[Endpoint]:
@@ -1299,33 +1344,38 @@ class TorrentRuntime:
             endpoint = normalize_endpoint(getattr(peer, "ip", None))
             if endpoint is None or endpoint in seen:
                 continue
-            availability = getattr(peer, "pieces", None)
-            if availability:
-                if not any(
-                    piece < len(availability) and bool(availability[piece])
-                    for piece in pieces
-                ):
-                    continue
+            # shortcut: a stale bitfield may reject this probe; native scheduling
+            # remains the fallback.
             seen.add(endpoint)
             connected.append(endpoint)
 
         discovered: list[Endpoint] = []
         discovery = getattr(getattr(self, "record", None), "discovery", None)
-        for peer in getattr(discovery, "discovered_peers", ()):
+        with getattr(discovery, "lock", threading.Lock()):
+            discovered_peers = tuple(getattr(discovery, "discovered_peers", ()))
+        for peer in discovered_peers:
             endpoint = normalize_endpoint(peer)
             if endpoint is None or endpoint in discovered:
                 continue
             discovered.append(endpoint)
 
-        # Keep tracker peers in the first probe batch. A full libtorrent peer
-        # list can consist of stale endpoints while discovery already found a
-        # reachable peer.
+        discovered = sorted(peer for peer in discovered if peer not in seen)
+        if discovered:
+            with getattr(self, "_fast_block_lock", threading.Lock()):
+                offset = getattr(self, "_fast_peer_cursor", 0) % len(discovered)
+                self._fast_peer_cursor = offset + 16 - min(4, len(connected))
+            discovered = discovered[offset:] + discovered[:offset]
+
+        # Try fresh tracker peers too: connected peers may reject a second
+        # connection from the same IP. Rotate stale tracker endpoints.
         endpoints: list[Endpoint] = []
         for endpoint in connected[:4] + discovered + connected[4:]:
             if endpoint in endpoints:
                 continue
             endpoints.append(endpoint)
-            if len(endpoints) >= 8:
+            # Stremio keeps a wider connection set during startup. A larger
+            # probe fan-out lets a reachable peer win over stale tracker data.
+            if len(endpoints) >= 16:
                 break
         return endpoints
 
@@ -1405,53 +1455,59 @@ class TorrentRuntime:
         block_size: int,
         total_size: int,
     ) -> None:
-        fetched = fetch_blocks_from_peers(
-            endpoints,
-            info_hash,
-            self._fast_peer_id,
-            blocks,
-            piece_length,
-            block_size,
-            total_size,
-        )
-        if fetched and not self.stop_event.is_set():
-            try:
-                absolute_path = self.selected_file_path()
-                # shortcut: partial blocks bypass piece hashing; replace with verified block injection when libtorrent exposes it.
-                written = {}
-                with open(absolute_path, "r+b") as stream:
-                    for (piece, block), data in fetched.items():
-                        local_offset = (
-                            piece * piece_length
-                            + block * block_size
-                            - file_offset
-                        )
-                        if (
-                            local_offset < 0
-                            or local_offset + len(data) > self.file_size
-                        ):
-                            continue
-                        stream.seek(local_offset)
-                        stream.write(data)
-                        written[(piece, block)] = data
-                    stream.flush()
-                fetched = written
-            except (OSError, ValueError) as error:
-                log_event(
-                    "fast block write failed",
-                    sessionId=self.session_id,
-                    error=str(error),
-                )
-                fetched = {}
+        active = threading.Event()
+        active.set()
+        seen: Set[tuple[int, int]] = set()
 
-        with self._fast_block_lock:
-            self._fast_blocks_inflight.difference_update(blocks)
-            self._fast_blocks.update(fetched)
-            retry_at = time.monotonic() + 1.0
-            for block in blocks - set(fetched):
-                self._fast_block_retry_at[block] = retry_at
-            for block in fetched:
-                self._fast_block_retry_at.pop(block, None)
+        def record(block: tuple[int, int], data: bytes) -> None:
+            piece, index = block
+            position = piece * piece_length + index * block_size
+            if position >= file_offset + self.file_size or position + len(data) <= file_offset:
+                return
+            with self._fast_block_lock:
+                if not active.is_set() or self.stop_event.is_set():
+                    return
+                seen.add(block)
+                self._fast_blocks.setdefault(block, data)
+                while sum(map(len, self._fast_blocks.values())) > 8 * 1024 * 1024:
+                    self._fast_blocks.pop(next(iter(self._fast_blocks)))
+                start_virtual_prefetch = bool(
+                    self._is_large_piece_torrent()
+                    and not getattr(self, "_startup_fast_prefetch_started", False)
+                    and block in getattr(self, "_startup_fast_head_blocks", set())
+                )
+                if start_virtual_prefetch:
+                    self._startup_fast_prefetch_started = True
+            if start_virtual_prefetch:
+                virtual_end = min(self.file_size, constants.STARTUP_VIRTUAL_PIECE_BYTES) - 1
+                head_end = getattr(self, "_startup_fast_head_end", -1)
+                if virtual_end > head_end:
+                    self._start_fast_block_fetch(head_end + 1, virtual_end)
+
+        try:
+            # ponytail: peer blocks are unverified until the piece completes; replace with verified block injection when available.
+            fetched = fetch_blocks_from_peers(
+                endpoints,
+                info_hash,
+                self._fast_peer_id,
+                blocks,
+                piece_length,
+                block_size,
+                total_size,
+                on_block=record,
+            )
+            for block, data in fetched.items():
+                record(block, data)
+        finally:
+            with self._fast_block_lock:
+                active.clear()
+                self._fast_blocks_inflight.difference_update(blocks)
+                retry_at = time.monotonic() + constants.BLOCKED_REPLAN_INTERVAL
+                for block in blocks - seen:
+                    self._fast_block_retry_at[block] = retry_at
+                for block in seen:
+                    self._fast_block_retry_at.pop(block, None)
+        fetched = seen
         if fetched:
             log_event(
                 "fast blocks ready",
@@ -1460,7 +1516,6 @@ class TorrentRuntime:
                 timingPhase="fast_block_ready",
                 elapsedMs=self.elapsed_ms(),
             )
-
     def _startup_window_bytes(self) -> int:
         try:
             piece_length = (
@@ -3037,7 +3092,7 @@ class TorrentRuntime:
                         is_sync=is_sync,
                         sync_metadata=sync_metadata,
                     )
-                    self._start_fast_block_fetch(start, end)
+                self._start_fast_block_fetch(start, end)
                 self._force_reannounce_if_stalled(
                     target_piece,
                     blocked_waits,
@@ -3110,8 +3165,37 @@ class TorrentRuntime:
             ):
                 return None
 
+            fast_blocks = getattr(self, "_fast_blocks", None)
+            cached = None
+            if isinstance(fast_blocks, dict):
+                required = self._required_range_blocks(start, end)
+                with self._fast_block_lock:
+                    cached = {key: fast_blocks[key] for key in required if key in fast_blocks}
+                if not self._range_blocks_are_finished(start, end, set(cached)):
+                    continue
             stream.seek(start)
             chunk = stream.read(expected_length)
+            if len(chunk) == expected_length and cached:
+                piece_length = int(self.info.piece_length())
+                file_offset = int(self.info.files().file_offset(self.file_index))
+                block_size = int(self.handle.status().block_size)
+                merged = bytearray(chunk)
+                try:
+                    verified = {
+                        piece for piece in {p for p, _ in cached}
+                        if self.handle.have_piece(piece)
+                    }
+                except RuntimeError:
+                    return None
+                for (piece, block), data in cached.items():
+                    if piece in verified:
+                        continue
+                    block_start = piece * piece_length + block * block_size - file_offset
+                    first = max(start, block_start)
+                    last = min(end + 1, block_start + len(data))
+                    if first < last:
+                        merged[first - start:last - start] = data[first - block_start:last - block_start]
+                chunk = bytes(merged)
             if len(chunk) == expected_length:
                 has_sparse_zeros = (
                     (sparse_zero_block in chunk)
@@ -3364,9 +3448,16 @@ class TorrentRuntime:
                     handler.close_connection = True
                     return
                 if chunk is None:
+                    chunk_size = (
+                        constants.INITIAL_STREAM_BYTES
+                        if track_position
+                        and self._is_large_piece_torrent()
+                        and self._is_startup_window_active(offset)
+                        else constants.STREAM_CHUNK_SIZE
+                    )
                     chunk_end = min(
                         end,
-                        offset + constants.STREAM_CHUNK_SIZE - 1,
+                        offset + chunk_size - 1,
                         self.file_piece_end(offset),
                     )
                     chunk = self.read_range_chunk(
@@ -3477,7 +3568,11 @@ class TorrentRuntime:
             return None, None
         chunk_end = min(
             end,
-            start + constants.STREAM_CHUNK_SIZE - 1,
+            start + (
+                constants.INITIAL_STREAM_BYTES
+                if track_position and not is_sync
+                else constants.STREAM_CHUNK_SIZE
+            ) - 1,
             self.file_piece_end(start),
         )
         if (

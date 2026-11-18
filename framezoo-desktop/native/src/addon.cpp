@@ -2042,12 +2042,15 @@ napi_value load_player(napi_env env, napi_callback_info info) {
   get_bool(env, argv[1], "autoplay", &autoplay);
   get_bool(env, argv[1], "isTorrent", &is_torrent);
   get_number(env, argv[1], "generation", &requested_generation);
+  if (!std::isfinite(start_at)) {
+    return throw_error(env, "startAt must be finite");
+  }
   player->generation.store(
       std::max(0, static_cast<int>(requested_generation))
   );
   player->video_frame_ready.store(false, std::memory_order_release);
   player->pending_start_at.store(
-      std::max(0.0, start_at),
+      is_torrent ? 0 : std::max(0.0, start_at),
       std::memory_order_release
   );
 #if defined(__APPLE__)
@@ -2128,7 +2131,12 @@ napi_value load_player(napi_env env, napi_callback_info info) {
   }
 
   const char* load_command[] = {"loadfile", url.c_str(), "replace", nullptr};
-  if (player->command(load_command) < 0) {
+  // Seeking during load prevents an initial frame from the start of the file.
+  const std::string start_option = "start=" + std::to_string(start_at);
+  const char* resume_command[] = {
+      "loadfile", url.c_str(), "replace", "-1", start_option.c_str(), nullptr
+  };
+  if (player->command(is_torrent && start_at > 0 ? resume_command : load_command) < 0) {
     return throw_error(env, "libmpv loadfile command failed");
   }
   napi_value result;

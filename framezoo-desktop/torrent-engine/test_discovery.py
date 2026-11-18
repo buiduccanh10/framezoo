@@ -120,6 +120,38 @@ class TrackerResponseTest(unittest.TestCase):
 
 
 class TorrentDiscoveryTest(unittest.TestCase):
+    def test_dht_lookup_starts_before_http_tracker_fanout(self):
+        events = []
+
+        class FakeHandle:
+            def status(self):
+                return SimpleNamespace(num_peers=0, total_done=0, total_wanted=100)
+
+            def force_dht_announce(self):
+                events.append("dht-announce")
+
+        class FakeSession:
+            def dht_get_peers(self, _info_hash):
+                events.append("dht-lookup")
+
+        runtime = discovery.TorrentDiscovery(
+            FakeSession(),
+            FakeHandle(),
+            lt.sha1_hash(bytes.fromhex("04" * 20)),
+            ["http://slow.example/announce"],
+            b"-FZ0001-" + b"0" * 12,
+            6881,
+        )
+
+        def announce(tracker, *_args, **_kwargs):
+            events.append("tracker")
+            return discovery.TrackerResult(tracker, ())
+
+        with patch.object(discovery, "announce_http_tracker", side_effect=announce):
+            runtime._run_cycle()
+
+        self.assertLess(events.index("dht-lookup"), events.index("tracker"))
+
     def test_slow_tracker_does_not_hide_fast_tracker_result(self):
         fast_peer = discovery.PeerAddress("127.0.0.1", 6881)
         slow_started = threading.Event()
@@ -312,7 +344,7 @@ class TorrentDiscoveryTest(unittest.TestCase):
                 self.dht_announces = 0
 
             def status(self):
-                return SimpleNamespace(total_done=0, total_wanted=100)
+                return SimpleNamespace(num_peers=0, total_done=0, total_wanted=100)
 
             def connect_peer(self, address, _source):
                 self.connected.append(address)
@@ -321,6 +353,9 @@ class TorrentDiscoveryTest(unittest.TestCase):
                 self.dht_announces += 1
 
         class FakeSession:
+            def __init__(self):
+                self.apply_settings = Mock()
+
             def dht_get_peers(self, _info_hash):
                 return None
 
@@ -338,18 +373,25 @@ class TorrentDiscoveryTest(unittest.TestCase):
         def announce(tracker, *_args, **_kwargs):
             return results[tracker]
 
-        with patch.object(discovery, "announce_http_tracker", side_effect=announce):
+        with patch.object(discovery, "announce_http_tracker", side_effect=announce), patch.object(
+            discovery,
+            "get_local_ipv4s",
+            return_value=["203.0.113.10", "192.0.2.2"],
+        ):
             runtime._run_cycle()
 
-        self.assertEqual(
-            handle.connected,
-            [("127.0.0.1", 6881), ("127.0.0.2", 6882)],
-        )
+        self.assertEqual(len(handle.connected), 4)
+        self.assertEqual(handle.connected.count(("127.0.0.1", 6881)), 2)
+        self.assertEqual(handle.connected.count(("127.0.0.2", 6882)), 2)
         self.assertEqual(runtime.snapshot()["trackersAttempted"], 2)
         self.assertEqual(runtime.snapshot()["trackersSucceeded"], 2)
         self.assertEqual(runtime.snapshot()["peersDiscovered"], 2)
         self.assertEqual(runtime.snapshot()["peersInjected"], 2)
         self.assertEqual(handle.dht_announces, 1)
+        runtime.session.apply_settings.assert_called_once_with({
+            "listen_interfaces": "203.0.113.10:49160-49170,192.0.2.2:49160-49170",
+            "outgoing_interfaces": "203.0.113.10,192.0.2.2",
+        })
 
     def test_tracker_failure_does_not_abort_cycle(self):
         class FakeHandle:
@@ -473,6 +515,20 @@ class TorrentDiscoveryTest(unittest.TestCase):
         self.assertIn("udp://exodus.desync.com:6969/announce", trackers)
         self.assertIn("http://tracker2.dler.org:80/announce", trackers)
 
+    def test_local_ipv4s_include_secondary_interfaces(self):
+        with patch.object(discovery, "get_local_ipv4", return_value="192.0.2.1"), patch.object(
+            discovery.subprocess,
+            "run",
+            return_value=SimpleNamespace(
+                stdout="en0: flags=\n    inet 192.0.2.1 netmask 0xffffff00\n"
+                "en1: flags=\n    inet 192.0.2.2 netmask 0xffffff00\n"
+            ),
+        ):
+            self.assertEqual(
+                discovery.get_local_ipv4s(),
+                ["192.0.2.1", "192.0.2.2"],
+            )
+
     def test_network_change_rebinds_and_reactivates_active_swarm(self):
         from torrent_engine import LibtorrentEngine
 
@@ -488,6 +544,8 @@ class TorrentDiscoveryTest(unittest.TestCase):
 
         with patch("torrent_engine.time.monotonic", return_value=100), patch(
             "torrent_engine.get_local_ipv4", return_value="192.0.2.2"
+        ), patch(
+            "torrent_engine.get_local_ipv4s", return_value=["192.0.2.2"]
         ), patch.dict("os.environ", {"FRAMEZOO_TEST_LOOPBACK": "0"}), patch(
             "torrent_engine.threading.Thread"
         ) as probe:
@@ -515,9 +573,31 @@ class TorrentDiscoveryTest(unittest.TestCase):
         engine._session = SimpleNamespace(apply_settings=Mock(side_effect=RuntimeError("failed")))
         with patch("torrent_engine.time.monotonic", return_value=100), patch(
             "torrent_engine.get_local_ipv4", return_value="192.0.2.2"
+        ), patch(
+            "torrent_engine.get_local_ipv4s", return_value=["192.0.2.2"]
         ):
             engine.refresh_network()
         self.assertEqual(engine.listen_address, "192.0.2.1")
+
+    def test_network_settings_bind_all_local_ipv4s(self):
+        from torrent_engine import LibtorrentEngine
+
+        engine = object.__new__(LibtorrentEngine)
+        with patch("torrent_engine.get_local_ipv4", return_value="192.0.2.1"), patch(
+            "torrent_engine.get_local_ipv4s",
+            return_value=["192.0.2.1", "192.0.2.2", "100.64.0.3"],
+        ), patch.dict("os.environ", {"FRAMEZOO_TEST_LOOPBACK": "0"}):
+            self.assertEqual(
+                engine._network_settings(),
+                {
+                    "listen_interfaces": (
+                        "192.0.2.1:49160-49170,"
+                        "192.0.2.2:49160-49170,"
+                        "100.64.0.3:49160-49170"
+                    ),
+                    "outgoing_interfaces": "192.0.2.1,192.0.2.2,100.64.0.3",
+                },
+            )
 
     def test_http_announce_uses_current_listen_port(self):
         session = SimpleNamespace(listen_port=lambda: 49169)
@@ -546,10 +626,15 @@ class TorrentDiscoveryTest(unittest.TestCase):
         )
         runtime.discovered_peers.add(("203.0.113.10", 6881))
 
-        self.assertTrue(runtime._relax_network_binding_if_peerless())
+        with patch.object(
+            discovery,
+            "get_local_ipv4s",
+            return_value=["203.0.113.10", "192.0.2.2"],
+        ):
+            self.assertTrue(runtime._relax_network_binding_if_peerless())
         session.apply_settings.assert_called_once_with({
-            "listen_interfaces": "0.0.0.0:49160-49170",
-            "outgoing_interfaces": "",
+            "listen_interfaces": "203.0.113.10:49160-49170,192.0.2.2:49160-49170",
+            "outgoing_interfaces": "203.0.113.10,192.0.2.2",
         })
         handle.force_reannounce.assert_called_once_with()
 
