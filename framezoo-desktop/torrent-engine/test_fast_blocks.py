@@ -463,6 +463,262 @@ class FastBlockProtocolTest(unittest.TestCase):
         self.assertTrue(calls)
         self.assertEqual(len(calls[0][1]), 4)
 
+    def test_peer_probe_uses_unique_peer_ids_and_prioritizes_working_peers(self):
+        from torrent_runtime import TorrentRuntime
+
+        seen_peer_ids = []
+        succeeded = []
+        blocks = {(0, 0)}
+
+        def fake_fetch(endpoint, _info_hash, peer_id, *_args, on_block=None, **_kwargs):
+            seen_peer_ids.append(peer_id)
+            if endpoint[1] == 2:
+                data = b"ok"
+                if on_block:
+                    on_block((0, 0), data)
+                return {(0, 0): data}
+            return {}
+
+        with patch("torrent_fast_blocks.fetch_blocks_from_peer", fake_fetch):
+            result = fetch_blocks_from_peers(
+                [("192.0.2.1", 1), ("192.0.2.2", 2)],
+                b"01234567890123456789",
+                b"-FZFB01-" + b"0" * 12,
+                blocks,
+                64 * 1024,
+                16 * 1024,
+                64 * 1024,
+                on_peer_success=succeeded.append,
+            )
+
+        self.assertEqual(result, {(0, 0): b"ok"})
+        self.assertEqual(len(seen_peer_ids), 2)
+        self.assertEqual(len(set(seen_peer_ids)), 2)
+        self.assertEqual(succeeded, [("192.0.2.2", 2)])
+
+        runtime = object.__new__(TorrentRuntime)
+        runtime._fast_block_lock = threading.Lock()
+        runtime._working_fast_peers = []
+        runtime._failed_fast_peers = {}
+        runtime.engine = SimpleNamespace(listen_address="192.168.1.5", listen_port=49161)
+        runtime.handle = SimpleNamespace(get_peer_info=lambda: [])
+        runtime.record = SimpleNamespace(
+            discovery=SimpleNamespace(
+                discovered_peers={
+                    ("192.168.1.5", 49161),
+                    ("192.0.2.1", 1),
+                    ("192.0.2.2", 2),
+                    ("192.0.2.3", 3),
+                },
+            ),
+        )
+        runtime._record_fast_peer_success(("192.0.2.2", 2))
+        runtime._record_fast_peer_failure(("192.0.2.1", 1))
+        endpoints = runtime._fast_peer_endpoints({0})
+        self.assertEqual(endpoints[0], ("192.0.2.2", 2))
+        self.assertNotIn(("192.168.1.5", 49161), endpoints)
+        self.assertGreater(endpoints.index(("192.0.2.1", 1)), endpoints.index(("192.0.2.3", 3)))
+
+    def test_peer_probe_reuses_unchoked_socket_and_filters_by_bitfield(self):
+        from torrent_fast_blocks import close_peer_connections
+
+        info_hash = b"01234567890123456789"
+        peer_id = b"-FZFB01-" + b"012345678901"
+        piece_length = 64 * 1024
+        block_size = 16 * 1024
+        payloads = {
+            (0, 0): b"a" * block_size,
+            (0, 1): b"b" * block_size,
+        }
+        accepts = 0
+        ready = threading.Event()
+        server = socket.socket()
+        server.bind(("127.0.0.1", 0))
+        server.listen(2)
+        port = server.getsockname()[1]
+
+        def serve_peer():
+            nonlocal accepts
+            ready.set()
+            conn, _ = server.accept()
+            accepts += 1
+            with conn:
+                conn.settimeout(3)
+                self._recv_exact(conn, 73)
+                # Send handshake + BITFIELD (piece 0 only, bit 0x80) + UNCHOKE
+                conn.sendall(
+                    bytes([19])
+                    + b"BitTorrent protocol"
+                    + b"\x00" * 8
+                    + info_hash
+                    + b"-FZSEED-" + b"012345678901"
+                    + struct.pack(">IBB", 2, 5, 0x80)
+                    + b"\x00\x00\x00\x01\x01",
+                )
+                for _ in range(2):
+                    length = struct.unpack(">I", self._recv_exact(conn, 4))[0]
+                    req = self._recv_exact(conn, length)
+                    self.assertEqual(req[0], 6)
+                    piece, begin, size = struct.unpack(">III", req[1:13])
+                    data = payloads[(piece, begin // block_size)][:size]
+                    conn.sendall(
+                        struct.pack(">IBII", 9 + len(data), 7, piece, begin)
+                        + data,
+                    )
+
+        thread = threading.Thread(target=serve_peer, daemon=True)
+        thread.start()
+        self.assertTrue(ready.wait(2))
+        sockets = {}
+        sockets_lock = threading.Lock()
+        try:
+            first = fetch_blocks_from_peers(
+                [("127.0.0.1", port)],
+                info_hash,
+                peer_id,
+                {(0, 0)},
+                piece_length,
+                block_size,
+                piece_length * 2,
+                peer_sockets=sockets,
+                peer_sockets_lock=sockets_lock,
+            )
+            self.assertEqual(first, {(0, 0): payloads[(0, 0)]})
+            self.assertIn(("127.0.0.1", port), sockets)
+            self.assertEqual(sockets[("127.0.0.1", port)].pieces, {0})
+
+            # Asking for piece 1 (not in peer bitfield) skips without failing/closing.
+            missing = fetch_blocks_from_peers(
+                [("127.0.0.1", port)],
+                info_hash,
+                peer_id,
+                {(1, 0)},
+                piece_length,
+                block_size,
+                piece_length * 2,
+                peer_sockets=sockets,
+                peer_sockets_lock=sockets_lock,
+            )
+            self.assertEqual(missing, {})
+            self.assertIn(("127.0.0.1", port), sockets)
+
+            # Second request for piece 0 reuses the exact same TCP socket (accepts == 1).
+            second = fetch_blocks_from_peers(
+                [("127.0.0.1", port)],
+                info_hash,
+                peer_id,
+                {(0, 1)},
+                piece_length,
+                block_size,
+                piece_length * 2,
+                peer_sockets=sockets,
+                peer_sockets_lock=sockets_lock,
+            )
+            self.assertEqual(second, {(0, 1): payloads[(0, 1)]})
+            self.assertEqual(accepts, 1)
+        finally:
+            close_peer_connections(sockets, sockets_lock)
+            server.close()
+            thread.join(timeout=2)
+
+    def test_reverse_tail_orders_head_first_and_reverses_tail(self):
+        from torrent_fast_blocks import _send_block_requests
+
+        sent = []
+
+        class RecordingSocket:
+            def sendall(self, data):
+                _, message_id, piece, begin, _length = struct.unpack(">IBIII", data)
+                self.assertEqual(message_id, 6)
+                sent.append((piece, begin // 16384))
+
+        # unittest helper binding
+        sock = RecordingSocket()
+        sock.self = self
+        RecordingSocket.assertEqual = self.assertEqual
+        blocks = {(0, idx) for idx in range(8)}
+        _send_block_requests(
+            sock,
+            blocks,
+            16 * 1024 * 1024,
+            16384,
+            16 * 1024 * 1024,
+            reverse_tail=True,
+        )
+        self.assertEqual(
+            sent,
+            [(0, 0), (0, 1), (0, 2), (0, 3), (0, 7), (0, 6), (0, 5), (0, 4)],
+        )
+
+    def test_busy_warm_socket_lock_waits_for_reuse_instead_of_redialing(self):
+        from torrent_fast_blocks import PeerWireConnection, close_peer_connections
+
+        info_hash = b"\x22" * 20
+        peer_id = b"-TEST01-123456789012"
+        block_size = 16384
+        piece_length = 65536
+        payload = b"z" * block_size
+
+        server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        server.bind(("127.0.0.1", 0))
+        server.listen(2)
+        port = server.getsockname()[1]
+
+        client_sock, peer_sock = socket.socketpair()
+        sockets_lock = threading.Lock()
+        endpoint = ("127.0.0.1", port)
+        pooled = PeerWireConnection(endpoint)
+        pooled.stream = client_sock
+        pooled.unchoked = True
+        sockets = {endpoint: pooled}
+        accepts = 0
+
+        def serve():
+            nonlocal accepts
+            server.settimeout(0.5)
+            try:
+                header = self._recv_exact(peer_sock, 17)
+                _, msg_id, piece, begin, length = struct.unpack(">IBIII", header)
+                self.assertEqual((msg_id, piece, begin), (6, 0, 0))
+                frame = struct.pack(">IBII", 9 + len(payload), 7, 0, 0) + payload
+                peer_sock.sendall(struct.pack(">I", len(frame) - 4) + frame[4:])
+                try:
+                    extra, _ = server.accept()
+                    accepts += 1
+                    extra.close()
+                except OSError:
+                    pass
+            finally:
+                peer_sock.close()
+
+        thread = threading.Thread(target=serve, daemon=True)
+        thread.start()
+        pooled.lock.acquire()
+        releaser = threading.Timer(0.03, pooled.lock.release)
+        releaser.start()
+        try:
+            fetched = fetch_blocks_from_peer(
+                endpoint,
+                info_hash,
+                peer_id,
+                {(0, 0)},
+                piece_length,
+                block_size,
+                piece_length,
+                timeout=1.0,
+                peer_sockets=sockets,
+                peer_sockets_lock=sockets_lock,
+            )
+            self.assertEqual(fetched, {(0, 0): payload})
+            self.assertEqual(accepts, 0)
+        finally:
+            releaser.cancel()
+            if pooled.lock.locked():
+                pooled.lock.release()
+            close_peer_connections(sockets, sockets_lock)
+            server.close()
+            thread.join(timeout=2)
+
     @staticmethod
     def _recv_exact(connection, length):
         data = bytearray()

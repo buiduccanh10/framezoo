@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import ipaddress
+import os
 import re
 import socket
+import struct
 import subprocess
 import threading
 import time
@@ -159,6 +161,118 @@ def _append_tracker_query(
     )
 
 
+_UDP_PROTOCOL_ID = 0x41727101980
+
+
+def announce_udp_tracker(
+    tracker: str,
+    info_hash: bytes,
+    peer_id: bytes,
+    port: int,
+    downloaded: int = 0,
+    left: Optional[int] = None,
+    uploaded: int = 0,
+    numwant: int = constants.TRACKER_NUMWANT,
+    timeout: float = 1.5,
+    event: Optional[str] = "started",
+) -> TrackerResult:
+    """Announce to a UDP tracker using BEP 15 compact peer responses."""
+    parsed = urlsplit(tracker)
+    if parsed.scheme != "udp" or not parsed.hostname or not parsed.port:
+        return TrackerResult(tracker, (), "unsupported udp tracker url")
+    if len(info_hash) != 20:
+        return TrackerResult(tracker, (), "invalid info_hash")
+
+    deadline = time.monotonic() + max(0.2, timeout)
+    sock: Optional[socket.socket] = None
+    try:
+        resolved = socket.getaddrinfo(
+            parsed.hostname,
+            parsed.port,
+            socket.AF_INET,
+            socket.SOCK_DGRAM,
+        )
+        if not resolved:
+            return TrackerResult(tracker, (), "tracker host lookup returned no IPv4")
+        remote = resolved[0][4]
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        sock.connect(remote)
+
+        connect_tx = int.from_bytes(os.urandom(4), "big")
+        sock.settimeout(max(0.05, deadline - time.monotonic()))
+        sock.sendall(struct.pack(">QII", _UDP_PROTOCOL_ID, 0, connect_tx))
+
+        connection_id: Optional[int] = None
+        while time.monotonic() < deadline:
+            sock.settimeout(max(0.05, deadline - time.monotonic()))
+            resp = sock.recv(64)
+            if len(resp) < 16:
+                continue
+            action, resp_tx, conn_id = struct.unpack(">IIQ", resp[:16])
+            if action == 0 and resp_tx == connect_tx:
+                connection_id = conn_id
+                break
+        if connection_id is None:
+            return TrackerResult(tracker, (), "udp connect timed out")
+
+        announce_tx = int.from_bytes(os.urandom(4), "big")
+        event_code = {"completed": 1, "started": 2, "stopped": 3}.get(
+            event or "",
+            0,
+        )
+        left_val = max(0, int(left)) if left is not None else 0
+        key = int.from_bytes(os.urandom(4), "big")
+        clamped_port = max(1, min(65535, int(port)))
+        packet = (
+            struct.pack(">QII", connection_id, 1, announce_tx)
+            + info_hash
+            + (peer_id[:20].ljust(20, b"0"))
+            + struct.pack(
+                ">QQQIIIiH",
+                max(0, int(downloaded)),
+                left_val,
+                max(0, int(uploaded)),
+                event_code,
+                0,
+                key,
+                max(1, int(numwant)),
+                clamped_port,
+            )
+        )
+        sock.settimeout(max(0.05, deadline - time.monotonic()))
+        sock.sendall(packet)
+
+        while time.monotonic() < deadline:
+            sock.settimeout(max(0.05, deadline - time.monotonic()))
+            resp = sock.recv(4096)
+            if len(resp) >= 8:
+                action, resp_tx = struct.unpack(">II", resp[:8])
+                if resp_tx != announce_tx:
+                    continue
+                if action == 3:
+                    return TrackerResult(
+                        tracker,
+                        (),
+                        resp[8:].decode("utf-8", "replace") or "udp tracker error",
+                    )
+                if action == 1 and len(resp) >= 20:
+                    return TrackerResult(
+                        tracker,
+                        tuple(_parse_compact_peers(resp[20:], 6)),
+                    )
+        return TrackerResult(tracker, (), "udp announce timed out")
+    except (OSError, TimeoutError, ValueError) as error:
+        return TrackerResult(tracker, (), str(error))
+    except Exception as error:
+        return TrackerResult(tracker, (), str(error))
+    finally:
+        if sock is not None:
+            try:
+                sock.close()
+            except OSError:
+                pass
+
+
 def announce_http_tracker(
     tracker: str,
     info_hash: bytes,
@@ -299,6 +413,7 @@ class TorrentDiscovery:
         listen_port: int,
         status_callback: Optional[Callable[[dict[str, Any]], None]] = None,
         initial_peers: Optional[Iterable[Tuple[str, int]]] = None,
+        on_peers_discovered: Optional[Callable[[], None]] = None,
     ) -> None:
         self.session = session
         self.handle = handle
@@ -306,6 +421,7 @@ class TorrentDiscovery:
         self.peer_id = peer_id
         self.listen_port = listen_port
         self.status_callback = status_callback
+        self.on_peers_discovered = on_peers_discovered
         self.stop_event = threading.Event()
         self.wake_event = threading.Event()
         self.lock = threading.RLock()
@@ -376,6 +492,8 @@ class TorrentDiscovery:
     def stop(self) -> None:
         self.stop_event.set()
         self.wake_event.set()
+        self.on_peers_discovered = None
+        self.status_callback = None
         with self.lock:
             self.paused = False
             self.phase = "stopped"
@@ -511,7 +629,7 @@ class TorrentDiscovery:
 
     def _announce_tracker(self, tracker: str, status: Any) -> TrackerResult:
         parsed = urlsplit(tracker)
-        if parsed.scheme not in ("http", "https"):
+        if parsed.scheme not in ("http", "https", "udp"):
             return TrackerResult(tracker, (), "native tracker")
 
         total_wanted = int(getattr(status, "total_wanted", 0))
@@ -533,6 +651,16 @@ class TorrentDiscovery:
             listen_port = int(self.session.listen_port()) or self.listen_port
         except (AttributeError, RuntimeError, TypeError, ValueError):
             listen_port = self.listen_port
+        if parsed.scheme == "udp":
+            return announce_udp_tracker(
+                tracker,
+                self.info_hash.to_bytes(),
+                self.peer_id,
+                listen_port,
+                downloaded=downloaded,
+                left=left,
+                timeout=min(constants.TRACKER_REQUEST_TIMEOUT, 1.5),
+            )
         return announce_http_tracker(
             tracker,
             self.info_hash.to_bytes(),
@@ -598,6 +726,12 @@ class TorrentDiscovery:
                     self.injected_peers.add(key)
             except Exception:
                 continue
+        callback = getattr(self, "on_peers_discovered", None)
+        if callable(callback):
+            try:
+                callback()
+            except Exception:
+                pass
 
     def _connected_peers(self) -> int:
         try:
@@ -709,7 +843,11 @@ class TorrentDiscovery:
             tracker
             for tracker in trackers
             if urlsplit(tracker).scheme in ("http", "https")
-        ]
+        ] or [
+            tracker
+            for tracker in trackers
+            if urlsplit(tracker).scheme == "udp"
+        ][:6]
         results: List[TrackerResult] = []
         if http_trackers:
             executor = ThreadPoolExecutor(
