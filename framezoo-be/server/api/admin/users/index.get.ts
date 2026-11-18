@@ -57,7 +57,7 @@ export default defineEventHandler(async event => {
   const search = typeof query.search === 'string' ? query.search.trim() : '';
   const page = Math.max(1, parseInt(String(query.page || '1'), 10) || 1);
   const limit = Math.min(100, Math.max(1, parseInt(String(query.limit || '10'), 10) || 10));
-  const sort = typeof query.sort === 'string' ? query.sort : 'created_desc';
+  const sort = typeof query.sort === 'string' ? query.sort : 'login_desc';
 
   const now = new Date();
   const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
