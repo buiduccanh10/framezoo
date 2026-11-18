@@ -1,7 +1,7 @@
 import { type LandingLocale, getLandingCopy } from "./i18n";
 
 const SITE_URL = "https://framezoo.top";
-const SOCIAL_IMAGE_URL = `${SITE_URL}/og-preview.jpg`;
+const SOCIAL_IMAGE_URL = `${SITE_URL}/og-preview.jpg?v=2`;
 const SOCIAL_IMAGE_WIDTH = "1024";
 const SOCIAL_IMAGE_HEIGHT = "595";
 const DEFAULT_SEO_TITLE = "Framezoo - Fast & Smooth Video Streaming";
