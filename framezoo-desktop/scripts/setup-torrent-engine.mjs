@@ -34,7 +34,7 @@ function run(command, args) {
   }
 }
 
-function canImportLibtorrent() {
+function canImportLibtorrent({ reportError = false } = {}) {
   if (!fs.existsSync(venvPython)) return false;
   const result = spawnSync(
     venvPython,
@@ -43,14 +43,26 @@ import sys
 from importlib.metadata import version
 from packaging.requirements import Requirement
 import libtorrent, PyInstaller
-requirements = (Requirement(line) for line in open(sys.argv[1]) if line.strip() and not line.lstrip().startswith('#'))
+with open(sys.argv[1], encoding="utf-8") as f:
+    # packaging>=26.3 rejects trailing newlines in Requirement(...)
+    requirements = [Requirement(s) for s in (line.strip() for line in f) if s and not s.startswith("#")]
 sys.exit(not all((req.marker is not None and not req.marker.evaluate()) or req.specifier.contains(version(req.name)) for req in requirements))
 `, requirementsPath],
     {
       cwd: desktopRoot,
-      stdio: "ignore",
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "pipe"],
     },
   );
+  if (result.status !== 0 && reportError) {
+    const details = (
+      result.stderr ||
+      result.stdout ||
+      result.error?.message ||
+      ""
+    ).trim();
+    if (details) console.error(details);
+  }
   return result.status === 0;
 }
 
@@ -107,7 +119,7 @@ function main() {
     requirementsPath,
   ]);
 
-  if (!canImportLibtorrent()) {
+  if (!canImportLibtorrent({ reportError: true })) {
     throw new Error(
       "libtorrent installation completed but import still fails.",
     );
