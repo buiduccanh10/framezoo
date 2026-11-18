@@ -75,6 +75,7 @@ export interface SubtitleStore {
   setOverrideCasing(enabled: boolean): void;
   setPrimaryDelay(delay: number): void;
   setSecondaryDelay(delay: number): void;
+  adjustDelay(track: "primary" | "secondary", delta: number): number;
   setShowDelayIndicator(show: boolean): void;
   importSubtitleLanguage(lang: string | null): void;
   resetSubtitleSpecificSettings(track?: "primary" | "secondary"): void;
@@ -253,6 +254,25 @@ export const useSubtitleStore = create(
         set((s) => {
           s.secondaryDelay = Number.isFinite(delay) ? delay : 0;
         });
+      },
+      adjustDelay(track, delta) {
+        let nextDelay = 0;
+        set((s) => {
+          const current =
+            track === "secondary" ? s.secondaryDelay : s.primaryDelay;
+          const raw = current + delta;
+          const rounded = Number.isFinite(raw)
+            ? Math.round(raw * 100) / 100
+            : 0;
+          nextDelay = Object.is(rounded, -0) ? 0 : rounded;
+          if (track === "secondary") {
+            s.secondaryDelay = nextDelay;
+          } else {
+            s.primaryDelay = nextDelay;
+          }
+          s.showDelayIndicator = true;
+        });
+        return nextDelay;
       },
       setShowDelayIndicator(show) {
         set((s) => {

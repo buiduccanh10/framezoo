@@ -14,6 +14,7 @@ export function SubtitleDelayPopout() {
   const secondaryDelay = useSubtitleStore((s) => s.secondaryDelay);
   const delay =
     activeSubtitleTrack === "secondary" ? secondaryDelay : primaryDelay;
+  const displayDelay = Math.abs(delay) < 0.05 ? 0 : delay;
 
   return (
     <Transition
@@ -34,8 +35,8 @@ export function SubtitleDelayPopout() {
           <div className="w-full flex items-center justify-between">
             <span className="text-sm">
               {t("player.menus.subtitles.settings.delay")}:{" "}
-              {delay > 0 ? "+" : ""}
-              {delay.toFixed(1)}s
+              {displayDelay > 0 ? "+" : ""}
+              {displayDelay.toFixed(1)}s
             </span>
           </div>
         </Flare.Child>

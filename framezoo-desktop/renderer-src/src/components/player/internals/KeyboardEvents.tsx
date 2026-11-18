@@ -37,7 +37,6 @@ export function KeyboardEvents() {
   const { setVolume, toggleMute } = useVolume();
   const isInWatchParty = useWatchPartyStore((s) => s.enabled);
   const meta = usePlayerStore((s) => s.meta);
-  const activeSubtitleTrack = usePlayerStore((s) => s.caption.activeTrack);
   const { setDirectMeta } = usePlayerMeta();
   const setShouldStartFromBeginning = usePlayerStore(
     (s) => s.setShouldStartFromBeginning,
@@ -47,14 +46,6 @@ export function KeyboardEvents() {
   const { toggleLastUsed, selectBestCaptionFromLastUsedLanguage } =
     useCaptions();
   const setShowVolume = useEmpheralVolumeStore((s) => s.setShowVolume);
-  const primaryDelay = useSubtitleStore((s) => s.primaryDelay);
-  const secondaryDelay = useSubtitleStore((s) => s.secondaryDelay);
-  const setPrimaryDelay = useSubtitleStore((s) => s.setPrimaryDelay);
-  const setSecondaryDelay = useSubtitleStore((s) => s.setSecondaryDelay);
-  const setDelay =
-    activeSubtitleTrack === "secondary" ? setSecondaryDelay : setPrimaryDelay;
-  const delay =
-    activeSubtitleTrack === "secondary" ? secondaryDelay : primaryDelay;
   const setShowDelayIndicator = useSubtitleStore(
     (s) => s.setShowDelayIndicator,
   );
@@ -86,6 +77,7 @@ export function KeyboardEvents() {
   );
   const lastSeekTargetRef = useRef<number | null>(null);
   const lastSeekKeyTimeRef = useRef<number>(0);
+  const lastSubtitleDelayKeyTimeRef = useRef<number>(0);
 
   const setCurrentOverlay = useOverlayStack((s) => s.setCurrentOverlay);
 
@@ -165,6 +157,26 @@ export function KeyboardEvents() {
     }, 800);
 
     dataRef.current.setVolume(targetVolume);
+  }, []);
+
+  const performSubtitleDelayChange = useCallback((delta: number) => {
+    const activeTrack =
+      usePlayerStore.getState().caption.activeTrack === "secondary"
+        ? "secondary"
+        : "primary";
+    useSubtitleStore.getState().adjustDelay(activeTrack, delta);
+
+    if (useOverlayStack.getState().currentOverlay !== "subtitle") {
+      dataRef.current.setCurrentOverlay("subtitle");
+    }
+
+    if (subtitleDebounce.current) clearTimeout(subtitleDebounce.current);
+    subtitleDebounce.current = setTimeout(() => {
+      dataRef.current.setShowDelayIndicator(false);
+      if (useOverlayStack.getState().currentOverlay === "subtitle") {
+        dataRef.current.setCurrentOverlay(null);
+      }
+    }, 3000);
   }, []);
 
   // Episode navigation functions
@@ -351,16 +363,14 @@ export function KeyboardEvents() {
     isRolling,
     time,
     duration,
-    activeSubtitleTrack,
     router,
-    setDelay,
-    delay,
     setShowDelayIndicator,
     setCurrentOverlay,
     isInWatchParty,
     performSeek,
     performAbsoluteSeek,
     performVolumeChange,
+    performSubtitleDelayChange,
     navigateToNextEpisode,
     navigateToPreviousEpisode,
     keyboardShortcuts,
@@ -382,16 +392,14 @@ export function KeyboardEvents() {
       isRolling,
       time,
       duration,
-      activeSubtitleTrack,
       router,
-      setDelay,
-      delay,
       setShowDelayIndicator,
       setCurrentOverlay,
       isInWatchParty,
       performSeek,
       performAbsoluteSeek,
       performVolumeChange,
+      performSubtitleDelayChange,
       navigateToNextEpisode,
       navigateToPreviousEpisode,
       keyboardShortcuts,
@@ -411,16 +419,14 @@ export function KeyboardEvents() {
     isRolling,
     time,
     duration,
-    activeSubtitleTrack,
     router,
-    setDelay,
-    delay,
     setShowDelayIndicator,
     setCurrentOverlay,
     isInWatchParty,
     performSeek,
     performAbsoluteSeek,
     performVolumeChange,
+    performSubtitleDelayChange,
     navigateToNextEpisode,
     navigateToPreviousEpisode,
     keyboardShortcuts,
@@ -540,67 +546,37 @@ export function KeyboardEvents() {
         return;
       }
 
-      // Subtitle delay - customizable; handle before repeat guard so holding works.
-      if (
-        matchesShortcut(
-          evt,
-          dataRef.current.keyboardShortcuts[ShortcutId.SYNC_SUBTITLES_EARLIER],
-        )
-      ) {
-        evt.preventDefault();
-        const subtitleState = useSubtitleStore.getState();
-        const currentDelay =
-          dataRef.current.activeSubtitleTrack === "secondary"
-            ? subtitleState.secondaryDelay
-            : subtitleState.primaryDelay;
-        dataRef.current.setDelay(currentDelay - 0.5);
-        dataRef.current.setShowDelayIndicator(true);
-        dataRef.current.setCurrentOverlay("subtitle");
-        if (subtitleDebounce.current) clearTimeout(subtitleDebounce.current);
-        subtitleDebounce.current = setTimeout(() => {
-          dataRef.current.setShowDelayIndicator(false);
-          if (useOverlayStack.getState().currentOverlay === "subtitle") {
-            dataRef.current.setCurrentOverlay(null);
+      const canHandleThrottledRepeat = (
+        lastKeyTimeRef: { current: number },
+        intervalMs = 150,
+      ) => {
+        const now = performance.now();
+        if (evt.repeat && now - lastKeyTimeRef.current < intervalMs) {
+          return false;
+        }
+        lastKeyTimeRef.current = now;
+        return true;
+      };
+
+      // Subtitle delay - customizable; single taps apply immediately, held repeat throttled.
+      const subtitleDelaySteps: Array<[ShortcutId, number]> = [
+        [ShortcutId.SYNC_SUBTITLES_EARLIER, -0.5],
+        [ShortcutId.SYNC_SUBTITLES_LATER, 0.5],
+      ];
+      for (const [shortcutId, delta] of subtitleDelaySteps) {
+        if (
+          matchesShortcut(evt, dataRef.current.keyboardShortcuts[shortcutId])
+        ) {
+          evt.preventDefault();
+          if (canHandleThrottledRepeat(lastSubtitleDelayKeyTimeRef)) {
+            dataRef.current.performSubtitleDelayChange(delta);
           }
-        }, 3000);
-        return;
-      }
-      if (
-        matchesShortcut(
-          evt,
-          dataRef.current.keyboardShortcuts[ShortcutId.SYNC_SUBTITLES_LATER],
-        )
-      ) {
-        evt.preventDefault();
-        const subtitleState = useSubtitleStore.getState();
-        const currentDelay =
-          dataRef.current.activeSubtitleTrack === "secondary"
-            ? subtitleState.secondaryDelay
-            : subtitleState.primaryDelay;
-        dataRef.current.setDelay(currentDelay + 0.5);
-        dataRef.current.setShowDelayIndicator(true);
-        dataRef.current.setCurrentOverlay("subtitle");
-        if (subtitleDebounce.current) clearTimeout(subtitleDebounce.current);
-        subtitleDebounce.current = setTimeout(() => {
-          dataRef.current.setShowDelayIndicator(false);
-          if (useOverlayStack.getState().currentOverlay === "subtitle") {
-            dataRef.current.setCurrentOverlay(null);
-          }
-        }, 3000);
-        return;
+          return;
+        }
       }
 
       // Video progress - handle skip shortcuts with accumulated seek & throttled repeat
-      const canHandleSeek = () => {
-        const now = performance.now();
-        if (evt.repeat) {
-          if (now - lastSeekKeyTimeRef.current < 150) {
-            return false;
-          }
-        }
-        lastSeekKeyTimeRef.current = now;
-        return true;
-      };
+      const canHandleSeek = () => canHandleThrottledRepeat(lastSeekKeyTimeRef);
 
       // Arrow keys are locked (always 5 seconds)
       if (k === LOCKED_SHORTCUTS.ARROW_RIGHT) {
