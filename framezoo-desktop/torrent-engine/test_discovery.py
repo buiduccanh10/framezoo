@@ -312,7 +312,7 @@ class TorrentDiscoveryTest(unittest.TestCase):
                 self.dht_announces = 0
 
             def status(self):
-                return SimpleNamespace(total_done=0, total_wanted=100)
+                return SimpleNamespace(num_peers=0, total_done=0, total_wanted=100)
 
             def connect_peer(self, address, _source):
                 self.connected.append(address)
@@ -321,6 +321,9 @@ class TorrentDiscoveryTest(unittest.TestCase):
                 self.dht_announces += 1
 
         class FakeSession:
+            def __init__(self):
+                self.apply_settings = Mock()
+
             def dht_get_peers(self, _info_hash):
                 return None
 
@@ -350,6 +353,10 @@ class TorrentDiscoveryTest(unittest.TestCase):
         self.assertEqual(runtime.snapshot()["peersDiscovered"], 2)
         self.assertEqual(runtime.snapshot()["peersInjected"], 2)
         self.assertEqual(handle.dht_announces, 1)
+        runtime.session.apply_settings.assert_called_once_with({
+            "listen_interfaces": "0.0.0.0:49160-49170",
+            "outgoing_interfaces": "",
+        })
 
     def test_tracker_failure_does_not_abort_cycle(self):
         class FakeHandle:

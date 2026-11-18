@@ -152,6 +152,28 @@ class FastBlockProtocolTest(unittest.TestCase):
         self.assertEqual(result, expected)
         self.assertLess(time.monotonic() - started, 0.2)
 
+    def test_peer_probe_partitions_multiple_blocks(self):
+        blocks = {(0, index) for index in range(4)}
+        calls = []
+
+        def fake_fetch(endpoint, _info_hash, _peer_id, assigned, *_args, **_kwargs):
+            calls.append((endpoint, set(assigned)))
+            return {block: bytes([block[1]]) for block in assigned}
+
+        with patch("torrent_fast_blocks.fetch_blocks_from_peer", fake_fetch):
+            result = fetch_blocks_from_peers(
+                [("192.0.2.1", 1), ("192.0.2.2", 2)],
+                b"01234567890123456789",
+                b"-FZTEST-" + b"012345678901",
+                blocks,
+                64 * 1024,
+                16 * 1024,
+                64 * 1024,
+            )
+
+        self.assertEqual(result, {block: bytes([block[1]]) for block in blocks})
+        self.assertEqual(sorted(len(assigned) for _, assigned in calls), [2, 2])
+
     @staticmethod
     def _recv_exact(connection, length):
         data = bytearray()

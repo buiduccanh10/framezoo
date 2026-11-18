@@ -180,31 +180,49 @@ def fetch_blocks_from_peers(
 
     # Tracker responses contain stale peers. Probe them concurrently so one
     # dead endpoint cannot delay a live peer behind it.
-    executor = ThreadPoolExecutor(max_workers=min(8, len(candidates)))
-    futures = {
-        executor.submit(
-            fetch_blocks_from_peer,
-            endpoint,
-            info_hash,
-            peer_id,
-            set(remaining),
-            piece_length,
-            block_size,
-            total_size,
-            timeout,
-        ): endpoint
-        for endpoint in candidates
-    }
-    try:
-        for future in as_completed(futures):
-            try:
-                fetched = future.result()
-            except (ConnectionError, OSError, TimeoutError, ValueError):
-                continue
-            received.update(fetched)
-            remaining.difference_update(fetched)
-            if not remaining:
-                break
-    finally:
-        executor.shutdown(wait=False, cancel_futures=True)
+    # shortcut: two probe rounds; later retries stay in the normal range loop.
+    for attempt in range(2):
+        if not remaining:
+            break
+        batches: Dict[Endpoint, Set[Block]] = {
+            endpoint: set() for endpoint in candidates
+        }
+        if attempt or len(remaining) < len(candidates):
+            # Keep a one-block probe redundant; it is cheaper than waiting for
+            # a stale endpoint when there is no work to split.
+            for endpoint in candidates:
+                batches[endpoint] = set(remaining)
+        else:
+            for index, block in enumerate(sorted(remaining)):
+                batches[candidates[index % len(candidates)]].add(block)
+        executor = ThreadPoolExecutor(max_workers=min(8, len(candidates)))
+        futures = {
+            executor.submit(
+                fetch_blocks_from_peer,
+                endpoint,
+                info_hash,
+                peer_id,
+                batches[endpoint],
+                piece_length,
+                block_size,
+                total_size,
+                timeout,
+            ): endpoint
+            for endpoint in candidates
+            if batches[endpoint]
+        }
+        try:
+            for future in as_completed(futures):
+                try:
+                    fetched = future.result()
+                except (ConnectionError, OSError, TimeoutError, ValueError):
+                    continue
+                received.update(fetched)
+                remaining.difference_update(fetched)
+                if not remaining:
+                    break
+        finally:
+            executor.shutdown(wait=False, cancel_futures=True)
+        if attempt == 0 and not received:
+            break
     return received

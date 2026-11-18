@@ -684,6 +684,11 @@ class TorrentDiscovery:
                             if len(batch) > 10:
                                 batch.sort(key=lambda peer: peer.port == 6881)
                             self._inject_peers(batch)
+                            # Apply the all-interface fallback as soon as the
+                            # first tracker returns peers; waiting for the
+                            # complete tracker fan-out can leave corporate
+                            # networks peerless for several seconds.
+                            self._relax_network_binding_if_peerless()
                         elif result.error and result.error != "native tracker":
                             with self.lock:
                                 self.last_error = result.error
