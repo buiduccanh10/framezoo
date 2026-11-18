@@ -27,7 +27,7 @@ describe("landing SEO", () => {
     expect(
       document.querySelector<HTMLMetaElement>('meta[name="thumbnail"]')
         ?.content,
-    ).toBe("https://framezoo.top/og-preview.jpg");
+    ).toBe("https://framezoo.top/og-preview.jpg?v=2");
     expect(
       document.querySelector<HTMLMetaElement>('meta[property="og:image:width"]')
         ?.content,
