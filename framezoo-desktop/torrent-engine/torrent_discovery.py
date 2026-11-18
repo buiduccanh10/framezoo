@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import ipaddress
+import re
 import socket
+import subprocess
 import threading
 import time
 from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
@@ -256,6 +258,34 @@ def get_local_ipv4() -> Optional[str]:
     except OSError:
         return None
     return None
+
+
+def get_local_ipv4s(primary: Optional[str] = None) -> list[str]:
+    """List usable local IPv4s so peer sockets can use VPN and secondary NICs."""
+    addresses: list[str] = []
+    primary = primary or get_local_ipv4()
+    if primary:
+        addresses.append(primary)
+    # shortcut: ifconfig covers macOS/Linux; unavailable tools keep the primary route.
+    try:
+        output = subprocess.run(
+            ["ifconfig"],
+            check=False,
+            capture_output=True,
+            text=True,
+            timeout=1,
+        ).stdout
+    except (OSError, subprocess.SubprocessError):
+        output = ""
+    for value in re.findall(r"^\s+inet\s+(\d+(?:\.\d+){3})\b", output, re.MULTILINE):
+        try:
+            address = ipaddress.ip_address(value)
+        except ValueError:
+            continue
+        if address.is_loopback or value in addresses:
+            continue
+        addresses.append(value)
+    return addresses
 
 
 class TorrentDiscovery:
@@ -586,13 +616,21 @@ class TorrentDiscovery:
         apply_settings = getattr(self.session, "apply_settings", None)
         if not callable(apply_settings):
             return False
+        addresses = get_local_ipv4s()
+        if len(addresses) > 1:
+            network_settings = {
+                "listen_interfaces": ",".join(
+                    f"{address}:49160-49170" for address in addresses
+                ),
+                "outgoing_interfaces": ",".join(addresses),
+            }
+        else:
+            network_settings = {
+                "listen_interfaces": "0.0.0.0:49160-49170",
+                "outgoing_interfaces": "",
+            }
         try:
-            apply_settings(
-                {
-                    "listen_interfaces": "0.0.0.0:49160-49170",
-                    "outgoing_interfaces": "",
-                },
-            )
+            apply_settings(network_settings)
         except Exception as error:
             with self.lock:
                 self.last_error = str(error)

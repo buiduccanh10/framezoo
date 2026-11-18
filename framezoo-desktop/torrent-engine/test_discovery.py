@@ -341,7 +341,11 @@ class TorrentDiscoveryTest(unittest.TestCase):
         def announce(tracker, *_args, **_kwargs):
             return results[tracker]
 
-        with patch.object(discovery, "announce_http_tracker", side_effect=announce):
+        with patch.object(discovery, "announce_http_tracker", side_effect=announce), patch.object(
+            discovery,
+            "get_local_ipv4s",
+            return_value=["203.0.113.10", "192.0.2.2"],
+        ):
             runtime._run_cycle()
 
         self.assertEqual(len(handle.connected), 4)
@@ -353,8 +357,8 @@ class TorrentDiscoveryTest(unittest.TestCase):
         self.assertEqual(runtime.snapshot()["peersInjected"], 2)
         self.assertEqual(handle.dht_announces, 1)
         runtime.session.apply_settings.assert_called_once_with({
-            "listen_interfaces": "0.0.0.0:49160-49170",
-            "outgoing_interfaces": "",
+            "listen_interfaces": "203.0.113.10:49160-49170,192.0.2.2:49160-49170",
+            "outgoing_interfaces": "203.0.113.10,192.0.2.2",
         })
 
     def test_tracker_failure_does_not_abort_cycle(self):
@@ -479,6 +483,20 @@ class TorrentDiscoveryTest(unittest.TestCase):
         self.assertIn("udp://exodus.desync.com:6969/announce", trackers)
         self.assertIn("http://tracker2.dler.org:80/announce", trackers)
 
+    def test_local_ipv4s_include_secondary_interfaces(self):
+        with patch.object(discovery, "get_local_ipv4", return_value="192.0.2.1"), patch.object(
+            discovery.subprocess,
+            "run",
+            return_value=SimpleNamespace(
+                stdout="en0: flags=\n    inet 192.0.2.1 netmask 0xffffff00\n"
+                "en1: flags=\n    inet 192.0.2.2 netmask 0xffffff00\n"
+            ),
+        ):
+            self.assertEqual(
+                discovery.get_local_ipv4s(),
+                ["192.0.2.1", "192.0.2.2"],
+            )
+
     def test_network_change_rebinds_and_reactivates_active_swarm(self):
         from torrent_engine import LibtorrentEngine
 
@@ -552,10 +570,15 @@ class TorrentDiscoveryTest(unittest.TestCase):
         )
         runtime.discovered_peers.add(("203.0.113.10", 6881))
 
-        self.assertTrue(runtime._relax_network_binding_if_peerless())
+        with patch.object(
+            discovery,
+            "get_local_ipv4s",
+            return_value=["203.0.113.10", "192.0.2.2"],
+        ):
+            self.assertTrue(runtime._relax_network_binding_if_peerless())
         session.apply_settings.assert_called_once_with({
-            "listen_interfaces": "0.0.0.0:49160-49170",
-            "outgoing_interfaces": "",
+            "listen_interfaces": "203.0.113.10:49160-49170,192.0.2.2:49160-49170",
+            "outgoing_interfaces": "203.0.113.10,192.0.2.2",
         })
         handle.force_reannounce.assert_called_once_with()
 
