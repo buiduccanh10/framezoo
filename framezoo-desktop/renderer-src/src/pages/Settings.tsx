@@ -90,7 +90,6 @@ function SettingsLayout(props: {
             onUnFocus={props.onSearchUnFocus}
             placeholder={t("settings.search.placeholder")}
             isSticky
-            hideTooltip
           />
         </ThinContainer>
       </div>

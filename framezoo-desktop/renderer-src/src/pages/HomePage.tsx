@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
@@ -96,7 +97,7 @@ export function HomePage() {
       </div>
 
       {search && (
-        <WideContainer>
+        <WideContainer classNames="motion-safe:animate-fade-in-up">
           <SearchListPart
             searchQuery={search}
             aiMode={aiMode}
@@ -115,8 +116,16 @@ export function HomePage() {
       )}
 
       {!search && (
-        <WideContainer ultraWide classNames="!px-3 md:!px-9">
-          <div className="pb-20" />
+        <WideContainer
+          ultraWide
+          classNames="!px-3 md:!px-9 motion-safe:animate-fade-in"
+        >
+          <div
+            className={classNames(
+              "transition-[padding] duration-300 ease-out motion-reduce:transition-none",
+              aiMode ? "pb-8" : "pb-20",
+            )}
+          />
           <DiscoverContent
             filterCountry={filterCountry}
             filterYear={filterYear}

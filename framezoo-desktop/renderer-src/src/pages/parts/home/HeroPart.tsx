@@ -87,6 +87,10 @@ export function HeroPart({
   }, [location.pathname]);
 
   const observerRef = useRef<HTMLDivElement>(null!);
+  const barWrapperRef = useRef<HTMLDivElement>(null!);
+  const [reservedHeight, setReservedHeight] = useState<number | undefined>(
+    undefined,
+  );
   const intersection = useIntersection(observerRef, {
     root: null,
     rootMargin: `-${Math.max(0, topOffset - 1)}px 0px 0px 0px`,
@@ -100,6 +104,28 @@ export function HeroPart({
   useEffect(() => {
     stickStateChanged(isSticky);
   }, [isSticky, stickStateChanged]);
+
+  const showAiGuide = aiMode && !search.trim() && !isSticky;
+
+  useEffect(() => {
+    if (isSticky) return;
+    const el = barWrapperRef.current;
+    if (!el) return;
+
+    const updateHeight = () => {
+      const height = el.offsetHeight;
+      if (height > 0) {
+        setReservedHeight((prev) => (prev === height ? prev : height));
+      }
+    };
+
+    updateHeight();
+
+    if (typeof ResizeObserver !== "function") return;
+    const observer = new ResizeObserver(updateHeight);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [isSticky]);
 
   const aiGuideExamples = useMemo(
     () => [
@@ -155,17 +181,38 @@ export function HeroPart({
           </div>
         ) : null}
 
-        <div className="space-y-3">
-          <div className="relative h-20 z-30">
+        <div
+          className="relative min-h-20 z-30"
+          style={
+            isSticky && reservedHeight
+              ? { minHeight: `${reservedHeight}px` }
+              : undefined
+          }
+        >
+          <div
+            ref={observerRef}
+            className="absolute inset-x-0 -top-[1px] h-[1px]"
+          />
+          <div
+            ref={barWrapperRef}
+            className={
+              isSticky
+                ? "pointer-events-none fixed inset-x-0 z-[450]"
+                : undefined
+            }
+            style={isSticky ? { top: `${topOffset}px` } : undefined}
+          >
             <div
-              ref={observerRef}
-              className="absolute inset-x-0 -top-[1px] h-[1px]"
-            />
-            <div
-              className="sticky"
-              style={{
-                top: `${topOffset}px`,
-              }}
+              className={
+                isSticky
+                  ? "mx-auto w-[600px] max-w-full px-8 sm:px-0 pointer-events-auto"
+                  : undefined
+              }
+              style={
+                isSticky
+                  ? ({ WebkitAppRegion: "no-drag" } as React.CSSProperties)
+                  : undefined
+              }
             >
               <SearchBarInput
                 ref={inputRef}
@@ -177,46 +224,62 @@ export function HeroPart({
                 isInFeatured={isInFeatured}
                 aiMode={aiMode}
                 onAiModeChange={setAiMode}
-              />
+              >
+                <div
+                  aria-hidden={!showAiGuide}
+                  data-testid="ai-guide-drawer"
+                  className={classNames(
+                    "grid transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none",
+                    showAiGuide
+                      ? "grid-rows-[1fr] opacity-100"
+                      : "pointer-events-none grid-rows-[0fr] opacity-0",
+                  )}
+                >
+                  <div className="min-h-0 overflow-hidden">
+                    <div className="mx-3.5 border-t border-white/[0.06] px-1 pt-2.5 pb-3 text-left">
+                      <p className="mb-2 flex items-center justify-center gap-1.5 text-[11px] text-white/60">
+                        <Icon
+                          icon={Icons.AI_SPARKLES}
+                          className="text-[11px] text-type-logo"
+                        />
+                        <span>
+                          {t("home.search.aiGuide.title", {
+                            defaultValue:
+                              "Try natural-language search by plot, similar titles, mood, or era:",
+                          })}
+                        </span>
+                      </p>
+                      <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
+                        {aiGuideExamples.map((example) => (
+                          <button
+                            key={example.id}
+                            type="button"
+                            tabIndex={showAiGuide ? undefined : -1}
+                            disabled={!showAiGuide}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSearch(example.query, true);
+                              inputRef.current?.focus();
+                            }}
+                            className="group flex items-start rounded-xl border border-white/[0.08] bg-white/[0.03] px-2.5 py-1.5 text-left text-[11px] leading-snug transition-colors duration-200 hover:border-type-logo/60 hover:bg-white/[0.06]"
+                          >
+                            <span>
+                              <span className="font-semibold text-type-logo">
+                                {example.label}:{" "}
+                              </span>
+                              <span className="text-white/75 group-hover:text-white">
+                                {example.query}
+                              </span>
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </SearchBarInput>
             </div>
           </div>
-
-          {aiMode && !search.trim() ? (
-            <div className="mx-auto max-w-2xl space-y-2.5 pt-1 text-center">
-              <p className="inline-flex items-center justify-center gap-1.5 text-xs text-white/65">
-                <Icon
-                  icon={Icons.AI_SPARKLES}
-                  className="text-xs text-type-logo"
-                />
-                <span>
-                  {t("home.search.aiGuide.title", {
-                    defaultValue:
-                      "Try natural-language search by plot, similar titles, mood, or era:",
-                  })}
-                </span>
-              </p>
-              <div className="flex flex-wrap items-center justify-center gap-2">
-                {aiGuideExamples.map((example) => (
-                  <button
-                    key={example.id}
-                    type="button"
-                    onClick={() => {
-                      setSearch(example.query, true);
-                      inputRef.current?.focus();
-                    }}
-                    className="group inline-flex max-w-full items-baseline gap-1.5 rounded-2xl border border-white/10 bg-search-background/75 px-3 py-1.5 text-left text-xs leading-snug transition-colors duration-200 hover:border-type-logo/60 hover:bg-search-background"
-                  >
-                    <span className="shrink-0 font-semibold text-type-logo">
-                      {example.label}:
-                    </span>
-                    <span className="text-white/80 group-hover:text-white">
-                      {example.query}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          ) : null}
         </div>
       </div>
     </ThinContainer>
