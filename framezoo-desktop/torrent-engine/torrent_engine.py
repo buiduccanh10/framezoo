@@ -16,6 +16,7 @@ import libtorrent as lt
 
 import torrent_constants as constants
 from torrent_discovery import TorrentDiscovery, get_local_ipv4, get_local_ipv4s
+from torrent_fast_blocks import close_peer_connections
 from torrent_http import TorrentHttpServer, log_event
 from torrent_runtime import TorrentRuntime
 from torrent_utils import (
@@ -29,6 +30,9 @@ from torrent_utils import (
     select_file,
     write_atomic_resume_data,
 )
+
+
+_RETIRED_SESSIONS: list[Any] = []
 
 
 class TorrentRecord:
@@ -60,6 +64,11 @@ class TorrentRecord:
         self.last_file_index: Optional[int] = None
         self.lock = threading.RLock()
         self.removal_timer: Optional[threading.Timer] = None
+        self.fast_peer_lock = threading.Lock()
+        self.working_fast_peers: list[tuple[str, int]] = []
+        self.failed_fast_peers: dict[tuple[str, int], float] = {}
+        self.fast_peer_sockets: dict[tuple[str, int], Any] = {}
+        self.fast_peer_sockets_lock = threading.Lock()
         info_hash = None
         try:
             info_hash = handle.info_hash()
@@ -74,10 +83,31 @@ class TorrentRecord:
                 engine.peer_id,
                 engine.listen_port,
                 initial_peers=initial_peers,
+                on_peers_discovered=self._wake_waiting_sessions,
             )
             if info_hash is not None
             else None
         )
+
+    def _wake_waiting_sessions(self) -> None:
+        with self.lock:
+            session_ids = list(self.session_ids)
+        for session_id in session_ids:
+            runtime = self.engine.sessions.get(session_id)
+            if runtime is None:
+                continue
+            wake = getattr(runtime, "_range_wake_event", None)
+            if wake is not None:
+                wake.set()
+            if (
+                getattr(runtime, "info", None) is not None
+                and not getattr(runtime, "_fast_blocks", None)
+                and not getattr(runtime, "_fast_blocks_inflight", None)
+            ):
+                try:
+                    runtime.prime_startup_fast_blocks()
+                except Exception:
+                    pass
 
     def start(self) -> None:
         if self.discovery is not None:
@@ -144,6 +174,7 @@ class TorrentRecord:
                     self.discovery.trackers,
                     self.engine.peer_id,
                     self.engine.listen_port,
+                    on_peers_discovered=self._wake_waiting_sessions,
                 )
                 with self.discovery.lock:
                     new_discovery.discovered_peers = set(
@@ -250,6 +281,10 @@ class TorrentRecord:
     def stop_discovery(self) -> None:
         if self.discovery is not None:
             self.discovery.stop()
+        close_peer_connections(
+            getattr(self, "fast_peer_sockets", None),
+            getattr(self, "fast_peer_sockets_lock", None),
+        )
 
 
 class LibtorrentEngine:
@@ -702,6 +737,7 @@ class LibtorrentEngine:
                 trackers,
                 constants.DEFAULT_TRACKERS,
             ),
+            initial_peers=initial_peers,
         )
         with self.lock:
             self.records[key] = record
@@ -970,6 +1006,10 @@ class LibtorrentEngine:
                 record.update_file_priorities()
                 if is_empty:
                     record.pause_discovery()
+                    close_peer_connections(
+                        getattr(record, "fast_peer_sockets", None),
+                        getattr(record, "fast_peer_sockets_lock", None),
+                    )
                     self._save_record_resume_data(record)
                     self._schedule_record_removal(record.key)
 
@@ -1106,4 +1146,25 @@ class LibtorrentEngine:
                 self.session.remove_torrent(record.handle)
             except Exception:
                 pass
+        if self._session is not None:
+            session = self._session
+            self._session = None
+            try:
+                session.pause()
+                apply_settings = getattr(session, "apply_settings", None)
+                if callable(apply_settings):
+                    apply_settings(
+                        {
+                            "enable_dht": False,
+                            "enable_lsd": False,
+                            "enable_upnp": False,
+                            "enable_natpmp": False,
+                            "listen_interfaces": "",
+                        }
+                    )
+            except Exception:
+                pass
+            if type(session).__module__.startswith("libtorrent"):
+                _RETIRED_SESSIONS.append(session)
+                del _RETIRED_SESSIONS[:-16]
         self.http_server.close()

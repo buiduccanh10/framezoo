@@ -3701,6 +3701,238 @@ class SidecarStorageTest(unittest.TestCase):
         self.assertEqual(runtime._required_target_blocks_finished(1, required), 0)
         self.assertEqual(runtime._target_piece_finished_blocks(1), 16)
 
+    def test_maybe_refocus_resets_startup_window_on_short_seek(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime._piece_priority_lock = threading.RLock()
+        runtime._last_stream_start = 1024 * 1024
+        runtime._playhead_streamed_bytes = 5 * 1024 * 1024
+        runtime._fast_lookahead_until = 6 * 1024 * 1024
+
+        runtime.maybe_refocus(6 * 1024 * 1024)
+
+        self.assertEqual(runtime._playhead_streamed_bytes, 0)
+        self.assertEqual(runtime._fast_lookahead_until, -1)
+
+    def test_release_playback_schedule_demotes_previous_episode_to_zero(self):
+        from torrent_engine import LibtorrentEngine, TorrentRecord
+
+        class FakeHandle:
+            def __init__(self):
+                self.priorities = {1: 7, 2: 7, 10: 7}
+                self.reset_deadlines = []
+
+            def info_hash(self):
+                return "88" * 20
+
+            def have_piece(self, _piece):
+                return False
+
+            def reset_piece_deadline(self, piece):
+                self.reset_deadlines.append(piece)
+
+            def piece_priority(self, piece, *priority):
+                if priority:
+                    self.priorities[piece] = priority[0]
+                    return None
+                return self.priorities.get(piece, 0)
+
+        engine = LibtorrentEngine()
+        handle = FakeHandle()
+        record = TorrentRecord(
+            engine,
+            "episode-switch-key",
+            handle,
+            "/tmp",
+            persistent_cache=False,
+            cache_ready=False,
+            cache_root="/tmp",
+            max_bytes=None,
+            trackers=[],
+        )
+        runtime1 = TorrentRuntime(engine, "ep1", {"sourceId": "ep1"}, handle, "/tmp", record=record)
+        runtime2 = TorrentRuntime(engine, "ep2", {"sourceId": "ep2"}, handle, "/tmp", record=record)
+        runtime1.file_index = 0
+        runtime2.file_index = 1
+        engine.sessions["ep1"] = runtime1
+        engine.sessions["ep2"] = runtime2
+        record.session_ids.update({"ep1", "ep2"})
+
+        runtime1._boosted_pieces = {1, 2}
+        runtime2._boosted_pieces = {2, 10}
+
+        runtime1.release_playback_schedule()
+
+        self.assertEqual(handle.priorities[1], 0)
+        self.assertEqual(handle.priorities[2], 7)
+        self.assertEqual(handle.priorities[10], 7)
+
+    def test_boundary_piece_pause_respects_total_wanted_and_restores_after_next_piece(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.session_id = "boundary-pause-test"
+        runtime.session_started_at = time.monotonic()
+        runtime.stop_event = threading.Event()
+        runtime._piece_priority_lock = threading.RLock()
+        runtime._fast_block_lock = threading.Lock()
+        runtime._fast_peer_sockets = {}
+        runtime._fast_peer_sockets_lock = threading.Lock()
+        runtime._working_fast_peers = [("203.0.113.10", 6881)]
+        runtime._failed_fast_peers = {}
+        runtime._boosted_pieces = set()
+        runtime._piece_priorities = {}
+        runtime._piece_deadlines = {}
+        runtime._pending_kick_restore = {}
+        runtime._paused_boundary_pieces = set()
+        runtime._fast_blocks = {}
+        runtime._fast_blocks_inflight = set()
+        runtime._fast_block_retry_at = {}
+        runtime.file_index = 1
+        runtime.file_size = 8 * 1024 * 1024
+        runtime.start_time = 0.0
+        runtime.duration = 0.0
+
+        piece_length = 16 * 1024 * 1024
+        file_offset = 12 * 1024 * 1024
+        runtime.info = type(
+            "Info",
+            (),
+            {
+                "piece_length": lambda _self: piece_length,
+                "num_pieces": lambda _self: 2,
+                "map_file": lambda _self, _idx, off, _sz: type(
+                    "Mapped",
+                    (),
+                    {"piece": (file_offset + off) // piece_length},
+                )(),
+                "files": lambda _self: type(
+                    "Files",
+                    (),
+                    {
+                        "file_offset": lambda _self, _index: file_offset,
+                        "total_size": lambda _self: 20 * 1024 * 1024,
+                    },
+                )(),
+            },
+        )()
+
+        have_pieces = set()
+        cancels = []
+
+        class FakeHandle:
+            def __init__(self):
+                self.priorities = {0: 7, 1: 0}
+                self.deadlines = {}
+
+            def have_piece(self, piece):
+                return piece in have_pieces
+
+            def piece_priority(self, piece, *priority):
+                if priority:
+                    self.priorities[piece] = priority[0]
+                    return None
+                return self.priorities.get(piece, 0)
+
+            def set_piece_deadline(self, piece, deadline_ms, _flags=0):
+                self.deadlines[piece] = deadline_ms
+
+            def reset_piece_deadline(self, piece):
+                self.deadlines.pop(piece, None)
+
+            def clear_piece_deadlines(self):
+                self.deadlines.clear()
+
+        handle = FakeHandle()
+        runtime.handle = handle
+        runtime._post_kick_cancel = lambda piece: cancels.append(piece)
+
+        runtime._schedule_pieces([0, 1], {0}, reason="range")
+        self.assertEqual(handle.priorities[0], 0)
+        self.assertGreaterEqual(handle.priorities[1], constants.STREAM_HOT_PIECE_PRIORITY)
+        self.assertEqual(cancels, [0])
+
+        # Kicking a paused boundary piece keeps it paused instead of re-raising to priority 7.
+        runtime._pending_kick_restore[0] = time.monotonic() - 1
+        runtime._restore_pending_kicks(time.monotonic())
+        self.assertEqual(handle.priorities[0], 0)
+
+        # Once the fallback piece completes, boundary piece restores so total_wanted > 0.
+        have_pieces.add(1)
+        runtime._restore_pending_kicks(time.monotonic())
+        self.assertGreater(handle.priorities[0], 0)
+        self.assertNotIn(0, runtime._paused_boundary_pieces)
+
+    def test_wait_for_range_sequential_lookahead_requires_extended_request_end(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.session_id = "lookahead-test"
+        runtime.session_started_at = time.monotonic()
+        runtime.stop_event = threading.Event()
+        runtime._piece_priority_lock = threading.RLock()
+        runtime._fast_block_lock = threading.Lock()
+        runtime._fast_blocks = {}
+        runtime._fast_blocks_inflight = set()
+        runtime._fast_block_retry_at = {}
+        runtime._fast_peer_sockets = {}
+        runtime._fast_peer_sockets_lock = threading.Lock()
+        runtime._working_fast_peers = [("203.0.113.10", 6881)]
+        runtime._failed_fast_peers = {}
+        runtime._boosted_pieces = set()
+        runtime._piece_priorities = {}
+        runtime._piece_deadlines = {}
+        runtime._pending_kick_restore = {}
+        runtime._paused_boundary_pieces = {0}
+        runtime._fast_lookahead_until = -1
+        runtime._last_stream_start = constants.STARTUP_VIRTUAL_PIECE_BYTES - constants.INITIAL_STREAM_BYTES
+        runtime._last_scheduled_piece = 0
+        runtime._was_startup_bounded = True
+        runtime.file_index = 1
+        runtime.file_size = 8 * 1024 * 1024
+        runtime.start_time = 0.0
+        runtime.duration = 0.0
+
+        piece_length = 16 * 1024 * 1024
+        file_offset = 12 * 1024 * 1024
+        runtime.info = type(
+            "Info",
+            (),
+            {
+                "piece_length": lambda _self: piece_length,
+                "num_pieces": lambda _self: 2,
+                "map_file": lambda _self, _idx, off, _sz: type(
+                    "Mapped",
+                    (),
+                    {"piece": (file_offset + off) // piece_length},
+                )(),
+                "files": lambda _self: type(
+                    "Files",
+                    (),
+                    {"file_offset": lambda _self, _index: file_offset},
+                )(),
+            },
+        )()
+        runtime.handle = type(
+            "Handle",
+            (),
+            {
+                "have_piece": lambda _self, _p: False,
+                "piece_priority": lambda _self, *_args: 0,
+            },
+        )()
+        runtime.range_is_ready = lambda _s, _e: True
+        runtime._range_blocks_are_finished = lambda _s, _e: True
+        started = []
+        runtime._start_fast_block_fetch = lambda s, e: started.append((s, e))
+
+        vp = constants.STARTUP_VIRTUAL_PIECE_BYTES
+        runtime.wait_for_range(vp, vp + constants.INITIAL_STREAM_BYTES - 1, request_end=2 * vp - 1)
+        self.assertEqual(started, [])
+
+        runtime._last_stream_start = vp
+        runtime.wait_for_range(
+            vp + constants.INITIAL_STREAM_BYTES,
+            vp + 2 * constants.INITIAL_STREAM_BYTES - 1,
+            request_end=runtime.file_size - 1,
+        )
+        self.assertEqual(started, [(2 * vp, 3 * vp - 1)])
+
 
 if __name__ == "__main__":
     unittest.main()

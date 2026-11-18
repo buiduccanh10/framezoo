@@ -559,23 +559,35 @@ export function DiscoverContent({
 
       <WideContainer ultraWide classNames="!px-0">
         {/* All Tab */}
-        <div style={{ display: isAllTab ? "block" : "none" }}>
+        <div
+          className="motion-safe:animate-fade-in-up"
+          style={{ display: isAllTab ? "block" : "none" }}
+        >
           {(isAllTab || visitedTabs.has("all")) && renderAllContent()}
         </div>
 
         {/* Movies Tab */}
-        <div style={{ display: isMoviesTab ? "block" : "none" }}>
+        <div
+          className="motion-safe:animate-fade-in-up"
+          style={{ display: isMoviesTab ? "block" : "none" }}
+        >
           {(isMoviesTab || visitedTabs.has("movies")) && renderMoviesContent()}
         </div>
 
         {/* TV Shows Tab */}
-        <div style={{ display: isTVShowsTab ? "block" : "none" }}>
+        <div
+          className="motion-safe:animate-fade-in-up"
+          style={{ display: isTVShowsTab ? "block" : "none" }}
+        >
           {(isTVShowsTab || visitedTabs.has("tvshows")) &&
             renderTVShowsContent()}
         </div>
 
         {/* Popular Tab */}
-        <div style={{ display: isPopularTab ? "block" : "none" }}>
+        <div
+          className="motion-safe:animate-fade-in-up"
+          style={{ display: isPopularTab ? "block" : "none" }}
+        >
           {(isPopularTab ||
             visitedTabs.has("popular") ||
             visitedTabs.has("top10") ||
@@ -584,7 +596,10 @@ export function DiscoverContent({
         </div>
 
         {/* Genre Movies Tab */}
-        <div style={{ display: isGenreTab ? "block" : "none" }}>
+        <div
+          className="motion-safe:animate-fade-in-up"
+          style={{ display: isGenreTab ? "block" : "none" }}
+        >
           {(isGenreTab ||
             (selectedGenreId && visitedTabs.has(`genre:${selectedGenreId}`))) &&
             renderSelectedGenreContent()}
@@ -596,7 +611,7 @@ export function DiscoverContent({
         className={classNames(
           "flex justify-center mt-8 mb-12",
           isAllTab || isMoviesTab || isPopularTab || isGenreTab
-            ? "block"
+            ? "block motion-safe:animate-fade-in"
             : "hidden",
         )}
       >

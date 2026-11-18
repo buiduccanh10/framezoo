@@ -37,6 +37,10 @@ const config: Config = {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" },
         },
+        "fade-in-up": {
+          "0%": { opacity: "0", transform: "translateY(8px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
         "seek-left": {
           "0%": { transform: "translateX(0) scale(1)", opacity: "1" },
           "100%": { transform: "translateX(-50px) scale(1.2)", opacity: "0" },
@@ -79,7 +83,9 @@ const config: Config = {
       },
       animation: {
         "loading-pin": "loading-pin 1.8s ease-in-out infinite",
-        "fade-in": "fade-in 200ms ease-out forwards",
+        "fade-in": "fade-in 220ms ease-out forwards",
+        "fade-in-up":
+          "fade-in-up 260ms cubic-bezier(0.22, 1, 0.36, 1) forwards",
         "seek-left": "seek-left 0.5s cubic-bezier(0, 0, 0.2, 1) forwards",
         "seek-right": "seek-right 0.5s cubic-bezier(0, 0, 0.2, 1) forwards",
         "ai-progress-scan":

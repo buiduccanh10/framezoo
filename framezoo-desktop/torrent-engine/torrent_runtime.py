@@ -23,6 +23,7 @@ from torrent_utils import (
 )
 from torrent_fast_blocks import (
     Endpoint,
+    close_peer_connections,
     fetch_blocks_from_peers,
     normalize_endpoint,
 )
@@ -123,7 +124,15 @@ class TorrentRuntime:
         self._startup_fast_head_blocks: Set[tuple[int, int]] = set()
         self._startup_fast_head_end = -1
         self._startup_fast_prefetch_started = False
+        self._startup_tail_prefetch_queued = False
+        self._fast_lookahead_until = -1
+        self._paused_boundary_pieces: Set[int] = set()
         self._fast_peer_id = b"-FZFB01-" + os.urandom(12)
+        self._range_wake_event = threading.Event()
+        self._working_fast_peers: list[Endpoint] = []
+        self._failed_fast_peers: dict[Endpoint, float] = {}
+        self._fast_peer_sockets: dict[Endpoint, Any] = {}
+        self._fast_peer_sockets_lock = threading.Lock()
         self.status_thread = threading.Thread(
             target=self.publish_status,
             name="torrent-status-" + session_id,
@@ -540,6 +549,11 @@ class TorrentRuntime:
     def stop(self, remove_torrent: bool = True) -> None:
         self.stop_event.set()
         self.engine.http_server.unregister(self.session_id)
+        if remove_torrent or getattr(self, "record", None) is None:
+            close_peer_connections(
+                getattr(self, "_fast_peer_sockets", None),
+                getattr(self, "_fast_peer_sockets_lock", None),
+            )
         log_event("session stopped", sessionId=self.session_id)
         if not self._torrent_cleaned:
             if self.persistent_cache:
@@ -575,6 +589,7 @@ class TorrentRuntime:
             else set()
         )
         other_protected_pieces: Set[int] = set()
+        other_same_file_active = False
         engine = getattr(self, "engine", None)
         if other_session_ids and engine is not None:
             sessions = getattr(engine, "sessions", None) or {}
@@ -582,6 +597,13 @@ class TorrentRuntime:
                 other = sessions.get(other_id)
                 if other is None:
                     continue
+                other_file_index = getattr(other, "file_index", None)
+                if (
+                    self.file_index is None
+                    or other_file_index is None
+                    or other_file_index == self.file_index
+                ):
+                    other_same_file_active = True
                 other_lock = getattr(other, "_piece_priority_lock", None)
                 if other_lock is not None:
                     with other_lock:
@@ -598,6 +620,11 @@ class TorrentRuntime:
                     )
 
         releasable_pieces = stale_pieces - other_protected_pieces
+        demote_priority = (
+            0
+            if other_session_ids and not other_same_file_active
+            else constants.STREAM_IDLE_FILE_PRIORITY
+        )
         clear_deadlines = getattr(self.handle, "clear_piece_deadlines", None)
         if not other_session_ids and callable(clear_deadlines):
             try:
@@ -620,7 +647,7 @@ class TorrentRuntime:
                     continue
                 self.handle.piece_priority(
                     piece,
-                    constants.STREAM_IDLE_FILE_PRIORITY,
+                    demote_priority,
                 )
                 demoted += 1
             except Exception:
@@ -1133,6 +1160,14 @@ class TorrentRuntime:
         should_refocus = False
         with self._piece_priority_lock:
             previous = self._last_stream_start
+            is_seek = previous is not None and (
+                start < previous
+                or (start - previous) > constants.STARTUP_PLAYBACK_BYTES
+            )
+            if is_seek:
+                if getattr(self, "_playhead_streamed_bytes", None) is not None:
+                    self._playhead_streamed_bytes = 0
+                self._fast_lookahead_until = -1
             if previous is None:
                 if start > constants.RANGE_PREFETCH_BYTES:
                     should_refocus = True
@@ -1332,22 +1367,244 @@ class TorrentRuntime:
                 finished.update(cached_blocks if cached_blocks is not None else getattr(self, "_fast_blocks", set()))
         return remaining.issubset(finished)
 
+    def _fast_peer_pool(
+        self,
+    ) -> tuple[
+        threading.Lock,
+        list[Endpoint],
+        dict[Endpoint, float],
+        dict[Endpoint, Any],
+        threading.Lock,
+    ]:
+        record = getattr(self, "record", None)
+        if (
+            record is not None
+            and hasattr(record, "fast_peer_lock")
+            and hasattr(record, "working_fast_peers")
+            and hasattr(record, "failed_fast_peers")
+            and hasattr(record, "fast_peer_sockets")
+            and hasattr(record, "fast_peer_sockets_lock")
+        ):
+            return (
+                record.fast_peer_lock,
+                record.working_fast_peers,
+                record.failed_fast_peers,
+                record.fast_peer_sockets,
+                record.fast_peer_sockets_lock,
+            )
+        lock = getattr(self, "_fast_block_lock", None)
+        if lock is None:
+            lock = threading.Lock()
+            self._fast_block_lock = lock
+        working = getattr(self, "_working_fast_peers", None)
+        if working is None:
+            working = []
+            self._working_fast_peers = working
+        failed = getattr(self, "_failed_fast_peers", None)
+        if failed is None:
+            failed = {}
+            self._failed_fast_peers = failed
+        sockets = getattr(self, "_fast_peer_sockets", None)
+        if sockets is None:
+            sockets = {}
+            self._fast_peer_sockets = sockets
+        sockets_lock = getattr(self, "_fast_peer_sockets_lock", None)
+        if sockets_lock is None:
+            sockets_lock = threading.Lock()
+            self._fast_peer_sockets_lock = sockets_lock
+        return lock, working, failed, sockets, sockets_lock
+
+    def _has_warm_fast_peer(self) -> bool:
+        pool_lock, working, _, sockets, sockets_lock = self._fast_peer_pool()
+        with pool_lock:
+            if working:
+                return True
+        with sockets_lock:
+            return any(getattr(conn, "unchoked", False) for conn in sockets.values())
+
+    def _boundary_piece_competes(self, piece: int) -> bool:
+        """True when libtorrent would spend swarm bandwidth on another file's bytes
+        in a large piece that fast blocks are already serving."""
+        try:
+            if not self._is_large_piece_torrent() or getattr(self, "info", None) is None:
+                return False
+            piece_length = int(self.info.piece_length())
+            file_offset = int(self.info.files().file_offset(self.file_index))
+        except Exception:
+            return False
+        return piece * piece_length < file_offset and self._has_warm_fast_peer()
+
+    def _next_unfinished_file_piece(self, exclude_piece: int) -> Optional[int]:
+        """Return another unfinished piece in the selected file to keep total_wanted > 0."""
+        if (
+            getattr(self, "info", None) is None
+            or getattr(self, "file_size", 0) <= 0
+            or getattr(self, "handle", None) is None
+        ):
+            return None
+        try:
+            paused = getattr(self, "_paused_boundary_pieces", ())
+            for piece in self.map_pieces(0, self.file_size):
+                if piece == exclude_piece or piece in paused:
+                    continue
+                if not self.handle.have_piece(piece):
+                    return piece
+        except Exception:
+            return None
+        return None
+
+    def _should_pause_boundary_piece(
+        self,
+        piece: int,
+        is_sync: bool = False,
+        require_verified: bool = False,
+    ) -> bool:
+        """Pause a competing boundary piece only when another unfinished file piece
+        keeps total_wanted > 0 and fast blocks already have a warm peer."""
+        if is_sync or require_verified:
+            return False
+        if not self._boundary_piece_competes(piece):
+            return False
+        return self._next_unfinished_file_piece(piece) is not None
+
+    def _pause_boundary_piece(self, piece: int) -> None:
+        """Pause a competing boundary piece at priority 0 and cancel its requests once."""
+        with self._piece_priority_lock:
+            next_piece = self._next_unfinished_file_piece(piece)
+            if next_piece is None:
+                return
+            next_prio = max(
+                self._piece_priority(next_piece) or 0,
+                constants.STREAM_HOT_PIECE_PRIORITY,
+            )
+            self.handle.piece_priority(next_piece, next_prio)
+            self._boosted_pieces = getattr(self, "_boosted_pieces", set())
+            self._boosted_pieces.add(next_piece)
+            self._piece_priorities = getattr(self, "_piece_priorities", {})
+            self._piece_priorities[next_piece] = next_prio
+
+            paused = getattr(self, "_paused_boundary_pieces", None)
+            if paused is None:
+                paused = set()
+                self._paused_boundary_pieces = paused
+            newly_paused = piece not in paused
+            paused.add(piece)
+
+            if newly_paused:
+                clear_deadlines = getattr(
+                    self.handle,
+                    "clear_piece_deadlines",
+                    None,
+                )
+                if callable(clear_deadlines):
+                    clear_deadlines()
+                else:
+                    self._reset_piece_deadline(piece)
+            elif piece in getattr(self, "_piece_deadlines", {}):
+                self._reset_piece_deadline(piece)
+
+            self.handle.piece_priority(piece, 0)
+            self._piece_priorities[piece] = 0
+            if newly_paused:
+                self._post_kick_cancel(piece)
+
+    def _unpause_stale_boundary_pieces(self, force: bool = False) -> None:
+        """Restore paused boundary pieces when fast blocks no longer cover them."""
+        handle = getattr(self, "handle", None)
+        if handle is None:
+            return
+        with self._piece_priority_lock:
+            paused = getattr(self, "_paused_boundary_pieces", None)
+            if not paused:
+                return
+            for piece in list(paused):
+                try:
+                    if handle.have_piece(piece):
+                        paused.discard(piece)
+                        continue
+                    if not force and self._should_pause_boundary_piece(piece):
+                        continue
+                    paused.discard(piece)
+                    focus_piece = getattr(self, "_focus_piece", None)
+                    restore_prio = (
+                        constants.STREAM_PIECE_PRIORITY
+                        if focus_piece in (None, piece)
+                        else constants.STREAM_IDLE_FILE_PRIORITY
+                    )
+                    handle.piece_priority(piece, restore_prio)
+                    self._piece_priorities = getattr(
+                        self,
+                        "_piece_priorities",
+                        {},
+                    )
+                    self._piece_priorities[piece] = restore_prio
+                except Exception:
+                    continue
+
+    def _record_fast_peer_success(self, endpoint: Endpoint) -> None:
+        pool_lock, working, failed, _, _ = self._fast_peer_pool()
+        with pool_lock:
+            if endpoint in working:
+                working.remove(endpoint)
+            working.insert(0, endpoint)
+            del working[16:]
+            failed.pop(endpoint, None)
+
+    def _record_fast_peer_failure(self, endpoint: Endpoint) -> None:
+        pool_lock, working, failed, _, _ = self._fast_peer_pool()
+        with pool_lock:
+            if endpoint in working:
+                working.remove(endpoint)
+                return
+            failed[endpoint] = time.monotonic()
+
     def _fast_peer_endpoints(self, pieces: Set[int]) -> list[Endpoint]:
+        engine = getattr(self, "engine", None)
+        listen_port = getattr(engine, "listen_port", None)
+        listen_address = getattr(engine, "listen_address", None)
+
+        def is_self_endpoint(endpoint: Endpoint) -> bool:
+            if listen_port is None or endpoint[1] != listen_port:
+                return False
+            return endpoint[0] in {"127.0.0.1", "0.0.0.0", "::1", listen_address}
+
         try:
             peers = self.handle.get_peer_info()
         except Exception:
             peers = []
 
-        connected: list[Endpoint] = []
+        connected_ready_scored: list[tuple[tuple[bool, int, float], Endpoint]] = []
+        active_connected_endpoints: Set[Endpoint] = set()
+        connected_other: list[Endpoint] = []
         seen: Set[Endpoint] = set()
         for peer in peers:
             endpoint = normalize_endpoint(getattr(peer, "ip", None))
-            if endpoint is None or endpoint in seen:
+            if endpoint is None or endpoint in seen or is_self_endpoint(endpoint):
                 continue
-            # shortcut: a stale bitfield may reject this probe; native scheduling
-            # remains the fallback.
             seen.add(endpoint)
-            connected.append(endpoint)
+            peer_pieces = getattr(peer, "pieces", None)
+            has_piece = False
+            if peer_pieces is not None and pieces:
+                try:
+                    num_pieces = len(peer_pieces)
+                    has_piece = any(
+                        0 <= p < num_pieces and bool(peer_pieces[p])
+                        for p in pieces
+                    )
+                except Exception:
+                    has_piece = False
+            down_speed = int(getattr(peer, "down_speed", 0) or 0)
+            progress = float(getattr(peer, "progress", 0.0) or 0.0)
+            if has_piece or down_speed > 0 or progress > 0.0:
+                connected_ready_scored.append(
+                    ((has_piece, down_speed, progress), endpoint)
+                )
+                if has_piece and down_speed > 0:
+                    active_connected_endpoints.add(endpoint)
+            else:
+                connected_other.append(endpoint)
+        connected_ready_scored.sort(key=lambda item: item[0], reverse=True)
+        connected_ready = [endpoint for _, endpoint in connected_ready_scored]
 
         discovered: list[Endpoint] = []
         discovery = getattr(getattr(self, "record", None), "discovery", None)
@@ -1355,27 +1612,93 @@ class TorrentRuntime:
             discovered_peers = tuple(getattr(discovery, "discovered_peers", ()))
         for peer in discovered_peers:
             endpoint = normalize_endpoint(peer)
-            if endpoint is None or endpoint in discovered:
+            if endpoint is None or endpoint in discovered or is_self_endpoint(endpoint):
                 continue
             discovered.append(endpoint)
 
         discovered = sorted(peer for peer in discovered if peer not in seen)
-        if discovered:
-            with getattr(self, "_fast_block_lock", threading.Lock()):
-                offset = getattr(self, "_fast_peer_cursor", 0) % len(discovered)
-                self._fast_peer_cursor = offset + 16 - min(4, len(connected))
-            discovered = discovered[offset:] + discovered[:offset]
 
-        # Try fresh tracker peers too: connected peers may reject a second
-        # connection from the same IP. Rotate stale tracker endpoints.
+        pool_lock, working_list, failed_map, sockets, sockets_lock = self._fast_peer_pool()
+        required_blocks = {(piece, 0) for piece in pieces}
+        with sockets_lock:
+            skip_endpoints = {
+                ep
+                for ep, conn in sockets.items()
+                if getattr(conn, "known_bitfield", False)
+                and required_blocks
+                and not conn.might_have_blocks(required_blocks)
+            }
+
+        with pool_lock:
+            working = [
+                ep
+                for ep in working_list
+                if not is_self_endpoint(ep) and ep not in skip_endpoints
+            ]
+            max_endpoints = 16
+            now = time.monotonic()
+            expired = [ep for ep, ts in failed_map.items() if now - ts >= 45.0]
+            for ep in expired:
+                failed_map.pop(ep, None)
+            fresh_discovered = [
+                ep
+                for ep in discovered
+                if ep not in failed_map and ep not in skip_endpoints
+            ]
+            stale_discovered = [
+                ep
+                for ep in discovered
+                if ep in failed_map and ep not in skip_endpoints
+            ]
+            if fresh_discovered:
+                offset = getattr(self, "_fast_peer_cursor", 0) % len(fresh_discovered)
+                self._fast_peer_cursor = (
+                    offset
+                    + max(
+                        1,
+                        max_endpoints
+                        - min(
+                            6,
+                            len(connected_ready)
+                            + len(connected_other)
+                            + len(working),
+                        ),
+                    )
+                )
+                fresh_discovered = fresh_discovered[offset:] + fresh_discovered[:offset]
+
+        connected_all = [
+            ep
+            for ep in (connected_ready + connected_other)
+            if ep not in skip_endpoints
+        ]
+        connected_fresh = [
+            ep
+            for ep in connected_all
+            if ep not in failed_map or ep in active_connected_endpoints
+        ]
+        connected_stale = [
+            ep
+            for ep in connected_all
+            if ep in failed_map and ep not in active_connected_endpoints
+        ]
+        # Prioritize working fast peers and fresh active swarm peers before sampling
+        # rotated fresh tracker endpoints and failed endpoints.
         endpoints: list[Endpoint] = []
-        for endpoint in connected[:4] + discovered + connected[4:]:
+        for endpoint in (
+            working
+            + connected_fresh[:6]
+            + fresh_discovered
+            + connected_fresh[6:]
+            + connected_stale
+            + stale_discovered
+        ):
             if endpoint in endpoints:
                 continue
             endpoints.append(endpoint)
             # Stremio keeps a wider connection set during startup. A larger
             # probe fan-out lets a reachable peer win over stale tracker data.
-            if len(endpoints) >= 16:
+            if len(endpoints) >= max_endpoints:
                 break
         return endpoints
 
@@ -1395,12 +1718,25 @@ class TorrentRuntime:
         if piece_length <= 0 or block_size <= 0 or total_size <= 0:
             return
 
-        engine = getattr(self, "engine", None)
-        get_finished = getattr(engine, "finished_blocks_for", None)
-        if callable(get_finished):
-            finished = get_finished(self.handle)
+        pieces = {piece for piece, _ in required}
+        have_piece_fn = getattr(self.handle, "have_piece", None)
+        have_pieces: Set[int] = set()
+        if callable(have_piece_fn):
+            try:
+                have_pieces = {piece for piece in pieces if have_piece_fn(piece)}
+            except Exception:
+                have_pieces = set()
+        if callable(getattr(self.handle, "get_download_queue", None)):
+            finished, _ = self._disk_flushed_blocks(pieces - have_pieces)
+            finished.update(item for item in required if item[0] in have_pieces)
         else:
-            finished = set(getattr(self, "_finished_blocks", set()))
+            engine = getattr(self, "engine", None)
+            get_finished = getattr(engine, "finished_blocks_for", None)
+            if callable(get_finished):
+                finished = get_finished(self.handle)
+            else:
+                finished = set(getattr(self, "_finished_blocks", set()))
+            finished.update(item for item in required if item[0] in have_pieces)
         with self._fast_block_lock:
             finished.update(self._fast_blocks)
             now = time.monotonic()
@@ -1471,10 +1807,12 @@ class TorrentRuntime:
                 self._fast_blocks.setdefault(block, data)
                 while sum(map(len, self._fast_blocks.values())) > 8 * 1024 * 1024:
                     self._fast_blocks.pop(next(iter(self._fast_blocks)))
+                head_blocks = getattr(self, "_startup_fast_head_blocks", set())
                 start_virtual_prefetch = bool(
                     self._is_large_piece_torrent()
+                    and bool(head_blocks)
                     and not getattr(self, "_startup_fast_prefetch_started", False)
-                    and block in getattr(self, "_startup_fast_head_blocks", set())
+                    and head_blocks.issubset(self._fast_blocks)
                 )
                 if start_virtual_prefetch:
                     self._startup_fast_prefetch_started = True
@@ -1483,7 +1821,11 @@ class TorrentRuntime:
                 head_end = getattr(self, "_startup_fast_head_end", -1)
                 if virtual_end > head_end:
                     self._start_fast_block_fetch(head_end + 1, virtual_end)
+            wake = getattr(self, "_range_wake_event", None)
+            if wake is not None:
+                wake.set()
 
+        _, _, _, sockets, sockets_lock = self._fast_peer_pool()
         try:
             # ponytail: peer blocks are unverified until the piece completes; replace with verified block injection when available.
             fetched = fetch_blocks_from_peers(
@@ -1494,7 +1836,13 @@ class TorrentRuntime:
                 piece_length,
                 block_size,
                 total_size,
+                timeout=2.0,
                 on_block=record,
+                on_peer_success=getattr(self, "_record_fast_peer_success", None),
+                on_peer_failure=getattr(self, "_record_fast_peer_failure", None),
+                peer_sockets=sockets,
+                peer_sockets_lock=sockets_lock,
+                should_stop=self.stop_event.is_set,
             )
             for block, data in fetched.items():
                 record(block, data)
@@ -1502,11 +1850,16 @@ class TorrentRuntime:
             with self._fast_block_lock:
                 active.clear()
                 self._fast_blocks_inflight.difference_update(blocks)
-                retry_at = time.monotonic() + constants.BLOCKED_REPLAN_INTERVAL
+                retry_delay = 0.05 if not seen else constants.BLOCKED_REPLAN_INTERVAL
+                retry_at = time.monotonic() + retry_delay
                 for block in blocks - seen:
                     self._fast_block_retry_at[block] = retry_at
                 for block in seen:
                     self._fast_block_retry_at.pop(block, None)
+            if not seen:
+                wake = getattr(self, "_range_wake_event", None)
+                if wake is not None:
+                    wake.set()
         fetched = seen
         if fetched:
             log_event(
@@ -1621,6 +1974,15 @@ class TorrentRuntime:
                     return
                 if piece in getattr(self, "_pending_kick_restore", {}):
                     continue
+                if self._should_pause_boundary_piece(piece, is_sync=is_sync):
+                    try:
+                        self._pause_boundary_piece(piece)
+                    except Exception:
+                        pass
+                    continue
+                paused_boundary = getattr(self, "_paused_boundary_pieces", None)
+                if paused_boundary:
+                    paused_boundary.discard(piece)
 
                 if piece in required_set:
                     focus_piece = getattr(self, "_focus_piece", None)
@@ -1638,6 +2000,9 @@ class TorrentRuntime:
                         priority = constants.STREAM_HOT_PIECE_PRIORITY
                     else:
                         priority = constants.STREAM_PIECE_PRIORITY
+                    if not is_sync and self._boundary_piece_competes(piece):
+                        priority = constants.STREAM_IDLE_FILE_PRIORITY
+                        deadline_ms = None
                 elif (
                     self._is_startup_window_active()
                     and index < constants.STARTUP_WINDOW_PIECES
@@ -2209,6 +2574,12 @@ class TorrentRuntime:
         """
         if target_piece is None or self._piece_have(target_piece):
             return
+        if self._should_pause_boundary_piece(target_piece):
+            try:
+                self._pause_boundary_piece(target_piece)
+            except Exception:
+                pass
+            return
 
         try:
             # Empty the time-critical list first: the piece's in-flight
@@ -2294,6 +2665,7 @@ class TorrentRuntime:
         if handle is None:
             return
         with self._piece_priority_lock:
+            self._unpause_stale_boundary_pieces()
             pending = getattr(self, "_pending_kick_restore", {})
             if not pending:
                 return
@@ -2307,6 +2679,9 @@ class TorrentRuntime:
                             piece,
                             constants.STREAM_IDLE_FILE_PRIORITY,
                         )
+                        continue
+                    if self._should_pause_boundary_piece(piece):
+                        self._pause_boundary_piece(piece)
                         continue
                     handle.piece_priority(
                         piece,
@@ -2522,6 +2897,7 @@ class TorrentRuntime:
         sync_metadata: Optional[dict[str, Any]] = None,
         playback_request_id: Optional[int] = None,
         require_verified: bool = False,
+        request_end: Optional[int] = None,
     ) -> bool:
         if track_position and self._is_playback_request_superseded(
             playback_request_id,
@@ -2672,14 +3048,48 @@ class TorrentRuntime:
             else None
         )
 
+        previous_stream_start = getattr(self, "_last_stream_start", None)
         if track_position:
             self.maybe_refocus(start)
+        fast_end = end
+        is_contiguous_followup = False
+        v_end = end
+        if (
+            track_position
+            and not is_sync
+            and self.file_size > 0
+            and self._is_large_piece_torrent()
+        ):
+            is_contiguous_followup = (
+                previous_stream_start is not None
+                and 0 < start - previous_stream_start <= constants.INITIAL_STREAM_BYTES
+            )
+            can_pipeline_first_virtual_piece = False
+            if start == 0 and not is_contiguous_followup:
+                can_pipeline_first_virtual_piece = self._has_warm_fast_peer()
+            if is_contiguous_followup or can_pipeline_first_virtual_piece:
+                vp = constants.STARTUP_VIRTUAL_PIECE_BYTES
+                v_end = ((start // vp) + 1) * vp - 1
+                fast_end = min(self.file_size - 1, max(end, v_end))
+        if is_sync or require_verified:
+            self._unpause_stale_boundary_pieces(force=True)
         required_set = set(required_pieces)
+        paused_boundary = getattr(self, "_paused_boundary_pieces", ())
+        boundary_needs_pause = (
+            first_required_piece is not None
+            and first_required_piece not in paused_boundary
+            and self._should_pause_boundary_piece(
+                first_required_piece,
+                is_sync=is_sync,
+                require_verified=require_verified,
+            )
+        )
         should_schedule = (
             not all_ready
             or first_required_piece != getattr(self, "_last_scheduled_piece", None)
             or getattr(self, "_was_startup_bounded", False) != startup_bounded
             or is_sync
+            or boundary_needs_pause
         )
         if should_schedule:
             self._last_scheduled_piece = first_required_piece
@@ -2691,7 +3101,39 @@ class TorrentRuntime:
                 is_sync=is_sync,
                 sync_metadata=sync_metadata,
             )
-            self._start_fast_block_fetch(start, end)
+            if not all_ready:
+                self._start_fast_block_fetch(start, fast_end)
+        if (
+            all_ready
+            and track_position
+            and not is_sync
+            and is_contiguous_followup
+            and first_required_piece is not None
+            and request_end is not None
+            and request_end > v_end
+            and start >= constants.STARTUP_VIRTUAL_PIECE_BYTES
+            and self._boundary_piece_competes(first_required_piece)
+        ):
+            vp = constants.STARTUP_VIRTUAL_PIECE_BYTES
+            next_v_start = v_end + 1
+            next_v_end = min(
+                request_end,
+                self.file_piece_end(start),
+                v_end + vp,
+            )
+            if (
+                next_v_start <= next_v_end
+                and next_v_end > getattr(self, "_fast_lookahead_until", -1)
+            ):
+                fast_lock = getattr(self, "_fast_block_lock", None)
+                if fast_lock is None:
+                    inflight = bool(getattr(self, "_fast_blocks_inflight", ()))
+                else:
+                    with fast_lock:
+                        inflight = bool(getattr(self, "_fast_blocks_inflight", ()))
+                if not inflight:
+                    self._fast_lookahead_until = next_v_end
+                    self._start_fast_block_fetch(next_v_start, next_v_end)
 
         tail_paused_pieces: dict[int, int] = {}
         tail_focused = (
@@ -2729,6 +3171,7 @@ class TorrentRuntime:
             return self._wait_for_range_loop(
                 start=start,
                 end=end,
+                fast_end=fast_end,
                 deadline=deadline,
                 handler=handler,
                 connect_start=connect_start,
@@ -2775,6 +3218,7 @@ class TorrentRuntime:
         *,
         start: int,
         end: int,
+        fast_end: int,
         deadline: Optional[float],
         handler: Optional[BaseHTTPRequestHandler],
         connect_start: float,
@@ -2815,6 +3259,9 @@ class TorrentRuntime:
             (deadline is None or time.monotonic() < deadline)
             and not self.stop_event.is_set()
         ):
+            wake = getattr(self, "_range_wake_event", None)
+            if wake is not None:
+                wake.clear()
             if handler and not is_client_connected(handler, connect_start):
                 log_event(
                     "client disconnected during range wait",
@@ -2934,7 +3381,10 @@ class TorrentRuntime:
                 return True
 
             blocked_waits += 1
-            time.sleep(constants.RANGE_RETRY_INTERVAL)
+            if wake is not None:
+                wake.wait(constants.RANGE_RETRY_INTERVAL)
+            else:
+                time.sleep(constants.RANGE_RETRY_INTERVAL)
             if self.stop_event.is_set() or (
                 track_position
                 and self._is_playback_request_superseded(playback_request_id)
@@ -3092,7 +3542,7 @@ class TorrentRuntime:
                         is_sync=is_sync,
                         sync_metadata=sync_metadata,
                     )
-                self._start_fast_block_fetch(start, end)
+                self._start_fast_block_fetch(start, fast_end)
                 self._force_reannounce_if_stalled(
                     target_piece,
                     blocked_waits,
@@ -3124,6 +3574,7 @@ class TorrentRuntime:
         is_sync: bool = False,
         sync_metadata: Optional[dict[str, Any]] = None,
         playback_request_id: Optional[int] = None,
+        request_end: Optional[int] = None,
     ) -> Optional[bytes]:
         end = min(end, self.file_piece_end(start))
         expected_length = end - start + 1
@@ -3162,6 +3613,7 @@ class TorrentRuntime:
                 is_sync=is_sync,
                 sync_metadata=sync_metadata,
                 playback_request_id=playback_request_id,
+                request_end=request_end,
             ):
                 return None
 
@@ -3470,6 +3922,7 @@ class TorrentRuntime:
                         is_sync=is_sync,
                         sync_metadata=sync_metadata,
                         playback_request_id=playback_request_id,
+                        request_end=end,
                     )
                     if chunk is None:
                         handler.close_connection = True

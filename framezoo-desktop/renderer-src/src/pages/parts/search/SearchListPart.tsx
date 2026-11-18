@@ -44,7 +44,7 @@ function SearchSuffix(props: {
   const icon: Icons = props.failed ? Icons.WARNING : Icons.EYE_SLASH;
 
   return (
-    <div className="mt-40 flex flex-col items-center justify-center space-y-3 text-center">
+    <div className="mt-40 flex flex-col items-center justify-center space-y-3 text-center motion-safe:animate-fade-in">
       <IconPatch
         icon={icon}
         className={`text-xl ${
@@ -285,7 +285,7 @@ export function SearchListPart({
   if (!results) return null;
 
   return (
-    <div>
+    <div className="motion-safe:animate-fade-in-up">
       <SectionHeading
         title={
           aiMode
@@ -298,7 +298,7 @@ export function SearchListPart({
       />
 
       {aiMode && aiIntent?.summary ? (
-        <div className="mb-4 flex flex-wrap items-center gap-2 text-xs text-type-secondary">
+        <div className="mb-4 flex flex-wrap items-center gap-2 text-xs text-type-secondary motion-safe:animate-fade-in">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-pill-background/60 px-3 py-1 text-type-text">
             <Icon icon={Icons.AI_SPARKLES} className="text-[11px]" />
             <span>{aiIntent.summary}</span>

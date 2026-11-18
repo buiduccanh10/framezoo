@@ -1609,7 +1609,6 @@ napi_value create_player(napi_env env, napi_callback_info info) {
   set_mpv_option(player.get(), "demuxer-readahead-secs", "90");
   set_mpv_option(player.get(), "demuxer-max-bytes", "768MiB");
   set_mpv_option(player.get(), "demuxer-max-back-bytes", "128MiB");
-  set_mpv_option(player.get(), "demuxer-hysteresis-secs", "10");
   set_mpv_option(player.get(), "demuxer-seekable-cache", "yes");
   set_mpv_option(player.get(), "stream-buffer-size", "32MiB");
   set_mpv_option(player.get(), "demuxer-lavf-analyzeduration", "0.5");

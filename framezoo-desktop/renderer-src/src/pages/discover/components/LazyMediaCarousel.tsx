@@ -64,24 +64,26 @@ export function LazyMediaCarousel({
   return (
     <div ref={ref}>
       {shouldRender ? (
-        <MediaCarousel
-          content={content}
-          isTVShow={isTVShow}
-          isMixed={isMixed}
-          carouselRefs={carouselRefs}
-          onShowDetails={onShowDetails}
-          moreContent={moreContent}
-          moreLink={moreLink}
-          showProviders={showProviders}
-          showGenres={showGenres}
-          showRecommendations={showRecommendations}
-          forcedGenreId={forcedGenreId}
-          forcedGenreName={forcedGenreName}
-          hideRelatedButtons={hideRelatedButtons}
-          releaseYear={releaseYear}
-          originCountry={originCountry}
-          sectionTitleOverride={sectionTitleOverride}
-        />
+        <div className="motion-safe:animate-fade-in">
+          <MediaCarousel
+            content={content}
+            isTVShow={isTVShow}
+            isMixed={isMixed}
+            carouselRefs={carouselRefs}
+            onShowDetails={onShowDetails}
+            moreContent={moreContent}
+            moreLink={moreLink}
+            showProviders={showProviders}
+            showGenres={showGenres}
+            showRecommendations={showRecommendations}
+            forcedGenreId={forcedGenreId}
+            forcedGenreName={forcedGenreName}
+            hideRelatedButtons={hideRelatedButtons}
+            releaseYear={releaseYear}
+            originCountry={originCountry}
+            sectionTitleOverride={sectionTitleOverride}
+          />
+        </div>
       ) : (
         // Placeholder with similar height to prevent layout shift
         <div className="h-[20rem]" />

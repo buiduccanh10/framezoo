@@ -23,6 +23,7 @@ import {
   getKeyDisplayName,
   getModifierSymbol,
   isNumberKey,
+  resolveCapturedShortcutKey,
 } from "@/utils/keyboardShortcuts";
 
 interface KeyboardShortcut {
@@ -280,8 +281,10 @@ export function KeyboardCommandsEditModal({
         return;
       }
 
+      const capturedKey = resolveCapturedShortcutKey(event);
+
       // Block number keys (0-9) - they're reserved for progress skipping
-      if (isNumberKey(event.key)) {
+      if (isNumberKey(capturedKey)) {
         event.preventDefault();
         event.stopPropagation();
         setIsCapturingKey(false);
@@ -291,7 +294,7 @@ export function KeyboardCommandsEditModal({
       event.preventDefault();
       event.stopPropagation();
 
-      setEditingKey(event.key);
+      setEditingKey(capturedKey);
       setIsCapturingKey(false);
     },
     [isCapturingKey, editingId],

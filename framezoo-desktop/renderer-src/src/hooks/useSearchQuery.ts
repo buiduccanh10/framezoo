@@ -62,9 +62,11 @@ export function useSearchQuery(): [
 
   const setAiMode = useCallback(
     (nextAiMode: boolean) => {
-      navigateWithMode(search, nextAiMode);
+      if (nextAiMode === aiMode) return;
+      setSearch("");
+      navigateWithMode("", nextAiMode);
     },
-    [navigateWithMode, search],
+    [aiMode, navigateWithMode],
   );
 
   return [search, updateParams, onUnFocus, aiMode, setAiMode];

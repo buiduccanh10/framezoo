@@ -240,6 +240,118 @@ export function findConflicts(
 }
 
 /**
+ * Physical key code mapping for US QWERTY keys, used as a fallback when an IME
+ * or non-Latin keyboard layout intercepts the printable key value.
+ */
+const KEY_TO_CODE_MAP: Record<string, string> = {
+  "[": "BracketLeft",
+  "{": "BracketLeft",
+  "]": "BracketRight",
+  "}": "BracketRight",
+  ",": "Comma",
+  "<": "Comma",
+  ".": "Period",
+  ">": "Period",
+  ";": "Semicolon",
+  ":": "Semicolon",
+  "'": "Quote",
+  '"': "Quote",
+  "/": "Slash",
+  "?": "Slash",
+  "\\": "Backslash",
+  "|": "Backslash",
+  "-": "Minus",
+  _: "Minus",
+  "=": "Equal",
+  "+": "Equal",
+  "`": "Backquote",
+  "~": "Backquote",
+};
+
+const CODE_TO_KEY_MAP: Record<string, string> = {
+  BracketLeft: "[",
+  BracketRight: "]",
+  Comma: ",",
+  Period: ".",
+  Semicolon: ";",
+  Quote: "'",
+  Slash: "/",
+  Backslash: "\\",
+  Minus: "-",
+  Equal: "=",
+  Backquote: "`",
+};
+
+const IME_INTERCEPTED_KEYS = new Set(["", "Process", "Dead", "Unidentified"]);
+
+function getExpectedKeyCode(key: string): string | undefined {
+  if (/^[a-z]$/i.test(key)) {
+    return `Key${key.toUpperCase()}`;
+  }
+  if (/^[0-9]$/.test(key)) {
+    return `Digit${key}`;
+  }
+  return KEY_TO_CODE_MAP[key];
+}
+
+function isImeOrNonAsciiEvent(event: KeyboardEvent): boolean {
+  const key = event.key ?? "";
+  return (
+    Boolean(event.isComposing) ||
+    IME_INTERCEPTED_KEYS.has(key) ||
+    /[^\x20-\x7e]/.test(key)
+  );
+}
+
+function matchesVietnameseTelexBracket(
+  event: KeyboardEvent,
+  configKey: string,
+): boolean {
+  const lowerKey = (event.key ?? "").toLowerCase();
+  if ((configKey === "[" || configKey === "{") && lowerKey === "ơ") {
+    return event.code !== "BracketRight";
+  }
+  if ((configKey === "]" || configKey === "}") && lowerKey === "ư") {
+    return event.code !== "BracketLeft" && event.code !== "KeyW";
+  }
+  return false;
+}
+
+/**
+ * Resolve a captured shortcut key to its canonical key identifier when an IME
+ * transforms `[` / `]` or emits a dead/composition key.
+ */
+export function resolveCapturedShortcutKey(event: KeyboardEvent): string {
+  const key = event.key ?? "";
+  const lowerKey = key.toLowerCase();
+
+  if (lowerKey === "ơ") {
+    return event.code === "BracketRight" ? "]" : "[";
+  }
+  if (lowerKey === "ư") {
+    if (event.code === "BracketLeft") return "[";
+    if (event.code === "KeyW") return "W";
+    return "]";
+  }
+
+  if (IME_INTERCEPTED_KEYS.has(key) || event.isComposing) {
+    if (event.code in CODE_TO_KEY_MAP) {
+      return CODE_TO_KEY_MAP[event.code];
+    }
+    const letterMatch = /^Key([A-Z])$/.exec(event.code);
+    if (letterMatch) {
+      return letterMatch[1];
+    }
+    const digitMatch = /^Digit([0-9])$/.exec(event.code);
+    if (digitMatch) {
+      return digitMatch[1];
+    }
+  }
+
+  return key;
+}
+
+/**
  * Check if a keyboard event matches a shortcut configuration
  */
 export function matchesShortcut(
@@ -250,7 +362,8 @@ export function matchesShortcut(
     return false;
   }
 
-  const eventKey = normalizeKey(event.key);
+  const rawEventKey = event.key ?? "";
+  const eventKey = normalizeKey(rawEventKey);
   const configKey = normalizeKey(config.key);
 
   // Check modifier match
@@ -272,7 +385,34 @@ export function matchesShortcut(
 
   // Check equivalence
   const equivKeys = getEquivalentKeys(configKey);
-  return equivKeys.includes(eventKey);
+  if (equivKeys.includes(eventKey)) {
+    return true;
+  }
+
+  // Fallback for IME / non-Latin layouts when the OS/IME alters `event.key`
+  // (e.g. Vietnamese Telex converting `[` -> `ơ` and `]` -> `ư` on the first press,
+  // or Apple Vietnamese / CJK layouts while preserving `event.code`).
+  if (matchesVietnameseTelexBracket(event, configKey)) {
+    return true;
+  }
+
+  const expectedCode = getExpectedKeyCode(configKey);
+  const lowerKey = rawEventKey.toLowerCase();
+  // macOS IMEs such as OpenKey inject synthetic Unicode events on keyCode 0 (`KeyA`),
+  // so never let synthetic `ơ` / `ư` trigger a shortcut bound to `A`.
+  const isSyntheticTelexCarrier =
+    expectedCode === "KeyA" && (lowerKey === "ơ" || lowerKey === "ư");
+
+  if (
+    expectedCode &&
+    event.code === expectedCode &&
+    !isSyntheticTelexCarrier &&
+    isImeOrNonAsciiEvent(event)
+  ) {
+    return true;
+  }
+
+  return false;
 }
 
 /**

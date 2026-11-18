@@ -696,6 +696,68 @@ class TorrentDiscoveryTest(unittest.TestCase):
         self.assertEqual(snapshot["peersDiscovered"], 1)
         self.assertEqual(snapshot["peersInjected"], 1)
 
+    def test_udp_tracker_announce_and_dispatch(self):
+        import struct
+
+        sent_packets = []
+        peer_ip = bytes([203, 0, 113, 9]) + (51413).to_bytes(2, "big")
+
+        class FakeUdpSocket:
+            def __init__(self):
+                self._step = 0
+
+            def connect(self, _addr):
+                return None
+
+            def settimeout(self, _timeout):
+                return None
+
+            def sendall(self, data):
+                sent_packets.append(data)
+
+            def recv(self, _size):
+                if self._step == 0:
+                    self._step += 1
+                    connect_tx = struct.unpack(">I", sent_packets[0][12:16])[0]
+                    return struct.pack(">IIQ", 0, connect_tx, 0x1122334455667788)
+                announce_tx = struct.unpack(">I", sent_packets[1][12:16])[0]
+                return struct.pack(">IIIII", 1, announce_tx, 1800, 3, 10) + peer_ip
+
+            def close(self):
+                return None
+
+        with patch.object(
+            discovery.socket,
+            "getaddrinfo",
+            return_value=[(discovery.socket.AF_INET, discovery.socket.SOCK_DGRAM, 17, "", ("198.51.100.1", 6969))],
+        ), patch.object(discovery.socket, "socket", return_value=FakeUdpSocket()):
+            result = discovery.announce_udp_tracker(
+                "udp://tracker.example:6969/announce",
+                b"1" * 20,
+                b"-FZ0001-" + b"0" * 12,
+                49161,
+            )
+
+        self.assertIsNone(result.error)
+        self.assertEqual(result.peers, (discovery.PeerAddress("203.0.113.9", 51413),))
+        self.assertEqual(len(sent_packets[0]), 16)
+        self.assertEqual(len(sent_packets[1]), 98)
+
+        runtime = discovery.TorrentDiscovery(
+            SimpleNamespace(listen_port=lambda: 49161),
+            Mock(),
+            lt.sha1_hash(b"0" * 20),
+            [],
+            b"-FZ0001-" + b"0" * 12,
+            49161,
+        )
+        with patch.object(discovery, "announce_udp_tracker") as udp_mock:
+            runtime._announce_tracker(
+                "udp://tracker.example:6969/announce",
+                SimpleNamespace(total_wanted=1000, total_wanted_done=0),
+            )
+        udp_mock.assert_called_once()
+
 
 if __name__ == "__main__":
     unittest.main()
