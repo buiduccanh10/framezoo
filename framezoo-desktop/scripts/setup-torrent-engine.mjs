@@ -38,7 +38,14 @@ function canImportLibtorrent() {
   if (!fs.existsSync(venvPython)) return false;
   const result = spawnSync(
     venvPython,
-    ["-c", "import libtorrent, PyInstaller"],
+    ["-c", `
+import sys
+from importlib.metadata import version
+from packaging.requirements import Requirement
+import libtorrent, PyInstaller
+requirements = (Requirement(line) for line in open(sys.argv[1]) if line.strip() and not line.lstrip().startswith('#'))
+sys.exit(not all((req.marker is not None and not req.marker.evaluate()) or req.specifier.contains(version(req.name)) for req in requirements))
+`, requirementsPath],
     {
       cwd: desktopRoot,
       stdio: "ignore",
@@ -78,21 +85,19 @@ function main() {
     return;
   }
 
-  const python = findSystemPython();
-  if (fs.existsSync(venvRoot)) {
-    fs.rmSync(venvRoot, { recursive: true, force: true });
+  if (!fs.existsSync(venvPython)) {
+    const python = findSystemPython();
+    run(python.command, [...python.prefix, "-m", "venv", venvRoot]);
+    run(venvPython, [
+      "-m",
+      "pip",
+      "install",
+      "--upgrade",
+      "pip",
+      "setuptools",
+      "wheel",
+    ]);
   }
-
-  run(python.command, [...python.prefix, "-m", "venv", venvRoot]);
-  run(venvPython, [
-    "-m",
-    "pip",
-    "install",
-    "--upgrade",
-    "pip",
-    "setuptools",
-    "wheel",
-  ]);
   run(venvPython, [
     "-m",
     "pip",

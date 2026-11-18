@@ -120,6 +120,38 @@ class TrackerResponseTest(unittest.TestCase):
 
 
 class TorrentDiscoveryTest(unittest.TestCase):
+    def test_dht_lookup_starts_before_http_tracker_fanout(self):
+        events = []
+
+        class FakeHandle:
+            def status(self):
+                return SimpleNamespace(num_peers=0, total_done=0, total_wanted=100)
+
+            def force_dht_announce(self):
+                events.append("dht-announce")
+
+        class FakeSession:
+            def dht_get_peers(self, _info_hash):
+                events.append("dht-lookup")
+
+        runtime = discovery.TorrentDiscovery(
+            FakeSession(),
+            FakeHandle(),
+            lt.sha1_hash(bytes.fromhex("04" * 20)),
+            ["http://slow.example/announce"],
+            b"-FZ0001-" + b"0" * 12,
+            6881,
+        )
+
+        def announce(tracker, *_args, **_kwargs):
+            events.append("tracker")
+            return discovery.TrackerResult(tracker, ())
+
+        with patch.object(discovery, "announce_http_tracker", side_effect=announce):
+            runtime._run_cycle()
+
+        self.assertLess(events.index("dht-lookup"), events.index("tracker"))
+
     def test_slow_tracker_does_not_hide_fast_tracker_result(self):
         fast_peer = discovery.PeerAddress("127.0.0.1", 6881)
         slow_started = threading.Event()

@@ -676,6 +676,19 @@ class TorrentDiscovery:
                 return False
         return False
 
+    def _request_dht_peers(self) -> None:
+        """Start DHT lookup without waiting for tracker HTTP timeouts."""
+        try:
+            force_dht = getattr(self.handle, "force_dht_announce", None)
+            if callable(force_dht):
+                force_dht()
+            dht_get_peers = getattr(self.session, "dht_get_peers", None)
+            if callable(dht_get_peers):
+                dht_get_peers(self.info_hash)
+        except Exception as error:
+            with self.lock:
+                self.last_error = str(error)
+
     def _run_cycle(self) -> None:
         self._harvest_peers_from_handle()
         try:
@@ -687,6 +700,10 @@ class TorrentDiscovery:
             trackers = list(self.trackers)
             self.phase = "discovering"
             self.last_discovery_at = time.time()
+
+        # Stremio starts DHT and tracker searches together. A slow or blocked
+        # HTTP tracker must not postpone the only remaining peer source.
+        self._request_dht_peers()
 
         http_trackers = [
             tracker
@@ -748,19 +765,6 @@ class TorrentDiscovery:
 
         if self.stop_event.is_set():
             return
-
-        try:
-            if self.stop_event.is_set():
-                return
-            force_dht = getattr(self.handle, "force_dht_announce", None)
-            if callable(force_dht):
-                force_dht()
-            dht_get_peers = getattr(self.session, "dht_get_peers", None)
-            if callable(dht_get_peers):
-                dht_get_peers(self.info_hash)
-        except Exception as error:
-            with self.lock:
-                self.last_error = str(error)
 
         self._harvest_peers_from_handle()
         if (

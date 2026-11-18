@@ -103,7 +103,7 @@ class SidecarStreamTest(unittest.TestCase):
         runtime.session_started_at = time.monotonic()
         runtime.stop_event = threading.Event()
         runtime._fast_block_lock = threading.Lock()
-        runtime._fast_blocks = set()
+        runtime._fast_blocks = {}
         runtime._fast_blocks_inflight = set()
         runtime._fast_block_retry_at = {}
         runtime._startup_fast_head_blocks = {(0, 0)}
@@ -127,10 +127,12 @@ class SidecarStreamTest(unittest.TestCase):
             runtime,
         )
 
-        with patch(
-            "torrent_runtime.fetch_blocks_from_peers",
-            return_value={(0, 0): b"a" * (16 * 1024)},
-        ):
+        def fetch(*_args, on_block, **_kwargs):
+            on_block((0, 0), b"a" * (16 * 1024))
+            self.assertEqual(requested, [(64 * 1024, constants.STARTUP_VIRTUAL_PIECE_BYTES - 1)])
+            return {(0, 0): b"a" * (16 * 1024)}
+
+        with patch("torrent_runtime.fetch_blocks_from_peers", side_effect=fetch):
             runtime._fetch_fast_blocks(
                 {(0, 0)},
                 [],
@@ -146,6 +148,86 @@ class SidecarStreamTest(unittest.TestCase):
             requested,
             [(64 * 1024, constants.STARTUP_VIRTUAL_PIECE_BYTES - 1)],
         )
+
+    def test_fast_blocks_preserve_file_and_verified_data_at_shared_boundaries(self):
+        from types import SimpleNamespace
+
+        runtime = object.__new__(TorrentRuntime)
+        runtime.session_id = "shared-boundary-test"
+        runtime.stop_event = threading.Event()
+        runtime._fast_block_lock = threading.Lock()
+        runtime._fast_blocks = {}
+        runtime._fast_blocks_inflight = {(0, 0), (0, 1)}
+        runtime._fast_block_retry_at = {}
+        runtime._fast_peer_id = b"-FZFB01-" + b"0" * 12
+        runtime.file_size = 3
+        runtime.file_index = 0
+        runtime.info = SimpleNamespace(piece_length=lambda: 8, files=lambda: SimpleNamespace(file_offset=lambda _: 3))
+        verified = [False]
+        runtime.handle = SimpleNamespace(status=lambda: SimpleNamespace(block_size=4), have_piece=lambda _: verified[0])
+        runtime.file_piece_end = lambda _: 2
+        runtime.wait_for_range = lambda *args, **kwargs: True
+        runtime._is_playback_request_superseded = lambda _: False
+        with tempfile.NamedTemporaryFile() as media:
+            media.write(b"xyz")
+            media.flush()
+            runtime.selected_file_path = lambda: media.name
+            with patch("torrent_runtime.fetch_blocks_from_peers", return_value={
+                (0, 0): b"abcD", (0, 1): b"EFGH",
+            }):
+                runtime._fetch_fast_blocks({(0, 0), (0, 1)}, [], b"0" * 20, 8, 3, 4, 8)
+            media.seek(0)
+            self.assertEqual(media.read(), b"xyz")
+            with open(media.name, "rb") as stream:
+                self.assertEqual(runtime.read_range_chunk(stream, 0, 2), b"DEF")
+            attempts = []
+
+            def wait_for_range(*_args, **_kwargs):
+                attempts.append(1)
+                if len(attempts) == 1:
+                    runtime._fast_blocks.pop((0, 0))
+                else:
+                    runtime._fast_blocks[(0, 0)] = b"abcD"
+                return True
+
+            runtime.wait_for_range = wait_for_range
+            with open(media.name, "rb") as stream:
+                self.assertEqual(runtime.read_range_chunk(stream, 0, 2), b"DEF")
+            self.assertEqual(len(attempts), 2)
+            verified[0] = True
+            with open(media.name, "rb") as stream:
+                self.assertEqual(runtime.read_range_chunk(stream, 0, 2), b"xyz")
+
+    def test_fast_blocks_are_available_before_peer_batch_finishes(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.session_id = "fast-progress-test"
+        runtime.stop_event = threading.Event()
+        runtime._fast_block_lock = threading.Lock()
+        runtime._fast_blocks = {}
+        runtime._fast_blocks_inflight = {(0, 0)}
+        runtime._fast_block_retry_at = {}
+        runtime._fast_peer_id = b"0" * 20
+        runtime.file_size = 4
+        runtime._is_large_piece_torrent = lambda: False
+        runtime.elapsed_ms = lambda: 0
+        ready, release = threading.Event(), threading.Event()
+
+        def fetch(*_args, on_block, **_kwargs):
+            on_block((0, 0), b"data")
+            ready.set()
+            release.wait(2)
+            return {(0, 0): b"data"}
+
+        with patch("torrent_runtime.fetch_blocks_from_peers", side_effect=fetch):
+            worker = threading.Thread(target=runtime._fetch_fast_blocks, args=({(0, 0)}, [], b"0" * 20, 4, 0, 4, 4))
+            worker.start()
+            try:
+                self.assertTrue(ready.wait(1))
+                self.assertTrue(worker.is_alive())
+                self.assertEqual(runtime._fast_blocks[(0, 0)], b"data")
+            finally:
+                release.set()
+                worker.join(2)
 
     def test_sync_flag_reaches_first_chunk_priority(self):
         runtime = object.__new__(TorrentRuntime)
@@ -188,6 +270,25 @@ class SidecarStreamTest(unittest.TestCase):
         self.assertTrue(calls[0]["is_sync"])
         self.assertEqual(calls[0]["sync_metadata"], {"windowIndex": 0})
         stream.close()
+
+    def test_first_playback_chunk_is_bounded_to_64k(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.stop_event = threading.Event()
+        runtime.info = None
+        runtime.file_index = None
+        runtime.file_size = constants.STREAM_CHUNK_SIZE
+        runtime.file_piece_end = lambda _start: runtime.file_size - 1
+        requested = []
+        runtime.read_range_chunk = lambda _stream, start, end, **_kwargs: (
+            requested.append((start, end)) or b"video"
+        )
+        with tempfile.NamedTemporaryFile() as media:
+            stream, chunk = runtime.open_first_chunk(
+                media.name, 0, runtime.file_size - 1,
+            )
+        stream.close()
+        self.assertEqual(chunk, b"video")
+        self.assertEqual(requested, [(0, constants.INITIAL_STREAM_BYTES - 1)])
 
 
     def test_materializes_selected_file_at_declared_size(self):
@@ -703,6 +804,75 @@ class SidecarStreamTest(unittest.TestCase):
         self.assertNotIn("Content-Range", handler.headers_sent)
         self.assertEqual(handler.wfile.getvalue(), b"012345678")
 
+    def test_large_piece_resume_sends_available_bytes_before_later_blocks(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.stop_event = threading.Event()
+        runtime.metadata_ready = threading.Event()
+        runtime.metadata_ready.set()
+        runtime.metadata_complete = threading.Event()
+        runtime.metadata_error = None
+        runtime.info = type("Info", (), {"piece_length": lambda _: 64 * 1024 * 1024})()
+        runtime.file_index = 0
+        start_offset = 4 * constants.STREAM_CHUNK_SIZE
+        runtime.file_size = start_offset + 2 * constants.STREAM_CHUNK_SIZE
+        runtime.file_path = "episode.mkv"
+        runtime.save_path = tempfile.gettempdir()
+        runtime.session_id = "incremental-body-test"
+        runtime.first_request_logged = False
+        runtime._piece_priority_lock = threading.RLock()
+        runtime._has_streamed_bytes = False
+        runtime._playhead_streamed_bytes = 0
+        runtime._last_stream_start = None
+        runtime.start_time = 120
+        runtime.focus_file = lambda: None
+        runtime.file_piece_end = lambda _start: runtime.file_size - 1
+        runtime.is_initial_tail_probe = lambda *_args: False
+        available = start_offset + 2 * constants.INITIAL_STREAM_BYTES
+        payload = b"a" * (runtime.file_size - start_offset)
+        release = threading.Event()
+        second_chunk_sent = threading.Event()
+        runtime.open_first_chunk = lambda *_args, **_kwargs: (
+            BytesIO(payload), payload[:constants.INITIAL_STREAM_BYTES]
+        )
+
+        def read_chunk(stream, start, end, **_kwargs):
+            if end >= available:
+                release.wait(2)
+            stream.seek(start - start_offset)
+            return stream.read(end - start + 1)
+
+        runtime.read_range_chunk = read_chunk
+
+        class Output(BytesIO):
+            def write(self, data):
+                result = super().write(data)
+                if self.tell() >= available - start_offset:
+                    second_chunk_sent.set()
+                return result
+
+        class Handler:
+            command = "GET"
+            headers = {"Range": f"bytes={start_offset}-"}
+            close_connection = False
+            wfile = Output()
+            def send_response(self, _status): pass
+            def send_header(self, _name, _value): pass
+            def end_headers(self): pass
+
+        handler = Handler()
+        worker = threading.Thread(target=runtime.serve, args=(handler, False))
+        worker.start()
+        try:
+            self.assertTrue(second_chunk_sent.wait(1))
+            self.assertEqual(
+                handler.wfile.getvalue(), payload[:available - start_offset]
+            )
+        finally:
+            release.set()
+            worker.join(3)
+        self.assertFalse(worker.is_alive())
+        self.assertEqual(handler.wfile.getvalue(), payload)
+
     def test_piece_scheduling_is_additive_for_concurrent_ranges(self):
         runtime = object.__new__(TorrentRuntime)
         runtime.stop_event = threading.Event()
@@ -1018,6 +1188,18 @@ class SidecarStreamTest(unittest.TestCase):
         runtime.start_time = 50.0  # 50s
         runtime.duration = 100.0  # 100s -> target offset is 50% = 50MB
         runtime.session_id = "startat-prefetch-test"
+        runtime.handle = type(
+            "FakeHandle",
+            (),
+            {
+                "have_piece": lambda _self, _piece: False,
+                "piece_priority": lambda _self, _piece, _priority: None,
+                "set_piece_deadline": lambda _self, piece, deadline, _flags: _self.deadlines.append(
+                    (piece, deadline)
+                ),
+            },
+        )()
+        runtime.handle.deadlines = []
         scheduled = []
 
         def map_pieces(self, start, length):
@@ -1043,6 +1225,7 @@ class SidecarStreamTest(unittest.TestCase):
         self.assertIn(200, pieces)
         self.assertIn(201, pieces)
         self.assertIn(200, required)
+        self.assertEqual(set(runtime.handle.deadlines), {(200, 0), (201, 0)})
 
     def test_focus_playback_piece_suppresses_prior_uncompleted_pieces(self):
         runtime = object.__new__(TorrentRuntime)
@@ -2083,6 +2266,7 @@ class SidecarStreamTest(unittest.TestCase):
         runtime._boosted_pieces = set()
         map_lengths = []
         schedule_calls = []
+        probe_calls = []
 
         def map_pieces(self, _start, length):
             map_lengths.append(length)
@@ -2101,6 +2285,7 @@ class SidecarStreamTest(unittest.TestCase):
             schedule_calls.append((is_sync, sync_metadata))
 
         runtime._schedule_pieces = MethodType(schedule_pieces, runtime)
+        runtime._start_fast_block_fetch = lambda start, end: probe_calls.append((start, end))
 
         class FakeStatus:
             has_metadata = True
@@ -2128,7 +2313,7 @@ class SidecarStreamTest(unittest.TestCase):
         runtime.wait_for_range(
             0,
             0,
-            timeout=0.15,
+            timeout=0.6,
             track_position=False,
             is_sync=True,
         )
@@ -2137,6 +2322,7 @@ class SidecarStreamTest(unittest.TestCase):
         self.assertNotIn(constants.SYNC_RANGE_PREFETCH_BYTES * 2, map_lengths)
         self.assertTrue(schedule_calls)
         self.assertTrue(all(is_sync for is_sync, _metadata in schedule_calls))
+        self.assertGreater(len(probe_calls), len(schedule_calls))
 
     def test_focus_file_does_not_reset_priorities_for_each_range(self):
         runtime = object.__new__(TorrentRuntime)
