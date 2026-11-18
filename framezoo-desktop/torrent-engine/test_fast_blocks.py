@@ -20,7 +20,7 @@ class FastBlockProtocolTest(unittest.TestCase):
         runtime = object.__new__(TorrentRuntime)
         runtime.handle = SimpleNamespace(
             get_peer_info=lambda: [
-                SimpleNamespace(ip=("192.0.2.1", port), pieces=None)
+                SimpleNamespace(ip=("192.0.2.1", port), pieces=[False])
                 for port in range(8)
             ],
         )
@@ -178,6 +178,56 @@ class FastBlockProtocolTest(unittest.TestCase):
             thread.join(timeout=2)
 
         self.assertEqual(result, {(0, 0): b"a" * block_size})
+
+    def test_fetch_uses_allowed_fast_piece_before_unchoke(self):
+        info_hash = b"01234567890123456789"
+        peer_id = b"-FZTEST-" + b"012345678901"
+        block_size = 16 * 1024
+        client, server = socket.socketpair()
+        data = b"a" * block_size
+
+        def serve_allowed_fast():
+            try:
+                server.settimeout(2)
+                handshake = self._recv_exact(server, 73)
+                self.assertEqual(handshake[68:], b"\x00\x00\x00\x01\x02")
+                server.sendall(
+                    bytes([19])
+                    + b"BitTorrent protocol"
+                    + b"\x00" * 8
+                    + info_hash
+                    + b"-FZSEED-" + b"012345678901"
+                    + struct.pack(">IBI", 5, 17, 0),
+                )
+                length = struct.unpack(">I", self._recv_exact(server, 4))[0]
+                request = self._recv_exact(server, length)
+                self.assertEqual(request[0], 6)
+                self.assertEqual(struct.unpack(">III", request[1:13]), (0, 0, block_size))
+                server.sendall(
+                    struct.pack(">IBII", 9 + len(data), 7, 0, 0) + data
+                    + b"\x00\x00\x00\x01\x01",
+                )
+            finally:
+                server.close()
+
+        thread = threading.Thread(target=serve_allowed_fast, daemon=True)
+        thread.start()
+        try:
+            with patch("torrent_fast_blocks.socket.create_connection", return_value=client):
+                result = fetch_blocks_from_peer(
+                    ("127.0.0.1", 1),
+                    info_hash,
+                    peer_id,
+                    {(0, 0)},
+                    64 * 1024,
+                    block_size,
+                    64 * 1024,
+                )
+        finally:
+            client.close()
+            thread.join(timeout=2)
+
+        self.assertEqual(result, {(0, 0): data})
 
     def test_peer_probe_does_not_wait_for_stale_endpoint(self):
         blocks = {(0, 0)}

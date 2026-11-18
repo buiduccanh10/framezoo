@@ -344,10 +344,10 @@ class TorrentRuntime:
                     # Start wire probes before libmpv opens the route. Priority
                     # alone does not request partial blocks from tracker peers.
                     self.prime_startup_fast_blocks()
-                    if self.start_time <= 0:
-                        self.wait_for_initial_chunk()
-                    self.metadata_ready.set()
+                    # Expose the blocking range route immediately. libmpv can
+                    # open it while the first blocks are still arriving.
                     self.stream_type = "file"
+                    self.metadata_ready.set()
                     try:
                         emit({"type": "status", "status": self.current_status()})
                     except Exception:
@@ -1332,13 +1332,8 @@ class TorrentRuntime:
             endpoint = normalize_endpoint(getattr(peer, "ip", None))
             if endpoint is None or endpoint in seen:
                 continue
-            availability = getattr(peer, "pieces", None)
-            if availability:
-                if not any(
-                    piece < len(availability) and bool(availability[piece])
-                    for piece in pieces
-                ):
-                    continue
+            # shortcut: a stale bitfield may reject this probe; native scheduling
+            # remains the fallback.
             seen.add(endpoint)
             connected.append(endpoint)
 

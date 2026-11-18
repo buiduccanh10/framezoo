@@ -512,6 +512,8 @@ class TorrentDiscoveryTest(unittest.TestCase):
 
         with patch("torrent_engine.time.monotonic", return_value=100), patch(
             "torrent_engine.get_local_ipv4", return_value="192.0.2.2"
+        ), patch(
+            "torrent_engine.get_local_ipv4s", return_value=["192.0.2.2"]
         ), patch.dict("os.environ", {"FRAMEZOO_TEST_LOOPBACK": "0"}), patch(
             "torrent_engine.threading.Thread"
         ) as probe:
@@ -539,9 +541,31 @@ class TorrentDiscoveryTest(unittest.TestCase):
         engine._session = SimpleNamespace(apply_settings=Mock(side_effect=RuntimeError("failed")))
         with patch("torrent_engine.time.monotonic", return_value=100), patch(
             "torrent_engine.get_local_ipv4", return_value="192.0.2.2"
+        ), patch(
+            "torrent_engine.get_local_ipv4s", return_value=["192.0.2.2"]
         ):
             engine.refresh_network()
         self.assertEqual(engine.listen_address, "192.0.2.1")
+
+    def test_network_settings_bind_all_local_ipv4s(self):
+        from torrent_engine import LibtorrentEngine
+
+        engine = object.__new__(LibtorrentEngine)
+        with patch("torrent_engine.get_local_ipv4", return_value="192.0.2.1"), patch(
+            "torrent_engine.get_local_ipv4s",
+            return_value=["192.0.2.1", "192.0.2.2", "100.64.0.3"],
+        ), patch.dict("os.environ", {"FRAMEZOO_TEST_LOOPBACK": "0"}):
+            self.assertEqual(
+                engine._network_settings(),
+                {
+                    "listen_interfaces": (
+                        "192.0.2.1:49160-49170,"
+                        "192.0.2.2:49160-49170,"
+                        "100.64.0.3:49160-49170"
+                    ),
+                    "outgoing_interfaces": "192.0.2.1,192.0.2.2,100.64.0.3",
+                },
+            )
 
     def test_http_announce_uses_current_listen_port(self):
         session = SimpleNamespace(listen_port=lambda: 49169)

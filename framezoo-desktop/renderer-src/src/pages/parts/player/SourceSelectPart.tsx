@@ -50,7 +50,6 @@ import {
   scheduleTorrentStop,
   stopTorrentSession,
   useActiveTorrentStatus,
-  waitForTorrentPlayable,
 } from "@/desktop/torrentPlaybackStore";
 import { ErrorCard } from "@/pages/parts/errors/ErrorCard";
 import { type PlayerMeta, playerStatus } from "@/stores/player/slices/source";
@@ -502,7 +501,10 @@ export function SourceSelectPart(props: {
             return;
           }
           registerTorrentSession(session.sessionId);
-          const playable = await waitForTorrentPlayable(session.sessionId);
+          // The sidecar route is valid before metadata/peers are ready and
+          // blocks the HTTP body until bytes arrive. Open it now so metadata,
+          // peer discovery, and native player startup overlap.
+          const playable = session;
           if (operationId !== selectionOperation.current) {
             scheduleTorrentStop(session.sessionId);
             return;

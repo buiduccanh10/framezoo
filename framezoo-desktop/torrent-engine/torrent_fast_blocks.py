@@ -105,12 +105,17 @@ def fetch_blocks_from_peer(
     received: Dict[Block, bytes] = {}
     with socket.create_connection(endpoint, timeout=timeout) as stream:
         stream.settimeout(timeout)
+        try:
+            stream.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+        except OSError:
+            pass
         stream.sendall(
             bytes([len(_PROTOCOL)])
             + _PROTOCOL
             + b"\x00" * 8
             + info_hash
-            + peer_id,
+            + peer_id
+            + _INTERESTED,
         )
         try:
             handshake = _recv_exact(stream, 68)
@@ -123,7 +128,25 @@ def fetch_blocks_from_peer(
         ):
             raise ConnectionError("peer handshake mismatch")
 
-        stream.sendall(_INTERESTED)
+        requested: Dict[Block, int] = {}
+        pending = set(blocks)
+        outstanding: Set[Block] = set()
+
+        def request_blocks(candidates: Set[Block]) -> None:
+            selected = candidates & pending
+            if not selected:
+                return
+            sent = _send_block_requests(
+                stream,
+                selected,
+                piece_length,
+                block_size,
+                total_size,
+            )
+            requested.update(sent)
+            pending.difference_update(sent)
+            outstanding.update(sent)
+
         unchoked = False
         while not unchoked:
             try:
@@ -131,21 +154,29 @@ def fetch_blocks_from_peer(
             except (ConnectionError, OSError, TimeoutError):
                 return received
             if message_id == 0:
-                raise ConnectionError("peer choked fast block request")
+                if not outstanding:
+                    raise ConnectionError("peer choked fast block request")
             if message_id == 1:
                 unchoked = True
+                request_blocks(set(pending))
+            elif message_id == 17 and len(payload) >= 4:
+                allowed_piece = struct.unpack(">I", payload[:4])[0]
+                request_blocks(
+                    {block for block in pending if block[0] == allowed_piece},
+                )
             elif message_id == 16:
                 raise ConnectionError("peer rejected fast block request")
+            elif message_id == 7 and len(payload) >= 8:
+                piece, begin = struct.unpack(">II", payload[:8])
+                block = (piece, begin // block_size)
+                if block in outstanding:
+                    data = payload[8:]
+                    if len(data) != requested[block]:
+                        raise ValueError("peer returned an unexpected block length")
+                    received[block] = data
+                    outstanding.remove(block)
 
-        requested = _send_block_requests(
-            stream,
-            blocks,
-            piece_length,
-            block_size,
-            total_size,
-        )
-        pending = set(requested)
-        while pending:
+        while outstanding:
             try:
                 message_id, payload = _recv_message(stream)
             except (ConnectionError, OSError, TimeoutError):
@@ -163,13 +194,13 @@ def fetch_blocks_from_peer(
 
             piece, begin = struct.unpack(">II", payload[:8])
             block = (piece, begin // block_size)
-            if block not in pending:
+            if block not in outstanding:
                 continue
             data = payload[8:]
             if len(data) != requested[block]:
                 raise ValueError("peer returned an unexpected block length")
             received[block] = data
-            pending.remove(block)
+            outstanding.remove(block)
     return received
 
 
