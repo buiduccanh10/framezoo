@@ -1,7 +1,20 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+vi.mock("@/setup/config", () => ({
+  conf: () => ({
+    BACKEND_URL: "https://api.example",
+    BACKEND_URLS: [],
+    APP_DOMAIN: "",
+  }),
+}));
+vi.mock("@/stores/auth", () => ({
+  useAuthStore: { getState: () => ({ backendUrl: null }) },
+}));
 
 import {
   extractHostname,
+  clearComplianceBlocklistCache,
+  fetchComplianceBlocklist,
   isAddonMediaBlocked,
   isDomainInBlocklist,
   isImdbBlocked,
@@ -9,6 +22,12 @@ import {
   isMediaBlocked,
   isSubtitleIdBlocked,
 } from "./blocklist";
+
+afterEach(() => {
+  clearComplianceBlocklistCache();
+  vi.restoreAllMocks();
+  vi.unstubAllGlobals();
+});
 
 describe("desktop compliance blocklist helpers", () => {
   it("extracts hostnames and matches exact and subdomain blocks without partial false positives", () => {
@@ -66,5 +85,19 @@ describe("desktop compliance blocklist helpers", () => {
     );
     expect(isSubtitleIdBlocked("opensubs:555", ["opensubs:555:en"])).toBe(true);
     expect(isSubtitleIdBlocked("wyzie:111:en", ["subsource:111"])).toBe(false);
+  });
+
+  it("shares one in-flight blocklist request", async () => {
+    let resolve!: (response: Response) => void;
+    const fetchMock = vi.fn(
+      () => new Promise<Response>((done) => (resolve = done)),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    const first = fetchComplianceBlocklist();
+    const second = fetchComplianceBlocklist();
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    resolve(new Response(JSON.stringify({}), { status: 200 }));
+    await expect(Promise.all([first, second])).resolves.toHaveLength(2);
   });
 });

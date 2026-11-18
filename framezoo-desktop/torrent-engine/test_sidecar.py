@@ -981,7 +981,7 @@ class SidecarStreamTest(unittest.TestCase):
             [
                 (
                     [10, 11, 12, 13, 14, 90, 91],
-                    {10, 11, 90, 91},
+                    {10, 11},
                     "startup-prefetch",
                 ),
             ],

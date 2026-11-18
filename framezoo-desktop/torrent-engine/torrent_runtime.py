@@ -924,12 +924,10 @@ class TorrentRuntime:
             required_pieces = set()
             if startup_pieces:
                 required_pieces.update(startup_pieces[:required_count])
-            if tail_pieces:
-                required_tail = set(tail_pieces[-required_count:])
-                required_pieces.update(required_tail)
-                self._startup_required_tail_pieces = required_tail
-            else:
-                self._startup_required_tail_pieces = set()
+            # Keep the container tail warm, but let the first playback range
+            # own startup bandwidth. A real tail probe promotes these pieces
+            # through wait_for_range() when the demuxer asks for them.
+            self._startup_required_tail_pieces = set()
             if target_pieces:
                 required_targets = set(target_pieces[:required_count])
                 required_pieces.update(required_targets)

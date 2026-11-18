@@ -14,6 +14,7 @@ const CACHE_KEY = "framezoo.compliance.blocklist.v1";
 const CACHE_TTL_MS = 5 * 60 * 1000;
 
 let memoryCache: { expiresAt: number; data: ComplianceBlocklist } | null = null;
+let inFlight: Promise<ComplianceBlocklist> | null = null;
 
 export function clearComplianceBlocklistCache(): void {
   memoryCache = null;
@@ -68,41 +69,50 @@ export async function fetchComplianceBlocklist(
   if (!force && memoryCache && memoryCache.expiresAt > now) {
     return memoryCache.data;
   }
+  if (!force && inFlight) return inFlight;
 
-  const baseUrl = resolveComplianceBackendUrl();
-  if (!baseUrl) {
-    return readStoredBlocklist() ?? emptyBlocklist();
-  }
-
-  try {
-    const res = await fetch(`${baseUrl}/compliance/blocklist`, {
-      signal: AbortSignal.timeout(5000),
-    });
-    if (!res.ok) {
-      throw new Error(`HTTP ${res.status}`);
+  const request = (async () => {
+    const baseUrl = resolveComplianceBackendUrl();
+    if (!baseUrl) {
+      return readStoredBlocklist() ?? emptyBlocklist();
     }
-    const payload = (await res.json()) as Partial<ComplianceBlocklist>;
-    const normalized: ComplianceBlocklist = {
-      addonDomains: Array.isArray(payload.addonDomains)
-        ? payload.addonDomains
-        : [],
-      tmdbIds: Array.isArray(payload.tmdbIds) ? payload.tmdbIds : [],
-      imdbIds: Array.isArray(payload.imdbIds) ? payload.imdbIds : [],
-      subtitleIds: Array.isArray(payload.subtitleIds)
-        ? payload.subtitleIds
-        : [],
-      infohashes: Array.isArray(payload.infohashes) ? payload.infohashes : [],
-      updatedAt: payload.updatedAt,
-    };
-    memoryCache = { expiresAt: now + CACHE_TTL_MS, data: normalized };
+
     try {
-      localStorage.setItem(CACHE_KEY, JSON.stringify(normalized));
+      const res = await fetch(`${baseUrl}/compliance/blocklist`, {
+        signal: AbortSignal.timeout(5000),
+      });
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
+      }
+      const payload = (await res.json()) as Partial<ComplianceBlocklist>;
+      const normalized: ComplianceBlocklist = {
+        addonDomains: Array.isArray(payload.addonDomains)
+          ? payload.addonDomains
+          : [],
+        tmdbIds: Array.isArray(payload.tmdbIds) ? payload.tmdbIds : [],
+        imdbIds: Array.isArray(payload.imdbIds) ? payload.imdbIds : [],
+        subtitleIds: Array.isArray(payload.subtitleIds)
+          ? payload.subtitleIds
+          : [],
+        infohashes: Array.isArray(payload.infohashes) ? payload.infohashes : [],
+        updatedAt: payload.updatedAt,
+      };
+      memoryCache = { expiresAt: Date.now() + CACHE_TTL_MS, data: normalized };
+      try {
+        localStorage.setItem(CACHE_KEY, JSON.stringify(normalized));
+      } catch {
+        // Ignore storage quota issues.
+      }
+      return normalized;
     } catch {
-      // Ignore storage quota issues.
+      return memoryCache?.data ?? readStoredBlocklist() ?? emptyBlocklist();
     }
-    return normalized;
-  } catch {
-    return memoryCache?.data ?? readStoredBlocklist() ?? emptyBlocklist();
+  })();
+  inFlight = request;
+  try {
+    return await request;
+  } finally {
+    if (inFlight === request) inFlight = null;
   }
 }
 
