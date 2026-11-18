@@ -329,10 +329,6 @@ class TorrentRuntime:
                             resume()
                         except Exception:
                             pass
-                    # Do not expose the stream to libmpv until the container
-                    # head is readable. Otherwise initial resume seeks can
-                    # race the first HTTP response and playback may present
-                    # offset zero while the UI already shows saved progress.
                     self.prime_startup_ranges()
                     record = getattr(self, "record", None)
                     discovery = getattr(record, "discovery", None)
@@ -342,7 +338,11 @@ class TorrentRuntime:
                                 discovery.reactivate()
                         except Exception:
                             pass
-                    self.wait_for_initial_chunk()
+                    # Start wire probes before libmpv opens the route. Priority
+                    # alone does not request partial blocks from tracker peers.
+                    self.prime_startup_fast_blocks()
+                    if self.start_time <= 0:
+                        self.wait_for_initial_chunk()
                     self.metadata_ready.set()
                     self.stream_type = "file"
                     try:
@@ -350,7 +350,7 @@ class TorrentRuntime:
                     except Exception:
                         pass
                     log_event(
-                        "stream ready",
+                        "stream route ready",
                         sessionId=self.session_id,
                         fileName=self.file_path.rsplit("/", 1)[-1],
                         fileSize=self.file_size,
@@ -1037,6 +1037,30 @@ class TorrentRuntime:
             firstChunkBytes=len(chunk),
             timingPhase="stream_ready",
             elapsedMs=self.elapsed_ms(),
+        )
+
+    def prime_startup_fast_blocks(self) -> None:
+        """Fetch the first range and resume target while metadata is settling."""
+        if getattr(self, "handle", None) is None or self.file_size <= 0:
+            return
+        initial_bytes = (
+            constants.INITIAL_STREAM_BYTES
+            if self._is_large_piece_torrent()
+            else constants.STREAM_CHUNK_SIZE
+        )
+        initial_end = min(self.file_size - 1, initial_bytes - 1)
+        self._start_fast_block_fetch(0, initial_end)
+        if self.start_time <= 0 or self.duration <= 0:
+            return
+        target_byte = int(
+            (min(self.start_time, self.duration) / self.duration) * self.file_size
+        )
+        self._start_fast_block_fetch(
+            target_byte,
+            min(
+                self.file_size - 1,
+                target_byte + constants.INITIAL_STREAM_BYTES - 1,
+            ),
         )
 
     def focus_file(self) -> None:

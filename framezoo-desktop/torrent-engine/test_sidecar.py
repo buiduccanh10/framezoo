@@ -68,6 +68,34 @@ class SidecarStreamTest(unittest.TestCase):
 
         self.assertEqual(requested, [constants.INITIAL_STREAM_BYTES - 1])
 
+    def test_startup_fast_blocks_include_resume_target(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.handle = object()
+        runtime.file_size = 100 * 1024 * 1024
+        runtime.start_time = 50.0
+        runtime.duration = 100.0
+        requested = []
+
+        def start_fast_block_fetch(self, start, end):
+            requested.append((start, end))
+
+        runtime._start_fast_block_fetch = MethodType(
+            start_fast_block_fetch,
+            runtime,
+        )
+        runtime.prime_startup_fast_blocks()
+
+        self.assertEqual(
+            requested,
+            [
+                (0, constants.STREAM_CHUNK_SIZE - 1),
+                (
+                    50 * 1024 * 1024,
+                    50 * 1024 * 1024 + constants.INITIAL_STREAM_BYTES - 1,
+                ),
+            ],
+        )
+
     def test_sync_flag_reaches_first_chunk_priority(self):
         runtime = object.__new__(TorrentRuntime)
         runtime.stop_event = threading.Event()
