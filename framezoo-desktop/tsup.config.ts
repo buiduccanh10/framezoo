@@ -14,7 +14,7 @@ export default defineConfig({
   platform: "node",
   sourcemap: true,
   splitting: false,
-  noExternal: ["torrent-stream"],
+  noExternal: ["torrent-stream", "bittorrent-dht", "bittorrent-tracker"],
   target: "node20",
   outExtension() {
     return {
