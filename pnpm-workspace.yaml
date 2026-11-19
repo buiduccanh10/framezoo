@@ -12,11 +12,14 @@ strictPeerDependencies: false
 # Dev/build-only path: framezoo-be > nitropack > listhen > node-forge.
 # React Native CLI and Nitro build tooling still resolve deepmerge@4.3.1.
 # GHSA-gcqx-w48m-w2h4 has no published patched release.
+# GHSA-2p57-rm9w-gvfp (ip <=2.0.1 isPublic) has no published patched release;
+# neither bittorrent-tracker (server parse-udp uses ip.toString) nor ip-set (uses ip.cidrSubnet/toLong) calls ip.isPublic.
 auditConfig:
   ignoreGhsas:
     - GHSA-gcqx-w48m-w2h4
     # Temporary: no patched picomatch release for CVE-2026-112366; remove after upstream fix.
     - GHSA-fc5q-39xc-vjpf
+    - GHSA-2p57-rm9w-gvfp
 allowBuilds:
   "@parcel/watcher": true
   "@prisma/client": true
@@ -110,6 +113,7 @@ overrides:
   "joi@<17.13.9": "^17.13.9"
   "joi@>=18.0.0 <18.3.1": "^18.3.1"
   "minimatch@<11.0.1": ">=11.0.1"
+  "ws@<5.2.5": "^8.22.0"
 minimumReleaseAgeExclude:
   - "@hono/node-server@2.1.0"
   - "@types/node@26.5.0"
