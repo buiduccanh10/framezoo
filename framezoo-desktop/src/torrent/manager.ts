@@ -6,7 +6,6 @@ import type {
 } from "../types";
 import { FixtureTorrentEngine } from "./fixtureEngine";
 import { NodeTorrentEngine } from "./nodeEngine";
-import { SidecarTorrentEngine } from "./sidecarEngine";
 import type { TorrentEngine, TorrentStatusListener } from "./types";
 import { UnavailableTorrentEngine } from "./unavailableEngine";
 import { resolveTorrentEnginePath } from "./paths";
@@ -41,11 +40,9 @@ export class TorrentManager {
             filePath: options.fixtureFilePath,
             intervalMs: options.fixtureIntervalMs,
           })
-        : process.env.FRAMEZOO_TORRENT_PYTHON_ENGINE_PATH
-          ? new SidecarTorrentEngine(process.env.FRAMEZOO_TORRENT_PYTHON_ENGINE_PATH)
-          : enginePath
-            ? new NodeTorrentEngine(enginePath)
-            : new UnavailableTorrentEngine());
+        : enginePath
+          ? new NodeTorrentEngine(enginePath)
+          : new UnavailableTorrentEngine());
   }
 
   async start(request: TorrentStartRequest) {

@@ -19,6 +19,3 @@ macOS and Windows targets use the same portable worker bundle.
 Set `FRAMEZOO_TORRENT_DATA_DIR` to control the temporary torrent download
 directory. `fileIdx` from Stremio streams is preferred; otherwise the largest
 video file is selected.
-
-Set `FRAMEZOO_TORRENT_PYTHON_ENGINE_PATH` only for temporary rollback to the
-legacy Python sidecar. The normal path never falls back to Python.

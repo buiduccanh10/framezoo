@@ -11,7 +11,7 @@ export class UnavailableTorrentEngine implements TorrentEngine {
     _listener: TorrentStatusListener,
   ): Promise<TorrentSession> {
     throw new Error(
-      "Node torrent worker is unavailable. Build the desktop shell or provide FRAMEZOO_TORRENT_NODE_ENGINE_PATH. Python rollback: FRAMEZOO_TORRENT_PYTHON_ENGINE_PATH.",
+      "Node torrent worker is unavailable. Build the desktop shell or provide FRAMEZOO_TORRENT_NODE_ENGINE_PATH.",
     );
   }
 
@@ -23,7 +23,7 @@ export class UnavailableTorrentEngine implements TorrentEngine {
 
   async warmup() {
     throw new Error(
-      "Node torrent worker is unavailable. Build the desktop shell or provide FRAMEZOO_TORRENT_NODE_ENGINE_PATH. Python rollback: FRAMEZOO_TORRENT_PYTHON_ENGINE_PATH.",
+      "Node torrent worker is unavailable. Build the desktop shell or provide FRAMEZOO_TORRENT_NODE_ENGINE_PATH.",
     );
   }
 

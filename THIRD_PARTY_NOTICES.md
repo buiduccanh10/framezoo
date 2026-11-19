@@ -43,7 +43,6 @@ Built with Electron, Chromium, Node.js, React, Vite, Tailwind CSS, TanStack Quer
 Native media/P2P helpers packaged alongside Desktop:
 - **libmpv / mpv** — LGPL-2.1+ (built without GPL components).
 - **FFmpeg** — LGPL-2.1+ (built without GPL components).
-- **libtorrent-rasterbar** — BSD-3-Clause (configured strictly as a non-seeding streaming reader).
 
 ---
 

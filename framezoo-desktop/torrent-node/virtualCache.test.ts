@@ -6,7 +6,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 
 import type { TorrentMetadata } from "torrent-stream";
-import { VIRTUAL_PIECE_BYTES, VirtualCache } from "./virtualCache";
+import { VIRTUAL_PIECE_BYTES, REQUEST_BLOCK_BYTES, VirtualCache } from "./virtualCache";
 
 describe("VirtualCache", () => {
   it("serves a virtual piece before a 64 MiB real piece is complete", async () => {
@@ -97,6 +97,49 @@ describe("VirtualCache", () => {
       expect(requests.length).toBe(2);
       expect(await cache.readRange(20_000, 20_000)).toEqual(data.subarray(20_000, 40_000));
       expect(cache.getStats().verifiedBytes).toBe(0);
+      expect(cache.cachedBytesInRange(0, data.length)).toBe(2 * REQUEST_BLOCK_BYTES);
+    } finally {
+      await cache.close();
+      await rm(directory, { recursive: true, force: true });
+    }
+  });
+
+  it("counts unique downloaded and verified bytes scoped to the selected file range", async () => {
+    const directory = await mkdtemp(path.join(tmpdir(), "framezoo-node-cache-"));
+    const pieceLength = VIRTUAL_PIECE_BYTES * 2;
+    const piece0 = Buffer.alloc(pieceLength, 0x11);
+    const piece1 = Buffer.alloc(pieceLength, 0x22);
+    const data = Buffer.concat([piece0, piece1]);
+    const metadata: TorrentMetadata = {
+      infoHash: "fedcba9876543210fedcba9876543210fedcba98",
+      length: data.length,
+      pieceLength,
+      pieces: [
+        createHash("sha1").update(piece0).digest("hex"),
+        createHash("sha1").update(piece1).digest("hex"),
+      ],
+      files: [
+        { name: "ep1.mkv", path: "ep1.mkv", offset: 0, length: pieceLength },
+        { name: "ep2.mkv", path: "ep2.mkv", offset: pieceLength, length: pieceLength },
+      ],
+    };
+    const cache = new VirtualCache(directory, metadata);
+
+    try {
+      await cache.open();
+      // Complete & verify piece 0 (ep1.mkv), and partially fetch 1 block in piece 1 (ep2.mkv).
+      await cache.ensureVirtual(0, async () => piece0.subarray(0, VIRTUAL_PIECE_BYTES));
+      await cache.ensureVirtual(1, async () => piece0.subarray(VIRTUAL_PIECE_BYTES));
+      await cache.ensureVirtualRange(2, 0, REQUEST_BLOCK_BYTES, async (offset, length) =>
+        piece1.subarray(offset, offset + length),
+      );
+      // Overlapping range should not double-count the already cached block.
+      await cache.ensureVirtualRange(2, 0, REQUEST_BLOCK_BYTES * 2, async (offset, length) =>
+        piece1.subarray(offset, offset + length),
+      );
+
+      expect(cache.cachedBytesInRange(0, pieceLength)).toBe(pieceLength);
+      expect(cache.cachedBytesInRange(pieceLength, pieceLength)).toBe(REQUEST_BLOCK_BYTES * 2);
     } finally {
       await cache.close();
       await rm(directory, { recursive: true, force: true });

@@ -135,6 +135,46 @@ export class VirtualCache {
     return this.verifiedPieces.has(piece);
   }
 
+  /** Unique downloaded or verified bytes within [start, start + length) (matches Stremio file progress). */
+  cachedBytesInRange(start: number, length: number): number {
+    const rangeStart = Math.max(0, start);
+    const rangeEnd = Math.min(this.metadata.length, start + length);
+    if (rangeEnd <= rangeStart) return 0;
+
+    let total = 0;
+    const firstPiece = Math.floor(rangeStart / this.metadata.pieceLength);
+    const lastPiece = Math.floor((rangeEnd - 1) / this.metadata.pieceLength);
+    for (let piece = firstPiece; piece <= lastPiece; piece++) {
+      const pieceStart = this.realPieceStart(piece);
+      const segStart = Math.max(rangeStart, pieceStart);
+      const segEnd = Math.min(rangeEnd, pieceStart + this.realPieceLength(piece));
+      if (segEnd <= segStart) continue;
+      if (this.verifiedPieces.has(piece)) {
+        total += segEnd - segStart;
+        continue;
+      }
+      const firstVirtual = Math.floor(segStart / this.virtualPieceBytes);
+      const lastVirtual = Math.floor((segEnd - 1) / this.virtualPieceBytes);
+      for (let v = firstVirtual; v <= lastVirtual; v++) {
+        const vStart = this.virtualStart(v);
+        const vSegStart = Math.max(segStart, vStart);
+        const vSegEnd = Math.min(segEnd, vStart + this.virtualLength(v));
+        if (this.completedVirtualPieces.has(v)) {
+          total += vSegEnd - vSegStart;
+          continue;
+        }
+        const blocks = this.completedVirtualBlocks.get(v);
+        if (!blocks?.size) continue;
+        for (const block of blocks) {
+          const bStart = Math.max(vSegStart, vStart + block);
+          const bEnd = Math.min(vSegEnd, vStart + block + REQUEST_BLOCK_BYTES);
+          if (bEnd > bStart) total += bEnd - bStart;
+        }
+      }
+    }
+    return total;
+  }
+
   async readVirtual(index: number) {
     const length = this.virtualLength(index);
     if (!this.file || length <= 0) throw new Error("torrent cache is closed");
@@ -271,6 +311,18 @@ export class VirtualCache {
     return true;
   }
 
+  private clearVirtualTrackingForPiece(piece: number) {
+    const start = Math.floor(this.realPieceStart(piece) / this.virtualPieceBytes);
+    const end = Math.ceil(
+      (this.realPieceStart(piece) + this.realPieceLength(piece)) /
+        this.virtualPieceBytes,
+    );
+    for (let index = start; index < end; index++) {
+      this.completedVirtualPieces.delete(index);
+      this.completedVirtualBlocks.delete(index);
+    }
+  }
+
   private async verifyRealPiece(piece: number) {
     if (this.verifiedPieces.has(piece)) return true;
     const buffer = await this.readAt(
@@ -280,18 +332,11 @@ export class VirtualCache {
     const actual = createHash("sha1").update(buffer).digest("hex");
     const expected = hashValue(this.metadata.pieces[piece] ?? "");
     if (actual !== expected) {
-      const start = Math.floor(this.realPieceStart(piece) / this.virtualPieceBytes);
-      const end = Math.ceil(
-        (this.realPieceStart(piece) + this.realPieceLength(piece)) /
-          this.virtualPieceBytes,
-      );
-      for (let index = start; index < end; index++) {
-        this.completedVirtualPieces.delete(index);
-        this.completedVirtualBlocks.delete(index);
-      }
+      this.clearVirtualTrackingForPiece(piece);
       return false;
     }
     this.verifiedPieces.add(piece);
+    this.clearVirtualTrackingForPiece(piece);
     this.stats.verifiedBytes += this.realPieceLength(piece);
     await this.persistManifest();
     this.publishStats();

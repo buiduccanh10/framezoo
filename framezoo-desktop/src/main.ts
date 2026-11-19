@@ -2386,8 +2386,8 @@ function registerIpcHandlers() {
 
   ipcMain.handle("desktop:torrent-clear-storage", async (event) => {
     requireTrustedRendererSender(event);
-    // Restart the torrent engine first so it drops all in-memory libtorrent
-    // handles. Otherwise, it will retain piece states for deleted files.
+    // Restart the torrent worker first so it drops all in-memory torrent
+    // handles. Otherwise, it will retain state for deleted files.
     await torrentManager.restartEngine();
 
     const torrentDir = getTorrentDataDir();

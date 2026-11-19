@@ -370,7 +370,6 @@ class TorrentRecord {
   private idleTimer: ReturnType<typeof setTimeout> | null = null;
   private peerSearch: PeerSearch | null = null;
   private totalDownloaded = 0;
-  private totalVerified = 0;
   private startedAt = Date.now();
   private readonly onChanged: () => void;
   private readonly cacheName: string;
@@ -469,7 +468,6 @@ class TorrentRecord {
     const cachePath = path.join(this.cacheRoot, `framezoo-node-torrent-${this.cacheName}`);
     this.cache = new VirtualCache(cachePath, metadata, (stats) => {
       this.totalDownloaded = Math.max(this.totalDownloaded, stats.downloadedBytes);
-      this.totalVerified = stats.verifiedBytes;
       this.onChanged();
     });
     try {
@@ -518,8 +516,8 @@ class TorrentRecord {
 
   progress(file: TorrentFile | null) {
     const total = file?.length ?? this.metadata?.length ?? 0;
-    if (!total) return 0;
-    return Math.min(100, (this.totalVerified / total) * 100);
+    if (!total || !this.cache) return 0;
+    return Math.min(100, (this.cache.cachedBytesInRange(file?.offset ?? 0, total) / total) * 100);
   }
 
   async *readRange(file: TorrentFile, start: number, end: number, signal: AbortSignal) {
