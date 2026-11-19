@@ -56,6 +56,7 @@ export interface DesktopPipState {
   status: PlayerStatus;
   sourceLoading: boolean;
   time: number;
+  seekGeneration: number;
   duration: number;
   paused: boolean;
   isPlaying: boolean;
@@ -331,6 +332,7 @@ export function getDesktopPipStateFromPlayerState(
     status: state.status,
     sourceLoading: state.status === playerStatus.SOURCE_SELECTION,
     time: currentTime,
+    seekGeneration: 0,
     duration,
     paused: state.mediaPlaying.isPaused,
     isPlaying: state.mediaPlaying.isPlaying,

@@ -13,5 +13,5 @@
       "@/*": ["./renderer-src/src/*"]
     }
   },
-  "include": ["src/**/*.ts", "tsup.config.ts"]
+  "include": ["src/**/*.ts", "torrent-node/**/*.ts", "tsup.config.ts"]
 }

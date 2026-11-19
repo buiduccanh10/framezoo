@@ -106,6 +106,7 @@ function getPipPlaybackResetKey(state: DesktopPipState): string {
     state.source?.url ?? "",
     state.episode?.season ?? "",
     state.episode?.episode ?? "",
+    state.seekGeneration,
   ].join(":");
 }
 

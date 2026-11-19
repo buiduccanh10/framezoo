@@ -1,11 +1,11 @@
 {
   "name": "Framezoo",
   "private": true,
-  "version": "2.3.6",
+  "version": "2.3.7",
   "main": "dist/main.cjs",
   "packageManager": "pnpm@12.16.1",
   "scripts": {
-    "dev": "pnpm run resources:ensure && pnpm run torrent:setup && concurrently -k -n renderer,shell,electron -c cyan,yellow,green \"pnpm run dev:renderer\" \"pnpm run dev:shell\" \"pnpm run dev:electron\"",
+    "dev": "pnpm run resources:ensure && concurrently -k -n renderer,shell,electron -c cyan,yellow,green \"pnpm run dev:renderer\" \"pnpm run dev:shell\" \"pnpm run dev:electron\"",
     "dev:renderer": "pnpm exec vite --config renderer-src/vite.config.mts --host 127.0.0.1 --port 5174",
     "dev:shell": "tsup --watch",
     "dev:electron": "wait-on dist/main.cjs tcp:127.0.0.1:5174 && cross-env ELECTRON_RENDERER_URL=http://127.0.0.1:5174 electronmon dist/main.cjs",
@@ -26,24 +26,17 @@
     "native:build:win32-x64": "node scripts/build-libmpv-native.mjs --target win32-x64",
     "native:build:darwin-universal": "node scripts/stage-libmpv-universal.mjs",
     "native:verify": "node scripts/verify-libmpv-native.mjs",
-    "torrent:setup": "node scripts/setup-torrent-engine.mjs",
-    "torrent:build": "node scripts/build-torrent-engine.mjs",
-    "torrent:build:darwin-arm64": "node scripts/build-torrent-engine.mjs darwin-arm64",
-    "torrent:build:darwin-x64": "node scripts/build-torrent-engine.mjs darwin-x64",
-    "torrent:build:win32-arm64": "node scripts/build-torrent-engine.mjs win32-arm64",
-    "torrent:build:win32-x64": "node scripts/build-torrent-engine.mjs win32-x64",
-    "package:dir": "pnpm run torrent:setup && pnpm run torrent:build && pnpm run native:build:host && pnpm run resources:ensure && pnpm run build && electron-builder --dir",
-    "package:release": "pnpm run torrent:setup && pnpm run torrent:build && pnpm run native:build:host && pnpm run resources:ensure && pnpm run build && electron-builder --publish never",
-    "package:release:mac": "pnpm run torrent:setup && pnpm run torrent:build && pnpm run native:build:host && pnpm run resources:ensure && pnpm run build && electron-builder --publish never --mac dmg zip",
-    "package:release:mac:arm64": "pnpm run torrent:setup && pnpm run torrent:build:darwin-arm64 && pnpm run native:build:darwin-arm64 && pnpm run resources:ensure:darwin-arm64 && pnpm run build && electron-builder --publish never --mac dmg zip --arm64",
-    "package:release:mac:x64": "pnpm run torrent:setup && pnpm run torrent:build:darwin-x64 && pnpm run native:build:darwin-x64 && pnpm run resources:ensure:darwin-x64 && pnpm run build && electron-builder --publish never --mac dmg zip --x64",
-    "package:release:mac:universal": "pnpm run torrent:setup && pnpm run torrent:build:darwin-arm64 && pnpm run torrent:build:darwin-x64 && pnpm run native:build:darwin-arm64 && pnpm run native:build:darwin-x64 && pnpm run resources:ensure:darwin-arm64 && pnpm run resources:ensure:darwin-x64 && pnpm run native:build:darwin-universal && pnpm run resources:ensure:darwin-universal && pnpm run build && electron-builder --publish never --mac dmg zip --universal",
-    "package:release:win:x64": "pnpm run torrent:setup && pnpm run torrent:build:win32-x64 && pnpm run native:build:win32-x64 && pnpm run resources:ensure:win32-x64 && pnpm exec electron scripts/verify-libmpv-native.mjs --addon resources/native/win32-x64/libmpv.node --runtime-dir resources/libmpv/win32-x64 --expect-arch x64 && pnpm run build && electron-builder --publish never --win nsis --x64",
-    "package:release:win:arm64": "pnpm run torrent:setup && pnpm run torrent:build:win32-arm64 && pnpm run native:build:win32-arm64 && pnpm run resources:ensure:win32-arm64 && pnpm exec electron scripts/verify-libmpv-native.mjs --addon resources/native/win32-arm64/libmpv.node --runtime-dir resources/libmpv/win32-arm64 --expect-arch arm64 && pnpm run build && electron-builder --publish never --win nsis --arm64",
-    "dev:torrent": "pnpm run dev",
+    "package:dir": "pnpm run native:build:host && pnpm run resources:ensure && pnpm run build && electron-builder --dir",
+    "package:release": "pnpm run native:build:host && pnpm run resources:ensure && pnpm run build && electron-builder --publish never",
+    "package:release:mac": "pnpm run native:build:host && pnpm run resources:ensure && pnpm run build && electron-builder --publish never --mac dmg zip",
+    "package:release:mac:arm64": "pnpm run native:build:darwin-arm64 && pnpm run resources:ensure:darwin-arm64 && pnpm run build && electron-builder --publish never --mac dmg zip --arm64",
+    "package:release:mac:x64": "pnpm run native:build:darwin-x64 && pnpm run resources:ensure:darwin-x64 && pnpm run build && electron-builder --publish never --mac dmg zip --x64",
+    "package:release:mac:universal": "pnpm run native:build:darwin-arm64 && pnpm run native:build:darwin-x64 && pnpm run resources:ensure:darwin-arm64 && pnpm run resources:ensure:darwin-x64 && pnpm run native:build:darwin-universal && pnpm run resources:ensure:darwin-universal && pnpm run build && electron-builder --publish never --mac dmg zip --universal",
+    "package:release:win:x64": "pnpm run native:build:win32-x64 && pnpm run resources:ensure:win32-x64 && pnpm exec electron scripts/verify-libmpv-native.mjs --addon resources/native/win32-x64/libmpv.node --runtime-dir resources/libmpv/win32-x64 --expect-arch x64 && pnpm run build && electron-builder --publish never --win nsis --x64",
+    "package:release:win:arm64": "pnpm run native:build:win32-arm64 && pnpm run resources:ensure:win32-arm64 && pnpm exec electron scripts/verify-libmpv-native.mjs --addon resources/native/win32-arm64/libmpv.node --runtime-dir resources/libmpv/win32-arm64 --expect-arch arm64 && pnpm run build && electron-builder --publish never --win nsis --arm64",
     "lint:renderer": "cd renderer-src && eslint src",
     "test:renderer": "vitest run --config renderer-src/vite.config.mts",
-    "test:torrent": "vitest run --config vitest.main.config.mts src/torrent/fixtureEngine.test.ts",
+    "test:torrent": "vitest run --config vitest.main.config.mts",
     "libmpv:update": "node scripts/ensure-libmpv.mjs",
     "libmpv:fetch:win32-x64": "node scripts/fetch-windows-libmpv.mjs --target win32-x64",
     "libmpv:fetch:win32-arm64": "node scripts/fetch-windows-libmpv.mjs --target win32-arm64",
@@ -55,8 +48,11 @@
   "dependencies": {
     "@noble/ciphers": "^2.4.0",
     "@noble/curves": "^2.4.0",
+    "bittorrent-dht": "6.4.2",
+    "bittorrent-tracker": "7.7.0",
     "electron-updater": "^6.8.9",
-    "rxjs": "^7.8.2"
+    "rxjs": "^7.8.2",
+    "torrent-stream": "1.2.1"
   },
   "devDependencies": {
     "@csstools/css-calc": "^3.4.1",
@@ -211,21 +207,12 @@
         ]
       },
       {
-        "from": "torrent-engine/bin/${platform}-${arch}",
-        "to": "torrent-engine/bin/${platform}-${arch}",
-        "filter": [
-          "**/*"
-        ]
+        "from": "dist/torrent-node.cjs",
+        "to": "torrent-engine/torrent-node.cjs"
       },
       {
-        "from": "torrent-engine",
-        "to": "torrent-engine",
-        "filter": [
-          "libtorrent_sidecar.py",
-          "requirements.txt",
-          "run.sh",
-          "run.cmd"
-        ]
+        "from": "torrent-node/THIRD_PARTY_NOTICES.txt",
+        "to": "torrent-engine/THIRD_PARTY_NOTICES.txt"
       }
     ],
     "extraMetadata": {

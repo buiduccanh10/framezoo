@@ -202,27 +202,29 @@ export const SearchBarInput = forwardRef<HTMLInputElement, SearchBarProps>(
                 </div>
               )}
 
-              <TextInputControl
-                ref={ref}
-                onUnFocus={() => {
-                  setFocused(false);
-                  props.onUnFocus();
-                }}
-                onFocus={() => setFocused(true)}
-                onChange={(val) => setSearch(val)}
-                value={props.value}
-                className={c(
-                  "w-full flex-1 bg-transparent px-4 py-4 !text-search-text focus:outline-none sm:py-4 sm:pr-12 transition-colors duration-300",
-                  showAiSwitch ? "pl-[6rem]" : "pl-12",
-                  "transition-colors duration-300",
-                  props.isInFeatured
-                    ? lightTheme
-                      ? "text-white/50"
-                      : "placeholder-search-placeholder"
-                    : "placeholder-search-placeholder",
-                )}
-                placeholder={props.placeholder}
-              />
+              <div className="min-w-0 flex-1">
+                <TextInputControl
+                  ref={ref}
+                  onUnFocus={() => {
+                    setFocused(false);
+                    props.onUnFocus();
+                  }}
+                  onFocus={() => setFocused(true)}
+                  onChange={(val) => setSearch(val)}
+                  value={props.value}
+                  className={c(
+                    "w-full flex-1 bg-transparent px-4 py-4 !text-search-text focus:outline-none sm:py-4 sm:pr-12 transition-colors duration-300",
+                    showAiSwitch ? "pl-[6rem]" : "pl-12",
+                    "transition-colors duration-300",
+                    props.isInFeatured
+                      ? lightTheme
+                        ? "text-white/50"
+                        : "placeholder-search-placeholder"
+                      : "placeholder-search-placeholder",
+                  )}
+                  placeholder={props.placeholder}
+                />
+              </div>
 
               <div
                 aria-hidden={props.value.length === 0}

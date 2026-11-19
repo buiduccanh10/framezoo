@@ -360,7 +360,8 @@ function getDirectorySize(dirPath: string): number {
 function isTorrentCacheEntry(name: string) {
   return (
     /^torrent-[a-z0-9]{1,128}$/i.test(name) ||
-    /^framezoo-torrent-[a-z0-9_-]{6,}$/i.test(name)
+    /^framezoo-torrent-[a-z0-9_-]{6,}$/i.test(name) ||
+    /^framezoo-node-torrent-[a-z0-9_-]{6,}$/i.test(name)
   );
 }
 
@@ -368,6 +369,7 @@ setupTorrentEnv();
 
 const streamRules = new Map<number, StreamRule>();
 const torrentManager: TorrentManager = createTorrentManagerFromEnvironment();
+torrentManager.configure(torrentSettings);
 const addonProtocolEngine = new AddonProtocolEngine();
 
 // Warmup state – tracks whether the torrent engine has been initialised.
@@ -2385,8 +2387,8 @@ function registerIpcHandlers() {
 
   ipcMain.handle("desktop:torrent-clear-storage", async (event) => {
     requireTrustedRendererSender(event);
-    // Restart the torrent engine first so it drops all in-memory libtorrent
-    // handles. Otherwise, it will retain piece states for deleted files.
+    // Restart the torrent worker first so it drops all in-memory torrent
+    // handles. Otherwise, it will retain state for deleted files.
     await torrentManager.restartEngine();
 
     const torrentDir = getTorrentDataDir();

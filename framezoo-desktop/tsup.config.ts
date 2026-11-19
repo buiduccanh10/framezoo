@@ -5,6 +5,7 @@ export default defineConfig({
   entry: {
     main: "src/main.ts",
     preload: "src/preload.ts",
+    "torrent-node": "torrent-node/worker.ts",
   },
   clean: true,
   external: ["electron"],
@@ -13,6 +14,7 @@ export default defineConfig({
   platform: "node",
   sourcemap: true,
   splitting: false,
+  noExternal: ["torrent-stream"],
   target: "node20",
   outExtension() {
     return {

@@ -254,8 +254,11 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
     set((s) => {
       s.status = playerStatus.IDLE;
       s.meta = null;
+      s.source = null;
       s.embedId = null;
       s.sourceId = null;
+      s.qualities = [];
+      s.currentQuality = null;
       s.interface.shouldStartFromBeginning = false;
       s.interface.skipNextSavedProgressResume = false;
       s.progress.time = 0;

@@ -38,13 +38,17 @@ type PendingRequest = {
 
 export class SidecarTorrentEngine implements TorrentEngine {
   private static readonly PROCESS_EXIT_ERROR =
-    "Torrent engine exited; stream is no longer available";
+    "Torrent worker exited; stream is no longer available";
   private process: ChildProcessWithoutNullStreams | null = null;
   private readonly pending = new Map<string, PendingRequest>();
   private readonly statuses = new Map<string, TorrentStatus>();
   private readonly listeners = new Map<string, TorrentStatusListener>();
 
-  constructor(private readonly executablePath: string) {}
+  constructor(
+    private readonly executablePath: string,
+    private readonly spawnArgs: string[] = [],
+    private readonly spawnEnvironment: NodeJS.ProcessEnv = globalThis.process.env,
+  ) {}
 
   async start(
     request: TorrentStartRequest,
@@ -100,7 +104,7 @@ export class SidecarTorrentEngine implements TorrentEngine {
         );
       }
     } catch (error) {
-      console.warn("[torrent] sidecar stop failed:", error);
+      console.warn("[torrent] worker stop failed:", error);
     } finally {
       this.listeners.delete(sessionId);
       this.statuses.delete(sessionId);
@@ -122,7 +126,7 @@ export class SidecarTorrentEngine implements TorrentEngine {
       }
     } catch (error) {
       console.warn(
-        "[torrent] sidecar stop_all failed, falling back to per-session stop:",
+        "[torrent] worker stop_all failed, falling back to per-session stop:",
         error,
       );
       await Promise.allSettled(
@@ -141,7 +145,7 @@ export class SidecarTorrentEngine implements TorrentEngine {
   async dispose() {
     for (const pending of this.pending.values()) {
       clearTimeout(pending.timer);
-      pending.reject(new Error("torrent sidecar disposed"));
+      pending.reject(new Error("torrent worker disposed"));
     }
     this.pending.clear();
     this.listeners.clear();
@@ -171,10 +175,8 @@ export class SidecarTorrentEngine implements TorrentEngine {
 
   async warmup(): Promise<void> {
     await this.ensureProcess();
-    // Send a lightweight "ping" that forces _ensure_session() on the Python
-    // side. This is where the OS network-permission dialog will appear so
-    // it shows at startup rather than interrupting the first stream attempt.
-    // 5-minute timeout gives the user ample time to respond to the dialog.
+    // Start the worker before playback so network initialization is outside
+    // the first media request.
     const WARMUP_TIMEOUT_MS = 5 * 60 * 1000;
     await new Promise<void>((resolve, reject) => {
       const requestId = randomUUID();
@@ -203,9 +205,9 @@ export class SidecarTorrentEngine implements TorrentEngine {
   private async ensureProcess() {
     if (this.process) return;
 
-    const process = spawn(this.executablePath, [], {
+    const process = spawn(this.executablePath, this.spawnArgs, {
       stdio: ["pipe", "pipe", "pipe"],
-      env: globalThis.process.env,
+      env: this.spawnEnvironment,
       shell:
         globalThis.process.platform === "win32" &&
         this.executablePath.toLowerCase().endsWith(".cmd"),
@@ -215,7 +217,7 @@ export class SidecarTorrentEngine implements TorrentEngine {
     process.stderr.on("data", (chunk) => {
       const message = String(chunk).trim();
       if (message) {
-        console.error("[torrent-sidecar]", message);
+        console.error("[torrent-worker]", message);
       }
     });
 
@@ -249,7 +251,7 @@ export class SidecarTorrentEngine implements TorrentEngine {
         clearTimeout(pending.timer);
         pending.reject(
           new Error(
-            `torrent sidecar exited (${code ?? "no code"}${signal ? `, ${signal}` : ""})`,
+            `torrent worker exited (${code ?? "no code"}${signal ? `, ${signal}` : ""})`,
           ),
         );
       }
@@ -273,7 +275,7 @@ export class SidecarTorrentEngine implements TorrentEngine {
 
   private send(message: Record<string, unknown>, timeoutMs = 180_000) {
     if (!this.process?.stdin.writable) {
-      return Promise.reject(new Error("torrent sidecar is not running"));
+      return Promise.reject(new Error("torrent worker is not running"));
     }
 
     const requestId = String(message.requestId);
@@ -282,7 +284,7 @@ export class SidecarTorrentEngine implements TorrentEngine {
         this.pending.delete(requestId);
         reject(
           new Error(
-            `torrent sidecar request (${String(message.type)}) timed out after ${timeoutMs}ms`,
+            `torrent worker request (${String(message.type)}) timed out after ${timeoutMs}ms`,
           ),
         );
       }, timeoutMs);
