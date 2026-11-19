@@ -225,7 +225,10 @@ function isWaitingForStreamBytes(
   }
   if (currentSource?.isTorrent === true) {
     const torrentStatus = getActiveTorrentStatus();
-    if (torrentStatus?.state === "error") {
+    if (
+      torrentStatus?.state === "error" ||
+      torrentStatus?.state === "stopped"
+    ) {
       return false;
     }
   }

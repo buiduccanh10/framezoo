@@ -715,3 +715,52 @@ describe("dual subtitle selection", () => {
     expect(usePlayerStore.getState().caption.dualSubEnabled).toBe(false);
   });
 });
+
+describe("player reset", () => {
+  afterEach(() => {
+    usePlayerStore.getState().setDisplay(null);
+    usePlayerStore.getState().reset();
+  });
+
+  it("clears source so redisplaySource does not reload a stopped torrent URL", () => {
+    const load = vi.fn();
+    const display = {
+      on: vi.fn(),
+      off: vi.fn(),
+      getType: () => "web",
+      load,
+      setCaption: vi.fn(),
+      setSecondaryCaption: vi.fn(),
+      destroy: vi.fn(),
+    } as unknown as DisplayInterface;
+
+    const store = usePlayerStore.getState();
+    store.setDisplay(display);
+    store.setMeta(createMeta(1));
+    store.setSource(
+      {
+        id: "torrent-1",
+        type: "file",
+        quality: "unknown",
+        isTorrent: true,
+        qualities: {
+          unknown: {
+            type: "mp4",
+            url: "http://127.0.0.1:64031/torrent/session-dead",
+          },
+        },
+      },
+      [],
+      0,
+    );
+
+    load.mockClear();
+    store.reset();
+    expect(usePlayerStore.getState().source).toBeNull();
+    expect(usePlayerStore.getState().status).toBe(playerStatus.IDLE);
+
+    load.mockClear();
+    store.redisplaySource(0);
+    expect(load).not.toHaveBeenCalled();
+  });
+});

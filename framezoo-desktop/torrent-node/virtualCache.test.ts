@@ -145,4 +145,107 @@ describe("VirtualCache", () => {
       await rm(directory, { recursive: true, force: true });
     }
   });
+
+  it("deduplicates concurrent block fetches and recovers when the first caller aborts", async () => {
+    const directory = await mkdtemp(path.join(tmpdir(), "framezoo-node-cache-"));
+    const data = Buffer.alloc(VIRTUAL_PIECE_BYTES, 0x44);
+    const metadata: TorrentMetadata = {
+      infoHash: "00112233445566778899aabbccddeeff00112233",
+      length: data.length,
+      pieceLength: data.length,
+      pieces: [createHash("sha1").update(data).digest("hex")],
+      files: [{ name: "fixture.mkv", path: "fixture.mkv", offset: 0, length: data.length }],
+    };
+    const cache = new VirtualCache(directory, metadata);
+    const blockCalls = new Map<number, number>();
+    let releaseFirst!: () => void;
+    const firstGate = new Promise<void>((resolve) => {
+      releaseFirst = resolve;
+    });
+    let failBlock0 = true;
+
+    try {
+      await cache.open();
+      const firstCaller = cache
+        .ensureVirtualRange(0, 0, REQUEST_BLOCK_BYTES * 2, async (offset, length) => {
+          blockCalls.set(offset, (blockCalls.get(offset) ?? 0) + 1);
+          if (offset === 0 && failBlock0) {
+            await firstGate;
+            failBlock0 = false;
+            throw new Error("caller aborted");
+          }
+          await firstGate;
+          return data.subarray(offset, offset + length);
+        })
+        .catch(() => "failed");
+
+      // Wait a microtask so firstCaller populates inFlightBlocks.
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
+      const secondCaller = cache.ensureVirtualRange(
+        0,
+        0,
+        VIRTUAL_PIECE_BYTES,
+        async (offset, length) => {
+          blockCalls.set(offset, (blockCalls.get(offset) ?? 0) + 1);
+          return data.subarray(offset, offset + length);
+        },
+      );
+
+      releaseFirst();
+      expect(await firstCaller).toBe("failed");
+      await secondCaller;
+
+      // Block 0 had 2 calls (1 failed + 1 recovery); block 16 KiB was deduplicated to 1 call.
+      expect(blockCalls.get(0)).toBe(2);
+      expect(blockCalls.get(REQUEST_BLOCK_BYTES)).toBe(1);
+      expect(cache.getStats().verifiedBytes).toBe(data.length);
+      expect(cache.cachedBytesInRange(0, data.length)).toBe(data.length);
+    } finally {
+      await cache.close();
+      await rm(directory, { recursive: true, force: true });
+    }
+  });
+
+  it("commits out-of-order blocks, deduplicates hotswaps, and verifies asynchronously", async () => {
+    const directory = await mkdtemp(path.join(tmpdir(), "framezoo-node-cache-"));
+    const data = Buffer.alloc(VIRTUAL_PIECE_BYTES, 0x6c);
+    const metadata: TorrentMetadata = {
+      infoHash: "99887766554433221100ffeeddccbbaa99887766",
+      length: data.length,
+      pieceLength: data.length,
+      pieces: [createHash("sha1").update(data).digest("hex")],
+      files: [{ name: "fixture.mkv", path: "fixture.mkv", offset: 0, length: data.length }],
+    };
+    const cache = new VirtualCache(directory, metadata);
+    const blockCount = VIRTUAL_PIECE_BYTES / REQUEST_BLOCK_BYTES;
+
+    try {
+      await cache.open();
+      expect(cache.hasBlock(0)).toBe(false);
+
+      // Commit out-of-order + concurrent duplicate hotswap commits on block 0.
+      const b0 = data.subarray(0, REQUEST_BLOCK_BYTES);
+      await Promise.all([cache.commitBlock(0, b0), cache.commitBlock(0, b0)]);
+      await cache.commitBlock(0, b0);
+      expect(cache.hasBlock(0)).toBe(true);
+      expect(cache.getStats().downloadedBytes).toBe(REQUEST_BLOCK_BYTES);
+
+      // Commit remaining blocks in reverse order.
+      for (let idx = blockCount - 1; idx >= 1; idx--) {
+        const start = idx * REQUEST_BLOCK_BYTES;
+        await cache.commitBlock(idx, data.subarray(start, start + REQUEST_BLOCK_BYTES));
+      }
+
+      // Asynchronous real-piece SHA-1 verification finishes shortly after the last block commits.
+      await new Promise((resolve) => setTimeout(resolve, 30));
+      expect(cache.getStats().downloadedBytes).toBe(data.length);
+      expect(cache.getStats().verifiedBytes).toBe(data.length);
+      expect(cache.cachedBytesInRange(0, data.length)).toBe(data.length);
+      expect(await cache.readRange(0, data.length)).toEqual(data);
+    } finally {
+      await cache.close();
+      await rm(directory, { recursive: true, force: true });
+    }
+  });
 });

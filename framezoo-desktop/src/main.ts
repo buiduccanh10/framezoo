@@ -369,6 +369,7 @@ setupTorrentEnv();
 
 const streamRules = new Map<number, StreamRule>();
 const torrentManager: TorrentManager = createTorrentManagerFromEnvironment();
+torrentManager.configure(torrentSettings);
 const addonProtocolEngine = new AddonProtocolEngine();
 
 // Warmup state – tracks whether the torrent engine has been initialised.

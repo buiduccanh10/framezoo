@@ -1,5 +1,13 @@
 import { createHash } from "node:crypto";
-import { access, mkdir, open, readFile, rename, rm, writeFile } from "node:fs/promises";
+import {
+  access,
+  mkdir,
+  open,
+  readFile,
+  rename,
+  rm,
+  writeFile,
+} from "node:fs/promises";
 import type { FileHandle } from "node:fs/promises";
 import path from "node:path";
 
@@ -7,7 +15,7 @@ import type { TorrentMetadata } from "torrent-stream";
 
 export const VIRTUAL_PIECE_BYTES = 512 * 1024;
 export const REQUEST_BLOCK_BYTES = 16 * 1024;
-const BLOCKS_PER_RANGE = 8;
+const BLOCKS_PER_RANGE = 32;
 
 type CacheManifest = {
   version: 1;
@@ -39,6 +47,10 @@ export class VirtualCache {
   private readonly completedVirtualBlocks = new Map<number, Set<number>>();
   private readonly verifiedPieces = new Set<number>();
   private readonly inFlight = new Map<number, Promise<void>>();
+  private readonly inFlightBlocks = new Map<string, Promise<void>>();
+  private readonly committingBlocks = new Map<number, Promise<void>>();
+  private readonly verifyingPieces = new Map<number, Promise<boolean>>();
+  private manifestChain: Promise<void> = Promise.resolve();
   private file: FileHandle | null = null;
   private manifestPath = "";
   private dataPath = "";
@@ -135,6 +147,75 @@ export class VirtualCache {
     return this.verifiedPieces.has(piece);
   }
 
+  isVirtualComplete(index: number) {
+    return (
+      this.verifiedPieces.has(this.realPieceForVirtual(index)) ||
+      this.completedVirtualPieces.has(index)
+    );
+  }
+
+  hasBlock(absBlockIdx: number): boolean {
+    const pos = absBlockIdx * REQUEST_BLOCK_BYTES;
+    if (pos < 0 || pos >= this.metadata.length) return false;
+    const realPiece = Math.floor(pos / this.metadata.pieceLength);
+    if (this.verifiedPieces.has(realPiece)) return true;
+    const vIdx = Math.floor(pos / this.virtualPieceBytes);
+    if (this.completedVirtualPieces.has(vIdx)) return true;
+    const blockOffset = pos - this.virtualStart(vIdx);
+    return Boolean(this.completedVirtualBlocks.get(vIdx)?.has(blockOffset));
+  }
+
+  async commitBlock(absBlockIdx: number, data: Buffer): Promise<void> {
+    const pos = absBlockIdx * REQUEST_BLOCK_BYTES;
+    if (pos < 0 || pos >= this.metadata.length) {
+      throw new RangeError(`torrent block ${absBlockIdx} is outside the torrent`);
+    }
+    const expectedLength = Math.min(
+      REQUEST_BLOCK_BYTES,
+      this.metadata.length - pos,
+    );
+    if (data.length !== expectedLength) {
+      throw new Error(
+        `torrent block ${absBlockIdx} length ${data.length} != ${expectedLength}`,
+      );
+    }
+    if (this.hasBlock(absBlockIdx)) return;
+    const inProgress = this.committingBlocks.get(absBlockIdx);
+    if (inProgress) return inProgress;
+
+    const task = (async () => {
+      if (this.hasBlock(absBlockIdx)) return;
+      const vIdx = Math.floor(pos / this.virtualPieceBytes);
+      const blockOffset = pos - this.virtualStart(vIdx);
+      const realPiece = this.realPieceForVirtual(vIdx);
+      await this.writeAt(pos, data);
+      if (this.verifiedPieces.has(realPiece)) return;
+      const completed =
+        this.completedVirtualBlocks.get(vIdx) ?? new Set<number>();
+      this.completedVirtualBlocks.set(vIdx, completed);
+      if (!completed.has(blockOffset)) {
+        completed.add(blockOffset);
+        this.stats.downloadedBytes += data.length;
+        this.publishStats();
+      }
+      const virtualLength = this.virtualLength(vIdx);
+      if (completed.size === Math.ceil(virtualLength / REQUEST_BLOCK_BYTES)) {
+        this.completedVirtualPieces.add(vIdx);
+        if (this.isRealPieceComplete(realPiece)) {
+          void this.verifyRealPiece(realPiece).catch(() => {});
+        }
+      }
+    })();
+    this.committingBlocks.set(absBlockIdx, task);
+    try {
+      await task;
+    } finally {
+      if (this.committingBlocks.get(absBlockIdx) === task) {
+        this.committingBlocks.delete(absBlockIdx);
+      }
+    }
+  }
+
   /** Unique downloaded or verified bytes within [start, start + length) (matches Stremio file progress). */
   cachedBytesInRange(start: number, length: number): number {
     const rangeStart = Math.max(0, start);
@@ -147,7 +228,10 @@ export class VirtualCache {
     for (let piece = firstPiece; piece <= lastPiece; piece++) {
       const pieceStart = this.realPieceStart(piece);
       const segStart = Math.max(rangeStart, pieceStart);
-      const segEnd = Math.min(rangeEnd, pieceStart + this.realPieceLength(piece));
+      const segEnd = Math.min(
+        rangeEnd,
+        pieceStart + this.realPieceLength(piece),
+      );
       if (segEnd <= segStart) continue;
       if (this.verifiedPieces.has(piece)) {
         total += segEnd - segStart;
@@ -182,7 +266,11 @@ export class VirtualCache {
   }
 
   async readRange(position: number, length: number) {
-    if (position < 0 || length < 0 || position + length > this.metadata.length) {
+    if (
+      position < 0 ||
+      length < 0 ||
+      position + length > this.metadata.length
+    ) {
       throw new RangeError("torrent cache range is outside the torrent");
     }
     return this.readAt(position, length);
@@ -193,21 +281,31 @@ export class VirtualCache {
     offset: number,
     length: number,
     fetchBlock: (offset: number, length: number) => Promise<Buffer>,
+    maxConcurrency = BLOCKS_PER_RANGE,
   ) {
     const virtualLength = this.virtualLength(index);
     if (offset < 0 || length < 0 || offset + length > virtualLength) {
-      throw new RangeError(`virtual range ${index}:${offset}+${length} is outside the piece`);
+      throw new RangeError(
+        `virtual range ${index}:${offset}+${length} is outside the piece`,
+      );
     }
-    if (!length || this.verifiedPieces.has(this.realPieceForVirtual(index))) return;
-    const blockStart = Math.floor(offset / REQUEST_BLOCK_BYTES) * REQUEST_BLOCK_BYTES;
+    if (!length || this.verifiedPieces.has(this.realPieceForVirtual(index)))
+      return;
+    const blockStart =
+      Math.floor(offset / REQUEST_BLOCK_BYTES) * REQUEST_BLOCK_BYTES;
     const blockEnd = Math.min(
       virtualLength,
       Math.ceil((offset + length) / REQUEST_BLOCK_BYTES) * REQUEST_BLOCK_BYTES,
     );
-    const completed = this.completedVirtualBlocks.get(index) ?? new Set<number>();
+    const completed =
+      this.completedVirtualBlocks.get(index) ?? new Set<number>();
     this.completedVirtualBlocks.set(index, completed);
     const missing: number[] = [];
-    for (let block = blockStart; block < blockEnd; block += REQUEST_BLOCK_BYTES) {
+    for (
+      let block = blockStart;
+      block < blockEnd;
+      block += REQUEST_BLOCK_BYTES
+    ) {
       if (!completed.has(block)) missing.push(block);
     }
     let next = 0;
@@ -215,21 +313,50 @@ export class VirtualCache {
       while (true) {
         const block = missing[next++];
         if (block === undefined) return;
-        const data = await fetchBlock(block, Math.min(REQUEST_BLOCK_BYTES, virtualLength - block));
-        const expectedLength = Math.min(REQUEST_BLOCK_BYTES, virtualLength - block);
-        if (data.length !== expectedLength) {
-          throw new Error(`torrent block ${index}:${block} length ${data.length} != ${expectedLength}`);
+        if (completed.has(block)) continue;
+        const key = `${index}:${block}`;
+        const existing = this.inFlightBlocks.get(key);
+        if (existing) {
+          try {
+            await existing;
+          } catch {
+            // An earlier caller aborted or failed; fall through to fetch if still missing.
+          }
+          if (completed.has(block)) continue;
         }
-        await this.writeAt(this.virtualStart(index) + block, data);
-        completed.add(block);
-        this.stats.downloadedBytes += data.length;
-        this.publishStats();
+        const task = (async () => {
+          const expectedLength = Math.min(
+            REQUEST_BLOCK_BYTES,
+            virtualLength - block,
+          );
+          const data = await fetchBlock(block, expectedLength);
+          if (data.length !== expectedLength) {
+            throw new Error(
+              `torrent block ${index}:${block} length ${data.length} != ${expectedLength}`,
+            );
+          }
+          await this.writeAt(this.virtualStart(index) + block, data);
+          completed.add(block);
+          this.stats.downloadedBytes += data.length;
+          this.publishStats();
+        })();
+        this.inFlightBlocks.set(key, task);
+        try {
+          await task;
+        } finally {
+          if (this.inFlightBlocks.get(key) === task) {
+            this.inFlightBlocks.delete(key);
+          }
+        }
       }
     };
     await Promise.all(
-      Array.from({ length: Math.min(BLOCKS_PER_RANGE, missing.length) }, () => worker()),
+      Array.from({ length: Math.min(maxConcurrency, missing.length) }, () =>
+        worker(),
+      ),
     );
-    if (completed.size !== Math.ceil(virtualLength / REQUEST_BLOCK_BYTES)) return;
+    if (completed.size !== Math.ceil(virtualLength / REQUEST_BLOCK_BYTES))
+      return;
     this.completedVirtualPieces.add(index);
     const realPiece = this.realPieceForVirtual(index);
     if (!this.isRealPieceComplete(realPiece)) return;
@@ -245,7 +372,10 @@ export class VirtualCache {
       throw new RangeError(`virtual piece ${index} is outside the torrent`);
     }
     const realPiece = this.realPieceForVirtual(index);
-    if (this.verifiedPieces.has(realPiece) || this.completedVirtualPieces.has(index)) {
+    if (
+      this.verifiedPieces.has(realPiece) ||
+      this.completedVirtualPieces.has(index)
+    ) {
       return;
     }
     const existing = this.inFlight.get(index);
@@ -256,7 +386,9 @@ export class VirtualCache {
       if (!this.isRealPieceComplete(realPiece)) return;
       for (let attempt = 0; attempt < 2; attempt++) {
         if (await this.verifyRealPiece(realPiece)) return;
-        const start = Math.floor(this.realPieceStart(realPiece) / this.virtualPieceBytes);
+        const start = Math.floor(
+          this.realPieceStart(realPiece) / this.virtualPieceBytes,
+        );
         const end = Math.ceil(
           (this.realPieceStart(realPiece) + this.realPieceLength(realPiece)) /
             this.virtualPieceBytes,
@@ -292,7 +424,8 @@ export class VirtualCache {
     await this.writeAt(this.virtualStart(index), data);
     this.completedVirtualPieces.add(index);
     const blocks = new Set<number>();
-    for (let block = 0; block < expectedLength; block += REQUEST_BLOCK_BYTES) blocks.add(block);
+    for (let block = 0; block < expectedLength; block += REQUEST_BLOCK_BYTES)
+      blocks.add(block);
     this.completedVirtualBlocks.set(index, blocks);
     this.stats.downloadedBytes += data.length;
     this.publishStats();
@@ -300,7 +433,9 @@ export class VirtualCache {
 
   private isRealPieceComplete(piece: number) {
     if (this.verifiedPieces.has(piece)) return true;
-    const start = Math.floor(this.realPieceStart(piece) / this.virtualPieceBytes);
+    const start = Math.floor(
+      this.realPieceStart(piece) / this.virtualPieceBytes,
+    );
     const end = Math.ceil(
       (this.realPieceStart(piece) + this.realPieceLength(piece)) /
         this.virtualPieceBytes,
@@ -312,7 +447,9 @@ export class VirtualCache {
   }
 
   private clearVirtualTrackingForPiece(piece: number) {
-    const start = Math.floor(this.realPieceStart(piece) / this.virtualPieceBytes);
+    const start = Math.floor(
+      this.realPieceStart(piece) / this.virtualPieceBytes,
+    );
     const end = Math.ceil(
       (this.realPieceStart(piece) + this.realPieceLength(piece)) /
         this.virtualPieceBytes,
@@ -323,37 +460,51 @@ export class VirtualCache {
     }
   }
 
-  private async verifyRealPiece(piece: number) {
-    if (this.verifiedPieces.has(piece)) return true;
-    const buffer = await this.readAt(
-      this.realPieceStart(piece),
-      this.realPieceLength(piece),
-    );
-    const actual = createHash("sha1").update(buffer).digest("hex");
-    const expected = hashValue(this.metadata.pieces[piece] ?? "");
-    if (actual !== expected) {
+  private verifyRealPiece(piece: number): Promise<boolean> {
+    if (this.verifiedPieces.has(piece)) return Promise.resolve(true);
+    const existing = this.verifyingPieces.get(piece);
+    if (existing) return existing;
+    const task = (async () => {
+      const buffer = await this.readAt(
+        this.realPieceStart(piece),
+        this.realPieceLength(piece),
+      );
+      const actual = createHash("sha1").update(buffer).digest("hex");
+      const expected = hashValue(this.metadata.pieces[piece] ?? "");
+      if (actual !== expected) {
+        this.clearVirtualTrackingForPiece(piece);
+        return false;
+      }
+      this.verifiedPieces.add(piece);
       this.clearVirtualTrackingForPiece(piece);
-      return false;
-    }
-    this.verifiedPieces.add(piece);
-    this.clearVirtualTrackingForPiece(piece);
-    this.stats.verifiedBytes += this.realPieceLength(piece);
-    await this.persistManifest();
-    this.publishStats();
-    return true;
+      this.stats.verifiedBytes += this.realPieceLength(piece);
+      await this.persistManifest();
+      this.publishStats();
+      return true;
+    })();
+    this.verifyingPieces.set(piece, task);
+    return task.finally(() => {
+      if (this.verifyingPieces.get(piece) === task) {
+        this.verifyingPieces.delete(piece);
+      }
+    });
   }
 
-  private async persistManifest() {
-    const manifest: CacheManifest = {
-      version: 1,
-      infoHash: this.metadata.infoHash,
-      pieceLength: this.metadata.pieceLength,
-      torrentLength: this.metadata.length,
-      verifiedPieces: [...this.verifiedPieces].sort((a, b) => a - b),
+  private persistManifest() {
+    const write = async () => {
+      const manifest: CacheManifest = {
+        version: 1,
+        infoHash: this.metadata.infoHash,
+        pieceLength: this.metadata.pieceLength,
+        torrentLength: this.metadata.length,
+        verifiedPieces: [...this.verifiedPieces].sort((a, b) => a - b),
+      };
+      const temporary = `${this.manifestPath}.tmp`;
+      await writeFile(temporary, JSON.stringify(manifest), "utf8");
+      await rename(temporary, this.manifestPath);
     };
-    const temporary = `${this.manifestPath}.tmp`;
-    await writeFile(temporary, JSON.stringify(manifest), "utf8");
-    await rename(temporary, this.manifestPath);
+    this.manifestChain = this.manifestChain.then(write, write);
+    return this.manifestChain;
   }
 
   private async readAt(position: number, length: number) {

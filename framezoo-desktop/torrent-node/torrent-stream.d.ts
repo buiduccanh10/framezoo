@@ -17,6 +17,8 @@ declare module "torrent-stream" {
   export interface TorrentWire {
     peerAddress?: string;
     peerChoking?: boolean;
+    amInterested?: boolean;
+    _finished?: boolean;
     peerPieces?: { get(index: number): boolean } | boolean[];
     requests?: Array<{ piece: number; offset: number; length: number }>;
     request(
@@ -27,6 +29,7 @@ declare module "torrent-stream" {
     ): void;
     cancel?(piece: number, offset: number, length: number): void;
     interested?(): void;
+    downloadSpeed?(): number;
     destroy?(): void;
     on(event: string, listener: (...args: any[]) => void): this;
   }
@@ -39,6 +42,9 @@ declare module "torrent-stream" {
       wires: TorrentWire[];
       queued: number;
       paused: boolean;
+      size?: number;
+      connectTimeout?: number;
+      handshakeTimeout?: number;
       downloadSpeed(): number;
       add(address: string): void;
       on(event: string, listener: (...args: any[]) => void): this;
