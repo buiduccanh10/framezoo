@@ -312,6 +312,25 @@ describe("playback clock", () => {
     expect(state.time).toBe(5);
   });
 
+  it("does not treat a delayed backward external sample as a seek", () => {
+    const input = {
+      time: 10,
+      duration: 120,
+      playbackRate: 1,
+      isActive: true,
+      resetKey: "source-a",
+      preserveMonotonicTime: true,
+    };
+    let state = createPlaybackClockState(input, 1_000);
+    state = reconcilePlaybackClockState(state, { ...input, time: 11 }, 2_000);
+    state = reconcilePlaybackClockState(state, { ...input, time: 9 }, 3_000);
+
+    expect(state.time).toBe(12);
+    expect(advancePlaybackClockState(state, input.duration, 3_250).time).toBe(
+      12.25,
+    );
+  });
+
   it("freezes during buffering and resumes from the latest sample", async () => {
     const times: number[] = [];
     const onTime = (time: number) => times.push(time);
