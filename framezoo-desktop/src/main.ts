@@ -360,7 +360,8 @@ function getDirectorySize(dirPath: string): number {
 function isTorrentCacheEntry(name: string) {
   return (
     /^torrent-[a-z0-9]{1,128}$/i.test(name) ||
-    /^framezoo-torrent-[a-z0-9_-]{6,}$/i.test(name)
+    /^framezoo-torrent-[a-z0-9_-]{6,}$/i.test(name) ||
+    /^framezoo-node-torrent-[a-z0-9_-]{6,}$/i.test(name)
   );
 }
 

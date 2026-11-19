@@ -5,6 +5,7 @@ import type {
   TorrentStatus,
 } from "../types";
 import { FixtureTorrentEngine } from "./fixtureEngine";
+import { NodeTorrentEngine } from "./nodeEngine";
 import { SidecarTorrentEngine } from "./sidecarEngine";
 import type { TorrentEngine, TorrentStatusListener } from "./types";
 import { UnavailableTorrentEngine } from "./unavailableEngine";
@@ -28,9 +29,9 @@ export class TorrentManager {
     const enginePath = resolveTorrentEnginePath();
     if (!enginePath) {
       console.warn(
-        "[torrent] No torrent engine binary found for",
+        "[torrent] No Node torrent worker found for",
         `${process.platform}-${process.arch}`,
-        "– torrent streaming is unavailable. Build the sidecar on a native runner first.",
+        "– torrent streaming is unavailable. Build the Node worker first or set FRAMEZOO_TORRENT_NODE_ENGINE_PATH.",
       );
     }
     this.engine =
@@ -40,9 +41,11 @@ export class TorrentManager {
             filePath: options.fixtureFilePath,
             intervalMs: options.fixtureIntervalMs,
           })
-        : enginePath
-          ? new SidecarTorrentEngine(enginePath)
-          : new UnavailableTorrentEngine());
+        : process.env.FRAMEZOO_TORRENT_PYTHON_ENGINE_PATH
+          ? new SidecarTorrentEngine(process.env.FRAMEZOO_TORRENT_PYTHON_ENGINE_PATH)
+          : enginePath
+            ? new NodeTorrentEngine(enginePath)
+            : new UnavailableTorrentEngine());
   }
 
   async start(request: TorrentStartRequest) {
