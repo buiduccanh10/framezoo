@@ -101,4 +101,44 @@ input.on("line", (line) => {
       await rm(directory, { recursive: true, force: true });
     }
   });
+
+  it.skipIf(process.platform === "win32")(
+    "SIGKILLs a sidecar that ignores SIGTERM during dispose()",
+    async () => {
+      const directory = await mkdtemp(join(tmpdir(), "framezoo-sidecar-kill-"));
+      const executablePath = join(directory, "stubborn-sidecar.js");
+      await writeFile(
+        executablePath,
+        `#!/usr/bin/env node
+const readline = require("node:readline");
+process.on("SIGTERM", () => {});
+const input = readline.createInterface({ input: process.stdin });
+input.on("line", (line) => {
+  const message = JSON.parse(line);
+  if (message.type === "ping") {
+    process.stdout.write(JSON.stringify({ type: "response", requestId: message.requestId, ok: true, pid: process.pid }) + "\\n");
+  }
+});
+setInterval(() => {}, 10_000);
+`,
+      );
+      await chmod(executablePath, 0o755);
+
+      const engine = new SidecarTorrentEngine(executablePath);
+      try {
+        await engine.warmup();
+        const child = (engine as unknown as { process: { pid?: number } | null }).process;
+        const pid = child?.pid;
+        expect(pid).toBeTypeOf("number");
+
+        const started = Date.now();
+        await engine.dispose();
+        expect(Date.now() - started).toBeLessThan(2_500);
+        expect(() => process.kill(pid!, 0)).toThrow();
+      } finally {
+        await engine.dispose();
+        await rm(directory, { recursive: true, force: true });
+      }
+    },
+  );
 });

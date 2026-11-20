@@ -23,10 +23,18 @@ import DhtClient from "bittorrent-dht/client";
 import type {
   TorrentProfile,
   TorrentSession,
+  TorrentSettings,
   TorrentStartRequest,
   TorrentStatus,
 } from "../src/types";
-import { REQUEST_BLOCK_BYTES, VirtualCache } from "./virtualCache";
+import {
+  PINNED_EDGE_BYTES,
+  REQUEST_BLOCK_BYTES,
+  VIRTUAL_PIECE_BYTES,
+  VirtualCache,
+  type EvictionGuard,
+  type VirtualCacheMode,
+} from "./virtualCache";
 
 const MAX_CONNECTIONS = 80;
 const PEER_SEARCH_MIN = 80;
@@ -48,7 +56,14 @@ const HOTSWAP_MIN_AGE_MS = 350;
 const WIRE_SILENCE_TIMEOUT_MS = 10_000;
 const PUMP_INTERVAL_MS = 200;
 const STATUS_THROTTLE_MS = 200;
-const IDLE_RECORD_TIMEOUT_MS = 5 * 60_000;
+const IDLE_RECORD_TIMEOUT_MS = 30_000;
+export const MIN_FREE_DISK_BYTES = 5 * 1024 * 1024 * 1024;
+const FREE_DISK_HYSTERESIS_BYTES = 256 * 1024 * 1024;
+const HARD_MIN_FREE_DISK_BYTES = 512 * 1024 * 1024;
+const MEMORY_CACHE_BUDGET_BYTES = 192 * 1024 * 1024;
+const KEEP_BEHIND_BYTES = 32 * 1024 * 1024;
+const DISK_CHECK_INTERVAL_MS = 1_000;
+const DISK_CHECK_BYTES_STEP = 16 * 1024 * 1024;
 const PROFILE_PREFETCH: Record<
   TorrentProfile,
   { pieces: number; maxQueuePerWire: number; bdpSeconds: number }
@@ -83,6 +98,7 @@ type WorkerMessage = {
   sessionId?: string;
   request?: TorrentStartRequest;
   discardCache?: boolean;
+  settings?: Partial<TorrentSettings>;
 };
 
 type WorkerResponse = {
@@ -106,29 +122,65 @@ type RuntimeSession = {
   firstByte: boolean;
 };
 
+function createNoopChunkStore(chunkLength: number) {
+  return {
+    chunkLength,
+    put(_index: number, _buf: Buffer, cb?: (err?: Error | null) => void) {
+      if (cb) process.nextTick(() => cb(null));
+    },
+    get(
+      _index: number,
+      optsOrCb?: unknown,
+      cb?: (err: Error | null, buf?: Buffer) => void,
+    ) {
+      const callback =
+        typeof optsOrCb === "function"
+          ? (optsOrCb as (err: Error | null, buf?: Buffer) => void)
+          : cb;
+      if (callback) {
+        process.nextTick(() => callback(new Error("noop store")));
+      }
+    },
+    close(cb?: (err?: Error | null) => void) {
+      if (cb) process.nextTick(() => cb(null));
+    },
+    destroy(cb?: (err?: Error | null) => void) {
+      if (cb) process.nextTick(() => cb(null));
+    },
+  };
+}
+
 async function directorySize(root: string): Promise<number> {
   let total = 0;
   for (const entry of await fs
     .readdir(root, { withFileTypes: true })
     .catch(() => [])) {
     const fullPath = path.join(root, entry.name);
-    if (entry.isDirectory()) total += await directorySize(fullPath);
-    else if (entry.isFile()) total += (await fs.stat(fullPath)).size;
+    if (entry.isDirectory()) {
+      total += await directorySize(fullPath);
+    } else if (entry.isFile()) {
+      const st = await fs.stat(fullPath).catch(() => null);
+      if (!st) continue;
+      total +=
+        process.platform !== "win32" && Number.isFinite(st.blocks)
+          ? Math.min(st.size, st.blocks * 512)
+          : st.size;
+    }
   }
   return total;
 }
 
-async function enforceCacheLimit(
+export async function enforceCacheLimit(
   root: string,
   maxBytes: number | null,
   active: Set<string>,
-) {
-  if (maxBytes === null) return;
-  await fs.mkdir(root, { recursive: true });
+  minFreeDiskBytes = MIN_FREE_DISK_BYTES,
+): Promise<number> {
+  await fs.mkdir(root, { recursive: true }).catch(() => {});
   const entries = await fs
     .readdir(root, { withFileTypes: true })
     .catch(() => []);
-  const candidates = [] as Array<{ path: string; size: number; mtime: number }>;
+  const candidates: Array<{ path: string; size: number; mtime: number }> = [];
   let total = 0;
   for (const entry of entries) {
     if (
@@ -136,25 +188,41 @@ async function enforceCacheLimit(
       !/^((?:torrent|framezoo-torrent|framezoo-node-torrent)-[a-z0-9_-]{1,128})$/i.test(
         entry.name,
       )
-    )
+    ) {
       continue;
+    }
     const entryPath = path.join(root, entry.name);
     const size = await directorySize(entryPath);
     total += size;
     if (!active.has(entryPath)) {
-      candidates.push({
-        path: entryPath,
-        size,
-        mtime: (await fs.stat(entryPath)).mtimeMs,
-      });
+      const st = await fs.stat(entryPath).catch(() => null);
+      if (st) {
+        candidates.push({
+          path: entryPath,
+          size,
+          mtime: st.mtimeMs,
+        });
+      }
     }
   }
+  let freeBytes = await fs
+    .statfs(root)
+    .then((s) => s.bavail * s.bsize)
+    .catch(() => null);
   candidates.sort((a, b) => a.mtime - b.mtime);
+  let freed = 0;
   for (const candidate of candidates) {
-    if (total <= maxBytes) break;
-    await fs.rm(candidate.path, { recursive: true, force: true });
-    total -= candidate.size;
+    const overLimit = maxBytes !== null && total > maxBytes;
+    const underFree = freeBytes !== null && freeBytes < minFreeDiskBytes;
+    if (!overLimit && !underFree) break;
+    await fs
+      .rm(candidate.path, { recursive: true, force: true })
+      .catch(() => {});
+    total = Math.max(0, total - candidate.size);
+    freed += candidate.size;
+    if (freeBytes !== null) freeBytes += candidate.size;
   }
+  return freed;
 }
 
 function writeMessage(
@@ -398,8 +466,13 @@ export function computePrefetchEnd(
   profilePieces: number,
   maxBytes: number | null,
   cachedFileBytes: number,
+  lowDiskSpace = false,
 ): number {
-  if (maxBytes === 0 || (maxBytes !== null && cachedFileBytes >= maxBytes)) {
+  if (
+    maxBytes === 0 ||
+    lowDiskSpace ||
+    (maxBytes !== null && cachedFileBytes >= maxBytes)
+  ) {
     return Math.min(fileLastVirtual, fromVirtual + profilePieces - 1);
   }
   return fileLastVirtual;
@@ -514,6 +587,8 @@ type InFlightBlock = {
 class TorrentRecord {
   readonly infoHash: string;
   readonly cachePath: string;
+  readonly cacheRootDir: string;
+  readonly cacheMode: VirtualCacheMode;
   readonly engine: TorrentEngine;
   readonly peerId: string;
   metadata: TorrentMetadata | null = null;
@@ -525,8 +600,9 @@ class TorrentRecord {
   private idleTimer: ReturnType<typeof setTimeout> | null = null;
   private peerSearch: PeerSearch | null = null;
   private totalDownloaded = 0;
-  private startedAt = Date.now();
   private readonly onChanged: () => void;
+  private readonly onNeedDiskSpace: (targetFreeBytes: number) => Promise<void>;
+  private readonly onFatalError: (record: TorrentRecord, message: string) => void;
   private readonly cacheName: string;
   private prefetchProfile: {
     pieces: number;
@@ -534,6 +610,14 @@ class TorrentRecord {
     bdpSeconds: number;
   };
   private maxBytes: number | null;
+  private destroyed = false;
+  private idle = false;
+  private lowDiskSpace = false;
+  private storageFatalError: string | null = null;
+  private lastDiskCheckAt = 0;
+  private bytesSinceDiskCheck = 0;
+  private budgetPromise: Promise<void> | null = null;
+  private enospcStrikes = 0;
   private activeFile: TorrentFile | null = null;
   private playheadBlock = 0;
   private fastCursor = 0;
@@ -544,27 +628,35 @@ class TorrentRecord {
   private readonly activeReads = new Set<{ startBlock: number; endBlock: number }>();
   private readonly inFlightBlocks = new Map<number, InFlightBlock>();
   private readonly blockWaiters = new Map<number, Set<() => void>>();
+  private readonly waiterRejects = new Set<(error: Error) => void>();
   private readonly wireStates = new WeakMap<TorrentWire, WireState>();
 
   constructor(
     private readonly request: TorrentStartRequest,
     private readonly cacheRoot: string,
     onChanged: () => void,
+    onNeedDiskSpace: (targetFreeBytes: number) => Promise<void>,
+    onFatalError: (record: TorrentRecord, message: string) => void,
   ) {
     this.infoHash =
       (request.infoHash ?? extractInfoHash(request.url))?.toLowerCase() ??
       request.url;
     this.peerId = createPeerId();
     this.cacheName = this.infoHash.replace(/[^a-z0-9_-]/gi, "_");
+    this.cacheRootDir = cacheRoot;
     this.onChanged = onChanged;
+    this.onNeedDiskSpace = onNeedDiskSpace;
+    this.onFatalError = onFatalError;
     this.prefetchProfile =
       PROFILE_PREFETCH[request.torrentProfile ?? "default"] ??
       PROFILE_PREFETCH.default;
     this.maxBytes = request.maxBytes ?? DEFAULT_MAX_BYTES;
+    this.cacheMode = this.maxBytes === 0 ? "memory" : "disk";
     this.readyPromise = new Promise<void>((resolve, reject) => {
       this.readyResolve = resolve;
       this.readyReject = reject;
     });
+    this.readyPromise.catch(() => {});
 
     const root = path.join(
       cacheRoot,
@@ -585,6 +677,7 @@ class TorrentRecord {
       tracker: true,
       uploads: 0,
       verify: false,
+      storage: createNoopChunkStore,
     });
     this.engine.swarm.connectTimeout = SWARM_CONNECT_TIMEOUT_MS;
     this.engine.swarm.handshakeTimeout = SWARM_HANDSHAKE_TIMEOUT_MS;
@@ -593,25 +686,36 @@ class TorrentRecord {
       void this.initializeMetadata();
     });
     this.engine.on("wire", (wire: TorrentWire) => {
+      if (this.destroyed || this.idle || this.storageFatalError) return;
       this.keepInterested(wire);
-      wire.on("unchoke", () => this.pumpWire(wire));
-      wire.on("choke", () => this.keepInterested(wire));
+      wire.on("unchoke", () => {
+        if (!this.destroyed && !this.idle && !this.storageFatalError) {
+          this.pumpWire(wire);
+        }
+      });
+      wire.on("choke", () => {
+        if (!this.destroyed && !this.idle && !this.storageFatalError) {
+          this.keepInterested(wire);
+        }
+      });
       wire.on("bitfield", () => {
+        if (this.destroyed || this.idle || this.storageFatalError) return;
         this.keepInterested(wire);
         this.pumpWire(wire);
       });
       wire.on("have", () => {
+        if (this.destroyed || this.idle || this.storageFatalError) return;
         this.keepInterested(wire);
         this.pumpWire(wire);
       });
       wire.on("close", this.onChanged);
       this.onChanged();
     });
-    this.engine.on("peer", (peer: string) => {
-      this.onChanged();
+    this.engine.on("peer", () => {
+      if (!this.destroyed) this.onChanged();
     });
     this.engine.on("error", (error: Error) => {
-      if (!this.metadata) {
+      if (!this.metadata && !this.readyError) {
         this.readyError = error;
         this.readyReject(error);
       }
@@ -630,12 +734,15 @@ class TorrentRecord {
 
   private async listen() {
     try {
+      if (this.destroyed) return;
       const port = await freePort();
+      if (this.destroyed) return;
       await new Promise<void>((resolve, reject) => {
         this.engine.listen(port, (error) =>
           error ? reject(error) : resolve(),
         );
       });
+      if (this.destroyed) return;
       this.peerSearch = new PeerSearch(
         this.infoHash,
         this.peerId,
@@ -644,14 +751,17 @@ class TorrentRecord {
         this.engine.swarm,
         this.onChanged,
       );
+      if (this.idle) this.engine.swarm.pause();
       this.onChanged();
     } catch (error) {
-      process.stderr.write(`[torrent-node] listen failed: ${String(error)}\n`);
+      if (!this.destroyed) {
+        process.stderr.write(`[torrent-node] listen failed: ${String(error)}\n`);
+      }
     }
   }
 
   private async initializeMetadata() {
-    if (this.metadata) return;
+    if (this.metadata || this.destroyed) return;
     const metadata = this.engine.torrent;
     if (!metadata) {
       const error = new Error("torrent engine reported ready without metadata");
@@ -664,18 +774,35 @@ class TorrentRecord {
       this.cacheRoot,
       `framezoo-node-torrent-${this.cacheName}`,
     );
-    this.cache = new VirtualCache(cachePath, metadata, (stats) => {
-      this.totalDownloaded = Math.max(
-        this.totalDownloaded,
-        stats.downloadedBytes,
-      );
-      this.onChanged();
-    });
+    const cache = new VirtualCache(
+      cachePath,
+      metadata,
+      (stats) => {
+        this.totalDownloaded = Math.max(
+          this.totalDownloaded,
+          stats.downloadedBytes,
+        );
+        this.onChanged();
+      },
+      {
+        mode: this.cacheMode,
+        memoryBudgetBytes: Math.max(
+          MEMORY_CACHE_BUDGET_BYTES,
+          this.prefetchProfile.pieces * VIRTUAL_PIECE_BYTES + 64 * 1024 * 1024,
+        ),
+      },
+    );
+    this.cache = cache;
     try {
-      await this.cache.open();
+      await cache.open();
+      if (this.destroyed) {
+        await cache.discard().catch(() => {});
+        return;
+      }
       this.readyResolve();
       // Re-assert interest right after torrent-stream's post-ready refresh().
       setTimeout(() => {
+        if (this.destroyed || this.idle || this.storageFatalError) return;
         for (const wire of this.engine.swarm.wires) {
           this.keepInterested(wire);
         }
@@ -691,25 +818,49 @@ class TorrentRecord {
   }
 
   async ready() {
+    if (this.destroyed) throw new Error("torrent session stopped");
     if (this.readyError) throw this.readyError;
-    return Promise.race([
-      this.readyPromise,
-      delay(PEER_WAIT_TIMEOUT_MS).then(() => {
-        throw new Error("torrent metadata discovery timed out");
-      }),
-    ]);
+    const ac = new AbortController();
+    try {
+      return await Promise.race([
+        this.readyPromise,
+        delay(PEER_WAIT_TIMEOUT_MS, undefined, {
+          signal: ac.signal,
+          ref: false,
+        }).then(() => {
+          throw new Error("torrent metadata discovery timed out");
+        }),
+      ]);
+    } finally {
+      ac.abort();
+    }
   }
 
-  scheduleIdleDestroy(onDestroy: () => Promise<void>) {
+  getFatalError() {
+    return this.storageFatalError;
+  }
+
+  currentMaxBytes() {
+    return this.maxBytes;
+  }
+
+  enterIdle(onDestroy: () => Promise<void>) {
+    if (this.destroyed) return;
+    this.idle = true;
     this.stopPrefetch();
+    this.engine.swarm.pause();
+    this.rejectAllBlockWaiters(new Error("torrent range request aborted"));
     if (this.idleTimer) clearTimeout(this.idleTimer);
     this.idleTimer = setTimeout(() => void onDestroy(), IDLE_RECORD_TIMEOUT_MS);
     this.idleTimer.unref();
   }
 
-  cancelIdleDestroy() {
+  exitIdle() {
     if (this.idleTimer) clearTimeout(this.idleTimer);
     this.idleTimer = null;
+    if (this.destroyed) return;
+    this.idle = false;
+    this.engine.swarm.resume();
   }
 
   peerCount() {
@@ -831,8 +982,169 @@ class TorrentRecord {
     return -1;
   }
 
+  private rejectAllBlockWaiters(error: Error) {
+    for (const rejectFn of [...this.waiterRejects]) rejectFn(error);
+  }
+
+  private buildEvictionGuard(): EvictionGuard {
+    const file = this.activeFile;
+    const vBytes = this.cache?.virtualPieceBytes ?? VIRTUAL_PIECE_BYTES;
+    const activeByteRanges = [...this.activeReads].map((r) => ({
+      start: r.startBlock * REQUEST_BLOCK_BYTES,
+      end: (r.endBlock + 1) * REQUEST_BLOCK_BYTES,
+    }));
+    return {
+      playheadPos: this.playheadBlock * REQUEST_BLOCK_BYTES,
+      fileOffset: file?.offset ?? 0,
+      fileLength: file?.length ?? this.metadata?.length ?? 0,
+      keepBehindBytes: KEEP_BEHIND_BYTES,
+      keepAheadBytes: Math.max(
+        this.prefetchProfile.pieces * vBytes,
+        URGENT_WINDOW_BLOCKS * REQUEST_BLOCK_BYTES,
+      ),
+      activeByteRanges,
+    };
+  }
+
+  private failStorage(message: string) {
+    if (this.destroyed || this.storageFatalError) return;
+    this.storageFatalError = message;
+    this.stopPrefetch();
+    this.engine.swarm.pause();
+    this.rejectAllBlockWaiters(new Error(message));
+    this.onFatalError(this, message);
+  }
+
+  private async maybeEnforceStorageBudget(force = false): Promise<void> {
+    if (this.destroyed || this.idle || !this.cache || this.storageFatalError) {
+      return;
+    }
+    if (this.cacheMode === "memory") {
+      if (this.cache.usedBytes() > this.cache.memoryBudgetBytes) {
+        this.cache.evictMemory(this.buildEvictionGuard());
+      }
+      return;
+    }
+
+    if (this.budgetPromise) {
+      if (!force) return;
+      await this.budgetPromise;
+    }
+    if (this.destroyed || this.idle || !this.cache || this.storageFatalError) {
+      return;
+    }
+
+    const now = Date.now();
+    const overConfiguredMax =
+      this.maxBytes !== null &&
+      this.maxBytes > 0 &&
+      this.cache.usedBytes() > this.maxBytes;
+    const due =
+      force ||
+      overConfiguredMax ||
+      now - this.lastDiskCheckAt >= DISK_CHECK_INTERVAL_MS ||
+      this.bytesSinceDiskCheck >= DISK_CHECK_BYTES_STEP;
+    if (!due) return;
+
+    this.lastDiskCheckAt = now;
+    this.bytesSinceDiskCheck = 0;
+
+    const task = (async () => {
+      if (!this.cache || this.destroyed || this.idle) return;
+      const guard = this.buildEvictionGuard();
+      if (
+        this.maxBytes !== null &&
+        this.maxBytes > 0 &&
+        this.cache.usedBytes() > this.maxBytes
+      ) {
+        await this.onNeedDiskSpace(MIN_FREE_DISK_BYTES);
+        if (this.destroyed || this.idle || !this.cache) return;
+        const excess = this.cache.usedBytes() - this.maxBytes;
+        if (excess > 0) {
+          await this.cache.evictDisk(excess, guard);
+        }
+      }
+
+      let freeBytes = await fs
+        .statfs(this.cacheRoot)
+        .then((s) => s.bavail * s.bsize)
+        .catch(() => null);
+      if (this.destroyed || this.idle || !this.cache || freeBytes === null) {
+        return;
+      }
+
+      if (freeBytes < MIN_FREE_DISK_BYTES) {
+        this.lowDiskSpace = true;
+        await this.onNeedDiskSpace(
+          MIN_FREE_DISK_BYTES + FREE_DISK_HYSTERESIS_BYTES,
+        );
+        if (this.destroyed || this.idle || !this.cache) return;
+        freeBytes = await fs
+          .statfs(this.cacheRoot)
+          .then((s) => s.bavail * s.bsize)
+          .catch(() => null);
+        if (freeBytes !== null && freeBytes < MIN_FREE_DISK_BYTES) {
+          const need =
+            MIN_FREE_DISK_BYTES + FREE_DISK_HYSTERESIS_BYTES - freeBytes;
+          await this.cache.evictDisk(need, this.buildEvictionGuard());
+          freeBytes = await fs
+            .statfs(this.cacheRoot)
+            .then((s) => s.bavail * s.bsize)
+            .catch(() => null);
+        }
+        if (freeBytes !== null && freeBytes < HARD_MIN_FREE_DISK_BYTES) {
+          this.failStorage(
+            "Not enough free disk space for torrent cache. Free up disk space or switch to No caching.",
+          );
+        }
+      } else if (
+        this.lowDiskSpace &&
+        freeBytes >= MIN_FREE_DISK_BYTES + FREE_DISK_HYSTERESIS_BYTES
+      ) {
+        this.lowDiskSpace = false;
+      }
+    })();
+
+    this.budgetPromise = task;
+    try {
+      await task;
+    } finally {
+      if (this.budgetPromise === task) this.budgetPromise = null;
+    }
+  }
+
+  private async handleCommitError(error: unknown) {
+    if (this.destroyed || this.idle || this.storageFatalError) return;
+    const code = (error as NodeJS.ErrnoException | null)?.code;
+    if (code !== "ENOSPC" && code !== "EDQUOT") return;
+    this.enospcStrikes += 1;
+    this.lowDiskSpace = true;
+    await this.maybeEnforceStorageBudget(true);
+    if (this.destroyed || this.idle || this.storageFatalError) return;
+    const freeBytes = await fs
+      .statfs(this.cacheRoot)
+      .then((s) => s.bavail * s.bsize)
+      .catch(() => null);
+    if (
+      (freeBytes !== null && freeBytes < HARD_MIN_FREE_DISK_BYTES) ||
+      this.enospcStrikes >= 3
+    ) {
+      this.failStorage(
+        "Not enough free disk space for torrent cache. Free up disk space or switch to No caching.",
+      );
+    }
+  }
+
   private pumpWire(wire: TorrentWire) {
-    if (!this.metadata || !this.cache || !this.activeFile || wire._finished) {
+    if (
+      this.destroyed ||
+      this.idle ||
+      this.storageFatalError ||
+      !this.metadata ||
+      !this.cache ||
+      !this.activeFile ||
+      wire._finished
+    ) {
       return;
     }
     this.keepInterested(wire);
@@ -860,15 +1172,14 @@ class TorrentRecord {
       (file.offset + Math.max(1, file.length) - 1) / vBytes,
     );
     const cachedFileBytes =
-      this.maxBytes !== null && this.maxBytes > 0
-        ? this.cache.cachedBytesInRange(file.offset, file.length)
-        : 0;
+      this.maxBytes !== null && this.maxBytes > 0 ? this.cache.usedBytes() : 0;
     const effectiveEndVirtual = computePrefetchEnd(
       Math.max(0, this.prefetchWindowStartVirtual),
       fileLastVirtual,
       this.prefetchProfile.pieces,
       this.maxBytes,
       cachedFileBytes,
+      this.lowDiskSpace,
     );
     const prefetchEndBlock = Math.min(
       fileLastBlock,
@@ -955,7 +1266,15 @@ class TorrentRecord {
         if (cur && cur.wire === wire) {
           this.inFlightBlocks.delete(bIdx);
         }
-        if (!error && block && block.length === len && this.cache) {
+        if (
+          !error &&
+          block &&
+          block.length === len &&
+          this.cache &&
+          !this.destroyed &&
+          !this.idle &&
+          !this.storageFatalError
+        ) {
           const doneAt = Date.now();
           const wireState = this.getWireState(wire);
           wireState.hist.push([doneAt, len]);
@@ -963,16 +1282,34 @@ class TorrentRecord {
           wireState.blocksDone++;
           void this.cache
             .commitBlock(bIdx, block)
-            .then(() => this.wakeBlockWaiters(bIdx))
-            .catch(() => {});
-          process.nextTick(() => this.pumpWire(wire));
+            .then(() => {
+              this.enospcStrikes = 0;
+              this.wakeBlockWaiters(bIdx);
+              this.bytesSinceDiskCheck += len;
+              void this.maybeEnforceStorageBudget(false);
+            })
+            .catch((commitError) => {
+              void this.handleCommitError(commitError);
+            });
+          if (!this.destroyed && !this.idle && !this.storageFatalError) {
+            process.nextTick(() => this.pumpWire(wire));
+          }
         }
       });
     }
   }
 
   private pumpAllWires() {
-    if (!this.metadata || !this.cache || !this.activeFile) return;
+    if (
+      this.destroyed ||
+      this.idle ||
+      this.storageFatalError ||
+      !this.metadata ||
+      !this.cache ||
+      !this.activeFile
+    ) {
+      return;
+    }
     const now = Date.now();
     for (const [bIdx, entry] of [...this.inFlightBlocks]) {
       const state = this.wireStates.get(entry.wire);
@@ -991,7 +1328,15 @@ class TorrentRecord {
   }
 
   private setPlaybackPosition(file: TorrentFile, startBlock: number) {
-    if (!this.cache || !this.metadata) return;
+    if (
+      this.destroyed ||
+      this.idle ||
+      this.storageFatalError ||
+      !this.cache ||
+      !this.metadata
+    ) {
+      return;
+    }
     const vIdx = Math.floor(
       (startBlock * REQUEST_BLOCK_BYTES) / this.cache.virtualPieceBytes,
     );
@@ -1042,6 +1387,8 @@ class TorrentRecord {
     this.prefetchFrontierVirtual = -1;
   }
 
+  private destroyPromise: Promise<void> | null = null;
+
   private waitForBlocks(
     startBlock: number,
     endBlock: number,
@@ -1055,8 +1402,11 @@ class TorrentRecord {
       return true;
     };
     if (allReady()) return Promise.resolve();
-    if (signal.aborted) {
+    if (signal.aborted || this.destroyed || this.idle) {
       return Promise.reject(new Error("torrent range request aborted"));
+    }
+    if (this.storageFatalError) {
+      return Promise.reject(new Error(this.storageFatalError));
     }
 
     return new Promise<void>((resolve, reject) => {
@@ -1065,10 +1415,18 @@ class TorrentRecord {
       const entry = { startBlock, endBlock };
       const watched = new Set<number>();
 
+      const rejectExternal = (err: Error) => {
+        if (settled) return;
+        settled = true;
+        cleanup();
+        reject(err);
+      };
+
       const cleanup = () => {
         if (timeout) clearTimeout(timeout);
         timeout = null;
         signal.removeEventListener("abort", onAbort);
+        this.waiterRejects.delete(rejectExternal);
         this.activeReads.delete(entry);
         for (const b of watched) {
           const set = this.blockWaiters.get(b);
@@ -1123,6 +1481,7 @@ class TorrentRecord {
         set.add(check);
       }
 
+      this.waiterRejects.add(rejectExternal);
       this.activeReads.add(entry);
       signal.addEventListener("abort", onAbort, { once: true });
       resetTimer();
@@ -1145,7 +1504,12 @@ class TorrentRecord {
     const absoluteEnd = file.offset + end;
     let cursor = absoluteStart;
     while (cursor <= absoluteEnd) {
-      if (signal.aborted) throw new Error("torrent range request aborted");
+      if (signal.aborted || this.destroyed || this.idle) {
+        throw new Error("torrent range request aborted");
+      }
+      if (this.storageFatalError) {
+        throw new Error(this.storageFatalError);
+      }
       const chunkLen = Math.min(STREAM_CHUNK_BYTES, absoluteEnd - cursor + 1);
       const needStartBlock = Math.floor(cursor / REQUEST_BLOCK_BYTES);
       const needEndBlock = Math.floor(
@@ -1159,23 +1523,61 @@ class TorrentRecord {
   }
 
   async destroy(discardCache: boolean) {
-    this.cancelIdleDestroy();
-    this.stopPrefetch();
-    this.peerSearch?.close();
-    this.peerSearch = null;
-    await new Promise<void>((resolve) => this.engine.destroy(() => resolve()));
-    if (discardCache) await this.cache?.discard();
-    else await this.cache?.close();
+    if (this.destroyPromise) return this.destroyPromise;
+    this.destroyed = true;
+    this.destroyPromise = (async () => {
+      if (this.idleTimer) clearTimeout(this.idleTimer);
+      this.idleTimer = null;
+      this.stopPrefetch();
+      if (!this.metadata && !this.readyError) {
+        const stopped = new Error("torrent session stopped");
+        this.readyError = stopped;
+        this.readyReject(stopped);
+      }
+      this.rejectAllBlockWaiters(new Error("torrent session stopped"));
+      this.peerSearch?.close();
+      this.peerSearch = null;
+      await new Promise<void>((resolve) => this.engine.destroy(() => resolve()));
+      if (discardCache) {
+        await this.cache?.discard().catch(() => {});
+        await fs
+          .rm(this.cachePath, { recursive: true, force: true })
+          .catch(() => {});
+      } else {
+        await this.cache?.close().catch(() => {});
+      }
+    })();
+    return this.destroyPromise;
   }
 }
 
-class TorrentWorker {
+export class TorrentWorker {
   private readonly records = new Map<string, TorrentRecord>();
   private readonly sessions = new Map<string, RuntimeSession>();
+  private readonly activeHttp = new Map<
+    string,
+    Set<{ abort: AbortController; response: ServerResponse }>
+  >();
   private server: ReturnType<typeof createServer> | null = null;
   private baseUrl = "";
   private statusTimer: ReturnType<typeof setTimeout> | null = null;
   private lastStatusEmitAt = 0;
+
+  private deleteRecord(target: TorrentRecord) {
+    for (const [key, record] of this.records) {
+      if (record === target) this.records.delete(key);
+    }
+  }
+
+  private abortSessionHttp(sessionId: string) {
+    const entries = this.activeHttp.get(sessionId);
+    if (!entries) return;
+    this.activeHttp.delete(sessionId);
+    for (const entry of [...entries]) {
+      entry.abort.abort();
+      if (!entry.response.destroyed) entry.response.destroy();
+    }
+  }
 
   async startServer() {
     this.server = createServer((request, response) => {
@@ -1207,18 +1609,50 @@ class TorrentWorker {
       : process.env.FRAMEZOO_TORRENT_DATA_DIR ||
         path.join(os.tmpdir(), "framezoo-torrents");
     const key = `${(request.infoHash ?? extractInfoHash(request.url) ?? request.url).toLowerCase()}::${cacheRoot}`;
+    const desiredMode: VirtualCacheMode = maxBytes === 0 ? "memory" : "disk";
     let record = this.records.get(key);
+    if (record && record.cacheMode !== desiredMode) {
+      const inUse = [...this.sessions.values()].some((s) => s.record === record);
+      if (!inUse) {
+        this.records.delete(key);
+        await record.destroy(record.cacheMode === "memory");
+        record = undefined;
+      }
+    }
     if (!record) {
       await enforceCacheLimit(
         cacheRoot,
         maxBytes,
         new Set([...this.records.values()].map((item) => item.cachePath)),
       );
-      record = new TorrentRecord(request, cacheRoot, () => this.emitStatuses());
+      record = new TorrentRecord(
+        request,
+        cacheRoot,
+        () => this.emitStatuses(),
+        async (targetFreeBytes) => {
+          const active = new Set(
+            [...this.records.values()].map((item) => item.cachePath),
+          );
+          await enforceCacheLimit(
+            cacheRoot,
+            record?.currentMaxBytes() ?? maxBytes,
+            active,
+            targetFreeBytes,
+          );
+        },
+        (failedRecord, message) => {
+          for (const session of this.sessions.values()) {
+            if (session.record !== failedRecord) continue;
+            session.state = "error";
+            this.emitStatus(session, message);
+            this.abortSessionHttp(session.sessionId);
+          }
+        },
+      );
       this.records.set(key, record);
     }
     record.configure(request.torrentProfile, maxBytes);
-    record.cancelIdleDestroy();
+    record.exitIdle();
     const sessionId =
       requestedSessionId ?? `torrent-${randomBytes(12).toString("hex")}`;
     const session: RuntimeSession = {
@@ -1247,7 +1681,38 @@ class TorrentWorker {
     };
   }
 
+  async configure(settings: Partial<TorrentSettings>) {
+    const roots = new Set<string>();
+    for (const [key, record] of [...this.records]) {
+      roots.add(record.cacheRootDir);
+      record.configure(settings.profile, settings.maxBytes);
+      if (settings.maxBytes === 0) {
+        const hasSession = [...this.sessions.values()].some(
+          (item) => item.record === record,
+        );
+        if (!hasSession) {
+          this.records.delete(key);
+          await record.destroy(true);
+        }
+      }
+    }
+    const configuredRoot = settings.cacheRoot
+      ? path.join(settings.cacheRoot, "Framezoo", "torrents")
+      : process.env.FRAMEZOO_TORRENT_DATA_DIR ||
+        path.join(os.tmpdir(), "framezoo-torrents");
+    roots.add(configuredRoot);
+    if (settings.maxBytes !== undefined) {
+      const active = new Set(
+        [...this.records.values()].map((item) => item.cachePath),
+      );
+      for (const root of roots) {
+        await enforceCacheLimit(root, settings.maxBytes, active);
+      }
+    }
+  }
+
   async stop(sessionId: string, discardCache: boolean) {
+    this.abortSessionHttp(sessionId);
     const session = this.sessions.get(sessionId);
     if (!session) return;
     this.sessions.delete(sessionId);
@@ -1257,29 +1722,39 @@ class TorrentWorker {
       (item) => item.record === session.record,
     );
     if (!hasOtherSession) {
-      if (discardCache) {
-        for (const [key, record] of this.records) {
-          if (record !== session.record) continue;
-          this.records.delete(key);
-        }
+      const shouldDiscard =
+        discardCache || session.record.cacheMode === "memory";
+      if (shouldDiscard) {
+        this.deleteRecord(session.record);
         await session.record.destroy(true);
         return;
       }
-      session.record.scheduleIdleDestroy(async () => {
-        this.records.forEach((record, key) => {
-          if (record === session.record) this.records.delete(key);
-        });
-        await session.record.destroy(discardCache);
+      session.record.enterIdle(async () => {
+        this.deleteRecord(session.record);
+        await session.record.destroy(false);
+        const active = new Set(
+          [...this.records.values()].map((item) => item.cachePath),
+        );
+        await enforceCacheLimit(
+          session.record.cacheRootDir,
+          session.record.currentMaxBytes(),
+          active,
+        );
       });
     }
   }
 
   async stopAll(discardCache: boolean) {
+    for (const sessionId of [...this.activeHttp.keys()]) {
+      this.abortSessionHttp(sessionId);
+    }
     const records = [...this.records.values()];
     this.sessions.clear();
     this.records.clear();
     await Promise.allSettled(
-      records.map((record) => record.destroy(discardCache)),
+      records.map((record) =>
+        record.destroy(discardCache || record.cacheMode === "memory"),
+      ),
     );
   }
 
@@ -1306,7 +1781,20 @@ class TorrentWorker {
       response.end();
       return;
     }
+    const fatal = session.record.getFatalError();
+    if (fatal) {
+      response.writeHead(507);
+      response.end();
+      return;
+    }
     const abort = new AbortController();
+    const httpEntry = { abort, response };
+    let httpSet = this.activeHttp.get(session.sessionId);
+    if (!httpSet) {
+      httpSet = new Set();
+      this.activeHttp.set(session.sessionId, httpSet);
+    }
+    httpSet.add(httpEntry);
     const cancel = () => abort.abort();
     request.on("close", cancel);
     response.on("close", cancel);
@@ -1382,7 +1870,11 @@ class TorrentWorker {
       }
       response.end();
     } catch (error) {
-      if (!abort.signal.aborted && !response.headersSent) {
+      const fatalErr = session.record.getFatalError();
+      if (fatalErr && session.state !== "error") {
+        session.state = "error";
+        this.emitStatus(session, fatalErr);
+      } else if (!abort.signal.aborted && !response.headersSent) {
         session.state = "error";
         this.emitStatus(
           session,
@@ -1390,6 +1882,14 @@ class TorrentWorker {
         );
         response.writeHead(502);
         response.end();
+      }
+    } finally {
+      request.off("close", cancel);
+      response.off("close", cancel);
+      const set = this.activeHttp.get(session.sessionId);
+      if (set) {
+        set.delete(httpEntry);
+        if (!set.size) this.activeHttp.delete(session.sessionId);
       }
     }
   }
@@ -1476,9 +1976,12 @@ class TorrentWorker {
       clearTimeout(this.statusTimer);
       this.statusTimer = null;
     }
-    await this.stopAll(true);
-    await new Promise<void>((resolve) => this.server?.close(() => resolve()));
-    this.server = null;
+    await this.stopAll(false);
+    if (this.server) {
+      this.server.closeAllConnections?.();
+      await new Promise<void>((resolve) => this.server?.close(() => resolve()));
+      this.server = null;
+    }
   }
 }
 
@@ -1501,6 +2004,15 @@ async function main() {
             requestId: message.requestId,
             ok: true,
             session,
+          });
+          return;
+        }
+        if (message.type === "configure") {
+          await worker.configure(message.settings ?? {});
+          writeMessage({
+            type: "response",
+            requestId: message.requestId,
+            ok: true,
           });
           return;
         }
@@ -1543,7 +2055,17 @@ async function main() {
       }
     })();
   });
-  const shutdown = () => void worker.dispose().finally(() => process.exit(0));
+  let shuttingDown = false;
+  const shutdown = () => {
+    if (shuttingDown) return;
+    shuttingDown = true;
+    const forceExit = setTimeout(() => process.exit(0), 1_500);
+    forceExit.unref();
+    void worker.dispose().finally(() => {
+      clearTimeout(forceExit);
+      process.exit(0);
+    });
+  };
   input.once("close", shutdown);
   process.once("SIGTERM", shutdown);
   process.once("SIGINT", shutdown);

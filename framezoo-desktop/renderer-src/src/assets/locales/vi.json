@@ -1448,7 +1448,7 @@
       "title": "Truyền phát",
       "maxSizeLabel": "Dung lượng bộ nhớ đệm",
       "maxSizeDescription": "Thiết lập dung lượng đĩa tối đa được sử dụng để lưu trữ bộ nhớ đệm cho các tệp stream. Nếu bộ nhớ đệm vượt quá giới hạn này, các tệp stream cũ hơn sẽ được dọn dẹp.",
-      "cacheSizeBehaviorDescription": "Áp dụng cho luồng mới. Bộ đệm được dọn về mức này khi handle torrent nhàn rỗi hết hạn (tối đa 5 phút sau khi dừng). Khi đang phát, dung lượng có thể vượt mức; Không lưu bộ đệm sẽ xóa dữ liệu khi luồng dừng, nhưng các mảnh vẫn dùng đĩa trong lúc phát.",
+      "cacheSizeBehaviorDescription": "Không lưu bộ đệm sẽ phát trực tiếp trên RAM, không ghi vào ổ đĩa. Các mức bộ nhớ đệm trên đĩa sẽ tự xóa dần các đoạn đã xem phía sau và luôn giữ tối thiểu 5 GiB dung lượng trống trên ổ.",
       "noCaching": "Không lưu bộ đệm",
       "infinite": "Vô hạn",
       "unlimited": "Không giới hạn",

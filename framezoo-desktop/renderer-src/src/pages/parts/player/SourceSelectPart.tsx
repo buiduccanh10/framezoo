@@ -47,7 +47,6 @@ import { startTorrent } from "@/desktop/torrentClient";
 import {
   getActiveTorrentSessionId,
   registerTorrentSession,
-  scheduleTorrentStop,
   stopTorrentSession,
   useActiveTorrentStatus,
 } from "@/desktop/torrentPlaybackStore";
@@ -299,6 +298,11 @@ export function SourceSelectPart(props: {
   const hasAttemptedAutoSelect = useRef(false);
   const selectionOperation = useRef(0);
   useEffect(() => {
+    return () => {
+      selectionOperation.current += 1;
+    };
+  }, []);
+  useEffect(() => {
     hasAttemptedAutoSelect.current = false;
     setShowingAddonList(false);
     setAutoSelectionResolved(false);
@@ -497,7 +501,7 @@ export function SourceSelectPart(props: {
           startedTorrentSessionId = session.sessionId;
 
           if (operationId !== selectionOperation.current) {
-            scheduleTorrentStop(session.sessionId);
+            void stopTorrentSession(session.sessionId);
             return;
           }
           registerTorrentSession(session.sessionId);
@@ -506,7 +510,7 @@ export function SourceSelectPart(props: {
           // peer discovery, and native player startup overlap.
           const playable = session;
           if (operationId !== selectionOperation.current) {
-            scheduleTorrentStop(session.sessionId);
+            void stopTorrentSession(session.sessionId);
             return;
           }
 

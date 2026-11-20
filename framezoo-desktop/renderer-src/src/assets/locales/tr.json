@@ -1448,7 +1448,7 @@
       "title": "Akış",
       "maxSizeLabel": "Maksimum Önbellek Boyutu",
       "maxSizeDescription": "Akış dosyalarını önbelleğe almak için kullanılan maksimum disk alanını ayarlayın. Önbellek bu sınırı aşarsa eski akış dosyaları temizlenecektir.",
-      "cacheSizeBehaviorDescription": "Yeni akışlar için geçerlidir. Boşta kalan torrent bağlantıları sona erdiğinde (durdurulduktan sonra en fazla 5 dakika) önbellek bu boyuta kadar budanır. Oynatma bu boyutu aşabilir; önbellekleme yoksa akış durduğunda veriler silinir, ancak oynatma sırasında parçalar yine de disk alanını kullanır.",
+      "cacheSizeBehaviorDescription": "Diske yazmadan RAM'de akış önbelleği alınmaz. Disk önbellek sınırları, oynatmanın gerisinde kalan izlenen bölümleri siler ve sürücüde en az 5 GiB boş alan bırakır.",
       "noCaching": "Önbelleğe alma yok",
       "infinite": "Sonsuz",
       "unlimited": "Sınırsız",

@@ -1448,7 +1448,7 @@
       "title": "Transmissão",
       "maxSizeLabel": "Tamanho máximo do cache",
       "maxSizeDescription": "Defina o espaço máximo em disco usado para armazenar arquivos de fluxo em cache. Se o cache exceder esse limite, os arquivos de stream mais antigos serão apagados.",
-      "cacheSizeBehaviorDescription": "Aplica-se a novos fluxos. O cache é reduzido a este tamanho quando os registros de torrent ociosos expiram (até 5 minutos após a interrupção). A reprodução pode exceder esse limite; a ausência de cache remove dados quando o fluxo é interrompido, mas os fragmentos ainda utilizam espaço em disco durante a reprodução.",
+      "cacheSizeBehaviorDescription": "Não é possível armazenar fluxos em cache na RAM sem gravá-los em disco. Os limites do cache de disco removem os segmentos assistidos que estão atrás da reprodução e mantêm pelo menos 5 GiB livres na unidade.",
       "noCaching": "Sem armazenamento em cache",
       "infinite": "Infinito",
       "unlimited": "Ilimitado",

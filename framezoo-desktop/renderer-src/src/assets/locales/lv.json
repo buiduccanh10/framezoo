@@ -1448,7 +1448,7 @@
       "title": "Straumēšana",
       "maxSizeLabel": "Maksimālais kešatmiņas lielums",
       "maxSizeDescription": "Iestatiet maksimālo diska vietu, kas tiek izmantota straumes failu saglabāšanai kešatmiņā. Ja kešatmiņa pārsniedz šo ierobežojumu, vecāki straumes faili tiks notīrīti.",
-      "cacheSizeBehaviorDescription": "Attiecas uz jaunām straumēm. Kešatmiņa tiek samazināta līdz šim lielumam, kad beidzas dīkstāves torrenta lietotājvārdu derīguma termiņš (līdz 5 minūtēm pēc apturēšanas). Atskaņošanas laiks var pārsniegt šo lielumu; kešatmiņa nenoņem datus, kad straume tiek apturēta, taču daļas atskaņošanas laikā joprojām izmanto disku.",
+      "cacheSizeBehaviorDescription": "Straumju kešatmiņa RAM atmiņā netiek saglabāta bez ierakstīšanas diskā. Diska kešatmiņa ierobežo skatīto segmentu izslēgšanu no atskaņošanas un diskā saglabā vismaz 5 GiB brīvas vietas.",
       "noCaching": "Nav kešatmiņas",
       "infinite": "Bezgalīgs",
       "unlimited": "Neierobežots",

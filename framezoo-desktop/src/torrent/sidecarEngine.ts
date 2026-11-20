@@ -8,6 +8,7 @@ import { randomUUID } from "node:crypto";
 
 import type {
   TorrentSession,
+  TorrentSettings,
   TorrentStartRequest,
   TorrentStatus,
 } from "../types";
@@ -138,6 +139,22 @@ export class SidecarTorrentEngine implements TorrentEngine {
     }
   }
 
+  async configure(settings: TorrentSettings): Promise<void> {
+    if (!this.process?.stdin.writable) return;
+    try {
+      await this.send(
+        {
+          type: "configure",
+          requestId: randomUUID(),
+          settings,
+        },
+        3_000,
+      );
+    } catch (error) {
+      console.warn("[torrent] worker configure failed:", error);
+    }
+  }
+
   getStatus(sessionId: string) {
     return this.statuses.get(sessionId) ?? null;
   }
@@ -153,22 +170,38 @@ export class SidecarTorrentEngine implements TorrentEngine {
     const proc = this.process;
     this.process = null;
     if (proc) {
-      if (globalThis.process.platform === "win32" && proc.pid) {
-        try {
-          execSync(`taskkill /pid ${proc.pid} /T /F`, { stdio: "ignore" });
-        } catch {
-          proc.kill();
-        }
-      } else {
-        try {
-          proc.stdin?.end();
-        } catch {}
-        proc.kill("SIGTERM");
-        setTimeout(() => {
+      const exited = proc.exitCode !== null || proc.signalCode !== null;
+      if (!exited) {
+        const exitPromise = new Promise<void>((resolve) => {
+          proc.once("exit", () => resolve());
+        });
+        if (globalThis.process.platform === "win32" && proc.pid) {
           try {
-            if (proc.pid) proc.kill("SIGKILL");
+            execSync(`taskkill /pid ${proc.pid} /T /F`, { stdio: "ignore" });
+          } catch {
+            proc.kill();
+          }
+        } else {
+          try {
+            proc.stdin?.end();
           } catch {}
-        }, 1500).unref();
+          try {
+            proc.kill("SIGTERM");
+          } catch {}
+          await Promise.race([
+            exitPromise,
+            new Promise<void>((resolve) => setTimeout(resolve, 1_000)),
+          ]);
+          if (proc.exitCode === null && proc.signalCode === null) {
+            try {
+              proc.kill("SIGKILL");
+            } catch {}
+            await Promise.race([
+              exitPromise,
+              new Promise<void>((resolve) => setTimeout(resolve, 200)),
+            ]);
+          }
+        }
       }
     }
   }

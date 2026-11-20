@@ -1448,7 +1448,7 @@
       "title": "Transmisión en directo",
       "maxSizeLabel": "Tamaño máximo da caché",
       "maxSizeDescription": "Establece o espazo máximo de disco utilizado para almacenar na caché os ficheiros de fluxo. Se a caché supera este límite, borraranse os ficheiros de fluxo máis antigos.",
-      "cacheSizeBehaviorDescription": "Aplícase a novas transmisións. A caché redúcese a este tamaño cando caducan os identificadores de torrent inactivos (ata 5 minutos despois de paralo). A reprodución pode excedelo; sen caché, os datos elimínanse cando a transmisión se detén, pero as pezas aínda usan disco mentres se reproducen.",
+      "cacheSizeBehaviorDescription": "Non se permiten almacenamento en caché de fluxos na RAM sen escribir no disco. Os límites da caché do disco eliminan os segmentos visualizados despois da reprodución e manteñen polo menos 5 GiB libres na unidade.",
       "noCaching": "Sen almacenamento en caché",
       "infinite": "Infinito",
       "unlimited": "Ilimitado",

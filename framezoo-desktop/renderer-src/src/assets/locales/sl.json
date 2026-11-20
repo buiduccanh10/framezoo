@@ -1448,7 +1448,7 @@
       "title": "Pretakanje",
       "maxSizeLabel": "Največja velikost predpomnilnika",
       "maxSizeDescription": "Nastavite največji prostor na disku, uporabljen za predpomnjenje tokovnih datotek. Če predpomnilnik preseže to omejitev, bodo starejše tokovne datoteke izbrisane.",
-      "cacheSizeBehaviorDescription": "Velja za nove tokove. Predpomnilnik se obreže na to velikost, ko potečejo ročki nedejavnega torrenta (do 5 minut po zaustavitvi). Predvajanje lahko to velikost preseže; brez predpomnjenja se podatki odstranijo, ko se tok ustavi, vendar deli med predvajanjem še vedno uporabljajo disk.",
+      "cacheSizeBehaviorDescription": "Brez predpomnjenja tokov v RAM-u brez pisanja na disk. Omejitve predpomnilnika diska izbrišejo gledane segmente za predvajanjem in ohranijo vsaj 5 GB prostega prostora na disku.",
       "noCaching": "Brez predpomnjenja",
       "infinite": "Neskončno",
       "unlimited": "Neomejeno",

@@ -63,6 +63,11 @@ export class TorrentManager {
 
   configure(settings: TorrentSettings) {
     this.settings = settings;
+    void Promise.resolve(this.engine.configure?.(settings)).catch(() => {});
+  }
+
+  hasActiveSessions() {
+    return this.statuses.size > 0;
   }
 
   async stop(sessionId: string) {

@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { mkdtemp, rm } from "node:fs/promises";
+import { access, mkdtemp, readdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
@@ -243,6 +243,183 @@ describe("VirtualCache", () => {
       expect(cache.getStats().verifiedBytes).toBe(data.length);
       expect(cache.cachedBytesInRange(0, data.length)).toBe(data.length);
       expect(await cache.readRange(0, data.length)).toEqual(data);
+    } finally {
+      await cache.close();
+      await rm(directory, { recursive: true, force: true });
+    }
+  });
+
+  it("streams in memory mode without touching disk and demotes verified pieces on eviction", async () => {
+    const parent = await mkdtemp(path.join(tmpdir(), "framezoo-mem-cache-"));
+    const cacheDir = path.join(parent, "never-created");
+    const pieceLength = VIRTUAL_PIECE_BYTES * 2;
+    const totalPieces = 4; // 4 MiB total across 8 virtual pieces
+    const pieces: Buffer[] = [];
+    const hashes: string[] = [];
+    for (let i = 0; i < totalPieces; i++) {
+      const buf = Buffer.alloc(pieceLength, 0x10 + i);
+      pieces.push(buf);
+      hashes.push(createHash("sha1").update(buf).digest("hex"));
+    }
+    const full = Buffer.concat(pieces);
+    const cache = new VirtualCache(
+      cacheDir,
+      {
+        infoHash: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        length: full.length,
+        pieceLength,
+        pieces: hashes,
+        files: [{ name: "movie.mkv", path: "movie.mkv", offset: 0, length: full.length }],
+      },
+      undefined,
+      {
+        mode: "memory",
+        memoryBudgetBytes: pieceLength * 2, // 2 MiB budget -> 4 virtual pieces
+      },
+    );
+
+    try {
+      await cache.open();
+      for (let v = 0; v < 8; v++) {
+        await cache.ensureVirtual(v, async () =>
+          full.subarray(v * VIRTUAL_PIECE_BYTES, (v + 1) * VIRTUAL_PIECE_BYTES),
+        );
+      }
+
+      // Memory mode must never create cacheDir on disk.
+      await expect(access(cacheDir)).rejects.toThrow();
+      expect(cache.usedBytes()).toBe(full.length);
+      expect(cache.isVerified(1)).toBe(true);
+
+      // Playhead at v=6..7 (byte 3 MiB), keepBehind=0, keepAhead=1 MiB, pinned head+tail = 512 KiB each (v=0 and v=7).
+      // Protected virtual pieces: v=0 (pinned head), v=6 (playhead), v=7 (pinned tail).
+      // Evictable behind playhead: v=1,2,3,4,5. Budget is 4 pieces -> evicts 4 oldest (v=1,2,3,4), keeping v=0,5,6,7.
+      const freed = cache.evictMemory({
+        playheadPos: 6 * VIRTUAL_PIECE_BYTES,
+        fileOffset: 0,
+        fileLength: full.length,
+        keepBehindBytes: 0,
+        keepAheadBytes: VIRTUAL_PIECE_BYTES * 2,
+        pinnedEdgeBytes: VIRTUAL_PIECE_BYTES,
+      });
+
+      expect(freed).toBe(4 * VIRTUAL_PIECE_BYTES);
+      expect(cache.usedBytes()).toBe(4 * VIRTUAL_PIECE_BYTES);
+      expect(cache.isVirtualComplete(0)).toBe(true);
+      expect(cache.isVirtualComplete(1)).toBe(false);
+      expect(cache.isVirtualComplete(2)).toBe(false);
+      expect(cache.isVirtualComplete(3)).toBe(false);
+      expect(cache.isVirtualComplete(4)).toBe(false);
+      expect(cache.isVirtualComplete(5)).toBe(true);
+      expect(cache.isVirtualComplete(6)).toBe(true);
+      expect(cache.isVirtualComplete(7)).toBe(true);
+      expect(cache.isVerified(3)).toBe(true);
+
+      // Partial eviction test: evict ONLY v=7 from verified real piece 3 (v=6,7), keeping v=6 via activeByteRanges.
+      const freedPartial = cache.evictMemory(
+        {
+          playheadPos: 0,
+          fileOffset: 0,
+          fileLength: full.length,
+          keepBehindBytes: 0,
+          keepAheadBytes: VIRTUAL_PIECE_BYTES,
+          pinnedEdgeBytes: 0,
+          activeByteRanges: [
+            { start: 6 * VIRTUAL_PIECE_BYTES, end: 7 * VIRTUAL_PIECE_BYTES },
+          ],
+        },
+        3 * VIRTUAL_PIECE_BYTES,
+      );
+      expect(freedPartial).toBe(VIRTUAL_PIECE_BYTES);
+      // Real piece 3 lost v=7 so it must no longer claim verified, yet v=6 remains complete!
+      expect(cache.isVerified(3)).toBe(false);
+      expect(cache.isVirtualComplete(6)).toBe(true);
+      expect(cache.isVirtualComplete(7)).toBe(false);
+      expect(cache.hasBlock((6 * VIRTUAL_PIECE_BYTES) / REQUEST_BLOCK_BYTES)).toBe(
+        true,
+      );
+      expect(cache.hasBlock((7 * VIRTUAL_PIECE_BYTES) / REQUEST_BLOCK_BYTES)).toBe(
+        false,
+      );
+      expect(await cache.readVirtual(6)).toEqual(
+        full.subarray(6 * VIRTUAL_PIECE_BYTES, 7 * VIRTUAL_PIECE_BYTES),
+      );
+    } finally {
+      await cache.close();
+      await rm(parent, { recursive: true, force: true });
+    }
+  });
+
+  it("uses segment files on disk, cleans legacy data.bin, and evicts watched segments", async () => {
+    const directory = await mkdtemp(path.join(tmpdir(), "framezoo-seg-cache-"));
+    await writeFile(path.join(directory, "data.bin"), Buffer.alloc(1024, 0xff));
+
+    const pieceLength = VIRTUAL_PIECE_BYTES;
+    const totalPieces = 6; // 3 MiB across 6 segments (1 piece per segment)
+    const pieces: Buffer[] = [];
+    const hashes: string[] = [];
+    for (let i = 0; i < totalPieces; i++) {
+      const buf = Buffer.alloc(pieceLength, 0x30 + i);
+      pieces.push(buf);
+      hashes.push(createHash("sha1").update(buf).digest("hex"));
+    }
+    const full = Buffer.concat(pieces);
+    const cache = new VirtualCache(
+      directory,
+      {
+        infoHash: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        length: full.length,
+        pieceLength,
+        pieces: hashes,
+        files: [{ name: "movie.mkv", path: "movie.mkv", offset: 0, length: full.length }],
+      },
+      undefined,
+      {
+        mode: "disk",
+        targetSegmentBytes: pieceLength,
+      },
+    );
+
+    try {
+      await cache.open();
+      // Legacy data.bin must have been removed on open.
+      await expect(access(path.join(directory, "data.bin"))).rejects.toThrow();
+
+      for (let i = 0; i < totalPieces; i++) {
+        await cache.ensureVirtual(i, async () => pieces[i]!);
+      }
+      const filesBefore = await readdir(directory);
+      expect(filesBefore.filter((f) => /^seg-\d+\.bin$/.test(f)).length).toBe(6);
+      expect(cache.usedBytes()).toBe(full.length);
+
+      // Playhead at seg 4, pinned head = seg 0, pinned tail = seg 5, active read on seg 2.
+      // Only seg 1 and seg 3 are evictable behind playhead.
+      const freed = await cache.evictDisk(pieceLength * 2, {
+        playheadPos: 4 * pieceLength,
+        fileOffset: 0,
+        fileLength: full.length,
+        keepBehindBytes: 0,
+        keepAheadBytes: pieceLength,
+        pinnedEdgeBytes: pieceLength,
+        activeByteRanges: [{ start: 2 * pieceLength, end: 3 * pieceLength }],
+      });
+
+      expect(freed).toBe(pieceLength * 2);
+      expect(cache.isVerified(0)).toBe(true);
+      expect(cache.isVerified(1)).toBe(false);
+      expect(cache.isVerified(2)).toBe(true);
+      expect(cache.isVerified(3)).toBe(false);
+      expect(cache.isVerified(4)).toBe(true);
+      expect(cache.isVerified(5)).toBe(true);
+      expect(cache.hasBlock(pieceLength / REQUEST_BLOCK_BYTES)).toBe(false);
+
+      await expect(access(path.join(directory, "seg-1.bin"))).rejects.toThrow();
+      await expect(access(path.join(directory, "seg-3.bin"))).rejects.toThrow();
+      expect(await cache.readRange(4 * pieceLength, pieceLength)).toEqual(pieces[4]);
+
+      // discard() waits for manifest writes and removes the cache root cleanly.
+      await cache.discard();
+      await expect(access(directory)).rejects.toThrow();
     } finally {
       await cache.close();
       await rm(directory, { recursive: true, force: true });

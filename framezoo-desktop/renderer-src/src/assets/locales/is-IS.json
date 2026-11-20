@@ -1448,7 +1448,7 @@
       "title": "Straumspilun",
       "maxSizeLabel": "Hámarksstærð skyndiminni",
       "maxSizeDescription": "Stilltu hámarks pláss sem notað er til að vista straumskrár. Ef skyndiminni fer yfir þessi mörk verða eldri straumskrár hreinsaðar.",
-      "cacheSizeBehaviorDescription": "Á við um nýja strauma. Skyndiminnið er minnkað niður í þessa stærð þegar óvirkir torrent-handföng renna út (allt að 5 mínútum eftir að straumurinn stöðvast). Spilun getur farið yfir hana; Engin skyndiminni fjarlægir gögn þegar straumurinn stöðvast, en hlutar nota samt diskinn á meðan þeir spila.",
+      "cacheSizeBehaviorDescription": "Engin skyndiminni á strauma í vinnsluminni án þess að skrifa á disk. Skyndiminnismörk á diski fjarlægja horfða hluta á eftir spilun og halda að minnsta kosti 5 GiB lausum á disknum.",
       "noCaching": "Engin skyndiminni",
       "infinite": "Óendanleg",
       "unlimited": "Ótakmarkað",

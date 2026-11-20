@@ -24,7 +24,7 @@ export interface TorrentStartRequest {
 export type TorrentProfile = "default" | "soft" | "fast" | "ultra-fast";
 
 export interface TorrentSettings {
-  /** null is unlimited; zero removes data at stop but still uses disk while streaming. */
+  /** null is unlimited; zero streams in memory without writing disk cache. */
   maxBytes: number | null;
   /** Selected parent stores data under Framezoo/torrents; null uses the app default. */
   cacheRoot: string | null;

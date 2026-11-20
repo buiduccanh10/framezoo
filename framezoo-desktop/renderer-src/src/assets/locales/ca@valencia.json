@@ -1448,7 +1448,7 @@
       "title": "Transmissió en directe",
       "maxSizeLabel": "Mida màxima de la memòria cau",
       "maxSizeDescription": "Estableix l'espai màxim de disc utilitzat per a la memòria cau dels fitxers de flux. Si la memòria cau supera aquest límit, s'esborraran els fitxers de reproducció més antics.",
-      "cacheSizeBehaviorDescription": "S&#39;aplica a les transmissions noves. La memòria cau es redueix a aquesta mida quan els identificadors de torrent inactius caduquen (fins a 5 minuts després d&#39;aturar-se). La reproducció pot superar-la; Sense memòria cau, s&#39;eliminen les dades quan la transmissió s&#39;atura, però les peces encara utilitzen disc durant la reproducció.",
+      "cacheSizeBehaviorDescription": "No s'emmagatzemen en memòria cau els fluxos a la RAM sense escriure al disc. Els límits de la memòria cau del disc eliminen els segments vistos després de la reproducció i mantenen almenys 5 GiB lliures a la unitat.",
       "noCaching": "Sense emmagatzematge en memòria cau",
       "infinite": "Infinit",
       "unlimited": "Il·limitat",

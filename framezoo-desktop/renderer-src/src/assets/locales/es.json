@@ -1448,7 +1448,7 @@
       "title": "Transmisión",
       "maxSizeLabel": "Tamaño máximo de caché",
       "maxSizeDescription": "Establezca el espacio máximo en disco utilizado para almacenar en caché los archivos continuos. Si el caché excede este límite, los archivos continuos más antiguos se borrarán.",
-      "cacheSizeBehaviorDescription": "Se aplica a las nuevas transmisiones. La caché se reduce a este tamaño cuando los identificadores de torrent inactivos caducan (hasta 5 minutos después de detenerse). La reproducción puede superar este límite; si no se utiliza caché, los datos se eliminan al detenerse la transmisión, pero algunos fragmentos siguen utilizando el disco durante la reproducción.",
+      "cacheSizeBehaviorDescription": "No se almacenan en caché las transmisiones en la RAM sin escribir en el disco. Los límites de la caché del disco eliminan los segmentos que se están reproduciendo y mantienen al menos 5 GiB libres en la unidad.",
       "noCaching": "Sin almacenamiento en caché",
       "infinite": "Infinito",
       "unlimited": "Ilimitado",
