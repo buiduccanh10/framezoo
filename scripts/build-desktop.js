@@ -39,108 +39,70 @@ for (const entry of fs.readdirSync(downloadsDir)) {
   }
 }
 
-// 2. Build desktop renderer and shell code
-console.log("Building desktop renderer and shell...");
-execSync("pnpm run torrent:setup", { cwd: desktopDir, stdio: "inherit" });
-execSync("pnpm run build", { cwd: desktopDir, stdio: "inherit" });
-
-// 3. Package desktop application for macOS and Windows sequentially to avoid CLI flag conflicts
-console.log("Packaging desktop applications for macOS and Windows...");
-
-const targets = [];
-if (process.platform === "darwin") {
-  targets.push(
+// 2. Build and package desktop applications for the current host OS via framezoo-desktop scripts.
+const PLATFORM_TARGETS = {
+  darwin: [
     {
       name: "macOS Apple Silicon (arm64)",
-      prepare:
-        "pnpm run torrent:build:darwin-arm64 && pnpm run resources:ensure:darwin-arm64",
-      command: "npx electron-builder --mac dmg --arm64",
+      script: "package:release:mac:arm64",
+      artifacts: (version) => [`Framezoo-${version}-arm64-mac.dmg`],
     },
     {
       name: "macOS Intel (x64)",
-      prepare:
-        "pnpm run torrent:build:darwin-x64 && pnpm run resources:ensure:darwin-x64",
-      command: "npx electron-builder --mac dmg --x64",
+      script: "package:release:mac:x64",
+      artifacts: (version) => [`Framezoo-${version}-x64-mac.dmg`],
     },
     {
       name: "macOS Universal",
-      prepare:
-        "pnpm run torrent:build:darwin-arm64 && pnpm run torrent:build:darwin-x64 && pnpm run resources:ensure:darwin-arm64 && pnpm run resources:ensure:darwin-x64",
-      command: "npx electron-builder --mac dmg --universal",
+      script: "package:release:mac:universal",
+      artifacts: (version) => [`Framezoo-${version}-universal-mac.dmg`],
     },
-  );
-} else if (process.platform === "linux") {
-  // Build macOS zip targets on Linux CI
-  targets.push(
+  ],
+  win32: [
     {
-      name: "macOS Apple Silicon (arm64) Zip",
-      prepare:
-        "pnpm run torrent:build:darwin-arm64 && pnpm run resources:ensure:darwin-arm64",
-      command: "npx electron-builder --mac zip --arm64",
+      name: "Windows x64",
+      script: "package:release:win:x64",
+      artifacts: (version) => [`Framezoo-${version}-x64.exe`],
     },
     {
-      name: "macOS Intel (x64) Zip",
-      prepare:
-        "pnpm run torrent:build:darwin-x64 && pnpm run resources:ensure:darwin-x64",
-      command: "npx electron-builder --mac zip --x64",
+      name: "Windows ARM64",
+      script: "package:release:win:arm64",
+      artifacts: (version) => [`Framezoo-${version}-arm64.exe`],
     },
-  );
-}
-// Windows zip targets can be built on macOS, Linux, and Windows
-targets.push(
-  {
-    name: "Windows x64",
-    prepare:
-      "pnpm run torrent:build:win32-x64 && pnpm run resources:ensure:win32-x64",
-    command: "npx electron-builder --win zip --x64",
-  },
-  {
-    name: "Windows ARM64",
-    prepare:
-      "pnpm run torrent:build:win32-arm64 && pnpm run resources:ensure:win32-arm64",
-    command: "npx electron-builder --win zip --arm64",
-  },
-);
+  ],
+};
 
+const targets = PLATFORM_TARGETS[process.platform];
+if (!targets) {
+  console.error(
+    `Unsupported host platform "${process.platform}". Framezoo desktop native builds support darwin and win32 only.`,
+  );
+  process.exit(1);
+}
+
+console.log(`Packaging desktop applications for ${process.platform}...`);
 for (const target of targets) {
   console.log(`\n--- Building target: ${target.name} ---`);
   try {
-    execSync(target.prepare, { cwd: desktopDir, stdio: "inherit" });
-    execSync(target.command, { cwd: desktopDir, stdio: "inherit" });
+    execSync(`pnpm run ${target.script}`, { cwd: desktopDir, stdio: "inherit" });
   } catch (error) {
     console.error(`Failed to build target ${target.name}:`, error.message);
   }
 }
 
-// 4. Find version from package.json
+// 3. Find version from package.json
 const packageJson = JSON.parse(
   fs.readFileSync(path.join(desktopDir, "package.json"), "utf8"),
 );
 const version = packageJson.version;
 
-// 5. Copy built artifacts to the downloads folder
+// 4. Copy built artifacts to the downloads folder
 const releaseDir = path.join(desktopDir, "release");
 console.log(
   `\nCopying packaged builds (v${version}) from ${releaseDir} to ${downloadsDir}...`,
 );
 
-const filesToCopy = [];
-if (process.platform === "darwin") {
-  filesToCopy.push(
-    `Framezoo-${version}-arm64-mac.dmg`,
-    `Framezoo-${version}-x64-mac.dmg`,
-    `Framezoo-${version}-universal-mac.dmg`,
-  );
-} else if (process.platform === "linux") {
-  filesToCopy.push(
-    `Framezoo-${version}-arm64-mac.zip`,
-    `Framezoo-${version}-x64-mac.zip`,
-  );
-}
-filesToCopy.push(
-  `Framezoo-${version}-x64.zip`,
-  `Framezoo-${version}-arm64.zip`,
-);
+const filesToCopy = targets.flatMap((target) => target.artifacts(version));
 
 let copiedCount = 0;
 for (const file of filesToCopy) {
