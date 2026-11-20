@@ -253,10 +253,15 @@ function migrateLegacyTorrentDirs(targetDir: string) {
       }
     }
 
+    const isSamePath = (a: string, b: string) =>
+      process.platform === "darwin" || process.platform === "win32"
+        ? a.toLowerCase() === b.toLowerCase()
+        : a === b;
+
     for (const candidate of candidateDirs) {
       if (!candidate) continue;
       const normalizedCandidate = path.resolve(candidate);
-      if (normalizedCandidate === normalizedTarget) continue;
+      if (isSamePath(normalizedCandidate, normalizedTarget)) continue;
       if (fs.existsSync(normalizedCandidate)) {
         copyDirectoryContentsRecursive(normalizedCandidate, normalizedTarget);
       }
@@ -324,6 +329,45 @@ function getTorrentDataDir(cacheRoot = torrentSettings.cacheRoot) {
     : DEFAULT_TORRENT_DATA_DIR;
 }
 
+const MIN_FREE_TORRENT_DISK_BYTES = 5 * 1024 * 1024 * 1024;
+
+function pruneTorrentCacheDir(torrentDir: string, maxBytes: number | null) {
+  try {
+    if (!fs.existsSync(torrentDir)) return;
+    const entries = fs.readdirSync(torrentDir, { withFileTypes: true });
+    const candidates: Array<{ path: string; size: number; mtimeMs: number }> =
+      [];
+    let total = 0;
+    for (const entry of entries) {
+      if (!isTorrentCacheEntry(entry.name)) continue;
+      const fullPath = path.join(torrentDir, entry.name);
+      const stat = fs.statSync(fullPath);
+      const size = entry.isDirectory() ? getDirectorySize(fullPath) : stat.size;
+      total += size;
+      candidates.push({ path: fullPath, size, mtimeMs: stat.mtimeMs });
+    }
+    let freeBytes: number | null = null;
+    try {
+      const stats = fs.statfsSync(torrentDir);
+      freeBytes = stats.bavail * stats.bsize;
+    } catch {
+      // ignore if statfs is unavailable
+    }
+    candidates.sort((a, b) => a.mtimeMs - b.mtimeMs);
+    for (const candidate of candidates) {
+      const overLimit = maxBytes !== null && total > maxBytes;
+      const underFree =
+        freeBytes !== null && freeBytes < MIN_FREE_TORRENT_DISK_BYTES;
+      if (!overLimit && !underFree) break;
+      fs.rmSync(candidate.path, { recursive: true, force: true });
+      total = Math.max(0, total - candidate.size);
+      if (freeBytes !== null) freeBytes += candidate.size;
+    }
+  } catch {
+    // ignore cache prune errors
+  }
+}
+
 function setupTorrentEnv() {
   const torrentDir = getTorrentDataDir();
   try {
@@ -332,7 +376,10 @@ function setupTorrentEnv() {
     // Keep the configured path; the torrent sidecar reports write failures.
   }
   process.env.FRAMEZOO_TORRENT_DATA_DIR = torrentDir;
-  migrateLegacyTorrentDirs(torrentDir);
+  if (torrentSettings.maxBytes !== 0) {
+    migrateLegacyTorrentDirs(torrentDir);
+  }
+  pruneTorrentCacheDir(torrentDir, torrentSettings.maxBytes);
 }
 
 function getDirectorySize(dirPath: string): number {
@@ -2368,7 +2415,11 @@ function registerIpcHandlers() {
 
       torrentSettings = settings;
       saveTorrentSettingsToDisk(settings);
+      process.env.FRAMEZOO_TORRENT_DATA_DIR = torrentDir;
       torrentManager.configure(settings);
+      if (!torrentManager.hasActiveSessions()) {
+        pruneTorrentCacheDir(torrentDir, settings.maxBytes);
+      }
       return true;
     },
   );

@@ -311,7 +311,7 @@ export function TorrentPart() {
           <p className="-mt-3 max-w-[48rem] font-medium text-type-secondary">
             {t(
               "settings.torrent.cacheSizeBehaviorDescription",
-              "Applies to new streams. Cache is pruned when idle torrent handles expire (up to 5 minutes after stopping). Playback can exceed the limit; no caching removes data when the stream stops, but pieces still use disk while playing.",
+              "No caching streams in RAM without writing to disk. Disk cache limits evict watched segments behind playback and keep at least 5 GiB free on the drive.",
             )}
           </p>
 

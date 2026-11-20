@@ -46,6 +46,8 @@ declare module "torrent-stream" {
       connectTimeout?: number;
       handshakeTimeout?: number;
       downloadSpeed(): number;
+      pause(): void;
+      resume(): void;
       add(address: string): void;
       on(event: string, listener: (...args: any[]) => void): this;
     };
@@ -68,6 +70,7 @@ declare module "torrent-stream" {
     uploads?: number;
     verify?: boolean;
     port?: number;
+    storage?: (chunkLength: number, opts?: unknown) => unknown;
   }
 
   function torrentStream(

@@ -1448,7 +1448,7 @@
       "title": "Streaming",
       "maxSizeLabel": "Maximale Cache-Größe",
       "maxSizeDescription": "Legen Sie den maximalen Speicherplatz fest, der zum Zwischenspeichern von Stream-Dateien verwendet wird. Wenn der Cache dieses Limit überschreitet, werden ältere Streamdateien gelöscht.",
-      "cacheSizeBehaviorDescription": "Gilt für neue Streams. Der Cache wird auf diese Größe reduziert, sobald inaktive Torrent-Handles ablaufen (bis zu 5 Minuten nach dem Stoppen). Die Wiedergabe kann diese Größe überschreiten; ohne Caching werden Daten beim Stoppen des Streams gelöscht, jedoch belegen einzelne Teile während der Wiedergabe weiterhin Speicherplatz.",
+      "cacheSizeBehaviorDescription": "Streams werden nicht im RAM zwischengespeichert, ohne sie auf die Festplatte zu schreiben. Der Festplatten-Cache begrenzt die Anzahl der abgespielten Segmente und hält mindestens 5 GiB Speicherplatz frei.",
       "noCaching": "Kein Caching",
       "infinite": "Unendlich",
       "unlimited": "Unbegrenzt",

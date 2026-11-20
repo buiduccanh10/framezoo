@@ -1448,7 +1448,7 @@
       "title": "Mengalir",
       "maxSizeLabel": "Ukuran Cache Maksimum",
       "maxSizeDescription": "Tetapkan ruang disk maksimum yang digunakan untuk menyimpan file streaming. Jika cache melebihi batas ini, file streaming lama akan dihapus.",
-      "cacheSizeBehaviorDescription": "Berlaku untuk aliran data baru. Cache dipangkas hingga ukuran ini ketika handle torrent yang tidak aktif kedaluwarsa (hingga 5 menit setelah berhenti). Pemutaran dapat melebihi ukuran ini; Tanpa caching, data akan dihapus saat aliran data berhenti, tetapi sebagian data masih menggunakan disk saat diputar.",
+      "cacheSizeBehaviorDescription": "Tidak ada caching stream di RAM tanpa menulis ke disk. Batasan cache disk mengeluarkan segmen yang telah ditonton di belakang pemutaran dan menyisakan setidaknya 5 GiB ruang kosong di drive.",
       "noCaching": "Tidak ada caching",
       "infinite": "Tak terbatas",
       "unlimited": "Tak terbatas",

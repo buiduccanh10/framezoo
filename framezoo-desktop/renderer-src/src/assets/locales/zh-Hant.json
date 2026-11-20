@@ -1448,7 +1448,7 @@
       "title": "串流媒體",
       "maxSizeLabel": "最大快取大小",
       "maxSizeDescription": "設定用於快取流檔案的最大磁碟空間。如果快取超過此限制，較舊的流檔案將被清除。",
-      "cacheSizeBehaviorDescription": "適用於新建立的串流。當空閒的種子句柄過期時（停止播放後最多 5 分鐘），快取將被修剪至此大小。播放過程中快取可能會超過此大小；不快取會在串流停止時刪除數據，但播放過程中部分資料仍會佔用磁碟空間。",
+      "cacheSizeBehaviorDescription": "不將流緩存到 RAM 中而不寫入磁碟。磁碟快取限制會清除播放後已觀看的片段，並在磁碟上保持至少 5 GiB 的可用空間。",
       "noCaching": "不緩存",
       "infinite": "無限",
       "unlimited": "無限",

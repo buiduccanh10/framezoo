@@ -1448,7 +1448,7 @@
       "title": "Streaming",
       "maxSizeLabel": "Maximal cachestorlek",
       "maxSizeDescription": "Ställ in maximalt diskutrymme som används för att cachelagra strömfiler. Om cachen överskrider denna gräns kommer äldre streamfiler att rensas.",
-      "cacheSizeBehaviorDescription": "Gäller nya strömmar. Cacheminnet beskärs till denna storlek när inaktiva torrenthandtag löper ut (upp till 5 minuter efter stopp). Uppspelningen kan överskrida den; Ingen cachelagring tar bort data när strömmen stoppas, men bitar använder fortfarande disken under uppspelning.",
+      "cacheSizeBehaviorDescription": "Inga cachlagringar av strömmar i RAM utan att skriva till disk. Diskcachegränser eliminerar bevakade segment bakom uppspelning och håller minst 5 GiB ledigt på disken.",
       "noCaching": "Ingen cachning",
       "infinite": "Oändlig",
       "unlimited": "Obegränsat",

@@ -1,5 +1,6 @@
 import type {
   TorrentSession,
+  TorrentSettings,
   TorrentStartRequest,
   TorrentStatus,
 } from "../types";
@@ -13,6 +14,7 @@ export interface TorrentEngine {
   ): Promise<TorrentSession>;
   stop(sessionId: string, discardCache?: boolean): Promise<void>;
   stopAll?(discardCache?: boolean): Promise<void>;
+  configure?(settings: TorrentSettings): Promise<void> | void;
   getStatus(sessionId: string): TorrentStatus | null;
   dispose(): Promise<void>;
   /** Pre-initialize the engine so OS network-permission dialogs appear at

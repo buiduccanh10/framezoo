@@ -1448,7 +1448,7 @@
       "title": "Streaming",
       "maxSizeLabel": "Cache size",
       "maxSizeDescription": "Set the maximum disk space used for caching stream files. If the cache exceeds this limit, older stream files will be cleared.",
-      "cacheSizeBehaviorDescription": "Applies to new streams. Cache is pruned to this size when idle torrent handles expire (up to 5 minutes after stopping). Playback can exceed it; No caching removes data when the stream stops, but pieces still use disk while playing.",
+      "cacheSizeBehaviorDescription": "No caching streams in RAM without writing to disk. Disk cache limits evict watched segments behind playback and keep at least 5 GiB free on the drive.",
       "noCaching": "No caching",
       "infinite": "Infinite",
       "unlimited": "Unlimited",

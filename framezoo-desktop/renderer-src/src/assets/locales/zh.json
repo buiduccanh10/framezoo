@@ -1448,7 +1448,7 @@
       "title": "流媒体",
       "maxSizeLabel": "最大缓存大小",
       "maxSizeDescription": "设置用于缓存流文件的最大磁盘空间。如果缓存超过此限制，较旧的流文件将被清除。",
-      "cacheSizeBehaviorDescription": "适用于新创建的流。当空闲的种子句柄过期时（停止播放后最多 5 分钟），缓存将被修剪至此大小。播放过程中缓存可能会超过此大小；不缓存会在流停止时删除数据，但播放过程中部分数据仍会占用磁盘空间。",
+      "cacheSizeBehaviorDescription": "不将流缓存到 RAM 中而不写入磁盘。磁盘缓存限制会清除播放后已观看的片段，并在磁盘上保持至少 5 GiB 的可用空间。",
       "noCaching": "不缓存",
       "infinite": "无限",
       "unlimited": "无限",

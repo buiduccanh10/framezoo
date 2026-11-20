@@ -1448,7 +1448,7 @@
       "title": "Streamen",
       "maxSizeLabel": "Maximale cachegrootte",
       "maxSizeDescription": "Stel de maximale schijfruimte in die wordt gebruikt voor het cachen van streambestanden. Als de cache deze limiet overschrijdt, worden oudere streambestanden gewist.",
-      "cacheSizeBehaviorDescription": "Van toepassing op nieuwe streams. De cache wordt tot deze grootte verkleind wanneer inactieve torrent-handles verlopen (tot 5 minuten na het stoppen). Afspelen kan deze grootte overschrijden; zonder caching worden gegevens verwijderd wanneer de stream stopt, maar delen ervan gebruiken nog steeds schijfruimte tijdens het afspelen.",
+      "cacheSizeBehaviorDescription": "Geen cache van streams in RAM zonder naar schijf te schrijven. De schijfcache beperkt het afspelen van segmenten die nog worden afgespeeld en zorgt ervoor dat er minimaal 5 GiB vrije ruimte op de schijf blijft.",
       "noCaching": "Geen caching",
       "infinite": "Oneindig",
       "unlimited": "Onbeperkt",

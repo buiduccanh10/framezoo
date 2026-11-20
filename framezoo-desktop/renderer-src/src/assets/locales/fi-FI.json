@@ -1448,7 +1448,7 @@
       "title": "Suoratoisto",
       "maxSizeLabel": "Välimuistin enimmäiskoko",
       "maxSizeDescription": "Aseta stream-tiedostojen välimuistiin käytettävä enimmäislevytila. Jos välimuisti ylittää tämän rajan, vanhemmat stream-tiedostot tyhjennetään.",
-      "cacheSizeBehaviorDescription": "Koskee uusia striimejä. Välimuisti karsitaan tähän kokoon, kun käyttämättömät torrentin kahvat vanhenevat (enintään 5 minuuttia pysäyttämisen jälkeen). Toisto voi ylittää tämän koon; Välimuistin puuttuminen poistaa tiedot striimin pysähtyessä, mutta osat käyttävät silti levytilaa toiston aikana.",
+      "cacheSizeBehaviorDescription": "Ei suoratoistojen välimuistia RAM-muistissa ilman levylle kirjoittamista. Levyn välimuisti rajoittaa katsottujen segmenttien poistamista toiston jälkeen ja pitää vähintään 5 Gt vapaana levyllä.",
       "noCaching": "Ei välimuistia",
       "infinite": "Ääretön",
       "unlimited": "Rajoittamaton",

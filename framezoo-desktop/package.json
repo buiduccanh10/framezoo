@@ -1,7 +1,7 @@
 {
   "name": "Framezoo",
   "private": true,
-  "version": "2.3.8",
+  "version": "2.3.9",
   "main": "dist/main.cjs",
   "packageManager": "pnpm@12.16.1",
   "scripts": {
@@ -177,6 +177,16 @@
     "artifactName": "${productName}-${version}-${arch}.${ext}",
     "asar": true,
     "asarUnpack": [],
+    "electronFuses": {
+      "runAsNode": true,
+      "enableCookieEncryption": false,
+      "enableNodeOptionsEnvironmentVariable": false,
+      "enableNodeCliInspectArguments": false,
+      "enableEmbeddedAsarIntegrityValidation": true,
+      "onlyLoadAppFromAsar": true,
+      "grantFileProtocolExtraPrivileges": false,
+      "resetAdHocDarwinSignature": true
+    },
     "directories": {
       "output": "release",
       "buildResources": "build"
