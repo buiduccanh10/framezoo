@@ -41,6 +41,8 @@ test('admin boundary keeps sessions server-side and out of browser URLs', () => 
   assert.doesNotMatch(client, /localStorage|\?token=/);
   assert.match(nginx, /Content-Security-Policy/);
   assert.match(nginx, /X-Frame-Options "DENY"/);
+  assert.match(nginx, /resolver 127\.0\.0\.11/);
+  assert.match(nginx, /proxy_pass \$framezoo_be;/);
   assert.match(productionCompose, /VIRTUAL_HOST=admin\.framezoo\.top[\s\S]*HTTPS_METHOD=redirect/);
   assert.match(edgeVhost, /Strict-Transport-Security/);
   assert.match(authHook, /await adminApi\.logout\(\);\s*setAuthState\(['"]anonymous['"]\)/s);
