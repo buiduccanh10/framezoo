@@ -60,19 +60,25 @@ describe("landing SEO", () => {
     ).toBe("https://framezoo.top/");
   });
 
-  it("keeps distinct category titles aligned with prerendered routes", () => {
+  it("keeps distinct category titles and descriptions aligned with prerendered routes", () => {
     expect(getLandingSeoMetadata("en", "download")).toMatchObject({
       title: "Downloads | Framezoo",
+      description:
+        "Download Framezoo for macOS and Windows. Watch movies, TV series, and video streams instantly at high speed.",
       canonical: "https://framezoo.top/download",
     });
     expect(getLandingSeoMetadata("en", "experience").title).toBe(
       "Features & Experience | Framezoo",
     );
-    expect(getLandingSeoMetadata("en", "ecosystem").title).toBe(
-      "Addon Ecosystem | Framezoo",
-    );
-    expect(getLandingSeoMetadata("en", "create-addon").title).toBe(
-      "Build an Addon | Framezoo",
-    );
+    expect(getLandingSeoMetadata("en", "ecosystem")).toMatchObject({
+      title: "Addon Ecosystem | Framezoo",
+      description:
+        "Extend Framezoo with high-speed stream sources, rich movie metadata catalogs, and multi-source subtitle providers.",
+    });
+    expect(getLandingSeoMetadata("en", "create-addon")).toMatchObject({
+      title: "Build an Addon | Framezoo",
+      description:
+        "Build a Framezoo addon with a simple HTTP manifest for video streams, multi-source subtitles, and movie metadata catalogs.",
+    });
   });
 });

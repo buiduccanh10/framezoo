@@ -3,14 +3,18 @@
   X-XSS-Protection: 1; mode=block
   X-Content-Type-Options: nosniff
   Referrer-Policy: origin-when-cross-origin
-  Cache-Control: public, max-age=0, s-maxage=0, must-revalidate
+  Cache-Control: no-cache, max-age=0, s-maxage=0, must-revalidate
+  CDN-Cache-Control: no-store
+  Cloudflare-CDN-Cache-Control: no-store
 
 /sw.js
   Cache-Control: no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0, s-maxage=0
   Service-Worker-Allowed: /
 
 /config.js
-  Cache-Control: public, max-age=0, s-maxage=0, must-revalidate
+  Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+  CDN-Cache-Control: no-store
+  Cloudflare-CDN-Cache-Control: no-store
 
 /favicon.ico
   Cache-Control: public, max-age=0, s-maxage=0, must-revalidate

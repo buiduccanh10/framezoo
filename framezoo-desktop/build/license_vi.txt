@@ -1,0 +1,28 @@
+﻿Thỏa Thuận Cấp Phép Phần Mềm Thương Mại Độc Quyền Framezoo (EULA)
+=================================================================
+
+Bản quyền (c) 2026 Bùi Đức Cảnh (Nhà phát triển độc lập, Dự án Framezoo)
+Pháo Đài Láng, P. Láng, Thành phố Hà Nội, Việt Nam
+Liên hệ Pháp lý & Bản quyền (DMCA): framezoo.top@gmail.com | legal@framezoo.top | +84 984 908 816
+Trang web: https://framezoo.top
+
+1. Quyền sở hữu và Bảo lưu quyền
+Phần mềm này, bao gồm mã nguồn, tệp nhị phân biên dịch, giao diện người dùng, tài nguyên, tài liệu và nhãn hiệu ("Framezoo"), là tài sản trí tuệ độc quyền của Bùi Đức Cảnh ("Đơn vị vận hành"), ngoại trừ các thành phần tuân theo điều khoản giấy phép mã nguồn mở hoặc bên thứ ba riêng biệt được nêu trong THIRD_PARTY_NOTICES.md và framezoo-be/LICENSE. Mọi quyền không được cấp rõ ràng đều được bảo lưu.
+
+2. Cấp phép sử dụng (Người dùng cuối)
+Với điều kiện bạn tuân thủ Điều khoản sử dụng (https://framezoo.top/legal/terms), Chính sách bảo mật (https://framezoo.top/legal/privacy) và pháp luật hiện hành, Đơn vị vận hành cấp cho bạn giấy phép có giới hạn, có thể thu hồi, không độc quyền, không chuyển nhượng và không cấp phép lại để tải xuống, cài đặt và sử dụng phần mềm Framezoo chính thức với vai trò trình phát đa phương tiện trung gian kỹ thuật thuần túy cho mục đích cá nhân hợp pháp.
+
+3. Các hành vi bị nghiêm cấm
+Trừ trường hợp được pháp luật bắt buộc cho phép rõ ràng hoặc chịu sự điều chỉnh của giấy phép mã nguồn mở ưu tiên áp dụng cho một thành phần bên thứ ba cụ thể (xem THIRD_PARTY_NOTICES.md), bạn KHÔNG được phép:
+- Sao chép, phân phối lại, bán lại, cho thuê, cho mượn, cấp phép lại hoặc khai thác thương mại phần mềm hay tài khoản Framezoo khi chưa có chấp thuận bằng văn bản của Đơn vị vận hành.
+- Xóa, sửa đổi hoặc che khuất các thông báo bản quyền, ghi nhận nguồn (bao gồm thông báo TMDB/OMDb) hoặc cơ chế chặn nội dung vi phạm theo yêu cầu pháp lý.
+- Sử dụng nhãn hiệu, logo hoặc nhận diện thương hiệu Framezoo để ngụ ý sai lệch sự bảo chứng hoặc đóng gói kèm nguồn phát trái phép hay nội dung vi phạm bản quyền.
+
+4. Tuyên bố miễn trừ vai trò trung gian kỹ thuật
+Framezoo chỉ là trình phát kỹ thuật và ứng dụng đồng bộ/siêu dữ liệu. Phần mềm không lưu trữ, tải lên, lập chỉ mục, tạo bộ nhớ đệm hay phân phối phim, phim bộ, tệp torrent hoặc luồng phát có bản quyền trái phép. Mọi tiện ích mở rộng (addon) do người dùng tự cài đặt đều do bên thứ ba tương ứng vận hành độc lập, và Đơn vị vận hành bảo lưu quyền thực thi danh sách chặn gỡ bỏ theo DMCA/Sở hữu trí tuệ (https://framezoo.top/legal/dmca).
+
+5. Thành phần bên thứ ba & API
+Việc sử dụng các thành phần mã nguồn mở, thư viện đa phương tiện gốc (bao gồm bản dựng FFmpeg/libmpv theo giấy phép LGPL đã tắt các thành phần GPL), phông chữ và API bên thứ ba (TMDB, OMDb, API phụ đề) tuân theo thông báo và điều khoản tại THIRD_PARTY_NOTICES.md và framezoo-tv/native/DEPENDENCIES.md. Một số thành phần máy chủ trong framezoo-be/ vẫn tuân theo giấy phép GNU GPL v3 như được lưu giữ tại framezoo-be/LICENSE.
+
+6. Miễn trừ bảo đảm & Giới hạn trách nhiệm pháp lý
+PHẦN MỀM ĐƯỢC CUNG CẤP THEO NGUYÊN TRẠNG ("AS IS"), KHÔNG KÈM BẤT KỲ BẢO ĐẢM NÀO DÙ RÕ RÀNG HAY NGẦM ĐỊNH, BAO GỒM NHƯNG KHÔNG GIỚI HẠN Ở BẢO ĐẢM VỀ TÍNH THƯƠNG MẠI, SỰ PHÙ HỢP CHO MỘT MỤC ĐÍCH CỤ THỂ VÀ KHÔNG VI PHẠM QUYỀN, TRONG PHẠM VI TỐI ĐA MÀ PHÁP LUẬT VIỆT NAM VÀ PHÁP LUẬT HIỆN HÀNH CHO PHÉP.

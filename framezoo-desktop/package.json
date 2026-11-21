@@ -291,7 +291,6 @@
       "shortcutName": "Framezoo",
       "createDesktopShortcut": "always",
       "createStartMenuShortcut": true,
-      "license": "build/HUONG_DAN_CAI_DAT.txt",
       "installerSidebar": null,
       "installerHeader": null,
       "include": "build/installer.nsh",

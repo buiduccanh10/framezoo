@@ -8,4 +8,7 @@
 /legal/privacy /legal/privacy/index.html 200
 /legal/copyright /legal/copyright/index.html 200
 /legal/addon-policy /legal/addon-policy/index.html 200
-/* /index.html 200
+/addon/subtitles/configure /addon/subtitles/configure/index.html 200
+/media/* /index.html 200
+/browse/* /index.html 200
+/discover /index.html 200

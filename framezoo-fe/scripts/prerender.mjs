@@ -64,28 +64,28 @@ const routes = [
     output: "legal/terms/index.html",
     title: "Terms of Service | Framezoo",
     description:
-      "Terms of Service and software license for the Framezoo desktop media player.",
+      "Please read these terms and the privacy policy before creating an account or using the Framezoo desktop application.",
   },
   {
     pathname: "/legal/privacy",
     output: "legal/privacy/index.html",
     title: "Privacy & Personal Data Protection Policy | Framezoo",
     description:
-      "Privacy policy and personal data protection compliance (Vietnam 2026 PDPD Law) for Framezoo.",
+      "This policy describes data processing across Framezoo Desktop, Mobile, TV apps and official Framezoo servers.",
   },
   {
     pathname: "/legal/copyright",
     output: "legal/copyright/index.html",
-    title: "Copyright, DMCA & Content Disclaimer | Framezoo",
+    title: "Copyright, Notice & Takedown & Content Disclaimer | Framezoo",
     description:
-      "Intermediary software disclaimer, metadata attribution, and DMCA notice procedure for Framezoo.",
+      "Neutral intermediary status, 24h/72h Notice & Takedown blocklist process, and Repeat Infringer policy.",
   },
   {
     pathname: "/legal/addon-policy",
     output: "legal/addon-policy/index.html",
     title: "Addon Policy & Community Guidelines | Framezoo",
     description:
-      "Safety standards and legal compliance guidelines for third-party community addons on Framezoo.",
+      "Safety and compliance standards for the open HTTP/JSON addon ecosystem on Framezoo.",
   },
 ];
 
@@ -97,21 +97,53 @@ function escapeHtml(value) {
     .replaceAll(">", "&gt;");
 }
 
+function replaceRequired(html, pattern, replacement, label) {
+  if (!pattern.test(html)) {
+    throw new Error(`Prerender failed: missing ${label}`);
+  }
+  return html.replace(pattern, replacement);
+}
+
 function setMeta(html, attribute, key, content) {
   const escapedContent = escapeHtml(content);
-  return html.replace(
-    new RegExp(`<meta ${attribute}="${key}" content="[^"]*"\\s*/>`),
+  return replaceRequired(
+    html,
+    new RegExp(`<meta\\s+${attribute}="${key}"\\s+content="[^"]*"\\s*/?>`, "i"),
     `<meta ${attribute}="${key}" content="${escapedContent}" />`,
+    `meta[${attribute}="${key}"]`,
   );
+}
+
+function hoistPreloadLinks(html, renderedApp) {
+  const preloadPattern = /<link\b[^>]*rel="preload"[^>]*\/?>/gi;
+  const preloads = renderedApp.match(preloadPattern) ?? [];
+  if (preloads.length === 0) {
+    return { html, renderedApp };
+  }
+
+  const uniqueNewPreloads = [...new Set(preloads)].filter(
+    (tag) => !html.includes(tag),
+  );
+  const nextHtml =
+    uniqueNewPreloads.length > 0
+      ? html.replace("</head>", `  ${uniqueNewPreloads.join("\n    ")}\n  </head>`)
+      : html;
+
+  return {
+    html: nextHtml,
+    renderedApp: renderedApp.replace(preloadPattern, ""),
+  };
 }
 
 function applyRouteSeo(html, route) {
   if (route.pathname === "/") return html;
 
   const canonical = `${siteUrl}${route.pathname}`;
-  let output = html.replace(
-    /<title>[^<]*<\/title>/,
+  let output = replaceRequired(
+    html,
+    /<title>[^<]*<\/title>/i,
     `<title>${escapeHtml(route.title)}</title>`,
+    "<title>",
   );
   output = setMeta(output, "name", "description", route.description);
   if (route.noindex) {
@@ -122,9 +154,11 @@ function applyRouteSeo(html, route) {
   output = setMeta(output, "property", "og:url", canonical);
   output = setMeta(output, "name", "twitter:title", route.title);
   output = setMeta(output, "name", "twitter:description", route.description);
-  output = output.replace(
-    /<link rel="canonical" href="[^"]*" \/>/,
+  output = replaceRequired(
+    output,
+    /<link\s+rel="canonical"\s+href="[^"]*"\s*\/?>/i,
     `<link rel="canonical" href="${canonical}" />`,
+    'link[rel="canonical"]',
   );
 
   const pageShortTitle = route.title
@@ -177,9 +211,11 @@ function applyRouteSeo(html, route) {
     ],
   };
 
-  return output.replace(
-    /<script type="application\/ld\+json">[\s\S]*?<\/script>/,
+  return replaceRequired(
+    output,
+    /<script\s+type="application\/ld\+json">[\s\S]*?<\/script>/i,
     `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>`,
+    "application/ld+json",
   );
 }
 
@@ -218,9 +254,15 @@ try {
       );
     }
 
-    const renderedApp = renderer.renderApp(route.pathname);
+    const { html: withPreloads, renderedApp } = hoistPreloadLinks(
+      template,
+      renderer.renderApp(route.pathname),
+    );
     const routeHtml = applyRouteSeo(
-      template.replace(rootPlaceholder, `<div id="root">${renderedApp}</div>`),
+      withPreloads.replace(
+        rootPlaceholder,
+        `<div id="root">${renderedApp}</div>`,
+      ),
       route,
     );
 

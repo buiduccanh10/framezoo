@@ -263,6 +263,7 @@
 
 .landing-brand {
   display: inline-flex;
+  flex-shrink: 0;
   align-items: center;
   min-height: 40px;
   text-decoration: none;
@@ -1591,7 +1592,9 @@
   pointer-events: none;
 }
 
-.landing-showcase-image img {
+.landing-showcase-image img,
+.landing-showcase-image video {
+  display: block;
   width: 100%;
   height: auto;
   object-fit: cover;
@@ -2815,7 +2818,8 @@ body {
   border-color: var(--color-rule);
 }
 
-.landing-showcase-image img {
+.landing-showcase-image img,
+.landing-showcase-image video {
   opacity: 0.94;
 }
 

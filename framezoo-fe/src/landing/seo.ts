@@ -43,15 +43,24 @@ export function getLandingSeoMetadata(
     },
     ecosystem: {
       title: locale === "en" ? "Addon Ecosystem" : copy.nav.addons,
-      description: copy.features.ecosystemDescription,
+      description:
+        locale === "en"
+          ? "Extend Framezoo with high-speed stream sources, rich movie metadata catalogs, and multi-source subtitle providers."
+          : copy.features.ecosystemDescription,
     },
     "create-addon": {
       title: locale === "en" ? "Build an Addon" : copy.nav.addonGuide,
-      description: copy.addonGuide.description,
+      description:
+        locale === "en"
+          ? "Build a Framezoo addon with a simple HTTP manifest for video streams, multi-source subtitles, and movie metadata catalogs."
+          : copy.addonGuide.description,
     },
     download: {
       title: locale === "en" ? "Downloads" : copy.nav.download,
-      description: copy.download.description,
+      description:
+        locale === "en"
+          ? "Download Framezoo for macOS and Windows. Watch movies, TV series, and video streams instantly at high speed."
+          : copy.download.description,
     },
   }[category];
   const path =

@@ -1,6 +1,6 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Allow: /
 Disallow: /media/
 Disallow: /browse/
 Disallow: /discover
