@@ -8,6 +8,7 @@ import {
 } from "@/components/player/utils/captions";
 import { scoreCaptionSourceFit } from "@/components/player/utils/captionSourceFit";
 import {
+  SUBTITLE_ALIGNMENT_AUDIO_WINDOW_SECONDS,
   type SubtitleAlignmentTrack,
   alignSubtitlesWithCurrentStream,
   applySubtitleAlignment,
@@ -373,7 +374,10 @@ export function useCaptions() {
         const batchResult = await alignSubtitlesWithCurrentStream({
           sourceUrl: quality.url,
           isTorrent: contextSource.isTorrent === true,
-          startAt: Math.max(0, pausedTime - 30),
+          startAt: Math.max(
+            0,
+            pausedTime - SUBTITLE_ALIGNMENT_AUDIO_WINDOW_SECONDS,
+          ),
           language: resolveAudioLanguage(
             pausedState.currentAudioTrack?.language,
             pausedState.meta?.originalLanguage,

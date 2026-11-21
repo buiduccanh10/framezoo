@@ -57,10 +57,20 @@ const WIRE_SILENCE_TIMEOUT_MS = 10_000;
 const PUMP_INTERVAL_MS = 200;
 const STATUS_THROTTLE_MS = 200;
 const IDLE_RECORD_TIMEOUT_MS = 30_000;
+const SYNC_LOOKAHEAD_BLOCKS = 1024;
+const SYNC_HEADER_PROBE_LOOKAHEAD_BLOCKS = 16;
+const SYNC_FALLBACK_LOOKAHEAD_BLOCKS = 256;
+const SYNC_FOCUS_TTL_MS = 90_000;
+const MAX_SYNC_FOCUS_BODY_BYTES = 8 * 1024;
+const MAX_SYNC_WINDOW_PREFETCH_BYTES = 16 * 1024 * 1024;
+const MIN_SYNC_WINDOW_PREFETCH_BYTES = 2 * 1024 * 1024;
+const MAX_SYNC_READ_WINDOW_BYTES = 64 * 1024 * 1024;
 export const MIN_FREE_DISK_BYTES = 5 * 1024 * 1024 * 1024;
 const FREE_DISK_HYSTERESIS_BYTES = 256 * 1024 * 1024;
 const HARD_MIN_FREE_DISK_BYTES = 512 * 1024 * 1024;
 const MEMORY_CACHE_BUDGET_BYTES = 192 * 1024 * 1024;
+const MEMORY_EVICT_STEP_BYTES = 4 * 1024 * 1024;
+const MEMORY_EVICT_INTERVAL_MS = 250;
 const KEEP_BEHIND_BYTES = 32 * 1024 * 1024;
 const DISK_CHECK_INTERVAL_MS = 1_000;
 const DISK_CHECK_BYTES_STEP = 16 * 1024 * 1024;
@@ -451,7 +461,8 @@ export function shouldHotswapBlock(
   ownerSpeedBps: number,
   candidateSpeedBps: number,
 ): boolean {
-  const wireStalled = now - Math.max(ownerLastDataAt, reqSentAt) > WIRE_STALL_MS;
+  const wireStalled =
+    now - Math.max(ownerLastDataAt, reqSentAt) > WIRE_STALL_MS;
   const fasterTakeover =
     now - reqSentAt > HOTSWAP_MIN_AGE_MS &&
     candidateSpeedBps >= FAST_PEER_MIN_BPS &&
@@ -476,6 +487,151 @@ export function computePrefetchEnd(
     return Math.min(fileLastVirtual, fromVirtual + profilePieces - 1);
   }
   return fileLastVirtual;
+}
+
+export type SyncFocusWindow = {
+  startAt: number;
+  duration: number;
+};
+
+type BlockRange = {
+  startBlock: number;
+  endBlock: number;
+};
+
+type SyncReadRange = BlockRange & {
+  lookaheadEndBlock: number;
+};
+
+type SyncTargetRange = BlockRange & {
+  firstMissing: number;
+};
+
+function computeSyncEdgeBlockRanges(
+  fileOffset: number,
+  fileLength: number,
+  pinnedEdgeBytes = PINNED_EDGE_BYTES,
+): BlockRange[] {
+  if (fileLength <= 0) return [];
+  const edgeBytes = Math.min(pinnedEdgeBytes, Math.floor(fileLength / 8));
+  if (edgeBytes <= 0) return [];
+  const fileFirstBlock = Math.floor(fileOffset / REQUEST_BLOCK_BYTES);
+  const fileLastBlock = Math.floor(
+    (fileOffset + Math.max(1, fileLength) - 1) / REQUEST_BLOCK_BYTES,
+  );
+  const edgeBlocks = Math.max(
+    0,
+    Math.ceil(edgeBytes / REQUEST_BLOCK_BYTES) - 1,
+  );
+  const headEnd = Math.min(fileLastBlock, fileFirstBlock + edgeBlocks);
+  const tailStart = Math.max(fileFirstBlock, fileLastBlock - edgeBlocks);
+  if (tailStart <= headEnd + 1) {
+    return [{ startBlock: fileFirstBlock, endBlock: fileLastBlock }];
+  }
+  return [
+    { startBlock: fileFirstBlock, endBlock: headEnd },
+    { startBlock: tailStart, endBlock: fileLastBlock },
+  ];
+}
+
+/** Compute prioritized header, footer, and estimated sync-window byte ranges in blocks. */
+export function computeSyncTargetBlockRanges(
+  fileOffset: number,
+  fileLength: number,
+  videoDurationSec: number | undefined,
+  windows: SyncFocusWindow[],
+  pinnedEdgeBytes = PINNED_EDGE_BYTES,
+): BlockRange[] {
+  if (fileLength <= 0) return [];
+  const fileFirstBlock = Math.floor(fileOffset / REQUEST_BLOCK_BYTES);
+  const fileLastBlock = Math.floor(
+    (fileOffset + Math.max(1, fileLength) - 1) / REQUEST_BLOCK_BYTES,
+  );
+  const merged: BlockRange[] = [];
+
+  const pushRange = (startBlock: number, endBlock: number) => {
+    const sInit = Math.max(fileFirstBlock, startBlock);
+    const eInit = Math.min(fileLastBlock, endBlock);
+    if (sInit > eInit) return;
+    let s = sInit;
+    let e = eInit;
+    let targetIdx = -1;
+    let changed = true;
+    while (changed) {
+      changed = false;
+      for (let i = 0; i < merged.length; i++) {
+        if (i === targetIdx) continue;
+        const cur = merged[i]!;
+        if (s <= cur.endBlock + 1 && cur.startBlock <= e + 1) {
+          s = Math.min(s, cur.startBlock);
+          e = Math.max(e, cur.endBlock);
+          if (targetIdx === -1) {
+            targetIdx = i;
+          } else {
+            merged.splice(i, 1);
+            if (i < targetIdx) targetIdx--;
+            i--;
+          }
+          changed = true;
+        }
+      }
+    }
+    if (targetIdx >= 0) {
+      merged[targetIdx] = { startBlock: s, endBlock: e };
+    } else {
+      merged.push({ startBlock: s, endBlock: e });
+    }
+  };
+
+  const edgeBytes = Math.min(pinnedEdgeBytes, Math.floor(fileLength / 8));
+  if (edgeBytes > 0) {
+    const edgeBlocks = Math.max(
+      0,
+      Math.ceil(edgeBytes / REQUEST_BLOCK_BYTES) - 1,
+    );
+    pushRange(fileFirstBlock, fileFirstBlock + edgeBlocks);
+    pushRange(fileLastBlock - edgeBlocks, fileLastBlock);
+  }
+
+  if (
+    typeof videoDurationSec === "number" &&
+    Number.isFinite(videoDurationSec) &&
+    videoDurationSec > 0
+  ) {
+    const bytesPerSec = fileLength / videoDurationSec;
+    for (const w of windows.slice(0, 12)) {
+      if (
+        !Number.isFinite(w.startAt) ||
+        w.startAt < 0 ||
+        !Number.isFinite(w.duration) ||
+        w.duration <= 0
+      ) {
+        continue;
+      }
+      const estStartByte = Math.max(
+        0,
+        Math.floor((w.startAt - 5) * bytesPerSec),
+      );
+      const estSpanBytes = Math.min(
+        MAX_SYNC_WINDOW_PREFETCH_BYTES,
+        Math.max(
+          MIN_SYNC_WINDOW_PREFETCH_BYTES,
+          Math.ceil((w.duration + 10) * bytesPerSec * 1.25),
+        ),
+      );
+      const absStart = fileOffset + estStartByte;
+      const absEnd = Math.min(
+        fileOffset + fileLength - 1,
+        absStart + estSpanBytes - 1,
+      );
+      pushRange(
+        Math.floor(absStart / REQUEST_BLOCK_BYTES),
+        Math.floor(absEnd / REQUEST_BLOCK_BYTES),
+      );
+    }
+  }
+
+  return merged;
 }
 
 export function isPrefetchSeek(
@@ -532,6 +688,9 @@ function localOrigin(request: IncomingMessage) {
   if (!origin || origin === "null") return origin ?? null;
   try {
     const parsed = new URL(origin);
+    if (parsed.protocol === "app:" && parsed.hostname === "renderer") {
+      return origin;
+    }
     return ["localhost", "127.0.0.1", "::1"].includes(parsed.hostname) &&
       ["http:", "https:"].includes(parsed.protocol)
       ? origin
@@ -548,7 +707,10 @@ function cors(request: IncomingMessage, response: ServerResponse) {
     response.setHeader("Access-Control-Allow-Credentials", "true");
     response.setHeader("Vary", "Origin");
   }
-  response.setHeader("Access-Control-Allow-Methods", "GET, HEAD, OPTIONS");
+  response.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, HEAD, POST, DELETE, OPTIONS",
+  );
   response.setHeader(
     "Access-Control-Allow-Headers",
     "Range, Content-Type, Accept, Origin",
@@ -584,7 +746,7 @@ type InFlightBlock = {
   hedged: boolean;
 };
 
-class TorrentRecord {
+export class TorrentRecord {
   readonly infoHash: string;
   readonly cachePath: string;
   readonly cacheRootDir: string;
@@ -602,7 +764,10 @@ class TorrentRecord {
   private totalDownloaded = 0;
   private readonly onChanged: () => void;
   private readonly onNeedDiskSpace: (targetFreeBytes: number) => Promise<void>;
-  private readonly onFatalError: (record: TorrentRecord, message: string) => void;
+  private readonly onFatalError: (
+    record: TorrentRecord,
+    message: string,
+  ) => void;
   private readonly cacheName: string;
   private prefetchProfile: {
     pieces: number;
@@ -616,6 +781,8 @@ class TorrentRecord {
   private storageFatalError: string | null = null;
   private lastDiskCheckAt = 0;
   private bytesSinceDiskCheck = 0;
+  private lastMemoryEvictAt = 0;
+  private bytesSinceMemoryEvict = 0;
   private budgetPromise: Promise<void> | null = null;
   private enospcStrikes = 0;
   private activeFile: TorrentFile | null = null;
@@ -625,7 +792,25 @@ class TorrentRecord {
   private prefetchWindowStartVirtual = -1;
   private prefetchFrontierVirtual = -1;
   private pumpTimer: ReturnType<typeof setInterval> | null = null;
-  private readonly activeReads = new Set<{ startBlock: number; endBlock: number }>();
+  private readonly activeReads = new Set<BlockRange>();
+  private readonly activeSyncReads = new Set<SyncReadRange>();
+  private readonly syncResumeWaiters = new Set<() => void>();
+  private syncFocus: {
+    targetRanges: SyncTargetRange[];
+    edgeRanges: SyncTargetRange[];
+    videoDurationSec?: number;
+    explicit: boolean;
+    implicitReaders: number;
+    expiresAt: number;
+    savedPlayback: {
+      activeFile: TorrentFile | null;
+      playheadBlock: number;
+      fastCursor: number;
+      slowCursor: number;
+      prefetchWindowStartVirtual: number;
+      prefetchFrontierVirtual: number;
+    } | null;
+  } | null = null;
   private readonly inFlightBlocks = new Map<number, InFlightBlock>();
   private readonly blockWaiters = new Map<number, Set<() => void>>();
   private readonly waiterRejects = new Set<(error: Error) => void>();
@@ -755,7 +940,9 @@ class TorrentRecord {
       this.onChanged();
     } catch (error) {
       if (!this.destroyed) {
-        process.stderr.write(`[torrent-node] listen failed: ${String(error)}\n`);
+        process.stderr.write(
+          `[torrent-node] listen failed: ${String(error)}\n`,
+        );
       }
     }
   }
@@ -847,6 +1034,7 @@ class TorrentRecord {
   enterIdle(onDestroy: () => Promise<void>) {
     if (this.destroyed) return;
     this.idle = true;
+    this.exitSyncFocus(false);
     this.stopPrefetch();
     this.engine.swarm.pause();
     this.rejectAllBlockWaiters(new Error("torrent range request aborted"));
@@ -986,13 +1174,238 @@ class TorrentRecord {
     for (const rejectFn of [...this.waiterRejects]) rejectFn(error);
   }
 
+  private isBlockInRanges(bIdx: number, ranges: Iterable<BlockRange>): boolean {
+    for (const r of ranges) {
+      if (bIdx >= r.startBlock && bIdx <= r.endBlock) return true;
+    }
+    return false;
+  }
+
+  private isBlockInSyncReadWindow(bIdx: number): boolean {
+    for (const r of this.activeSyncReads) {
+      if (bIdx >= r.startBlock && bIdx <= r.lookaheadEndBlock) return true;
+    }
+    return false;
+  }
+
+  private cancelStaleSyncInFlightBlocks() {
+    if (!this.syncFocus || this.activeSyncReads.size === 0) return;
+    for (const [bIdx, entry] of [...this.inFlightBlocks]) {
+      if (!this.isBlockInSyncReadWindow(bIdx)) {
+        this.cancelInFlightBlock(bIdx, entry);
+      }
+    }
+  }
+
+  private ensurePumpTimer() {
+    if (!this.pumpTimer) {
+      this.pumpTimer = setInterval(() => this.pumpAllWires(), PUMP_INTERVAL_MS);
+      this.pumpTimer.unref();
+    }
+  }
+
+  isSyncFocused(): boolean {
+    return this.syncFocus !== null;
+  }
+
+  enterSyncFocus(
+    file: TorrentFile,
+    windows: SyncFocusWindow[],
+    videoDurationSec: number | undefined,
+    explicit: boolean,
+  ) {
+    if (
+      this.destroyed ||
+      this.idle ||
+      this.storageFatalError ||
+      !this.metadata ||
+      !this.cache
+    ) {
+      return;
+    }
+    const rawRanges = computeSyncTargetBlockRanges(
+      file.offset,
+      file.length,
+      videoDurationSec,
+      windows,
+    );
+    const targetRanges: SyncTargetRange[] = rawRanges.map((r) => ({
+      ...r,
+      firstMissing: r.startBlock,
+    }));
+    const edgeRanges: SyncTargetRange[] = computeSyncEdgeBlockRanges(
+      file.offset,
+      file.length,
+    ).map((r) => ({
+      ...r,
+      firstMissing: r.startBlock,
+    }));
+    const expiresAt = Date.now() + SYNC_FOCUS_TTL_MS;
+
+    if (!this.syncFocus) {
+      this.syncFocus = {
+        targetRanges,
+        edgeRanges,
+        videoDurationSec,
+        explicit,
+        implicitReaders: explicit ? 0 : 1,
+        expiresAt,
+        savedPlayback: {
+          activeFile: this.activeFile,
+          playheadBlock: this.playheadBlock,
+          fastCursor: this.fastCursor,
+          slowCursor: this.slowCursor,
+          prefetchWindowStartVirtual: this.prefetchWindowStartVirtual,
+          prefetchFrontierVirtual: this.prefetchFrontierVirtual,
+        },
+      };
+      this.activeFile = file;
+    } else {
+      if (explicit) {
+        this.syncFocus.targetRanges = targetRanges;
+        this.syncFocus.edgeRanges = edgeRanges;
+        if (videoDurationSec !== undefined) {
+          this.syncFocus.videoDurationSec = videoDurationSec;
+        }
+        this.syncFocus.explicit = true;
+      } else {
+        this.syncFocus.implicitReaders += 1;
+        if (
+          this.syncFocus.videoDurationSec === undefined &&
+          videoDurationSec !== undefined
+        ) {
+          this.syncFocus.videoDurationSec = videoDurationSec;
+        }
+        if (!this.syncFocus.explicit && targetRanges.length > 0) {
+          for (const nextRange of targetRanges) {
+            const exists = this.syncFocus.targetRanges.some(
+              (r) =>
+                r.startBlock <= nextRange.startBlock &&
+                r.endBlock >= nextRange.endBlock,
+            );
+            if (!exists) this.syncFocus.targetRanges.push(nextRange);
+          }
+        }
+      }
+      this.syncFocus.expiresAt = expiresAt;
+      this.activeFile ??= file;
+    }
+
+    // Cancel normal playback/prefetch requests so all peers pivot immediately to sync targets.
+    for (const [bIdx, entry] of [...this.inFlightBlocks]) {
+      if (
+        !this.isBlockInSyncReadWindow(bIdx) &&
+        !this.isBlockInRanges(bIdx, this.syncFocus.targetRanges)
+      ) {
+        this.cancelInFlightBlock(bIdx, entry);
+      }
+    }
+    this.ensurePumpTimer();
+    this.pumpAllWires();
+  }
+
+  releaseImplicitSyncReader() {
+    if (!this.syncFocus) return;
+    this.syncFocus.implicitReaders = Math.max(
+      0,
+      this.syncFocus.implicitReaders - 1,
+    );
+    if (!this.syncFocus.explicit && this.syncFocus.implicitReaders === 0) {
+      this.exitSyncFocus(true);
+    }
+  }
+
+  exitSyncFocus(restorePlayback = true) {
+    if (!this.syncFocus) return;
+    const saved = this.syncFocus.savedPlayback;
+    this.syncFocus = null;
+
+    if (restorePlayback && saved?.activeFile) {
+      this.activeFile = saved.activeFile;
+      this.playheadBlock = saved.playheadBlock;
+      this.fastCursor = saved.fastCursor;
+      this.slowCursor = saved.slowCursor;
+      this.prefetchWindowStartVirtual = saved.prefetchWindowStartVirtual;
+      this.prefetchFrontierVirtual = saved.prefetchFrontierVirtual;
+    }
+
+    const urgentEnd = this.playheadBlock + URGENT_WINDOW_BLOCKS;
+    for (const [bIdx, entry] of [...this.inFlightBlocks]) {
+      if (
+        !this.isBlockInRanges(bIdx, this.activeReads) &&
+        (bIdx < this.playheadBlock || bIdx > urgentEnd)
+      ) {
+        this.cancelInFlightBlock(bIdx, entry);
+      }
+    }
+
+    for (const wake of [...this.syncResumeWaiters]) wake();
+
+    if (
+      restorePlayback &&
+      !this.destroyed &&
+      !this.idle &&
+      !this.storageFatalError &&
+      this.activeFile
+    ) {
+      this.pumpAllWires();
+    }
+  }
+
+  private waitForSyncFocusExit(signal: AbortSignal): Promise<void> {
+    if (!this.syncFocus) return Promise.resolve();
+    if (signal.aborted || this.destroyed || this.idle) {
+      return Promise.reject(new Error("torrent range request aborted"));
+    }
+    if (this.storageFatalError) {
+      return Promise.reject(new Error(this.storageFatalError));
+    }
+
+    return new Promise<void>((resolve, reject) => {
+      let settled = false;
+      const cleanup = () => {
+        signal.removeEventListener("abort", onAbort);
+        this.syncResumeWaiters.delete(onWake);
+        this.waiterRejects.delete(rejectExternal);
+      };
+      const onWake = () => {
+        if (settled) return;
+        settled = true;
+        cleanup();
+        resolve();
+      };
+      const onAbort = () => {
+        if (settled) return;
+        settled = true;
+        cleanup();
+        reject(new Error("torrent range request aborted"));
+      };
+      const rejectExternal = (err: Error) => {
+        if (settled) return;
+        settled = true;
+        cleanup();
+        reject(err);
+      };
+      this.syncResumeWaiters.add(onWake);
+      this.waiterRejects.add(rejectExternal);
+      signal.addEventListener("abort", onAbort, { once: true });
+      if (!this.syncFocus) onWake();
+    });
+  }
+
   private buildEvictionGuard(): EvictionGuard {
     const file = this.activeFile;
     const vBytes = this.cache?.virtualPieceBytes ?? VIRTUAL_PIECE_BYTES;
-    const activeByteRanges = [...this.activeReads].map((r) => ({
-      start: r.startBlock * REQUEST_BLOCK_BYTES,
-      end: (r.endBlock + 1) * REQUEST_BLOCK_BYTES,
-    }));
+    const activeByteRanges = [
+      ...[...this.activeReads].map((r) => ({
+        start: r.startBlock * REQUEST_BLOCK_BYTES,
+        end: (r.endBlock + 1) * REQUEST_BLOCK_BYTES,
+      })),
+      ...[...this.activeSyncReads].map((r) => ({
+        start: r.startBlock * REQUEST_BLOCK_BYTES,
+        end: (r.lookaheadEndBlock + 1) * REQUEST_BLOCK_BYTES,
+      })),
+    ];
     return {
       playheadPos: this.playheadBlock * REQUEST_BLOCK_BYTES,
       fileOffset: file?.offset ?? 0,
@@ -1009,6 +1422,7 @@ class TorrentRecord {
   private failStorage(message: string) {
     if (this.destroyed || this.storageFatalError) return;
     this.storageFatalError = message;
+    this.exitSyncFocus(false);
     this.stopPrefetch();
     this.engine.swarm.pause();
     this.rejectAllBlockWaiters(new Error(message));
@@ -1021,7 +1435,16 @@ class TorrentRecord {
     }
     if (this.cacheMode === "memory") {
       if (this.cache.usedBytes() > this.cache.memoryBudgetBytes) {
-        this.cache.evictMemory(this.buildEvictionGuard());
+        const now = Date.now();
+        if (
+          force ||
+          now - this.lastMemoryEvictAt >= MEMORY_EVICT_INTERVAL_MS ||
+          this.bytesSinceMemoryEvict >= MEMORY_EVICT_STEP_BYTES
+        ) {
+          this.lastMemoryEvictAt = now;
+          this.bytesSinceMemoryEvict = 0;
+          this.cache.evictMemory(this.buildEvictionGuard());
+        }
       }
       return;
     }
@@ -1192,60 +1615,161 @@ class TorrentRecord {
     while ((wire.requests?.length ?? 0) < cap && sent < cap) {
       let picked = -1;
 
-      // Priority 0: active HTTP readers (header, EOF cues, current stream chunk).
-      if (!slow || !anyFast) {
-        for (const read of this.activeReads) {
+      if (this.syncFocus) {
+        // Dedicated sync-focus scheduler: never fall through to normal playback/EOF prefetch.
+        if (!slow || !anyFast) {
+          for (const read of this.activeSyncReads) {
+            picked = this.pickUrgentBlock(
+              wire,
+              Math.max(fileFirstBlock, read.startBlock),
+              Math.min(fileLastBlock, read.endBlock),
+              mySpeed,
+              now,
+            );
+            if (picked >= 0) break;
+          }
+        }
+
+        if (picked < 0 && (!slow || !anyFast)) {
+          for (const read of this.activeSyncReads) {
+            const lookStart = Math.max(fileFirstBlock, read.endBlock + 1);
+            const lookEnd = Math.min(fileLastBlock, read.lookaheadEndBlock);
+            if (lookStart <= lookEnd) {
+              picked = this.pickUrgentBlock(
+                wire,
+                lookStart,
+                lookEnd,
+                mySpeed,
+                now,
+              );
+              if (picked >= 0) break;
+            }
+          }
+        }
+
+        if (picked < 0) {
+          // While active sync readers exist, only fall back to pinned header/footer edges
+          // so 100% of peer capacity stays on exact libmpv seek offsets instead of VBR guesses.
+          const baseRanges =
+            this.activeSyncReads.size > 0
+              ? this.syncFocus.edgeRanges
+              : this.syncFocus.targetRanges;
+          const ranges =
+            slow && anyFast ? [...baseRanges].reverse() : baseRanges;
+          for (const r of ranges) {
+            while (
+              r.firstMissing <= r.endBlock &&
+              this.cache.hasBlock(r.firstMissing)
+            ) {
+              r.firstMissing++;
+            }
+            let scan = Math.max(fileFirstBlock, r.firstMissing);
+            const end = Math.min(fileLastBlock, r.endBlock);
+            while (scan <= end) {
+              const piece = Math.floor(
+                (scan * REQUEST_BLOCK_BYTES) / pieceLength,
+              );
+              if (!getPeerPiece(wire, piece)) {
+                scan = Math.ceil(
+                  ((piece + 1) * pieceLength) / REQUEST_BLOCK_BYTES,
+                );
+                continue;
+              }
+              if (
+                !this.cache.hasBlock(scan) &&
+                !this.inFlightBlocks.has(scan)
+              ) {
+                picked = scan;
+                break;
+              }
+              scan++;
+            }
+            if (picked >= 0) break;
+          }
+        }
+
+        if (
+          picked < 0 &&
+          this.activeSyncReads.size === 0 &&
+          (!slow || !anyFast)
+        ) {
+          for (const r of this.syncFocus.targetRanges) {
+            const start = Math.max(fileFirstBlock, r.firstMissing);
+            const end = Math.min(fileLastBlock, r.endBlock);
+            if (start <= end) {
+              picked = this.pickUrgentBlock(wire, start, end, mySpeed, now);
+              if (picked >= 0) break;
+            }
+          }
+        }
+
+        if (picked < 0) break;
+      } else {
+        // Priority 0: active HTTP readers (header, EOF cues, current stream chunk).
+        if (!slow || !anyFast) {
+          for (const read of this.activeReads) {
+            picked = this.pickUrgentBlock(
+              wire,
+              Math.max(fileFirstBlock, read.startBlock),
+              Math.min(fileLastBlock, read.endBlock),
+              mySpeed,
+              now,
+            );
+            if (picked >= 0) break;
+          }
+        }
+
+        // Priority 1: urgent playhead buffer (next 2 MiB).
+        if (picked < 0 && (!slow || !anyFast)) {
+          const urgentStart = Math.max(fileFirstBlock, this.playheadBlock);
+          const urgentEnd = Math.min(
+            fileLastBlock,
+            urgentStart + URGENT_WINDOW_BLOCKS,
+          );
           picked = this.pickUrgentBlock(
             wire,
-            Math.max(fileFirstBlock, read.startBlock),
-            Math.min(fileLastBlock, read.endBlock),
+            urgentStart,
+            urgentEnd,
             mySpeed,
             now,
           );
-          if (picked >= 0) break;
         }
-      }
 
-      // Priority 1: urgent playhead buffer (next 2 MiB).
-      if (picked < 0 && (!slow || !anyFast)) {
-        const urgentStart = Math.max(fileFirstBlock, this.playheadBlock);
-        const urgentEnd = Math.min(
-          fileLastBlock,
-          urgentStart + URGENT_WINDOW_BLOCKS,
-        );
-        picked = this.pickUrgentBlock(wire, urgentStart, urgentEnd, mySpeed, now);
-      }
-
-      // Priority 2: continuous sequential read-ahead (fast/slow lanes).
-      if (picked < 0) {
-        const slowLane = slow && anyFast;
-        let scan = slowLane
-          ? Math.max(
-              this.slowCursor,
-              this.playheadBlock + SLOW_LANE_OFFSET_BLOCKS,
-            )
-          : Math.max(this.fastCursor, this.playheadBlock);
-        const scanLimit = Math.min(prefetchEndBlock, scan + 16_384);
-        let contiguous = true;
-        while (scan <= scanLimit) {
-          const piece = Math.floor((scan * REQUEST_BLOCK_BYTES) / pieceLength);
-          if (!getPeerPiece(wire, piece)) {
-            contiguous = false;
-            scan = Math.ceil(((piece + 1) * pieceLength) / REQUEST_BLOCK_BYTES);
-            continue;
-          }
-          if (!this.cache.hasBlock(scan) && !this.inFlightBlocks.has(scan)) {
-            picked = scan;
-            if (contiguous) {
-              if (slowLane) this.slowCursor = scan + 1;
-              else this.fastCursor = scan + 1;
+        // Priority 2: continuous sequential read-ahead (fast/slow lanes).
+        if (picked < 0) {
+          const slowLane = slow && anyFast;
+          let scan = slowLane
+            ? Math.max(
+                this.slowCursor,
+                this.playheadBlock + SLOW_LANE_OFFSET_BLOCKS,
+              )
+            : Math.max(this.fastCursor, this.playheadBlock);
+          const scanLimit = Math.min(prefetchEndBlock, scan + 16_384);
+          let contiguous = true;
+          while (scan <= scanLimit) {
+            const piece = Math.floor(
+              (scan * REQUEST_BLOCK_BYTES) / pieceLength,
+            );
+            if (!getPeerPiece(wire, piece)) {
+              contiguous = false;
+              scan = Math.ceil(
+                ((piece + 1) * pieceLength) / REQUEST_BLOCK_BYTES,
+              );
+              continue;
             }
-            break;
-          }
-          scan++;
-          if (contiguous) {
-            if (slowLane) this.slowCursor = scan;
-            else this.fastCursor = scan;
+            if (!this.cache.hasBlock(scan) && !this.inFlightBlocks.has(scan)) {
+              picked = scan;
+              if (contiguous) {
+                if (slowLane) this.slowCursor = scan + 1;
+                else this.fastCursor = scan + 1;
+              }
+              break;
+            }
+            scan++;
+            if (contiguous) {
+              if (slowLane) this.slowCursor = scan;
+              else this.fastCursor = scan;
+            }
           }
         }
       }
@@ -1286,6 +1810,7 @@ class TorrentRecord {
               this.enospcStrikes = 0;
               this.wakeBlockWaiters(bIdx);
               this.bytesSinceDiskCheck += len;
+              this.bytesSinceMemoryEvict += len;
               void this.maybeEnforceStorageBudget(false);
             })
             .catch((commitError) => {
@@ -1311,6 +1836,14 @@ class TorrentRecord {
       return;
     }
     const now = Date.now();
+    if (
+      this.syncFocus &&
+      now > this.syncFocus.expiresAt &&
+      this.activeSyncReads.size === 0
+    ) {
+      this.exitSyncFocus(true);
+      return;
+    }
     for (const [bIdx, entry] of [...this.inFlightBlocks]) {
       const state = this.wireStates.get(entry.wire);
       const lastActive = Math.max(state?.lastBlockAt ?? 0, entry.sentAt);
@@ -1361,13 +1894,7 @@ class TorrentRecord {
     this.playheadBlock = startBlock;
     this.prefetchWindowStartVirtual = vIdx;
     this.prefetchFrontierVirtual = Math.max(this.prefetchFrontierVirtual, vIdx);
-    if (!this.pumpTimer) {
-      this.pumpTimer = setInterval(
-        () => this.pumpAllWires(),
-        PUMP_INTERVAL_MS,
-      );
-      this.pumpTimer.unref();
-    }
+    this.ensurePumpTimer();
     this.pumpAllWires();
   }
 
@@ -1393,6 +1920,8 @@ class TorrentRecord {
     startBlock: number,
     endBlock: number,
     signal: AbortSignal,
+    isSync = false,
+    lookaheadEndBlock?: number,
   ): Promise<void> {
     const cache = this.cache!;
     const allReady = () => {
@@ -1412,7 +1941,17 @@ class TorrentRecord {
     return new Promise<void>((resolve, reject) => {
       let settled = false;
       let timeout: ReturnType<typeof setTimeout> | null = null;
-      const entry = { startBlock, endBlock };
+      const entry: BlockRange = { startBlock, endBlock };
+      const syncEntry: SyncReadRange | null = isSync
+        ? {
+            startBlock,
+            endBlock,
+            lookaheadEndBlock: Math.max(
+              endBlock,
+              lookaheadEndBlock ?? endBlock,
+            ),
+          }
+        : null;
       const watched = new Set<number>();
 
       const rejectExternal = (err: Error) => {
@@ -1422,12 +1961,22 @@ class TorrentRecord {
         reject(err);
       };
 
+      const onSyncExit = () => {
+        if (settled || this.destroyed || this.idle || this.storageFatalError) {
+          return;
+        }
+        resetTimer();
+        check();
+      };
+
       const cleanup = () => {
         if (timeout) clearTimeout(timeout);
         timeout = null;
         signal.removeEventListener("abort", onAbort);
         this.waiterRejects.delete(rejectExternal);
-        this.activeReads.delete(entry);
+        this.syncResumeWaiters.delete(onSyncExit);
+        if (syncEntry) this.activeSyncReads.delete(syncEntry);
+        else this.activeReads.delete(entry);
         for (const b of watched) {
           const set = this.blockWaiters.get(b);
           if (!set) continue;
@@ -1439,8 +1988,16 @@ class TorrentRecord {
 
       const resetTimer = () => {
         if (timeout) clearTimeout(timeout);
+        if (!isSync && this.syncFocus) {
+          timeout = null;
+          return;
+        }
         timeout = setTimeout(() => {
           if (settled) return;
+          if (!isSync && this.syncFocus) {
+            timeout = null;
+            return;
+          }
           settled = true;
           cleanup();
           reject(
@@ -1482,7 +2039,13 @@ class TorrentRecord {
       }
 
       this.waiterRejects.add(rejectExternal);
-      this.activeReads.add(entry);
+      if (!isSync) this.syncResumeWaiters.add(onSyncExit);
+      if (syncEntry) {
+        this.activeSyncReads.add(syncEntry);
+        this.cancelStaleSyncInFlightBlocks();
+      } else {
+        this.activeReads.add(entry);
+      }
       signal.addEventListener("abort", onAbort, { once: true });
       resetTimer();
       this.pumpAllWires();
@@ -1495,13 +2058,60 @@ class TorrentRecord {
     start: number,
     end: number,
     signal: AbortSignal,
+    options?: {
+      isSync?: boolean;
+      syncStartAt?: number;
+      syncDuration?: number;
+    },
   ) {
     if (!this.metadata || !this.cache) await this.ready();
     if (!this.metadata || !this.cache)
       throw new Error("torrent metadata unavailable");
 
+    const isSync = options?.isSync === true;
     const absoluteStart = file.offset + start;
     const absoluteEnd = file.offset + end;
+    const fileLastBlock = Math.floor(
+      (file.offset + Math.max(1, file.length) - 1) / REQUEST_BLOCK_BYTES,
+    );
+    const isHeaderProbe =
+      isSync &&
+      start < PINNED_EDGE_BYTES &&
+      typeof options?.syncStartAt === "number" &&
+      Number.isFinite(options.syncStartAt) &&
+      options.syncStartAt > 15;
+    let syncWindowEndBlock: number | null = null;
+    if (
+      isSync &&
+      !isHeaderProbe &&
+      typeof options?.syncDuration === "number" &&
+      Number.isFinite(options.syncDuration) &&
+      options.syncDuration > 0
+    ) {
+      const videoDuration =
+        this.syncFocus?.videoDurationSec ?? this.request.duration ?? undefined;
+      if (
+        typeof videoDuration === "number" &&
+        Number.isFinite(videoDuration) &&
+        videoDuration > 0
+      ) {
+        const bytesPerSec = file.length / videoDuration;
+        const estWindowBytes = Math.min(
+          MAX_SYNC_READ_WINDOW_BYTES,
+          Math.max(
+            MIN_SYNC_WINDOW_PREFETCH_BYTES,
+            Math.ceil((options.syncDuration + 6) * bytesPerSec * 1.35),
+          ),
+        );
+        syncWindowEndBlock = Math.min(
+          fileLastBlock,
+          Math.floor(
+            (absoluteStart + estWindowBytes - 1) / REQUEST_BLOCK_BYTES,
+          ),
+        );
+      }
+    }
+
     let cursor = absoluteStart;
     while (cursor <= absoluteEnd) {
       if (signal.aborted || this.destroyed || this.idle) {
@@ -1510,13 +2120,54 @@ class TorrentRecord {
       if (this.storageFatalError) {
         throw new Error(this.storageFatalError);
       }
+      if (!isSync && this.syncFocus) {
+        await this.waitForSyncFocusExit(signal);
+        continue;
+      }
       const chunkLen = Math.min(STREAM_CHUNK_BYTES, absoluteEnd - cursor + 1);
       const needStartBlock = Math.floor(cursor / REQUEST_BLOCK_BYTES);
       const needEndBlock = Math.floor(
         (cursor + chunkLen - 1) / REQUEST_BLOCK_BYTES,
       );
-      this.setPlaybackPosition(file, needStartBlock);
-      await this.waitForBlocks(needStartBlock, needEndBlock, signal);
+      let lookaheadEndBlock: number | undefined;
+      if (isSync) {
+        if (this.syncFocus) {
+          this.syncFocus.expiresAt = Date.now() + SYNC_FOCUS_TTL_MS;
+        }
+        this.activeFile ??= file;
+        this.ensurePumpTimer();
+        if (isHeaderProbe && cursor < file.offset + PINNED_EDGE_BYTES) {
+          lookaheadEndBlock = Math.min(
+            fileLastBlock,
+            needEndBlock + SYNC_HEADER_PROBE_LOOKAHEAD_BLOCKS,
+          );
+        } else if (syncWindowEndBlock !== null) {
+          lookaheadEndBlock =
+            needEndBlock < syncWindowEndBlock
+              ? Math.min(
+                  syncWindowEndBlock,
+                  needEndBlock + SYNC_LOOKAHEAD_BLOCKS,
+                )
+              : Math.min(
+                  fileLastBlock,
+                  needEndBlock + SYNC_FALLBACK_LOOKAHEAD_BLOCKS,
+                );
+        } else {
+          lookaheadEndBlock = Math.min(
+            fileLastBlock,
+            needEndBlock + SYNC_LOOKAHEAD_BLOCKS,
+          );
+        }
+      } else {
+        this.setPlaybackPosition(file, needStartBlock);
+      }
+      await this.waitForBlocks(
+        needStartBlock,
+        needEndBlock,
+        signal,
+        isSync,
+        lookaheadEndBlock,
+      );
       yield await this.cache.readRange(cursor, chunkLen);
       cursor += chunkLen;
     }
@@ -1528,6 +2179,7 @@ class TorrentRecord {
     this.destroyPromise = (async () => {
       if (this.idleTimer) clearTimeout(this.idleTimer);
       this.idleTimer = null;
+      this.exitSyncFocus(false);
       this.stopPrefetch();
       if (!this.metadata && !this.readyError) {
         const stopped = new Error("torrent session stopped");
@@ -1537,7 +2189,9 @@ class TorrentRecord {
       this.rejectAllBlockWaiters(new Error("torrent session stopped"));
       this.peerSearch?.close();
       this.peerSearch = null;
-      await new Promise<void>((resolve) => this.engine.destroy(() => resolve()));
+      await new Promise<void>((resolve) =>
+        this.engine.destroy(() => resolve()),
+      );
       if (discardCache) {
         await this.cache?.discard().catch(() => {});
         await fs
@@ -1612,7 +2266,9 @@ export class TorrentWorker {
     const desiredMode: VirtualCacheMode = maxBytes === 0 ? "memory" : "disk";
     let record = this.records.get(key);
     if (record && record.cacheMode !== desiredMode) {
-      const inUse = [...this.sessions.values()].some((s) => s.record === record);
+      const inUse = [...this.sessions.values()].some(
+        (s) => s.record === record,
+      );
       if (!inUse) {
         this.records.delete(key);
         await record.destroy(record.cacheMode === "memory");
@@ -1770,17 +2426,132 @@ export class TorrentWorker {
       response.end();
       return;
     }
-    const match = /^\/torrent\/([^/]+)$/.exec(
-      (request.url ?? "").split("?", 1)[0],
+    const parsedUrl = new URL(request.url ?? "/", "http://127.0.0.1");
+    const syncFocusMatch = /^\/torrent\/([^/]+)\/sync-focus$/.exec(
+      parsedUrl.pathname,
     );
+    if (syncFocusMatch) {
+      if (request.headers.origin && !localOrigin(request)) {
+        response.writeHead(403);
+        response.end();
+        return;
+      }
+      const session = this.sessions.get(decodeURIComponent(syncFocusMatch[1]!));
+      if (!session) {
+        response.writeHead(404);
+        response.end();
+        return;
+      }
+      if (request.method === "DELETE") {
+        session.record.exitSyncFocus(true);
+        response.writeHead(200, { "Content-Type": "application/json" });
+        response.end('{"ok":true}');
+        return;
+      }
+      if (request.method !== "POST") {
+        response.writeHead(405);
+        response.end();
+        return;
+      }
+      const chunks: Buffer[] = [];
+      let totalBytes = 0;
+      let tooLarge = false;
+      try {
+        for await (const chunk of request) {
+          const buf = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
+          totalBytes += buf.length;
+          if (totalBytes > MAX_SYNC_FOCUS_BODY_BYTES) {
+            tooLarge = true;
+            break;
+          }
+          chunks.push(buf);
+        }
+      } catch {
+        if (!response.headersSent) {
+          response.writeHead(400);
+          response.end();
+        }
+        return;
+      }
+      if (tooLarge) {
+        response.writeHead(413);
+        response.end();
+        return;
+      }
+      let payload: Record<string, unknown>;
+      try {
+        const raw = Buffer.concat(chunks).toString("utf8");
+        const parsed = raw ? (JSON.parse(raw) as unknown) : {};
+        if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+          throw new Error("invalid body");
+        }
+        payload = parsed as Record<string, unknown>;
+      } catch {
+        response.writeHead(400);
+        response.end();
+        return;
+      }
+      if (payload.active === false) {
+        session.record.exitSyncFocus(true);
+        response.writeHead(200, { "Content-Type": "application/json" });
+        response.end('{"ok":true}');
+        return;
+      }
+      if (payload.active !== true) {
+        response.writeHead(400);
+        response.end();
+        return;
+      }
+      const rawDuration = payload.videoDuration;
+      const videoDuration =
+        typeof rawDuration === "number" &&
+        Number.isFinite(rawDuration) &&
+        rawDuration > 0
+          ? rawDuration
+          : (session.request.duration ?? undefined);
+      const rawWindows = Array.isArray(payload.windows) ? payload.windows : [];
+      const windows: SyncFocusWindow[] = [];
+      for (const item of rawWindows.slice(0, 12)) {
+        if (!item || typeof item !== "object") continue;
+        const win = item as Record<string, unknown>;
+        if (
+          typeof win.startAt === "number" &&
+          Number.isFinite(win.startAt) &&
+          win.startAt >= 0 &&
+          typeof win.duration === "number" &&
+          Number.isFinite(win.duration) &&
+          win.duration > 0
+        ) {
+          windows.push({ startAt: win.startAt, duration: win.duration });
+        }
+      }
+      const metadata = session.record.metadata;
+      if (metadata) {
+        session.file ??= this.resolveFile(session, metadata);
+        if (session.file) {
+          session.record.enterSyncFocus(
+            session.file,
+            windows,
+            videoDuration,
+            true,
+          );
+        }
+      }
+      response.writeHead(200, { "Content-Type": "application/json" });
+      response.end('{"ok":true}');
+      return;
+    }
+
+    const match = /^\/torrent\/([^/]+)$/.exec(parsedUrl.pathname);
     const session = match
-      ? this.sessions.get(decodeURIComponent(match[1]))
+      ? this.sessions.get(decodeURIComponent(match[1]!))
       : undefined;
     if (!session || (request.method !== "GET" && request.method !== "HEAD")) {
       response.writeHead(session ? 405 : 404);
       response.end();
       return;
     }
+    const isSyncClient = parsedUrl.searchParams.get("client") === "sync";
     const fatal = session.record.getFatalError();
     if (fatal) {
       response.writeHead(507);
@@ -1798,11 +2569,12 @@ export class TorrentWorker {
     const cancel = () => abort.abort();
     request.on("close", cancel);
     response.on("close", cancel);
+    let enteredImplicitSync = false;
     try {
       await session.record.ready();
       const metadata = session.record.metadata;
       if (!metadata) throw new Error("torrent metadata unavailable");
-      if (session.state === "starting") {
+      if (!isSyncClient && session.state === "starting") {
         session.state = "buffering";
         this.emitStatus(session);
       }
@@ -1835,6 +2607,31 @@ export class TorrentWorker {
         response.end();
         return;
       }
+      let syncStartAt: number | undefined;
+      let syncDuration: number | undefined;
+      if (isSyncClient) {
+        const parsedStartAt = Number(parsedUrl.searchParams.get("syncStartAt"));
+        const parsedDuration = Number(
+          parsedUrl.searchParams.get("syncDuration"),
+        );
+        if (Number.isFinite(parsedStartAt) && parsedStartAt >= 0) {
+          syncStartAt = parsedStartAt;
+        }
+        if (Number.isFinite(parsedDuration) && parsedDuration > 0) {
+          syncDuration = parsedDuration;
+        }
+        const implicitWindows =
+          syncStartAt !== undefined && syncDuration !== undefined
+            ? [{ startAt: syncStartAt, duration: syncDuration }]
+            : [];
+        session.record.enterSyncFocus(
+          session.file,
+          implicitWindows,
+          session.request.duration ?? undefined,
+          false,
+        );
+        enteredImplicitSync = true;
+      }
       response.statusCode = request.headers.range ? 206 : 200;
       if (request.headers.range)
         response.setHeader(
@@ -1847,9 +2644,10 @@ export class TorrentWorker {
         range.start,
         range.end,
         abort.signal,
+        { isSync: isSyncClient, syncStartAt, syncDuration },
       )) {
         if (abort.signal.aborted || response.destroyed) return;
-        if (!session.firstByte) {
+        if (!isSyncClient && !session.firstByte) {
           session.firstByte = true;
           session.state = "ready";
           this.emitStatus(session);
@@ -1875,15 +2673,20 @@ export class TorrentWorker {
         session.state = "error";
         this.emitStatus(session, fatalErr);
       } else if (!abort.signal.aborted && !response.headersSent) {
-        session.state = "error";
-        this.emitStatus(
-          session,
-          error instanceof Error ? error.message : String(error),
-        );
+        if (!isSyncClient) {
+          session.state = "error";
+          this.emitStatus(
+            session,
+            error instanceof Error ? error.message : String(error),
+          );
+        }
         response.writeHead(502);
         response.end();
       }
     } finally {
+      if (enteredImplicitSync) {
+        session.record.releaseImplicitSyncReader();
+      }
       request.off("close", cancel);
       response.off("close", cancel);
       const set = this.activeHttp.get(session.sessionId);

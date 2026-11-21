@@ -136,6 +136,24 @@ def compute_piecewise_segments(
     if len(merged_groups) < 2:
         return []
 
+    # Drop isolated low-confidence boundary outliers when a multi-window majority agrees
+    if len(cleaned_windows) >= 4:
+        if (
+            len(merged_groups[0]) == 1
+            and len(merged_groups[1]) >= 2
+            and int(merged_groups[0][0]["result"].get("confidence", 0)) < 82
+        ):
+            merged_groups.pop(0)
+        if (
+            len(merged_groups) >= 2
+            and len(merged_groups[-1]) == 1
+            and len(merged_groups[-2]) >= 2
+            and int(merged_groups[-1][0]["result"].get("confidence", 0)) < 82
+        ):
+            merged_groups.pop()
+        if len(merged_groups) < 2:
+            return []
+
     segments: list[dict[str, int]] = []
     for i, group in enumerate(merged_groups):
         avg_offset = round(_weighted_offset(group))
@@ -143,7 +161,9 @@ def compute_piecewise_segments(
         if i == 0:
             seg_start_ms = 0
         else:
-            prev_end_s = float(merged_groups[i - 1][-1]["startAt"]) + 60.0
+            prev_win = merged_groups[i - 1][-1]
+            prev_dur_s = float(prev_win.get("durationSec", 60.0))
+            prev_end_s = float(prev_win["startAt"]) + prev_dur_s
             cur_start_s = float(group[0]["startAt"])
             boundary_s = max(prev_end_s, (prev_end_s + cur_start_s) / 2.0)
             seg_start_ms = int(round(boundary_s * 1000))
@@ -151,7 +171,9 @@ def compute_piecewise_segments(
         if i == len(merged_groups) - 1:
             seg_end_ms = 9_007_199_254_740_991  # JS Number.MAX_SAFE_INTEGER
         else:
-            cur_end_s = float(group[-1]["startAt"]) + 60.0
+            cur_win = group[-1]
+            cur_dur_s = float(cur_win.get("durationSec", 60.0))
+            cur_end_s = float(cur_win["startAt"]) + cur_dur_s
             next_start_s = float(merged_groups[i + 1][0]["startAt"])
             boundary_s = max(cur_end_s, (cur_end_s + next_start_s) / 2.0)
             seg_end_ms = int(round(boundary_s * 1000))

@@ -151,6 +151,58 @@ class VadFftTests(unittest.TestCase):
                 audio_end_ms=10_000_000,
             )
 
+    def test_fft_framerate_ratio_returns_unscaled_offset_at_late_timestamps(self):
+        # At 60 minutes (3,600,000ms), 25/24 ratio means t_video = ratio * t_sub ->
+        # subtitle cues sit near 3,600,000 / ratio = 3,456,000ms, so true offset is +144,000ms.
+        ratio = 25.0 / 24.0
+        start_ms = 3_600_000
+        speech = [
+            (start_ms + 5_000, start_ms + 9_000),
+            (start_ms + 22_000, start_ms + 27_000),
+            (start_ms + 40_000, start_ms + 45_000),
+        ]
+        subs = [(int(round(s / ratio)), int(round(e / ratio))) for s, e in speech]
+
+        offset_ms, conf, detected_ratio = find_best_offset_fft(
+            speech_intervals=speech,
+            subtitle_intervals=subs,
+            audio_start_ms=start_ms,
+            audio_end_ms=start_ms + 60_000,
+            try_framerate_ratios=True,
+        )
+        self.assertAlmostEqual(detected_ratio, ratio, delta=0.002)
+        self.assertAlmostEqual(offset_ms, 144_000, delta=250)
+        self.assertGreaterEqual(conf, 80.0)
+
+        # At 85 minutes (5,100,000ms), true offset is +204,000ms (> 180s previous limit)
+        late_start_ms = 5_100_000
+        late_speech = [
+            (late_start_ms + 6_000, late_start_ms + 10_000),
+            (late_start_ms + 24_000, late_start_ms + 29_000),
+            (late_start_ms + 42_000, late_start_ms + 47_000),
+        ]
+        late_subs = [(int(round(s / ratio)), int(round(e / ratio))) for s, e in late_speech]
+
+        late_offset, late_conf, _ = find_best_offset_fft(
+            speech_intervals=late_speech,
+            subtitle_intervals=late_subs,
+            audio_start_ms=late_start_ms,
+            audio_end_ms=late_start_ms + 60_000,
+            try_framerate_ratios=True,
+        )
+        self.assertAlmostEqual(late_offset, 204_000, delta=300)
+        self.assertGreaterEqual(late_conf, 80.0)
+
+    def test_split_ignores_isolated_low_confidence_boundary_outlier(self):
+        windows = [
+            {"startAt": 60, "result": {"aligned": True, "offsetMs": 14_000, "confidence": 72}},
+            {"startAt": 400, "result": {"aligned": True, "offsetMs": -2_000, "confidence": 92}},
+            {"startAt": 900, "result": {"aligned": True, "offsetMs": -2_050, "confidence": 90}},
+            {"startAt": 1_500, "result": {"aligned": True, "offsetMs": -1_980, "confidence": 91}},
+            {"startAt": 2_100, "result": {"aligned": True, "offsetMs": 19_500, "confidence": 68}},
+        ]
+        self.assertEqual(compute_piecewise_segments(windows, global_offset_ms=-2_010), [])
+
 
 if __name__ == "__main__":
     unittest.main()
