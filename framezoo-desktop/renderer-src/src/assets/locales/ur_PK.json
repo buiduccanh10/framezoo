@@ -209,20 +209,25 @@
   "details": {
     "addToList": "فہرست میں شامل کریں۔",
     "airs": "ایئرز",
+    "cast": "کاسٹ:",
     "collection": {
       "bookmarkAll": "سبھی کو بُک مارک کریں۔",
+      "bookmarkTooltip": "پورے {{name}} مجموعہ کو بُک مارک کریں۔",
+      "label": "مجموعہ",
       "movie": "فلم",
       "movies": "فلمیں",
       "rating": "درجہ بندی",
       "releaseDate": "ریلیز کی تاریخ",
       "sortBy": "ترتیب دیں"
     },
+    "director": "ڈائریکٹر:",
     "endsAt": "{{time}} پر ختم ہوتا ہے",
     "episode": "قسط",
     "episodeNumber": "قسط {{number}}",
     "episodeReleaseDate": "ریلیز کی تاریخ: {{date}}",
     "episodeReleaseDateUnknown": "ریلیز کی تاریخ: نامعلوم",
     "episodes": "اقساط",
+    "goToEpisode": "ایپی سوڈ پر جائیں۔",
     "imdb": "آئی ایم ڈی بی پر دیکھیں",
     "language": "زبان:",
     "play": "کھیلیں",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "اس میڈیا کے لیے تصویر نہیں لائی جا سکی",
     "episodeDisplay": "S{{season}} - E{{episode}}",
     "episodeShort": "E",
+    "errors": {
+      "errorLoading": "مجموعہ لوڈ کرنے میں خرابی۔",
+      "failedToLoad": "مجموعہ لوڈ کرنے میں ناکام"
+    },
     "inCinema": "سینما میں",
+    "noMoviesInCollection": "اس مجموعہ میں کوئی فلم نہیں ملی",
     "seasonUnwatched": "کیا آپ واقعی سیزن کو غیر دیکھے ہوئے کے بطور نشان زد کرنا چاہتے ہیں؟",
     "seasonWatched": "کیا آپ واقعی سیزن کو دیکھا گیا کے بطور نشان زد کرنا چاہتے ہیں؟",
     "types": {

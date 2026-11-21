@@ -209,20 +209,25 @@
   "details": {
     "addToList": "リストに追加",
     "airs": "エアーズ",
+    "cast": "キャスト：",
     "collection": {
       "bookmarkAll": "すべてブックマーク",
+      "bookmarkTooltip": "{{name}} コレクション全体をブックマークする",
+      "label": "コレクション",
       "movie": "映画",
       "movies": "映画",
       "rating": "評価",
       "releaseDate": "発売日",
       "sortBy": "並べ替え"
     },
+    "director": "監督：",
     "endsAt": "{{time}} に終了",
     "episode": "エピソード",
     "episodeNumber": "エピソード {{number}}",
     "episodeReleaseDate": "発売日: {{date}}",
     "episodeReleaseDateUnknown": "発売日：不明",
     "episodes": "エピソード",
+    "goToEpisode": "エピソードへ移動",
     "imdb": "IMDbで見る",
     "language": "言語：",
     "play": "遊ぶ",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "このメディアの画像を取得できませんでした",
     "episodeDisplay": "S{{season}} - E{{episode}}",
     "episodeShort": "E",
+    "errors": {
+      "errorLoading": "コレクションの読み込みエラー",
+      "failedToLoad": "コレクションの読み込みに失敗しました"
+    },
     "inCinema": "映画で",
+    "noMoviesInCollection": "このコレクションには映画が見つかりませんでした",
     "seasonUnwatched": "シーズンを未視聴としてマークしてもよろしいですか?",
     "seasonWatched": "シーズンを視聴済みとしてマークしてもよろしいですか?",
     "types": {

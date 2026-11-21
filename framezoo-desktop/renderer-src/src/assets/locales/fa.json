@@ -209,20 +209,25 @@
   "details": {
     "addToList": "به لیست اضافه کنید",
     "airs": "هواها",
+    "cast": "بازیگران:",
     "collection": {
       "bookmarkAll": "نشانک کردن همه",
+      "bookmarkTooltip": "کل مجموعه {{name}} را نشانه‌گذاری کنید",
+      "label": "مجموعه",
       "movie": "فیلم",
       "movies": "فیلم ها",
       "rating": "رتبه بندی",
       "releaseDate": "تاریخ انتشار",
       "sortBy": "مرتب سازی بر اساس"
     },
+    "director": "کارگردان:",
     "endsAt": "پایان در {{time}}",
     "episode": "اپیزود",
     "episodeNumber": "قسمت {{number}}",
     "episodeReleaseDate": "تاریخ انتشار: {{date}}",
     "episodeReleaseDateUnknown": "تاریخ انتشار: نامعلوم",
     "episodes": "اپیزودها",
+    "goToEpisode": "رفتن به قسمت",
     "imdb": "مشاهده در IMDb",
     "language": "زبان:",
     "play": "بازی کنید",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "نتوانستم تصویری برای این رسانه دریافت کنم",
     "episodeDisplay": "فصل {{season}} قسمت {{episode}}",
     "episodeShort": "E",
+    "errors": {
+      "errorLoading": "خطا در بارگیری مجموعه",
+      "failedToLoad": "بارگیری مجموعه ناموفق بود"
+    },
     "inCinema": "در سینما",
+    "noMoviesInCollection": "فیلمی در این مجموعه یافت نشد",
     "seasonUnwatched": "آیا مطمئنید که می‌خواهید فصل را به‌عنوان تماشا نشده علامت بزنید؟",
     "seasonWatched": "آیا مطمئنید که می‌خواهید فصل را به‌عنوان تماشا شده علامت بزنید؟",
     "types": {

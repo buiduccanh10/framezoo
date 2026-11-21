@@ -209,20 +209,25 @@
   "details": {
     "addToList": "Adicionar à lista",
     "airs": "Lançamento",
+    "cast": "Elenco:",
     "collection": {
       "bookmarkAll": "Marcar tudo",
+      "bookmarkTooltip": "Adicione toda a coleção {{name}} aos seus favoritos.",
+      "label": "Coleção",
       "movie": "Filme",
       "movies": "Filmes",
       "rating": "Avaliação",
       "releaseDate": "Data de lançamento",
       "sortBy": "Ordenar por"
     },
+    "director": "Diretor:",
     "endsAt": "Termina em {{time}}",
     "episode": "Episódio",
     "episodeNumber": "Episódio {{number}}",
     "episodeReleaseDate": "Data de lançamento: {{date}}",
     "episodeReleaseDateUnknown": "Data de lançamento: desconhecida",
     "episodes": "Episódios",
+    "goToEpisode": "Ir para o episódio",
     "imdb": "Ver no IMDb",
     "language": "Idioma:",
     "play": "Jogar",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "Não foi possível obter uma imagem para esta mídia.",
     "episodeDisplay": "T{{season}} E{{episode}}",
     "episodeShort": "E",
+    "errors": {
+      "errorLoading": "Erro ao carregar a coleção",
+      "failedToLoad": "Falha ao carregar a coleção"
+    },
     "inCinema": "No cinema",
+    "noMoviesInCollection": "Nenhum filme encontrado nesta coleção.",
     "seasonUnwatched": "Tem certeza de que deseja marcar a temporada como não assistida?",
     "seasonWatched": "Tem certeza de que deseja marcar a temporada como assistida?",
     "types": {

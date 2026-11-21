@@ -209,20 +209,25 @@
   "details": {
     "addToList": "Přidat do seznamu",
     "airs": "Airs",
+    "cast": "Obsazení:",
     "collection": {
       "bookmarkAll": "Přidat do záložek vše",
+      "bookmarkTooltip": "Uložit do záložek celou kolekci {{name}}",
+      "label": "Sbírka",
       "movie": "Film",
       "movies": "Filmy",
       "rating": "Hodnocení",
       "releaseDate": "Datum vydání",
       "sortBy": "Seřadit podle"
     },
+    "director": "Ředitel:",
     "endsAt": "Končí v {{time}}",
     "episode": "Epizoda",
     "episodeNumber": "Epizoda {{number}}",
     "episodeReleaseDate": "Datum vydání: {{date}}",
     "episodeReleaseDateUnknown": "Datum vydání: neznámé",
     "episodes": "Epizody",
+    "goToEpisode": "Přejít na epizodu",
     "imdb": "Zobrazit na IMDb",
     "language": "Jazyk:",
     "play": "Hrát",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "Nepodařilo se načíst obrázek pro toto médium",
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
+    "errors": {
+      "errorLoading": "Chyba při načítání kolekce",
+      "failedToLoad": "Načtení kolekce se nezdařilo"
+    },
     "inCinema": "V kině",
+    "noMoviesInCollection": "V této kolekci nebyly nalezeny žádné filmy",
     "seasonUnwatched": "Opravdu chcete sezónu označit jako nezhlédnutou?",
     "seasonWatched": "Opravdu chcete označit sezónu jako sledovanou?",
     "types": {

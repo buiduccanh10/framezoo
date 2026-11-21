@@ -209,20 +209,25 @@
   "details": {
     "addToList": "Dodaj do listy",
     "airs": "Powietrze",
+    "cast": "Rzucać:",
     "collection": {
       "bookmarkAll": "Dodaj do zakładek Wszystko",
+      "bookmarkTooltip": "Dodaj całą kolekcję {{name}} do zakładek",
+      "label": "Kolekcja",
       "movie": "Film",
       "movies": "Kino",
       "rating": "Ocena",
       "releaseDate": "Data wydania",
       "sortBy": "Sortuj według"
     },
+    "director": "Dyrektor:",
     "endsAt": "Kończy się na {{time}}",
     "episode": "Odcinek",
     "episodeNumber": "Odcinek {{number}}",
     "episodeReleaseDate": "Data wydania: {{date}}",
     "episodeReleaseDateUnknown": "Data wydania: nieznana",
     "episodes": "Odcinki",
+    "goToEpisode": "Przejdź do odcinka",
     "imdb": "Zobacz na IMDB",
     "language": "Język:",
     "play": "Wznów",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "Nie można pobrać obrazu dla tego nośnika",
     "episodeDisplay": "S{{season}} - O{{episode}}",
     "episodeShort": "O",
+    "errors": {
+      "errorLoading": "Błąd ładowania kolekcji",
+      "failedToLoad": "Nie udało się załadować kolekcji"
+    },
     "inCinema": "W kinie",
+    "noMoviesInCollection": "Nie znaleziono filmów w tej kolekcji",
     "seasonUnwatched": "Czy na pewno chcesz oznaczyć sezon jako nieobejrzany?",
     "seasonWatched": "Czy na pewno chcesz oznaczyć sezon jako obejrzany?",
     "types": {

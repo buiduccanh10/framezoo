@@ -209,20 +209,25 @@
   "details": {
     "addToList": "Pievienot sarakstam",
     "airs": "Airs",
+    "cast": "Aktieri:",
     "collection": {
       "bookmarkAll": "Atzīmēt visu",
+      "bookmarkTooltip": "Pievienot grāmatzīmēm visu {{name}} kolekciju",
+      "label": "Kolekcija",
       "movie": "Filma",
       "movies": "Filmas",
       "rating": "Vērtējums",
       "releaseDate": "Izdošanas datums",
       "sortBy": "Kārtot pēc"
     },
+    "director": "Režisors:",
     "endsAt": "Beidzas {{time}}",
     "episode": "Epizode",
     "episodeNumber": "Sērija {{number}}",
     "episodeReleaseDate": "Izdošanas datums: {{date}}",
     "episodeReleaseDateUnknown": "Izdošanas datums: nav zināms",
     "episodes": "Epizodes",
+    "goToEpisode": "Doties uz epizodi",
     "imdb": "Skatīt IMDb",
     "language": "Valoda:",
     "play": "Spēlēt",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "Nevarēja ielādēt attēlu šim multivides failam.",
     "episodeDisplay": "Sezona{{season}} Episode{{episode}}",
     "episodeShort": "E",
+    "errors": {
+      "errorLoading": "Kļūda, ielādējot kolekciju",
+      "failedToLoad": "Neizdevās ielādēt kolekciju"
+    },
     "inCinema": "Kinoteātrī",
+    "noMoviesInCollection": "Šajā kolekcijā nav atrastas filmas",
     "seasonUnwatched": "Vai tiešām vēlaties atzīmēt sezonu kā neskatītu?",
     "seasonWatched": "Vai tiešām vēlaties atzīmēt sezonu kā skatītu?",
     "types": {

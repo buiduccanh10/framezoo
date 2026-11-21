@@ -209,20 +209,25 @@
   "details": {
     "addToList": "Lägg till i listan",
     "airs": "Sänds",
+    "cast": "Kasta:",
     "collection": {
       "bookmarkAll": "Bokmärk alla",
+      "bookmarkTooltip": "Bokmärk hela {{name}}-samlingen",
+      "label": "Samling",
       "movie": "Film",
       "movies": "Filmer",
       "rating": "Gradering",
       "releaseDate": "Releasedatum",
       "sortBy": "Sortera efter"
     },
+    "director": "Direktör:",
     "endsAt": "Slutar på {{time}}",
     "episode": "Avsnitt",
     "episodeNumber": "Avsnitt {{number}}",
     "episodeReleaseDate": "Utgivningsdatum: {{date}}",
     "episodeReleaseDateUnknown": "Releasedatum: Okänt",
     "episodes": "Avsnitt",
+    "goToEpisode": "Gå till avsnittet",
     "imdb": "Visa på IMDb",
     "language": "Språk:",
     "play": "Spela upp",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "Kunde inte hämta en bild för detta medieinnehåll",
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "A",
+    "errors": {
+      "errorLoading": "Fel vid laddning av samlingen",
+      "failedToLoad": "Misslyckades med att läsa in samlingen"
+    },
     "inCinema": "På bio",
+    "noMoviesInCollection": "Inga filmer hittades i den här samlingen",
     "seasonUnwatched": "Är du säker du vill markera säsongen som otittad?",
     "seasonWatched": "Är du säker du vill markera säsongen som tittad?",
     "types": {

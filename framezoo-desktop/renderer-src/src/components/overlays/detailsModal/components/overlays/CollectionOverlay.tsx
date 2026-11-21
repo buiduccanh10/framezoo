@@ -269,7 +269,9 @@ export function CollectionOverlay({
                             type="button"
                             onClick={handleBookmarkCollection}
                             className="flex items-center gap-2 px-3 py-1 rounded-md text-xs font-medium bg-white/10 hover:bg-white/20 text-white/70 transition-colors"
-                            title={`Bookmark entire ${collectionName} collection`}
+                            title={t("details.collection.bookmarkTooltip", {
+                              name: collectionName,
+                            })}
                           >
                             <Icon
                               icon={Icons.BOOKMARK_OUTLINE}

@@ -209,20 +209,25 @@
   "details": {
     "addToList": "ලැයිස්තුවට එක් කරන්න",
     "airs": "ගුවන්",
+    "cast": "රංගනය:",
     "collection": {
       "bookmarkAll": "සියල්ල පිටු සලකුණු කරන්න",
+      "bookmarkTooltip": "මුළු {{name}} එකතුවම පිටු සලකුණු කරන්න",
+      "label": "එකතුව",
       "movie": "චිත්රපටය",
       "movies": "චිත්රපට",
       "rating": "ශ්රේණිගත කිරීම",
       "releaseDate": "නිකුත් කරන දිනය",
       "sortBy": "අනුව තෝරන්න"
     },
+    "director": "අධ්‍යක්ෂක:",
     "endsAt": "{{time}} ට අවසන් වේ",
     "episode": "කථාංගය",
     "episodeNumber": "කථාංගය{{number}}",
     "episodeReleaseDate": "මුදා හැරීමේ දිනය: {{date}}",
     "episodeReleaseDateUnknown": "මුදා හැරීමේ දිනය: නොදනී",
     "episodes": "කථාංග",
+    "goToEpisode": "කථාංගයට යන්න",
     "imdb": "IMDb මත බලන්න",
     "language": "භාෂාව:",
     "play": "සෙල්ලම් කරන්න",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "මෙම මාධ්‍ය සඳහා රූපයක් ලබා ගැනීමට නොහැකි විය.",
     "episodeDisplay": "S{{season}} - E{{episode}}",
     "episodeShort": "E",
+    "errors": {
+      "errorLoading": "එකතුව පූරණය කිරීමේදී දෝෂයකි",
+      "failedToLoad": "එකතුව පූරණය කිරීමට අසමත් විය."
+    },
     "inCinema": "සිනමාවේ",
+    "noMoviesInCollection": "මෙම එකතුවේ චිත්‍රපට කිසිවක් හමු නොවීය.",
     "seasonUnwatched": "වාරය නොබැලු ලෙස සලකුණු කිරීමට අවශ්‍ය බව ඔබට විශ්වාසද?",
     "seasonWatched": "ඔබට වාරය නැරඹූ ලෙස සලකුණු කිරීමට අවශ්‍ය බව විශ්වාසද?",
     "types": {

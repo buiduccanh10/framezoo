@@ -209,20 +209,25 @@
   "details": {
     "addToList": "Lisää listaan",
     "airs": "Esitetään",
+    "cast": "Heittää:",
     "collection": {
       "bookmarkAll": "Merkitse kaikki",
+      "bookmarkTooltip": "Lisää koko {{name}} kokoelma kirjanmerkkeihin",
+      "label": "Kokoelma",
       "movie": "Elokuva",
       "movies": "Elokuvat",
       "rating": "Luokitus",
       "releaseDate": "Julkaisupäivä",
       "sortBy": "Lajitteluperuste"
     },
+    "director": "Johtaja:",
     "endsAt": "Loppuu {{time}}",
     "episode": "Jakso",
     "episodeNumber": "Jakso {{number}}",
     "episodeReleaseDate": "Julkaisupäivä: {{date}}",
     "episodeReleaseDateUnknown": "Julkaisupäivä: Tuntematon",
     "episodes": "Jaksot",
+    "goToEpisode": "Siirry jaksoon",
     "imdb": "Näytä IMDb:ssä",
     "language": "Kieli:",
     "play": "Toista",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "Tämän median kuvaa ei voitu hakea",
     "episodeDisplay": "K{{season}} J{{episode}}",
     "episodeShort": "J",
+    "errors": {
+      "errorLoading": "Virhe kokoelman lataamisessa",
+      "failedToLoad": "Kokoelman lataaminen epäonnistui"
+    },
     "inCinema": "Elokuvateatterissa",
+    "noMoviesInCollection": "Tästä kokoelmasta ei löytynyt elokuvia",
     "seasonUnwatched": "Haluatko varmasti merkitä kauden katsomattomaksi?",
     "seasonWatched": "Haluatko varmasti merkitä kauden katsotuksi?",
     "types": {

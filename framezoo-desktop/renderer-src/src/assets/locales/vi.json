@@ -209,20 +209,25 @@
   "details": {
     "addToList": "Thêm vào danh sách",
     "airs": "Phát sóng",
+    "cast": "Diễn viên:",
     "collection": {
       "bookmarkAll": "Đánh dấu tất cả",
+      "bookmarkTooltip": "Đánh dấu toàn bộ bộ sưu tập {{name}}",
+      "label": "Bộ sưu tập",
       "movie": "Phim điện ảnh",
       "movies": "Phim điện ảnh",
       "rating": "Đánh giá",
       "releaseDate": "Ngày phát hành",
       "sortBy": "Sắp xếp theo"
     },
+    "director": "Đạo diễn:",
     "endsAt": "Kết thúc tại {{time}}",
     "episode": "Tập",
     "episodeNumber": "Tập {{number}}",
     "episodeReleaseDate": "Ngày phát hành: {{date}}",
     "episodeReleaseDateUnknown": "Ngày phát hành: Chưa xác định",
     "episodes": "Tập phim",
+    "goToEpisode": "Đi tới tập phim",
     "imdb": "Xem trên IMDb",
     "language": "Ngôn ngữ:",
     "play": "Phát",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "Không thể tải hình ảnh cho phương tiện này.",
     "episodeDisplay": "M{{season}} T{{episode}}",
     "episodeShort": "T",
+    "errors": {
+      "errorLoading": "Lỗi khi tải bộ sưu tập",
+      "failedToLoad": "Không thể tải bộ sưu tập"
+    },
     "inCinema": "Chiếu rạp",
+    "noMoviesInCollection": "Không tìm thấy phim nào trong bộ sưu tập này",
     "seasonUnwatched": "Bạn có chắc chắn muốn đánh dấu mùa này là chưa xem không?",
     "seasonWatched": "Bạn có chắc chắn muốn đánh dấu mùa này là đã xem không?",
     "types": {

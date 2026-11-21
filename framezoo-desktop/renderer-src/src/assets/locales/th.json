@@ -209,20 +209,25 @@
   "details": {
     "addToList": "เพิ่มลงในรายการ",
     "airs": "ออกอากาศ",
+    "cast": "หล่อ:",
     "collection": {
       "bookmarkAll": "บุ๊คมาร์คทั้งหมด",
+      "bookmarkTooltip": "คั่นหน้าคอลเลกชัน {{name}} ทั้งหมด",
+      "label": "ของสะสม",
       "movie": "ภาพยนตร์",
       "movies": "ภาพยนตร์",
       "rating": "เรตติ้ง",
       "releaseDate": "วันที่วางจำหน่าย",
       "sortBy": "เรียงตาม"
     },
+    "director": "ผู้อำนวยการ:",
     "endsAt": "สิ้นสุดที่ {{time}}",
     "episode": "ตอน",
     "episodeNumber": "ตอนที่ {{number}}",
     "episodeReleaseDate": "วันที่วางจำหน่าย: {{date}}",
     "episodeReleaseDateUnknown": "วันที่วางจำหน่าย: ไม่ทราบ",
     "episodes": "ตอน",
+    "goToEpisode": "ไปที่ตอน",
     "imdb": "ดูบน IMDb",
     "language": "ภาษา:",
     "play": "เล่น",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "ไม่สามารถดึงภาพสำหรับสื่อนี้ได้",
     "episodeDisplay": "ภ{{season}} ต{{episode}}",
     "episodeShort": "E",
+    "errors": {
+      "errorLoading": "เกิดข้อผิดพลาดในการโหลดคอลเลกชัน",
+      "failedToLoad": "ไม่สามารถโหลดคอลเลกชันได้"
+    },
     "inCinema": "ในโรงภาพยนตร์",
+    "noMoviesInCollection": "ไม่พบภาพยนตร์ในคอลเลกชันนี้",
     "seasonUnwatched": "คุณแน่ใจหรือไม่ว่าต้องการทำเครื่องหมายซีซันนี้ว่ายังไม่ได้รับชม",
     "seasonWatched": "คุณแน่ใจหรือไม่ว่าต้องการทำเครื่องหมายซีซันว่าดูแล้ว",
     "types": {

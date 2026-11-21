@@ -1,6 +1,5 @@
-import { t } from "i18next";
 import { useEffect, useState } from "react";
-import { Trans } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 
 import { Icon, Icons } from "@/components/Icon";
 
@@ -16,6 +15,7 @@ export function DetailsInfo({
   provider,
   onCollectionClick,
 }: DetailsInfoProps) {
+  const { t } = useTranslation();
   const [isShiftPressed, setIsShiftPressed] = useState(false);
   const [showCopied, setShowCopied] = useState(false);
 
@@ -123,7 +123,7 @@ export function DetailsInfo({
             />
             <div className="flex flex-col items-start flex-1 min-w-0">
               <span className="text-[10px] text-white/50 font-medium uppercase tracking-wide">
-                Collection
+                {t("details.collection.label")}
               </span>
               <span className="text-xs font-medium truncate w-full text-left">
                 {data.collection.name}

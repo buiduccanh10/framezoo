@@ -209,20 +209,25 @@
   "details": {
     "addToList": "បន្ថែមទៅបញ្ជី",
     "airs": "ខ្យល់",
+    "cast": "តួសម្តែង៖",
     "collection": {
       "bookmarkAll": "ចំណាំទាំងអស់។",
+      "bookmarkTooltip": "ចំណាំបណ្តុំ {{name}} ទាំងមូល",
+      "label": "ការប្រមូល",
       "movie": "ភាពយន្ត",
       "movies": "ភាពយន្ត",
       "rating": "ការវាយតម្លៃ",
       "releaseDate": "កាលបរិច្ឆេទចេញផ្សាយ",
       "sortBy": "តម្រៀបតាម"
     },
+    "director": "នាយក៖",
     "endsAt": "បញ្ចប់នៅម៉ោង {{time}}",
     "episode": "វគ្គ",
     "episodeNumber": "ភាគ {{number}}",
     "episodeReleaseDate": "កាលបរិច្ឆេទចេញផ្សាយ៖ {{date}}",
     "episodeReleaseDateUnknown": "កាលបរិច្ឆេទចេញផ្សាយ៖ មិនស្គាល់",
     "episodes": "ភាគ",
+    "goToEpisode": "ចូលទៅកាន់ភាគ",
     "imdb": "មើលនៅលើ IMDb",
     "language": "ភាសា៖",
     "play": "លេង",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "មិនអាចទាញយករូបភាពសម្រាប់មេឌៀនេះបានទេ",
     "episodeDisplay": "S{{season}} - E{{episode}}",
     "episodeShort": "E",
+    "errors": {
+      "errorLoading": "មានបញ្ហាក្នុងការផ្ទុកបណ្តុំ",
+      "failedToLoad": "មិនអាចផ្ទុកបណ្តុំបានទេ"
+    },
     "inCinema": "នៅក្នុងរោងកុន",
+    "noMoviesInCollection": "រកមិនឃើញភាពយន្តនៅក្នុងបណ្តុំនេះទេ",
     "seasonUnwatched": "តើ​អ្នក​ប្រាកដ​ជា​ចង់​សម្គាល់​រដូវ​កាល​ថា​មិន​បាន​មើល​ទេ?",
     "seasonWatched": "តើអ្នកប្រាកដថាចង់សម្គាល់រដូវកាលដូចដែលបានមើលទេ?",
     "types": {

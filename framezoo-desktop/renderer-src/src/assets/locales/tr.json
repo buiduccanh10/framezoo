@@ -209,20 +209,25 @@
   "details": {
     "addToList": "Listeye Ekle",
     "airs": "Fiyaka",
+    "cast": "Döküm:",
     "collection": {
       "bookmarkAll": "Tümünü Yer İşaretlerine Ekle",
+      "bookmarkTooltip": "{{name}} koleksiyonunun tamamını yer işaretlerinize ekleyin.",
+      "label": "Koleksiyon",
       "movie": "Film",
       "movies": "Filmler",
       "rating": "Derecelendirme",
       "releaseDate": "Yayın tarihi",
       "sortBy": "Göre sırala"
     },
+    "director": "Müdür:",
     "endsAt": "{{time}}'de bitiyor",
     "episode": "Bölüm",
     "episodeNumber": "Bölüm {{number}}",
     "episodeReleaseDate": "Yayın Tarihi: {{date}}",
     "episodeReleaseDateUnknown": "Çıkış Tarihi: Bilinmiyor",
     "episodes": "Bölümler",
+    "goToEpisode": "Bölüme git",
     "imdb": "TMDb'de görüntüle",
     "language": "Dil:",
     "play": "Oynat",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "Bu medya için bir resim alınamadı.",
     "episodeDisplay": "S{{season}} B{{episode}}",
     "episodeShort": "B",
+    "errors": {
+      "errorLoading": "Koleksiyon yüklenirken hata oluştu.",
+      "failedToLoad": "Koleksiyon yüklenemedi."
+    },
     "inCinema": "Sinemada",
+    "noMoviesInCollection": "Bu koleksiyonda hiçbir film bulunamadı.",
     "seasonUnwatched": "Sezonu izlenmedi olarak işaretlemek istediğinizden emin misiniz?",
     "seasonWatched": "Sezonu izlendi olarak işaretlemek istediğinizden emin misiniz?",
     "types": {

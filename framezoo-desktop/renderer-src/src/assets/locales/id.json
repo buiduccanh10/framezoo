@@ -209,20 +209,25 @@
   "details": {
     "addToList": "Tambahkan ke Daftar",
     "airs": "mengudara",
+    "cast": "Pemeran:",
     "collection": {
       "bookmarkAll": "Tandai Semua",
+      "bookmarkTooltip": "Tandai seluruh koleksi __PH__",
+      "label": "Koleksi",
       "movie": "Film",
       "movies": "Film",
       "rating": "Peringkat",
       "releaseDate": "Tanggal Rilis",
       "sortBy": "Urutkan berdasarkan"
     },
+    "director": "Direktur:",
     "endsAt": "Berakhir pada {{time}}",
     "episode": "Episode",
     "episodeNumber": "Episode {{number}}",
     "episodeReleaseDate": "Tanggal Rilis: {{date}}",
     "episodeReleaseDateUnknown": "Tanggal Rilis: Tidak Diketahui",
     "episodes": "Episode",
+    "goToEpisode": "Pergi ke episode",
     "imdb": "Lihat di IMDb",
     "language": "Bahasa:",
     "play": "Bermain",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "Tidak dapat mengambil gambar untuk media ini.",
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
+    "errors": {
+      "errorLoading": "Terjadi kesalahan saat memuat koleksi.",
+      "failedToLoad": "Gagal memuat koleksi"
+    },
     "inCinema": "Di Bioskop",
+    "noMoviesInCollection": "Tidak ada film yang ditemukan dalam koleksi ini.",
     "seasonUnwatched": "Yakin ingin menandai season ini sebagai belum ditonton?",
     "seasonWatched": "Yakin ingin menandai season sebagai ditonton?",
     "types": {

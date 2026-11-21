@@ -209,20 +209,25 @@
   "details": {
     "addToList": "ਸੂਚੀ ਵਿੱਚ ਸ਼ਾਮਲ ਕਰੋ",
     "airs": "ਏਅਰਸ",
+    "cast": "ਕਾਸਟ:",
     "collection": {
       "bookmarkAll": "ਸਭ ਨੂੰ ਬੁੱਕਮਾਰਕ ਕਰੋ",
+      "bookmarkTooltip": "ਪੂਰੇ {{name}} ਸੰਗ੍ਰਹਿ ਨੂੰ ਬੁੱਕਮਾਰਕ ਕਰੋ",
+      "label": "ਸੰਗ੍ਰਹਿ",
       "movie": "ਮੂਵੀ",
       "movies": "ਫਿਲਮਾਂ",
       "rating": "ਰੇਟਿੰਗ",
       "releaseDate": "ਰਿਹਾਈ ਤਾਰੀਖ",
       "sortBy": "ਦੇ ਨਾਲ ਕ੍ਰਮਬੱਧ"
     },
+    "director": "ਨਿਰਦੇਸ਼ਕ:",
     "endsAt": "{{time}} 'ਤੇ ਸਮਾਪਤ ਹੁੰਦਾ ਹੈ",
     "episode": "ਐਪੀਸੋਡ",
     "episodeNumber": "ਐਪੀਸੋਡ {{number}}",
     "episodeReleaseDate": "ਰੀਲੀਜ਼ ਦੀ ਮਿਤੀ: {{date}}",
     "episodeReleaseDateUnknown": "ਰੀਲੀਜ਼ ਦੀ ਮਿਤੀ: ਅਗਿਆਤ",
     "episodes": "ਐਪੀਸੋਡ",
+    "goToEpisode": "ਐਪੀਸੋਡ 'ਤੇ ਜਾਓ",
     "imdb": "IMDb 'ਤੇ ਦੇਖੋ",
     "language": "ਭਾਸ਼ਾ:",
     "play": "ਖੇਡੋ",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "ਇਸ ਮੀਡੀਆ ਲਈ ਚਿੱਤਰ ਪ੍ਰਾਪਤ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ।",
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
+    "errors": {
+      "errorLoading": "ਸੰਗ੍ਰਹਿ ਲੋਡ ਕਰਨ ਵਿੱਚ ਗੜਬੜ ਹੋਈ",
+      "failedToLoad": "ਸੰਗ੍ਰਹਿ ਲੋਡ ਕਰਨ ਵਿੱਚ ਅਸਫਲ"
+    },
     "inCinema": "ਸਿਨੇਮਾ ਵਿੱਚ",
+    "noMoviesInCollection": "ਇਸ ਸੰਗ੍ਰਹਿ ਵਿੱਚ ਕੋਈ ਫ਼ਿਲਮਾਂ ਨਹੀਂ ਮਿਲੀਆਂ।",
     "seasonUnwatched": "ਕੀ ਤੁਸੀਂ ਯਕੀਨੀ ਤੌਰ 'ਤੇ ਸੀਜ਼ਨ ਨੂੰ ਅਣਦੇਖੇ ਵਜੋਂ ਚਿੰਨ੍ਹਿਤ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?",
     "seasonWatched": "ਕੀ ਤੁਸੀਂ ਯਕੀਨੀ ਤੌਰ 'ਤੇ ਸੀਜ਼ਨ ਨੂੰ ਦੇਖਿਆ ਗਿਆ ਵਜੋਂ ਚਿੰਨ੍ਹਿਤ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?",
     "types": {

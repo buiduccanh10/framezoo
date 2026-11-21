@@ -209,20 +209,25 @@
   "details": {
     "addToList": "הוסף לרשימה",
     "airs": "עולה לאוויר",
+    "cast": "יָצוּק:",
     "collection": {
       "bookmarkAll": "סמן הכל",
+      "bookmarkTooltip": "הוסף את כל האוסף {{name}} למועדפים",
+      "label": "גְבִיָה",
       "movie": "סֶרֶט",
       "movies": "סרטים",
       "rating": "דֵרוּג",
       "releaseDate": "תאריך יציאה",
       "sortBy": "מיין לפי"
     },
+    "director": "מְנַהֵל:",
     "endsAt": "מסתיים ב־{{time}}",
     "episode": "פרק",
     "episodeNumber": "פרק {{number}}",
     "episodeReleaseDate": "תאריך יציאה: {{date}}",
     "episodeReleaseDateUnknown": "תאריך יציאה: לא ידוע",
     "episodes": "פרקים",
+    "goToEpisode": "עבור לפרק",
     "imdb": "לבדוק בIMDb",
     "language": "שפה:",
     "play": "לנגן",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "לא ניתן היה לאחזר תמונה עבור מדיה זו",
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "פ",
+    "errors": {
+      "errorLoading": "שגיאה בטעינת האוסף",
+      "failedToLoad": "טעינת האוסף נכשלה"
+    },
     "inCinema": "בקולנוע",
+    "noMoviesInCollection": "לא נמצאו סרטים באוסף זה",
     "seasonUnwatched": "האם אתה בטוח שאתה רוצה לסמן את העונה כלא נצפתה?",
     "seasonWatched": "האם אתה בטוח שאתה רוצה לסמן את העונה כצפית?",
     "types": {
