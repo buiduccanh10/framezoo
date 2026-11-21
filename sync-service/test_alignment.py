@@ -1370,6 +1370,86 @@ Let's move out.
         self.assertEqual(segments[0]["endMs"], 365_000)
         self.assertEqual(segments[1]["startMs"], 365_000)
 
+    def test_hdtv_staircase_uses_piecewise_segments_instead_of_fake_rate_ratio(self):
+        from alignment import select_alignment_consensus
+
+        specs = [
+            (15.0, 1575, 100),
+            (302.0, 2300, 92),
+            (754.0, 3025, 94),
+            (1258.0, 5325, 89),
+            (1760.0, 6325, 93),
+            (2213.0, 5675, 96),
+        ]
+        entries = [
+            {
+                "startAt": start_s,
+                "durationSec": 45.0,
+                "midMs": int((start_s + 22.5) * 1000),
+                "result": self.make_aligned_result(offset_ms, conf),
+            }
+            for start_s, offset_ms, conf in specs
+        ]
+        consensus = select_alignment_consensus(entries)
+        self.assertTrue(consensus["aligned"])
+        self.assertIsNone(consensus.get("rateRatio"))
+        segs = consensus.get("segments")
+        self.assertIsNotNone(segs)
+        self.assertGreaterEqual(len(segs), 4)
+        self.assertEqual(segs[-1]["offsetMs"], 5675)
+
+    def test_tied_three_vs_three_commercial_split_returns_two_segments(self):
+        from alignment import select_alignment_consensus
+
+        specs = [
+            (60.0, 0, 90),
+            (360.0, 0, 91),
+            (720.0, 0, 89),
+            (1200.0, 5_000, 90),
+            (1680.0, 5_000, 92),
+            (2160.0, 5_000, 90),
+        ]
+        entries = [
+            {
+                "startAt": start_s,
+                "durationSec": 45.0,
+                "midMs": int((start_s + 22.5) * 1000),
+                "result": self.make_aligned_result(offset_ms, conf),
+            }
+            for start_s, offset_ms, conf in specs
+        ]
+        consensus = select_alignment_consensus(entries)
+        self.assertTrue(consensus["aligned"])
+        self.assertIsNone(consensus.get("rateRatio"))
+        segs = consensus.get("segments")
+        self.assertIsNotNone(segs)
+        self.assertEqual([s["offsetMs"] for s in segs], [0, 5_000])
+
+    def test_flat_constant_offset_with_jitter_returns_no_segments_and_no_rate_ratio(self):
+        from alignment import select_alignment_consensus
+
+        specs = [
+            (60.0, 2100, 90),
+            (400.0, 1800, 88),
+            (800.0, 2450, 91),
+            (1300.0, 1750, 87),
+            (1800.0, 2250, 90),
+            (2250.0, 1950, 89),
+        ]
+        entries = [
+            {
+                "startAt": start_s,
+                "durationSec": 45.0,
+                "midMs": int((start_s + 22.5) * 1000),
+                "result": self.make_aligned_result(offset_ms, conf),
+            }
+            for start_s, offset_ms, conf in specs
+        ]
+        consensus = select_alignment_consensus(entries)
+        self.assertTrue(consensus["aligned"])
+        self.assertIsNone(consensus.get("rateRatio"))
+        self.assertIsNone(consensus.get("segments"))
+
 
 if __name__ == "__main__":
     unittest.main()

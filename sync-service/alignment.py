@@ -2075,6 +2075,31 @@ def _is_single_endpoint_jump(
     return False
 
 
+def _has_coherent_excluded_point(
+    sorted_points: list[tuple[float, float, float, float, dict[str, Any]]],
+    slope: float,
+    intercept: float,
+    residual_threshold_ms: float = 900.0,
+    neighbor_tol_ms: float = 2_500.0,
+    min_conf: float = 75.0,
+) -> bool:
+    """
+    Return True when a non-standard linear fit discards a high-confidence window
+    whose offset coheres with its adjacent inlier (e.g. HDTV staircase plateau reversal).
+    """
+    for idx, p in enumerate(sorted_points):
+        err = abs(p[1] - (slope * p[0] + intercept))
+        if err <= residual_threshold_ms or p[3] < min_conf:
+            continue
+        for nb_idx in (idx - 1, idx + 1):
+            if 0 <= nb_idx < len(sorted_points):
+                nb = sorted_points[nb_idx]
+                nb_err = abs(nb[1] - (slope * nb[0] + intercept))
+                if nb_err <= residual_threshold_ms and abs(p[2] - nb[2]) <= neighbor_tol_ms:
+                    return True
+    return False
+
+
 def _fit_small_linear_drift(
     points: list[tuple[float, float, float, float, dict[str, Any]]],
 ) -> dict[str, Any] | None:
@@ -2207,6 +2232,8 @@ def _fit_small_linear_drift(
             if not _has_consistent_drift_direction(inliers, slope, 0.60):
                 continue
             if _is_single_endpoint_jump(inliers, slope, linear_rmse):
+                continue
+            if _has_coherent_excluded_point(sorted_points, slope, intercept):
                 continue
 
             average_confidence = round(sum(weights) / len(inliers))
@@ -2365,6 +2392,10 @@ def _fit_framerate_drift(
                     continue
                 if _is_single_endpoint_jump(inliers, slope, linear_rmse):
                     continue
+                if not snapped_to_std and _has_coherent_excluded_point(
+                    points, slope, intercept
+                ):
+                    continue
 
                 score_tuple = (len(inliers), -linear_rmse)
                 if best_model is None or score_tuple > best_model["rank"]:
@@ -2420,8 +2451,43 @@ def _fit_framerate_drift(
     return _fit_small_linear_drift(points)
 
 
+def _is_coherent_piecewise_consensus(
+    clusters: list[dict[str, Any]],
+    valid_entries: list[dict[str, Any]],
+    segments: list[dict[str, int]],
+) -> bool:
+    """Allow piecewise consensus for clean multi-cluster splits or monotonic HDTV staircases."""
+    if len(segments) < 2:
+        return False
+    strong_clusters = [
+        cluster
+        for cluster in clusters
+        if len(cluster["candidates"]) >= 2
+        and cluster["averageConfidence"] >= MIN_ALIGNMENT_CONFIDENCE
+    ]
+    if len(strong_clusters) >= 2:
+        return True
+    if len(valid_entries) < 4:
+        return False
+    mean_conf = sum(
+        int(entry["result"].get("confidence", 0)) for entry in valid_entries
+    ) / len(valid_entries)
+    if mean_conf < 75.0:
+        return False
+    step_deltas = [
+        segments[idx + 1]["offsetMs"] - segments[idx]["offsetMs"]
+        for idx in range(len(segments) - 1)
+    ]
+    if not step_deltas or max(abs(d) for d in step_deltas) > 15_000:
+        return False
+    pos_steps = sum(1 for d in step_deltas if d > 0)
+    neg_steps = sum(1 for d in step_deltas if d < 0)
+    return max(pos_steps, neg_steps) / len(step_deltas) >= 0.60
+
+
 def select_alignment_consensus(
     entries: list[dict[str, Any]],
+    cues: list[Cue] | None = None,
 ) -> dict[str, Any]:
     candidates = [entry["result"] for entry in entries]
     speech_candidates = [
@@ -2557,6 +2623,17 @@ def select_alignment_consensus(
         if strong_single_window and score_margin >= 20:
             has_consensus = True
 
+    piecewise_override: list[dict[str, int]] | None = None
+    if not has_consensus and len(valid_entries) >= 3:
+        cand_segments = compute_piecewise_segments(
+            valid_entries,
+            round(best_cluster["averageOffsetMs"]),
+            cues=cues,
+        )
+        if _is_coherent_piecewise_consensus(clusters, valid_entries, cand_segments):
+            has_consensus = True
+            piecewise_override = cand_segments
+
     if not has_consensus:
         return _build_unaligned_consensus_result(
             candidates,
@@ -2571,7 +2648,11 @@ def select_alignment_consensus(
     )["result"]
     avg_offset = round(best_cluster["averageOffsetMs"])
     avg_conf = round(best_cluster["averageConfidence"])
-    piecewise_segments = compute_piecewise_segments(valid_entries, avg_offset)
+    piecewise_segments = (
+        piecewise_override
+        if piecewise_override is not None
+        else compute_piecewise_segments(valid_entries, avg_offset, cues=cues)
+    )
 
     consensus_res = {
         **representative,
@@ -2940,8 +3021,8 @@ def align_speech_windows(
             )
 
     for track, entries in entries_by_track.items():
-        consensus = select_alignment_consensus(entries)
         cues = parsed_tracks.get(track)
+        consensus = select_alignment_consensus(entries, cues=cues)
 
         # Cross-window hint rescue, FPS drift projection & bounded pooled fallback
         if (
@@ -2963,14 +3044,47 @@ def align_speech_windows(
                 if e["result"].get("aligned") and isinstance(e["result"].get("offsetMs"), int)
             ]
             rescued_entries = working_entries
+            healed_outlier = False
             if aligned_hints:
+                median_hint = int(round(float(np.median(aligned_hints))))
                 rescued_entries = []
                 for idx, (speech_intervals, audio_start_ms, audio_end_ms) in enumerate(windows):
                     orig_entry = working_entries[idx]
-                    if orig_entry["result"].get("aligned"):
+                    orig_res = orig_entry["result"]
+                    merged_speech = merge_intervals(speech_intervals)
+                    if orig_res.get("aligned"):
+                        orig_off = int(orig_res["offsetMs"])
+                        has_neighbor_support = any(
+                            j != idx
+                            and working_entries[j]["result"].get("aligned")
+                            and abs(int(working_entries[j]["result"]["offsetMs"]) - orig_off) <= 5_000
+                            for j in range(len(working_entries))
+                        )
+                        if (
+                            alignment_result_fn is None
+                            and len(aligned_hints) >= 3
+                            and abs(orig_off - median_hint) > 15_000
+                            and not has_neighbor_support
+                        ):
+                            repaired = _align_window_at_projected_rate(
+                                cues,
+                                merged_speech,
+                                audio_start_ms,
+                                audio_end_ms,
+                                median_hint,
+                                1.0,
+                                search_radius_ms=8_000,
+                            )
+                            if (
+                                repaired.get("aligned")
+                                and int(repaired.get("speechAnchorCount", 0)) >= 2
+                                and int(repaired.get("confidence", 0))
+                                >= int(orig_res.get("confidence", 0)) - 10
+                            ):
+                                orig_entry = {**orig_entry, "result": repaired}
+                                healed_outlier = True
                         rescued_entries.append(orig_entry)
                         continue
-                    merged_speech = merge_intervals(speech_intervals)
                     centers = compute_track_search_centers(
                         cues,
                         merged_speech,
@@ -2997,8 +3111,8 @@ def align_speech_windows(
                                 search_centers=centers,
                             )
                         except TypeError:
-                            re_res = orig_entry["result"]
-                    chosen_res = orig_entry["result"]
+                            re_res = orig_res
+                    chosen_res = orig_res
                     if re_res.get("aligned") or (
                         not chosen_res.get("aligned")
                         and "_candidate" in re_res
@@ -3017,9 +3131,10 @@ def align_speech_windows(
                             "result": chosen_res,
                         }
                     )
-                rescued_consensus = select_alignment_consensus(rescued_entries)
+                rescued_consensus = select_alignment_consensus(rescued_entries, cues=cues)
                 if rescued_consensus.get("aligned") and (
-                    not consensus.get("aligned")
+                    healed_outlier
+                    or not consensus.get("aligned")
                     or rescued_consensus.get("rateRatio") is not None
                 ):
                     consensus = rescued_consensus
