@@ -99,6 +99,12 @@ export function getApiError(error: unknown, fallback: string) {
     if (message && typeof message === "object" && "message" in message) {
       return String(message.message);
     }
+    if (!error.response) {
+      return "Không thể kết nối đến máy chủ.";
+    }
+    if (error.response.status >= 500) {
+      return `Lỗi máy chủ (${error.response.status}).`;
+    }
   }
   return fallback;
 }
