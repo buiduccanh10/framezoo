@@ -10,7 +10,8 @@ const SHOWCASE_ITEMS = [
     key: "detail",
     rowClassName: "landing-showcase-row-primary",
     figureClassName: "landing-showcase-image-detail",
-    gifSrc: "/Snapzy_Recording_2026-11-17_22-40-18.gif",
+    videoSrc: "/showcase-detail.mp4",
+    posterSrc: "/showcase-detail-poster.jpg",
     mediaFirst: true,
     altKey: "showcasePrimaryAlt",
     titleKey: "showcaseTitle",
@@ -20,7 +21,8 @@ const SHOWCASE_ITEMS = [
     key: "discovery",
     rowClassName: "landing-showcase-row-secondary",
     figureClassName: "landing-showcase-image-discovery",
-    gifSrc: "/Snapzy_Recording_2026-11-17_22-41-21.gif",
+    videoSrc: "/showcase-discovery.mp4",
+    posterSrc: "/showcase-discovery-poster.jpg",
     mediaFirst: false,
     altKey: "showcaseSecondaryAlt",
     titleKey: "showcaseSecondaryTitle",
@@ -143,14 +145,19 @@ export function FeatureSection({ copy, variant = "all" }: FeatureSectionProps) {
               <figure
                 className={`landing-showcase-image ${item.figureClassName}`}
               >
-                <img
-                  src={item.gifSrc}
-                  alt={copy[item.altKey]}
-                  width={959}
+                <video
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  preload="metadata"
+                  poster={item.posterSrc}
+                  width={958}
                   height={588}
-                  loading="lazy"
-                  decoding="async"
-                />
+                  aria-label={copy[item.altKey]}
+                >
+                  <source src={item.videoSrc} type="video/mp4" />
+                </video>
               </figure>
             );
             const details = (

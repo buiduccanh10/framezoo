@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/sync-logo.mjs && vite build && node scripts/prerender.mjs",
+    "build": "node scripts/sync-logo.mjs && vite build && node scripts/prerender.mjs && node scripts/validate-seo.mjs",
     "logo:sync": "node scripts/sync-logo.mjs",
     "test": "vitest run",
     "seo:validate": "node scripts/validate-seo.mjs",

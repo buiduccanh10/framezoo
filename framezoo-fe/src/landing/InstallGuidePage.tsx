@@ -49,7 +49,10 @@ export function InstallGuidePage() {
       getLandingLocaleOption(locale)?.direction ?? "ltr";
     applyPageSeo(locale, {
       title: `${locale === "en" ? activeCopy.nav.installGuide : activeCopy.installGuide.title} | Framezoo`,
-      description: activeCopy.installGuide.subtitle,
+      description:
+        locale === "en"
+          ? "Step-by-step installation and launch guide for the Framezoo desktop streaming player on macOS and Windows."
+          : activeCopy.installGuide.subtitle,
       path: "/guide/install",
     });
 
