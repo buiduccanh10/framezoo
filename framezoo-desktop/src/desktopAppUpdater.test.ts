@@ -1,7 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { mockAutoUpdater } = vi.hoisted(() => {
+const { mockAutoUpdater, mockAppVersion } = vi.hoisted(() => {
   const listeners: Record<string, Function[]> = {};
+  const appVersion = { current: "2.1.7" };
   const emitter = {
     on: vi.fn((event: string, fn: Function) => {
       listeners[event] = listeners[event] || [];
@@ -24,14 +25,15 @@ const { mockAutoUpdater } = vi.hoisted(() => {
     quitAndInstall: vi.fn(),
     autoDownload: false,
     autoInstallOnAppQuit: false,
+    allowDowngrade: false,
   };
-  return { mockAutoUpdater: emitter };
+  return { mockAutoUpdater: emitter, mockAppVersion: appVersion };
 });
 
 vi.mock("electron", () => ({
   app: {
     isPackaged: true,
-    getVersion: () => "2.1.7",
+    getVersion: () => mockAppVersion.current,
     quit: vi.fn(),
   },
 }));
@@ -46,6 +48,7 @@ describe("createDesktopAppUpdater - pre-download update checks", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockAutoUpdater.removeAllListeners();
+    mockAppVersion.current = "2.1.7";
   });
 
   it("checks for updates and downloads immediately when the version is unchanged", async () => {
@@ -271,6 +274,84 @@ describe("createDesktopAppUpdater - pre-download update checks", () => {
       await vi.waitFor(() => {
         expect(mockAutoUpdater.downloadUpdate).toHaveBeenCalled();
       });
+    } finally {
+      Object.defineProperty(process, "platform", { value: originalPlatform });
+      updater.dispose();
+    }
+  });
+
+  it("supports sub-release upgrades (2.4.1 -> 2.4.1-a -> 2.4.1-b -> 2.4.1-aa)", async () => {
+    mockAppVersion.current = "2.4.1";
+    const updater = createDesktopAppUpdater({
+      appName: "Framezoo",
+      checkIntervalMs: 60000,
+      releaseOwner: "framezoo",
+      releaseRepo: "framezoo",
+    });
+
+    mockAutoUpdater.checkForUpdates.mockImplementation(async () => {
+      mockAutoUpdater.emit("update-available", { version: "2.4.1-a" });
+      return { updateInfo: { version: "2.4.1-a" } };
+    });
+    mockAutoUpdater.downloadUpdate.mockResolvedValue(true);
+
+    const originalPlatform = process.platform;
+    Object.defineProperty(process, "platform", { value: "win32" });
+
+    try {
+      updater.initialize();
+      expect(mockAutoUpdater.allowDowngrade).toBe(true);
+
+      const hasUpdate = await updater.checkForUpdate();
+      expect(hasUpdate).toBe(true);
+      await vi.waitFor(() => {
+        expect(mockAutoUpdater.downloadUpdate).toHaveBeenCalled();
+      });
+
+      mockAppVersion.current = "2.4.1-a";
+      mockAutoUpdater.emit("update-available", { version: "2.4.1-b" });
+      expect(updater.getState().status).toBe("available");
+      expect(updater.getState().updateVersion).toBe("2.4.1-b");
+
+      mockAppVersion.current = "2.4.1-z";
+      mockAutoUpdater.emit("update-available", { version: "2.4.1-aa" });
+      expect(updater.getState().status).toBe("available");
+      expect(updater.getState().updateVersion).toBe("2.4.1-aa");
+    } finally {
+      Object.defineProperty(process, "platform", { value: originalPlatform });
+      updater.dispose();
+    }
+  });
+
+  it("rejects stale or older versions even when allowDowngrade is enabled", async () => {
+    mockAppVersion.current = "2.4.1-a";
+    const updater = createDesktopAppUpdater({
+      appName: "Framezoo",
+      checkIntervalMs: 60000,
+      releaseOwner: "framezoo",
+      releaseRepo: "framezoo",
+    });
+
+    mockAutoUpdater.checkForUpdates.mockImplementation(async () => {
+      mockAutoUpdater.emit("update-available", { version: "2.4.1" });
+      return { updateInfo: { version: "2.4.1" } };
+    });
+
+    const originalPlatform = process.platform;
+    Object.defineProperty(process, "platform", { value: "win32" });
+
+    try {
+      updater.initialize();
+      const hasUpdate = await updater.checkForUpdate();
+      expect(hasUpdate).toBe(false);
+      expect(updater.getState().status).toBe("idle");
+      expect(updater.getState().updateVersion).toBeNull();
+      expect(mockAutoUpdater.downloadUpdate).not.toHaveBeenCalled();
+
+      mockAppVersion.current = "2.4.2";
+      mockAutoUpdater.emit("update-available", { version: "2.4.1-b" });
+      expect(updater.getState().status).toBe("idle");
+      expect(updater.getState().updateVersion).toBeNull();
     } finally {
       Object.defineProperty(process, "platform", { value: originalPlatform });
       updater.dispose();
