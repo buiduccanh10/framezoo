@@ -820,53 +820,65 @@ export function shiftVttPiecewiseTimestamps(
       const end = parseVttTimestamp(match[2]);
       if (!Number.isFinite(start) || !Number.isFinite(end)) return block;
 
-      let appliedOffsetMs = fallbackOffsetMs;
+      let shiftedStart: number | null = null;
+      let shiftedEnd: number | null = null;
 
-      let insideSegment = false;
-      for (const seg of sortedSegments) {
-        if (start >= seg.startMs && start < seg.endMs) {
-          appliedOffsetMs = seg.offsetMs;
-          insideSegment = true;
+      // Segments define disjoint target intervals in VIDEO time [segStart, segEnd).
+      // Match each cue by its shifted video timestamp so a negative offset jump on
+      // a later segment can never fold cues backwards on top of an earlier segment.
+      for (let i = 0; i < sortedSegments.length; i++) {
+        const seg = sortedSegments[i];
+        const segStart = i === 0 ? 0 : seg.startMs;
+        const segEnd =
+          i === sortedSegments.length - 1
+            ? Number.POSITIVE_INFINITY
+            : seg.endMs;
+        const candStart = start * effectiveRateRatio + seg.offsetMs;
+        const candEnd = end * effectiveRateRatio + seg.offsetMs;
+        if (candEnd > segStart && candStart < segEnd) {
+          shiftedStart = Math.max(segStart, candStart);
+          shiftedEnd = Math.min(segEnd, candEnd);
           break;
         }
       }
 
-      if (!insideSegment && sortedSegments.length > 0) {
-        if (sortedSegments.length === 1 || start < sortedSegments[0].startMs) {
-          // Clamp outside boundary segments without extrapolating artificial drift
-          appliedOffsetMs = sortedSegments[0].offsetMs;
-        } else if (start >= sortedSegments[sortedSegments.length - 1].endMs) {
-          appliedOffsetMs = sortedSegments[sortedSegments.length - 1].offsetMs;
-        } else {
-          for (let i = 0; i < sortedSegments.length - 1; i++) {
-            const s1 = sortedSegments[i];
-            let s2 = sortedSegments[i + 1];
-            // Find the next non-overlapping segment to interpolate the gap
-            for (let j = i + 1; j < sortedSegments.length; j++) {
-              if (sortedSegments[j].startMs >= s1.endMs) {
-                s2 = sortedSegments[j];
-                break;
-              }
-            }
-            if (start >= s1.endMs && start < s2.startMs) {
-              const gap = s2.startMs - s1.endMs;
-              const slope = gap > 0 ? (s2.offsetMs - s1.offsetMs) / gap : 0;
-              appliedOffsetMs = s1.offsetMs + slope * (start - s1.endMs);
-              break;
-            }
+      if (shiftedStart === null || shiftedEnd === null) {
+        // Explicit gap between non-adjacent segments: interpolate only if the
+        // shifted cue stays strictly inside the uncovered video gap.
+        for (let i = 0; i < sortedSegments.length - 1; i++) {
+          const s1 = sortedSegments[i];
+          const s2 = sortedSegments[i + 1];
+          if (s2.startMs <= s1.endMs) continue;
+          const s1SubEnd = (s1.endMs - s1.offsetMs) / effectiveRateRatio;
+          const s2SubStart = (s2.startMs - s2.offsetMs) / effectiveRateRatio;
+          if (
+            s2SubStart > s1SubEnd &&
+            start >= s1SubEnd &&
+            start < s2SubStart
+          ) {
+            const t = (start - s1SubEnd) / (s2SubStart - s1SubEnd);
+            const appliedOffsetMs =
+              s1.offsetMs + t * (s2.offsetMs - s1.offsetMs);
+            shiftedStart = Math.max(
+              s1.endMs,
+              start * effectiveRateRatio + appliedOffsetMs,
+            );
+            shiftedEnd = Math.min(
+              s2.startMs,
+              end * effectiveRateRatio + appliedOffsetMs,
+            );
+            break;
           }
         }
       }
 
-      const shiftedStart = Math.max(
-        0,
-        start * effectiveRateRatio + appliedOffsetMs,
-      );
-      const shiftedEnd = Math.max(
-        0,
-        end * effectiveRateRatio + appliedOffsetMs,
-      );
-      if (shiftedEnd <= shiftedStart) return null;
+      if (
+        shiftedStart === null ||
+        shiftedEnd === null ||
+        shiftedEnd <= shiftedStart
+      ) {
+        return null;
+      }
 
       lines[timingLineIndex] =
         `${formatVttTimestamp(shiftedStart)} --> ${formatVttTimestamp(shiftedEnd)}${match[3]}`;

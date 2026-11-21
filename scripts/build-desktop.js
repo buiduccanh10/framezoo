@@ -90,11 +90,15 @@ for (const target of targets) {
   }
 }
 
-// 3. Find version from package.json
+// 3. Find version from package.json (match electron-builder's normalized version, e.g. 2.4.1-a)
 const packageJson = JSON.parse(
   fs.readFileSync(path.join(desktopDir, "package.json"), "utf8"),
 );
-const version = packageJson.version;
+const rawVersion = String(packageJson.version || "").trim();
+const version = rawVersion.replace(
+  /^(\d+\.\d+\.\d+)([A-Za-z][0-9A-Za-z]*)$/,
+  "$1-$2",
+);
 
 // 4. Copy built artifacts to the downloads folder
 const releaseDir = path.join(desktopDir, "release");

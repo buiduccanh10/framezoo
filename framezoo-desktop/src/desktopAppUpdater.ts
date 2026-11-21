@@ -12,6 +12,7 @@ import type {
   CreateDesktopAppUpdaterOptions,
   DesktopAppUpdateState,
 } from "./types";
+import { isNewerDesktopVersion } from "./desktopVersion";
 
 const INITIAL_DESKTOP_APP_UPDATE_STATE: DesktopAppUpdateState = {
   status: "idle",
@@ -239,7 +240,7 @@ export function createDesktopAppUpdater(
       }
 
       const hasNewerVersion = Boolean(
-        initialVersion && latestVersion !== initialVersion,
+        initialVersion && isNewerDesktopVersion(latestVersion, initialVersion),
       );
 
       if (hasNewerVersion) {
@@ -480,6 +481,10 @@ echo "Update finished successfully at $(date)"
 
     autoUpdater.autoDownload = false;
     autoUpdater.autoInstallOnAppQuit = true;
+    // Allow electron-updater to surface SemVer prerelease-formatted sub-releases
+    // (e.g. 2.4.1 -> 2.4.1-a); actual upgrade eligibility is enforced below via
+    // isNewerDesktopVersion so true downgrades are still rejected.
+    autoUpdater.allowDowngrade = true;
     autoUpdater.setFeedURL({
       provider: "generic",
       url: getFeedUrl(),
@@ -495,7 +500,21 @@ echo "Update finished successfully at $(date)"
     });
 
     autoUpdater.on("update-available", (info: any) => {
-      const nextVersion = info?.version ?? app.getVersion();
+      const currentVersion = app.getVersion();
+      const nextVersion = info?.version ?? currentVersion;
+      if (!isNewerDesktopVersion(nextVersion, currentVersion)) {
+        clearAutoDownloadRetry();
+        setState({
+          status: "idle",
+          updateToken: null,
+          updateVersion: null,
+          progressPercent: null,
+          errorMessage: null,
+          versionBump: null,
+        });
+        return;
+      }
+
       if (isCheckingBeforeDownload) {
         state = {
           ...state,

@@ -413,6 +413,35 @@ Late cue after last segment`;
     expect(shifted).toContain("00:15:05.000 --> 00:15:07.000");
   });
 
+  it("drops cut-scene cues instead of folding them backwards on top of an earlier segment", () => {
+    const vtt = `WEBVTT
+
+00:00:02.000 --> 00:00:04.000
+Intro line at 00:02
+
+00:03:02.000 --> 00:03:04.000
+Cut scene line that would fold onto 00:02
+
+00:06:02.000 --> 00:06:04.000
+Main show line mapped to 03:02`;
+
+    const cues = parseCanonicalVtt(
+      shiftVttPiecewiseTimestamps(
+        vtt,
+        [
+          { startMs: 0, endMs: 180_000, offsetMs: 0 },
+          { startMs: 180_000, endMs: Number.MAX_SAFE_INTEGER, offsetMs: -180_000 },
+        ],
+        0,
+      ),
+    );
+
+    expect(cues.map((c) => [c.start, c.end, c.content])).toEqual([
+      [2_000, 4_000, "Intro line at 00:02"],
+      [182_000, 184_000, "Main show line mapped to 03:02"],
+    ]);
+  });
+
   it("applies FPS rateRatio together with offsetMs in applyVttAlignment", () => {
     const vtt = `WEBVTT
 
