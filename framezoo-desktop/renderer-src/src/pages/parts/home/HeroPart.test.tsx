@@ -125,7 +125,7 @@ describe("HeroPart sticky search bar", () => {
     expect(container.querySelector(".fixed")).not.toBeNull();
     expect(container.querySelector("input")).toBe(inputBefore);
 
-    // Switch to AI mode while sticky — stays fixed and keeps glowing AI border
+    // Switch to AI mode while sticky — switches to auto-expanding textarea, stays fixed, and keeps glowing AI border
     const aiBtn = container.querySelector(
       'button[aria-label="Switch to AI natural language search"]',
     ) as HTMLButtonElement;
@@ -133,9 +133,11 @@ describe("HeroPart sticky search bar", () => {
       aiBtn.click();
     });
 
+    const textareaInAi = container.querySelector("textarea");
     expect(container.querySelector(".fixed")).not.toBeNull();
     expect(container.querySelector(".ai-search-border-beam")).not.toBeNull();
-    expect(container.querySelector("input")).toBe(inputBefore);
+    expect(container.querySelector("input")).toBeNull();
+    expect(textareaInAi).not.toBeNull();
     // Compact sticky bar collapses the multi-row suggestions smoothly while scrolled
     const drawerWhileSticky = container.querySelector(
       '[data-testid="ai-guide-drawer"]',
@@ -147,15 +149,28 @@ describe("HeroPart sticky search bar", () => {
       (drawerWhileSticky.querySelector("button") as HTMLButtonElement).disabled,
     ).toBe(true);
 
-    // Scrolling back to top expands suggestions back open inside the search box
+    // Scrolling back to top expands suggestions back open inside the search box without remounting the textarea
     triggerIntersection(true);
     expect(setIsSticky).toHaveBeenLastCalledWith(false);
     expect(container.querySelector(".fixed")).toBeNull();
+    expect(container.querySelector("textarea")).toBe(textareaInAi);
     expect(drawerWhileSticky.getAttribute("aria-hidden")).toBe("false");
     expect(drawerWhileSticky.className).toContain("grid-rows-[1fr]");
     expect(drawerWhileSticky.className).toContain("opacity-100");
     expect(
       (drawerWhileSticky.querySelector("button") as HTMLButtonElement).disabled,
     ).toBe(false);
+
+    // Pressing "/" inside the AI textarea must not be intercepted by useSlashFocus
+    textareaInAi!.focus();
+    const slashEvent = new KeyboardEvent("keydown", {
+      key: "/",
+      bubbles: true,
+      cancelable: true,
+    });
+    act(() => {
+      window.dispatchEvent(slashEvent);
+    });
+    expect(slashEvent.defaultPrevented).toBe(false);
   });
 });

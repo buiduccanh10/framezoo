@@ -4,7 +4,10 @@ import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import { useIntersection } from "react-use";
 
-import { SearchBarInput } from "@/components/form/SearchBar";
+import {
+  SearchBarInput,
+  type SearchBarInputElement,
+} from "@/components/form/SearchBar";
 import { Icon, Icons } from "@/components/Icon";
 import { ThinContainer } from "@/components/layout/ThinContainer";
 import { useSlashFocus } from "@/components/player/hooks/useSlashFocus";
@@ -76,7 +79,7 @@ export function HeroPart({
           "Describe what you want to watch (plot, mood, genre, country...)",
       })
     : randomT(`home.search.placeholder`);
-  const inputRef = useRef<HTMLInputElement>(null!);
+  const inputRef = useRef<SearchBarInputElement>(null!);
   const location = useLocation();
   useSlashFocus(inputRef);
 

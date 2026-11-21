@@ -1,11 +1,68 @@
 import c from "classnames";
-import { type ReactNode, forwardRef, useEffect, useRef, useState } from "react";
+import {
+  type ReactNode,
+  forwardRef,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { useTranslation } from "react-i18next";
 
 import { Flare } from "@/components/utils/Flare";
 
 import { Icon, Icons } from "../Icon";
 import { TextInputControl } from "../text-inputs/TextInputControl";
+
+const AI_MAX_LINES_NORMAL = 4;
+const AI_MAX_LINES_STICKY = 2;
+const DEFAULT_LINE_HEIGHT_PX = 24;
+const DEFAULT_VERTICAL_PADDING_PX = 32;
+
+function normalizeSingleLineSearch(value: string): string {
+  return value.replace(/[\r\n]+/g, " ");
+}
+
+function syncAiTextareaHeight(
+  el: HTMLTextAreaElement,
+  isSticky: boolean,
+): void {
+  const computed = window.getComputedStyle(el);
+  const parsedLineHeight = Number.parseFloat(computed.lineHeight);
+  const lineHeight =
+    Number.isFinite(parsedLineHeight) && parsedLineHeight > 0
+      ? parsedLineHeight
+      : DEFAULT_LINE_HEIGHT_PX;
+  const paddingTop = Number.parseFloat(computed.paddingTop) || 0;
+  const paddingBottom = Number.parseFloat(computed.paddingBottom) || 0;
+  const verticalPadding =
+    paddingTop + paddingBottom > 0
+      ? paddingTop + paddingBottom
+      : DEFAULT_VERTICAL_PADDING_PX;
+
+  const maxLines = isSticky ? AI_MAX_LINES_STICKY : AI_MAX_LINES_NORMAL;
+  const minHeight = Math.ceil(lineHeight + verticalPadding);
+  const maxHeight = Math.ceil(lineHeight * maxLines + verticalPadding);
+
+  if (el.value.length === 0) {
+    el.style.height = `${minHeight}px`;
+    el.style.overflowY = "hidden";
+    return;
+  }
+
+  const prevScrollTop = el.scrollTop;
+  el.style.height = "auto";
+  const contentHeight = el.scrollHeight;
+  const nextHeight = Math.min(Math.max(minHeight, contentHeight), maxHeight);
+  el.style.height = `${nextHeight}px`;
+  el.style.overflowY = contentHeight > maxHeight ? "auto" : "hidden";
+  if (contentHeight > maxHeight && prevScrollTop > 0) {
+    el.scrollTop = prevScrollTop;
+  }
+}
+
+export type SearchBarInputElement = HTMLInputElement | HTMLTextAreaElement;
 
 export interface SearchBarProps {
   placeholder?: string;
@@ -21,7 +78,7 @@ export interface SearchBarProps {
   style?: React.CSSProperties;
 }
 
-export const SearchBarInput = forwardRef<HTMLInputElement, SearchBarProps>(
+export const SearchBarInput = forwardRef<SearchBarInputElement, SearchBarProps>(
   (props, ref) => {
     const { t } = useTranslation();
     const [focused, setFocused] = useState(false);
@@ -29,12 +86,52 @@ export const SearchBarInput = forwardRef<HTMLInputElement, SearchBarProps>(
       Boolean(props.isInFeatured) && window.scrollY < 600,
     );
     const containerRef = useRef<HTMLDivElement>(null!);
+    const fieldRef = useRef<SearchBarInputElement | null>(null);
+    const pendingModeFocusRef = useRef(false);
     const showAiSwitch = Boolean(props.onAiModeChange);
     const isAiMode = showAiSwitch && Boolean(props.aiMode);
+    const isSticky = Boolean(props.isSticky);
+
+    const setFieldRef = useCallback(
+      (node: SearchBarInputElement | null) => {
+        fieldRef.current = node;
+        if (typeof ref === "function") {
+          ref(node);
+        } else if (ref) {
+          ref.current = node;
+        }
+      },
+      [ref],
+    );
 
     function setSearch(value: string) {
-      props.onChange(value, true);
+      props.onChange(isAiMode ? normalizeSingleLineSearch(value) : value, true);
     }
+
+    useEffect(() => {
+      if (!pendingModeFocusRef.current) return;
+      pendingModeFocusRef.current = false;
+      fieldRef.current?.focus();
+    }, [isAiMode]);
+
+    useLayoutEffect(() => {
+      if (!isAiMode) return;
+      const el = fieldRef.current;
+      if (!(el instanceof HTMLTextAreaElement)) return;
+      syncAiTextareaHeight(el, isSticky);
+    }, [isAiMode, isSticky, props.value]);
+
+    useEffect(() => {
+      if (!isAiMode || typeof ResizeObserver !== "function") return;
+      const el = fieldRef.current;
+      if (!(el instanceof HTMLTextAreaElement)) return;
+
+      const observer = new ResizeObserver(() => {
+        syncAiTextareaHeight(el, isSticky);
+      });
+      observer.observe(el);
+      return () => observer.disconnect();
+    }, [isAiMode, isSticky]);
 
     useEffect(() => {
       const handleScroll = () => {
@@ -43,6 +140,20 @@ export const SearchBarInput = forwardRef<HTMLInputElement, SearchBarProps>(
       window.addEventListener("scroll", handleScroll);
       return () => window.removeEventListener("scroll", handleScroll);
     }, [props.isInFeatured]);
+
+    const horizontalPaddingClass = showAiSwitch ? "pl-[6rem]" : "pl-12";
+    const rightPaddingClass = props.value.length > 0 ? "pr-12" : "pr-5";
+
+    const fieldClassName = c(
+      "w-full flex-1 bg-transparent py-4 leading-6 !text-search-text focus:outline-none transition-colors duration-300",
+      horizontalPaddingClass,
+      rightPaddingClass,
+      props.isInFeatured
+        ? lightTheme
+          ? "text-white/50"
+          : "placeholder-search-placeholder"
+        : "placeholder-search-placeholder",
+    );
 
     return (
       <div
@@ -55,13 +166,8 @@ export const SearchBarInput = forwardRef<HTMLInputElement, SearchBarProps>(
           } as React.CSSProperties
         }
         onClick={(e) => {
-          if (
-            ref &&
-            typeof ref !== "function" &&
-            ref.current &&
-            e.target !== ref.current
-          ) {
-            ref.current.focus();
+          if (fieldRef.current && e.target !== fieldRef.current) {
+            fieldRef.current.focus();
           }
         }}
       >
@@ -134,10 +240,10 @@ export const SearchBarInput = forwardRef<HTMLInputElement, SearchBarProps>(
                         e.preventDefault();
                         e.stopPropagation();
                         if (isAiMode) {
+                          pendingModeFocusRef.current = true;
                           props.onAiModeChange?.(false);
-                        }
-                        if (ref && typeof ref !== "function" && ref.current) {
-                          ref.current.focus();
+                        } else {
+                          fieldRef.current?.focus();
                         }
                       }}
                       className={c(
@@ -162,10 +268,10 @@ export const SearchBarInput = forwardRef<HTMLInputElement, SearchBarProps>(
                         e.preventDefault();
                         e.stopPropagation();
                         if (!isAiMode) {
+                          pendingModeFocusRef.current = true;
                           props.onAiModeChange?.(true);
-                        }
-                        if (ref && typeof ref !== "function" && ref.current) {
-                          ref.current.focus();
+                        } else {
+                          fieldRef.current?.focus();
                         }
                       }}
                       className={c(
@@ -193,37 +299,68 @@ export const SearchBarInput = forwardRef<HTMLInputElement, SearchBarProps>(
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    if (ref && typeof ref !== "function" && ref.current) {
-                      ref.current.focus();
-                    }
+                    fieldRef.current?.focus();
                   }}
                 >
                   <Icon icon={Icons.SEARCH} />
                 </div>
               )}
 
-              <div className="min-w-0 flex-1">
-                <TextInputControl
-                  ref={ref}
-                  onUnFocus={() => {
-                    setFocused(false);
-                    props.onUnFocus();
-                  }}
-                  onFocus={() => setFocused(true)}
-                  onChange={(val) => setSearch(val)}
-                  value={props.value}
-                  className={c(
-                    "w-full flex-1 bg-transparent px-4 py-4 !text-search-text focus:outline-none sm:py-4 sm:pr-12 transition-colors duration-300",
-                    showAiSwitch ? "pl-[6rem]" : "pl-12",
-                    "transition-colors duration-300",
-                    props.isInFeatured
-                      ? lightTheme
-                        ? "text-white/50"
-                        : "placeholder-search-placeholder"
-                      : "placeholder-search-placeholder",
-                  )}
-                  placeholder={props.placeholder}
-                />
+              <div className="relative min-w-0 flex-1">
+                {isAiMode ? (
+                  <>
+                    <textarea
+                      ref={setFieldRef}
+                      rows={1}
+                      enterKeyHint="search"
+                      aria-label={props.placeholder}
+                      value={props.value}
+                      className={c(fieldClassName, "block resize-none")}
+                      style={
+                        { WebkitAppRegion: "no-drag" } as React.CSSProperties
+                      }
+                      onBlur={() => {
+                        setFocused(false);
+                        props.onUnFocus();
+                      }}
+                      onFocus={() => setFocused(true)}
+                      onChange={(e) => setSearch(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && !e.nativeEvent.isComposing) {
+                          e.preventDefault();
+                        }
+                      }}
+                    />
+                    {props.value.length === 0 && props.placeholder ? (
+                      <p
+                        aria-hidden="true"
+                        data-testid="ai-search-placeholder"
+                        className={c(
+                          "pointer-events-none absolute inset-x-0 top-0 select-none truncate py-4 pr-5 text-start leading-6 transition-colors duration-300",
+                          horizontalPaddingClass,
+                          props.isInFeatured && lightTheme
+                            ? "text-white/50"
+                            : "text-search-placeholder",
+                        )}
+                      >
+                        {props.placeholder}
+                      </p>
+                    ) : null}
+                  </>
+                ) : (
+                  <TextInputControl
+                    ref={setFieldRef}
+                    onUnFocus={() => {
+                      setFocused(false);
+                      props.onUnFocus();
+                    }}
+                    onFocus={() => setFocused(true)}
+                    onChange={(val) => setSearch(val)}
+                    value={props.value}
+                    className={fieldClassName}
+                    placeholder={props.placeholder}
+                  />
+                )}
               </div>
 
               <div
@@ -232,12 +369,10 @@ export const SearchBarInput = forwardRef<HTMLInputElement, SearchBarProps>(
                   if (props.value.length === 0) return;
                   e.stopPropagation();
                   props.onUnFocus("");
-                  if (ref && typeof ref !== "function") {
-                    ref.current?.focus();
-                  }
+                  fieldRef.current?.focus();
                 }}
                 className={c(
-                  "absolute bottom-0 right-2 top-0 my-auto flex h-10 w-10 items-center justify-center rounded-full text-search-icon transition-[opacity,transform,background-color,color] duration-200 ease-out motion-reduce:transition-none",
+                  "absolute right-2 top-2 flex h-10 w-10 items-center justify-center rounded-full text-search-icon transition-[opacity,transform,background-color,color] duration-200 ease-out motion-reduce:transition-none",
                   props.value.length > 0
                     ? "cursor-pointer opacity-100 scale-100 pointer-events-auto hover:bg-search-hoverBackground hover:text-white active:scale-95"
                     : "pointer-events-none scale-75 opacity-0",
