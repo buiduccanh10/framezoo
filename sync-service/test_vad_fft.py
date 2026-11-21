@@ -203,6 +203,25 @@ class VadFftTests(unittest.TestCase):
         ]
         self.assertEqual(compute_piecewise_segments(windows, global_offset_ms=-2_010), [])
 
+    def test_split_snaps_boundary_to_subtitle_silence_gap(self):
+        from alignment import Cue
+
+        windows = [
+            {"startAt": 100, "durationSec": 45, "result": {"aligned": True, "offsetMs": 2_300, "confidence": 92}},
+            {"startAt": 302, "durationSec": 45, "result": {"aligned": True, "offsetMs": 2_300, "confidence": 92}},
+            {"startAt": 950, "durationSec": 45, "result": {"aligned": True, "offsetMs": 5_300, "confidence": 92}},
+            {"startAt": 1_400, "durationSec": 45, "result": {"aligned": True, "offsetMs": 5_300, "confidence": 92}},
+        ]
+        cues = [
+            Cue(0, 795_000, 799_000, "Before break"),
+            Cue(1, 881_200, 884_000, "After break"),
+        ]
+        segments = compute_piecewise_segments(windows, global_offset_ms=3_800, cues=cues)
+        self.assertEqual(len(segments), 2)
+        # Arithmetic midpoint between 347s and 950s is 648.5s; gap midpoint + avg_off is ~843.9s
+        self.assertEqual(segments[0]["endMs"], 843_900)
+        self.assertEqual(segments[1]["startMs"], 843_900)
+
 
 if __name__ == "__main__":
     unittest.main()
