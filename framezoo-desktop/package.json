@@ -1,7 +1,7 @@
 {
   "name": "Framezoo",
   "private": true,
-  "version": "2.4.1",
+  "version": "2.4.2",
   "main": "dist/main.cjs",
   "packageManager": "pnpm@12.16.1",
   "scripts": {
@@ -291,7 +291,6 @@
       "shortcutName": "Framezoo",
       "createDesktopShortcut": "always",
       "createStartMenuShortcut": true,
-      "license": "build/HUONG_DAN_CAI_DAT.txt",
       "installerSidebar": null,
       "installerHeader": null,
       "include": "build/installer.nsh",
