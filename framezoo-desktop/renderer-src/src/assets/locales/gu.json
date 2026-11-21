@@ -209,20 +209,25 @@
   "details": {
     "addToList": "યાદીમાં ઉમેરો",
     "airs": "પ્રસારણ",
+    "cast": "કાસ્ટ:",
     "collection": {
       "bookmarkAll": "બધાને બુકમાર્ક કરો",
+      "bookmarkTooltip": "સમગ્ર {{name}} સંગ્રહને બુકમાર્ક કરો",
+      "label": "સંગ્રહ",
       "movie": "મૂવી",
       "movies": "મૂવીઝ",
       "rating": "રેટિંગ",
       "releaseDate": "પ્રકાશન તારીખ",
       "sortBy": "દ્વારા સૉર્ટ કરો"
     },
+    "director": "દિગ્દર્શક:",
     "endsAt": "{{time}} વાગ્યે સમાપ્ત થાય છે",
     "episode": "એપિસોડ",
     "episodeNumber": "એપિસોડ {{number}}",
     "episodeReleaseDate": "પ્રકાશન તારીખ: {{date}}",
     "episodeReleaseDateUnknown": "પ્રકાશન તારીખ: અજ્ઞાત",
     "episodes": "એપિસોડ્સ",
+    "goToEpisode": "એપિસોડ પર જાઓ",
     "imdb": "IMDb પર જુઓ",
     "language": "ભાષા:",
     "play": "રમો",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "આ મીડિયા માટે છબી મેળવી શકાઈ નથી.",
     "episodeDisplay": "સિઝન{{season}} એપિસોડ{{episode}}",
     "episodeShort": "E",
+    "errors": {
+      "errorLoading": "સંગ્રહ લોડ કરવામાં ભૂલ",
+      "failedToLoad": "સંગ્રહ લોડ કરવામાં નિષ્ફળ થયાં"
+    },
     "inCinema": "સિનેમામાં",
+    "noMoviesInCollection": "આ સંગ્રહમાં કોઈ મૂવી મળી નથી.",
     "seasonUnwatched": "શું તમે ખરેખર સીઝનને ન જોયા તરીકે ચિહ્નિત કરવા માંગો છો?",
     "seasonWatched": "શું તમે ખરેખર સીઝનને જોયેલી તરીકે ચિહ્નિત કરવા માંગો છો?",
     "types": {

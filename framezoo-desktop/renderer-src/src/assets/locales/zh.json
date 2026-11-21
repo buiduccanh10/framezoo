@@ -209,20 +209,25 @@
   "details": {
     "addToList": "添加到列表",
     "airs": "空气",
+    "cast": "投掷：",
     "collection": {
       "bookmarkAll": "全部添加书签",
+      "bookmarkTooltip": "收藏整个 {{name}} 系列",
+      "label": "收藏",
       "movie": "电影",
       "movies": "电影",
       "rating": "等级",
       "releaseDate": "发布日期",
       "sortBy": "排序方式"
     },
+    "director": "导演：",
     "endsAt": "结束于 {{time}}",
     "episode": "插曲",
     "episodeNumber": "第 {{number}} 集",
     "episodeReleaseDate": "发布日期：{{date}}",
     "episodeReleaseDateUnknown": "发布日期： 未知",
     "episodes": "剧集数",
+    "goToEpisode": "前往剧集",
     "imdb": "在 IMDb 上查看",
     "language": "语言：",
     "play": "玩",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "无法获取此媒体的图像",
     "episodeDisplay": "S{{season}} - E{{episode}}",
     "episodeShort": "E",
+    "errors": {
+      "errorLoading": "加载集合时出错",
+      "failedToLoad": "集合加载失败"
+    },
     "inCinema": "在电影院",
+    "noMoviesInCollection": "此合集中未找到任何影片。",
     "seasonUnwatched": "您确定要将本季标记为未观看吗？",
     "seasonWatched": "您确定要将该季标记为已观看吗？",
     "types": {

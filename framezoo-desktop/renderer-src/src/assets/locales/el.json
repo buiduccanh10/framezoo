@@ -209,20 +209,25 @@
   "details": {
     "addToList": "Προσθήκη στη λίστα",
     "airs": "Κυκλοφορίες στις",
+    "cast": "Εκμαγείο:",
     "collection": {
       "bookmarkAll": "Σελιδοδείκτης σε όλα",
+      "bookmarkTooltip": "Προσθήκη σελιδοδείκτη σε ολόκληρη τη συλλογή {{name}}",
+      "label": "Συλλογή",
       "movie": "Ταινία",
       "movies": "Κινηματογράφος",
       "rating": "Εκτίμηση",
       "releaseDate": "Ημερομηνία κυκλοφορίας",
       "sortBy": "Ταξινόμηση κατά"
     },
+    "director": "Διευθυντής:",
     "endsAt": "Λήγει στις {{time}}",
     "episode": "Επεισόδιο",
     "episodeNumber": "Επεισόδιο {{number}}",
     "episodeReleaseDate": "Ημερομηνία κυκλοφορίας: {{date}}",
     "episodeReleaseDateUnknown": "Ημερομηνία κυκλοφορίας: Άγνωστη",
     "episodes": "Επεισόδια",
+    "goToEpisode": "Μετάβαση στο επεισόδιο",
     "imdb": "Προβολή στο IMDb",
     "language": "Γλώσσα:",
     "play": "Αναπαραγωγή",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "Δεν ήταν δυνατή η ανάκτηση εικόνας για αυτό το μέσο",
     "episodeDisplay": "Σ{{season}} Ε{{episode}}",
     "episodeShort": "E",
+    "errors": {
+      "errorLoading": "Σφάλμα φόρτωσης συλλογής κατά τη φόρτωση της συλλογής",
+      "failedToLoad": "Η φόρτωση της συλλογής απέτυχε"
+    },
     "inCinema": "Στον Κινηματογράφο",
+    "noMoviesInCollection": "Δεν βρέθηκαν ταινίες σε αυτήν τη συλλογή",
     "seasonUnwatched": "Είστε βέβαιοι ότι θέλετε να χαρακτηρίσετε τη σεζόν ως απαρατήρητη;",
     "seasonWatched": "Είστε βέβαιοι ότι θέλετε να επισημάνετε τη σεζόν ως παρακολουθημένη;",
     "types": {

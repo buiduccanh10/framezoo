@@ -209,20 +209,25 @@
   "details": {
     "addToList": "Lisa loendisse",
     "airs": "Õhud",
+    "cast": "Osatäitjad:",
     "collection": {
       "bookmarkAll": "Lisa kõik järjehoidjatesse",
+      "bookmarkTooltip": "Lisa kogu {{name}} kollektsioon järjehoidjatesse",
+      "label": "Kollektsioon",
       "movie": "Film",
       "movies": "Filmid",
       "rating": "Hinnang",
       "releaseDate": "Väljalaske kuupäev",
       "sortBy": "Sorteeri"
     },
+    "director": "Lavastaja:",
     "endsAt": "Lõpeb {{time}}",
     "episode": "Episood",
     "episodeNumber": "Jagu {{number}}",
     "episodeReleaseDate": "Väljalaskekuupäev: {{date}}",
     "episodeReleaseDateUnknown": "Väljalaskekuupäev: teadmata",
     "episodes": "Episoodid",
+    "goToEpisode": "Mine episoodi juurde",
     "imdb": "Vaata IMDb-st",
     "language": "Keel:",
     "play": "Mängi",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "Selle meedia jaoks ei õnnestunud pilti tuua",
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
+    "errors": {
+      "errorLoading": "Viga kollektsiooni laadimisel",
+      "failedToLoad": "Kollektsiooni laadimine ebaõnnestus"
+    },
     "inCinema": "Kinos",
+    "noMoviesInCollection": "Selles kollektsioonis ei leitud filme",
     "seasonUnwatched": "Kas olete kindel, et soovite hooaja vaatamata jätta?",
     "seasonWatched": "Kas soovite kindlasti hooaja vaadatuks märkida?",
     "types": {

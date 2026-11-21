@@ -209,20 +209,25 @@
   "details": {
     "addToList": "Adaugă la listă",
     "airs": "Aeruri",
+    "cast": "Distribuție:",
     "collection": {
       "bookmarkAll": "Marcați toate",
+      "bookmarkTooltip": "Adaugă la favorite întreaga colecție {{name}}",
+      "label": "Colectare",
       "movie": "Film",
       "movies": "Filme",
       "rating": "Evaluare",
       "releaseDate": "Data de lansare",
       "sortBy": "Filtrează după"
     },
+    "director": "Director:",
     "endsAt": "Se încheie la {{time}}",
     "episode": "Episod",
     "episodeNumber": "Episodul {{number}}",
     "episodeReleaseDate": "Data lansării: {{date}}",
     "episodeReleaseDateUnknown": "Data lansării: necunoscută",
     "episodes": "Episoade",
+    "goToEpisode": "Mergi la episod",
     "imdb": "Vizualizați pe IMDb",
     "language": "Limbă:",
     "play": "Redă",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "Nu s-a putut prelua o imagine pentru acest suport media",
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
+    "errors": {
+      "errorLoading": "Eroare la încărcarea colecției",
+      "failedToLoad": "Colecția nu a putut fi încărcată"
+    },
     "inCinema": "În Cinema",
+    "noMoviesInCollection": "Nu s-au găsit filme în această colecție",
     "seasonUnwatched": "Sigur vrei să marchezi sezonul ca nevizionat?",
     "seasonWatched": "Sigur vrei să marchezi sezonul ca vizionat?",
     "types": {

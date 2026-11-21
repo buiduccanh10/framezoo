@@ -209,20 +209,25 @@
   "details": {
     "addToList": "Додати до списку",
     "airs": "Ефіри",
+    "cast": "У ролях:",
     "collection": {
       "bookmarkAll": "Додати все в закладки",
+      "bookmarkTooltip": "Додати в закладки всю колекцію {{name}}",
+      "label": "Колекція",
       "movie": "фільм",
       "movies": "фільми",
       "rating": "Рейтинг",
       "releaseDate": "Дата випуску",
       "sortBy": "Сортувати за"
     },
+    "director": "Директор:",
     "endsAt": "Закінчується о {{time}}",
     "episode": "Епізод",
     "episodeNumber": "Епізод {{number}}",
     "episodeReleaseDate": "Дата випуску: {{date}}",
     "episodeReleaseDateUnknown": "Дата випуску: невідома",
     "episodes": "Епізоди",
+    "goToEpisode": "Перейти до епізоду",
     "imdb": "Переглянути на IMDb",
     "language": "мова:",
     "play": "грати",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "Не вдалося отримати зображення для цього медіафайлу",
     "episodeDisplay": "С{{season}} Е{{episode}}",
     "episodeShort": "E",
+    "errors": {
+      "errorLoading": "Помилка завантаження колекції",
+      "failedToLoad": "Не вдалося завантажити колекцію"
+    },
     "inCinema": "У кіно",
+    "noMoviesInCollection": "У цій колекції фільмів не знайдено",
     "seasonUnwatched": "Ви впевнені, що хочете позначити сезон як непереглянутий?",
     "seasonWatched": "Ви впевнені, що хочете позначити сезон як переглянутий?",
     "types": {

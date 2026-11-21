@@ -209,20 +209,25 @@
   "details": {
     "addToList": "Bæta við lista",
     "airs": "Airs",
+    "cast": "Leikarar:",
     "collection": {
       "bookmarkAll": "Bókamerki allt",
+      "bookmarkTooltip": "Bókamerkja allt {{name}} safnið",
+      "label": "Safn",
       "movie": "Kvikmynd",
       "movies": "Kvikmyndir",
       "rating": "Einkunn",
       "releaseDate": "Útgáfudagur",
       "sortBy": "Raða eftir"
     },
+    "director": "Leikstjóri:",
     "endsAt": "Lýkur kl. {{time}}",
     "episode": "Þáttur",
     "episodeNumber": "Þáttur {{number}}",
     "episodeReleaseDate": "Útgáfudagur: {{date}}",
     "episodeReleaseDateUnknown": "Útgáfudagur: Óþekkt",
     "episodes": "Þættir",
+    "goToEpisode": "Fara í þáttinn",
     "imdb": "Skoðaðu á IMDb",
     "language": "Tungumál:",
     "play": "Spila",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "Gat ekki sótt mynd fyrir þetta efni",
     "episodeDisplay": "S{{season}} Þ{{episode}}",
     "episodeShort": "E",
+    "errors": {
+      "errorLoading": "Villa við að hlaða safninu",
+      "failedToLoad": "Mistókst að hlaða safnið"
+    },
     "inCinema": "Í Bíó",
+    "noMoviesInCollection": "Engar kvikmyndir fundust í þessu safni",
     "seasonUnwatched": "Ertu viss um að þú viljir merkja tímabilið sem óhorft?",
     "seasonWatched": "Ertu viss um að þú viljir merkja tímabilið sem horft á?",
     "types": {

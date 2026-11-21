@@ -209,20 +209,25 @@
   "details": {
     "addToList": "सूचीमा थप्नुहोस्",
     "airs": "प्रसारण",
+    "cast": "कलाकार:",
     "collection": {
       "bookmarkAll": "सबैलाई बुकमार्क गर्नुहोस्",
+      "bookmarkTooltip": "सम्पूर्ण {{name}} सङ्ग्रहलाई बुकमार्क गर्नुहोस्",
+      "label": "सङ्कलन",
       "movie": "चलचित्र",
       "movies": "चलचित्रहरू",
       "rating": "मूल्याङ्कन",
       "releaseDate": "रिलीज मिति",
       "sortBy": "क्रमबद्ध गर्नुहोस्"
     },
+    "director": "निर्देशक:",
     "endsAt": "{{time}} मा समाप्त हुन्छ",
     "episode": "एपिसोड",
     "episodeNumber": "एपिसोड {{number}}",
     "episodeReleaseDate": "रिलीज मिति: {{date}}",
     "episodeReleaseDateUnknown": "रिलीज मिति: अज्ञात",
     "episodes": "एपिसोडहरू",
+    "goToEpisode": "एपिसोडमा जानुहोस्",
     "imdb": "IMDb मा हेर्नुहोस्",
     "language": "भाषा:",
     "play": "खेल्नुहोस्",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "यो मिडियाको लागि छवि ल्याउन सकिएन।",
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
+    "errors": {
+      "errorLoading": "सङ्ग्रह लोड गर्दा त्रुटि भयो",
+      "failedToLoad": "सङ्ग्रह लोड गर्न असफल भयो"
+    },
     "inCinema": "सिनेमामा",
+    "noMoviesInCollection": "यस सङ्ग्रहमा कुनै पनि चलचित्र भेटिएनन्",
     "seasonUnwatched": "के तपाइँ सिजनलाई नहेरेको रूपमा चिन्ह लगाउन निश्चित हुनुहुन्छ?",
     "seasonWatched": "के तपाइँ यो सिजन हेरिएको रूपमा चिन्ह लगाउन निश्चित हुनुहुन्छ?",
     "types": {

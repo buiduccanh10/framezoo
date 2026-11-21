@@ -209,20 +209,25 @@
   "details": {
     "addToList": "Dodaj na seznam",
     "airs": "Zraki",
+    "cast": "Igralska zasedba:",
     "collection": {
       "bookmarkAll": "Dodaj vse med zaznamke",
+      "bookmarkTooltip": "Dodaj med zaznamke celotno zbirko {{name}}",
+      "label": "Zbirka",
       "movie": "Film",
       "movies": "Filmi",
       "rating": "Ocena",
       "releaseDate": "Datum izdaje",
       "sortBy": "Razvrsti po"
     },
+    "director": "Direktor:",
     "endsAt": "Konča se ob {{time}}",
     "episode": "Epizoda",
     "episodeNumber": "Epizoda {{number}}",
     "episodeReleaseDate": "Datum izdaje: {{date}}",
     "episodeReleaseDateUnknown": "Datum izdaje: neznano",
     "episodes": "Epizode",
+    "goToEpisode": "Pojdi na epizodo",
     "imdb": "Ogled na IMDb",
     "language": "jezik:",
     "play": "Igraj",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "Slike za ta medij ni bilo mogoče pridobiti",
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
+    "errors": {
+      "errorLoading": "Napaka pri nalaganju zbirke",
+      "failedToLoad": "Zbirke ni bilo mogoče naložiti"
+    },
     "inCinema": "V kinu",
+    "noMoviesInCollection": "V tej zbirki ni bilo najdenih filmov",
     "seasonUnwatched": "Ali ste prepričani, da želite sezono označiti kot neogledano?",
     "seasonWatched": "Ali ste prepričani, da želite sezono označiti kot ogledano?",
     "types": {

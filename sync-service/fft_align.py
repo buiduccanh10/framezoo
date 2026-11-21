@@ -7,7 +7,7 @@ import numpy as np
 from scipy.signal import fftconvolve
 
 FRAME_MS = 25  # 25ms per bin
-MAX_SEARCH_OFFSET_MS = 180_000  # ±3 minutes search range
+MAX_SEARCH_OFFSET_MS = 270_000  # ±4.5 minutes search range
 MAX_FFT_OFFSET_MS = 300_000
 MAX_FFT_DURATION_MS = 600_000
 ONSET_BOOST_FRAMES = 8  # First 200ms of an utterance/cue receives onset emphasis
@@ -239,7 +239,7 @@ def find_top_offsets_fft(
                 continue
             k = int(low_k + best_idx)
             lag = k - zero_k
-            offset_ms = lag * FRAME_MS + bounded_max_offset_ms
+            offset_ms = int(round((lag * FRAME_MS + bounded_max_offset_ms) / ratio))
             adjusted_score = raw_score
             if search_centers:
                 closest_dist = min(abs(offset_ms - c) for c in search_centers)

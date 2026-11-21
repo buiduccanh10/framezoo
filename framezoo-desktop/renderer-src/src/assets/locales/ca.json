@@ -209,20 +209,25 @@
   "details": {
     "addToList": "Afegeix a la llista",
     "airs": "Airs",
+    "cast": "Repartiment:",
     "collection": {
       "bookmarkAll": "Marca-ho tot",
+      "bookmarkTooltip": "Marca tota la col·lecció {{name}}",
+      "label": "Col·lecció",
       "movie": "Pel·lícula",
       "movies": "Pel·lícules",
       "rating": "Valoració",
       "releaseDate": "Data de llançament",
       "sortBy": "Ordena per"
     },
+    "director": "Director/a:",
     "endsAt": "Finalitza a les {{time}}",
     "episode": "Episodi",
     "episodeNumber": "Episodi {{number}}",
     "episodeReleaseDate": "Data de llançament: {{date}}",
     "episodeReleaseDateUnknown": "Data de llançament: desconeguda",
     "episodes": "Episodis",
+    "goToEpisode": "Ves a l'episodi",
     "imdb": "Veure a IMDb",
     "language": "Idioma:",
     "play": "Jugar",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "No s&#39;ha pogut obtenir una imatge per a aquest suport multimèdia",
     "episodeDisplay": "T{{season}} E{{episode}}",
     "episodeShort": "E",
+    "errors": {
+      "errorLoading": "S'ha produït un error en carregar la col·lecció",
+      "failedToLoad": "No s'ha pogut carregar la col·lecció"
+    },
     "inCinema": "En Cinema",
+    "noMoviesInCollection": "No s'han trobat pel·lícules en aquesta col·lecció",
     "seasonUnwatched": "Esteu segur que voleu marcar la temporada com a no vista?",
     "seasonWatched": "Esteu segur que voleu marcar la temporada com a vista?",
     "types": {

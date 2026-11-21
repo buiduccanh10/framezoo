@@ -209,20 +209,25 @@
   "details": {
     "addToList": "أضف إلى القائمة",
     "airs": "يصدر",
+    "cast": "يقذف:",
     "collection": {
       "bookmarkAll": "المرجعية الكل",
+      "bookmarkTooltip": "احفظ مجموعة {{name}} بأكملها في المفضلة",
+      "label": "مجموعة",
       "movie": "فيلم",
       "movies": "أفلام",
       "rating": "تصنيف",
       "releaseDate": "تاريخ الافراج عنه",
       "sortBy": "الترتيب حسب"
     },
+    "director": "مخرج:",
     "endsAt": "ينتهي الساعة {{time}}",
     "episode": "حلقة",
     "episodeNumber": "الحلقة {{number}}",
     "episodeReleaseDate": "تاريخ الإصدار: {{date}}",
     "episodeReleaseDateUnknown": "تاريخ الإصدار: غير معروف",
     "episodes": "الحلقات",
+    "goToEpisode": "انتقل إلى الحلقة",
     "imdb": "عرض في IMDb",
     "language": "اللغة:",
     "play": "تشغيل",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "تعذر جلب صورة لهذا الوسائط",
     "episodeDisplay": "\"موسم{{season}} حلقة{{episode}}\"",
     "episodeShort": "ح",
+    "errors": {
+      "errorLoading": "حدث خطأ أثناء تحميل المجموعة",
+      "failedToLoad": "فشل تحميل المجموعة"
+    },
     "inCinema": "في السينما",
+    "noMoviesInCollection": "لم يتم العثور على أي أفلام في هذه المجموعة",
     "seasonUnwatched": "هل أنت متأكد أنك تريد وضع علامة على الموسم بأنه غير مراقب؟",
     "seasonWatched": "هل أنت متأكد أنك تريد وضع علامة على الموسم كما تمت مشاهدته؟",
     "types": {

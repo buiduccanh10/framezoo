@@ -1,14 +1,19 @@
 import { useEffect } from "react";
 
-export function useSlashFocus(ref: React.RefObject<HTMLInputElement>) {
+export function useSlashFocus(ref: { readonly current: HTMLElement | null }) {
   useEffect(() => {
     const listener = (e: KeyboardEvent) => {
       if (e.key === "/") {
+        const activeElement = document.activeElement;
+        const activeTag = activeElement?.tagName.toLowerCase();
         if (
-          document.activeElement &&
-          document.activeElement.tagName.toLowerCase() === "input"
-        )
+          activeTag === "input" ||
+          activeTag === "textarea" ||
+          (activeElement instanceof HTMLElement &&
+            activeElement.isContentEditable)
+        ) {
           return;
+        }
         e.preventDefault();
         ref.current?.focus();
       }

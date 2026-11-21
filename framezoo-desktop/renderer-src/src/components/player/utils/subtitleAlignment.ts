@@ -7,17 +7,54 @@ import {
 import { mwFetch } from "../../../backend/helpers/fetch";
 import { conf } from "../../../setup/config";
 
-export const SUBTITLE_ALIGNMENT_AUDIO_WINDOW_SECONDS = 60;
+export const SUBTITLE_ALIGNMENT_AUDIO_WINDOW_SECONDS = 45;
 export const SUBTITLE_ALIGNMENT_MAX_WINDOWS = 6;
 export const SUBTITLE_ALIGNMENT_TIMELINE_ANCHOR_FRACTIONS = [
-  0.15, 0.35, 0.55, 0.75,
+  0.12, 0.3, 0.5, 0.7, 0.88, 0.4,
 ];
 
 const SUBTITLE_ALIGNMENT_WINDOW_FALLBACK_OFFSETS_SECONDS = [
-  -120, 120, -240, 240,
+  -120, 120, -240, 240, -360, 360,
 ];
 const SUBTITLE_ALIGNMENT_MIN_AUDIO_WINDOW_SECONDS = 1;
-const SUBTITLE_ALIGNMENT_CAPTURE_CONCURRENCY = 3;
+const SUBTITLE_ALIGNMENT_CAPTURE_CONCURRENCY = 4;
+
+function setTorrentSyncFocus(
+  sourceUrl: string,
+  payload: {
+    active: boolean;
+    videoDuration?: number;
+    windows?: Array<{ startAt: number; duration: number }>;
+  },
+) {
+  if (typeof fetch !== "function") return;
+  try {
+    const parsed = new URL(sourceUrl);
+    if (
+      (parsed.hostname !== "127.0.0.1" && parsed.hostname !== "localhost") ||
+      !/^\/torrent\/[^/]+$/.test(parsed.pathname)
+    ) {
+      return;
+    }
+    const controller =
+      typeof AbortController === "function" ? new AbortController() : undefined;
+    const timer = controller
+      ? setTimeout(() => controller.abort(), 2_000)
+      : undefined;
+    void fetch(`${parsed.origin}${parsed.pathname}/sync-focus`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      signal: controller?.signal,
+    })
+      .catch(() => {})
+      .finally(() => {
+        if (timer !== undefined) clearTimeout(timer);
+      });
+  } catch {
+    // Best-effort hint for local torrent worker
+  }
+}
 
 export interface SubtitleAlignmentResponse {
   aligned: boolean;
@@ -40,6 +77,7 @@ export interface SubtitleAlignmentBatchResponse {
   results: Partial<Record<SubtitleAlignmentTrack, SubtitleAlignmentResponse>>;
   needsMoreSamples?: boolean;
   additionalWindows?: number;
+  failedWindowIndices?: number[];
   errorMessage?: string;
   warningMessage?: string;
 }
@@ -368,7 +406,16 @@ export function buildAlignmentWindowPlan(
     videoDuration,
     windowDuration,
   );
+
+  const maxStart =
+    typeof videoDuration === "number" &&
+    Number.isFinite(videoDuration) &&
+    videoDuration > 0
+      ? Math.max(0, videoDuration - windowDuration)
+      : null;
+
   if (
+    maxStart === null &&
     typeof buffered === "number" &&
     Number.isFinite(buffered) &&
     buffered >= windowDuration
@@ -381,25 +428,6 @@ export function buildAlignmentWindowPlan(
       windowDuration,
     );
   }
-
-  if (plans.length < 2) {
-    addUniqueAlignmentWindow(
-      plans,
-      currentStart >= windowDuration
-        ? currentStart - windowDuration
-        : currentStart + windowDuration,
-      "nearby",
-      videoDuration,
-      windowDuration,
-    );
-  }
-
-  const maxStart =
-    typeof videoDuration === "number" &&
-    Number.isFinite(videoDuration) &&
-    videoDuration > 0
-      ? Math.max(0, videoDuration - windowDuration)
-      : null;
   const dialogueSpans = extractDialogueCueSpans(options?.subtitleVtts);
 
   const fallbackStarts =
@@ -412,6 +440,7 @@ export function buildAlignmentWindowPlan(
         );
 
   for (const fallbackStart of fallbackStarts) {
+    if (plans.length >= SUBTITLE_ALIGNMENT_MAX_WINDOWS) break;
     const targetStart = pickDialogueDenseWindowStart(
       fallbackStart,
       plans,
@@ -426,6 +455,33 @@ export function buildAlignmentWindowPlan(
       videoDuration,
       windowDuration,
     );
+  }
+
+  if (plans.length < 2) {
+    if (
+      typeof buffered === "number" &&
+      Number.isFinite(buffered) &&
+      buffered >= windowDuration
+    ) {
+      addUniqueAlignmentWindow(
+        plans,
+        buffered - windowDuration,
+        "buffered",
+        videoDuration,
+        windowDuration,
+      );
+    }
+    if (plans.length < 2) {
+      addUniqueAlignmentWindow(
+        plans,
+        currentStart >= windowDuration
+          ? currentStart - windowDuration
+          : currentStart + windowDuration,
+        "nearby",
+        videoDuration,
+        windowDuration,
+      );
+    }
   }
 
   return plans.slice(0, SUBTITLE_ALIGNMENT_MAX_WINDOWS);
@@ -572,7 +628,7 @@ export async function alignSubtitlesWithCurrentStream(options: {
     captureAbortController.abort();
   }
   let completedCaptures = 0;
-  let nextCaptureIndex = options.isTorrent ? 1 : 0;
+  let nextCaptureIndex = 0;
   const processWindow = async (
     index: number,
     plan = windowPlan[index],
@@ -651,16 +707,23 @@ export async function alignSubtitlesWithCurrentStream(options: {
       throw error;
     }
   };
+  if (options.isTorrent) {
+    setTorrentSyncFocus(options.sourceUrl, {
+      active: true,
+      videoDuration: options.videoDuration,
+      windows: windowPlan.map((plan) => ({
+        startAt: plan.startAt,
+        duration: windowDuration,
+      })),
+    });
+  }
   try {
-    if (options.isTorrent) {
-      await processWindow(0);
-    }
     await Promise.all(
       Array.from(
         {
           length: Math.min(
-            options.isTorrent ? 1 : SUBTITLE_ALIGNMENT_CAPTURE_CONCURRENCY,
-            Math.max(0, windowPlan.length - 1),
+            SUBTITLE_ALIGNMENT_CAPTURE_CONCURRENCY,
+            windowPlan.length,
           ),
         },
         () => captureWorker(),
@@ -672,6 +735,9 @@ export async function alignSubtitlesWithCurrentStream(options: {
       windowDuration,
     });
   } finally {
+    if (options.isTorrent) {
+      setTorrentSyncFocus(options.sourceUrl, { active: false });
+    }
     options.signal?.removeEventListener("abort", abortCaptures);
   }
 
@@ -684,6 +750,7 @@ export async function alignSubtitlesWithCurrentStream(options: {
     const capturedWindows: Array<{ audio: Uint8Array; startMs: number }> = [];
     const windowStartsMs: number[] = [];
     const windowDurationsMs: number[] = [];
+    const sentIndices: number[] = [];
     const selectedIndices = new Set(
       indices ?? windowPlan.map((_, index) => index),
     );
@@ -698,6 +765,7 @@ export async function alignSubtitlesWithCurrentStream(options: {
       capturedWindows.push({ audio, startMs: Math.round(plan.startAt * 1000) });
       windowStartsMs.push(Math.round(plan.startAt * 1000));
       windowDurationsMs.push(Math.round(windowDuration * 1000));
+      sentIndices.push(index);
     }
 
     if (capturedWindows.length === 0) {
@@ -705,11 +773,11 @@ export async function alignSubtitlesWithCurrentStream(options: {
         "Failed to capture any valid audio windows for alignment",
       );
     }
-    return { capturedWindows, windowStartsMs, windowDurationsMs };
+    return { capturedWindows, windowStartsMs, windowDurationsMs, sentIndices };
   };
 
   const submitAlignment = async (progress: number, indices?: number[]) => {
-    const { capturedWindows, windowStartsMs, windowDurationsMs } =
+    const { capturedWindows, windowStartsMs, windowDurationsMs, sentIndices } =
       buildAlignmentPayload(indices);
     const body = new FormData();
     body.append(
@@ -730,7 +798,7 @@ export async function alignSubtitlesWithCurrentStream(options: {
 
     options.onProgress?.(progress, "analyzing");
     emitTelemetry(progress, "analyzing", "vad");
-    return await mwFetch<SubtitleAlignmentBatchResponse>(
+    const response = await mwFetch<SubtitleAlignmentBatchResponse>(
       "/api/subtitle-align",
       {
         method: "POST",
@@ -740,9 +808,12 @@ export async function alignSubtitlesWithCurrentStream(options: {
         timeout: 300_000,
       },
     );
+    return { response, sentIndices };
   };
 
-  let response = await submitAlignment(0.58);
+  const firstSubmission = await submitAlignment(0.58);
+  let response = firstSubmission.response;
+  const firstSentIndices = firstSubmission.sentIndices;
   const reportedAdditionalWindows = response.additionalWindows;
   const requestedRetryWindows = Math.min(
     SUBTITLE_ALIGNMENT_MAX_WINDOWS,
@@ -782,19 +853,50 @@ export async function alignSubtitlesWithCurrentStream(options: {
       options.signal?.addEventListener("abort", abortCaptures, { once: true });
       if (options.signal?.aborted) captureAbortController.abort();
       try {
-        await Promise.all(
-          Array.from(
-            {
-              length: Math.min(
-                SUBTITLE_ALIGNMENT_CAPTURE_CONCURRENCY,
-                retryPlans.length,
-              ),
-            },
-            () => captureWorker(false),
-          ),
-        );
-        if (buildAlignmentPayload(retryIndices).capturedWindows.length > 0) {
-          response = await submitAlignment(0.76, retryIndices);
+        if (options.isTorrent) {
+          setTorrentSyncFocus(options.sourceUrl, {
+            active: true,
+            videoDuration: options.videoDuration,
+            windows: retryPlans.map((plan) => ({
+              startAt: plan.startAt,
+              duration: windowDuration,
+            })),
+          });
+        }
+        try {
+          await Promise.all(
+            Array.from(
+              {
+                length: Math.min(
+                  SUBTITLE_ALIGNMENT_CAPTURE_CONCURRENCY,
+                  retryPlans.length,
+                ),
+              },
+              () => captureWorker(false),
+            ),
+          );
+        } finally {
+          if (options.isTorrent) {
+            setTorrentSyncFocus(options.sourceUrl, { active: false });
+          }
+        }
+        const retryPayload = buildAlignmentPayload(retryIndices);
+        if (retryPayload.capturedWindows.length > 0) {
+          let submitIndices = retryPayload.sentIndices;
+          if (
+            Array.isArray(response.failedWindowIndices) &&
+            response.failedWindowIndices.length > 0
+          ) {
+            const failedSet = new Set(response.failedWindowIndices);
+            const survivingInitialIndices = firstSentIndices.filter(
+              (_, pos) => !failedSet.has(pos),
+            );
+            submitIndices = [
+              ...survivingInitialIndices,
+              ...retryPayload.sentIndices,
+            ].slice(0, SUBTITLE_ALIGNMENT_MAX_WINDOWS);
+          }
+          response = (await submitAlignment(0.76, submitIndices)).response;
         }
       } catch (error) {
         if (options.signal?.aborted) throw error;

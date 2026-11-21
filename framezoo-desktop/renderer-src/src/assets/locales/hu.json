@@ -209,20 +209,25 @@
   "details": {
     "addToList": "Hozzáadás a listához",
     "airs": "Megjelenés",
+    "cast": "Öntvény:",
     "collection": {
       "bookmarkAll": "Összes könyvjelzővel",
+      "bookmarkTooltip": "Könyvjelzővel megjelölni a teljes {{name}} gyűjteményt",
+      "label": "Gyűjtemény",
       "movie": "Film",
       "movies": "Filmek",
       "rating": "Értékelés",
       "releaseDate": "Megjelenés dátuma",
       "sortBy": "Rendezés"
     },
+    "director": "Igazgató:",
     "endsAt": "Vége {{time}}-kor",
     "episode": "Rész",
     "episodeNumber": "{{number}}. epizód",
     "episodeReleaseDate": "Megjelenés dátuma: {{date}}",
     "episodeReleaseDateUnknown": "Megjelenés dátuma: Ismeretlen",
     "episodes": "Részek",
+    "goToEpisode": "Ugrás az epizódra",
     "imdb": "Megtekintés IMDb-én",
     "language": "Nyelv:",
     "play": "Lejátszás",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "Nem sikerült képet letölteni ehhez a médiához",
     "episodeDisplay": "{{season}}. évad - {{episode}}. rész",
     "episodeShort": "rész",
+    "errors": {
+      "errorLoading": "Hiba a gyűjtemény betöltése során",
+      "failedToLoad": "Nem sikerült betölteni a gyűjteményt"
+    },
     "inCinema": "Moziban",
+    "noMoviesInCollection": "Nem találhatók filmek ebben a gyűjteményben",
     "seasonUnwatched": "Biztosan nézetlenként szeretnéd megjelölni az évadot?",
     "seasonWatched": "Biztos, hogy megtekintettként szeretné megjelölni az évadot?",
     "types": {

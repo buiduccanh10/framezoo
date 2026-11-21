@@ -209,20 +209,25 @@
   "details": {
     "addToList": "Add to List",
     "airs": "Airs",
+    "cast": "Cast:",
     "collection": {
       "bookmarkAll": "Bookmark All",
+      "bookmarkTooltip": "Bookmark entire {{name}} collection",
+      "label": "Collection",
       "movie": "Movie",
       "movies": "Movies",
       "rating": "Rating",
       "releaseDate": "Release Date",
       "sortBy": "Sort by"
     },
+    "director": "Director:",
     "endsAt": "Ends at {{time}}",
     "episode": "Episode",
     "episodeNumber": "Episode {{number}}",
     "episodeReleaseDate": "Release Date: {{date}}",
     "episodeReleaseDateUnknown": "Release Date: Unknown",
     "episodes": "Episodes",
+    "goToEpisode": "Go to episode",
     "imdb": "View on IMDb",
     "language": "Language:",
     "play": "Play",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "Could not fetch an image for this media",
     "episodeDisplay": "S{{season}} - E{{episode}}",
     "episodeShort": "E",
+    "errors": {
+      "errorLoading": "Error loading collection",
+      "failedToLoad": "Failed to load collection"
+    },
     "inCinema": "In Cinema",
+    "noMoviesInCollection": "No movies found in this collection",
     "seasonUnwatched": "Are you sure you want to mark the season as unwatched?",
     "seasonWatched": "Are you sure you want to mark the season as watched?",
     "types": {

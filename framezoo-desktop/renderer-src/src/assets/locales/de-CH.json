@@ -209,20 +209,25 @@
   "details": {
     "addToList": "Zur Liste hinzufügen",
     "airs": "Loft",
+    "cast": "Gießen:",
     "collection": {
       "bookmarkAll": "Alle als Lesezeichen speichern",
+      "bookmarkTooltip": "Gesamte Sammlung {{name}} als Lesezeichen speichern",
+      "label": "Sammlung",
       "movie": "Film",
       "movies": "Filme",
       "rating": "Bewertung",
       "releaseDate": "Veröffentlichungsdatum",
       "sortBy": "Sortieren nach"
     },
+    "director": "Direktor:",
     "endsAt": "Ändet am {{time}}",
     "episode": "Folge",
     "episodeNumber": "Folge {{number}}",
     "episodeReleaseDate": "Erscheinungsdatum: {{date}}",
     "episodeReleaseDateUnknown": "Erscheinungsdatum: Unbekannt",
     "episodes": "Folg",
+    "goToEpisode": "Zur Folge",
     "imdb": "Uf IMDb azeige",
     "language": "Sproch:",
     "play": "Abspele",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "Für dieses Medium konnte kein Bild abgerufen werden.",
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
+    "errors": {
+      "errorLoading": "Fehler beim Laden der Sammlung",
+      "failedToLoad": "Sammlung konnte nicht geladen werden"
+    },
     "inCinema": "Im Kino",
+    "noMoviesInCollection": "In dieser Sammlung wurden keine Filme gefunden.",
     "seasonUnwatched": "Sind Sie sicher, dass Sie die Saison als ungesehen markieren möchten?",
     "seasonWatched": "Sind Sie sicher, dass Sie die Saison als gesehen markieren möchten?",
     "types": {

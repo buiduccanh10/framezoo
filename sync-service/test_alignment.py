@@ -1174,6 +1174,202 @@ Let's move out.
         self.assertLessEqual(abs(primary["offsetMs"] - offset0), 250)
         self.assertIsNone(primary.get("rateRatio"))
 
+    def test_rescues_moderate_confidence_constant_offset_across_spread_windows(self):
+        # Simulate noisy/music-heavy audio where each window gets 50-56% score
+        # (below 60% single-window threshold) but 4 spread windows agree tightly at -2_500ms.
+        vtt_data, windows = self._build_drifted_vtt_and_windows(
+            [
+                (120_000, 0, True),
+                (600_000, 0, True),
+                (1_200_000, 0, True),
+                (1_800_000, 0, True),
+            ],
+            rate_ratio=1.0,
+            offset0_ms=-2_500,
+        )
+
+        # Inject unaligned background noise intervals so single-window score lands around ~52-55%
+        noisy_windows = [
+            (
+                [(s_ms + 3_000, s_ms + 6_500), *speech, (e_ms - 6_500, e_ms - 3_000)],
+                s_ms,
+                e_ms,
+            )
+            for speech, s_ms, e_ms in windows
+        ]
+        res = align_speech_windows(noisy_windows, [{"track": "primary", "vttData": vtt_data}])
+        primary = res["results"]["primary"]
+        self.assertTrue(primary["aligned"])
+        self.assertAlmostEqual(primary["offsetMs"], -2_500, delta=300)
+        self.assertNotIn("_candidate", primary)
+
+    def test_sliding_cluster_and_core_mean_resist_noisy_cluster_edge(self):
+        entries = [
+            {"startAt": 100, "result": self.make_aligned_result(-2_020, 92)},
+            {"startAt": 500, "result": self.make_aligned_result(-1_990, 90)},
+            {"startAt": 900, "result": self.make_aligned_result(-2_010, 91)},
+            {"startAt": 1_300, "result": self.make_aligned_result(-2_000, 93)},
+            {"startAt": 1_700, "result": self.make_aligned_result(-950, 62)},
+        ]
+        consensus = select_alignment_consensus(entries)
+        self.assertTrue(consensus["aligned"])
+        # Core 4 windows near -2005ms must not be pulled toward -950ms
+        self.assertLessEqual(abs(consensus["offsetMs"] - (-2_005)), 40)
+
+    def test_aligns_large_constant_offset_and_reports_failed_window_indices(self):
+        vtt_data, windows = self._build_drifted_vtt_and_windows(
+            [
+                (120_000, 0, True),
+                (600_000, 0, False),
+                (1_200_000, 0, True),
+                (1_800_000, 0, False),
+            ],
+            rate_ratio=1.0,
+            offset0_ms=75_000,
+        )
+        res = align_speech_windows(windows, [{"track": "primary", "vttData": vtt_data}])
+        primary = res["results"]["primary"]
+        self.assertTrue(primary["aligned"])
+        self.assertAlmostEqual(primary["offsetMs"], 75_000, delta=350)
+        self.assertEqual(res["failedWindowIndices"], [1, 3])
+
+    def test_three_aligned_windows_fit_framerate_drift_and_22min_episode(self):
+        # 3 windows across a 22-minute episode at 23.976 / 24.0
+        ratio = 23.976 / 24.0
+        offset0 = 1_200
+        vtt_data, windows = self._build_drifted_vtt_and_windows(
+            [
+                (120_000, 0, True),
+                (660_000, 0, True),
+                (1_200_000, 0, True),
+            ],
+            rate_ratio=ratio,
+            offset0_ms=offset0,
+            end_s_ms=1_400_000,
+        )
+        res = align_speech_windows(windows, [{"track": "primary", "vttData": vtt_data}])
+        primary = res["results"]["primary"]
+        self.assertTrue(primary["aligned"])
+        self.assertAlmostEqual(primary.get("rateRatio", 1.0), ratio, delta=0.0002)
+        self.assertLessEqual(abs(primary["offsetMs"] - offset0), 250)
+
+    def test_detects_drift_with_clustered_first_two_windows_and_jitter(self):
+        # Mirrors buildAlignmentWindowPlan layout: windows 0 & 1 only 60s apart + ±120ms jitter
+        for ratio in (23.976 / 24.0, 0.9996):
+            with self.subTest(ratio=ratio):
+                offset0 = 1_500
+                vtt_data, windows = self._build_drifted_vtt_and_windows(
+                    [
+                        (600_000, 120, True),
+                        (660_000, -110, True),
+                        (1_200_000, 90, True),
+                        (1_800_000, -100, True),
+                        (2_400_000, 110, True),
+                    ],
+                    rate_ratio=ratio,
+                    offset0_ms=offset0,
+                )
+                res = align_speech_windows(
+                    windows, [{"track": "primary", "vttData": vtt_data}]
+                )
+                primary = res["results"]["primary"]
+                self.assertTrue(primary["aligned"])
+                self.assertIsNotNone(primary.get("rateRatio"))
+                self.assertAlmostEqual(primary["rateRatio"], ratio, delta=0.0002)
+
+    def test_late_movie_large_fps_drift_beyond_180s_locks_via_projection(self):
+        # 25/23.976 drift starting around 70 minutes (4,200,000ms -> offset ~179,000ms..205,000ms)
+        ratio = 25.0 / 23.976
+        offset0 = 0
+        vtt_data, windows = self._build_drifted_vtt_and_windows(
+            [
+                (4_200_000, 0, True),
+                (4_500_000, 0, True),
+                (4_800_000, 0, True),
+                (5_100_000, 0, True),
+            ],
+            rate_ratio=ratio,
+            offset0_ms=offset0,
+            end_s_ms=5_400_000,
+        )
+        res = align_speech_windows(windows, [{"track": "primary", "vttData": vtt_data}])
+        primary = res["results"]["primary"]
+        self.assertTrue(primary["aligned"])
+        self.assertAlmostEqual(primary.get("rateRatio", 1.0), ratio, delta=0.0004)
+
+    def test_non_standard_drift_with_far_outlier_locks_via_all_pairs_empirical_ratio(self):
+        # Non-standard rate 1.006 where only 2 early windows align in Pass 1 + 1 furthest outlier,
+        # and later windows exceed 45s offset so projection must infer 1.006 from the clean pair.
+        ratio = 1.006
+        offset0 = 2_000
+        vtt_data, windows = self._build_drifted_vtt_and_windows(
+            [
+                (300_000, 0, True),
+                (1_500_000, 0, True),
+                (2_700_000, 0, True),
+                (3_900_000, 0, True),
+            ],
+            rate_ratio=ratio,
+            offset0_ms=offset0,
+            end_s_ms=4_200_000,
+        )
+        # Replace window 3's cues with a far outlier offset on a separate check in _project_and_fit_framerate_drift
+        cues = parse_alignment_cues(vtt_data)
+        from alignment import _project_and_fit_framerate_drift
+
+        base_entries = [
+            {
+                "startAt": 300.0,
+                "midMs": 300_000,
+                "result": self.make_aligned_result(
+                    int(round(offset0 + (1.0 - 1.0 / ratio) * 300_000)), 90
+                ),
+            },
+            {
+                "startAt": 1_500.0,
+                "midMs": 1_500_000,
+                "result": self.make_aligned_result(
+                    int(round(offset0 + (1.0 - 1.0 / ratio) * 1_500_000)), 88
+                ),
+            },
+            {
+                "startAt": 2_700.0,
+                "midMs": 2_700_000,
+                "result": {
+                    "aligned": False,
+                    "offsetMs": 0,
+                    "confidence": 20,
+                    "speechIntervals": [],
+                    "reason": "low_alignment_confidence",
+                },
+            },
+            {
+                "startAt": 3_900.0,
+                "midMs": 3_900_000,
+                # Outlier aligned window at the furthest timestamp
+                "result": self.make_aligned_result(-40_000, 70),
+            },
+        ]
+        projected = _project_and_fit_framerate_drift(windows, base_entries, cues)
+        self.assertIsNotNone(projected)
+        self.assertTrue(projected["aligned"])
+        self.assertAlmostEqual(projected.get("rateRatio", 1.0), ratio, delta=0.0005)
+
+    def test_piecewise_split_boundaries_respect_window_duration_sec(self):
+        from split_align import compute_piecewise_segments
+
+        entries = [
+            {"startAt": 100.0, "durationSec": 30.0, "result": self.make_aligned_result(0, 90)},
+            {"startAt": 300.0, "durationSec": 30.0, "result": self.make_aligned_result(0, 90)},
+            {"startAt": 400.0, "durationSec": 30.0, "result": self.make_aligned_result(5_000, 90)},
+            {"startAt": 700.0, "durationSec": 30.0, "result": self.make_aligned_result(5_000, 90)},
+        ]
+        segments = compute_piecewise_segments(entries, global_offset_ms=0)
+        self.assertEqual(len(segments), 2)
+        # Midpoint between (300 + 30) and 400 is 365s (not 380s from hardcoded 60s)
+        self.assertEqual(segments[0]["endMs"], 365_000)
+        self.assertEqual(segments[1]["startMs"], 365_000)
+
 
 if __name__ == "__main__":
     unittest.main()

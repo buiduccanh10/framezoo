@@ -209,20 +209,25 @@
   "details": {
     "addToList": "பட்டியலில் சேர்",
     "airs": "ஏர்ஸ்",
+    "cast": "நடிகர்கள்:",
     "collection": {
       "bookmarkAll": "அனைத்தையும் புக்மார்க் செய்யவும்",
+      "bookmarkTooltip": "முழு {{name}} தொகுப்பையும் புக்மார்க் செய்யவும்",
+      "label": "சேகரிப்பு",
       "movie": "திரைப்படம்",
       "movies": "திரைப்படங்கள்",
       "rating": "மதிப்பீடு",
       "releaseDate": "வெளியீட்டு தேதி",
       "sortBy": "வரிசைப்படுத்து"
     },
+    "director": "இயக்குனர்:",
     "endsAt": "{{time}} இல் முடிகிறது",
     "episode": "அத்தியாயம்",
     "episodeNumber": "எபிசோட் {{number}}",
     "episodeReleaseDate": "வெளியீட்டு தேதி: {{date}}",
     "episodeReleaseDateUnknown": "வெளியீட்டு தேதி: தெரியவில்லை",
     "episodes": "அத்தியாயங்கள்",
+    "goToEpisode": "அத்தியாயத்திற்குச் செல்லவும்",
     "imdb": "IMDb இல் பார்க்கவும்",
     "language": "மொழி:",
     "play": "விளையாடு",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "இந்த ஊடகத்திற்கான படத்தை எடுக்க முடியவில்லை",
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
+    "errors": {
+      "errorLoading": "தொகுப்பை ஏற்றுவதில் பிழை",
+      "failedToLoad": "தொகுப்பை ஏற்ற முடியவில்லை"
+    },
     "inCinema": "சினிமாவில்",
+    "noMoviesInCollection": "இந்தத் தொகுப்பில் திரைப்படங்கள் எதுவும் காணப்படவில்லை",
     "seasonUnwatched": "சீசனை பார்க்காததாக நிச்சயமாகக் குறிக்க விரும்புகிறீர்களா?",
     "seasonWatched": "சீசனை பார்த்ததாக நிச்சயமாகக் குறிக்க விரும்புகிறீர்களா?",
     "types": {

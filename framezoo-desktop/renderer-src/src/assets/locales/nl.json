@@ -209,20 +209,25 @@
   "details": {
     "addToList": "Toevoegen aan lijst",
     "airs": "Luchten",
+    "cast": "Vorm:",
     "collection": {
       "bookmarkAll": "Maak een bladwijzer van alles",
+      "bookmarkTooltip": "Voeg de volledige {{name}} collectie toe aan je bladwijzers",
+      "label": "Verzameling",
       "movie": "Film",
       "movies": "Films",
       "rating": "Beoordeling",
       "releaseDate": "Releasedatum",
       "sortBy": "Sorteer op"
     },
+    "director": "Directeur:",
     "endsAt": "Eindigt op {{time}}",
     "episode": "Aflevering",
     "episodeNumber": "Aflevering {{number}}",
     "episodeReleaseDate": "Releasedatum: {{date}}",
     "episodeReleaseDateUnknown": "Releasedatum: onbekend",
     "episodes": "Afleveringen",
+    "goToEpisode": "Ga naar de aflevering",
     "imdb": "Bekijk op IMDb",
     "language": "Taal:",
     "play": "Toneelstuk",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "Er kon geen afbeelding voor dit medium worden opgehaald.",
     "episodeDisplay": "S{{season}} A{{episode}}",
     "episodeShort": "E",
+    "errors": {
+      "errorLoading": "Fout bij het laden van de collectie",
+      "failedToLoad": "Het laden van de collectie is mislukt."
+    },
     "inCinema": "In de bioscoop",
+    "noMoviesInCollection": "Geen films gevonden in deze collectie.",
     "seasonUnwatched": "Weet je zeker dat je het seizoen als niet bekeken wilt markeren?",
     "seasonWatched": "Weet je zeker dat je het seizoen als bekeken wilt markeren?",
     "types": {

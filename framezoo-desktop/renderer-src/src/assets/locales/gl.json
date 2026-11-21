@@ -209,20 +209,25 @@
   "details": {
     "addToList": "Engadir á Lista",
     "airs": "Aire",
+    "cast": "Elenco:",
     "collection": {
       "bookmarkAll": "Marcar todo",
+      "bookmarkTooltip": "Marcar toda a colección {{name}}",
+      "label": "Colección",
       "movie": "Película",
       "movies": "Películas",
       "rating": "Valoración",
       "releaseDate": "Data de lanzamento",
       "sortBy": "Ordenar por"
     },
+    "director": "Director/a:",
     "endsAt": "Remata ás {{time}}",
     "episode": "Episodio",
     "episodeNumber": "Episodio {{number}}",
     "episodeReleaseDate": "Data de lanzamento: {{date}}",
     "episodeReleaseDateUnknown": "Data de lanzamento: descoñecida",
     "episodes": "Episodios",
+    "goToEpisode": "Ir ao episodio",
     "imdb": "Ver en IMDb",
     "language": "Idioma:",
     "play": "Xogar",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "Non se puido obter unha imaxe para este contido multimedia",
     "episodeDisplay": "T{{season}} E{{episode}}",
     "episodeShort": "E",
+    "errors": {
+      "errorLoading": "Produciuse un erro ao cargar a colección",
+      "failedToLoad": "Non se puido cargar a colección"
+    },
     "inCinema": "En Cine",
+    "noMoviesInCollection": "Non se atoparon películas nesta colección",
     "seasonUnwatched": "Estás seguro de que queres marcar a tempada como sen ver?",
     "seasonWatched": "Estás seguro de que queres marcar a tempada como vista?",
     "types": {

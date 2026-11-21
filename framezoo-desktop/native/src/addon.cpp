@@ -1133,6 +1133,10 @@ bool wait_for_audio_file(
     }
     if (event->event_id == MPV_EVENT_FILE_LOADED) {
       file_loaded = true;
+      // Disable video now that initial MKV/MP4 Cue seeking is complete so
+      // extraction decodes audio only (avoids libmpv v0.41 linear MKV scan).
+      const char* disable_vid_command[] = {"set", "vid", "no", nullptr};
+      api->command(handle, disable_vid_command);
       const char* play_command[] = {"set", "pause", "no", nullptr};
       if (api->command(handle, play_command) < 0) {
         request->error = "libmpv audio extraction playback failed";
@@ -1215,7 +1219,10 @@ void run_audio_extraction(AudioExtractionRequest* request) {
   if (
       !set_option("terminal", "no") ||
       !set_option("vo", "null") ||
-      !set_option("vid", "no") ||
+      !set_option("vid", "auto") ||
+      !set_option("hwdec", "no") ||
+      !set_option("sub", "no") ||
+      !set_option("untimed", "yes") ||
       !set_option("ao", "pcm") ||
       !set_option("ao-pcm-file", request->output_path.c_str()) ||
       !set_option("ao-pcm-waveheader", "yes") ||
@@ -1230,9 +1237,9 @@ void run_audio_extraction(AudioExtractionRequest* request) {
       !set_option("idle", "no") ||
       !set_option("cache", "yes") ||
       !set_option("force-seekable", "yes") ||
-      !set_option("demuxer-max-bytes", "8388608") ||
-      !set_option("demuxer-max-back-bytes", "2097152") ||
-      !set_option("demuxer-readahead-secs", "12")
+      !set_option("demuxer-max-bytes", "4194304") ||
+      !set_option("demuxer-max-back-bytes", "524288") ||
+      !set_option("demuxer-readahead-secs", "2")
   ) {
     request->error = "libmpv audio extraction option failed";
     cleanup();

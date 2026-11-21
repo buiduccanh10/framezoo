@@ -209,20 +209,25 @@
   "details": {
     "addToList": "Добавяне към списъка",
     "airs": "Ефири",
+    "cast": "Актьорски състав:",
     "collection": {
       "bookmarkAll": "Маркирайте всички",
+      "bookmarkTooltip": "Запазете цялата колекция {{name}} в отметките си",
+      "label": "Колекция",
       "movie": "Филм",
       "movies": "Филми",
       "rating": "Рейтинг",
       "releaseDate": "Дата на издаване",
       "sortBy": "Сортирай по"
     },
+    "director": "Директор:",
     "endsAt": "Завършва в {{time}}",
     "episode": "епизод",
     "episodeNumber": "Епизод {{number}}",
     "episodeReleaseDate": "Дата на издаване: {{date}}",
     "episodeReleaseDateUnknown": "Дата на издаване: Неизвестна",
     "episodes": "епизоди",
+    "goToEpisode": "Отиди на епизода",
     "imdb": "Вижте в IMDb",
     "language": "език:",
     "play": "Играйте",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "Не можа да се извлече изображение за този медиен файл",
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
+    "errors": {
+      "errorLoading": "Грешка при зареждане на колекцията",
+      "failedToLoad": "Зареждането на колекцията не бе успешно"
+    },
     "inCinema": "В киното",
+    "noMoviesInCollection": "Няма намерени филми в тази колекция",
     "seasonUnwatched": "Сигурни ли сте, че искате да маркирате сезона като негледан?",
     "seasonWatched": "Сигурни ли сте, че искате да маркирате сезона като гледан?",
     "types": {

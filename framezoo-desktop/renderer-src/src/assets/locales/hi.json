@@ -209,20 +209,25 @@
   "details": {
     "addToList": "सूची में शामिल",
     "airs": "एयर्स",
+    "cast": "ढालना:",
     "collection": {
       "bookmarkAll": "सभी को बुकमार्क करें",
+      "bookmarkTooltip": "संपूर्ण {{name}} संग्रह को बुकमार्क करें",
+      "label": "संग्रह",
       "movie": "चलचित्र",
       "movies": "चलचित्र",
       "rating": "रेटिंग",
       "releaseDate": "रिलीज़ की तारीख",
       "sortBy": "इसके अनुसार क्रमबद्ध करें"
     },
+    "director": "निदेशक:",
     "endsAt": "{{time}} पर समाप्त होता है",
     "episode": "एपिसोड",
     "episodeNumber": "एपिसोड {{number}}",
     "episodeReleaseDate": "रिलीज़ दिनांक: {{date}}",
     "episodeReleaseDateUnknown": "रिलीज़ दिनांक: अज्ञात",
     "episodes": "एपिसोड",
+    "goToEpisode": "एपिसोड पर जाएं",
     "imdb": "IMDb पर देखें",
     "language": "भाषा:",
     "play": "खेल",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "इस मीडिया के लिए कोई छवि प्राप्त नहीं हो सकी",
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
+    "errors": {
+      "errorLoading": "संग्रह लोड करने में त्रुटि",
+      "failedToLoad": "संग्रह लोड करने में विफल"
+    },
     "inCinema": "सिनेमा में",
+    "noMoviesInCollection": "इस संग्रह में कोई फ़िल्में नहीं मिलीं",
     "seasonUnwatched": "क्या आप वाकई सीज़न को न देखे गए के रूप में चिह्नित करना चाहते हैं?",
     "seasonWatched": "क्या आप वाकई सीज़न को देखे गए के रूप में चिह्नित करना चाहते हैं?",
     "types": {

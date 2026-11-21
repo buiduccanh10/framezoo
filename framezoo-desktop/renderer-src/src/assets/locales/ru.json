@@ -209,20 +209,25 @@
   "details": {
     "addToList": "Добавить в список",
     "airs": "Арии",
+    "cast": "Бросать:",
     "collection": {
       "bookmarkAll": "Добавить все в закладки",
+      "bookmarkTooltip": "Добавьте в закладки всю коллекцию {{name}}",
+      "label": "Коллекция",
       "movie": "Фильм",
       "movies": "Фильмы",
       "rating": "Рейтинг",
       "releaseDate": "Дата выпуска",
       "sortBy": "Сортировать по"
     },
+    "director": "Режиссер:",
     "endsAt": "Заканчивается в {{time}}",
     "episode": "Эпизод",
     "episodeNumber": "Эпизод {{number}}",
     "episodeReleaseDate": "Дата выпуска: {{date}}",
     "episodeReleaseDateUnknown": "Дата выхода: Неизвестно",
     "episodes": "Эпизоды",
+    "goToEpisode": "Перейти к эпизоду",
     "imdb": "Посмотреть на IMDb",
     "language": "Язык:",
     "play": "Играть",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "Не удалось получить изображение для этого медиафайла.",
     "episodeDisplay": "Сезон {{season}}, Эпизод {{episode}}",
     "episodeShort": "E",
+    "errors": {
+      "errorLoading": "Ошибка загрузки коллекции",
+      "failedToLoad": "Не удалось загрузить коллекцию."
+    },
     "inCinema": "В кино",
+    "noMoviesInCollection": "В этой коллекции фильмы не найдены.",
     "seasonUnwatched": "Вы уверены, что хотите отметить сезон как непросмотренный?",
     "seasonWatched": "Вы уверены, что хотите отметить сезон как просмотренный?",
     "types": {

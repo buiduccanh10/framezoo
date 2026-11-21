@@ -204,24 +204,18 @@ describe("subtitle alignment client", () => {
       buffered: 3600,
     });
 
-    expect(maxActiveCaptures).toBe(3);
+    expect(maxActiveCaptures).toBe(4);
     expect(alignmentMocks.extractAudioWindow).toHaveBeenCalledTimes(6);
   });
 
-  it("finishes the first torrent window before starting the remaining pool", async () => {
-    let resolveFirst: (() => void) | undefined;
-    let firstFinished = false;
+  it("launches torrent windows in parallel up to the concurrency cap so peers focus on real seek offsets immediately", async () => {
     const starts: number[] = [];
+    const resolvers: Array<() => void> = [];
     alignmentMocks.extractAudioWindow.mockImplementation(async (request) => {
       starts.push(request.windowIndex);
-      if (request.windowIndex === 0) {
-        await new Promise<void>((resolve) => {
-          resolveFirst = resolve;
-        });
-        firstFinished = true;
-      } else {
-        expect(firstFinished).toBe(true);
-      }
+      await new Promise<void>((resolve) => {
+        resolvers.push(resolve);
+      });
       return new Uint8Array([1, 2, 3]);
     });
 
@@ -236,8 +230,12 @@ describe("subtitle alignment client", () => {
     });
 
     await new Promise((resolve) => setTimeout(resolve, 0));
-    expect(starts).toEqual([0]);
-    resolveFirst?.();
+    expect(starts).toEqual([0, 1, 2, 3]);
+    while (resolvers.length > 0) {
+      const batch = resolvers.splice(0, resolvers.length);
+      for (const resolve of batch) resolve();
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    }
     await pending;
     expect(starts).toHaveLength(6);
   });
@@ -264,7 +262,7 @@ describe("subtitle alignment client", () => {
       [...(request.body as FormData).entries()].filter(
         ([name]) => name === "audio",
       ),
-    ).toHaveLength(4);
+    ).toHaveLength(5);
   });
 
   it("reports monotonic progress and completes audio preparation before moving to subtitle sync", async () => {
@@ -372,15 +370,16 @@ describe("subtitle alignment client", () => {
     });
   });
 
-  it("plans independent current, buffered, and fallback windows", () => {
+  it("plans independent current and spread timeline fallback windows", () => {
     const plan = buildAlignmentWindowPlan(600, 3600, 900);
 
-    expect(plan.slice(0, 2)).toEqual([
+    expect(plan).toEqual([
       { startAt: 600, priority: "nearby" },
-      { startAt: 840, priority: "buffered" },
-    ]);
-    expect(plan.slice(2).map((window) => window.startAt)).toEqual([
-      531, 1239, 1947, 2655,
+      { startAt: 427, priority: "fallback" },
+      { startAt: 1067, priority: "fallback" },
+      { startAt: 1778, priority: "fallback" },
+      { startAt: 2489, priority: "fallback" },
+      { startAt: 3128, priority: "fallback" },
     ]);
     for (let first = 0; first < plan.length; first += 1) {
       for (let second = first + 1; second < plan.length; second += 1) {
@@ -402,10 +401,10 @@ describe("subtitle alignment client", () => {
   });
 
   it("uses half-file windows for short videos", () => {
-    expect(getSubtitleAlignmentWindowDuration(90)).toBe(45);
-    expect(buildAlignmentWindowPlan(0, 90).slice(0, 2)).toEqual([
+    expect(getSubtitleAlignmentWindowDuration(60)).toBe(30);
+    expect(buildAlignmentWindowPlan(0, 60).slice(0, 2)).toEqual([
       { startAt: 0, priority: "nearby" },
-      { startAt: 45, priority: "nearby" },
+      { startAt: 30, priority: "nearby" },
     ]);
   });
 
@@ -541,33 +540,33 @@ Episode dialogue.`;
       subtitleVtts: ["WEBVTT"],
     });
     expect(emptyPlan.map((w) => w.startAt)).toEqual([
-      600, 840, 531, 1239, 1947, 2655,
+      600, 427, 1067, 1778, 2489, 3128,
     ]);
 
-    // Anchor 1239s..1299s only has SDH music/effects, while 1329s..1389s (+90s) has 4 dialogue cues.
+    // Anchor 1778s..1823s only has SDH music/effects, while 1868s..1913s (+90s) has 4 dialogue cues.
     const richVtt = `WEBVTT
 
-00:20:45.000 --> 00:20:48.000
+00:29:50.000 --> 00:29:53.000
 [DRAMATIC MUSIC]
 
-00:22:10.000 --> 00:22:12.000
-Line one right around 1330s.
+00:31:16.000 --> 00:31:18.000
+Line one right around 1876s.
 
-00:22:18.000 --> 00:22:20.000
-Line two right around 1338s.
+00:31:22.000 --> 00:31:24.000
+Line two right around 1882s.
 
-00:22:26.000 --> 00:22:28.000
-Line three right around 1346s.
+00:31:28.000 --> 00:31:30.000
+Line three right around 1888s.
 
-00:22:34.000 --> 00:22:36.000
-Line four right around 1354s.`;
+00:31:34.000 --> 00:31:36.000
+Line four right around 1894s.`;
 
     const nudgedPlan = buildAlignmentWindowPlan(600, 3600, 900, {
       subtitleVtts: [richVtt],
     });
     const nudgedStarts = nudgedPlan.map((w) => w.startAt);
-    expect(nudgedStarts).not.toContain(1239);
-    expect(nudgedStarts.some((s) => s >= 1295 && s <= 1350)).toBe(true);
+    expect(nudgedStarts).not.toContain(1778);
+    expect(nudgedStarts.some((s) => s >= 1850 && s <= 1895)).toBe(true);
   });
 
   it("applies rateRatio alongside offsetMs in applySubtitleAlignment", () => {
@@ -627,5 +626,120 @@ Dialogue at 100s.`;
     expect(
       telemetryEvents.at(-1)?.statuses.every((s) => s === "captured"),
     ).toBe(true);
+  });
+
+  it("toggles /sync-focus around torrent capture and releases before server upload", async () => {
+    const events: string[] = [];
+    const fetchSpy = vi
+      .spyOn(globalThis, "fetch")
+      .mockImplementation(async (input, init) => {
+        const body = init?.body ? JSON.parse(String(init.body)) : {};
+        events.push(`sync-focus:${String(input)}:${String(body.active)}`);
+        return new Response('{"ok":true}', { status: 200 });
+      });
+
+    alignmentMocks.extractAudioWindow.mockImplementation(async (request) => {
+      events.push(`capture:${request.windowIndex}`);
+      return new Uint8Array([1, 2, 3]);
+    });
+    alignmentMocks.mwFetch.mockImplementation(async () => {
+      events.push("upload");
+      return { results: { primary: baseResult } };
+    });
+
+    try {
+      await alignSubtitlesWithCurrentStream({
+        sourceUrl: "http://127.0.0.1:41234/torrent/sess-1",
+        isTorrent: true,
+        startAt: 600,
+        language: "en",
+        subtitles: [{ track: "primary", vttData: "WEBVTT" }],
+        videoDuration: 3600,
+        buffered: 900,
+      });
+
+      expect(events[0]).toBe(
+        "sync-focus:http://127.0.0.1:41234/torrent/sess-1/sync-focus:true",
+      );
+      const offIdx = events.indexOf(
+        "sync-focus:http://127.0.0.1:41234/torrent/sess-1/sync-focus:false",
+      );
+      const uploadIdx = events.indexOf("upload");
+      expect(offIdx).toBeGreaterThan(0);
+      expect(offIdx).toBeLessThan(uploadIdx);
+    } finally {
+      fetchSpy.mockRestore();
+    }
+  });
+
+  it("releases /sync-focus when torrent audio capture is aborted", async () => {
+    const focusStates: boolean[] = [];
+    const fetchSpy = vi
+      .spyOn(globalThis, "fetch")
+      .mockImplementation(async (_input, init) => {
+        const body = init?.body ? JSON.parse(String(init.body)) : {};
+        focusStates.push(Boolean(body.active));
+        return new Response('{"ok":true}', { status: 200 });
+      });
+    const ac = new AbortController();
+    alignmentMocks.extractAudioWindow.mockImplementationOnce(async () => {
+      ac.abort();
+      throw new DOMException("Aborted", "AbortError");
+    });
+
+    try {
+      await expect(
+        alignSubtitlesWithCurrentStream({
+          sourceUrl: "http://127.0.0.1:41234/torrent/sess-abort",
+          isTorrent: true,
+          startAt: 100,
+          language: "en",
+          subtitles: [{ track: "primary", vttData: "WEBVTT" }],
+          videoDuration: 3600,
+          signal: ac.signal,
+        }),
+      ).rejects.toThrow();
+
+      expect(focusStates).toEqual([true, false]);
+    } finally {
+      fetchSpy.mockRestore();
+    }
+  });
+
+  it("combines surviving Pass 1 windows with retry replacements when failedWindowIndices is returned", async () => {
+    alignmentMocks.mwFetch
+      .mockResolvedValueOnce({
+        results: {
+          primary: {
+            ...baseResult,
+            aligned: false,
+            confidence: 0,
+            reason: "insufficient_consensus",
+          },
+        },
+        needsMoreSamples: true,
+        additionalWindows: 2,
+        failedWindowIndices: [1, 4],
+      })
+      .mockResolvedValueOnce({ results: { primary: baseResult } });
+
+    const result = await alignSubtitlesWithCurrentStream({
+      sourceUrl: "https://example.test/video.m3u8",
+      startAt: 600,
+      language: "en",
+      subtitles: [{ track: "primary", vttData: "WEBVTT" }],
+      videoDuration: 3600,
+      buffered: 900,
+    });
+
+    expect(result.results.primary).toEqual(baseResult);
+    expect(alignmentMocks.mwFetch).toHaveBeenCalledTimes(2);
+    const secondCallEntries = [
+      ...(alignmentMocks.mwFetch.mock.calls[1][1].body as FormData).entries(),
+    ];
+    // 4 surviving Pass 1 windows + 2 replacement windows = 6 windows total
+    expect(secondCallEntries.filter(([name]) => name === "audio")).toHaveLength(
+      6,
+    );
   });
 });

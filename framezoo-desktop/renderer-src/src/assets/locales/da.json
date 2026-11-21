@@ -209,20 +209,25 @@
   "details": {
     "addToList": "Tilføj til liste",
     "airs": "Airs",
+    "cast": "Medvirkende:",
     "collection": {
       "bookmarkAll": "Bogmærk alle",
+      "bookmarkTooltip": "Bogmærk hele {{name}} samlingen",
+      "label": "Samling",
       "movie": "Film",
       "movies": "Film",
       "rating": "Bedømmelse",
       "releaseDate": "Udgivelsesdato",
       "sortBy": "Sorter efter"
     },
+    "director": "Direktør:",
     "endsAt": "Slutter kl. {{time}}",
     "episode": "Episode",
     "episodeNumber": "Afsnit {{number}}",
     "episodeReleaseDate": "Udgivelsesdato: {{date}}",
     "episodeReleaseDateUnknown": "Udgivelsesdato: Ukendt",
     "episodes": "Episoder",
+    "goToEpisode": "Gå til episoden",
     "imdb": "Se på IMDb",
     "language": "Sprog:",
     "play": "Spil",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "Kunne ikke hente et billede til dette medie",
     "episodeDisplay": "S{{season}} - E{{episode}}",
     "episodeShort": "E",
+    "errors": {
+      "errorLoading": "Fejl ved indlæsning af samling",
+      "failedToLoad": "Kunne ikke indlæse samlingen"
+    },
     "inCinema": "I Biograf",
+    "noMoviesInCollection": "Ingen film fundet i denne samling",
     "seasonUnwatched": "Er du sikker på, at du vil markere sæsonen som uvist?",
     "seasonWatched": "Er du sikker på, at du vil markere sæsonen som set?",
     "types": {

@@ -209,20 +209,25 @@
   "details": {
     "addToList": "Añadir a la lista",
     "airs": "aires",
+    "cast": "Elenco:",
     "collection": {
       "bookmarkAll": "Marcar todo",
+      "bookmarkTooltip": "Marcar como favorito toda la colección {{name}}",
+      "label": "Recopilación",
       "movie": "Película",
       "movies": "Cine",
       "rating": "Clasificación",
       "releaseDate": "Fecha de lanzamiento",
       "sortBy": "Ordenar por"
     },
+    "director": "Director:",
     "endsAt": "Termina en {{time}}",
     "episode": "Episodio",
     "episodeNumber": "Episodio {{number}}",
     "episodeReleaseDate": "Fecha de lanzamiento: {{date}}",
     "episodeReleaseDateUnknown": "Fecha de lanzamiento: Desconocida",
     "episodes": "Episodios",
+    "goToEpisode": "Ir al episodio",
     "imdb": "Ver en IMDb",
     "language": "Idioma:",
     "play": "Reproducir",
@@ -658,7 +663,12 @@
     "cannotFetchImage": "No se pudo obtener una imagen para este medio.",
     "episodeDisplay": "T{{season}} E{{episode}}",
     "episodeShort": "E",
+    "errors": {
+      "errorLoading": "Error al cargar la colección",
+      "failedToLoad": "No se pudo cargar la colección"
+    },
     "inCinema": "En el cine",
+    "noMoviesInCollection": "No se encontraron películas en esta colección.",
     "seasonUnwatched": "¿Estás seguro de que quieres marcar la temporada como no vista?",
     "seasonWatched": "¿Estás seguro de que quieres marcar la temporada como vista?",
     "types": {

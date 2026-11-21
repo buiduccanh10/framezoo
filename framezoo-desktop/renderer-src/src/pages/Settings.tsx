@@ -12,7 +12,10 @@ import { getSessions, updateSession } from "@/backend/accounts/sessions";
 import { getSettings, updateSettings } from "@/backend/accounts/settings";
 import { editUser } from "@/backend/accounts/user";
 import { Button } from "@/components/buttons/Button";
-import { SearchBarInput } from "@/components/form/SearchBar";
+import {
+  SearchBarInput,
+  type SearchBarInputElement,
+} from "@/components/form/SearchBar";
 import { ThinContainer } from "@/components/layout/ThinContainer";
 import { WideContainer } from "@/components/layout/WideContainer";
 import { Modal, ModalCard, useModal } from "@/components/overlays/Modal";
@@ -58,7 +61,7 @@ function SettingsLayout(props: {
   const { className } = props;
   const { t } = useTranslation();
   const { isMobile } = useIsMobile();
-  const searchRef = useRef<HTMLInputElement>(null!);
+  const searchRef = useRef<SearchBarInputElement>(null!);
 
   const isPWA = useIsPWA();
   const isIOS = useIsIOS();
